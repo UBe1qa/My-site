@@ -65,6 +65,45 @@ button{font:inherit;color:inherit}
 .legend{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px}
 .legend-note{margin-top:10px;font-size:14px;color:var(--muted)}
 
+/* 예시 사진·영상 */
+.media{position:relative;margin:0;border-radius:14px;overflow:hidden;background:#D9DDE4;aspect-ratio:3/4}
+.media img,.media video{display:block;width:100%;height:100%;object-fit:cover}
+.media .ai{position:absolute;left:8px;top:8px;font-size:12px;font-weight:700;line-height:1;background:rgba(26,34,51,.72);color:#fff;padding:5px 8px;border-radius:999px}
+.media .play{position:absolute;right:8px;bottom:8px;font-size:12px;font-weight:700;line-height:1;background:rgba(255,255,255,.9);color:var(--ink);padding:5px 8px;border-radius:999px}
+button.media{border:0;padding:0;cursor:zoom-in;width:100%;font:inherit}
+.teaser{margin-top:32px;max-width:480px}
+.teaser h2{font-size:15px;font-weight:700;color:var(--muted);letter-spacing:0;margin-bottom:10px}
+.teaser .pair{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);column-gap:8px;align-items:start}
+.teaser .pair figure{display:contents}
+.teaser .pair figure:first-child .media{grid-area:1/1}
+.teaser .pair figure:first-child figcaption{grid-area:2/1}
+.teaser .pair figure:last-child .media{grid-area:1/3}
+.teaser .pair figure:last-child figcaption{grid-area:2/3}
+.teaser .to{grid-area:1/2;align-self:center;display:grid;place-items:center;color:var(--faint)}
+.teaser figcaption{margin-top:8px;font-size:14px;line-height:1.45;color:var(--muted)}
+.teaser figcaption b{display:block;color:var(--ink);font-size:14.5px}
+.teaser figure{margin:0}
+.compare{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.compare figure{margin:0}
+.compare figcaption{margin-top:10px;font-size:15px;line-height:1.5}
+.compare figcaption b{display:block}
+.compare figcaption code{font-family:inherit;font-size:13.5px;color:var(--muted);background:var(--line-2);padding:1px 6px;border-radius:5px}
+.compare-note{margin-top:14px;font-size:15.5px;color:var(--muted)}
+.sub-lead{margin:-4px 0 16px;font-size:16px;color:var(--muted);max-width:46em}
+.compare-note b{color:var(--ink)}
+.out-media{display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.out-media .media{border-radius:10px;background:#2A3345}
+.out-media p{font-size:14px;color:#C9D0DD;line-height:1.55}
+.out-media p b{display:block;color:#fff;font-size:15px}
+.fix .shot{max-width:220px}
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(92vw,560px);width:100%}
+dialog.lb::backdrop{background:rgba(10,14,22,.82)}
+dialog.lb .media{aspect-ratio:auto;max-height:86vh;background:#000}
+dialog.lb img,dialog.lb video{max-height:86vh;object-fit:contain}
+dialog.lb .close{position:absolute;right:8px;top:8px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--ink);font-size:22px;line-height:1;cursor:pointer;z-index:2}
+dialog.lb p{color:#E6EAF0;font-size:14.5px;margin-top:10px;line-height:1.55}
+dialog.lb .lb-body img,dialog.lb .lb-body video{display:block;width:100%;height:auto}
+
 /* 첫걸음 노선도 */
 .route{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 22px 10px}
 .route-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
@@ -368,6 +407,9 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
   .step .cost{grid-column:2;grid-row:2;justify-self:start;margin-top:0}
   .photo-check,.dd,.post-grid{grid-template-columns:1fr}
   .fix .inner{grid-template-columns:1fr}
+  .compare{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
+  .compare figure{scroll-snap-align:start}
+  .out-media{grid-template-columns:96px minmax(0,1fr)}
   .helper{grid-template-columns:1fr}
   dl.gloss{grid-template-columns:1fr}
   footer .cols{grid-template-columns:1fr}
@@ -422,6 +464,20 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       <span class="tag c-rul"><i></i>규칙·주의</span>
     </div>
     <p class="legend-note">이 페이지에서 색은 뜻이 하나씩 정해져 있어요. 파란색이 보이면 사진, 주황색이면 영상 얘기예요.</p>
+    <div class="teaser">
+      <h2>힉스필드로 이렇게 만들어요</h2>
+      <div class="pair">
+        <figure>
+          <button type="button" class="media" data-lb="img" data-src="examples/photo-morning.webp" data-cap="Soul 2.0으로 만든 사진. 프롬프트는 아래 '프롬프트' 칸의 기본 조합 그대로예요." aria-label="예시 사진 크게 보기"><img src="examples/photo-morning.webp" alt="카페 창가에서 아이스 라떼를 든 단발머리 여성, AI로 만든 가상 인물" width="900" height="1200" loading="eager"><span class="ai">AI 예시</span></button>
+          <figcaption><b>① 글로 사진 만들기</b>Soul 2.0 · 장당 0.12크레딧</figcaption>
+        </figure>
+        <span class="to" aria-hidden="true"><svg width="22" height="22"><use href="#i-arrow"/></svg></span>
+        <figure>
+          <div class="media"><video src="examples/video-pushin.mp4" poster="examples/video-pushin.webp" autoplay muted loop playsinline preload="metadata" aria-label="같은 사진을 5초 영상으로 만든 예시: 창밖을 보다가 카메라를 보며 웃는 장면"></video><span class="ai">AI 예시</span></div>
+          <figcaption><b>② 그 사진을 5초 영상으로</b>Kling 3.0 · 720p · 소리 끔 7.5크레딧</figcaption>
+        </figure>
+      </div>
+    </div>
   </div>
 
   <div class="route" aria-labelledby="route-title">
@@ -448,7 +504,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       <li class="stop c-vid">
         <span class="dot"><span>4</span><svg><use href="#i-ok"/></svg></span>
         <div class="body"><h3><a href="#money">그 사진을 5초 영상으로</a></h3><p>720p, 5초로 시험해요. 마음에 든 사진만 영상으로.</p><span class="where">Video → Kling 3.0</span></div>
-        <div class="side"><span class="cost">약 7</span><label class="chk"><input type="checkbox">했어요</label></div>
+        <div class="side"><span class="cost">7.5</span><label class="chk"><input type="checkbox">했어요</label></div>
       </li>
       <li class="stop c-chr">
         <span class="dot"><span>5</span><svg><use href="#i-ok"/></svg></span>
@@ -487,7 +543,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
     <div class="basic c-vid">
       <span class="ic"><svg><use href="#i-vid"/></svg></span>
       <div class="txt"><h3>영상이 사진보다 훨씬 비싸요</h3>
-      <p>Soul 2.0 사진 1장은 <b>0.12크레딧</b>, Kling 3.0 영상 5초는 <b>약 7크레딧</b>이에요. 영상 한 번이 사진 58장 값이라, <b>사진으로 먼저 확정</b>하고 영상은 그다음에 만들어요.</p></div>
+      <p>Soul 2.0 사진 1장은 <b>0.12크레딧</b>, Kling 3.0 영상 5초는 <b>7.5크레딧</b>이에요. 영상 한 번이 사진 60장 넘는 값이라, <b>사진으로 먼저 확정</b>하고 영상은 그다음에 만들어요.</p></div>
     </div>
     <div class="basic c-rul">
       <span class="ic"><svg><use href="#i-clock"/></svg></span>
@@ -539,7 +595,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       <div class="top"><h3>사진을 움직이는 짧은 영상</h3><span class="pri first">먼저</span></div>
       <span class="path">Video → Kling 3.0</span>
       <p>사람 움직임이 자연스럽고 싼 편이에요. 최대 15초, 한 영상에 여러 컷도 돼요.</p>
-      <div class="foot"><span class="cost">5초 약 7</span><span class="lock">Starter는 720p까지</span></div>
+      <div class="foot"><span class="cost">5초 7.5 · 소리 켜면 10</span><span class="lock">Starter는 720p까지</span></div>
     </article>
     <article class="goal c-vid" data-k="vid">
       <div class="top"><h3>버튼으로 카메라 움직임 넣기</h3><span class="pri first">먼저</span></div>
@@ -746,7 +802,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       <div class="txt"><h3>장면 사진 → 영상 → 말하게 하기</h3>
       <p>Soul 2.0으로 장면 사진을 만들고, Kling 3.0으로 움직이고(720p 먼저), Audio로 목소리를 만들어 Lipsync Studio에서 입혀요.
       <span class="tip"><b>팁</b> 음성을 먼저 만들고, 정면에 조명이 고른 사진을 쓰면 입 모양이 잘 맞아요. 한 번에 20초 안쪽으로.</span></p></div>
-      <span class="cost">5초 약 7~14</span>
+      <span class="cost">5초 약 7.5~14</span>
     </li>
   </ol>
 
@@ -793,12 +849,51 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
   <div class="builder" id="builder" role="tabpanel" aria-labelledby="tab-photo">
     <div class="slots" id="slots"></div>
     <div class="out" aria-live="polite">
+      <div class="out-media">
+        <button type="button" class="media" id="outMedia" aria-label="예시 크게 보기"></button>
+        <p id="outMediaCap"></p>
+      </div>
       <span class="lab">완성된 프롬프트</span>
       <p class="en" id="outEn"></p>
       <p class="ko" id="outKo"></p>
       <p class="set" id="outSet"></p>
       <button type="button" class="btn" id="copyPrompt"><svg><use href="#i-copy"/></svg>프롬프트 복사</button>
     </div>
+  </div>
+
+  <h3 class="subhead">칸 하나만 바꿔도 이렇게 달라져요</h3>
+  <p class="sub-lead">⑤ 빛만 바꾸고 나머지 다섯 칸은 그대로 둔 결과예요. 셋 다 Soul 2.0으로 직접 만들었어요.</p>
+  <div class="compare">
+    <figure>
+      <button type="button" class="media" data-lb="img" data-src="examples/photo-morning.webp" data-cap="⑤ 빛: 아침 햇살 (soft morning sunlight from the left)" aria-label="아침 햇살 예시 크게 보기"><img src="examples/photo-morning.webp" alt="아침 햇살이 드는 카페 창가의 가상 인물" width="900" height="1200" loading="lazy"><span class="ai">AI 예시</span></button>
+      <figcaption><b>아침 햇살</b><code>soft morning sunlight from the left</code></figcaption>
+    </figure>
+    <figure>
+      <button type="button" class="media" data-lb="img" data-src="examples/photo-sunset.webp" data-cap="⑤ 빛: 노을 (warm golden-hour sunset light)" aria-label="노을 예시 크게 보기"><img src="examples/photo-sunset.webp" alt="해질녘 카페 창가의 가상 인물" width="900" height="1200" loading="lazy"><span class="ai">AI 예시</span></button>
+      <figcaption><b>노을</b><code>warm golden-hour sunset light</code></figcaption>
+    </figure>
+    <figure>
+      <button type="button" class="media" data-lb="img" data-src="examples/photo-neon.webp" data-cap="⑤ 빛: 밤 네온 (neon signs at night with cool blue and pink tones)" aria-label="밤 네온 예시 크게 보기"><img src="examples/photo-neon.webp" alt="밤 네온사인 거리 옆 카페의 가상 인물" width="900" height="1200" loading="lazy"><span class="ai">AI 예시</span></button>
+      <figcaption><b>밤 네온</b><code>neon signs at night with cool blue and pink tones</code></figcaption>
+    </figure>
+  </div>
+  <p class="compare-note"><b>얼굴이 조금씩 다른 게 보이나요?</b> 인물 설명을 똑같이 써도 뽑을 때마다 얼굴이 달라져요. 같은 얼굴을 계속 쓰려면 <a href="#influencer">Soul ID</a>가 필요한 이유예요.</p>
+
+  <h3 class="subhead">같은 사진, 카메라만 바꾸면</h3>
+  <p class="sub-lead">위의 아침 햇살 사진을 시작 장면으로 넣고, 동작 문장은 그대로 둔 채 ② 카메라만 바꿨어요. Kling 3.0 · 720p · 5초 · 소리 끔.</p>
+  <div class="compare">
+    <figure>
+      <div class="media"><video src="examples/video-pushin.mp4" poster="examples/video-pushin.webp" autoplay muted loop playsinline preload="metadata" aria-label="천천히 다가가는 카메라 예시"></video><span class="ai">AI 예시</span></div>
+      <figcaption><b>천천히 다가가기</b><code>Slow push-in … ending on a close-up.</code></figcaption>
+    </figure>
+    <figure>
+      <div class="media"><video src="examples/video-static.mp4" poster="examples/video-static.webp" autoplay muted loop playsinline preload="metadata" aria-label="고정 카메라 예시"></video><span class="ai">AI 예시</span></div>
+      <figcaption><b>고정</b><code>Static camera, locked-off tripod shot.</code></figcaption>
+    </figure>
+    <figure>
+      <div class="media"><video src="examples/video-orbit.mp4" poster="examples/video-orbit.webp" autoplay muted loop playsinline preload="metadata" aria-label="반 바퀴 도는 카메라 예시"></video><span class="ai">AI 예시</span></div>
+      <figcaption><b>반 바퀴 돌기</b><code>Slow half orbit around the person …</code></figcaption>
+    </figure>
   </div>
 
   <h3 class="subhead">잘 나오는 프롬프트의 규칙</h3>
@@ -840,7 +935,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
   <div class="sec-head">
     <span class="kicker"><svg><use href="#i-wrench"/></svg>문제 해결</span>
     <h2>잘 안 나올 때 이렇게 고쳐요</h2>
-    <p>초보가 가장 많이 막히는 일곱 가지예요. 증상을 누르면 원인과 해결법이 보여요.</p>
+    <p>초보가 가장 많이 막히는 여덟 가지예요. 증상을 누르면 원인과 해결법이 보여요.</p>
   </div>
   <div class="fixes">
     <details class="fix" open><summary>얼굴이 매번 달라져요<span class="tag c-chr"><i></i>인물</span><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></summary>
@@ -849,6 +944,10 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
     <details class="fix"><summary>피부가 플라스틱처럼 매끈해요<span class="tag c-chr"><i></i>인물</span><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></summary>
       <div class="inner"><div><p class="k">왜 그럴까</p><p class="why">흠 없는 얼굴을 만들면 오히려 AI티가 나요.</p></div>
       <div><p class="k">이렇게</p><ul><li>인물 설계에서 피부 상태(주근깨, 피부결) 넣기</li><li>프롬프트에 <b>natural skin texture</b> 넣기</li><li>영상은 사람 표현에 강한 Kling 3.0으로</li></ul></div></div></details>
+    <details class="fix"><summary>사진에 인스타 화면 틀이 같이 그려져요<span class="tag c-img"><i></i>사진</span><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></summary>
+      <div class="inner"><div><p class="k">왜 그럴까</p><p class="why">프롬프트에 <b>Instagram post</b>처럼 앱 이름을 쓰면, 아이디·버튼까지 있는 인스타 화면을 통째로 그려요. 이 페이지 예시를 만들다 실제로 겪은 일이에요.</p>
+      <button type="button" class="media shot" data-lb="img" data-src="examples/mistake-insta-frame.webp" data-cap="프롬프트 끝에 'everyday Instagram post'를 넣었더니 가짜 인스타 화면(엉터리 아이디, 버튼)까지 그려진 결과" aria-label="실수 예시 크게 보기" style="margin-top:12px"><img src="examples/mistake-insta-frame.webp" alt="인스타그램 화면 틀과 엉터리 아이디가 함께 그려진 실패 예시" width="900" height="1200" loading="lazy"><span class="ai">실패 예시</span></button></div>
+      <div><p class="k">이렇게</p><ul><li>앱 이름 대신 사진 느낌만 적기: <b>casual everyday snapshot</b></li><li>'post', 'story', 'feed' 같은 말도 빼기</li><li>이미 나왔다면 Inpaint로 틀 부분만 지우기</li></ul></div></div></details>
     <details class="fix"><summary>손가락이 이상해요<span class="tag c-img"><i></i>사진</span><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></summary>
       <div class="inner"><div><p class="k">왜 그럴까</p><p class="why">손 동작을 복잡하게 설명하면 AI가 헷갈려요.</p></div>
       <div><p class="k">이렇게</p><ul><li>손이 적게 나오는 허리 위 구도로</li><li>동작 대신 손의 시작·끝 위치만 적기</li><li>손 모양 참고 사진을 같이 넣기</li></ul></div></div></details>
@@ -974,6 +1073,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
     <div>
       <h3>이 페이지에 대해</h3>
       <p>힉스필드와 관계없는 개인이 만든 비공식 가이드예요. 2026년 9월 27일에 확인한 내용이고, 힉스필드는 가격·메뉴·모델이 몇 주 단위로 바뀌어요. 결제 전에는 꼭 <a href="https://higgsfield.ai/pricing">공식 요금 페이지</a>를 확인하세요.</p>
+      <p style="margin-top:10px">'AI 예시'가 붙은 사진과 영상은 이 가이드를 위해 힉스필드로 직접 만든 결과물이에요. 등장인물은 실제 사람이 아닌 가상 인물이에요.</p>
     </div>
   </div>
 </footer>
@@ -1024,7 +1124,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       {n:'Soul 2.0 사진',s:'인물·일상 감성',cost:0.12,u:'장',min:'starter'},
       {n:'Nano Banana Pro 사진',s:'글자·제품·부분 수정',cost:2,u:'장',min:'starter'}]},
     {g:'영상',c:'vid',items:[
-      {n:'Kling 3.0 영상',s:'5초 · 720p',cost:7,u:'개',min:'starter'},
+      {n:'Kling 3.0 영상',s:'5초 · 720p · 소리 끔',cost:7.5,u:'개',min:'starter'},
       {n:'Kling 3.0 영상',s:'5초 · 1080p',cost:8,u:'개',min:'plus'},
       {n:'Seedance 2.0 영상',s:'5초 · 720p',cost:22,u:'개',min:'plus'},
       {n:'Veo 3.1 영상',s:'4초 · 소리 포함',cost:40,u:'개',min:'plus'},
@@ -1099,7 +1199,7 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
       ['흐린 날','soft overcast daylight'],
       ['밤 네온','neon signs at night with cool blue and pink tones']]},
     {lab:'⑥ 카메라·분위기',opts:[
-      ['폰으로 찍은 일상','candid iPhone photo, natural skin texture, everyday Instagram post'],
+      ['폰으로 찍은 일상','candid iPhone photo, natural skin texture, casual everyday snapshot'],
       ['35mm 필름','shot on 35mm film, slight grain, shallow depth of field'],
       ['50mm 인물 사진','50mm portrait lens, eye level, shallow depth of field, calm mood'],
       ['잡지 화보','editorial fashion photo, clean composition, natural skin texture']]}
@@ -1139,6 +1239,29 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
     outEn.textContent=en.join(c.sep);
     outKo.textContent='뜻: '+ko.join(' / ');
     outSet.innerHTML=c.set+(mode==='photo'&&pick.photo[0]===3?'<br>Soul ID 인물은 Character 탭에서 먼저 골라 주세요.':'');
+    setOutMedia();
+  }
+  /* 고른 조합의 실제 결과 (힉스필드로 직접 만든 예시) */
+  var EX_LIGHT={0:'photo-morning',1:'photo-sunset',3:'photo-neon'},EX_CAM={0:'pushin',1:'static',3:'orbit'};
+  function setOutMedia(){
+    var m=$('#outMedia'),cap=$('#outMediaCap'),p=pick[mode],src,kind,html,exact;
+    if(mode==='photo'){
+      var name=EX_LIGHT[p[4]];
+      exact=!!name&&p.every(function(v,i){return i===4||v===0});
+      if(!exact)name='photo-morning';
+      src='examples/'+name+'.webp';kind='img';
+      html='<img src="'+src+'" alt="이 프롬프트로 만든 예시 사진" width="900" height="1200"><span class="ai">AI 예시</span>';
+    }else{
+      var cam=EX_CAM[p[1]];
+      exact=!!cam&&p[0]===0&&p[2]===0;
+      if(!exact)cam='pushin';
+      src='examples/video-'+cam+'.mp4';kind='video';
+      html='<video src="'+src+'" poster="examples/video-'+cam+'.webp" autoplay muted loop playsinline preload="metadata"></video><span class="ai">AI 예시</span>';
+    }
+    if(m.getAttribute('data-src')!==src){m.innerHTML=html;m.setAttribute('data-src',src);m.setAttribute('data-lb',kind)}
+    m.setAttribute('data-cap',exact?outEn.textContent:'기본 조합으로 만든 예시예요.');
+    cap.innerHTML=exact?'<b>이 프롬프트 그대로 만든 결과</b>'+(mode==='photo'?'Soul 2.0':'Kling 3.0 · 720p · 5초')+' · 누르면 크게 보여요'
+      :'<b>이 조합은 예시가 없어요</b>기본 조합 결과를 보여 드려요. 직접 만들어 비교해 보세요.';
   }
   slotsEl.addEventListener('click',function(e){
     var b=e.target.closest('button[data-s]');if(!b)return;
@@ -1155,6 +1278,19 @@ footer details ol{list-style:decimal;padding-left:20px;margin-top:8px}
   $('#copyPrompt').addEventListener('click',function(){copy(outEn.textContent,'프롬프트를 복사했어요')});
   $('#copyHelper').addEventListener('click',function(){copy($('#helperText').textContent,'복사했어요. ChatGPT나 Claude에 붙여 넣으세요')});
   renderSlots();
+
+  /* 크게 보기 */
+  var lb=document.createElement('dialog');lb.className='lb';
+  lb.innerHTML='<div class="media"><button type="button" class="close" aria-label="닫기">×</button><div class="lb-body"></div></div><p></p>';
+  document.body.appendChild(lb);
+  function openLB(kind,src,cap){
+    lb.querySelector('.lb-body').innerHTML=kind==='video'?'<video src="'+src+'" autoplay muted loop playsinline controls></video>':'<img src="'+src+'" alt="">';
+    lb.querySelector('p').textContent=cap||'';
+    if(typeof lb.showModal==='function')lb.showModal();else window.open(src,'_blank');
+  }
+  lb.addEventListener('click',function(e){if(e.target===lb||e.target.classList.contains('close'))lb.close()});
+  lb.addEventListener('close',function(){lb.querySelector('.lb-body').innerHTML=''});
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-lb]');if(!b||b.closest('dialog'))return;openLB(b.getAttribute('data-lb'),b.getAttribute('data-src'),b.getAttribute('data-cap'))});
 
   /* 용어 찾기 */
   var q=$('#gq'),empty=$('#gempty'),terms=$$('#gloss > div');
