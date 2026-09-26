@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기획 · 시장 조사 | AI.Influence</title>
+<meta name="description" content="기획 노트 #1 — 인스타그램 AI 캐릭터 계정 18개 시장 조사: 반응률, 터지는 공식, 빈 니치, 2주 플랜, 수익 순서.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  /* doc switcher */
+  .docs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .doc{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-size:13.5px}
+  .doc em{font-style:normal;font-size:11px;font-weight:900;color:var(--accent)}
+  .doc.on{border-color:var(--accent);background:rgba(255,92,138,.1)}
+  .doc.soon{opacity:.5;border-style:dashed}
+  .doc.soon small{font-size:11px;color:var(--warn)}
+
+  /* 01 reality */
+  .reality{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:820px){.reality{grid-template-columns:1fr}}
+  .vrow{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line)}
+  .vrow:last-of-type{border-bottom:0}
+  .vrow .av{width:48px;height:48px;border-radius:50%;overflow:hidden;background:var(--card2)}
+  .vrow .nm{font-size:14px;font-weight:700}.vrow .nm small{color:var(--muted);font-weight:400;margin-left:6px}
+  .vflow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:13.5px;color:var(--muted)}
+  .vflow b{font-size:22px;font-weight:900;color:var(--text)}
+  .vflow .arr{color:var(--dim);font-size:18px}
+  .vflow .hit{font-size:34px;line-height:1}
+  .verdict{margin-top:6px;padding:12px 14px;border-radius:12px;background:rgba(255,92,138,.08);border:1px solid rgba(255,92,138,.25);font-size:14px}
+  .chartbox{position:relative}
+  .colchart{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:end;height:250px;margin-top:22px;padding:0 6px;border-bottom:1px solid var(--line2)}
+  .col{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;cursor:pointer;outline:none}
+  .col .val{font-size:22px;font-weight:900;margin-bottom:6px;white-space:nowrap}
+  .col .b{width:62%;max-width:92px;min-height:4px;height:0;border-radius:4px 4px 0 0;background:#4a4a66;transition:height 1.2s cubic-bezier(.2,.8,.2,1),filter .2s}
+  .col.hi .b{background:var(--grad)}
+  .col.hi .val{color:var(--accent)}
+  .col:hover .b,.col:focus .b{filter:brightness(1.25)}
+  .xl{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:center;margin-top:10px;font-size:14px;font-weight:700}
+  .xl small{display:block;color:var(--dim);font-weight:400;font-size:12px}
+  .callout{position:absolute;top:6px;right:8px;background:var(--card2);border:1px solid var(--line2);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700}
+  .callout b{color:var(--accent);font-size:18px}
+  details.more{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+  details.more summary{cursor:pointer;list-style:none;padding:14px 18px;font-size:14px;color:var(--muted);display:flex;justify-content:space-between}
+  details.more summary::-webkit-details-marker{display:none}
+  details.more summary::after{content:"▾";transition:transform .2s}
+  details.more[open] summary::after{transform:rotate(180deg)}
+  details.more .inner{padding:0 18px 18px}
+  .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:10px}
+  .seg button{padding:6px 12px;border-radius:8px;font-size:13px;color:var(--muted)}
+  .seg button.on{background:var(--card2);color:var(--text)}
+  .erow{display:grid;grid-template-columns:140px 1fr 56px;gap:10px;align-items:center;padding:5px 0;font-size:13px}
+  .erow .nm small{display:block;color:var(--dim);font-size:11px}
+  .erow .val{text-align:right;font-weight:700}
+  .erow.hot .val{color:var(--accent)}
+  .bar{height:10px;border-radius:99px;background:#23233a;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width 1s}
+  @media(max-width:480px){.erow{grid-template-columns:100px 1fr 48px}}
+
+  /* 02 formula */
+  .eq{display:flex;align-items:stretch}
+  .eqb{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;transition:.25s;min-width:0}
+  .eqb:hover{border-color:var(--line2);transform:translateY(-3px)}
+  .eqb .ic{font-size:28px}
+  .eqb h3{font-size:15px;margin:8px 0 10px;line-height:1.35}
+  .eqb .stat{font-size:26px;font-weight:900;line-height:1.1}
+  .eqb .proof{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .plus{flex:0 0 26px;display:grid;place-items:center;color:var(--dim);font-weight:900;font-size:20px}
+  .equals{margin:14px auto 0;display:flex;align-items:center;justify-content:center;gap:14px;padding:16px 20px;border-radius:16px;background:linear-gradient(90deg,rgba(255,92,138,.14),rgba(123,97,255,.14));border:1px solid rgba(255,92,138,.3);font-size:18px;font-weight:900;text-align:center}
+  .equals span{font-size:26px}
+  @media(max-width:900px){.eq{flex-direction:column}.plus{flex-basis:28px}.eqb{display:grid;grid-template-columns:44px 1fr auto;gap:0 12px;align-items:center}.eqb .ic{grid-row:1/3}.eqb h3{margin:0}.eqb .stat{grid-row:1/3;grid-column:3;font-size:22px;text-align:right}.eqb .proof{margin-top:2px}}
+
+  /* 03 niche */
+  .niche{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.niche{grid-template-columns:1fr}}
+  .niche .card{padding:22px}
+  .nh{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;margin-bottom:14px}
+  .nh .m{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:16px}
+  .ni{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 0;border-top:1px dashed var(--line)}
+  .ni .e{font-size:20px;line-height:1.3}
+  .ni b{font-size:15px;display:block}
+  .ni small{color:var(--muted);font-size:13px}
+  .red .ni b{color:#ffb0b0}
+  .red .nh .m{background:rgba(255,107,107,.15);color:var(--bad)}
+  .blue .nh .m{background:rgba(61,220,151,.15);color:var(--ok)}
+  .blue{border-color:rgba(61,220,151,.3)!important}
+
+  /* 04 character teaser */
+  .teaser{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+  .stack{display:flex}
+  .stack span{width:58px;height:58px;border-radius:50%;overflow:hidden;border:3px solid var(--card);margin-left:-14px;background:var(--card2)}
+  .stack span:first-child{margin-left:0;box-shadow:0 0 0 2px var(--ok)}
+  .teaser b{font-size:18px;display:block}
+  .teaser p{color:var(--muted);font-size:14px}
+  @media(max-width:700px){.teaser{grid-template-columns:1fr}.teaser .btn{justify-self:start}}
+
+  /* 05 start */
+  .subhead{font-size:17px;font-weight:900;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+  .subhead small{font-size:13px;color:var(--muted);font-weight:400}
+  .loop{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .ls{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 14px}
+  .ls:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--dim);font-weight:900;z-index:1}
+  .ls .n{font-size:11px;font-weight:900;color:var(--accent)}
+  .ls .ic{font-size:24px;margin:4px 0}
+  .ls b{display:block;font-size:15px}
+  .ls small{color:var(--muted);font-size:12.5px;line-height:1.45;display:block;margin-top:2px}
+  .loopback{margin-top:10px;border:1.5px dashed var(--line2);border-top:0;border-radius:0 0 16px 16px;height:22px;position:relative}
+  .loopback span{position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);background:var(--bg2);padding:0 10px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+  @media(max-width:900px){.loop{grid-template-columns:repeat(3,1fr)}.ls::after{display:none}}
+  @media(max-width:520px){.loop{grid-template-columns:repeat(2,1fr)}}
+  .plan-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:48px 0 14px}
+  .plan-head .subhead{margin:0}
+  .pbar{flex:1;min-width:180px;max-width:340px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+  .pbar .progress{flex:1;height:10px;background:#23233a;border-radius:99px;overflow:hidden}
+  .pbar .progress i{display:block;height:100%;width:0;background:var(--grad);transition:width .35s}
+  .pbar b{color:var(--text);min-width:38px;text-align:right}
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:900px){.phases{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.phases{grid-template-columns:1fr}}
+  .ph{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;transition:border-color .3s}
+  .ph.done{border-color:rgba(61,220,151,.45)}
+  .ph .day{font-size:12px;font-weight:900;color:var(--accent);letter-spacing:.5px}
+  .ph h4{font-size:16px;margin:2px 0 10px;display:flex;justify-content:space-between}
+  .ph h4 span{font-size:14px;opacity:0;transition:.3s}.ph.done h4 span{opacity:1}
+  .ph label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px dashed var(--line);font-size:14px;cursor:pointer}
+  .ph input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);flex-shrink:0}
+  .ph input:checked + span{color:var(--dim);text-decoration:line-through}
+  .done-msg{display:none;margin-top:14px;padding:12px 16px;border-radius:12px;background:rgba(61,220,151,.12);color:var(--ok);font-weight:700;text-align:center}
+  .done-msg.show{display:block;animation:pop .5s}
+
+  /* 06 money */
+  .stair{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end}
+  .st{position:relative;border-radius:16px 16px 6px 6px;padding:18px 16px;border:1px solid var(--line);height:var(--h);display:flex;flex-direction:column;transition:.25s}
+  .st:hover{transform:translateY(-4px)}
+  .st .lv{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:.5px}
+  .st h3{font-size:19px;margin:2px 0}
+  .st .cond{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .st .rv{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.25);margin-bottom:6px}
+  .st .rv em{font-style:normal;font-size:10.5px;font-weight:900;background:var(--warn);color:#1b1200;padding:1px 7px;border-radius:99px;margin-left:auto}
+  .st .none{font-size:13px;color:var(--dim)}
+  .st .keep{font-size:12.5px;color:var(--muted);padding:2px 2px 0}
+  .st .cnt{margin-top:auto;font-size:12px;color:var(--muted)}
+  .st .cnt b{color:var(--text);font-size:16px}
+  .s0{--h:200px;background:linear-gradient(180deg,#1b1b29,#161622)}
+  .s1{--h:270px;background:linear-gradient(180deg,rgba(255,92,138,.16),#171724);border-color:rgba(255,92,138,.4)}
+  .s2{--h:340px;background:linear-gradient(180deg,rgba(190,95,200,.16),#171724)}
+  .s3{--h:410px;background:linear-gradient(180deg,rgba(123,97,255,.2),#171724)}
+  .stair-axis{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--dim)}
+  @media(max-width:820px){.stair{grid-template-columns:1fr}.st{height:auto;border-radius:14px}.stair-axis{display:none}}
+  .evi{margin-top:16px;display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:14px;color:var(--muted)}
+  .evi b{color:var(--text)}
+
+  /* 07 caution */
+  .cau{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:860px){.cau{grid-template-columns:1fr 1fr}}
+  .cau .card{padding:18px;border-top:3px solid var(--warn)}
+  .cau .ic{font-size:24px}
+  .cau h3{font-size:15.5px;margin:8px 0 4px}
+  .cau p{font-size:13.5px;color:var(--muted)}
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+  details.faq summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary::after{content:"+";color:var(--accent);font-size:22px;line-height:1;transition:transform .2s}
+  details.faq[open] summary::after{transform:rotate(45deg)}
+  details.faq p{color:var(--muted);margin-top:8px;font-size:14.5px}
+  .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;align-items:start;margin-top:36px}
+  @media(max-width:760px){.faq-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-chapter="plan">
+<nav id="topnav"></nav>
+<div class="subnav"><div class="wrap">
+  <a href="#tldr">요약</a><a href="#s1"><em>01</em>현실</a><a href="#s2"><em>02</em>공식</a><a href="#s3"><em>03</em>자리</a><a href="#s4"><em>04</em>캐릭터</a><a href="#s5"><em>05</em>시작</a><a href="#s6"><em>06</em>수익</a><a href="#s7"><em>07</em>주의</a>
+</div></div>
+
+<header class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="/">홈</a>›<b>01 기획</b></div>
+    <h1>인스타 AI 캐릭터 <span class="grad">시장 조사</span></h1>
+    <p class="lead">한국 10개·해외 8개 AI 캐릭터 계정의 최근 게시물을 직접 뜯어봤어요. 결론은 "얼굴 말고 이야기로 뜬다".</p>
+    <div class="pills"><span class="pill">📅 2026년 9월 조사</span><span class="pill">🔎 계정 18개</span><span class="pill">⏱️ 읽는 시간 4분</span></div>
+    <div class="docs" aria-label="기획 노트 목록">
+      <span class="doc on"><em>#1</em>시장 조사</span>
+      <span class="doc soon"><em>#2</em>콘텐츠 캘린더 설계 <small>작성 예정</small></span>
+      <span class="doc soon"><em>#3</em>수익화 실험 설계 <small>작성 예정</small></span>
+    </div>
+  </div>
+</header>
+
+<!-- TL;DR -->
+<div class="wrap" id="tldr" style="padding-bottom:72px">
+  <div class="tldr-title">📌 바쁘면 이것만 보세요</div>
+  <div class="tldr">
+    <a class="tl reveal" href="#s1"><span class="k">요약 1 · 현실</span><span class="big grad">50배</span>
+      <p>팔로워가 적은 계정이 반응률은 더 높아요<small>팔로워 1~2천 계정 ≈ 7.5% vs 16만 이상 ≈ 0.15%</small></p><span class="go">01 근거 보기 →</span></a>
+    <a class="tl reveal" href="#s2"><span class="k">요약 2 · 공식</span><span class="big grad">32만</span>
+      <p>셀카 말고 시리즈 상황극 릴스가 터져요<small>팔로워 2.3만 계정의 릴스 한 편 좋아요 수</small></p><span class="go">02 공식 보기 →</span></a>
+    <a class="tl reveal" href="#s6"><span class="k">요약 3 · 수익</span><span class="big grad">1천 명</span>
+      <p>협찬보다 디지털 상품이 먼저 돈이 돼요<small>팔로워 1천 명 수준부터 PDF·가이드 판매 가능</small></p><span class="go">06 수익 순서 보기 →</span></a>
+  </div>
+</div>
+
+<!-- 01 -->
+<section id="s1" class="alt">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">01</span>
+      <div><p class="eyebrow">현실 체크</p><h2>팔로워가 많을수록 <span class="grad">반응은 오히려 낮았어요</span></h2><p class="sub">큰 계정은 사진 위주로 업로드가 느려졌고, 작은 계정은 매일 스토리 릴스를 올렸어요.</p></div></div>
+    <div class="reality reveal">
+      <div class="card">
+        <h3>팔로워 7배 차이, 결과는 정반대</h3><p class="cap">두 계정의 최근 게시물 반응</p>
+        <div class="vrow"><div class="av" data-av="rozy"></div><div><div class="nm">rozy.gram<small>사진 위주 · 월 1~3회</small></div>
+          <div class="vflow">팔로워 <b>16만</b><span class="arr">→</span>좋아요 <b>~300</b></div></div></div>
+        <div class="vrow"><div class="av" data-av="emma"></div><div><div class="nm">emma.talks__<small>연애 상황극 릴스 · 주 2~3회</small></div>
+          <div class="vflow">팔로워 <b>2.3만</b><span class="arr">→</span>좋아요 <b class="grad hit">32만</b> 🔥</div></div></div>
+        <div class="verdict">👉 팔로워가 1/7인데 좋아요는 <b>1,000배</b>. 차이는 <b>형식</b>(사진 vs 상황극 릴스)이었어요.</div>
+      </div>
+      <div class="card chartbox" id="chartbox">
+        <h3>팔로워 규모별 반응률</h3><p class="cap">팔로워 대비 좋아요 비율, 그룹별 대략 평균 · 막대에 마우스를 올리면 계정이 보여요</p>
+        <div class="colchart" id="colchart"><div class="callout">작은 계정이 약 <b>50배</b></div></div>
+        <div class="xl" id="xl"></div>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+    <details class="more reveal" id="rawdata">
+      <summary>계정별 데이터 10개 자세히 보기</summary>
+      <div class="inner">
+        <div class="seg"><button class="on" data-sort="rate">반응률 순</button><button data-sort="fol">팔로워 순</button></div>
+        <div id="erows"></div>
+        <p class="note">최근 게시물 4~7개 기준 대략치. 좋아요를 숨긴 계정은 제외했어요.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="s2">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">02</span>
+      <div><p class="eyebrow">터지는 공식</p><h2>잘 되는 계정은 <span class="grad">이 5가지를 더해요</span></h2><p class="sub">하나만 해도 효과가 있지만, 다 합치면 "다음 편 기다리는 계정"이 돼요.</p></div></div>
+    <div class="eq reveal">
+      <div class="eqb"><div class="ic">🎭</div><h3>공감 상황극</h3><div class="stat grad">32만</div><p class="proof">emma.talks__ '더치페이' 연애 상황극 좋아요</p></div>
+      <div class="plus">+</div>
+      <div class="eqb"><div class="ic">📺</div><h3>EP.1, EP.2 시리즈</h3><div class="stat grad">7배</div><p class="proof">팔로워 230명인데 한 편 좋아요 1,668개</p></div>
+      <div class="plus">+</div>
+      <div class="eqb"><div class="ic">🐱</div><h3>동물 보조 캐릭터</h3><div class="stat grad">2,374</div><p class="proof">팔로워 1천 계정의 고양이 에피소드 좋아요</p></div>
+      <div class="plus">+</div>
+      <div class="eqb"><div class="ic">🎬</div><h3>릴스로, 주 3~7회</h3><div class="stat grad">7개 중 6~7</div><p class="proof">성장 중인 계정의 최근 게시물 중 릴스 비율</p></div>
+      <div class="plus">+</div>
+      <div class="eqb"><div class="ic">🏷️</div><h3>AI임을 공개</h3><div class="stat grad">대부분</div><p class="proof">반응 좋은 신규 계정 대부분이 'AI 생성' 표시</p></div>
+    </div>
+    <div class="equals reveal"><span>=</span>다음 편을 기다리는 계정<span>🔥</span></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="s3" class="alt">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">03</span>
+      <div><p class="eyebrow">어디서 시작할까</p><h2>셀카 판은 꽉 찼고, <span class="grad">빈자리는 따로 있어요</span></h2><p class="sub">조사한 18개 계정 중 '노릴 자리'를 하는 곳은 거의 없었어요.</p></div></div>
+    <div class="niche reveal">
+      <div class="card red">
+        <div class="nh"><span class="m">✕</span>피할 자리</div>
+        <div class="ni"><span class="e">🤳</span><div><b>예쁜 여성 셀카·패션 룩</b><small>#aigirl 인기 게시물 대부분. 신규 계정은 좋아요 0~5개</small></div></div>
+        <div class="ni"><span class="e">💔</span><div><b>AI 여친·성인향 구독</b><small>광고주가 피하고 플랫폼·법적 리스크가 큼</small></div></div>
+        <div class="ni"><span class="e">🎤</span><div><b>대기업형 버추얼 아이돌</b><small>제작비는 큰데 게시물당 반응 10~100개</small></div></div>
+      </div>
+      <div class="card blue">
+        <div class="nh"><span class="m">○</span>노릴 자리</div>
+        <div class="ni"><span class="e">🍳</span><div><b>남성 캐릭터의 일상·요리</b><small>팔로워 1,601명 요리 계정이 반응률 약 5%</small></div></div>
+        <div class="ni"><span class="e">🇰🇷</span><div><b>해외 팬 겨냥 K-라이프</b><small>한국 음식·동네를 영어로 보여주는 계정은 소수</small></div></div>
+        <div class="ni"><span class="e">💼</span><div><b>직업이 있는 캐릭터</b><small>바리스타·미용사처럼 '일터' 있는 캐릭터는 거의 없음</small></div></div>
+        <div class="ni"><span class="e">👵</span><div><b>중장년·시니어</b><small>조사한 18개 전부 20대 안팎. 40~60대는 0개</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 teaser -->
+<section id="s4">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">04</span>
+      <div><p class="eyebrow">캐릭터 아이디어</p><h2>빈자리를 노린 <span class="grad">후보 5명</span>을 뽑았어요</h2><p class="sub">자세한 비교와 캐릭터 설정은 캐릭터 챕터에 따로 정리했어요.</p></div></div>
+    <a class="card teaser reveal" href="/characters/">
+      <div class="stack"><span data-av="hana"></span><span data-av="doyun"></span><span data-av="gyeol"></span><span data-av="seojin"></span><span data-av="bokdan"></span></div>
+      <div><b>하나 쌤 · 하도윤 · 한결 · 정서진 · 복단 여사</b><p>초보 추천은 하나 쌤. 한 명이 한 장소에서 말하면 끝이라 제작이 가장 단순해요.</p></div>
+      <span class="btn primary">02 캐릭터 챕터 →</span>
+    </a>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="s5" class="alt">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">05</span>
+      <div><p class="eyebrow">시작하기</p><h2><span class="grad">2주면</span> 첫 릴스까지 갈 수 있어요</h2><p class="sub">한 편은 6단계로 만들고, 반응을 보고 다음 편에 반복해요.</p></div></div>
+    <div class="reveal">
+      <div class="subhead">🔁 한 편을 만드는 6단계</div>
+      <div class="loop">
+        <div class="ls"><span class="n">STEP 1</span><div class="ic">📝</div><b>기획</b><small>끝맺음부터 정하기. "다음 편"이 궁금하게</small></div>
+        <div class="ls"><span class="n">STEP 2</span><div class="ic">🖼️</div><b>이미지</b><small>기준 얼굴 1장을 정해 계속 재사용</small></div>
+        <div class="ls"><span class="n">STEP 3</span><div class="ic">🎞️</div><b>영상</b><small>한 명·한 장소 컷이 가장 안정적 (Higgsfield 등)</small></div>
+        <div class="ls"><span class="n">STEP 4</span><div class="ic">✂️</div><b>편집</b><small>자막 크게, 첫 1초에 상황이 보이게</small></div>
+        <div class="ls"><span class="n">STEP 5</span><div class="ic">📤</div><b>업로드</b><small>릴스로 주 3~7회, AI 캐릭터 표시</small></div>
+        <div class="ls"><span class="n">STEP 6</span><div class="ic">📊</div><b>분석</b><small>저장·공유 많은 편을 찾아 후속편</small></div>
+      </div>
+      <div class="loopback"><span>↺ 6단계 결과가 다시 1단계 기획으로</span></div>
+    </div>
+    <div class="reveal">
+      <div class="plan-head">
+        <div class="subhead">🗓️ 2주 플랜 <small>체크하면서 따라 해보세요</small></div>
+        <div class="pbar"><div class="progress"><i id="bar"></i></div><b id="pct">0%</b></div>
+      </div>
+      <div class="phases" id="phases">
+        <div class="ph"><span class="day">DAY 1–2</span><h4>정하기<span>✅</span></h4>
+          <label><input type="checkbox"><span>노릴 자리(03) 하나 고르기</span></label>
+          <label><input type="checkbox"><span>캐릭터 이름·나이·말투 한 문단</span></label>
+          <label><input type="checkbox"><span>동물·소품 보조 캐릭터 정하기</span></label></div>
+        <div class="ph"><span class="day">DAY 3–4</span><h4>만들기<span>✅</span></h4>
+          <label><input type="checkbox"><span>기준 얼굴 이미지 확정</span></label>
+          <label><input type="checkbox"><span>EP.1~EP.5 한 줄 대본</span></label>
+          <label><input type="checkbox"><span>6단계를 한 번 끝까지 돌려보기</span></label></div>
+        <div class="ph"><span class="day">DAY 5–7</span><h4>올리기<span>✅</span></h4>
+          <label><input type="checkbox"><span>릴스 6개 비축</span></label>
+          <label><input type="checkbox"><span>프로필에 'AI 캐릭터' 표시</span></label>
+          <label><input type="checkbox"><span>EP.1 업로드</span></label></div>
+        <div class="ph"><span class="day">DAY 8–14</span><h4>키우기<span>✅</span></h4>
+          <label><input type="checkbox"><span>주 3회 이상 이어서 업로드</span></label>
+          <label><input type="checkbox"><span>저장·공유 많은 편 골라 후속편</span></label>
+          <label><input type="checkbox"><span>첫 디지털 상품 아이디어 적기</span></label></div>
+      </div>
+      <div class="done-msg" id="done">🎉 2주 완주! 이제 반응 좋은 포맷을 계속 반복하면 돼요</div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section id="s6">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">06</span>
+      <div><p class="eyebrow">수익 순서</p><h2>돈은 협찬보다 <span class="grad">디지털 상품이 먼저</span> 들어와요</h2><p class="sub">계단 한 칸 올라갈 때마다 수익원이 2개씩 늘어나요.</p></div></div>
+    <div class="reveal">
+      <div class="stair">
+        <div class="st s0"><span class="lv">STAGE 0</span><h3>준비기</h3><p class="cond">컨셉 확정 · 릴스 비축</p><p class="none">아직 수익보다<br>포맷 실험이 먼저</p><p class="cnt">수익원 <b>0</b>개</p></div>
+        <div class="st s1"><span class="lv">STAGE 1</span><h3>초기</h3><p class="cond">팔로워 1천 명 전후</p><div class="rv">📦 디지털 상품<em>먼저!</em></div><div class="rv">🔗 제휴 링크</div><p class="cnt">수익원 <b>2</b>개</p></div>
+        <div class="st s2"><span class="lv">STAGE 2</span><h3>성장기</h3><p class="cond">터진 시리즈 확보</p><div class="rv">🎬 AI 영상 제작 의뢰</div><div class="rv">🤝 브랜드 협찬</div><p class="keep">+ 초기 수익 2개 유지</p><p class="cnt">수익원 <b>4</b>개</p></div>
+        <div class="st s3"><span class="lv">STAGE 3</span><h3>확장기</h3><p class="cond">캐릭터가 곧 브랜드</p><div class="rv">🧸 굿즈·이모티콘</div><div class="rv">🎓 강의·가이드</div><p class="keep">+ 이전 수익 4개 유지</p><p class="cnt">수익원 <b>6</b>개</p></div>
+      </div>
+      <div class="stair-axis"><span>시작</span><span>시간·팔로워 →</span></div>
+      <div class="evi">💡<div><b>왜 디지털 상품이 먼저?</b> 조사한 해외 계정 veylaspeaks·itsmichelle.ai는 협찬보다 가이드·강의 링크를 먼저 프로필에 걸었어요. PDF나 템플릿은 팔로워가 적어도 팔 수 있어요.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section id="s7" class="alt">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num" style="-webkit-text-stroke-color:var(--warn)">07</span>
+      <div><p class="eyebrow" style="color:var(--warn)">주의</p><h2>이 <span style="color:var(--warn)">4가지</span>만 지키면 돼요</h2></div></div>
+    <div class="cau reveal">
+      <div class="card"><div class="ic">🏷️</div><h3>AI임을 밝히기</h3><p>잘 되는 계정 대부분이 이미 표시해요.</p></div>
+      <div class="card"><div class="ic">📢</div><h3>광고는 광고라고</h3><p>협찬·제휴 게시물엔 '광고' 표기.</p></div>
+      <div class="card"><div class="ic">🙅</div><h3>실존 인물 흉내 X</h3><p>연예인 닮은 얼굴·이름은 초상권 문제.</p></div>
+      <div class="card"><div class="ic">🎬</div><h3>장면 복제 X</h3><p>드라마 장면은 그대로 쓰지 말고 새로 연출.</p></div>
+    </div>
+    <div class="faq-grid reveal">
+      <details class="faq"><summary>팔로워가 적어도 돈이 되나요?</summary><p>디지털 상품은 팔로워 1천 명 수준에서도 팔 수 있어요. 협찬은 터진 시리즈가 생긴 뒤에 따라와요.</p></details>
+      <details class="faq"><summary>얼굴이 매번 조금씩 달라져요</summary><p>기준 이미지 1장을 계속 참조로 넣으세요. 한 명이 한 장소에서 말하는 포맷이면 훨씬 쉬워요.</p></details>
+      <details class="faq"><summary>AI라고 밝히면 인기가 떨어지나요?</summary><p>반응이 좋았던 계정들 대부분이 AI임을 공개했어요. 사람들은 "다음 편이 궁금한가"에 반응해요.</p></details>
+      <details class="faq"><summary>영어를 못 하면요?</summary><p>하나 쌤 대신 한국어로 운영할 수 있는 다른 후보를 고르면 돼요. 캐릭터 챕터에서 '한국어로만 운영'을 눌러보세요.</p></details>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <a class="next reveal" href="/characters/"><div><small>다음 챕터</small><b>02 캐릭터 — 후보 5명 비교와 캐릭터 설정</b></div><span class="arr">→</span></a>
+  </div>
+</section>
+
+<footer id="foot" data-note="데이터: 인스타그램 공개 AI 캐릭터 계정 18개(한국 10·해외 8)의 최근 게시물을 2026년 9월에 직접 확인한 대략치. 그룹 평균은 좋아요를 공개한 10개 계정 기준."></footer>
+
+<script src="/assets/common.js"></script>
+<script>
+/* grouped column chart */
+const GROUPS=[
+  {x:'팔로워 1~2천',s:'2개 계정',v:7.5,lab:'≈7.5%',hi:true,list:'arincha.archive 10%+<br>dohoon.kim._ 약 5%'},
+  {x:'팔로워 1~4만',s:'5개 계정',v:1.0,lab:'≈1%',list:'mosoniinochiwo 약 3.5%<br>ruuui_li 0.7% · thehan_corea 0.3%<br>meet.kayal 0.2% · iiterniti 0.1%'},
+  {x:'팔로워 16만+',s:'3개 계정',v:0.15,lab:'≈0.15%',list:'rozy.gram 0.2%<br>fit_aitana 0.15% · lilmiquela 0.1%'}
+];
+const colchart=document.getElementById('colchart'),tip=document.getElementById('tip'),box=document.getElementById('chartbox');
+GROUPS.forEach(g=>{
+  const c=document.createElement('div');c.className='col'+(g.hi?' hi':'');c.tabIndex=0;c.setAttribute('aria-label',`${g.x}: 반응률 ${g.lab}`);
+  c.innerHTML=`<span class="val">${g.lab}</span><div class="b" data-h="${Math.max(2,g.v/7.5*78)}"></div>`;
+  const show=()=>{tip.innerHTML=`<b>${g.x} · ${g.s}</b>${g.list}`;const r=c.getBoundingClientRect(),p=box.getBoundingClientRect();
+    tip.style.width='210px';tip.style.left=Math.min(p.width-222,Math.max(8,r.left-p.left+r.width/2-105))+'px';tip.style.top=(r.top-p.top+40)+'px';tip.classList.add('show');};
+  c.addEventListener('mouseenter',show);c.addEventListener('focus',show);c.addEventListener('click',show);
+  c.addEventListener('mouseleave',()=>tip.classList.remove('show'));c.addEventListener('blur',()=>tip.classList.remove('show'));
+  colchart.appendChild(c);
+});
+document.getElementById('xl').innerHTML=GROUPS.map(g=>`<div>${g.x}<small>${g.s}</small></div>`).join('');
+box.closest('.reveal').addEventListener('revealed',()=>colchart.querySelectorAll('.b').forEach(b=>b.style.height=b.dataset.h+'%'));
+
+/* raw data */
+const DATA=[
+  {n:'arincha.archive',f:1073,fl:'1,073',r:10},{n:'dohoon.kim._',f:1601,fl:'1,601',r:5},
+  {n:'mosoniinochiwo',f:15000,fl:'1.5만',r:3.5},{n:'ruuui_li',f:14000,fl:'1.4만',r:0.7},
+  {n:'thehan_corea',f:31000,fl:'3.1만',r:0.3},{n:'rozy.gram',f:160000,fl:'16만',r:0.2},
+  {n:'meet.kayal',f:36000,fl:'3.6만',r:0.2},{n:'fit_aitana',f:403000,fl:'40.3만',r:0.15},
+  {n:'iiterniti',f:19000,fl:'1.9만',r:0.1},{n:'lilmiquela',f:2250000,fl:'225만',r:0.1}
+];
+const erows=document.getElementById('erows');
+function renderRows(key){
+  const arr=[...DATA].sort((a,b)=>key==='rate'?b.r-a.r:b.f-a.f),max=key==='rate'?10:Math.log10(2250000);
+  const rt=d=>d.r>=10?'10%+':d.r+'%';
+  erows.innerHTML=arr.map(d=>{const w=key==='rate'?d.r/max*100:Math.log10(d.f)/max*100,hot=d.r>=3;
+    return `<div class="erow${hot?' hot':''}"><div class="nm">${d.n}<small>${key==='rate'?'팔로워 '+d.fl:'반응률 '+rt(d)}</small></div><div class="bar"><i data-w="${w.toFixed(1)}" style="background:${hot?'var(--grad)':'#4a4a66'}"></i></div><div class="val">${key==='rate'?rt(d):d.fl}</div></div>`;}).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>erows.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%')));
+}
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));renderRows(b.dataset.sort);}));
+document.getElementById('rawdata').addEventListener('toggle',e=>{if(e.target.open)renderRows(document.querySelector('.seg .on').dataset.sort);});
+
+/* 2-week plan */
+const boxes=document.querySelectorAll('#phases input'),bar=document.getElementById('bar'),pct=document.getElementById('pct'),done=document.getElementById('done');let celebrated=false;
+boxes.forEach(b=>b.addEventListener('change',()=>{
+  const d=[...boxes].filter(x=>x.checked).length,p=Math.round(d/boxes.length*100);bar.style.width=p+'%';pct.textContent=p+'%';
+  document.querySelectorAll('.ph').forEach(ph=>ph.classList.toggle('done',[...ph.querySelectorAll('input')].every(i=>i.checked)));
+  done.classList.toggle('show',p===100);if(p===100&&!celebrated){celebrated=true;confetti();}if(p<100)celebrated=false;
+}));
+</script>
+</body>
+</html>

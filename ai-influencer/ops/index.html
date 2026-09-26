@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>운영 · 대시보드 | AI.Influence</title>
+<meta name="description" content="AI 인플루언서 계정 운영 대시보드 — 팔로워 추이, 게시물별 참여율, 수익, 업로드 계획.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .dash{display:grid;gap:16px}
+  .dash>*,.row2>*,.row2b>*,.kpis>*{min-width:0}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 12px;position:relative;overflow:hidden}
+  .kpi .lb{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+  .kpi .v{font-size:32px;font-weight:900;letter-spacing:-1px;margin:4px 0 2px;line-height:1.15}
+  .kpi .d{font-size:12.5px;color:var(--muted)}
+  .kpi .d b{color:var(--ok)}
+  .kpi .d b.dn{color:var(--bad)}
+  .kpi svg{display:block;width:100%;height:36px;margin-top:8px}
+  @media(max-width:480px){.kpi .v{font-size:25px}.kpi{padding:14px 14px 10px}}
+  .row2{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .row2b{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.row2,.row2b{grid-template-columns:1fr}}
+  .card .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .chart{position:relative;width:100%}
+  .chart svg{display:block;width:100%}
+  .chart .axis{fill:var(--dim);font-size:11.5px;font-family:inherit}
+  .chart .grid{stroke:#23233a;stroke-width:1}
+  .chart .ev{stroke:var(--warn);stroke-dasharray:4 4;stroke-width:1.2;opacity:.7}
+  .chart .evl{fill:var(--warn);font-size:11.5px;font-weight:700;font-family:inherit}
+  .chart .avg{stroke:var(--muted);stroke-dasharray:5 5;stroke-width:1.2}
+  .chart .avgl{fill:var(--muted);font-size:11.5px;font-family:inherit}
+  .chart .xh{stroke:var(--line2);stroke-width:1}
+  .chart .hit{fill:transparent;cursor:pointer}
+  .ins{display:grid;gap:10px}
+  .in{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:14px}
+  .in .e{font-size:20px;line-height:1.3}
+  .in small{display:block;color:var(--muted);font-size:12px}
+  .in b{color:var(--text)}
+  .money .ln{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .money .ln small{display:block;color:var(--dim);font-size:12px}
+  .money .ln .amt{font-weight:900;font-size:16px;text-align:right}
+  .money .ln .mbar{grid-column:1/-1;height:6px;border-radius:3px;background:#23233a;overflow:hidden}
+  .money .ln .mbar i{display:block;height:100%;border-radius:3px;background:var(--grad)}
+  .money .ln.exp .amt{color:var(--bad)}
+  .money .ln.exp .mbar i{background:#6b3b48}
+  .money .net{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(61,220,151,.08);border:1px solid rgba(61,220,151,.3)}
+  .money .net b{font-size:26px;font-weight:900;color:var(--ok)}
+  .week{display:grid;gap:6px}
+  .day{border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:9px 12px;display:flex;align-items:center;gap:12px;font-size:13.5px}
+  .day .dn{font-weight:900;font-size:13px;color:var(--muted);min-width:18px}
+  .day .tt{font-weight:500;line-height:1.4}
+  .day .ty{margin-left:auto;font-size:11px;color:var(--dim);border:1px solid var(--line2);border-radius:99px;padding:1px 7px}
+  .day .st{font-size:11.5px;font-weight:700;white-space:nowrap}
+  .day.done{border-color:rgba(61,220,151,.4)}.day.done .st{color:var(--ok)}
+  .day.ready .st{color:#8fd3ff}.day.draft .st{color:var(--warn)}.day.todo .st{color:var(--muted)}
+  .day.off{opacity:.45}
+  .tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+  th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:var(--card2);color:var(--muted);font-weight:500;font-size:12.5px;cursor:pointer;user-select:none;position:sticky;top:0}
+  th:hover{color:var(--text)}
+  th.on{color:var(--accent)}
+  th:nth-child(2),td:nth-child(2),th:nth-child(4),td:nth-child(4){text-align:left}
+  td:nth-child(2){white-space:normal;min-width:220px}
+  tr:last-child td{border-bottom:0}
+  tr.top td{background:rgba(255,92,138,.06)}
+  td .rt{font-weight:900}
+  tr.top .rt{color:var(--accent)}
+  .typ{font-size:11px;padding:2px 7px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
+</style>
+</head>
+<body data-chapter="ops">
+<nav id="topnav"></nav>
+<div class="subnav"><div class="wrap">
+  <a href="#kpi">핵심 지표</a><a href="#growth">팔로워 추이</a><a href="#posts">게시물 반응</a><a href="#money">수익</a><a href="#plan">업로드 계획</a><a href="#log">전체 기록</a>
+</div></div>
+
+<header class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="/">홈</a>›<b>03 운영</b></div>
+    <h1>운영 <span class="grad">대시보드</span></h1>
+    <p class="lead">실제 계정을 운영하면서 팔로워·반응·수익을 주차별로 기록하는 곳이에요.</p>
+    <div class="pills" id="pills"></div>
+  </div>
+</header>
+
+<div class="wrap dash" style="padding-bottom:72px">
+  <div class="demo-banner reveal" id="demo"><span>🧪</span><div><b>지금 보이는 숫자는 샘플(더미) 데이터예요.</b> 아직 운영 전이라, 하나 쌤으로 8주 운영했다고 가정한 예시로 채워뒀어요. 실제 운영을 시작하면 진짜 숫자로 바뀌어요.</div></div>
+
+  <div class="kpis reveal" id="kpi"></div>
+
+  <div class="row2" id="growth">
+    <div class="card reveal">
+      <div class="hd"><div><h3>팔로워 추이</h3><p class="cap">주차별 팔로워 수 · 점에 마우스를 올리면 숫자가 보여요</p></div></div>
+      <div class="chart" id="lineChart"></div>
+    </div>
+    <div class="card reveal">
+      <h3>이번 주 한눈에</h3><p class="cap">데이터에서 자동으로 뽑은 요약</p>
+      <div class="ins" id="insights" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="card reveal" id="posts">
+    <div class="hd"><div><h3>게시물별 참여율</h3><p class="cap">참여율 = (좋아요+댓글+저장+공유) ÷ 조회수 · 분홍 막대가 상위 3개</p></div></div>
+    <div class="chart" id="barChart"></div>
+  </div>
+
+  <div class="row2b">
+    <div class="card money reveal" id="money">
+      <h3>수익</h3><p class="cap">누적 수입과 지출</p>
+      <div id="moneyRows" style="margin-top:6px"></div>
+    </div>
+    <div class="card reveal" id="plan">
+      <h3>이번 주 업로드 계획</h3><p class="cap">✅ 완료 · 🟢 준비 완료 · ✏️ 초안 · ⏳ 할 일</p>
+      <div class="week" id="week" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="card reveal" id="log">
+    <div class="hd"><div><h3>게시물 전체 기록</h3><p class="cap">열 제목을 누르면 정렬돼요</p></div></div>
+    <div class="tbl-wrap"><table id="tbl"></table></div>
+  </div>
+
+  <a class="next reveal" href="/reports/" style="margin-top:20px"><div><small>다음 챕터</small><b>04 리포트 — 주간 회고와 분석</b></div><span class="arr">→</span></a>
+</div>
+
+<footer id="foot"></footer>
+
+<script src="/assets/common.js"></script>
+<script src="/ops/data.js"></script>
+<script>
+const D=OPS, P=D.posts.map(p=>({...p,eng:(p.likes+p.comments+p.saves+p.shares)/p.views}));
+const last=D.followers.length-1, W=D.weeks.length;
+if(!D.demo)document.getElementById('demo').remove();
+document.getElementById('pills').innerHTML=`<span class="pill">📷 ${D.platform} ${D.account}</span><span class="pill">🎭 ${D.character}</span><span class="pill">📅 ${W}주차</span>${D.demo?'<span class="pill demo">샘플 데이터</span>':`<span class="pill">🔄 ${D.updated}</span>`}`;
+
+/* ---------- KPIs ---------- */
+const avgEng=arr=>arr.length?arr.reduce((s,p)=>s+p.eng,0)/arr.length:0;
+const recent=P.filter(p=>p.w>W-4), prev=P.filter(p=>p.w<=W-4&&p.w>W-8);
+const income=D.money.income.reduce((s,x)=>s+x.amount,0), expense=D.money.expense.reduce((s,x)=>s+x.amount,0);
+const perWeek=D.weeks.map((_,i)=>P.filter(p=>p.w===i+1).length);
+const engWeek=D.weeks.map((_,i)=>avgEng(P.filter(p=>p.w===i+1)));
+function spark(vals){const w=200,h=36,mx=Math.max(...vals),mn=Math.min(...vals),r=mx-mn||1;
+  const pts=vals.map((v,i)=>[i/(vals.length-1)*w,h-4-(v-mn)/r*(h-8)]);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="M${pts.map(p=>p.join(',')).join('L')}" fill="none" stroke="url(#sg)" stroke-width="2" vector-effect="non-scaling-stroke"/><defs><linearGradient id="sg"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs></svg>`;}
+const dF=D.followers[last]-D.followers[last-1];
+const kp=[
+  {lb:'팔로워',v:fmt.n(D.followers[last]),d:`지난주보다 <b>+${fmt.n(dF)}</b>`,s:D.followers},
+  {lb:'게시물',v:P.length+'개',d:`이번 주 <b>+${perWeek[last]}</b>개`,s:perWeek.map((_,i)=>perWeek.slice(0,i+1).reduce((a,b)=>a+b,0))},
+  {lb:'평균 참여율 (최근 4주)',v:fmt.pct(avgEng(recent)),d:`이전 4주 ${fmt.pct(avgEng(prev))} → <b class="${avgEng(recent)>=avgEng(prev)?'':'dn'}">${avgEng(recent)>=avgEng(prev)?'▲':'▼'} ${(Math.abs(avgEng(recent)-avgEng(prev))*100).toFixed(1)}%p</b>`,s:engWeek},
+  {lb:'누적 순이익',v:fmt.won(income-expense),d:`수입 ${fmt.won(income)} − 지출 ${fmt.won(expense)}`,s:[0,0,0,0,0,-expense/2,income*.4-expense,income-expense]}
+];
+document.getElementById('kpi').innerHTML=kp.map(k=>`<div class="kpi"><div class="lb">${k.lb}${D.demo?'<span class="pill demo" style="padding:1px 7px;font-size:10.5px">샘플</span>':''}</div><div class="v">${k.v}</div><div class="d">${k.d}</div>${spark(k.s)}</div>`).join('');
+
+/* ---------- line chart ---------- */
+function niceMax(v){const s=[100,200,250,500,1000,2000,2500,5000,10000,20000,50000,100000];for(const x of s){if(v<=x*4)return Math.ceil(v/x)*x;}return v;}
+function lineChart(){
+  const box=document.getElementById('lineChart'),w=box.clientWidth,h=w<500?220:330,l=44,r=14,t=24,b=30;
+  const ymax=niceMax(Math.max(...D.followers)*1.1),iw=w-l-r,ih=h-t-b;
+  const X=i=>l+i/(W-1)*iw,Y=v=>t+ih-v/ymax*ih;
+  const ticks=[0,ymax/3,ymax*2/3,ymax].map(v=>Math.round(v));
+  const pts=D.followers.map((v,i)=>[X(i),Y(v)]);
+  let s=`<svg viewBox="0 0 ${w} ${h}" height="${h}" role="img" aria-label="주차별 팔로워 추이: ${D.followers.map((v,i)=>D.weeks[i]+' '+v).join(', ')}">
+  <defs><linearGradient id="la" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c8a" stop-opacity=".28"/><stop offset="1" stop-color="#ff5c8a" stop-opacity="0"/></linearGradient>
+  <linearGradient id="ll"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs>`;
+  ticks.forEach(v=>{s+=`<line class="grid" x1="${l}" x2="${w-r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis" x="${l-8}" y="${Y(v)+4}" text-anchor="end">${fmt.n(v)}</text>`;});
+  D.weeks.forEach((wk,i)=>{if(w<420&&i%2)return;s+=`<text class="axis" x="${X(i)}" y="${h-8}" text-anchor="middle">${wk}</text>`;});
+  (D.events||[]).forEach(e=>{const x=X(e.w-1);s+=`<line class="ev" x1="${x}" x2="${x}" y1="${t}" y2="${t+ih}"/><text class="evl" x="${x-4}" y="${t-8}" text-anchor="end">${e.label}</text>`;});
+  s+=`<path d="M${pts.map(p=>p.join(',')).join('L')}L${X(W-1)},${t+ih}L${l},${t+ih}Z" fill="url(#la)"/>`;
+  s+=`<path d="M${pts.map(p=>p.join(',')).join('L')}" fill="none" stroke="url(#ll)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  s+=`<circle cx="${pts[last][0]}" cy="${pts[last][1]}" r="5" fill="#7b61ff" stroke="var(--card)" stroke-width="2"/><text x="${pts[last][0]-8}" y="${pts[last][1]-10}" text-anchor="end" fill="var(--text)" font-size="13" font-weight="900" font-family="inherit">${fmt.n(D.followers[last])}</text>`;
+  s+=`<line class="xh" id="xh" x1="0" x2="0" y1="${t}" y2="${t+ih}" style="display:none"/><circle id="dot" r="5" fill="#ff5c8a" stroke="var(--card)" stroke-width="2" style="display:none"/>`;
+  D.followers.forEach((v,i)=>{const x0=i?(X(i-1)+X(i))/2:l,x1=i<W-1?(X(i)+X(i+1))/2:w-r;s+=`<rect class="hit" data-i="${i}" x="${x0}" y="${t}" width="${x1-x0}" height="${ih}"/>`;});
+  s+='</svg><div class="tip" id="ltip"></div>';
+  box.innerHTML=s;
+  const tip=box.querySelector('#ltip'),xh=box.querySelector('#xh'),dot=box.querySelector('#dot');
+  box.querySelectorAll('.hit').forEach(rc=>{
+    const i=+rc.dataset.i,show=()=>{const [x,y]=pts[i];xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.style.display='';dot.setAttribute('cx',x);dot.setAttribute('cy',y);dot.style.display='';
+      const d=i?D.followers[i]-D.followers[i-1]:D.followers[i];const ev=(D.events||[]).find(e=>e.w===i+1);
+      tip.innerHTML=`<b>${D.weeks[i]}차 · ${fmt.n(D.followers[i])}명</b>전주 대비 +${fmt.n(d)}${ev?`<br>📍 ${ev.label}`:''}`;
+      tip.style.left=Math.min(w-170,Math.max(0,x-80))+'px';tip.style.top=Math.max(0,y-78)+'px';tip.classList.add('show');};
+    rc.addEventListener('mouseenter',show);rc.addEventListener('click',show);
+    rc.addEventListener('mouseleave',()=>{tip.classList.remove('show');xh.style.display='none';dot.style.display='none';});
+  });
+}
+
+/* ---------- bar chart ---------- */
+function barChart(){
+  const box=document.getElementById('barChart'),w=box.clientWidth,h=w<500?200:240,l=40,r=10,t=18,b=28;
+  const iw=w-l-r,ih=h-t-b,n=P.length,gap=2,bw=Math.max(4,iw/n-gap),mx=Math.ceil(Math.max(...P.map(p=>p.eng))*100/5)*5/100;
+  const X=i=>l+i*(iw/n)+gap/2,Y=v=>t+ih-v/mx*ih,avg=avgEng(P);
+  const top=[...P].sort((a,b)=>b.eng-a.eng).slice(0,3).map(p=>p.id);
+  let s=`<svg viewBox="0 0 ${w} ${h}" height="${h}" role="img" aria-label="게시물별 참여율 막대그래프, 평균 ${fmt.pct(avg)}"><defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs>`;
+  [0,mx/2,mx].forEach(v=>{s+=`<line class="grid" x1="${l}" x2="${w-r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis" x="${l-6}" y="${Y(v)+4}" text-anchor="end">${Math.round(v*100)}%</text>`;});
+  P.forEach((p,i)=>{const x=X(i),y=Y(p.eng),hh=t+ih-y,isTop=top.includes(p.id);
+    s+=`<path d="M${x},${t+ih}V${y+Math.min(4,hh)}Q${x},${y} ${x+Math.min(4,bw/2)},${y}H${x+bw-Math.min(4,bw/2)}Q${x+bw},${y} ${x+bw},${y+Math.min(4,hh)}V${t+ih}Z" fill="${isTop?'url(#bg1)':'#4a4a66'}" data-i="${i}" class="bb" style="cursor:pointer"/>`;
+    if(n<=24&&(w>=500||i%3===0))s+=`<text class="axis" x="${x+bw/2}" y="${h-10}" text-anchor="middle">${p.id}</text>`;});
+  s+=`<line class="avg" x1="${l}" x2="${w-r}" y1="${Y(avg)}" y2="${Y(avg)}"/><text class="avgl" x="${l+6}" y="${Y(avg)-6}">평균 ${fmt.pct(avg)}</text>`;
+  s+='</svg><div class="tip" id="btip"></div>';
+  box.innerHTML=s;
+  const tip=box.querySelector('#btip');
+  box.querySelectorAll('.bb').forEach(el=>{const p=P[+el.dataset.i];
+    const show=()=>{const x=X(+el.dataset.i);tip.innerHTML=`<b>#${p.id} ${p.title}</b>${p.w}주차 · ${p.type}<br>조회 ${fmt.n(p.views)} · 참여율 <b style="display:inline;color:var(--accent)">${fmt.pct(p.eng)}</b>`;
+      tip.style.left=Math.min(w-230,Math.max(0,x-100))+'px';tip.style.top=Math.max(0,Y(p.eng)-90)+'px';tip.classList.add('show');el.style.filter='brightness(1.3)';};
+    el.addEventListener('mouseenter',show);el.addEventListener('click',show);
+    el.addEventListener('mouseleave',()=>{tip.classList.remove('show');el.style.filter='';});});
+}
+
+/* ---------- insights ---------- */
+(function(){
+  const best=[...P].sort((a,b)=>b.eng-a.eng)[0];
+  const reels=P.filter(p=>p.type==='릴스'),cars=P.filter(p=>p.type==='캐러셀');
+  const saveRate=a=>a.reduce((s,p)=>s+p.saves,0)/a.reduce((s,p)=>s+p.views,0);
+  const g=dF/D.followers[last-1];
+  document.getElementById('insights').innerHTML=`
+   <div class="in"><span class="e">📈</span><div><small>팔로워 성장</small>이번 주 <b>+${fmt.n(dF)}명</b> (${fmt.pct(g)} 증가)</div></div>
+   <div class="in"><span class="e">🏆</span><div><small>최고 게시물</small><b>#${best.id} ${best.title}</b><br>조회 ${fmt.k(best.views)} · 참여율 ${fmt.pct(best.eng)}</div></div>
+   <div class="in"><span class="e">🔖</span><div><small>형식 비교</small>릴스 참여율 <b>${fmt.pct(avgEng(reels))}</b> · 캐러셀 저장률 <b>${fmt.pct(saveRate(cars))}</b> (릴스 ${fmt.pct(saveRate(reels))})</div></div>
+   <div class="in"><span class="e">👉</span><div><small>다음 액션</small>상위 게시물과 같은 포맷으로 후속편 만들기</div></div>`;
+})();
+
+/* ---------- money ---------- */
+(function(){
+  const mx=Math.max(...D.money.income.map(x=>x.amount),...D.money.expense.map(x=>x.amount));
+  document.getElementById('moneyRows').innerHTML=
+    D.money.income.map(x=>`<div class="ln"><div>${x.src}<small>${x.note}</small></div><div class="amt">+${fmt.won(x.amount)}</div><div class="mbar"><i style="width:${x.amount/mx*100}%"></i></div></div>`).join('')+
+    D.money.expense.map(x=>`<div class="ln exp"><div>${x.src}<small>${x.note}</small></div><div class="amt">−${fmt.won(x.amount)}</div><div class="mbar"><i style="width:${x.amount/mx*100}%"></i></div></div>`).join('')+
+    `<div class="net"><span>누적 순이익</span><b>${income-expense>=0?'+':''}${fmt.won(income-expense)}</b></div>`;
+})();
+
+/* ---------- schedule ---------- */
+const STI={done:'✅ 완료',ready:'🟢 준비 완료',draft:'✏️ 초안',todo:'⏳ 할 일',off:'휴식'};
+document.getElementById('week').innerHTML=D.schedule.map(d=>`<div class="day ${d.st}"><span class="dn">${d.d}</span><span class="tt">${d.t||'—'}</span><span class="st">${STI[d.st]}</span>${d.type?`<span class="ty">${d.type}</span>`:''}</div>`).join('');
+
+/* ---------- table ---------- */
+const COLS=[['id','#'],['title','제목'],['w','주차'],['type','형식'],['views','조회'],['likes','좋아요'],['comments','댓글'],['saves','저장'],['shares','공유'],['eng','참여율']];
+let sortK='id',sortDir=1;
+function table(){
+  const top=[...P].sort((a,b)=>b.eng-a.eng).slice(0,3).map(p=>p.id);
+  const arr=[...P].sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*sortDir);
+  document.getElementById('tbl').innerHTML=`<thead><tr>${COLS.map(([k,l])=>`<th data-k="${k}" class="${k===sortK?'on':''}">${l}${k===sortK?(sortDir>0?' ↑':' ↓'):''}</th>`).join('')}</tr></thead>
+  <tbody>${arr.map(p=>`<tr class="${top.includes(p.id)?'top':''}"><td>${p.id}</td><td>${p.title}</td><td>${p.w}주</td><td><span class="typ">${p.type}</span></td><td>${fmt.n(p.views)}</td><td>${fmt.n(p.likes)}</td><td>${fmt.n(p.comments)}</td><td>${fmt.n(p.saves)}</td><td>${fmt.n(p.shares)}</td><td class="rt">${fmt.pct(p.eng)}</td></tr>`).join('')}</tbody>`;
+  document.querySelectorAll('#tbl th').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(k===sortK)sortDir*=-1;else{sortK=k;sortDir=(k==='title'||k==='type'||k==='id'||k==='w')?1:-1;}table();}));
+}
+
+function drawAll(){lineChart();barChart();}
+drawAll();table();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,150);});
+</script>
+</body>
+</html>
