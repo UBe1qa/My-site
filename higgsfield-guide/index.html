@@ -9,14 +9,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 :root{
-  --bg:#FFF3F1; --surface:#FFFFFF; --ink:#2B1216; --muted:#7D5A5F; --line:#F2D5D3;
-  --accent:#D62839; --accent-soft:#FFE1E3;
-  --c-img:#C2185B; --c-img-soft:#FDE3EE;
-  --c-vid:#E8590C; --c-vid-soft:#FFE8D9;
-  --c-chr:#8E3BC7; --c-chr-soft:#F2E6FC;
-  --c-edt:#0E8A7B; --c-edt-soft:#DDF4F0;
-  --c-amb:#B7791F; --c-amb-soft:#FCF0D8;
-  --good:#1B8A5A; --bad:#D62839;
+  --bg:#F6F7F9; --surface:#FFFFFF; --ink:#1C1F26; --muted:#535A69; --line:#E2E5EB;
+  --accent:#2E4FC7; --accent-soft:#E9EDFB;
+  --c-img:#2A62C9; --c-img-soft:#EAF1FC;
+  --c-vid:#B9542E; --c-vid-soft:#FBEEE8;
+  --c-chr:#6B45B8; --c-chr-soft:#F1ECFA;
+  --c-edt:#1D7A55; --c-edt-soft:#E6F4EC;
+  --c-amb:#94640F; --c-amb-soft:#FBF3E1;
+  --good:#1D7A55; --bad:#B8322A;
   --sans:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -162,44 +162,10 @@ dl.gloss dd{margin:0;font-size:14.5px}
 .sources{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:18px}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
-/* 붉은 테마 + 다채로운 글자 */
-body{background:linear-gradient(180deg,#FFE4E1 0,var(--bg) 420px) no-repeat,var(--bg)}
-h1{background:linear-gradient(90deg,#D62839 0%,#E8590C 45%,#C2185B 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.eyebrow{color:#C2185B}
-.lead{color:#6B2A33}
-.glance div{border-color:#F6CACA}
-.glance div:nth-child(1) .q{color:#D62839}
-.glance div:nth-child(2) .q{color:#E8590C}
-.glance div:nth-child(3) .q{color:#8E3BC7}
-.glance div:nth-child(1) b{color:#D62839}
-.glance div:nth-child(2) b{color:#E8590C}
-.glance div:nth-child(3) b{color:#8E3BC7}
-nav.toc{background:color-mix(in srgb,#FFF3F1 90%,transparent)}
-nav.toc a{border-color:#F4C9C9}
-nav.toc a:hover,nav.toc a:focus-visible{background:var(--accent);color:#fff;border-color:var(--accent)}
-.sec-head{--sc:var(--accent);--ss:var(--accent-soft)}
-.sec-head .sec-ico{background:var(--ss)!important;color:var(--sc)!important}
-.sec-head h2{color:var(--sc)}
-#tools .sec-head{--sc:#D62839;--ss:#FFE1E3}
-#credits .sec-head{--sc:#E8590C;--ss:#FFE8D9}
-#firstday .sec-head{--sc:#C2185B;--ss:#FDE3EE}
-#influencer .sec-head{--sc:#8E3BC7;--ss:#F2E6FC}
-#prompts .sec-head{--sc:#0E8A7B;--ss:#DDF4F0}
-#tips .sec-head{--sc:#B7791F;--ss:#FCF0D8}
-#glossary .sec-head{--sc:#D62839;--ss:#FFE1E3}
-.dot{background:linear-gradient(135deg,#D62839,#E8590C)!important;color:#fff!important}
-.flow.four .dot{background:linear-gradient(135deg,#8E3BC7,#C2185B)!important}
-.node h3{color:#2B1216}
-.node:nth-child(1) h3{color:#D62839}.node:nth-child(2) h3{color:#E8590C}.node:nth-child(3) h3{color:#C2185B}.node:nth-child(4) h3{color:#8E3BC7}.node:nth-child(5) h3{color:#0E8A7B}
-.plan .pr{color:#D62839}
-.plan:nth-child(3) .pr{color:#E8590C}.plan:nth-child(4) .pr{color:#8E3BC7}.plan:nth-child(1) .pr{color:#7D5A5F}
-.plan .badge{background:linear-gradient(90deg,#D62839,#E8590C)}
-dl.gloss div:nth-child(5n+1) dt{color:#D62839}
-dl.gloss div:nth-child(5n+2) dt{color:#E8590C}
-dl.gloss div:nth-child(5n+3) dt{color:#C2185B}
-dl.gloss div:nth-child(5n+4) dt{color:#8E3BC7}
-dl.gloss div:nth-child(5n+5) dt{color:#0E8A7B}
-.tool,.bars,.plan,.prompt,.dd .col,dl.gloss div,.glance div,.phase{box-shadow:0 1px 0 #F6D9D7,0 6px 18px -12px rgba(214,40,57,.35)}
+/* 읽기 편한 톤 */
+body{font-size:17px;line-height:1.75}
+.feat span,.node p,.dd li span,dl.gloss dd,.plan p{color:var(--muted)}
+.tool,.bars,.plan,.prompt,.dd .col,dl.gloss div,.glance div{box-shadow:0 1px 2px rgba(20,24,33,.04)}
 </style>
 </head>
 <body>
