@@ -9,14 +9,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 :root{
-  --bg:#F6F7F9; --surface:#FFFFFF; --ink:#1C1F26; --muted:#535A69; --line:#E2E5EB;
-  --accent:#2E4FC7; --accent-soft:#E9EDFB;
-  --c-img:#2A62C9; --c-img-soft:#EAF1FC;
-  --c-vid:#B9542E; --c-vid-soft:#FBEEE8;
-  --c-chr:#6B45B8; --c-chr-soft:#F1ECFA;
-  --c-edt:#1D7A55; --c-edt-soft:#E6F4EC;
-  --c-amb:#94640F; --c-amb-soft:#FBF3E1;
-  --good:#1D7A55; --bad:#B8322A;
+  --bg:#F1F6FD; --surface:#FFFFFF; --ink:#14213D; --muted:#4A5875; --line:#D6E2F3;
+  --accent:#1F5FD1; --accent-soft:#E3EDFC;
+  --c-img:#1F5FD1; --c-img-soft:#E6F0FD;
+  --c-vid:#0E7C9B; --c-vid-soft:#E0F3F8;
+  --c-chr:#4B4FC9; --c-chr-soft:#ECECFB;
+  --c-edt:#1C7A6B; --c-edt-soft:#E2F4F0;
+  --c-amb:#9A6A12; --c-amb-soft:#FBF3E1;
+  --good:#1C7A6B; --bad:#B8322A;
   --sans:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -163,6 +163,12 @@ dl.gloss dd{margin:0;font-size:14.5px}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
 /* 읽기 편한 톤 */
+/* 파란 톤 */
+body{background:linear-gradient(180deg,#DDEAFB 0,var(--bg) 380px) no-repeat,var(--bg)}
+h1{color:#123A8C}
+.dot{background:var(--accent)!important;color:#fff!important}
+.flow.four .dot{background:var(--c-chr)!important}
+nav.toc{background:color-mix(in srgb,var(--bg) 90%,transparent)}
 body{font-size:17px;line-height:1.75}
 .feat span,.node p,.dd li span,dl.gloss dd,.plan p{color:var(--muted)}
 .tool,.bars,.plan,.prompt,.dd .col,dl.gloss div,.glance div{box-shadow:0 1px 2px rgba(20,24,33,.04)}
