@@ -172,6 +172,41 @@ nav.toc{background:color-mix(in srgb,var(--bg) 90%,transparent)}
 body{font-size:17px;line-height:1.75}
 .feat span,.node p,.dd li span,dl.gloss dd,.plan p{color:var(--muted)}
 .tool,.bars,.plan,.prompt,.dd .col,dl.gloss div,.glance div{box-shadow:0 1px 2px rgba(20,24,33,.04)}
+
+/* 인터랙션 */
+.progress{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--accent),var(--c-vid));z-index:20}
+nav.toc a{transition:background .2s,color .2s,border-color .2s}
+nav.toc a.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tool,.plan,.dd .col,dl.gloss > div,.glance > div,.prompt{transition:transform .25s ease,box-shadow .25s ease}
+.feat li{transition:transform .2s ease}
+.node .dot{transition:transform .25s ease}
+@media (hover:hover){
+  .tool:hover,.plan:hover,.dd .col:hover,dl.gloss > div:hover,.glance > div:hover{transform:translateY(-4px);box-shadow:0 14px 28px -16px rgba(31,95,209,.45)}
+  .feat li:hover{transform:translateX(4px)}
+  .node:hover .dot{transform:scale(1.12)}
+}
+.rv{transition:opacity .6s ease,transform .6s ease}
+.rv.pre{opacity:.35;transform:translateY(18px)}
+.fill{transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.bars.pre .fill{width:0!important}
+.gsearch{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:420px}
+.gsearch:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.gsearch input{border:0;outline:0;background:transparent;font:inherit;font-size:15px;color:var(--ink);width:100%}
+.gempty{color:var(--muted);font-size:14.5px}
+.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:0;background:var(--accent);color:#fff;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(31,95,209,.6);opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .25s,transform .25s;z-index:15}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:focus-visible{outline:3px solid var(--accent-soft);outline-offset:2px}
+/* 화면 크기별 */
+@media (min-width:1100px){.wrap{max-width:980px}}
+@media (max-width:720px){
+  body{font-size:16px}
+  .wrap{gap:44px;padding-block:24px 80px}
+  .sec-ico{width:38px;height:38px}
+  .plans{grid-template-columns:1fr 1fr}
+  .prompt .code{font-size:13px;line-height:2}
+}
+@media (max-width:380px){.plans{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.rv.pre{opacity:1;transform:none}.bars.pre .fill{width:auto!important}}
 </style>
 </head>
 <body>
@@ -191,6 +226,7 @@ body{font-size:17px;line-height:1.75}
   <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></symbol>
 </svg>
 
+<div class="progress" id="progress" aria-hidden="true"></div>
 <div class="wrap">
 <header>
   <div class="eyebrow">Higgsfield 비공식 입문 가이드</div>
@@ -336,6 +372,7 @@ body{font-size:17px;line-height:1.75}
 
 <section id="glossary">
   <div class="sec-head"><span class="sec-ico"><svg width="22" height="22"><use href="#i-book"/></svg></span><div><h2>용어집</h2></div></div>
+  <label class="gsearch" for="gq"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="gq" type="search" placeholder="용어 검색 (예: Soul, 업스케일)" autocomplete="off"></label>
   <dl class="gloss">
     <div><dt>Credit</dt><dd>만들 때마다 빠지는 사이트 안의 돈</dd></div>
     <div><dt>Soul</dt><dd>힉스필드 자체 사진 모델</dd></div>
@@ -347,6 +384,7 @@ body{font-size:17px;line-height:1.75}
     <div><dt>Inpaint</dt><dd>사진 일부만 골라 다시 만들기</dd></div>
     <div><dt>Upscale</dt><dd>화질(해상도) 올리기</dd></div>
   </dl>
+  <p class="gempty" id="gempty" hidden>찾는 용어가 없어요.</p>
 </section>
 
 <footer class="sources">
@@ -354,6 +392,7 @@ body{font-size:17px;line-height:1.75}
   <div>참고: <a href="https://higgsfield.ai/creator-hub/help-center/tools/how-do-i-use-ai-influencer">Higgsfield Help Center</a> · <a href="https://higgsfield.ai/blog/how-to-create-ai-influencer">Higgsfield Blog</a> · <a href="https://www.krea.ai/blog/higgsfield-pricing-explained-2026-unlimited-credits-and-real-monthly-costs">Krea 가격 해설</a> · <a href="https://blog.segmind.com/higgsfield-ai-features-pricing-guide/">Segmind 가이드</a></div>
 </footer>
 </div>
+<button class="totop" id="totop" type="button" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 6-6 6 6"/></svg></button>
 
 <script>
 document.querySelectorAll('button.copy').forEach(function(btn){
@@ -365,6 +404,51 @@ document.querySelectorAll('button.copy').forEach(function(btn){
     try{navigator.clipboard.writeText(txt).then(function(){btn.textContent='복사됨';reset();},fallback);}catch(e){fallback();}
   });
 });
+
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bar=document.getElementById('progress'),top=document.getElementById('totop');
+  function onScroll(){
+    var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+    var r=max>0?h.scrollTop/max:0; bar.style.transform='scaleX('+r+')';
+    top.classList.toggle('show',h.scrollTop>600);
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  top.addEventListener('click',function(){scrollTo({top:0,behavior:reduce?'auto':'smooth'});});
+  var nav=document.querySelector('nav.toc'),links={};
+  nav.querySelectorAll('a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+  if('IntersectionObserver' in window){
+    var spy=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting)return;
+        var a=links[e.target.id]; if(!a)return;
+        nav.querySelectorAll('a.active').forEach(function(x){x.classList.remove('active');});
+        a.classList.add('active');
+        nav.scrollTo({left:a.offsetLeft-nav.clientWidth/2+a.clientWidth/2,behavior:reduce?'auto':'smooth'});
+      });
+    },{rootMargin:'-35% 0px -60% 0px'});
+    document.querySelectorAll('section[id]').forEach(function(s){spy.observe(s);});
+    if(!reduce){
+      var vh=innerHeight;
+      var io=new IntersectionObserver(function(es){
+        es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target);}});
+      },{rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.tool,.plan,.node,.dd .col,dl.gloss > div,.prompt,.note,.phase').forEach(function(el,i){
+        if(el.getBoundingClientRect().top>vh){el.classList.add('rv','pre');el.style.transitionDelay=(i%4)*60+'ms';io.observe(el);}
+      });
+      var bars=document.querySelector('.bars');
+      if(bars&&bars.getBoundingClientRect().top>vh){bars.classList.add('pre');io.observe(bars);}
+    }
+  }
+  var q=document.getElementById('gq'),empty=document.getElementById('gempty');
+  q.addEventListener('input',function(){
+    var v=q.value.trim().toLowerCase(),n=0;
+    document.querySelectorAll('dl.gloss > div').forEach(function(d){
+      var hit=!v||d.textContent.toLowerCase().indexOf(v)>-1; d.hidden=!hit; if(hit)n++;
+    });
+    empty.hidden=n>0;
+  });
+})();
 </script>
 
 </body>
