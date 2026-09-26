@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>캐릭터 프로필 | AI.Influence</title>
+<meta name="description" content="AI 인플루언서 캐릭터별 설정표와 운영 성과.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .ph{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center}
+  @media(max-width:700px){.ph{grid-template-columns:96px 1fr;gap:16px;align-items:start}}
+  .ph .pic{aspect-ratio:5/6;border-radius:20px;overflow:hidden;background:var(--card2);position:relative;border:1px solid var(--line2)}
+  .ph .pic .emo{position:absolute;right:10px;bottom:6px;font-size:36px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+  @media(max-width:700px){.ph .pic{border-radius:14px}.ph .pic .emo{font-size:22px;right:4px;bottom:2px}}
+  .ph h1{margin-bottom:4px}
+  .ph .handle{color:var(--accent);font-weight:700;font-size:15px}
+  .ph .con{font-size:17px;margin-top:10px;max-width:620px}
+  @media(max-width:700px){.ph .con{font-size:15px}}
+  .track{display:flex;gap:4px;margin-top:16px;max-width:520px}
+  .track div{flex:1;text-align:center;font-size:11px;color:var(--dim)}
+  .track div i{display:block;height:6px;border-radius:3px;background:#26263a;margin-bottom:5px}
+  .track div.past i{background:rgba(255,92,138,.45)}
+  .track div.cur i{background:var(--grad)}
+  .track div.cur{color:var(--text);font-weight:700}
+  .track div.paused.cur i{background:#4a4a66}
+  .pager{display:flex;justify-content:space-between;gap:10px;margin-bottom:18px;font-size:13px}
+  .pager a{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:99px;border:1px solid var(--line2);background:var(--card);color:var(--muted)}
+  .pager a:last-child{padding:6px 6px 6px 12px}
+  .pager a:hover{color:var(--text);border-color:var(--muted)}
+  .pager span.av{width:24px;height:24px;border-radius:50%;overflow:hidden;display:inline-block}
+
+  .perf{display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;gap:12px}
+  @media(max-width:900px){.perf{grid-template-columns:1fr 1fr}.perf .spk{grid-column:1/-1}}
+  .pk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .pk small{display:block;font-size:12px;color:var(--muted)}
+  .pk b{font-size:24px;font-weight:900;line-height:1.3;display:block}
+  .pk em{font-style:normal;font-size:12px;color:var(--ok)}
+  .pk .vd{font-size:18px}
+  .vd.go{color:var(--ok)}.vd.watch{color:var(--warn)}.vd.stop{color:#ff9d9d}
+  .spk svg{width:100%;height:56px;display:block;margin-top:4px}
+  .perf-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--dim);flex-wrap:wrap;gap:8px}
+  .perf-foot a{color:var(--accent);font-weight:700}
+
+  .compbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:14px;color:var(--muted)}
+  .compbar .bar{flex:1;max-width:320px;height:8px;border-radius:4px;background:#23233a;overflow:hidden}
+  .compbar .bar i{display:block;height:100%;background:var(--grad)}
+  .compbar b{color:var(--text)}
+  .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:900px){.bgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.bgrid{grid-template-columns:1fr}}
+  .bgrid .card{padding:18px}
+  .bgrid .w2{grid-column:span 2}.bgrid .w3{grid-column:1/-1}
+  @media(max-width:900px){.bgrid .w2,.bgrid .w3{grid-column:1/-1}}
+  .bgrid h4{font-size:13.5px;color:var(--muted);font-weight:700;margin-bottom:10px}
+  .bgrid .card p{font-size:14px}
+  .bgrid .todo{border-style:dashed;background:transparent}
+  .bgrid .todo p{color:var(--dim);font-size:13px}
+  dl.info{display:grid;grid-template-columns:64px 1fr;gap:7px 10px;font-size:14px}
+  dl.info dt{color:var(--dim)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:13px;padding:5px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+  .bubble{background:var(--card2);border:1px solid var(--line2);border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:14px;margin-bottom:8px}
+  .bubble small{display:block;color:var(--dim);font-size:11.5px;margin-top:2px}
+  ul.no{list-style:none;display:grid;gap:6px;font-size:14px}
+  ul.no li::before{content:"✕";color:var(--bad);font-weight:900;margin-right:8px}
+  .eps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.eps{grid-template-columns:1fr}}
+  .ep{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:13.5px}
+  .ep em{font-style:normal;font-weight:900;font-size:11px;color:var(--accent);min-width:38px}
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px}
+  .flow .arrow{color:var(--dim)}
+  .flow span.box{padding:8px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+  .flow span.box.hot{border-color:rgba(255,181,71,.5);color:var(--warn)}
+  .kv{display:grid;gap:8px}
+  .kv div{font-size:14px}.kv small{display:block;color:var(--dim);font-size:12px}
+  .rl{display:grid;gap:10px}
+  .rl a{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);transition:.2s}
+  .rl a:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .rl a small{color:var(--muted);font-size:12px;display:block}
+  .rl a b{font-size:14.5px}
+  .rl a .arr{margin-left:auto;color:var(--accent)}
+  .nf{text-align:center;padding:80px 20px}
+  .nf b{font-size:24px;display:block;margin-bottom:10px}
+</style>
+</head>
+<body data-chapter="characters">
+<nav id="topnav"></nav>
+<main id="main"></main>
+<footer id="foot"></footer>
+
+<script src="/characters/data.js"></script>
+<script src="/ops/data.js"></script>
+<script src="/ops/metrics.js"></script>
+<script src="/reports/data.js"></script>
+<script src="/assets/common.js"></script>
+<script>
+const id=new URLSearchParams(location.search).get('id');
+const c=charById(id),main=document.getElementById('main');
+const LANG={ko:'🇰🇷 한국어',en:'🇺🇸 영어'};
+if(!c){
+  main.innerHTML=`<div class="wrap nf"><b>캐릭터를 찾을 수 없어요</b><p style="color:var(--muted)">주소가 바뀌었거나 아직 없는 캐릭터예요.</p><p style="margin-top:20px"><a class="btn primary" href="/characters/">로스터로 돌아가기</a></p></div>`;
+}else{
+  document.title=`${c.name} · 캐릭터 | AI.Influence`;
+  const i=CHARACTERS.indexOf(c),prev=CHARACTERS[(i-1+CHARACTERS.length)%CHARACTERS.length],next=CHARACTERS[(i+1)%CHARACTERS.length];
+  const m=window.M&&M.char(c.id),cp=completeness(c);
+  const order=['idea','design','test','live'];const si=order.indexOf(c.stage);
+  const track=STAGES.filter(s=>s.k!=='paused').map((s,k)=>`<div class="${k<si?'past':''} ${k===si?'cur':''}"><i></i>${s.ic} ${s.label}</div>`).join('')+(c.stage==='paused'?`<div class="paused cur"><i></i>💤 보류</div>`:'');
+  const todo=(t,h)=>`<div class="card todo"><h4>${h}</h4><p>아직 안 정함 · ${t}</p></div>`;
+  const has=v=>Array.isArray(v)?v.length:v!=null&&v!=='';
+
+  /* performance */
+  let perf='';
+  if(m){
+    const vals=m.followers.filter(v=>v!=null),w=240,h=56,mx=Math.max(...vals),mn=Math.min(...vals),r=mx-mn||1;
+    const pts=vals.map((v,k)=>[vals.length>1?k/(vals.length-1)*w:w/2,h-4-(v-mn)/r*(h-10)]);
+    const col=c.color||'#ff5c8a';
+    perf=`<section style="padding:0 0 48px"><div class="wrap">
+      <div class="sh plain reveal" style="margin-bottom:16px"><div><p class="eyebrow">운영 성과</p><h2 style="font-size:24px">${m.weeksRun}주째 운영 중 ${c.demo?'<span class="pill demo" style="font-size:12px;vertical-align:middle">샘플</span>':''}</h2></div></div>
+      <div class="perf reveal">
+        <div class="pk"><small>팔로워</small><b>${fmt.n(m.latest)}</b><em>이번 주 +${fmt.n(m.delta)}</em></div>
+        <div class="pk"><small>최근 참여율</small><b>${fmt.pct(m.avgEng)}</b><em style="color:var(--muted)">게시물 ${m.posts.length}개</em></div>
+        <div class="pk"><small>판정</small><b class="vd ${m.verdict.k}">${m.verdict.ic} ${m.verdict.label}</b><em style="color:var(--muted)">기준: 10% 이상 계속</em></div>
+        <div class="pk"><small>수익</small><b>${fmt.won(m.income)}</b><em style="color:var(--muted)">누적</em></div>
+        <div class="pk spk"><small>팔로워 추이</small><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="팔로워 ${vals.join(', ')}">
+          <path d="M${pts.map(p=>p.join(',')).join('L')}L${w},${h}L0,${h}Z" fill="${col}" opacity=".15"/><path d="M${pts.map(p=>p.join(',')).join('L')}" fill="none" stroke="${col}" stroke-width="2.5" vector-effect="non-scaling-stroke"/></svg></div>
+      </div>
+      <div class="perf-foot reveal"><span>🏆 최고 게시물: ${m.best.title} · 참여율 ${fmt.pct(m.best.eng)}</span><a href="/ops/?c=${c.id}">운영 대시보드에서 자세히 →</a></div>
+    </div></section>`;
+  }
+
+  /* bible */
+  const cards=[];
+  cards.push(`<div class="card"><h4>🪪 기본 정보</h4><dl class="info">
+    <dt>나이</dt><dd>${c.age?c.age+'세':'—'}</dd><dt>직업</dt><dd>${c.role||'—'}</dd><dt>사는 곳</dt><dd>${c.home||'—'}</dd>
+    <dt>언어</dt><dd>${c.lang?LANG[c.lang]:'—'}</dd><dt>플랫폼</dt><dd>${c.platform||'—'}</dd></dl></div>`);
+  cards.push(has(c.personality)?`<div class="card"><h4>🧠 성격</h4><div class="chips">${c.personality.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`:todo('성격 키워드 3~5개','🧠 성격'));
+  cards.push(has(c.looks)?`<div class="card"><h4>👀 외형 고정 키워드</h4><div class="chips">${c.looks.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`:todo('매번 같은 얼굴로 보이게 할 키워드','👀 외형 고정 키워드'));
+  cards.push(has(c.voice)?`<div class="card w2"><h4>💬 말투 예시</h4>${c.voice.map(v=>`<div class="bubble">${v.t}<small>${v.n}</small></div>`).join('')}</div>`:`<div class="card todo w2"><h4>💬 말투 예시</h4><p>아직 안 정함 · 오프닝·핵심 한 줄·엔딩 대사</p></div>`);
+  cards.push(`<div class="card"><h4>🎯 왜 이 캐릭터?</h4><div class="kv"><div><small>이유</small>${c.why||'—'}</div><div><small>타깃</small>${c.target||'—'}</div></div></div>`);
+  cards.push(has(c.sidekick)?`<div class="card"><h4>🐾 보조 캐릭터</h4><p>${c.sidekick}</p></div>`:todo('동물·소품 같은 보조 캐릭터','🐾 보조 캐릭터'));
+  cards.push(has(c.avoid)?`<div class="card"><h4>🚫 하지 않는 것</h4><ul class="no">${c.avoid.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:todo('선 넘지 않을 규칙','🚫 하지 않는 것'));
+  cards.push(`<div class="card"><h4>⚠️ 리스크</h4><p>${c.risk||'<span style="color:var(--dim)">아직 안 정함</span>'}</p></div>`);
+  cards.push(has(c.episodes)?`<div class="card w3"><h4>📺 에피소드 (${c.episodes.length}편)</h4><div class="eps">${c.episodes.map((e,k)=>`<div class="ep"><em>EP.${k+1}</em>${e.replace(/^EP\.\d+\s*/,'')}</div>`).join('')}</div></div>`:`<div class="card todo w3"><h4>📺 에피소드</h4><p>아직 안 정함 · 첫 에피소드 3~10개</p></div>`);
+  cards.push(has(c.moneyFlow)?`<div class="card w3"><h4>💰 수익 연결</h4><div class="flow">${c.moneyFlow.map((x,k)=>`${k?'<span class="arrow">→</span>':''}<span class="box ${x.includes('📦')?'hot':''}">${x}</span>`).join('')}</div>${c.money?`<p class="note" style="margin-top:10px">수익원 후보: ${c.money}</p>`:''}</div>`
+    :`<div class="card ${c.money?'':'todo'} w3"><h4>💰 수익 연결</h4><p>${c.money?c.money:'아직 안 정함 · 어떤 상품·협찬으로 돈을 벌지'}</p></div>`);
+
+  const reps=(window.REPORTS||[]).filter(r=>(r.chars||[]).includes(c.id));
+
+  main.innerHTML=`
+  <header class="page-head"><div class="wrap">
+    <div class="pager"><a href="/characters/profile/?id=${prev.id}"><span class="av">${avatar(AV[prev.id])}</span>← ${prev.name}</a><a href="/characters/profile/?id=${next.id}">${next.name} →<span class="av">${avatar(AV[next.id])}</span></a></div>
+    <div class="crumb"><a href="/">홈</a>›<a href="/characters/">02 캐릭터</a>›<b>${c.name}</b></div>
+    <div class="ph">
+      <div class="pic">${avatar(AV[c.id])}${c.emo?`<span class="emo">${c.emo}</span>`:''}</div>
+      <div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">${stageBadge(c)}${c.niche?`<span class="pill">${c.niche}</span>`:''}${c.lang?`<span class="pill">${LANG[c.lang]}</span>`:''}</div>
+        <h1>${c.name}</h1>
+        ${c.handle?`<div class="handle">${c.handle} <small style="color:var(--dim);font-weight:400">(예시)</small></div>`:''}
+        <p class="con">${c.concept}</p>
+        <div class="track">${track}</div>
+      </div>
+    </div>
+  </div></header>
+  ${perf}
+  <section class="alt"><div class="wrap">
+    <div class="sh plain reveal" style="margin-bottom:18px"><div><p class="eyebrow">캐릭터 설정표</p><h2>매번 같은 사람처럼 보이게, <span class="grad">이렇게 고정해요</span></h2></div></div>
+    <div class="compbar reveal">설정표 완성도 <span class="bar"><i style="width:${cp.pct}%"></i></span><b>${cp.pct}%</b><span>(${cp.n}/${cp.total}칸)</span></div>
+    <div class="bgrid reveal">${cards.join('')}</div>
+  </div></section>
+  ${reps.length?`<section style="padding:56px 0 0"><div class="wrap"><div class="sh plain reveal" style="margin-bottom:16px"><div><p class="eyebrow">관련 리포트</p><h2 style="font-size:24px">${josa(c.name,'이','가')} 나온 리포트</h2></div></div>
+    <div class="rl reveal">${reps.map(r=>`<a href="/reports/#${r.id}"><div><small>${r.kind} · ${r.week}${r.demo?' · 샘플':''}</small><b>${r.title}</b></div><span class="arr">→</span></a>`).join('')}</div></div></section>`:''}
+  <section style="padding:56px 0"><div class="wrap"><a class="next reveal" href="/characters/"><div><small>돌아가기</small><b>캐릭터 로스터 — 전체 ${CHARACTERS.length}명</b></div><span class="arr">→</span></a></div></section>`;
+  watchReveal();
+}
+</script>
+</body>
+</html>

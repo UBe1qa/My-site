@@ -180,7 +180,7 @@
     <div class="crumb"><a href="/">홈</a>›<b>01 기획</b></div>
     <h1>인스타 AI 캐릭터 <span class="grad">시장 조사</span></h1>
     <p class="lead">한국 10개·해외 8개 AI 캐릭터 계정의 최근 게시물을 직접 뜯어봤어요. 결론은 "얼굴 말고 이야기로 뜬다".</p>
-    <div class="pills"><span class="pill">📅 2026년 9월 조사</span><span class="pill">🔎 계정 18개</span><span class="pill">⏱️ 읽는 시간 4분</span></div>
+    <div class="pills"><span class="pill">📅 2026년 9월 조사</span><span class="pill">🔎 계정 18개</span><span class="pill">⏱️ 읽는 시간 4분</span><a class="pill" href="https://www.youtube.com/watch?v=LlhTEttKcwQ" target="_blank" rel="noopener" style="color:var(--text)">▶ 시작하게 된 영상 ↗</a></div>
     <div class="docs" aria-label="기획 노트 목록">
       <span class="doc on"><em>#1</em>시장 조사</span>
       <span class="doc soon"><em>#2</em>콘텐츠 캘린더 설계 <small>작성 예정</small></span>
@@ -281,11 +281,11 @@
 <section id="s4">
   <div class="wrap">
     <div class="sh reveal"><span class="num">04</span>
-      <div><p class="eyebrow">캐릭터 아이디어</p><h2>빈자리를 노린 <span class="grad">후보 5명</span>을 뽑았어요</h2><p class="sub">자세한 비교와 캐릭터 설정은 캐릭터 챕터에 따로 정리했어요.</p></div></div>
+      <div><p class="eyebrow">캐릭터 아이디어</p><h2>빈자리마다 <span class="grad">캐릭터를 여러 명</span> 뽑아요</h2><p class="sub">AI 캐릭터는 몇 명이든 만들 수 있어요. 여러 명을 동시에 테스트하고, 반응 좋은 캐릭터만 키우는 게 전략이에요.</p></div></div>
     <a class="card teaser reveal" href="/characters/">
-      <div class="stack"><span data-av="hana"></span><span data-av="doyun"></span><span data-av="gyeol"></span><span data-av="seojin"></span><span data-av="bokdan"></span></div>
-      <div><b>하나 쌤 · 하도윤 · 한결 · 정서진 · 복단 여사</b><p>초보 추천은 하나 쌤. 한 명이 한 장소에서 말하면 끝이라 제작이 가장 단순해요.</p></div>
-      <span class="btn primary">02 캐릭터 챕터 →</span>
+      <div class="stack" id="stack"></div>
+      <div><b id="teaserN">캐릭터 로스터</b><p>제작이 가장 쉬운 건 하나 쌤(한 명이 한 장소에서 말하면 끝). 로스터에서 단계별로 관리해요.</p></div>
+      <span class="btn primary">02 캐릭터 로스터 →</span>
     </a>
   </div>
 </section>
@@ -294,7 +294,7 @@
 <section id="s5" class="alt">
   <div class="wrap">
     <div class="sh reveal"><span class="num">05</span>
-      <div><p class="eyebrow">시작하기</p><h2><span class="grad">2주면</span> 첫 릴스까지 갈 수 있어요</h2><p class="sub">한 편은 6단계로 만들고, 반응을 보고 다음 편에 반복해요.</p></div></div>
+      <div><p class="eyebrow">시작하기</p><h2><span class="grad">2주면</span> 캐릭터 3명을 동시에 테스트할 수 있어요</h2><p class="sub">한 편은 6단계로 만들고, 3명을 같은 조건으로 올려서 이긴 캐릭터를 골라요.</p></div></div>
     <div class="reveal">
       <div class="subhead">🔁 한 편을 만드는 6단계</div>
       <div class="loop">
@@ -313,24 +313,24 @@
         <div class="pbar"><div class="progress"><i id="bar"></i></div><b id="pct">0%</b></div>
       </div>
       <div class="phases" id="phases">
-        <div class="ph"><span class="day">DAY 1–2</span><h4>정하기<span>✅</span></h4>
-          <label><input type="checkbox"><span>노릴 자리(03) 하나 고르기</span></label>
-          <label><input type="checkbox"><span>캐릭터 이름·나이·말투 한 문단</span></label>
-          <label><input type="checkbox"><span>동물·소품 보조 캐릭터 정하기</span></label></div>
+        <div class="ph"><span class="day">DAY 1–2</span><h4>고르기<span>✅</span></h4>
+          <label><input type="checkbox"><span>노릴 자리(03)에서 캐릭터 3명 고르기</span></label>
+          <label><input type="checkbox"><span>3명 각각 설정표 한 장</span></label>
+          <label><input type="checkbox"><span>캐릭터마다 보조 캐릭터 정하기</span></label></div>
         <div class="ph"><span class="day">DAY 3–4</span><h4>만들기<span>✅</span></h4>
-          <label><input type="checkbox"><span>기준 얼굴 이미지 확정</span></label>
-          <label><input type="checkbox"><span>EP.1~EP.5 한 줄 대본</span></label>
-          <label><input type="checkbox"><span>6단계를 한 번 끝까지 돌려보기</span></label></div>
+          <label><input type="checkbox"><span>캐릭터별 기준 얼굴·목소리 확정</span></label>
+          <label><input type="checkbox"><span>캐릭터별 EP.1~3 대본</span></label>
+          <label><input type="checkbox"><span>6단계를 한 명으로 먼저 돌려보기</span></label></div>
         <div class="ph"><span class="day">DAY 5–7</span><h4>올리기<span>✅</span></h4>
-          <label><input type="checkbox"><span>릴스 6개 비축</span></label>
-          <label><input type="checkbox"><span>프로필에 'AI 캐릭터' 표시</span></label>
-          <label><input type="checkbox"><span>EP.1 업로드</span></label></div>
-        <div class="ph"><span class="day">DAY 8–14</span><h4>키우기<span>✅</span></h4>
-          <label><input type="checkbox"><span>주 3회 이상 이어서 업로드</span></label>
-          <label><input type="checkbox"><span>저장·공유 많은 편 골라 후속편</span></label>
-          <label><input type="checkbox"><span>첫 디지털 상품 아이디어 적기</span></label></div>
+          <label><input type="checkbox"><span>계정 3개 열고 'AI 캐릭터' 표시</span></label>
+          <label><input type="checkbox"><span>캐릭터별 릴스 3개 비축</span></label>
+          <label><input type="checkbox"><span>3명 같은 요일에 EP.1 업로드</span></label></div>
+        <div class="ph"><span class="day">DAY 8–14</span><h4>판정하기<span>✅</span></h4>
+          <label><input type="checkbox"><span>3명 모두 주 2회 같은 조건으로</span></label>
+          <label><input type="checkbox"><span>운영 대시보드에서 참여율 비교</span></label>
+          <label><input type="checkbox"><span>1등 캐릭터에 첫 디지털 상품 붙이기</span></label></div>
       </div>
-      <div class="done-msg" id="done">🎉 2주 완주! 이제 반응 좋은 포맷을 계속 반복하면 돼요</div>
+      <div class="done-msg" id="done">🎉 2주 완주! 이긴 캐릭터에 집중하고, 다음 캐릭터 테스트를 준비해요</div>
     </div>
   </div>
 </section>
@@ -368,7 +368,7 @@
       <details class="faq"><summary>팔로워가 적어도 돈이 되나요?</summary><p>디지털 상품은 팔로워 1천 명 수준에서도 팔 수 있어요. 협찬은 터진 시리즈가 생긴 뒤에 따라와요.</p></details>
       <details class="faq"><summary>얼굴이 매번 조금씩 달라져요</summary><p>기준 이미지 1장을 계속 참조로 넣으세요. 한 명이 한 장소에서 말하는 포맷이면 훨씬 쉬워요.</p></details>
       <details class="faq"><summary>AI라고 밝히면 인기가 떨어지나요?</summary><p>반응이 좋았던 계정들 대부분이 AI임을 공개했어요. 사람들은 "다음 편이 궁금한가"에 반응해요.</p></details>
-      <details class="faq"><summary>영어를 못 하면요?</summary><p>하나 쌤 대신 한국어로 운영할 수 있는 다른 후보를 고르면 돼요. 캐릭터 챕터에서 '한국어로만 운영'을 눌러보세요.</p></details>
+      <details class="faq"><summary>캐릭터를 왜 여러 명 만들어요?</summary><p>어떤 캐릭터가 터질지는 올려보기 전엔 몰라요. AI는 새 캐릭터를 만드는 비용이 거의 없어서, 여러 명을 같은 조건으로 테스트하고 이긴 캐릭터에 집중하는 게 유리해요.</p></details>
     </div>
   </div>
 </section>
@@ -381,8 +381,11 @@
 
 <footer id="foot" data-note="데이터: 인스타그램 공개 AI 캐릭터 계정 18개(한국 10·해외 8)의 최근 게시물을 2026년 9월에 직접 확인한 대략치. 그룹 평균은 좋아요를 공개한 10개 계정 기준."></footer>
 
+<script src="/characters/data.js"></script>
 <script src="/assets/common.js"></script>
 <script>
+document.getElementById('stack').innerHTML=CHARACTERS.slice(0,6).map(c=>`<span>${avatar(AV[c.id])}</span>`).join('');
+document.getElementById('teaserN').textContent=`캐릭터 ${CHARACTERS.length}명 · `+CHARACTERS.slice(0,4).map(c=>c.name).join(' · ')+(CHARACTERS.length>4?' …':'');
 /* grouped column chart */
 const GROUPS=[
   {x:'팔로워 1~2천',s:'2개 계정',v:7.5,lab:'≈7.5%',hi:true,list:'arincha.archive 10%+<br>dohoon.kim._ 약 5%'},

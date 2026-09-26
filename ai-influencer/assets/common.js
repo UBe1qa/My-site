@@ -6,7 +6,7 @@
 (function(){
   const CHAPTERS=[
     {k:'plan',n:'01',label:'기획',href:'/plan/'},
-    {k:'characters',n:'02',label:'캐릭터',href:'/characters/'},
+    {k:'characters',n:'02',label:'캐릭터',href:'/characters/',count:()=>window.CHARACTERS&&window.CHARACTERS.length},
     {k:'ops',n:'03',label:'운영',href:'/ops/'},
     {k:'reports',n:'04',label:'리포트',href:'/reports/'}
   ];
@@ -17,7 +17,7 @@
   if(nav){
     nav.className='topnav';
     nav.innerHTML=`<div class="wrap"><a href="/" class="logo" aria-label="홈">AI<span>.</span>Influence</a>
-      <div class="chapters" role="navigation" aria-label="챕터">${CHAPTERS.map(c=>`<a href="${c.href}" class="${c.k===cur?'on':''}" ${c.k===cur?'aria-current="page"':''}><em>${c.n}</em>${c.label}</a>`).join('')}</div></div>
+      <div class="chapters" role="navigation" aria-label="챕터">${CHAPTERS.map(c=>`<a href="${c.href}" class="${c.k===cur?'on':''}" ${c.k===cur?'aria-current="page"':''}><em>${c.n}</em>${c.label}${c.count&&c.count()?`<span class="cnt">${c.count()}</span>`:''}</a>`).join('')}</div></div>
       <div class="ptop" id="ptop"></div>`;
     const on=nav.querySelector('.chapters a.on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'center'});
   }
@@ -57,7 +57,7 @@
     <path d="M90 124q10 8 20 0" stroke="#8a3b4d" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
   }
   window.avatar=avatar;
-  window.AV={
+  window.AV=window.AV||{};Object.assign(window.AV,{
     hana:{skin:'#f6d3bd',hair:'#3b2a4a',style:'bob',top:'#ff5c8a',bg:['#3a2350','#1b1530'],glasses:true},
     doyun:{skin:'#efc8a8',hair:'#1f1a24',style:'short',top:'#2f3b5a',bg:['#2a2f4a','#141726']},
     gyeol:{skin:'#f8d9c4',hair:'#6b3f2a',style:'long',top:'#3ddc97',bg:['#1f3a33','#101a18']},
@@ -65,8 +65,22 @@
     bokdan:{skin:'#eec3a4',hair:'#b9b4c2',style:'bun',top:'#b8554e',bg:['#4a2f2a','#1e1614'],old:true,glasses:true},
     rozy:{skin:'#f3d2c0',hair:'#8b8b9e',style:'long',top:'#55556e',bg:['#2a2a3a','#1a1a24']},
     emma:{skin:'#f6d6c4',hair:'#6a3b2c',style:'bob',top:'#ff5c8a',bg:['#4a2240','#231020']}
-  };
+  });
+  /* characters/data.js 가 먼저 로드됐으면 캐릭터 얼굴·조회 도우미 등록 */
+  const DEFAULT_AV={skin:'#f1cdb2',hair:'#3a3040',style:'short',top:'#55556e',bg:['#2a2a3a','#1a1a24']};
+  if(window.CHARACTERS){
+    window.CHARACTERS.forEach(c=>{window.AV[c.id]=c.av||DEFAULT_AV;});
+    window.charById=id=>window.CHARACTERS.find(c=>c.id===id);
+    window.stageOf=k=>(window.STAGES||[]).find(s=>s.k===k)||{k,ic:'•',label:k};
+    /* 설정표 완성도: 채워진 칸 / 전체 칸 */
+    const FIELDS=['handle','age','role','home','platform','concept','target','why','risk','money','personality','looks','voice','sidekick','avoid','episodes','moneyFlow'];
+    window.completeness=c=>{const n=FIELDS.filter(k=>{const v=c[k];return Array.isArray(v)?v.length:v!=null&&v!=='';}).length;return {n,total:FIELDS.length,pct:Math.round(n/FIELDS.length*100)};};
+    window.stageBadge=c=>{const s=window.stageOf(c.stage);return `<span class="stg ${s.k}">${s.ic} ${s.label}${c.demo?' <span class="d">샘플</span>':''}</span>`;};
+  }
   document.querySelectorAll('[data-av]').forEach(el=>el.innerHTML=avatar(window.AV[el.dataset.av]));
+
+  /* ---------- 한국어 조사: josa('하나 쌤','이','가') → '하나 쌤이' ---------- */
+  window.josa=(w,a,b)=>{const ch=w.charCodeAt(w.length-1);const has=ch>=0xAC00&&ch<=0xD7A3&&(ch-0xAC00)%28>0;return w+(has?a:b);};
 
   /* ---------- number formatting ---------- */
   window.fmt={
@@ -84,12 +98,12 @@
 
   /* ---------- scroll progress + sub-nav scrollspy ---------- */
   const ptop=document.getElementById('ptop');
-  const subLinks=[...document.querySelectorAll('.subnav a[href^="#"]')];
-  const subSecs=subLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
   function onScroll(){
     const h=document.documentElement,max=h.scrollHeight-h.clientHeight;
     if(ptop)ptop.style.width=(max>0?h.scrollTop/max*100:0)+'%';
-    if(subLinks.length){let c=-1;subSecs.forEach((s,i)=>{if(s.getBoundingClientRect().top<140)c=i;});
+    const subLinks=[...document.querySelectorAll('.subnav a[href^="#"]')];
+    const subSecs=subLinks.map(a=>document.querySelector(a.getAttribute('href')));
+    if(subLinks.length){let c=-1;subSecs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)c=i;});
       subLinks.forEach((a,i)=>{const on=i===c;if(on&&!a.classList.contains('on')&&a.scrollIntoView)a.parentElement.scrollTo({left:a.offsetLeft-40,behavior:'smooth'});a.classList.toggle('on',on);});}
   }
   addEventListener('scroll',onScroll,{passive:true});onScroll();

@@ -49,6 +49,18 @@
   .rbox.n{grid-column:1/-1;border-color:rgba(255,92,138,.3)}.rbox.n h4{color:var(--accent)}
   .rbox.n li::before{content:"☐";color:var(--accent)}
   .rlink{display:inline-block;margin-top:16px;color:var(--accent);font-weight:700;font-size:14px}
+  .cfil{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 16px;align-items:center}
+  .cfil>span{font-size:13px;color:var(--muted);margin-right:2px}
+  .cf{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13px;color:var(--muted)}
+  .cf.on{border-color:var(--accent2);background:rgba(123,97,255,.18);color:var(--text)}
+  .cf .av{width:24px;height:24px;border-radius:50%;overflow:hidden;display:inline-block;background:var(--card2)}
+  .faces{display:flex;margin-top:8px}
+  .faces span{width:22px;height:22px;border-radius:50%;overflow:hidden;border:2px solid var(--card);margin-left:-6px;background:var(--card2)}
+  .faces span:first-child{margin-left:0}
+  .who{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .who a{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:99px;border:1px solid var(--line2);font-size:12.5px;color:var(--muted)}
+  .who a:hover{color:var(--text);border-color:var(--muted)}
+  .who a .av{width:22px;height:22px;border-radius:50%;overflow:hidden;display:inline-block}
   .tmpl{margin-top:26px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
   .tmpl span.s{padding:5px 10px;border-radius:8px;background:var(--card);border:1px solid var(--line)}
 </style>
@@ -68,6 +80,7 @@
 <div class="wrap" style="padding-bottom:72px">
   <div class="demo-banner reveal" style="margin-bottom:18px"><span>🧪</span><div><b>'샘플' 표시가 붙은 주간 리포트는 예시예요.</b> 운영 대시보드의 샘플 데이터를 바탕으로 쓴 가상 회고예요. 기획 리포트는 실제 조사 내용이에요.</div></div>
   <div class="tabs" id="tabs"><button class="tab on" data-f="all">전체</button><button class="tab" data-f="주간">주간 리포트</button><button class="tab" data-f="기획">기획 리포트</button></div>
+  <div class="cfil" id="cfil"></div>
   <div class="rlayout">
     <div class="rlist" id="rlist"></div>
     <article class="card rdoc" id="rdoc" aria-live="polite"></article>
@@ -78,14 +91,20 @@
 
 <footer id="foot"></footer>
 
-<script src="/assets/common.js"></script>
+<script src="/characters/data.js"></script>
 <script src="/reports/data.js"></script>
+<script src="/assets/common.js"></script>
 <script>
-const R=REPORTS;let filter='all',cur=null;
+const R=REPORTS;let filter='all',cfilter='',cur=null;
+const used=[...new Set(R.flatMap(r=>r.chars||[]))].filter(id=>charById(id));
+const cfil=document.getElementById('cfil');
+cfil.innerHTML=`<span>캐릭터:</span><button class="cf on" data-c="" style="padding-left:12px">전체</button>`+used.map(id=>`<button class="cf" data-c="${id}"><span class="av">${avatar(AV[id])}</span>${charById(id).name}</button>`).join('');
+cfil.addEventListener('click',e=>{const b=e.target.closest('.cf');if(!b)return;cfilter=b.dataset.c;cfil.querySelectorAll('.cf').forEach(x=>x.classList.toggle('on',x===b));list();});
 document.getElementById('pills').innerHTML=`<span class="pill">📄 리포트 ${R.length}개</span><span class="pill">🗓️ 주간 ${R.filter(r=>r.kind==='주간').length} · 기획 ${R.filter(r=>r.kind==='기획').length}</span>`;
 function list(){
-  const arr=R.filter(r=>filter==='all'||r.kind===filter);
-  document.getElementById('rlist').innerHTML=arr.map(r=>`<button class="ri ${r.id===cur?'on':''}" data-id="${r.id}"><span class="top"><span class="kind ${r.kind==='기획'?'plan':''}">${r.kind}</span>· ${r.week}${r.demo?'<span class="demo">샘플</span>':''}</span><b>${r.title}</b></button>`).join('');
+  const arr=R.filter(r=>(filter==='all'||r.kind===filter)&&(!cfilter||(r.chars||[]).includes(cfilter)));
+  if(!arr.length){document.getElementById('rlist').innerHTML='<p class="note">조건에 맞는 리포트가 없어요.</p>';return;}
+  document.getElementById('rlist').innerHTML=arr.map(r=>`<button class="ri ${r.id===cur?'on':''}" data-id="${r.id}"><span class="top"><span class="kind ${r.kind==='기획'?'plan':''}">${r.kind}</span>· ${r.week}${r.demo?'<span class="demo">샘플</span>':''}</span><b>${r.title}</b>${(r.chars||[]).length?`<span class="faces">${r.chars.filter(id=>charById(id)).map(id=>`<span>${avatar(AV[id])}</span>`).join('')}</span>`:''}</button>`).join('');
   if(!arr.find(r=>r.id===cur)&&arr[0])show(arr[0].id,false);
 }
 function show(id,scroll){
@@ -94,6 +113,7 @@ function show(id,scroll){
   const doc=document.getElementById('rdoc');
   doc.innerHTML=`<div class="meta"><span class="pill">${r.kind} 리포트</span><span class="pill">${r.week}</span>${r.demo?'<span class="pill demo">샘플</span>':'<span class="pill" style="color:var(--ok);border-color:rgba(61,220,151,.4)">실제</span>'}</div>
     <h2>${r.title}</h2><p class="one">${r.one}</p>
+    ${(r.chars||[]).length?`<div class="who">${r.chars.filter(id=>charById(id)).map(id=>`<a href="/characters/profile/?id=${id}"><span class="av">${avatar(AV[id])}</span>${charById(id).name}</a>`).join('')}</div>`:''}
     <div class="rnums">${r.nums.map(n=>`<div class="rn"><small>${n.k}</small><b>${n.v}</b><em>${n.d}</em></div>`).join('')}</div>
     <div class="rsec">
       <div class="rbox g"><h4>👍 잘된 것</h4>${ul(r.good)}</div>

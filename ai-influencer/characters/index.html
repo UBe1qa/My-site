@@ -3,244 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>캐릭터 · 후보 5명 | AI.Influence</title>
-<meta name="description" content="AI 인플루언서 캐릭터 후보 5명 비교와 캐릭터 설정(바이블) 초안.">
+<title>캐릭터 로스터 | AI.Influence</title>
+<meta name="description" content="AI 인플루언서 캐릭터 로스터 — 아이디어부터 집중 운영까지 캐릭터 여러 명을 단계별로 관리합니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  .status{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line2);font-size:14px}
-  .status i{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 0 rgba(255,181,71,.6);animation:pulse 1.8s infinite}
-  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(255,181,71,0)}100%{box-shadow:0 0 0 0 rgba(255,181,71,0)}}
+  /* stage funnel */
+  .funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:26px}
+  .fs{position:relative;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;transition:.2s}
+  .fs:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .fs.on{border-color:var(--accent);background:rgba(255,92,138,.08)}
+  .fs .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+  .fs b{font-size:34px;font-weight:900;line-height:1.1;display:block;margin-top:2px}
+  .fs small{display:block;font-size:12px;color:var(--dim);line-height:1.4;margin-top:2px}
+  .fs .faces{display:flex;margin-top:8px;height:24px}
+  .fs .faces span{width:24px;height:24px;border-radius:50%;overflow:hidden;border:2px solid var(--card);margin-left:-8px;background:var(--card2)}
+  .fs .faces span:first-child{margin-left:0}
+  .fs:not(:last-child)::after{content:"›";position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:18px;font-weight:900;z-index:1}
+  .fs.paused{opacity:.75}
+  @media(max-width:860px){.funnel{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.funnel::-webkit-scrollbar{display:none}.fs b{font-size:26px}}
 
-  .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
-  .filters > span{font-size:13px;color:var(--muted);margin-right:4px}
-  .flt{padding:8px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13.5px;transition:.2s}
-  .flt.on{border-color:var(--accent2);background:rgba(123,97,255,.18)}
-  .fcount{font-size:13px;color:var(--dim);margin-left:auto}
-  .cgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-  .cc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 14px 16px;transition:.25s}
-  .cc:hover{transform:translateY(-3px);border-color:var(--line2)}
-  .cc.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(255,92,138,.35),0 16px 40px rgba(255,92,138,.12)}
-  .cc.dim{opacity:.28;filter:grayscale(.8)}
-  .cc .rec{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;background:var(--ok);color:#06140d;padding:3px 10px;border-radius:99px;white-space:nowrap}
-  .cc .av{width:72px;height:72px;border-radius:50%;overflow:hidden;background:var(--card2);margin-bottom:10px}
-  .cc b{font-size:16px}
-  .cc .role{font-size:12px;color:var(--dim)}
-  .cc .con{font-size:13.5px;margin:10px 0 12px;min-height:42px;line-height:1.5}
-  .mm{width:100%;display:grid;gap:5px}
-  .mm div{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);text-align:left}
-  .pips{display:flex;gap:3px}
-  .pips i{flex:1;height:6px;border-radius:3px;background:#2a2a40}
-  .pips i.f{background:var(--grad)}
-  .lang{margin-top:12px;font-size:11.5px;padding:3px 9px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
-  @media(max-width:900px){
-    .cgrid{grid-template-columns:1fr}
-    .cc{display:grid;grid-template-columns:56px 1fr;text-align:left;align-items:center;gap:0 14px;padding:14px}
-    .cc .av{width:56px;height:56px;margin:0;grid-row:1/5;align-self:start}
-    .cc .rec{position:static;transform:none;justify-self:start;margin-bottom:4px;grid-column:2}
-    .cc .con{min-height:0;margin:4px 0 8px;grid-column:2}
-    .cc .mm,.cc .lang,.cc .head{grid-column:2}
-    .cc .lang{justify-self:start;margin-top:8px}
-  }
-  .cdetail{margin-top:16px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
-  @media(max-width:760px){.cdetail{grid-template-columns:1fr}}
-  .cdetail h4{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:10px}
-  .cdetail h4 b{color:var(--text);font-size:17px;margin-right:6px}
-  .post{display:flex;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:14px;margin-bottom:8px}
-  .post .k{flex-shrink:0;min-width:34px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:900;background:var(--grad)}
-  .kv{display:grid;gap:10px}
-  .kv div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
-  .kv small{display:block;color:var(--muted);font-size:12px;margin-bottom:2px}
+  /* toolbar */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:26px 0 16px}
+  .search{flex:1;min-width:200px;max-width:320px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:0 12px;height:40px}
+  .search input{flex:1;background:none;border:0;color:var(--text);font:inherit;font-size:14px;outline:none;min-width:0}
+  .search input::placeholder{color:var(--dim)}
+  .chipsrow{display:flex;gap:6px;flex-wrap:wrap}
+  .fchip{padding:7px 12px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13px;color:var(--muted);transition:.15s}
+  .fchip.on{border-color:var(--accent2);background:rgba(123,97,255,.18);color:var(--text)}
+  .views{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;margin-left:auto}
+  .views button{padding:6px 12px;border-radius:8px;font-size:13px;color:var(--muted)}
+  .views button.on{background:var(--card2);color:var(--text)}
+  .count{font-size:13px;color:var(--dim)}
 
-  /* bible */
-  .bible{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
-  @media(max-width:860px){.bible{grid-template-columns:1fr}}
-  .profile{position:sticky;top:130px;padding:0;overflow:hidden}
-  @media(max-width:860px){.profile{position:static}}
-  .profile .pic{aspect-ratio:5/6;background:var(--card2);position:relative}
-  @media(max-width:860px){.profile .pic{max-width:260px;margin:0 auto}}
-  .profile .pic .cat{position:absolute;right:14px;bottom:10px;font-size:44px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
-  .profile .body{padding:18px 20px 20px}
-  .profile h3{font-size:22px;font-weight:900}
-  .profile .handle{color:var(--accent);font-size:14px;font-weight:700}
-  .profile dl{display:grid;grid-template-columns:70px 1fr;gap:8px 10px;margin-top:14px;font-size:13.5px}
-  .profile dt{color:var(--dim)}
-  .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:600px){.bgrid{grid-template-columns:1fr}}
-  .bgrid .card{padding:20px}
-  .bgrid .wide{grid-column:1/-1}
-  .bgrid h4{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:10px;letter-spacing:.3px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chip{font-size:13px;padding:5px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
-  .bubble{position:relative;background:var(--card2);border:1px solid var(--line2);border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:14px;margin-bottom:8px;max-width:95%}
-  .bubble small{display:block;color:var(--dim);font-size:11.5px;margin-top:2px}
-  ul.no{list-style:none;display:grid;gap:6px;font-size:14px}
-  ul.no li::before{content:"✕";color:var(--bad);font-weight:900;margin-right:8px}
-  .eps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  @media(max-width:600px){.eps{grid-template-columns:1fr}}
-  .ep{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:13.5px}
-  .ep em{font-style:normal;font-weight:900;font-size:11px;color:var(--accent);min-width:36px}
-  .ep.fin{border-color:rgba(255,92,138,.45)}
-  .money{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px}
-  .money .arrow{color:var(--dim)}
-  .money span.box{padding:8px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
-  .money span.box.hot{border-color:rgba(255,181,71,.5);color:var(--warn)}
+  /* character card */
+  .cc{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;transition:.2s;position:relative}
+  .cc:hover{border-color:rgba(255,92,138,.45);transform:translateY(-2px)}
+  .cc .hd{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center}
+  .cc .av{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--card2)}
+  .cc .nm{font-weight:900;font-size:15px;line-height:1.3}
+  .cc .nm small{display:block;font-weight:400;font-size:11.5px;color:var(--dim)}
+  .cc .con{font-size:13px;color:#d6d6e2;line-height:1.5}
+  .cc .tags{display:flex;gap:5px;flex-wrap:wrap}
+  .tg{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+  .cc .stat{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted);padding-top:8px;border-top:1px dashed var(--line)}
+  .cc .stat b{color:var(--text);font-size:13.5px}
+  .cc .stat{flex-wrap:wrap;row-gap:4px}
+  .cc .stat .vd{margin-left:auto;font-weight:700;font-size:11.5px;white-space:nowrap}
+  .vd.go{color:var(--ok)}.vd.watch{color:var(--warn)}.vd.stop{color:#ff9d9d}
+  .comp{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--dim);padding-top:8px;border-top:1px dashed var(--line)}
+  .comp .bar{flex:1;height:5px;border-radius:3px;background:#23233a;overflow:hidden}
+  .comp .bar i{display:block;height:100%;background:var(--grad);border-radius:3px}
+  .cc .cbar{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0}
+  .newc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1.5px dashed var(--line2);border-radius:14px;padding:18px 14px;color:var(--muted);font-size:13px;min-height:120px;background:transparent}
+  .newc b{font-size:26px;color:var(--accent);line-height:1}
+  .newc:hover{border-color:var(--accent);color:var(--text)}
+
+  /* board */
+  .board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:start}
+  .col{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:120px}
+  .col h4{display:flex;align-items:center;gap:6px;font-size:13.5px;padding:2px 4px}
+  .col h4 em{font-style:normal;margin-left:auto;font-size:12px;color:var(--dim)}
+  .col .empty{font-size:12px;color:var(--dim);text-align:center;padding:14px 4px;border:1px dashed var(--line);border-radius:10px}
+  @media(max-width:1000px){.board{grid-template-columns:repeat(5,250px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.col{scroll-snap-align:start}}
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+
+  .tbl-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:820px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:var(--card2);color:var(--muted);font-weight:500;font-size:12.5px;cursor:pointer;user-select:none}
+  th.on{color:var(--accent)}
+  tr:last-child td{border-bottom:0}
+  tbody tr{cursor:pointer;transition:background .15s}
+  tbody tr:hover{background:var(--card)}
+  td.nm{display:flex;align-items:center;gap:8px;font-weight:700}
+  td.nm span.av{width:26px;height:26px;border-radius:50%;overflow:hidden;display:inline-block;background:var(--card2)}
+  .pp{display:inline-flex;gap:2px}.pp i{width:10px;height:6px;border-radius:2px;background:#2a2a40}.pp i.f{background:var(--grad)}
+  td.num{text-align:right}th.num{text-align:right}
+
+  /* lifecycle */
+  .life{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:900px){.life{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.life{grid-template-columns:1fr}}
+  .lf{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .lf .mv{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
+  .lf .mv .arr{color:var(--dim)}
+  .lf ul{list-style:none;display:grid;gap:5px;font-size:13.5px;color:#d6d6e2}
+  .lf li::before{content:"✓";color:var(--ok);margin-right:6px;font-weight:900}
+  .lf.stop li::before{content:"!";color:#ff9d9d}
+  .rules{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+  .rule{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:13.5px}
+  .rule b{color:var(--text)}
 </style>
 </head>
 <body data-chapter="characters">
 <nav id="topnav"></nav>
 <div class="subnav"><div class="wrap">
-  <a href="#compare"><em>A</em>후보 비교</a><a href="#bible"><em>B</em>캐릭터 설정 초안</a>
+  <a href="#roster">로스터</a><a href="#life">캐릭터가 크는 과정</a>
 </div></div>
 
 <header class="page-head">
   <div class="wrap">
     <div class="crumb"><a href="/">홈</a>›<b>02 캐릭터</b></div>
-    <h1>누구로 <span class="grad">시작할까?</span></h1>
-    <p class="lead">시장 조사에서 찾은 빈자리를 노린 후보 5명이에요. 비교해서 한 명을 고르고, 고른 캐릭터의 설정(바이블)을 여기에 쌓아갈 거예요.</p>
-    <div class="status"><i></i>현재 단계: <b>후보 비교 중</b> · 아직 확정 전</div>
+    <h1>캐릭터 <span class="grad">로스터</span></h1>
+    <p class="lead">AI 인플루언서의 진짜 장점은 몇 명이든 만들 수 있다는 것. 아이디어는 전부 여기 모으고, 테스트해서 터진 캐릭터만 키워요.</p>
+    <div class="funnel" id="funnel" role="group" aria-label="단계별 필터"></div>
   </div>
 </header>
 
-<section id="compare" class="alt" style="padding-top:56px">
+<section id="roster" style="padding-top:8px">
   <div class="wrap">
-    <div class="sh reveal"><span class="num">A</span>
-      <div><p class="eyebrow">후보 비교</p><h2>처음이라면 <span class="grad">'하나 쌤'이 가장 쉬워요</span></h2><p class="sub">카드를 누르면 첫 게시물과 수익화 방법이 아래에 나와요.</p></div></div>
-    <div class="reveal">
-      <div class="filters">
-        <span>조건:</span>
-        <button class="flt" data-f="kr">🇰🇷 한국어로만 운영</button>
-        <button class="flt" data-f="easy">⚡ 제작 쉬운 것만</button>
-        <span class="fcount" id="fcount">5명 모두 표시</span>
-      </div>
-      <div class="cgrid" id="cgrid"></div>
-      <div class="card cdetail" id="cdetail"></div>
-      <p class="note">점수는 조사 내용을 바탕으로 한 5명 사이의 상대 비교예요. 근거는 <a href="/plan/#s3" style="color:var(--muted);text-decoration:underline">기획 › 03 자리</a>에 있어요.</p>
+    <div class="demo-banner reveal"><span>🧪</span><div><b>'샘플' 표시가 붙은 단계는 운영 대시보드 예시에 맞춘 가상 단계예요.</b> 실제로는 아직 모든 캐릭터가 아이디어 단계예요. 운영을 시작하면 실제 단계로 바뀌어요.</div></div>
+    <div class="toolbar">
+      <label class="search"><span aria-hidden="true">🔎</span><input id="q" type="search" placeholder="이름·컨셉 검색" aria-label="캐릭터 검색"></label>
+      <div class="chipsrow" id="niches"></div>
+      <div class="views" role="tablist"><button class="on" data-v="board">보드</button><button data-v="grid">카드</button><button data-v="table">비교표</button></div>
+    </div>
+    <p class="count" id="count"></p>
+    <div id="view" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<section id="life" class="alt">
+  <div class="wrap">
+    <div class="sh reveal"><span class="num">↻</span>
+      <div><p class="eyebrow">캐릭터가 크는 과정</p><h2>많이 만들고, 빨리 테스트하고, <span class="grad">터진 캐릭터만 키워요</span></h2><p class="sub">한 단계 넘어갈 때마다 아래 조건을 확인해요. 판정 숫자는 조사 결과를 바탕으로 한 제안이에요.</p></div></div>
+    <div class="life reveal">
+      <div class="lf"><div class="mv"><span class="stg idea">💡 아이디어</span><span class="arr">→</span><span class="stg design">🎨 설정 중</span></div>
+        <ul><li>한 줄 컨셉이 있다</li><li>조사한 '빈 니치'에 들어간다</li><li>에피소드 3개가 바로 떠오른다</li></ul></div>
+      <div class="lf"><div class="mv"><span class="stg design">🎨 설정 중</span><span class="arr">→</span><span class="stg test">🧪 테스트</span></div>
+        <ul><li>설정표 80% 이상 채움</li><li>기준 얼굴·목소리 확정</li><li>릴스 3개 미리 만들어 둠</li></ul></div>
+      <div class="lf"><div class="mv"><span class="stg test">🧪 테스트</span><span class="arr">→</span><span class="stg live">🚀 집중 운영</span></div>
+        <ul><li>2~4주 동안 주 2회 이상 업로드</li><li>최근 참여율 <b>10% 이상</b></li><li>저장이 많은 편이 있다</li></ul></div>
+      <div class="lf stop"><div class="mv"><span class="stg test">🧪 테스트</span><span class="arr">→</span><span class="stg paused">💤 보류</span></div>
+        <ul><li>최근 참여율 <b>7% 미만</b>이 2주 이상</li><li>포맷을 바꿔도 반응 없음</li><li>보류해도 설정은 남겨둬요</li></ul></div>
+    </div>
+    <div class="rules reveal">
+      <div class="rule">🧪 <span>동시에 테스트하는 캐릭터는 <b>최대 3명</b></span></div>
+      <div class="rule">📏 <span>같은 조건으로 비교: <b>주 2회, 같은 요일</b></span></div>
+      <div class="rule">🚀 <span>집중 운영 캐릭터가 생기면 <b>그 캐릭터부터 수익화</b></span></div>
     </div>
   </div>
 </section>
 
-<section id="bible">
+<section style="padding:56px 0">
   <div class="wrap">
-    <div class="sh reveal"><span class="num">B</span>
-      <div><p class="eyebrow">캐릭터 설정 · 초안</p><h2>하나 쌤으로 간다면, <span class="grad">이렇게 고정해요</span></h2><p class="sub">매 게시물이 같은 사람처럼 보이도록 외형·말투·세계관을 한 장에 정리한 설정표예요. 확정 전 초안이에요.</p></div></div>
-
-    <div class="bible reveal">
-      <div class="card profile">
-        <div class="pic"><div data-av="hana" style="width:100%;height:100%"></div><span class="cat">🐈</span></div>
-        <div class="body">
-          <span class="pill demo">초안 · 확정 전</span>
-          <h3 style="margin-top:10px">하나 쌤</h3>
-          <div class="handle">@hana.ssaem <small style="color:var(--dim);font-weight:400">(예시)</small></div>
-          <dl>
-            <dt>나이</dt><dd>26세</dd>
-            <dt>직업</dt><dd>외국인 대상 한국어 강사</dd>
-            <dt>사는 곳</dt><dd>서울 연남동, 고양이와 둘이</dd>
-            <dt>언어</dt><dd>영어 자막 + 한국어 예문</dd>
-            <dt>플랫폼</dt><dd>인스타 릴스 주 4회</dd>
-          </dl>
-        </div>
-      </div>
-
-      <div class="bgrid">
-        <div class="card"><h4>🧠 성격</h4>
-          <div class="chips"><span class="chip">밝고 말이 빠름</span><span class="chip">슬랭 덕후</span><span class="chip">틀리면 바로 인정</span><span class="chip">K드라마 정주행러</span><span class="chip">은근 허당</span></div></div>
-        <div class="card"><h4>👀 외형 고정 키워드</h4>
-          <div class="chips"><span class="chip">보라빛 흑발 단발</span><span class="chip">둥근 뿔테 안경</span><span class="chip">핑크 니트</span><span class="chip">연남동 카페 창가</span><span class="chip">따뜻한 오후 조명</span></div></div>
-        <div class="card wide"><h4>💬 말투 예시</h4>
-          <div class="bubble">Okay so, 여러분! 오늘은 '밥 먹었어?'의 진짜 뜻 알려줄게요 🍚<small>오프닝 — 항상 "Okay so"로 시작</small></div>
-          <div class="bubble">이거 드라마에서 나오면… 그냥 고백이에요. 진짜로요 😳<small>핵심 한 줄 — 짧고 과장되게</small></div>
-          <div class="bubble">다음 편은 '눈치'! 이건 번역이 안 돼요. 저장해두세요 🔖<small>엔딩 — 다음 편 예고 + 저장 유도</small></div>
-        </div>
-        <div class="card"><h4>🐈 보조 캐릭터</h4>
-          <p style="font-size:14px"><b>고양이 '쌀떡'</b> — 수업 중에 자꾸 화면에 들어오는 치즈 고양이. 쌀떡이가 나오는 편은 따로 표시해서 반응을 비교해요.</p></div>
-        <div class="card"><h4>🚫 하지 않는 것</h4>
-          <ul class="no"><li>실존 연예인 이름·닮은 얼굴</li><li>드라마 장면 그대로 복제</li><li>정치·혐오 이슈</li><li>AI임을 숨기기</li></ul></div>
-        <div class="card wide"><h4>📺 시즌 1 에피소드 (10편)</h4>
-          <div class="eps">
-            <div class="ep"><em>EP.1</em>'밥 먹었어?'가 고백인 이유</div>
-            <div class="ep"><em>EP.2</em>'대박' 쓰면 안 되는 상황 3가지</div>
-            <div class="ep"><em>EP.3</em>'눈치'는 번역이 안 돼요</div>
-            <div class="ep"><em>EP.4</em>'애교' 3단계</div>
-            <div class="ep"><em>EP.5</em>존댓말→반말 넘어가는 타이밍</div>
-            <div class="ep"><em>EP.6</em>'헐'의 5가지 뜻</div>
-            <div class="ep"><em>EP.7</em>'아이고'는 언제 쓸까</div>
-            <div class="ep"><em>EP.8</em>식당에서 '이모!' 부르는 법</div>
-            <div class="ep"><em>EP.9</em>'정'이 뭐예요?</div>
-            <div class="ep fin"><em>EP.10</em>시즌 1 피날레 · 퀴즈 총정리</div>
-          </div></div>
-        <div class="card wide"><h4>💰 수익 연결</h4>
-          <div class="money"><span class="box">EP 10편 공개</span><span class="arrow">→</span><span class="box">저장 많은 표현 추리기</span><span class="arrow">→</span><span class="box hot">📦 'K드라마 표현 50' PDF</span><span class="arrow">→</span><span class="box">프로필 링크로 판매</span></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="alt" style="padding:56px 0">
-  <div class="wrap">
-    <a class="next reveal" href="/ops/"><div><small>다음 챕터</small><b>03 운영 — 팔로워·반응·수익 대시보드</b></div><span class="arr">→</span></a>
+    <a class="next reveal" href="/ops/"><div><small>다음 챕터</small><b>03 운영 — 캐릭터별 팔로워·반응·수익 비교</b></div><span class="arr">→</span></a>
   </div>
 </section>
 
 <footer id="foot"></footer>
 
+<script src="/characters/data.js"></script>
+<script src="/ops/data.js"></script>
+<script src="/ops/metrics.js"></script>
 <script src="/assets/common.js"></script>
 <script>
-const CH={
-  hana:{name:'하나 쌤',role:'26세 · 한국어 강사',rec:true,kr:false,
-    con:'K드라마 속 한국어 표현을 15초로 알려주는 영어 릴스',
-    m:[5,5,5],posts:["드라마에서 '밥 먹었어?'가 고백인 이유","'대박'을 쓰면 안 되는 상황 3가지",'"저는 AI 쌤이에요" 자기소개'],
-    target:'한국어 배우는 해외 10~30대 K팝·드라마 팬',money:'표현 모음 PDF·단어장, 한국어 앱 제휴, K뷰티·여행 협찬',risk:'영어 자막 필요. 드라마 장면은 새로 연출해야 해요.',
-    why:'한 명이 한 장소에서 말하면 끝이라 제작이 가장 단순하고, 정보형이라 저장·공유가 많아요.'},
-  doyun:{name:'하도윤',role:'28세 · 자취하는 직장인',kr:true,
-    con:'퇴근 후 15분, 편의점·시장 재료로 만드는 서울 집밥',
-    m:[3,4,4],posts:['냉장고에 달걀 2개뿐일 때 편의점 계란밥','드라마에서 본 그 라면, 진짜 버전','"저는 AI지만 레시피는 진짜입니다"'],
-    target:'한국 음식에 관심 있는 해외 20~30대 + 한국 1인 가구',money:'식품 제휴 링크, 레시피 PDF, 밀키트·편의점 협찬',risk:'AI 음식이 실제와 다를 수 있어요. 레시피는 직접 해보고 올리기.',
-    why:'남성 요리 캐릭터는 수 자체가 적고, 비슷한 계정이 반응률 5%로 수요를 증명했어요.'},
-  gyeol:{name:'한결',role:'25세 · 애견 미용실 막내',kr:true,
-    con:'손님 강아지들과 시바견 콩떡이의 미용실 시트콤',
-    m:[2,5,4],posts:['EP.1 출근 첫날, 콩떡이가 가위를 물고 도망갔다','목욕 거부하는 비숑 손님','"어느 쪽이 미용 후일까요?" 투표'],
-    target:'반려인 20~40대, 동물 릴스 좋아하는 사람',money:'사료·간식·용품 협찬, 콩떡이 굿즈·이모티콘',risk:'강아지 생김새를 매번 똑같이 맞추기 까다로워요.',
-    why:'동물 + 직업 에피소드 조합이 작은 계정에서도 가장 크게 터졌어요.'},
-  seojin:{name:'정서진',role:'29세 · 여의도 3년차 대리',kr:true,
-    con:'회사에서 하는 말 vs 속마음, 직장인 공감 상황극',
-    m:[2,4,3],posts:["부장님이 '편하게 얘기해'라고 했을 때",'금요일 5시 50분에 온 업무 메일','연차 쓸 때 말하는 법 3단계'],
-    target:'한국 20~30대 직장인, 취준생',money:'협업툴·채용 앱 협찬, 메일·보고서 템플릿 판매',risk:'대본이 재미를 좌우하고, 여러 인물이 나오면 제작이 어려워요.',
-    why:'32만 좋아요를 받은 상황극 공식을 한국 직장 문화로 옮긴 아이디어예요.'},
-  bokdan:{name:'복단 여사',role:'67세 · 서울 딸 집 할머니',kr:true,
-    con:'키오스크·탕후루·팝업스토어에 도전하는 할머니',
-    m:[3,4,3],posts:['EP.1 키오스크에서 햄버거 주문 15분','두바이 쿠키 첫입 리뷰','할머니 간장 계란장 비법'],
-    target:'할머니를 떠올리는 20~30대 + 40~60대 부모 세대',money:'식품·효도 선물 협찬, 시니어 디지털 교육 캠페인, 레시피 전자책',risk:"'답답한 노인'이 아니라 '결국 해내는 할머니'로 그려야 해요.",
-    why:'조사한 18개 계정 전부 20대. 시니어 캐릭터는 정면으로 비어 있어요.'}
-};
-const ML=['제작 쉬움','소재','수익 속도'];
-const cgrid=document.getElementById('cgrid'),cdetail=document.getElementById('cdetail');
-cgrid.innerHTML=Object.entries(CH).map(([k,c])=>`<button class="cc" data-k="${k}" aria-label="${c.name} 자세히 보기">
-  ${c.rec?'<span class="rec">⭐ 초보 추천</span>':''}
-  <span class="av">${avatar(AV[k])}</span>
-  <span class="head"><b>${c.name}</b><br><span class="role">${c.role}</span></span>
-  <span class="con">${c.con}</span>
-  <span class="mm">${c.m.map((v,i)=>`<div>${ML[i]}<span class="pips">${[1,2,3,4,5].map(p=>`<i class="${p<=v?'f':''}"></i>`).join('')}</span></div>`).join('')}</span>
-  <span class="lang">${c.kr?'🇰🇷 한국어 가능':'🇺🇸 영어 필요'}</span></button>`).join('');
-function showChar(k){
-  const c=CH[k];
-  cdetail.innerHTML=`<div><h4><b>${c.name}</b>첫 게시물 3개</h4>${c.posts.map((p,i)=>`<div class="post"><span class="k">EP.${i+1}</span>${p}</div>`).join('')}</div>
-  <div class="kv"><div><small>✨ 왜 이 캐릭터?</small>${c.why}</div><div><small>🎯 타깃</small>${c.target}</div><div><small>💰 수익화</small>${c.money}</div><div><small>⚠️ 주의</small>${c.risk}</div></div>`;
-  cdetail.classList.remove('swap');void cdetail.offsetWidth;cdetail.classList.add('swap');
-  cgrid.querySelectorAll('.cc').forEach(t=>t.classList.toggle('on',t.dataset.k===k));
+const C=CHARACTERS,S=STAGES;
+const LANG={ko:'🇰🇷 한국어',en:'🇺🇸 영어'};
+const url=new URLSearchParams(location.search);
+const st={stage:url.get('stage')||'',niche:'',q:'',view:url.get('view')||'board',sort:'stage',dir:1};
+const prof=id=>`/characters/profile/?id=${encodeURIComponent(id)}`;
+
+/* funnel */
+function funnel(){
+  document.getElementById('funnel').innerHTML=S.map(s=>{const list=C.filter(c=>c.stage===s.k);
+    return `<button class="fs ${s.k} ${st.stage===s.k?'on':''}" data-s="${s.k}" aria-pressed="${st.stage===s.k}"><span class="top"><span>${s.ic} ${s.label}</span></span><b>${list.length}</b><small>${s.desc}</small>
+      <span class="faces">${list.slice(0,5).map(c=>`<span>${avatar(AV[c.id])}</span>`).join('')}</span></button>`;}).join('');
 }
-cgrid.addEventListener('click',e=>{const t=e.target.closest('.cc');if(t)showChar(t.dataset.k);});
-showChar('hana');
-const F={kr:false,easy:false};
-document.querySelectorAll('.flt').forEach(b=>b.addEventListener('click',()=>{
-  F[b.dataset.f]=!F[b.dataset.f];b.classList.toggle('on',F[b.dataset.f]);
-  let n=0,first=null;
-  cgrid.querySelectorAll('.cc').forEach(el=>{const c=CH[el.dataset.k];const ok=(!F.kr||c.kr)&&(!F.easy||c.m[0]>=3);el.classList.toggle('dim',!ok);if(ok){n++;first=first||el.dataset.k;}});
-  document.getElementById('fcount').textContent=(F.kr||F.easy)?`조건에 맞는 캐릭터 ${n}명`:'5명 모두 표시';
-  const cur=cgrid.querySelector('.cc.on');if(cur&&cur.classList.contains('dim')&&first)showChar(first);
-}));
+document.getElementById('funnel').addEventListener('click',e=>{const b=e.target.closest('.fs');if(!b)return;st.stage=st.stage===b.dataset.s?'':b.dataset.s;funnel();render();});
+
+/* niche chips */
+const niches=[...new Set(C.map(c=>c.niche).filter(Boolean))];
+const nicheBox=document.getElementById('niches');
+nicheBox.innerHTML=`<button class="fchip on" data-n="">전체</button>`+niches.map(n=>`<button class="fchip" data-n="${n}">${n}</button>`).join('');
+nicheBox.addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;st.niche=b.dataset.n;nicheBox.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));render();});
+document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.trim().toLowerCase();render();});
+document.querySelectorAll('.views button').forEach(b=>{b.classList.toggle('on',b.dataset.v===st.view);b.addEventListener('click',()=>{st.view=b.dataset.v;document.querySelectorAll('.views button').forEach(x=>x.classList.toggle('on',x===b));render();});});
+
+function filtered(){return C.filter(c=>(!st.stage||c.stage===st.stage)&&(!st.niche||c.niche===st.niche)&&(!st.q||(c.name+c.concept+(c.niche||'')+(c.role||'')).toLowerCase().includes(st.q)));}
+
+function card(c){
+  const m=window.M&&M.char(c.id),cp=completeness(c);
+  const foot=m?`<div class="stat"><span>팔로워 <b>${fmt.n(m.latest)}</b></span><span>참여율 <b>${fmt.pct(m.avgEng)}</b></span><span class="vd ${m.verdict.k}">${m.verdict.ic} ${m.verdict.label}</span></div>`
+             :`<div class="comp"><span>설정표</span><span class="bar"><i style="width:${cp.pct}%"></i></span><span>${cp.pct}%</span></div>`;
+  return `<a class="cc" href="${prof(c.id)}">${c.color?`<span class="cbar" style="background:${c.color}"></span>`:''}
+    <div class="hd"><span class="av">${avatar(AV[c.id])}</span><div class="nm">${c.name}<small>${c.role||''}</small></div></div>
+    <div>${stageBadge(c)}</div>
+    <div class="con">${c.concept}</div>
+    <div class="tags">${c.niche?`<span class="tg">${c.niche}</span>`:''}${c.lang?`<span class="tg">${LANG[c.lang]}</span>`:''}</div>${foot}</a>`;
+}
+const newCard=`<div class="newc"><b>＋</b><span>새 캐릭터 아이디어</span><small style="color:var(--dim)">한 줄만 알려주면 로스터에 추가돼요</small></div>`;
+
+function render(){
+  const list=filtered(),v=document.getElementById('view');
+  document.getElementById('count').textContent=`${list.length}명 표시 · 전체 ${C.length}명`+(st.stage?` · ${stageOf(st.stage).label}만`:'');
+  if(st.view==='board'){
+    v.innerHTML=`<div class="board">${S.map(s=>{const l=list.filter(c=>c.stage===s.k);
+      return `<div class="col"><h4>${s.ic} ${s.label}<em>${l.length}</em></h4>${l.map(card).join('')||'<div class="empty">아직 없음</div>'}${s.k==='idea'?newCard:''}</div>`;}).join('')}</div>`;
+  }else if(st.view==='grid'){
+    v.innerHTML=`<div class="grid">${list.map(card).join('')}${newCard}</div>`;
+  }else{
+    const order=S.map(s=>s.k);
+    const rows=list.map(c=>{const m=window.M&&M.char(c.id);return {c,stage:order.indexOf(c.stage),name:c.name,niche:c.niche||'',lang:c.lang||'',ease:c.scores?c.scores.ease:0,topic:c.scores?c.scores.topic:0,money:c.scores?c.scores.money:0,fol:m?m.latest:-1,eng:m?m.avgEng:-1,comp:completeness(c).pct};});
+    rows.sort((a,b)=>(a[st.sort]>b[st.sort]?1:a[st.sort]<b[st.sort]?-1:0)*st.dir);
+    const pips=v=>v?`<span class="pp">${[1,2,3,4,5].map(p=>`<i class="${p<=v?'f':''}"></i>`).join('')}</span>`:'<span style="color:var(--dim)">—</span>';
+    const H=[['name','캐릭터'],['stage','단계'],['niche','니치'],['lang','언어'],['ease','제작 쉬움'],['topic','소재'],['money','수익 속도'],['fol','팔로워','num'],['eng','참여율','num'],['comp','설정표','num']];
+    v.innerHTML=`<div class="tbl-wrap"><table><thead><tr>${H.map(([k,l,cl])=>`<th data-k="${k}" class="${cl||''} ${k===st.sort?'on':''}">${l}${k===st.sort?(st.dir>0?' ↑':' ↓'):''}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr data-id="${r.c.id}"><td class="nm"><span class="av">${avatar(AV[r.c.id])}</span>${r.c.name}</td><td>${stageBadge(r.c)}</td><td>${r.niche||'—'}</td><td>${r.lang?LANG[r.lang]:'—'}</td><td>${pips(r.ease)}</td><td>${pips(r.topic)}</td><td>${pips(r.money)}</td><td class="num">${r.fol>=0?fmt.n(r.fol):'—'}</td><td class="num">${r.eng>=0?fmt.pct(r.eng):'—'}</td><td class="num">${r.comp}%</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">행을 누르면 캐릭터 프로필로 가요. 제작 쉬움·소재·수익 속도는 캐릭터끼리의 상대 비교예요.</p>`;
+    v.querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(k===st.sort)st.dir*=-1;else{st.sort=k;st.dir=['name','stage','niche','lang'].includes(k)?1:-1;}render();}));
+    v.querySelectorAll('tbody tr').forEach(tr=>tr.addEventListener('click',()=>location.href=prof(tr.dataset.id)));
+  }
+}
+funnel();render();
 </script>
 </body>
 </html>
