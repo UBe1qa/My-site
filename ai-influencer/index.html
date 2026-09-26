@@ -3,221 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI.Influence — 캐릭터는 여러 명, 터지는 한 명을 키운다</title>
-<meta name="description" content="얼굴 없이, AI 캐릭터를 여러 명 만들어 동시에 테스트하고 반응 좋은 캐릭터로 수익을 만드는 프로젝트 기록.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>AI.Influence — 얼굴 없이, 캐릭터로 돈 벌기</title>
+<meta name="description" content="AI 캐릭터를 여러 명 만들어 동시에 올려보고, 반응 터진 한 명만 키워 수익을 만드는 실험 기록.">
+<meta property="og:title" content="AI.Influence — 얼굴 없이, 캐릭터로 돈 벌기">
+<meta property="og:description" content="AI 캐릭터 여러 명을 동시에 테스트하고, 이긴 한 명으로 수익을 만드는 실험 기록.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  /* hero */
-  .hero{position:relative;padding:68px 0 60px;overflow:hidden}
-  .hero::before,.hero::after{content:"";position:absolute;width:480px;height:480px;border-radius:50%;filter:blur(120px);z-index:-1}
-  .hero::before{background:var(--accent);opacity:.26;top:-200px;left:-160px}
-  .hero::after{background:var(--accent2);opacity:.2;bottom:-140px;right:-160px}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
-  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:30px}.hero{padding-top:40px}}
-  .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 14px;border:1px solid var(--line);border-radius:99px;font-size:13px;color:var(--muted);background:var(--bg2);margin-bottom:22px}
-  .badge i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
-  .hero h1{font-size:clamp(38px,6.2vw,66px);font-weight:900;line-height:1.12;letter-spacing:-2px;margin-bottom:20px}
-  .hero .lead{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:470px;margin-bottom:28px}
-  .hero .lead b{color:var(--text)}
+  /* ===== HERO ===== */
+  .hero{position:relative;padding:92px 0 0;text-align:center;overflow:hidden;background:radial-gradient(ellipse 620px 420px at 50% -60px,rgba(180,92,255,.30),rgba(255,92,138,.12) 55%,transparent 100%)}
+  .live{display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 12px;border-radius:99px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-size:14px;color:var(--muted);margin-bottom:28px}
+  .live i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+  .hero h1{font-size:clamp(46px,8.4vw,104px);font-weight:800;letter-spacing:-.055em;line-height:1.02;margin-bottom:26px}
+  .hero .lead{font-size:clamp(17.5px,2.1vw,21px);color:var(--muted);max-width:620px;margin:0 auto 36px;line-height:1.6}
+  .hero .lead b{color:var(--text);font-weight:700}
+  .hero .btns{justify-content:center}
 
-  /* phone fan */
-  .fan{position:relative;height:470px;display:flex;justify-content:center}
-  .phone{position:absolute;top:10px;width:210px;height:410px;border-radius:34px;background:#050508;border:7px solid #22222f;box-shadow:0 26px 70px rgba(0,0,0,.45),0 0 0 1px #33334a;overflow:hidden;user-select:none;cursor:pointer;transition:transform .4s cubic-bezier(.2,.8,.2,1),z-index 0s .2s}
-  .phone .screen{position:absolute;inset:0}
-  .phone .notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:66px;height:18px;border-radius:10px;background:#000;z-index:3}
-  .phone .ep{position:absolute;top:32px;left:12px;font-size:11px;font-weight:700;background:rgba(0,0,0,.45);padding:3px 9px;border-radius:99px;z-index:2}
-  .phone .face{position:absolute;left:50%;top:70px;transform:translateX(-50%);width:150px}
-  .phone .caption{position:absolute;left:12px;right:52px;bottom:16px;font-size:11.5px;z-index:2;line-height:1.45}
-  .phone .caption b{display:block;font-size:12.5px;margin-bottom:2px}
-  .phone .side{position:absolute;right:8px;bottom:18px;display:flex;flex-direction:column;gap:10px;align-items:center;font-size:10.5px;z-index:2}
-  .phone .side span{font-size:19px;display:block;text-align:center}
-  .phone.p0{z-index:3;transform:translateY(0) rotate(0)}
-  .phone.p1{z-index:2;transform:translateX(-128px) translateY(34px) rotate(-9deg) scale(.9);filter:brightness(.7)}
-  .phone.p2{z-index:1;transform:translateX(128px) translateY(34px) rotate(9deg) scale(.9);filter:brightness(.7)}
-  .phone:hover{filter:none}
-  .fan-tag{position:absolute;z-index:4;font-size:12px;font-weight:700;padding:5px 11px;border-radius:99px;background:var(--card);border:1px solid var(--line2);white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.35)}
-  .fan-tag.t1{top:0;right:6%}
-  .fan-tag.t2{bottom:14px;left:4%}
-  .fan-hint{position:absolute;bottom:-8px;left:0;right:0;text-align:center;color:var(--dim);font-size:12.5px}
-  .heart{position:absolute;pointer-events:none;font-size:24px;animation:heartUp 1.1s ease-out forwards;z-index:6}
-  @keyframes heartUp{0%{opacity:1;transform:translate(-50%,-50%) scale(.6)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-150px) scale(1.4)}}
-  @media(max-width:520px){.fan{height:390px;transform:scale(.82);transform-origin:top center;margin-bottom:-60px}.fan-tag.t2{display:none}}
+  /* casting lineup */
+  .lineup{position:relative;display:flex;justify-content:center;align-items:flex-end;margin-top:70px;height:360px}
+  .lc{position:relative;flex-shrink:0;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08);transition:transform .45s cubic-bezier(.2,.8,.2,1);margin:0 -14px;background:var(--card)}
+  .lc .ph{display:block;aspect-ratio:4/5}
+  .lc .tag{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px 8px 12px;border-radius:14px;background:rgba(10,10,14,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:left}
+  .lc .tag b{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lc .tag small{font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .lc:hover{transform:translateY(-14px) rotate(0) scale(1.02)!important;z-index:10;filter:none!important}
+  .lc.s2 .tag,.lc.s2r .tag,.lc.s3 .tag,.lc.s3r .tag{display:none}
+  .lineup::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:110px;background:linear-gradient(transparent,var(--bg));z-index:8;pointer-events:none}
+  .lc.s0{width:250px;z-index:5;transform:translateY(0)}
+  .lc.s1{width:205px;z-index:4;transform:translateY(22px) rotate(-5deg)}
+  .lc.s1r{width:205px;z-index:4;transform:translateY(22px) rotate(5deg)}
+  .lc.s2{width:170px;z-index:3;transform:translateY(52px) rotate(-9deg);filter:brightness(.82)}
+  .lc.s2r{width:170px;z-index:3;transform:translateY(52px) rotate(9deg);filter:brightness(.82)}
+  .lc.s3{width:140px;z-index:2;transform:translateY(86px) rotate(-13deg);filter:brightness(.65)}
+  .lc.s3r{width:140px;z-index:2;transform:translateY(86px) rotate(13deg);filter:brightness(.65)}
+  .chip{position:absolute;z-index:12;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;background:rgba(20,20,28,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line2);font-size:14px;font-weight:600;white-space:nowrap;box-shadow:0 16px 40px rgba(0,0,0,.45);animation:bob 5s ease-in-out infinite}
+  .chip small{color:var(--dim);font-weight:500;font-size:12px}
+  .chip .up{color:var(--ok)}
+  .chip.c1{top:26px;left:calc(50% + 110px)}
+  .chip.c2{top:120px;right:calc(50% + 120px);animation-delay:-2.4s}
+  @keyframes bob{50%{transform:translateY(-8px)}}
+  @media(max-width:900px){.lc.s3,.lc.s3r{display:none}.chip.c1{left:auto;right:4%}.chip.c2{right:auto;left:4%}}
+  @media(max-width:620px){
+    .hero{padding-top:64px}
+    .lineup{height:250px;margin-top:48px}
+    .lc{margin:0 -22px}
+    .lc.s0{width:170px}.lc.s1,.lc.s1r{width:140px}.lc.s2,.lc.s2r{width:118px}
+    .lc .tag{left:6px;right:6px;bottom:6px;padding:6px 8px;border-radius:10px}.lc .tag b{font-size:13px}.lc .tag small{display:none}
+    .chip{font-size:12.5px;padding:8px 11px}.chip.c1{top:0;right:2%}.chip.c2{top:auto;bottom:-8px;left:2%}
+  }
 
-  /* cast strip */
-  .cast{display:flex;gap:14px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-  .cast-track{display:flex;gap:14px;animation:scroll 40s linear infinite;flex-shrink:0}
-  .cast:hover .cast-track{animation-play-state:paused}
-  @keyframes scroll{to{transform:translateX(calc(-100% - 14px))}}
-  .ci{flex-shrink:0;width:132px;text-align:center;padding:14px 10px;border-radius:16px;background:var(--card);border:1px solid var(--line);transition:.2s}
-  .ci:hover{border-color:rgba(255,92,138,.5);transform:translateY(-3px)}
-  .ci .av{width:64px;height:64px;border-radius:50%;overflow:hidden;margin:0 auto 8px;background:var(--card2)}
-  .ci b{display:block;font-size:14px}
-  .ci small{display:block;font-size:11.5px;color:var(--dim);margin:2px 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ci.add{border-style:dashed;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--muted);font-size:13px;background:transparent}
-  .ci.add b{font-size:30px;color:var(--accent)}
-  .cast-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-  .cast-head h2{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.8px}
-  .cast-head a{font-size:14px;color:var(--accent);font-weight:700}
+  /* ===== NUMBERS ===== */
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .nm{padding:40px 12px;text-align:center;border-right:1px solid var(--line)}
+  .nm:last-child{border-right:0}
+  .nm b{display:block;font-size:clamp(40px,5vw,60px);font-weight:800;letter-spacing:-.05em;line-height:1}
+  .nm span{display:block;margin-top:12px;font-size:15.5px;color:var(--muted)}
+  @media(max-width:760px){.nums{grid-template-columns:1fr 1fr}.nm:nth-child(2){border-right:0}.nm:nth-child(-n+2){border-bottom:1px solid var(--line)}.nm{padding:30px 8px}}
 
-  /* why AI */
-  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:720px){.vs{grid-template-columns:1fr}}
-  .vs .card{padding:22px}
-  .vs h3{font-size:18px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .vs .big{font-size:44px;font-weight:900;line-height:1;letter-spacing:-1px}
-  .vs ul{list-style:none;display:grid;gap:8px;margin-top:14px;font-size:14.5px}
-  .vs li{display:flex;gap:10px}
-  .vs .human li::before{content:"–";color:var(--dim)}
-  .vs .ai{border-color:rgba(255,92,138,.45);background:linear-gradient(160deg,rgba(255,92,138,.1),var(--card) 60%)}
-  .vs .ai li::before{content:"✓";color:var(--ok);font-weight:900}
-  .people{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;min-height:34px}
-  .people span{width:26px;height:26px;border-radius:50%;overflow:hidden;background:var(--card2);animation:popin .4s both}
-  @keyframes popin{from{opacity:0;transform:scale(.4)}}
+  /* ===== INSIGHT ===== */
+  .ins{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+  @media(max-width:900px){.ins{grid-template-columns:1fr;gap:40px}}
+  .ins .sh{margin-bottom:0}
+  .more{display:inline-flex;align-items:center;gap:6px;margin-top:26px;font-weight:700;font-size:16px;color:var(--text);border-bottom:1px solid var(--line2);padding-bottom:3px}
+  .more:hover{border-color:var(--text)}
+  .vs{padding:30px}
+  .vs .row{display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;padding:22px 0}
+  .vs .row+.row{border-top:1px solid var(--line)}
+  .vs .av{width:56px;height:56px;border-radius:50%;overflow:hidden}
+  .vs .who{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:15px;color:var(--muted)}
+  .vs .who b{color:var(--text);font-size:16.5px}
+  .vs .likes{display:flex;align-items:baseline;gap:8px;margin:8px 0 10px}
+  .vs .likes b{font-size:40px;font-weight:800;letter-spacing:-.04em;line-height:1}
+  .vs .likes span{font-size:14px;color:var(--muted)}
+  .vs .bar{height:10px;border-radius:99px;background:var(--track);overflow:hidden}
+  .vs .bar i{display:block;height:100%;border-radius:99px;width:0;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+  .vs .foot{margin-top:6px;padding-top:18px;border-top:1px solid var(--line);font-size:15.5px;color:var(--muted)}
+  .vs .foot b{color:var(--text)}
 
-  /* funnel */
-  .fun{display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:stretch}
-  .fn{position:relative;padding:22px 18px;text-align:center;background:var(--card);border:1px solid var(--line);clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%,18px 50%)}
-  .fn:first-child{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);border-radius:14px 0 0 14px}
-  .fn:last-child{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,18px 50%);border-radius:0 14px 14px 0;background:linear-gradient(135deg,rgba(255,92,138,.25),rgba(123,97,255,.25))}
-  .fn .ic{font-size:24px}
-  .fn b{display:block;font-size:34px;font-weight:900;line-height:1.1;margin:4px 0}
-  .fn span{display:block;font-size:14px;font-weight:700}
-  .fn small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-  .fn em.sm{font-style:normal;font-size:10px;color:var(--warn);border:1px solid rgba(255,181,71,.4);border-radius:99px;padding:0 5px;vertical-align:middle}
-  .fun-foot{text-align:center;color:var(--muted);font-size:14px;margin-top:14px}
-  @media(max-width:720px){.fun{grid-template-columns:1fr;gap:6px}.fn,.fn:first-child,.fn:last-child{clip-path:none;border-radius:14px;display:grid;grid-template-columns:40px 60px 1fr;align-items:center;text-align:left;gap:10px;padding:14px 16px}.fn b{margin:0;font-size:28px}}
+  /* ===== HOW (3 steps) ===== */
+  .steps{display:grid;gap:28px}
+  .step{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:48px;border-radius:32px;background:var(--card);border:1px solid var(--line)}
+  .step.flip .txt{order:2}
+  .step .no{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--grad);font-weight:800;font-size:18px;margin-bottom:22px;color:#fff}
+  .step h3{font-size:clamp(28px,3.4vw,40px);font-weight:800;letter-spacing:-.04em;line-height:1.2;margin-bottom:16px}
+  .step p{font-size:18px;color:var(--muted);line-height:1.65;max-width:440px}
+  .step p b{color:var(--text)}
+  @media(max-width:900px){.step{grid-template-columns:1fr;gap:30px;padding:32px 24px;border-radius:26px}.step.flip .txt{order:0}}
+  /* step 1: face grid */
+  .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .fgrid .ft{border-radius:18px;overflow:hidden;aspect-ratio:1/1;transition:transform .3s}
+  .fgrid .ft:hover{transform:translateY(-4px) rotate(-2deg)}
+  .fgrid .plus{display:grid;place-items:center;border:1.5px dashed var(--line2);border-radius:18px;aspect-ratio:1/1;color:var(--muted);font-size:14px;font-weight:600;text-align:center;line-height:1.3}
+  .fgrid .plus b{display:block;font-size:30px;color:var(--text);line-height:1}
+  /* step 2: leaderboard */
+  .lb{padding:6px 0}
+  .lbr{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 0}
+  .lbr+.lbr{border-top:1px solid var(--line)}
+  .lbr .av{width:44px;height:44px;border-radius:50%;overflow:hidden}
+  .lbr .nm2{display:flex;justify-content:space-between;font-size:15.5px;font-weight:700;margin-bottom:8px}
+  .lbr .nm2 span{font-weight:800}
+  .lbr .tr{position:relative;height:10px;border-radius:99px;background:var(--track)}
+  .lbr .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+  .lbr .tr em{position:absolute;top:-4px;bottom:-4px;border-left:2px dashed}
+  .lb-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--dim);margin-top:12px}
+  .lb-legend span{display:inline-flex;align-items:center;gap:6px}
+  .lb-legend i{height:12px;border-left:2px dashed}
+  .smp{font-size:11.5px;font-weight:700;color:var(--warn);border:1px solid rgba(255,181,71,.45);border-radius:99px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+  /* step 3: funnel */
+  .fun{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;text-align:center}
+  .fcol b{display:block;font-size:48px;font-weight:800;letter-spacing:-.05em;line-height:1}
+  .fcol span{display:block;font-size:14.5px;color:var(--muted);margin-top:6px}
+  .fcol .fs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:14px;min-height:70px;align-content:flex-end}
+  .fcol .fs i{display:block;border-radius:50%;overflow:hidden}
+  .fcol.win .fs i{box-shadow:0 0 0 3px var(--ok),0 0 34px rgba(61,220,151,.45)}
+  .farr{font-size:22px;color:var(--dim)}
+  .money-chip{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:26px;padding:14px 16px;border-radius:16px;background:rgba(61,220,151,.08);border:1px solid rgba(61,220,151,.28);font-size:15.5px}
+  .money-chip b{color:var(--ok)}
 
-  /* chapters */
-  .chgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:760px){.chgrid{grid-template-columns:1fr}}
-  .ch{display:grid;grid-template-columns:1fr 132px;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:.25s}
-  .ch:hover{transform:translateY(-4px);border-color:rgba(255,92,138,.45)}
-  .ch .n{font-size:12px;font-weight:900;color:var(--accent);letter-spacing:1px}
-  .ch h3{font-size:21px;font-weight:900;margin:2px 0 4px}
-  .ch p{font-size:14px;color:var(--muted)}
-  .ch .go{display:inline-block;margin-top:10px;font-size:13px;font-weight:700}
-  .ch:hover .go{color:var(--accent)}
-  .ch .vis{height:92px;border-radius:12px;background:var(--bg);border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:8px}
-  .ch .vis svg{width:100%;height:100%;display:block}
-  .vis .tagd{position:absolute;top:6px;right:6px;font-size:10px;color:var(--warn);border:1px solid rgba(255,181,71,.4);border-radius:99px;padding:0 6px;background:var(--bg)}
-  .mini-stack{display:flex;flex-wrap:wrap;justify-content:center;gap:2px}
-  .mini-stack span{width:26px;height:26px;border-radius:50%;overflow:hidden;background:var(--card2)}
-  .vis .doc{width:100%;display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted)}
-  .vis .doc b{color:var(--text);font-size:12px;line-height:1.35}
-  .vis .doc i{display:block;height:5px;border-radius:3px;background:#2a2a40}
-  @media(max-width:760px){.ch{grid-template-columns:1fr 104px;padding:16px}.ch h3{font-size:19px}.ch .vis{height:80px}.mini-stack span{width:20px;height:20px}}
+  /* ===== DASHBOARD SHOWCASE ===== */
+  .show{position:relative;overflow:hidden}
+  .browser{border-radius:22px;border:1px solid var(--line2);background:#0f0f15;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.55),0 0 120px rgba(123,97,255,.16);max-width:980px;margin:0 auto}
+  .bbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:#121219}
+  .bbar i{width:11px;height:11px;border-radius:50%;background:#34343f}
+  .bbar span{margin-left:12px;flex:1;max-width:360px;font-size:12.5px;color:var(--dim);background:rgba(255,255,255,.05);padding:5px 12px;border-radius:8px}
+  .bbody{padding:26px}
+  .bk{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .bk div{padding:16px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+  .bk small{display:block;font-size:13px;color:var(--muted)}
+  .bk b{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.04em}
+  .bchart{padding:18px 18px 8px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+  .bchart .hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;font-weight:700;margin-bottom:6px}
+  .bchart .lg{display:flex;gap:12px;font-size:12.5px;color:var(--muted);font-weight:500}
+  .bchart .lg span{display:inline-flex;align-items:center;gap:5px}.bchart .lg i{width:12px;height:3px;border-radius:2px}
+  .bchart svg{display:block;width:100%;height:auto}
+  @media(max-width:620px){.bbody{padding:14px}.bk{gap:8px}.bk div{padding:12px}.bk small{font-size:11.5px}}
 
-  /* roadmap (10 steps) */
-  .road{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-  @media(max-width:900px){.road{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:480px){.road{grid-template-columns:1fr}}
-  .rs{position:relative;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
-  .rs .no{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900;background:var(--bg);border:2px solid var(--line2);color:var(--muted)}
-  .rs b{display:block;font-size:14.5px;line-height:1.35}
-  .rs small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-  .rs.is-done{border-color:rgba(61,220,151,.35)}
-  .rs.is-done .no{border-color:var(--ok);background:rgba(61,220,151,.15);color:var(--ok)}
-  .rs.is-now{border-color:var(--accent);background:rgba(255,92,138,.08)}
-  .rs.is-now .no{border-color:var(--accent);color:var(--text);animation:ring 1.8s infinite}
-  .rs.is-next{opacity:.7}
-  @keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,92,138,.55)}70%{box-shadow:0 0 0 10px rgba(255,92,138,0)}100%{box-shadow:0 0 0 0 rgba(255,92,138,0)}}
-  .rs a{position:absolute;inset:0;border-radius:14px}
-  .road-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:14px;color:var(--muted)}
-  .road-bar .bar{flex:1;max-width:360px;height:8px;border-radius:4px;background:#23233a;overflow:hidden}
-  .road-bar .bar i{display:block;height:100%;width:0;background:var(--grad);transition:width 1.2s ease}
-  .road-bar b{color:var(--text)}
+  /* ===== PROGRESS ===== */
+  .prog{position:relative;display:grid;grid-template-columns:repeat(10,1fr);margin:10px 0 34px}
+  .prog::before{content:"";position:absolute;left:5%;right:5%;top:15px;height:2px;background:var(--track)}
+  .prog .fill{position:absolute;left:5%;top:15px;height:2px;background:var(--grad);width:0;transition:width 1.4s ease}
+  .pd{position:relative;text-align:center;font-size:12.5px;color:var(--dim);padding:0 2px}
+  .pd i{display:grid;place-items:center;width:32px;height:32px;margin:0 auto 10px;border-radius:50%;background:var(--bg);border:2px solid var(--line2);font-style:normal;font-weight:800;font-size:13px;color:var(--dim);position:relative;z-index:1}
+  .pd.is-done i{background:var(--ok);border-color:var(--ok);color:#05140c}
+  .pd.is-now i{background:#fff;border-color:#fff;color:#0a0a0f;box-shadow:0 0 0 6px rgba(255,255,255,.12)}
+  .pd.is-now{color:var(--text);font-weight:700}
+  .pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .pc{padding:24px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+  .pc small{display:block;font-size:13.5px;font-weight:700;margin-bottom:8px}
+  .pc b{display:block;font-size:21px;letter-spacing:-.03em}
+  .pc p{font-size:15px;color:var(--muted);margin-top:6px}
+  .pc.is-done small{color:var(--ok)}.pc.is-now{border-color:rgba(255,255,255,.35)}.pc.is-now small{color:var(--text)}.pc.is-next small{color:var(--dim)}
+  @media(max-width:760px){.pd span{display:none}.pcards{grid-template-columns:1fr}}
 
-  /* inspiration */
-  .insp{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:20px 22px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line);transition:.25s}
-  .insp:hover{border-color:var(--line2);transform:translateY(-2px)}
-  .insp .play{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;background:#ff0033;font-size:24px;color:#fff}
-  .insp small{display:block;color:var(--muted);font-size:12.5px}
-  .insp b{display:block;font-size:17px;margin:2px 0}
-  .insp p{font-size:13.5px;color:var(--muted)}
-  .insp .go{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap}
-  @media(max-width:620px){.insp{grid-template-columns:auto 1fr}.insp .go{grid-column:1/-1}}
+  /* ===== CHAPTERS ===== */
+  .chs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .ch{display:flex;flex-direction:column;justify-content:space-between;min-height:230px;padding:26px;border-radius:24px;background:var(--card);border:1px solid var(--line);transition:.25s;position:relative;overflow:hidden}
+  .ch:hover{transform:translateY(-5px);border-color:var(--line2)}
+  .ch small{font-size:13px;font-weight:700;color:var(--accent)}
+  .ch h3{font-size:30px;font-weight:800;letter-spacing:-.04em;margin:6px 0 8px}
+  .ch p{font-size:15.5px;color:var(--muted);line-height:1.5}
+  .ch .go{margin-top:22px;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:space-between}
+  .ch .go i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);font-style:normal;transition:.25s}
+  .ch:hover .go i{background:#fff;color:#0a0a0f}
+  .ch .peek{position:absolute;right:22px;top:22px;display:flex}
+  .ch .peek span{width:44px;height:44px;border-radius:50%;overflow:hidden;margin-left:-12px;border:3px solid var(--card)}
+  @media(max-width:1000px){.chs{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.chs{grid-template-columns:1fr}.ch{min-height:0}}
+
+  /* ===== FINAL CTA ===== */
+  .final{position:relative;text-align:center;padding:130px 0;overflow:hidden;background:radial-gradient(ellipse 480px 280px at 50% 50%,rgba(255,92,138,.24),rgba(123,97,255,.14) 60%,transparent 100%)}
+  .final .faces{display:flex;justify-content:center;margin-bottom:34px}
+  .final .faces span{width:64px;height:64px;border-radius:50%;overflow:hidden;border:3px solid var(--bg);margin-left:-14px;transition:transform .3s}
+  .final .faces span:first-child{margin-left:0}
+  .final .faces span:hover{transform:translateY(-8px)}
+  .final .faces .q{display:grid;place-items:center;background:var(--card2);color:var(--text);font-weight:800;font-size:24px}
+  .final h2{font-size:clamp(40px,6.6vw,80px);font-weight:800;letter-spacing:-.055em;line-height:1.08;margin-bottom:22px}
+  .final p{font-size:19px;color:var(--muted);margin-bottom:36px}
+  .final .btns{justify-content:center}
+  .video{display:inline-flex;align-items:center;gap:14px;margin-top:56px;padding:12px 18px 12px 12px;border-radius:18px;border:1px solid var(--line2);background:rgba(255,255,255,.03);text-align:left;transition:.25s;max-width:100%}
+  .video:hover{border-color:rgba(255,255,255,.3)}
+  .video .play{flex-shrink:0;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:#ff0033;color:#fff;font-size:16px}
+  .video small{display:block;font-size:12.5px;color:var(--dim)}
+  .video b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body data-chapter="home">
 <nav id="topnav"></nav>
 
+<!-- HERO -->
 <header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="badge"><i></i>진행 중인 실험 · 얼굴 없이 AI 캐릭터로 돈 벌기</span>
-      <h1>캐릭터는 여러 명,<br><span class="grad">터지는 한 명을 키운다</span></h1>
-      <p class="lead">얼굴도 목소리도 필요 없어요. AI 캐릭터를 <b>여러 명 만들어 동시에 테스트</b>하고, 반응 좋은 캐릭터로 수익을 만들어요.</p>
-      <div class="btns">
-        <a href="/characters/" class="btn primary">캐릭터 로스터 보기</a>
-        <a href="/ops/" class="btn ghost">누가 이기고 있나</a>
-      </div>
-    </div>
-    <div class="fan" id="fan">
-      <span class="fan-tag t1" id="ft1"></span>
-      <span class="fan-tag t2" id="ft2"></span>
-      <p class="fan-hint">👆 폰을 누르면 앞으로 나와요 · 한 번 더 누르면 ❤️</p>
+  <div class="wrap">
+    <span class="live reveal"><i></i>지금 진행 중인 실험</span>
+    <h1 class="reveal d1">얼굴 없이,<br><span class="grad">캐릭터로 돈 벌기</span></h1>
+    <p class="lead reveal d2">AI 캐릭터를 <b>여러 명</b> 만들고, <b>동시에</b> 올려보고,<br>반응 터진 <b>한 명만</b> 키워요. 그 과정을 전부 기록합니다.</p>
+    <div class="btns reveal d3">
+      <a href="/characters/" class="btn primary">캐릭터 만나보기 →</a>
+      <a href="#how" class="btn ghost">3단계로 보기</a>
     </div>
   </div>
+  <div class="lineup" id="lineup" aria-label="캐릭터 라인업"></div>
 </header>
 
-<!-- CAST -->
-<section style="padding:0 0 70px">
-  <div class="wrap">
-    <div class="cast-head reveal"><h2>지금 로스터에 <span class="grad" id="castN"></span></h2><a href="/characters/">전체 보기 →</a></div>
+<!-- NUMBERS -->
+<div class="wrap reveal">
+  <div class="nums">
+    <div class="nm"><b data-count="18" data-suffix="개">0</b><span>뜯어본 AI 캐릭터 계정</span></div>
+    <div class="nm"><b id="nChars" data-suffix="명">0</b><span>지금 로스터의 캐릭터</span></div>
+    <div class="nm"><b class="grad" data-count="50" data-suffix="배">0</b><span>작은 계정의 반응률 차이</span></div>
+    <div class="nm"><b>₩0</b><span>촬영 장비 · 얼굴 노출</span></div>
   </div>
-  <div class="cast reveal" id="cast"></div>
-</section>
+</div>
 
-<!-- WHY AI -->
-<section class="alt">
-  <div class="wrap">
-    <div class="sh plain reveal"><div><p class="eyebrow">왜 AI 캐릭터냐면</p><h2>사람은 한 명, <span class="grad">AI는 몇 명이든</span></h2></div></div>
-    <div class="vs reveal">
-      <div class="card human"><h3>👤 사람 인플루언서</h3><div class="big">1명</div><ul><li>내 얼굴·사생활 노출</li><li>촬영 장소·장비·시간이 필요</li><li>컨셉이 안 맞으면 처음부터 다시</li></ul></div>
-      <div class="card ai"><h3>🤖 AI 인플루언서</h3><div class="big grad">몇 명이든</div><div class="people" id="people"></div><ul><li>얼굴·목소리 노출 없음</li><li>새 캐릭터는 프롬프트 몇 줄</li><li>안 되면 보류하고 다음 캐릭터로</li></ul></div>
+<!-- INSIGHT -->
+<section>
+  <div class="wrap ins">
+    <div class="sh plain reveal">
+      <p class="eyebrow">시장 조사에서 찾은 것</p>
+      <h2>팔로워 16만보다<br>2.3만이 <span class="grad">1,000배</span><br>더 터졌어요</h2>
+      <p class="sub">차이는 얼굴이 아니라 <b style="color:var(--text)">이야기</b>. 다음 편이 궁금한 상황극 릴스가 사진을 이겼어요.</p>
+      <a class="more" href="/plan/">시장 조사 전체 보기 →</a>
+    </div>
+    <div class="card vs reveal d1" id="vs">
+      <div class="row"><span class="av" data-av="rozy"></span><div>
+        <div class="who"><b>rozy.gram</b><span>팔로워 16만 · 사진</span></div>
+        <div class="likes"><b>~300</b><span>최근 게시물 좋아요</span></div>
+        <div class="bar"><i data-w="1.2" style="background:#55556a"></i></div></div></div>
+      <div class="row"><span class="av" data-av="emma"></span><div>
+        <div class="who"><b>emma.talks__</b><span>팔로워 2.3만 · 상황극 릴스</span></div>
+        <div class="likes"><b class="grad">32만</b><span>릴스 한 편 좋아요</span></div>
+        <div class="bar"><i data-w="100" style="background:var(--grad)"></i></div></div></div>
+      <div class="foot">팔로워는 <b>7분의 1</b>, 좋아요는 <b>1,000배</b>.</div>
     </div>
   </div>
 </section>
 
-<!-- FUNNEL -->
-<section>
+<!-- HOW -->
+<section class="alt" id="how">
   <div class="wrap">
-    <div class="sh plain reveal"><div><p class="eyebrow">어떻게 하냐면</p><h2>많이 만들고, 빨리 테스트하고, <span class="grad">이긴 캐릭터만 키워요</span></h2></div></div>
-    <div class="fun reveal" id="fun"></div>
-    <p class="fun-foot reveal">판정 기준: 최근 4주 참여율 <b>10% 이상이면 계속</b>, 7% 미만이면 보류 · <a href="/characters/#life" style="color:var(--accent)">자세히</a></p>
+    <div class="sh plain center reveal">
+      <p class="eyebrow">방법</p>
+      <h2>많이 만들고, 같이 올리고,<br><span class="grad">이긴 한 명만 키운다</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="txt"><span class="no">1</span><h3>캐릭터를 많이 만든다</h3>
+          <p>사람 인플루언서는 한 명뿐이지만, AI 캐릭터는 <b>프롬프트 몇 줄</b>이면 새로 생겨요. 조사에서 찾은 빈자리마다 여러 명을 뽑아요.</p>
+          <a class="more" href="/characters/">로스터 보기 →</a></div>
+        <div class="fgrid" id="fgrid"></div>
+      </div>
+      <div class="step flip reveal">
+        <div class="txt"><span class="no">2</span><h3>같은 조건으로 올린다</h3>
+          <p>2~4주 동안 <b>주 2회, 같은 요일</b>에. 감이 아니라 <b>참여율</b>로 비교해요.</p>
+          <a class="more" href="/ops/">운영 대시보드 →</a></div>
+        <div class="card lb" id="lb"></div>
+      </div>
+      <div class="step reveal">
+        <div class="txt"><span class="no">3</span><h3>이긴 한 명만 키운다</h3>
+          <p>참여율 <b>10%를 넘기면 집중 운영</b>, 7% 아래면 보류. 이긴 캐릭터로 <b>디지털 상품부터</b> 팔아요.</p>
+          <a class="more" href="/plan/#s6">수익 순서 보기 →</a></div>
+        <div>
+          <div class="fun" id="fun"></div>
+          <div class="money-chip">💰 첫 수익은 협찬보다 <b>PDF·가이드</b>가 먼저</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD SHOWCASE -->
+<section class="show">
+  <div class="wrap">
+    <div class="sh plain center reveal">
+      <p class="eyebrow">기록</p>
+      <h2>누가 이기고 있는지,<br><span class="grad">숫자로 한눈에</span></h2>
+      <p class="sub">캐릭터별 팔로워·참여율·수익을 매주 쌓아요. 잘되면 이게 그대로 포트폴리오가 돼요.</p>
+    </div>
+    <div class="browser reveal d1">
+      <div class="bbar"><i></i><i></i><i></i><span>ai-influencer-psi.vercel.app/ops</span></div>
+      <div class="bbody">
+        <div class="bk" id="bk"></div>
+        <div class="bchart"><div class="hd"><span>팔로워 추이 <span class="smp">예시</span></span><div class="lg" id="blg"></div></div><div id="bsvg"></div></div>
+      </div>
+    </div>
+    <div class="btns reveal" style="justify-content:center;margin-top:40px"><a class="btn ghost" href="/ops/">운영 대시보드 열기 →</a></div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sh plain reveal">
+      <p class="eyebrow">진행 상황</p>
+      <h2 id="progH">지금 2단계예요</h2>
+    </div>
+    <div class="prog reveal" id="prog"><span class="fill" id="pfill"></span></div>
+    <div class="pcards reveal" id="pcards"></div>
   </div>
 </section>
 
 <!-- CHAPTERS -->
-<section class="alt">
+<section>
   <div class="wrap">
-    <div class="sh plain reveal"><div><p class="eyebrow">둘러보기</p><h2>4개 챕터로 <span class="grad">기록하고 있어요</span></h2></div></div>
-    <div class="chgrid">
-      <a class="ch reveal" href="/plan/"><div><span class="n">01</span><h3>기획</h3><p>인스타 AI 캐릭터 18개를 뜯어본 시장 조사와 전략</p><span class="go">읽어보기 →</span></div>
-        <div class="vis"><svg viewBox="0 0 120 70" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs><rect x="20" y="6" width="20" height="62" rx="3" fill="url(#cg)"/><rect x="50" y="58" width="20" height="10" rx="2" fill="#4a4a66"/><rect x="80" y="65" width="20" height="3" rx="1.5" fill="#4a4a66"/></svg></div></a>
-      <a class="ch reveal" href="/characters/"><div><span class="n">02</span><h3>캐릭터</h3><p id="chText">캐릭터 로스터 — 아이디어부터 집중 운영까지</p><span class="go">로스터 보기 →</span></div>
-        <div class="vis"><div class="mini-stack" id="miniStack"></div></div></a>
-      <a class="ch reveal" href="/ops/"><div><span class="n">03</span><h3>운영</h3><p>캐릭터별 팔로워·참여율·수익을 같은 기준으로 비교</p><span class="go">대시보드 →</span></div>
-        <div class="vis" id="opsVis"></div></a>
-      <a class="ch reveal" href="/reports/" id="repCard"><div><span class="n">04</span><h3>리포트</h3><p>매주 쓰는 회고 — 잘된 것, 아쉬운 것, 다음 할 일</p><span class="go">최신 리포트 →</span></div>
-        <div class="vis" id="repVis"></div></a>
+    <div class="sh plain reveal"><p class="eyebrow">더 보기</p><h2>4개 챕터로 기록하고 있어요</h2></div>
+    <div class="chs">
+      <a class="ch reveal" href="/plan/"><div><small>01</small><h3>기획</h3><p>인스타 AI 캐릭터 18개를 뜯어본 시장 조사와 전략</p></div><span class="go">읽어보기<i>→</i></span></a>
+      <a class="ch reveal d1" href="/characters/"><span class="peek" id="peek"></span><div><small>02</small><h3>캐릭터</h3><p id="chP">캐릭터 로스터 — 아이디어부터 집중 운영까지</p></div><span class="go">로스터 보기<i>→</i></span></a>
+      <a class="ch reveal d2" href="/ops/"><div><small>03</small><h3>운영</h3><p>캐릭터별 팔로워·참여율·수익을 같은 기준으로</p></div><span class="go">대시보드<i>→</i></span></a>
+      <a class="ch reveal d3" href="/reports/" id="repCard"><div><small>04</small><h3>리포트</h3><p id="repP">매주 쓰는 회고 — 잘된 것, 아쉬운 것, 다음 할 일</p></div><span class="go">최신 리포트<i>→</i></span></a>
     </div>
   </div>
 </section>
 
-<!-- ROADMAP -->
-<section>
+<!-- FINAL -->
+<div class="final">
   <div class="wrap">
-    <div class="sh plain reveal"><div><p class="eyebrow">진행 상황</p><h2>10단계 중 <span class="grad" id="roadNow"></span></h2></div></div>
-    <div class="road-bar reveal" id="roadBar"></div>
-    <div class="road reveal" id="road"></div>
-    <div style="height:28px"></div>
-    <a class="insp reveal" id="insp" target="_blank" rel="noopener"></a>
+    <div class="faces reveal" id="ffaces"></div>
+    <h2 class="reveal d1">다음에 뜰 캐릭터는<br><span class="grad">누구일까요?</span></h2>
+    <p class="reveal d2">로스터에서 한 명씩 만나보세요.</p>
+    <div class="btns reveal d3"><a class="btn primary" href="/characters/">캐릭터 로스터 보기 →</a></div>
+    <a class="video reveal" id="video" target="_blank" rel="noopener"></a>
   </div>
-</section>
+</div>
 
 <footer id="foot"></footer>
 
@@ -228,80 +336,85 @@
 <script src="/assets/project.js"></script>
 <script src="/assets/common.js"></script>
 <script>
-const C=CHARACTERS;
-/* ---------- phone fan ---------- */
+const C=CHARACTERS,byId=charById;
+
+/* ---------- hero lineup ---------- */
 (function(){
-  const pick=[...C].sort((a,b)=>['live','test','design','idea','paused'].indexOf(a.stage)-['live','test','design','idea','paused'].indexOf(b.stage)).slice(0,3);
-  const fan=document.getElementById('fan');
-  const caps={hana:"드라마에서 '밥 먹었어?'가 고백인 이유 🍚",doyun:'냉장고에 달걀 2개뿐일 때 🍳',bokdan:'키오스크에서 햄버거 주문 15분 😵'};
-  const likes=pick.map(c=>{const m=window.M&&M.char(c.id);return m?m.best.likes:0;});
-  pick.forEach((c,i)=>{
-    const a=AV[c.id];const el=document.createElement('div');el.className='phone p'+i;el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',c.name+' 앞으로');el.dataset.i=i;
-    el.innerHTML=`<div class="screen" style="background:linear-gradient(170deg,${a.bg[0]},${a.bg[1]} 60%,#0e0e18)"></div><div class="notch"></div><div class="ep">${stageOf(c.stage).ic} ${c.name}</div>
-      <div class="face">${avatar({...a,nobg:true})}</div>
-      <div class="caption"><b>${c.handle||'@'+c.id}</b>${caps[c.id]||c.concept}</div>
-      <div class="side"><div><span>❤️</span><em class="lk">${fmt.n(likes[i])}</em></div><div><span>💬</span>${Math.round(likes[i]/9)}</div><div><span>🔖</span>${Math.round(likes[i]/2)}</div></div>`;
-    fan.appendChild(el);
-  });
-  const phones=[...fan.querySelectorAll('.phone')];let order=[0,1,2];
-  function arrange(){order.forEach((pi,slot)=>{phones[pi].className='phone p'+slot;});
-    const front=pick[order[0]],m=window.M&&M.char(front.id);
-    document.getElementById('ft1').innerHTML=m?`${m.verdict.ic} ${front.name} · 참여율 ${fmt.pct(m.avgEng)}`:`${stageOf(front.stage).ic} ${front.name}`;
-    document.getElementById('ft2').textContent=`+ 아이디어 ${C.filter(c=>c.stage==='idea').length}명 대기 중`;}
-  function burst(el,x,y){const em=['❤️','💖','✨','🔥'];for(let k=0;k<5;k++){const h=document.createElement('span');h.className='heart';h.textContent=em[k%4];h.style.left=x+'px';h.style.top=y+'px';h.style.setProperty('--dx',(Math.random()*80-40)+'px');h.style.animationDelay=(k*60)+'ms';el.appendChild(h);setTimeout(()=>h.remove(),1400);}
-    const i=+el.dataset.i;likes[i]+=Math.floor(Math.random()*20+5);el.querySelector('.lk').textContent=fmt.n(likes[i]);}
-  phones.forEach((el,pi)=>{const act=e=>{if(order[0]===pi){const r=el.getBoundingClientRect();burst(el,e&&e.clientX?e.clientX-r.left:100,e&&e.clientY?e.clientY-r.top:200);}else{order=[pi,...order.filter(x=>x!==pi)];arrange();}};
-    el.addEventListener('click',act);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}});});
-  arrange();
+  const order=['deokbae','seojin','doyun','hana','bokdan','gyeol','minjae'].filter(byId);
+  const slots=['s3','s2','s1','s0','s1r','s2r','s3r'];
+  const el=document.getElementById('lineup');
+  el.innerHTML=order.map((id,i)=>{const c=byId(id);return `<a class="lc ${slots[i]}" href="/characters/profile/?id=${id}"><span class="ph">${face(id)}</span><span class="tag"><b>${c.name}</b><small>${c.niche||''}</small></span></a>`;}).join('');
+  const m=window.M&&M.char('hana'),tests=C.filter(c=>c.stage==='test').length,ideas=C.filter(c=>c.stage==='idea').length;
+  if(m)el.insertAdjacentHTML('beforeend',`<span class="chip c1">📈 참여율 <b>${fmt.pct(m.avgEng)}</b><span class="up">▲</span><small>예시</small></span>`);
+  el.insertAdjacentHTML('beforeend',`<span class="chip c2">💡 아이디어 <b>${ideas}명</b> 대기 중</span>`);
 })();
 
-/* ---------- cast strip ---------- */
+/* ---------- numbers ---------- */
+document.getElementById('nChars').dataset.count=C.length;
+document.querySelector('.nums').closest('.reveal').addEventListener('revealed',()=>document.querySelectorAll('.nums [data-count]').forEach(countUp));
+
+/* ---------- insight bars ---------- */
+document.getElementById('vs').addEventListener('revealed',()=>document.querySelectorAll('#vs .bar i').forEach(b=>b.style.width=b.dataset.w+'%'));
+
+/* ---------- step 1: face grid ---------- */
+document.getElementById('fgrid').innerHTML=C.slice(0,7).map(c=>`<a class="ft" href="/characters/profile/?id=${c.id}" title="${c.name}">${face(c.id)}</a>`).join('')+`<div class="plus"><div><b>+</b>계속<br>추가</div></div>`;
+
+/* ---------- step 2: leaderboard ---------- */
 (function(){
-  document.getElementById('castN').textContent=`${C.length}명`;
-  const item=c=>`<a class="ci" href="/characters/profile/?id=${c.id}"><span class="av" style="display:block">${avatar(AV[c.id])}</span><b>${c.name}</b><small>${c.role||c.niche||''}</small>${stageBadge(c)}</a>`;
-  const add=`<a class="ci add" href="/characters/"><b>＋</b>다음 캐릭터</a>`;
-  const html=C.map(item).join('')+add;
-  document.getElementById('cast').innerHTML=`<div class="cast-track">${html}</div><div class="cast-track" aria-hidden="true">${html}</div>`;
+  if(!window.M)return;
+  const rows=[...M.all].sort((a,b)=>b.avgEng-a.avgEng);
+  const lb=document.getElementById('lb');
+  lb.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px;padding:4px 0 8px">최근 4주 참여율 <span class="smp">예시</span></div>`+rows.map(m=>{const c=byId(m.id);return `<div class="lbr"><span class="av">${face(m.id,true)}</span><div><div class="nm2">${c.name}<span>${fmt.pct(m.avgEng)}</span></div><div class="tr"><i data-w="${Math.min(100,m.avgEng/.2*100)}" style="background:${c.color}"></i><em style="left:35%;border-color:rgba(255,181,71,.7)"></em><em style="left:50%;border-color:rgba(61,220,151,.8)"></em></div></div><span class="vchip ${m.verdict.k}">${m.verdict.label}</span></div>`;}).join('')+
+  `<div class="lb-legend"><span><i style="border-color:rgba(255,181,71,.7)"></i>7% 보류선</span><span><i style="border-color:rgba(61,220,151,.8)"></i>10% 합격선</span></div>`;
+  lb.closest('.reveal').addEventListener('revealed',()=>lb.querySelectorAll('.tr i').forEach(i=>i.style.width=i.dataset.w+'%'));
 })();
 
-/* ---------- why AI: people pop ---------- */
+/* ---------- step 3: funnel ---------- */
 (function(){
-  const box=document.getElementById('people');let shown=false;
-  box.closest('.reveal').addEventListener('revealed',()=>{if(shown)return;shown=true;
-    let k=0;const iv=setInterval(()=>{const c=C[k%C.length];const s=document.createElement('span');s.innerHTML=avatar(AV[c.id]);s.style.animationDelay='0s';box.appendChild(s);k++;
-      if(k>=C.length*3)clearInterval(iv);},90);});
+  const all=C.slice(0,8),test=C.filter(c=>c.stage==='test'||c.stage==='live').slice(0,3),win=C.filter(c=>c.stage==='live').slice(0,1);
+  const col=(list,n,label,sz,cls)=>`<div class="fcol ${cls||''}"><div class="fs">${list.map(c=>`<i style="width:${sz}px;height:${sz}px">${face(c.id,true)}</i>`).join('')}</div><b>${n}</b><span>${label}</span></div>`;
+  document.getElementById('fun').innerHTML=col(all,C.length+'명','아이디어',26)+'<span class="farr">→</span>'+col(test,test.length+'명','테스트',38)+'<span class="farr">→</span>'+col(win,win.length+'명','집중 운영',62,'win');
 })();
 
-/* ---------- funnel ---------- */
+/* ---------- dashboard showcase ---------- */
 (function(){
-  const cnt=k=>C.filter(c=>c.stage===k).length;
-  const steps=[{ic:'💡',k:['idea'],t:'아이디어',d:'빈 니치에서 마구 뽑기'},{ic:'🎨',k:['design'],t:'설정',d:'설정표·기준 얼굴·목소리'},{ic:'🧪',k:['test','paused'],t:'테스트',d:'동시에 2~4주, 같은 조건'},{ic:'🚀',k:['live'],t:'집중 운영',d:'이긴 캐릭터만 키우고 수익화'}];
-  document.getElementById('fun').innerHTML=steps.map(s=>`<a class="fn" href="/characters/?stage=${s.k[0]}"><span class="ic">${s.ic}</span><b>${s.k.reduce((a,k)=>a+cnt(k),0)}</b><div><span>${s.t}${C.some(c=>s.k.includes(c.stage)&&c.demo)?' <em class="sm">샘플</em>':''}</span><small>${s.d}</small></div></a>`).join('');
+  if(!window.M)return;
+  const cs=M.all,recent=M.allPosts.filter(p=>p.w>M.W-4);
+  document.getElementById('bk').innerHTML=`<div><small>총 팔로워</small><b>${fmt.n(M.totalFollowers)}</b></div><div><small>운영 캐릭터</small><b>${cs.length}명</b></div><div><small>평균 참여율</small><b>${fmt.pct(M.avg(recent))}</b></div>`;
+  document.getElementById('blg').innerHTML=cs.map(m=>`<span><i style="background:${byId(m.id).color}"></i>${byId(m.id).name}</span>`).join('');
+  const w=900,h=250,l=8,r=110,t=14,b=26,iw=w-l-r,ih=h-t-b,W=M.W,mx=Math.max(...cs.map(c=>c.latest))*1.12;
+  const X=i=>l+i/(W-1)*iw,Y=v=>t+ih-v/mx*ih;
+  let s=`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="캐릭터별 팔로워 추이 예시">`;
+  [0,.33,.66,1].forEach(k=>{s+=`<line x1="${l}" x2="${l+iw}" y1="${t+ih*k}" y2="${t+ih*k}" stroke="rgba(255,255,255,.06)"/>`;});
+  OPS.weeks.forEach((wk,i)=>{s+=`<text x="${X(i)}" y="${h-6}" fill="#7d7d8c" font-size="13" text-anchor="middle" font-family="inherit">${wk}</text>`;});
+  const ends=[];
+  cs.forEach(m=>{const col=byId(m.id).color;const pts=m.followers.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);
+    s+=`<path class="ln" d="M${pts.map(p=>p.join(',')).join('L')}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`;
+    const lp=pts[pts.length-1];s+=`<circle cx="${lp[0]}" cy="${lp[1]}" r="5" fill="${col}" stroke="#131319" stroke-width="2"/>`;ends.push({x:lp[0],y:lp[1],t:`${byId(m.id).name} ${fmt.n(m.latest)}`});});
+  ends.sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<20)ends[i].y=ends[i-1].y+20;
+  ends.forEach(e=>{s+=`<text x="${e.x+10}" y="${e.y+5}" fill="#f5f5f7" font-size="14" font-weight="700" font-family="inherit">${e.t}</text>`;});
+  document.getElementById('bsvg').innerHTML=s+'</svg>';
+  const st=document.createElement('style');st.textContent='.ln{transition:stroke-dashoffset 2s cubic-bezier(.3,.7,.2,1)}.drawn .ln{stroke-dashoffset:0!important}';document.head.appendChild(st);
+  const br=document.querySelector('.browser');br.addEventListener('revealed',()=>setTimeout(()=>br.classList.add('drawn'),200));
 })();
 
-/* ---------- chapter previews ---------- */
+/* ---------- progress ---------- */
 (function(){
-  document.getElementById('miniStack').innerHTML=C.map(c=>`<span>${avatar(AV[c.id])}</span>`).join('');
-  document.getElementById('chText').textContent=`캐릭터 ${C.length}명 로스터 — 아이디어부터 집중 운영까지 단계별로`;
-  if(window.M){
-    const w=120,h=70,mx=Math.max(...M.all.map(c=>c.latest));
-    const paths=M.all.map(m=>{const pts=m.followers.map((v,i)=>v==null?null:[i/(M.W-1)*w,h-4-v/mx*(h-10)]).filter(Boolean);return `<path d="M${pts.map(p=>p.join(',')).join('L')}" fill="none" stroke="${charById(m.id).color}" stroke-width="2.2" vector-effect="non-scaling-stroke"/>`;}).join('');
-    document.getElementById('opsVis').innerHTML=`${OPS.demo?'<span class="tagd">샘플</span>':''}<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${paths}</svg>`;
-  }
-  const r=REPORTS[0];document.getElementById('repCard').href='/reports/#'+r.id;
-  document.getElementById('repVis').innerHTML=`${r.demo?'<span class="tagd">샘플</span>':''}<div class="doc"><span>${r.kind} · ${r.week}</span><b>${r.title}</b><i style="width:90%"></i><i style="width:70%"></i></div>`;
+  const rm=PROJECT.roadmap,now=rm.findIndex(s=>s.s==='now'),done=rm.filter(s=>s.s==='done').length;
+  document.getElementById('progH').innerHTML=now>=0?`10단계 중 <span class="grad">${now+1}단계</span>예요`:`${done}단계 완료`;
+  document.getElementById('prog').insertAdjacentHTML('beforeend',rm.map((s,i)=>`<div class="pd is-${s.s}"><i>${s.s==='done'?'✓':i+1}</i><span>${s.t}</span></div>`).join(''));
+  document.getElementById('prog').addEventListener('revealed',()=>document.getElementById('pfill').style.width=((Math.max(now,done-1))/(rm.length-1)*90)+'%');
+  const pick=[rm[now-1],rm[now],rm[now+1]].filter(Boolean),lbl={done:'✓ 완료',now:'● 지금 하는 중',next:'다음'};
+  document.getElementById('pcards').innerHTML=pick.map(s=>`<${s.href?'a href="'+s.href+'"':'div'} class="pc is-${s.s}"><small>${lbl[s.s]}</small><b>${s.t}</b><p>${s.d}</p></${s.href?'a':'div'}>`).join('');
 })();
 
-/* ---------- roadmap ---------- */
-(function(){
-  const rm=PROJECT.roadmap,done=rm.filter(s=>s.s==='done').length,now=rm.findIndex(s=>s.s==='now');
-  document.getElementById('roadNow').textContent=now>=0?`${now+1}단계: ${rm[now].t}`:`${done}단계 완료`;
-  document.getElementById('roadBar').innerHTML=`<span>진행률</span><span class="bar"><i id="rbi"></i></span><b>${done}/${rm.length} 완료</b>`;
-  document.getElementById('road').innerHTML=rm.map((s,i)=>`<div class="rs is-${s.s}"><span class="no">${s.s==='done'?'✓':i+1}</span><div><b>${s.t}</b><small>${s.d}</small></div>${s.href?`<a href="${s.href}" aria-label="${s.t}"></a>`:''}</div>`).join('');
-  document.getElementById('roadBar').addEventListener('revealed',()=>{document.getElementById('rbi').style.width=((done+(now>=0?.5:0))/rm.length*100)+'%';});
-  const I=PROJECT.inspiration,el=document.getElementById('insp');el.href=I.url;
-  el.innerHTML=`<span class="play">▶</span><div><small>이 프로젝트를 시작하게 한 영상 · ${I.channel}</small><b>${I.title}</b><p>${I.summary}. 여기 10단계가 그 영상의 흐름이에요.</p></div><span class="go">유튜브에서 보기 ↗</span>`;
-})();
+/* ---------- chapters / final ---------- */
+document.getElementById('peek').innerHTML=C.slice(0,3).map(c=>`<span>${face(c.id,true)}</span>`).join('');
+document.getElementById('chP').textContent=`캐릭터 ${C.length}명 — 아이디어부터 집중 운영까지 단계별로`;
+const r0=REPORTS[0];document.getElementById('repCard').href='/reports/#'+r0.id;document.getElementById('repP').textContent=`최신: ${r0.title}`;
+document.getElementById('ffaces').innerHTML=C.map(c=>`<span>${face(c.id,true)}</span>`).join('')+'<span class="q">?</span>';
+const I=PROJECT.inspiration,v=document.getElementById('video');v.href=I.url;
+v.innerHTML=`<span class="play">▶</span><span style="min-width:0"><small>이 프로젝트를 시작하게 한 영상 · ${I.channel}</small><b>${I.title}</b></span>`;
 </script>
 </body>
 </html>

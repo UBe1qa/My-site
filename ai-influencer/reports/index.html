@@ -5,89 +5,148 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>리포트 · 회고와 분석 | AI.Influence</title>
 <meta name="description" content="AI 인플루언서 운영 주간 리포트와 기획 리포트 모음.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-  .tab{padding:8px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13.5px}
-  .tab.on{border-color:var(--accent);background:rgba(255,92,138,.12)}
-  .rlayout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
-  @media(max-width:880px){.rlayout{grid-template-columns:1fr}}
-  .rlist{display:grid;gap:10px;position:sticky;top:130px}
-  @media(max-width:880px){.rlist{position:static;display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.rlist::-webkit-scrollbar{display:none}.ri{flex:0 0 260px}}
-  .ri{display:block;width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;transition:.2s;position:relative}
-  .ri:hover{border-color:var(--line2)}
-  .ri.on{border-color:var(--accent);background:rgba(255,92,138,.07)}
-  .ri .top{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:4px}
-  .ri .kind{font-weight:900;color:var(--accent)}
+  /* ===== HERO ===== */
+  .rhd{padding:72px 0 48px;background:radial-gradient(ellipse 560px 320px at 88% -60px,rgba(255,92,138,.18),transparent 100%)}
+  .rhd h1{font-size:clamp(40px,6.4vw,74px);font-weight:800;letter-spacing:-.05em;line-height:1.08}
+  .rhd .lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:620px;margin-top:18px}
+
+  /* featured latest */
+  .feat{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);border-radius:30px;overflow:hidden;background:var(--card);border:1px solid var(--line);margin-top:44px;transition:border-color .25s}
+  .feat:hover{border-color:var(--line2)}
+  .feat .l{padding:40px 40px 36px}
+  .feat .tag{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;font-weight:700;color:var(--muted)}
+  .feat .tag b{color:var(--accent)}
+  .feat h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-.045em;line-height:1.25;margin:16px 0 14px}
+  .feat p{font-size:17.5px;color:var(--muted);line-height:1.6}
+  .feat .btns{margin-top:28px}
+  .feat .r{padding:40px 36px;background:linear-gradient(160deg,rgba(255,92,138,.12),rgba(123,97,255,.12));display:flex;flex-direction:column;justify-content:center;gap:0}
+  .feat .r div{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .feat .r div:last-child{border-bottom:0}
+  .feat .r small{display:block;font-size:14px;color:var(--muted);font-weight:600}
+  .feat .r b{display:block;font-size:clamp(30px,3.4vw,40px);font-weight:800;letter-spacing:-.045em;line-height:1.15;margin-top:2px}
+  .feat .r em{font-style:normal;font-size:14px;color:var(--ok);font-weight:700}
+  @media(max-width:860px){.feat{grid-template-columns:1fr}.feat .l{padding:30px 24px}.feat .r{padding:14px 24px}}
+
+  /* ===== TOOLBAR ===== */
+  .rbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:26px}
+  .tabs{display:flex;gap:6px}
+  .tab{height:44px;padding:0 18px;border-radius:99px;border:1px solid var(--line2);font-size:15px;font-weight:600;color:var(--muted);transition:.2s}
+  .tab:hover{color:var(--text)}
+  .tab.on{background:#fff;border-color:#fff;color:#0a0a0f}
+  .cfil{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto}
+  .cf{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 5px;border-radius:99px;border:1px solid transparent;font-size:14.5px;font-weight:600;color:var(--muted);transition:.2s}
+  .cf:hover{color:var(--text)}
+  .cf.on{border-color:var(--line2);background:rgba(255,255,255,.06);color:var(--text)}
+  .cf.all{padding-left:16px}
+  .cf .av{width:34px;height:34px;border-radius:50%;overflow:hidden;display:inline-block}
+  @media(max-width:760px){.cfil{margin-left:0}}
+
+  /* ===== READER ===== */
+  .rlayout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
+  @media(max-width:900px){.rlayout{grid-template-columns:1fr}}
+  .rlist{position:sticky;top:90px;display:grid;gap:4px;border-left:2px solid var(--line);padding-left:0}
+  @media(max-width:900px){.rlist{position:static;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;border-left:0;padding-bottom:4px}.rlist::-webkit-scrollbar{display:none}}
+  .ri{display:block;width:100%;position:relative;padding:14px 16px 14px 22px;border-radius:0 16px 16px 0;transition:background .2s}
+  .ri::before{content:"";position:absolute;left:-2px;top:14px;bottom:14px;width:2px;background:transparent;transition:.2s}
+  .ri:hover{background:rgba(255,255,255,.03)}
+  .ri.on{background:rgba(255,255,255,.05)}
+  .ri.on::before{background:var(--grad);width:3px;left:-2.5px}
+  .ri .top{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--dim);font-weight:600;margin-bottom:4px}
+  .ri .kind{color:var(--accent);font-weight:800}
   .ri .kind.plan{color:#b3a6ff}
-  .ri b{font-size:14.5px;line-height:1.45;display:block}
-  .ri .demo{margin-left:auto;font-size:10.5px;color:var(--warn);border:1px solid rgba(255,181,71,.4);border-radius:99px;padding:0 6px}
-  .rdoc{padding:28px}
-  @media(max-width:560px){.rdoc{padding:20px}}
-  .rdoc .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-  .rdoc h2{font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.8px;line-height:1.3}
-  .rdoc .one{margin-top:12px;padding:14px 16px;border-left:3px solid var(--accent);background:rgba(255,92,138,.07);border-radius:0 12px 12px 0;font-size:15.5px}
-  .rnums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}
-  @media(max-width:560px){.rnums{grid-template-columns:1fr}}
-  .rn{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .rn small{color:var(--muted);font-size:12px;display:block}
-  .rn b{font-size:24px;font-weight:900;display:block;line-height:1.25}
-  .rn em{font-style:normal;font-size:12px;color:var(--ok)}
-  .rsec{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .ri .d{margin-left:auto;font-size:11.5px;color:var(--warn);font-weight:700}
+  .ri b{font-size:16px;line-height:1.45;display:block;letter-spacing:-.02em;color:var(--muted)}
+  .ri.on b{color:var(--text)}
+  .ri .faces{display:flex;margin-top:8px}
+  .ri .faces span{width:24px;height:24px;border-radius:50%;overflow:hidden;border:2px solid var(--bg);margin-left:-7px}
+  .ri .faces span:first-child{margin-left:0}
+  @media(max-width:900px){.ri{flex:0 0 250px;border:1px solid var(--line);border-radius:18px;padding:14px 16px}.ri::before{display:none}.ri.on{border-color:var(--line2)}}
+
+  .rdoc{padding:44px 44px 40px;border-radius:30px;background:var(--card);border:1px solid var(--line);min-width:0}
+  @media(max-width:560px){.rdoc{padding:28px 20px}}
+  .rdoc .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .rdoc h2{font-size:clamp(28px,3.4vw,40px);font-weight:800;letter-spacing:-.045em;line-height:1.25;margin-top:18px}
+  .rdoc .one{margin-top:18px;padding-left:18px;border-left:4px solid var(--accent);font-size:clamp(17.5px,1.9vw,20px);line-height:1.6;color:#e2e2ea}
+  .rdoc .who{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .rdoc .who a{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 4px;border-radius:99px;background:rgba(255,255,255,.06);font-size:14.5px;font-weight:700;transition:.2s}
+  .rdoc .who a:hover{background:rgba(255,255,255,.12)}
+  .rdoc .who a .av{width:32px;height:32px;border-radius:50%;overflow:hidden;display:inline-block}
+  .rnums{display:grid;grid-template-columns:repeat(3,1fr);margin:32px 0 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .rn{padding:22px 20px 20px 0}
+  .rn+.rn{padding-left:22px;border-left:1px solid var(--line)}
+  .rn small{color:var(--dim);font-size:14px;font-weight:600;display:block}
+  .rn b{font-size:clamp(28px,3.2vw,38px);font-weight:800;letter-spacing:-.045em;display:block;line-height:1.2;margin-top:4px}
+  .rn em{font-style:normal;font-size:14px;color:var(--ok);font-weight:600}
+  @media(max-width:600px){.rnums{grid-template-columns:1fr}.rn,.rn+.rn{padding:16px 0;border-left:0}.rn+.rn{border-top:1px solid var(--line)}}
+  .rsec{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
   @media(max-width:700px){.rsec{grid-template-columns:1fr}}
-  .rbox{border-radius:12px;border:1px solid var(--line);padding:14px 16px;background:var(--bg)}
-  .rbox h4{font-size:14px;margin-bottom:8px}
-  .rbox ul{list-style:none;display:grid;gap:6px;font-size:14px;color:#d6d6e2}
-  .rbox li{padding-left:16px;position:relative}
-  .rbox li::before{content:"•";position:absolute;left:2px;color:var(--dim)}
-  .rbox.g{border-color:rgba(61,220,151,.3)}.rbox.g h4{color:var(--ok)}
-  .rbox.b{border-color:rgba(255,107,107,.3)}.rbox.b h4{color:#ff9d9d}
-  .rbox.l{border-color:rgba(123,97,255,.35)}.rbox.l h4{color:#b3a6ff}
-  .rbox.n{grid-column:1/-1;border-color:rgba(255,92,138,.3)}.rbox.n h4{color:var(--accent)}
-  .rbox.n li::before{content:"☐";color:var(--accent)}
-  .rlink{display:inline-block;margin-top:16px;color:var(--accent);font-weight:700;font-size:14px}
-  .cfil{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 16px;align-items:center}
-  .cfil>span{font-size:13px;color:var(--muted);margin-right:2px}
-  .cf{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13px;color:var(--muted)}
-  .cf.on{border-color:var(--accent2);background:rgba(123,97,255,.18);color:var(--text)}
-  .cf .av{width:24px;height:24px;border-radius:50%;overflow:hidden;display:inline-block;background:var(--card2)}
-  .faces{display:flex;margin-top:8px}
-  .faces span{width:22px;height:22px;border-radius:50%;overflow:hidden;border:2px solid var(--card);margin-left:-6px;background:var(--card2)}
-  .faces span:first-child{margin-left:0}
-  .who{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-  .who a{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:99px;border:1px solid var(--line2);font-size:12.5px;color:var(--muted)}
-  .who a:hover{color:var(--text);border-color:var(--muted)}
-  .who a .av{width:22px;height:22px;border-radius:50%;overflow:hidden;display:inline-block}
-  .tmpl{margin-top:26px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
-  .tmpl span.s{padding:5px 10px;border-radius:8px;background:var(--card);border:1px solid var(--line)}
+  .rbox{border-radius:22px;padding:24px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+  .rbox h4{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+  .rbox h4 i{font-style:normal;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:16px}
+  .rbox ul{list-style:none;display:grid;gap:12px;font-size:16.5px;line-height:1.55;color:#dcdce4}
+  .rbox li{padding-left:18px;position:relative}
+  .rbox li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--dim)}
+  .rbox.g h4 i{background:rgba(61,220,151,.14)}.rbox.g li::before{background:var(--ok)}
+  .rbox.b h4 i{background:rgba(255,107,107,.14)}.rbox.b li::before{background:#ff8f8f}
+  .rbox.l{grid-column:1/-1;background:rgba(123,97,255,.07);border-color:rgba(123,97,255,.25)}.rbox.l h4 i{background:rgba(123,97,255,.2)}.rbox.l li::before{background:#b3a6ff}
+  .rbox.l ul{font-size:18px;font-weight:600;color:var(--text)}
+  .rbox.n{grid-column:1/-1;border-color:rgba(255,92,138,.3)}.rbox.n h4 i{background:rgba(255,92,138,.15)}
+  .rbox.n li{padding-left:34px}
+  .rbox.n li::before{content:"";top:.18em;left:0;width:20px;height:20px;border-radius:7px;background:none;border:2px solid rgba(255,92,138,.6)}
+  .rlink{display:inline-flex;margin-top:24px}
+  .rnav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+  .rnav button{display:block;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid var(--line);transition:.2s;min-width:0}
+  .rnav button:hover{border-color:var(--line2)}
+  .rnav button:last-child{text-align:right}
+  .rnav small{display:block;font-size:13px;color:var(--dim);font-weight:600}
+  .rnav b{display:block;font-size:15.5px;line-height:1.4;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rnav .x{visibility:hidden}
+  @media(max-width:560px){.rnav{grid-template-columns:1fr}.rnav button:last-child{text-align:left}}
+
+  /* template strip */
+  .tmpl{margin-top:64px;padding:32px;border-radius:26px;border:1px dashed var(--line2)}
+  .tmpl h3{font-size:20px;font-weight:800;letter-spacing:-.03em}
+  .tmpl p{font-size:15.5px;color:var(--muted);margin-top:4px}
+  .tsteps{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px;counter-reset:t}
+  .tsteps span{counter-increment:t;padding:14px 14px 12px;border-radius:16px;background:var(--card);font-size:15.5px;font-weight:700}
+  .tsteps span::before{content:counter(t,decimal-leading-zero);display:block;font-size:12.5px;font-weight:800;color:var(--accent);margin-bottom:4px}
+  @media(max-width:860px){.tsteps{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:480px){.tsteps{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body data-chapter="reports">
 <nav id="topnav"></nav>
 
-<header class="page-head">
+<header class="rhd">
   <div class="wrap">
-    <div class="crumb"><a href="/">홈</a>›<b>04 리포트</b></div>
-    <h1>매주 쓰는 <span class="grad">회고와 분석</span></h1>
-    <p class="lead">숫자만 쌓지 않고, 무엇이 왜 잘됐는지를 매주 한 장으로 남겨요. 나중에 이게 포트폴리오가 돼요.</p>
+    <div class="crumb"><a href="/">홈</a>›<b>리포트</b></div>
+    <h1>매주 한 장,<br><span class="grad">무엇이 왜 됐는지</span></h1>
+    <p class="lead">숫자만 쌓지 않고, 잘된 이유와 다음 할 일을 매주 한 장으로 남겨요. 쌓이면 그대로 포트폴리오가 돼요.</p>
     <div class="pills" id="pills"></div>
+    <div id="feat"></div>
   </div>
 </header>
 
-<div class="wrap" style="padding-bottom:72px">
-  <div class="demo-banner reveal" style="margin-bottom:18px"><span>🧪</span><div><b>'샘플' 표시가 붙은 주간 리포트는 예시예요.</b> 운영 대시보드의 샘플 데이터를 바탕으로 쓴 가상 회고예요. 기획 리포트는 실제 조사 내용이에요.</div></div>
-  <div class="tabs" id="tabs"><button class="tab on" data-f="all">전체</button><button class="tab" data-f="주간">주간 리포트</button><button class="tab" data-f="기획">기획 리포트</button></div>
-  <div class="cfil" id="cfil"></div>
-  <div class="rlayout">
-    <div class="rlist" id="rlist"></div>
-    <article class="card rdoc" id="rdoc" aria-live="polite"></article>
+<section id="read" style="padding-top:72px">
+  <div class="wrap">
+    <div class="sh plain reveal"><p class="eyebrow">모든 리포트</p><h2 id="allH">리포트 모아보기</h2></div>
+    <div class="rbar">
+      <div class="tabs" id="tabs"><button class="tab on" data-f="all">전체</button><button class="tab" data-f="주간">주간</button><button class="tab" data-f="기획">기획</button></div>
+      <div class="cfil" id="cfil"></div>
+    </div>
+    <div class="rlayout">
+      <nav class="rlist" id="rlist" aria-label="리포트 목록"></nav>
+      <article class="rdoc" id="rdoc" aria-live="polite"></article>
+    </div>
+    <div class="tmpl reveal"><h3>리포트는 늘 같은 순서로 써요</h3><p>순서가 같아야 주차끼리 비교가 쉬워요.</p>
+      <div class="tsteps"><span>한 줄 요약</span><span>숫자 3개</span><span>잘된 것</span><span>아쉬운 것</span><span>배운 것</span><span>다음 할 일</span></div></div>
+    <a class="next reveal" href="/" style="margin-top:28px"><div><small>처음으로</small><b>홈 — 프로젝트 한눈에 보기</b></div><span class="arr">→</span></a>
   </div>
-  <div class="tmpl reveal">📝 리포트 구성:<span class="s">한 줄 요약</span>→<span class="s">숫자 3개</span>→<span class="s">잘된 것</span>→<span class="s">아쉬운 것</span>→<span class="s">배운 것</span>→<span class="s">다음 주 할 일</span></div>
-  <a class="next reveal" href="/" style="margin-top:28px"><div><small>처음으로</small><b>홈 — 프로젝트 한눈에 보기</b></div><span class="arr">→</span></a>
-</div>
+</section>
 
 <footer id="foot"></footer>
 
@@ -95,40 +154,62 @@
 <script src="/reports/data.js"></script>
 <script src="/assets/common.js"></script>
 <script>
-const R=REPORTS;let filter='all',cfilter='',cur=null;
+const R=REPORTS;let filter='all',cfilter='',cur=null,shown=[];
 const used=[...new Set(R.flatMap(r=>r.chars||[]))].filter(id=>charById(id));
+const chars=r=>(r.chars||[]).filter(id=>charById(id));
+const nW=R.filter(r=>r.kind==='주간').length,nP=R.filter(r=>r.kind==='기획').length;
+document.getElementById('pills').innerHTML=`<span class="pill">리포트 ${R.length}개</span><span class="pill">주간 ${nW} · 기획 ${nP}</span>${R.some(r=>r.demo)?'<span class="pill demo">주간 리포트는 샘플 데이터 기준</span>':''}`;
+document.getElementById('allH').innerHTML=`리포트 <span class="grad">${R.length}개</span>`;
+
+/* featured latest */
+const L=R[0];
+document.getElementById('feat').innerHTML=`<div class="feat reveal"><div class="l">
+  <div class="tag"><b>최신</b>${L.kind} 리포트 · ${L.week}${L.demo?' <span class="pill demo" style="padding:1px 8px;font-size:12px">샘플</span>':''}</div>
+  <h2>${L.title}</h2><p>${L.one}</p>
+  <div class="btns"><a class="btn primary" href="#${L.id}" data-open="${L.id}">전체 읽기 →</a></div></div>
+  <div class="r">${L.nums.map(n=>`<div><small>${n.k}</small><b>${n.v}</b><em>${n.d}</em></div>`).join('')}</div></div>`;
+document.querySelector('[data-open]').addEventListener('click',e=>{e.preventDefault();filter='all';cfilter='';syncFilters();list();show(L.id,false);document.getElementById('read').scrollIntoView({behavior:'smooth'});});
+
+/* filters */
 const cfil=document.getElementById('cfil');
-cfil.innerHTML=`<span>캐릭터:</span><button class="cf on" data-c="" style="padding-left:12px">전체</button>`+used.map(id=>`<button class="cf" data-c="${id}"><span class="av">${avatar(AV[id])}</span>${charById(id).name}</button>`).join('');
-cfil.addEventListener('click',e=>{const b=e.target.closest('.cf');if(!b)return;cfilter=b.dataset.c;cfil.querySelectorAll('.cf').forEach(x=>x.classList.toggle('on',x===b));list();});
-document.getElementById('pills').innerHTML=`<span class="pill">📄 리포트 ${R.length}개</span><span class="pill">🗓️ 주간 ${R.filter(r=>r.kind==='주간').length} · 기획 ${R.filter(r=>r.kind==='기획').length}</span>`;
+cfil.innerHTML=`<button class="cf all on" data-c="">모든 캐릭터</button>`+used.map(id=>`<button class="cf" data-c="${id}"><span class="av">${face(id,true)}</span>${charById(id).name}</button>`).join('');
+cfil.addEventListener('click',e=>{const b=e.target.closest('.cf');if(!b)return;cfilter=b.dataset.c;syncFilters();list();});
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;filter=b.dataset.f;syncFilters();list();});
+function syncFilters(){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.f===filter));cfil.querySelectorAll('.cf').forEach(x=>x.classList.toggle('on',x.dataset.c===cfilter));}
+
 function list(){
-  const arr=R.filter(r=>(filter==='all'||r.kind===filter)&&(!cfilter||(r.chars||[]).includes(cfilter)));
-  if(!arr.length){document.getElementById('rlist').innerHTML='<p class="note">조건에 맞는 리포트가 없어요.</p>';return;}
-  document.getElementById('rlist').innerHTML=arr.map(r=>`<button class="ri ${r.id===cur?'on':''}" data-id="${r.id}"><span class="top"><span class="kind ${r.kind==='기획'?'plan':''}">${r.kind}</span>· ${r.week}${r.demo?'<span class="demo">샘플</span>':''}</span><b>${r.title}</b>${(r.chars||[]).length?`<span class="faces">${r.chars.filter(id=>charById(id)).map(id=>`<span>${avatar(AV[id])}</span>`).join('')}</span>`:''}</button>`).join('');
-  if(!arr.find(r=>r.id===cur)&&arr[0])show(arr[0].id,false);
+  shown=R.filter(r=>(filter==='all'||r.kind===filter)&&(!cfilter||(r.chars||[]).includes(cfilter)));
+  const el=document.getElementById('rlist');
+  if(!shown.length){el.innerHTML='<p class="note" style="padding:14px 20px">조건에 맞는 리포트가 없어요.</p>';document.getElementById('rdoc').innerHTML='<p style="color:var(--dim)">다른 조건을 골라보세요.</p>';return;}
+  el.innerHTML=shown.map(r=>`<button class="ri ${r.id===cur?'on':''}" data-id="${r.id}"><span class="top"><span class="kind ${r.kind==='기획'?'plan':''}">${r.kind}</span>${r.week}${r.demo?'<span class="d">샘플</span>':''}</span><b>${r.title}</b>${chars(r).length?`<span class="faces">${chars(r).map(id=>`<span>${face(id,true)}</span>`).join('')}</span>`:''}</button>`).join('');
+  if(!shown.find(r=>r.id===cur))show(shown[0].id,false);
 }
 function show(id,scroll){
   const r=R.find(x=>x.id===id);if(!r)return;cur=id;
   const ul=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  const i=shown.findIndex(x=>x.id===id),newer=shown[i-1],older=shown[i+1];
   const doc=document.getElementById('rdoc');
   doc.innerHTML=`<div class="meta"><span class="pill">${r.kind} 리포트</span><span class="pill">${r.week}</span>${r.demo?'<span class="pill demo">샘플</span>':'<span class="pill" style="color:var(--ok);border-color:rgba(61,220,151,.4)">실제</span>'}</div>
     <h2>${r.title}</h2><p class="one">${r.one}</p>
-    ${(r.chars||[]).length?`<div class="who">${r.chars.filter(id=>charById(id)).map(id=>`<a href="/characters/profile/?id=${id}"><span class="av">${avatar(AV[id])}</span>${charById(id).name}</a>`).join('')}</div>`:''}
+    ${chars(r).length?`<div class="who">${chars(r).map(id=>`<a href="/characters/profile/?id=${id}"><span class="av">${face(id,true)}</span>${charById(id).name}</a>`).join('')}</div>`:''}
     <div class="rnums">${r.nums.map(n=>`<div class="rn"><small>${n.k}</small><b>${n.v}</b><em>${n.d}</em></div>`).join('')}</div>
     <div class="rsec">
-      <div class="rbox g"><h4>👍 잘된 것</h4>${ul(r.good)}</div>
-      <div class="rbox b"><h4>👎 아쉬운 것</h4>${ul(r.bad)}</div>
-      <div class="rbox l" style="grid-column:1/-1"><h4>💡 배운 것</h4>${ul(r.learn)}</div>
-      <div class="rbox n"><h4>👉 ${r.kind==='주간'?'다음 주 할 일':'다음 할 일'}</h4>${ul(r.next)}</div>
-    </div>${r.link?`<a class="rlink" href="${r.link}">원문 보기 →</a>`:''}`;
+      <div class="rbox g"><h4><i>👍</i>잘된 것</h4>${ul(r.good)}</div>
+      <div class="rbox b"><h4><i>👎</i>아쉬운 것</h4>${ul(r.bad)}</div>
+      <div class="rbox l"><h4><i>💡</i>배운 것</h4>${ul(r.learn)}</div>
+      <div class="rbox n"><h4><i>👉</i>${r.kind==='주간'?'다음 주 할 일':'다음 할 일'}</h4>${ul(r.next)}</div>
+    </div>${r.link?`<a class="btn ghost sm rlink" href="${r.link}">원문 보기 →</a>`:''}
+    <div class="rnav">${newer?`<button data-go="${newer.id}"><small>← 더 최근</small><b>${newer.week} · ${newer.title}</b></button>`:'<span class="x"></span>'}${older?`<button data-go="${older.id}"><small>이전 →</small><b>${older.week} · ${older.title}</b></button>`:''}</div>`;
   doc.classList.remove('swap');void doc.offsetWidth;doc.classList.add('swap');
+  doc.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go,true)));
   document.querySelectorAll('.ri').forEach(b=>b.classList.toggle('on',b.dataset.id===id));
   history.replaceState(null,'','#'+id);
-  if(scroll&&innerWidth<880)doc.scrollIntoView({behavior:'smooth',block:'start'});
+  if(scroll)doc.scrollIntoView({behavior:'smooth',block:'start'});
 }
-document.getElementById('rlist').addEventListener('click',e=>{const b=e.target.closest('.ri');if(b)show(b.dataset.id,true);});
-document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;filter=b.dataset.f;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t===b));list();});
+document.getElementById('rlist').addEventListener('click',e=>{const b=e.target.closest('.ri');if(b)show(b.dataset.id,innerWidth<900);});
 const h=location.hash.slice(1);cur=R.find(r=>r.id===h)?h:R[0].id;list();show(cur,false);
+if(R.find(r=>r.id===h))setTimeout(()=>document.getElementById('read').scrollIntoView(),50);
+watchReveal();
 </script>
 </body>
 </html>

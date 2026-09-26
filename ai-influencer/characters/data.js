@@ -1,6 +1,7 @@
 /* ===== 캐릭터 로스터 데이터 =====
    새 캐릭터 = CHARACTERS 배열에 { } 하나 추가하면 로스터·프로필·메인에 자동으로 나타나요.
    꼭 필요한 칸: id(영문), name, stage, niche, concept   (나머지는 비워두면 '아직 안 정함'으로 표시)
+   tint: 일러스트 배경색 (연한 파스텔). 일러스트 파일은 /assets/chars/{id}.svg — 없으면 이름 첫 글자로 표시
    stage: idea 아이디어 · design 설정 중 · test 테스트 · live 집중 운영 · paused 보류
    demo:true  → 단계·성과가 샘플(더미)이라는 표시
    color      → 운영 차트에서 쓰는 색 (테스트/운영 캐릭터만. 검증된 6색: #d55181 #3987e5 #d95926 #9085e9 #199e70 #c98500) */
@@ -12,7 +13,7 @@ window.STAGES=[
   {k:'paused',ic:'💤',label:'보류',     desc:'반응이 약해 잠시 멈춤'}
 ];
 window.CHARACTERS=[
-  {id:'hana',name:'하나 쌤',handle:'@hana.ssaem',stage:'live',demo:true,color:'#d55181',
+  {id:'hana',tint:'#ffd3e2',name:'하나 쌤',handle:'@hana.ssaem',stage:'live',demo:true,color:'#d55181',
    niche:'교육',lang:'en',age:26,role:'외국인 대상 한국어 강사',home:'서울 연남동',platform:'인스타 릴스 주 4회',
    concept:'K드라마 속 한국어 표현을 15초로 알려주는 영어 릴스',
    target:'한국어 배우는 해외 10~30대 K팝·드라마 팬',
@@ -31,7 +32,7 @@ window.CHARACTERS=[
    moneyFlow:['EP 10편 공개','저장 많은 표현 추리기',"📦 'K드라마 표현 50' PDF",'프로필 링크로 판매'],
    av:{skin:'#f6d3bd',hair:'#3b2a4a',style:'bob',top:'#ff5c8a',bg:['#3a2350','#1b1530'],glasses:true},emo:'📚'},
 
-  {id:'doyun',name:'하도윤',handle:'@doyun.bap',stage:'test',demo:true,color:'#3987e5',
+  {id:'doyun',tint:'#d3e3ff',name:'하도윤',handle:'@doyun.bap',stage:'test',demo:true,color:'#3987e5',
    niche:'요리',lang:'ko',age:28,role:'IT 회사 다니는 자취 직장인',home:'서울 망원동 원룸',platform:'인스타 릴스 주 2회',
    concept:'퇴근 후 15분, 편의점·시장 재료로 만드는 서울 집밥',
    target:'한국 음식에 관심 있는 해외 20~30대 + 한국 1인 가구',
@@ -48,7 +49,7 @@ window.CHARACTERS=[
    moneyFlow:['집밥 릴스','저장 많은 레시피 추리기','📦 자취 레시피 PDF','편의점·밀키트 협찬'],
    av:{skin:'#efc8a8',hair:'#1f1a24',style:'short',top:'#2f3b5a',bg:['#2a2f4a','#141726']},emo:'🍳'},
 
-  {id:'bokdan',name:'복단 여사',handle:'@bokdan.halmae',stage:'test',demo:true,color:'#d95926',
+  {id:'bokdan',tint:'#ffdcc6',name:'복단 여사',handle:'@bokdan.halmae',stage:'test',demo:true,color:'#d95926',
    niche:'시니어',lang:'ko',age:67,role:'서울 딸 집에 올라온 할머니',home:'서울 딸 아파트',platform:'인스타 릴스 주 2회',
    concept:'키오스크·탕후루·팝업스토어에 도전하는 할머니 시리즈',
    target:'할머니를 떠올리는 20~30대 + 40~60대 부모 세대',
@@ -65,7 +66,7 @@ window.CHARACTERS=[
    moneyFlow:['도전 시리즈','반응 좋은 레시피 추리기','📦 할머니 레시피 전자책','효도 선물 협찬'],
    av:{skin:'#eec3a4',hair:'#b9b4c2',style:'bun',top:'#b8554e',bg:['#4a2f2a','#1e1614'],old:true,glasses:true},emo:'🧋'},
 
-  {id:'gyeol',name:'한결',handle:'',stage:'idea',
+  {id:'gyeol',tint:'#cff3df',name:'한결',handle:'',stage:'idea',
    niche:'반려동물',lang:'ko',age:25,role:'동네 애견 미용실 막내',
    concept:'손님 강아지들과 시바견 콩떡이의 미용실 시트콤',
    target:'반려인 20~40대, 동물 릴스 좋아하는 사람',
@@ -77,7 +78,7 @@ window.CHARACTERS=[
    sidekick:'🐕 말 안 듣는 시바견 콩떡이',
    av:{skin:'#f8d9c4',hair:'#6b3f2a',style:'long',top:'#3ddc97',bg:['#1f3a33','#101a18']},emo:'🐕'},
 
-  {id:'seojin',name:'정서진',handle:'',stage:'idea',
+  {id:'seojin',tint:'#e2d9ff',name:'정서진',handle:'',stage:'idea',
    niche:'직장',lang:'ko',age:29,role:'여의도 3년차 대리',
    concept:'회사에서 하는 말 vs 속마음, 직장인 공감 상황극',
    target:'한국 20~30대 직장인, 취준생',
@@ -88,21 +89,21 @@ window.CHARACTERS=[
    episodes:["부장님이 '편하게 얘기해'라고 했을 때",'금요일 5시 50분에 온 업무 메일','연차 쓸 때 말하는 법 3단계'],
    av:{skin:'#f3cfb6',hair:'#241b2e',style:'long',top:'#7b61ff',bg:['#2b2450','#151226']},emo:'💼'},
 
-  {id:'minjae',name:'바리스타 민재',handle:'',stage:'idea',
+  {id:'minjae',tint:'#efdfca',name:'바리스타 민재',handle:'',stage:'idea',
    niche:'직업',lang:'ko',age:27,role:'연남동 카페 바리스타',
    concept:'주문으로 보는 손님 유형 시트콤 + 라떼아트 한 컷',
    target:'카페 좋아하는 20~30대',
    why:"'일터'가 있는 캐릭터는 조사한 계정 중 거의 없었어요.",
    av:{skin:'#f1cdb2',hair:'#5a3a2a',style:'short',top:'#6b4f3a',bg:['#3a2a22','#17110e']},emo:'☕'},
 
-  {id:'soyeon',name:'편의점 소연',handle:'',stage:'idea',
+  {id:'soyeon',tint:'#d2efff',name:'편의점 소연',handle:'',stage:'idea',
    niche:'직장',lang:'ko',age:22,role:'편의점 야간 알바',
    concept:'신상 리뷰 + 새벽 손님 상황극',
    target:'10~20대, 편의점 신상 덕후',
    why:'공감 상황극 + 신상 리뷰로 제휴 링크를 붙이기 쉬워요.',
    av:{skin:'#f7d7c2',hair:'#2b2230',style:'long',top:'#3987e5',bg:['#1e2a44','#0f1522']},emo:'🏪'},
 
-  {id:'deokbae',name:'덕배 할아버지',handle:'',stage:'idea',
+  {id:'deokbae',tint:'#e0ead0',name:'덕배 할아버지',handle:'',stage:'idea',
    niche:'시니어',lang:'ko',age:72,role:'등산 동호회 회장님',
    concept:'등산·트로트·스마트폰에 진심인 할아버지',
    target:'부모님 세대를 떠올리는 30~40대',

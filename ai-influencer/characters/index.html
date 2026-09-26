@@ -4,156 +4,278 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>캐릭터 로스터 | AI.Influence</title>
-<meta name="description" content="AI 인플루언서 캐릭터 로스터 — 아이디어부터 집중 운영까지 캐릭터 여러 명을 단계별로 관리합니다.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<meta name="description" content="AI 인플루언서 캐릭터 로스터 — 여러 명을 만들고, 같은 조건으로 테스트하고, 터진 캐릭터만 키웁니다.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  /* stage funnel */
-  .funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:26px}
-  .fs{position:relative;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;transition:.2s}
-  .fs:hover{border-color:var(--line2);transform:translateY(-2px)}
-  .fs.on{border-color:var(--accent);background:rgba(255,92,138,.08)}
-  .fs .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
-  .fs b{font-size:34px;font-weight:900;line-height:1.1;display:block;margin-top:2px}
-  .fs small{display:block;font-size:12px;color:var(--dim);line-height:1.4;margin-top:2px}
-  .fs .faces{display:flex;margin-top:8px;height:24px}
-  .fs .faces span{width:24px;height:24px;border-radius:50%;overflow:hidden;border:2px solid var(--card);margin-left:-8px;background:var(--card2)}
-  .fs .faces span:first-child{margin-left:0}
-  .fs:not(:last-child)::after{content:"›";position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:18px;font-weight:900;z-index:1}
-  .fs.paused{opacity:.75}
-  @media(max-width:860px){.funnel{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.funnel::-webkit-scrollbar{display:none}.fs b{font-size:26px}}
+  /* ===== HERO ===== */
+  .rhero{position:relative;padding:80px 0 72px;text-align:center;background:radial-gradient(ellipse 620px 380px at 50% -80px,rgba(180,92,255,.22),transparent 100%)}
+  .rhero .crumb{justify-content:center}
+  .rhero h1{font-size:clamp(40px,7vw,80px);font-weight:800;letter-spacing:-.05em;line-height:1.08}
+  .rhero .lead{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:620px;margin:22px auto 0;line-height:1.6}
+  .rhero .lead b{color:var(--text)}
+  .rhero .pill{margin-top:22px}
 
-  /* toolbar */
-  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:26px 0 16px}
-  .search{flex:1;min-width:200px;max-width:320px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:0 12px;height:40px}
-  .search input{flex:1;background:none;border:0;color:var(--text);font:inherit;font-size:14px;outline:none;min-width:0}
+  /* stage pipeline */
+  .pipe{display:grid;grid-template-columns:repeat(4,1fr) .82fr;margin-top:56px;border:1px solid var(--line);border-radius:26px;background:var(--card);text-align:left}
+  .ps{position:relative;padding:24px 22px 22px;border-right:1px solid var(--line);transition:background .2s}
+  .ps:first-child{border-radius:26px 0 0 26px}.ps:last-child{border-radius:0 26px 26px 0;border-right:0}
+  .ps:hover{background:rgba(255,255,255,.035)}
+  .ps.on{background:rgba(255,255,255,.07)}
+  .ps.on::before{content:"";position:absolute;left:22px;right:22px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--sc)}
+  .ps .lb{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--text)}
+  .ps .lb::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sc);box-shadow:0 0 12px var(--sc)}
+  .ps b{display:block;font-size:60px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:16px 0 8px}
+  .ps.zero b{color:#3c3c4a}
+  .ps small{display:block;font-size:14px;color:var(--dim);line-height:1.45;min-height:40px}
+  .ps .fc{display:flex;margin-top:16px;height:38px;align-items:center}
+  .ps .fc span{width:38px;height:38px;border-radius:50%;overflow:hidden;border:3px solid var(--card);margin-left:-11px}
+  .ps .fc span:first-child{margin-left:0}
+  .ps .fc em{font-style:normal;font-size:13px;font-weight:700;color:var(--muted);margin-left:8px}
+  .ps .fc .none{font-size:13px;color:#4a4a58;border:1px dashed #33333f;border-radius:99px;padding:6px 12px;width:auto;height:auto;margin:0}
+  .ps .ar{position:absolute;right:-14px;top:30px;z-index:2;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line2);color:var(--muted);font-style:normal;font-size:15px;font-weight:800}
+  .ps.pz{border-left:1px dashed var(--line2)}
+  .ps.pz .lb{color:var(--muted)}
+  @media(max-width:900px){.ps{padding:18px 14px}.ps b{font-size:44px}.ps small{font-size:12.5px}.ps .fc span{width:30px;height:30px;margin-left:-9px}}
+  @media(max-width:640px){
+    .pipe{grid-template-columns:repeat(5,1fr);margin-top:40px;border-radius:20px}
+    .ps:first-child{border-radius:20px 0 0 20px}.ps:last-child{border-radius:0 20px 20px 0}
+    .ps{padding:16px 4px 14px;text-align:center}
+    .ps .lb{justify-content:center;font-size:12px;gap:0;letter-spacing:-.04em}.ps .lb::before{display:none}
+    .ps.on::before{left:10px;right:10px}
+    .ps b{font-size:32px;margin:8px 0 0}.ps small{display:none}
+    .ps .fc{justify-content:center;height:24px;margin-top:10px}.ps .fc span{width:24px;height:24px;border-width:2px;margin-left:-10px}.ps .fc span:nth-child(n+3),.ps .fc em,.ps .fc .none{display:none}
+    .ps .ar{width:20px;height:20px;right:-10px;top:20px;font-size:12px}
+  }
+
+  /* ===== SPOTLIGHT ===== */
+  .spot{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);border-radius:30px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+  .spot .pic{position:relative;min-height:480px}
+  .spot .pic .face{position:absolute;inset:0}
+  .spot .pic .face img{object-position:50% 16%}
+  .spot .crown{position:absolute;left:20px;top:20px;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:99px;background:rgba(10,10,14,.86);color:#fff;font-size:14px;font-weight:700}
+  .spot .bd{padding:46px 46px 40px;display:flex;flex-direction:column;min-width:0}
+  .spot .meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--dim)}
+  .spot h3{font-size:clamp(40px,5vw,60px);font-weight:800;letter-spacing:-.05em;line-height:1.05;margin:16px 0 10px}
+  .spot .rl{font-size:17px;color:var(--muted)}
+  .spot .cn{font-size:clamp(19px,2vw,23px);font-weight:700;line-height:1.45;letter-spacing:-.03em;margin-top:22px;padding-left:16px;border-left:3px solid var(--c)}
+  .kp{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .kp div{padding:18px 0 16px}
+  .kp div+div{padding-left:20px;border-left:1px solid var(--line)}
+  .kp small{display:block;font-size:13.5px;color:var(--dim);font-weight:600}
+  .kp b{display:block;font-size:clamp(26px,3vw,34px);font-weight:800;letter-spacing:-.04em;line-height:1.15;margin-top:4px}
+  .kp em{font-style:normal;font-size:13.5px;font-weight:700;color:var(--ok)}
+  .spark{margin-top:22px}
+  .spark svg{display:block;width:100%;height:auto;overflow:visible}
+  .spark .sx{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);margin-top:6px}
+  .spark path.ln{stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 1.8s cubic-bezier(.3,.7,.2,1)}
+  .spot.show path.ln{stroke-dashoffset:0}
+  .spot .btns{margin-top:28px}
+  @media(max-width:900px){.spot{grid-template-columns:1fr}.spot .pic{min-height:0;aspect-ratio:1/.8}.spot .bd{padding:30px 24px 28px}}
+  @media(max-width:520px){.kp div+div{padding-left:12px}.kp small{font-size:12px}}
+
+  /* ===== VERDICT SCALE ===== */
+  .scale{margin-top:22px;padding:30px 32px 26px;border-radius:26px;background:var(--card);border:1px solid var(--line)}
+  .scale .hd{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .scale .hd h3{font-size:22px;font-weight:800;letter-spacing:-.03em}
+  .scale .hd p{font-size:15px;color:var(--muted);margin-top:4px}
+  .zl{display:grid;grid-template-columns:150px 1fr 70px;gap:16px;align-items:end}
+  .zl .zn{position:relative;height:22px;font-size:13px;font-weight:700}
+  .zl .zn span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+  .srow{display:grid;grid-template-columns:150px 1fr 70px;gap:16px;align-items:center;padding:12px 0;border-radius:14px;transition:background .2s}
+  .srow:hover{background:rgba(255,255,255,.03)}
+  .srow .who{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px;min-width:0}
+  .srow .who span.f{width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0}
+  .srow .who small{display:block;font-size:12.5px;color:var(--dim);font-weight:500}
+  .srow .tr{position:relative;height:40px;border-radius:12px;background:linear-gradient(90deg,rgba(255,107,107,.10) 0 43.75%,rgba(255,181,71,.12) 43.75% 62.5%,rgba(61,220,151,.12) 62.5% 100%)}
+  .srow .tr i{position:absolute;left:0;top:50%;height:10px;margin-top:-5px;border-radius:0 99px 99px 0;width:0;opacity:.9;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+  .srow .tr u{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid #fff;left:0;transition:left 1.4s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 10px rgba(0,0,0,.4)}
+  .srow .v{text-align:right;font-size:20px;font-weight:800;letter-spacing:-.03em}
+  .zt{display:grid;grid-template-columns:150px 1fr 70px;gap:16px;margin-top:8px}
+  .zt div{position:relative;height:18px;font-size:12.5px;color:var(--dim)}
+  .zt span{position:absolute;transform:translateX(-50%)}
+  .zt span:first-child{transform:none}
+  @media(max-width:640px){.scale{padding:22px 16px 18px}.zl,.srow,.zt{grid-template-columns:86px 1fr 52px;gap:10px}.srow .who{font-size:14px;gap:8px}.srow .who span.f{width:30px;height:30px}.srow .who small{display:none}.srow .v{font-size:16px}.zl .zn{font-size:11.5px}}
+
+  /* ===== ROSTER TOOLBAR ===== */
+  .rbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:99px;border:1px solid var(--line2);font-size:15px;font-weight:600;color:var(--muted);white-space:nowrap;transition:.2s}
+  .tab:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+  .tab em{font-style:normal;font-size:13px;font-weight:800;color:var(--dim)}
+  .tab.on{background:#fff;border-color:#fff;color:#0a0a0f}.tab.on em{color:#6b6b78}
+  .tab.zero{opacity:.5}
+  .tools{display:flex;gap:10px;align-items:center}
+  .search{display:flex;align-items:center;gap:8px;height:44px;width:230px;padding:0 16px;border-radius:99px;background:var(--card);border:1px solid var(--line2)}
+  .search svg{flex-shrink:0;opacity:.6}
+  .search input{flex:1;min-width:0;background:none;border:0;color:var(--text);font-size:15px;outline:none}
   .search input::placeholder{color:var(--dim)}
-  .chipsrow{display:flex;gap:6px;flex-wrap:wrap}
-  .fchip{padding:7px 12px;border-radius:99px;border:1px solid var(--line2);background:var(--card);font-size:13px;color:var(--muted);transition:.15s}
-  .fchip.on{border-color:var(--accent2);background:rgba(123,97,255,.18);color:var(--text)}
-  .views{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;margin-left:auto}
-  .views button{padding:6px 12px;border-radius:8px;font-size:13px;color:var(--muted)}
-  .views button.on{background:var(--card2);color:var(--text)}
-  .count{font-size:13px;color:var(--dim)}
+  .views{display:inline-flex;padding:4px;border-radius:99px;background:var(--card);border:1px solid var(--line2)}
+  .views button{height:34px;padding:0 14px;border-radius:99px;font-size:14px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .views button.on{background:rgba(255,255,255,.12);color:var(--text)}
+  .nrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px;font-size:14px;color:var(--dim)}
+  .nrow button{padding:5px 12px;border-radius:99px;font-size:14px;color:var(--muted);border:1px solid transparent}
+  .nrow button:hover{color:var(--text)}
+  .nrow button.on{border-color:var(--line2);color:var(--text);background:rgba(255,255,255,.05)}
+  .nrow .cnt{margin-left:auto}
+  @media(max-width:760px){.tools{width:100%}.search{flex:1;width:auto;min-width:0;padding:0 12px}.views button{padding:0 11px;font-size:13.5px}.nrow .cnt{width:100%;margin:4px 0 0}}
 
-  /* character card */
-  .cc{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;transition:.2s;position:relative}
-  .cc:hover{border-color:rgba(255,92,138,.45);transform:translateY(-2px)}
-  .cc .hd{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center}
-  .cc .av{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--card2)}
-  .cc .nm{font-weight:900;font-size:15px;line-height:1.3}
-  .cc .nm small{display:block;font-weight:400;font-size:11.5px;color:var(--dim)}
-  .cc .con{font-size:13px;color:#d6d6e2;line-height:1.5}
-  .cc .tags{display:flex;gap:5px;flex-wrap:wrap}
-  .tg{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
-  .cc .stat{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted);padding-top:8px;border-top:1px dashed var(--line)}
-  .cc .stat b{color:var(--text);font-size:13.5px}
-  .cc .stat{flex-wrap:wrap;row-gap:4px}
-  .cc .stat .vd{margin-left:auto;font-weight:700;font-size:11.5px;white-space:nowrap}
-  .vd.go{color:var(--ok)}.vd.watch{color:var(--warn)}.vd.stop{color:#ff9d9d}
-  .comp{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--dim);padding-top:8px;border-top:1px dashed var(--line)}
-  .comp .bar{flex:1;height:5px;border-radius:3px;background:#23233a;overflow:hidden}
-  .comp .bar i{display:block;height:100%;background:var(--grad);border-radius:3px}
-  .cc .cbar{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0}
-  .newc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1.5px dashed var(--line2);border-radius:14px;padding:18px 14px;color:var(--muted);font-size:13px;min-height:120px;background:transparent}
-  .newc b{font-size:26px;color:var(--accent);line-height:1}
-  .newc:hover{border-color:var(--accent);color:var(--text)}
+  /* ===== CASTING CARDS ===== */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+  @media(max-width:1060px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+  .cast{display:flex;flex-direction:column;border-radius:24px;background:var(--card);border:1px solid var(--line);overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
+  .cast:hover{transform:translateY(-6px);border-color:var(--line2);box-shadow:0 26px 60px rgba(0,0,0,.5)}
+  .cast .pic{position:relative;aspect-ratio:1/.9;overflow:hidden}
+  .cast .pic .face img{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+  .cast:hover .pic .face img{transform:scale(1.06)}
+  .cast .pic .stg{position:absolute;left:12px;top:12px;background:rgba(10,10,14,.86);border-color:transparent}
+  .cast .bd{display:flex;flex-direction:column;flex:1;padding:18px 20px 20px}
+  .cast h3{display:flex;align-items:center;gap:8px;font-size:21px;font-weight:800;letter-spacing:-.035em}
+  .cast .rl{font-size:14px;color:var(--dim);margin-top:2px}
+  .cast .cn{font-size:15.5px;color:var(--muted);line-height:1.5;margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cast .tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .cast .tg span{font-size:12.5px;padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.06);color:var(--muted)}
+  .cast .ft{display:flex;align-items:flex-end;gap:16px;margin-top:auto;padding-top:16px}
+  .cast .ft>div{flex-shrink:0}
+  .cast .ft small{display:block;font-size:12px;color:var(--dim);font-weight:600}
+  .cast .ft b{display:block;font-size:18px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+  .cast .ft .vchip{margin-left:auto;font-size:12px;padding:4px 9px}
+  .cast .gap{height:16px}
+  .comp{flex:1}
+  .comp .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);font-weight:600}
+  .comp .row b{font-size:12.5px;color:var(--muted);display:inline}
+  .comp .bar{height:6px;border-radius:99px;background:var(--track);margin-top:7px;overflow:hidden}
+  .comp .bar i{display:block;height:100%;border-radius:99px;background:var(--grad)}
+  .cast.new{border:1.5px dashed var(--line2);background:transparent;cursor:default}
+  .cast.new:hover{transform:none;box-shadow:none}
+  .cast.new .pic{display:grid;place-items:center;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 12px,transparent 12px 24px)}
+  .cast.new .pic b{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--grad);font-size:34px;font-weight:500;color:#fff}
+  .cast.new h3{color:var(--text)}
+  @media(max-width:800px){.cast h3{font-size:18px}.cast .bd{padding:14px 14px 16px}.cast .cn{font-size:14px}.cast .tg{display:none}.cast .ft{gap:10px;flex-wrap:wrap}.cast .ft b{font-size:16px}.cast .ft .vchip{margin-left:0}.cast .pic .stg{left:8px;top:8px;font-size:11.5px;padding:2px 8px}}
+  .empty{margin-top:28px;padding:56px 20px;text-align:center;border:1px dashed var(--line2);border-radius:24px;color:var(--dim)}
+  .empty b{display:block;font-size:20px;color:var(--text);margin-bottom:6px}
 
-  /* board */
-  .board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:start}
-  .col{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:120px}
-  .col h4{display:flex;align-items:center;gap:6px;font-size:13.5px;padding:2px 4px}
-  .col h4 em{font-style:normal;margin-left:auto;font-size:12px;color:var(--dim)}
-  .col .empty{font-size:12px;color:var(--dim);text-align:center;padding:14px 4px;border:1px dashed var(--line);border-radius:10px}
-  @media(max-width:1000px){.board{grid-template-columns:repeat(5,250px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.col{scroll-snap-align:start}}
+  /* ===== STAGE COLUMNS ===== */
+  .board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:28px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .col h4{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;padding:0 4px 10px;border-bottom:2px solid var(--sc)}
+  .col h4 em{font-style:normal;margin-left:auto;font-size:14px;color:var(--dim)}
+  .mini{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:12px;border-radius:18px;background:var(--card);border:1px solid var(--line);transition:.2s}
+  .mini:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .mini .f{width:44px;height:44px;border-radius:14px;overflow:hidden}
+  .mini b{display:block;font-size:15px;line-height:1.3}
+  .mini small{display:block;font-size:12.5px;color:var(--dim);line-height:1.35;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .col .none{padding:22px 10px;text-align:center;font-size:13.5px;color:#55555f;border:1px dashed #2c2c36;border-radius:18px}
+  @media(max-width:1000px){.board{grid-template-columns:repeat(5,230px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}.col{scroll-snap-align:start}}
 
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:520px){.grid{grid-template-columns:1fr}}
-
-  .tbl-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--line)}
-  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:820px}
-  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
-  th{background:var(--card2);color:var(--muted);font-weight:500;font-size:12.5px;cursor:pointer;user-select:none}
-  th.on{color:var(--accent)}
+  /* ===== TABLE ===== */
+  .tbl-wrap{margin-top:28px;overflow-x:auto;border-radius:22px;border:1px solid var(--line);background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:15px;min-width:880px}
+  th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--dim);font-weight:600;font-size:13.5px;cursor:pointer;user-select:none}
+  th:hover{color:var(--text)}
+  th.on{color:var(--text)}
   tr:last-child td{border-bottom:0}
   tbody tr{cursor:pointer;transition:background .15s}
-  tbody tr:hover{background:var(--card)}
-  td.nm{display:flex;align-items:center;gap:8px;font-weight:700}
-  td.nm span.av{width:26px;height:26px;border-radius:50%;overflow:hidden;display:inline-block;background:var(--card2)}
-  .pp{display:inline-flex;gap:2px}.pp i{width:10px;height:6px;border-radius:2px;background:#2a2a40}.pp i.f{background:var(--grad)}
-  td.num{text-align:right}th.num{text-align:right}
+  tbody tr:hover{background:rgba(255,255,255,.035)}
+  td.nm{display:flex;align-items:center;gap:10px;font-weight:700}
+  td.nm span.f{width:34px;height:34px;border-radius:50%;overflow:hidden;display:inline-block;flex-shrink:0}
+  .pp{display:inline-flex;gap:3px}.pp i{width:12px;height:6px;border-radius:3px;background:var(--track)}.pp i.f{background:var(--grad)}
+  td.num,th.num{text-align:right}
 
-  /* lifecycle */
-  .life{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  @media(max-width:900px){.life{grid-template-columns:1fr 1fr}}
-  @media(max-width:520px){.life{grid-template-columns:1fr}}
-  .lf{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-  .lf .mv{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
-  .lf .mv .arr{color:var(--dim)}
-  .lf ul{list-style:none;display:grid;gap:5px;font-size:13.5px;color:#d6d6e2}
-  .lf li::before{content:"✓";color:var(--ok);margin-right:6px;font-weight:900}
-  .lf.stop li::before{content:"!";color:#ff9d9d}
-  .rules{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
-  .rule{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:13.5px}
-  .rule b{color:var(--text)}
+  /* ===== LIFECYCLE ===== */
+  .gates{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative}
+  .gate{position:relative;padding:30px 28px 28px;border-radius:26px;background:var(--card);border:1px solid var(--line)}
+  .gate .mv{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .gate .mv .ar{color:var(--dim);font-weight:800}
+  .gate .no{display:block;font-size:14px;font-weight:800;color:var(--accent);margin-top:24px}
+  .gate h3{font-size:clamp(22px,2.4vw,27px);font-weight:800;letter-spacing:-.04em;line-height:1.3;margin-top:6px}
+  .gate ul{list-style:none;display:grid;gap:12px;margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+  .gate li{display:grid;grid-template-columns:24px 1fr;gap:10px;font-size:16.5px;line-height:1.45;color:var(--muted)}
+  .gate li b{color:var(--text)}
+  .gate li::before{content:"✓";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(61,220,151,.14);color:var(--ok);font-size:13px;font-weight:900}
+  .gate.hot{border-color:rgba(61,220,151,.35);background:linear-gradient(180deg,rgba(61,220,151,.07),var(--card) 60%)}
+  .pause{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;margin-top:16px;padding:24px 28px;border-radius:24px;border:1px dashed var(--line2)}
+  .pause h4{font-size:19px;font-weight:800;letter-spacing:-.03em}
+  .pause p{font-size:16px;color:var(--muted);margin-top:4px}
+  .pause p b{color:#ffb0b0}
+  @media(max-width:900px){.gates{grid-template-columns:1fr}.pause{grid-template-columns:1fr;gap:12px}}
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+  .rule{padding:4px 0 0}
+  .rule b{display:block;font-size:clamp(44px,6vw,72px);font-weight:800;letter-spacing:-.05em;line-height:1}
+  .rule p{font-size:17px;font-weight:600;margin-top:14px;line-height:1.45}
+  .rule p small{display:block;font-size:15px;color:var(--muted);font-weight:400;margin-top:4px}
+  @media(max-width:760px){.rules{grid-template-columns:1fr;gap:34px}}
 </style>
 </head>
 <body data-chapter="characters">
 <nav id="topnav"></nav>
 <div class="subnav"><div class="wrap">
-  <a href="#roster">로스터</a><a href="#life">캐릭터가 크는 과정</a>
+  <a href="#now">지금 키우는 캐릭터</a><a href="#roster">전체 로스터</a><a href="#life">캐릭터가 크는 과정</a>
 </div></div>
 
-<header class="page-head">
+<header class="rhero">
   <div class="wrap">
-    <div class="crumb"><a href="/">홈</a>›<b>02 캐릭터</b></div>
-    <h1>캐릭터 <span class="grad">로스터</span></h1>
-    <p class="lead">AI 인플루언서의 진짜 장점은 몇 명이든 만들 수 있다는 것. 아이디어는 전부 여기 모으고, 테스트해서 터진 캐릭터만 키워요.</p>
-    <div class="funnel" id="funnel" role="group" aria-label="단계별 필터"></div>
+    <div class="crumb"><a href="/">홈</a>›<b>캐릭터</b></div>
+    <h1 id="h1">여러 명을 만들고,<br><span class="grad">터진 한 명을 키워요</span></h1>
+    <p class="lead">사람 인플루언서는 한 명뿐이지만, AI 캐릭터는 <b>프롬프트 몇 줄이면 한 명 더</b>. 아이디어는 전부 여기 모으고, 같은 조건으로 테스트해서 이긴 캐릭터만 키워요.</p>
+    <span class="pill demo">샘플 데이터 · 실제로는 아직 전부 아이디어 단계</span>
+    <div class="pipe reveal" id="pipe" role="group" aria-label="단계별로 보기"></div>
   </div>
 </header>
 
-<section id="roster" style="padding-top:8px">
+<section id="now" style="padding-top:64px">
   <div class="wrap">
-    <div class="demo-banner reveal"><span>🧪</span><div><b>'샘플' 표시가 붙은 단계는 운영 대시보드 예시에 맞춘 가상 단계예요.</b> 실제로는 아직 모든 캐릭터가 아이디어 단계예요. 운영을 시작하면 실제 단계로 바뀌어요.</div></div>
-    <div class="toolbar">
-      <label class="search"><span aria-hidden="true">🔎</span><input id="q" type="search" placeholder="이름·컨셉 검색" aria-label="캐릭터 검색"></label>
-      <div class="chipsrow" id="niches"></div>
-      <div class="views" role="tablist"><button class="on" data-v="board">보드</button><button data-v="grid">카드</button><button data-v="table">비교표</button></div>
-    </div>
-    <p class="count" id="count"></p>
-    <div id="view" style="margin-top:10px"></div>
+    <div class="sh plain reveal"><p class="eyebrow">지금 키우는 캐릭터</p><h2 id="spotH">테스트를 통과한 캐릭터</h2></div>
+    <div class="spot reveal" id="spot"></div>
+    <div class="scale reveal" id="scale"></div>
   </div>
 </section>
 
-<section id="life" class="alt">
+<section id="roster" class="alt">
   <div class="wrap">
-    <div class="sh reveal"><span class="num">↻</span>
-      <div><p class="eyebrow">캐릭터가 크는 과정</p><h2>많이 만들고, 빨리 테스트하고, <span class="grad">터진 캐릭터만 키워요</span></h2><p class="sub">한 단계 넘어갈 때마다 아래 조건을 확인해요. 판정 숫자는 조사 결과를 바탕으로 한 제안이에요.</p></div></div>
-    <div class="life reveal">
-      <div class="lf"><div class="mv"><span class="stg idea">💡 아이디어</span><span class="arr">→</span><span class="stg design">🎨 설정 중</span></div>
-        <ul><li>한 줄 컨셉이 있다</li><li>조사한 '빈 니치'에 들어간다</li><li>에피소드 3개가 바로 떠오른다</li></ul></div>
-      <div class="lf"><div class="mv"><span class="stg design">🎨 설정 중</span><span class="arr">→</span><span class="stg test">🧪 테스트</span></div>
-        <ul><li>설정표 80% 이상 채움</li><li>기준 얼굴·목소리 확정</li><li>릴스 3개 미리 만들어 둠</li></ul></div>
-      <div class="lf"><div class="mv"><span class="stg test">🧪 테스트</span><span class="arr">→</span><span class="stg live">🚀 집중 운영</span></div>
-        <ul><li>2~4주 동안 주 2회 이상 업로드</li><li>최근 참여율 <b>10% 이상</b></li><li>저장이 많은 편이 있다</li></ul></div>
-      <div class="lf stop"><div class="mv"><span class="stg test">🧪 테스트</span><span class="arr">→</span><span class="stg paused">💤 보류</span></div>
-        <ul><li>최근 참여율 <b>7% 미만</b>이 2주 이상</li><li>포맷을 바꿔도 반응 없음</li><li>보류해도 설정은 남겨둬요</li></ul></div>
+    <div class="sh plain reveal"><p class="eyebrow">전체 로스터</p><h2 id="rosterH">캐릭터 전원</h2><p class="sub">카드를 누르면 설정표·말투·수익 구조가 담긴 프로필로 가요.</p></div>
+    <div class="rbar">
+      <div class="tabs" id="tabs" role="tablist" aria-label="단계"></div>
+      <div class="tools">
+        <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="이름·컨셉 검색" aria-label="캐릭터 검색"></label>
+        <div class="views" role="tablist" aria-label="보기 방식"><button data-v="grid">카드</button><button data-v="stage">단계별</button><button data-v="table">비교표</button></div>
+      </div>
     </div>
-    <div class="rules reveal">
-      <div class="rule">🧪 <span>동시에 테스트하는 캐릭터는 <b>최대 3명</b></span></div>
-      <div class="rule">📏 <span>같은 조건으로 비교: <b>주 2회, 같은 요일</b></span></div>
-      <div class="rule">🚀 <span>집중 운영 캐릭터가 생기면 <b>그 캐릭터부터 수익화</b></span></div>
+    <div class="nrow" id="niches"></div>
+    <div id="view"></div>
+  </div>
+</section>
+
+<section id="life">
+  <div class="wrap">
+    <div class="sh plain reveal"><p class="eyebrow">캐릭터가 크는 과정</p><h2>문은 3개.<br><span class="grad">통과한 캐릭터만</span> 다음 단계로</h2><p class="sub">한 단계 넘어갈 때마다 아래 조건을 확인해요. 판정 숫자는 조사 결과를 바탕으로 한 제안이에요.</p></div>
+    <div class="gates">
+      <div class="gate reveal"><div class="mv"><span class="stg idea">아이디어</span><span class="ar">→</span><span class="stg design">설정 중</span></div>
+        <span class="no">문 1</span><h3>살릴 만한 아이디어인가?</h3>
+        <ul><li><span>한 줄 컨셉이 있다</span></li><li><span>조사한 <b>'빈 니치'</b>에 들어간다</span></li><li><span>에피소드 <b>3개</b>가 바로 떠오른다</span></li></ul></div>
+      <div class="gate reveal d1"><div class="mv"><span class="stg design">설정 중</span><span class="ar">→</span><span class="stg test">테스트</span></div>
+        <span class="no">문 2</span><h3>올릴 준비가 됐나?</h3>
+        <ul><li><span>설정표 <b>80% 이상</b> 채움</span></li><li><span>기준 얼굴·목소리 확정</span></li><li><span>릴스 <b>3개</b> 미리 만들어 둠</span></li></ul></div>
+      <div class="gate hot reveal d2"><div class="mv"><span class="stg test">테스트</span><span class="ar">→</span><span class="stg live">집중 운영</span></div>
+        <span class="no">문 3</span><h3>반응이 터졌나?</h3>
+        <ul><li><span>2~4주 동안 <b>주 2회</b> 이상 업로드</span></li><li><span>최근 참여율 <b>10% 이상</b></span></li><li><span>저장이 많은 편이 있다</span></li></ul></div>
+    </div>
+    <div class="pause reveal"><span class="stg paused">보류</span><div><h4>반응이 없으면 잠시 멈춰요</h4><p>최근 참여율 <b>7% 미만이 2주 이상</b>이고 포맷을 바꿔도 그대로면 보류. 설정은 지우지 않고 남겨둬요.</p></div></div>
+    <div class="rules">
+      <div class="rule reveal"><b class="grad">3명</b><p>동시에 테스트하는 최대 인원<small>그 이상은 품질이 떨어져요</small></p></div>
+      <div class="rule reveal d1"><b class="grad">주 2회</b><p>모두 같은 조건으로 비교<small>같은 요일, 같은 횟수</small></p></div>
+      <div class="rule reveal d2"><b class="grad">10%</b><p>넘으면 집중 운영<small>그 캐릭터부터 수익화 시작</small></p></div>
     </div>
   </div>
 </section>
 
-<section style="padding:56px 0">
+<section style="padding:0 0 96px">
   <div class="wrap">
-    <a class="next reveal" href="/ops/"><div><small>다음 챕터</small><b>03 운영 — 캐릭터별 팔로워·반응·수익 비교</b></div><span class="arr">→</span></a>
+    <a class="next reveal" href="/ops/"><div><small>다음 챕터</small><b>운영 — 캐릭터별 팔로워·반응·수익 비교</b></div><span class="arr">→</span></a>
   </div>
 </section>
 
@@ -165,63 +287,132 @@
 <script src="/assets/common.js"></script>
 <script>
 const C=CHARACTERS,S=STAGES;
-const LANG={ko:'🇰🇷 한국어',en:'🇺🇸 영어'};
+const LANG={ko:'한국어',en:'영어'};
+const SC={idea:'#d0d0dc',design:'#c3b8ff',test:'#8fcbff',live:'#3ddc97',paused:'#7d7d8c'};
 const url=new URLSearchParams(location.search);
-const st={stage:url.get('stage')||'',niche:'',q:'',view:url.get('view')||'board',sort:'stage',dir:1};
+const VIEWS={grid:1,stage:1,table:1,board:'stage'};
+let v0=url.get('view')||'grid';v0=VIEWS[v0]===1?v0:(VIEWS[v0]||'grid');
+const st={stage:url.get('stage')||'',niche:'',q:'',view:v0,sort:'stage',dir:1};
 const prof=id=>`/characters/profile/?id=${encodeURIComponent(id)}`;
+const ops=id=>window.M&&M.char(id);
+const byStage=k=>C.filter(c=>c.stage===k);
 
-/* funnel */
-function funnel(){
-  document.getElementById('funnel').innerHTML=S.map(s=>{const list=C.filter(c=>c.stage===s.k);
-    return `<button class="fs ${s.k} ${st.stage===s.k?'on':''}" data-s="${s.k}" aria-pressed="${st.stage===s.k}"><span class="top"><span>${s.ic} ${s.label}</span></span><b>${list.length}</b><small>${s.desc}</small>
-      <span class="faces">${list.slice(0,5).map(c=>`<span>${avatar(AV[c.id])}</span>`).join('')}</span></button>`;}).join('');
+/* ---------- hero ---------- */
+const liveN=byStage('live').length;
+document.getElementById('h1').innerHTML=`${C.length}명을 만들고,<br><span class="grad">터진 ${liveN>1?liveN+'명':'한 명'}을 키워요</span>`;
+
+function pipe(){
+  document.getElementById('pipe').innerHTML=S.map((s,i)=>{const l=byStage(s.k);
+    return `<button class="ps ${s.k==='paused'?'pz':''} ${l.length?'':'zero'} ${st.stage===s.k?'on':''}" data-s="${s.k}" style="--sc:${SC[s.k]}" aria-pressed="${st.stage===s.k}">
+      <span class="lb">${s.label}</span><b>${l.length}</b><small>${s.desc}</small>
+      <span class="fc">${l.length?l.slice(0,4).map(c=>`<span>${face(c.id,true)}</span>`).join('')+(l.length>4?`<em>+${l.length-4}</em>`:''):'<span class="none">비어 있음</span>'}</span>
+      ${i<3?'<i class="ar" aria-hidden="true">›</i>':''}</button>`;}).join('');
 }
-document.getElementById('funnel').addEventListener('click',e=>{const b=e.target.closest('.fs');if(!b)return;st.stage=st.stage===b.dataset.s?'':b.dataset.s;funnel();render();});
+document.getElementById('pipe').addEventListener('click',e=>{const b=e.target.closest('.ps');if(!b)return;setStage(st.stage===b.dataset.s?'':b.dataset.s);
+  document.getElementById('roster').scrollIntoView({behavior:'smooth'});});
 
-/* niche chips */
+/* ---------- spotlight ---------- */
+function spot(){
+  const star=byStage('live')[0]||byStage('test')[0],box=document.getElementById('spot');
+  if(!star){document.getElementById('now').style.display='none';return;}
+  const m=ops(star.id),col=star.color||'#ff5c8a';
+  document.getElementById('spotH').innerHTML=star.stage==='live'?`테스트를 통과한 <span class="grad">${star.name}</span>`:`가장 앞선 캐릭터, <span class="grad">${star.name}</span>`;
+  let spark='';
+  if(m){
+    const f=m.followers.map((v,i)=>({v,i})).filter(p=>p.v!=null),W=600,H=130,mx=Math.max(...f.map(p=>p.v));
+    const x=i=>i/(m.followers.length-1)*W,y=v=>H-8-(v/mx)*(H-24);
+    const d=f.map((p,k)=>`${k?'L':'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+    const last=f[f.length-1];
+    spark=`<div class="spark"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="주별 팔로워 추이">
+      <defs><linearGradient id="sg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".35"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+      <path d="${d} L${x(last.i)},${H} L${x(f[0].i)},${H} Z" fill="url(#sg)"/>
+      <path class="ln" d="${d}" fill="none" stroke="${col}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${x(last.i)}" cy="${y(last.v)}" r="6" fill="${col}" stroke="#fff" stroke-width="3"/></svg>
+      <div class="sx"><span>${M.O.weeks[f[0].i]} ${fmt.n(f[0].v)}명</span><span>팔로워 추이 · 샘플</span><span>${M.O.weeks[last.i]} ${fmt.n(last.v)}명</span></div></div>`;
+  }
+  const kp=m?`<div class="kp">
+      <div><small>팔로워</small><b data-count="${m.latest}">${fmt.n(m.latest)}</b>${m.delta>0?`<em>▲ ${fmt.n(m.delta)} 이번 주</em>`:''}</div>
+      <div><small>최근 4주 참여율</small><b>${fmt.pct(m.avgEng)}</b><span class="vchip ${m.verdict.k}" style="margin-top:6px;font-size:12px;padding:3px 9px">${m.verdict.label}</span></div>
+      <div><small>${m.income?'누적 수익':'게시물'}</small><b>${m.income?fmt.won(m.income):m.posts.length+'개'}</b><em style="color:var(--dim)">${m.weeksRun}주 운영</em></div></div>`:'';
+  box.style.setProperty('--c',col);
+  box.innerHTML=`<div class="pic">${face(star.id)}<span class="crown">🏆 ${star.stage==='live'?'테스트 통과':'선두'}</span></div>
+    <div class="bd"><div class="meta">${stageBadge(star)}<span>${star.handle||''}</span>${star.niche?`<span>· ${star.niche}</span>`:''}</div>
+      <h3>${star.name}</h3><p class="rl">${star.age?star.age+'세 · ':''}${star.role||''}</p>
+      <p class="cn">${star.concept}</p>${kp}${spark}
+      <div class="btns"><a class="btn primary" href="${prof(star.id)}">프로필 보기 →</a><a class="btn ghost" href="/ops/?c=${star.id}">운영 기록</a></div></div>`;
+  box.addEventListener('revealed',()=>box.querySelectorAll('[data-count]').forEach(countUp),{once:true});
+}
+
+/* ---------- verdict scale ---------- */
+function scale(){
+  const box=document.getElementById('scale');
+  const list=C.map(c=>({c,m:ops(c.id)})).filter(x=>x.m).sort((a,b)=>b.m.avgEng-a.m.avgEng);
+  if(!list.length){box.style.display='none';return;}
+  const MAX=.16,pos=v=>Math.min(100,v/MAX*100).toFixed(2);
+  const go=M.RULE.go,wa=M.RULE.watch;
+  box.innerHTML=`<div class="hd"><div><h3>판정 눈금 — 누가 올라갈까?</h3><p>최근 4주 평균 참여율로 판정해요. 초록 칸에 들어가면 집중 운영 후보.</p></div></div>
+    <div class="zl"><div></div><div class="zn">
+      <span style="left:${pos(wa/2)}%;color:#ff9d9d">보류 후보</span><span style="left:${pos((wa+go)/2)}%;color:var(--warn)">지켜보기</span><span style="left:${pos((go+MAX)/2)}%;color:var(--ok)">계속</span></div><div></div></div>
+    ${list.map(({c,m})=>`<a class="srow" href="${prof(c.id)}"><span class="who"><span class="f">${face(c.id,true)}</span><span>${c.name}<small>${m.weeksRun}주차 · ${stageOf(c.stage).label}</small></span></span>
+      <span class="tr"><i style="background:${c.color}" data-w="${pos(m.avgEng)}"></i><u style="background:${c.color}" data-l="${pos(m.avgEng)}"></u></span>
+      <span class="v">${fmt.pct(m.avgEng)}</span></a>`).join('')}
+    <div class="zt"><div></div><div><span style="left:0">0%</span><span style="left:${pos(wa)}%">${Math.round(wa*100)}%</span><span style="left:${pos(go)}%">${Math.round(go*100)}%</span><span style="left:100%">${Math.round(MAX*100)}%</span></div><div></div></div>`;
+  box.addEventListener('revealed',()=>setTimeout(()=>box.querySelectorAll('.srow .tr').forEach(t=>{const i=t.querySelector('i'),u=t.querySelector('u');i.style.width=i.dataset.w+'%';u.style.left=u.dataset.l+'%';}),150),{once:true});
+}
+
+/* ---------- roster ---------- */
+function tabs(){
+  const all=[{k:'',label:'전체',n:C.length},...S.map(s=>({k:s.k,label:s.label,n:byStage(s.k).length}))];
+  document.getElementById('tabs').innerHTML=all.map(t=>`<button class="tab ${st.stage===t.k?'on':''} ${t.n?'':'zero'}" data-s="${t.k}" role="tab" aria-selected="${st.stage===t.k}">${t.label}<em>${t.n}</em></button>`).join('');
+}
+function setStage(k){st.stage=k;tabs();pipe();render();}
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)setStage(b.dataset.s);});
+
 const niches=[...new Set(C.map(c=>c.niche).filter(Boolean))];
-const nicheBox=document.getElementById('niches');
-nicheBox.innerHTML=`<button class="fchip on" data-n="">전체</button>`+niches.map(n=>`<button class="fchip" data-n="${n}">${n}</button>`).join('');
-nicheBox.addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;st.niche=b.dataset.n;nicheBox.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));render();});
+const nbox=document.getElementById('niches');
+nbox.innerHTML=`<span>분야</span><button class="on" data-n="">전체</button>`+niches.map(n=>`<button data-n="${n}">${n}</button>`).join('')+`<span class="cnt" id="count"></span>`;
+nbox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.niche=b.dataset.n;nbox.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));render();});
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.trim().toLowerCase();render();});
 document.querySelectorAll('.views button').forEach(b=>{b.classList.toggle('on',b.dataset.v===st.view);b.addEventListener('click',()=>{st.view=b.dataset.v;document.querySelectorAll('.views button').forEach(x=>x.classList.toggle('on',x===b));render();});});
 
 function filtered(){return C.filter(c=>(!st.stage||c.stage===st.stage)&&(!st.niche||c.niche===st.niche)&&(!st.q||(c.name+c.concept+(c.niche||'')+(c.role||'')).toLowerCase().includes(st.q)));}
 
 function card(c){
-  const m=window.M&&M.char(c.id),cp=completeness(c);
-  const foot=m?`<div class="stat"><span>팔로워 <b>${fmt.n(m.latest)}</b></span><span>참여율 <b>${fmt.pct(m.avgEng)}</b></span><span class="vd ${m.verdict.k}">${m.verdict.ic} ${m.verdict.label}</span></div>`
-             :`<div class="comp"><span>설정표</span><span class="bar"><i style="width:${cp.pct}%"></i></span><span>${cp.pct}%</span></div>`;
-  return `<a class="cc" href="${prof(c.id)}">${c.color?`<span class="cbar" style="background:${c.color}"></span>`:''}
-    <div class="hd"><span class="av">${avatar(AV[c.id])}</span><div class="nm">${c.name}<small>${c.role||''}</small></div></div>
-    <div>${stageBadge(c)}</div>
-    <div class="con">${c.concept}</div>
-    <div class="tags">${c.niche?`<span class="tg">${c.niche}</span>`:''}${c.lang?`<span class="tg">${LANG[c.lang]}</span>`:''}</div>${foot}</a>`;
+  const m=ops(c.id),cp=completeness(c);
+  const ft=m?`<div class="ft"><div><small>팔로워</small><b>${fmt.n(m.latest)}</b></div><div><small>참여율</small><b>${fmt.pct(m.avgEng)}</b></div><span class="vchip ${m.verdict.k}">${m.verdict.label}</span></div>`
+            :`<div class="ft"><div class="comp"><div class="row"><span>설정표</span><b>${cp.pct}%</b></div><div class="bar"><i style="width:${cp.pct}%"></i></div></div></div>`;
+  return `<a class="cast" href="${prof(c.id)}"><div class="pic">${face(c.id)}${stageBadge(c)}</div>
+    <div class="bd"><h3>${c.color?`<span class="cdot" style="background:${c.color}"></span>`:''}${c.name}</h3><p class="rl">${c.age?c.age+'세 · ':''}${c.role||''}</p>
+    <p class="cn">${c.concept}</p><div class="tg">${c.niche?`<span>${c.niche}</span>`:''}${c.lang?`<span>${LANG[c.lang]}</span>`:''}</div>${ft}</div></a>`;
 }
-const newCard=`<div class="newc"><b>＋</b><span>새 캐릭터 아이디어</span><small style="color:var(--dim)">한 줄만 알려주면 로스터에 추가돼요</small></div>`;
+const newCard=`<div class="cast new"><div class="pic"><b>＋</b></div><div class="bd"><h3>다음 캐릭터</h3><p class="rl">아이디어 슬롯</p><p class="cn">한 줄 컨셉만 정하면 로스터에 바로 추가돼요.</p></div></div>`;
+const mini=c=>{const m=ops(c.id);return `<a class="mini" href="${prof(c.id)}"><span class="f">${face(c.id,true)}</span><span style="min-width:0"><b>${c.name}</b><small>${m?`팔로워 ${fmt.n(m.latest)} · ${fmt.pct(m.avgEng)}`:c.concept}</small></span></a>`;};
 
 function render(){
   const list=filtered(),v=document.getElementById('view');
-  document.getElementById('count').textContent=`${list.length}명 표시 · 전체 ${C.length}명`+(st.stage?` · ${stageOf(st.stage).label}만`:'');
-  if(st.view==='board'){
+  document.getElementById('count').textContent=`${list.length}명 표시 · 전체 ${C.length}명`;
+  document.getElementById('rosterH').innerHTML=st.stage?`${stageOf(st.stage).label} <span class="grad">${byStage(st.stage).length}명</span>`:`캐릭터 <span class="grad">${C.length}명</span>`;
+  if(st.view==='stage'){
     v.innerHTML=`<div class="board">${S.map(s=>{const l=list.filter(c=>c.stage===s.k);
-      return `<div class="col"><h4>${s.ic} ${s.label}<em>${l.length}</em></h4>${l.map(card).join('')||'<div class="empty">아직 없음</div>'}${s.k==='idea'?newCard:''}</div>`;}).join('')}</div>`;
-  }else if(st.view==='grid'){
-    v.innerHTML=`<div class="grid">${list.map(card).join('')}${newCard}</div>`;
-  }else{
+      return `<div class="col" style="--sc:${SC[s.k]}"><h4>${s.label}<em>${l.length}</em></h4>${l.map(mini).join('')||'<div class="none">아직 없음</div>'}</div>`;}).join('')}</div>`;
+  }else if(st.view==='table'){
     const order=S.map(s=>s.k);
-    const rows=list.map(c=>{const m=window.M&&M.char(c.id);return {c,stage:order.indexOf(c.stage),name:c.name,niche:c.niche||'',lang:c.lang||'',ease:c.scores?c.scores.ease:0,topic:c.scores?c.scores.topic:0,money:c.scores?c.scores.money:0,fol:m?m.latest:-1,eng:m?m.avgEng:-1,comp:completeness(c).pct};});
+    const rows=list.map(c=>{const m=ops(c.id);return {c,stage:order.indexOf(c.stage),name:c.name,niche:c.niche||'',lang:c.lang||'',ease:c.scores?c.scores.ease:0,topic:c.scores?c.scores.topic:0,money:c.scores?c.scores.money:0,fol:m?m.latest:-1,eng:m?m.avgEng:-1,comp:completeness(c).pct};});
     rows.sort((a,b)=>(a[st.sort]>b[st.sort]?1:a[st.sort]<b[st.sort]?-1:0)*st.dir);
-    const pips=v=>v?`<span class="pp">${[1,2,3,4,5].map(p=>`<i class="${p<=v?'f':''}"></i>`).join('')}</span>`:'<span style="color:var(--dim)">—</span>';
-    const H=[['name','캐릭터'],['stage','단계'],['niche','니치'],['lang','언어'],['ease','제작 쉬움'],['topic','소재'],['money','수익 속도'],['fol','팔로워','num'],['eng','참여율','num'],['comp','설정표','num']];
+    const pips=x=>x?`<span class="pp" aria-label="${x}점">${[1,2,3,4,5].map(p=>`<i class="${p<=x?'f':''}"></i>`).join('')}</span>`:'<span style="color:var(--dim)">—</span>';
+    const H=[['name','캐릭터'],['stage','단계'],['niche','분야'],['lang','언어'],['ease','제작 쉬움'],['topic','소재'],['money','수익 속도'],['fol','팔로워','num'],['eng','참여율','num'],['comp','설정표','num']];
     v.innerHTML=`<div class="tbl-wrap"><table><thead><tr>${H.map(([k,l,cl])=>`<th data-k="${k}" class="${cl||''} ${k===st.sort?'on':''}">${l}${k===st.sort?(st.dir>0?' ↑':' ↓'):''}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(r=>`<tr data-id="${r.c.id}"><td class="nm"><span class="av">${avatar(AV[r.c.id])}</span>${r.c.name}</td><td>${stageBadge(r.c)}</td><td>${r.niche||'—'}</td><td>${r.lang?LANG[r.lang]:'—'}</td><td>${pips(r.ease)}</td><td>${pips(r.topic)}</td><td>${pips(r.money)}</td><td class="num">${r.fol>=0?fmt.n(r.fol):'—'}</td><td class="num">${r.eng>=0?fmt.pct(r.eng):'—'}</td><td class="num">${r.comp}%</td></tr>`).join('')}</tbody></table></div>
-    <p class="note">행을 누르면 캐릭터 프로필로 가요. 제작 쉬움·소재·수익 속도는 캐릭터끼리의 상대 비교예요.</p>`;
+    <tbody>${rows.map(r=>`<tr data-id="${r.c.id}"><td class="nm"><span class="f">${face(r.c.id,true)}</span>${r.c.name}</td><td>${stageBadge(r.c)}</td><td>${r.niche||'—'}</td><td>${r.lang?LANG[r.lang]:'—'}</td><td>${pips(r.ease)}</td><td>${pips(r.topic)}</td><td>${pips(r.money)}</td><td class="num">${r.fol>=0?fmt.n(r.fol):'—'}</td><td class="num">${r.eng>=0?fmt.pct(r.eng):'—'}</td><td class="num">${r.comp}%</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">제목을 누르면 정렬돼요. 제작 쉬움·소재·수익 속도는 캐릭터끼리의 상대 비교예요.</p>`;
     v.querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(k===st.sort)st.dir*=-1;else{st.sort=k;st.dir=['name','stage','niche','lang'].includes(k)?1:-1;}render();}));
     v.querySelectorAll('tbody tr').forEach(tr=>tr.addEventListener('click',()=>location.href=prof(tr.dataset.id)));
+  }else{
+    v.innerHTML=list.length?`<div class="grid">${list.map(card).join('')}${!st.q&&(!st.stage||st.stage==='idea')?newCard:''}</div>`
+      :`<div class="empty"><b>조건에 맞는 캐릭터가 없어요</b>다른 단계나 검색어로 찾아보세요.</div>`;
   }
+  v.firstElementChild&&v.firstElementChild.classList.add('swap');
 }
-funnel();render();
+pipe();spot();scale();tabs();render();watchReveal();
 </script>
 </body>
 </html>
