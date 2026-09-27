@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 영상 노트 — 나중에 볼 AI 영상, 결론부터</title>
+<meta name="description" content="나중에 볼 동영상에 쌓아 둔 AI 영상을 내용별 챕터로 묶고, 영상마다 결론 한 줄·핵심·바로 가는 장면을 정리했어요.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3EEE4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23A8321F'/%3E%3Cpath d='M25 19l21 13-21 13z' fill='%23FBF8F1'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<div class="wrap issue"><span>VOL.1 · 2026.09.27 · 나중에 볼 동영상</span><span class="hide-m">AI 영상 <span data-n-total>14</span>편 · <span data-time-total>4시간 20분</span> · 봤어요 <span data-seen-count="all">0/14</span></span></div>
+
+<main>
+  <section class="hero">
+    <div class="wrap grid">
+      <div>
+        <p class="kicker">나중에 볼 동영상에 쌓아 둔 AI 영상 <span data-n-total>14</span>개</p>
+        <h1><span>AI 영상 <span data-time-total>4시간 20분</span>,</span><span>결론부터 읽고 봐요</span></h1>
+        <p class="lede">채널 말고 내용별 <span data-n-ch>5</span>개 챕터로 묶고, 영상마다 결론 한 줄·핵심·바로 가는 장면을 정리했어요.</p>
+        <div class="cta">
+          <a class="btn primary" href="/chapter/?id=web">챕터별로 보기 <span class="arr">→</span></a>
+          <a class="btn" href="#first">먼저 볼 4개</a>
+        </div>
+        <ul class="checks">
+          <li>장면 시간 누르면 바로 재생</li>
+          <li>다 본 영상 체크</li>
+          <li>'영상 속 주장' 따로 표시</li>
+        </ul>
+      </div>
+      <aside class="toc" id="toc" aria-label="목차"></aside>
+    </div>
+  </section>
+
+  <section class="sec" id="first">
+    <div class="wrap">
+      <p class="label">먼저 볼 영상</p>
+      <h2 class="h2" id="first-title">화면 보며 따라 할 4개부터, 1시간 7분이에요</h2>
+      <p class="lead" id="first-lead">나머지 10개는 요약부터 읽고, 필요한 장면만 골라 봐도 돼요.</p>
+      <div class="lenbar" id="lenbar"></div>
+      <div class="cards" id="first-cards"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="common">
+    <div class="wrap">
+      <p class="label">공통 결론</p>
+      <h2 class="h2">채널은 달라도, 결론은 세 가지로 모여요</h2>
+      <p class="lead"><span data-n-total>14</span>개를 다 읽고 여러 영상에서 겹치는 말만 뽑았어요.</p>
+      <div class="ins" id="insights"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="reality">
+    <div class="wrap">
+      <p class="label">제목과 실제</p>
+      <h2 class="h2">제목의 약속과 영상 속 실제는 조금 달라요</h2>
+      <p class="lead">보기 전에 알아 두면 기대치를 맞출 수 있어요.</p>
+      <div class="vs" id="vs"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="all">
+    <div class="wrap">
+      <p class="label">전체 목록</p>
+      <h2 class="h2"><span data-n-total>14</span>개 전부, 챕터 순서대로</h2>
+      <p class="lead">표시를 보고 볼 순서를 정하세요. 다 본 영상은 ✓를 눌러 두면 이 브라우저에 기억돼요.</p>
+      <div class="filters" id="filters" role="group" aria-label="보기 방식으로 거르기"></div>
+      <div class="list" id="list"></div>
+    </div>
+  </section>
+
+  <section class="end">
+    <div class="wrap">
+      <p class="label">시작하기</p>
+      <h2 class="h2">결론부터 읽고, 영상은 그다음에</h2>
+      <p class="lead" id="end-lead"></p>
+      <div class="cta">
+        <a class="btn primary" id="end-go" href="/chapter/?id=web">01 사이트 만들기부터 읽기 <span class="arr">→</span></a>
+        <a class="btn" href="#first">먼저 볼 4개</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="/assets/data.js"></script>
+<script src="/assets/app.js"></script>
+<script>App.home();</script>
+</body>
+</html>
