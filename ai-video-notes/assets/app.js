@@ -334,7 +334,13 @@
       var el = document.getElementById(decodeURIComponent(location.hash.slice(1))), moved = false;
       var stop = function () { moved = true; };
       ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stop, { once: true, passive: true }); });
-      var jump = function () { if (el && !moved) el.scrollIntoView(); };
+      var jump = function () {  // 페이지를 열 때는 부드럽게 말고 바로 이동 (긴 거리·백그라운드 탭에서도 정확하게)
+        if (!el || moved) return;
+        var root = document.documentElement, prev = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        el.scrollIntoView();
+        root.style.scrollBehavior = prev;
+      };
       if (el) {
         setTimeout(jump, 0);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(jump);
