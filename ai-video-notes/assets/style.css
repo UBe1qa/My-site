@@ -318,7 +318,8 @@ h1,h2,h3,.h2{text-wrap:balance}
   .site-head{position:static}
   .site-head .bar{height:auto;flex-direction:column;align-items:stretch;gap:2px;padding-top:12px}
   .logo{font-size:21px}
-  .gnav{overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--gut) * -1);padding:0 var(--gut) 2px}
+  .gnav{overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--gut) * -1);padding:0 44px 2px var(--gut);
+    -webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent)}
   .gnav::-webkit-scrollbar{display:none}
   .gnav a{font-size:14px;padding:9px 12px 9px 0}
   .issue{font-size:11px;letter-spacing:.05em}
