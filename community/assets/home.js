@@ -5,7 +5,6 @@
   await App.init({ active: 'home' });
 
   document.querySelector('#hot-hint').textContent = `추천 ${S.hotLikes}개 이상`;
-  document.querySelector('#check-hot').textContent = `추천 ${S.hotLikes}개면 인기글`;
 
   // 로그인한 사람에게는 가입 안내 대신 짧은 인사
   if (App.user) {
@@ -35,7 +34,13 @@
   if (hot.error) {
     hotList.append(h('li', { class: 'empty small' }, App.friendlyError(hot.error)));
   } else if (!hot.data.length) {
-    hotList.append(h('li', { class: 'empty small' }, `아직 인기글이 없어요. 추천 ${S.hotLikes}개를 받으면 여기에 올라와요.`));
+    // 인기글이 아직 없으면 그 자리에 게시판 바로가기를 보여 줘요
+    document.getElementById('hot-h').textContent = '게시판';
+    document.getElementById('hot-hint').textContent = `인기글은 추천 ${S.hotLikes}개부터`;
+    S.boards.forEach((b) => hotList.append(h('li', null,
+      h('a', { href: `/board/?b=${b.slug}` },
+        h('span', { class: 'hot-title' }, h('span', { class: 't' }, b.full)),
+        h('span', { class: 'likes' }, b.desc)))));
   } else {
     hot.data.forEach((p, i) => hotList.append(h('li', null,
       h('a', { href: `/post/?id=${p.id}` },
@@ -52,6 +57,9 @@
   }
   const rows = (notices.data || []).concat(recent.data || []);
   if (!rows.length) {
+    // 아직 글이 없으면 '먼저 둘러볼게요'는 숨겨요 (둘러볼 게 없으니까)
+    const browse = document.querySelector('.hero .cta .btn.ghost[href="#latest"]');
+    if (browse) browse.hidden = true;
     latest.append(h('li', null, App.empty('아직 글이 없어요', '처음으로 글을 남겨 보세요.',
       h('a', { class: 'btn primary sm', href: App.user ? '/write/' : '/login/?mode=signup&next=%2Fwrite%2F' }, '첫 글 쓰기'))));
   } else {
