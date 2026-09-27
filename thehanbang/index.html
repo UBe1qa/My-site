@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>더한방 주간보호센터</title>
-<meta name="description" content="요양원 가시기 전에 주간보호를 먼저 알아보세요. 한의사가 함께하는 인천 연수구 더한방 주간보호센터. 매일 건강 체크, 천장 보행레일 재활, 매일 직접 조리하는 식사. 상담 032-815-0157">
+<meta name="description" content="부모님 다리 힘은 쓰는 만큼 남아요. 한의사가 건강관리를 설계하는 인천 연수구 더한방 주간보호센터. 매일 건강 체크, 천장 보행레일 재활, 매일 직접 조리하는 식사. 상담 032-815-0157">
 <meta name="theme-color" content="#FFFFFF">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="더한방 주간보호센터">
-<meta property="og:title" content="더한방 주간보호센터 · 요양원 가시기 전에, 주간보호 먼저">
+<meta property="og:title" content="더한방 주간보호센터 · 부모님 다리 힘, 쓰는 만큼 남아요">
 <meta property="og:description" content="낮에는 한의사가 함께하는 센터에서 돌봄과 재활을, 저녁에는 집에서 가족과 함께. 인천 연수구 · 상담 032-815-0157">
 <meta property="og:image" content="https://thehanbang.vercel.app/img/rehab.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238B3A1F'/%3E%3Cg transform='translate(3 7.9) scale(.1625)' fill='none' stroke='%23fff' stroke-width='10'%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3Ccircle cx='111.5' cy='50' r='44'/%3E%3C/g%3E%3C/svg%3E">
@@ -499,23 +499,32 @@ html{scroll-padding-top:122px}
 .hero-photo{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:28px;box-shadow:var(--shadow-lg)}
 @media (min-width:1024px){.hero-photo{aspect-ratio:4/5;border-radius:32px}}
 
-/* 요양병원·요양원·주간보호 비교 */
-.compare{display:grid;gap:1rem}
-@media (min-width:900px){.compare{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;align-items:stretch}}
-.cmp{display:flex;flex-direction:column;padding:1.8rem 1.6rem 1.9rem;border-radius:var(--radius)}
-.cmp-tag{align-self:flex-start;padding:.32rem .8rem;border-radius:999px;background:var(--gray-100);font-size:.9rem;font-weight:700;color:var(--gray-700)}
-.cmp h3{margin-top:1rem;font-size:1.28rem;font-weight:800;line-height:1.4;letter-spacing:-.035em}
-.cmp dl{display:grid;gap:.9rem;margin-top:1.4rem;padding-top:1.3rem;border-top:1px solid var(--gray-200)}
-.cmp dl div{display:grid;grid-template-columns:2.8rem minmax(0,1fr);gap:.8rem}
-.cmp dt{font-size:.9rem;font-weight:600;color:var(--gray-500)}
-.cmp dd{font-size:1rem;font-weight:700;line-height:1.5;color:var(--gray-900)}
-.cmp dd small{display:block;margin-top:.1rem;font-size:.87rem;font-weight:500;color:var(--gray-600)}
-.cmp.main{background:var(--primary-50);box-shadow:inset 0 0 0 2px var(--primary)}
-.cmp.main .cmp-tag{background:var(--primary);color:var(--white)}
-.cmp.main dl{border-top-color:var(--primary-100)}
-.cmp-foot{display:flex;align-items:center;gap:.4rem;margin-top:auto;padding-top:1.4rem;font-size:.98rem;font-weight:700;color:var(--primary)}
-.cmp-foot svg{width:1.15rem;height:1.15rem}
-.fineprint{margin-top:1rem;font-size:.85rem;color:var(--gray-500);text-align:center}
+/* 같은 하루 비교: 집에서만 vs 더한방 */
+.versus{display:grid;gap:1rem;max-width:64rem;margin-inline:auto}
+@media (min-width:860px){.versus{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;align-items:stretch}}
+.vs{display:flex;flex-direction:column;padding:1.7rem 1.6rem 1.6rem;border-radius:var(--radius)}
+.cmp-tag{align-self:flex-start;padding:.36rem .85rem;border-radius:999px;background:var(--gray-100);font-size:.95rem;font-weight:700;color:var(--gray-600)}
+.vs-list{display:grid;margin-top:1.1rem;padding:0;list-style:none}
+.vs-list li{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.75rem;align-items:baseline;padding:.85rem 0;border-top:1px solid var(--gray-200)}
+.vs-list li:first-child{border-top:0}
+.vs-time{font-size:.9rem;font-weight:700;color:var(--gray-500)}
+.vs-list p{font-size:1.05rem;font-weight:600;line-height:1.5;letter-spacing:-.02em;color:var(--gray-600)}
+.vs.main{background:var(--primary-50);box-shadow:inset 0 0 0 2px var(--primary)}
+.vs.main .cmp-tag{background:var(--primary);color:var(--white)}
+.vs.main .vs-list li{border-top-color:var(--primary-100)}
+.vs.main .vs-time{color:var(--primary)}
+.vs.main .vs-list p{font-weight:700;color:var(--gray-900)}
+.vs-foot{display:flex;align-items:center;gap:.45rem;margin-top:auto;padding-top:1.1rem;border-top:1px dashed var(--gray-200);font-size:.98rem;font-weight:700;color:var(--gray-500)}
+.vs.main .vs-foot{border-top-color:var(--primary-100);color:var(--primary)}
+.vs-foot svg{flex:none;width:1.15rem;height:1.15rem}
+.sec-head h2 em{font-style:normal;color:var(--primary)}
+.vs-price{max-width:64rem;margin:1.5rem auto 0;text-align:center}
+.vs-price p{font-size:clamp(1.08rem,1rem + .35vw,1.3rem);font-weight:700;line-height:1.55;letter-spacing:-.03em;color:var(--gray-900)}
+.vs-price strong{color:var(--primary);font-weight:800}
+.vs-price span{display:block;margin-top:.35rem;font-size:.88rem;color:var(--gray-500)}
+.vs-price a{color:var(--primary);font-weight:700}
+.br-m{display:inline}
+@media (min-width:640px){.br-m{display:none}}
 
 /* 더한방 이유 */
 .reasons{display:grid;gap:1.1rem}
@@ -712,9 +721,9 @@ html{scroll-padding-top:122px}
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <span class="badge">요양원·요양병원 알아보고 계신가요?</span>
-        <h1>요양원 가시기 전에,<br><em>주간보호</em> 먼저 알아보세요</h1>
-        <p class="hero-sub">낮에는 한의사가 함께하는 센터에서 돌봄과 재활을 받고, 저녁에는 집으로 돌아와 가족과 지내세요. 비용의 85~100%는 장기요양보험이 지원해요.</p>
+        <span class="badge">부모님, 종일 집에만 계신가요?</span>
+        <h1>다리 힘은<br><em>쓰는 만큼</em> 남아요</h1>
+        <p class="hero-sub">움직임이 줄면 걷는 힘도 함께 줄어요. 더한방에서 낮 동안 한의사가 설계한 건강관리와 재활 운동을 하시고, 저녁엔 집으로 돌아오세요. 비용의 85~100%는 장기요양보험이 지원해요.</p>
         <div class="hero-cta">
           <a class="btn btn-primary btn-lg" href="tel:0328150157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화 상담 <span class="num">032-815-0157</span></a>
           <a class="btn btn-outline btn-lg" href="sms:01026840157"><svg class="ico" aria-hidden="true"><use href="#i-msg"/></svg>문자로 문의하기</a>
@@ -736,41 +745,35 @@ html{scroll-padding-top:122px}
   <section class="section gray" id="compare">
     <div class="container">
       <div class="sec-head">
-        <span class="eyebrow">요양병원 · 요양원 · 주간보호</span>
-        <h2>부모님께 맞는 곳은<br>어디일까요?</h2>
-        <p>치료보다 일상의 돌봄과 재활이 필요하시다면, 집을 떠나지 않으셔도 돼요.</p>
+        <span class="eyebrow">부모님의 낮 시간</span>
+        <h2>같은 하루,<br><em>어디서</em> 보내시나요?</h2>
       </div>
-      <div class="compare">
-        <article class="cmp raised">
-          <span class="cmp-tag">요양병원</span>
-          <h3>치료가 필요할 때<br>입원하는 병원</h3>
-          <dl>
-            <div><dt>생활</dt><dd>병원에 입원</dd></div>
-            <div><dt>대상</dt><dd>치료가 필요한 환자<small>장기요양등급이 없어도 돼요</small></dd></div>
-            <div><dt>비용</dt><dd>건강보험 적용<small>간병비는 대부분 따로 내요</small></dd></div>
-          </dl>
+      <div class="versus">
+        <article class="vs home raised">
+          <span class="cmp-tag">집에서만 지내시는 하루</span>
+          <ol class="vs-list">
+            <li><span class="vs-time">오전</span><p>TV를 켜 두고 앉아만 계세요</p></li>
+            <li><span class="vs-time">점심</span><p>혼자 드시니 대충 넘기기 쉬워요</p></li>
+            <li><span class="vs-time">오후</span><p>종일 말 나눌 사람이 없어요</p></li>
+            <li><span class="vs-time">저녁</span><p>움직임이 적어 걷는 힘이 줄어요</p></li>
+          </ol>
+          <p class="vs-foot"><svg aria-hidden="true"><use href="#i-bell"/></svg>보호자는 일하면서도 마음이 쓰여요</p>
         </article>
-        <article class="cmp raised">
-          <span class="cmp-tag">요양원</span>
-          <h3>집을 떠나 시설에서<br>생활하는 곳</h3>
-          <dl>
-            <div><dt>생활</dt><dd>24시간 입소 생활</dd></div>
-            <div><dt>대상</dt><dd>장기요양 1·2등급 중심</dd></div>
-            <div><dt>비용</dt><dd>본인부담 20%<small>식비 별도</small></dd></div>
-          </dl>
-        </article>
-        <article class="cmp main">
-          <span class="cmp-tag">주간보호</span>
-          <h3>낮에만 다니시고<br>저녁엔 집으로</h3>
-          <dl>
-            <div><dt>생활</dt><dd>낮엔 센터, 밤엔 집</dd></div>
-            <div><dt>대상</dt><dd>장기요양 1~5등급·인지지원등급</dd></div>
-            <div><dt>비용</dt><dd>본인부담 15%<small>감경 대상 6~9% · 식비 별도</small></dd></div>
-          </dl>
-          <p class="cmp-foot"><svg aria-hidden="true"><use href="#i-home"/></svg>익숙한 집, 가족 곁에서 지내세요</p>
+        <article class="vs main">
+          <span class="cmp-tag">더한방에서 보내는 하루</span>
+          <ol class="vs-list">
+            <li><span class="vs-time">오전</span><p>건강 체크하고 재활 운동해요</p></li>
+            <li><span class="vs-time">점심</span><p>직접 만든 따뜻한 밥을 드세요</p></li>
+            <li><span class="vs-time">오후</span><p>웃음치료·미술 수업과 족욕</p></li>
+            <li><span class="vs-time">저녁</span><p>저녁까지 드시고 댁으로 가요</p></li>
+          </ol>
+          <p class="vs-foot"><svg aria-hidden="true"><use href="#i-smile"/></svg>보호자는 마음 놓고 일하세요</p>
         </article>
       </div>
-      <p class="fineprint">장기요양보험 기준이에요. 개인별 조건은 상담 때 확인해 드려요.</p>
+      <div class="vs-price">
+        <p>하루 8시간씩 한 달 20일 다니셔도<br class="br-m"> 본인부담은 <strong class="num">약 17만 9천 원</strong>이에요</p>
+        <span>3등급·본인부담 15% 기준 · 식비 별도 · <a href="#cost">비용 자세히 보기</a></span>
+      </div>
     </div>
   </section>
 
@@ -818,8 +821,8 @@ html{scroll-padding-top:122px}
     <div class="container">
       <div class="cta-box">
         <div>
-          <h2>부모님께 맞는 돌봄,<br>편하게 물어보세요</h2>
-          <p>상담과 등급 신청 도움은 무료예요. 지금은 대기 없이 바로 시작하실 수 있어요.</p>
+          <h2>먼저 둘러보시고,<br>천천히 결정하세요</h2>
+          <p>센터를 구경하고 프로그램도 체험해 보실 수 있어요. 상담과 등급 신청 도움은 무료예요.</p>
         </div>
         <div class="cta-actions">
           <a class="btn btn-white btn-lg" href="tel:0328150157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span class="num">032-815-0157</span></a>
@@ -1031,7 +1034,7 @@ html{scroll-padding-top:122px}
         <h2>궁금한 점을 모았어요</h2>
       </div>
       <div class="faq">
-        <details><summary><span><span class="q">Q</span>요양원과 무엇이 다른가요?</span><svg aria-hidden="true"><use href="#i-chevron"/></svg></summary><div class="a"><p>요양원은 시설에 입소해 생활하시는 곳이고, 주간보호는 낮에만 센터에 오셨다가 저녁에 집으로 돌아가시는 곳이에요. 가족과 함께 지내시면서 낮 동안 돌봄과 재활을 받으세요.</p></div></details>
+        <details><summary><span><span class="q">Q</span>어떤 어르신께 잘 맞나요?</span><svg aria-hidden="true"><use href="#i-chevron"/></svg></summary><div class="a"><p>댁에서 지내시면서 낮 동안 돌봄과 재활 운동이 필요한 어르신께 잘 맞아요. 어르신 상태에 맞는지는 상담과 방문 때 함께 확인해 드려요.</p></div></details>
         <details><summary><span><span class="q">Q</span>한의사가 있으면 무엇이 다른가요?</span><svg aria-hidden="true"><use href="#i-chevron"/></svg></summary><div class="a"><p>대표 한의사가 어르신의 통증과 신체 기능을 직접 살피고 건강관리 방향을 정해요. 온열, 순환 스트레칭처럼 어르신이 편하게 받으실 수 있는 방식을 함께 써요.</p></div></details>
         <details><summary><span><span class="q">Q</span>등급이 없어도 다닐 수 있나요?</span><svg aria-hidden="true"><use href="#i-chevron"/></svg></summary><div class="a"><p>보험 적용을 받으려면 장기요양등급이 필요해요. 아직 없으시면 신청부터 방문 조사 준비까지 무료로 도와드려요.</p></div></details>
         <details><summary><span><span class="q">Q</span>차량은 어디까지 오나요?</span><svg aria-hidden="true"><use href="#i-chevron"/></svg></summary><div class="a"><p>인천 연수구를 중심으로 댁 앞까지 모시러 가고 모셔다 드려요. 사시는 곳이 운행 가능한지는 전화로 확인해 주세요.</p></div></details>
