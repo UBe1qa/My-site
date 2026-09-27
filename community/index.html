@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마당 · 누구나 가입하는 작은 커뮤니티</title>
+<meta name="description" content="글 올리고, 사진 붙이고, 댓글 달아요. 이메일과 닉네임이면 1분 만에 가입하는 작은 커뮤니티, 마당.">
+<meta property="og:title" content="마당 · 누구나 가입하는 작은 커뮤니티">
+<meta property="og:description" content="글 올리고, 사진 붙이고, 댓글 달아요. 이메일과 닉네임이면 1분 만에 가입하는 작은 커뮤니티, 마당.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://glrziojqelmlsyepfimr.supabase.co" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
+<script src="/assets/config.js" defer></script>
+<script src="/assets/app.js" defer></script>
+<script src="/assets/home.js" defer></script>
+</head>
+<body data-active="home">
+<main class="wrap">
+  <section class="hero" id="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">누구나 가입하는 작은 커뮤니티</p>
+      <h1>글 올리고, 사진 붙이고,<br><span class="hl">댓글 달아요</span></h1>
+      <p class="lead">이메일과 닉네임이면 1분 만에 가입 끝.<br>내가 쓴 글은 언제든 고치고 지울 수 있어요.</p>
+      <div class="cta">
+        <a class="btn primary" href="/login/?mode=signup&amp;next=%2Fwrite%2F">가입하고 첫 글 쓰기</a>
+        <a class="btn ghost" href="#latest">먼저 둘러볼게요</a>
+      </div>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>실명·전화번호 안 받아요</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>광고 없어요</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span id="check-hot">추천 3개면 인기글</span></li>
+      </ul>
+    </div>
+    <aside class="card hot" aria-labelledby="hot-h">
+      <div class="card-head"><h2 id="hot-h">인기글</h2><span class="hint" id="hot-hint">추천 3개 이상</span></div>
+      <ol class="hot-list" id="hot-list"></ol>
+    </aside>
+  </section>
+  <section class="section" id="latest" aria-labelledby="latest-h">
+    <div class="sec-head"><h2 id="latest-h">새 글</h2><a class="more" href="/board/?b=all">전체 글 보기 ›</a></div>
+    <ul class="post-list card" id="latest-list"></ul>
+  </section>
+</main>
+</body>
+</html>

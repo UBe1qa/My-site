@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>로그인 · 마당</title>
+<meta name="description" content="글 올리고, 사진 붙이고, 댓글 달아요. 이메일과 닉네임이면 1분 만에 가입하는 작은 커뮤니티, 마당.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="로그인 · 마당">
+<meta property="og:description" content="글 올리고, 사진 붙이고, 댓글 달아요. 이메일과 닉네임이면 1분 만에 가입하는 작은 커뮤니티, 마당.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://glrziojqelmlsyepfimr.supabase.co" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
+<script src="/assets/config.js" defer></script>
+<script src="/assets/app.js" defer></script>
+<script src="/assets/login.js" defer></script>
+</head>
+<body data-active="">
+<main>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-tabs" role="tablist" aria-label="로그인 또는 가입">
+        <button type="button" role="tab" id="tab-login" aria-controls="pane-login">로그인</button>
+        <button type="button" role="tab" id="tab-signup" aria-controls="pane-signup">가입하기</button>
+      </div>
+      <section id="pane-login" role="tabpanel" aria-labelledby="tab-login">
+        <h1>다시 만나서 반가워요</h1>
+        <p class="page-sub">가입할 때 쓴 이메일과 비밀번호를 넣어 주세요.</p>
+        <form class="form" id="f-login" novalidate>
+          <label class="field"><span>이메일</span><input type="email" name="email" autocomplete="email" inputmode="email"></label>
+          <label class="field"><span>비밀번호</span><input type="password" name="password" autocomplete="current-password"></label>
+          <div class="msg error" role="alert" hidden></div>
+          <button class="btn primary block" type="submit">로그인</button>
+        </form>
+        <p class="auth-foot">아직 회원이 아니에요? <a class="link" href="/login/?mode=signup" data-go="signup">1분 만에 가입하기</a></p>
+        <p class="auth-foot hint" style="margin-top:6px">비밀번호 찾기는 준비 중이에요.</p>
+      </section>
+      <section id="pane-signup" role="tabpanel" aria-labelledby="tab-signup" hidden>
+        <h1>1분이면 가입 끝</h1>
+        <p class="page-sub">실명·전화번호는 받지 않아요. 이메일과 닉네임만 있으면 돼요.</p>
+        <form class="form" id="f-signup" novalidate>
+          <label class="field"><span>닉네임</span><input name="nickname" maxlength="12" autocomplete="nickname"><span class="under"><span id="nick-msg">2~12자, 한글·영문·숫자·밑줄(_)</span></span></label>
+          <label class="field"><span>이메일</span><input type="email" name="email" autocomplete="email" inputmode="email"><span class="under"><span>로그인할 때만 써요. 다른 사람에게는 보이지 않아요.</span></span></label>
+          <label class="field"><span>비밀번호</span><input type="password" name="password" autocomplete="new-password"><span class="under"><span>8자 이상</span></span></label>
+          <label class="field"><span>비밀번호 확인</span><input type="password" name="password2" autocomplete="new-password"></label>
+          <label class="check"><input type="checkbox" name="agree"><span><a class="link" href="/rules/" target="_blank">이용 규칙</a>과 <a class="link" href="/rules/#privacy" target="_blank">개인정보 처리방침</a>을 읽었고 동의해요</span></label>
+          <div class="msg error" role="alert" hidden></div>
+          <button class="btn primary block" type="submit">가입하기</button>
+        </form>
+        <p class="auth-foot">이미 회원이에요? <a class="link" href="/login/" data-go="login">로그인</a></p>
+      </section>
+    </div>
+  </div>
+</main>
+</body>
+</html>
