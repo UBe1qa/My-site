@@ -1,0 +1,7 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'ai-video-notes' 하나
+// 이 폴더의 파일이 그대로 사이트가 됩니다 (빌드 없음). 빼고 올릴 파일은 .assetsignore 에 적어요.
+{
+  "name": "ai-video-notes",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": "." }
+}
