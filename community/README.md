@@ -1,6 +1,6 @@
 # 마당 · 작은 커뮤니티
 
-- 주소: (Vercel 연결 후 적어 둠)
+- 주소: https://madang-community.vercel.app (Vercel 프로젝트 madang-community, Root Directory = community)
 - 화면: 이 폴더의 HTML·CSS·JS (빌드 없음)
 - 글·댓글·회원 저장: Supabase 프로젝트 `community` (서울)
 

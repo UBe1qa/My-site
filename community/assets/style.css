@@ -150,10 +150,10 @@ fieldset{border:0;min-width:0}
 .g-meta{font-size:13px;color:var(--faint);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* 비어 있을 때·불러오는 중 */
-.empty{padding:56px 24px;text-align:center;color:var(--sub)}
+.empty{display:flex;flex-direction:column;align-items:center;padding:56px 24px;text-align:center;color:var(--sub)}
 .empty strong{display:block;color:var(--ink);font-size:19px;margin-bottom:6px}
 .empty .btn{margin-top:18px}
-.empty.small{padding:18px 14px 20px;font-size:15px;text-align:left;color:var(--sub)}
+.empty.small{align-items:flex-start;padding:18px 14px 20px;font-size:15px;text-align:left;color:var(--sub)}
 .skel{height:18px;border-radius:6px;background:linear-gradient(90deg,var(--soft) 0,#e9ecef 50%,var(--soft) 100%);background-size:200% 100%;animation:skel 1.2s infinite linear}
 @keyframes skel{to{background-position:-200% 0}}
 .skel-row{padding:18px 22px}
