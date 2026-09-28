@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR 만들기 — 주소를 넣으면 QR이 바로 나와요</title>
+<meta name="description" content="웹페이지 주소를 넣으면 QR 코드가 바로 만들어지고, 이미지(PNG·SVG)로 저장할 수 있어요. 가입·광고 없이, 만료되지 않는 QR.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f2f3ef">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QR 만들기">
+<meta property="og:description" content="주소를 넣으면 QR이 바로 나와요. 이미지로 저장까지.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="QR 만들기">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top wrap">
+  <a class="logo" href="./"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i></span>QR 만들기</a>
+  <a class="top-link" href="#app" data-app-only>휴대폰 홈 화면에 두기</a>
+</header>
+
+<main>
+  <!-- 1. 도구: 입력 → 미리보기 → 저장 -->
+  <section class="tool wrap" aria-labelledby="title">
+    <div class="tool-main">
+      <h1 id="title">주소를 넣으면,<br>QR이 바로 나와요</h1>
+      <p class="lede">마음에 들면 이미지로 저장하세요. 가입·광고 없이, 만료되지 않는 QR이에요.</p>
+
+      <div class="field">
+        <label for="url">웹페이지 주소</label>
+        <div class="field-row">
+          <input id="url" type="text" inputmode="url" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="예: naver.com" maxlength="3000">
+          <button type="button" class="field-btn" id="paste" hidden>붙여넣기</button>
+          <button type="button" class="field-btn" id="clear" hidden>지우기</button>
+        </div>
+      </div>
+      <p class="encoded" id="encoded" aria-live="polite"></p>
+      <div class="tracker" id="tracker" hidden>
+        <p id="tracker-text"></p>
+        <button type="button" class="tracker-btn" id="tracker-btn">꼬리표 떼기</button>
+      </div>
+    </div>
+
+    <aside class="preview" aria-label="미리보기">
+      <div class="preview-head">
+        <b>미리보기</b>
+        <span class="density" id="density"><i class="meter" aria-hidden="true"><em></em><em></em><em></em></i><span id="density-text"></span></span>
+      </div>
+      <div class="stage" id="stage">
+        <div class="proof is-empty" id="proof">
+          <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+          <img id="qr-img" alt="" width="320" height="320">
+          <p class="ghost-note" id="ghost-note">여기에 QR이 나와요</p>
+        </div>
+      </div>
+      <p class="proof-label" id="proof-label" hidden></p>
+      <div class="actions" id="actions">
+        <button type="button" class="btn primary" id="save" disabled>이미지로 저장</button>
+        <button type="button" class="btn ghost" id="alt" hidden disabled>복사</button>
+        <button type="button" class="btn ghost" id="svg" hidden disabled>SVG</button>
+      </div>
+      <p class="hint" id="hint"></p>
+      <a class="to-opts" href="#opts">색·모양·아래 글자 꾸미기 ↓</a>
+    </aside>
+
+    <form class="opts" id="opts" aria-labelledby="opts-title">
+        <h2 class="opts-title" id="opts-title">꾸미기 <span>그냥 둬도 돼요</span></h2>
+        <fieldset class="opt">
+          <legend>색</legend>
+          <div class="opt-body">
+            <div class="swatches" id="swatches"></div>
+            <p class="opt-note warn" id="color-warn" hidden>색이 연해서 휴대폰이 잘 못 읽을 수 있어요. 더 진한 색을 골라 주세요.</p>
+          </div>
+        </fieldset>
+        <fieldset class="opt">
+          <legend>배경</legend>
+          <div class="opt-body">
+            <div class="seg">
+              <label><input type="radio" name="bg" value="white" checked><span>흰색</span></label>
+              <label><input type="radio" name="bg" value="transparent"><span>투명</span></label>
+            </div>
+            <p class="opt-note" id="bg-note" hidden>투명 배경은 밝은 바탕 위에 올릴 때만 잘 읽혀요.</p>
+          </div>
+        </fieldset>
+        <fieldset class="opt">
+          <legend>모양</legend>
+          <div class="opt-body">
+            <div class="seg">
+              <label><input type="radio" name="style" value="square" checked><span>네모</span></label>
+              <label><input type="radio" name="style" value="round"><span>둥글게</span></label>
+            </div>
+            <p class="opt-note" id="style-note" hidden>둥근 모양도 잘 읽히지만, 가장 확실한 건 네모예요.</p>
+          </div>
+        </fieldset>
+        <div class="opt">
+          <label class="opt-label" for="caption">아래 글자</label>
+          <div class="opt-body">
+            <input class="text-in" id="caption" type="text" maxlength="30" autocomplete="off" placeholder="예: 메뉴 보기 (비워 두면 QR만)" enterkeyhint="done">
+          </div>
+        </div>
+        <fieldset class="opt">
+          <legend>저장 크기</legend>
+          <div class="opt-body">
+            <div class="seg seg-size" id="sizes"></div>
+          </div>
+        </fieldset>
+      </form>
+  </section>
+
+  <!-- 2. 최근에 저장한 QR (이 브라우저에만) -->
+  <section class="recent wrap" id="recent" hidden aria-labelledby="recent-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="recent-title">최근에 저장한 QR</h2>
+      <button type="button" class="link-btn" id="recent-clear">모두 지우기</button>
+    </div>
+    <p class="sec-sub">이 브라우저에만 남아요. 누르면 그때 설정 그대로 다시 열려요.</p>
+    <ul class="recent-list" id="recent-list"></ul>
+  </section>
+
+  <!-- 3. 알아 두면 좋은 3가지 -->
+  <section class="tips wrap" aria-labelledby="tips-title">
+    <h2 class="sec-title" id="tips-title">저장하기 전에 알아 두면 좋은 3가지</h2>
+    <div class="tip-grid">
+      <article class="tip">
+        <p class="tip-no">1</p>
+        <h3>이 QR은 만료되지 않아요</h3>
+        <div class="flow">
+          <p class="flow-cap">여기서 만든 QR</p>
+          <div class="flow-row">
+            <span class="node">휴대폰</span><i class="arrow" aria-hidden="true"></i><span class="node end">웹페이지</span>
+          </div>
+          <p class="flow-cap">중간 서버를 거치는 QR</p>
+          <div class="flow-row">
+            <span class="node">휴대폰</span><i class="arrow" aria-hidden="true"></i><span class="node mid">중간 서버</span><i class="arrow broken" aria-hidden="true"></i><span class="node end dim">웹페이지</span>
+          </div>
+        </div>
+        <p>주소를 그대로 담아서, 찍으면 바로 그 페이지가 열려요. 중간 서버를 거치는 QR은 그 서버가 멈추면 같이 멈춰요.</p>
+        <p class="tip-note">대신 주소가 바뀌면 QR도 새로 만들어야 해요.</p>
+      </article>
+
+      <article class="tip">
+        <p class="tip-no">2</p>
+        <h3>주소가 짧을수록 멀리서도 잘 읽혀요</h3>
+        <div class="compare">
+          <figure><img id="demo-short" alt="짧은 주소로 만든 QR" width="120" height="120"><figcaption><b id="demo-short-n"></b>짧은 주소</figcaption></figure>
+          <figure><img id="demo-long" alt="꼬리표가 붙은 긴 주소로 만든 QR" width="120" height="120"><figcaption><b id="demo-long-n"></b>꼬리표가 붙은 주소</figcaption></figure>
+        </div>
+        <p>칸이 적으면 한 칸이 커져서, 작게 인쇄하거나 멀리서 찍어도 읽혀요. 주소 끝의 <code>?utm_…</code> 같은 추적용 꼬리표는 떼도 같은 페이지가 열려요. 꼬리표가 보이면 위에 '떼기' 버튼이 나와요.</p>
+      </article>
+
+      <article class="tip">
+        <p class="tip-no">3</p>
+        <h3>QR 크기는 찍는 거리의 1/10</h3>
+        <table class="size-table">
+          <thead><tr><th scope="col">찍는 거리</th><th scope="col">QR 한 변</th><th scope="col">이럴 때</th></tr></thead>
+          <tbody>
+            <tr><td>20cm</td><td><b>2cm</b></td><td>명함·전단지</td></tr>
+            <tr><td>1m</td><td><b>10cm</b></td><td>벽 포스터</td></tr>
+            <tr><td>3m</td><td><b>30cm</b></td><td>입간판</td></tr>
+          </tbody>
+        </table>
+        <p>가장 작아도 2cm는 돼야 해요. 인쇄 전에 휴대폰으로 한 번 찍어 보세요.</p>
+        <p class="src">기준: <a href="https://www.qr-code-generator.com/blog/minimum-qr-code-size/" target="_blank" rel="noopener">QR Code Generator 크기 안내</a> · 2026-09-28 확인</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 4. 홈 화면에 두기 (웹앱) -->
+  <section class="app wrap" id="app" aria-labelledby="app-title" data-app-only>
+    <div class="app-card">
+      <div class="app-text">
+        <h2 class="sec-title" id="app-title">홈 화면에 두면 앱처럼 열려요</h2>
+        <ul class="app-points">
+          <li><b>인터넷이 없어도</b> 한 번 열어 둔 뒤에는 열리고, QR도 만들어져요</li>
+          <li><b>주소창 없이</b> 앱처럼 한 화면으로 떠요</li>
+          <li><b>안드로이드</b>에선 다른 앱의 '공유'에서 QR 만들기를 고르면 바로 QR이 나와요</li>
+        </ul>
+        <button type="button" class="btn primary install" id="install" hidden>앱으로 설치</button>
+      </div>
+      <div class="how">
+        <div class="how-item" data-os="ios">
+          <h3>아이폰 <span class="here">지금 쓰는 기기</span></h3>
+          <ol><li>Safari로 이 페이지 열기</li><li>아래쪽 공유 버튼 누르기</li><li>'홈 화면에 추가' 누르기</li></ol>
+        </div>
+        <div class="how-item" data-os="android">
+          <h3>안드로이드 <span class="here">지금 쓰는 기기</span></h3>
+          <ol><li>Chrome으로 이 페이지 열기</li><li>오른쪽 위 ⋮ 메뉴 누르기</li><li>'앱 설치' 또는 '홈 화면에 추가'</li></ol>
+        </div>
+        <div class="how-item" data-os="desktop">
+          <h3>컴퓨터 <span class="here">지금 쓰는 기기</span></h3>
+          <ol><li>Chrome이나 Edge로 이 페이지 열기</li><li>주소창 오른쪽 설치 아이콘 누르기</li><li>'설치' 누르기</li></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p><b>입력한 주소는 어디에도 보내지 않아요.</b> QR은 이 화면 안에서 바로 만들어져요.</p>
+  <p class="foot-sub">QR 표준(ISO/IEC 18004) 방식 · 만든 날 2026-09-28 · QR Code는 (주)덴소웨이브의 등록상표예요</p>
+</footer>
+
+<!-- 휴대폰에서 미리보기가 화면 밖으로 나가면 아래에 뜨는 저장 막대 -->
+<div class="dock" id="dock" hidden>
+  <img id="dock-img" alt="" width="44" height="44">
+  <span class="dock-label" id="dock-label"></span>
+  <button type="button" class="btn primary" id="dock-save">저장</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/settings.js"></script>
+<script src="assets/qr.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
