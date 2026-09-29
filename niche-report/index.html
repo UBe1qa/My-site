@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>니치 앱 리포트 · 돈 낼 사람부터 찾기</title>
+<meta name="description" content="니치 타겟 앱 아이디어 조사 요약본. 누가 돈을 내는지로 거른 후보, 피할 곳, 규제 선, 6주 검증 순서.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="니치 앱 리포트 · 좁은 앱은 돈 낼 사람부터">
+<meta property="og:description" content="니치 타겟 앱 아이디어 조사 요약본 (2026년 9월 기준): 먼저 검증할 후보 4개, 피할 곳, 규제 선, 6주 검증 순서.">
+<meta name="theme-color" content="#D5F36A">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<script>
+  // 움직임: '동작 줄이기'가 아닐 때만 켠다. 3.5초 안에 motion.js가 시작 못 하면 내용을 그냥 보여 준다.
+  (function () {
+    var d = document.documentElement;
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); d.classList.add('noanim'); };
+      window.__animTimer = setTimeout(window.__unanim, 3500);
+    } else { d.classList.add('noanim'); }
+  })();
+</script>
+</head>
+<body>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>니치 앱 리포트</a>
+    <nav class="toc" aria-label="목차" id="toc">
+      <a href="#numbers">현실</a>
+      <a href="#payer">성패 사례</a>
+      <a href="#filter">5가지 질문</a>
+      <a href="#ideas">후보</a>
+      <a href="#areas">분야별</a>
+      <a href="#avoid">피할 곳</a>
+      <a href="#rules">규제</a>
+      <a href="#money">지원사업</a>
+      <a href="#plan">6주 검증</a>
+      <a href="#end">결론</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+</div>
+
+<main>
+  <!-- 0. 첫 화면 -->
+  <header class="hero" id="top">
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <p class="kicker h-a">니치 타겟 앱 아이디어 조사 · 요약본 · <span class="nw">2026년 9월 기준</span></p>
+        <h1 class="h-title">좁은 앱은<br><em>돈 낼 사람</em>부터<br class="d-only"> 찾아요</h1>
+        <ol class="tldr" id="tldr" aria-label="세 줄 요약"></ol>
+        <div class="hero-cta h-a">
+          <a class="btn btn-ink" href="#ideas">1순위 후보 4개 보기</a>
+          <a class="btn btn-line" href="#plan">6주 검증 순서</a>
+        </div>
+      </div>
+      <figure class="hero-art h-art">
+        <img src="img/hero.webp" width="900" height="900" alt="파란 깔때기에 여러 색 공이 가득 들어 있고, 아래로는 금화 세 개만 떨어지는 점토 그림">
+        <figcaption><span class="ai-tag">AI 그림</span> <span class="cap">아이디어는 많아도, <span class="nw">돈이 되는 건</span> <span class="nw">걸러진 몇 개</span></span></figcaption>
+      </figure>
+    </div>
+    <p class="scroll-hint h-a" aria-hidden="true">아래로 내려 숫자부터 ↓</p>
+  </header>
+
+  <!-- 1. 숫자 -->
+  <section class="sec" id="numbers" aria-labelledby="t-numbers">
+    <div class="wrap">
+      <p class="sec-no">01 · 숫자로 보는 현실</p>
+      <h2 class="sec-title" id="t-numbers">앱은 60% 늘었는데, 다운로드는 2% 늘었어요</h2>
+      <p class="sec-sub">AI 덕에 만들기는 쉬워졌고, 팔기는 어려워졌어요. 병목은 개발이 아니라 <b>돈 낼 사람</b>이에요.</p>
+      <div class="flood" id="flood"></div>
+      <div class="stat-grid" id="stats"></div>
+      <div class="goal" id="goal"></div>
+    </div>
+  </section>
+
+  <!-- 2. 지불자 -->
+  <section class="sec sec-white" id="payer" aria-labelledby="t-payer">
+    <div class="wrap">
+      <p class="sec-no">02 · 사례</p>
+      <h2 class="sec-title" id="t-payer">살아남은 곳엔 돈 내는 쪽이 따로 있었어요</h2>
+      <p class="sec-sub">사용자 수나 기능이 아니라 <b>예산을 가진 지불자</b>가 있느냐가 갈랐어요.</p>
+      <div class="cases">
+        <div class="case-col win">
+          <h3 class="case-h"><span class="case-ic" aria-hidden="true">✓</span>살아남은 곳 <small>돈 내는 쪽</small></h3>
+          <ul id="win"></ul>
+        </div>
+        <div class="case-col lose">
+          <h3 class="case-h"><span class="case-ic" aria-hidden="true">✕</span>무너진 곳 <small>무너진 이유</small></h3>
+          <ul id="lose"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 거름망 -->
+  <section class="sec sec-cobalt" id="filter" aria-labelledby="t-filter">
+    <div class="wrap">
+      <p class="sec-no">03 · 거르는 법</p>
+      <h2 class="sec-title" id="t-filter">좁은 타겟은 다섯 번 걸러요</h2>
+      <p class="sec-sub">'희귀할수록 좋다'는 틀렸어요. 좁을수록 경쟁도 줄지만 <b>돈 낼 사람도 같이 줄어요.</b> 내 아이디어를 넣어 직접 걸러 보세요.</p>
+      <div class="sieve">
+        <div class="sieve-art">
+          <svg id="funnel" viewBox="0 0 580 560" role="img" aria-label="공 36개가 다섯 겹의 거름망을 지나며 24, 14, 9, 5개로 줄고, 마지막에 3개만 금화가 되는 그림"></svg>
+          <button class="replay" type="button" id="replay">다시 거르기 ↻</button>
+        </div>
+        <div class="sieve-q">
+          <ol class="checks" id="checks"></ol>
+          <div class="verdict" id="verdict" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 후보 -->
+  <section class="sec" id="ideas" aria-labelledby="t-ideas">
+    <div class="wrap">
+      <p class="sec-no">04 · 후보</p>
+      <h2 class="sec-title" id="t-ideas">먼저 검증할 곳은 넷: <span class="nw">반려묘·</span><span class="nw">난임·</span><span class="nw">ADHD·</span><span class="nw">영세 사업자</span></h2>
+      <p class="sec-sub">1순위는 기관 영업 없이 <b><span class="nw">앱스토어·</span><span class="nw">커뮤니티·</span>검색으로 바로 닿는</b> 곳, 2순위는 근거가 더 강해도 <b><span class="nw">치료사·</span><span class="nw">의원·</span>센터를 설득해야</b> 하는 곳이에요.</p>
+      <div class="lanes" aria-hidden="true">
+        <div class="lane l1"><b>1순위</b> 내가 바로 닿는다 <span>사용자 본인이 매일 아프고, 한국어 경쟁자가 비었거나 초기</span></div>
+        <div class="lane l2"><b>2순위</b> 기관을 설득해야 한다 <span>현장 접근권이 있으면 순위가 뒤집혀요</span></div>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="후보 거르기"></div>
+      <div class="idea-grid" id="ideaGrid"></div>
+      <p class="empty" id="ideaEmpty" hidden>이 조합에 맞는 후보가 없어요. 다른 칸을 눌러 보세요.</p>
+      <aside class="insider" id="insider"></aside>
+      <div class="thirds" id="thirds"></div>
+    </div>
+  </section>
+
+  <!-- 5. 분야별 -->
+  <section class="sec sec-white" id="areas" aria-labelledby="t-areas">
+    <div class="wrap">
+      <p class="sec-no">05 · 분야별 한 장</p>
+      <h2 class="sec-title" id="t-areas">분야마다 돈이 흐르는 길이 달라요</h2>
+      <p class="sec-sub">다섯 분야를 한 장씩. 탭을 누르면 그 분야의 핵심 숫자와 할 일이 나와요.</p>
+      <div class="tabs" role="tablist" aria-label="분야" id="areaTabs"></div>
+      <div id="areaPanels"></div>
+    </div>
+  </section>
+
+  <!-- 6. 피할 곳 -->
+  <section class="sec" id="avoid" aria-labelledby="t-avoid">
+    <div class="wrap">
+      <p class="sec-no">06 · 피할 곳</p>
+      <h2 class="sec-title" id="t-avoid">이 아홉 곳은 피해요</h2>
+      <p class="sec-sub">시장이 너무 작거나, 이미 붐비거나, 자본이 많이 들거나, 불법이에요.</p>
+      <ul class="avoid-grid" id="avoidList"></ul>
+    </div>
+  </section>
+
+  <!-- 7. 규제 -->
+  <section class="sec sec-white" id="rules" aria-labelledby="t-rules">
+    <div class="wrap">
+      <p class="sec-no">07 · 규제</p>
+      <h2 class="sec-title" id="t-rules">선은 기능보다 '말'과 '돈 받는 방식'에 그어져요</h2>
+      <p class="sec-sub">같은 기능도 어떻게 말하고, 누구에게 어떻게 돈을 받느냐로 갈려요. 그래서 규제 설계는 코드보다 <b>랜딩페이지 문구</b>에서 시작해요.</p>
+      <div class="lights" id="lights"></div>
+      <h3 class="sub-h">같은 일, 다른 결과</h3>
+      <div class="pairs" id="pairs"></div>
+      <div class="rule-bottom">
+        <div class="words">
+          <h3 class="sub-h">랜딩페이지에도 쓰지 않을 말</h3>
+          <p class="words-row"><s>치료</s><s>진단</s><s>재활</s><s>발병위험도</s></p>
+          <p class="muted">가짜 문 랜딩페이지도 공개 광고예요. 제품이 없어도 문제가 될 수 있어요.</p>
+        </div>
+        <div class="gates">
+          <h3 class="sub-h">출시 전 보안 관문 4개</h3>
+          <ol id="gates"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 지원사업 -->
+  <section class="sec" id="money" aria-labelledby="t-money">
+    <div class="wrap">
+      <p class="sec-no">08 · 지원사업</p>
+      <h2 class="sec-title" id="t-money">큰돈은 상반기에 마감, 지금은 <span class="nw">연말까지 무료 컨설팅</span></h2>
+      <p class="sec-sub">2026년 창업지원 예산은 약 3.4조 원으로 역대 최대지만, 현금이 큰 사업은 상반기에 끝났어요.</p>
+      <div class="timeline" id="timeline"></div>
+      <div class="warn" id="grantWarn"></div>
+      <ul class="more" id="grantMore"></ul>
+    </div>
+  </section>
+
+  <!-- 9. 6주 검증 -->
+  <section class="sec sec-white" id="plan" aria-labelledby="t-plan">
+    <div class="wrap">
+      <p class="sec-no">09 · 다음 할 일</p>
+      <h2 class="sec-title" id="t-plan">코드 전에 6주: 돈 낼 사람이 있는지부터</h2>
+      <p class="sec-sub">관심 표시가 아니라 <b>지불 의사</b>를 재요. 좁은 니치는 검색 도구가 수요를 0으로 보여 주기도 해서, 인터뷰와 커뮤니티가 주된 신호예요.</p>
+      <div class="steps" id="steps">
+        <div class="steps-rail" aria-hidden="true"><i id="stepsFill"></i></div>
+      </div>
+      <h3 class="sub-h">이렇게 검증한 사례</h3>
+      <ul class="proofs" id="proofs"></ul>
+      <div class="trial" id="trial"></div>
+    </div>
+  </section>
+
+  <!-- 10. 확인 필요 -->
+  <section class="sec" id="unknown" aria-labelledby="t-unknown">
+    <div class="wrap">
+      <p class="sec-no">10 · 확인 필요</p>
+      <h2 class="sec-title" id="t-unknown">조사에서 아직 못 메운 빈칸 8개</h2>
+      <p class="sec-sub">1주 차 경쟁 조사와 법률 확인이 이 빈칸을 메우는 일이기도 해요.</p>
+      <ul class="unknowns" id="unknowns"></ul>
+    </div>
+  </section>
+
+  <!-- 11. 결론 -->
+  <section class="sec sec-lime" id="end" aria-labelledby="t-end">
+    <div class="wrap">
+      <p class="sec-no">11 · 결론</p>
+      <h2 class="sec-title" id="t-end">인터뷰 10명, 랜딩페이지 하나, 선결제 3건이 먼저</h2>
+      <div class="ending" id="ending"></div>
+      <a class="btn btn-ink" href="#top">처음으로 ↑</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>원문: Claude 조사 보고서 「지불자를 찾으면 좁은 타겟도 사업이 된다」를 읽기 쉽게 요약했어요. 숫자는 <b>2026년 9월</b>에 확인한 것이고, 각 카드의 '출처'는 원문이 인용한 곳이에요.</p>
+    <p>순위·가격은 조사 근거를 종합한 판단이에요. 법률·의료 자문이 아니에요. <span class="ai-tag">AI 그림</span> 표시가 있는 그림은 AI로 만들었어요.</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="motion.js" defer></script>
+</body>
+</html>
