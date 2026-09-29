@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>결제를 멈췄어요 | 붕어빵 결제 연습소</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#EFE6D6">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+<script type="module" src="../fail.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../"><span class="brand-fish" data-fish="redbean"></span>붕어빵 결제 연습소</a>
+    <span class="stamp stamp--sm">테스트 결제 · 실제 돈 0원</span>
+  </div>
+</header>
+
+<main id="main" class="result wrap">
+  <article class="receipt result-receipt result-receipt--narrow" aria-labelledby="f-title">
+    <p class="r-head"><span>붕어빵 결제 연습소</span><span class="mono">결제 멈춤</span></p>
+    <h1 id="f-title" class="result-title">결제를 멈췄어요</h1>
+    <p class="big-stamp" data-tone="bad">돈 안 나감</p>
+    <p class="fail-why" id="f-why">결제창에서 결제가 끝나지 않았어요. 승인 전에 멈췄으니 돈은 나가지 않았어요.</p>
+    <div class="fail-kv" id="f-kv"></div>
+    <div class="result-acts">
+      <a class="btn btn-ink" href="../#pay">다시 결제해 보기</a>
+    </div>
+    <p class="r-foot">결제창에서 문제가 생기면 토스가 성공 주소 대신 이 페이지로 보내면서 <b>이유 코드</b>를 주소 뒤에 붙여 줘요.</p>
+  </article>
+</main>
+</body>
+</html>

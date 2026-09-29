@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>결제 확인 | 붕어빵 결제 연습소</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#EFE6D6">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+<script type="module" src="../result.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../"><span class="brand-fish" data-fish="redbean"></span>붕어빵 결제 연습소</a>
+    <span class="stamp stamp--sm">테스트 결제 · 실제 돈 0원</span>
+  </div>
+</header>
+
+<main id="main" class="result wrap">
+  <div class="result-grid">
+    <article class="receipt result-receipt" aria-labelledby="r-title">
+      <p class="r-head"><span>붕어빵 결제 연습소</span><span class="mono" id="r-when"></span></p>
+      <h1 id="r-title" class="result-title">결제를 확인하는 중…</h1>
+      <p class="big-stamp" id="r-stamp" hidden></p>
+
+      <ol class="r-steps r-steps--live" id="steps">
+        <li data-step="1"><span class="box" aria-hidden="true"></span><b>결제창에서 돌아왔어요</b><div class="step-body"></div></li>
+        <li data-step="2"><span class="box" aria-hidden="true"></span><b>서버가 금액을 다시 계산해요</b><div class="step-body"></div></li>
+        <li data-step="3"><span class="box" aria-hidden="true"></span><b>토스에 승인을 요청해요</b><div class="step-body"></div></li>
+        <li data-step="4"><span class="box" aria-hidden="true"></span><b>완료 · 환불</b><div class="step-body"></div></li>
+      </ol>
+
+      <div class="result-acts" id="acts"></div>
+    </article>
+
+    <aside class="result-side">
+      <h2 class="side-title">방금 무슨 일이 있었나요?</h2>
+      <ol class="side-list">
+        <li>토스 결제창에서 결제를 마치면, 토스가 이 페이지 주소 뒤에 <b>결제 키·주문번호·금액</b>을 붙여서 보내 줘요. 아직 돈이 확정된 건 아니에요.</li>
+        <li>이 페이지가 그 세 값을 <b>우리 서버</b>에 넘기면, 서버가 주문번호 속 주문 내용으로 금액을 다시 계산해서 맞는지 봐요.</li>
+        <li>맞으면 서버가 <b>시크릿 키</b>로 토스에 승인을 요청하고, 이때 결제가 확정돼요. 10분 안에 승인하지 않으면 결제는 저절로 없던 일이 돼요.</li>
+      </ol>
+      <details class="raw">
+        <summary>서버가 준 답 원본 보기</summary>
+        <pre id="raw" class="mono"></pre>
+      </details>
+    </aside>
+  </div>
+</main>
+</body>
+</html>

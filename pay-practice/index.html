@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>붕어빵 결제 연습소 | 테스트 결제로 결제·승인·환불 해 보기</title>
+<meta name="description" content="가상의 붕어빵 가게에서 토스페이먼츠 테스트 결제로 결제창 → 서버 승인 → 환불까지 직접 해 보는 연습 사이트. 실제 돈은 나가지 않아요.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#EFE6D6">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<!-- 토스페이먼츠 결제 SDK v2 (결제 위젯을 그려 주고 결제창을 띄워요) -->
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#menu">붕어빵 고르기로 바로가기</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="./"><span class="brand-fish" data-fish="redbean"></span>붕어빵 결제 연습소</a>
+    <span class="stamp stamp--sm">테스트 결제 · 실제 돈 0원</span>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap">
+    <div class="hero-text">
+      <p class="kicker">토스페이먼츠 테스트 결제 연습</p>
+      <h1>붕어빵 사면서<br>결제 연습하기</h1>
+      <p class="lead">토스 결제창으로 결제하고, 서버가 승인하고, 환불까지 해 봐요. 테스트 키라서 <strong>카드 정보를 넣어도 돈은 나가지 않아요.</strong></p>
+      <div class="hero-cta">
+        <a class="btn btn-ink" href="#menu">붕어빵 고르기 <span aria-hidden="true">↓</span></a>
+        <span class="fine">가상 가게 · 가상 가격</span>
+      </div>
+    </div>
+
+    <div class="receipt hero-receipt">
+      <p class="r-head"><span>결제는 이렇게 흘러가요</span><span class="mono">4 STEPS</span></p>
+      <ol class="r-steps">
+        <li><a href="#menu"><span class="box" aria-hidden="true"></span><b>담기</b><span>이 페이지에서 붕어빵 고르기</span></a></li>
+        <li><a href="#pay"><span class="box" aria-hidden="true"></span><b>결제창</b><span>토스가 띄우는 창에서 결제</span></a></li>
+        <li><a href="#server"><span class="box" aria-hidden="true"></span><b>확인·승인</b><span>우리 서버가 금액을 다시 계산하고, 맞으면 토스에 승인 요청</span></a></li>
+        <li><a href="#mine"><span class="box" aria-hidden="true"></span><b>완료·환불</b><span>영수증 보기, 원하면 환불</span></a></li>
+      </ol>
+      <p class="r-foot">결제를 마치면 결제 확인 영수증에 칸이 하나씩 채워져요</p>
+    </div>
+  </section>
+
+  <section id="menu" class="sec wrap" aria-labelledby="h-menu">
+    <h2 id="h-menu"><span class="num">1</span><span class="h2-t">붕어빵을 담으면 주문서에 <span class="nw">바로 찍혀요</span></span></h2>
+    <ul class="menu" id="menu-list" aria-label="메뉴"></ul>
+    <noscript><p class="notice">이 연습 가게는 자바스크립트가 켜져 있어야 움직여요.</p></noscript>
+  </section>
+
+  <section id="pay" class="sec wrap" aria-labelledby="h-pay">
+    <h2 id="h-pay"><span class="num">2</span><span class="h2-t">결제창은 토스가 띄우고, <span class="nw">돈은 안 나가요</span></span></h2>
+    <p class="sec-lead">오른쪽(휴대폰은 아래) 결제수단 칸은 토스페이먼츠가 그려 주는 <b>결제 위젯</b>이에요. 수단을 고르고 결제하기를 누르면 토스 결제창이 떠요.</p>
+
+    <div class="pay-grid">
+      <div class="receipt order" aria-live="polite">
+        <p class="r-head"><span>주문서</span><span class="mono" id="order-count">0개</span></p>
+        <ul class="order-lines" id="order-lines"></ul>
+        <p class="order-total"><span>합계</span><span class="mono" id="order-total">0원</span></p>
+        <p class="r-foot">주문번호는 결제하기를 누를 때 만들어요. 주문 내용이 번호 안에 들어가요 <span class="nw">(예: <code>BB-p2s1-…</code>)</span></p>
+      </div>
+
+      <div class="widget-card">
+        <div id="payment-method"></div>
+        <div id="agreement"></div>
+        <p class="widget-wait" id="widget-wait">결제 위젯을 불러오는 중…</p>
+        <button type="button" class="btn btn-gold btn-block" id="pay-btn" disabled>결제하기</button>
+        <p class="pay-msg" id="pay-msg" role="status"></p>
+        <details class="how" open>
+          <summary>결제창에서 뭘 넣어야 하나요?</summary>
+          <ul>
+            <li>테스트용 카드 번호는 따로 없어요. 내 카드로 카드사 인증(앱카드 등)까지 해도 <b>테스트 환경이라 돈은 빠져나가지 않아요</b> — 토스페이먼츠 공식 안내예요.</li>
+            <li>토스페이·카카오페이 같은 간편결제도 같은 방식이에요. 일부 간편결제의 포인트·계좌 결제는 테스트에서 잘 안 될 수 있어요.</li>
+            <li>결제창을 닫으면 결제는 멈추고, 이 칸 위에 이유가 떠요.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="server" class="sec wrap" aria-labelledby="h-server">
+    <h2 id="h-server"><span class="num">3</span><span class="h2-t">금액은 우리 서버가 <span class="nw">다시 계산해서</span> 확인해요</span></h2>
+
+    <ol class="flow" aria-label="결제 승인 흐름">
+      <li class="flow-node"><b>내 화면</b><span>브라우저</span></li>
+      <li class="flow-edge"><span>결제 키·주문번호·금액을 보내요</span></li>
+      <li class="flow-node flow-node--server"><b>우리 서버</b><span>Cloudflare Worker</span><em>시크릿 키는 여기에만</em></li>
+      <li class="flow-edge"><span>금액이 맞으면 승인을 요청해요</span></li>
+      <li class="flow-node"><b>토스페이먼츠</b><span>결제 회사 · 여기서 결제 확정</span></li>
+    </ol>
+
+    <ul class="why">
+      <li><b>화면의 금액은 누구나 바꿀 수 있어요.</b> 주소창이나 개발자 도구로 4,000원을 100원으로 고쳐 보낼 수 있어요.</li>
+      <li><b>그래서 서버가 다시 계산해요.</b> 주문번호 <code>BB-p2s1-…</code> 속 주문 내용(팥 2, 슈크림 1)과 메뉴 가격으로 금액을 구해 비교해요.</li>
+      <li><b>승인·환불은 서버만 할 수 있어요.</b> 시크릿 키가 서버에만 있어서, 화면만으로는 결제를 확정하거나 환불할 수 없어요.</li>
+    </ul>
+
+    <div class="try">
+      <p class="try-head">직접 시험해 보기 <span class="fine">지금 주문서 <b id="try-total">0원</b> 기준 · 가짜 결제 키라 돈과 상관없어요</span></p>
+      <div class="try-btns">
+        <button type="button" class="btn btn-line" id="try-hack">금액을 100원으로 바꿔 보내 보기</button>
+        <button type="button" class="btn btn-line" id="try-fake">금액은 그대로, 가짜 결제 키로 보내 보기</button>
+      </div>
+      <div class="try-out" id="try-out" aria-live="polite" hidden></div>
+    </div>
+  </section>
+
+  <section id="mine" class="sec wrap" aria-labelledby="h-mine">
+    <h2 id="h-mine"><span class="num">4</span><span class="h2-t">결제한 건 여기서 환불해요</span></h2>
+    <p class="sec-lead">이 브라우저에서 한 테스트 결제만 보여요. 상태는 열 때마다 토스에 다시 물어봐요.</p>
+    <ul class="mine" id="mine-list"></ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p>가상 가게 · 가상 가격이에요. 결제는 토스페이먼츠 <b>문서용 테스트 키</b>로만 돼서 실제로 돈이 움직이지 않아요.</p>
+    <p class="fine">2026-09-29 확인 · 출처: <a href="https://docs.tosspayments.com/guides/v2/payment-widget/integration" rel="noopener">토스페이먼츠 결제위젯 연동 문서</a>, <a href="https://github.com/tosspayments/tosspayments-sample" rel="noopener">공식 샘플 코드</a></p>
+  </div>
+</footer>
+</body>
+</html>

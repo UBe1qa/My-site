@@ -1,0 +1,9 @@
+# 사이트에 올리지 않을 파일
+wrangler.jsonc
+.assetsignore
+worker.js
+.wrangler
+.dev.vars
+node_modules
+.DS_Store
+README.md
