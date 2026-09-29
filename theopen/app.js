@@ -1,6 +1,7 @@
-/* 더오픈 THE OPEN — 페이지 동작
-   1) 스크롤하면 머리 막대 바탕 바꾸기  2) 동선 도면 점선 그리기  3) 휴대폰 아래 막대 보이기/숨기기
-   4) '영상 상담하기' → 상담 종류 미리 고르기  5) 상담 신청서 → 문자·메일 앱으로 옮기기 (사이트에 저장하지 않음) */
+/* 더오픈 THE OPEN — 페이지 동작 (움직임은 motion.js)
+   1) 스크롤하면 머리 막대 아래 선  3) 휴대폰 아래 막대 보이기/숨기기
+   4) '영상 상담하기' → 상담 종류 미리 고르기
+   5) 상담 신청서 → 휴대폰: 문자·메일 앱으로 옮기기 / 컴퓨터: 적은 내용 복사(+메일 앱) — 사이트에 저장하지 않음 */
 (function () {
   'use strict';
   var PHONE = '01026110157';
@@ -9,24 +10,12 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var hasIO = 'IntersectionObserver' in window;
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* 1) 머리 막대 */
   var header = $('.site-header');
   function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8); }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
-
-  /* 2) 동선 도면: 화면에 들어오면 점선이 입구부터 그려진다 */
-  $$('[data-plan]').forEach(function (plan) {
-    if (reduce || !hasIO) { plan.classList.add('is-in'); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { plan.classList.add('is-in'); io.disconnect(); }
-      });
-    }, { threshold: 0.3 });
-    io.observe(plan);
-  });
 
   /* 3) 휴대폰 아래 막대: 첫 화면을 지나면 보이고, 상담 칸·바닥글에선 숨긴다 */
   var bar = $('[data-mbar]');
@@ -64,12 +53,15 @@
   var touch = window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches;
   var lastText = '';
 
-  // 컴퓨터에서는 메일 버튼을 앞에(진하게), 휴대폰에서는 문자 버튼을 앞에
+  // 휴대폰: [문자로 보내기] [이메일로 보내기]
+  // 컴퓨터: [적은 내용 복사하기] [메일 앱으로 보내기] — 컴퓨터엔 메일 프로그램이 설정 안 된 경우가 많고
+  //         (네이버 메일을 웹으로 쓰면 mailto가 설정 창만 띄움), 문자는 보낼 수 없어서 복사를 앞에 둔다
   if (!touch) {
-    var smsBtn = $('[data-via="sms"]', form), mailBtn = $('[data-via="mail"]', form);
-    smsBtn.classList.replace('btn--ink', 'btn--line');
-    mailBtn.classList.replace('btn--line', 'btn--ink');
-    mailBtn.parentNode.insertBefore(mailBtn, smsBtn);
+    $('[data-via="sms"]', form).hidden = true;
+    $('[data-via="copy"]', form).hidden = false;
+    $('[data-mail-label]', form).textContent = '메일 앱으로 보내기';
+    var note = $('[data-note]', form);
+    if (note) note.textContent = '적으신 내용은 이 사이트에 저장되지 않습니다. 복사해서 쓰시는 메일(네이버 메일 등)로 ' + MAIL + '에 보내 주세요.';
   }
 
   function compose() {
@@ -119,10 +111,15 @@
     }
   };
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var via = (e.submitter && e.submitter.value) || (touch ? 'sms' : 'mail');
+  function send(via) {
     lastText = compose();
+    if (via === 'copy') {
+      copy(lastText, function (ok) {
+        say(ok ? ['복사했습니다. 쓰시는 메일에서 받는 사람에 ' + MAIL + '을 넣고, 붙여 넣어 보내 주세요.']
+               : ['복사가 되지 않았습니다. 적으신 내용을 ' + MAIL + '으로 직접 보내 주시거나 010-2611-0157로 전화 주세요.']);
+      });
+      return;
+    }
     var url;
     if (via === 'sms') {
       url = 'sms:' + PHONE + (isApple ? '&' : '?') + 'body=' + encodeURIComponent(lastText);
@@ -137,5 +134,11 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  // 버튼은 모두 type="button" (자바스크립트가 없을 때 적은 내용이 주소창에 실려 가지 않게)
+  $$('[data-via]', form).forEach(function (b) {
+    b.addEventListener('click', function () { send(b.getAttribute('data-via')); });
   });
+  form.addEventListener('submit', function (e) { e.preventDefault(); send(touch ? 'sms' : 'copy'); });
 })();
