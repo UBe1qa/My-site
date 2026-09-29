@@ -168,7 +168,7 @@
         .fromTo(furn, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.012, ease: 'none' }, 0.95)
         .fromTo(draw, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, ease: 'power1.inOut' }, 1.35);
       // 번호는 점선이 그 자리에 닿을 때 (점선 길이 비율로 계산한 시각)
-      [1.85, 2.07, 2.34, 3.4].forEach(function (t, i) {
+      [1.94, 2.18, 2.53, 3.4].forEach(function (t, i) {
         drawTl.fromTo(nodes[i], { autoAlpha: 0, scale: 0.4, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'power2.out' }, t);
       });
       intro
