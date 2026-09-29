@@ -590,10 +590,10 @@ html{scroll-padding-top:122px}
 .meal-body{padding:1.1rem 1.25rem 1.35rem}
 .meal-tag{display:inline-block;padding:.22rem .65rem;border-radius:8px;background:var(--primary-50);color:var(--primary);font-size:.86rem;font-weight:700}
 .meal-tag.d{background:var(--gray-100);color:var(--gray-700)}
+.meal-tag.s{background:var(--green-50);color:var(--green-600)}
+@media (min-width:900px){.meal-grid.n3{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .meal-menu{margin-top:.6rem;font-size:1.04rem;font-weight:600;line-height:1.6;color:var(--gray-900)}
 .meal-menu.none{font-weight:500;color:var(--gray-500)}
-.snack-line{display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding:.9rem 1.1rem;border-radius:14px;background:var(--primary-50);font-size:.97rem;color:var(--gray-800)}
-.snack-line svg{width:1.1rem;height:1.1rem;color:var(--primary)}
 .thumbs-title{margin-top:3rem;font-size:1.2rem;font-weight:800;letter-spacing:-.03em}
 .thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-top:1rem}
 @media (min-width:700px){.thumbs{grid-template-columns:repeat(5,minmax(0,1fr));gap:.7rem}}
@@ -1061,14 +1061,13 @@ html{scroll-padding-top:122px}
     <div class="container menu-wrap">
       <div class="day-bar">
         <button class="icon-btn" type="button" id="prevDay" aria-label="이전 날짜"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
-        <h2 id="dayTitle" aria-live="polite">9월 23일 (수)</h2>
+        <h2 id="dayTitle" aria-live="polite">오늘의 식단</h2>
         <button class="icon-btn" type="button" id="nextDay" aria-label="다음 날짜"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
       </div>
       <div class="meal-grid" id="meals"></div>
-      <p class="snack-line" id="snack" hidden></p>
       <h3 class="thumbs-title">지난 식단</h3>
       <div class="thumbs" id="thumbs"></div>
-      <p class="small-note">8월 26일부터 9월 23일까지의 기록이에요. 새 식단은 <a href="https://blog.naver.com/thehanbang0157" target="_blank" rel="noopener">블로그</a>에 매일 올라와요.</p>
+      <p class="small-note"><span id="mealRange"></span>센터 <a href="https://blog.naver.com/thehanbang0157" target="_blank" rel="noopener">블로그</a>에 새 식단이 올라오면 여기에도 자동으로 올라와요.</p>
     </div>
   </section>
 </div>
@@ -1278,10 +1277,11 @@ html{scroll-padding-top:122px}
   <a class="btn btn-secondary" href="sms:01026110157"><svg class="ico" aria-hidden="true"><use href="#i-msg"/></svg>문자 문의</a>
 </nav>
 
+<script src="meals.js"></script>
 <script>
 (function () {
   var root = document.documentElement;
-  var MEALS = [{"d":"9.23","w":"수","log":"224421033433","L":{"m":["코다리 무 조림","무생채","호박전","배추김치","콩나물국"],"img":"img/meals/0923-lunch.jpg","wh":[760,623]},"D":{"m":["배추김치","도토리묵무침","계란말이","크로켓","어묵국"],"img":"img/meals/0923-dinner.jpg","wh":[760,538]}},{"d":"9.22","w":"화","log":"224419909404","L":{"m":["낙지볶음","궁채나물","샐러드","배추김치","배추 된장국"],"img":"img/meals/0922-lunch.jpg","wh":[760,546]},"D":{"m":["배추김치","마늘쫑무침","오이무침","코다리조림","제육볶음"],"img":"img/meals/0922-dinner.jpg","wh":[760,537]}},{"d":"9.21","w":"월","log":"224418828721","L":{"m":["제육볶음","미역줄기볶음","마늘종 무침","배추김치","어묵국"],"img":"img/meals/0921-lunch.jpg","wh":[760,531]},"D":{"m":["배추김치","미역초무침","계란찜","삼치구이","감자국"],"img":"img/meals/0921-dinner.jpg","wh":[760,532]}},{"d":"9.19","w":"토","log":"224417010661","L":{"m":["크로켓","호박나물볶음","어묵볶음","배추김치","잔치국수"],"img":"img/meals/0919-lunch.jpg","wh":[760,548]},"D":{"m":["배추김치","멸치볶음","깻잎무침","도토리묵","된장국"],"img":"img/meals/0919-dinner.jpg","wh":[760,570]}},{"d":"9.18","w":"금","log":"224416215521","L":{"m":["닭볶음탕","오이무침","미역줄기볶음","배추김치","홍합무국"],"img":"img/meals/0918-lunch.jpg","wh":[760,563]},"S":{"t":"야외 나들이 과일 도시락","img":"img/meals/0918-snack.jpg","wh":[608,760]}},{"d":"9.16","w":"수","log":"224413829677","L":{"m":["카레","샐러드","열무김치","새우튀김","미소 장국"],"img":"img/meals/0916-lunch.jpg","wh":[760,533]},"D":{"m":["배추김치","멸치볶음","호박볶음","도토리묵무침","콩나물국"],"img":"img/meals/0916-dinner.jpg","wh":[760,565]}},{"d":"9.15","w":"화","log":"224412607007","L":{"m":["떡갈비","청포묵무침","시래기 무침","배추김치","수제비"],"img":"img/meals/0915-lunch.jpg","wh":[760,581]},"D":{"m":["배추김치","우엉조림","무 조림","분홍소시지 계란부침","아욱 된장국"],"img":"img/meals/0915-dinner.jpg","wh":[760,428]},"S":{"t":"토마토와 사과","img":"img/meals/0915-snack.jpg","wh":[760,385]}},{"d":"9.14","w":"월","log":"224411368198","L":{"m":["코다리 무 조림","김자반","오이무침","배추김치","계란 국"],"img":"img/meals/0914-lunch.jpg","wh":[760,507]},"D":{"m":["배추김치","청포묵무침","진미채무침","호박전","된장국"],"img":"img/meals/0914-dinner.jpg","wh":[760,570]}},{"d":"9.12","w":"토","log":"224409376393","L":{"m":["제육볶음","멸치볶음","버섯볶음","배추김치","소고기뭇국"],"img":"img/meals/0912-lunch.jpg","wh":[760,505]},"S":{"t":"불가리스, 모나카, 바나나","img":"img/meals/0912-snack.jpg","wh":[456,760]}},{"d":"9.11","w":"금","log":"224408386336","L":{"m":["찐만두","두부조림","단무지무침","배추김치","양념간장","아욱 된장국"],"img":"img/meals/0911-lunch.jpg","wh":[760,520]},"D":{"m":["배추김치","어묵볶음","우엉조림","제육볶음","콩나물국"],"img":"img/meals/0911-dinner.jpg","wh":[760,570]}},{"d":"9.09","w":"수","log":"224406127281","L":{"m":["계란찜","마늘종 무침","단배추 나물 무침","배추김치","만둣국"],"img":"img/meals/0909-lunch.jpg","wh":[760,574]},"D":{"m":["배추김치","미역줄기볶음","진미채 부침","도토리묵무침","순두부 국"],"img":"img/meals/0909-dinner.jpg","wh":[760,518]}},{"d":"9.08","w":"화","log":"224404952112","L":{"m":["고등어구이","청포묵 김 무침","고사리 무침","배추김치","부대찌개"],"img":"img/meals/0908-lunch.jpg","wh":[760,522]},"D":{"m":["배추김치","숙주나물무침","멸치볶음","계란말이","만두국"],"img":"img/meals/0908-dinner.jpg","wh":[760,525]}},{"d":"9.07","w":"월","log":"224403781969","L":{"m":["제육볶음","오이무침","숙주나물무침","배추김치","콩나물국"],"img":"img/meals/0907-lunch.jpg","wh":[760,507]},"D":{"m":["배추김치","청포묵무침","오징어젓갈","감자조림","무국"],"img":"img/meals/0907-dinner.jpg","wh":[760,462]},"S":{"t":"찐빵","img":"img/meals/0907-snack.jpg","wh":[760,385]}},{"d":"9.04","w":"금","log":"224401011204","L":{"m":["삼치무조림","숙주나물무침","감자조림","배추김치","아욱된장국"],"img":"img/meals/0904-lunch.jpg","wh":[760,539]},"D":{"m":[],"img":"img/meals/0904-dinner.jpg","wh":[760,522]}},{"d":"9.03","w":"목","log":"224399850291","L":{"m":["두부조림","단배추 나물 무침","오징어젓갈","배추김치","감자수제비 국"],"img":"img/meals/0903-lunch.jpg","wh":[760,563]},"D":{"m":[],"img":"img/meals/0903-dinner.jpg","wh":[760,492]}},{"d":"9.02","w":"수","log":"224398639318","L":{"m":["오리고기볶음","양배추 쌈","고사리나물","배추김치","어묵 뭇국"],"img":"img/meals/0902-lunch.jpg","wh":[760,546]},"D":{"m":[],"img":"img/meals/0902-dinner.jpg","wh":[760,538]}},{"d":"9.01","w":"화","log":"224397456645","L":{"m":["잡채","배추김치","호박볶음","볶음김치","홍합무국"],"img":"img/meals/0901-lunch.jpg","wh":[760,558]},"D":{"m":["볶음김치","우엉조림","오복지무침","계란말이","북어무국"],"img":"img/meals/0901-dinner.jpg","wh":[760,570]}},{"d":"8.31","w":"월","log":"224396194405","L":{"m":["계란찜","어묵볶음","우엉조림","볶음김치","된장국"],"img":"img/meals/0831-lunch.jpg","wh":[760,558]},"D":{"m":["볶음김치","호박볶음","새싹샐러드","제육볶음","미역국"],"img":"img/meals/0831-dinner.jpg","wh":[760,526]}},{"d":"8.26","w":"수","log":"224391001640","L":{"m":["새우튀김","오복지무침","마늘쫑무침","배추김치","소고기 미역국"],"img":"img/meals/0826-lunch.jpg","wh":[760,548]},"D":{"m":["배추김치","두부조림","계란말이","제육볶음","만두국"],"img":"img/meals/0826-dinner.jpg","wh":[760,563]}}];
+  var MEALS = window.MEALS || [];
 
   /* 머리글 구분선 */
   var header = document.getElementById('header');
@@ -1371,18 +1371,20 @@ html{scroll-padding-top:122px}
   });
 
   /* 식단 */
-  var mealsEl = document.getElementById('meals'), snackEl = document.getElementById('snack');
+  var mealsEl = document.getElementById('meals'), rangeEl = document.getElementById('mealRange');
   var titleEl = document.getElementById('dayTitle'), thumbsEl = document.getElementById('thumbs');
   var prevBtn = document.getElementById('prevDay'), nextBtn = document.getElementById('nextDay');
   var sel = 0, thumbBtns = [];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function label(d) { var p = d.d.split('.'); return p[0] + '월 ' + p[1] + '일 (' + d.w + ')'; }
+  var NAMES = { L: '점심', S: '간식', D: '저녁' };
   function card(m, kind) {
     if (!m) return '';
-    var nm = kind === 'L' ? '점심' : '저녁';
-    var menu = m.m && m.m.length ? '<p class="meal-menu">' + esc(m.m.join(' · ')) + '</p>' : '<p class="meal-menu none">이날은 사진만 올라왔어요</p>';
-    return '<article class="meal"><div class="ph"><img src="' + m.img + '" width="' + m.wh[0] + '" height="' + m.wh[1] + '" alt="' + nm + ' 식판 사진" loading="lazy" decoding="async"></div>' +
-      '<div class="meal-body"><span class="meal-tag' + (kind === 'D' ? ' d' : '') + '">' + nm + '</span>' + menu + '</div></article>';
+    var nm = NAMES[kind];
+    var words = kind === 'S' ? (m.t ? [m.t] : []) : (m.m || []);
+    var menu = words.length ? '<p class="meal-menu">' + esc(words.join(' · ')) + '</p>' : '<p class="meal-menu none">이날은 사진만 올라왔어요</p>';
+    return '<article class="meal"><div class="ph"><img src="' + esc(m.img) + '" width="' + m.wh[0] + '" height="' + m.wh[1] + '" alt="' + nm + (kind === 'S' ? ' 사진' : ' 식판 사진') + '" loading="lazy" decoding="async"></div>' +
+      '<div class="meal-body"><span class="meal-tag ' + kind.toLowerCase() + '">' + nm + '</span>' + menu + '</div></article>';
   }
   function syncThumb() {
     thumbBtns.forEach(function (b, j) { b.setAttribute('aria-pressed', j === sel ? 'true' : 'false'); });
@@ -1390,14 +1392,18 @@ html{scroll-padding-top:122px}
   function render(i) {
     sel = i; var d = MEALS[i];
     titleEl.textContent = label(d);
-    mealsEl.innerHTML = card(d.L, 'L') + card(d.D, 'D');
-    if (d.S) { snackEl.innerHTML = '<svg aria-hidden="true"><use href="#i-sun"/></svg><span>오늘의 간식: ' + esc(d.S.t) + '</span>'; snackEl.hidden = false; }
-    else snackEl.hidden = true;
+    mealsEl.innerHTML = card(d.L, 'L') + card(d.S, 'S') + card(d.D, 'D');
+    mealsEl.className = 'meal-grid n' + ['L', 'S', 'D'].filter(function (k) { return d[k]; }).length;
     prevBtn.disabled = i >= MEALS.length - 1; nextBtn.disabled = i <= 0;
     syncThumb();
   }
+  var menuWrap = document.querySelector('#ch-menu .menu-wrap');
+  if (!MEALS.length) { menuWrap.innerHTML = '<p class="small-note">식단을 불러오지 못했어요. <a href="https://blog.naver.com/thehanbang0157" target="_blank" rel="noopener">블로그</a>에서 확인해 주세요.</p>'; }
+  else {
+  var first = MEALS[MEALS.length - 1].d.split('.'), last = MEALS[0].d.split('.');
+  rangeEl.textContent = first[0] + '월 ' + (+first[1]) + '일부터 ' + last[0] + '월 ' + (+last[1]) + '일까지의 기록이에요. ';
   MEALS.forEach(function (d, i) {
-    var src = d.L ? d.L.img : d.D.img;
+    var src = (d.L || d.D || d.S).img;
     var b = document.createElement('button'); b.type = 'button'; b.className = 'thumb';
     b.setAttribute('aria-label', label(d) + ' 식단 보기');
     b.innerHTML = '<img src="' + src + '" alt="" loading="lazy" decoding="async"><span>' + d.d + ' ' + d.w + '</span>';
@@ -1407,6 +1413,7 @@ html{scroll-padding-top:122px}
   prevBtn.addEventListener('click', function () { if (sel < MEALS.length - 1) render(sel + 1); });
   nextBtn.addEventListener('click', function () { if (sel > 0) render(sel - 1); });
   render(0);
+  }
 
   show(resolve(current()), false);
   function settle() { var r = resolve(current()); if (r.target) { var t = document.getElementById(r.target); if (t) t.scrollIntoView({ block: 'start' }); } }

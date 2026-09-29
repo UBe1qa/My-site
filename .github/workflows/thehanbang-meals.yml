@@ -1,0 +1,43 @@
+# 더한방 '오늘의 식단' 자동 업데이트
+# 네이버 블로그에 새 '하루 소개' 글이 올라오면 점심·간식·저녁 사진과 메뉴를 thehanbang/meals.js 에 넣고 올린다.
+# 올리면 Cloudflare가 thehanbang.org 를 자동으로 다시 배포한다. 가져오는 방법은 thehanbang/tools/update_meals.py 참고.
+name: 더한방 식단 자동 업데이트
+
+on:
+  schedule:
+    # 한국 시간 18:37, 21:37, 다음 날 09:07 (블로그 글은 보통 저녁 식사 뒤에 올라온다)
+    - cron: '37 9 * * *'
+    - cron: '37 12 * * *'
+    - cron: '7 0 * * *'
+  workflow_dispatch: {}   # GitHub → Actions 탭에서 'Run workflow'로 바로 돌릴 수도 있다
+
+permissions:
+  contents: write
+
+concurrency:
+  group: thehanbang-meals
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: 블로그에서 새 식단 가져오기
+        run: python thehanbang/tools/update_meals.py
+      - name: 바뀐 게 있으면 올리기
+        run: |
+          if [ -z "$(git status --porcelain thehanbang/meals.js thehanbang/img/meals)" ]; then
+            echo "새 식단 없음"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A thehanbang/meals.js thehanbang/img/meals
+          git commit -m "더한방: 블로그 새 식단 자동 반영"
+          git pull --rebase origin main
+          git push origin HEAD:main
