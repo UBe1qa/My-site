@@ -2,6 +2,7 @@
    GSAP(ScrollTrigger·SplitText) + 컴퓨터(마우스)에선 Lenis 부드러운 스크롤.
    - 첫 화면: 제목이 줄마다 올라오고, 도면이 실제로 그려지듯 벽 → 가구 → 동선 순서로 나타남
    - 아래로: 섹션 제목이 줄마다 올라오고, 선이 그어지고, 진행 단계는 스크롤을 따라 하나씩 켜짐
+   - 3차(내용 늘림): 순서 비교는 오른쪽 단계가 하나씩, 자재 막대는 왼쪽부터 차오름, 나머지 칸은 살짝 올라옴
    - html.anim 이 있을 때만 움직인다 ('동작 줄이기'면 머리 스크립트가 anim을 안 붙임)
    - 라이브러리가 안 불리면 __unanim()으로 모든 내용을 그대로 보여 준다
    - 튕기는 효과·마우스 따라 빛·흐르는 띠 같은 꾸밈은 쓰지 않는다 (AI 템플릿 인상) */
@@ -115,7 +116,7 @@
     if (points.length) {
       G.timeline({ scrollTrigger: { trigger: '.points', start: 'top 84%' } })
         .fromTo(points, { '--ln': 0 }, { '--ln': 1, duration: 1.1, stagger: 0.14, ease: 'power3.inOut' }, 0)
-        .from($$('.point h3, .point p'), { autoAlpha: 0, y: 14, duration: 0.8, stagger: 0.07, ease: 'power3.out', clearProps: 'transform' }, 0.2);
+        .from($$('.point h3, .point p'), { opacity: 0, y: 14, duration: 0.8, stagger: 0.07, ease: 'power3.out', clearProps: 'transform' }, 0.2);
     }
 
     /* 6) 진행 과정: 스크롤을 따라 선이 이어지고 번호가 하나씩 켜짐 */
@@ -136,7 +137,7 @@
         trackEl.style.height = dir === 'y' ? (by - ay) + 'px' : '1px';
       };
       layout();
-      G.from(steps, { autoAlpha: 0, y: 24, duration: 0.8, stagger: 0.09, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: wrap, start: 'top 86%' } });
+      G.from(steps, { opacity: 0, y: 24, duration: 0.8, stagger: 0.09, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: wrap, start: 'top 86%' } });
       ST.create({
         trigger: wrap, start: 'top 70%', end: 'bottom 62%', scrub: 0.4,
         onRefresh: layout,
@@ -151,17 +152,72 @@
     /* 7) 영상 띠: 편집 조각이 펼쳐지고, 스크롤을 따라 재생선이 지나감 */
     if ($('.band')) {
       G.timeline({ scrollTrigger: { trigger: '.band', start: 'top 86%' } })
-        .from('.band__art', { autoAlpha: 0, y: 10, duration: 0.7, ease: 'power3.out' })
+        .from('.band__art', { opacity: 0, y: 10, duration: 0.7, ease: 'power3.out' })
         .from('.band .v-clip', { scaleX: 0, transformOrigin: '0% 50%', duration: 0.6, stagger: 0.08, ease: 'power3.out' }, 0.1)
-        .from('.band__text p, .band__btn', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.08, ease: 'power3.out', clearProps: 'transform' }, 0.15);
+        .from('.band__text p, .band__btn', { opacity: 0, y: 12, duration: 0.7, stagger: 0.08, ease: 'power3.out', clearProps: 'transform' }, 0.15);
       G.fromTo('.band .v-head', { x: -150 }, { x: 214, ease: 'none', scrollTrigger: { trigger: '.band', start: 'top 92%', end: 'bottom 15%', scrub: 0.6 } });
     }
 
+    /* 7-1) 3차에 늘린 칸들: 살짝 올라오며 나타남 (내용은 그대로, 움직임만) */
+    var rise = function (targets, trigger, start, extra) {
+      var list = typeof targets === 'string' ? $$(targets) : [].concat(targets);
+      if (!list.length) return;
+      var vars = { opacity: 0, y: 18, duration: 0.8, stagger: 0.08, ease: 'power3.out', clearProps: 'transform',
+        scrollTrigger: { trigger: trigger, start: start || 'top 85%' } };
+      if (extra) for (var k in extra) vars[k] = extra[k];
+      G.from(list, vars);
+    };
+    $$('.sec__lead').forEach(function (el) { rise(el, el, 'top 90%'); });
+
+    // 순서 비교: 왼쪽(디자인 먼저) → 오른쪽(예산 먼저), 오른쪽 단계는 하나씩
+    if ($('.flows')) {
+      G.timeline({ scrollTrigger: { trigger: '.flows', start: 'top 80%' } })
+        .from('.flow--off', { opacity: 0, y: 18, duration: 0.7, ease: 'power3.out', clearProps: 'transform' })
+        .from('.flow--on', { opacity: 0, y: 18, duration: 0.7, ease: 'power3.out', clearProps: 'transform' }, 0.25)
+        .from('.flow--on .flow__steps li', { opacity: 0, x: -10, duration: 0.5, stagger: 0.18, ease: 'power2.out', clearProps: 'transform' }, 0.6)
+        .from('.flow--on .flow__end', { opacity: 0, duration: 0.6 }, 1.2);
+    }
+
+    // 자재 막대: 칸이 왼쪽부터 차오르고(글자는 찌그러지지 않게 잘라서 드러냄), 설명이 뒤따름
+    if ($('[data-bars]')) {
+      var bars = G.timeline({ scrollTrigger: { trigger: '[data-bars]', start: 'top 78%' } });
+      $$('.bars__row').forEach(function (row, r) {
+        bars.fromTo($$('.seg', row), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.55, stagger: 0.14, ease: 'power2.out', clearProps: 'clipPath' }, r * 0.95)
+          .from($$('.bars__note', row), { opacity: 0, y: 8, duration: 0.5, ease: 'power2.out', clearProps: 'transform' }, r * 0.95 + 0.65);
+      });
+      bars.from('.bars__tag', { opacity: 0, duration: 0.4 }, 1.7);
+    }
+
+    // 공간마다 살필 것: 칸 글자와 평면
+    $$('.sub').forEach(function (s) { rise($$('.sub__kicker, .sub__title', s), s, 'top 85%'); });
+    $$('.zone').forEach(function (z) { rise($$('.zone__no, h4, li', z), z, 'top 82%'); });
+    rise('.space__fig', '.space', 'top 75%');
+    rise('.inline-cta', '.inline-cta', 'top 90%');
+
+    // 개원/리뉴얼 · 회사 정보 · 상담 칸의 준비할 것
+    rise('.track', '.tracks', 'top 82%', { stagger: 0.12 });
+    rise('.facts > div', '.facts', 'top 85%', { stagger: 0.06 });
+    rise('.promise li', '.promise', 'top 85%', { stagger: 0.06 });
+    rise('.prep li, .prep__note', '.prep', 'top 88%', { stagger: 0.06 });
+
     /* 8) 자주 묻는 질문 · 상담 · 바닥글 */
-    G.from('.faq__list details', { autoAlpha: 0, y: 16, duration: 0.7, stagger: 0.07, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.faq__list', start: 'top 86%' } });
-    G.from('.contact__lead, .direct li', { autoAlpha: 0, y: 16, duration: 0.8, stagger: 0.08, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.contact__intro', start: 'top 80%' } });
-    G.from('.inquiry', { autoAlpha: 0, y: 32, duration: 1, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: '.inquiry', start: 'top 90%' } });
-    G.from('.footer__in > *', { autoAlpha: 0, y: 16, duration: 0.8, stagger: 0.1, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.site-footer', start: 'top 95%' } });
+    G.from('.faq__list details', { opacity: 0, y: 16, duration: 0.7, stagger: 0.07, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.faq__list', start: 'top 86%' } });
+    G.from('.contact__lead, .direct li', { opacity: 0, y: 16, duration: 0.8, stagger: 0.08, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.contact__intro', start: 'top 80%' } });
+    // 신청서는 페이지 안 링크가 곧장 오는 곳이라 위치를 옮기지 않고(y 없이) 흐리게만 나타나게
+    G.from('.inquiry', { opacity: 0, duration: 0.9, ease: 'power2.out', scrollTrigger: { trigger: '.inquiry', start: 'top 90%' } });
+    G.from('.footer__in > *', { opacity: 0, y: 16, duration: 0.8, stagger: 0.1, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.site-footer', start: 'top 95%' } });
+    // 아래 칸들은 visibility가 아니라 opacity로만 숨겨 둔다 (키보드로 넘어가도 건너뛰지 않게).
+    // 아직 나타나지 않은 칸 안으로 초점이 들어오면 그 움직임을 바로 끝낸다.
+    document.addEventListener('focusin', function (e) {
+      ST.getAll().forEach(function (st) {
+        var a = st.animation;
+        if (!a || a.progress() === 1) return;
+        var targets = a.targets ? a.targets() : [];
+        if (a.getChildren) a.getChildren(true, true, false).forEach(function (c) { targets = targets.concat(c.targets()); });
+        if (targets.some(function (t) { return t && t.contains && t.contains(e.target); })) a.progress(1);
+      });
+    });
+
     // 질문을 열고 닫으면 페이지 길이가 바뀌니 위치 다시 재기
     $$('.faq__list details').forEach(function (d) { d.addEventListener('toggle', function () { setTimeout(function () { ST.refresh(); }, 450); }); });
 

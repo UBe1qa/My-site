@@ -69,6 +69,7 @@
     </a>
     <nav class="nav" aria-label="이 페이지 안에서 이동">
       <a href="#why">상담 방식</a>
+      <a href="#space">공간 설계</a>
       <a href="#process">진행 과정</a>
       <a href="#faq">자주 묻는 질문</a>
     </nav>
@@ -85,7 +86,7 @@
           <h1 id="hero-title">한의원 인테리어,<br>예산부터 듣겠습니다</h1>
           <p class="hero__lead">생각하신 금액 안에서 <span class="nw">쓸 곳과</span> <span class="nw">줄일 곳을</span> 가려 드립니다.</p>
           <div class="hero__actions">
-            <a class="btn btn--ink" href="#contact">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ink" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </div>
         </div>
 
@@ -146,14 +147,54 @@
     </div>
   </section>
 
-  <!-- 차이점: 핵심 세 가지 -->
-  <section class="sec" id="why" aria-labelledby="why-title">
+  <!-- 개원 / 리뉴얼: 보는 곳이 다름 (첫 화면 바로 다음 — 내 얘기부터) -->
+  <section class="sec sec--alt" id="start" aria-labelledby="start-title">
+    <div class="wrap">
+      <h2 class="sec__title" id="start-title">개원과 리뉴얼은<br>보는 곳이 다릅니다</h2>
+      <div class="tracks">
+        <article class="track">
+          <svg class="track__art" viewBox="0 0 240 150" aria-hidden="true">
+            <path class="p-wall p-wall--outer" d="M100 142H8V8H232V142H136"/>
+            <path class="p-path" d="M118 150V112H48V64H128V36H196V104"/>
+            <g class="t-dot"><circle cx="48" cy="112" r="6"/><circle cx="88" cy="64" r="6"/><circle cx="128" cy="36" r="6"/><circle cx="196" cy="104" r="6"/></g>
+          </svg>
+          <p class="track__tag">신규 개원</p>
+          <h3>진료 흐름에 맞춰 방을 배치합니다</h3>
+          <p>진료실과 치료실이 몇 개 필요한지, 환자가 어떤 순서로 움직일지 정한 뒤 자재와 디자인을 고릅니다.</p>
+          <a class="btn btn--line track__btn" href="#inquiry" data-topic="신규 개원">개원 상담 신청하기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="track">
+          <svg class="track__art" viewBox="0 0 240 150" aria-hidden="true">
+            <path class="p-wall p-wall--outer" d="M100 142H8V8H232V142H136"/>
+            <path class="p-wall p-wall--inner" d="M124 8V66M124 66H146M176 66H232"/>
+            <g class="p-furn">
+              <rect x="24" y="22" width="82" height="14" rx="3"/>
+              <rect x="24" y="48" width="82" height="14" rx="3"/>
+              <path d="M24 98H58V106H40V128H24Z"/>
+              <rect x="150" y="20" width="46" height="13" rx="2"/>
+              <rect x="146" y="84" width="22" height="44" rx="3"/>
+              <rect x="176" y="84" width="22" height="44" rx="3"/>
+              <rect x="206" y="84" width="18" height="44" rx="3"/>
+            </g>
+            <circle class="t-mark" cx="184" cy="106" r="36"/>
+          </svg>
+          <p class="track__tag">리뉴얼</p>
+          <h3>불편했던 곳을 짚어 고칩니다</h3>
+          <p>매일 쓰시면서 불편했던 곳을 들은 뒤, 현장 조건에 맞춰 공사 범위를 제안합니다. 모두 바꾸지 않아도 됩니다.</p>
+          <a class="btn btn--line track__btn" href="#inquiry" data-topic="리뉴얼">리뉴얼 상담 신청하기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 상담에서 정하는 세 가지 → 아래에서 하나씩 자세히 (예산 순서 · 자재 · 공간) -->
+  <section class="sec chapter" id="why" aria-labelledby="why-title">
     <div class="wrap split">
       <h2 class="sec__title" id="why-title">상담에서 정하는<br>세 가지</h2>
       <ul class="points">
         <li class="point">
           <h3>어디에 돈을 쓸지</h3>
-          <p>정해진 디자인에 금액을 맞추지 않습니다. 원장님과 무엇이 먼저인지 정하고, <span class="nw">그 순서에</span> 맞춰 예산을 씁니다.</p>
+          <p>진료실·치료실·대기실 가운데 어디에 더 쓸지 원장님과 우선순위를 정하고, 그에 맞춰 예산을 씁니다.</p>
         </li>
         <li class="point">
           <h3>어떤 자재를 쓸지</h3>
@@ -161,10 +202,165 @@
         </li>
         <li class="point">
           <h3>환자가 어떻게 움직일지</h3>
-          <p><span class="nw">접수·대기·진료·치료</span>로 이어지는 환자 동선과, 원장님·직원이 일하기 편한 배치를 같이 봅니다.</p>
+          <p><span class="nw">접수·대기·진료·치료</span>로 이어지는 환자 동선과, <span class="nw">원장님·직원이</span> 일하기 편한 배치를 함께 봅니다.</p>
         </li>
       </ul>
     </div>
+    <section class="wrap sub" id="reason" aria-labelledby="reason-title">
+      <p class="sub__kicker">어디에 돈을 쓸지</p>
+      <h3 class="sub__title" id="reason-title">예산에 디자인을 맞춥니다</h3>
+      <p class="sec__lead">순서 하나로 예산이 쓰이는 곳이 바뀝니다.</p>
+      <div class="flows">
+        <div class="flow flow--off">
+          <p class="flow__label">디자인을 먼저 고르면</p>
+          <ol class="flow__steps">
+            <li>마음에 드는 디자인 고르기</li>
+            <li>견적 받기</li>
+            <li>예산을 넘으면 여기저기 줄이기</li>
+          </ol>
+          <p class="flow__end">줄일 곳을 나중에 급하게 고르게 됩니다.</p>
+        </div>
+        <div class="flow flow--on">
+          <p class="flow__label">예산을 먼저 들으면</p>
+          <ol class="flow__steps">
+            <li>생각하신 예산 듣기</li>
+            <li>쓸 곳과 줄일 곳 가르기</li>
+            <li>그 안에서 자재와 디자인 고르기</li>
+          </ol>
+          <p class="flow__end">쓸 곳을 미리 정해 두니, 나중에 급하게 줄일 일이 적습니다.</p>
+        </div>
+      </div>
+    </section>
+    <section class="wrap sub" id="budget" aria-labelledby="budget-title">
+      <p class="sub__kicker">어떤 자재를 쓸지</p>
+      <h3 class="sub__title" id="budget-title">좋은 자재는 필요한 곳에 씁니다</h3>
+      <p class="sec__lead">자재 등급을 공간마다 달리하면, 같은 예산 안에 네 공간을 모두 담을 수 있습니다.</p>
+      <figure class="bars" data-bars>
+        <div class="bars__chart">
+          <div class="bars__row">
+            <p class="bars__label">모든 곳에 좋은 자재를 쓰면</p>
+            <div class="bars__track">
+              <span class="seg seg--hi" style="--w:25%"><i>1</i></span><span class="seg seg--hi" style="--w:25%"><i>2</i></span><span class="seg seg--hi" style="--w:25%"><i>3</i></span><span class="seg seg--hi seg--over" style="--w:25%"><i>4</i></span>
+            </div>
+            <p class="bars__note bars__note--off">치료실까지 오면 예산을 넘습니다.</p>
+          </div>
+          <div class="bars__row">
+            <p class="bars__label">필요한 곳에만 좋은 자재를 쓰면</p>
+            <div class="bars__track">
+              <span class="seg seg--hi" style="--w:22%"><i>1</i></span><span class="seg seg--hi" style="--w:20%"><i>2</i></span><span class="seg seg--mid" style="--w:16%"><i>3</i></span><span class="seg seg--lo" style="--w:15%"><i>4</i></span>
+              <span class="bars__tag">예산</span>
+            </div>
+            <p class="bars__note">네 곳 모두 예산 안에 들어옵니다.</p>
+          </div>
+        </div>
+        <figcaption class="bars__cap">
+          <span class="bars__keys">
+            <span class="sheet__legend"><span class="lg"><i>1</i>접수</span><span class="lg"><i>2</i>대기</span><span class="lg"><i>3</i>진료</span><span class="lg"><i>4</i>치료</span></span>
+            <span class="bars__grades"><span class="gr gr--hi">좋은 자재</span><span class="gr gr--mid">중간</span><span class="gr gr--lo">기본 자재</span></span>
+          </span>
+          <span class="bars__why">막대 길이는 드는 비용, 옅은 바탕은 예산입니다. 예시이며, 어디에 어떤 자재를 쓸지는 원장님과 정합니다.</span>
+        </figcaption>
+      </figure>
+    </section>
+    <section class="wrap sub" id="space" aria-labelledby="space-title">
+      <p class="sub__kicker">환자가 어떻게 움직일지</p>
+      <h3 class="sub__title" id="space-title">공간마다 살필 것이 다릅니다</h3>
+      <p class="sec__lead">같은 평수라도 방을 잇는 방법에 따라 환자가 헤매는 정도와 원장님이 걷는 거리가 달라집니다. 공간마다 확인하는 것을 예시 평면에 표시했습니다.</p>
+      <div class="space">
+        <div class="space__list">
+          <article class="zone" data-zone="1">
+            <p class="zone__no"><i>1</i>접수</p>
+            <h4>입구에서 접수까지 한눈에</h4>
+            <ul>
+              <li>접수대에서 입구와 대기실이 한눈에 보이는지</li>
+              <li>처음 온 환자도 어디로 가야 할지 바로 아는지</li>
+            </ul>
+          </article>
+          <article class="zone" data-zone="2">
+            <p class="zone__no"><i>2</i>대기</p>
+            <h4>조용한 대기실</h4>
+            <ul>
+              <li>진료실 말소리가 대기실까지 들리지 않는지</li>
+              <li>옷을 갈아입고 짐을 둘 곳이 가까이 있는지</li>
+            </ul>
+          </article>
+          <article class="zone" data-zone="3">
+            <p class="zone__no"><i>3</i>진료</p>
+            <h4>진료실에서 치료실까지 몇 걸음</h4>
+            <ul>
+              <li>진맥하고 설명하기 좋게 책상과 의자를 놓았는지</li>
+              <li>진료실에서 치료실까지 몇 걸음이면 가는지</li>
+            </ul>
+          </article>
+          <article class="zone" data-zone="4">
+            <p class="zone__no"><i>4</i>치료</p>
+            <h4>베드 사이 동선과 환기</h4>
+            <ul>
+              <li>원장님과 직원이 베드 사이를 부딪히지 않고 오가는지</li>
+              <li>커튼으로 나뉜 자리마다 치료기 전원을 쓸 수 있는지</li>
+              <li>뜸 연기를 뺄 환기 자리가 있는지</li>
+            </ul>
+          </article>
+        </div>
+        <figure class="sheet space__fig" data-space-fig>
+          <div class="sheet__draw">
+            <svg class="space__plan" viewBox="0 0 560 424" role="img" aria-labelledby="space-t space-d">
+              <title id="space-t">공간별로 살피는 곳을 나눠 표시한 한의원 평면 예시</title>
+              <desc id="space-d">1 접수, 2 대기, 3 진료, 4 치료 공간을 나눠 표시한 예시 평면도</desc>
+              <g class="z-areas">
+                <rect class="z" data-z="1" x="13" y="203" width="254" height="184"/>
+                <rect class="z" data-z="2" x="13" y="13" width="254" height="187"/>
+                <path class="z" data-z="3" d="M273 13H407V147H273ZM413 13H547V147H413Z"/>
+                <rect class="z" data-z="4" x="273" y="233" width="274" height="154"/>
+              </g>
+              <g class="p-furn">
+                <path d="M44 236H96V252H72V340H44Z"/>
+                <circle cx="27" cy="290" r="7"/>
+                <rect x="40" y="40" width="180" height="26" rx="5"/><path d="M44 47H216M52 40V66M208 40V66"/>
+                <rect x="92" y="80" width="76" height="16" rx="3"/>
+                <rect x="40" y="110" width="180" height="26" rx="5"/><path d="M44 129H216M52 110V136M208 110V136"/>
+                <circle cx="243" cy="38" r="11"/><circle cx="243" cy="38" r="4.5"/>
+                <rect x="296" y="30" width="72" height="22" rx="2"/><path d="M318 36H346"/>
+                <circle cx="332" cy="20" r="6"/>
+                <rect x="308" y="58" width="14" height="14" rx="3"/><rect x="336" y="58" width="14" height="14" rx="3"/>
+                <rect x="440" y="30" width="72" height="22" rx="2"/><path d="M462 36H490"/>
+                <circle cx="476" cy="20" r="6"/>
+                <rect x="452" y="58" width="14" height="14" rx="3"/><rect x="480" y="58" width="14" height="14" rx="3"/>
+                <rect x="290" y="296" width="40" height="78" rx="4"/><rect x="296" y="302" width="28" height="12" rx="3"/>
+                <rect x="350" y="296" width="40" height="78" rx="4"/><rect x="356" y="302" width="28" height="12" rx="3"/>
+                <rect x="410" y="296" width="40" height="78" rx="4"/><rect x="416" y="302" width="28" height="12" rx="3"/>
+                <rect x="470" y="296" width="40" height="78" rx="4"/><rect x="476" y="302" width="28" height="12" rx="3"/>
+                <path d="M220 390V332A58 58 0 0 0 162 390"/>
+              </g>
+              <path class="p-curtain" d="M340 288V382M400 288V382M460 288V382"/>
+              <g class="p-room">
+                <text x="24" y="31">대기실</text>
+                <text x="24" y="364">접수</text>
+                <text x="400" y="140" text-anchor="end">진료실</text>
+                <text x="540" y="140" text-anchor="end">진료실</text>
+                <text x="282" y="252">치료실</text>
+              </g>
+              <path class="p-wall p-wall--outer" d="M160 390H10V10H550V390H220"/>
+              <path class="p-wall p-wall--inner" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M270 230H430M480 230H550M270 230V390"/>
+              <path class="p-path" d="M190 400V288H100V190H326V92V190H455V268"/>
+              <g class="p-node" data-z="1"><circle cx="100" cy="288" r="13"/><text x="100" y="293">1</text></g>
+              <g class="p-node" data-z="2"><circle cx="150" cy="190" r="13"/><text x="150" y="195">2</text></g>
+              <g class="p-node" data-z="3"><circle cx="326" cy="92" r="13"/><text x="326" y="97">3</text></g>
+              <g class="p-node" data-z="4"><circle cx="455" cy="268" r="13"/><text x="455" y="273">4</text></g>
+              <text class="p-entry" x="190" y="419">입구</text>
+            </svg>
+          </div>
+          <figcaption class="sheet__meta">
+            <span class="sheet__name">평면 예시</span>
+            <span class="sheet__note">실제 한의원 공간에 맞춰 다시 그립니다</span>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="inline-cta">
+        <p>원장님 한의원은 어떤 공간인가요? 예산과 함께 알려 주세요.</p>
+        <a class="btn btn--ink" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
   </section>
 
   <!-- 진행 과정 -->
@@ -176,7 +372,7 @@
         <ol class="steps">
           <li class="step"><span class="step__no" aria-hidden="true">1</span><h3>미팅</h3><p>예산과 우선순위, 지금 공간과 필요한 기능을 확인합니다.</p></li>
           <li class="step"><span class="step__no" aria-hidden="true">2</span><h3>설계</h3><p>동선·자재·조명과 현장에 맞는 공사 범위를 정해 도면으로 만듭니다.</p></li>
-          <li class="step"><span class="step__no" aria-hidden="true">3</span><h3>착공</h3><p>현장을 넘겨받아 자재와 시공팀을 준비하고, 안전하게 공사합니다.</p></li>
+          <li class="step"><span class="step__no" aria-hidden="true">3</span><h3>착공</h3><p>공사 날짜가 정해지면 현장을 넘겨받아 자재와 시공팀을 준비하고 공사를 시작합니다.</p></li>
           <li class="step"><span class="step__no" aria-hidden="true">4</span><h3>준공</h3><p>시운전으로 설계대로 됐는지 확인하고, <span class="nw">모자란 곳은</span> 고칩니다.</p></li>
           <li class="step"><span class="step__no" aria-hidden="true">5</span><h3>관리</h3><p>마감과 자재를 검수하고, 하자가 생기면 빠르게 조치합니다.</p></li>
         </ol>
@@ -184,8 +380,34 @@
     </div>
   </section>
 
+  <!-- 회사 정보 + 광고글의 여섯 가지 -->
+  <section class="sec" id="company" aria-labelledby="company-title">
+    <div class="wrap">
+      <h2 class="sec__title" id="company-title">주식회사 더오픈이 진행합니다</h2>
+      <div class="company">
+        <dl class="facts">
+          <div><dt>회사</dt><dd>주식회사 더오픈</dd></div>
+          <div><dt>사업자등록번호</dt><dd>484-88-03770</dd></div>
+          <div><dt>하는 일</dt><dd>한의원 인테리어 <span class="nw">(신규 개원·리뉴얼)</span><br>한의원 광고 영상 편집</dd></div>
+          <div><dt>상담</dt><dd>담당자 직통 <a href="tel:010-2611-0157">010-2611-0157</a><br><a href="mailto:lunar_23@naver.com">lunar_23@naver.com</a></dd></div>
+        </dl>
+        <div class="promise">
+          <p class="promise__title">상담부터 준공까지 챙기는 것</p>
+          <ul>
+            <li>원장님 예산에 맞춘 공간 계획</li>
+            <li>예산별 자재·마감재 선택 제안</li>
+            <li>꼭 필요한 곳과 줄여도 되는 부분 구분</li>
+            <li>진료 효율과 환자 경험을 생각한 동선 설계</li>
+            <li>현장 조건에 맞는 현실적인 공사 범위 제안</li>
+            <li>설계부터 시공, 준공까지 차례대로 진행</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 자주 묻는 질문 -->
-  <section class="sec" id="faq" aria-labelledby="faq-title">
+  <section class="sec sec--alt" id="faq" aria-labelledby="faq-title">
     <div class="wrap">
       <h2 class="sec__title" id="faq-title">자주 묻는 질문</h2>
       <div class="faq__list">
@@ -195,7 +417,15 @@
         </details>
         <details>
           <summary>예산을 말하면 그만큼 다 쓰게 되지 않나요?</summary>
-          <p>말씀하신 예산은 채워야 할 금액이 아니라 넘지 않을 선으로 봅니다. 필요 없는 비용은 빼고 제안합니다.</p>
+          <p>말씀하신 예산은 채워야 할 금액이 아니라 상한선으로 보고 계획합니다. 필요 없는 비용은 처음 계획에서 뺍니다.</p>
+        </details>
+        <details>
+          <summary>정확한 예산이 없어도 상담할 수 있나요?</summary>
+          <p>네. '이 정도 안에서'처럼 범위만 말씀해 주셔도 충분합니다.</p>
+        </details>
+        <details>
+          <summary>리뉴얼도 상담하나요?</summary>
+          <p>네. 새로 여시는 한의원도, 운영 중인 한의원을 고치시는 경우도 상담합니다.</p>
         </details>
         <details>
           <summary>상담하면 무엇을 받아 보나요?</summary>
@@ -228,7 +458,7 @@
         <h2 class="band__title" id="video-title">한의원 광고 영상 편집도 합니다</h2>
         <p>개원이나 리뉴얼 뒤 한의원을 알릴 영상이 필요하면 같이 말씀해 주세요.</p>
       </div>
-      <a class="btn btn--line band__btn" href="#contact" data-topic="영상 편집·광고">영상 상담하기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn--line band__btn" href="#inquiry" data-topic="영상 편집·광고">영상 상담하기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </section>
 
@@ -237,11 +467,22 @@
     <div class="wrap contact__grid">
       <div class="contact__intro">
         <h2 class="sec__title" id="contact-title">예산부터 편하게<br>말씀해 주세요</h2>
-        <p class="contact__lead">개원·리뉴얼 모두 상담합니다. 대략의 예산과 지역만 적어 보내셔도 됩니다.</p>
+        <p class="contact__lead">개원·리뉴얼 모두 상담합니다. 대략의 예산과 지역만 적어 <span class="nw">보내 주시면</span> 담당자가 연락드립니다.</p>
         <ul class="direct">
           <li><a href="tel:010-2611-0157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span><small>담당자 직통</small><strong>010-2611-0157</strong></span></a></li>
           <li><a href="mailto:lunar_23@naver.com"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><small>이메일</small><strong>lunar_23@naver.com</strong></span></a></li>
         </ul>
+        <div class="prep">
+          <p class="prep__title">상담 전에 떠올려 두시면 좋은 것</p>
+          <ul class="prep__list">
+            <li><b>대략의 예산</b><span>예: ○천만 원 안팎</span></li>
+            <li><b>지역과 평수</b><span>예: 서울 송파구, 약 35평</span></li>
+            <li><b>개원이나 공사 예정 시기</b><span>예: 내년 봄</span></li>
+            <li><b>필요한 진료실·치료실 수</b><span>예: 진료실 2, 치료 베드 6</span></li>
+            <li><b>평면도나 지금 공간 사진</b><span>있으면 준비해 두세요</span></li>
+          </ul>
+          <p class="prep__note">아는 것만 적어 주셔도 됩니다.</p>
+        </div>
       </div>
 
       <form class="inquiry" id="inquiry" novalidate>
@@ -297,7 +538,7 @@
 
 <div class="mbar" data-mbar>
   <a class="btn btn--line-dark mbar__call" href="tel:010-2611-0157" aria-label="전화 010-2611-0157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화</a>
-  <a class="btn btn--light" href="#contact">상담 신청서 쓰기</a>
+  <a class="btn btn--light" href="#inquiry">상담 신청서 쓰기</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>

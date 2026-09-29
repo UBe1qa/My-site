@@ -1,6 +1,6 @@
 /* 더오픈 THE OPEN — 페이지 동작 (움직임은 motion.js)
    1) 스크롤하면 머리 막대 아래 선  3) 휴대폰 아래 막대 보이기/숨기기
-   4) '영상 상담하기' → 상담 종류 미리 고르기
+   4) '영상 상담하기'·'개원/리뉴얼 상담 신청하기' → 상담 종류 미리 고르기  6) 공간마다 살필 것 (평면 표시)
    5) 상담 신청서 → 휴대폰: 문자·메일 앱으로 옮기기 / 컴퓨터: 적은 내용 복사(+메일 앱) — 사이트에 저장하지 않음 */
 (function () {
   'use strict';
@@ -44,6 +44,41 @@
     });
   });
 
+  /* 6) 공간마다 살필 것
+     컴퓨터: 오른쪽 평면(따라 내려옴)에서 지금 읽는 공간을 칠해 보여 준다
+     휴대폰: 평면을 칸마다 복사해 그 공간을 칠해 보여 준다 — 잘라 내면 벽이 끊겨 보여서 전체를 작게 (자바스크립트가 없으면 평면 하나가 그대로 보임) */
+  var spaceFig = $('[data-space-fig]');
+  var zones = $$('.zone[data-zone]');
+  if (spaceFig && zones.length) {
+    var plan = $('svg', spaceFig);
+    zones.forEach(function (z) {
+      var n = z.getAttribute('data-zone');
+      var c = plan.cloneNode(true);
+      c.removeAttribute('role');
+      c.removeAttribute('aria-labelledby');
+      c.setAttribute('aria-hidden', 'true');
+      c.setAttribute('focusable', 'false');
+      $$('title, desc', c).forEach(function (el) { el.parentNode.removeChild(el); });
+      $$('[id]', c).forEach(function (el) { el.removeAttribute('id'); });
+      $$('[data-z="' + n + '"]', c).forEach(function (el) { el.classList.add('is-on'); });
+      var box = document.createElement('div');
+      box.className = 'zone__crop';
+      box.appendChild(c);
+      z.appendChild(box);
+    });
+    var setZone = function (n) {
+      zones.forEach(function (z) { z.classList.toggle('is-on', z.getAttribute('data-zone') === n); });
+      $$('[data-z]', plan).forEach(function (el) { el.classList.toggle('is-on', el.getAttribute('data-z') === n); });
+    };
+    if (hasIO) {
+      // 화면 가운데 줄에 걸린 칸을 '지금 읽는 공간'으로 본다
+      var zio = new IntersectionObserver(function (en) {
+        en.forEach(function (e) { if (e.isIntersecting) setZone(e.target.getAttribute('data-zone')); });
+      }, { rootMargin: '-45% 0px -45% 0px' });
+      zones.forEach(function (z) { zio.observe(z); });
+    }
+  }
+
   /* 5) 상담 신청서 */
   var form = $('#inquiry');
   if (!form) return;
@@ -61,7 +96,7 @@
     $('[data-via="copy"]', form).hidden = false;
     $('[data-mail-label]', form).textContent = '메일 앱으로 보내기';
     var note = $('[data-note]', form);
-    if (note) note.textContent = '적으신 내용은 이 사이트에 저장되지 않습니다. 복사해서 쓰시는 메일(네이버 메일 등)로 ' + MAIL + '에 보내 주세요.';
+    if (note) note.textContent = '적으신 내용은 이 사이트에 저장되지 않습니다. 복사한 내용을 평소 쓰시는 메일에 붙여 넣어 ' + MAIL + '으로 보내 주세요.';
   }
 
   function compose() {
@@ -115,7 +150,7 @@
     lastText = compose();
     if (via === 'copy') {
       copy(lastText, function (ok) {
-        say(ok ? ['복사했습니다. 쓰시는 메일에서 받는 사람에 ' + MAIL + '을 넣고, 붙여 넣어 보내 주세요.']
+        say(ok ? ['복사했습니다. 평소 쓰시는 메일에서 받는 사람에 ' + MAIL + '을 넣고, 붙여 넣어 보내 주세요.']
                : ['복사가 되지 않았습니다. 적으신 내용을 ' + MAIL + '으로 직접 보내 주시거나 010-2611-0157로 전화 주세요.']);
       });
       return;
