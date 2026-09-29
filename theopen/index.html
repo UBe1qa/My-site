@@ -83,10 +83,10 @@
     <div class="wrap">
       <div class="hero__grid">
         <div class="hero__copy">
-          <h1 id="hero-title">한의원 인테리어,<br>예산부터 듣겠습니다</h1>
+          <h1 id="hero-title">한의원 인테리어,<br><span class="hl">예산부터</span> 듣겠습니다</h1>
           <p class="hero__lead">생각하신 금액 안에서 <span class="nw">쓸 곳과</span> <span class="nw">줄일 곳을</span> 가려 드립니다.</p>
           <div class="hero__actions">
-            <a class="btn btn--ink" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--main" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </div>
         </div>
 
@@ -100,6 +100,14 @@
                   <path class="p-draw" pathLength="1" d="M190 400V288H100V190H326V92V190H455V268"/>
                 </mask>
               </defs>
+              <g class="p-floor">
+                <rect class="f2" x="10" y="10" width="260" height="190"/>
+                <rect class="f1" x="10" y="200" width="260" height="190"/>
+                <rect class="f1" x="270" y="150" width="280" height="80"/>
+                <rect class="f3" x="270" y="10" width="140" height="140"/>
+                <rect class="f3" x="410" y="10" width="140" height="140"/>
+                <rect class="f4" x="270" y="230" width="280" height="160"/>
+              </g>
               <g class="p-furn">
                 <path d="M44 236H96V252H72V340H44Z"/>
                 <circle cx="27" cy="290" r="7"/>
@@ -207,8 +215,10 @@
       </ul>
     </div>
     <section class="wrap sub" id="reason" aria-labelledby="reason-title">
-      <p class="sub__kicker">어디에 돈을 쓸지</p>
-      <h3 class="sub__title" id="reason-title">예산에 디자인을 맞춥니다</h3>
+      <div class="sub__head">
+        <p class="sub__kicker">어디에 돈을 쓸지</p>
+        <h3 class="sub__title" id="reason-title">예산에 디자인을 맞춥니다</h3>
+      </div>
       <p class="sec__lead">순서 하나로 예산이 쓰이는 곳이 바뀝니다.</p>
       <div class="flows">
         <div class="flow flow--off">
@@ -232,8 +242,10 @@
       </div>
     </section>
     <section class="wrap sub" id="budget" aria-labelledby="budget-title">
-      <p class="sub__kicker">어떤 자재를 쓸지</p>
-      <h3 class="sub__title" id="budget-title">좋은 자재는 필요한 곳에 씁니다</h3>
+      <div class="sub__head">
+        <p class="sub__kicker">어떤 자재를 쓸지</p>
+        <h3 class="sub__title" id="budget-title">좋은 자재는 필요한 곳에 씁니다</h3>
+      </div>
       <p class="sec__lead">자재 등급을 공간마다 달리하면, 같은 예산 안에 네 공간을 모두 담을 수 있습니다.</p>
       <figure class="bars" data-bars>
         <div class="bars__chart">
@@ -263,8 +275,10 @@
       </figure>
     </section>
     <section class="wrap sub" id="space" aria-labelledby="space-title">
-      <p class="sub__kicker">환자가 어떻게 움직일지</p>
-      <h3 class="sub__title" id="space-title">공간마다 살필 것이 다릅니다</h3>
+      <div class="sub__head">
+        <p class="sub__kicker">환자가 어떻게 움직일지</p>
+        <h3 class="sub__title" id="space-title">공간마다 살필 것이 다릅니다</h3>
+      </div>
       <p class="sec__lead">같은 평수라도 방을 잇는 방법에 따라 환자가 헤매는 정도와 원장님이 걷는 거리가 달라집니다. 공간마다 확인하는 것을 예시 평면에 표시했습니다.</p>
       <div class="space">
         <div class="space__list">
@@ -358,7 +372,7 @@
       </div>
       <div class="inline-cta">
         <p>원장님 한의원은 어떤 공간인가요? 예산과 함께 알려 주세요.</p>
-        <a class="btn btn--ink" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--main" href="#inquiry">상담 신청서 쓰기<svg class="ico ico--arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </section>
   </section>
@@ -392,7 +406,7 @@
   </section>
 
   <!-- 자주 묻는 질문 -->
-  <section class="sec sec--alt" id="faq" aria-labelledby="faq-title">
+  <section class="sec" id="faq" aria-labelledby="faq-title">
     <div class="wrap">
       <h2 class="sec__title" id="faq-title">자주 묻는 질문</h2>
       <div class="faq__list">
@@ -498,8 +512,8 @@
           <textarea name="memo" rows="3" placeholder="예: 개원 예정 시기, 원하는 분위기, 필요한 진료실·치료실 수"></textarea>
         </label>
         <div class="inquiry__actions">
-          <button class="btn btn--ink" type="button" data-via="copy" hidden><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg>적은 내용 복사하기</button>
-          <button class="btn btn--ink" type="button" data-via="sms"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>문자로 보내기</button>
+          <button class="btn btn--main" type="button" data-via="copy" hidden><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg>적은 내용 복사하기</button>
+          <button class="btn btn--main" type="button" data-via="sms"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>문자로 보내기</button>
           <button class="btn btn--line" type="button" data-via="mail"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span data-mail-label>이메일로 보내기</span></button>
         </div>
         <p class="inquiry__note" data-note>적으신 내용은 이 사이트에 저장되지 않습니다. 휴대폰 문자(또는 메일) 앱에 그대로 옮겨지니, 그 앱에서 ‘보내기’만 누르세요.</p>
