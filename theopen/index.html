@@ -98,16 +98,16 @@
               <desc id="plan-d">입구로 들어와 1 접수, 2 대기, 3 진료, 4 치료 순서로 이어지는 환자 동선을 점선으로 그린 예시 평면도</desc>
               <defs>
                 <mask id="plan-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="560" height="424">
-                  <path class="p-draw" pathLength="1" d="M190 400V288H100V190H326V92V190H455V268"/>
+                  <path class="p-draw" pathLength="1" d="M190 400V288H100V178H326V92V298H452"/>
                 </mask>
               </defs>
               <g class="p-floor">
                 <rect class="f2" x="10" y="10" width="260" height="190"/>
                 <rect class="f1" x="10" y="200" width="260" height="190"/>
-                <rect class="f1" x="270" y="150" width="280" height="80"/>
+                <rect class="f1" x="270" y="150" width="280" height="56"/>
                 <rect class="f3" x="270" y="10" width="140" height="140"/>
                 <rect class="f3" x="410" y="10" width="140" height="140"/>
-                <rect class="f4" x="270" y="230" width="280" height="160"/>
+                <rect class="f4" x="270" y="206" width="280" height="184"/>
               </g>
               <g class="p-furn">
                 <path d="M44 236H96V252H72V340H44Z"/>
@@ -122,27 +122,32 @@
                 <rect x="440" y="30" width="72" height="22" rx="2"/><path d="M462 36H490"/>
                 <circle cx="476" cy="20" r="6"/>
                 <rect x="452" y="58" width="14" height="14" rx="3"/><rect x="480" y="58" width="14" height="14" rx="3"/>
-                <rect x="290" y="296" width="40" height="78" rx="4"/><rect x="296" y="302" width="28" height="12" rx="3"/>
-                <rect x="350" y="296" width="40" height="78" rx="4"/><rect x="356" y="302" width="28" height="12" rx="3"/>
-                <rect x="410" y="296" width="40" height="78" rx="4"/><rect x="416" y="302" width="28" height="12" rx="3"/>
-                <rect x="470" y="296" width="40" height="78" rx="4"/><rect x="476" y="302" width="28" height="12" rx="3"/>
+                <!-- 치료실 베드 8개: 두 줄로 마주 보게, 가운데 통로 -->
+                <rect x="365" y="213" width="34" height="66" rx="4"/><rect x="370" y="218" width="24" height="10" rx="3"/>
+                <rect x="412" y="213" width="34" height="66" rx="4"/><rect x="417" y="218" width="24" height="10" rx="3"/>
+                <rect x="459" y="213" width="34" height="66" rx="4"/><rect x="464" y="218" width="24" height="10" rx="3"/>
+                <rect x="506" y="213" width="34" height="66" rx="4"/><rect x="511" y="218" width="24" height="10" rx="3"/>
+                <rect x="365" y="317" width="34" height="66" rx="4"/><rect x="370" y="368" width="24" height="10" rx="3"/>
+                <rect x="412" y="317" width="34" height="66" rx="4"/><rect x="417" y="368" width="24" height="10" rx="3"/>
+                <rect x="459" y="317" width="34" height="66" rx="4"/><rect x="464" y="368" width="24" height="10" rx="3"/>
+                <rect x="506" y="317" width="34" height="66" rx="4"/><rect x="511" y="368" width="24" height="10" rx="3"/>
                 <path d="M220 390V332A58 58 0 0 0 162 390"/>
               </g>
-              <path class="p-curtain" d="M340 288V382M400 288V382M460 288V382"/>
+              <path class="p-curtain" d="M405.5 210V283M405.5 313V386M452.5 210V283M452.5 313V386M499.5 210V283M499.5 313V386"/>
               <g class="p-room">
                 <text x="24" y="35">대기실</text>
                 <text x="24" y="364">접수</text>
                 <text x="400" y="140" text-anchor="end">진료실</text>
                 <text x="540" y="140" text-anchor="end">진료실</text>
-                <text x="282" y="257">치료실</text>
+                <text x="284" y="345">치료실</text>
               </g>
               <path class="p-wall p-wall--outer" pathLength="1" d="M160 390H10V10H550V390H220"/>
-              <path class="p-wall p-wall--inner" pathLength="1" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M270 230H430M480 230H550M270 230V390"/>
-              <path class="p-path" mask="url(#plan-mask)" d="M190 400V288H100V190H326V92V190H455V268"/>
+              <path class="p-wall p-wall--inner" pathLength="1" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M270 206H300M352 206H550M270 206V390"/>
+              <path class="p-path" mask="url(#plan-mask)" d="M190 400V288H100V178H326V92V298H452"/>
               <g class="p-node"><circle cx="100" cy="288" r="13"/><text x="100" y="293">1</text></g>
-              <g class="p-node"><circle cx="150" cy="190" r="13"/><text x="150" y="195">2</text></g>
+              <g class="p-node"><circle cx="150" cy="178" r="13"/><text x="150" y="183">2</text></g>
               <g class="p-node"><circle cx="326" cy="92" r="13"/><text x="326" y="97">3</text></g>
-              <g class="p-node"><circle cx="455" cy="268" r="13"/><text x="455" y="273">4</text></g>
+              <g class="p-node"><circle cx="452" cy="298" r="13"/><text x="452" y="303">4</text></g>
               <text class="p-entry" x="190" y="419">입구</text>
             </svg>
           </div>
@@ -326,7 +331,7 @@
                 <rect class="z" data-z="1" x="13" y="203" width="254" height="184"/>
                 <rect class="z" data-z="2" x="13" y="13" width="254" height="187"/>
                 <path class="z" data-z="3" d="M273 13H407V147H273ZM413 13H547V147H413Z"/>
-                <rect class="z" data-z="4" x="273" y="233" width="274" height="154"/>
+                <rect class="z" data-z="4" x="273" y="209" width="274" height="178"/>
               </g>
               <g class="p-furn">
                 <path d="M44 236H96V252H72V340H44Z"/>
@@ -341,27 +346,32 @@
                 <rect x="440" y="30" width="72" height="22" rx="2"/><path d="M462 36H490"/>
                 <circle cx="476" cy="20" r="6"/>
                 <rect x="452" y="58" width="14" height="14" rx="3"/><rect x="480" y="58" width="14" height="14" rx="3"/>
-                <rect x="290" y="296" width="40" height="78" rx="4"/><rect x="296" y="302" width="28" height="12" rx="3"/>
-                <rect x="350" y="296" width="40" height="78" rx="4"/><rect x="356" y="302" width="28" height="12" rx="3"/>
-                <rect x="410" y="296" width="40" height="78" rx="4"/><rect x="416" y="302" width="28" height="12" rx="3"/>
-                <rect x="470" y="296" width="40" height="78" rx="4"/><rect x="476" y="302" width="28" height="12" rx="3"/>
+                <!-- 치료실 베드 8개: 두 줄로 마주 보게, 가운데 통로 -->
+                <rect x="365" y="213" width="34" height="66" rx="4"/><rect x="370" y="218" width="24" height="10" rx="3"/>
+                <rect x="412" y="213" width="34" height="66" rx="4"/><rect x="417" y="218" width="24" height="10" rx="3"/>
+                <rect x="459" y="213" width="34" height="66" rx="4"/><rect x="464" y="218" width="24" height="10" rx="3"/>
+                <rect x="506" y="213" width="34" height="66" rx="4"/><rect x="511" y="218" width="24" height="10" rx="3"/>
+                <rect x="365" y="317" width="34" height="66" rx="4"/><rect x="370" y="368" width="24" height="10" rx="3"/>
+                <rect x="412" y="317" width="34" height="66" rx="4"/><rect x="417" y="368" width="24" height="10" rx="3"/>
+                <rect x="459" y="317" width="34" height="66" rx="4"/><rect x="464" y="368" width="24" height="10" rx="3"/>
+                <rect x="506" y="317" width="34" height="66" rx="4"/><rect x="511" y="368" width="24" height="10" rx="3"/>
                 <path d="M220 390V332A58 58 0 0 0 162 390"/>
               </g>
-              <path class="p-curtain" d="M340 288V382M400 288V382M460 288V382"/>
+              <path class="p-curtain" d="M405.5 210V283M405.5 313V386M452.5 210V283M452.5 313V386M499.5 210V283M499.5 313V386"/>
               <g class="p-room">
                 <text x="24" y="35">대기실</text>
                 <text x="24" y="364">접수</text>
                 <text x="400" y="140" text-anchor="end">진료실</text>
                 <text x="540" y="140" text-anchor="end">진료실</text>
-                <text x="282" y="257">치료실</text>
+                <text x="284" y="345">치료실</text>
               </g>
               <path class="p-wall p-wall--outer" d="M160 390H10V10H550V390H220"/>
-              <path class="p-wall p-wall--inner" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M270 230H430M480 230H550M270 230V390"/>
-              <path class="p-path" d="M190 400V288H100V190H326V92V190H455V268"/>
+              <path class="p-wall p-wall--inner" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M270 206H300M352 206H550M270 206V390"/>
+              <path class="p-path" d="M190 400V288H100V178H326V92V298H452"/>
               <g class="p-node" data-z="1"><circle cx="100" cy="288" r="13"/><text x="100" y="293">1</text></g>
-              <g class="p-node" data-z="2"><circle cx="150" cy="190" r="13"/><text x="150" y="195">2</text></g>
+              <g class="p-node" data-z="2"><circle cx="150" cy="178" r="13"/><text x="150" y="183">2</text></g>
               <g class="p-node" data-z="3"><circle cx="326" cy="92" r="13"/><text x="326" y="97">3</text></g>
-              <g class="p-node" data-z="4"><circle cx="455" cy="268" r="13"/><text x="455" y="273">4</text></g>
+              <g class="p-node" data-z="4"><circle cx="452" cy="298" r="13"/><text x="452" y="303">4</text></g>
               <text class="p-entry" x="190" y="419">입구</text>
             </svg>
           </div>
