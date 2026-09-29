@@ -139,6 +139,7 @@ p { text-wrap: pretty; }
 .hero h1 .hl { color: var(--main-ink); }
 .hero__lead { margin: 0 0 28px; font-size: clamp(1.0625rem, 1rem + .35vw, 1.25rem); line-height: 1.7; color: var(--ink-2); max-width: 26em; }
 .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.hero__free { font-size: 1rem; font-weight: 600; color: var(--main-ink); }
 @media (min-width: 960px) {
   .hero { padding-top: calc(var(--header-h) + 56px); padding-bottom: 72px; }
   .hero__grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; }
