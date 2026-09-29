@@ -309,20 +309,18 @@ p { text-wrap: pretty; }
 .track > p:not(.track__tag) { margin: 0 0 22px; color: var(--ink-2); }
 .track__btn { margin-top: auto; }
 
-/* ---------- 회사 정보 ---------- */
-.company { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
-@media (min-width: 960px) { .company { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; align-items: start; } }
-.facts { margin: 0; border-top: 1px solid var(--ink); }
-.facts > div { display: grid; grid-template-columns: 7.2em minmax(0, 1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.facts dt { font-size: 15px; font-weight: 700; color: var(--ink-3); line-height: 1.7; }
-.facts dd { margin: 0; font-weight: 600; }
-.facts a { text-decoration: none; }
-.facts a:hover { text-decoration: underline; }
-.promise { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 22px 14px; }
+/* ---------- 진행 과정 아래: 이 과정에서 지키는 것 ---------- */
+.promise { margin-top: 48px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 22px 14px; }
 .promise__title { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
 .promise ul { margin: 0; padding: 0; list-style: none; }
 .promise li { position: relative; padding: 10px 0 10px 22px; border-top: 1px solid var(--line-2); color: var(--ink-2); line-height: 1.55; }
 .promise li:first-child { border-top: 0; }
+@media (min-width: 768px) {
+  .promise { padding: 26px 30px 18px; }
+  .promise ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+  .promise li:nth-child(2) { border-top: 0; }
+}
+@media (min-width: 960px) { .promise { margin-top: 64px; } }
 .promise li::before { content: ""; position: absolute; left: 2px; top: 1.3em; width: 10px; height: 2px; background: var(--brand); }
 
 
@@ -355,11 +353,9 @@ p { text-wrap: pretty; }
 }
 .faq__list details[open] summary::after { transform: translateY(-25%) rotate(-135deg); }
 .faq__list details p { margin: 0 0 22px; color: var(--ink-2); max-width: 36em; }
-@supports (interpolate-size: allow-keywords) {
-  :root { interpolate-size: allow-keywords; }
-  .faq__list details::details-content { height: 0; overflow: clip; transition: height .4s cubic-bezier(.2, .7, .2, 1), content-visibility .4s allow-discrete; }
-  .faq__list details[open]::details-content { height: auto; }
-}
+/* 열 때 높이를 늘리는 움직임은 페이지 전체를 매 프레임 다시 배치해 버벅여서, 바로 열고 답 글만 살짝 나타나게 한다 */
+.faq__list details[open] p { animation: faq-in .3s cubic-bezier(.2, .7, .2, 1); }
+@keyframes faq-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
 /* ---------- 상담 ---------- */
 .contact { background: var(--dark); color: var(--on-dark); }
@@ -440,5 +436,5 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .site-header, .mbar, .step__no, .btn .ico--arrow, .z, .p-node circle { transition: none; }
-  .faq__list details::details-content { transition: none; }
+  .faq__list details[open] p { animation: none; }
 }

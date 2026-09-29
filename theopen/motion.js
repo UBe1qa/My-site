@@ -194,9 +194,8 @@
     rise('.space__fig', '.space', 'top 75%');
     rise('.inline-cta', '.inline-cta', 'top 90%');
 
-    // 개원/리뉴얼 · 회사 정보 · 상담 칸의 준비할 것
+    // 개원/리뉴얼 · 진행 과정 아래 여섯 가지 · 상담 칸의 준비할 것
     rise('.track', '.tracks', 'top 82%', { stagger: 0.12 });
-    rise('.facts > div', '.facts', 'top 85%', { stagger: 0.06 });
     rise('.promise li', '.promise', 'top 85%', { stagger: 0.06 });
     rise('.prep li, .prep__note', '.prep', 'top 88%', { stagger: 0.06 });
 
@@ -218,8 +217,8 @@
       });
     });
 
-    // 질문을 열고 닫으면 페이지 길이가 바뀌니 위치 다시 재기
-    $$('.faq__list details').forEach(function (d) { d.addEventListener('toggle', function () { setTimeout(function () { ST.refresh(); }, 450); }); });
+    // 질문을 열고 닫을 때 ScrollTrigger.refresh()는 하지 않는다 (35개를 다시 재느라 순간 멈칫함.
+    // 아래 칸들의 나타나는 위치가 답 길이만큼 조금 일찍 잡힐 뿐이라 문제없음)
 
     requestAnimationFrame(function () { ST.refresh(); });
   }
