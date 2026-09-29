@@ -96,11 +96,6 @@
             <svg viewBox="0 0 560 424" role="img" aria-labelledby="plan-t plan-d">
               <title id="plan-t">한의원 평면 동선 예시</title>
               <desc id="plan-d">입구로 들어와 1 접수, 2 대기, 3 진료, 4 치료 순서로 이어지는 환자 동선을 점선으로 그린 예시 평면도</desc>
-              <defs>
-                <mask id="plan-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="560" height="424">
-                  <path class="p-draw" pathLength="1" d="M190 400V288H100V178H326V92V298H400"/>
-                </mask>
-              </defs>
               <g class="p-floor">
                 <rect class="f2" x="10" y="10" width="260" height="190"/>
                 <rect class="f1" x="10" y="200" width="260" height="190"/>
@@ -151,7 +146,7 @@
               </g>
               <path class="p-wall p-wall--outer" pathLength="1" d="M160 390H10V10H550V390H220"/>
               <path class="p-wall p-wall--inner" pathLength="1" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M230 206H300M352 206H550M230 206V390"/>
-              <path class="p-path" mask="url(#plan-mask)" d="M190 400V288H100V178H326V92V298H400"/>
+              <path class="p-path" d="M190 400V288H100V178H318V92H334V298H400"/>
               <g class="p-node"><circle cx="100" cy="288" r="13"/><text x="100" y="293">1</text></g>
               <g class="p-node"><circle cx="150" cy="178" r="13"/><text x="150" y="183">2</text></g>
               <g class="p-node"><circle cx="326" cy="92" r="13"/><text x="326" y="97">3</text></g>
@@ -383,7 +378,7 @@
               </g>
               <path class="p-wall p-wall--outer" d="M160 390H10V10H550V390H220"/>
               <path class="p-wall p-wall--inner" d="M270 10V150M410 10V150M270 150H300M352 150H440M500 150H550M230 206H300M352 206H550M230 206V390"/>
-              <path class="p-path" d="M190 400V288H100V178H326V92V298H400"/>
+              <path class="p-path" d="M190 400V288H100V178H318V92H334V298H400"/>
               <g class="p-node" data-z="1"><circle cx="100" cy="288" r="13"/><text x="100" y="293">1</text></g>
               <g class="p-node" data-z="2"><circle cx="150" cy="178" r="13"/><text x="150" y="183">2</text></g>
               <g class="p-node" data-z="3"><circle cx="326" cy="92" r="13"/><text x="326" y="97">3</text></g>

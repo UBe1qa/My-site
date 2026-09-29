@@ -56,10 +56,10 @@ async def main():
                 on = await pg.evaluate('document.querySelector("[data-mbar]").classList.contains("is-on")')
                 check(not on, '첫 화면에선 아래 막대 숨김')
                 await pg.wait_for_timeout(1200)
-                off = await pg.evaluate('getComputedStyle(document.querySelector(".p-draw")).strokeDashoffset')
+                off = await pg.evaluate('(() => { const s = document.querySelector("[data-sheet]"); const d = [...s.querySelectorAll(".p-dot")]; if (!d.length) return getComputedStyle(s.querySelector(".p-path")).opacity === "1" ? "full" : "hidden"; const on = d.filter(e => e.style.opacity !== "0").length; return on === d.length ? "full" : on + "/" + d.length; })()')
                 wall = await pg.evaluate('getComputedStyle(document.querySelector(".p-wall--inner")).strokeDashoffset')
                 node = await pg.evaluate('getComputedStyle(document.querySelector(".p-node:last-of-type")).opacity')
-                check(off in ('0', '0px') and wall in ('0', '0px') and node == '1', f'도면: 벽·점선·번호 끝까지 그려짐 (점선 {off}, 벽 {wall}, 번호 {node})')
+                check(off == 'full' and wall in ('0', '0px') and node == '1', f'도면: 벽·점선·번호 끝까지 그려짐 (점선 {off}, 벽 {wall}, 번호 {node})')
                 await pg.evaluate('document.querySelector("#process").scrollIntoView({behavior:"instant"})')
                 await pg.wait_for_timeout(600)
                 on = await pg.evaluate('document.querySelector("[data-mbar]").classList.contains("is-on")')
@@ -144,6 +144,10 @@ async def main():
         # 공간 칸: 컴퓨터에선 오른쪽 평면이 따라오고, 가운데 칸의 공간이 칠해짐
         await pg.evaluate('(() => { const z = document.querySelector(".zone[data-zone=\'3\']"); window.scrollTo(0, z.getBoundingClientRect().top + scrollY - innerHeight / 2 + z.offsetHeight / 2); })()')
         await pg.wait_for_timeout(700)
+        for _ in range(2):  # 여러 확인을 동시에 돌리면 부드러운 스크롤이 늦게 멈출 때가 있어 한 번 더 맞춤
+            if await pg.evaluate('[...document.querySelectorAll("[data-space-fig] .z.is-on")].map(e => e.dataset.z).join() === "3"'): break
+            await pg.evaluate('(() => { const z = document.querySelector(".zone[data-zone=\'3\']"); window.scrollTo(0, z.getBoundingClientRect().top + scrollY - innerHeight / 2 + z.offsetHeight / 2); })()')
+            await pg.wait_for_timeout(900)
         zinfo = await pg.evaluate('({ on: [...document.querySelectorAll("[data-space-fig] .z.is-on")].map(e => e.dataset.z), pos: getComputedStyle(document.querySelector("[data-space-fig]")).position, top: Math.round(document.querySelector("[data-space-fig]").getBoundingClientRect().top), crops: getComputedStyle(document.querySelector(".zone__crop")).display })')
         check(zinfo['on'] == ['3'] and zinfo['pos'] == 'sticky' and 0 < zinfo['top'] < 200 and zinfo['crops'] == 'none', f'공간 칸 (컴퓨터): {zinfo}')
         dup = await pg.evaluate('(() => { const ids = [...document.querySelectorAll("[id]")].map(e => e.id); return ids.filter((v, i) => ids.indexOf(v) !== i); })()')

@@ -25,7 +25,7 @@ BARS = '''() => { const s = [...document.querySelectorAll("[data-bars] .seg")].m
   return { none: s.filter(v => v === "none").length, total: s.length, tag: +getComputedStyle(document.querySelector(".bars__tag")).opacity }; }'''
 TITLE = '''(sel) => { const l = [...document.querySelectorAll(sel + " .ln")]; return l.map(e => getComputedStyle(e).transform); }'''
 PLAN = '''() => { const s = document.querySelector("[data-sheet]"); return { wall: getComputedStyle(s.querySelector(".p-wall")).strokeDashoffset,
-  draw: getComputedStyle(s.querySelector(".p-draw")).strokeDashoffset, node: +getComputedStyle(s.querySelector(".p-node")).opacity,
+  draw: (() => { const s = document.querySelector("[data-sheet]"); const d = [...s.querySelectorAll(".p-dot")]; if (!d.length) return getComputedStyle(s.querySelector(".p-path")).opacity === "1" ? "full" : "hidden"; const on = d.filter(e => e.style.opacity !== "0").length; return on === d.length ? "full" : on + "/" + d.length; })(), node: +getComputedStyle(s.querySelector(".p-node")).opacity,
   floor: s.querySelector(".p-floor > *") ? +getComputedStyle(s.querySelector(".p-floor > *")).opacity : -1 }; }'''
 # 화면 가운데(12%~75%)에 걸친 요소 가운데 안 보이는 것 (모든 칸의 '나타나는 줄'보다 안쪽이라 기다린 뒤엔 다 보여야 함)
 HID = '''() => { const vh = innerHeight; return [...document.querySelectorAll("main *, footer *")].filter(e => {
@@ -46,10 +46,11 @@ async def main():
         pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
         pg.on('pageerror', lambda e: errs.append(str(e)))
         await pg.goto(base, wait_until='domcontentloaded')
-        await pg.wait_for_timeout(5200)
+        await pg.wait_for_function('window.__motionReady === true', timeout=20000)  # 여러 확인을 동시에 돌리면 시작이 늦어질 수 있음
+        await pg.wait_for_timeout(4800)
         print('[휴대폰]')
         pl = await pg.evaluate(PLAN)
-        check(pl['wall'] in ('0', '0px') and pl['draw'] in ('0', '0px') and pl['node'] == 1, f'첫 화면 도면 다 그려짐 {pl}')
+        check(pl['wall'] in ('0', '0px') and pl['draw'] == 'full' and pl['node'] == 1, f'첫 화면 도면 다 그려짐 {pl}')
 
         # 자재 막대: 처음
         await pg.evaluate(TOP_AT, ['[data-bars]', 0.3]); await pg.wait_for_timeout(2800)
@@ -94,7 +95,7 @@ async def main():
         pl2 = await pg.evaluate(PLAN)
         await pg.wait_for_timeout(4500)
         pl3 = await pg.evaluate(PLAN)
-        check(pl1['draw'] not in ('0', '0px') and pl2['draw'] not in ('0', '0px') and pl3['draw'] in ('0', '0px') and pl3['node'] == 1,
+        check(pl1['draw'] != 'full' and pl2['draw'] != 'full' and pl3['draw'] == 'full' and pl3['node'] == 1,
               f'첫 화면 도면 다시 그려짐 (나가 있을 때 {pl1["draw"]}, 0.5초 {pl2["draw"]}, 끝 {pl3["draw"]})')
 
         # 휴대폰 공간 칸: 작은 평면에 그 공간이 칠해짐

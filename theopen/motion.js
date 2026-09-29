@@ -1,6 +1,9 @@
 /* 더오픈 THE OPEN — 움직임 (4차: 다시 보일 때마다 다시 움직임, 2026-09-29)
    GSAP(ScrollTrigger·SplitText) + 컴퓨터(마우스)에선 Lenis 부드러운 스크롤.
-   - 첫 화면: 제목이 줄마다 올라오고(처음 한 번), 도면이 벽 → 바닥 → 가구 → 동선 순서로 그려짐.
+   - 첫 화면: 제목이 줄마다 올라오고(처음 한 번), 도면은 벽이 그어지고 → 바닥·가구가 한 번에 깔리고 →
+     환자 한 명(초록 점)이 입구에서 걸어 들어가며 발자국 점선을 남기고, 도착하는 곳마다 번호와 아래 설명이 켜진다.
+     점선·번호·설명이 모두 '걸어간 거리' 하나로 움직여 어긋나지 않는다 (5차, 2026-09-29 — 전엔 마스크로 점선을 드러내
+     번호와 따로 놀았고, 아이폰 사파리는 마스크를 움직이는 도중 다시 안 그려 끝에 한꺼번에 나타날 수 있었음).
      도면은 화면 밖으로 나갔다가 다시 보이면 다시 그려진다
    - 아래 칸들: 화면 안쪽으로 들어오면 나타나고, 화면 밖으로 완전히 나가면 처음 상태로 되돌려 둔다
      → 위로 올라갔다 다시 내려와도(반대로 올라와도) 또 움직인다 (사용자 요청, 2026-09-29).
@@ -38,6 +41,127 @@
   setTimeout(start, 1200);
 
   function $(s, r) { return (r || document).querySelector(s); }
+
+  /* 첫 화면 도면을 층 네 개로 나눈다: 바닥(원래 그림) / 가구·방 이름 / 벽 / 걷는 동선·번호.
+     그림 하나(SVG)는 그 안의 점 하나만 움직여도 매 프레임 전체를 다시 그린다 → 휴대폰에서 걷는 동안 초당 10~15장까지 떨어졌음.
+     층마다 따로 그려 두면 움직이는 층만 다시 그리고, 나타나는 층(바닥·가구)은 통째로 흐려졌다 선명해지기만 해서 거의 공짜.
+     움직임이 꺼지면(동작 줄이기·라이브러리 실패) 이 함수는 안 불리고 원래 그림 하나 그대로 */
+  function layerPlan(sheet) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var base = sheet.querySelector('.sheet__draw svg');
+    if (!base) return null;
+    var stack = document.createElement('div');
+    stack.className = 'sheet__stack';
+    base.parentNode.insertBefore(stack, base);
+    stack.appendChild(base);
+    base.classList.add('sheet__base');
+    function layer(sel) {
+      var l = document.createElementNS(NS, 'svg');
+      l.setAttribute('viewBox', base.getAttribute('viewBox'));
+      l.setAttribute('class', 'sheet__layer');
+      l.setAttribute('aria-hidden', 'true');
+      l.setAttribute('focusable', 'false');
+      Array.prototype.forEach.call(base.querySelectorAll(sel), function (el) { l.appendChild(el); });
+      stack.appendChild(l);
+      return l;
+    }
+    return { floor: base, furn: layer('.p-furn, .p-curtain, .p-room, .p-entry'), wall: layer('.p-wall'), walk: layer('.p-path, .p-node') };
+  }
+
+  /* 첫 화면 도면의 '걸어가는 동선'.
+     점선(.p-path)을 따라 10단위마다 발자국 점을 만들고, 걸어간 거리 d 하나로 점·사람 점·번호·설명을 맞춘다.
+     번호 자리는 도면에서 직접 재므로 도면을 다시 그려도 시간을 손으로 다시 계산할 필요가 없다.
+     점선 위 위치는 처음에 2단위마다 한 번만 재 두고(매 프레임 다시 재지 않음) 사이는 이어 붙인다 */
+  function makeWalk(sheet) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var route = sheet.querySelector('.p-path');
+    var nodes = Array.prototype.slice.call(sheet.querySelectorAll('.p-node'));
+    var legend = Array.prototype.slice.call(sheet.querySelectorAll('.sheet__legend .lg'));
+    if (!route || !route.getTotalLength || !nodes.length) return null;
+    var len = route.getTotalLength();
+    var SAMPLE = 2, STEP = 10, SPEED = 820, PAUSE = 0.14;
+    var pts = [];
+    for (var i = 0; i * SAMPLE < len; i++) pts.push(route.getPointAtLength(i * SAMPLE));
+    pts.push(route.getPointAtLength(len));
+    function pointAt(dist) {
+      var f = Math.max(0, Math.min(dist, len)) / SAMPLE, i0 = Math.min(Math.floor(f), pts.length - 1), i1 = Math.min(i0 + 1, pts.length - 1), k = f - i0;
+      return { x: pts[i0].x + (pts[i1].x - pts[i0].x) * k, y: pts[i0].y + (pts[i1].y - pts[i0].y) * k };
+    }
+    function el(name, cls, attrs) {
+      var e = document.createElementNS(NS, name);
+      e.setAttribute('class', cls);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+    var g = el('g', 'p-walk', { 'aria-hidden': 'true' });
+    nodes[0].parentNode.insertBefore(g, nodes[0]); // 번호 아래 (도착하면 번호가 사람 점을 덮는다)
+    var dots = [];
+    for (var d = 0; d <= len + 0.01; d += STEP) {
+      var p = pointAt(d);
+      var dot = el('circle', 'p-dot', { cx: p.x.toFixed(1), cy: p.y.toFixed(1), r: 2.4 });
+      dot.style.opacity = 0;
+      g.appendChild(dot);
+      dots.push(dot);
+    }
+    // 번호마다 점선 위 거리 (가장 가까운 곳)
+    var at = nodes.map(function (n) {
+      var c = n.querySelector('circle'), x = +c.getAttribute('cx'), y = +c.getAttribute('cy'), best = 0, bd = 1e9;
+      pts.forEach(function (q, j) {
+        var dd = (q.x - x) * (q.x - x) + (q.y - y) * (q.y - y);
+        if (dd < bd) { bd = dd; best = Math.min(j * SAMPLE, len); }
+      });
+      return best;
+    });
+    var rings = nodes.map(function (n) {
+      var c = n.querySelector('circle');
+      var r = el('circle', 'p-ring', { cx: c.getAttribute('cx'), cy: c.getAttribute('cy'), r: 13 });
+      r.style.opacity = 0;
+      g.appendChild(r);
+      return r;
+    });
+    var man = el('circle', 'p-walker', { r: 0 });
+    g.appendChild(man);
+    route.style.opacity = 0; // 점선은 발자국 점이 대신한다 (움직임이 꺼지면 원래 점선이 그대로 보임)
+
+    var shown = 0, pos = { d: 0 };
+    function render(dist) {
+      var n = dist <= 0 ? 0 : Math.min(dots.length, Math.floor(dist / STEP) + 1);
+      if (n !== shown) {
+        for (var i = Math.min(n, shown); i < Math.max(n, shown); i++) dots[i].style.opacity = i < n ? 1 : 0;
+        shown = n;
+      }
+      var q = pointAt(dist);
+      man.setAttribute('cx', q.x.toFixed(1)); man.setAttribute('cy', q.y.toFixed(1));
+    }
+    function update() { render(pos.d); }
+    render(0);
+
+    function addTo(tl, start) {
+      tl.fromTo(man, { attr: { r: 0 } }, { attr: { r: 7.5 }, duration: 0.25, ease: 'power2.out' }, start);
+      if (legend.length) tl.fromTo(legend, { opacity: 0.35 }, { opacity: 0.35, duration: 0.01 }, 0);
+      var t = start + 0.1, prev = 0;
+      var nc = nodes.map(function (n) { return n.querySelector('circle'); }), nt = nodes.map(function (n) { return n.querySelector('text'); });
+      at.forEach(function (dist, i) {
+        var dur = 0.26 + (dist - prev) / SPEED;
+        // 곳마다 천천히 출발해 천천히 멈춘다 (사람이 걷다 서는 것처럼)
+        tl.fromTo(pos, { d: prev }, { d: dist, duration: dur, ease: 'sine.inOut', immediateRender: false, onUpdate: update }, t);
+        t += dur;
+        // 번호: 동그라미만 커지고 숫자는 흐림만 (묶음째 크기를 바꾸면 매 프레임 도면 글자를 다시 배치해 휴대폰에서 버벅였음)
+        tl.fromTo(nodes[i], { opacity: 0 }, { opacity: 1, duration: 0.18, ease: 'none' }, t - 0.06)
+          .fromTo(nc[i], { attr: { r: 6 } }, { attr: { r: 13 }, duration: 0.4, ease: 'power3.out' }, t - 0.06)
+          .fromTo(nt[i], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out' }, t + 0.02)
+          .set(rings[i], { opacity: 0.5, attr: { r: 13 } }, t - 0.04) // 되감으면 set이 풀려 다시 안 보임
+          .to(rings[i], { opacity: 0, attr: { r: 24 }, duration: 0.7, ease: 'power2.out' }, t - 0.04);
+        if (legend[i]) tl.to(legend[i], { opacity: 1, duration: 0.35, ease: 'power1.out' }, t - 0.06);
+        prev = dist;
+        t += PAUSE;
+      });
+      // 마지막 곳(치료)에 닿으면 사람 점은 번호 속으로 사라지고, 남은 점선을 끝까지
+      tl.to(man, { attr: { r: 0 }, duration: 0.25, ease: 'power2.in' }, t - PAUSE)
+        .fromTo(pos, { d: prev }, { d: len, duration: Math.max(0.01, (len - prev) / SPEED), ease: 'none', immediateRender: false, onUpdate: update }, t - PAUSE);
+    }
+    return { render: render, addTo: addTo };
+  }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
 
   function init() {
@@ -113,7 +237,8 @@
     function hide(it) {
       if (it.state === 'hidden' || holdsFocus(it)) return; // 입력 중인 신청서 같은 곳은 되돌리지 않는다
       it.state = 'hidden';
-      it.tl.pause(0);
+      it.tl.pause(0);            // 되돌릴 땐 onUpdate가 불리지 않으므로(GSAP 기본) 따로 챙길 게 있으면 onReset
+      if (it.onReset) it.onReset();
     }
     function useTl(it, tl) {
       it.tl = tl;
@@ -152,28 +277,26 @@
       .fromTo('.hero__lead', { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.9 }, 0.45)
       .fromTo('.hero__actions > *', { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.08, clearProps: 'transform' }, 0.6);
 
-    // 도면: 시트가 놓이고 → 바깥벽 → 안쪽 벽 → 바닥 색 → 가구·방 이름 → 동선 점선과 번호가 차례로.
-    // 그리는 부분은 따로 떼어 두고, 화면 밖으로 나갔다 들어오면 다시 그린다
+    // 도면: 벽 → 바닥·가구(한 번에) → 환자가 걸어가는 동선. 화면 밖으로 나갔다 들어오면 다시 그린다
     var sheet = $('[data-sheet]');
     if (sheet) {
+      var L = layerPlan(sheet);
       var walls = $$('.p-wall', sheet);
-      var floors = $$('.p-floor > *', sheet);
-      var furn = $$('.p-furn > *, .p-curtain, .p-room text, .p-entry', sheet);
-      var draw = $('.p-draw', sheet);
-      var nodes = $$('.p-node', sheet);
+      var walk = makeWalk(sheet);
       var drawTl = G.timeline({ paused: true })
-        .fromTo(walls[0], { strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' }, 0)
-        .fromTo(walls[1], { strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0.55)
-        .fromTo(floors, { opacity: 0 }, { opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power1.out' }, 0.85)
-        .fromTo(furn, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.012, ease: 'none' }, 0.95)
-        .fromTo(draw, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, ease: 'power1.inOut' }, 1.35);
-      // 번호는 점선이 그 자리에 닿을 때 (점선 길이 비율로 계산한 시각)
-      [1.94, 2.18, 2.53, 3.4].forEach(function (t, i) {
-        drawTl.fromTo(nodes[i], { autoAlpha: 0, scale: 0.4, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'power2.out' }, t);
-      });
+        .fromTo(walls[0], { strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.8, ease: 'power2.inOut' }, 0)
+        .fromTo(walls[1], { strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut' }, 0.1)
+        // 바닥과 가구는 방마다 따로가 아니라 층째 한 번에 (다시 그리지 않고 흐림만 바뀜)
+        .fromTo(L ? L.floor : $('.p-floor', sheet), { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 0.3)
+        .fromTo(L ? L.furn : $$('.p-furn, .p-curtain, .p-room, .p-entry', sheet), { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 0.45);
+      if (walk) walk.addTo(drawTl, 0.65);
       intro
-        .fromTo(sheet, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1.1, clearProps: 'transform' }, 0.3)
-        .call(function () { drawTl.play(0); reveal(sheet, drawTl, 92, true); }, null, 0.55);
+        .fromTo(sheet, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.7, clearProps: 'transform' }, 0.2)
+        .call(function () {
+          drawTl.play(0);
+          var it = reveal(sheet, drawTl, 92, true);
+          if (it && walk) it.onReset = function () { walk.render(0); };
+        }, null, 0.3);
     }
 
     /* 4) 섹션 제목: 줄마다 아래에서 올라옴.
@@ -223,7 +346,7 @@
     if (wrap) {
       var trackEl = $('.steps__track', wrap), fillEl = $('.steps__fill', wrap);
       var steps = $$('.step', wrap), nos = $$('.step__no', wrap);
-      var dir = 'y';
+      var dir = 'y', lastOn = -1;
       // 번호 동그라미 가운데끼리 잇는 선 (transform 영향 없는 offset 값으로 잰다)
       var layout = function () {
         var a = nos[0], b = nos[nos.length - 1];
@@ -243,7 +366,9 @@
         onUpdate: function (self) {
           var p = self.progress;
           fillEl.style.transform = dir === 'x' ? 'scaleX(' + p + ')' : 'scaleY(' + p + ')';
-          steps.forEach(function (s, i) { s.classList.toggle('is-on', p > 0.001 && p >= i / (steps.length - 1) - 0.02); });
+          var on = 0;
+          steps.forEach(function (s, i) { if (p > 0.001 && p >= i / (steps.length - 1) - 0.02) on = i + 1; });
+          if (on !== lastOn) { steps.forEach(function (s, i) { s.classList.toggle('is-on', i < on); }); lastOn = on; }
         }
       });
     }
