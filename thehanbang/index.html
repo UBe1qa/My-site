@@ -17,6 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238B3A1F'/%3E%3Cg transform='translate(3 7.9) scale(.1625)' fill='none' stroke='%23fff' stroke-width='10'%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3Ccircle cx='111.5' cy='50' r='44'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" as="image" href="img/hall_wide.webp" fetchpriority="high">
+<link rel="preload" as="font" href="fonts/first-f504c305.woff2" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <script>try{if(localStorage.getItem('daycare-text-lg')==='1')document.documentElement.classList.add('text-lg')}catch(e){}</script>
@@ -51,6 +52,11 @@
   --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,Roboto,'Helvetica Neue','Segoe UI','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;
   color-scheme:light;
 }
+/* 첫 화면 글꼴: 첫 화면(class="first-font")에 쓰인 글자만 담은 Pretendard 조각(약 20KB)을 먼저 받는다.
+   처음 방문 때 큰 글꼴이 늦게 와도 첫 화면 글자가 다른 글꼴로 보였다가 줄이 다시 짜이는 일이 없게.
+   첫 화면 문구를 바꾸면 python3 _dev/first_font.py 를 다시 돌린다 (빠진 글자는 _dev/check.py 가 알려 줌) */
+@font-face{font-family:'hb-first';src:url(fonts/first-f504c305.woff2) format('woff2');font-weight:400 800;font-display:swap;unicode-range:U+20,U+25,U+2b-2e,U+30-39,U+3f,U+7e,U+a0,U+b7,U+ac00,U+ac04,U+ac15,U+ac19,U+ac74,U+ac8c,U+acc4,U+ace0,U+acfc,U+ad00,U+ae00,U+ae08-ae09,U+ae30,U+ae4c,U+aed8,U+b098,U+b0b4,U+b141,U+b294,U+b298,U+b2a5,U+b2d8,U+b2e4,U+b2e8,U+b2f4,U+b300-b301,U+b354,U+b3d9,U+b458,U+b4dc,U+b4f1,U+b514,U+b7ec,U+b7fc,U+b824,U+b85c,U+b8cc,U+b8e8,U+b9ac,U+b9c8,U+b9db,U+baa8,U+bb34,U+bb38,U+bc29,U+bcf4,U+bd80,U+be44,U+c0ac,U+c0c1,U+c11c,U+c124,U+c138,U+c13c,U+c154,U+c2dc-c2dd,U+c2e0,U+c544,U+c548,U+c55e,U+c5b4,U+c5c6,U+c5d0,U+c624,U+c640,U+c694-c695,U+c6a9,U+c6b4,U+c6d0,U+c73c,U+c740,U+c758,U+c774,U+c77c,U+c788,U+c790,U+c7ac,U+c800,U+c804,U+c811,U+c870-c871,U+c885,U+c8fc,U+c9c0-c9c1,U+c9d1,U+cbe4,U+ccad,U+ce68,U+ce7c,U+d06c,U+d130,U+d558,U+d55c,U+d568,U+d5d8,U+d638,U+d63c,U+d648,U+d654,U+d65c,U+d6c4}
+.first-font{font-family:'hb-first',var(--font)}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
 html{
@@ -643,24 +649,23 @@ html{scroll-padding-top:122px}
 .other-cols a:hover{color:var(--primary)}
 
 /* 움직임 (html.anim일 때만 — '동작 줄이기'면 없음). 칸마다 뜻에 맞는 움직임 하나씩, transform·opacity만
-   첫 화면: 처음 한 번 — 제목 첫 줄↔'아침' 칩, 둘째 줄↔'저녁' 칩
-   제목: 줄마다 가림막 아래에서 올라옴 / 비교: 더한방의 하루를 점이 아침→저녁으로 지나가며 켬(집의 하루는 가만히)
-   사진: 덮개가 걷힘 / 장비: 톡톡 차례로 / 하루 일과: 스크롤한 만큼 선이 차오름 / 비용: 100%에서 본인부담까지 내려감, 월 금액은 올라감
+   첫 화면: 처음 열 때 한 번만 — 제목 첫 줄↔'아침' 칩, 둘째 줄↔'저녁' 칩 (다른 탭에 갔다 오면 hero-done이라 다시 안 함)
+   탭 바꿈: 새 칸만 짧게 흐리게 → 선명하게 (JS element.animate, 처음 열 때는 안 함)
+   탭 첫 제목: 줄마다 가림막 아래에서 올라옴 / 비교: 더한방의 하루를 점이 아침→저녁으로 지나가며 켬(집의 하루는 가만히)
+   사진: 살짝 다가오며 선명해짐 / 장비: 차례로 짧게 / 하루 일과: 스크롤한 만큼 선이 차오름 / 이용 절차: 1→4 아이콘에 불이 켜짐
    나머지 카드: 제자리에서 흐리게 → 선명하게 */
 .hero h1 .ln{display:inline-block}
 @keyframes rv-rise{from{opacity:0;transform:translateY(14px)}}
 @keyframes rv-pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
-@keyframes rv-fade{from{opacity:0}}
-.anim .hero .badge,.anim .hero h1 .ln,.anim .hero-sub,.anim .hero-cta,.anim .hero-note{animation:rv-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.anim:not(.hero-done) .hero .badge,.anim:not(.hero-done) .hero h1 .ln,.anim:not(.hero-done) .hero-sub,.anim:not(.hero-done) .hero-cta,.anim:not(.hero-done) .hero-note{animation:rv-rise .7s cubic-bezier(.2,.7,.2,1) both}
 .anim .hero h1 .ln:first-child{animation-delay:.08s}
 .anim .hero h1 .ln + br + .ln{animation-delay:.34s}
 .anim .hero-sub{animation-delay:.48s}
 .anim .hero-cta{animation-delay:.54s}
 .anim .hero-note{animation-delay:.6s}
-.anim .chip{animation:rv-pop .55s cubic-bezier(.2,.7,.2,1) both}
+.anim:not(.hero-done) .chip{animation:rv-pop .55s cubic-bezier(.2,.7,.2,1) both}
 .anim .chip-a{animation-delay:.2s}
 .anim .chip-b{animation-delay:.48s}
-.anim.ready .chapter:not([hidden]){animation:rv-fade .3s ease both}
 
 /* 공통: 흐리게 → 선명하게 (움직이지 않음) */
 .anim .rv{transition:opacity .55s ease var(--d,0s)}
@@ -750,7 +755,7 @@ html{scroll-padding-top:122px}
 
 <a class="skip" href="#main">본문 바로가기</a>
 
-<header class="header" id="header">
+<header class="header first-font" id="header">
   <div class="container header-row">
     <a class="logo" href="#home"><svg aria-hidden="true"><use href="#logo-mark"/></svg>더한방<span>주간보호센터</span></a>
     <nav class="nav" aria-label="메뉴">
@@ -779,7 +784,7 @@ html{scroll-padding-top:122px}
 <!-- ================= 홈 ================= -->
 <div class="chapter" id="ch-home">
 
-  <section class="hero">
+  <section class="hero first-font">
     <div class="container hero-grid">
       <div>
         <span class="badge">부모님, 하루 종일 집에 혼자 계신가요?</span>
@@ -805,7 +810,7 @@ html{scroll-padding-top:122px}
 
   <section class="section gray" id="compare">
     <div class="container">
-      <div class="sec-head">
+      <div class="sec-head first-font">
         <span class="eyebrow">아침부터 저녁까지</span>
         <h2>같은 하루,<br><em>어디서</em> 보내시나요?</h2>
       </div>
@@ -1331,7 +1336,7 @@ html{scroll-padding-top:122px}
   </div>
 </footer>
 
-<nav class="bottom-bar" aria-label="빠른 상담">
+<nav class="bottom-bar first-font" aria-label="빠른 상담">
   <a class="btn btn-primary" href="tel:0328150157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화 상담</a>
   <a class="btn btn-secondary" href="sms:01026110157"><svg class="ico" aria-hidden="true"><use href="#i-msg"/></svg>문자 문의</a>
 </nav>
@@ -1346,7 +1351,6 @@ html{scroll-padding-top:122px}
   (function () {
     if (!root.classList.contains('anim')) return;
     window.__rvOn = true;
-    setTimeout(function () { root.classList.add('ready'); }, 900);
     var $$ = function (sel, el) { return [].slice.call((el || document).querySelectorAll(sel)); };
     var items = [];
     // 지켜보는 건 칸(묶음) 단위, 움직이는 건 그 안의 요소들 — 지켜볼 요소 수를 줄여 스크롤 계산을 가볍게
@@ -1518,8 +1522,14 @@ html{scroll-padding-top:122px}
     for (var c in chEls) { if (chEls[c].contains(el)) return { ch: c, target: id }; }
     return { ch: 'home' };
   }
+  var shownCh = null;
   function show(r, smooth) {
+    var changed = shownCh !== null && shownCh !== r.ch; shownCh = r.ch;
     CH.forEach(function (c) { chEls[c].hidden = c !== r.ch; });
+    if (changed && root.classList.contains('anim')) {
+      root.classList.add('hero-done');
+      if (chEls[r.ch].animate) chEls[r.ch].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+    }
     navLinks.forEach(function (a) { if (a.dataset.ch === r.ch) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     var title = TITLES[r.ch];
     if (r.ch === 'column') {
