@@ -46,9 +46,11 @@ with sync_playwright() as p:
             ok(pg.evaluate("document.documentElement.classList.contains('anim')"), f'{w}px {ch} 움직임 켜짐')
             bad = []; H_ = pg.evaluate('document.body.scrollHeight')
             for y in range(0, H_, 500):
-                pg.mouse.wheel(0, 500); pg.wait_for_timeout(1300); bad += pg.evaluate(HIDDEN)
+                pg.mouse.wheel(0, 500); pg.wait_for_timeout(1300)
+                if pg.evaluate(HIDDEN): pg.wait_for_timeout(1500); bad += pg.evaluate(HIDDEN)  # 과정 재생은 끝날 때까지 기다림
             for y in range(0, H_, 700):
-                pg.mouse.wheel(0, -700); pg.wait_for_timeout(1300); bad += pg.evaluate(HIDDEN)
+                pg.mouse.wheel(0, -700); pg.wait_for_timeout(1300)
+                if pg.evaluate(HIDDEN): pg.wait_for_timeout(1500); bad += pg.evaluate(HIDDEN)
             ok(not bad, f'{w}px {ch} 스크롤 중 숨은 채 남은 요소 {bad[:3]}'); ok(not errs, f'{w}px {ch} 움직임 콘솔 오류 {errs[:2]}')
             pg.context.close()
     # 다시 재생: 비교 칸을 지나쳤다 돌아오면 in이 빠졌다가 다시 붙는지
