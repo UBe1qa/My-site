@@ -6,3 +6,4 @@ node_modules
 .DS_Store
 README.md
 tools
+_dev

@@ -15,8 +15,13 @@
 <meta property="og:image" content="https://thehanbang.org/img/hall_wide.jpg">
 <link rel="canonical" href="https://thehanbang.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238B3A1F'/%3E%3Cg transform='translate(3 7.9) scale(.1625)' fill='none' stroke='%23fff' stroke-width='10'%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3Ccircle cx='111.5' cy='50' r='44'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" as="image" href="img/hall_wide.webp" fetchpriority="high">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <script>try{if(localStorage.getItem('daycare-text-lg')==='1')document.documentElement.classList.add('text-lg')}catch(e){}</script>
+<script>/* 움직임: '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 본 스크립트가 못 켜면 움직임 없이 전부 보이게 */
+(function(){var d=document.documentElement;if(!('IntersectionObserver' in window))return;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return}catch(e){}d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)})();</script>
 <style>
 
 /* 브랜드 색은 센터 간판과 출입문 로고의 적갈색에서 가져왔습니다. */
@@ -120,9 +125,7 @@ h1,h2,h3,h4{color:var(--gray-900);text-wrap:balance}
 /* 머리글 */
 .header{
   position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
-  background:rgba(255,255,255,.94);
-  -webkit-backdrop-filter:saturate(1.6) blur(14px);
-  backdrop-filter:saturate(1.6) blur(14px);
+  background:rgba(255,255,255,.97);
   box-shadow:0 1px 0 transparent;
   transition:box-shadow .2s ease;
 }
@@ -195,18 +198,15 @@ h1,h2,h3,h4{color:var(--gray-900);text-wrap:balance}
   display:flex;align-items:center;gap:.6rem;
   padding:.6rem .95rem .6rem .6rem;border-radius:16px;
   background:var(--white);box-shadow:var(--shadow-md);
-  animation:float 6s ease-in-out infinite;
 }
 .chip b{display:block;font-size:.88rem;line-height:1.3;color:var(--gray-900)}
 .chip div > span{display:block;font-size:.8rem;line-height:1.3;color:var(--gray-600)}
 .chip-a{top:1.1rem;left:.9rem}
-.chip-b{right:.9rem;bottom:1.1rem;animation-delay:-3s}
+.chip-b{right:.9rem;bottom:1.1rem}
 @media (min-width:1024px){
   .chip-a{top:2.4rem;left:-1.4rem}
   .chip-b{right:-1.4rem;bottom:2.6rem}
 }
-@keyframes float{50%{transform:translateY(-6px)}}
-@media (prefers-reduced-motion:reduce){.chip{animation:none}}
 
 /* 핵심 정보 띠 */
 .features-wrap{position:relative;z-index:2;margin-top:-3rem}
@@ -473,8 +473,7 @@ textarea.input{min-height:7.5rem;resize:vertical;line-height:1.6}
   position:fixed;left:0;right:0;bottom:0;z-index:50;
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;
   padding:.6rem max(16px,env(safe-area-inset-right,0px)) calc(.6rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
-  background:rgba(255,255,255,.96);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.98);
   box-shadow:0 -1px 0 var(--gray-200);
 }
 .bottom-bar .btn{min-height:3.25rem}
@@ -642,6 +641,25 @@ html{scroll-padding-top:122px}
 .other-cols ul{display:grid;gap:.4rem;margin-top:.7rem}
 .other-cols a{font-weight:600;color:var(--gray-800);text-decoration:none}
 .other-cols a:hover{color:var(--primary)}
+
+/* 움직임 (html.anim일 때만 — '동작 줄이기'면 없음)
+   첫 화면: 처음 열 때 한 번. 제목 첫 줄과 '아침' 칩, 둘째 줄과 '저녁' 칩이 짝지어 켜진다
+   나머지: 화면에 들어올 때마다 살짝 올라오며 나타나고, 완전히 나가면 되돌려 둔다 (transform·opacity만) */
+.hero h1 .ln{display:inline-block}
+@keyframes rv-rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes rv-pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
+.anim .hero .badge,.anim .hero h1 .ln,.anim .hero-sub,.anim .hero-cta,.anim .hero-note{animation:rv-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.anim .hero h1 .ln:first-child{animation-delay:.08s}
+.anim .hero h1 .ln + br + .ln{animation-delay:.34s}
+.anim .hero-sub{animation-delay:.48s}
+.anim .hero-cta{animation-delay:.54s}
+.anim .hero-note{animation-delay:.6s}
+.anim .chip{animation:rv-pop .55s cubic-bezier(.2,.7,.2,1) both}
+.anim .chip-a{animation-delay:.2s}
+.anim .chip-b{animation-delay:.48s}
+.anim .rv{transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.anim .rv:not(.in){opacity:0;transform:translateY(18px);transition-duration:0s;transition-delay:0s}
+@media print{.anim .rv{opacity:1!important;transform:none!important}}
 </style>
 </head>
 <body>
@@ -724,7 +742,7 @@ html{scroll-padding-top:122px}
     <div class="container hero-grid">
       <div>
         <span class="badge">부모님, 하루 종일 집에 혼자 계신가요?</span>
-        <h1>아침에 모셔 가고,<br><em>저녁에 모셔다 드려요</em></h1>
+        <h1><span class="ln">아침에 모셔 가고,</span><br><em class="ln">저녁에 모셔다 드려요</em></h1>
         <p class="hero-sub">한의사가 설계한 건강관리와 재활 운동, 아로마 족욕, 직접 조리한 맛있는 식사까지 더한방과 함께 하세요.</p>
         <div class="hero-cta">
           <a class="btn btn-primary btn-lg" href="tel:0328150157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화 상담 <span class="num">032-815-0157</span></a>
@@ -737,7 +755,7 @@ html{scroll-padding-top:122px}
         </p>
       </div>
       <figure class="visual photo">
-        <img class="hero-photo" src="img/hall_wide.jpg" width="960" height="619" alt="천장 보행레일과 주황색 보행 라인이 있는 밝은 센터 홀. 안쪽에 소파와 식탁, 더한방 주간보호센터 안내 화면이 보인다">
+        <img class="hero-photo" src="img/hall_wide.webp" width="960" height="619" fetchpriority="high" alt="천장 보행레일과 주황색 보행 라인이 있는 밝은 센터 홀. 안쪽에 소파와 식탁, 더한방 주간보호센터 안내 화면이 보인다">
         <div class="chip chip-a"><span class="mi brand sm"><svg aria-hidden="true"><use href="#i-bus"/></svg></span><div><b>아침 9시쯤</b><span>댁 앞으로 모시러 가요</span></div></div>
         <div class="chip chip-b"><span class="mi green sm"><svg aria-hidden="true"><use href="#i-home"/></svg></span><div><b>저녁 식사 후</b><span>댁 앞까지 모셔다 드려요</span></div></div>
       </figure>
@@ -789,7 +807,7 @@ html{scroll-padding-top:122px}
       </div>
       <div class="reasons">
         <article class="pcard raised">
-          <div class="ph"><img src="img/door_sq.jpg" width="846" height="909" alt="더한방 주간보호센터 유리 출입문과 경희대학교 로고" loading="lazy" decoding="async"></div>
+          <div class="ph"><img src="img/door_sq.webp" width="846" height="909" alt="더한방 주간보호센터 유리 출입문과 경희대학교 로고" loading="lazy" decoding="async"></div>
           <div class="pbody">
             <span class="kicker">의료진</span>
             <h3>한의사가 설계하고,<br>매일 건강을 살펴요</h3>
@@ -797,7 +815,7 @@ html{scroll-padding-top:122px}
           </div>
         </article>
         <article class="pcard raised">
-          <div class="ph"><img src="img/walk.jpg" width="900" height="1090" alt="천장 레일의 슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 35%"></div>
+          <div class="ph"><img src="img/walk.webp" width="900" height="1090" alt="천장 레일의 슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 35%"></div>
           <div class="pbody">
             <span class="kicker">재활</span>
             <h3>천장 보행레일로<br>넘어질 걱정 없이</h3>
@@ -805,7 +823,7 @@ html{scroll-padding-top:122px}
           </div>
         </article>
         <article class="pcard raised">
-          <div class="ph"><img src="img/meal.jpg" width="900" height="636" alt="잡곡밥과 국, 반찬 네 가지가 담긴 개인 식판" loading="lazy" decoding="async"></div>
+          <div class="ph"><img src="img/meal.webp" width="900" height="636" alt="잡곡밥과 국, 반찬 네 가지가 담긴 개인 식판" loading="lazy" decoding="async"></div>
           <div class="pbody">
             <span class="kicker">식사</span>
             <h3>점심·저녁 모두<br>센터에서 직접 만들어요</h3>
@@ -849,15 +867,15 @@ html{scroll-padding-top:122px}
   <section class="section tight">
     <div class="container">
       <div class="gallery">
-        <figure class="g big"><img src="img/rehab.jpg" width="966" height="966" alt="천장 보행레일이 설치된 재활실에서 운동하는 어르신들" loading="lazy" decoding="async"><figcaption>천장 보행레일 재활실</figcaption></figure>
-        <figure class="g"><img src="img/door.jpg" width="900" height="1200" alt="더한방 주간보호센터 출입문" loading="lazy" decoding="async" style="object-position:50% 30%"><figcaption>센터 입구</figcaption></figure>
-        <figure class="g"><img src="img/hall.jpg" width="800" height="800" alt="긴 테이블이 놓인 밝은 프로그램실" loading="lazy" decoding="async"><figcaption>프로그램실</figcaption></figure>
-        <figure class="g"><img src="img/walk.jpg" width="900" height="1090" alt="슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 30%"><figcaption>슬링 보행 훈련</figcaption></figure>
-        <figure class="g"><img src="img/footbath.jpg" width="966" height="681" alt="원목 족욕대에서 족욕을 하는 어르신들" loading="lazy" decoding="async"><figcaption>아로마 족욕</figcaption></figure>
-        <figure class="g"><img src="img/hydro.jpg" width="966" height="492" alt="수치료기" loading="lazy" decoding="async"><figcaption>수치료기</figcaption></figure>
-        <figure class="g"><img src="img/walker.jpg" width="900" height="1090" alt="보행기를 잡고 보행 라인을 따라 걷는 어르신" loading="lazy" decoding="async" style="object-position:50% 35%"><figcaption>보행 라인 걷기</figcaption></figure>
-        <figure class="g"><img src="img/art.jpg" width="966" height="725" alt="어르신들이 색칠한 해바라기 그림" loading="lazy" decoding="async"><figcaption>인지 미술 활동</figcaption></figure>
-        <figure class="g"><img src="img/outing.jpg" width="966" height="594" alt="바닷가 정자 앞에서 찍은 가을 나들이 사진" loading="lazy" decoding="async"><figcaption>가을 나들이</figcaption></figure>
+        <figure class="g big"><img src="img/rehab.webp" width="966" height="966" alt="천장 보행레일이 설치된 재활실에서 운동하는 어르신들" loading="lazy" decoding="async"><figcaption>천장 보행레일 재활실</figcaption></figure>
+        <figure class="g"><img src="img/door.webp" width="900" height="1200" alt="더한방 주간보호센터 출입문" loading="lazy" decoding="async" style="object-position:50% 30%"><figcaption>센터 입구</figcaption></figure>
+        <figure class="g"><img src="img/hall.webp" width="800" height="800" alt="긴 테이블이 놓인 밝은 프로그램실" loading="lazy" decoding="async"><figcaption>프로그램실</figcaption></figure>
+        <figure class="g"><img src="img/walk.webp" width="900" height="1090" alt="슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 30%"><figcaption>슬링 보행 훈련</figcaption></figure>
+        <figure class="g"><img src="img/footbath.webp" width="966" height="681" alt="원목 족욕대에서 족욕을 하는 어르신들" loading="lazy" decoding="async"><figcaption>아로마 족욕</figcaption></figure>
+        <figure class="g"><img src="img/hydro.webp" width="966" height="492" alt="수치료기" loading="lazy" decoding="async"><figcaption>수치료기</figcaption></figure>
+        <figure class="g"><img src="img/walker.webp" width="900" height="1090" alt="보행기를 잡고 보행 라인을 따라 걷는 어르신" loading="lazy" decoding="async" style="object-position:50% 35%"><figcaption>보행 라인 걷기</figcaption></figure>
+        <figure class="g"><img src="img/art.webp" width="966" height="725" alt="어르신들이 색칠한 해바라기 그림" loading="lazy" decoding="async"><figcaption>인지 미술 활동</figcaption></figure>
+        <figure class="g"><img src="img/outing.webp" width="966" height="594" alt="바닷가 정자 앞에서 찍은 가을 나들이 사진" loading="lazy" decoding="async"><figcaption>가을 나들이</figcaption></figure>
       </div>
     </div>
   </section>
@@ -1003,7 +1021,7 @@ html{scroll-padding-top:122px}
       </div>
       <div class="contact-grid">
         <div class="panel raised">
-          <img class="place-photo" src="img/building.jpg" width="966" height="725" alt="연수프라자 건물 4층에 걸린 더한방 주간보호센터 간판" loading="lazy" decoding="async">
+          <img class="place-photo" src="img/building.webp" width="966" height="725" alt="연수프라자 건물 4층에 걸린 더한방 주간보호센터 간판" loading="lazy" decoding="async">
           <p class="label">상담 전화</p>
           <a class="big-phone" href="tel:0328150157">032-815-0157</a>
           <p class="muted">문자 <a href="sms:01026110157" class="num">010-2611-0157</a></p>
@@ -1085,11 +1103,11 @@ html{scroll-padding-top:122px}
     <section class="section tight">
       <div class="container">
         <ul class="posts">
-          <li><a class="post" href="#col-fall"><span class="post-thumb"><img src="img/walker.jpg" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">낙상 예방</span><time>2026.05.13</time></span><strong class="post-title">집 안 낙상, 매일 지나는 길부터 점검하세요</strong><span class="post-excerpt">욕실·침대 주변·거실 통로처럼 매일 지나는 곳에서 많이 일어나요.</span></span></a></li>
-          <li><a class="post" href="#col-sleep"><span class="post-thumb"><img src="img/footbath.jpg" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">수면</span><time>2026.05.13</time></span><strong class="post-title">밤잠을 설치시는 부모님, 생활 리듬부터 살펴보세요</strong><span class="post-excerpt">낮 활동, 저녁 식사, 잠자리 환경이 밤잠을 바꿔요.</span></span></a></li>
-          <li><a class="post" href="#col-walk"><span class="post-thumb"><img src="img/walk.jpg" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">보행 케어</span><time>2026.05.12</time></span><strong class="post-title">센터에서는 걸음걸이부터 봅니다</strong><span class="post-excerpt">빨리보다 안정적으로. 바른 걸음 연습법도 담았어요.</span></span></a></li>
-          <li><a class="post" href="#col-memory"><span class="post-thumb"><img src="img/art.jpg" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">치매 예방</span><time>2026.05.10</time></span><strong class="post-title">한의학으로 보는 치매 예방 생활법</strong><span class="post-excerpt">생활 속에서 지키는 3권 3행을 정리했어요.</span></span></a></li>
-          <li><a class="post" href="#col-pd"><span class="post-thumb"><img src="img/sling.jpg" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">파킨슨병</span><time>2026.05.17</time></span><strong class="post-title">손떨림, 느려진 걸음… 나이 탓만은 아닐 수 있어요</strong><span class="post-excerpt">놓치기 쉬운 초기 신호와 관리 방법이에요.</span></span></a></li>
+          <li><a class="post" href="#col-fall"><span class="post-thumb"><img src="img/walker.webp" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">낙상 예방</span><time>2026.05.13</time></span><strong class="post-title">집 안 낙상, 매일 지나는 길부터 점검하세요</strong><span class="post-excerpt">욕실·침대 주변·거실 통로처럼 매일 지나는 곳에서 많이 일어나요.</span></span></a></li>
+          <li><a class="post" href="#col-sleep"><span class="post-thumb"><img src="img/footbath.webp" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">수면</span><time>2026.05.13</time></span><strong class="post-title">밤잠을 설치시는 부모님, 생활 리듬부터 살펴보세요</strong><span class="post-excerpt">낮 활동, 저녁 식사, 잠자리 환경이 밤잠을 바꿔요.</span></span></a></li>
+          <li><a class="post" href="#col-walk"><span class="post-thumb"><img src="img/walk.webp" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">보행 케어</span><time>2026.05.12</time></span><strong class="post-title">센터에서는 걸음걸이부터 봅니다</strong><span class="post-excerpt">빨리보다 안정적으로. 바른 걸음 연습법도 담았어요.</span></span></a></li>
+          <li><a class="post" href="#col-memory"><span class="post-thumb"><img src="img/art.webp" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">치매 예방</span><time>2026.05.10</time></span><strong class="post-title">한의학으로 보는 치매 예방 생활법</strong><span class="post-excerpt">생활 속에서 지키는 3권 3행을 정리했어요.</span></span></a></li>
+          <li><a class="post" href="#col-pd"><span class="post-thumb"><img src="img/sling.webp" alt="" loading="lazy" decoding="async"></span><span class="post-body"><span class="post-meta"><span class="post-cat">파킨슨병</span><time>2026.05.17</time></span><strong class="post-title">손떨림, 느려진 걸음… 나이 탓만은 아닐 수 있어요</strong><span class="post-excerpt">놓치기 쉬운 초기 신호와 관리 방법이에요.</span></span></a></li>
         </ul>
       </div>
     </section>
@@ -1101,7 +1119,7 @@ html{scroll-padding-top:122px}
       <p class="post-meta"><span class="post-cat">낙상 예방</span><time>2026.05.13</time></p>
       <h1>집 안 낙상,<br>매일 지나는 길부터 점검하세요</h1>
       <p class="lede">낙상은 욕실, 침대 주변, 거실 통로처럼 하루에도 여러 번 지나는 곳에서 많이 일어나요. 막 잠에서 깬 이른 아침과 어두운 밤에는 균형 감각이 떨어져 더 위험해요.</p>
-      <figure class="cover"><img src="img/walker.jpg" alt="보행기를 잡고 걷는 어르신" loading="lazy" decoding="async"></figure>
+      <figure class="cover"><img src="img/walker.webp" alt="보행기를 잡고 걷는 어르신" loading="lazy" decoding="async"></figure>
       <h2>우리 집 점검 목록</h2>
       <ul class="check-list">
         <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>벗겨진 장판, 카펫 가장자리, 문턱 턱이 없는지 확인해요.</span></li>
@@ -1124,7 +1142,7 @@ html{scroll-padding-top:122px}
       <p class="post-meta"><span class="post-cat">수면</span><time>2026.05.13</time></p>
       <h1>밤잠을 설치시는 부모님,<br>생활 리듬부터 살펴보세요</h1>
       <p class="lede">나이가 들면 깊은 잠은 줄고 일찍 깨는 일은 늘어요. 자연스러운 변화지만, 낮을 어떻게 보내시는지에 따라 밤잠이 크게 달라져요.</p>
-      <figure class="cover"><img src="img/footbath.jpg" alt="족욕을 하며 쉬는 어르신들" loading="lazy" decoding="async"></figure>
+      <figure class="cover"><img src="img/footbath.webp" alt="족욕을 하며 쉬는 어르신들" loading="lazy" decoding="async"></figure>
       <h2>일정한 리듬 지키기</h2>
       <ul class="check-list">
         <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>매일 같은 시간에 일어나고 같은 시간에 잠자리에 드세요.</span></li>
@@ -1157,7 +1175,7 @@ html{scroll-padding-top:122px}
       <p class="post-meta"><span class="post-cat">보행 케어</span><time>2026.05.12</time></p>
       <h1>센터에서는<br>걸음걸이부터 봅니다</h1>
       <p class="lede">오전 9시, 어르신들이 도착하시면 직원들은 가장 먼저 걸음걸이를 살펴요. 발끝이 끌리는지, 걸음이 흔들리는지, 난간을 급하게 잡으시는지가 그날 컨디션을 알려 주는 신호예요.</p>
-      <figure class="cover"><img src="img/walk.jpg" alt="슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 30%"></figure>
+      <figure class="cover"><img src="img/walk.webp" alt="슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async" style="object-position:50% 30%"></figure>
       <h2>빨리보다 안정적으로</h2>
       <ul class="check-list">
         <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>서두르면 보폭이 커지고 방향을 바꿀 때 균형을 잃기 쉬워요.</span></li>
@@ -1190,7 +1208,7 @@ html{scroll-padding-top:122px}
       <p class="post-meta"><span class="post-cat">치매 예방</span><time>2026.05.10</time></p>
       <h1>한의학으로 보는<br>치매 예방 생활법</h1>
       <p class="lede">한의학에서는 치매를 기억력만의 문제가 아니라 몸 전체의 균형이 무너진 결과로 봐요. 정기(精氣)와 신혈(腎血)의 부조화, 심장·간·비장·신장 같은 장부 기능의 불균형으로 이해해요.</p>
-      <figure class="cover"><img src="img/art.jpg" alt="어르신들이 색칠한 해바라기 그림" loading="lazy" decoding="async"></figure>
+      <figure class="cover"><img src="img/art.webp" alt="어르신들이 색칠한 해바라기 그림" loading="lazy" decoding="async"></figure>
       <h2>생활 속에서 지키는 3권 3행</h2>
       <div class="two-lists">
         <section>
@@ -1222,7 +1240,7 @@ html{scroll-padding-top:122px}
       <p class="post-meta"><span class="post-cat">파킨슨병</span><time>2026.05.17</time></p>
       <h1>손떨림, 느려진 걸음…<br>나이 탓만은 아닐 수 있어요</h1>
       <p class="lede">70대가 되면 움직임이 느려지고 손이 떨리는 걸 흔히 노화로 여겨요. 하지만 이런 변화가 반복된다면 파킨슨병 검사를 받아 보는 게 좋아요. 일찍 치료를 시작할수록 일상을 스스로 이어가시기 쉬워요.</p>
-      <figure class="cover"><img src="img/sling.jpg" alt="슬링에 발을 걸고 하체 운동을 하는 어르신들" loading="lazy" decoding="async"></figure>
+      <figure class="cover"><img src="img/sling.webp" alt="슬링에 발을 걸고 하체 운동을 하는 어르신들" loading="lazy" decoding="async"></figure>
       <h2>이런 변화가 있는지 살펴보세요</h2>
       <ul class="check-list">
         <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>가만히 있을 때 손이 떨려요</span></li>
@@ -1282,6 +1300,34 @@ html{scroll-padding-top:122px}
 (function () {
   var root = document.documentElement;
   var MEALS = window.MEALS || [];
+
+  /* 스크롤 움직임: 들어올 때마다 나타나고, 완전히 나가면 되돌려 둔다 */
+  (function () {
+    if (!root.classList.contains('anim')) return;
+    window.__rvOn = true;
+    var SEL = '.sec-head > *, .page-head .container > *, .vs, .vs-foot, .vs-price, .reasons > *, .gallery > *, .pills > *, .day-grid > *, .features > *, .rates > *, .steps > *, .notes > *, .grade, .posts > li, .cta-box, .contact-grid > *';
+    var els = [].slice.call(document.querySelectorAll(SEL)).filter(function (el) { return !el.closest('.hero'); });
+    els.forEach(function (el) { el.classList.add('rv'); });
+    var rows = [].slice.call(document.querySelectorAll('.vs-list li'));
+    rows.forEach(function (li) { li.classList.add('rv'); li.style.setProperty('--d', (0.1 + [].indexOf.call(li.parentNode.children, li) * 0.07).toFixed(2) + 's'); });
+    function show(list) {
+      var n = 0;
+      list.forEach(function (el) {
+        if (el.parentNode.classList.contains('vs-list')) { el.classList.add('in'); return; }
+        el.style.setProperty('--d', Math.min(n++ * 0.08, 0.4).toFixed(2) + 's');
+        el.classList.add('in');
+      });
+    }
+    var play = new IntersectionObserver(function (es) {
+      show(es.filter(function (e) { return e.isIntersecting && !e.target.classList.contains('in'); }).map(function (e) { return e.target; }));
+    }, { rootMargin: '0px 0px -8% 0px' });
+    var reset = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (!e.isIntersecting && !e.target.contains(document.activeElement)) e.target.classList.remove('in'); });
+    });
+    els.concat(rows).forEach(function (el) { play.observe(el); reset.observe(el); });
+    document.addEventListener('focusin', function (e) { var r = e.target.closest && e.target.closest('.rv'); if (r) r.classList.add('in'); });
+    window.addEventListener('beforeprint', function () { els.concat(rows).forEach(function (el) { el.classList.add('in'); }); });
+  })();
 
   /* 머리글 구분선 */
   var header = document.getElementById('header');
