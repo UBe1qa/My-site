@@ -1,0 +1,81 @@
+# 새 사이트 자동 배포 (GitHub Actions → Cloudflare Workers)
+# 폴더 안에 빈 파일 '.deploy-actions'가 있는 사이트만 여기서 배포한다.
+# 기존 사이트(Cloudflare 대시보드의 Workers Builds로 연결된 폴더)는 이 파일이 없어서 건드리지 않는다.
+# 처음 배포할 때 Worker가 없으면 wrangler가 새로 만들고 https://<이름>.mysitebox.workers.dev 주소를 켠다.
+# 필요한 저장소 Secrets: CLOUDFLARE_API_TOKEN ('Edit Cloudflare Workers' 권한), CLOUDFLARE_ACCOUNT_ID
+name: 새 사이트 자동 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: '배포할 폴더 이름 (비우면 토큰 연결만 확인)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-new-sites
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 배포할 폴더 고르기
+        id: pick
+        env:
+          BEFORE: ${{ github.event.before }}
+          INPUT_FOLDER: ${{ github.event.inputs.folder }}
+        run: |
+          marked=$(for f in */.deploy-actions; do [ -f "$f" ] && dirname "$f"; done)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            folders=""
+            if [ -n "$INPUT_FOLDER" ]; then
+              if echo "$marked" | grep -qx -- "$INPUT_FOLDER"; then folders="$INPUT_FOLDER"
+              else echo "::error::$INPUT_FOLDER 폴더에 .deploy-actions 가 없어요 (기존 사이트는 여기서 배포하지 않아요)"; exit 1; fi
+            fi
+          elif [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            folders="$marked"
+          else
+            changed=$(git diff --name-only "$BEFORE" "$GITHUB_SHA" | cut -d/ -f1 | sort -u)
+            folders=$(comm -12 <(echo "$marked" | sort -u) <(echo "$changed"))
+          fi
+          folders=$(echo $folders)
+          echo "folders=$folders" >> "$GITHUB_OUTPUT"
+          echo "배포할 폴더: ${folders:-없음}"
+
+      - name: 토큰 확인
+        if: steps.pick.outputs.folders != '' || github.event_name == 'workflow_dispatch'
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::저장소 Settings → Secrets and variables → Actions 에 CLOUDFLARE_API_TOKEN 과 CLOUDFLARE_ACCOUNT_ID 를 넣어 주세요."
+            exit 1
+          fi
+          npx --yes wrangler@4 whoami
+
+      - name: 배포
+        if: steps.pick.outputs.folders != ''
+        env:
+          FOLDERS: ${{ steps.pick.outputs.folders }}
+        run: |
+          for d in $FOLDERS; do
+            case "$d" in *[!A-Za-z0-9._-]*|.*) echo "::error::폴더 이름이 이상해요: $d"; exit 1;; esac
+            if [ ! -f "$d/wrangler.jsonc" ]; then
+              echo "::error::$d/wrangler.jsonc 가 없어요"; exit 1
+            fi
+            echo "=== $d 배포"
+            (cd "$d" && npx --yes wrangler@4 deploy)
+          done
