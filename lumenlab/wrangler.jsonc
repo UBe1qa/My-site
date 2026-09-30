@@ -1,0 +1,8 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'lumenlab' 하나
+// 이 폴더의 파일이 그대로 사이트가 됩니다 (빌드 없음). 빼고 올릴 파일은 .assetsignore 에 적어요.
+// 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 합니다 (.deploy-actions 표시).
+{
+  "name": "lumenlab",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": ".", "not_found_handling": "404-page" }
+}

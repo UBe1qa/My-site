@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-i18n="docTitle">Lumen Lab 루멘랩 · 앱 안내와 지원</title>
+<meta name="description" content="Lumen Lab(루멘랩)이 만든 앱 Owlight(Mac 메뉴 막대 앱)와 세트노트(헬스 기록 웹앱)의 사용 안내, 자주 묻는 질문, 개인정보 처리방침. Support and privacy policy for Owlight and SetNote.">
+<link rel="canonical" href="https://lumenlab.mysitebox.workers.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="Lumen Lab 루멘랩 · 앱 안내와 지원">
+<meta property="og:description" content="Owlight와 세트노트의 사용 안내, 자주 묻는 질문, 개인정보 처리방침. Support and privacy policy for Owlight and SetNote.">
+<meta property="og:url" content="https://lumenlab.mysitebox.workers.dev/">
+<meta property="og:image" content="https://lumenlab.mysitebox.workers.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/home.css">
+<script>
+/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기는 body 끝의 i18n.js */
+(function(d){var l;try{l=localStorage.getItem('lumen:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+/* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
+(function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
+</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a href="/#contact" data-i18n="navContact">문의</a>
+      <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <h1 id="hero-title" class="hero__title rv"><span class="lm"><span data-i18n="h1a">Owlight와 세트노트를</span></span> <span class="lm"><span data-i18n="h1b">만든 곳이에요</span></span></h1>
+        <p class="hero__lead rv" data-i18n="lead">앱 소개와 함께 Owlight의 지원 페이지와 <span class="nw">개인정보 처리방침을</span> 모아 두었어요. 찾는 답이 없으면 메일로 물어봐 주세요.</p>
+      </div>
+
+      <ul class="apps" id="apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">
+        <li class="app rv">
+          <img class="icon" src="/img/owlight.webp" width="64" height="64" alt="" fetchpriority="high">
+          <div class="app__body">
+            <h2 class="app__name">Owlight</h2>
+            <p class="app__kind" data-i18n="owlKind">Mac 메뉴 막대 앱 <span aria-hidden="true">·</span> <span class="nw">macOS 14 이상</span></p>
+            <p class="app__status"><span data-i18n="owlStatus">App Store 출시 준비 중</span></p>
+            <p class="app__line" data-i18n="owlLine">잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.</p>
+            <p class="app__links">
+              <a class="chip" href="/owlight/support/" data-i18n="support">지원</a>
+              <a class="chip" href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a>
+            </p>
+          </div>
+        </li>
+        <li class="app rv">
+          <img class="icon" src="/img/setnote.webp" width="64" height="64" alt="" fetchpriority="high">
+          <div class="app__body">
+            <h2 class="app__name" data-i18n="snName">세트노트 <span class="app__en">SetNote</span></h2>
+            <p class="app__kind" data-i18n="snKind">브라우저로 여는 앱 <span aria-hidden="true">·</span> <span class="nw">홈 화면에 추가</span></p>
+            <p class="app__line" data-i18n="snLine">루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.</p>
+            <p class="app__links">
+              <a class="chip chip--go" href="/setnote/" data-i18n="snOpen">세트노트 열기</a>
+              <a class="chip" href="#setnote" data-i18n="snMore">어떤 앱인지</a>
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="owl" id="owlight" aria-labelledby="owl-title">
+    <div class="wrap owl__in">
+      <div class="owl__text">
+        <p class="sec-kicker">Owlight</p>
+        <h2 id="owl-title" class="sec-title" data-i18n="owlTitle">스위치 다섯 개가 <span class="nw">메뉴 막대에 들어 있어요</span></h2>
+        <p class="sec-lead" data-i18n="owlLead">Dock에는 아이콘이 생기지 않아요. 개인정보를 모으지 않고, 인터넷에도 접속하지 않아요.</p>
+      </div>
+      <figure class="panel" aria-label="Owlight 메뉴 화면 예시" data-i18n-aria="panelLabel">
+        <span class="panel__tag" data-i18n="example">예시</span>
+        <div class="panel__bar" aria-hidden="true">
+          <span class="panel__dots"><i></i><i></i><i></i></span>
+          <span class="panel__owl"><img src="/img/owlight.webp" width="18" height="18" alt=""></span>
+        </div>
+        <ul class="feats">
+          <li class="feat"><span class="sw" aria-hidden="true"></span><b data-i18n="f1">불침번</b><span data-i18n="f1d">Mac이 잠들지 않게 하기</span></li>
+          <li class="feat"><span class="sw" aria-hidden="true"></span><b data-i18n="f2">커튼</b><span data-i18n="f2d">바탕화면 아이콘과 위젯 가리기</span></li>
+          <li class="feat"><span class="sw sw--off" aria-hidden="true"></span><b data-i18n="f3">후광</b><span data-i18n="f3d">맨 앞 창만 또렷하게, 뒤는 어둡게</span></li>
+          <li class="feat"><span class="sw sw--off" aria-hidden="true"></span><b data-i18n="f4">장면</b><span data-i18n="f4d">여러 기능을 한 번에 켜기</span></li>
+          <li class="feat"><span class="sw sw--off" aria-hidden="true"></span><b data-i18n="f5">몰입 세션</b><span data-i18n="f5d">정한 시간만큼 집중, 끝나면 알림</span></li>
+        </ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="set" id="setnote" aria-labelledby="set-title">
+    <div class="wrap set__in">
+      <div class="set__text">
+        <p class="sec-kicker" data-i18n="snKicker">세트노트</p>
+        <h2 id="set-title" class="sec-title" data-i18n="snTitle">지난번 기록을 옆에 두고 이번 세트를 적어요</h2>
+        <ul class="facts">
+          <li data-i18n="fact1"><b>루틴을 저장해 두고</b> 운동할 때 불러와요</li>
+          <li data-i18n="fact2"><b>홈 화면에 추가하면</b> 인터넷이 없어도 열려요</li>
+          <li data-i18n="fact3"><b>기록은 이 기기에</b> 남고, 백업 파일로 옮길 수 있어요</li>
+        </ul>
+        <p><a class="btn btn--main" href="/setnote/" data-i18n="snOpen">세트노트 열기</a></p>
+      </div>
+      <figure class="log" aria-label="세트 기록 화면 예시" data-i18n-aria="logLabel">
+        <span class="log__tag" data-i18n="example">예시</span>
+        <div class="log__head"><b data-i18n="bench">벤치프레스</b><span data-i18n="lastToday">지난번 → 오늘</span></div>
+        <ol class="sets">
+          <li class="setrow"><span class="setrow__n">1</span><span class="setrow__prev">60kg × 10</span><span class="setrow__now">60kg × 10</span></li>
+          <li class="setrow"><span class="setrow__n">2</span><span class="setrow__prev">60kg × 8</span><span class="setrow__now">60kg × 9</span></li>
+          <li class="setrow"><span class="setrow__n">3</span><span class="setrow__prev">60kg × 6</span><span class="setrow__now">60kg × 8</span></li>
+        </ol>
+        <figcaption data-i18n="logCap">칠해진 칸이 오늘 적은 기록이에요</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact__in">
+      <h2 id="contact-title" class="contact__title" data-i18n="ctTitle">안 되는 게 있으면 메일로 알려 주세요</h2>
+      <p class="contact__lead" data-i18n="ctLead">어떤 앱인지, 기기와 버전, 어떤 상황에서 생겼는지 같이 적어 주시면 더 빨리 도와드릴 수 있어요.</p>
+      <p class="contact__mail"><a class="btn btn--lamp" href="mailto:woxocoso@gmail.com" data-i18n="ctBtn">메일 쓰기</a> <span class="contact__addr">woxocoso@gmail.com</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <div><b>Owlight</b><a href="/owlight/support/" data-i18n="support">지원</a><a href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a></div>
+      <div><b data-i18n="snKicker">세트노트</b><a href="/setnote/" data-i18n="openApp">앱 열기</a></div>
+    </div>
+  </div>
+</footer>
+<script src="/assets/i18n.js"></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

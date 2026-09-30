@@ -1,0 +1,128 @@
+/* 루멘랩 공통 스타일: 색·글꼴 토큰, 머리말·바닥글, 방침 글 모양. 페이지 안에 색 코드를 직접 넣지 않는다. */
+[hidden]{display:none!important}
+img{max-width:100%;height:auto}
+.nw{white-space:nowrap}
+
+:root{
+  --paper:#FAF9F6;
+  --card:#FFFFFF;
+  --ink:#1B1A24;
+  --ink-2:#44424F;
+  --muted:#686675;
+  --line:#E6E3DC;
+  --lamp:#F2B33D;          /* 켜진 불빛: 채우기·점에만 */
+  --lamp-soft:#FCEFD2;
+  --lamp-ink:#8A5500;      /* 밝은 바탕 위 강조 글자 (대비 5.9:1) */
+  --night:#17162B;
+  --night-2:#24223F;
+  --night-ink:#EFEDF7;
+  --night-muted:#B3B0C8;
+  --focus:#3D5AFE;
+  --radius:18px;
+  --radius-s:12px;
+  --shadow:0 1px 2px rgba(27,26,36,.05),0 8px 24px rgba(27,26,36,.06);
+  --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic","Segoe UI",sans-serif;
+  --wrap:1080px;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#121121;
+    --card:#1C1B30;
+    --ink:#EFEDF7;
+    --ink-2:#CFCCE0;
+    --muted:#A6A3BC;
+    --line:#2E2C48;
+    --lamp:#F5B94A;
+    --lamp-soft:#3A2F1C;
+    --lamp-ink:#F5B94A;
+    --night:#0B0A18;
+    --night-2:#1A1930;
+    --focus:#8EA2FF;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-padding-top:80px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.7 var(--font);word-break:keep-all;overflow-wrap:break-word;
+  display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+main{width:100%;flex:1}
+a{color:var(--lamp-ink);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:var(--wrap);margin-left:auto;margin-right:auto;padding-left:24px;padding-right:24px}
+@media (max-width:560px){.wrap{padding-left:18px;padding-right:18px}}
+.skip{position:absolute;left:-999px;top:8px;background:var(--card);padding:8px 12px;border-radius:8px;z-index:10}
+.skip:focus{left:8px}
+
+/* 로고: 켜진 불빛 한 점 */
+.mark{display:inline-block;width:22px;height:22px;flex:none;vertical-align:middle}
+.mark .glow{fill:var(--lamp);opacity:.28}
+.mark .core{fill:var(--lamp)}
+.mark .ring{fill:none;stroke:currentColor;stroke-width:1.6}
+
+/* 공통 머리말 */
+.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 88%,transparent);
+  -webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.is-stuck{border-bottom-color:var(--line)}
+.top__in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand small{font-weight:500;font-size:15px;color:var(--muted)}
+.top nav{display:flex;gap:4px}
+.top nav a{color:var(--ink-2);text-decoration:none;font-size:16px;font-weight:600;padding:8px 12px;border-radius:10px}
+.top nav a:hover{background:var(--line)}
+
+/* 공통 바닥글 */
+.foot{border-top:1px solid var(--line);margin-top:0;color:var(--muted);font-size:15px}
+.foot__in{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 40px;padding-top:36px;padding-bottom:44px}
+.foot .brand{font-size:16px}
+.foot p{margin:10px 0 0}
+.foot a{color:var(--ink-2)}
+.foot__links{display:grid;grid-template-columns:auto auto;gap:6px 32px;align-content:start}
+.foot__links b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+.foot__links a{display:block;text-decoration:none;padding:2px 0}
+.foot__links a:hover{text-decoration:underline}
+@media (max-width:640px){.foot__in{grid-template-columns:minmax(0,1fr)}}
+
+/* 버튼 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;
+  font:inherit;font-size:16px;font-weight:700;text-decoration:none;cursor:pointer;border:1px solid transparent}
+.btn--main{background:var(--ink);color:var(--paper)}
+.btn--main:hover{background:var(--ink-2)}
+.btn--line{border-color:var(--line);color:var(--ink);background:var(--card)}
+.btn--line:hover{border-color:var(--muted)}
+
+/* 앱 아이콘 */
+.icon{width:64px;height:64px;border-radius:22.5%;flex:none;box-shadow:0 1px 2px rgba(0,0,0,.12),0 6px 16px rgba(27,26,36,.12)}
+
+/* 방침·지원 페이지 (내용은 원래 그대로, 모양만) */
+.doc-head{border-bottom:1px solid var(--line);background:var(--card)}
+.doc-head__in{max-width:760px;padding-top:36px;padding-bottom:28px}
+.crumb{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);margin:0 0 18px}
+.crumb a{color:var(--ink-2);font-weight:600;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+.crumb .icon{width:28px;height:28px;border-radius:7px;box-shadow:none}
+.doc{max-width:760px;padding-top:8px;padding-bottom:72px}
+.doc-head h1{font-size:clamp(28px,4.4vw,38px);line-height:1.25;letter-spacing:-.02em;margin:0 0 8px}
+.doc-head .meta{color:var(--muted);font-size:15px;margin:0}
+.doc-head nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.doc-head nav a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;
+  text-decoration:none;color:var(--ink);font-size:15px;font-weight:600;background:var(--paper)}
+.doc-head nav a:hover{border-color:var(--muted)}
+.doc h2{font-size:22px;line-height:1.35;margin:48px 0 8px;padding-top:28px;border-top:1px solid var(--line);letter-spacing:-.01em}
+.doc section:first-child h2{border-top:0;padding-top:20px;margin-top:20px}
+.doc h3{font-size:18px;line-height:1.45;margin:30px 0 6px}
+.doc p,.doc li{margin:8px 0;color:var(--ink-2)}
+.doc strong{color:var(--ink)}
+.doc ul{padding-left:1.2em}
+.doc .meta{color:var(--muted);font-size:15px}
+.doc section[lang="en"] p,.doc section[lang="en"] li{word-break:normal}
+
+/* 언어 버튼 */
+.lang{font:inherit;font-size:15px;font-weight:600;color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:999px;padding:0 14px;min-height:38px;cursor:pointer;margin-left:6px}
+.lang:hover{border-color:var(--muted)}
+/* 방침·지원 페이지: 고른 언어의 칸만 (스크립트가 없으면 둘 다 보임) */
+html[data-lang="en"] .doc section#ko,html[data-lang="ko"] .doc section#en{display:none}
+html[data-lang] .doc section h2{border-top:0;padding-top:20px;margin-top:20px}
+html[data-lang="en"] .doc-head nav a[href="#en"],html[data-lang="ko"] .doc-head nav a[href="#ko"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}

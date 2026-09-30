@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>페이지를 찾을 수 없어요 · Lumen Lab</title>
+<meta name="description" content="Lumen Lab(루멘랩)">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script>
+/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기는 body 끝의 i18n.js */
+(function(d){var l;try{l=localStorage.getItem('lumen:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+</script>
+<style>.nf{padding-top:80px;padding-bottom:96px;max-width:760px}.nf h1{font-size:clamp(28px,4.4vw,38px);line-height:1.3;margin:0 0 12px}.nf p{color:var(--ink-2);margin:0 0 28px}.nf .row{display:flex;flex-wrap:wrap;gap:10px}</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a href="/#contact" data-i18n="navContact">문의</a>
+      <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap nf">
+<h1 data-i18n="nfTitle">찾는 페이지가 없어요</h1>
+<p data-i18n="nfText">주소가 바뀌었거나 잘못 들어왔을 수 있어요. 앱 목록에서 다시 골라 주세요.</p>
+<p class="row"><a class="btn btn--main" href="/" data-i18n="nfHome">앱 목록으로</a><a class="btn btn--line" href="mailto:woxocoso@gmail.com" data-i18n="nfMail">메일로 문의</a></p>
+</main>
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <div><b>Owlight</b><a href="/owlight/support/" data-i18n="support">지원</a><a href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a></div>
+      <div><b data-i18n="snKicker">세트노트</b><a href="/setnote/" data-i18n="openApp">앱 열기</a></div>
+    </div>
+  </div>
+</footer>
+<script src="/assets/i18n.js"></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
