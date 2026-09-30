@@ -40,7 +40,7 @@ jobs:
           BEFORE: ${{ github.event.before }}
           INPUT_FOLDER: ${{ github.event.inputs.folder }}
         run: |
-          marked=$(for f in */.deploy-actions; do [ -f "$f" ] && dirname "$f"; done)
+          marked=$(find . -mindepth 2 -maxdepth 2 -name .deploy-actions -printf '%h\n' | sed 's|^\./||' | sort -u)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             folders=""
             if [ -n "$INPUT_FOLDER" ]; then
