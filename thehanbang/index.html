@@ -739,17 +739,17 @@ html{scroll-padding-top:122px}
 .vs-track{position:absolute;left:-.95rem;top:0;bottom:0;width:2px;pointer-events:none}
 .vs-rail,.vs-fill{position:absolute;left:0;top:var(--t0,0);height:var(--h,100%);width:2px;border-radius:2px}
 .vs-rail{background:var(--primary-100)}
-.vs-fill{background:var(--primary);transform-origin:50% 0;transform:scaleY(0);transition:transform .6s cubic-bezier(.37,0,.63,1)}
-.vs-dot{position:absolute;left:-5px;top:0;width:12px;height:12px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 4px var(--primary-50);transition:transform .6s cubic-bezier(.37,0,.63,1)}
+.vs-fill{background:var(--primary);transform-origin:50% 0;transform:scaleY(0);transition:transform .4s cubic-bezier(.37,0,.63,1)}
+.vs-dot{position:absolute;left:-5px;top:0;width:12px;height:12px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 4px var(--primary-50);transition:transform .4s cubic-bezier(.37,0,.63,1)}
 .vs-dot::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 1.5px var(--primary);opacity:0}
 .vs-dot.ping::after{animation:vs-ping .8s cubic-bezier(.2,.7,.2,1)}
 @keyframes vs-ping{from{opacity:.55;transform:scale(1)}to{opacity:0;transform:scale(2.6)}}
 .vs.main .vs-list{position:relative}
-.anim .vs.main .vs-list li{transition:opacity .5s ease}
-.anim .vs.main .vs-list li p{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.anim .vs.main .vs-list li{transition:opacity .4s ease}
+.anim .vs.main .vs-list li p{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
 .anim .vs.main:not(.done) .vs-list li:not(.on){opacity:.28}
 .anim .vs.main:not(.done) .vs-list li:not(.on) p{transform:translateX(-6px);transition:none}
-.anim .vs.main .vs-foot{transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.anim .vs.main .vs-foot{transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
 .anim .vs.main:not(.done) .vs-foot{opacity:0;transform:translateY(6px)}
 .anim .vs.main:not(.go) .vs-dot{opacity:0}
 /* 하루 일과: 스크롤한 만큼 선이 차오름 */
@@ -1529,12 +1529,13 @@ html{scroll-padding-top:122px}
       function ys() { return rows.map(function (li) { var t = li.querySelector('.vs-time'); return t.offsetTop + t.offsetHeight / 2; }); }
       vm.classList.add('rvx');
       items.push({ el: vm, kids: [],
-        // 더오픈 도면의 걷는 환자와 같은 박자: 곳마다 천천히 출발해 천천히 멈추고(0.6초), 도착하면 그 줄이 켜지고
-        // 고리가 한 번 번진 뒤 잠깐 머문다(0.3초). 전부 약 4초. 예전엔 0.33초 간격(2초)이라 읽기도 전에 끝났음 (사용자, 2026-10-01)
+        // 더오픈 도면의 걷는 환자처럼 곳마다 부드럽게 출발해 멈추고(0.4초), 도착하면 그 줄이 켜지고
+        // 고리가 한 번 번진 뒤 잠깐 머문다(0.16초). 전부 약 2.6초. 0.33초 간격(2초)은 읽기도 전에 끝났고,
+        // 0.6+0.3초(4초)는 다섯 줄짜리 칸에 너무 느렸음 (사용자, 2026-10-01)
         at: 30,
         on: function () {
           timers.forEach(clearTimeout); timers = [];
-          var y = ys(), y0 = y[0], span = y[y.length - 1] - y0, MOVE = 600, STAY = 300, t = 350;
+          var y = ys(), y0 = y[0], span = y[y.length - 1] - y0, MOVE = 400, STAY = 160, t = 250;
           [rail, fill].forEach(function (e) { e.style.setProperty('--t0', y0 + 'px'); e.style.setProperty('--h', span + 'px'); });
           vm.classList.remove('done', 'go');
           rows.forEach(function (li) { li.classList.remove('on'); });
