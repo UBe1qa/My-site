@@ -654,11 +654,8 @@ html{scroll-padding-top:122px}
 }
 @media (min-width:1024px){.acts{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* 둘러보기: 누가 운영하나 */
-.who{display:grid;gap:1.6rem;max-width:62rem;margin-inline:auto;align-items:center}
-@media (min-width:760px){.who{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:3.5rem}}
-.who-ph{margin:0;overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
-@media (min-width:760px){.who-ph{aspect-ratio:4/5}}
-.who-ph img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 29%}
+.who{max-width:46rem;margin-inline:auto}
+
 .who-body h2{margin-top:.9rem;font-size:clamp(1.65rem,1.12rem + 2vw,2.4rem);font-weight:800;line-height:1.32;letter-spacing:-.04em}
 .who-lead{margin-top:1rem;font-size:clamp(1rem,.97rem + .15vw,1.08rem);color:var(--gray-700)}
 .who-facts{margin-top:1.4rem;border-top:1px solid var(--gray-200)}
@@ -1169,14 +1166,12 @@ html{scroll-padding-top:122px}
   <section class="section" id="who">
     <div class="container">
       <div class="who">
-        <figure class="who-ph"><img src="img/door.webp" width="900" height="1200" alt="더한방 주간보호센터 간판과 유리문. 유리문에 ‘한의사 대표의 한의학적 전문성을 바탕으로 과학적 돌봄을 지향한다’는 문장과 경희대학교 로고가 있다" loading="lazy" decoding="async"></figure>
         <div class="who-body">
           <p class="ask"><span class="q">Q</span>누가 운영하나요?</p>
           <h2>경희대 출신 한의사가<br>건강관리를 설계해요</h2>
           <p class="who-lead">어르신의 신체기능을 세심하게 살피며, 온열 관리와 순환 스트레칭 등 어르신의 몸에 맞춘 편안한 건강관리로 매일의 하루에 작은 활력을 더합니다.</p>
           <dl class="who-facts">
             <div><dt>대표</dt><dd>경희대 출신 한의사</dd></div>
-            <div><dt>간호 인력</dt><dd>간호조무사</dd></div>
             <div><dt>건강 체크</dt><dd>매일 아침 도착하시면</dd></div>
           </dl>
         </div>
@@ -1588,8 +1583,8 @@ html{scroll-padding-top:122px}
     $$('.th-ph').forEach(function (f) { mark(f, 'rv-ph'); });
     $$('.sec-head, .page-head .container').forEach(function (g) { group(g, [].slice.call(g.children), 0.08); });
 
-    // 둘러보기: 사진이 살짝 다가오며 안착 → 글 (보행레일·수업·누가 운영, 레일 사진 두 장) / 이유 카드: 사진이 살짝 다가옴
-    [['.rail', '.rail-ph', '.rail-body'], ['.class', '.class-ph', '.class-body'], ['.who', '.who-ph', '.who-body']].forEach(function (c) {
+    // 둘러보기: 사진이 살짝 다가오며 안착 → 글 (보행레일·수업, 레일 사진 두 장) / 이유 카드: 사진이 살짝 다가옴
+    [['.rail', '.rail-ph', '.rail-body'], ['.class', '.class-ph', '.class-body']].forEach(function (c) {
       $$(c[0]).forEach(function (el) { group(el, [mark(el.querySelector(c[1]), 'rv-ph'), el.querySelector(c[2])], 0.15); });
     });
     $$('.duo').forEach(function (g) { group(g, $$('.ph', g).map(function (x) { return mark(x, 'rv-ph'); }).concat($$('figcaption', g)), 0.1); });
@@ -1603,7 +1598,7 @@ html{scroll-padding-top:122px}
       $$(c[0]).forEach(function (g) { group(g, $$(c[1], g), c[2]); });
     });
     // 하나씩: 제자리에서 흐리게 → 선명하게
-    $$('.vs.home, .vs-price, .example, .grade, .cta-box, .band, .safe-facts').forEach(function (el) { group(el, [el]); });
+    $$('.vs.home, .vs-price, .example, .grade, .cta-box, .band, .safe-facts, .who-body').forEach(function (el) { group(el, [el]); });
     // 비교: 더한방의 하루 — 점이 아침부터 저녁까지 내려가며 줄을 켠다 (사이트의 '과정 재생' 하나)
     var vm = document.querySelector('.vs.main');
     if (vm) {
