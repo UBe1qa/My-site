@@ -278,7 +278,7 @@ h1,h2,h3,h4{color:var(--gray-900);text-wrap:balance}
 .tl{margin-top:1.5rem}
 .tl li{display:grid;grid-template-columns:3.6rem minmax(0,1fr);gap:.9rem;padding-bottom:1.35rem}
 .tl li:last-child{padding-bottom:0}
-.tl time{padding-top:.05rem;font-size:.98rem;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums}
+.tl time{padding-top:.05rem;white-space:nowrap;font-size:.98rem;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums}
 .tl-body{position:relative;padding-left:1.5rem}
 .tl-body::before{content:"";position:absolute;left:0;top:.5rem;width:11px;height:11px;border:2.5px solid var(--primary);border-radius:50%;background:var(--white)}
 .tl-body::after{content:"";position:absolute;left:5px;top:calc(.5rem + 13px);bottom:calc(-1.35rem - .5rem + 2px);width:1.5px;background:var(--gray-300)}
@@ -286,7 +286,7 @@ h1,h2,h3,h4{color:var(--gray-900);text-wrap:balance}
 .tl h4{font-size:1.04rem;font-weight:700;letter-spacing:-.025em}
 .tl p{margin-top:.15rem;font-size:.95rem;color:var(--gray-700)}
 .tl-link{color:var(--primary);font-weight:600;text-underline-offset:3px;white-space:nowrap}
-@media (max-width:420px){.tl li{grid-template-columns:3.2rem minmax(0,1fr);gap:.7rem}}
+@media (max-width:420px){.tl li{grid-template-columns:3.4rem minmax(0,1fr);gap:.6rem}}
 
 /* 보호자 안심 */
 .split{display:grid;gap:2.5rem;align-items:center}
@@ -558,54 +558,113 @@ html{scroll-padding-top:122px}
 .section.tight{padding-top:clamp(1.5rem,3vw,2.5rem)}
 
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* 둘러보기: 차례 */
-.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.6rem}
-.toc a{display:inline-flex;align-items:center;min-height:2.6rem;padding:.45rem .9rem;border-radius:999px;background:var(--white);box-shadow:inset 0 0 0 1px var(--gray-200);font-size:.95rem;font-weight:600;color:var(--gray-700);text-decoration:none}
-.toc a:hover{color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary-100)}
-/* 둘러보기: 공간을 한 곳씩 */
-.stops{display:grid;gap:clamp(3rem,7vw,5.5rem);max-width:68rem;margin-inline:auto}
-.stop{display:grid;gap:1.4rem;align-items:center}
-@media (min-width:860px){
-  .stop{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:3.5rem}
-  .stop:nth-child(even){grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}
-  .stop:nth-child(even) .stop-ph{order:2}
+/* 둘러보기: 머리 — 보호자가 궁금해하실 네 가지가 곧 차례 */
+.tour-head .badge{justify-self:start}
+.qa-nav{display:grid;margin-top:1.75rem;overflow:hidden;border:1px solid var(--gray-200);border-radius:18px;background:var(--white)}
+.qa-nav a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:.75rem;padding:.95rem 1.15rem;color:inherit;text-decoration:none}
+.qa-nav a + a{border-top:1px solid var(--gray-100)}
+.qa-nav a:hover{background:var(--gray-50)}
+.qa-nav b{font-size:1.04rem;line-height:1.5;letter-spacing:-.025em;color:var(--gray-900)}
+.qa-nav span{font-size:.97rem;font-weight:600;line-height:1.5;color:var(--primary)}
+.qa-nav svg{grid-column:2;grid-row:1 / span 2;width:1.2rem;height:1.2rem;color:var(--gray-500);transform:rotate(90deg)}
+.qa-nav a:hover svg{color:var(--primary)}
+.th-ph{position:relative;margin:1.75rem 0 0;overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
+.th-ph img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+@media (min-width:960px){
+  .tour-head .container{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);column-gap:clamp(2.5rem,5vw,4.5rem);align-items:start}
+  .tour-head .container > *{grid-column:1}
+  .tour-head .th-ph{grid-column:2;grid-row:1 / span 4;align-self:stretch;margin:0;aspect-ratio:auto;min-height:22rem}
 }
-.stop-ph{margin:0;overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
-.stop-ph img{display:block;width:100%;height:100%;object-fit:cover}
-.stop-tag{display:flex;align-items:center;gap:.6rem;font-size:.98rem;font-weight:700;color:var(--primary)}
-.stop-no{display:inline-grid;place-items:center;flex:none;width:2rem;height:2rem;border-radius:50%;background:var(--primary);color:var(--white);font-size:.95rem;font-weight:800;font-variant-numeric:tabular-nums}
-.stop-body h3{margin-top:.85rem;font-size:clamp(1.35rem,1.1rem + .9vw,1.75rem);font-weight:800;line-height:1.38;letter-spacing:-.035em}
-.stop-body > p:not(.stop-tag){margin-top:.75rem;font-size:clamp(1rem,.97rem + .15vw,1.08rem);color:var(--gray-700)}
-.stop-quote{margin:1rem 0 0;padding:1rem 1.15rem;border-left:3px solid var(--primary);border-radius:0 14px 14px 0;background:var(--primary-50)}
-.stop-quote p{font-size:1rem;line-height:1.7;color:var(--gray-800)}
-.stop-quote cite{display:block;margin-top:.45rem;font-size:.94rem;font-style:normal;color:var(--gray-600)}
-/* 둘러보기: 재활 장비 */
-.eq-grid{display:grid;gap:1.1rem}
-@media (min-width:900px){.eq-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}.eq.wide{grid-column:1 / -1;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}.eq.wide .eq-ph{aspect-ratio:auto;min-height:100%}}
-.eq{display:grid;align-content:start;overflow:hidden;border-radius:var(--radius)}
-.eq-ph{margin:0;overflow:hidden;aspect-ratio:16/10;background:var(--gray-100)}
-.eq-ph img{display:block;width:100%;height:100%;object-fit:cover}
-.eq-body{padding:1.5rem 1.4rem 1.7rem}
-@media (min-width:900px){.eq-body{padding:1.9rem 2rem 2.1rem}.eq.wide .eq-body{align-self:center}}
-.eq-body h3{display:flex;align-items:center;gap:.5rem;font-size:1.2rem;font-weight:800;letter-spacing:-.035em}
-.eq-body h3 svg{flex:none;width:22px;height:22px;color:var(--primary)}
-.eq-list{display:grid;gap:.95rem;margin-top:1.15rem}
-.eq-list li{display:grid;gap:.15rem;padding-top:.95rem;border-top:1px solid var(--gray-200)}
-.eq-list li:first-child{padding-top:0;border-top:0}
-.eq-list b{font-size:1.04rem;letter-spacing:-.025em;color:var(--gray-900)}
-.eq-list span{font-size:.97rem;line-height:1.6;color:var(--gray-700)}
-#equip .small-note{font-size:.95rem;color:var(--gray-600)}
+/* 둘러보기: 칸마다 보호자의 질문으로 시작 */
+.ask{display:inline-flex;align-items:baseline;gap:.45rem;padding:.5rem 1rem;border-radius:18px 18px 18px 6px;background:var(--primary-50);font-size:1rem;font-weight:700;line-height:1.5;color:var(--gray-800)}
+.section.gray .ask{background:var(--white);box-shadow:var(--shadow-sm)}
+.ask .q{font-weight:800;color:var(--primary)}
+.band{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem;align-items:center;margin-top:clamp(1.75rem,4vw,2.5rem);padding:1.4rem 1.5rem;border-radius:var(--radius);background:var(--primary-50)}
+.band.soft{background:var(--gray-50)}
+@media (min-width:860px){.band{grid-template-columns:minmax(0,1fr) auto;column-gap:2rem;padding:1.6rem 2rem}}
+.band b{display:block;font-size:1.12rem;line-height:1.45;letter-spacing:-.03em;color:var(--gray-900)}
+.band p span{display:block;margin-top:.2rem;font-size:1rem;color:var(--gray-700)}
+.band .btn{justify-self:start;max-width:100%;white-space:normal;text-align:center}
+/* 둘러보기: 보행레일 */
+.rail{display:grid;gap:1.5rem;max-width:64rem;margin-inline:auto;align-items:center}
+@media (min-width:860px){.rail{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:3.5rem}}
+/* 사진은 조끼가 레일에 매달린 줄까지 보이게 (얼굴은 센터가 가린 그대로) */
+.rail-ph{margin:0;overflow:hidden;aspect-ratio:4/5;border-radius:var(--radius);background:var(--gray-100)}
+.rail-ph img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.rail-body h3{font-size:clamp(1.3rem,1.1rem + .8vw,1.65rem);font-weight:800;line-height:1.38;letter-spacing:-.035em}
+.how{display:grid;gap:1.15rem;margin-top:1.3rem;counter-reset:how}
+.how li{display:grid;grid-template-columns:2.2rem minmax(0,1fr);column-gap:.9rem;counter-increment:how}
+.how li::before{content:counter(how);grid-row:1 / span 2;display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--primary);color:var(--white);font-size:1rem;font-weight:800}
+.how b{font-size:1.1rem;line-height:1.5;letter-spacing:-.03em;color:var(--gray-900)}
+.how span{font-size:1rem;color:var(--gray-700)}
+.how-note{margin-top:1.4rem;padding:1rem 1.15rem;border-radius:14px;background:var(--primary-50);font-size:1rem;color:var(--gray-800)}
+.duo{display:grid;gap:1.75rem;max-width:64rem;margin:clamp(3rem,6vw,4.5rem) auto 0}
+@media (min-width:700px){.duo{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}}
+.duo figure{margin:0}
+.duo .ph{overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
+.duo img{display:block;width:100%;height:100%;object-fit:cover}
+.duo figcaption{margin-top:.9rem;font-size:1rem;color:var(--gray-700)}
+.duo figcaption b{display:block;margin-bottom:.15rem;font-size:1.1rem;letter-spacing:-.03em;color:var(--gray-900)}
+.safe-facts{max-width:64rem;margin:clamp(2.25rem,5vw,3rem) auto 0;padding:1.35rem 1.5rem;border-radius:var(--radius);background:var(--gray-50)}
+.safe-facts h3{font-size:1.08rem;font-weight:800;letter-spacing:-.03em}
+.safe-facts ul{display:grid;gap:.55rem;margin-top:.85rem}
+.safe-facts li{display:flex;align-items:center;gap:.5rem;font-size:1rem;color:var(--gray-800)}
+.safe-facts svg{flex:none;width:1.15rem;height:1.15rem;color:var(--primary)}
+@media (min-width:960px){.safe-facts{display:flex;align-items:center;gap:2.5rem;padding:1.4rem 2rem}.safe-facts ul{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin-top:0}}
+/* 둘러보기: 재활 기기 9가지 (쓰임새별) */
+.kit{display:grid;gap:1rem}
+@media (min-width:960px){.kit{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;align-items:start}}
+.kit-grp{overflow:hidden;border-radius:var(--radius)}
+.kit-grp > :not(.kit-ph){margin-inline:1.35rem}
+@media (min-width:960px){.kit-grp > :not(.kit-ph){margin-inline:1.6rem}}
+.kit-ph{margin:0;overflow:hidden;aspect-ratio:16/9;background:var(--gray-100)}
+.kit-ph img{display:block;width:100%;height:100%;object-fit:cover}
+.kit-grp h3{margin-top:1.2rem;font-size:1.16rem;font-weight:800;line-height:1.38;letter-spacing:-.03em}
+.kit-grp h3 small{margin-left:.45rem;font-size:.95rem;font-weight:700;color:var(--primary)}
+.kit ul{display:grid;gap:.8rem;margin-top:1rem;margin-bottom:1.5rem;padding-top:1rem;border-top:1px solid var(--gray-200)}
+.kit li b{display:block;font-size:1.04rem;letter-spacing:-.025em;color:var(--gray-900)}
+.kit li span{display:block;font-size:1rem;line-height:1.55;color:var(--gray-700)}
 /* 둘러보기: 활동 */
-.acts{display:grid;gap:1rem}
-@media (min-width:640px){.acts{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}}
-@media (min-width:1024px){.acts{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.act{display:flex;flex-direction:column;overflow:hidden;border-radius:var(--radius)}
-.act-ph{aspect-ratio:4/3;overflow:hidden;background:var(--gray-100)}
+.class{display:grid;gap:1.4rem;align-items:center;max-width:64rem;margin:0 auto clamp(3.5rem,7vw,5rem)}
+@media (min-width:860px){.class{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:3.5rem}}
+.class-ph{margin:0;overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
+.class-ph img{display:block;width:100%;height:100%;object-fit:cover}
+.class-body h3{font-size:clamp(1.3rem,1.1rem + .8vw,1.65rem);font-weight:800;line-height:1.38;letter-spacing:-.035em}
+.class-body > p{margin-top:.7rem;font-size:clamp(1rem,.97rem + .15vw,1.08rem);color:var(--gray-700)}
+.class-tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.1rem}
+.class-tags li{padding:.35rem .85rem;border-radius:999px;background:var(--primary-50);font-size:.97rem;font-weight:700;color:var(--primary)}
+.class-body > .class-sub{margin-top:.75rem;font-size:.97rem;color:var(--gray-600)}
+.acts-head{margin-bottom:1.1rem;font-size:1.25rem;font-weight:800;letter-spacing:-.03em}
+/* 휴대폰은 사진 옆에 글 (두 칸으로 나누면 줄이 너무 짧아짐 — 블라인드 검토) */
+.acts{display:grid;gap:.75rem}
+.act{display:grid;grid-template-columns:7.5rem minmax(0,1fr);overflow:hidden;border-radius:18px}
+.act-ph{min-height:7.5rem;overflow:hidden;background:var(--gray-100)}
 .act-ph img{display:block;width:100%;height:100%;object-fit:cover}
-.act-body{padding:1.25rem 1.3rem 1.45rem}
+.act-body{align-self:center;padding:.85rem 1rem .95rem}
 .act-body time{font-size:.9rem;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums}
-.act-body h3{margin-top:.25rem;font-size:1.15rem;font-weight:800;letter-spacing:-.03em}
-.act-body p{margin-top:.35rem;font-size:.97rem;color:var(--gray-700)}
+.act-body h4{margin-top:.1rem;font-size:1.06rem;font-weight:800;line-height:1.4;letter-spacing:-.03em}
+.act-body p{margin-top:.2rem;font-size:.97rem;line-height:1.55;color:var(--gray-700)}
+@media (min-width:640px){
+  .acts{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
+  .act{display:flex;flex-direction:column}
+  .act-ph{min-height:0;aspect-ratio:4/3}
+  .act-body{align-self:auto;padding:1.2rem 1.3rem 1.4rem}
+  .act-body h4{font-size:1.15rem}
+  .act-body p{font-size:1rem}
+}
+@media (min-width:1024px){.acts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* 둘러보기: 누가 운영하나 */
+.who{display:grid;gap:1.6rem;max-width:62rem;margin-inline:auto;align-items:center}
+@media (min-width:760px){.who{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:3.5rem}}
+.who-ph{margin:0;overflow:hidden;aspect-ratio:4/3;border-radius:var(--radius);background:var(--gray-100)}
+@media (min-width:760px){.who-ph{aspect-ratio:4/5}}
+.who-ph img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 29%}
+.who-body h2{margin-top:.9rem;font-size:clamp(1.65rem,1.12rem + 2vw,2.4rem);font-weight:800;line-height:1.32;letter-spacing:-.04em}
+.who-lead{margin-top:1rem;font-size:clamp(1rem,.97rem + .15vw,1.08rem);color:var(--gray-700)}
+.who-facts{margin-top:1.4rem;border-top:1px solid var(--gray-200)}
+.who-facts div{display:grid;grid-template-columns:6.2rem minmax(0,1fr);gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--gray-200)}
+.who-facts dt{font-size:.97rem;font-weight:700;color:var(--primary)}
+.who-facts dd{margin:0;font-size:1.02rem;font-weight:600;color:var(--gray-900)}
 
 /* 비용 예시 */
 .example{display:grid;gap:.35rem;margin-top:1.25rem;padding:1.5rem 1.6rem;border-radius:var(--radius);background:var(--card-bg)}
@@ -692,9 +751,9 @@ html{scroll-padding-top:122px}
 /* 움직임 (html.anim일 때만 — '동작 줄이기'면 없음). 칸마다 뜻에 맞는 움직임 하나씩, transform·opacity만
    첫 화면: 처음 열 때 한 번만 — 제목 첫 줄↔'아침' 칩, 둘째 줄↔'저녁' 칩 (다른 탭에 갔다 오면 hero-done이라 다시 안 함)
    탭 바꿈: 새 칸만 짧게 흐리게 → 선명하게 (JS element.animate, 처음 열 때는 안 함)
-   탭 첫 제목: 줄마다 가림막 아래에서 올라옴 / 비교: 더한방의 하루를 점이 아침→저녁으로 걸어가며 켬(곳마다 천천히 출발·멈춤, 도착하면 고리 한 번 — 더오픈 동선과 같은 박자. 집의 하루는 가만히)
-   둘러보기 공간: 사진이 살짝 다가오며 선명해지고, 글이 뒤따른 뒤 번호에 불이 켜짐(그곳에 '도착')
-   이유 카드 사진: 살짝 다가옴 / 장비: 카드가 나타나고 기기 이름이 차례로 짧게 / 하루 일과: 스크롤한 만큼 선이 차오름 / 이용 절차: 1→4 아이콘에 불이 켜짐
+   탭 첫 제목: 줄마다 가림막 아래에서 올라옴 / 비교: 더한방의 하루를 점이 아침→저녁으로 걸어가며 켬(곳마다 부드럽게 출발·멈춤 약 2.6초, 도착하면 고리 한 번 — 더오픈 동선과 같은 박자. 집의 하루는 가만히)
+   둘러보기: 사진이 살짝 다가오며 선명해지고 글이 뒤따름, 보행레일 방법은 1→3 번호에 차례로 불이 켜짐
+   이유 카드 사진: 살짝 다가옴 / 재활 기기: 카드가 나타나고 기기 이름이 차례로 짧게 / 하루 일과: 스크롤한 만큼 선이 차오름 / 이용 절차: 1→4 아이콘에 불이 켜짐
    나머지 카드: 제자리에서 흐리게 → 선명하게 */
 .hero h1 .ln{display:inline-block}
 @keyframes rv-rise{from{opacity:0;transform:translateY(14px)}}
@@ -723,9 +782,9 @@ html{scroll-padding-top:122px}
 /* 이유 카드 사진: 살짝 다가옴 */
 .anim .pcard.rv .ph img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
 .anim .pcard.rv:not(.in) .ph img{transform:scale(1.08);transition:none}
-/* 둘러보기 공간: 번호는 글이 나타난 뒤에 채워짐 */
-.anim .stop-no{transition:background-color .5s ease calc(var(--d,0s) + .45s),color .5s ease calc(var(--d,0s) + .45s),box-shadow .5s ease calc(var(--d,0s) + .45s)}
-.anim .stop-body.rv:not(.in) .stop-no{background:transparent;color:var(--primary);box-shadow:inset 0 0 0 1.5px var(--primary);transition:none}
+/* 둘러보기 보행레일: 걷는 순서대로 1→3 번호에 불이 켜짐 */
+.anim .how li::before{transition:background-color .5s ease calc(var(--d,0s) + .3s),color .5s ease calc(var(--d,0s) + .3s),box-shadow .5s ease calc(var(--d,0s) + .3s)}
+.anim .how li.rv:not(.in)::before{background:transparent;color:var(--primary);box-shadow:inset 0 0 0 1.5px var(--primary);transition:none}
 /* 장비: 기기 이름이 차례로 짧게 */
 .anim .rv-pop{transition:opacity .45s ease var(--d,0s)}
 .anim .rv-pop:not(.in){opacity:0;transition:none}
@@ -954,122 +1013,126 @@ html{scroll-padding-top:122px}
 
 <!-- ================= 센터 둘러보기 ================= -->
 <div class="chapter" id="ch-tour" hidden>
-  <section class="page-head">
+  <section class="page-head tour-head">
     <div class="container">
       <span class="badge">센터 둘러보기</span>
-      <h1>밝고 넓은 공간에서,<br><em>안전하게</em> 움직여요</h1>
-      <p class="hero-sub">연수역 근처 연수프라자 4층에 있는 어르신 주간보호센터예요.<br>센터 안을 한 곳씩 보여 드릴게요.</p>
-      <nav class="toc" aria-label="둘러보기 차례">
-        <a href="#space">공간</a><a href="#equip">재활 장비</a><a href="#program">활동</a><a href="#day">하루 일과</a>
+      <h1>부모님이 지내실 곳,<br><em>먼저</em> 둘러보세요</h1>
+      <p class="hero-sub">연수역 근처 연수프라자 4층에 있는 어르신 주간보호센터예요. 보호자분들이 궁금해하실 것들에 사진으로 답해 드릴게요.</p>
+      <nav class="qa-nav" aria-label="궁금하신 것">
+        <a href="#safe"><b>걷다가 넘어지시면 어떡하죠?</b><span>조끼를 천장 레일에 걸고 걸어요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#equip"><b>운동은 어떻게 하세요?</b><span>재활 기기가 9가지 더 있어요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#program"><b>낮에 심심해하시지 않을까요?</b><span>외부 강사 수업과 만들기를 해요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#day"><b>하루는 어떻게 보내세요?</b><span>아침 9시쯤부터 저녁 식사까지예요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#who"><b>누가 운영하나요?</b><span>경희대 출신 한의사가 대표예요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </nav>
+      <figure class="th-ph"><img src="img/hall_wide.webp" width="960" height="619" alt="천장 레일과 주황색 보행 라인이 있는 밝은 센터 홀. 큰 창 옆에 소파와 테이블이 놓여 있다" loading="lazy" decoding="async" style="object-position:70% 50%"></figure>
     </div>
   </section>
 
-  <section class="section tight" id="space">
+  <section class="section" id="safe">
     <div class="container">
-      <h2 class="sr-only">공간</h2>
-      <ol class="stops">
-        <li class="stop">
-          <figure class="stop-ph"><img src="img/hall_wide.webp" width="960" height="619" alt="큰 창 옆에 소파와 테이블이 놓인 밝은 홀. 바닥에 주황색 보행 라인이 있다" loading="lazy" decoding="async" style="object-position:70% 50%"></figure>
-          <div class="stop-body">
-            <p class="stop-tag"><span class="stop-no">1</span>홀</p>
-            <h3>큰 창으로<br>햇빛이 들어요</h3>
-            <p>창가에 소파와 테이블이 놓여 있어요. 어르신들이 쉬시거나 이야기를 나누시는 곳이에요.</p>
-          </div>
-        </li>
-        <li class="stop">
-          <figure class="stop-ph"><img src="img/rail_room.webp" width="966" height="725" alt="천장 레일이 굽이지며 이어지고, 레일에 매단 빨간 줄 아래마다 의자가 놓인 재활 공간. 벽을 따라 손잡이가 달려 있다" loading="lazy" decoding="async"></figure>
-          <div class="stop-body">
-            <p class="stop-tag"><span class="stop-no">2</span>재활 공간</p>
-            <h3>천장 레일이 지나는<br>재활 공간</h3>
-            <p>레일에 매단 빨간 줄 아래마다 의자가 놓여 있어요. 바닥엔 주황색 보행 라인이 그어져 있고, 벽을 따라 손잡이가 달려 있어요.</p>
-          </div>
-        </li>
-        <li class="stop">
-          <figure class="stop-ph"><img src="img/hall.webp" width="800" height="800" alt="긴 테이블에 둘러앉아 외부 강사의 수업을 듣는 어르신들" loading="lazy" decoding="async" style="object-position:50% 62%"></figure>
-          <div class="stop-body">
-            <p class="stop-tag"><span class="stop-no">3</span>수업 자리</p>
-            <h3>수업은 긴 테이블에<br>둘러앉아서</h3>
-            <p>외부 강사 수업과 색칠·만들기 같은 활동을 이 테이블에서 해요. 휠체어에 앉은 채로 수업을 듣는 분도 계세요.</p>
-          </div>
-        </li>
-        <li class="stop">
-          <figure class="stop-ph"><img src="img/door.webp" width="900" height="1200" alt="더한방 주간보호센터 간판과 유리문. 유리문에 센터가 지향하는 돌봄이 적혀 있다" loading="lazy" decoding="async" style="object-position:50% 29%"></figure>
-          <div class="stop-body">
-            <p class="stop-tag"><span class="stop-no">4</span>입구</p>
-            <h3>나서는 길,<br>유리문에 적힌 한 문장</h3>
-            <blockquote class="stop-quote"><p>“한의사 대표의 한의학적 전문성을 바탕으로 어르신의 신체적 재활과 정서적 안정을 함께 케어해 드리는 ‘과학적 돌봄’을 지향합니다.”</p><cite>센터 입구 유리문</cite></blockquote>
-            <p>휠체어로도 드나들 수 있는 출입문이에요.</p>
-          </div>
-        </li>
-      </ol>
+      <div class="sec-head">
+        <p class="ask"><span class="q">Q</span>걷다가 넘어지시면 어떡하죠?</p>
+        <h2>레일과 조끼가 받쳐 줘서,<br>넘어질 걱정을 덜고 걸어요</h2>
+        <p>센터 천장을 따라 마르페 보행레일이 이어져 있어요.</p>
+      </div>
+      <div class="rail">
+        <figure class="rail-ph"><img src="img/walk.webp" width="900" height="1090" alt="천장 레일에 줄로 연결된 슬링 조끼를 입고 걷기 연습을 하는 어르신" loading="lazy" decoding="async"></figure>
+        <div class="rail-body">
+          <h3>보행레일로 걷는 방법</h3>
+          <ol class="how">
+            <li><b>조끼를 입어요</b><span>천장 레일에 줄로 매단 슬링 조끼를 입고 연결해요.</span></li>
+            <li><b>장치가 따라와요</b><span>걸음을 옮기면 레일 위 장치가 부드럽게 따라 움직여요.</span></li>
+            <li><b>기울어도 잡아 줘요</b><span>조끼 줄이 천장 레일에 걸려 있어서예요.</span></li>
+          </ol>
+          <p class="how-note"><b>편마비로 한쪽 몸이 불편하신 분</b>도 이 레일로 걷기 연습을 하실 수 있어요.</p>
+        </div>
+      </div>
+      <div class="duo">
+        <figure><div class="ph"><img src="img/rail_room.webp" width="966" height="725" alt="천장 레일이 굽이지며 이어지고, 레일에 매단 빨간 줄 아래마다 의자가 놓인 재활 공간. 벽을 따라 손잡이가 달려 있다" loading="lazy" decoding="async"></div><figcaption><b>재활 공간을 지나는 레일</b>천장 레일이 굽이지며 이어지고, 줄마다 그 아래 의자가 하나씩 있어요.</figcaption></figure>
+        <figure><div class="ph"><img src="img/rehab.webp" width="966" height="966" alt="천장 레일에 매단 슬링에 발을 걸고 앉아서 다리 운동을 하는 어르신들" loading="lazy" decoding="async" style="object-position:50% 70%"></div><figcaption><b>앉아서 하는 다리 운동</b>슬링 줄에 발을 걸고 다리를 들어 올려요. 줄을 붙잡고 서서 균형 연습도 해요.</figcaption></figure>
+      </div>
+      <div class="safe-facts">
+        <h3>레일 밖에서도 걷기 편하게</h3>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>바닥에 주황색 보행 라인</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>벽을 따라 이어진 손잡이</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>휠체어로 드나드는 출입문</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <section class="section gray" id="equip">
     <div class="container">
       <div class="sec-head">
-        <span class="eyebrow">재활 장비</span>
-        <h2>재활 장비 10가지를<br>쓰임새별로 모았어요</h2>
-        <p>쓰고 싶은 기기를 골라 자유롭게 쓰실 수 있어요.</p>
+        <p class="ask"><span class="q">Q</span>운동은 어떻게 하세요?</p>
+        <h2>보행레일 말고도<br>재활 기기 9가지를 갖췄어요</h2>
+        <p>원하시는 기기를 골라 이용하실 수 있어요.</p>
       </div>
-      <div class="eq-grid">
-        <article class="eq wide raised">
-          <figure class="eq-ph"><img src="img/rehab.webp" width="966" height="966" alt="천장 레일에 매단 슬링에 발을 걸고 앉아서 다리 운동을 하는 어르신들" loading="lazy" decoding="async" style="object-position:50% 70%"></figure>
-          <div class="eq-body">
-            <h3><svg aria-hidden="true"><use href="#i-activity"/></svg>걷고 힘 기르기</h3>
-            <ul class="eq-list">
-              <li><b>마르페 천장 보행레일</b><span>조끼를 입고 레일에 연결하면, 레일 위 장치가 걸음을 따라 움직이며 몸을 잡아 줘요. 넘어질 걱정을 덜고 걷기 연습을 할 수 있어요. 앉은 채 슬링에 발을 걸어 다리 운동을 하기도 해요.</span></li>
-              <li><b>실내 자전거</b><span>앉아서 페달을 밟는 운동이라 무릎에 부담이 덜해요.</span></li>
-            </ul>
-          </div>
+      <div class="kit">
+        <article class="kit-grp raised">
+          <figure class="kit-ph"><img src="img/belt.webp" width="966" height="604" alt="벨트 마사지기에 두 손을 얹고 선 어르신. 기기에 달린 벨트가 몸을 감싸고 있다" loading="lazy" decoding="async"></figure>
+          <h3>앉거나 서서 움직이기<small>2가지</small></h3>
+          <ul>
+            <li><b>실내 자전거</b><span>앉아서 페달을 밟아요. 무릎 부담이 덜해요.</span></li>
+            <li><b>벨트 마사지기</b><span>몸에 두른 벨트가 떨리며 흔들어 줘요.</span></li>
+          </ul>
         </article>
-        <article class="eq raised">
-          <figure class="eq-ph"><img src="img/belt.webp" width="966" height="604" alt="벨트 마사지기에 두 손을 얹고 선 어르신. 기기에 달린 벨트가 몸을 감싸고 있다" loading="lazy" decoding="async"></figure>
-          <div class="eq-body">
-            <h3><svg aria-hidden="true"><use href="#i-stretch"/></svg>몸 풀기</h3>
-            <ul class="eq-list">
-              <li><b>벨트 마사지기</b><span>벨트를 몸에 두르고 서면, 벨트가 떨리며 몸을 흔들어 줘요.</span></li>
-              <li><b>수치료기</b><span>물침대와 비슷해서, 누우면 물 위에 떠 있는 듯해요.</span></li>
-              <li><b>두타베드</b><span>누우면 온몸에 진동이 전해지는 침대예요.</span></li>
-              <li><b>하지 공기압 마사지기</b><span>다리에 감은 주머니가 공기로 부풀었다 줄었다 하며 다리를 눌러 줘요.</span></li>
-              <li><b>손목 마사지기</b><span>손목을 넣으면 따뜻하게 감싸며 주물러 줘요.</span></li>
-            </ul>
-          </div>
+        <article class="kit-grp raised">
+          <figure class="kit-ph"><img src="img/hydro.webp" width="966" height="492" alt="물침대처럼 생긴 수치료기. 옆에 조작 화면이 있고 위에 체크무늬 깔개가 덮여 있다" loading="lazy" decoding="async"></figure>
+          <h3>누워서 몸 풀기<small>3가지</small></h3>
+          <ul>
+            <li><b>수치료기</b><span>물침대처럼 생긴 기기에 편하게 누워요.</span></li>
+            <li><b>두타베드</b><span>온몸에 진동이 전해지는 침대예요.</span></li>
+            <li><b>하지 공기압 마사지기</b><span>다리에 감은 주머니가 부풀며 눌러 줘요.</span></li>
+          </ul>
         </article>
-        <article class="eq raised">
-          <figure class="eq-ph"><img src="img/footspa.webp" width="966" height="604" alt="원목 족욕대에 앉아 물을 받은 족욕기에 발을 담근 어르신" loading="lazy" decoding="async"></figure>
-          <div class="eq-body">
-            <h3><svg aria-hidden="true"><use href="#i-bath"/></svg>따뜻하게 쉬기</h3>
-            <ul class="eq-list">
-              <li><b>아로마 족욕기</b><span>따끈한 물에 아로마 오일을 더해 발을 담가요.</span></li>
-              <li><b>건식 족욕기</b><span>물을 쓰지 않고 발을 데워요.</span></li>
-              <li><b>원적외선 온열기</b><span>둥근 갓에서 나오는 열을 하체에 쬐어요.</span></li>
-            </ul>
-          </div>
+        <article class="kit-grp raised">
+          <figure class="kit-ph"><img src="img/footspa.webp" width="966" height="604" alt="원목 족욕대에 앉아 족욕기에 발을 담근 어르신" loading="lazy" decoding="async"></figure>
+          <h3>따뜻하게 데우기<small>4가지</small></h3>
+          <ul>
+            <li><b>아로마 족욕기</b><span>따끈한 물에 아로마 오일을 더해 발을 담가요.</span></li>
+            <li><b>건식 족욕기</b><span>물 없이 발을 데워요.</span></li>
+            <li><b>원적외선 온열기</b><span>하체에 따뜻한 열을 쬐어요.</span></li>
+            <li><b>손목 마사지기</b><span>손목을 따뜻하게 감싸 주물러요.</span></li>
+          </ul>
         </article>
       </div>
-      <p class="small-note">기기마다 자세한 소개는 센터 블로그 글 <a href="https://blog.naver.com/thehanbang0157/224391970708" target="_blank" rel="noopener">‘재활기구를 소개해드립니다’</a>에 있어요.</p>
+      <div class="band">
+        <p><b>둘러보러 오시면 기기를 직접 써 보실 수 있어요</b></p>
+        <a class="btn btn-primary" href="tel:0328150157"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화로 둘러볼 날 정하기</a>
+      </div>
     </div>
   </section>
 
   <section class="section" id="program">
     <div class="container">
       <div class="sec-head">
-        <span class="eyebrow">활동</span>
-        <h2>요즘 센터에서<br>이런 활동을 했어요</h2>
-        <p>센터 블로그에 매일 올라오는 기록에서 골랐어요.</p>
+        <p class="ask"><span class="q">Q</span>낮에 심심해하시지 않을까요?</p>
+        <h2>외부 강사 수업과 만들기로<br>날마다 할 거리가 있어요</h2>
       </div>
+      <div class="class">
+        <figure class="class-ph"><img src="img/hall.webp" width="800" height="800" alt="긴 테이블에 둘러앉아 외부 강사의 수업을 듣는 어르신들" loading="lazy" decoding="async" style="object-position:50% 62%"></figure>
+        <div class="class-body">
+          <h3>오후엔 외부 강사 수업</h3>
+          <p>강사가 앞에서 수업을 이끌어요. 휠체어에 앉은 채로 들으시는 분도 계세요.</p>
+          <ul class="class-tags"><li>체육</li><li>웃음치료</li><li>인지 미술</li></ul>
+          <p class="class-sub">수업은 요일마다 바뀌어요.</p>
+        </div>
+      </div>
+      <h3 class="acts-head">블로그에 남긴 활동 기록</h3>
       <ul class="acts">
-        <li class="act raised"><div class="act-ph"><img src="img/leaf_mosaic.webp" width="966" height="725" alt="풀을 쥐고 낙엽 그림 위에 빨간 색종이 조각을 붙이는 어르신의 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-09-30">9월 30일</time><h3>낙엽 모자이크</h3><p>색종이 조각을 붙여 가을 낙엽을 꾸미셨어요.</p></div></li>
-        <li class="act raised"><div class="act-ph"><img src="img/picnic.webp" width="966" height="725" alt="나들이 간식으로 준비한 과일 도시락. 사과, 포도, 방울토마토, 바나나가 담겨 있다" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-09-18">9월 18일</time><h3>가을 나들이</h3><p>바닷가에서 바람을 쐬며 걷고, 과일 도시락을 드셨어요.</p></div></li>
-        <li class="act raised"><div class="act-ph"><img src="img/cooking.webp" width="966" height="630" alt="위생 장갑을 끼고 밀대로 식빵을 펴는 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-08-28">8월 28일</time><h3>롤 샌드위치 만들기</h3><p>식빵을 밀대로 펴고 재료를 올려 돌돌 말아 드셨어요.</p></div></li>
-        <li class="act raised"><div class="act-ph"><img src="img/pe_class.webp" width="525" height="394" alt="둥글게 앉아 분홍 스카프를 펼쳐 든 어르신의 뒷모습" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-08-26">8월 26일</time><h3>체육 수업</h3><p>스카프와 밴드를 들고 앉은 채로 몸을 움직이셨어요.</p></div></li>
-        <li class="act raised"><div class="act-ph"><img src="img/scoop.webp" width="966" height="725" alt="파란 스쿠프에 노란 공을 담아 든 어르신의 두 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-07-15">7월 15일</time><h3>스쿠프 놀이</h3><p>바구니처럼 생긴 교구로 가벼운 공을 주고받으셨어요.</p></div></li>
-        <li class="act raised"><div class="act-ph"><img src="img/mandala.webp" width="966" height="640" alt="어르신들이 색칠한 꽃무늬 만다라 다섯 장" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-07-15">7월 15일</time><h3>만다라 색칠</h3><p>원하는 색을 골라 칠하셨어요. 크게 움직이지 않아 누구나 편하게 할 수 있어요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/leaf_mosaic.webp" width="966" height="725" alt="풀을 쥐고 낙엽 그림 위에 빨간 색종이 조각을 붙이는 어르신의 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-09-30">9월 30일</time><h4>낙엽 모자이크</h4><p>색종이 조각을 붙여 나뭇잎을 꾸미셨어요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/picnic.webp" width="966" height="725" alt="나들이 간식으로 준비한 과일 도시락. 사과, 포도, 방울토마토, 바나나가 담겨 있다" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-09-18">9월 18일</time><h4>가을 나들이</h4><p>바닷가 나들이 날 챙겨 간 과일 도시락이에요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/cooking.webp" width="966" height="630" alt="위생 장갑을 끼고 밀대로 식빵을 펴는 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-08-28">8월 28일</time><h4>롤 샌드위치</h4><p>밀대로 식빵을 펴서 돌돌 말았어요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/pe_class.webp" width="525" height="394" alt="둥글게 앉아 분홍 스카프를 펼쳐 든 어르신의 뒷모습" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-08-26">8월 26일</time><h4>체육 수업</h4><p>앉은 채로 스카프를 흔들며 몸을 풀었어요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/scoop.webp" width="966" height="725" alt="파란 스쿠프에 노란 공을 담아 든 어르신의 두 손" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-07-15">7월 15일</time><h4>스쿠프 놀이</h4><p>스쿠프로 공을 받아 넘기는 놀이예요.</p></div></li>
+        <li class="act raised"><div class="act-ph"><img src="img/mandala.webp" width="966" height="640" alt="어르신들이 색칠한 꽃무늬 만다라 다섯 장" loading="lazy" decoding="async"></div><div class="act-body"><time datetime="2026-07-15">7월 15일</time><h4>만다라 색칠</h4><p>원하는 색을 골라 칠하셨어요.</p></div></li>
       </ul>
-      <div class="more-row">
-        <a class="btn btn-outline" href="https://blog.naver.com/thehanbang0157" target="_blank" rel="noopener">블로그에서 매일의 기록 보기</a>
+      <div class="band soft">
+        <p><b>부모님이 하신 활동은 블로그에서 보실 수 있어요</b><span>센터 블로그에 활동 사진을 꾸준히 올려요.</span></p>
+        <a class="btn btn-outline" href="https://blog.naver.com/thehanbang0157" target="_blank" rel="noopener">블로그에서 최근 기록 보기</a>
       </div>
     </div>
   </section>
@@ -1077,28 +1140,45 @@ html{scroll-padding-top:122px}
   <section class="section gray" id="day">
     <div class="container">
       <div class="sec-head">
-        <span class="eyebrow">하루 일과</span>
-        <h2>센터에서의 하루는<br>이렇게 흘러가요</h2>
-        <p>오후 수업은 요일마다 달라져요.</p>
+        <p class="ask"><span class="q">Q</span>하루는 어떻게 보내세요?</p>
+        <h2>아침 9시쯤 모시러 가서,<br>저녁 식사 후 모셔다 드려요</h2>
       </div>
       <div class="day-grid">
         <div class="day-col raised">
-          <h3 class="day-title"><svg aria-hidden="true"><use href="#i-sun"/></svg>오전</h3>
+          <h3 class="day-title"><svg aria-hidden="true"><use href="#i-sun"/></svg>모셔 와서 점심까지</h3>
           <ol class="tl">
             <li><time>9시쯤</time><div class="tl-body"><h4>댁 앞에서 모셔 와요</h4><p>차량이 댁 앞까지 가고, 타고 내리실 때 부축해요.</p></div></li>
             <li><time>도착</time><div class="tl-body"><h4>건강 체크</h4><p>걸음걸이를 살피고, 혈압과 컨디션을 확인해요.</p></div></li>
-            <li><time>오전</time><div class="tl-body"><h4>체조와 재활 운동</h4><p>9988체조로 몸을 깨우고 보행레일·자전거로 운동해요.</p></div></li>
-            <li><time>점심</time><div class="tl-body"><h4>식사와 양치</h4><p>직접 만든 점심을 드시고 양치까지 챙겨요. <a class="tl-link" href="#menu">오늘의 식단 보기</a></p></div></li>
+            <li><time>오전</time><div class="tl-body"><h4>체조와 재활 운동</h4><p>9988체조를 하고 보행레일·자전거로 운동해요.</p></div></li>
+            <li><time>점심</time><div class="tl-body"><h4>식사와 양치</h4><p>직접 만든 점심을 드시고, 양치까지 챙겨 드려요. <a class="tl-link" href="#menu">오늘의 식단 보기</a></p></div></li>
           </ol>
         </div>
         <div class="day-col raised">
-          <h3 class="day-title"><svg aria-hidden="true"><use href="#i-moon"/></svg>오후 · 저녁</h3>
+          <h3 class="day-title"><svg aria-hidden="true"><use href="#i-moon"/></svg>오후부터 귀가까지</h3>
           <ol class="tl">
-            <li><time>휴식</time><div class="tl-body"><h4>오침과 간식</h4><p>편하게 쉬시고, 과일·찐빵 같은 간식을 챙겨 드려요.</p></div></li>
-            <li><time>오후</time><div class="tl-body"><h4>외부 강사 수업</h4><p>체육, 웃음치료, 인지 미술 수업과 교구 활동을 해요.</p></div></li>
-            <li><time>마무리</time><div class="tl-body"><h4>아로마 족욕</h4><p>족욕으로 하루 피로를 풀어요.</p></div></li>
-            <li><time>저녁</time><div class="tl-body"><h4>식사 후 귀가</h4><p>저녁까지 드시고 댁 앞까지 모셔다 드려요.</p></div></li>
+            <li><time>점심 후</time><div class="tl-body"><h4>오침과 간식</h4><p>편하게 쉬시고, 과일·찐빵 같은 간식을 챙겨 드려요.</p></div></li>
+            <li><time>오후</time><div class="tl-body"><h4>수업과 교구 놀이</h4><p>외부 강사 수업을 듣고, 교구 놀이도 해요.</p></div></li>
+            <li><time>마무리</time><div class="tl-body"><h4>아로마 족욕</h4><p>따뜻한 족욕으로 하루를 마무리해요.</p></div></li>
+            <li><time>저녁</time><div class="tl-body"><h4>식사 후 귀가</h4><p>저녁을 드신 뒤 댁 앞까지 모셔다 드려요.</p></div></li>
           </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="who">
+    <div class="container">
+      <div class="who">
+        <figure class="who-ph"><img src="img/door.webp" width="900" height="1200" alt="더한방 주간보호센터 간판과 유리문. 유리문에 ‘한의사 대표의 한의학적 전문성을 바탕으로 과학적 돌봄을 지향한다’는 문장과 경희대학교 로고가 있다" loading="lazy" decoding="async"></figure>
+        <div class="who-body">
+          <p class="ask"><span class="q">Q</span>누가 운영하나요?</p>
+          <h2>경희대 출신 한의사가<br>건강관리를 설계해요</h2>
+          <p class="who-lead">어르신의 신체기능을 세심하게 살피며, 온열 관리와 순환 스트레칭 등 어르신의 몸에 맞춘 편안한 건강관리로 매일의 하루에 작은 활력을 더합니다.</p>
+          <dl class="who-facts">
+            <div><dt>대표</dt><dd>경희대 출신 한의사</dd></div>
+            <div><dt>간호 인력</dt><dd>간호조무사</dd></div>
+            <div><dt>건강 체크</dt><dd>매일 아침 도착하시면</dd></div>
+          </dl>
         </div>
       </div>
     </div>
@@ -1505,19 +1585,25 @@ html{scroll-padding-top:122px}
       }).join('');
       mark(h, 'rv-ln');
     });
+    $$('.th-ph').forEach(function (f) { mark(f, 'rv-ph'); });
     $$('.sec-head, .page-head .container').forEach(function (g) { group(g, [].slice.call(g.children), 0.08); });
 
-    // 둘러보기 공간: 사진이 살짝 다가오며 안착 → 글 → 번호에 불 (한 곳씩) / 이유 카드: 사진이 살짝 다가옴
-    $$('.stop').forEach(function (el) { group(el, [mark(el.querySelector('.stop-ph'), 'rv-ph'), el.querySelector('.stop-body')], 0.15); });
+    // 둘러보기: 사진이 살짝 다가오며 안착 → 글 (보행레일·수업·누가 운영, 레일 사진 두 장) / 이유 카드: 사진이 살짝 다가옴
+    [['.rail', '.rail-ph', '.rail-body'], ['.class', '.class-ph', '.class-body'], ['.who', '.who-ph', '.who-body']].forEach(function (c) {
+      $$(c[0]).forEach(function (el) { group(el, [mark(el.querySelector(c[1]), 'rv-ph'), el.querySelector(c[2])], 0.15); });
+    });
+    $$('.duo').forEach(function (g) { group(g, $$('.ph', g).map(function (x) { return mark(x, 'rv-ph'); }).concat($$('figcaption', g)), 0.1); });
+    // 보행레일 방법: 걷는 순서대로 1→3 번호에 불
+    $$('.how').forEach(function (g) { group(g, $$('li', g), 0.3); });
     $$('.reasons .pcard').forEach(function (el) { group(el, [el]); });
-    // 장비: 카드가 나타나고 기기 이름이 차례로 짧게
-    $$('.eq').forEach(function (el) { group(el, [el].concat($$('.eq-list li', el).map(function (x) { return mark(x, 'rv-pop'); })), 0.07); });
+    // 재활 기기: 카드가 나타나고 기기 이름이 차례로 짧게
+    $$('.kit-grp').forEach(function (el) { group(el, [el].concat($$('li', el).map(function (x) { return mark(x, 'rv-pop'); })), 0.07); });
     // 묶음으로 차례로: 이용 절차(아이콘이 켜짐), 요약, 하루 일과, 안내, 칼럼 목록, 연락처
     [['.steps', '.step', 0.35], ['.features', 'li', 0.06], ['.day-grid', '.day-col', 0.12], ['.notes', 'li', 0.08], ['.posts', 'li', 0.06], ['.contact-grid', ':scope > *', 0.1], ['.rates', '.rate', 0.1], ['.acts', '.act', 0.08]].forEach(function (c) {
       $$(c[0]).forEach(function (g) { group(g, $$(c[1], g), c[2]); });
     });
     // 하나씩: 제자리에서 흐리게 → 선명하게
-    $$('.vs.home, .vs-price, .example, .grade, .cta-box').forEach(function (el) { group(el, [el]); });
+    $$('.vs.home, .vs-price, .example, .grade, .cta-box, .band, .safe-facts').forEach(function (el) { group(el, [el]); });
     // 비교: 더한방의 하루 — 점이 아침부터 저녁까지 내려가며 줄을 켠다 (사이트의 '과정 재생' 하나)
     var vm = document.querySelector('.vs.main');
     if (vm) {
