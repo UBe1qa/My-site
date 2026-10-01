@@ -654,14 +654,7 @@ html{scroll-padding-top:122px}
 }
 @media (min-width:1024px){.acts{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* 둘러보기: 누가 운영하나 */
-.who{max-width:46rem;margin-inline:auto}
 
-.who-body h2{margin-top:.9rem;font-size:clamp(1.65rem,1.12rem + 2vw,2.4rem);font-weight:800;line-height:1.32;letter-spacing:-.04em}
-.who-lead{margin-top:1rem;font-size:clamp(1rem,.97rem + .15vw,1.08rem);color:var(--gray-700)}
-.who-facts{margin-top:1.4rem;border-top:1px solid var(--gray-200)}
-.who-facts div{display:grid;grid-template-columns:6.2rem minmax(0,1fr);gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--gray-200)}
-.who-facts dt{font-size:.97rem;font-weight:700;color:var(--primary)}
-.who-facts dd{margin:0;font-size:1.02rem;font-weight:600;color:var(--gray-900)}
 
 /* 비용 예시 */
 .example{display:grid;gap:.35rem;margin-top:1.25rem;padding:1.5rem 1.6rem;border-radius:var(--radius);background:var(--card-bg)}
@@ -1020,7 +1013,6 @@ html{scroll-padding-top:122px}
         <a href="#equip"><b>운동은 어떻게 하세요?</b><span>재활 기기가 9가지 더 있어요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a href="#program"><b>낮에 심심해하시지 않을까요?</b><span>외부 강사 수업과 만들기를 해요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a href="#day"><b>하루는 어떻게 보내세요?</b><span>아침 9시쯤부터 저녁 식사까지예요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a href="#who"><b>누가 운영하나요?</b><span>경희대 출신 한의사가 대표예요</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </nav>
       <figure class="th-ph"><img src="img/hall_wide.webp" width="960" height="619" alt="천장 레일과 주황색 보행 라인이 있는 밝은 센터 홀. 큰 창 옆에 소파와 테이블이 놓여 있다" loading="lazy" decoding="async" style="object-position:70% 50%"></figure>
     </div>
@@ -1158,22 +1150,6 @@ html{scroll-padding-top:122px}
             <li><time>마무리</time><div class="tl-body"><h4>아로마 족욕</h4><p>따뜻한 족욕으로 하루를 마무리해요.</p></div></li>
             <li><time>저녁</time><div class="tl-body"><h4>식사 후 귀가</h4><p>저녁을 드신 뒤 댁 앞까지 모셔다 드려요.</p></div></li>
           </ol>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="who">
-    <div class="container">
-      <div class="who">
-        <div class="who-body">
-          <p class="ask"><span class="q">Q</span>누가 운영하나요?</p>
-          <h2>경희대 출신 한의사가<br>건강관리를 설계해요</h2>
-          <p class="who-lead">어르신의 신체기능을 세심하게 살피며, 온열 관리와 순환 스트레칭 등 어르신의 몸에 맞춘 편안한 건강관리로 매일의 하루에 작은 활력을 더합니다.</p>
-          <dl class="who-facts">
-            <div><dt>대표</dt><dd>경희대 출신 한의사</dd></div>
-            <div><dt>건강 체크</dt><dd>매일 아침 도착하시면</dd></div>
-          </dl>
         </div>
       </div>
     </div>
@@ -1598,7 +1574,7 @@ html{scroll-padding-top:122px}
       $$(c[0]).forEach(function (g) { group(g, $$(c[1], g), c[2]); });
     });
     // 하나씩: 제자리에서 흐리게 → 선명하게
-    $$('.vs.home, .vs-price, .example, .grade, .cta-box, .band, .safe-facts, .who-body').forEach(function (el) { group(el, [el]); });
+    $$('.vs.home, .vs-price, .example, .grade, .cta-box, .band, .safe-facts').forEach(function (el) { group(el, [el]); });
     // 비교: 더한방의 하루 — 점이 아침부터 저녁까지 내려가며 줄을 켠다 (사이트의 '과정 재생' 하나)
     var vm = document.querySelector('.vs.main');
     if (vm) {
