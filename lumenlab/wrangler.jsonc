@@ -6,6 +6,8 @@
   "compatibility_date": "2026-09-01",
   "assets": { "directory": ".", "not_found_handling": "404-page" },
   // 메인 도메인. 예전 주소 lumenlab.mysitebox.workers.dev 도 계속 열린다(앱스토어에 적힌 지원·방침 주소)
+  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소를 살려 두려고 명시
+  "workers_dev": true,
   "routes": [
     { "pattern": "lumenlab.page", "custom_domain": true },
     { "pattern": "www.lumenlab.page", "custom_domain": true }

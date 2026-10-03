@@ -5,6 +5,8 @@
   "name": "date-calc",
   "compatibility_date": "2026-09-01",
   "assets": { "directory": "." },
+  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소를 살려 두려고 명시
+  "workers_dev": true,
   "routes": [
     { "pattern": "date.lumenlab.page", "custom_domain": true }
   ]
