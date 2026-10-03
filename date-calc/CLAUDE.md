@@ -10,7 +10,7 @@
 - `assets/dates.js` 순수 계산 로직(`DC`). DOM 모름. 날짜는 '하루 번호'(1970-01-01=0, UTC)로 다뤄 서머타임에 안 흔들림.
 - `assets/holidays.js` 공휴일 표 2015–2035 (자동 생성, 손으로 고치지 않음).
 - `assets/i18n.js` 영어 사전(`L`, `F`). 키 = 한국어 원문. 어순이 다르면 `%2$s`.
-- `assets/app.js` 화면 연결. `assets/ads-config.js` 애드센스(기본 꺼짐).
+- `assets/app.js` 화면 연결. `assets/ads-config.js` 애드센스(기본 꺼짐). 광고 자리 3곳(top, below-tool, bottom). localhost나 `?adpreview`면 점선 상자로 자리만 보여 줌.
 - `privacy.html` 개인정보 처리방침(한·영). `tools/` `tests/` 는 `.assetsignore`로 배포에서 뺌.
 
 ## 명령어

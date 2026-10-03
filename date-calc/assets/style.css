@@ -96,6 +96,7 @@ h1 { font-size: clamp(26px, 6vw, 38px); line-height: 1.2; margin: 0 0 8px; lette
 .anniv li.next em { color: var(--accent); }
 
 .ad-slot { margin-top: 16px; min-height: 100px; }
+.ad-preview { display: flex; align-items: center; justify-content: center; border: 2px dashed var(--accent); border-radius: 12px; color: var(--accent); font-weight: 700; font-size: 14px; }
 
 /* FAQ */
 .faq { padding-top: 34px; padding-bottom: 10px; }
