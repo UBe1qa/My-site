@@ -11,6 +11,7 @@
 - `assets/holidays.js` 공휴일 표 2015–2035 (자동 생성, 손으로 고치지 않음).
 - `assets/i18n.js` 영어 사전(`L`, `F`). 키 = 한국어 원문. 어순이 다르면 `%2$s`.
 - `assets/app.js` 화면 연결. `assets/ads-config.js` 애드센스(기본 꺼짐). 광고 자리 3곳(top, below-tool, bottom). localhost나 `?adpreview`면 점선 상자로 자리만 보여 줌.
+- `guide/*/index.html`(가이드 글 6편), `guide/index.html`, `about/index.html`, `sitemap.xml` 은 `tools/build_guides.py` 가 만든다. 글은 그 파일 안에서 고치고 다시 돌린다. 글 속 예시 숫자는 tests/run.js '가이드:' 묶음이 검산한다(글을 고치면 시험도 같이).
 - `privacy.html` 개인정보 처리방침(한·영). `tools/` `tests/` 는 `.assetsignore`로 배포에서 뺌.
 
 ## 명령어
@@ -21,6 +22,7 @@
 - 배포: 이 폴더에 빈 파일 `.deploy-actions`가 있으면 main에 푸시할 때 GitHub Actions(`deploy-new-sites.yml`)가 wrangler로 배포.
 
 ## 설계 결정
+- 에이브랜치 영상(2026-10-03 정리) 기준으로 애드센스 승인·검색 노출용: 사이트 주제에 맞는 가이드 글을 글마다 따로 된 페이지로, 머리 메뉴·푸터에 가이드·소개·방침·문의, robots.txt에 AI 검색 크롤러 명시 허용. 검토 없는 자동 대량 발행은 하지 않는다(스팸 정책).
 - 기준값(tests/cases.json)은 파이썬 datetime·dateutil·holidays로 따로 계산한 값. 같은 로직을 두 번 짠 게 아님.
 - 1/31 + 1개월 = 2/28 (말일 맞춤). 2/29생은 평년에 2/28이 생일.
 - 영업일 세기: 종료일은 늘 포함, 시작일은 옵션(기본 포함). 영업일 더하기: 기준일은 세지 않음.
