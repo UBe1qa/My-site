@@ -29,6 +29,9 @@
 - 설정(언어·나라)만 localStorage `dc.lang`, `dc.country`. 입력값은 저장 안 함 → 방침 문구와 일치.
 
 ## 주의할 점
+- wrangler.jsonc에 `routes`(사용자 지정 도메인)를 넣으면 wrangler가 workers.dev 주소를 꺼 버린다(2026-10-03 lumenlab 지원·방침 주소가 5분쯤 404). 예전 주소를 살리려면 `"workers_dev": true`를 같이 둔다.
+- 사용자 지정 도메인을 다른 Worker로 옮길 땐 원래 Worker에서 먼저 빼고 배포한 뒤 새 Worker에 넣는다. 옮긴 직후 맥 DNS 캐시 때문에 잠깐 접속이 안 될 수 있다(`curl --resolve`로 확인).
+- 서치 콘솔 확인 태그는 주소마다 다르다(lumenlab.page·date.lumenlab.page는 같은 값, workers.dev는 다른 값).
 - `holidays` 라이브러리 객체는 기본 `expand=True`라 표 밖 연도를 몰래 채운다. 기준값 만들 때 `expand=False` 필수(안 하면 2014년 사례에서 앱과 어긋남).
 - 한국어 조사(이에요/예요)를 변수 뒤에 붙이지 않는다. "공휴일이에요: %s"처럼 쓴다.
 - 광고를 켜면 같은 변경에서 `ads.txt` 추가 + `privacy.html` 광고 문단 수정.
