@@ -1,12 +1,11 @@
 // Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'date-calc' 하나
-// 주소: https://lumenlab.page (메인 도메인, 애드센스 승인용) + https://www.lumenlab.page, 예전 주소 date-calc.mysitebox.workers.dev 도 계속 열림
+// 주소: https://date.lumenlab.page (메인 lumenlab.page 는 루멘랩 소개 사이트 = lumenlab 폴더). 예전 주소 date-calc.mysitebox.workers.dev 도 계속 열림
 // 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
 {
   "name": "date-calc",
   "compatibility_date": "2026-09-01",
   "assets": { "directory": "." },
   "routes": [
-    { "pattern": "lumenlab.page", "custom_domain": true },
-    { "pattern": "www.lumenlab.page", "custom_domain": true }
+    { "pattern": "date.lumenlab.page", "custom_domain": true }
   ]
 }

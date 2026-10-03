@@ -2,7 +2,7 @@
 
 날짜 계산 웹 도구 11종(두 날짜 사이, 디데이, 날짜 더하기·빼기, 영업일 세기, 영업일 뒤 날짜, 만 나이, 기념일, 요일, 주차, 시간 차이, 공휴일 목록). 한국어·영어, 한국·미국 공휴일. 빌드 없는 정적 사이트.
 
-- 주소: https://lumenlab.page (메인 도메인, Cloudflare에서 2026-10-03 구입) · www.lumenlab.page · 예전 date-calc.mysitebox.workers.dev 도 열림(canonical은 lumenlab.page). Worker `date-calc`
+- 주소: https://date.lumenlab.page (Worker `date-calc`). 메인 lumenlab.page 는 루멘랩 소개 사이트(lumenlab 폴더). 예전 date-calc.mysitebox.workers.dev 도 열림(canonical은 date.lumenlab.page). lumenlab.page 는 2026-10-03 Cloudflare에서 구입
 - 출발점: 2026-10-03, 유튜브 "GPT-6 Astra에게 수익형 웹사이트를 통째로 맡겨봤습니다"의 날짜 계산기 예시를 참고해 기능만 가져옴. 이름·디자인·문구는 새로 만듦.
 
 ## 폴더
