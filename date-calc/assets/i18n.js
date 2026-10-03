@@ -69,7 +69,7 @@ var I18N = (function () {
     "1월 31일에 1개월을 더하면요?": "What's Jan 31 plus one month?",
     "다음 달에 31일이 없으면 그 달의 마지막 날로 맞춰요. 그래서 2월 28일(윤년은 29일)이 나와요.": "If the next month has no 31st, it uses that month's last day — so you get Feb 28 (29 in leap years).",
     "입력한 날짜가 어딘가로 전송되나요?": "Are the dates I enter sent anywhere?",
-    "아니요. 모든 계산은 이 브라우저 안에서만 해요. 고른 언어와 나라만 이 기기에 기억해 둬요.": "No. Everything is calculated in your browser. Only your language and country choice are remembered on this device.",
+    "아니요. 모든 계산은 이 브라우저 안에서만 해요. 고른 언어와 나라만 이 기기에 기억해 둬요. 다만 페이지에 나오는 Google 광고는 쿠키를 쓸 수 있어요(개인정보 처리방침 참고).": "No. Everything is calculated in your browser. Only your language and country choice are remembered on this device. Google ads shown on the page may use cookies (see the privacy policy).",
     "© 2026 루멘랩": "© 2026 Lumen Lab",
     "개인정보 처리방침": "Privacy policy",
     "문의": "Contact",

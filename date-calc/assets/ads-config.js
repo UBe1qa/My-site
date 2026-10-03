@@ -1,9 +1,8 @@
 // 구글 애드센스 설정. 비어 있으면 광고 코드를 아예 불러오지 않는다(기본값).
-// 켜는 법: 애드센스 승인을 받은 뒤 client(ca-pub-…)와 slot 번호를 넣고, 같은 변경에서
-//   1) 사이트 맨 위에 ads.txt 만들기 (google.com, pub-…, DIRECT, f08c47fec0942fa0)
-//   2) privacy.html 의 '광고' 문단을 '광고를 보여 줘요'로 바꾸기  ← 안내문이 실제 동작과 같아야 한다
+// 켜져 있음: ads.txt(이 폴더와 lumenlab 폴더 = 메인 도메인), index.html <head> 광고 코드, privacy.html 광고 문단.
+// 수동 광고 단위를 만들면 아래 slots에 번호를 넣는다. 끄려면 client를 비우고 <head> 코드와 방침 문단도 같이 고친다.
 var DC_ADS = {
-  client: "",                  // 예: "ca-pub-1234567890123456"
+  client: "ca-pub-9496167591465154",  // 루멘랩 애드센스 (2026-10-03)
   // 수동 광고 단위 번호(반응형 디스플레이 광고 하나를 세 자리에 같이 써도 된다)
   //   top: 계산기 고르기 아래 / below-tool: 계산 결과 아래 / bottom: 자주 묻는 질문 끝
   slots: { "top": "", "below-tool": "", "bottom": "" },
@@ -21,10 +20,7 @@ var DC_ADS = {
       return;
     }
     if (!this.client || !/^ca-pub-\d{10,20}$/.test(this.client)) return;
-    var s = document.createElement("script");
-    s.async = true; s.crossOrigin = "anonymous";
-    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + this.client;
-    document.head.appendChild(s);
+    // 광고 코드(adsbygoogle.js)는 index.html <head>에 직접 있다(자동 광고·심사용). 여기선 수동 광고 자리만 채운다
     var slots = this.slots, client = this.client;
     document.querySelectorAll("[data-ad]").forEach(function (box) {
       var id = slots[box.getAttribute("data-ad")];
