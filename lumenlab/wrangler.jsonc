@@ -4,5 +4,10 @@
 {
   "name": "lumenlab",
   "compatibility_date": "2026-09-01",
-  "assets": { "directory": ".", "not_found_handling": "404-page" }
+  "assets": { "directory": ".", "not_found_handling": "404-page" },
+  // 메인 도메인. 예전 주소 lumenlab.mysitebox.workers.dev 도 계속 열린다(앱스토어에 적힌 지원·방침 주소)
+  "routes": [
+    { "pattern": "lumenlab.page", "custom_domain": true },
+    { "pattern": "www.lumenlab.page", "custom_domain": true }
+  ]
 }
