@@ -1,0 +1,8 @@
+tools
+tests
+CLAUDE.md
+wrangler.jsonc
+.assetsignore
+.deploy-actions
+.wrangler
+.DS_Store

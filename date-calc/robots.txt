@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://date-calc.mysitebox.workers.dev/sitemap.xml
