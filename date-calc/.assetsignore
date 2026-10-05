@@ -6,3 +6,4 @@ wrangler.jsonc
 .deploy-actions
 .wrangler
 .DS_Store
+worker.js

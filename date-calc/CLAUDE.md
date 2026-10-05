@@ -2,7 +2,7 @@
 
 날짜 계산 웹 도구 11종(두 날짜 사이, 디데이, 날짜 더하기·빼기, 영업일 세기, 영업일 뒤 날짜, 만 나이, 기념일, 요일, 주차, 시간 차이, 공휴일 목록). 한국어·영어, 한국·미국 공휴일. 빌드 없는 정적 사이트.
 
-- 주소: https://date.lumenlab.page (Worker `date-calc`). 메인 lumenlab.page 는 루멘랩 소개 사이트(lumenlab 폴더). 예전 date-calc.mysitebox.workers.dev 도 열림(canonical은 date.lumenlab.page). lumenlab.page 는 2026-10-03 Cloudflare에서 구입
+- 주소: https://date.lumenlab.page (Worker `date-calc`). 메인 lumenlab.page 는 루멘랩 소개 사이트(lumenlab 폴더). 예전 date-calc.mysitebox.workers.dev 는 `worker.js`가 새 주소의 같은 페이지로 301 넘긴다(2026-10-05, 네이버 중복 콘텐츠 방지). lumenlab.page 는 2026-10-03 Cloudflare에서 구입
 - 출발점: 2026-10-03, 유튜브 "GPT-6 Astra에게 수익형 웹사이트를 통째로 맡겨봤습니다"의 날짜 계산기 예시를 참고해 기능만 가져옴. 이름·디자인·문구는 새로 만듦.
 
 ## 폴더
@@ -12,10 +12,12 @@
 - `assets/i18n.js` 영어 사전(`L`, `F`). 키 = 한국어 원문. 어순이 다르면 `%2$s`.
 - `assets/app.js` 화면 연결. `assets/ads-config.js` 애드센스(기본 꺼짐). 광고 자리 3곳(top, below-tool, bottom). localhost나 `?adpreview`면 점선 상자로 자리만 보여 줌.
 - `guide/*/index.html`(가이드 글 6편), `guide/index.html`, `about/index.html`, `sitemap.xml` 은 `tools/build_guides.py` 가 만든다. 글은 그 파일 안에서 고치고 다시 돌린다. 글 속 예시 숫자는 tests/run.js '가이드:' 묶음이 검산한다(글을 고치면 시험도 같이).
-- `privacy.html` 개인정보 처리방침(한·영). `tools/` `tests/` 는 `.assetsignore`로 배포에서 뺌.
+- `404.html`(광고 없음·noindex·홈 링크)과 `rss.xml`(가이드 글 본문 전체, 네이버 서치어드바이저 제출용)도 `tools/build_guides.py`가 만든다. sitemap lastmod는 그 파일의 `LASTMOD`에 실제로 고친 페이지·날짜만 적는다.
+- `worker.js` 예전 workers.dev 주소 → 새 주소 301. `wrangler.jsonc`의 `run_worker_first: ["/*", "!/assets/*"]`라 페이지 요청만 Worker를 거친다(무료 하루 10만 요청을 페이지 조회에만 씀).
+- `privacy.html` 개인정보 처리방침(한·영, 제3자 쿠키·웹 비콘 문장과 구글 파트너 사이트 링크 포함 = 애드센스 게시자 정책). `tools/` `tests/` `worker.js` 는 `.assetsignore`로 배포에서 뺌.
 
 ## 명령어
-- 테스트: `./tests/run.sh` (맥 기본 jsc로 로직 3,200여 개 + 현지화 검사. node 필요 없음)
+- 테스트: `./tests/run.sh` (맥 기본 jsc로 로직 3,200여 개 + 현지화 검사. node 필요 없음). 리눅스 작업 공간에선 `node -e 'global.print=console.log;const fs=require("fs");global.read=f=>fs.readFileSync(f,"utf8");global.load=f=>{(0,eval)(read(f))};(0,eval)(read("tests/run.js"))'` 뒤 `python3 tools/check_i18n.py`
 - 로컬 보기: `python3 -m http.server 8417 --directory date-calc`
 - 공휴일 표 다시 만들기 / 기준값 다시 만들기 (venv에 `holidays` 설치):
   `python3 -m venv /tmp/hv && /tmp/hv/bin/pip install holidays && /tmp/hv/bin/python date-calc/tools/gen_holidays.py && /tmp/hv/bin/python date-calc/tests/gen_cases.py`
@@ -43,7 +45,9 @@
 - 광고를 켜면 같은 변경에서 `ads.txt` 추가 + `privacy.html` 광고 문단 수정.
 - Cloudflare가 `privacy.html`을 `/privacy`로 307 넘긴다. 링크·sitemap은 확장자 없이 쓴다.
 - 애드센스는 workers.dev 같은 공용 서브도메인으로는 승인받기 어렵다. 승인된 자기 도메인이 필요.
+- 광고 코드가 있는 실제 주소를 Playwright로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽).
 
 ## 미완성
+- RSS(`https://date.lumenlab.page/rss.xml`) 네이버 서치어드바이저 제출은 사용자가 할 일(2026-10-05 만듦).
 - 애드센스: pub-9496167591465154, ads.txt는 메인(lumenlab 폴더)과 이 폴더 둘 다. 사이트 심사(lumenlab.page)는 2026-10-03 신청 대기. 수동 광고 단위 번호 아직 없음(자동 광고만). og 이미지 없음.
 - 임시공휴일은 라이브러리 업데이트 후 표를 다시 만들어야 반영(예: 2026 제헌절 공휴일 재지정 여부 확인 필요).

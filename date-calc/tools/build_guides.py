@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""가이드 글 페이지(guide/*/index.html), 가이드 목록, 소개 페이지, sitemap.xml을 만든다.
+"""가이드 글 페이지(guide/*/index.html), 가이드 목록, 소개 페이지, 404 페이지, sitemap.xml, rss.xml을 만든다.
 
 글 내용은 이 파일의 GUIDES에 있다. 고친 뒤 `python3 date-calc/tools/build_guides.py` 를 돌리고 결과를 커밋한다.
 예시 숫자는 assets/dates.js로 검산한 값이다(tests/run.js의 '가이드 예시' 묶음이 같은 값을 시험한다).
@@ -9,6 +9,8 @@ import html, json, os
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 BASE = "https://date.lumenlab.page"
 UPDATED = "2026-10-03"
+# sitemap lastmod: 본문·구조화 데이터·링크가 실제로 바뀐 날만 적는다(배포 날짜를 일괄로 찍지 않는다). 없으면 UPDATED
+LASTMOD = {"/": "2026-10-05", "/privacy": "2026-10-05"}
 AD_HEAD = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>'
 
 # slug, 제목(h1), 짧은 제목(목록·링크), 설명(meta), 계산기 해시, 본문 HTML, 이어서 볼 글
@@ -396,8 +398,57 @@ def about_page():
 
 def sitemap():
     urls = ["/", "/guide/"] + [f"/guide/{g['slug']}/" for g in GUIDES] + ["/about/", "/privacy"]
-    rows = "\n".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls)
+    rows = "\n".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{LASTMOD.get(u, UPDATED)}</lastmod></url>" for u in urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}\n</urlset>\n'
+
+
+def rss():
+    """네이버 서치어드바이저에 내는 RSS. 글마다 본문 전체, 링크는 전부 이 도메인의 전체 주소로."""
+    import datetime
+    d = datetime.date.fromisoformat(UPDATED)
+    pub = d.strftime("%a, %d %b %Y 00:00:00 +0900")
+    items = []
+    for g in GUIDES:
+        url = f"{BASE}/guide/{g['slug']}/"
+        body = g["body"].strip().replace('href="/', f'href="{BASE}/')
+        items.append(f"""  <item>
+    <title>{E(g['title'])}</title>
+    <link>{url}</link>
+    <guid isPermaLink="true">{url}</guid>
+    <pubDate>{pub}</pubDate>
+    <description><![CDATA[{body}]]></description>
+  </item>""")
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>며칠 계산기 가이드</title>
+  <link>{BASE}/guide/</link>
+  <description>날짜 사이 기간, 디데이, 만 나이, 영업일, 대체공휴일, 기념일을 정확하게 세는 법</description>
+  <language>ko</language>
+{chr(10).join(items)}
+</channel>
+</rss>
+"""
+
+
+def not_found_page():
+    """없는 주소에 보여 주는 페이지. 내용이 없는 화면이라 광고 코드를 넣지 않고(애드센스 게시자 정책), 검색에도 안 올린다."""
+    page = head("페이지를 찾을 수 없어요 | 며칠 계산기", "찾는 페이지가 없어요. 며칠 계산기 첫 화면이나 가이드로 가 보세요.", "/404", {"@context": "https://schema.org", "@type": "WebPage", "name": "404"})
+    page = page.replace(AD_HEAD + "\n", "").replace('<link rel="canonical" href="' + BASE + '/404">\n', '<meta name="robots" content="noindex">\n')
+    page = page.replace('<meta property="og:url" content="' + BASE + '/404">\n', "")
+    return page + """
+<main id="main" class="wrap">
+  <article class="doc article">
+    <h1>페이지를 찾을 수 없어요</h1>
+    <p>주소가 바뀌었거나 없는 페이지예요. 아래에서 찾아보세요.</p>
+    <ul>
+      <li><a href="/">며칠 계산기 첫 화면</a> (기간·디데이·만 나이 등 11가지 계산)</li>
+      <li><a href="/guide/">날짜 계산 가이드</a></li>
+    </ul>
+    <p lang="en">Page not found. Go to the <a href="/">Daycount home</a> or the <a href="/guide/">guides</a>.</p>
+  </article>
+</main>
+""" + FOOT
 
 
 if __name__ == "__main__":
@@ -405,5 +456,7 @@ if __name__ == "__main__":
         write(f"guide/{g['slug']}/index.html", guide_page(g))
     write("guide/index.html", guide_index())
     write("about/index.html", about_page())
+    write("404.html", not_found_page())
     write("sitemap.xml", sitemap())
-    print("가이드 %d편 + 목록 + 소개 + sitemap 만듦" % len(GUIDES))
+    write("rss.xml", rss())
+    print("가이드 %d편 + 목록 + 소개 + 404 + sitemap + rss 만듦" % len(GUIDES))

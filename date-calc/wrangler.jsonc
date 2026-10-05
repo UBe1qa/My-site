@@ -1,11 +1,21 @@
 // Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'date-calc' 하나
-// 주소: https://date.lumenlab.page (메인 lumenlab.page 는 루멘랩 소개 사이트 = lumenlab 폴더). 예전 주소 date-calc.mysitebox.workers.dev 도 계속 열림
+// 주소: https://date.lumenlab.page (메인 lumenlab.page 는 루멘랩 소개 사이트 = lumenlab 폴더).
+// 예전 주소 date-calc.mysitebox.workers.dev 는 worker.js 가 새 주소의 같은 페이지로 301 넘긴다(2026-10-05).
 // 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
 {
   "name": "date-calc",
+  "main": "worker.js",
   "compatibility_date": "2026-09-01",
-  "assets": { "directory": "." },
-  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소를 살려 두려고 명시
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    // 없는 주소는 404.html(광고 없음, 홈 링크)을 404로 보여 준다
+    "not_found_handling": "404-page",
+    // 페이지 주소만 worker.js 를 먼저 거친다(예전 주소 넘기기). 그림·글꼴·스크립트(/assets/)는 파일을 바로 준다
+    // → Worker 무료 요청 수(하루 10만)를 페이지 조회에만 쓴다
+    "run_worker_first": ["/*", "!/assets/*"]
+  },
+  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소로 온 사람을 넘기려면 켜 둔다
   "workers_dev": true,
   "routes": [
     { "pattern": "date.lumenlab.page", "custom_domain": true }
