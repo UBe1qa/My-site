@@ -110,7 +110,7 @@ with sync_playwright() as p:
     lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__title');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     pg.click('[data-lang-toggle]'); pg.wait_for_timeout(200)
-    ok(pg.evaluate("document.documentElement.lang") == 'ko' and '만든 곳' in pg.inner_text('h1'), '버튼으로 한국어로 바뀜')
+    ok(pg.evaluate("document.documentElement.lang") == 'ko' and '만드는 곳' in pg.inner_text('h1'), '버튼으로 한국어로 바뀜')
     pg.goto(BASE + '/owlight/privacy/'); pg.wait_for_timeout(300)
     ok(pg.evaluate("document.documentElement.lang") == 'ko', '고른 언어가 다른 페이지에도 이어짐')
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")

@@ -136,3 +136,5 @@ html[data-lang="en"] .doc-head nav a[href="#en"],html[data-lang="ko"] .doc-head 
   .lang{padding:0 10px;margin-left:2px;font-size:14px}
 }
 @media (max-width:380px){.top .brand small{display:none}.top .brand{font-size:16px;gap:7px}.top nav a{padding:8px 5px}}
+/* 휴대폰은 첫 화면의 앱 / 웹 도구 카드가 같은 일을 하니 머리말에선 '문의'만 */
+@media (max-width:560px){.top nav .nav-cat{display:none}}

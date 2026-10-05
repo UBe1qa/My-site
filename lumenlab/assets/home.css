@@ -9,7 +9,20 @@
 .lm>span{display:inline-block}
 .hero__lead{margin:20px 0 0;font-size:18px;color:var(--ink-2);max-width:30em}
 
-.apps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.shelves{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.shelf{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px 24px;box-shadow:var(--shadow);color:var(--ink);text-decoration:none;transition:border-color .2s}
+.shelf:hover{border-color:var(--lamp)}
+.shelf__icons{display:flex}
+.shelf__icons img{display:block;width:44px;height:44px;border-radius:11px;box-shadow:0 0 0 3px var(--card)}
+.shelf__icons img+img{margin-left:-12px}
+.shelf__text{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;min-width:0}
+.shelf__text b{font-size:21px;letter-spacing:-.01em}
+.shelf__n{font-size:15px;font-weight:700;color:var(--lamp-ink)}
+.shelf__names{flex-basis:100%;font-size:15px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shelf__go{font-size:20px;color:var(--muted);transition:transform .2s}
+.shelf:hover .shelf__go{transform:translateX(4px);color:var(--ink)}
+@media (max-width:420px){.shelf{padding:18px;gap:14px}.shelf__icons img{width:38px;height:38px}}
 .app{display:flex;gap:18px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
 .app__body{min-width:0}
 .app__name{margin:0;font-size:22px;line-height:1.3;letter-spacing:-.01em}
@@ -29,7 +42,7 @@
   .hero__lead{font-size:17px}
 }
 @media (max-width:420px){
-  .app{padding:18px;gap:14px}
+  .app{padding:18px;column-gap:14px}
   .app .icon{width:52px;height:52px}
 }
 
@@ -39,29 +52,25 @@
 .sec-lead{margin:14px 0 0;color:var(--ink-2)}
 .sec-links{display:flex;flex-wrap:wrap;gap:6px 20px;margin:18px 0 0;font-weight:600;font-size:16px}
 
-/* 첫 화면 아래 도구 칸으로 가는 한 줄 */
-.hero__more{margin:14px 0 0;font-size:16px;font-weight:600}
-.hero__more a{text-decoration:none;border-bottom:1.5px solid var(--lamp)}
-.hero__more a::after{content:" ↓";color:var(--muted)}
+/* 앱 / 웹 도구 두 칸. 카드는 _dev/catalog.json → build_home.py 로 만들고, 늘어나면 칸이 알아서 줄 바꿈 */
+.cat{padding-top:80px;padding-bottom:88px;border-top:1px solid var(--line)}
+.cat__lead{max-width:34em}
+.cat__grid{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.cat__grid--apps,.cat__grid--tools{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.cat__all{margin:22px 0 0;font-weight:600}
+@media (max-width:860px){.cat{padding-top:64px;padding-bottom:64px}.cat__grid{margin-top:26px}}
 
-/* 무료 웹 도구: 카드 한 장 = 서브도메인 하나. 늘어나면 칸이 알아서 줄 바꿈 */
-.tools{padding-top:80px;padding-bottom:88px;border-top:1px solid var(--line)}
-.tools__lead{max-width:34em}
-.tools__grid{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
 .tool{display:flex}
-.tool__a{flex:1;display:flex;flex-direction:column;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+.tool__a{flex:1;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;align-content:start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
   padding:22px;box-shadow:var(--shadow);color:var(--ink);text-decoration:none;transition:border-color .2s,transform .2s}
 .tool__a:hover{border-color:var(--lamp)}
-.tool__icon{display:block;border-radius:12px}
-.tool__name{margin:14px 0 0;font-size:20px;line-height:1.35;letter-spacing:-.01em}
+.tool__icon{display:block;border-radius:12px;grid-row:1/4}
+.tool__name,.tool__line,.tool__url{grid-column:2}
+.tool__name{margin:0;font-size:20px;line-height:1.35;letter-spacing:-.01em}
 .tool__line{margin:6px 0 0;color:var(--ink-2);font-size:16px;line-height:1.6;flex:1}
 .tool__url{margin:16px 0 0;display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--lamp-ink)}
 .tool__go{display:inline-block;transition:transform .2s}
 .tool__a:hover .tool__go{transform:translateX(4px)}
-.tool--next{align-self:start;align-items:center;justify-content:center;min-height:96px;border:1.5px dashed var(--muted);opacity:.7;border-radius:var(--radius);padding:22px;text-align:center}
-.tool--next p{margin:0;color:var(--muted);font-size:15px}
-@media (max-width:860px){.tools{padding-top:64px;padding-bottom:64px}.tools__grid{margin-top:26px}}
-@media (max-width:560px){.tool--next{min-height:0;padding:16px}}
 
 /* Owlight: 메뉴 막대에서 내려온 스위치 목록 */
 .owl{padding-top:88px;padding-bottom:88px;border-top:1px solid var(--line)}

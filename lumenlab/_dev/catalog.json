@@ -1,0 +1,40 @@
+{
+  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
+  "limit": 6,
+  "apps": [
+    {
+      "id": "owlight",
+      "icon": "/img/owlight.webp",
+      "name": {"ko": "Owlight", "en": "Owlight"},
+      "kind": {"ko": "Mac 메뉴 막대 앱 <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 이상</span>", "en": "Menu bar app for Mac <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 or later</span>"},
+      "status": {"ko": "App Store 출시 준비 중", "en": "Getting ready for the App Store"},
+      "line": {"ko": "잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.", "en": "Keep your Mac awake, cover the desktop, highlight the front-most window and more, right from the menu bar."},
+      "links": [
+        {"href": "/owlight/support/", "ko": "지원", "en": "Support"},
+        {"href": "/owlight/privacy/", "ko": "개인정보 처리방침", "en": "Privacy Policy"}
+      ]
+    },
+    {
+      "id": "setnote",
+      "icon": "/img/setnote.webp",
+      "name": {"ko": "세트노트", "en": "SetNote"},
+      "sub": "SetNote",
+      "kind": {"ko": "브라우저로 여는 앱 <span aria-hidden=\"true\">·</span> <span class=\"nw\">홈 화면에 추가</span>", "en": "Opens in your browser <span aria-hidden=\"true\">·</span> <span class=\"nw\">add it to your Home Screen</span>"},
+      "line": {"ko": "루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.", "en": "Save your routines and log every set with last time’s weight and reps beside it."},
+      "links": [
+        {"href": "/setnote/", "go": true, "ko": "세트노트 열기", "en": "Open SetNote"},
+        {"href": "/#setnote", "ko": "어떤 앱인지", "en": "What it does"}
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "id": "daycount",
+      "url": "https://date.lumenlab.page/",
+      "icon": "/img/daycount.svg",
+      "name": {"ko": "며칠 계산기", "en": "Daycount"},
+      "sub": "Daycount",
+      "line": {"ko": "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.", "en": "Days between dates, countdowns, business days excluding holidays, age and anniversaries."}
+    }
+  ]
+}

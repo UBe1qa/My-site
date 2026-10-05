@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title data-i18n="docTitle">Lumen Lab 루멘랩 · 앱 안내와 지원</title>
+<title data-i18n="docTitle">Lumen Lab 루멘랩 · 앱과 무료 웹 도구</title>
 <meta name="description" content="Lumen Lab(루멘랩)이 만든 앱 Owlight(Mac 메뉴 막대 앱), 세트노트(헬스 기록 웹앱)의 사용 안내, 자주 묻는 질문, 개인정보 처리방침과 며칠 계산기 같은 무료 웹 도구 모음. Support and privacy policy for Owlight and SetNote.">
 <!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
 <meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
 <link rel="canonical" href="https://lumenlab.page/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lumen Lab 루멘랩">
-<meta property="og:title" content="Lumen Lab 루멘랩 · 앱 안내와 지원">
+<meta property="og:title" content="Lumen Lab 루멘랩 · 앱과 무료 웹 도구">
 <meta property="og:description" content="Owlight와 세트노트의 사용 안내, 자주 묻는 질문, 개인정보 처리방침. Support and privacy policy for Owlight and SetNote.">
 <meta property="og:url" content="https://lumenlab.page/">
 <meta property="og:image" content="https://lumenlab.page/og.png">
@@ -38,7 +38,8 @@
       <span>Lumen Lab <small lang="ko">루멘랩</small></span>
     </a>
     <nav aria-label="사이트" data-i18n-aria="navLabel">
-      <a href="/#tools" data-i18n="navTools">도구</a>
+      <a class="nav-cat" href="/#apps" data-i18n="navApps">앱</a>
+      <a class="nav-cat" href="/#tools" data-i18n="navTools">웹 도구</a>
       <a href="/#contact" data-i18n="navContact">문의</a>
       <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
     </nav>
@@ -49,61 +50,60 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap hero__in">
       <div class="hero__text">
-        <h1 id="hero-title" class="hero__title rv"><span class="lm"><span data-i18n="h1a">Owlight와 세트노트를</span></span> <span class="lm"><span data-i18n="h1b">만든 곳이에요</span></span></h1>
-        <p class="hero__lead rv" data-i18n="lead">앱 소개와 함께 Owlight의 지원 페이지와 <span class="nw">개인정보 처리방침을</span> 모아 두었어요. 찾는 답이 없으면 메일로 물어봐 주세요.</p>
-        <p class="hero__more rv"><a href="#tools" data-i18n="heroTools">가입 없이 쓰는 무료 웹 도구도 있어요</a></p>
+        <h1 id="hero-title" class="hero__title rv"><span class="lm"><span data-i18n="h1a">작은 앱과 웹 도구를</span></span> <span class="lm"><span data-i18n="h1b">만드는 곳이에요</span></span></h1>
+        <p class="hero__lead rv" data-i18n="lead">기기에 두고 쓰는 앱과, 열어서 바로 쓰는 <span class="nw">무료 웹 도구를</span> 만들어요. 앱의 지원 페이지와 <span class="nw">개인정보 처리방침도</span> 여기 모아 두었어요.</p>
       </div>
-
-      <ul class="apps" id="apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">
-        <li class="app rv">
-          <img class="icon" src="/img/owlight.webp" width="64" height="64" alt="" fetchpriority="high">
-          <div class="app__body">
-            <h2 class="app__name">Owlight</h2>
-            <p class="app__kind" data-i18n="owlKind">Mac 메뉴 막대 앱 <span aria-hidden="true">·</span> <span class="nw">macOS 14 이상</span></p>
-            <p class="app__status"><span data-i18n="owlStatus">App Store 출시 준비 중</span></p>
-            <p class="app__line" data-i18n="owlLine">잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.</p>
-            <p class="app__links">
-              <a class="chip" href="/owlight/support/" data-i18n="support">지원</a>
-              <a class="chip" href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a>
-            </p>
-          </div>
-        </li>
-        <li class="app rv">
-          <img class="icon" src="/img/setnote.webp" width="64" height="64" alt="" fetchpriority="high">
-          <div class="app__body">
-            <h2 class="app__name" data-i18n="snName">세트노트 <span class="app__en">SetNote</span></h2>
-            <p class="app__kind" data-i18n="snKind">브라우저로 여는 앱 <span aria-hidden="true">·</span> <span class="nw">홈 화면에 추가</span></p>
-            <p class="app__line" data-i18n="snLine">루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.</p>
-            <p class="app__links">
-              <a class="chip chip--go" href="/setnote/" data-i18n="snOpen">세트노트 열기</a>
-              <a class="chip" href="#setnote" data-i18n="snMore">어떤 앱인지</a>
-            </p>
-          </div>
-        </li>
+      <ul class="shelves" aria-label="루멘랩이 만드는 것" data-i18n-aria="shelvesLabel">
+        <!-- gen:shelves -->
+        <li class="rv"><a class="shelf" href="#apps">
+          <span class="shelf__icons" aria-hidden="true"><img src="/img/owlight.webp" width="36" height="36" alt=""><img src="/img/setnote.webp" width="36" height="36" alt=""></span>
+          <span class="shelf__text"><b data-i18n="sh_apps">앱</b> <span class="shelf__n" data-i18n="sh_apps_n">2개</span><span class="shelf__names" data-i18n="sh_apps_names">Owlight · 세트노트</span></span>
+          <span class="shelf__go" aria-hidden="true">→</span>
+        </a></li>
+        <li class="rv"><a class="shelf" href="#tools">
+          <span class="shelf__icons" aria-hidden="true"><img src="/img/daycount.svg" width="36" height="36" alt=""></span>
+          <span class="shelf__text"><b data-i18n="sh_tools">웹 도구</b> <span class="shelf__n" data-i18n="sh_tools_n">1개</span><span class="shelf__names" data-i18n="sh_tools_names">며칠 계산기</span></span>
+          <span class="shelf__go" aria-hidden="true">→</span>
+        </a></li>
+        <!-- /gen:shelves -->
       </ul>
     </div>
   </section>
 
-  <section class="tools" id="tools" aria-labelledby="tools-title">
+  <!-- 앱·웹 도구 카드는 _dev/catalog.json 에 한 줄 더하고 python3 _dev/build_home.py 로 만든다 -->
+  <section class="cat" id="apps" aria-labelledby="apps-title">
     <div class="wrap">
-      <p class="sec-kicker" data-i18n="tlKicker">무료 웹 도구</p>
-      <h2 id="tools-title" class="sec-title" data-i18n="tlTitle">필요할 때 열어서 <span class="nw">바로 쓰는 도구</span></h2>
-      <p class="sec-lead tools__lead" data-i18n="tlLead">가입도 설치도 없이 브라우저에서 계산해요. 도구마다 <span class="nw">lumenlab.page 아래</span> 자기 주소가 있어요.</p>
-      <!-- 새 도구(이름.lumenlab.page)를 만들면 아래 <li class="tool rv"> 하나를 복사해 맨 뒤(안내 칸 앞)에 넣고,
-           영어 문구는 assets/i18n.js, 푸터 '무료 도구' 줄에도 링크 하나. 아이콘은 img/에 64×64 -->
-      <ul class="tools__grid" aria-label="루멘랩의 무료 웹 도구" data-i18n-aria="toolsLabel">
-        <li class="tool rv">
-          <a class="tool__a" href="https://date.lumenlab.page/">
-            <img class="tool__icon" src="/img/daycount.svg" width="48" height="48" alt="" loading="lazy">
-            <h3 class="tool__name" data-i18n="dcName">며칠 계산기 <span class="app__en">Daycount</span></h3>
-            <p class="tool__line" data-i18n="dcLine">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.</p>
-            <p class="tool__url"><span>date.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
-          </a>
+      <p class="sec-kicker" data-i18n="apKicker">앱</p>
+      <h2 id="apps-title" class="sec-title" data-i18n="apTitle">기기에 두고 <span class="nw">매일 쓰는 앱</span></h2>
+      <!-- gen:apps -->
+      <ul class="cat__grid cat__grid--apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">
+        <li class="app rv">
+          <img class="icon" src="/img/owlight.webp" width="64" height="64" alt="">
+          <div class="app__body">
+            <h3 class="app__name" data-i18n="c_owlight_name">Owlight</h3>
+            <p class="app__kind" data-i18n="c_owlight_kind">Mac 메뉴 막대 앱 <span aria-hidden="true">·</span> <span class="nw">macOS 14 이상</span></p>
+            <p class="app__status"><span data-i18n="c_owlight_status">App Store 출시 준비 중</span></p>
+            <p class="app__line" data-i18n="c_owlight_line">잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.</p>
+            <p class="app__links">
+              <a class="chip" href="/owlight/support/" data-i18n="c_owlight_l0">지원</a>
+              <a class="chip" href="/owlight/privacy/" data-i18n="c_owlight_l1">개인정보 처리방침</a>
+            </p>
+          </div>
         </li>
-        <li class="tool tool--next rv">
-          <p data-i18n="tlNext">새 도구가 생기면 <span class="nw">여기에 이어서 놓아요</span></p>
+        <li class="app rv">
+          <img class="icon" src="/img/setnote.webp" width="64" height="64" alt="">
+          <div class="app__body">
+            <h3 class="app__name" data-i18n="c_setnote_name">세트노트 <span class="app__en">SetNote</span></h3>
+            <p class="app__kind" data-i18n="c_setnote_kind">브라우저로 여는 앱 <span aria-hidden="true">·</span> <span class="nw">홈 화면에 추가</span></p>
+            <p class="app__line" data-i18n="c_setnote_line">루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.</p>
+            <p class="app__links">
+              <a class="chip chip--go" href="/setnote/" data-i18n="c_setnote_l0">세트노트 열기</a>
+              <a class="chip" href="/#setnote" data-i18n="c_setnote_l1">어떤 앱인지</a>
+            </p>
+          </div>
         </li>
       </ul>
+      <!-- /gen:apps -->
     </div>
   </section>
 
@@ -156,6 +156,26 @@
     </div>
   </section>
 
+  <section class="cat cat--tools" id="tools" aria-labelledby="tools-title">
+    <div class="wrap">
+      <p class="sec-kicker" data-i18n="tlKicker">웹 도구</p>
+      <h2 id="tools-title" class="sec-title" data-i18n="tlTitle">필요할 때 열어서 <span class="nw">바로 쓰는 무료 도구</span></h2>
+      <p class="sec-lead cat__lead" data-i18n="tlLead">가입도 설치도 없이 브라우저에서 바로 써요. 도구마다 주소가 따로 있어요 <span class="nw">(예: date.lumenlab.page)</span>.</p>
+      <!-- gen:tools -->
+      <ul class="cat__grid cat__grid--tools" aria-label="루멘랩의 무료 웹 도구" data-i18n-aria="toolsLabel">
+        <li class="tool rv">
+          <a class="tool__a" href="https://date.lumenlab.page/">
+            <img class="tool__icon" src="/img/daycount.svg" width="48" height="48" alt="" loading="lazy">
+            <h3 class="tool__name" data-i18n="c_daycount_name">며칠 계산기 <span class="app__en">Daycount</span></h3>
+            <p class="tool__line" data-i18n="c_daycount_line">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.</p>
+            <p class="tool__url"><span>date.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
+          </a>
+        </li>
+      </ul>
+      <!-- /gen:tools -->
+    </div>
+  </section>
+
   <section class="contact" id="contact" aria-labelledby="contact-title">
     <div class="wrap contact__in">
       <h2 id="contact-title" class="contact__title" data-i18n="ctTitle">안 되는 게 있으면 메일로 알려 주세요</h2>
@@ -173,9 +193,11 @@
       <p>© 2026 Lumen Lab</p>
     </div>
     <div class="foot__links">
-      <div><b>Owlight</b><a href="/owlight/support/" data-i18n="support">지원</a><a href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a></div>
-      <div><b data-i18n="snKicker">세트노트</b><a href="/setnote/" data-i18n="openApp">앱 열기</a></div>
-      <div><b data-i18n="tlKicker">무료 웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="dcShort">며칠 계산기</a></div>
+      <!-- gen:foot -->
+      <div><b data-i18n="ftApps">앱</b><a href="/owlight/support/" data-i18n="f_owlight">Owlight</a><a href="/setnote/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a></div>
+      <div><b data-i18n="privacy">개인정보 처리방침</b><a href="/owlight/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
     </div>
   </div>
 </footer>
