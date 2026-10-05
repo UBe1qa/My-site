@@ -57,6 +57,8 @@ with sync_playwright() as p:
     c = br.new_context(viewport={'width': 1366, 'height': 800}, locale='ko-KR'); pg = c.new_page(); pg.goto(BASE + '/')
     miss = pg.evaluate('[...document.querySelectorAll("a[href^=\'#\']")].map(a => a.getAttribute("href")).filter(h => h.length > 1 && !document.querySelector(h))')
     ok(not miss, f'페이지 안 링크 대상 있음 {miss}')
+    n_sc = pg.evaluate('document.querySelectorAll(".scenery__list img").length')
+    ok(n_sc == 10, f'커튼 풍경 그림 10장 ({n_sc})')
     locals_ = pg.evaluate('[...document.querySelectorAll("a[href^=\'/\'], link[href^=\'/\'], img[src^=\'/\'], script[src^=\'/\']")].map(e => e.getAttribute("href") || e.getAttribute("src"))')
     bad = [u for u in set(locals_) if pg.request.get(BASE + u.split('#')[0]).status != 200]
     ok(not bad, f'사이트 안 파일 링크 전부 200 {bad}')

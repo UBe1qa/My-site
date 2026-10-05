@@ -48,7 +48,7 @@
   /* 칸 드러내기 */
   if (anim) {
     window.__rvOn = true;
-    var targets = d.querySelectorAll('.why__row, .feat__text, .feat__head, .feat__shot, .more__item, .privacy__card, .faq__list, .scenes__text, .board');
+    var targets = d.querySelectorAll('.feat__text, .feat__head, .feat__shot, .more__item, .scenery, .privacy__card, .faq__list, .scenes__text, .board');
     targets.forEach(function (el) { el.setAttribute('data-rv', ''); });
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {

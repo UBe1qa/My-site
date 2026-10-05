@@ -1,4 +1,4 @@
-/* Owlight 소개 사이트 스타일. 색은 앱의 Theme(night #14132A, amber #F5B53F)에서 가져왔다. 페이지 안에 색 코드를 직접 넣지 않는다. */
+/* Owlight 소개 사이트 스타일. 색은 앱 프로젝트 랜딩 키트의 기본-정보.md(앱 Theme과 같음)에서 가져왔다. 페이지 안에 색 코드를 직접 넣지 않는다. */
 [hidden]{display:none!important}
 img{max-width:100%;height:auto}
 .nw{white-space:nowrap}
@@ -6,7 +6,7 @@ img{max-width:100%;height:auto}
 :root{
   /* 밤 칸 (첫 화면·장면·마지막) */
   --night:#14132A;
-  --night-2:#1E1C3B;
+  --night-2:#24213F;          /* 키트의 Night soft: 카드 배경 */
   --night-3:#2A2754;
   --night-line:#3A3768;
   --night-ink:#F0EFF9;
@@ -21,7 +21,7 @@ img{max-width:100%;height:auto}
   /* 앱 강조색 */
   --amber:#F5B53F;            /* 채우기·점·밤 칸 글자 */
   --amber-deep:#E0891E;
-  --amber-ink:#8F5100;        /* 밝은 바탕 위 강조 글자 */
+  --amber-ink:#9A5700;        /* 키트의 Amber ink: 밝은 바탕 위 강조 글자(종이색 위 5.2:1) */
   /* 기능마다 앱과 같은 색: 불침번 앰버, 커튼 페리윙클, 후광 코랄 */
   --nightwatch:#F5B53F;
   --curtain:#8C9BFF;
@@ -98,6 +98,7 @@ a{color:inherit}
 .btn:hover{background:#FFC65A}
 .btn:active{transform:translateY(1px)}
 .status{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--night-muted);white-space:nowrap}
+.hero__meta{margin-top:18px;font-size:14px;color:var(--night-muted);line-height:1.8}
 .status__dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(245,181,63,.18)}
 .hero__shot{margin:0}
 picture{display:block}
@@ -109,18 +110,7 @@ picture{display:block}
   .hero__in{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:56px}
 }
 
-/* 세 가지 문제 → 기능 */
-.why{padding-top:72px;padding-bottom:56px}
-.why h2,.more h2,.faq h2{font-size:clamp(25px,4.4vw,36px);font-weight:800}
-.why__list{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:12px}
-.why__row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--f);border-radius:var(--radius-s)}
-.why__q{color:var(--muted);font-size:16px}
-.why__a{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;text-decoration:none;font-size:18px;font-weight:600}
-.why__a b{font-size:14px;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--f);color:var(--night);white-space:nowrap}
-.why__a:hover span{text-decoration:underline;text-underline-offset:4px}
-@media (min-width:760px){
-  .why__row{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);align-items:center;gap:24px;padding:20px 24px}
-}
+.more h2,.faq h2{font-size:clamp(25px,4.4vw,36px);font-weight:800}
 
 /* 기능 칸 */
 .feat{padding-top:64px;padding-bottom:64px;border-top:1px solid var(--line)}
@@ -134,6 +124,14 @@ picture{display:block}
 .points li{position:relative;padding-left:22px;color:var(--ink-2)}
 .points li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--f,var(--amber))}
 .points--cols{margin-top:28px}
+/* 커튼 풍경 그림 10장: 받은 파일 그대로(출처 표식 C2PA 때문에 다시 저장 금지), 크기는 CSS로만 줄임 */
+.scenery{margin-top:44px}
+.scenery h3{font-size:18px;font-weight:800}
+.scenery__list{list-style:none;margin:16px 0 0;padding:0 0 6px;display:grid;grid-auto-flow:column;grid-auto-columns:44%;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
+.scenery__list li{scroll-snap-align:start}
+.scenery__list img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:var(--line)}
+.scenery .note{margin-top:14px}
+@media (min-width:700px){.scenery__list{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;padding-bottom:0}}
 @media (min-width:900px){
   .feat{padding-top:88px;padding-bottom:88px}
   .feat__in{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:56px}
@@ -204,7 +202,7 @@ picture{display:block}
 /* 마지막 */
 .end{padding-top:80px;padding-bottom:80px;text-align:center}
 .end__in{display:flex;flex-direction:column;align-items:center}
-.end__icon{border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.end__icon{display:block}  /* 키트의 공식 아이콘: 둘레 여백과 그림자가 그림 안에 들어 있어 따로 안 꾸밈 */
 .end h2{font-size:clamp(26px,5vw,40px);font-weight:800;margin-top:24px}
 .end__lead{margin-top:14px;font-size:18px;color:var(--night-muted)}
 .end__links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-top:28px}

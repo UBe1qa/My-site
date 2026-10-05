@@ -7,7 +7,7 @@ LIVE=https://owlight.lumenlab.page
 if [ "$1" = live ]; then
   for i in $(seq 1 40); do
     bad=0
-    for f in / /assets/site.css /assets/site.js /assets/i18n.js /favicon.svg /og.png; do
+    for f in / /assets/site.css /assets/site.js /assets/i18n.js /favicon.svg /og.png /img/owlight-256.webp /img/scenery/scenery-03-night-ridge.jpg; do
       local=".$f"; case "$f" in */) local=".${f}index.html";; esac
       curl -sL "$LIVE$f" -o /tmp/owlight_live 2>/dev/null
       cmp -s /tmp/owlight_live "$local" || { bad=1; echo "아직 다름: $f"; }
