@@ -126,3 +126,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 html[data-lang="en"] .doc section#ko,html[data-lang="ko"] .doc section#en{display:none}
 html[data-lang] .doc section h2{border-top:0;padding-top:20px;margin-top:20px}
 html[data-lang="en"] .doc-head nav a[href="#en"],html[data-lang="ko"] .doc-head nav a[href="#ko"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* 좁은 휴대폰: 머리말에 메뉴 둘 + 언어 버튼이 한 줄로 들어가게 */
+.top .brand,.top nav a,.lang{white-space:nowrap}
+@media (max-width:420px){
+  .top__in{gap:8px}
+  .top nav{gap:0}
+  .top nav a{padding:8px 7px;font-size:15px}
+  .lang{padding:0 10px;margin-left:2px;font-size:14px}
+}
+@media (max-width:380px){.top .brand small{display:none}.top .brand{font-size:16px;gap:7px}.top nav a{padding:8px 5px}}

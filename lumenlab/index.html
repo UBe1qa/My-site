@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title data-i18n="docTitle">Lumen Lab 루멘랩 · 앱 안내와 지원</title>
-<meta name="description" content="Lumen Lab(루멘랩)이 만든 앱 Owlight(Mac 메뉴 막대 앱), 세트노트(헬스 기록 웹앱), 며칠 계산기(날짜 계산 웹 도구)의 사용 안내, 자주 묻는 질문, 개인정보 처리방침. Support and privacy policy for Owlight and SetNote.">
+<meta name="description" content="Lumen Lab(루멘랩)이 만든 앱 Owlight(Mac 메뉴 막대 앱), 세트노트(헬스 기록 웹앱)의 사용 안내, 자주 묻는 질문, 개인정보 처리방침과 며칠 계산기 같은 무료 웹 도구 모음. Support and privacy policy for Owlight and SetNote.">
 <!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
 <meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
 <link rel="canonical" href="https://lumenlab.page/">
@@ -38,6 +38,7 @@
       <span>Lumen Lab <small lang="ko">루멘랩</small></span>
     </a>
     <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a href="/#tools" data-i18n="navTools">도구</a>
       <a href="/#contact" data-i18n="navContact">문의</a>
       <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
     </nav>
@@ -50,6 +51,7 @@
       <div class="hero__text">
         <h1 id="hero-title" class="hero__title rv"><span class="lm"><span data-i18n="h1a">Owlight와 세트노트를</span></span> <span class="lm"><span data-i18n="h1b">만든 곳이에요</span></span></h1>
         <p class="hero__lead rv" data-i18n="lead">앱 소개와 함께 Owlight의 지원 페이지와 <span class="nw">개인정보 처리방침을</span> 모아 두었어요. 찾는 답이 없으면 메일로 물어봐 주세요.</p>
+        <p class="hero__more rv"><a href="#tools" data-i18n="heroTools">가입 없이 쓰는 무료 웹 도구도 있어요</a></p>
       </div>
 
       <ul class="apps" id="apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">
@@ -78,17 +80,28 @@
             </p>
           </div>
         </li>
-        <li class="app rv">
-          <img class="icon" src="/img/daycount.svg" width="64" height="64" alt="">
-          <div class="app__body">
-            <h2 class="app__name" data-i18n="dcName">며칠 계산기 <span class="app__en">Daycount</span></h2>
-            <p class="app__kind" data-i18n="dcKind">무료 웹 도구 <span aria-hidden="true">·</span> <span class="nw">가입 없이 바로</span></p>
-            <p class="app__line" data-i18n="dcLine">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.</p>
-            <p class="app__links">
-              <a class="chip chip--go" href="https://date.lumenlab.page/" data-i18n="dcOpen">계산기 열기</a>
-              <a class="chip" href="https://date.lumenlab.page/guide/" data-i18n="dcGuide">날짜 계산 가이드</a>
-            </p>
-          </div>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tools" id="tools" aria-labelledby="tools-title">
+    <div class="wrap">
+      <p class="sec-kicker" data-i18n="tlKicker">무료 웹 도구</p>
+      <h2 id="tools-title" class="sec-title" data-i18n="tlTitle">필요할 때 열어서 <span class="nw">바로 쓰는 도구</span></h2>
+      <p class="sec-lead tools__lead" data-i18n="tlLead">가입도 설치도 없이 브라우저에서 계산해요. 도구마다 <span class="nw">lumenlab.page 아래</span> 자기 주소가 있어요.</p>
+      <!-- 새 도구(이름.lumenlab.page)를 만들면 아래 <li class="tool rv"> 하나를 복사해 맨 뒤(안내 칸 앞)에 넣고,
+           영어 문구는 assets/i18n.js, 푸터 '무료 도구' 줄에도 링크 하나. 아이콘은 img/에 64×64 -->
+      <ul class="tools__grid" aria-label="루멘랩의 무료 웹 도구" data-i18n-aria="toolsLabel">
+        <li class="tool rv">
+          <a class="tool__a" href="https://date.lumenlab.page/">
+            <img class="tool__icon" src="/img/daycount.svg" width="48" height="48" alt="" loading="lazy">
+            <h3 class="tool__name" data-i18n="dcName">며칠 계산기 <span class="app__en">Daycount</span></h3>
+            <p class="tool__line" data-i18n="dcLine">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.</p>
+            <p class="tool__url"><span>date.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
+          </a>
+        </li>
+        <li class="tool tool--next rv">
+          <p data-i18n="tlNext">새 도구가 생기면 <span class="nw">여기에 이어서 놓아요</span></p>
         </li>
       </ul>
     </div>
@@ -162,7 +175,7 @@
     <div class="foot__links">
       <div><b>Owlight</b><a href="/owlight/support/" data-i18n="support">지원</a><a href="/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a></div>
       <div><b data-i18n="snKicker">세트노트</b><a href="/setnote/" data-i18n="openApp">앱 열기</a></div>
-      <div><b data-i18n="dcKicker">며칠 계산기</b><a href="https://date.lumenlab.page/" data-i18n="openApp">앱 열기</a><a href="https://date.lumenlab.page/guide/" data-i18n="dcGuide">날짜 계산 가이드</a></div>
+      <div><b data-i18n="tlKicker">무료 웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="dcShort">며칠 계산기</a></div>
     </div>
   </div>
 </footer>
