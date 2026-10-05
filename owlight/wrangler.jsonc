@@ -1,0 +1,22 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'owlight' 하나 (Owlight 앱 소개 사이트)
+// 주소: https://owlight.lumenlab.page . workers.dev 주소는 worker.js 가 대표 주소로 301 넘긴다.
+// 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
+// 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
+{
+  "name": "owlight",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    // 없는 주소는 404.html(noindex, 소개 페이지 링크)을 404로 보여 준다
+    "not_found_handling": "404-page",
+    // 페이지 주소만 worker.js 를 먼저 거친다. 그림·스타일(/img/, /assets/)은 파일을 바로 준다
+    "run_worker_first": ["/*", "!/assets/*", "!/img/*"]
+  },
+  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소로 온 사람을 넘기려고 켜 둔다
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "owlight.lumenlab.page", "custom_domain": true }
+  ]
+}

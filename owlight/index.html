@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-i18n="docTitle">Owlight · 맥 잠자기 방지, 바탕화면 가리기, 지금 쓰는 창 강조</title>
+<meta name="description" content="Owlight는 Mac 메뉴 막대 앱이에요. 맥이 잠들지 않게 깨워 두고(불침번), 바탕화면을 시계와 배경으로 가리고(커튼), 지금 쓰는 창만 또렷하게 남겨요(후광). 장면 하나로 한 번에 켜요. macOS 14 이상, App Store 출시 준비 중.">
+<link rel="canonical" href="https://owlight.lumenlab.page/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Owlight">
+<meta property="og:title" content="Owlight · 한 번 누르면, 맥이 발표할 준비를 끝내요">
+<meta property="og:description" content="잠자기 방지, 바탕화면 가리기, 지금 쓰는 창 강조를 메뉴 막대에서. Mac 메뉴 막대 앱, App Store 출시 준비 중.">
+<meta property="og:url" content="https://owlight.lumenlab.page/">
+<meta property="og:image" content="https://owlight.lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14132A">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script>
+/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글·스크린숏 바꾸기는 body 끝의 i18n.js */
+(function(d){var l;try{l=localStorage.getItem('owlight:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+/* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 늘 보이게 */
+(function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Owlight","operatingSystem":"macOS 14 or later","applicationCategory":"UtilitiesApplication","url":"https://owlight.lumenlab.page/","image":"https://owlight.lumenlab.page/img/owlight-256.webp","inLanguage":["ko","en"],"author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"}}
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-nightwatch" viewBox="0 0 24 24"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></symbol>
+  <symbol id="i-curtain" viewBox="0 0 24 24"><path d="M4 4.5h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 6h4.6v13.5H6zM13.4 6H18v13.5h-4.6z" fill="currentColor"/></symbol>
+  <symbol id="i-halo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+</svg>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Owlight 처음으로" data-i18n-aria="brandLabel">
+      <img src="/favicon.svg" width="30" height="30" alt="">
+      <span translate="no">Owlight</span>
+    </a>
+    <nav class="nav" aria-label="이 페이지" data-i18n-aria="navLabel">
+      <a href="#features" data-i18n="navFeatures">기능</a>
+      <a href="#scenes" data-i18n="navScenes">장면</a>
+      <a href="#faq" data-i18n="navFaq">자주 묻는 질문</a>
+      <a href="https://lumenlab.page/owlight/support/" data-i18n="navSupport">지원</a>
+    </nav>
+    <button class="lang" type="button" hidden data-lang-btn>English</button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero night" aria-labelledby="hero-title">
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <p class="kicker" data-i18n="heroKicker">Mac 메뉴 막대 앱 <span aria-hidden="true">·</span> <span class="nw">macOS 14 이상</span></p>
+        <h1 id="hero-title" data-i18n="heroTitle">한 번 누르면, <span class="nw">맥이 발표할</span> <span class="nw">준비를 끝내요</span></h1>
+        <p class="lead" data-i18n="heroLead">맥이 잠들지 않게 깨워 두고, 바탕화면은 시계가 뜬 배경으로 가리고, 뒤에 있는 창은 어둡게 가라앉혀요. 자주 쓰는 조합은 ‘장면’으로 묶어 메뉴 막대에서 한 번에 켜요.</p>
+        <div class="hero__act">
+          <a class="btn" href="#scenes" data-i18n="heroCta">장면 직접 눌러 보기</a>
+          <span class="status"><span class="status__dot" aria-hidden="true"></span><span data-i18n="status">App Store 출시 준비 중</span></span>
+        </div>
+      </div>
+      <figure class="hero__shot">
+        <img class="shot" data-shot="hero" src="/img/ko-hero-1200.webp" srcset="/img/ko-hero-640.webp 640w, /img/ko-hero-1200.webp 1200w" sizes="(min-width: 900px) 560px, 100vw" width="1200" height="820" alt="Owlight 메뉴 패널에서 장면 '발표'를 켠 화면. 불침번과 커튼 스위치가 켜져 있고 바탕화면엔 큰 시계가 떠 있다." data-i18n-alt="heroAlt" fetchpriority="high">
+        <figcaption data-i18n="heroCap">장면 ‘발표’를 누른 모습: 맥은 깨어 있고, 바탕화면은 시계가 뜬 커튼으로 가려져요.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="why" id="features" aria-labelledby="why-title">
+    <div class="wrap">
+      <h2 id="why-title" data-i18n="whyTitle">맥을 쓰다 겪는 <span class="nw">세 가지 불편을 덜어 줘요</span></h2>
+      <ol class="why__list">
+        <li class="why__row" style="--f:var(--nightwatch)">
+          <p class="why__q" data-i18n="whyQ1">발표나 긴 다운로드 중에 맥이 잠들어요</p>
+          <a class="why__a" href="#nightwatch"><b data-i18n="nightwatch">불침번</b><span data-i18n="whyA1">원하는 시간만큼 맥을 깨워 둬요</span></a>
+        </li>
+        <li class="why__row" style="--f:var(--curtain)">
+          <p class="why__q" data-i18n="whyQ2">화면을 공유하면 바탕화면 파일이 다 보여요</p>
+          <a class="why__a" href="#curtain"><b data-i18n="curtain">커튼</b><span data-i18n="whyA2">바탕화면 위에 차분한 배경과 시계를 띄워요</span></a>
+        </li>
+        <li class="why__row" style="--f:var(--halo)">
+          <p class="why__q" data-i18n="whyQ3">창이 많으면 지금 쓰는 창을 자꾸 놓쳐요</p>
+          <a class="why__a" href="#halo"><b data-i18n="halo">후광</b><span data-i18n="whyA3">지금 쓰는 창 말고는 어둡게 하거나 흐리게 해요</span></a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="feat" id="nightwatch" aria-labelledby="nw-title" style="--f:var(--nightwatch)">
+    <div class="wrap feat__in">
+      <div class="feat__text">
+        <p class="feat__name"><svg class="feat__icon" aria-hidden="true"><use href="#i-nightwatch"/></svg><span data-i18n="nightwatch">불침번</span></p>
+        <h2 id="nw-title" data-i18n="nwTitle">필요한 동안만 <span class="nw">맥을 깨워 둬요</span></h2>
+        <ul class="points">
+          <li data-i18n="nw1">15분부터 4시간까지 고르거나, 직접 끌 때까지 둬요. 화면(디스플레이)도 켜 둘지 골라요.</li>
+          <li data-i18n="nw2">충전기를 꽂았을 때, 골라 둔 앱이 켜져 있을 때, 요일별 시간표에 맞춰 스스로 켜져요.</li>
+          <li data-i18n="nw3">배터리가 설정한 잔량(예: 20%) 아래로 내려가면 알아서 멈춰요.</li>
+        </ul>
+        <p class="note" data-i18n="nwNote">자동 잠자기만 막아요. 덮개를 닫거나 잠자기를 직접 고르면 맥은 그대로 잠들어요.</p>
+      </div>
+      <figure class="feat__shot">
+        <picture><source media="(max-width: 699px)" data-shot="3m" srcset="/img/ko-3m-800.webp"><img class="shot" data-shot="3" src="/img/ko-3-1600.webp" srcset="/img/ko-3-800.webp 800w, /img/ko-3-1600.webp 1600w" sizes="(min-width: 900px) 600px, 100vw" width="1600" height="912" alt="불침번 설정 화면: 기본 시간, 디스플레이 켜 두기, 배터리 지킴이와 멈출 배터리 잔량" data-i18n-alt="nwAlt" loading="lazy"></picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="feat feat--wide" id="curtain" aria-labelledby="ct-title" style="--f:var(--curtain)">
+    <div class="wrap">
+      <div class="feat__head">
+        <p class="feat__name"><svg class="feat__icon" aria-hidden="true"><use href="#i-curtain"/></svg><span data-i18n="curtain">커튼</span></p>
+        <h2 id="ct-title" data-i18n="ctTitle">화면을 공유할 땐 <span class="nw">바탕화면 대신</span> <span class="nw">커튼이 보여요</span></h2>
+      </div>
+      <figure class="feat__shot">
+        <img class="shot" data-shot="2" src="/img/ko-2-1600.webp" srcset="/img/ko-2-800.webp 800w, /img/ko-2-1600.webp 1600w" sizes="(min-width: 1100px) 1040px, 100vw" width="1600" height="912" alt="커튼을 친 바탕화면: 오로라 그라데이션 위에 큰 시계, 날짜, ‘5분 뒤에 돌아올게요’ 문구" data-i18n-alt="ctAlt" loading="lazy">
+      </figure>
+      <ul class="points points--cols">
+        <li data-i18n="ct1">큰 시계와 짧은 문구(예: ‘5분 뒤에 돌아올게요’, 발표 제목)를 띄워요.</li>
+        <li data-i18n="ct2">바탕화면과 그 위의 아이콘만 가리고, 열어 둔 창은 그 위에 그대로 보여요. 연결된 모든 디스플레이에 쳐져요.</li>
+        <li data-i18n="ct3">천천히 흐르는 오로라 6가지, 풍경 그림 10장, 반투명 유리, 단색, 직접 고른 사진 중에서 골라요.</li>
+        <li data-i18n="ct4">회의나 방송 앱을 켜면 커튼이 알아서 쳐지게 할 수 있어요.</li>
+      </ul>
+      <p class="note" data-i18n="ctNote">풍경 그림 10장은 AI 이미지 생성 도구로 만들었어요. 이 페이지 스크린숏 배경의 밤 산 그림도 그중 하나예요.</p>
+    </div>
+  </section>
+
+  <section class="feat feat--flip" id="halo" aria-labelledby="ha-title" style="--f:var(--halo)">
+    <div class="wrap feat__in">
+      <div class="feat__text">
+        <p class="feat__name"><svg class="feat__icon" aria-hidden="true"><use href="#i-halo"/></svg><span data-i18n="halo">후광</span></p>
+        <h2 id="ha-title" data-i18n="haTitle">지금 쓰는 창만 <span class="nw">또렷하게 남아요</span></h2>
+        <ul class="points">
+          <li data-i18n="ha1">나머지 화면은 색을 입혀 어둡게 하거나 흐리게 해요. 색과 강도는 고를 수 있어요.</li>
+          <li data-i18n="ha2">넓은 화면에선 최근에 쓴 창 몇 개(최대 5개)를 같이 밝게 둘 수도 있어요.</li>
+          <li data-i18n="ha3">고른 앱에서는 꺼지게 하고, 모든 디스플레이에 쓸지도 골라요.</li>
+        </ul>
+      </div>
+      <figure class="feat__shot">
+        <img class="shot" data-shot="1" src="/img/ko-1-1600.webp" srcset="/img/ko-1-800.webp 800w, /img/ko-1-1600.webp 1600w" sizes="(min-width: 900px) 600px, 100vw" width="1600" height="912" alt="후광을 켠 화면: 앞의 설정 창만 밝고 뒤의 메모 창들은 어둡게 가라앉아 있다" data-i18n-alt="haAlt" loading="lazy">
+      </figure>
+    </div>
+  </section>
+
+  <section class="scenes night" id="scenes" aria-labelledby="sc-title">
+    <div class="wrap scenes__in">
+      <div class="scenes__text">
+        <h2 id="sc-title" data-i18n="scTitle">장면을 고르면 <span class="nw">세 스위치가</span> <span class="nw">같이 움직여요</span></h2>
+        <p class="lead" data-i18n="scLead">기본 장면 네 개가 들어 있어요. 장면을 눌러 무엇이 켜지는지 보세요.</p>
+        <p class="note" data-i18n="scNote">장면 이름과 켜지는 기능은 바꿀 수 있고, 새 장면도 만들 수 있어요.</p>
+      </div>
+      <div class="board" data-board>
+        <div class="board__scenes" role="group" aria-label="기본 장면" data-i18n-aria="scGroup">
+          <button type="button" class="chip" aria-pressed="true" data-on="nightwatch curtain" data-i18n="scPresent">발표</button>
+          <button type="button" class="chip" aria-pressed="false" data-on="nightwatch halo" data-i18n="scFocus">깊은 몰입</button>
+          <button type="button" class="chip" aria-pressed="false" data-on="nightwatch curtain halo" data-i18n="scShare">화면 공유</button>
+          <button type="button" class="chip" aria-pressed="false" data-on="nightwatch" data-i18n="scMovie">영화 감상</button>
+        </div>
+        <ul class="board__rows" aria-live="polite">
+          <li class="sw" data-f="nightwatch" style="--f:var(--nightwatch)"><svg class="sw__icon" aria-hidden="true"><use href="#i-nightwatch"/></svg><b data-i18n="nightwatch">불침번</b><span class="sw__state"><span class="sw__on" data-i18n="on">켜짐</span><span class="sw__off" data-i18n="off">꺼짐</span></span><span class="sw__track" aria-hidden="true"></span></li>
+          <li class="sw" data-f="curtain" style="--f:var(--curtain)"><svg class="sw__icon" aria-hidden="true"><use href="#i-curtain"/></svg><b data-i18n="curtain">커튼</b><span class="sw__state"><span class="sw__on" data-i18n="on">켜짐</span><span class="sw__off" data-i18n="off">꺼짐</span></span><span class="sw__track" aria-hidden="true"></span></li>
+          <li class="sw" data-f="halo" style="--f:var(--halo)"><svg class="sw__icon" aria-hidden="true"><use href="#i-halo"/></svg><b data-i18n="halo">후광</b><span class="sw__state"><span class="sw__on" data-i18n="on">켜짐</span><span class="sw__off" data-i18n="off">꺼짐</span></span><span class="sw__track" aria-hidden="true"></span></li>
+        </ul>
+        <p class="board__cap" data-i18n="scCap">앱의 기본값 그대로예요. 장면을 다시 누르면 세 기능이 모두 꺼져요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="mo-title">
+    <div class="wrap">
+      <h2 id="mo-title" data-i18n="moTitle">타이머와 단축키로 <span class="nw">더 빨리 켜요</span></h2>
+      <div class="more__grid">
+        <article class="more__item">
+          <picture><source media="(max-width: 699px)" data-shot="5m" srcset="/img/ko-5m-800.webp"><img class="shot" data-shot="5" src="/img/ko-5-800.webp" srcset="/img/ko-5-800.webp 800w, /img/ko-5-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="몰입 세션이 진행 중인 메뉴 패널: 24분 54초 남음, 오늘 몰입 95분" data-i18n-alt="ssAlt" loading="lazy"></picture>
+          <h3 data-i18n="ssTitle">몰입 세션: 시간을 정하면 그동안만 켜져요</h3>
+          <p data-i18n="ssText">카운트다운을 시작하면 고른 기능이 켜지고, 끝나면 다시 꺼져요. 시간이 다 되면 부드러운 소리와 알림이 울리고, 오늘 몰입한 시간과 마친 횟수가 남아요.</p>
+        </article>
+        <article class="more__item">
+          <picture><source media="(max-width: 699px)" data-shot="6m" srcset="/img/ko-6m-800.webp"><img class="shot" data-shot="6" src="/img/ko-6-800.webp" srcset="/img/ko-6-800.webp 800w, /img/ko-6-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="단축키 설정 화면: 불침번, 커튼, 후광, 몰입 세션과 장면마다 단축키 칸" data-i18n-alt="hkAlt" loading="lazy"></picture>
+          <h3 data-i18n="hkTitle">단축키와 링크: 메뉴를 안 열어도 돼요</h3>
+          <p data-i18n="hkText">모든 기능과 장면, 몰입 세션에 전역 단축키를 지정해요. 단축어나 스크립트에서는 이런 링크로 켜요.</p>
+          <code class="code" translate="no">owlight://nightwatch/on?minutes=90</code>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="privacy" aria-labelledby="pv-title">
+    <div class="wrap">
+      <div class="privacy__card">
+        <h2 id="pv-title" data-i18n="pvTitle">모든 게 <span class="nw">이 맥 안에서만 돌아가요</span></h2>
+        <ul class="points">
+          <li data-i18n="pv1">계정, 분석 도구, 광고, 인터넷 접속이 없어요. 설정도 맥 밖으로 나가지 않아요.</li>
+          <li data-i18n="pv2">App Store 앱의 보안 규칙(샌드박스) 안에서만 움직이고, 화면 기록이나 손쉬운 사용 권한을 묻지 않아요.</li>
+        </ul>
+        <a class="link" href="https://lumenlab.page/owlight/privacy/" data-i18n="pvLink">개인정보 처리방침 전문 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq__in">
+      <h2 id="faq-title" data-i18n="faqTitle">자주 묻는 질문</h2>
+      <div class="faq__list">
+        <details>
+          <summary data-i18n="q1">덮개를 닫아도 맥이 깨어 있나요?</summary>
+          <p data-i18n="a1">아니요. 불침번은 자동 잠자기만 막아요. 덮개를 닫거나, 잠자기를 직접 고르거나, 배터리가 아주 적거나, 열이 너무 높으면 맥은 그대로 잠들어요. 시간표가 잠든 맥을 깨우지도 않아요.</p>
+        </details>
+        <details>
+          <summary data-i18n="q2">어떤 권한이 필요한가요?</summary>
+          <p data-i18n="a2">손쉬운 사용이나 화면 기록 권한은 필요 없어요. 후광은 창의 위치와 크기만 보고, 창 제목이나 화면 내용은 읽지 않아요. 불침번이 끝났을 때 알려 드리려고 알림 권한을 물을 수 있어요.</p>
+        </details>
+        <details>
+          <summary data-i18n="q3">어떤 맥에서 쓸 수 있나요?</summary>
+          <p data-i18n="a3">macOS 14 Sonoma 이상이에요. 메뉴 막대에 사는 앱이라 Dock에는 아이콘이 없어요. 한국어와 영어를 지원해요.</p>
+        </details>
+        <details>
+          <summary data-i18n="q4">메뉴 막대에 부엉이가 안 보이면요?</summary>
+          <p data-i18n="a4">노치나 꽉 찬 메뉴 막대에 가려질 수 있어요. 모든 기능은 설정 창에서도 켜고 끌 수 있고, 실행 중인 Owlight를 다시 열면 설정 창이 열려요.</p>
+        </details>
+        <details>
+          <summary data-i18n="q5">언제 받을 수 있나요?</summary>
+          <p data-i18n="a5">App Store 출시를 준비하고 있어요. 나오면 이 페이지에 App Store 링크를 달아 둘게요.</p>
+        </details>
+        <details>
+          <summary data-i18n="q6">궁금한 게 더 있으면요?</summary>
+          <p data-i18n="a6"><a href="https://lumenlab.page/owlight/support/">지원 페이지</a>에 사용법과 문제 해결이 더 있어요. 메일은 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 보내 주세요.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="end night" aria-labelledby="end-title">
+    <div class="wrap end__in">
+      <img class="end__icon" src="/img/owlight-256.webp" width="96" height="96" alt="" loading="lazy">
+      <h2 id="end-title" data-i18n="endTitle">App Store 출시를 <span class="nw">준비하고 있어요</span></h2>
+      <p class="end__lead" data-i18n="endLead">나오면 이 페이지에 App Store 링크를 달아 둘게요.</p>
+      <p class="end__links">
+        <a href="https://lumenlab.page/owlight/support/" data-i18n="navSupport">지원</a>
+        <a href="https://lumenlab.page/owlight/privacy/" data-i18n="privacy">개인정보 처리방침</a>
+        <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p data-i18n="footMaker">Owlight는 <a href="https://lumenlab.page/" class="nw">Lumen Lab(루멘랩)</a>이 만들어요. <span class="nw">Lumen Lab</span>은 개인사업자예요.</p>
+    <p class="nw">© 2026 Lumen Lab</p>
+  </div>
+</footer>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
