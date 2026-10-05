@@ -125,6 +125,8 @@ var I18N = (function () {
     "%s주년": "%s yr",
     "%s 공휴일: %s": "%s holiday: %s",
     "주말이에요.": "It's a weekend.",
+    "오늘": "Today",
+    "영업일": "Business days",
     "평일이에요.": "It's a weekday.",
     "%s년 %s주차": "%s, week %s",
     "ISO 기준 (월요일 시작, 첫 목요일이 든 주가 1주차)": "ISO week (Monday start; week 1 contains the first Thursday)",

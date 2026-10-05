@@ -41,10 +41,25 @@
   function dLabel(diff) { return diff === 0 ? "D-Day" : diff > 0 ? "D-" + num(diff) : "D+" + num(-diff); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
-  function big(text, sub) { return '<p class="big">' + esc(text) + "</p>" + (sub ? '<p class="sub">' + sub + "</p>" : ""); }
+  function big(text, sub, cls) { return '<p class="big' + (cls ? " " + cls : "") + '">' + esc(text) + "</p>" + (sub ? '<p class="sub">' + sub + "</p>" : ""); }
   function rows(list) {
-    return '<dl class="rows">' + list.map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join("") + "</dl>";
+    return '<dl class="rows">' + list.map(function (r) { return (r[2] ? '<div class="' + r[2] + '">' : "<div>") + "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join("") + "</dl>";
   }
+  // 기간 막대(그림): 앞 날짜 → 뒤 날짜, 그 안에 오늘이 있으면 빨간 오늘 표시
+  function spanBar(a, b) {
+    var lo = Math.min(a, b), hi = Math.max(a, b), len = hi - lo;
+    if (len < 2) return "";
+    var pos = function (n) { return ((n - lo) / len * 100).toFixed(2) + "%"; };
+    var today = todayN();
+    var mark = today > lo && today < hi ? '<em style="left:' + pos(today) + '"></em>' : "";
+    return '<div class="span" aria-hidden="true"><div class="span-bar"><b></b>' +
+      mark +
+      '</div><div class="span-ends"><span>' + esc(fmtShort(lo)) + "</span>" +
+      (mark ? '<span class="span-today">' + esc(L("오늘")) + "</span>" : "") +
+      "<span>" + esc(fmtShort(hi)) + "</span></div></div>";
+  }
+  // 요일 색: 일요일·공휴일은 빨강, 토요일은 파랑(달력 약속)
+  function dayCls(n) { var w = DC.weekday(n); return holName(n) || w === 0 ? "is-sun" : w === 6 ? "is-sat" : ""; }
   function warn(text) { return '<p class="warn">' + esc(text) + "</p>"; }
   function empty(text) { return '<p class="empty">' + esc(text || L("날짜를 넣어 주세요.")) + "</p>"; }
   function intVal(id) {
@@ -72,7 +87,7 @@
       if (a === null || b === null) return empty();
       var r = DC.between(a, b, $("period-inc").checked);
       var ago = r.sign < 0 ? " " + L("(종료일이 시작일보다 앞이에요)") : "";
-      return big(F("%s일", num(r.days)), esc(ago)) + rows([
+      return big(F("%s일", num(r.days)), esc(ago)) + spanBar(a, b) + rows([
         [L("주로"), F("%s주 %s일", num(r.weeks), num(r.weekRest))],
         [L("개월로"), F("%s년 %s개월 %s일", num(r.years), num(r.months), num(r.restDays))],
         [L("총 개월"), F("%s개월", num(r.totalMonths))],
@@ -85,7 +100,7 @@
       var diff = t - b;
       var sub = diff === 0 ? L("바로 그날이에요.") : diff > 0 ? F("%s까지 %s일 남았어요.", fmtDate(t), num(diff)) : F("%s부터 %s일 지났어요.", fmtDate(t), num(-diff));
       var p = DC.ymd(b, t);
-      return big(dLabel(diff), esc(sub)) + rows([[L("개월로"), F("%s년 %s개월 %s일", num(p.years), num(p.months), num(p.days))], [L("주로"), F("%s주 %s일", num(Math.floor(Math.abs(diff) / 7)), num(Math.abs(diff) % 7))]]);
+      return big(dLabel(diff), esc(sub)) + spanBar(b, t) + rows([[L("개월로"), F("%s년 %s개월 %s일", num(p.years), num(p.months), num(p.days))], [L("주로"), F("%s주 %s일", num(Math.floor(Math.abs(diff) / 7)), num(Math.abs(diff) % 7))]]);
     },
     add: function () {
       var a = P($("add-a").value);
@@ -97,7 +112,7 @@
       var t = DC.toYMD(n);
       if (t.y < 1 || t.y > 9999) return empty(L("계산할 수 있는 범위를 벗어났어요."));
       var h = holName(n);
-      return big(fmtDate(n), h ? esc(F("공휴일이에요: %s", h)) : "") + rows([[L("기준일에서"), F("%s일 차이", num(Math.abs(n - a)))]]);
+      return big(fmtDate(n), h ? esc(F("공휴일이에요: %s", h)) : "", dayCls(n)) + rows([[L("기준일에서"), F("%s일 차이", num(Math.abs(n - a)))]]);
     },
     workdays: function () {
       var a = P($("wd-a").value), b = P($("wd-b").value);
@@ -106,9 +121,13 @@
       var r = DC.businessDays(a, b, c, $("wd-inc").checked);
       var out = big(F("%s영업일", num(r.business)), esc(c === "none" ? L("주말만 뺐어요.") : F("주말과 %s 공휴일을 뺐어요.", countryName()))) + rows([
         [L("달력상 날짜"), F("%s일", num(r.calendar))],
-        [L("주말"), F("%s일", num(r.weekend))],
-        [L("평일 공휴일"), F("%s일", num(r.holidays.length))]
+        [L("주말"), F("%s일", num(r.weekend)), "k-w"],
+        [L("평일 공휴일"), F("%s일", num(r.holidays.length)), "k-h"]
       ]);
+      // 달력상 날짜 중 영업일·주말·공휴일 비율 막대
+      if (r.calendar > 0) out = out.replace('<dl class="rows">', '<div class="mix" aria-hidden="true"><i class="mix-b" style="flex-grow:' + r.business +
+        '"></i><i class="mix-w" style="flex-grow:' + r.weekend + '"></i><i class="mix-h" style="flex-grow:' + r.holidays.length + '"></i></div>' +
+        '<p class="mix-key" aria-hidden="true"><span class="k-b">' + esc(L("영업일")) + '</span><span class="k-w">' + esc(L("주말")) + '</span><span class="k-h">' + esc(L("평일 공휴일")) + '</span></p><dl class="rows">');
       if (r.holidays.length) {
         out += '<ul class="hols">' + r.holidays.slice(0, 40).map(function (h) {
           return "<li><span>" + esc(fmtShort(h.day)) + "</span> " + esc(h.name[lang === "ko" ? 0 : 1]) + "</li>";
@@ -160,7 +179,7 @@
       if (a === null) return empty();
       var h = holName(a), w = DC.weekday(a);
       var kind = h ? F("%s 공휴일: %s", countryName(), h) : (w === 0 || w === 6) ? L("주말이에요.") : L("평일이에요.");
-      return big(weekdayName(a), esc(fmtDate(a) + " · " + kind));
+      return big(weekdayName(a), esc(fmtDate(a) + " · " + kind), dayCls(a));
     },
     week: function () {
       var a = P($("wn-a").value);
@@ -214,6 +233,12 @@
       if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
     render(name);
+    // 휴대폰에서 가로로 넘기는 고르기 줄: 고른 칸이 보이게 줄만 옮긴다(페이지는 그대로)
+    var pk = document.querySelector(".picker"), on = pk.querySelector("a.on");
+    if (on && pk.scrollWidth > pk.clientWidth) {
+      var want = on.offsetLeft - (pk.clientWidth - on.offsetWidth) / 2;
+      pk.scrollLeft = Math.max(0, want);
+    }
   }
   function fromHash() { return (location.hash || "").replace("#", ""); }
   window.addEventListener("hashchange", function () {

@@ -260,7 +260,8 @@ def head(title, desc, path, extra_ld):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta name="theme-color" content="#f6f1e7">
+<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="{url}">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="며칠 계산기">
@@ -270,6 +271,8 @@ def head(title, desc, path, extra_ld):
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/assets/style.css">
 {AD_HEAD}
 <script type="application/ld+json">
