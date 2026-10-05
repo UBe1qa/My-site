@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO week numbers: why January 1 can be in week 53 | Daycount</title>
+<meta name="description" content="ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.">
+<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://date.lumenlab.page/en/guide/iso-week-numbers/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Daycount">
+<meta property="og:title" content="ISO week numbers: why January 1 can be in week 53 | Daycount">
+<meta property="og:description" content="ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.">
+<meta property="og:url" content="https://date.lumenlab.page/en/guide/iso-week-numbers/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "ISO week numbers: why January 1 can be in week 53", "description": "ISO weeks start on Monday and week 1 holds the year's first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel's WEEKNUM differs.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://date.lumenlab.page/en/guide/iso-week-numbers/", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Daycount", "item": "https://date.lumenlab.page/en/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://date.lumenlab.page/en/guide/"}, {"@type": "ListItem", "position": 3, "name": "ISO week numbers", "item": "https://date.lumenlab.page/en/guide/iso-week-numbers/"}]}]}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body class="doc-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/en/"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span>Daycount</span></a>
+  <nav class="top-nav" aria-label="Site menu"><a href="/en/">Calculator</a><a href="/en/guide/">Guides</a><a href="/en/about/">About</a></nav>
+</header>
+
+<main id="main" class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/">Daycount</a> › <a href="/en/guide/">Guides</a> › <span>ISO week numbers</span></nav>
+  <article class="doc article">
+    <h1>ISO week numbers: why January 1 can be in week 53</h1>
+    <p class="meta">By Lumen Lab · <time datetime="2026-10-05">October 5, 2026</time></p>
+    <p>In the ISO 8601 system, weeks run from Monday to Sunday and week 1 is the week that contains the year's first Thursday. The first days of January can therefore belong to the last week of the previous year. January 1, 2027 is a Friday and falls in <b>week 53 of 2026</b>; week 1 of 2027 starts on Monday, January 4.</p>
+
+<h2>The rule</h2>
+<ul>
+<li>A week starts on Monday.</li>
+<li>Week 1 is the week with the year's first Thursday in it, which is the same as the week that contains January 4.</li>
+<li>A week belongs to the year its Thursday is in, so a week is never split between two years.</li>
+</ul>
+
+<h2>Around New Year</h2>
+<table>
+<thead><tr><th>Date</th><th>ISO week</th></tr></thead>
+<tbody>
+<tr><td>Mon, Dec 29, 2025</td><td><span class="nw">2026-W01</span></td></tr>
+<tr><td>Thu, Jan 1, 2026</td><td><span class="nw">2026-W01</span></td></tr>
+<tr><td>Mon, Dec 28, 2026</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Fri, Jan 1, 2027</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Sun, Jan 3, 2027</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Mon, Jan 4, 2027</td><td><span class="nw">2027-W01</span></td></tr>
+<tr><td>Mon, Dec 31, 2029</td><td><span class="nw">2030-W01</span></td></tr>
+</tbody>
+</table>
+<p>2026-W53 means week 53 of ISO year 2026. Use the ISO year, not the calendar year, when you label or sort by week, because the two can differ for up to three days at either end of the year. Python's documentation gives a similar case: 2004 began on a Thursday, so ISO week 1 of 2004 started on Monday, December 29, 2003.</p>
+
+<h2>Which years have 53 weeks</h2>
+<p>A year has 53 ISO weeks when it starts on a Thursday, or when it's a leap year that starts on a Wednesday. Between 2015 and 2040 that happens in 2015, 2020, 2026, 2032 and 2037. December 28 is always in the last week of its ISO year, so its week number tells you whether a year has 52 or 53 weeks.</p>
+
+<h2>Why a spreadsheet can show a different number</h2>
+<p>Excel's <code>WEEKNUM</code> function uses another system by default: the week containing January 1 is week 1, and weeks begin on Sunday. So <code>WEEKNUM</code> puts January 1, 2027 in week 1, while ISO puts it in week 53 of 2026. Microsoft's documentation says <code>WEEKNUM(date, 21)</code> follows ISO 8601 instead and calls it the method "commonly known as the European week numbering system". When you share week numbers with other teams, say which system you mean.</p>
+
+<h2>Week of the month</h2>
+<p>The <a href="/en/#week">week number calculator</a> also shows the week of the month. ISO 8601 numbers weeks within a year, not within a month, so Daycount uses a simple convention for this: the week containing the 1st is week 1, and weeks start on Sunday. Monday, October 5, 2026 is in the 2nd week of October and in ISO week 41.</p>
+<p>For the number of days between two dates rather than weeks, see <a href="/en/guide/days-between-dates/">how to count the days between two dates</a>.</p>
+    <p class="cta"><a class="btn" href="/en/#week">Look up the ISO week of any date →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://docs.python.org/3/library/datetime.html#datetime.date.isocalendar">Python documentation: date.isocalendar() and the ISO calendar</a></li><li><a href="https://support.microsoft.com/en-us/office/weeknum-function-e5c43a03-b4ab-426c-b411-b18c13c75340">Microsoft Support: WEEKNUM function</a></li></ul>
+  </article>
+  <section class="related doc" aria-labelledby="rel-h">
+    <h2 id="rel-h">Related guides</h2>
+    <ul><li><a href="/en/guide/days-between-dates/">How to count the days between two dates (and when to add 1)</a></li><li><a href="/en/guide/federal-holidays-observed/">US federal holidays on a weekend: which day is observed</a></li><li><a href="/en/guide/adding-months/">Adding months to a date: what happens to January 31</a></li></ul>
+  </section>
+</main>
+<footer class="foot wrap">
+  <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="/" hreflang="ko" lang="ko">한국어</a></p>
+  <p>© 2026 Lumen Lab · <a href="https://lumenlab.page/">lumenlab.page</a></p>
+</footer>
+</body>
+</html>

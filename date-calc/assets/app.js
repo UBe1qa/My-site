@@ -7,11 +7,12 @@
   function load(key) { try { return localStorage.getItem("dc." + key); } catch (e) { return null; } }
   function save(key, v) { try { localStorage.setItem("dc." + key, v); } catch (e) { /* 사생활 보호 모드 */ } }
 
-  var navKo = /^ko\b/i.test(navigator.language || "");
-  var lang = load("lang") || (navKo ? "ko" : "en");
-  var country = load("country") || (lang === "ko" ? "KR" : "US");
-  if (lang !== "ko" && lang !== "en") lang = "ko";
-  if (country !== "KR" && country !== "US") country = "KR";
+  // 화면 언어는 페이지가 정한다(<html lang>): / = 한국어, /en/ = 영어. 저장값·브라우저 언어로 바꾸지 않는다(주소 하나에 언어 하나 → 검색에 둘 다 나옴).
+  var lang = /^en\b/i.test(document.documentElement.lang) ? "en" : "ko";
+  I18N.setLang(lang);
+  // 나라는 고른 값을 기억한다. 처음엔 한국어 페이지 = 한국, 영어 페이지 = 미국
+  var country = load("country");
+  if (country !== "KR" && country !== "US") country = lang === "ko" ? "KR" : "US";
 
   // ---------- 오늘 ----------
   function todayN() { var t = new Date(); return DC.fromYMD(t.getFullYear(), t.getMonth() + 1, t.getDate()); }
@@ -233,6 +234,7 @@
       if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
     render(name);
+    syncLangLinks();
     // 휴대폰에서 가로로 넘기는 고르기 줄: 고른 칸이 보이게 줄만 옮긴다(페이지는 그대로)
     var pk = document.querySelector(".picker"), on = pk.querySelector("a.on");
     if (on && pk.scrollWidth > pk.clientWidth) {
@@ -254,18 +256,31 @@
     if (window.matchMedia("(max-width: 720px)").matches) $(a.getAttribute("data-tool")).scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  // ---------- 언어·나라 ----------
-  function applyLang() {
-    document.documentElement.lang = lang;
-    I18N.apply(document, lang);
-    $("lang").textContent = lang === "ko" ? "EN" : "한국어";
-    $("lang").setAttribute("aria-label", lang === "ko" ? "English" : "한국어로 보기");
-    document.title = lang === "ko" ? "며칠 계산기 — 날짜 사이 기간, 디데이, 영업일, 만 나이" : "Daycount — days between dates, countdowns, business days, age";
+  // ---------- 언어(다른 언어 페이지로 가는 링크)·나라 ----------
+  // 머리의 언어 버튼은 다른 언어 페이지로 가는 보통 링크. 고른 계산기(#해시)를 그대로 들고 간다.
+  // dc.lang = 방문자가 고른 언어. 언어 제안 띠를 다시 띄울지 정할 때만 쓴다(화면 언어는 안 바꾼다).
+  var other = lang === "ko" ? "en" : "ko", otherBase = lang === "ko" ? "/en/" : "/";
+  function otherHref() { return otherBase + (location.hash || ""); }
+  function syncLangLinks() {
+    document.querySelectorAll("a[data-other-lang]").forEach(function (a) { a.href = otherHref(); });
   }
-  $("lang").addEventListener("click", function () {
-    lang = lang === "ko" ? "en" : "ko"; save("lang", lang);
-    applyLang(); renderAll();
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[data-other-lang]");
+    if (a) { a.href = otherHref(); save("lang", other); }
   });
+  $("lang").setAttribute("data-other-lang", "");
+  // 브라우저 언어가 이 페이지 언어와 다르면 작은 띠로 다른 언어 페이지를 알려 준다. 자동으로 넘기지 않는다.
+  var navLang = /^ko\b/i.test(navigator.language || "") ? "ko" : "en";
+  if (navLang !== lang && load("lang") !== lang) {
+    var bar = document.createElement("div");
+    bar.className = "langbar";
+    bar.setAttribute("lang", other);
+    bar.innerHTML = '<p class="wrap"><span>' + (other === "en" ? "This page is in Korean." : "한국어 페이지도 있어요.") + "</span> " +
+      '<a data-other-lang hreflang="' + other + '" href="' + esc(otherHref()) + '">' + (other === "en" ? "English version →" : "한국어로 보기 →") + "</a>" +
+      '<button type="button" class="langbar-x" aria-label="' + (other === "en" ? "Close" : "닫기") + '">×</button></p>';
+    bar.querySelector("button").addEventListener("click", function () { save("lang", lang); bar.remove(); });
+    document.body.insertBefore(bar, document.querySelector("header"));
+  }
   $("country").value = country;
   $("country").addEventListener("change", function () {
     country = this.value; save("country", country); renderAll();
@@ -290,7 +305,6 @@
     el.addEventListener("change", function () { render(el.closest(".tool").id); });
   });
 
-  applyLang();
   show(fromHash());
   renderAll();
   if (window.DC_ADS) window.DC_ADS.mount();

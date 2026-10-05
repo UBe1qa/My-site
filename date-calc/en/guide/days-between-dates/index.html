@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to count the days between two dates (and when to add 1) | Daycount</title>
+<meta name="description" content="Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.">
+<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://date.lumenlab.page/en/guide/days-between-dates/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Daycount">
+<meta property="og:title" content="How to count the days between two dates (and when to add 1) | Daycount">
+<meta property="og:description" content="Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.">
+<meta property="og:url" content="https://date.lumenlab.page/en/guide/days-between-dates/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "How to count the days between two dates (and when to add 1)", "description": "Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://date.lumenlab.page/en/guide/days-between-dates/", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Daycount", "item": "https://date.lumenlab.page/en/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://date.lumenlab.page/en/guide/"}, {"@type": "ListItem", "position": 3, "name": "Days between two dates: when to add 1", "item": "https://date.lumenlab.page/en/guide/days-between-dates/"}]}]}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body class="doc-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/en/"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span>Daycount</span></a>
+  <nav class="top-nav" aria-label="Site menu"><a href="/en/">Calculator</a><a href="/en/guide/">Guides</a><a href="/en/about/">About</a></nav>
+</header>
+
+<main id="main" class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/">Daycount</a> › <a href="/en/guide/">Guides</a> › <span>Days between two dates: when to add 1</span></nav>
+  <article class="doc article">
+    <h1>How to count the days between two dates (and when to add 1)</h1>
+    <p class="meta">By Lumen Lab · <time datetime="2026-10-05">October 5, 2026</time></p>
+    <p>Subtract the earlier date from the later one. From October 5 to December 25, 2026 that gives <b>81 days</b>. That's the plain subtraction answer, and it's what "how many days until Christmas?" means. Add 1 only when both the first and the last day should be counted, as in "October 5 through December 25": that's <b>82 days</b>.</p>
+
+<h2>Pick the count that fits the question</h2>
+<p>The two answers differ by whether the start date is day 0 or day 1. Using June 1 to June 5 as the example:</p>
+<table>
+<thead><tr><th>Question</th><th>How to count</th><th>June 1 to June 5</th></tr></thead>
+<tbody>
+<tr><td>How many days until June 5?</td><td>Subtract</td><td>4 days</td></tr>
+<tr><td>How many nights is the hotel stay?</td><td>Subtract</td><td>4 nights</td></tr>
+<tr><td>How long ago did it start?</td><td>Subtract</td><td>4 days</td></tr>
+<tr><td>How many days does the trip last?</td><td>Subtract, then add 1</td><td>5 days</td></tr>
+<tr><td>How many days did I work, June 1 through June 5?</td><td>Subtract, then add 1</td><td>5 days</td></tr>
+</tbody>
+</table>
+<p>It's the same trap as counting fence posts: a fence with 4 sections has 5 posts. Subtraction counts the gaps between dates, and the inclusive count counts the dates themselves.</p>
+
+<h2>Counting down to a date</h2>
+<p>A countdown is plain subtraction, so it reaches 0 on the day itself. On October 5, 2026 there are 81 days left until Friday, December 25. On December 24 there is 1 day left, and on December 25 the count is 0. If a countdown shows 82 on October 5, it is counting today as well. The <a href="/en/#dday">countdown calculator</a> uses subtraction.</p>
+<p>81 days is also 11 weeks and 4 days, or 2 months and 20 days. The months are counted from date to date (October 5 to December 5 is two months), not by dividing by 30.</p>
+
+<h2>Why dividing by 30 goes wrong</h2>
+<p>Months have 28 to 31 days, so one division can't turn days into months. March 1 to April 15, 2026 is 45 days. Divided by 30 that looks like a month and a half, but on the calendar it is <b>1 month and 14 days</b>: March 1 to April 1 is one month, then 14 more days. Month ends cause the biggest surprises, which is covered in <a href="/en/guide/adding-months/">what happens when you add a month to January 31</a>.</p>
+
+<h2>Leap years add a day</h2>
+<p>February 1 to March 1 is 28 days in 2026 and 29 days in 2028. A whole year, January 1 to December 31, is 364 days by subtraction in 2026 (365 counting both ends) and 365 days in 2028 (366 counting both ends). A year is a leap year when it divides by 4, except century years that don't divide by 400: 2000 was a leap year and 2100 won't be.</p>
+
+<h2>In a spreadsheet</h2>
+<p>Excel stores dates as serial numbers, so <code>=B2-A2</code> gives the subtraction count and <code>=B2-A2+1</code> the inclusive one. The <code>DAYS</code> function does the same subtraction; in Microsoft's example, <code>=DAYS("15-MAR-2021","1-FEB-2021")</code> returns 42.</p>
+<p>If you need working days rather than calendar days, see <a href="/en/guide/business-days/">how to count business days</a>.</p>
+    <p class="cta"><a class="btn" href="/en/#period">Count the days between two dates →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://support.microsoft.com/en-us/office/days-function-57740535-d549-4395-8728-0f07bff0b9df">Microsoft Support: DAYS function</a></li></ul>
+  </article>
+  <section class="related doc" aria-labelledby="rel-h">
+    <h2 id="rel-h">Related guides</h2>
+    <ul><li><a href="/en/guide/adding-months/">Adding months to a date: what happens to January 31</a></li><li><a href="/en/guide/business-days/">How to count business days and find a deadline</a></li><li><a href="/en/guide/exact-age/">How to calculate your exact age in years, months and days</a></li></ul>
+  </section>
+</main>
+<footer class="foot wrap">
+  <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="/" hreflang="ko" lang="ko">한국어</a></p>
+  <p>© 2026 Lumen Lab · <a href="https://lumenlab.page/">lumenlab.page</a></p>
+</footer>
+</body>
+</html>

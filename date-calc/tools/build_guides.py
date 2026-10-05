@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """가이드 글 페이지(guide/*/index.html), 가이드 목록, 소개 페이지, 404 페이지, sitemap.xml, rss.xml을 만든다.
+영어판(en/: 계산기·영어 글·목록·소개)도 같은 명령으로 tools/build_en.py가 만든다.
 
-글 내용은 이 파일의 GUIDES에 있다. 고친 뒤 `python3 date-calc/tools/build_guides.py` 를 돌리고 결과를 커밋한다.
+글 내용은 이 파일의 GUIDES에 있다(영어 글은 build_en.py). 고친 뒤 `python3 date-calc/tools/build_guides.py` 를 돌리고 결과를 커밋한다.
 예시 숫자는 assets/dates.js로 검산한 값이다(tests/run.js의 '가이드 예시' 묶음이 같은 값을 시험한다).
 """
 import html, json, os
@@ -10,7 +11,8 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 BASE = "https://date.lumenlab.page"
 UPDATED = "2026-10-03"
 # sitemap lastmod: 본문·구조화 데이터·링크가 실제로 바뀐 날만 적는다(배포 날짜를 일괄로 찍지 않는다). 없으면 UPDATED
-LASTMOD = {"/": "2026-10-05", "/privacy": "2026-10-05"}
+# 영어 페이지(/en/…)는 build_en.UPDATED. /about/은 영어 소개와 hreflang으로 이어서 2026-10-05
+LASTMOD = {"/": "2026-10-05", "/privacy": "2026-10-05", "/about/": "2026-10-05"}
 AD_HEAD = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>'
 
 # slug, 제목(h1), 짧은 제목(목록·링크), 설명(meta), 계산기 해시, 본문 HTML, 이어서 볼 글
@@ -253,7 +255,7 @@ GUIDE_BY_SLUG = {g["slug"]: g for g in GUIDES}
 E = html.escape
 
 
-def head(title, desc, path, extra_ld):
+def head(title, desc, path, extra_ld, alt=""):
     url = BASE + path
     return f"""<!doctype html>
 <html lang="ko">
@@ -265,7 +267,7 @@ def head(title, desc, path, extra_ld):
 <meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="{url}">
-<meta property="og:type" content="article">
+{alt}<meta property="og:type" content="article">
 <meta property="og:site_name" content="며칠 계산기">
 <meta property="og:title" content="{E(title)}">
 <meta property="og:description" content="{E(desc)}">
@@ -363,8 +365,10 @@ def about_page():
         {"@type": "AboutPage", "name": "며칠 계산기 소개", "url": BASE + path, "inLanguage": "ko",
          "publisher": {"@type": "Organization", "name": "루멘랩(Lumen Lab)", "url": "https://lumenlab.page/", "email": "woxocoso@gmail.com"}},
         crumbs([("며칠 계산기", "/"), ("소개", path)])]}
+    import build_en  # 영어 소개(/en/about/)와 hreflang으로 잇는다
     return head("며칠 계산기 소개 — 만든 곳, 계산 기준, 문의 | 며칠 계산기",
-                "며칠 계산기는 루멘랩이 만든 무료 날짜 계산 도구예요. 계산 기준, 공휴일 데이터 출처, 정확도 확인 방법과 문의처를 안내해요.", path, ld) + """
+                "며칠 계산기는 루멘랩이 만든 무료 날짜 계산 도구예요. 계산 기준, 공휴일 데이터 출처, 정확도 확인 방법과 문의처를 안내해요.", path, ld,
+                build_en.alternates(path, "/en/about/")) + """
 <main id="main" class="wrap">
   <nav class="crumbs" aria-label="현재 위치"><a href="/">며칠 계산기</a> › <span>소개</span></nav>
   <article class="doc article">
@@ -396,9 +400,10 @@ def about_page():
 """ + FOOT
 
 
-def sitemap():
+def sitemap(en_urls=(), en_updated=UPDATED):
     urls = ["/", "/guide/"] + [f"/guide/{g['slug']}/" for g in GUIDES] + ["/about/", "/privacy"]
     rows = "\n".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{LASTMOD.get(u, UPDATED)}</lastmod></url>" for u in urls)
+    rows += "".join(f"\n  <url><loc>{BASE}{u}</loc><lastmod>{en_updated}</lastmod></url>" for u in en_urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}\n</urlset>\n'
 
 
@@ -432,31 +437,40 @@ def rss():
 
 
 def not_found_page():
-    """없는 주소에 보여 주는 페이지. 내용이 없는 화면이라 광고 코드를 넣지 않고(애드센스 게시자 정책), 검색에도 안 올린다."""
-    page = head("페이지를 찾을 수 없어요 | 며칠 계산기", "찾는 페이지가 없어요. 며칠 계산기 첫 화면이나 가이드로 가 보세요.", "/404", {"@context": "https://schema.org", "@type": "WebPage", "name": "404"})
+    """없는 주소에 보여 주는 페이지(한국어·영어). 내용이 없는 화면이라 광고 코드를 넣지 않고(애드센스 게시자 정책), 검색에도 안 올린다."""
+    page = head("페이지를 찾을 수 없어요 · Page not found | 며칠 계산기", "찾는 페이지가 없어요. This page doesn't exist.", "/404", {"@context": "https://schema.org", "@type": "WebPage", "name": "404"})
     page = page.replace(AD_HEAD + "\n", "").replace('<link rel="canonical" href="' + BASE + '/404">\n', '<meta name="robots" content="noindex">\n')
     page = page.replace('<meta property="og:url" content="' + BASE + '/404">\n', "")
     return page + """
 <main id="main" class="wrap">
   <article class="doc article">
     <h1>페이지를 찾을 수 없어요</h1>
-    <p>주소가 바뀌었거나 없는 페이지예요. 아래에서 찾아보세요.</p>
+    <p>주소가 바뀌었거나 없는 페이지예요.</p>
     <ul>
       <li><a href="/">며칠 계산기 첫 화면</a> (기간·디데이·만 나이 등 11가지 계산)</li>
       <li><a href="/guide/">날짜 계산 가이드</a></li>
     </ul>
-    <p lang="en">Page not found. Go to the <a href="/">Daycount home</a> or the <a href="/guide/">guides</a>.</p>
+    <div lang="en">
+      <h2>Page not found</h2>
+      <p>This address doesn't exist or has moved.</p>
+      <ul>
+        <li><a href="/en/">Daycount date calculator</a> (days between dates, business days, age and more)</li>
+        <li><a href="/en/guide/">Date calculation guides</a></li>
+      </ul>
+    </div>
   </article>
 </main>
 """ + FOOT
 
 
 if __name__ == "__main__":
+    import build_en
+    n_en = build_en.build_all()
     for g in GUIDES:
         write(f"guide/{g['slug']}/index.html", guide_page(g))
     write("guide/index.html", guide_index())
     write("about/index.html", about_page())
     write("404.html", not_found_page())
-    write("sitemap.xml", sitemap())
+    write("sitemap.xml", sitemap(build_en.urls(), build_en.UPDATED))
     write("rss.xml", rss())
-    print("가이드 %d편 + 목록 + 소개 + 404 + sitemap + rss 만듦" % len(GUIDES))
+    print("가이드 %d편 + 목록 + 소개 + 404 + sitemap + rss 만듦, 영어판(/en/: 계산기 + 글 %d편 + 목록 + 소개) 만듦" % (len(GUIDES), n_en))

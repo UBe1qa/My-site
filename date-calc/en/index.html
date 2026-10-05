@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Date Calculator: Days Between Dates, Business Days, Age | Daycount</title>
+<meta name="description" content="Count the days between two dates, days until a date, business days without US federal holidays, exact age and ISO week numbers. Free, and it runs in your browser.">
+<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://date.lumenlab.page/en/">
+<link rel="alternate" hreflang="ko" href="https://date.lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://date.lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://date.lumenlab.page/en/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Daycount">
+<meta property="og:title" content="Date Calculator: Days Between Dates, Business Days, Age | Daycount">
+<meta property="og:description" content="Count the days between two dates, days until a date, business days without US federal holidays, exact age and ISO week numbers. Free, and it runs in your browser.">
+<meta property="og:url" content="https://date.lumenlab.page/en/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebApplication", "name": "Daycount", "url": "https://date.lumenlab.page/en/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "inLanguage": "en", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Free web calculator for days between dates, countdowns, business days, exact age, anniversaries, day of the week and ISO week numbers"}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What does “include start date” mean?", "acceptedAnswer": {"@type": "Answer", "text": "It counts the first day as a day too. From Oct 1 to Oct 3 is 2 days by subtraction, or 3 days if you include the start date. Leave it off for countdowns and “how long ago”; turn it on for periods like “June 1 through June 5”."}}, {"@type": "Question", "name": "Which days are skipped when counting business days?", "acceptedAnswer": {"@type": "Answer", "text": "Saturdays, Sundays and the public holidays of the calendar you pick. With US holidays, that means the 11 federal holidays on the days they are observed: the Friday before when one falls on a Saturday, the Monday after when it falls on a Sunday. Holiday data covers 2015 to 2035."}}, {"@type": "Question", "name": "What’s Jan 31 plus one month?", "acceptedAnswer": {"@type": "Answer", "text": "If the next month has no 31st, the result is that month’s last day, so you get Feb 28 (Feb 29 in leap years)."}}, {"@type": "Question", "name": "How is age calculated?", "acceptedAnswer": {"@type": "Answer", "text": "You gain a year on each birthday, and the months and days are counted on from your last birthday. People born on Feb 29 are treated as having their birthday on Feb 28 in other years."}}, {"@type": "Question", "name": "Are the dates I enter sent anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything is calculated in your browser. Only your holiday calendar and language choices are remembered on this device. Google ads on the page may use cookies (see the privacy policy)."}}]}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#tools">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/en/"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span>Daycount</span></a>
+  <nav class="top-nav" aria-label="Site menu"><a href="/en/guide/">Guides</a><a href="/en/about/">About</a></nav>
+  <div class="top-ctl">
+    <label class="mini">
+      <span class="sr">Holiday calendar</span>
+      <select id="country" aria-label="Holiday calendar">
+        <option value="KR">🇰🇷 Korean holidays</option>
+        <option value="US">🇺🇸 US holidays</option>
+      </select>
+    </label>
+    <a class="lang" id="lang" href="/" hreflang="ko" lang="ko" aria-label="한국어로 보기">한국어</a>
+  </div>
+</header>
+
+<main id="tools">
+  <section class="hero wrap">
+    <h1>Date calculator: days between dates, business days, age</h1>
+    <p class="lede">Days between two dates, countdowns, business days without holidays, exact age and anniversaries, calculated as you type.</p>
+  </section>
+
+  <div class="bench wrap">
+  <nav class="picker" aria-label="Choose a calculator">
+    <a href="#period" data-tool="period">Between dates</a>
+    <a href="#dday" data-tool="dday">Countdown</a>
+    <a href="#add" data-tool="add">Add / subtract</a>
+    <a href="#workdays" data-tool="workdays">Business days</a>
+    <a href="#workadd" data-tool="workadd">Business-day deadline</a>
+    <a href="#age" data-tool="age">Age</a>
+    <a href="#anniv" data-tool="anniv">Anniversaries</a>
+    <a href="#weekday" data-tool="weekday">Day of week</a>
+    <a href="#week" data-tool="week">Week number</a>
+    <a href="#time" data-tool="time">Time between</a>
+    <a href="#holidays" data-tool="holidays">Holidays</a>
+  </nav>
+
+  <div class="stage">
+    <section class="tool" id="period" aria-labelledby="h-period">
+      <h2 id="h-period">Days between two dates</h2>
+      <div class="grid2">
+        <label class="field"><span>Start date</span><input type="date" id="period-a"></label>
+        <label class="field"><span>End date</span><input type="date" id="period-b"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="period-inc"> <span>Include start date (count the first day too)</span></label>
+      <div class="result" id="r-period" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="dday" aria-labelledby="h-dday">
+      <h2 id="h-dday">Countdown (D-day)</h2>
+      <div class="grid2">
+        <label class="field"><span>Target date</span><input type="date" id="dday-t"></label>
+        <label class="field"><span>From (usually today)</span><input type="date" id="dday-b"></label>
+      </div>
+      <div class="result" id="r-dday" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="add" aria-labelledby="h-add">
+      <h2 id="h-add">Add / subtract</h2>
+      <label class="field"><span>From date</span><input type="date" id="add-a"></label>
+      <div class="grid4">
+        <label class="field"><span>Years</span><input type="number" id="add-y" inputmode="numeric" value="0" step="1"></label>
+        <label class="field"><span>Months</span><input type="number" id="add-m" inputmode="numeric" value="0" step="1"></label>
+        <label class="field"><span>Weeks</span><input type="number" id="add-w" inputmode="numeric" value="0" step="1"></label>
+        <label class="field"><span>Days</span><input type="number" id="add-d" inputmode="numeric" value="30" step="1"></label>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Direction">
+        <label><input type="radio" name="add-dir" value="1" checked> <span>Later (add)</span></label>
+        <label><input type="radio" name="add-dir" value="-1"> <span>Earlier (subtract)</span></label>
+      </div>
+      <div class="result" id="r-add" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="workdays" aria-labelledby="h-workdays">
+      <h2 id="h-workdays">Business days</h2>
+      <p class="hint">Counts working days only, skipping weekends and public holidays (including substitute holidays).</p>
+      <div class="grid2">
+        <label class="field"><span>Start date</span><input type="date" id="wd-a"></label>
+        <label class="field"><span>End date</span><input type="date" id="wd-b"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="wd-inc" checked> <span>Include start date</span></label>
+      <label class="check"><input type="checkbox" id="wd-nohol"> <span>Don't skip holidays (weekends only)</span></label>
+      <div class="result" id="r-workdays" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="workadd" aria-labelledby="h-workadd">
+      <h2 id="h-workadd">Business-day deadline</h2>
+      <p class="hint">Finds a date N business days away, like a shipping or processing deadline. The start date itself isn't counted.</p>
+      <div class="grid2">
+        <label class="field"><span>From date</span><input type="date" id="wa-a"></label>
+        <label class="field"><span>Business days (negative = earlier)</span><input type="number" id="wa-n" inputmode="numeric" value="5" step="1"></label>
+      </div>
+      <div class="result" id="r-workadd" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="age" aria-labelledby="h-age">
+      <h2 id="h-age">Age calculator</h2>
+      <div class="grid2">
+        <label class="field"><span>Date of birth</span><input type="date" id="age-b"></label>
+        <label class="field"><span>From (usually today)</span><input type="date" id="age-t"></label>
+      </div>
+      <div class="result" id="r-age" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="anniv" aria-labelledby="h-anniv">
+      <h2 id="h-anniv">Anniversaries (100 days, 1 year…)</h2>
+      <label class="field"><span>Start date</span><input type="date" id="an-a"></label>
+      <label class="check"><input type="checkbox" id="an-one"> <span>Count the start date as day 1 (Korean style)</span></label>
+      <div class="result" id="r-anniv" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="weekday" aria-labelledby="h-weekday">
+      <h2 id="h-weekday">What day of the week?</h2>
+      <label class="field"><span>Date</span><input type="date" id="wk-a"></label>
+      <div class="result" id="r-weekday" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="week" aria-labelledby="h-week">
+      <h2 id="h-week">Week number &amp; day of year</h2>
+      <label class="field"><span>Date</span><input type="date" id="wn-a"></label>
+      <div class="result" id="r-week" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="time" aria-labelledby="h-time">
+      <h2 id="h-time">Time between two moments</h2>
+      <div class="grid2">
+        <label class="field"><span>Start</span><input type="datetime-local" id="tm-a"></label>
+        <label class="field"><span>End</span><input type="datetime-local" id="tm-b"></label>
+      </div>
+      <div class="result" id="r-time" aria-live="polite"></div>
+    </section>
+
+    <section class="tool" id="holidays" aria-labelledby="h-holidays">
+      <h2 id="h-holidays">Public holidays</h2>
+      <label class="field narrow"><span>Year</span><input type="number" id="hol-y" inputmode="numeric" min="2015" max="2035" step="1"></label>
+      <div class="result" id="r-holidays" aria-live="polite"></div>
+    </section>
+
+  </div>
+  <div class="ad-slot" data-ad="below-tool" hidden></div>
+  </div>
+
+  <section class="guides wrap" aria-labelledby="h-guides">
+    <h2 id="h-guides">Date calculation guides</h2>
+    <ul class="guide-list">
+      <li><a href="/en/guide/days-between-dates/"><b>Days between two dates: when to add 1</b><span>Inclusive or exclusive counts, countdowns and leap years</span></a></li>
+      <li><a href="/en/guide/business-days/"><b>Counting business days</b><span>Deadlines like “within 5 business days”, step by step</span></a></li>
+      <li><a href="/en/guide/federal-holidays-observed/"><b>Federal holidays on a weekend</b><span>Saturday moves to Friday, Sunday to Monday: dates for 2026–2028</span></a></li>
+      <li><a href="/en/guide/adding-months/"><b>Adding months to a date</b><span>The end-of-month rule and monthly schedules</span></a></li>
+      <li><a href="/en/guide/exact-age/"><b>Exact age in years, months and days</b><span>The counting method, month-end and February 29 birthdays</span></a></li>
+      <li><a href="/en/guide/iso-week-numbers/"><b>ISO week numbers</b><span>Week 1, week 53 and why spreadsheets disagree</span></a></li>
+    </ul>
+  </section>
+
+  <div class="wrap"><div class="ad-slot" data-ad="top" hidden></div></div>
+
+  <section class="faq wrap" aria-labelledby="h-faq">
+    <h2 id="h-faq">Frequently asked questions</h2>
+    <details><summary>What does “include start date” mean?</summary><p>It counts the first day as a day too. From Oct 1 to Oct 3 is 2 days by subtraction, or 3 days if you include the start date. Leave it off for countdowns and “how long ago”; turn it on for periods like “June 1 through June 5”.</p></details>
+    <details><summary>Which days are skipped when counting business days?</summary><p>Saturdays, Sundays and the public holidays of the calendar you pick. With US holidays, that means the 11 federal holidays on the days they are observed: the Friday before when one falls on a Saturday, the Monday after when it falls on a Sunday. Holiday data covers 2015 to 2035.</p></details>
+    <details><summary>What’s Jan 31 plus one month?</summary><p>If the next month has no 31st, the result is that month’s last day, so you get Feb 28 (Feb 29 in leap years).</p></details>
+    <details><summary>How is age calculated?</summary><p>You gain a year on each birthday, and the months and days are counted on from your last birthday. People born on Feb 29 are treated as having their birthday on Feb 28 in other years.</p></details>
+    <details><summary>Are the dates I enter sent anywhere?</summary><p>No. Everything is calculated in your browser. Only your holiday calendar and language choices are remembered on this device. Google ads on the page may use cookies (see the <a href="/privacy#en">privacy policy</a>).</p></details>
+    <div class="ad-slot" data-ad="bottom" hidden></div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a></p>
+</footer>
+
+<script src="/assets/holidays.js"></script>
+<script src="/assets/dates.js"></script>
+<script src="/assets/i18n.js"></script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

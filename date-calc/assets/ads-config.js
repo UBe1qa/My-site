@@ -1,5 +1,5 @@
-// 구글 애드센스 설정. 비어 있으면 광고 코드를 아예 불러오지 않는다(기본값).
-// 켜져 있음: ads.txt(이 폴더와 lumenlab 폴더 = 메인 도메인), index.html <head> 광고 코드, privacy.html 광고 문단.
+// 구글 애드센스 설정. 지금 켜져 있다(client 있음, 자동 광고). client를 비우면 수동 광고 자리만 안 채우고, <head>의 광고 코드는 따로 지워야 한다.
+// 켜져 있음: ads.txt(이 폴더와 lumenlab 폴더 = 메인 도메인), index.html·en/index.html·가이드 글 <head> 광고 코드(자동 광고), privacy.html 광고 문단.
 // 수동 광고 단위를 만들면 아래 slots에 번호를 넣는다. 끄려면 client를 비우고 <head> 코드와 방침 문단도 같이 고친다.
 var DC_ADS = {
   client: "ca-pub-9496167591465154",  // 루멘랩 애드센스 (2026-10-03)
@@ -16,12 +16,12 @@ var DC_ADS = {
       document.querySelectorAll("[data-ad]").forEach(function (box) {
         box.hidden = false;
         box.className += " ad-preview";
-        box.textContent = "광고 자리 · " + box.getAttribute("data-ad");
+        box.textContent = (/^en\b/i.test(document.documentElement.lang) ? "Ad slot · " : "광고 자리 · ") + box.getAttribute("data-ad");
       });
       return;
     }
     if (!this.client || !/^ca-pub-\d{10,20}$/.test(this.client)) return;
-    // 광고 코드(adsbygoogle.js)는 index.html <head>에 직접 있다(자동 광고·심사용). 여기선 수동 광고 자리만 채운다
+    // 광고 코드(adsbygoogle.js)는 index.html·en/index.html <head>에 직접 있다(자동 광고·심사용). 여기선 수동 광고 자리만 채운다
     var slots = this.slots, client = this.client;
     document.querySelectorAll("[data-ad]").forEach(function (box) {
       var id = slots[box.getAttribute("data-ad")];

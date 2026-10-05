@@ -1,4 +1,5 @@
 // 문구 현지화. 키는 한국어 원문 그대로. 새 문구는 여기 영어를 같이 넣는다(tools/check_i18n.py가 빠진 걸 잡는다).
+// index.html의 data-i18n 글자를 바꾸면 python3 tools/build_guides.py 로 영어 페이지(en/index.html)도 다시 만든다.
 // 형식: %s, %d 차례대로. 영어 어순이 다르면 %2$s 처럼 번호를 붙인다.
 var I18N = (function () {
   var EN = {
@@ -9,11 +10,11 @@ var I18N = (function () {
     "🇰🇷 한국 공휴일": "🇰🇷 Korean holidays",
     "🇺🇸 미국 공휴일": "🇺🇸 US holidays",
     "날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지": "Date calculator: days between dates, business days, age",
-    "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.": "Days between two dates, countdowns, business days excluding holidays, age and anniversaries — calculated as you type.",
+    "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.": "Days between two dates, countdowns, business days without holidays, exact age and anniversaries, calculated as you type.",
     "사이트 메뉴": "Site menu",
     "가이드": "Guides",
     "소개": "About",
-    "날짜 계산 가이드": "Date calculation guides (Korean)",
+    "날짜 계산 가이드": "Date calculation guides",
     "계산기 고르기": "Choose a calculator",
     "두 날짜 사이": "Between dates",
     "디데이": "Countdown",
@@ -61,7 +62,7 @@ var I18N = (function () {
     "공휴일 목록": "Public holidays",
     "연도": "Year",
     // FAQ
-    "자주 묻는 질문": "FAQ",
+    "자주 묻는 질문": "Frequently asked questions",
     "시작일 포함은 무슨 뜻인가요?": "What does “include start date” mean?",
     "첫날도 하루로 세는 방식이에요. 10월 1일부터 10월 3일까지는 그냥 빼면 2일, 시작일을 포함하면 3일이에요.": "It counts the first day as a day too. From Oct 1 to Oct 3 is 2 days by subtraction, or 3 days including the start date.",
     "영업일에는 어떤 날이 빠지나요?": "Which days are skipped as non-business days?",
@@ -161,12 +162,8 @@ var I18N = (function () {
     if (lang === "en") out = out.replace(/(^|[^\d.,])1 (day|week|year|month|hour|minute|business day)s\b/g, "$11 $2");
     return out;
   }
-  // data-i18n(글자), data-i18n-aria(aria-label). 원문은 처음 한 번 기억해 둔다.
-  function apply(root, newLang) {
-    lang = newLang;
-    root.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = L(el.getAttribute("data-i18n")); });
-    root.querySelectorAll("[data-i18n-aria]").forEach(function (el) { el.setAttribute("aria-label", L(el.getAttribute("data-i18n-aria"))); });
-  }
-  return { EN: EN, L: L, F: F, apply: apply, setLang: function (l) { lang = l; } };
+  // 화면 글자(data-i18n)는 브라우저에서 바꾸지 않는다. 영어 페이지 en/index.html은 tools/build_en.py가 이 사전으로 미리 만든다.
+  // 여기선 계산 결과 문구(L, F)만 페이지 언어(app.js가 setLang)에 맞춘다.
+  return { EN: EN, L: L, F: F, setLang: function (l) { lang = l; } };
 })();
 var L = I18N.L, F = I18N.F;

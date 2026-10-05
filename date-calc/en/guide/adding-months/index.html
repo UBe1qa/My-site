@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adding months to a date: what happens to January 31 | Daycount</title>
+<meta name="description" content="January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.">
+<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://date.lumenlab.page/en/guide/adding-months/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Daycount">
+<meta property="og:title" content="Adding months to a date: what happens to January 31 | Daycount">
+<meta property="og:description" content="January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.">
+<meta property="og:url" content="https://date.lumenlab.page/en/guide/adding-months/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Adding months to a date: what happens to January 31", "description": "January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://date.lumenlab.page/en/guide/adding-months/", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Daycount", "item": "https://date.lumenlab.page/en/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://date.lumenlab.page/en/guide/"}, {"@type": "ListItem", "position": 3, "name": "Adding months to a date", "item": "https://date.lumenlab.page/en/guide/adding-months/"}]}]}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body class="doc-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/en/"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span>Daycount</span></a>
+  <nav class="top-nav" aria-label="Site menu"><a href="/en/">Calculator</a><a href="/en/guide/">Guides</a><a href="/en/about/">About</a></nav>
+</header>
+
+<main id="main" class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/">Daycount</a> › <a href="/en/guide/">Guides</a> › <span>Adding months to a date</span></nav>
+  <article class="doc article">
+    <h1>Adding months to a date: what happens to January 31</h1>
+    <p class="meta">By Lumen Lab · <time datetime="2026-10-05">October 5, 2026</time></p>
+    <p>If the target month is too short, the date moves back to that month's last day. January 31, 2026 plus one month is <b>February 28, 2026</b>, and in a leap year it's February 29. Daycount works this way, and so do Python's dateutil library and the EDATE function in Microsoft's DAX formula language. JavaScript's built-in <code>Date</code> behaves differently, as shown further down.</p>
+
+<h2>Examples</h2>
+<table>
+<thead><tr><th>Start</th><th>Change</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Jan 31, 2026</td><td>+1 month</td><td>Feb 28, 2026</td></tr>
+<tr><td>Jan 31, 2028</td><td>+1 month</td><td>Feb 29, 2028</td></tr>
+<tr><td>Mar 31, 2026</td><td>+1 month</td><td>Apr 30, 2026</td></tr>
+<tr><td>Aug 31, 2026</td><td>+6 months</td><td>Feb 28, 2027</td></tr>
+<tr><td>Feb 29, 2028</td><td>+12 months</td><td>Feb 28, 2029</td></tr>
+<tr><td>Mar 31, 2026</td><td>−1 month</td><td>Feb 28, 2026</td></tr>
+</tbody>
+</table>
+<p>Days 1 to 28 exist in every month, so they never move.</p>
+
+<h2>Adding one month twice isn't adding two months</h2>
+<p>Once a date has been pulled back to the 28th, it stays there. January 31 plus one month is February 28, and February 28 plus one month is March 28. But January 31 plus two months is March 31. For anything that repeats monthly, like a bill, a subscription or a payment plan, work out each date from the original start date rather than from the previous due date.</p>
+<table>
+<thead><tr><th>Payment</th><th>Jan 31, 2026 + n months</th><th>Previous date + 1 month</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Feb 28</td><td>Feb 28</td></tr>
+<tr><td>2</td><td>Mar 31</td><td>Mar 28</td></tr>
+<tr><td>3</td><td>Apr 30</td><td>Apr 28</td></tr>
+<tr><td>4</td><td>May 31</td><td>May 28</td></tr>
+<tr><td>5</td><td>Jun 30</td><td>Jun 28</td></tr>
+</tbody>
+</table>
+<p>Going backwards has the same catch. March 31 minus one month is February 28, and adding the month back gives March 28, not March 31.</p>
+
+<h2>One month isn't 30 days</h2>
+<p>Thirty days after January 31, 2026 is March 2. One month after it is February 28. When a contract says "30 days", put 30 in the Days field of the <a href="/en/#add">date calculator</a>; when it says "one month", use the Months field. Mixing them up can move the date by up to two days.</p>
+
+<h2>Counting the months between two dates</h2>
+<p>The same rule decides how many months lie between two dates. Daycount treats a month as complete when the date reaches the same day of the month, or the last day of a shorter month. That makes January 28, 29, 30 and 31, 2026 all exactly one month before February 28, 2026. <a href="/en/guide/exact-age/">Exact age in years, months and days</a> is counted the same way.</p>
+
+<h2>How other tools handle it</h2>
+<ul>
+<li><b>Python (dateutil)</b>: its documentation says that if the result falls after the last day of the month, the last day is used, and shows January 31, 2003 plus one month as February 28, 2003.</li>
+<li><b>Power BI (DAX)</b>: Microsoft documents that <code>EDATE("2009-01-31", 1)</code> returns February 28, 2009.</li>
+<li><b>JavaScript</b>: <code>setMonth</code> on a <code>Date</code> carries the extra days into the next month. Starting from January 31, 2026 and setting the month to February gives <b>March 3, 2026</b>. MDN's documentation shows the same effect, with January 31, 2016 becoming March 2, 2016.</li>
+</ul>
+<p>When two systems disagree by a few days around the end of a month, this difference is the usual reason.</p>
+    <p class="cta"><a class="btn" href="/en/#add">Add or subtract months from a date →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://dateutil.readthedocs.io/en/stable/relativedelta.html">dateutil documentation: relativedelta</a></li><li><a href="https://learn.microsoft.com/en-us/dax/edate-function-dax">Microsoft Learn: EDATE function (DAX)</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setMonth">MDN Web Docs: Date.prototype.setMonth()</a></li></ul>
+  </article>
+  <section class="related doc" aria-labelledby="rel-h">
+    <h2 id="rel-h">Related guides</h2>
+    <ul><li><a href="/en/guide/exact-age/">How to calculate your exact age in years, months and days</a></li><li><a href="/en/guide/days-between-dates/">How to count the days between two dates (and when to add 1)</a></li><li><a href="/en/guide/business-days/">How to count business days and find a deadline</a></li></ul>
+  </section>
+</main>
+<footer class="foot wrap">
+  <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="/" hreflang="ko" lang="ko">한국어</a></p>
+  <p>© 2026 Lumen Lab · <a href="https://lumenlab.page/">lumenlab.page</a></p>
+</footer>
+</body>
+</html>
