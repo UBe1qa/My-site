@@ -10,7 +10,7 @@ var I18N = (function () {
     "🇰🇷 한국 공휴일": "🇰🇷 Korean holidays",
     "🇺🇸 미국 공휴일": "🇺🇸 US holidays",
     "날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지": "Date calculator: days between dates, business days, age",
-    "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.": "Days between two dates, countdowns, business days without holidays, exact age and anniversaries, calculated as you type.",
+    "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.": "Days between dates, countdowns, exact age, and business days that skip US federal holidays and their observed days off. Calculated as you type, right in your browser.",
     "사이트 메뉴": "Site menu",
     "가이드": "Guides",
     "소개": "About",
