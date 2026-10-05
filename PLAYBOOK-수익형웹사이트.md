@@ -34,6 +34,7 @@
 ## 5. 배포
 - `wrangler.jsonc`에 `routes: [{ pattern: "이름.lumenlab.page", custom_domain: true }]` + **`"workers_dev": true`**(빼면 workers.dev 주소가 꺼진다).
 - 배포 후 실제 주소에서 모든 페이지 200, `tools/` `tests/`는 404인지 확인.
+- **루멘랩 본페이지(lumenlab.page)에 카드 추가**: `lumenlab/_dev/catalog.json`의 `tools`에 항목 하나(이름·한 줄 설명 한국어/영어, 주소, 아이콘은 `lumenlab/img/`) → `python3 lumenlab/_dev/build_home.py` → 같은 푸시에. 홈 카드·첫 화면 '웹 도구 N개'·꼬리말·영어 문구가 같이 바뀐다(손으로 HTML을 고치지 않는다). 새 앱이면 `apps`에.
 
 ## 6. 등록 (배포 직후)
 1. **구글 서치 콘솔**: URL 접두어 속성 → **HTML 태그** 방식(HTML 파일 방식은 Cloudflare가 `.html`을 넘겨서 안 됨) → 사이트맵 제출 → 첫 페이지 색인 요청(하루 몇 개만). Claude가 크롬으로 할 수 있다.
