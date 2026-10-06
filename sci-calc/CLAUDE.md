@@ -11,6 +11,7 @@
 - `assets/calc.js` 첫 페이지 계산기 / `assets/modes-ui.js` 모드 화면 6개 / `assets/ads-config.js` 광고 자리
 - `assets/style.css` 모양 전부(색은 `:root` 토큰, 어두운 화면 포함)
 - `tools/build.py` 모든 HTML·sitemap.xml·rss.xml 을 만든다. 글은 `tools/articles.py`, 첫 화면·모드·소개·방침 글은 `tools/content.py`
+- `og.png`(한국어)·`og-en.png`(영어) 공유 사진 1200×630: `python3 _dev/og.py` 가 `_dev/og.html` 을 찍는다. 사이트 CSS 와 따로라 화면을 바꿔도 다시 안 찍어도 된다(색을 바꾸면 og.html 색만)
 - `tests/` 기준값(파이썬 sympy·mpmath·scipy 로 따로 계산)과 시험. `_dev/` 검사 도구
 
 ## 명령
