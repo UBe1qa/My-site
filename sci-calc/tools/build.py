@@ -19,7 +19,7 @@ import articles  # noqa: E402
 SITE = 'https://calc.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = datetime.date(2026, 10, 6)
-ASSET_V = '7'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
+ASSET_V = '8'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
 
 esc = html.escape
 
