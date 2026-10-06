@@ -611,3 +611,34 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
   .status { min-height: 28px; }
   .status button, .status .st-right a { padding: 4px 9px; }
 }
+/* ------------------------------------------------ 연출 (2026-10-06, 설계서 '연출 요청문')
+   기본 반응: 길이·곡선 한 값(--mo-d, --mo-e)을 전체에 같이 씀. transform·opacity 만 움직임.
+   화려한 연출 3개(작게, 0.3초 이하): SHIFT 불 켜짐(.mo-shift), 정확값 밑줄(.mo-line), 기록 불러오기(.mo-ghost, calc.js). */
+:root { --mo-d: .16s; --mo-e: cubic-bezier(.2, .8, .2, 1); }
+.k { transition: transform .06s var(--mo-e), box-shadow .06s var(--mo-e), background-color var(--mo-d) var(--mo-e), color var(--mo-d) var(--mo-e); }
+.result { position: relative; }
+.result.mo-in, .expr.mo-in { animation: mo-rise var(--mo-d) var(--mo-e); }
+.result.mo-roll { animation: mo-roll var(--mo-d) var(--mo-e); }
+.side .hist-list li.mo-new { animation: mo-rise calc(var(--mo-d) * 1.5) var(--mo-e); }
+.screen.mo-shake { animation: mo-shake .24s var(--mo-e); }
+.acts button.mo-ok { animation: mo-ok .6s var(--mo-e); }
+@keyframes mo-rise { from { transform: translateY(6px); opacity: .35; } }
+@keyframes mo-roll { from { transform: translateY(-7px); opacity: .3; } }
+@keyframes mo-shake { 20% { transform: translateX(-4px); } 45% { transform: translateX(4px); } 70% { transform: translateX(-2px); } }
+@keyframes mo-ok { 0%, 70% { background: var(--accent); color: #fff; } }
+/* SHIFT 불 켜짐: SHIFT 를 켜는 순간 보조 글자들이 키 순서대로 빠르게 켜진다 */
+.calc.mo-shift .k[data-s] .ks { animation: mo-lit .16s var(--mo-e) backwards; animation-delay: calc(var(--i, 0) * 4ms); }
+@keyframes mo-lit { from { opacity: .2; transform: translateY(2px) scale(.9); } }
+/* 정확값 밑줄: 답 아래 주황 줄이 오른쪽에서 그어졌다 사라진다 */
+.mo-line { position: absolute; bottom: 2px; height: 2px; border-radius: 2px; background: var(--accent); transform-origin: right center; pointer-events: none;
+  animation: mo-line .3s var(--mo-e) forwards; }
+@keyframes mo-line { 0% { transform: scaleX(0); opacity: 1; } 60% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+/* 기록 불러오기: 누른 식이 계산 화면으로 날아간다 */
+.mo-ghost { position: fixed; z-index: 50; margin: 0; pointer-events: none; display: flex; align-items: center; color: var(--ink); font-size: 15px; will-change: transform, opacity; }
+@media (prefers-reduced-motion: reduce) {
+  .result.mo-in, .expr.mo-in, .result.mo-roll, .side .hist-list li.mo-new { animation: mo-fade .12s linear; }
+  .screen.mo-shake, .calc.mo-shift .k[data-s] .ks, .mo-line { animation: none; }
+  .mo-line { display: none; }
+  .k { transition: none; }
+}
+@keyframes mo-fade { from { opacity: .4; } }

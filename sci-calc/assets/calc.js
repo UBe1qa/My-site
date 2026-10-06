@@ -50,7 +50,9 @@ function drawStatus() {
   statusEl.querySelector('[data-st=shift]').hidden = !state.shift;
   var m = statusEl.querySelector('[data-st=m]');
   m.hidden = !(vars.M && !SC.isZero(vars.M));
+  var wasShift = root.classList.contains('is-shift');
   root.classList.toggle('is-shift', state.shift);
+  if (state.shift && !wasShift && !calmMo.matches) mo(root, 'mo-shift');
 }
 statusEl.querySelector('[data-st=angle]').addEventListener('click', function () {
   settings.angle = { deg: 'rad', rad: 'gra', gra: 'deg' }[settings.angle]; UI.saveSettings(settings); drawStatus(); onEdit();
@@ -59,6 +61,41 @@ statusEl.querySelector('[data-st=disp]').addEventListener('click', function () {
 
 // ---------------------------------------------------------------- 계산
 function env() { return UI.envFrom(settings, vars, ans); }
+// ---------------------------------------------------------------- 연출 (2026-10-06, 설계서 '연출 요청문')
+// 기본 반응은 CSS(--mo-d·--mo-e 한 값)로, 여기선 class 만 다시 붙인다. 화려한 연출은 3개(SHIFT 불 켜짐, 정확값 밑줄, 기록 불러오기).
+var calmMo = matchMedia('(prefers-reduced-motion: reduce)');
+function mo(node, cls) {
+  if (!node) return;
+  clearTimeout(node['_mo' + cls]);
+  node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls);
+  node['_mo' + cls] = setTimeout(function () { node.classList.remove(cls); }, 700);
+}
+// 정확값(분수·√·π)으로 나온 답 밑에 주황 줄이 오른쪽에서 왼쪽으로 그어졌다 사라진다 (0.3초)
+function moExact() {
+  if (calmMo.matches || !resEl.firstChild) return;
+  var r = document.createRange(); r.selectNodeContents(resEl);
+  var b = r.getBoundingClientRect(), o = resEl.getBoundingClientRect();
+  if (!b.width) return;
+  var line = document.createElement('span'); line.className = 'mo-line'; line.setAttribute('aria-hidden', 'true');
+  line.style.left = Math.max(0, b.left - o.left + resEl.scrollLeft) + 'px'; line.style.width = Math.min(b.width, o.width) + 'px';
+  resEl.appendChild(line);
+  line.addEventListener('animationend', function () { line.remove(); });
+  setTimeout(function () { line.remove(); }, 600);
+}
+// 기록 줄을 누르면 그 식이 계산 화면으로 날아간다 (0.3초, 조각 1개)
+function moFly(fromEl) {
+  if (calmMo.matches || !fromEl || !fromEl.animate) return;
+  var a = fromEl.getBoundingClientRect(), b = exprEl.getBoundingClientRect();
+  if (!a.width || !b.width) return;
+  var g = fromEl.cloneNode(true); g.className = 'mo-ghost'; g.setAttribute('aria-hidden', 'true');
+  g.style.left = a.left + 'px'; g.style.top = a.top + 'px'; g.style.width = a.width + 'px'; g.style.height = a.height + 'px';
+  document.body.appendChild(g);
+  var dx = b.left + 12 - a.left, dy = b.top + 8 - a.top;
+  var an = g.animate([{ transform: 'translate(0,0)', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1.12)', opacity: 0 }],
+    { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  an.onfinish = an.oncancel = function () { g.remove(); };
+  setTimeout(function () { g.remove(); }, 700);
+}
 function hasNode(row, test) {
   return row.some(function (n) {
     if (test(n)) return true;
@@ -86,11 +123,15 @@ function evaluateNow(forceDecimal) {
   state.histPos = -1;
   ME.render(row, exprEl, {});
   drawResult();
+  mo(resEl, 'mo-in');
+  if (sideList && sideList.firstElementChild) mo(sideList.firstElementChild, 'mo-new');
+  if (!state.view.decimal && v.t === 'x' && !SC.realIsInt(v)) moExact();
 }
 function showError(e) {
   resEl.className = 'result is-err';
   resEl.removeAttribute('data-plain');
   resEl.textContent = UI.errorText(e);
+  mo(resEl.closest('.screen'), 'mo-shake');
   if (e.kind === 'syntax') { var hint = document.createElement('span'); hint.className = 'result-hint'; hint.textContent = t('syntaxHint'); resEl.appendChild(hint); }
   state.done = false;
 }
@@ -249,10 +290,11 @@ function act(a) {
   if (a === 'fact') { state.view.fact = !state.view.fact; state.view.dms = false; state.view.eng = null; }
   if (a === 'copy') {
     var txt = copyTextOf(v);
-    UI.copyText(txt, function (ok) { UI.toast(ok ? t('copied') + ': ' + txt : t('copyFail')); });
+    UI.copyText(txt, function (ok) { UI.toast(ok ? t('copied') + ': ' + txt : t('copyFail')); if (ok) mo(root.querySelector('[data-act=copy]'), 'mo-ok'); });
     return;
   }
   drawResult();
+  mo(resEl, 'mo-roll');
 }
 function copyTextOf(v) {
   if (v.t === 'multi') return v.items.map(function (it) { return it.label + '=' + copyTextOf(it.v); }).join(', ');
@@ -445,7 +487,7 @@ function histItems(list, onPick) {
     var v = UI.deser(h.r);
     if (v) UI.cell(rs, v, UI.valueOpts(settings, { decimal: !SC.hasExactDisplay(v) }));
     b.appendChild(ex); b.appendChild(el('span', 'hist-eq', '=')); b.appendChild(rs);
-    b.addEventListener('click', function () { onPick(i, h); });
+    b.addEventListener('click', function () { onPick(i, h, b); });
     li.appendChild(b); list.appendChild(li);
   });
 }
@@ -472,11 +514,18 @@ var sideList = document.querySelector('[data-hist]'), sideEmpty = document.query
 function drawSideHist() {
   if (!sideList) return;
   sideList.textContent = '';
-  histItems(sideList, loadHist);
+  histItems(sideList, function (i, h, btn) {
+    var r = exprEl.getBoundingClientRect(), seen = r.top >= 0 && r.bottom <= innerHeight;
+    if (seen) moFly(btn.querySelector('.hist-expr'));
+    loadHist(i, h);
+    // 휴대폰처럼 계산 화면이 위로 지나가 있으면 화면으로 데려가서 불러온 식을 보여 준다
+    if (!seen) { exprEl.closest('.screen').scrollIntoView({ block: 'center', behavior: calmMo.matches ? 'auto' : 'smooth' }); mo(exprEl, 'mo-in'); }
+  });
   var empty = !hist.length;
   sideList.hidden = empty; sideClear.hidden = empty; sideEmpty.hidden = !empty;
 }
 if (sideClear) sideClear.addEventListener('click', clearHist);
+root.querySelectorAll('.k[data-s]').forEach(function (k, i) { k.style.setProperty('--i', i); });
 
 // 주소에 ?e=식 이 있으면 넣어 둔다 (글 페이지의 '계산기에서 열기' 링크)
 (function () {
