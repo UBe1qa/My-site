@@ -191,5 +191,32 @@ function labPlate() {
 function openKeys() { var d = document.getElementById('keys'); if (d && d.tagName === 'DETAILS') d.open = true; }
 document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href="#keys"]'); if (a) openKeys(); });
 if (location.hash === '#keys') document.addEventListener('DOMContentLoaded', openKeys);
-document.addEventListener('DOMContentLoaded', function () { langBar(); showCurrentMode(); labPlate(); });
+// 계산기 키에 마우스를 0.45초 올려 두면 키 위에 큰 설명 풍선: 기능 이름 + SHIFT 기능(주황).
+// 마우스가 있는 기기에서만, 누르거나 키보드를 치면 바로 닫힌다
+function keyTips() {
+  if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  var tip = null, timer = 0, cur = null;
+  function hide() { clearTimeout(timer); cur = null; if (tip) tip.classList.remove('is-on'); }
+  function show(k) {
+    if (!tip) { tip = document.createElement('div'); tip.className = 'ktip'; tip.setAttribute('aria-hidden', 'true'); document.body.appendChild(tip); }
+    tip.textContent = '';
+    var name = document.createElement('b'); name.textContent = k.getAttribute('data-tip'); tip.appendChild(name);
+    var sh = k.getAttribute('data-tip-s');
+    if (sh) { var s = document.createElement('span'); s.textContent = 'SHIFT  ' + sh; tip.appendChild(s); }
+    tip.classList.add('is-on');
+    var r = k.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)), y = r.top - h - 8;
+    if (y < 8) y = r.bottom + 8;
+    tip.style.left = Math.round(x) + 'px'; tip.style.top = Math.round(y) + 'px';
+  }
+  document.addEventListener('mouseover', function (ev) {
+    var k = ev.target.closest && ev.target.closest('[data-tip]');
+    if (k === cur) return;
+    hide();
+    if (!k) return;
+    cur = k; timer = setTimeout(function () { if (cur === k) show(k); }, 450);
+  });
+  ['mousedown', 'keydown', 'scroll', 'blur'].forEach(function (t) { window.addEventListener(t, hide, true); });
+}
+document.addEventListener('DOMContentLoaded', function () { langBar(); showCurrentMode(); labPlate(); keyTips(); });
 })(window);

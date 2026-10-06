@@ -232,6 +232,8 @@ function press(k) {
   }
   if (/^[0-9]$/.test(k)) { ed.insertChar(k); return; }
   switch (k) {
+    // 지수 칸 안의 ÷ 는 작은 분수로: x^□ 1 ÷ 2 → x^½ (= √x). 줄 위의 ÷ 로 두면 5¹÷2 처럼 읽혀 헷갈린다
+    case 'div': if (ed.inExponent()) { ed.insertTemplate('frac'); return; } break;
     case 'sq': ed.insertTemplate('pow', { a: [{ t: 'c', v: '2' }] }); return;
     case 'cube': ed.insertTemplate('pow', { a: [{ t: 'c', v: '3' }] }); return;
     case 'inv': ed.insertTemplate('pow', { a: [{ t: 'c', v: '−' }, { t: 'c', v: '1' }] }); return;

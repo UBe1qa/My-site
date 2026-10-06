@@ -19,7 +19,7 @@ import articles  # noqa: E402
 SITE = 'https://calc.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = datetime.date(2026, 10, 6)
-ASSET_V = '9'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
+ASSET_V = '10'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
 
 esc = html.escape
 
@@ -195,11 +195,12 @@ def key(k, label, s=None, slabel=None, cls='', aria=None, wide=False, lang='ko')
         attrs += ' data-s="%s"' % s
     if aria:
         attrs += ' aria-label="%s"' % esc(aria, quote=True)
+    # 마우스를 올려 두면 뜨는 큰 설명 풍선(ui.js keyTips). 브라우저 기본 title 은 작고 늦게 떠서 쓰지 않는다
     tip = KEY_TIPS[lang].get(k)
-    if tip and s and s in SHIFT_TIPS[lang]:
-        tip += ' · SHIFT: ' + SHIFT_TIPS[lang][s]
     if tip:
-        attrs += ' title="%s"' % esc(tip, quote=True)
+        attrs += ' data-tip="%s"' % esc(tip, quote=True)
+        if s and s in SHIFT_TIPS[lang]:
+            attrs += ' data-tip-s="%s"' % esc(SHIFT_TIPS[lang][s], quote=True)
     sl = '<span class="ks" aria-hidden="true">%s</span>' % slabel if slabel else ''
     return '<button %s>%s<span class="kl">%s</span></button>' % (attrs, sl, label)
 

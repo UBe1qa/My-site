@@ -402,6 +402,11 @@ Editor.prototype.openParens = function (row) {
   row.forEach(function (n) { if (n.t === 'c' && n.v === '(') d++; if (n.t === 'c' && n.v === ')') d--; });
   return d;
 };
+// 커서가 지수 칸 바로 안에 있는가
+Editor.prototype.inExponent = function () {
+  var p = this.parentOf(this.cur.row);
+  return !!(p && p.node.t === 'pow');
+};
 // 키보드로 친 ^ / 의 마지막 칸(지수·분모): 글자 식처럼 다음 연산 기호나 짝 없는 ) 에서 칸을 나온다
 // (2^10*3 → 2¹⁰×3, 1/2+1/3 → ½+⅓). 화면 키로 만든 칸은 카시오처럼 그대로 둔다
 Editor.prototype.markKbSlot = function () {

@@ -710,3 +710,17 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
   .hero .work-mode > h1 { margin-bottom: 14px; }
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lab-plate { border: 1px solid var(--line-2); } }
+
+/* 키 설명 풍선 (ui.js keyTips, 2026-10-06 사용자 "마우스를 올리면 대놓고 기능 이름이 뜨게") */
+.ktip { position: fixed; z-index: 60; left: 0; top: 0; max-width: 260px; padding: 9px 13px 10px; border-radius: 10px;
+  background: #1f1d1a; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.28); pointer-events: none;
+  opacity: 0; transform: translateY(4px); transition: opacity var(--mo-d, .16s) var(--mo-e, ease), transform var(--mo-d, .16s) var(--mo-e, ease); }
+.ktip.is-on { opacity: 1; transform: none; }
+.ktip b { display: block; font-size: 16px; font-weight: 800; line-height: 1.35; letter-spacing: -0.01em; }
+.ktip span { display: block; margin-top: 3px; font-size: 13.5px; font-weight: 700; color: var(--shift); white-space: pre; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ktip { background: #f4efe6; color: #1b1a17; } :root:not([data-theme="light"]) .ktip span { color: #9a5b00; } }
+:root[data-theme="dark"] .ktip { background: #f4efe6; color: #1b1a17; }
+:root[data-theme="dark"] .ktip span { color: #9a5b00; }
+@media (prefers-reduced-motion: reduce) { .ktip { transition: none; transform: none; } }
+/* 지수 칸 안의 분수(x^½)는 지수 자리로 올려 대분수 5½ 와 헷갈리지 않게 */
+.msup .mfrac { vertical-align: text-bottom; font-size: .86em; margin: 0 .04em; }
