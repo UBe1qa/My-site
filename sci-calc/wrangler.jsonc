@@ -1,0 +1,17 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'sci-calc' 하나 (정적 파일만, worker.js 없음)
+// 주소: https://calc.lumenlab.page  (새 사이트라 workers.dev 주소는 켜지 않는다)
+// 빌드는 내 컴퓨터에서 python3 tools/build.py 로 HTML 을 만들어 같이 올린다. 올리지 않을 파일은 .assetsignore 에 적는다.
+{
+  "name": "sci-calc",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    // 없는 주소는 404.html(광고 없음, noindex)을 404로 보여 준다
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "calc.lumenlab.page", "custom_domain": true }
+  ]
+}

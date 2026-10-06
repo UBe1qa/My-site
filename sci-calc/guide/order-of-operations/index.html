@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리 | 공학용 계산기</title>
+<meta name="description" content="6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/guide/order-of-operations/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/guide/order-of-operations/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/guide/order-of-operations/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/guide/order-of-operations/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리 | 공학용 계산기">
+<meta property="og:description" content="6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.">
+<meta property="og:url" content="https://calc.lumenlab.page/guide/order-of-operations/">
+<meta property="og:site_name" content="공학용 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="https://calc.lumenlab.page/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리","description":"6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.","inLanguage":"ko","datePublished":"2026-10-06","dateModified":"2026-10-06","author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"publisher":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"mainEntityOfPage":"https://calc.lumenlab.page/guide/order-of-operations/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"공학용 계산기","item":"https://calc.lumenlab.page/"},{"@type":"ListItem","position":2,"name":"가이드","item":"https://calc.lumenlab.page/guide/"},{"@type":"ListItem","position":3,"name":"6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리","item":"https://calc.lumenlab.page/guide/order-of-operations/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/guide/order-of-operations/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/guide/order-of-operations/" hreflang="en" lang="en" title="English version">EN</a></header></div>
+<main id="main"><div class="page-head"><div class="wrap"><nav class="crumbs" aria-label="현재 위치"><a href="/">계산기</a> › <a href="/guide/">가이드</a> › <span>6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</span></nav><h1>6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</h1><p>6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.</p></div></div><article class="wrap section prose"><div class="answer"><p>이 계산기에서는 <b>1</b>이에요. 곱하기 기호를 생략한 2(1+2)를 먼저 묶어 6÷6으로 계산하기 때문이에요. ×와 ÷를 왼쪽부터 차례로 계산하는 규칙을 그대로 쓰면 9가 나와요. 두 가지로 읽히는 식은 괄호를 넣어 뜻을 하나로 정하는 게 가장 확실해요.</p></div>
+<h2>답이 둘로 갈리는 이유</h2>
+<p>학교에서 배우는 기본 규칙은 “곱셈과 나눗셈은 같은 순위이고 왼쪽부터”예요. 이 규칙으로 6÷2(1+2)를 읽으면 6÷2 = 3을 먼저 하고 3×3 = 9가 돼요.</p>
+<p>그런데 2(1+2)처럼 숫자와 괄호를 붙여 쓴 곱을 한 덩어리로 보는 약속도 널리 쓰여요. 1÷2x 를 보통 1/(2x)로 읽는 것과 같은 이유예요. 이렇게 읽으면 6÷(2×3) = 1이에요.</p>
+<p>어느 한쪽이 틀렸다기보다 식을 쓰는 약속이 두 가지인 거예요. 그래서 계산기도 제품과 모델에 따라 1이 나오기도 하고 9가 나오기도 해요. 예를 들어 카시오 fx-570ES PLUS·fx-991ES PLUS 설명서의 <a href="https://support.casio.com/global/en/calc/manual/fx-570ESPLUS_991ESPLUS_en/technical_informatoin/sequence.html" rel="noopener">계산 순서표</a>(영어)에는 “곱하기 기호를 생략한 곱”이 곱하기·나누기보다 위에 있어요. 이 계산기도 그 방식을 따라요.</p>
+<p><a class="try" href="/?e=6%C3%B72%281%2B2%29">6÷2(1+2) 계산해 보기 ▸</a> <a class="try" href="/?e=6%C3%B72%C3%97%281%2B2%29">6÷2×(1+2) 계산해 보기 ▸</a></p>
+<h2>이 계산기의 계산 순서</h2>
+<p>표의 위쪽부터 먼저 계산해요. 같은 줄끼리는 왼쪽부터예요.</p>
+<table><thead><tr><th>순서</th><th>무엇</th><th>예</th></tr></thead><tbody>
+<tr><td>1</td><td>괄호, 분수 칸, 루트 칸, 함수</td><td>(1+2), □/□, √□, sin(30)</td></tr>
+<tr><td>2</td><td>숫자 뒤에 붙는 기호 (x², x! 키)</td><td>x², x⁻¹, x!, %, °′″</td></tr>
+<tr><td>3</td><td>지수 칸에 쓰는 거듭제곱 (x<sup>□</sup> 키)</td><td>2³</td></tr>
+<tr><td>4</td><td>앞에 붙는 마이너스 부호</td><td>−2² = −(2²) = −4</td></tr>
+<tr><td>5</td><td>곱하기 기호를 생략한 곱</td><td>2π, 2(1+2), 3sin(30)</td></tr>
+<tr><td>6</td><td>순열·조합</td><td>5P2, 5C2</td></tr>
+<tr><td>7</td><td>곱하기·나누기</td><td>6÷2×3 = 9</td></tr>
+<tr><td>8</td><td>더하기·빼기</td><td>1−2+3 = 2</td></tr>
+</tbody></table>
+<h2>자주 헷갈리는 예</h2>
+<table><thead><tr><th>식</th><th>이 계산기</th><th>이유</th></tr></thead><tbody>
+<tr><td>6÷2(1+2)</td><td>1</td><td>생략된 곱 2(1+2)를 먼저</td></tr>
+<tr><td>6÷2×(1+2)</td><td>9</td><td>× 를 쓰면 왼쪽부터</td></tr>
+<tr><td>−2²</td><td>−4</td><td>제곱을 먼저 하고 부호를 붙여요</td></tr>
+<tr><td>(−2)²</td><td>4</td><td>괄호 안의 −2 를 제곱</td></tr>
+<tr><td>1÷2π</td><td>≈&nbsp;0.159</td><td>1÷(2π) 와 같아요. 분모에 π가 있으면 소수로 보여 줘요</td></tr>
+<tr><td>3sin(30), DEG</td><td>3/2</td><td>sin 30° = 1/2 에 3을 곱해요</td></tr>
+</tbody></table>
+<p>엑셀은 조금 달라요. 엑셀에 <code>=-2^2</code> 를 넣으면 부호를 먼저 붙여 4가 나와요. 같은 식이라도 프로그램마다 약속이 다를 수 있다는 걸 기억해 두세요.</p>
+<h3>지수 안의 지수</h3>
+<p>자연 표시 입력에서는 지수가 작은 칸에 들어가요. 지수 칸 안에서 다시 x<sup>□</sup> 를 누르면 지수 안의 지수가 되어 2<sup>3<sup>2</sup></sup> = 2⁹ = 512 예요. 지수 칸에서 ▶ 로 빠져나온 다음 x² 를 누르면 (2³)² = 64 예요. 칸이 눈에 보이니 어떤 뜻인지 헷갈릴 일이 적어요.</p>
+<h2>헷갈리지 않게 쓰는 법</h2>
+<ul>
+<li>나누는 식은 분수 키 □/□ 로 쓰면 분모가 어디까지인지 눈에 보여요. 분자에 6, 분모에 2(1+2)를 넣으면 1이에요. 분수 6/2 를 쓰고 뒤에 ×(1+2)를 하면 9예요.</li>
+<li>다른 사람에게 식을 보낼 때는 6÷(2(1+2)) 처럼 괄호를 하나 더 넣어요.</li>
+<li>엑셀과 대부분의 프로그래밍 언어는 곱하기 생략을 쓸 수 없어서 <code>6/2*(1+2)</code> 처럼 써야 하고, 왼쪽부터 계산해 9가 나와요.</li>
+</ul><p class="updated">처음 쓴 날 2026-10-06 · 고친 날 2026-10-06 · 루멘랩</p></article><aside class="ad wrap" data-ad-wrap="below-tool" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="below-tool"></div></aside><section class="section wrap"><h2>다른 가이드</h2><ul class="links"><li><a href="/guide/standard-deviation/">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법<span>n으로 나눌까 n−1로 나눌까, 예제로 비교</span></a></li><li><a href="/guide/degrees-radians/">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때<span>각도 단위 바꾸기와 도 ↔ 라디안 환산표</span></a></li><li><a href="/guide/equations/">이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법<span>근의 공식과 판별식, 해가 없거나 무수히 많을 때</span></a></li><li><a href="/guide/permutations-combinations/">순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법<span>순서가 있으면 순열, 없으면 조합. 로또 확률까지</span></a></li></ul></section><aside class="ad wrap" data-ad-wrap="bottom" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="bottom"></div></aside></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요</p><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/ui.js?v=1" defer></script>
+</body>
+</html>

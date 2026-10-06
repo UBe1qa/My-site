@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법 | 공학용 계산기</title>
+<meta name="description" content="순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/guide/permutations-combinations/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/guide/permutations-combinations/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/guide/permutations-combinations/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/guide/permutations-combinations/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법 | 공학용 계산기">
+<meta property="og:description" content="순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.">
+<meta property="og:url" content="https://calc.lumenlab.page/guide/permutations-combinations/">
+<meta property="og:site_name" content="공학용 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="https://calc.lumenlab.page/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법","description":"순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.","inLanguage":"ko","datePublished":"2026-10-06","dateModified":"2026-10-06","author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"publisher":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"mainEntityOfPage":"https://calc.lumenlab.page/guide/permutations-combinations/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"공학용 계산기","item":"https://calc.lumenlab.page/"},{"@type":"ListItem","position":2,"name":"가이드","item":"https://calc.lumenlab.page/guide/"},{"@type":"ListItem","position":3,"name":"순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법","item":"https://calc.lumenlab.page/guide/permutations-combinations/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/guide/permutations-combinations/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/guide/permutations-combinations/" hreflang="en" lang="en" title="English version">EN</a></header></div>
+<main id="main"><div class="page-head"><div class="wrap"><nav class="crumbs" aria-label="현재 위치"><a href="/">계산기</a> › <a href="/guide/">가이드</a> › <span>순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</span></nav><h1>순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</h1><p>순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.</p></div></div><article class="wrap section prose"><div class="answer"><p>뽑는 <b>순서가 중요하면 순열</b> nPr = n!/(n−r)!, <b>순서가 상관없으면 조합</b> nCr = n!/(r!(n−r)!) 이에요. 5명 중 회장·부회장을 뽑는 경우는 5P2 = 20가지, 대표 2명을 뽑는 경우는 5C2 = 10가지예요.</p></div>
+<h2>순서가 있나 없나</h2>
+<p>5명(가, 나, 다, 라, 마) 중 2명을 뽑는다고 해 볼게요.</p>
+<ul>
+<li><b>회장과 부회장</b>을 뽑으면 (가 회장, 나 부회장)과 (나 회장, 가 부회장)이 달라요. 순서가 있으니 순열: 5 × 4 = <b>20</b>가지</li>
+<li><b>대표 2명</b>을 뽑으면 {가, 나}와 {나, 가}가 같아요. 순서가 없으니 조합: 20 ÷ 2 = <b>10</b>가지</li>
+</ul>
+<p>조합은 순열을 “뽑힌 사람끼리 줄 세우는 경우의 수 r!”로 나눈 거예요. 그래서 nCr = nPr ÷ r! 이에요.</p>
+<h2>공식</h2>
+<ul>
+<li>nPr = n! / (n − r)! = n × (n−1) × … × (n−r+1)</li>
+<li>nCr = n! / (r! × (n − r)!)</li>
+<li>n! = 1 × 2 × … × n, 0! = 1</li>
+<li>nCr = nC(n−r): 45개 중 6개를 고르는 수는 39개를 남기는 수와 같아요.</li>
+</ul>
+<h2>계산기에서 넣는 법</h2>
+<p>n 을 누르고 <b>SHIFT ×</b>(nPr) 또는 <b>SHIFT ÷</b>(nCr), 그다음 r 을 누르고 = 예요. 키보드로는 <code>5P2</code>, <code>5C2</code> 처럼 대문자 P, C 를 써요. 팩토리얼은 <b>SHIFT x⁻¹</b>(x!) 이에요.</p>
+<p><a class="try" href="/?e=5P2">5P2 계산해 보기 ▸</a> <a class="try" href="/?e=5C2">5C2 계산해 보기 ▸</a></p>
+<h2>예제</h2>
+<table><thead><tr><th>상황</th><th>식</th><th>경우의 수</th></tr></thead><tbody>
+<tr><td>로또 6/45 번호 고르기</td><td>45C6</td><td>8,145,060</td></tr>
+<tr><td>카드 52장 중 5장 받기</td><td>52C5</td><td>2,598,960</td></tr>
+<tr><td>서로 다른 숫자 4자리 비밀번호</td><td>10P4</td><td>5,040</td></tr>
+<tr><td>숫자 4자리 비밀번호(같은 숫자 허용)</td><td>10⁴</td><td>10,000</td></tr>
+<tr><td>10명을 한 줄로 세우기</td><td>10!</td><td>3,628,800</td></tr>
+</tbody></table>
+<p>로또 1등 확률은 1 ÷ 45C6 = 1/8145060 ≈ 0.000000123 이에요. 계산기에서는 1.22773804×10⁻⁷ 처럼 지수 표기로 보여 줘요.</p>
+<p><a class="try" href="/?e=1%C3%B745C6">1÷45C6 계산해 보기 ▸</a></p>
+<h2>큰 수</h2>
+<p>팩토리얼은 금방 커져요. 70! 은 약 1.197857167×10¹⁰⁰ 이에요. 이 계산기는 정수 팩토리얼을 3000! 까지 계산해요. 너무 크면 지수 표기로 보여 줘요.</p><p class="updated">처음 쓴 날 2026-10-06 · 고친 날 2026-10-06 · 루멘랩</p></article><aside class="ad wrap" data-ad-wrap="below-tool" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="below-tool"></div></aside><section class="section wrap"><h2>다른 가이드</h2><ul class="links"><li><a href="/guide/order-of-operations/">6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리<span>곱하기 생략, −2², 지수가 계산기마다 다른 이유</span></a></li><li><a href="/guide/standard-deviation/">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법<span>n으로 나눌까 n−1로 나눌까, 예제로 비교</span></a></li><li><a href="/guide/degrees-radians/">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때<span>각도 단위 바꾸기와 도 ↔ 라디안 환산표</span></a></li><li><a href="/guide/equations/">이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법<span>근의 공식과 판별식, 해가 없거나 무수히 많을 때</span></a></li></ul></section><aside class="ad wrap" data-ad-wrap="bottom" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="bottom"></div></aside></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요</p><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/ui.js?v=1" defer></script>
+</body>
+</html>

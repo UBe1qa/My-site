@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About | Scientific Calculator</title>
+<meta name="description" content="How this scientific calculator works, who makes it, and how its results are checked.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/en/about/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/about/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/about/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About | Scientific Calculator">
+<meta property="og:description" content="How this scientific calculator works, who makes it, and how its results are checked.">
+<meta property="og:url" content="https://calc.lumenlab.page/en/about/">
+<meta property="og:site_name" content="Scientific Calculator">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="langbar" id="langbar" hidden lang="ko"><span>이 페이지는 한국어로도 볼 수 있어요.</span><a href="/about/" hreflang="ko">한국어로 보기</a><button type="button" aria-label="Close">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>Scientific Calculator</span></a><nav class="top-nav" aria-label="Site menu"><a href="/en/guide/">Guides</a><a href="/en/about/">About</a></nav><a class="lang" href="/about/" hreflang="ko" lang="ko" title="한국어판">KO</a></header></div>
+<main id="main"><div class="page-head"><div class="wrap"><h1>About this calculator</h1><p>A free scientific calculator that runs in your browser.</p></div></div><div class="wrap section prose">
+<p>This site puts the functions of a student scientific calculator in your browser, free. Fractions and roots are displayed as in a textbook, and answers come out exact first, like √2/2, 1/3 or 2π. There are no accounts, and what you type is never sent to a server.</p>
+<h2>Who makes it</h2>
+<p>It is made and run by <a href="https://lumenlab.page/en/">Lumen Lab</a>, a one-person software studio that also makes <a href="https://date.lumenlab.page/en/">Daycount</a>, a date calculator, and Owlight, a Mac menu bar app.</p>
+<h2>How it calculates</h2>
+<ul>
+<li><b>Exact values</b>: fractions are kept as big-integer fractions and roots and π as symbols, so there is no rounding error. When an exact form is not possible it switches to double-precision decimals.</li>
+<li><b>Order of operations</b>: brackets → functions → powers (left to right) → products without a × sign → × ÷ → + −. So 6÷2(1+2) = 1 and −2² = −4.</li>
+<li><b>Display</b>: normal display shows 10 significant digits and switches to scientific notation at 10¹⁰ and above or below 10⁻⁹. Rounding is half up.</li>
+<li><b>Calculus</b>: integrals use adaptive Gauss–Kronrod (7-15) quadrature; derivatives use Ridders’ method.</li>
+<li><b>Statistics</b>: quartiles use the scientific calculator method by default, with Excel’s QUARTILE.INC as an option.</li>
+<li><b>Physical constants</b>: CODATA 2022 recommended values from NIST.</li>
+</ul>
+<h2>How results are checked</h2>
+<p>Automated tests compare the calculator with about 3,700 answers computed separately in Python (sympy, mpmath, scipy and numpy). The constants were compared digit by digit with the NIST table. Still, double-check important results before using them for exams or work.</p>
+<h2>Advertising</h2>
+<p>Google AdSense ads cover the running costs. See the <a href="/en/privacy/">privacy policy</a> for ads and cookies.</p>
+<h2>Contact</h2>
+<p>Found a wrong result or missing a feature? Email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.</p></div></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">Made by <a href="https://lumenlab.page/en/">Lumen Lab</a>, a small studio for tools and apps</p><nav aria-label="Footer menu"><a href="/en/guide/">Guides</a><a href="/en/about/">About</a><a href="/en/privacy/">Privacy policy</a></nav><p>Everything is calculated in your browser. Double-check important results before using them for exams or work.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/ui.js?v=1" defer></script>
+</body>
+</html>

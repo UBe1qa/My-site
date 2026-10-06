@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>소개 | 공학용 계산기</title>
+<meta name="description" content="공학용 계산기가 어떻게 계산하는지, 누가 만드는지, 계산을 어떻게 확인하는지 알려 드려요.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/about/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/about/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="소개 | 공학용 계산기">
+<meta property="og:description" content="공학용 계산기가 어떻게 계산하는지, 누가 만드는지, 계산을 어떻게 확인하는지 알려 드려요.">
+<meta property="og:url" content="https://calc.lumenlab.page/about/">
+<meta property="og:site_name" content="공학용 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="https://calc.lumenlab.page/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/about/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/about/" hreflang="en" lang="en" title="English version">EN</a></header></div>
+<main id="main"><div class="page-head"><div class="wrap"><h1>공학용 계산기 소개</h1><p>설치 없이 쓰는 무료 공학용 계산기예요.</p></div></div><div class="wrap section prose">
+<p>이 사이트는 학생용 공학용 계산기에 있는 계산을 브라우저에서 무료로 쓸 수 있게 만든 도구예요. 분수와 루트를 교과서처럼 보여 주고, 답을 √2/2, 1/3, 2π 같은 정확값으로 먼저 보여 줘요. 회원 가입이 없고 입력한 식은 서버로 보내지 않아요.</p>
+<h2>누가 만드나요</h2>
+<p><a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a>이 만들고 운영해요. 루멘랩은 혼자 운영하는 작은 소프트웨어 스튜디오로, <a href="https://date.lumenlab.page/">며칠 계산기</a>와 맥 메뉴 막대 앱 Owlight 도 만들어요.</p>
+<h2>어떻게 계산하나요</h2>
+<ul>
+<li><b>정확값</b>: 분수는 큰 정수 분수로, 루트와 π 는 기호 그대로 계산해서 반올림 오차가 없어요. 정확값으로 나타낼 수 없으면 소수(배정밀도)로 계산해요.</li>
+<li><b>계산 순서</b>: 괄호 → 함수 → 거듭제곱(왼쪽부터) → 곱하기 기호를 생략한 곱 → × ÷ → + − 순서예요. 그래서 6÷2(1+2) = 1, −2² = −4 예요.</li>
+<li><b>표시</b>: 보통 표시는 유효숫자 10자리, 10¹⁰ 이상이나 10⁻⁹ 미만은 지수 표기예요. 반올림은 사사오입이에요.</li>
+<li><b>적분·미분</b>: 적분은 가우스-크론로드(7-15) 적응 적분, 미분은 리더스 방법으로 계산해요.</li>
+<li><b>통계</b>: 사분위수는 학생용 공학용 계산기 방식이 기본이고, 엑셀 QUARTILE.INC 방식도 고를 수 있어요.</li>
+<li><b>물리 상수</b>: 미국 표준기술연구소(NIST)의 CODATA 2022 권고값이에요.</li>
+</ul>
+<h2>계산을 어떻게 확인했나요</h2>
+<p>Python 의 수학 라이브러리(sympy, mpmath, scipy, numpy)로 따로 구한 정답 3,700여 개와 이 계산기의 결과를 자동으로 맞춰 봐요. 물리 상수는 NIST 표와 한 자리씩 비교했어요. 그래도 시험이나 업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p>
+<h2>광고</h2>
+<p>운영비를 위해 Google 애드센스 광고를 보여 줘요. 광고와 쿠키는 <a href="/privacy/">개인정보 처리방침</a>에 있어요.</p>
+<h2>문의</h2>
+<p>틀린 결과를 찾았거나 필요한 기능이 있으면 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a> 으로 알려 주세요.</p></div></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요</p><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/ui.js?v=1" defer></script>
+</body>
+</html>

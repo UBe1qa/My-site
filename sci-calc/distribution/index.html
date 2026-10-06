@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>정규분포 계산기 — 확률, 역정규분포, 이항·푸아송 분포 | 공학용 계산기</title>
+<meta name="description" content="정규분포의 확률 P(a≤X≤b)와 확률밀도, 확률로 값을 찾는 역정규분포, 이항분포와 푸아송분포의 확률·누적확률을 계산해요. 표준정규분포표 없이 바로.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/distribution/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/distribution/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/distribution/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/distribution/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="정규분포 계산기 — 확률, 역정규분포, 이항·푸아송 분포 | 공학용 계산기">
+<meta property="og:description" content="정규분포의 확률 P(a≤X≤b)와 확률밀도, 확률로 값을 찾는 역정규분포, 이항분포와 푸아송분포의 확률·누적확률을 계산해요. 표준정규분포표 없이 바로.">
+<meta property="og:url" content="https://calc.lumenlab.page/distribution/">
+<meta property="og:site_name" content="공학용 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="https://calc.lumenlab.page/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"확률 분포 계산기","url":"https://calc.lumenlab.page/distribution/","applicationCategory":"EducationalApplication","operatingSystem":"Any","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"description":"정규분포의 확률 P(a≤X≤b)와 확률밀도, 확률로 값을 찾는 역정규분포, 이항분포와 푸아송분포의 확률·누적확률을 계산해요. 표준정규분포표 없이 바로."}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/distribution/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/distribution/" hreflang="en" lang="en" title="English version">EN</a></header></div>
+<main id="main"><section class="hero hero-mode"><div class="wrap"><h1>확률 분포 계산기</h1><p class="lede">정규분포 넓이(확률), 확률로 경곗값 찾기, 이항·푸아송 분포를 계산해요. 표준정규분포표를 찾아볼 필요가 없어요.</p><ul class="modes" aria-label="계산 모드"><li><a href="/">계산</a></li><li><a href="/stats/">통계</a></li><li><a href="/distribution/" aria-current="page">분포</a></li><li><a href="/equation/">방정식</a></li><li><a href="/matrix/">행렬·벡터</a></li><li><a href="/base/">진법</a></li><li><a href="/table/">함수표</a></li></ul><div class="panel mode-ui" id="mode-ui" data-mode="distribution"><noscript><p>계산하려면 자바스크립트를 켜 주세요.</p></noscript></div></div></section><div class="after-hero"><aside class="ad wrap" data-ad-wrap="below-tool" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="below-tool"></div></aside><section class="section wrap prose"><h2>쓰는 법</h2><ol><li>위에서 분포와 계산 종류를 골라요. <b>누적</b>은 구간의 확률, <b>밀도·확률</b>은 한 점의 값이에요.</li><li>정규분포는 평균 μ 와 표준편차 σ 를 넣어요. 표준정규분포는 μ=0, σ=1 이에요.</li><li>아래 끝을 비우면 −∞, 위 끝을 비우면 +∞ 로 계산해요.</li><li>역정규분포는 넓이(확률)와 꼬리 방향(왼쪽·오른쪽·가운데)으로 경곗값을 찾아요.</li></ol><p>예: μ=0, σ=1 일 때 P(−1.96 ≤ Z ≤ 1.96) ≈ 0.9500 이고, 왼쪽 넓이 0.975 의 역정규값은 약 1.959963985 예요.</p></section><section class="section wrap"><h2>다른 계산</h2><ul class="links"><li><a href="/stats/">통계·회귀<span>평균, 표준편차 σ·s, 사분위수, 회귀식 7가지</span></a></li><li><a href="/equation/">방정식<span>연립 2~4원, 2~4차 방정식, 부등식, SOLVE</span></a></li><li><a href="/matrix/">행렬·벡터<span>4×4까지 곱·역행렬·행렬식, 내적·외적</span></a></li><li><a href="/base/">진법 계산<span>2·8·10·16진수, and·or·xor, 비트 수</span></a></li><li><a href="/table/">함수표<span>f(x)·g(x) 값을 200줄까지, 작은 그래프</span></a></li><li><a href="/">계산기<span>자연 표시 공학용 계산기</span></a></li></ul></section><aside class="ad wrap" data-ad-wrap="bottom" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="bottom"></div></aside></div></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요</p><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/engine.js?v=1" defer></script>
+<script src="/assets/editor.js?v=1" defer></script>
+<script src="/assets/ui.js?v=1" defer></script>
+<script src="/assets/modes.js?v=1" defer></script>
+<script src="/assets/modes-ui.js?v=1" defer></script>
+</body>
+</html>

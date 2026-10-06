@@ -46,6 +46,14 @@
       "name": {"ko": "인플레이스", "en": "Inplace"},
       "sub": "Inplace",
       "line": {"ko": "영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.", "en": "Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload."}
+    },
+    {
+      "id": "scicalc",
+      "url": "https://calc.lumenlab.page/",
+      "icon": "/img/sci-calc.svg",
+      "name": {"ko": "공학용 계산기", "en": "Scientific Calculator"},
+      "sub": "Scientific Calculator",
+      "line": {"ko": "분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.", "en": "Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n."}
     }
   ]
 }

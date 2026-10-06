@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법 | 공학용 계산기</title>
+<meta name="description" content="이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.">
+<meta name="theme-color" content="#d8ff3e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b2008" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calc.lumenlab.page/guide/equations/">
+<link rel="alternate" hreflang="ko" href="https://calc.lumenlab.page/guide/equations/">
+<link rel="alternate" hreflang="en" href="https://calc.lumenlab.page/en/guide/equations/">
+<link rel="alternate" hreflang="x-default" href="https://calc.lumenlab.page/en/guide/equations/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법 | 공학용 계산기">
+<meta property="og:description" content="이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.">
+<meta property="og:url" content="https://calc.lumenlab.page/guide/equations/">
+<meta property="og:site_name" content="공학용 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="https://calc.lumenlab.page/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법","description":"이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.","inLanguage":"ko","datePublished":"2026-10-06","dateModified":"2026-10-06","author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"publisher":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"mainEntityOfPage":"https://calc.lumenlab.page/guide/equations/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"공학용 계산기","item":"https://calc.lumenlab.page/"},{"@type":"ListItem","position":2,"name":"가이드","item":"https://calc.lumenlab.page/guide/"},{"@type":"ListItem","position":3,"name":"이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법","item":"https://calc.lumenlab.page/guide/equations/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js?v=1" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/guide/equations/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/guide/equations/" hreflang="en" lang="en" title="English version">EN</a></header></div>
+<main id="main"><div class="page-head"><div class="wrap"><nav class="crumbs" aria-label="현재 위치"><a href="/">계산기</a> › <a href="/guide/">가이드</a> › <span>이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</span></nav><h1>이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</h1><p>이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.</p></div></div><article class="wrap section prose"><div class="answer"><p>ax²+bx+c = 0 의 근은 <b>x = (−b ± √(b²−4ac)) / 2a</b> 예요. 판별식 D = b²−4ac 가 양수면 서로 다른 두 실근, 0 이면 중근, 음수면 두 허근이에요. 방정식 화면에 a, b, c 만 넣으면 근을 1+√2 같은 정확값으로 보여 줘요.</p></div>
+<h2>이차방정식 예제</h2>
+<table><thead><tr><th>방정식</th><th>판별식 D</th><th>근</th></tr></thead><tbody>
+<tr><td>x² − 2x − 1 = 0</td><td>8 (양수)</td><td>x = 1 − √2, 1 + √2 (약 −0.4142135624, 2.414213562)</td></tr>
+<tr><td>x² − 6x + 9 = 0</td><td>0</td><td>x = 3 (중근)</td></tr>
+<tr><td>x² + 2x + 5 = 0</td><td>−16 (음수)</td><td>x = −1 − 2i, −1 + 2i</td></tr>
+</tbody></table>
+<p>첫 번째 식을 공식에 넣으면 x = (2 ± √8)/2 = (2 ± 2√2)/2 = 1 ± √2 예요. √8 = 2√2 처럼 루트 안을 간단히 하는 것까지 계산기가 해 줘요.</p>
+<p>y = x² − 2x − 1 의 그래프는 x = 1 에서 가장 낮고 그때 y = −2 예요(꼭짓점 (1, −2)). 방정식 화면은 근과 함께 이 꼭짓점도 보여 줘요.</p>
+<p><a class="try" href="/equation/?poly=1,-2,-1">방정식 화면에서 x²−2x−1=0 풀기 ▸</a></p>
+<h2>삼차·사차방정식</h2>
+<p>삼차방정식부터는 손으로 풀기가 어려워요. 계산기는 정수·분수 근을 먼저 찾아 차수를 낮추고, 남은 부분을 근의 공식이나 수치 계산으로 풀어요. 예: x³ − 6x² + 11x − 6 = 0 의 근은 1, 2, 3 이에요.</p>
+<h2>연립일차방정식</h2>
+<p>2x + 3y = 12, x − y = 1 을 풀면 x = 3, y = 2 예요. 둘째 식에서 x = y + 1 을 첫째 식에 넣으면 2(y + 1) + 3y = 12, 5y = 10 이라서 y = 2 예요.</p>
+<p>연립방정식은 해가 하나가 아닐 수도 있어요.</p>
+<ul>
+<li><b>해가 없음</b>: x + y = 1, 2x + 2y = 3 처럼 왼쪽은 비례하는데 오른쪽은 비례하지 않을 때(평행한 두 직선)</li>
+<li><b>해가 무수히 많음</b>: x + y = 1, 2x + 2y = 2 처럼 두 식이 사실 같은 식일 때(겹치는 두 직선)</li>
+</ul>
+<p>방정식 화면은 이런 경우를 “해 없음”, “해가 무수히 많음”으로 알려 줘요. 미지수는 4개까지 풀 수 있어요.</p>
+<h2>계산기로 풀 때 주의할 점</h2>
+<ul>
+<li>계수는 높은 차수부터 넣어요. 빠진 항은 0 을 넣어요. x² − 4 = 0 이면 a = 1, b = 0, c = −4 예요.</li>
+<li>칸에는 1/3, √2, 2π 같은 식도 넣을 수 있어요.</li>
+<li>근이 맞는지 확인하려면 계산기에서 근을 원래 식에 넣어 0 이 되는지 보세요.</li>
+</ul><p class="updated">처음 쓴 날 2026-10-06 · 고친 날 2026-10-06 · 루멘랩</p></article><aside class="ad wrap" data-ad-wrap="below-tool" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="below-tool"></div></aside><section class="section wrap"><h2>다른 가이드</h2><ul class="links"><li><a href="/guide/order-of-operations/">6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리<span>곱하기 생략, −2², 지수가 계산기마다 다른 이유</span></a></li><li><a href="/guide/standard-deviation/">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법<span>n으로 나눌까 n−1로 나눌까, 예제로 비교</span></a></li><li><a href="/guide/degrees-radians/">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때<span>각도 단위 바꾸기와 도 ↔ 라디안 환산표</span></a></li><li><a href="/guide/permutations-combinations/">순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법<span>순서가 있으면 순열, 없으면 조합. 로또 확률까지</span></a></li></ul></section><aside class="ad wrap" data-ad-wrap="bottom" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="bottom"></div></aside></main>
+<footer class="foot"><div class="wrap"><p class="foot-pub">펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요</p><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
+<script src="/assets/ui.js?v=1" defer></script>
+</body>
+</html>

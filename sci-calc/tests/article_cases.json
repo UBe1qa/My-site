@@ -1,0 +1,648 @@
+[
+ {
+  "e": "6÷2(1+2)",
+  "exact": "1",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "6÷2×(1+2)",
+  "exact": "9",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "−2^2",
+  "exact": "−4",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "(−2)^2",
+  "exact": "4",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "1÷2π",
+  "dec": "0.1591549431",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "3sin(30)",
+  "angle": "deg",
+  "exact": "3/2",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "1−2+3",
+  "exact": "2",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "2^(3^2)",
+  "exact": "512",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "e": "(2^3)^2",
+  "exact": "64",
+  "page": "/guide/order-of-operations/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "mean",
+  "dec": "5",
+  "page": "/guide/standard-deviation/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "popSD",
+  "dec": "2",
+  "page": "/guide/standard-deviation/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "sampleSD",
+  "dec": "2.138089935",
+  "page": "/guide/standard-deviation/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "sampleVar",
+  "dec": "4.571428571",
+  "page": "/guide/standard-deviation/"
+ },
+ {
+  "e": "sqrt(100÷99)",
+  "dec": "1.005037815",
+  "page": "/guide/standard-deviation/"
+ },
+ {
+  "e": "sin(30)",
+  "angle": "rad",
+  "dec": "-0.9880316241",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "sin(30)",
+  "angle": "deg",
+  "exact": "1/2",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "180÷π",
+  "dec": "57.29577951",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "sin(π÷6)",
+  "angle": "rad",
+  "exact": "1/2",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "sin(60)",
+  "angle": "deg",
+  "exact": "√3/2",
+  "dec": "0.8660254038",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "cos(45)",
+  "angle": "deg",
+  "exact": "√2/2",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "cos(180)",
+  "angle": "deg",
+  "exact": "−1",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "e": "30°15′",
+  "dec": "30.25",
+  "page": "/guide/degrees-radians/"
+ },
+ {
+  "poly": [
+   1,
+   -2,
+   -1
+  ],
+  "roots": [
+   "1−√2",
+   "1+√2"
+  ],
+  "page": "/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   -6,
+   9
+  ],
+  "roots": [
+   "3",
+   "3"
+  ],
+  "page": "/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   2,
+   5
+  ],
+  "roots": [
+   "−1+2i",
+   "−1−2i"
+  ],
+  "page": "/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   -6,
+   11,
+   -6
+  ],
+  "roots": [
+   "1",
+   "2",
+   "3"
+  ],
+  "page": "/guide/equations/"
+ },
+ {
+  "e": "1−√(2)",
+  "dec": "-0.4142135624",
+  "page": "/guide/equations/"
+ },
+ {
+  "e": "1+√(2)",
+  "dec": "2.414213562",
+  "page": "/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    -1
+   ]
+  ],
+  "b": [
+   12,
+   1
+  ],
+  "x": [
+   "3",
+   "2"
+  ],
+  "page": "/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "b": [
+   1,
+   3
+  ],
+  "kind": "none",
+  "page": "/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "b": [
+   1,
+   2
+  ],
+  "kind": "many",
+  "page": "/guide/equations/"
+ },
+ {
+  "e": "5P2",
+  "exact": "20",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "5C2",
+  "exact": "10",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "45C6",
+  "exact": "8145060",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "52C5",
+  "exact": "2598960",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "10P4",
+  "exact": "5040",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "10^4",
+  "exact": "10000",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "10!",
+  "exact": "3628800",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "1÷45C6",
+  "exact": "1/8145060",
+  "dec": "1.22773804E-7",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "70!",
+  "dec": "1.197857167E100",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "45C39",
+  "exact": "8145060",
+  "page": "/guide/permutations-combinations/"
+ },
+ {
+  "e": "2÷3",
+  "exact": "2/3",
+  "dec": "0.6666666667",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "sqrt(12)",
+  "exact": "2√3",
+  "dec": "3.464101615",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "sin(60)",
+  "angle": "deg",
+  "exact": "√3/2",
+  "dec": "0.8660254038",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "tan(30)",
+  "angle": "deg",
+  "exact": "√3/3",
+  "dec": "0.5773502692",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "π÷4",
+  "exact": "π/4",
+  "dec": "0.7853981634",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "0.1+0.2−0.3",
+  "exact": "0",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "1÷sqrt(3)",
+  "exact": "√3/3",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "0.5×3",
+  "dec": "1.5",
+  "page": "/guide/exact-vs-decimal/"
+ },
+ {
+  "e": "6÷2(1+2)",
+  "exact": "1",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "6÷2×(1+2)",
+  "exact": "9",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "−2^2",
+  "exact": "−4",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "(−2)^2",
+  "exact": "4",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "1÷2π",
+  "dec": "0.1591549431",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "3sin(30)",
+  "angle": "deg",
+  "exact": "3/2",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "2^(3^2)",
+  "exact": "512",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "e": "(2^3)^2",
+  "exact": "64",
+  "page": "/en/guide/order-of-operations/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "popSD",
+  "dec": "2",
+  "page": "/en/guide/standard-deviation/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "sampleSD",
+  "dec": "2.138089935",
+  "page": "/en/guide/standard-deviation/"
+ },
+ {
+  "stats": [
+   2,
+   4,
+   4,
+   4,
+   5,
+   5,
+   7,
+   9
+  ],
+  "key": "sampleVar",
+  "dec": "4.571428571",
+  "page": "/en/guide/standard-deviation/"
+ },
+ {
+  "e": "sqrt(100÷99)",
+  "dec": "1.005037815",
+  "page": "/en/guide/standard-deviation/"
+ },
+ {
+  "e": "sin(30)",
+  "angle": "rad",
+  "dec": "-0.9880316241",
+  "page": "/en/guide/degrees-radians/"
+ },
+ {
+  "e": "sin(30)",
+  "angle": "deg",
+  "exact": "1/2",
+  "page": "/en/guide/degrees-radians/"
+ },
+ {
+  "e": "180÷π",
+  "dec": "57.29577951",
+  "page": "/en/guide/degrees-radians/"
+ },
+ {
+  "e": "sin(60)",
+  "angle": "deg",
+  "exact": "√3/2",
+  "dec": "0.8660254038",
+  "page": "/en/guide/degrees-radians/"
+ },
+ {
+  "e": "30°15′",
+  "dec": "30.25",
+  "page": "/en/guide/degrees-radians/"
+ },
+ {
+  "poly": [
+   1,
+   -2,
+   -1
+  ],
+  "roots": [
+   "1−√2",
+   "1+√2"
+  ],
+  "page": "/en/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   -6,
+   9
+  ],
+  "roots": [
+   "3",
+   "3"
+  ],
+  "page": "/en/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   2,
+   5
+  ],
+  "roots": [
+   "−1+2i",
+   "−1−2i"
+  ],
+  "page": "/en/guide/equations/"
+ },
+ {
+  "poly": [
+   1,
+   -6,
+   11,
+   -6
+  ],
+  "roots": [
+   "1",
+   "2",
+   "3"
+  ],
+  "page": "/en/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    -1
+   ]
+  ],
+  "b": [
+   12,
+   1
+  ],
+  "x": [
+   "3",
+   "2"
+  ],
+  "page": "/en/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "b": [
+   1,
+   3
+  ],
+  "kind": "none",
+  "page": "/en/guide/equations/"
+ },
+ {
+  "sys": [
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "b": [
+   1,
+   2
+  ],
+  "kind": "many",
+  "page": "/en/guide/equations/"
+ },
+ {
+  "e": "5P2",
+  "exact": "20",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "5C2",
+  "exact": "10",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "45C6",
+  "exact": "8145060",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "52C5",
+  "exact": "2598960",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "10P4",
+  "exact": "5040",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "10^4",
+  "exact": "10000",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "10!",
+  "exact": "3628800",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "1÷45C6",
+  "exact": "1/8145060",
+  "dec": "1.22773804E-7",
+  "page": "/en/guide/permutations-combinations/"
+ },
+ {
+  "e": "70!",
+  "dec": "1.197857167E100",
+  "page": "/en/guide/permutations-combinations/"
+ }
+]
