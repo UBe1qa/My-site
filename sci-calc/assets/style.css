@@ -598,3 +598,16 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
   .langbar a { white-space: nowrap; } .langbar button { font-size: 16px; padding: 2px 4px; } }
 /* 시안 D: = 키(주황) 위 보조 글자는 어두운 글자로 (어두운 화면 포함) */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .keys-n .k.eq .ks, :root:not([data-theme="light"]) .calc.is-shift .keys-n .k.eq[data-s] .ks { color: #3a1800; } }
+
+/* ---- 평가 반영 (2026-10-06): 긴 기록이 휴대폰 폭을 밀지 않게, 작은 단추 키우기 ---- */
+.work > .side, .side-box { min-width: 0; }
+.side .hist-list { grid-template-columns: minmax(0, 1fr); overflow-x: hidden; }
+.side .hist-item { overflow: hidden; }
+.side .hist-item > .hist-expr, .side .hist-item > .hist-res { min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.side .hist-item > .hist-res::-webkit-scrollbar, .side .hist-item > .hist-expr::-webkit-scrollbar { display: none; }
+@media (max-width: 600px) {
+  .work .keys-f .k.arrows { padding: 0; }
+  .k.arrows button { font-size: 15px; min-height: 40px; }
+  .status { min-height: 28px; }
+  .status button, .status .st-right a { padding: 4px 9px; }
+}

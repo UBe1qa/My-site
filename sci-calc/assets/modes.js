@@ -79,6 +79,7 @@ function stats1(xs, fs, quart) {
   // 최빈값 (모두 한 번씩이면 없음)
   var counts = {}, best = 0;
   pairs.forEach(function (p) { var k = SC.rowToPlain(SC.valueRow(p.x, { decimal: true })); counts[k] = (counts[k] || { x: p.x, c: 0 }); counts[k].c += p.f; best = Math.max(best, counts[k].c); });
+  if (best > 1) res.modeCount = best;
   if (best > 1) res.mode = Object.keys(counts).filter(function (k) { return counts[k].c === best; }).map(function (k) { return counts[k].x; });
   return res;
 }
@@ -230,6 +231,7 @@ function normalPdf(x, mu, sd) {
 // 역정규: 왼쪽 넓이 p 인 x. 첫 값(아브라모위츠·스테건 26.2.23) → 할리 방법으로 다듬기
 function invNormStd(p) {
   if (!(p > 0 && p < 1)) throw mathErr('domain');
+  if (p === 0.5) return 0;                       // 다듬기에서 1.9×10⁻¹⁸ 같은 찌꺼기가 남지 않게
   var q = p < 0.5 ? p : 1 - p;
   var t = Math.sqrt(-2 * Math.log(q));
   var z = t - (2.515517 + 0.802853 * t + 0.010328 * t * t) / (1 + 1.432788 * t + 0.189269 * t * t + 0.001308 * t * t * t);
@@ -415,6 +417,37 @@ function numericRoots(cf) {               // cf: 숫자 배열 [aₙ…a₀]
   });
   return z;
 }
+// 중근은 수치로 찾으면 찌꺼기(±1e−8)가 남는다: f′ 도 거의 0 인 근은 f′ 의 근으로 다시 다듬고(뉴턴),
+// 아주 작은 실수부·허수부는 0 으로 (x⁴−6x²+9 → ±√3 두 번씩, x⁴+2x²+1 → ±i 두 번씩)
+function snapMultiple(cf, z) {
+  var n = cf.length - 1;
+  function cmul(p, q) { return [p[0] * q[0] - p[1] * q[1], p[0] * q[1] + p[1] * q[0]]; }
+  function cdiv(p, q) { var d = q[0] * q[0] + q[1] * q[1]; return [(p[0] * q[0] + p[1] * q[1]) / d, (p[1] * q[0] - p[0] * q[1]) / d]; }
+  function ev(c, x) {
+    var v = [0, 0], sc = 0, ax = Math.hypot(x[0], x[1]);
+    c.forEach(function (a) { v = cmul(v, x); v[0] += a; sc = sc * ax + Math.abs(a); });
+    return { v: v, sc: sc };
+  }
+  var d1 = cf.slice(0, n).map(function (c, i) { return c * (n - i); });
+  var d2 = d1.slice(0, n - 1).map(function (c, i) { return c * (n - 1 - i); });
+  var f1 = ev(d1, z);
+  if (Math.hypot(f1.v[0], f1.v[1]) > 1e-6 * Math.max(1e-300, f1.sc)) return z;     // 홑근
+  var x = z.slice();
+  for (var t = 0; t < 30; t++) {
+    var a = ev(d1, x).v, b = ev(d2, x).v;
+    if (!b[0] && !b[1]) break;
+    var st = cdiv(a, b);
+    if (!isFinite(st[0]) || !isFinite(st[1])) break;
+    x = [x[0] - st[0], x[1] - st[1]];
+    if (Math.hypot(st[0], st[1]) <= 1e-16 * Math.max(1, Math.hypot(x[0], x[1]))) break;
+  }
+  var f = ev(cf, x);
+  if (Math.hypot(f.v[0], f.v[1]) > 1e-12 * Math.max(1e-300, f.sc)) return z;
+  var m = Math.hypot(x[0], x[1]);
+  if (Math.abs(x[1]) < 1e-9 * Math.max(1, m)) x[1] = 0;
+  if (Math.abs(x[0]) < 1e-9 * Math.max(1, m)) x[0] = 0;
+  return x;
+}
 // 다항식 풀기: co 높은 차수부터 (2~4차). 근 배열(정확값·소수·복소수), 중근은 반복
 function polyRoots(co) {
   while (co.length > 1 && SC.isZero(co[0])) co = co.slice(1);
@@ -431,7 +464,7 @@ function polyRoots(co) {
   if (co.length - 1 === 2) roots = roots.concat(quadRoots(co[0], co[1], co[2]));
   else if (co.length - 1 === 1) roots.push(div(neg(co[1]), co[0]));
   else {
-    var nr = numericRoots(co.map(num));
+    var cf = co.map(num), nr = numericRoots(cf).map(function (z) { return snapMultiple(cf, z); });
     roots = roots.concat(nr.map(function (z) { return z[1] === 0 ? SC.F(z[0]) : SC.cx(SC.F(z[0]), SC.F(z[1])); }));
   }
   // 정렬: 실근 작은 것부터, 그다음 복소근
@@ -505,13 +538,22 @@ function polyInequality(co, op) {
 }
 // 아무 식 풀기 (SOLVE): f(x) − g(x) = 0 을 x0 근처에서
 function solveNumeric(f, x0) {
+  var r = solveRaw(f, x0);
+  // 2.9999999999999805 처럼 끝자리만 흔들리면 12자리로 반올림한 값이 더 맞는지 본다 (|x−3| → 3, 좌변−우변 0)
+  var xr = Number(r.x.toPrecision(12)), fr;
+  try { fr = f(xr); } catch (e) { fr = NaN; }
+  if (xr !== r.x && isFinite(fr) && Math.abs(fr) <= Math.abs(r.res)) r = { x: xr, res: fr };
+  return r;
+}
+function solveRaw(f, x0) {
   function g(x) { var v = f(x); if (!isFinite(v)) throw mathErr('domain'); return v; }
   var x = x0, fx;
   try { fx = g(x); } catch (e) { fx = NaN; }
   // 1) 뉴턴
   for (var i = 0; i < 60 && isFinite(fx); i++) {
     if (fx === 0) return { x: x, res: 0 };
-    var h = 1e-7 * Math.max(1, Math.abs(x)), d;
+    // 근 가까이선 h 를 줄인다: |x−3| 처럼 꺾인 곳에 근이 있으면 h 가 근을 넘어가 앞뒤로 튄다
+    var ax = Math.max(1, Math.abs(x)), h = Math.min(1e-7 * ax, Math.max(Math.abs(fx) * 1e-2, 1e-12 * ax)), d;
     try { d = (g(x + h) - g(x - h)) / (2 * h); } catch (e) { break; }
     if (!isFinite(d) || d === 0) break;
     var nx = x - fx / d;
@@ -519,7 +561,8 @@ function solveNumeric(f, x0) {
     if (Math.abs(nx - x) <= 1e-15 * Math.max(1, Math.abs(x))) { x = nx; try { fx = g(x); } catch (e) {} return { x: x, res: fx }; }
     x = nx; try { fx = g(x); } catch (e) { break; }
   }
-  if (isFinite(fx) && Math.abs(fx) < 1e-12) return { x: x, res: fx };
+  // 뉴턴이 끝없이 멀리 가며 f 가 0 에 다가가는 경우(1/x = 0)는 근이 아니다
+  if (isFinite(fx) && Math.abs(fx) < 1e-12 && Math.abs(x) < 1e12 * Math.max(1, Math.abs(x0))) return { x: x, res: fx };
   // 2) x0 에서 넓혀 가며 부호 바뀌는 곳 찾기 → 이분법
   var step = Math.max(0.1, Math.abs(x0) * 0.1), prevX = x0, prevF;
   try { prevF = g(x0); } catch (e) { prevF = NaN; }
@@ -530,12 +573,17 @@ function solveNumeric(f, x0) {
     if (fa === 0) return { x: xa, res: 0 };
     if (fa * fb < 0) {
       var lo = Math.min(xa, xb), hi = Math.max(xa, xb), flo = g(lo);
-      for (var t = 0; t < 200; t++) {
-        var m = (lo + hi) / 2, fm = g(m);
-        if (fm === 0 || hi - lo <= 2e-16 * Math.max(1, Math.abs(m))) return { x: m, res: fm };
-        if ((fm < 0) === (flo < 0)) { lo = m; flo = fm; } else hi = m;
-      }
-      return { x: (lo + hi) / 2, res: g((lo + hi) / 2) };
+      var big = Math.max(Math.abs(fa), Math.abs(fb)), hit = null;
+      try {
+        for (var t = 0; t < 200; t++) {
+          var m = (lo + hi) / 2, fm = g(m);
+          if (fm === 0 || hi - lo <= 2e-16 * Math.max(1, Math.abs(m))) { hit = { x: m, res: fm }; break; }
+          if ((fm < 0) === (flo < 0)) { lo = m; flo = fm; } else hi = m;
+        }
+        if (!hit) hit = { x: (lo + hi) / 2, res: g((lo + hi) / 2) };
+      } catch (e) { hit = null; }
+      // 부호가 바뀌어도 그 자리가 끊긴 곳(1/x 의 0, tan 의 90°)이면 근이 아니다
+      if (hit && Math.abs(hit.res) <= 1e-3 * big) return hit;
     }
   }
   throw mathErr('nosol');
@@ -675,6 +723,11 @@ function baseCalc(text, base, bits) {
     }
     if (i === st) throw SC.synErr('number');
     if (base !== 10) { if (v > mask) throw mathErr('range'); return fromUnsigned(v, bits); }
+    if (v > mask >> 1n) {                        // 8비트 10진: −128~127 (−128 은 앞에 − 가 붙을 때만)
+      var b4 = st - 1; while (s[b4] === ' ') b4--;
+      if (v === (mask >> 1n) + 1n && (s[b4] === '-' || s[b4] === '−')) return v;
+      throw mathErr('range');
+    }
     return v;
   }
   function wrapResult(v) { return wrapSigned(v, bits); }
@@ -725,7 +778,7 @@ function baseCalc(text, base, bits) {
   }
   var v = orExpr(); skip();
   if (i < s.length) throw SC.synErr('trailing');
-  return v;
+  return wrapSigned(v, bits);
 }
 function baseAll(v, bits) {
   return { DEC: formatBase(v, 10, bits), HEX: formatBase(v, 16, bits), OCT: formatBase(v, 8, bits), BIN: formatBase(v, 2, bits) };

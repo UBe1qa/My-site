@@ -402,6 +402,22 @@ Editor.prototype.openParens = function (row) {
   row.forEach(function (n) { if (n.t === 'c' && n.v === '(') d++; if (n.t === 'c' && n.v === ')') d--; });
   return d;
 };
+// 키보드로 친 ^ / 의 마지막 칸(지수·분모): 글자 식처럼 다음 연산 기호나 짝 없는 ) 에서 칸을 나온다
+// (2^10*3 → 2¹⁰×3, 1/2+1/3 → ½+⅓). 화면 키로 만든 칸은 카시오처럼 그대로 둔다
+Editor.prototype.markKbSlot = function () {
+  var p = this.parentOf(this.cur.row);
+  if (p) { p.node.kb = 1; this.draw(); }
+};
+Editor.prototype.leaveKbSlot = function (once) {
+  for (;;) {
+    var r = this.cur.row, p = this.parentOf(r);
+    if (!p || !p.node.kb || !r.length || this.cur.i !== r.length || this.openParens(r) > 0) return;
+    var ord = this.slotOrder(p.node);
+    if (ord[ord.length - 1] !== p.key) return;
+    this.cur = { row: p.parentRow, i: p.index + 1 };
+    if (once) return;
+  }
+};
 // 실제 키보드
 Editor.prototype.handleKey = function (ev) {
   if (ev.key !== '(') { this.pendParen = null; this.pendFnParen = null; }
@@ -413,12 +429,17 @@ Editor.prototype.handleKey = function (ev) {
     k = ev.shiftKey ? ev.code.charAt(3) : ev.code.charAt(3).toLowerCase();
   }
   if (/^[0-9.]$/.test(k)) { this.insertChar(k); return true; }
+  // 숫자 바로 뒤의 E 는 ×10ⁿ, C·P 는 조합·순열(6.02E23, 10C3). 소문자 e 는 그대로 상수 e
+  var prev = this.cur.i > 0 ? this.cur.row[this.cur.i - 1] : null;
+  var afterNum = prev && prev.t === 'c' && /^[0-9.)]$/.test(prev.v);
+  if (afterNum && k === 'E' && prev.v !== ')') { this.insertChar('ᴇ'); return true; }
+  if (afterNum && (k === 'C' || k === 'P')) { this.leaveKbSlot(); this.insertChar(k); return true; }
   switch (k) {
-    case '+': this.insertChar('+'); return true;
-    case '-': this.insertChar('−'); return true;
-    case '*': this.insertChar('×'); return true;
-    case '/': this.insertTemplate('frac'); return true;
-    case '^': this.insertTemplate('pow'); return true;
+    case '+': this.leaveKbSlot(); this.insertChar('+'); return true;
+    case '-': this.leaveKbSlot(); this.insertChar('−'); return true;
+    case '*': this.leaveKbSlot(); this.insertChar('×'); return true;
+    case '/': this.insertTemplate('frac'); this.markKbSlot(); return true;
+    case '^': this.insertTemplate('pow'); this.markKbSlot(); return true;
     case '(':
       if (this.pendFnParen && this.pendFnParen.row === this.cur.row && this.pendFnParen.i === this.cur.i) { this.pendFnParen = null; return true; }
       // sqrt( · abs( 처럼 글자로 쓴 칸 바로 뒤의 ( 는 칸이 괄호 노릇을 하니 넣지 않고, 짝 ) 에서 칸 밖으로 나간다
@@ -431,8 +452,9 @@ Editor.prototype.handleKey = function (ev) {
         ps.pop();
         if (par) { this.cur = { row: par.parentRow, i: par.index + 1 }; this.draw(); return true; }
       }
-      this.insertChar(k); return true;
-    case ',': case '!': case '%': this.insertChar(k); return true;
+      this.leaveKbSlot(true); this.insertChar(k); return true;
+    case ',': this.leaveKbSlot(); this.insertChar(k); return true;
+    case '!': case '%': this.insertChar(k); return true;
     case 'ArrowLeft': this.left(); return true;
     case 'ArrowRight': this.right(); return true;
     case 'ArrowUp': if (!this.vertical('up') && this.opts.onHistory) this.opts.onHistory(-1); return true;

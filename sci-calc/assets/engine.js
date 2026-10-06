@@ -835,23 +835,27 @@ var TEXT_TEMPLATES = { frac: 'frac', sqrt: 'sqrt', root: 'root', abs: 'abs', log
 function parseText(str) {
   var i = 0, s = String(str);
   function row(stopChars) {
-    var out = [];
+    var out = [], depth = 0;                  // 안쪽 괄호 abs(sin(x)) 의 ) , 에서 멈추지 않게
     while (i < s.length) {
       var ch = s[i];
-      if (stopChars && stopChars.indexOf(ch) >= 0) break;
+      if (stopChars && depth === 0 && stopChars.indexOf(ch) >= 0) break;
       if (ch === ' ' || ch === '\t' || ch === '\n') { i++; continue; }
       if (/[0-9.]/.test(ch)) { out.push({ t: 'c', v: ch }); i++; continue; }
       if ((ch === 'E' || ch === 'ᴇ') && out.length && /[0-9.]/.test(out[out.length - 1].v || '')) { out.push({ t: 'c', v: 'ᴇ' }); i++; continue; }
       if (ch === '*' || ch === '×' || ch === '·') { out.push({ t: 'c', v: '×' }); i++; continue; }
       if (ch === '/' || ch === '÷') { out.push({ t: 'c', v: '÷' }); i++; continue; }
       if (ch === '-' || ch === '−' || ch === '–') { out.push({ t: 'c', v: '−' }); i++; continue; }
-      if ('+(),!%°∠'.indexOf(ch) >= 0) { out.push({ t: 'c', v: ch }); i++; continue; }
+      if ('+(),!%°∠'.indexOf(ch) >= 0) {
+        if (ch === '(') depth++; else if (ch === ')' && depth > 0) depth--;
+        out.push({ t: 'c', v: ch }); i++; continue;
+      }
       if (ch === "'" || ch === '′') { out.push({ t: 'c', v: '′' }); i++; continue; }
       if (ch === '"' || ch === '″') { out.push({ t: 'c', v: '″' }); i++; continue; }
       if (ch === 'π') { out.push({ t: 'c', v: 'π' }); i++; continue; }
       if (ch === '²') { out.push({ t: 'pow', a: [{ t: 'c', v: '2' }] }); i++; continue; }
       if (ch === '³') { out.push({ t: 'pow', a: [{ t: 'c', v: '3' }] }); i++; continue; }
       if (ch === '√') { i++; out.push({ t: 'sqrt', a: operand() }); continue; }
+      if (ch === '|') { i++; var ab = { t: 'abs', a: row('|') }; if (s[i] === '|') i++; out.push(ab); continue; }   // |x−3| (겹친 |…| 은 abs( ) 로)
       if (ch === '^') { i++; out.push({ t: 'pow', a: operand() }); continue; }
       if (/[A-Za-z]/.test(ch)) {
         var m = /^[A-Za-z]+/.exec(s.slice(i))[0];
@@ -1325,7 +1329,9 @@ function integrate(node, env) {
 }
 // 리더스 방법(중심 차분 + 리처드슨)
 function derivNum(f, x) {
-  var h = 0.1 * Math.max(1, Math.abs(x)), CON = 1.4, CON2 = CON * CON, NT = 12, SAFE = 2;
+  // 처음 간격은 x 의 1%(최대 0.01). 예전 0.1×|x| 는 점근선·정의역 끝 근처(1/x 의 x=0.05, ln 의 x=0.05)와
+  // 아주 큰 x(sin x 의 x=10⁶)에서 틀린 값을 냈다 (2026-10-06 제3자 평가)
+  var h = x === 0 ? 0.01 : Math.min(0.01, 0.01 * Math.abs(x)), CON = 1.4, CON2 = CON * CON, NT = 12, SAFE = 2;
   var a = [], err = Infinity, ans = NaN;
   a[0] = [(f(x + h) - f(x - h)) / (2 * h)];
   for (var i = 1; i < NT; i++) {
@@ -1356,14 +1362,24 @@ function snapNum(v) {
   if (Math.abs(v) < 1e-13) return 0;
   return v;
 }
+function exactBits(a) {
+  var m = 0;
+  a.v.forEach(function (t) { m = Math.max(m, t.c.n.toString(16).length * 4, t.c.d.toString(16).length * 4); });
+  return m;
+}
 function sumProd(node, env, isSum) {
   var lo = toBigInt(realOnly(noMulti(evaluate(node.lo, env)))), hi = toBigInt(realOnly(noMulti(evaluate(node.hi, env))));
   if (hi < lo) throw mathErr('domain');
   if (hi - lo > 1000000n) throw mathErr('range');
-  var acc = isSum ? ZERO : ONE;
+  var acc = isSum ? ZERO : ONE, t0 = Date.now(), n = 0;
   for (var k = lo; k <= hi; k++) {
     var v = evalAtX(node.a, env, xr(R(k)));
     acc = isSum ? add(acc, v) : mul(acc, v);
+    // 정확값의 분자·분모가 너무 커지면(Σ1/x 를 수천 항) 소수로 바꿔 이어서 계산한다. 예전엔 탭이 몇십 초 멈췄다 (2026-10-06 제3자 평가)
+    if ((++n & 63) === 0) {
+      if (acc.t === 'x' && exactBits(acc) > 600) acc = F(toNum(acc));
+      if (Date.now() - t0 > 5000) throw mathErr('range');
+    }
   }
   return acc;
 }
@@ -1594,7 +1610,9 @@ function exactRow(ef, mixed) {
 }
 function realRow(v, opts) {
   if (opts.dms && v.t !== 'c') return dmsRow(v);
-  if (!opts.decimal && v.t === 'x') {
+  // Sci·Fix 일 땐 정수도 그 표시로 (카시오: Sci 3 에서 123456 → 1.23×10⁵). 분수·루트는 그대로
+  var dm = opts.disp && opts.disp.mode, intFmt = (dm === 'sci' || dm === 'fix') && v.t === 'x' && xIsRat(v) && risInt(xRat(v));
+  if (!opts.decimal && v.t === 'x' && !intFmt) {
     var ef = exactForm(v);
     if (exactFits(ef)) return exactRow(ef, opts.mixed);
   }
@@ -1635,7 +1653,7 @@ function valueRow(v, opts) {
     var iv = v.im, ineg = sign(iv) < 0;
     if (ineg) iv = neg(iv);
     if (out.length) out.push({ t: 'c', v: ineg ? '−' : '+' }); else if (ineg) out.push({ t: 'c', v: '−' });
-    var one = iv.t === 'x' && xIsRat(iv) && xRat(iv).n === 1n && xRat(iv).d === 1n;
+    var one = iv.t === 'x' && xIsRat(iv) && xRat(iv).n === 1n && xRat(iv).d === 1n || iv.t === 'f' && iv.v === 1;   // 1i → i
     if (!one) out = out.concat(realRow(iv, opts));
     out.push({ t: 'c', v: 'i' });
     return out;

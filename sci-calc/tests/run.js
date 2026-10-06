@@ -137,6 +137,34 @@ if (data.derived) {        // 정의로 계산한 상수: NIST 표의 앞자리(
   });
 }
 
+// ---- 5-1. 제3자 평가(2026-10-06)에서 나온 결함이 다시 생기지 않게
+(function () {
+  var SCM = require(path.join(__dirname, '../assets/modes.js'));
+  function n(t, e) { return SC.toNum(SC.calc(t, Object.assign(env(), e || {}))); }
+  function near(a, b, tol) { return Math.abs(a - b) <= (tol || 1e-9) * Math.max(1, Math.abs(b)); }
+  var t0 = Date.now(), s = n('sum(1/x,1,10000)');
+  ok(near(s, 9.787606036044348) && Date.now() - t0 < 2000, 'Σ1/x 1만 항 (멈추지 않고)', s + ' ' + (Date.now() - t0) + 'ms');
+  ok(near(n('der(1/x,0.05)'), -400, 1e-6), 'd/dx 1/x at 0.05', n('der(1/x,0.05)'));
+  ok(near(n('der(tan(x),89)'), 57.30159, 1e-5), 'd/dx tan at 89°', n('der(tan(x),89)'));
+  ok(near(n('der(ln(x),0.05)'), 20, 1e-6), 'd/dx ln at 0.05', n('der(ln(x),0.05)'));
+  ['abs(sin(x))', 'sqrt((1+2)*3)', 'int(abs(sin(x)),0,1)', '2^((1+1)*2)'].forEach(function (t) {
+    ok(SC.rowToText(SC.parseText(t)) === t, '겹친 괄호 되돌리기 ' + t, SC.rowToText(SC.parseText(t)));
+  });
+  ok(SC.rowToText(SC.parseText('|x-3|')) === 'abs(x-3)', '|x| 읽기');
+  ok(SC.rowToPlain(SC.valueRow(SC.calc('(-1)^0.5', Object.assign(env(), { complex: true })), {})) === 'i', '(−1)^0.5 → i');
+  ok(SC.rowToPlain(SC.valueRow(SC.calc('123456', env()), { disp: { mode: 'sci', digits: 3 } })) === '1.23×10^5', 'Sci 3 정수');
+  ok(SCM.invNormStd(0.5) === 0, '역정규 0.5 → 0');
+  var r4 = SCM.polyRoots([1, 0, -6, 0, 9].map(SC.xint));
+  ok(r4.length === 4 && r4.every(function (r) { return !SC.isC(r) && near(Math.abs(SC.toNum(r)), Math.sqrt(3)); }), 'x⁴−6x²+9 중근 실수', JSON.stringify(r4.map(String)));
+  var r5 = SCM.polyRoots([1, 0, 2, 0, 1].map(SC.xint));
+  ok(r5.every(function (r) { return SC.isC(r) && SC.toNum(SC.re(r)) === 0 && Math.abs(SC.toNum(SC.im(r))) === 1; }), 'x⁴+2x²+1 → ±i 두 번씩');
+  var thrown = function (fn) { try { fn(); return false; } catch (e) { return true; } };
+  ok(thrown(function () { SCM.solveNumeric(function (x) { return 1 / x; }, 1); }), 'SOLVE 1/x=0 은 근 없음');
+  ok(SCM.solveNumeric(function (x) { return Math.abs(x - 3); }, 0).x === 3, 'SOLVE |x−3|=0 → 3');
+  ok(thrown(function () { SCM.baseCalc('256', 10, 8); }) && thrown(function () { SCM.baseCalc('128', 10, 8); }), '8비트 10진 범위');
+  ok(SCM.baseCalc('-128', 10, 8) === -128n, '8비트 −128');
+})();
+
 // ---- 6. 모드 계산 (통계·분포·방정식·행렬·진법)
 var modesPath = path.join(__dirname, 'run_modes.js');
 if (fs.existsSync(modesPath)) {
