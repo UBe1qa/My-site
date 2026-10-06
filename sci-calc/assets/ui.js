@@ -172,5 +172,24 @@ function showCurrentMode() {
   ul.addEventListener('scroll', edge, { passive: true });
   window.addEventListener('resize', edge);
 }
-document.addEventListener('DOMContentLoaded', function () { langBar(); showCurrentMode(); });
+// 루멘랩 이름판: 화면에 들어오면 태양전지 칸이 차례로 켜지고(한 번), 마우스를 올리면 다시 켜진다. 동작 줄이기면 그냥 켜진 채로.
+function labPlate() {
+  var el = document.querySelector('.lab-plate'); if (!el) return;
+  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play() {
+    el.classList.add('is-lit'); if (calm) return;
+    el.classList.remove('mo-sun'); void el.offsetWidth; el.classList.add('mo-sun');
+    clearTimeout(el._t); el._t = setTimeout(function () { el.classList.remove('mo-sun'); }, 900);
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); play(); } }, { threshold: 0.8 });
+    io.observe(el);
+  } else el.classList.add('is-lit');
+  el.addEventListener('mouseenter', play); el.addEventListener('focus', play);
+}
+// '키 뜻' 링크(#keys)는 접힌 키 뜻 표를 펼치고 간다
+function openKeys() { var d = document.getElementById('keys'); if (d && d.tagName === 'DETAILS') d.open = true; }
+document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href="#keys"]'); if (a) openKeys(); });
+if (location.hash === '#keys') document.addEventListener('DOMContentLoaded', openKeys);
+document.addEventListener('DOMContentLoaded', function () { langBar(); showCurrentMode(); labPlate(); });
 })(window);

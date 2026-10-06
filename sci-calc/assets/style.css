@@ -189,6 +189,64 @@ h1, h2, h3 { text-wrap: balance; }
   .work .keys-f .k { min-height: 42px; padding-top: 13px; }
 }
 
+
+/* 배치 5차 (2026-10-06, 사용자 "글자가 너무 빽빽") 시안 C1 '조용한 3단': 모드 메뉴는 아이콘 + 이름만(설명은 title),
+   오른쪽은 기록만 늘 보이고 키보드 단축키는 접힘, 계산 결과가 없으면 꺼진 보기 버튼은 숨김, SHIFT 글자는 SHIFT 켤 때만 진하게 */
+.mi { width: 18px; height: 18px; flex: none; }
+.modes a { display: inline-flex; align-items: center; gap: 6px; }
+.work .modes small { display: none; }
+@media (min-width: 900px) {
+  .work .modes a { display: flex; gap: 10px; padding: 9px 12px; }
+  .work .modes .mi { width: 20px; height: 20px; color: var(--muted); }
+  .work .modes a[aria-current="page"] .mi { color: var(--accent); }
+  .work .calc [data-open=history] { display: none; }
+}
+@media (min-width: 900px) and (max-width: 1139px) { .work { grid-template-columns: 150px minmax(0, 440px) minmax(0, 1fr); } .work-mode { grid-template-columns: 150px minmax(0, 1fr); } }
+@media (min-width: 1140px) { .work { grid-template-columns: 180px 450px minmax(0, 1fr); } .work-mode { grid-template-columns: 180px minmax(0, 1fr); } }
+@media (max-width: 600px) {
+  .work .modes .mi { width: 16px; height: 16px; }
+  .hero .work > h1 { font-size: 20px; }
+}
+.acts button:disabled { display: none; }
+.k .ks { opacity: .72; transition: opacity var(--mo-d, .16s) ease; }
+.calc.is-shift .k[data-s] .ks { opacity: 1; }
+details.side-kbd { padding: 0; }
+details.side-kbd > summary { list-style: none; cursor: pointer; padding: 12px 16px; font-size: 14px; font-weight: 700; color: var(--ink-2); display: flex; justify-content: space-between; align-items: center; }
+details.side-kbd > summary::-webkit-details-marker { display: none; }
+details.side-kbd > summary::after { content: "+"; color: var(--muted); font-weight: 600; }
+details.side-kbd[open] > summary::after { content: "−"; }
+details.side-kbd > :not(summary) { margin-left: 16px; margin-right: 16px; }
+details.side-kbd[open] { padding-bottom: 14px; }
+.keyhelp > details > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+.keyhelp > details > summary::-webkit-details-marker { display: none; }
+.keyhelp > details > summary h2 { margin: 0; }
+.keyhelp > details > summary::after, .more-tips > summary::after { content: "+"; font-weight: 700; color: var(--accent); font-size: 20px; line-height: 1; }
+.keyhelp > details[open] > summary::after, .more-tips[open] > summary::after { content: "−"; }
+.more-tips { grid-column: 1 / -1; }
+.more-tips > summary { list-style: none; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; font-weight: 700; color: var(--ink-2); padding: 6px 2px; }
+.more-tips > summary::-webkit-details-marker { display: none; }
+.more-tips > .tips { margin-top: 10px; }
+
+/* 루멘랩 이름판 (모든 수익형 사이트 고정 연출 칸): 계산기 위쪽 태양전지 + 이름판 */
+.lab-plate { display: inline-flex; align-items: center; gap: 14px; max-width: 100%; margin: 0 0 18px; padding: 12px 16px 12px 14px; border-radius: 14px;
+  background: var(--screen); color: var(--screen-ink); text-decoration: none; box-shadow: inset 0 2px 6px rgba(0,0,0,.35); }
+.foot .lab-plate { color: var(--screen-ink); }
+.lab-sun { display: grid; grid-template-columns: repeat(4, 11px); gap: 2px; padding: 3px; border-radius: 5px; background: #1b1916; flex: none; }
+.lab-sun i { display: block; height: 18px; border-radius: 2px; background: #4a3a2a; position: relative; overflow: hidden; }
+.lab-sun i::after { content: ""; position: absolute; inset: 0; background: var(--shift); opacity: 0; }
+.lab-plate.is-lit .lab-sun i::after { opacity: .9; }
+.lab-txt { display: grid; gap: 1px; min-width: 0; }
+.lab-txt b { font-size: 14px; letter-spacing: .16em; }
+.lab-txt small { font-size: 12.5px; color: var(--screen-muted); }
+.lab-go { font-weight: 800; color: var(--accent); transition: transform var(--mo-d, .16s) var(--mo-e, ease); }
+.lab-plate:hover .lab-go, .lab-plate:focus-visible .lab-go { transform: translateX(4px); }
+.lab-plate.mo-sun .lab-sun i::after { animation: mo-sun .5s var(--mo-e, ease) backwards; }
+.lab-plate.mo-sun .lab-sun i:nth-child(2)::after { animation-delay: .08s; }
+.lab-plate.mo-sun .lab-sun i:nth-child(3)::after { animation-delay: .16s; }
+.lab-plate.mo-sun .lab-sun i:nth-child(4)::after { animation-delay: .24s; }
+@keyframes mo-sun { 0% { opacity: 0; } 55% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .lab-plate.mo-sun .lab-sun i::after { animation: none; } .lab-go { transition: none; } }
+
 /* ------------------------------------------------ 계산기 몸체 */
 .calc { position: relative; background: var(--body); color: var(--body-ink); border-radius: 26px; padding: 14px 12px 14px;
   box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 18px 40px -18px rgba(10, 20, 60, .55); }
@@ -642,3 +700,11 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
   .k { transition: none; }
 }
 @keyframes mo-fade { from { opacity: .4; } }
+/* 배치 5차: 모드 페이지는 설명 글을 제목 옆(판 위)에 넓게 두어 왼쪽 칸에 글자가 몰리지 않게 */
+@media (min-width: 900px) {
+  .work-mode { grid-template-rows: auto 1fr; grid-template-areas: "h1 lede" "nav tool"; align-items: end; }
+  .work-mode > .w-nav, .work-mode > .tool { align-self: start; }
+  .hero .work-mode > .lede { margin: 0 0 14px; font-size: 15px; max-width: 46em; }
+  .hero .work-mode > h1 { margin-bottom: 14px; }
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lab-plate { border: 1px solid var(--line-2); } }

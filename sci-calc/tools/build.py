@@ -107,12 +107,29 @@ MODES = [('/', '계산', 'Calculate'), ('/stats/', '통계', 'Statistics'), ('/d
          ('/table/', '함수표', 'Table')]
 
 
+# 모드 메뉴 아이콘 (2026-10-06 5차 '글자 줄이기': 설명 대신 아이콘 + 이름, 설명은 title 로)
+MODE_ICONS = {
+    '/': '<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7.5h7M9 12h.01M12 12h.01M15 12h.01M9 15.5h.01M12 15.5h.01M15 15.5h.01"/>',
+    '/stats/': '<path d="M4 20h16M6.5 20v-7M11 20V6M15.5 20v-9M20 20v-4"/>',
+    '/distribution/': '<path d="M3 19h18M3 18.5c4.5 0 5-12.5 9-12.5s4.5 12.5 9 12.5"/>',
+    '/equation/': '<path d="M4.5 7.5l6 9M10.5 7.5l-6 9M14 10.5h6M14 14h6"/>',
+    '/matrix/': '<path d="M7.5 4H5v16h2.5M16.5 4H19v16h-2.5M9.5 9h.01M14.5 9h.01M9.5 15h.01M14.5 15h.01"/>',
+    '/base/': '<path d="M6 8l2.5-2v12"/><rect x="12.5" y="6" width="6" height="12" rx="3"/>',
+    '/table/': '<path d="M4 4v16h16M6.5 16.5c3.5 0 5-9.5 12.5-10.5"/>',
+}
+
+
+def mode_icon(p):
+    return ('<svg class="mi" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" '
+            'stroke-linecap="round" stroke-linejoin="round">%s</svg>' % MODE_ICONS[p])
+
+
 def modes_nav(lang, current):
     desc = {p: d for p, n, d in content.HOME[lang]['modes']}
     items = []
     for p, ko, en in MODES:
         cur = ' aria-current="page"' if p == current else ''
-        items.append('<li><a href="%s"%s><b>%s</b><small>%s</small></a></li>' % (url(lang, p), cur, T(lang, ko, en), desc[p]))
+        items.append('<li><a href="%s"%s title="%s">%s<b>%s</b></a></li>' % (url(lang, p), cur, esc(strip(desc[p])), mode_icon(p), T(lang, ko, en)))
     return '<ul class="modes" aria-label="%s">%s</ul>' % (T(lang, '계산 모드', 'Calculator modes'), ''.join(items))
 
 
@@ -131,12 +148,12 @@ def side_panel(lang):
     return ('<aside class="side" aria-label="%s">'
             '<section class="side-box side-hist"><div class="side-h"><h2>%s</h2><button type="button" class="side-x" data-hist-clear hidden>%s</button></div>'
             '<ol class="hist-list" data-hist hidden></ol><p class="side-note" data-hist-empty>%s</p></section>'
-            '<section class="side-box side-kbd"><h2>%s</h2><p class="side-sub">%s</p><dl class="kbd-list" id="kbd-help">%s</dl>'
-            '<a class="side-link" href="#keys">%s</a></section>'
+            '<details class="side-box side-kbd"><summary>%s</summary><p class="side-sub">%s</p><dl class="kbd-list" id="kbd-help">%s</dl>'
+            '<a class="side-link" href="#keys">%s</a></details>'
             '</aside>') % (
         T(lang, '기록과 키보드', 'History and keyboard'), T(lang, '기록', 'History'), T(lang, '지우기', 'Clear'),
         T(lang, '계산하면 여기에 쌓여요. 누르면 그 식을 다시 불러와요.', 'Your calculations appear here. Tap one to bring it back.'),
-        T(lang, '키보드로 쓰기', 'Typing on a keyboard'),
+        T(lang, '키보드 단축키', 'Keyboard shortcuts'),
         T(lang, '숫자와 + − * ( ) 는 그대로 쳐요.', 'Digits and + − * ( ) work as usual.'), rows,
         T(lang, '키 뜻 전체 보기 →', 'What every key does →'))
 
@@ -150,8 +167,11 @@ def footer(lang):
     nav = [(url(lang, '/guide/'), T(lang, '가이드', 'Guides')), (url(lang, '/about/'), T(lang, '소개', 'About')),
            (url(lang, '/privacy/'), T(lang, '개인정보 처리방침', 'Privacy policy'))]
     return ('<footer class="foot"><div class="wrap">'
-            '<p class="foot-pub">%s</p>' % T(lang, '펴낸 곳 <a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a> · 작은 도구와 앱을 만들어요',
-                                             'Made by <a href="https://lumenlab.page/en/">Lumen Lab</a>, a small studio for tools and apps') +
+            # 루멘랩 이름판: 계산기 위쪽 태양전지 + 이름판 모양. 보이면 전지 칸이 차례로 켜진다(ui.js labPlate)
+            '<a class="lab-plate" href="%s"><span class="lab-sun" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
+            '<span class="lab-txt"><b>LUMEN LAB</b><small>%s</small></span><span class="lab-go" aria-hidden="true">→</span></a>' % (
+                T(lang, 'https://lumenlab.page/', 'https://lumenlab.page/en/'),
+                T(lang, '이 계산기를 만든 곳 · 다른 도구와 앱 보기', 'Made this calculator · see our other tools and apps')) +
             '<nav aria-label="%s">%s</nav>' % (T(lang, '아래 메뉴', 'Footer menu'), ''.join('<a href="%s">%s</a>' % h for h in nav)) +
             '<p>%s</p>' % T(lang, '계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.',
                             'Everything is calculated in your browser. Double-check important results before using them for exams or work.') +
@@ -255,7 +275,7 @@ KEY_LEGEND = {
 
 def key_legend(lang):
     rows = ''.join('<div><dt>%s</dt><dd>%s</dd></div>' % (esc(a), esc(b)) for a, b in KEY_LEGEND[lang])
-    return ('<section class="section wrap keyhelp" id="keys"><h2>%s</h2><p>%s</p><dl>%s</dl></section>'
+    return ('<section class="section wrap keyhelp"><details id="keys"><summary><h2>%s</h2></summary><p>%s</p><dl>%s</dl></details></section>'
             % (T(lang, '키 뜻 한눈에 보기', 'What each key does'),
                T(lang, '키에 마우스를 올려도 설명이 나와요. 주황 글자는 SHIFT를 누른 다음 그 키를 눌러요.',
                  'Hover over a key to see its name too. Orange labels need SHIFT first.'), rows))
@@ -346,9 +366,11 @@ def calculator(lang):
 def home(lang):
     C = content.HOME[lang]
     faq_html = ''.join('<details><summary>%s</summary><p>%s</p></details>' % (q, a) for q, a in C['faq'])
-    tips = ''.join('<div class="tip"><h3>%s</h3><p>%s</p>%s</div>' % (h, p, ('<span class="eg">%s</span>' % eg) if eg else '')
-                   for h, p, eg in C['tips'])
-    links = ''.join('<li><a href="%s">%s<span>%s</span></a></li>' % (url(lang, p), n, d) for p, n, d in C['modes'])
+    tip = lambda h, p, eg: '<div class="tip"><h3>%s</h3><p>%s</p>%s</div>' % (h, p, ('<span class="eg">%s</span>' % eg) if eg else '')  # noqa: E731
+    tips = ''.join(tip(*t) for t in C['tips'][:3])
+    if len(C['tips']) > 3:
+        tips += '<details class="more-tips"><summary>%s</summary><div class="tips">%s</div></details>' % (
+            T(lang, '사용법 더 보기', 'More tips'), ''.join(tip(*t) for t in C['tips'][3:]))
     guides = ''.join('<li><a href="%s">%s<span>%s</span></a></li>' % (url(lang, '/guide/%s/' % a['slug']), a['title'], a['short'])
                      for a in articles.list_for(lang))
     body = ('<main id="main">'
@@ -364,14 +386,13 @@ def home(lang):
             '<section class="section wrap"><h2>%s</h2><div class="tips">%s</div></section>'
             '%s'
             '<section class="section wrap"><h2>%s</h2><ul class="links">%s</ul></section>'
-            '<section class="section wrap"><h2>%s</h2><ul class="links">%s</ul></section>'
             '<section class="section wrap faq prose"><h2>%s</h2>%s</section>'
             '%s'
             '</div></main>') % (
         C['h1'], C['lede'], modes_nav(lang, '/'), calculator(lang), side_panel(lang),
         ''.join('<li><span class="dot"></span><span>%s</span></li>' % p for p in C['points']),
         ad_slot(lang, 'below-tool'),
-        C['tips_h'], tips, key_legend(lang), C['modes_h'], links, C['guides_h'], guides, C['faq_h'], faq_html,
+        C['tips_h'], tips, key_legend(lang), C['guides_h'], guides, C['faq_h'], faq_html,
         ad_slot(lang, 'bottom'))
     jsonld = [content.webapp(lang, url(lang, '/'), SITE),
               {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
