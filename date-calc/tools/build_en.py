@@ -276,7 +276,7 @@ GUIDES = [
 <p>A common shortcut subtracts the years, months and days separately and "borrows" the length of the previous month when the days go negative. It breaks on a date like this: 1 − 31 + 28 (the days in February 2026) is still negative. Counting forward from the birthday avoids the problem.</p>
 
 <h2>Born on February 29</h2>
-<p>In years without a February 29, Daycount treats February 28 as the birthday. A person born on February 29, 2000 is 25 on February 27, 2026 and turns 26 on February 28, 2026. Other rules may use March 1 instead, so for anything official, such as a license or a benefit that starts at a certain age, check the rule that applies.</p>
+<p>In years without a February 29, Daycount treats March 1 as the birthday. A person born on February 29, 2000 is still 25 on February 28, 2026 and turns 26 on March 1, 2026. Other rules may use February 28 instead, so for anything official, such as a license or a benefit that starts at a certain age, check the rule that applies.</p>
 
 <h2>Age in days, weeks or months</h2>
 <p>The same person, counted up to October 5, 2026:</p>
@@ -358,7 +358,7 @@ FAQ = [
     ("What’s Jan 31 plus one month?",
      "If the next month has no 31st, the result is that month’s last day, so you get Feb 28 (Feb 29 in leap years)."),
     ("How is age calculated?",
-     "You gain a year on each birthday, and the months and days are counted on from your last birthday. People born on Feb 29 are treated as having their birthday on Feb 28 in other years."),
+     "You gain a year on each birthday, and the months and days are counted on from your last birthday. People born on Feb 29 are treated as having their birthday on Mar 1 in other years."),
     ("Are the dates I enter sent anywhere?",
      "No. Everything is calculated in your browser. Only your holiday calendar and language choices are remembered on this device. Google ads on the page may use cookies (see the <a href=\"/privacy#en\">privacy policy</a>)."),
 ]
@@ -500,7 +500,7 @@ def about_page():
     <ul>
       <li><b>Days between dates</b>: the later date minus the earlier one. Turn on “Include start date” to count the first day too.</li>
       <li><b>Months</b>: counted from date to date. If the month is too short, its last day is used, so January 31 plus one month is February 28 (29 in a leap year).</li>
-      <li><b>Age</b>: whole years since the last birthday, then months and days. People born on February 29 have their birthday on February 28 in other years.</li>
+      <li><b>Age</b>: whole years since the last birthday, then months and days. People born on February 29 have their birthday on March 1 in other years.</li>
       <li><b>Business days</b>: Saturdays, Sundays and the holidays of the selected calendar (US federal holidays or Korean public holidays) are skipped, on the days they are observed. When finding a date N business days away, the starting day isn't counted.</li>
       <li><b>Week numbers</b>: ISO 8601. Weeks start on Monday, and week 1 contains the year's first Thursday.</li>
     </ul>

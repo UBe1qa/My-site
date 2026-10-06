@@ -47,10 +47,15 @@ for i in range(300):
         d += step
         if d.weekday() < 5 and d not in tbl: left -= 1
     cases["addBusiness"].append([a.isoformat(), k, c, d.isoformat()])
+def age_years(birth, today):
+    # 2월 29일생은 평년엔 3월 1일에 한 살 (2026-10-06 운영자 결정). 나머지는 dateutil 그대로.
+    if (birth.month, birth.day) != (2, 29): return relativedelta(today, birth).years
+    leap = today.year % 4 == 0 and (today.year % 100 != 0 or today.year % 400 == 0)
+    return today.year - birth.year - ((today.month, today.day) < ((2, 29) if leap else (3, 1)))
 for i in range(200):
     birth = rd(); today = birth + dt.timedelta(days=random.randrange(0, 365 * 30))
-    cases["age"].append([birth.isoformat(), today.isoformat(), relativedelta(today, birth).years])
-cases["age"] += [["2000-02-29", "2025-02-27", 24], ["2000-02-29", "2025-02-28", 25], ["2000-02-29", "2024-02-29", 24]]
+    cases["age"].append([birth.isoformat(), today.isoformat(), age_years(birth, today)])
+cases["age"] += [["2000-02-29", "2025-02-27", 24], ["2000-02-29", "2025-02-28", 24], ["2000-02-29", "2025-03-01", 25], ["2000-02-29", "2024-02-28", 23], ["2000-02-29", "2024-02-29", 24]]
 out = os.path.join(os.path.dirname(__file__), "cases.json")
 json.dump(cases, open(out, "w"), indent=0)
 print({k: len(v) for k, v in cases.items()})

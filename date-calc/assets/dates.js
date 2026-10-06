@@ -111,20 +111,25 @@ var DC = (function () {
     return { day: n, covered: allCovered };
   }
 
-  // 만 나이와 생일 정보. 2월 29일생은 평년에 2월 28일을 생일로 본다.
+  // 만 나이와 생일 정보. 2월 29일생은 평년에 3월 1일을 생일로 본다(2026-10-06 운영자 결정).
+  function birthdayIn(birth, y) {
+    var tb = toYMD(birth);
+    if (tb.m === 2 && tb.d === 29 && !isLeap(y)) return fromYMD(y, 3, 1);
+    return fromYMD(y, tb.m, tb.d);
+  }
   function age(birth, today) {
     if (today < birth) return null;
-    var p = ymd(birth, today);
     var tb = toYMD(birth), tt = toYMD(today);
-    var next = addYears(birth, p.years + 1);
-    var thisYear = addYears(birth, tt.y - tb.y);
+    var y = birthdayIn(birth, tt.y) <= today ? tt.y : tt.y - 1;
+    var last = birthdayIn(birth, y), p = ymd(last, today);
+    var next = birthdayIn(birth, y + 1);
     return {
-      full: p.years, months: p.months, days: p.days,
+      full: y - tb.y, months: p.months, days: p.days,
       counting: tt.y - tb.y + 1,           // 세는 나이(옛 방식)
       yearAge: tt.y - tb.y,                // 연 나이(병역·청소년 보호법 등)
       lived: today - birth,
       nextBirthday: next, toNext: next - today,
-      birthdayToday: thisYear === today && today !== birth
+      birthdayToday: last === today && today !== birth
     };
   }
 

@@ -116,7 +116,11 @@ var g = DC.age(P("1990-08-15"), P("2026-10-05"));
 eq("Guide (en): Aug 15, 1990 on Oct 5, 2026", [g.full, g.months, g.days, g.lived, Math.floor(g.lived / 7), g.lived % 7, DC.ymd(P("1990-08-15"), P("2026-10-05")).totalMonths, iso(g.nextBirthday), g.toNext], [36, 1, 20, 13200, 1885, 5, 433, "2027-08-15", 314]);
 var h = DC.age(P("2000-01-31"), P("2026-03-01"));
 eq("Guide (en): born Jan 31, 2000 on Mar 1, 2026", [h.full, h.months, h.days, DC.daysInMonth(2026, 2), 1 - 31 + 28 < 0], [26, 1, 1, 28, true]);
-eq("Guide (en): Feb 29 birthday", [DC.age(P("2000-02-29"), P("2026-02-27")).full, DC.age(P("2000-02-29"), P("2026-02-28")).full, DC.age(P("2000-02-29"), P("2026-02-28")).birthdayToday], [25, 26, true]);
+eq("Guide (en): Feb 29 birthday", [DC.age(P("2000-02-29"), P("2026-02-28")).full, DC.age(P("2000-02-29"), P("2026-03-01")).full, DC.age(P("2000-02-29"), P("2026-03-01")).birthdayToday, DC.age(P("2000-02-29"), P("2028-02-29")).birthdayToday], [25, 26, true, true]);
+var f29 = DC.age(P("2000-02-29"), P("2026-02-28"));
+eq("2월 29일생: 평년 2/28엔 아직 11개월 27일, 다음 생일 3/1", [f29.months, f29.days, DC.iso(f29.nextBirthday), f29.toNext], [11, 27, "2026-03-01", 1]);
+var f29b = DC.age(P("2000-02-29"), P("2027-03-01"));
+eq("2월 29일생: 평년 3/1 생일 다음 날부터 다시 셈", [f29b.full, f29b.months, f29b.days, DC.iso(DC.age(P("2000-02-29"), P("2027-03-02")).nextBirthday)], [27, 0, 0, "2028-02-29"]);
 eq("Guide (en): 10,000th day", [iso(P("1990-08-15") + 10000), DC.weekday(P("1990-08-15") + 10000)], ["2017-12-31", 0]);
 // iso-week-numbers
 var wk2 = function (s) { var w = DC.isoWeek(P(s)); return w.year + "-W" + (w.week < 10 ? "0" : "") + w.week; };

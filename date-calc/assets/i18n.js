@@ -70,7 +70,7 @@ var I18N = (function () {
     "100일은 어떻게 세나요?": "How are “100 days” counted?",
     "한국에서는 보통 시작한 날을 1일째로 세요. 그래서 100일은 시작일에서 99일 뒤예요. 옵션을 끄면 시작일 다음 날부터 세요.": "In Korea the start date is usually day 1, so day 100 is 99 days after it. Turn the option off to start counting from the next day.",
     "만 나이는 어떻게 계산하나요?": "How is age calculated?",
-    "태어난 날을 0살로 보고 생일이 지날 때마다 한 살씩 더해요. 2023년 6월부터 한국의 법과 행정에서 쓰는 기준이에요. 2월 29일생은 평년에는 2월 28일을 생일로 봐요.": "You're 0 on the day you're born and gain a year on each birthday — the international standard, used in Korean law since June 2023. People born on Feb 29 have their birthday on Feb 28 in non-leap years.",
+    "태어난 날을 0살로 보고 생일이 지날 때마다 한 살씩 더해요. 2023년 6월부터 한국의 법과 행정에서 쓰는 기준이에요. 2월 29일생은 평년에는 3월 1일을 생일로 봐요.": "You're 0 on the day you're born and gain a year on each birthday — the international standard, used in Korean law since June 2023. People born on Feb 29 have their birthday on Mar 1 in non-leap years.",
     "1월 31일에 1개월을 더하면요?": "What's Jan 31 plus one month?",
     "다음 달에 31일이 없으면 그 달의 마지막 날로 맞춰요. 그래서 2월 28일(윤년은 29일)이 나와요.": "If the next month has no 31st, it uses that month's last day — so you get Feb 28 (29 in leap years).",
     "입력한 날짜가 어딘가로 전송되나요?": "Are the dates I enter sent anywhere?",
