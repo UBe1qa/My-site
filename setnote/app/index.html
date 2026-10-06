@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="세트노트">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
+<meta name="text-scale" content="scale">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -62,15 +63,32 @@ if ('serviceWorker' in navigator) addEventListener('load', function () { navigat
   --scrim: rgba(10,12,9,.48);
   --shadow: 0 1px 2px rgba(16,18,14,.05), 0 10px 30px rgba(16,18,14,.08);
   --shadow-lg: 0 12px 40px rgba(16,18,14,.18);
+  /* exercise tiles: one tint per body part */
+  --cat-chest: #FFE4D6; --cat-chest-ink: #8A3A12; --cat-back: #DCEAFF; --cat-back-ink: #1D4B8F;
+  --cat-legs: #E3F5D6; --cat-legs-ink: #2F6A12; --cat-shoulders: #EFE3FF; --cat-shoulders-ink: #5B2E99;
+  --cat-arms: #FFF0C7; --cat-arms-ink: #7A5300; --cat-core: #D5F3EF; --cat-core-ink: #145F57;
   --font-num: "Barlow Condensed", "IBM Plex Sans KR", system-ui, sans-serif;
   --font-body: "IBM Plex Sans KR", -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  /* Text sizes are written as N × --fs so they follow the reader's text-size setting: 1px at the default size,
+     at most 1.35px (iOS "xxxLarge"; bigger settings stop there so the set table still fits a 320px phone).
+     Display numbers of 20px and up use --fs-lg, which grows half as fast, so they stay inside their boxes. */
+  --fs: clamp(.88px, calc(1rem / 16), 1.35px);
+  --fs-lg: clamp(.94px, calc(.5px + 1rem / 32), 1.18px);
+  /* motion: three durations and one curve for the whole app */
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
   --r-sm: 10px;
   --r-md: 14px;
   --r-lg: 22px;
   --tabbar-h: 64px;
   --safe-b: env(safe-area-inset-bottom, 0px);
+  font-size: 100%;
   color-scheme: light;
 }
+/* The dark palette has to be written twice: once for the system setting and once for an explicit dark choice
+   (the app's own theme setting, or claude.ai's), so either can win. scripts/build-web.mjs stops if the two copies differ. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
@@ -80,6 +98,9 @@ if ('serviceWorker' in navigator) addEventListener('load', function () { navigat
     --inv-soft: rgba(255,255,255,.1); --play-bg: #D4FF3A; --play-fg: #0A0B09; --danger: #FF6B5E; --danger-soft: #3A1714;
     --pr: #FFC53D; --pr-soft: #33270C; --pr-fill: #FFC53D; --glass: rgba(29,32,27,.78);
     --scrim: rgba(0,0,0,.62); --shadow: 0 1px 0 rgba(255,255,255,.03), 0 10px 30px rgba(0,0,0,.35); --shadow-lg: 0 12px 40px rgba(0,0,0,.55);
+    --cat-chest: #3A2217; --cat-chest-ink: #FFB48F; --cat-back: #182A45; --cat-back-ink: #9CC3FF;
+    --cat-legs: #1F3316; --cat-legs-ink: #A6E07C; --cat-shoulders: #2C1D44; --cat-shoulders-ink: #CDA8FF;
+    --cat-arms: #3A2E0E; --cat-arms-ink: #FFD66B; --cat-core: #123430; --cat-core-ink: #86E3D6;
   }
 }
 :root[data-theme="dark"] {
@@ -90,14 +111,34 @@ if ('serviceWorker' in navigator) addEventListener('load', function () { navigat
   --inv-soft: rgba(255,255,255,.1); --play-bg: #D4FF3A; --play-fg: #0A0B09; --danger: #FF6B5E; --danger-soft: #3A1714;
   --pr: #FFC53D; --pr-soft: #33270C; --pr-fill: #FFC53D; --glass: rgba(29,32,27,.78);
   --scrim: rgba(0,0,0,.62); --shadow: 0 1px 0 rgba(255,255,255,.03), 0 10px 30px rgba(0,0,0,.35); --shadow-lg: 0 12px 40px rgba(0,0,0,.55);
+  --cat-chest: #3A2217; --cat-chest-ink: #FFB48F; --cat-back: #182A45; --cat-back-ink: #9CC3FF;
+  --cat-legs: #1F3316; --cat-legs-ink: #A6E07C; --cat-shoulders: #2C1D44; --cat-shoulders-ink: #CDA8FF;
+  --cat-arms: #3A2E0E; --cat-arms-ink: #FFD66B; --cat-core: #123430; --cat-core-ink: #86E3D6;
+}
+/* "Increase contrast" (iOS) / prefers-contrast: grey text, lines and the tab bar get stronger. The light values sit on
+   bare :root, which the dark blocks above outrank; the dark values come twice for the same reason as above. */
+@media (prefers-contrast: more) {
+  :root { --ink-2: #262924; --muted: #4D5249; --line: #B4B9AE; --line-strong: #858B7F; --accent-text: #3A5400; --danger: #B42318; --pr: #7A4800; --glass: rgba(255,255,255,.96); }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ink-2: #E4E7DF; --muted: #B6BBB0; --line: #4D5248; --line-strong: #727869; --danger: #FF8E84; --glass: rgba(29,32,27,.96); }
+}
+@media (prefers-contrast: more) {
+  :root[data-theme="dark"] { --ink-2: #E4E7DF; --muted: #B6BBB0; --line: #4D5248; --line-strong: #727869; --danger: #FF8E84; --glass: rgba(29,32,27,.96); }
+}
+/* iPhone and iPad: Safari shares the Dynamic Type size only through -apple-system-body (17px at the default size),
+   so the root takes that font and --fs is measured against 17px. -webkit-touch-callout keeps desktop Safari out.
+   Elsewhere Android Chrome scales text by itself, so text-size-adjust stays at its default there. */
+@supports (font: -apple-system-body) and (-webkit-touch-callout: none) {
+  :root { font: -apple-system-body; -webkit-text-size-adjust: 100%; --fs: clamp(.88px, calc(1rem / 17), 1.35px); --fs-lg: clamp(.94px, calc(.5px + 1rem / 34), 1.18px); }
 }
 
 * { box-sizing: border-box; }
 html { background: var(--bg); }
 body {
   background: var(--bg); color: var(--ink); font-family: var(--font-body);
-  font-size: 15px; line-height: 1.5; padding-inline: 16px; word-break: keep-all; overflow-wrap: break-word;
-  -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%;
+  font-size: calc(15 * var(--fs)); line-height: 1.5; padding-inline: 16px; word-break: keep-all; overflow-wrap: break-word;
+  -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
 }
 body.lock { overflow: hidden; }
@@ -106,8 +147,8 @@ button:disabled { cursor: default; opacity: .4; }
 input, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 h1, h2, h3 { text-wrap: balance; margin: 0; }
-h1 { font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; }
-h2 { font-size: 20px; line-height: 1.3; font-weight: 700; letter-spacing: -.01em; }
+h1 { font-size: calc(30 * var(--fs-lg)); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; }
+h2 { font-size: calc(20 * var(--fs-lg)); line-height: 1.3; font-weight: 700; letter-spacing: -.01em; }
 p { margin: 0; }
 .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
 .muted { color: var(--muted); }
@@ -122,32 +163,36 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* header */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px 10px; background: var(--bg); }
-.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; letter-spacing: -.02em; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: calc(17 * var(--fs)); letter-spacing: -.02em; }
 .logo { width: 28px; height: 28px; }
 .logo .bg { fill: var(--play-bg); }
 .logo .o { fill: none; stroke: var(--play-fg); stroke-width: 3.2; }
 .logo .h { fill: var(--play-fg); }
 .top-actions { display: flex; align-items: center; gap: 6px; }
-.sync { display: inline-flex; align-items: center; gap: 5px; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--muted); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.sync { position: relative; display: inline-flex; align-items: center; gap: 5px; height: 34px; padding: 0 12px; border-radius: 999px; font-size: calc(12.5 * var(--fs)); font-weight: 600; white-space: nowrap; color: var(--muted); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 .sync .ic { width: 16px; height: 16px; }
 .sync.cloud { color: var(--accent-text); }
-.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; color: var(--ink-2); flex: none; }
+.icon-btn { position: relative; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; color: var(--ink-2); flex: none; }
 .icon-btn:hover { background: var(--surface-2); }
 .icon-btn:active { background: var(--surface-3); }
 .icon-btn.round { border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
-.icon-btn.sm { width: 34px; height: 34px; border-radius: 10px; }
+.icon-btn.sm { border-radius: 10px; }
 .icon-btn.sm .ic { width: 18px; height: 18px; }
 
-.view-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-block: 8px 18px; }
-.view-head p { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+.view-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-block: 8px 18px; }
+.view-head p { color: var(--muted); font-size: calc(13.5 * var(--fs)); margin-top: 4px; }
 .view-head .btn { flex: none; white-space: nowrap; }
-.eyebrow { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
-.sub-h { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .01em; margin: 26px 4px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.eyebrow { font-size: calc(13 * var(--fs)); font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+.sub-h { font-size: calc(13 * var(--fs)); font-weight: 700; color: var(--muted); letter-spacing: .01em; margin: 26px 4px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .empty { color: var(--muted); padding: 18px 4px; }
+.empty-state { display: grid; gap: 4px; padding: 22px 4px 8px; }
+.empty-state b { font-size: calc(16.5 * var(--fs)); }
+.empty-state p { color: var(--muted); font-size: calc(14 * var(--fs)); }
+.empty-state .btn { margin-top: 12px; }
 .stack { display: grid; gap: 10px; }
 
 /* buttons */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 18px; border-radius: var(--r-md); font-weight: 700; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--ink); text-align: center; transition: transform .12s ease, background-color .15s; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 18px; border-radius: var(--r-md); font-weight: 700; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--ink); text-align: center; transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast); }
 .btn:active:not(:disabled) { transform: scale(.98); }
 .btn .ic { width: 18px; height: 18px; }
 .btn-primary { background: var(--accent); box-shadow: none; color: var(--accent-ink); }
@@ -155,60 +200,60 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .btn-soft { background: var(--surface-2); box-shadow: none; color: var(--ink-2); }
 .btn-ghost { background: transparent; box-shadow: none; border: 1.5px dashed var(--line-strong); color: var(--ink-2); }
 .btn-danger { background: var(--danger-soft); box-shadow: none; color: var(--danger); }
-.btn-text { box-shadow: none; background: none; color: var(--muted); min-height: 40px; font-weight: 600; }
+.btn-text { box-shadow: none; background: none; color: var(--muted); min-height: 44px; font-weight: 600; }
 .btn-text.danger { color: var(--danger); }
-.btn-sm { min-height: 38px; padding: 0 14px; font-size: 14px; border-radius: 12px; }
+.btn-sm { min-height: 44px; padding: 0 14px; font-size: calc(14 * var(--fs)); border-radius: 12px; }
 .wide { width: 100%; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 
 /* home: featured routine */
 .hero { position: relative; overflow: hidden; background: var(--accent); color: var(--accent-ink); border-radius: 26px; padding: 18px 18px 16px; display: grid; gap: 4px; margin-bottom: 8px; }
 .hero::after { content: ""; position: absolute; right: -46px; top: -46px; width: 170px; height: 170px; border-radius: 50%; border: 22px solid rgba(15,17,14,.07); pointer-events: none; }
-.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
-.hero-label { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: rgba(15,17,14,.1); }
-.hero-when { font-weight: 600; opacity: .72; }
-.hero-name { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-top: 8px; text-align: left; overflow-wrap: anywhere; position: relative; z-index: 1; }
-.hero-meta { display: flex; gap: 14px; font-size: 13.5px; font-weight: 600; opacity: .78; }
-.hero-meta b { font-size: 18px; font-weight: 700; margin-right: 1px; }
-.hero-ex { font-size: 13.5px; opacity: .78; margin-top: 2px; }
-.hero-go { margin-top: 12px; height: 52px; border-radius: 16px; background: var(--hero-btn, #0F110E); color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: 16px; position: relative; z-index: 1; transition: transform .12s ease; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: calc(13 * var(--fs)); font-weight: 700; }
+.hero-label { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: rgba(15,17,14,.1); }
+.hero-when { font-weight: 600; opacity: .72; text-align: right; }
+.hero-name { font-size: calc(28 * var(--fs-lg)); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-top: 8px; text-align: left; overflow-wrap: anywhere; position: relative; z-index: 1; }
+.hero-meta { display: flex; gap: 14px; font-size: calc(13.5 * var(--fs)); font-weight: 600; opacity: .78; }
+.hero-meta b { font-size: calc(18 * var(--fs)); font-weight: 700; margin-right: 1px; }
+.hero-ex { font-size: calc(13.5 * var(--fs)); opacity: .78; margin-top: 2px; }
+.hero-go { margin-top: 12px; height: 52px; border-radius: 16px; background: var(--hero-btn, #0F110E); color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: calc(16 * var(--fs)); position: relative; z-index: 1; transition: transform var(--dur-fast) var(--ease-standard); }
 .hero-go:active { transform: scale(.98); }
 .hero-go .ic { width: 18px; height: 18px; }
 
 /* routine cards */
 .rcard { display: flex; align-items: center; gap: 4px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding-right: 14px; }
 .rcard-main { flex: 1; min-width: 0; padding: 16px 4px 16px 18px; display: grid; gap: 3px; }
-.rcard-title { font-size: 17.5px; font-weight: 700; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; letter-spacing: -.01em; }
-.rcard-meta { font-size: 13px; color: var(--muted); }
-.rcard-ex { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; }
-.play { width: 50px; height: 50px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--play-bg); color: var(--play-fg); transition: transform .12s ease; }
+.rcard-title { font-size: calc(17.5 * var(--fs)); font-weight: 700; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; letter-spacing: -.01em; }
+.rcard-meta { font-size: calc(13 * var(--fs)); color: var(--muted); }
+.rcard-ex { font-size: calc(13.5 * var(--fs)); color: var(--ink-2); margin-top: 4px; }
+.play { width: 50px; height: 50px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--play-bg); color: var(--play-fg); transition: transform var(--dur-fast) var(--ease-standard); }
 .play:active { transform: scale(.94); }
 .play .ic { width: 20px; height: 20px; margin-left: 2px; }
-.badge { font-size: 11px; font-weight: 700; letter-spacing: .01em; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
+.badge { font-size: calc(11 * var(--fs)); font-weight: 700; letter-spacing: .01em; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
 .badge.pr { background: var(--pr-soft); color: var(--pr); }
 .tpl { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 16px; display: grid; gap: 10px; }
 .tpl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.tpl-name { font-weight: 700; font-size: 17px; }
-.tpl-list { font-size: 13.5px; color: var(--ink-2); }
+.tpl-name { font-weight: 700; font-size: calc(17 * var(--fs)); }
+.tpl-list { font-size: calc(13.5 * var(--fs)); color: var(--ink-2); }
 .tpl-more { margin-top: 18px; }
-.tpl-more > summary { cursor: pointer; color: var(--muted); font-weight: 600; font-size: 14px; padding: 8px 4px; list-style: none; }
+.tpl-more > summary { cursor: pointer; color: var(--muted); font-weight: 600; font-size: calc(14 * var(--fs)); min-height: 44px; display: flex; align-items: center; padding: 0 4px; list-style: none; }
 .tpl-more > summary::-webkit-details-marker { display: none; }
 .tpl-more[open] > summary { margin-bottom: 8px; }
 .intro { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 6px; margin-bottom: 14px; }
-.intro b { font-size: 16.5px; }
-.intro p { color: var(--ink-2); font-size: 14px; }
+.intro b { font-size: calc(16.5 * var(--fs)); }
+.intro p { color: var(--ink-2); font-size: calc(14 * var(--fs)); }
 .intro .row2 { margin-top: 6px; }
 .welcome { display: grid; gap: 10px; justify-items: start; padding: 6px 2px 18px; }
 .welcome .logo { width: 52px; height: 52px; }
-.welcome h2 { font-size: 24px; }
-.welcome p { color: var(--ink-2); font-size: 14.5px; }
+.welcome h2 { font-size: calc(24 * var(--fs-lg)); }
+.welcome p { color: var(--ink-2); font-size: calc(14.5 * var(--fs)); }
 .after-list { display: grid; gap: 8px; margin-top: 12px; }
 
 /* floating tab bar */
 .tabbar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--safe-b) + 10px); z-index: 20; width: min(420px, calc(100% - 32px)); border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-lg); padding: 6px; }
 .tabbar-in { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; height: calc(var(--tabbar-h) - 12px); }
-.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 999px; font-size: 11.5px; color: var(--muted); font-weight: 600; text-align: center; transition: background-color .15s, color .15s; }
+.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 999px; font-size: calc(11.5 * var(--fs)); color: var(--muted); font-weight: 600; text-align: center; transition: background-color var(--dur-fast), color var(--dur-fast); }
 .tab .ic { width: 22px; height: 22px; }
 .tab[aria-current="page"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
 
@@ -217,164 +262,160 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .pill-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex: none; box-shadow: 0 0 0 0 rgba(200,241,53,.6); animation: live 1.6s ease-out infinite; }
 @keyframes live { 0% { box-shadow: 0 0 0 0 rgba(200,241,53,.55); } 70%, 100% { box-shadow: 0 0 0 9px rgba(200,241,53,0); } }
 .pill-txt { flex: 1; min-width: 0; display: grid; }
-.pill-txt b { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pill-txt span { font-size: 12.5px; opacity: .78; }
-.pill-txt .num { font-size: 14px; font-weight: 600; }
-.pill-go { flex: none; height: 40px; padding: 0 14px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; display: grid; place-items: center; }
+.pill-txt b { font-size: calc(14.5 * var(--fs)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill-txt span { font-size: calc(12.5 * var(--fs)); opacity: .78; }
+.pill-txt .num { font-size: calc(14 * var(--fs)); font-weight: 600; }
+.pill-go { flex: none; height: 40px; padding: 0 14px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: calc(14 * var(--fs)); display: grid; place-items: center; }
 
 /* exercise list */
 .search { position: relative; }
 .search .ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 18px; height: 18px; }
-.txt { height: 48px; border-radius: var(--r-md); border: 0; box-shadow: inset 0 0 0 1px var(--line); background: var(--surface); padding: 0 14px; font-size: 16px; width: 100%; }
+/* never under 16px: iPhone Safari zooms the whole page into a field with smaller text (a small text-size setting would do it) */
+.txt { height: 48px; border-radius: var(--r-md); border: 0; box-shadow: inset 0 0 0 1px var(--line); background: var(--surface); padding: 0 14px; font-size: max(16px, calc(16 * var(--fs))); width: 100%; }
 .txt:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
 .search .txt { padding-left: 40px; }
 .txt::placeholder { color: var(--muted); }
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-block: 12px 4px; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
 .chips::-webkit-scrollbar { display: none; }
-.chips.wrap { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; }
-.chip { flex: none; height: 36px; padding: 0 15px; border-radius: 999px; font-size: 14px; font-weight: 600; background: var(--surface); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); }
+.chips.wrap { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; row-gap: 8px; }
+.chip { position: relative; flex: none; height: 36px; padding: 0 15px; border-radius: 999px; font-size: calc(14 * var(--fs)); font-weight: 600; background: var(--surface); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); box-shadow: none; }
 .exlist { display: grid; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; }
 .exrow { display: flex; gap: 12px; align-items: center; padding: 12px 16px 12px 12px; border-top: 1px solid var(--line); width: 100%; }
 .exrow:first-child { border-top: 0; }
 .exrow:active { background: var(--surface-2); }
-.extile { width: 44px; height: 44px; border-radius: 13px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; letter-spacing: -.02em; background: var(--surface-2); color: var(--ink-2); }
-.extile[data-cat="가슴"] { background: #FFE4D6; color: #8A3A12; }
-.extile[data-cat="등"] { background: #DCEAFF; color: #1D4B8F; }
-.extile[data-cat="하체"] { background: #E3F5D6; color: #2F6A12; }
-.extile[data-cat="어깨"] { background: #EFE3FF; color: #5B2E99; }
-.extile[data-cat="팔"] { background: #FFF0C7; color: #7A5300; }
-.extile[data-cat="코어"] { background: #D5F3EF; color: #145F57; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .extile[data-cat="가슴"] { background: #3A2217; color: #FFB48F; }
-  :root:not([data-theme="light"]) .extile[data-cat="등"] { background: #182A45; color: #9CC3FF; }
-  :root:not([data-theme="light"]) .extile[data-cat="하체"] { background: #1F3316; color: #A6E07C; }
-  :root:not([data-theme="light"]) .extile[data-cat="어깨"] { background: #2C1D44; color: #CDA8FF; }
-  :root:not([data-theme="light"]) .extile[data-cat="팔"] { background: #3A2E0E; color: #FFD66B; }
-  :root:not([data-theme="light"]) .extile[data-cat="코어"] { background: #123430; color: #86E3D6; }
-}
-:root[data-theme="dark"] .extile[data-cat="가슴"] { background: #3A2217; color: #FFB48F; }
-:root[data-theme="dark"] .extile[data-cat="등"] { background: #182A45; color: #9CC3FF; }
-:root[data-theme="dark"] .extile[data-cat="하체"] { background: #1F3316; color: #A6E07C; }
-:root[data-theme="dark"] .extile[data-cat="어깨"] { background: #2C1D44; color: #CDA8FF; }
-:root[data-theme="dark"] .extile[data-cat="팔"] { background: #3A2E0E; color: #FFD66B; }
-:root[data-theme="dark"] .extile[data-cat="코어"] { background: #123430; color: #86E3D6; }
+.extile { width: 44px; height: 44px; border-radius: 13px; flex: none; display: grid; place-items: center; font-size: calc(12 * var(--fs)); font-weight: 700; letter-spacing: -.02em; background: var(--surface-2); color: var(--ink-2); }
+.extile[data-cat="가슴"] { background: var(--cat-chest); color: var(--cat-chest-ink); }
+.extile[data-cat="등"] { background: var(--cat-back); color: var(--cat-back-ink); }
+.extile[data-cat="하체"] { background: var(--cat-legs); color: var(--cat-legs-ink); }
+.extile[data-cat="어깨"] { background: var(--cat-shoulders); color: var(--cat-shoulders-ink); }
+.extile[data-cat="팔"] { background: var(--cat-arms); color: var(--cat-arms-ink); }
+.extile[data-cat="코어"] { background: var(--cat-core); color: var(--cat-core-ink); }
 .exrow-txt { flex: 1; min-width: 0; display: grid; gap: 1px; }
 .exrow-name { font-weight: 600; }
-.exrow-sub { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.exrow-sub { font-size: calc(13 * var(--fs)); color: var(--muted); overflow-wrap: anywhere; }
 .exrow-best { text-align: right; flex: none; display: grid; }
-.exrow-best .num { font-size: 24px; font-weight: 700; line-height: 1.05; }
-.exrow-best small { font-size: 11px; color: var(--muted); }
+.exrow-best .num { font-size: calc(24 * var(--fs-lg)); font-weight: 700; line-height: 1.05; }
+.exrow-best small { font-size: calc(11 * var(--fs)); color: var(--muted); }
 .last b { font-weight: 600; color: var(--ink-2); }
 .last.none { color: var(--muted); }
 
 /* history */
 .week { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 16px 14px 14px; display: grid; gap: 16px; }
-.week-sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-inline: 4px; }
+/* columns follow their content, so a six-digit weekly volume still fits next to the other two */
+.week-sum { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px 12px; padding-inline: 4px; }
 .wstat { display: grid; gap: 0; min-width: 0; }
+/* numbers in the three-across tiles are already display size and fill their tiles, so they keep a fixed size */
 .wstat .num { font-size: 30px; font-weight: 700; line-height: 1.05; letter-spacing: -.01em; white-space: nowrap; }
 .wstat .num em { font-style: normal; font-size: 15px; font-weight: 600; color: var(--muted); margin-left: 2px; }
-.wstat small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.wstat small { font-size: calc(12 * var(--fs)); color: var(--muted); font-weight: 600; }
 .week-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.wk { display: grid; justify-items: center; gap: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
-.wk-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-family: var(--font-num); font-size: 15px; font-weight: 600; color: var(--ink-2); }
+.wk { display: grid; justify-items: center; gap: 6px; font-size: calc(12 * var(--fs)); color: var(--muted); font-weight: 600; }
+.wk-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-family: var(--font-num); font-size: calc(15 * var(--fs)); font-weight: 600; color: var(--ink-2); }
 .wk.on .wk-dot { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
 .wk.today .wk-dot { box-shadow: inset 0 0 0 2px var(--ink); }
 .wk.today > span:first-child { color: var(--ink); font-weight: 700; }
-.month-h { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .01em; margin: 26px 4px 10px; }
+.month-h { display: flex; justify-content: space-between; font-size: calc(13 * var(--fs)); font-weight: 700; color: var(--muted); letter-spacing: .01em; margin: 26px 4px 10px; }
 .scard { width: 100%; display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 14px 16px 14px 14px; text-align: left; }
 .scard:active { background: var(--surface-2); }
 .scard-date { width: 48px; flex: none; display: grid; justify-items: center; padding: 6px 0 5px; border-radius: 14px; background: var(--surface-2); line-height: 1.1; }
-.scard-date b { font-family: var(--font-num); font-size: 24px; font-weight: 700; }
-.scard-date small { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.scard-date b { font-family: var(--font-num); font-size: calc(24 * var(--fs-lg)); font-weight: 700; }
+.scard-date small { font-size: calc(11.5 * var(--fs)); color: var(--muted); font-weight: 600; }
 .scard-main { flex: 1; min-width: 0; display: grid; gap: 4px; }
 .scard-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.scard-title { font-weight: 700; font-size: 16.5px; letter-spacing: -.01em; }
-.scard-when { font-size: 12.5px; color: var(--muted); flex: none; }
-.scard-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.scard-title { font-weight: 700; font-size: calc(16.5 * var(--fs)); letter-spacing: -.01em; }
+.scard-when { font-size: calc(12.5 * var(--fs)); color: var(--muted); flex: none; }
+.scard-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: calc(13 * var(--fs)); color: var(--muted); }
 .scard-stats > span { display: inline-flex; align-items: baseline; gap: 2px; }
-.scard-stats .num { font-size: 17px; font-weight: 700; color: var(--ink); }
-.scard-ex { font-size: 13px; color: var(--muted); }
+.scard-stats .num { font-size: calc(17 * var(--fs)); font-weight: 700; color: var(--ink); }
+.scard-ex { font-size: calc(13 * var(--fs)); color: var(--muted); }
 
 /* workout overlay */
 .wo { position: fixed; inset: 0; z-index: 30; background: var(--bg); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .wo-head { position: sticky; top: 0; z-index: 3; background: var(--bg); padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 0; }
 .wo-head-in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
 .wo-title { flex: 1; min-width: 0; }
-.wo-name { font-weight: 700; font-size: 17px; overflow-wrap: anywhere; line-height: 1.3; letter-spacing: -.01em; }
-.wo-sub { font-size: 12.5px; color: var(--muted); }
+.wo-name { font-weight: 700; font-size: calc(17 * var(--fs)); overflow-wrap: anywhere; line-height: 1.3; letter-spacing: -.01em; }
+.wo-sub { font-size: calc(12.5 * var(--fs)); color: var(--muted); }
 .wo-stats { max-width: 560px; margin: 10px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .wo-stat { background: var(--surface); border-radius: var(--r-md); box-shadow: inset 0 0 0 1px var(--line); padding: 8px 12px 7px; display: grid; }
 .wo-stat .num { font-size: 24px; font-weight: 700; line-height: 1.05; white-space: nowrap; }
 .wo-stat .num em { font-style: normal; font-size: 15px; color: var(--muted); font-weight: 600; margin-left: 1px; }
-.wo-stat small { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.wo-stat small { font-size: calc(11.5 * var(--fs)); color: var(--muted); font-weight: 600; }
 .wo-bar { max-width: 560px; margin: 10px auto 0; height: 4px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
-.wo-bar i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width .3s ease; }
+.wo-bar i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width var(--dur-base) var(--ease-standard); }
 .wo-head::after { content: ""; display: block; height: 10px; }
 .wo-body { max-width: 560px; margin: 0 auto; padding: 6px 16px calc(150px + var(--safe-b)); display: grid; gap: 12px; }
 .wo-empty { text-align: center; color: var(--muted); padding: 28px 12px; background: var(--surface); border: 1.5px dashed var(--line-strong); border-radius: var(--r-lg); }
 
-.excard { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 14px 12px 10px; transition: box-shadow .2s; }
+.excard { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 14px 12px 10px; transition: box-shadow var(--dur-fast); }
 .excard.all-done { box-shadow: inset 0 0 0 2px var(--accent), var(--shadow); }
-.excard-head { display: flex; align-items: flex-start; gap: 10px; padding-left: 4px; }
-.ex-idx { width: 30px; height: 30px; margin-top: 2px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--surface-2); font-size: 17px; font-weight: 700; color: var(--ink-2); }
+/* when the name's longest word can't fit beside the tools (big text on a narrow phone), the tools move to a second line
+   instead of the word breaking mid-syllable */
+.excard-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 10px; padding-left: 4px; }
+.ex-idx { width: 30px; height: 30px; margin-top: 2px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--surface-2); font-size: calc(17 * var(--fs)); font-weight: 700; color: var(--ink-2); }
 .excard.all-done .ex-idx { background: var(--accent); color: var(--accent-ink); }
-.excard-name { flex: 1; min-width: 0; font-size: 17.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.3; padding-top: 4px; overflow-wrap: anywhere; }
+.excard-name { position: relative; flex: 1; font-size: calc(17.5 * var(--fs)); font-weight: 700; letter-spacing: -.01em; line-height: 1.3; padding-top: 4px; overflow-wrap: break-word; }
 .excard-name:hover { text-decoration: underline; text-underline-offset: 3px; }
-.excard-tools { display: flex; flex: none; color: var(--muted); }
-.excard-last { margin-top: 6px; padding-left: 4px; font-size: 13px; color: var(--ink-2); display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; }
-.tag { font-size: 11px; font-weight: 700; letter-spacing: .01em; padding: 2px 8px; border-radius: 7px; background: var(--surface-2); color: var(--muted); }
+.excard-tools { display: flex; flex: none; gap: 12px; margin-left: auto; color: var(--muted); }
+.excard-last { margin-top: 6px; padding-left: 4px; font-size: calc(13 * var(--fs)); color: var(--ink-2); display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; }
+.tag { font-size: calc(11 * var(--fs)); font-weight: 700; letter-spacing: .01em; padding: 2px 8px; border-radius: 7px; background: var(--surface-2); color: var(--muted); }
 .tag.acc { background: var(--accent-soft); color: var(--accent-text); }
 .tag.ok { background: var(--accent); color: var(--accent-ink); }
 .sets { margin-top: 12px; display: grid; gap: 4px; }
 .set-h, .set { display: grid; grid-template-columns: 30px minmax(0, 1fr) 74px 60px 46px; gap: 7px; align-items: center; }
-.set-h { font-size: 11.5px; color: var(--muted); font-weight: 700; padding: 0 4px 2px; }
-.set-h span:first-child { text-align: center; }
+.set-h { font-size: calc(11.5 * var(--fs)); color: var(--muted); font-weight: 700; padding: 0 4px 2px; }
+.set-h span { white-space: nowrap; }
+/* centred with flex so a label wider than its column (big text, 320px) spills evenly to both sides */
+.set-h span:first-child { display: flex; justify-content: center; }
+/* starts where the values under it start (.set-prev padding), which also keeps it clear of '세트' */
+.set-h span:nth-child(2) { padding-left: 4px; }
 .set-h span:nth-child(3), .set-h span:nth-child(4) { text-align: center; }
-.set { padding: 4px; border-radius: 14px; transition: background-color .2s; }
+.set { padding: 4px; border-radius: 14px; transition: background-color var(--dur-fast); }
 .set.done { background: var(--done-soft); }
-.set-n { width: 28px; height: 28px; justify-self: center; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-num); font-weight: 700; font-size: 16px; color: var(--ink-2); background: var(--surface-2); }
+.set-n { width: 28px; height: 28px; justify-self: center; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-num); font-weight: 700; font-size: calc(16 * var(--fs)); color: var(--ink-2); background: var(--surface-2); }
 .set.done .set-n { background: transparent; color: var(--accent-text); }
-.set-prev { font-family: var(--font-num); font-size: 16px; color: var(--muted); padding: 6px 4px; border-radius: 9px; min-height: 42px; overflow-wrap: anywhere; word-break: keep-all; line-height: 1.15; display: flex; align-items: center; flex-wrap: wrap; }
+.set-prev { font-family: var(--font-num); font-size: calc(16 * var(--fs)); color: var(--muted); padding: 6px 4px; border-radius: 9px; min-height: 44px; overflow-wrap: anywhere; word-break: keep-all; line-height: 1.15; display: flex; align-items: center; flex-wrap: wrap; }
 .set-prev:not(:disabled):hover { background: var(--surface-2); color: var(--ink-2); }
 .set-prev:disabled { opacity: 1; }
-.num-in { width: 100%; height: 46px; border-radius: 12px; border: 0; background: var(--surface-2); text-align: center; font-family: var(--font-num); font-size: 21px; font-weight: 700; padding: 0 4px; box-shadow: inset 0 0 0 1px transparent; transition: box-shadow .12s, background-color .12s; }
+.num-in { width: 100%; height: 46px; border-radius: 12px; border: 0; background: var(--surface-2); text-align: center; font-family: var(--font-num); font-size: calc(21 * var(--fs-lg)); font-weight: 700; padding: 0 4px; box-shadow: inset 0 0 0 1px transparent; transition: box-shadow var(--dur-fast), background-color var(--dur-fast); }
 .num-in::placeholder { color: var(--muted); opacity: 1; font-weight: 500; }
 .num-in:focus { background: var(--surface); outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
 .set.done .num-in { background: transparent; }
 @media (max-width: 359px) {
-  .row2 .btn { padding-inline: 10px; font-size: 14px; }
-  .row2 .btn .ic { display: none; }
+  .row2 .btn { padding-inline: 10px; font-size: calc(14 * var(--fs)); }
+  .row2 .btn .ic, .row3 .btn .ic { display: none; }
+  .rest-btns button { padding-inline: 10px; }
   .excard { padding-inline: 8px; }
   .set-h, .set { grid-template-columns: 24px minmax(0, 1fr) 60px 48px 44px; gap: 5px; }
-  .set-n { width: 24px; height: 24px; font-size: 15px; }
-  .num-in { font-size: 19px; }
+  .set-n { width: 24px; height: 24px; font-size: calc(15 * var(--fs)); }
+  .num-in { font-size: calc(19 * var(--fs-lg)); }
   .wo-stat { padding-inline: 9px; }
   .wo-stat .num { font-size: 21px; }
   .wstat .num { font-size: 25px; }
 }
-.set-check { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); background: var(--surface-2); transition: background-color .15s, transform .12s; }
+.set-check { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); background: var(--surface-2); transition: background-color var(--dur-fast), transform var(--dur-fast) var(--ease-standard); }
 .set-check:active { transform: scale(.92); }
 .set-check .ic { width: 22px; height: 22px; stroke-width: 2.8; }
 .set.done .set-check { background: var(--accent); color: var(--accent-ink); }
-.set.pop .set-check { animation: pop .32s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes pop { 0% { transform: scale(.7); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.set.pop .set-check { animation: tick var(--dur-fast) var(--ease-standard); }
+@keyframes tick { from { transform: scale(.86); } to { transform: none; } }
 .excard-foot { display: grid; gap: 8px; margin-top: 8px; }
 .excard-foot .btns { display: flex; gap: 6px; }
 .excard-foot .btns .btn-soft { flex: 1; }
-.prog { font-size: 13px; color: var(--muted); padding-left: 4px; }
+.prog { font-size: calc(13 * var(--fs)); color: var(--muted); padding-left: 4px; }
 .prog b { color: var(--ink-2); }
 .prog.up b:last-child { color: var(--accent-text); }
-.prog .num { font-size: 15px; }
+.prog .num { font-size: calc(15 * var(--fs)); }
 
 /* rest bar */
 .rest { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--safe-b) + 12px); width: min(528px, calc(100% - 24px)); z-index: 35; overflow: hidden; border-radius: 24px; background: var(--inv); color: var(--inv-ink); padding: 16px 14px 14px 20px; box-shadow: var(--shadow-lg); }
-.rest-prog { position: absolute; left: 0; top: 0; height: 4px; background: var(--accent); transition: width .25s linear; }
-.rest-in { display: flex; align-items: center; gap: 8px; }
-.rest-label { font-size: 12.5px; font-weight: 600; opacity: .75; }
-.rest-time { font-size: 38px; font-weight: 700; min-width: 3.4ch; line-height: 1; letter-spacing: -.01em; }
+.rest-prog { position: absolute; left: 0; top: 0; height: 4px; background: var(--accent); transition: width var(--dur-base) linear; }
+.rest-in { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rest-label { font-size: calc(12.5 * var(--fs)); font-weight: 600; opacity: .75; }
+.rest-time { font-size: calc(38 * var(--fs-lg)); font-weight: 700; min-width: 3.4ch; line-height: 1; letter-spacing: -.01em; }
 .rest-btns { margin-left: auto; display: flex; gap: 6px; }
-.rest-btns button { min-height: 44px; padding: 0 13px; border-radius: 14px; background: var(--inv-soft); font-weight: 700; font-size: 14px; font-family: var(--font-body); }
+.rest-btns button { min-height: 44px; padding: 0 13px; border-radius: 14px; background: var(--inv-soft); font-weight: 700; font-size: calc(14 * var(--fs)); font-family: var(--font-body); }
 .rest-btns button:last-child { background: var(--accent); color: var(--accent-ink); }
 
 /* sheets */
@@ -382,7 +423,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .sheet-root:empty { display: none; }
 .backdrop { position: absolute; inset: 0; background: var(--scrim); cursor: pointer; }
 .sheet { position: relative; width: 100%; max-width: 560px; max-height: calc(100% - 20px - env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; background: var(--surface); border-radius: 28px 28px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,.2); }
-.sheet.enter { animation: sheet-up .26s cubic-bezier(.2, .9, .3, 1); }
+.sheet.enter { animation: sheet-up var(--dur-base) var(--ease-standard); }
 @keyframes sheet-up { from { transform: translateY(40px); opacity: .4; } to { transform: none; opacity: 1; } }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 14px 8px 22px; }
 .sheet-head .icon-btn { background: var(--surface-2); border-radius: 50%; width: 36px; height: 36px; }
@@ -390,16 +431,16 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .sheet-body { overflow-y: auto; padding: 6px 22px 20px; overscroll-behavior: contain; flex: 1; }
 .sheet-foot { padding: 12px 22px calc(12px + var(--safe-b)); border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .sheet .exlist { border-radius: var(--r-md); box-shadow: inset 0 0 0 1px var(--line); }
-.confirm-msg { font-size: 15px; color: var(--ink-2); padding-block: 4px 8px; }
+.confirm-msg { font-size: calc(15 * var(--fs)); color: var(--ink-2); padding-block: 4px 8px; }
 
 .field { display: grid; gap: 6px; margin-bottom: 14px; }
-.field > span { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.field > span { font-size: calc(13 * var(--fs)); font-weight: 700; color: var(--ink-2); }
 .sheet .txt { background: var(--surface-2); box-shadow: none; }
 .sheet .txt:focus { box-shadow: inset 0 0 0 2px var(--ink); background: var(--surface); }
 
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin-block: 6px 16px; }
 .stat { background: var(--surface-2); border-radius: var(--r-md); padding: 11px 13px; display: grid; gap: 1px; }
-.stat small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.stat small { font-size: calc(12 * var(--fs)); color: var(--muted); font-weight: 600; }
 .stat .num { font-size: 26px; font-weight: 700; line-height: 1.1; }
 .stat .num em { font-style: normal; font-size: 14px; font-weight: 600; margin-left: 2px; color: var(--muted); }
 
@@ -407,27 +448,27 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .rd-ex { width: 100%; display: grid; gap: 2px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
 .rd-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .rd-name { font-weight: 600; }
-.rd-target { font-size: 13px; color: var(--muted); flex: none; }
-.rd-last { font-size: 13px; color: var(--ink-2); overflow-wrap: anywhere; }
-.kv { font-size: 14px; color: var(--ink-2); }
+.rd-target { font-size: calc(13 * var(--fs)); color: var(--muted); flex: none; }
+.rd-last { font-size: calc(13 * var(--fs)); color: var(--ink-2); overflow-wrap: anywhere; }
+.kv { font-size: calc(14 * var(--fs)); color: var(--ink-2); }
 
 .ed-list { display: grid; gap: 8px; margin-block: 4px 12px; }
 .ed-row { background: var(--surface-2); border-radius: var(--r-md); padding: 10px 10px 12px 14px; display: grid; gap: 6px; }
 .ed-top { display: flex; justify-content: space-between; gap: 6px; align-items: flex-start; }
 .ed-name { font-weight: 600; padding-top: 6px; overflow-wrap: anywhere; }
-.ed-tools { display: flex; flex: none; }
-.ed-last { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.ed-tools { display: flex; flex: none; gap: 12px; }
+.ed-last { font-size: calc(12.5 * var(--fs)); color: var(--muted); overflow-wrap: anywhere; }
 .ed-fields { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.stepper { display: inline-flex; align-items: center; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); height: 42px; }
-.stepper button { width: 38px; height: 40px; display: grid; place-items: center; color: var(--ink-2); }
+.stepper { display: inline-flex; align-items: center; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); height: 44px; }
+.stepper button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink-2); }
 .stepper .ic { width: 16px; height: 16px; }
-.stepper .num { font-size: 20px; font-weight: 700; min-width: 1.6ch; text-align: center; }
-.stepper small { font-size: 12.5px; color: var(--muted); margin-right: 2px; }
-.mini { display: inline-flex; align-items: center; gap: 4px; height: 42px; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); padding: 0 10px 0 4px; }
-.mini input { width: 58px; height: 38px; border: 0; background: transparent; text-align: center; font-family: var(--font-num); font-size: 19px; font-weight: 700; }
+.stepper .num { font-size: calc(20 * var(--fs-lg)); font-weight: 700; min-width: 1.6ch; text-align: center; }
+.stepper small { font-size: calc(12.5 * var(--fs)); color: var(--muted); margin-right: 2px; }
+.mini { display: inline-flex; align-items: center; gap: 4px; height: 44px; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); padding: 0 10px 0 4px; }
+.mini input { width: 58px; height: 40px; border: 0; background: transparent; text-align: center; font-family: var(--font-num); font-size: calc(19 * var(--fs-lg)); font-weight: 700; }
 .mini input:focus { outline: none; }
 .mini:focus-within { box-shadow: inset 0 0 0 2px var(--ink); }
-.mini small { font-size: 12.5px; color: var(--muted); }
+.mini small { font-size: calc(12.5 * var(--fs)); color: var(--muted); }
 
 .pk-row { display: flex; gap: 12px; align-items: center; padding: 11px 14px; border-top: 1px solid var(--line); width: 100%; }
 .pk-row:first-child { border-top: 0; }
@@ -437,13 +478,13 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .pk-row.on .pk-box { background: var(--accent); box-shadow: none; color: var(--accent-ink); }
 .pk-txt { display: grid; min-width: 0; }
 .pk-name { font-weight: 600; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.pk-sub { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.pk-sub { font-size: calc(12.5 * var(--fs)); color: var(--muted); overflow-wrap: anywhere; }
 .pk-new { display: flex; width: 100%; align-items: center; gap: 8px; padding: 12px 14px; margin-bottom: 10px; border-radius: var(--r-md); border: 1.5px dashed var(--line-strong); color: var(--ink); font-weight: 700; }
 .pk-create { padding: 12px 14px; margin-bottom: 10px; border-radius: var(--r-md); background: var(--accent-soft); }
-.pk-create-t { font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+.pk-create-t { font-weight: 600; font-size: calc(14 * var(--fs)); overflow-wrap: anywhere; }
 
 .chart { margin-block: 4px 16px; }
-.chart-h { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+.chart-h { display: flex; justify-content: space-between; font-size: calc(12.5 * var(--fs)); color: var(--muted); margin-bottom: 4px; font-weight: 600; }
 .chart svg { width: 100%; height: auto; display: block; }
 .sp-grid { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
 .sp-area { fill: var(--accent); stroke: none; opacity: .28; }
@@ -454,74 +495,132 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 .hist { display: grid; gap: 8px; }
 .hist-row { display: grid; gap: 2px; padding: 10px 12px; background: var(--surface-2); border-radius: var(--r-md); }
-.hist-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: var(--muted); }
-.hist-sets { font-family: var(--font-num); font-size: 17px; font-weight: 600; overflow-wrap: anywhere; }
+.hist-top { display: flex; justify-content: space-between; gap: 8px; font-size: calc(12.5 * var(--fs)); color: var(--muted); }
+.hist-sets { font-family: var(--font-num); font-size: calc(17 * var(--fs)); font-weight: 600; overflow-wrap: anywhere; }
 
 .sd-ex { padding-block: 10px; border-top: 1px solid var(--line); }
 .sd-ex:first-of-type { border-top: 0; }
-.sd-name { font-weight: 700; }
+.sd-name { position: relative; font-weight: 700; }
 .sd-name:hover { text-decoration: underline; text-underline-offset: 3px; }
 .sd-sets { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; }
-.sd-sets li { display: grid; grid-template-columns: 26px auto; gap: 8px; font-family: var(--font-num); font-size: 17px; font-weight: 600; }
+.sd-sets li { display: grid; grid-template-columns: 26px auto; gap: 8px; font-family: var(--font-num); font-size: calc(17 * var(--fs)); font-weight: 600; }
 .sd-sets li span:first-child { color: var(--muted); }
 
-.done-hero { text-align: center; padding-block: 4px 8px; display: grid; justify-items: center; gap: 2px; }
-.done-badge { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); margin-bottom: 8px; animation: pop .45s cubic-bezier(.3, 1.6, .5, 1); }
+.done-hero { position: relative; text-align: center; padding-block: 4px 8px; display: grid; justify-items: center; gap: 2px; }
+.done-badge { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); margin-bottom: 8px; animation: pop var(--dur-slow) cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes pop { 0% { transform: scale(.7); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
 .done-badge .ic { width: 30px; height: 30px; stroke-width: 2.6; }
-.done-hero .num { font-size: 60px; font-weight: 800; line-height: 1; letter-spacing: -.01em; }
-.done-hero .num small { font-size: 22px; margin-left: 3px; color: var(--muted); font-weight: 700; }
-.done-hero p { color: var(--muted); font-size: 13.5px; font-weight: 600; }
+.done-hero .num { font-size: calc(60 * var(--fs-lg)); font-weight: 800; line-height: 1; letter-spacing: -.01em; }
+.done-hero .num small { font-size: calc(22 * var(--fs-lg)); margin-left: 3px; color: var(--muted); font-weight: 700; }
+.done-hero p { color: var(--muted); font-size: calc(13.5 * var(--fs)); font-weight: 600; }
 .done-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; margin-top: 14px; }
 .done-stats div { background: var(--surface-2); border-radius: var(--r-md); padding: 10px 6px; display: grid; }
 .done-stats b { font-family: var(--font-num); font-size: 22px; font-weight: 700; line-height: 1.1; }
-.done-stats small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.done-stats small { font-size: calc(12 * var(--fs)); color: var(--muted); font-weight: 600; }
 .cmp { display: grid; gap: 6px; margin-top: 4px; }
 .cmp-row { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 11px 12px 11px 14px; background: var(--surface-2); border-radius: var(--r-md); }
 .cmp-row b { font-weight: 600; overflow-wrap: anywhere; }
-.cmp-d { font-size: 13px; color: var(--muted); flex: none; text-align: right; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+.cmp-d { font-size: calc(13 * var(--fs)); color: var(--muted); flex: none; text-align: right; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
 .cmp-d .ic { width: 14px; height: 14px; stroke-width: 2.6; }
 .cmp-d.up { color: var(--accent-ink); background: var(--accent); padding: 3px 9px; border-radius: 999px; }
 .pr-list { display: grid; gap: 6px; margin: 14px 0 4px; }
-.pr-row { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: var(--r-md); background: var(--pr-soft); color: var(--pr); font-size: 14px; flex-wrap: wrap; font-weight: 600; }
+.pr-row { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: var(--r-md); background: var(--pr-soft); color: var(--pr); font-size: calc(14 * var(--fs)); flex-wrap: wrap; font-weight: 600; }
 .pr-row .ic { color: var(--pr); }
 .pr-row b { color: var(--ink); }
 
 .toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
 .toggle-txt { display: grid; gap: 1px; }
-.toggle-txt small { color: var(--muted); font-size: 12.5px; }
-.switch { width: 48px; height: 28px; border-radius: 999px; background: var(--line-strong); position: relative; flex: none; transition: background .15s; }
-.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; transition: transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.toggle-txt small { color: var(--muted); font-size: calc(12.5 * var(--fs)); }
+.switch { width: 48px; height: 28px; border-radius: 999px; background: var(--line-strong); position: relative; flex: none; transition: background var(--dur-fast); }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; transition: transform var(--dur-fast) var(--ease-standard); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .toggle[aria-pressed="true"] .switch { background: var(--accent); }
 .toggle[aria-pressed="true"] .switch::after { transform: translateX(20px); }
 
 .set-group { display: grid; gap: 8px; margin-bottom: 24px; }
-.set-group > h3 { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .01em; }
+.set-group > h3 { font-size: calc(13 * var(--fs)); font-weight: 700; color: var(--muted); letter-spacing: .01em; }
 .where { display: flex; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
 .where .ic { margin-top: 2px; }
 .where.cloud .ic { color: var(--accent-text); }
-.where p { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
-.install-steps { margin: 0; padding-left: 20px; font-size: 13.5px; color: var(--ink-2); display: grid; gap: 6px; }
+.where p { font-size: calc(13 * var(--fs)); color: var(--ink-2); margin-top: 2px; }
+.install-steps { margin: 0; padding-left: 20px; font-size: calc(13.5 * var(--fs)); color: var(--ink-2); display: grid; gap: 6px; }
 .install-steps .ic { width: 17px; height: 17px; vertical-align: -3px; color: var(--ink); }
 .ic.rot { transform: rotate(90deg); }
 .inst { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 10px 6px 10px 12px; margin-bottom: 14px; }
 .inst .logo { width: 40px; height: 40px; }
 .inst-txt { flex: 1; min-width: 0; display: grid; gap: 1px; line-height: 1.35; }
-.inst-txt b { font-size: 14.5px; }
-.inst-txt small { font-size: 12.5px; color: var(--muted); }
+.inst-txt b { font-size: calc(14.5 * var(--fs)); }
+.inst-txt small { font-size: calc(12.5 * var(--fs)); color: var(--muted); }
 .inst .btn { flex: none; padding: 0 12px; }
 .inst .icon-btn { color: var(--muted); }
 .cust-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 4px 8px 12px; border-radius: 12px; background: var(--surface-2); }
 .cust-row small { color: var(--muted); margin-left: 6px; }
-.export-box { width: 100%; height: 220px; border-radius: 12px; border: 0; box-shadow: inset 0 0 0 1px var(--line-strong); background: var(--surface-2); font-family: ui-monospace, Menlo, monospace; font-size: 12px; padding: 10px; }
+.export-box { width: 100%; height: 220px; border-radius: 12px; border: 0; box-shadow: inset 0 0 0 1px var(--line-strong); background: var(--surface-2); font-family: ui-monospace, Menlo, monospace; font-size: calc(12 * var(--fs)); padding: 10px; }
 .file-btn { position: relative; overflow: hidden; }
 .file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
 
-.toast { position: fixed; left: 50%; bottom: calc(var(--safe-b) + 150px); transform: translate(-50%, 8px); z-index: 70; background: var(--inv); color: var(--inv-ink); padding: 12px 16px; border-radius: 14px; font-size: 14px; font-weight: 600; max-width: calc(100% - 32px); width: max-content; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; text-align: center; }
+.toast { position: fixed; left: 50%; bottom: calc(var(--safe-b) + 150px); transform: translate(-50%, 8px); z-index: 70; background: var(--inv); color: var(--inv-ink); padding: 12px 16px; border-radius: 14px; font-size: calc(14 * var(--fs)); font-weight: 600; max-width: calc(100% - 32px); width: max-content; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease-standard); text-align: center; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+/* small controls keep their size on screen but get a touch area of at least 44px, the phone minimum */
+.sync::after, .icon-btn::after, .chip::after, .hero-name::after, .excard-name::after, .sd-name::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
 }
+/* rows of icon buttons: 32px buttons 12px apart, so each gets the full 44px touch area without covering its neighbour */
+.excard-tools .icon-btn, .ed-tools .icon-btn { width: 32px; height: 32px; }
+
+/* record-day confetti canvas (celebrate): above the sheet, below the toast, never takes a tap */
+.confetti { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; }
+
+/* Basic reactions, one rule set for the whole app (--dur-*, --ease-standard): a press shrinks the control a
+   little, new content rises 8px while fading in. Entrances are one-shot classes (S.enter, S.sheetEnter) that the
+   next render drops, so typing or a timer tick never replays them. Only transform and opacity move. */
+.chip, .pill-go { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast), color var(--dur-fast); }
+.tab { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast), color var(--dur-fast); }
+.icon-btn { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast); }
+.chip:active, .tab:active, .pill-go:active, .icon-btn:active:not(:disabled) { transform: scale(.94); }
+.pk-row:active, .set-prev:not(:disabled):active { background: var(--surface-2); }
+.toggle:active { background: var(--surface-3); }
+.view.enter, .set.add, .excard.add { animation: rise var(--dur-base) var(--ease-standard); }
+.wo.enter { animation: sheet-up var(--dur-base) var(--ease-standard); }
+.pr-row.in, .cmp-row.in { animation: rise var(--dur-base) var(--ease-standard) backwards; animation-delay: calc(250ms + var(--i, 0) * 45ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes appear { from { opacity: 0; } }
+
+/* milestone stamp on the done sheet (1st, 5th, 10th … workout): drops onto the corner like a rubber stamp,
+   then one lime ring spreads out. About 1 s, CSS only; without .stamp (re-render, Reduce Motion) it just sits there. */
+.done-hero.has-mile { padding-top: 26px; } /* room above the stamp so its ripple isn't cut by the sheet edge */
+.mile { position: absolute; right: 0; top: 22px; width: 76px; height: 76px; border-radius: 50%; display: grid; place-content: center; justify-items: center; background: var(--ink); color: var(--bg); transform: rotate(-12deg); line-height: 1.05; z-index: 1; }
+.mile::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1.5px dashed var(--bg); opacity: .45; }
+.mile b { font-size: calc(24 * var(--fs-lg)); font-weight: 800; }
+.mile b.num { font-family: var(--font-num); font-size: calc(30 * var(--fs-lg)); line-height: .95; }
+.mile span { font-size: min(calc(10.5 * var(--fs)), 12.5px); font-weight: 700; max-width: 56px; word-break: keep-all; }
+.mile.stamp { animation: stamp 420ms cubic-bezier(.55, 0, .75, .2) 300ms backwards; }
+.mile.stamp::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--accent); opacity: 0; animation: ripple 650ms var(--ease-standard) 690ms; }
+@keyframes stamp { 0% { opacity: 0; transform: rotate(-26deg) scale(2.3); } 75% { opacity: 1; transform: rotate(-10deg) scale(.9); } 100% { opacity: 1; transform: rotate(-12deg) scale(1); } }
+@keyframes ripple { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
+
+/* exercise chart drawing itself when its sheet opens (see sparkline) */
+.chart svg.draw .sp-line { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw-line 700ms var(--ease-standard) 150ms forwards; }
+.chart svg.draw .sp-area, .chart svg.draw .sp-labels { animation: appear 300ms ease-out 550ms backwards; }
+.chart svg.draw .sp-dot { transform-box: fill-box; transform-origin: center; animation: dot-in 320ms cubic-bezier(.3, 1.6, .5, 1) 780ms backwards; }
+.sp-ring { fill: none; stroke: var(--accent-text); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ring 700ms var(--ease-standard) 1000ms; }
+@keyframes draw-line { to { stroke-dashoffset: 0; } }
+@keyframes dot-in { from { transform: scale(0); } }
+@keyframes ring { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(4); } }
+
+/* Reduce Motion: no scaling, sliding or pulsing; sheets and the toast fade instead, colour changes stay */
+@media (prefers-reduced-motion: reduce) {
+  .set.pop .set-check, .done-badge, .pill-dot { animation: none; }
+  .btn:active:not(:disabled), .hero-go:active, .play:active, .set-check:active { transform: none; }
+  .chip:active, .tab:active, .pill-go:active, .icon-btn:active:not(:disabled) { transform: none; }
+  .sheet.enter, .wo.enter, .view.enter, .set.add, .excard.add, .pr-row.in, .cmp-row.in { animation-name: fade-in; }
+  .mile.stamp, .mile.stamp::after, .sp-ring,
+  .chart svg.draw .sp-line, .chart svg.draw .sp-area, .chart svg.draw .sp-labels, .chart svg.draw .sp-dot { animation: none; }
+  .chart svg.draw .sp-line { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .toast { transform: translate(-50%, 0); }
+  .wo-bar i, .rest-prog, .switch::after { transition: none; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 </style>
 
 <div class="app"><div id="main"></div></div>
@@ -543,7 +642,28 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const norm = s => String(s || '').replace(/\s+/g, '').toLowerCase();
-const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+const DOW_KO = ['일', '월', '화', '수', '목', '금', '토'], DOW_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+/* ---------- language ---------- */
+/* Korean or English. 'auto' follows the phone: Korean when its first language is Korean, English otherwise.
+   Each string is written as a pair where it is used, tx('한국어', 'English'), so neither side can go missing.
+   Stored data keeps its Korean keys (body parts like '가슴', the free workout '자유 운동') and is translated when shown. */
+function langPref() { const v = lsGet('setnote:lang'); return v === 'ko' || v === 'en' ? v : 'auto'; }
+function sysLang() { const l = (navigator.languages && navigator.languages[0]) || navigator.language || ''; return /^ko\b/i.test(l) ? 'ko' : 'en'; }
+let LANG = 'ko';
+const tx = (ko, en) => (LANG === 'en' ? en : ko);
+function applyLang() {
+  const p = langPref();
+  LANG = p === 'auto' ? sysLang() : p;
+  document.documentElement.lang = LANG;
+  document.title = tx('세트노트', 'SetNote');
+  const t = document.querySelector('meta[name="apple-mobile-web-app-title"]'); if (t) t.content = document.title;
+}
+applyLang();
+const dow = i => tx(DOW_KO, DOW_EN)[i];
+/* English nouns that change with the count: pl(3, 'set') → '3 sets' */
+const pl = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
 const ID_RE = /^[A-Za-z0-9_\-.~:@+]{1,120}$/;
 
 function lsGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
@@ -564,24 +684,27 @@ function weekStreak(mon) {
 }
 function relDay(ts) {
   const n = Math.round((dayStart(Date.now()) - dayStart(ts)) / 864e5);
-  if (n <= 0) return '오늘';
-  if (n === 1) return '어제';
-  if (n < 7) return n + '일 전';
-  if (n < 30) return Math.floor(n / 7) + '주 전';
-  if (n < 365) return Math.floor(n / 30) + '개월 전';
-  return Math.floor(n / 365) + '년 전';
+  if (n <= 0) return tx('오늘', 'Today');
+  if (n === 1) return tx('어제', 'Yesterday');
+  if (n < 7) return tx(n + '일 전', pl(n, 'day') + ' ago');
+  if (n < 30) return tx(Math.floor(n / 7) + '주 전', pl(Math.floor(n / 7), 'week') + ' ago');
+  if (n < 365) return tx(Math.floor(n / 30) + '개월 전', pl(Math.floor(n / 30), 'month') + ' ago');
+  return tx(Math.floor(n / 365) + '년 전', pl(Math.floor(n / 365), 'year') + ' ago');
 }
+const lastDone = ts => tx('마지막 ' + relDay(ts), 'Last done ' + relDay(ts).toLowerCase());
 function fmtDate(ts) {
   const d = new Date(ts);
-  const y = d.getFullYear() !== new Date().getFullYear() ? d.getFullYear() + '년 ' : '';
-  return `${y}${d.getMonth() + 1}월 ${d.getDate()}일 (${DOW[d.getDay()]})`;
+  const other = d.getFullYear() !== new Date().getFullYear();
+  if (LANG === 'en') return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', ...(other ? { year: 'numeric' } : {}) });
+  return `${other ? d.getFullYear() + '년 ' : ''}${d.getMonth() + 1}월 ${d.getDate()}일 (${dow(d.getDay())})`;
 }
+const monthLabel = d => tx(d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월', d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }));
 function fmtTime(ts) { const d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 function fmtDur(ms) {
   const m = Math.max(1, Math.round(ms / 60000));
-  if (m < 60) return m + '분';
+  if (m < 60) return m + tx('분', ' min');
   const h = Math.floor(m / 60);
-  return h + '시간' + (m % 60 ? ' ' + (m % 60) + '분' : '');
+  return h + tx('시간', ' h') + (m % 60 ? ' ' + (m % 60) + tx('분', ' min') : '');
 }
 function fmtClock(sec) {
   sec = Math.max(0, Math.floor(sec));
@@ -643,31 +766,42 @@ const I = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidd
 
 /* ---------- exercise library ---------- */
 const CATS = ['가슴', '등', '하체', '어깨', '팔', '코어', '기타'];
+/* body-part keys stay Korean in saved data (custom exercises store them); English shows [full, tile] labels */
+const CAT_EN = { 전체: ['All', 'All'], 가슴: ['Chest', 'Chest'], 등: ['Back', 'Back'], 하체: ['Legs', 'Legs'], 어깨: ['Shoulders', 'Delts'], 팔: ['Arms', 'Arms'], 코어: ['Core', 'Core'], 기타: ['Other', 'Other'] };
+const catName = (c, tile) => (LANG === 'en' && CAT_EN[c] ? CAT_EN[c][tile ? 1 : 0] : c);
 const LIB = [
-  ['bench', '벤치프레스', '가슴'], ['incline_bench', '인클라인 벤치프레스', '가슴'], ['db_bench', '덤벨 벤치프레스', '가슴'],
-  ['incline_db', '인클라인 덤벨 프레스', '가슴'], ['chest_press', '체스트 프레스 머신', '가슴'], ['db_fly', '덤벨 플라이', '가슴'],
-  ['pec_deck', '펙덱 플라이', '가슴'], ['cable_fly', '케이블 크로스오버', '가슴'], ['dips', '딥스', '가슴', 1], ['pushup', '푸시업', '가슴', 1],
-  ['deadlift', '데드리프트', '등'], ['pullup', '풀업', '등', 1], ['chinup', '친업', '등', 1], ['lat_pulldown', '랫풀다운', '등'],
-  ['bb_row', '바벨 로우', '등'], ['db_row', '원암 덤벨 로우', '등'], ['cable_row', '시티드 케이블 로우', '등'], ['tbar_row', '티바 로우', '등'],
-  ['back_ext', '백 익스텐션', '등', 1],
-  ['squat', '스쿼트', '하체'], ['front_squat', '프론트 스쿼트', '하체'], ['leg_press', '레그 프레스', '하체'], ['hack_squat', '핵 스쿼트', '하체'],
-  ['rdl', '루마니안 데드리프트', '하체'], ['lunge', '런지', '하체'], ['bss', '불가리안 스플릿 스쿼트', '하체'], ['leg_ext', '레그 익스텐션', '하체'],
-  ['leg_curl', '레그 컬', '하체'], ['hip_thrust', '힙 쓰러스트', '하체'], ['calf_raise', '카프 레이즈', '하체'],
-  ['ohp', '오버헤드 프레스', '어깨'], ['db_shoulder', '덤벨 숄더 프레스', '어깨'], ['lateral_raise', '사이드 레터럴 레이즈', '어깨'],
-  ['front_raise', '프론트 레이즈', '어깨'], ['rear_delt', '리어 델트 플라이', '어깨'], ['face_pull', '페이스 풀', '어깨'], ['shrug', '슈러그', '어깨'],
-  ['bb_curl', '바벨 컬', '팔'], ['db_curl', '덤벨 컬', '팔'], ['hammer_curl', '해머 컬', '팔'], ['preacher_curl', '프리처 컬', '팔'],
-  ['pushdown', '트라이셉스 푸시다운', '팔'], ['oh_ext', '오버헤드 트라이셉스 익스텐션', '팔'], ['skull', '라잉 트라이셉스 익스텐션', '팔'],
-  ['close_bench', '클로즈그립 벤치프레스', '팔'],
-  ['hlr', '행잉 레그 레이즈', '코어', 1], ['cable_crunch', '케이블 크런치', '코어'], ['ab_roll', '앱 롤아웃', '코어', 1],
-  ['crunch', '크런치', '코어', 1], ['russian_twist', '러시안 트위스트', '코어', 1],
-].map(([id, name, cat, bw]) => ({ id, name, cat, bw: !!bw }));
+  ['bench', '벤치프레스', 'Bench Press', '가슴'], ['incline_bench', '인클라인 벤치프레스', 'Incline Bench Press', '가슴'], ['db_bench', '덤벨 벤치프레스', 'Dumbbell Bench Press', '가슴'],
+  ['incline_db', '인클라인 덤벨 프레스', 'Incline Dumbbell Press', '가슴'], ['chest_press', '체스트 프레스 머신', 'Chest Press Machine', '가슴'], ['db_fly', '덤벨 플라이', 'Dumbbell Fly', '가슴'],
+  ['pec_deck', '펙덱 플라이', 'Pec Deck Fly', '가슴'], ['cable_fly', '케이블 크로스오버', 'Cable Crossover', '가슴'], ['dips', '딥스', 'Dips', '가슴', 1], ['pushup', '푸시업', 'Push-up', '가슴', 1],
+  ['deadlift', '데드리프트', 'Deadlift', '등'], ['pullup', '풀업', 'Pull-up', '등', 1], ['chinup', '친업', 'Chin-up', '등', 1], ['lat_pulldown', '랫풀다운', 'Lat Pulldown', '등'],
+  ['bb_row', '바벨 로우', 'Barbell Row', '등'], ['db_row', '원암 덤벨 로우', 'One-Arm Dumbbell Row', '등'], ['cable_row', '시티드 케이블 로우', 'Seated Cable Row', '등'], ['tbar_row', '티바 로우', 'T-Bar Row', '등'],
+  ['back_ext', '백 익스텐션', 'Back Extension', '등', 1],
+  ['squat', '스쿼트', 'Squat', '하체'], ['front_squat', '프론트 스쿼트', 'Front Squat', '하체'], ['leg_press', '레그 프레스', 'Leg Press', '하체'], ['hack_squat', '핵 스쿼트', 'Hack Squat', '하체'],
+  ['rdl', '루마니안 데드리프트', 'Romanian Deadlift', '하체'], ['lunge', '런지', 'Lunge', '하체'], ['bss', '불가리안 스플릿 스쿼트', 'Bulgarian Split Squat', '하체'], ['leg_ext', '레그 익스텐션', 'Leg Extension', '하체'],
+  ['leg_curl', '레그 컬', 'Leg Curl', '하체'], ['hip_thrust', '힙 쓰러스트', 'Hip Thrust', '하체'], ['calf_raise', '카프 레이즈', 'Calf Raise', '하체'],
+  ['ohp', '오버헤드 프레스', 'Overhead Press', '어깨'], ['db_shoulder', '덤벨 숄더 프레스', 'Dumbbell Shoulder Press', '어깨'], ['lateral_raise', '사이드 레터럴 레이즈', 'Lateral Raise', '어깨'],
+  ['front_raise', '프론트 레이즈', 'Front Raise', '어깨'], ['rear_delt', '리어 델트 플라이', 'Rear Delt Fly', '어깨'], ['face_pull', '페이스 풀', 'Face Pull', '어깨'], ['shrug', '슈러그', 'Shrug', '어깨'],
+  ['bb_curl', '바벨 컬', 'Barbell Curl', '팔'], ['db_curl', '덤벨 컬', 'Dumbbell Curl', '팔'], ['hammer_curl', '해머 컬', 'Hammer Curl', '팔'], ['preacher_curl', '프리처 컬', 'Preacher Curl', '팔'],
+  ['pushdown', '트라이셉스 푸시다운', 'Triceps Pushdown', '팔'], ['oh_ext', '오버헤드 트라이셉스 익스텐션', 'Overhead Triceps Extension', '팔'], ['skull', '라잉 트라이셉스 익스텐션', 'Skull Crusher', '팔'],
+  ['close_bench', '클로즈그립 벤치프레스', 'Close-Grip Bench Press', '팔'],
+  ['hlr', '행잉 레그 레이즈', 'Hanging Leg Raise', '코어', 1], ['cable_crunch', '케이블 크런치', 'Cable Crunch', '코어'], ['ab_roll', '앱 롤아웃', 'Ab Wheel Rollout', '코어', 1],
+  ['crunch', '크런치', 'Crunch', '코어', 1], ['russian_twist', '러시안 트위스트', 'Russian Twist', '코어', 1],
+].map(([id, ko, en, cat, bw]) => ({ id, ko, en, cat, bw: !!bw, get name() { return tx(ko, en); } }));
 const LIB_MAP = new Map(LIB.map(e => [e.id, e]));
+/* sessions keep the name an exercise had when it was logged; built-in ones are shown in the current language */
+const exName = e => { const k = LIB_MAP.get(e.exId); return k ? k.name : e.name; };
+/* search finds a built-in exercise by either language's name ('벤치' and 'bench' both find 벤치프레스) */
+const exNames = e => [e.name, e.ko, e.en].filter(Boolean).map(norm);
+const nameHas = (e, nq) => exNames(e).some(n => n.includes(nq));
+const nameIs = (e, q) => exNames(e).includes(norm(q));
+/* a workout started without a routine is stored as '자유 운동' and shown in the current language */
+const rName = n => (!n || n === '자유 운동' || n === 'Free workout' ? tx('자유 운동', 'Free workout') : n);
 
 const TEMPLATES = [
-  { key: 'push', name: '푸시 데이', note: '가슴 · 어깨 · 삼두', ex: [['bench', 4, '6-8'], ['incline_db', 3, '8-10'], ['ohp', 3, '8'], ['lateral_raise', 3, '12-15'], ['pushdown', 3, '10-12']] },
-  { key: 'pull', name: '풀 데이', note: '등 · 이두', ex: [['deadlift', 3, '5'], ['pullup', 3, '6-10'], ['bb_row', 3, '8'], ['lat_pulldown', 3, '10-12'], ['face_pull', 3, '15'], ['db_curl', 3, '10-12']] },
-  { key: 'legs', name: '레그 데이', note: '하체', ex: [['squat', 4, '5-6'], ['rdl', 3, '8'], ['leg_press', 3, '10-12'], ['leg_curl', 3, '12'], ['calf_raise', 4, '15']] },
-];
+  { key: 'push', ko: ['푸시 데이', '가슴 · 어깨 · 삼두'], en: ['Push Day', 'Chest · Shoulders · Triceps'], ex: [['bench', 4, '6-8'], ['incline_db', 3, '8-10'], ['ohp', 3, '8'], ['lateral_raise', 3, '12-15'], ['pushdown', 3, '10-12']] },
+  { key: 'pull', ko: ['풀 데이', '등 · 이두'], en: ['Pull Day', 'Back · Biceps'], ex: [['deadlift', 3, '5'], ['pullup', 3, '6-10'], ['bb_row', 3, '8'], ['lat_pulldown', 3, '10-12'], ['face_pull', 3, '15'], ['db_curl', 3, '10-12']] },
+  { key: 'legs', ko: ['레그 데이', '하체'], en: ['Leg Day', 'Legs'], ex: [['squat', 4, '5-6'], ['rdl', 3, '8'], ['leg_press', 3, '10-12'], ['leg_curl', 3, '12'], ['calf_raise', 4, '15']] },
+].map(t => ({ ...t, get name() { return tx(t.ko[0], t.en[0]); }, get note() { return tx(t.ko[1], t.en[1]); } }));
 const DEF_PROFILE = { rest: 90, sound: true, custom: [] };
 
 /* ---------- state ---------- */
@@ -693,6 +827,7 @@ const S = {
   rest: null,
   wroteOk: false,
   pop: null,
+  enter: new Set(), // one-shot entrance keys ('view', 'wo', 'ex:<u>', 'set:<u>:<i>'), cleared after each render
 };
 const prof = () => ({ ...DEF_PROFILE, ...S.profile, custom: Array.isArray(S.profile.custom) ? S.profile.custom : [] });
 
@@ -700,7 +835,7 @@ function exInfo(id, fallbackName) {
   const known = LIB_MAP.get(id) || prof().custom.find(c => c.id === id);
   if (known) return known;
   const L = idx().last.get(id);
-  return { id, name: fallbackName || (L && L.ex.name) || '이름 없는 운동', cat: '기타', bw: !!(L && L.ex.bw) };
+  return { id, name: fallbackName || (L && L.ex.name) || tx('이름 없는 운동', 'Unnamed exercise'), cat: '기타', bw: !!(L && L.ex.bw) };
 }
 function mergeById(a, b) {
   const m = new Map();
@@ -710,7 +845,7 @@ function mergeById(a, b) {
 function allExercises() {
   const list = [...LIB, ...prof().custom];
   const seen = new Set(list.map(e => e.id));
-  for (const [id, L] of idx().last) if (!seen.has(id)) { list.push({ id, name: L.ex.name || '이름 없는 운동', cat: '기타', bw: !!L.ex.bw }); seen.add(id); }
+  for (const [id, L] of idx().last) if (!seen.has(id)) { list.push({ id, name: L.ex.name || tx('이름 없는 운동', 'Unnamed exercise'), cat: '기타', bw: !!L.ex.bw }); seen.add(id); }
   return list;
 }
 function sortSessions(arr) { return arr.slice().sort((a, b) => (b.endedAt || 0) - (a.endedAt || 0)); }
@@ -743,18 +878,18 @@ function idx() {
 }
 
 function wStr(w, bw) {
-  if (w == null || w === 0) return bw ? '맨몸' : '—';
+  if (w == null || w === 0) return bw ? tx('맨몸', 'Bodyweight') : '—';
   return (bw ? '+' : '') + fmtW(w) + 'kg';
 }
 function setsStr(sets, bw) {
   if (!sets || !sets.length) return '';
   const w0 = sets[0].w ?? null;
   if (sets.every(s => (s.w ?? null) === w0)) return `${wStr(w0, bw)} × ${sets.map(s => s.r ?? '-').join(', ')}`;
-  return sets.map(s => `${s.w ? (bw ? '+' : '') + fmtW(s.w) : (bw ? '맨몸' : '—')}×${s.r ?? '-'}`).join(' · ');
+  return sets.map(s => `${s.w ? (bw ? '+' : '') + fmtW(s.w) : (bw ? tx('맨몸', 'BW') : '—')}×${s.r ?? '-'}`).join(' · ');
 }
 function lastHtml(exId) {
   const L = idx().last.get(exId);
-  if (!L) return '<span class="last none">기록 없음</span>';
+  if (!L) return `<span class="last none">${tx('기록 없음', 'Not done yet')}</span>`;
   return `<span class="last"><b>${relDay(L.s.endedAt)}</b> ${esc(setsStr(L.ex.sets, L.ex.bw))}</span>`;
 }
 
@@ -792,7 +927,7 @@ function pruneV1(ids) {
 }
 function profileReady() {
   if (S.loaded.profile && (S.mode !== 'cloud' || S.fresh.profile)) return true;
-  toast('아직 불러오는 중이에요. 잠시만요.');
+  toast(tx('아직 불러오는 중이에요. 잠시만요.', 'Still loading. One moment.'));
   return false;
 }
 
@@ -801,7 +936,7 @@ function localStore(loadExisting) {
   const KEY = 'setnote:v1';
   const persist = async () => {
     const ok = lsSet(KEY, JSON.stringify({ v: 1, routines: S.routines, sessions: S.sessions, profile: S.profile }));
-    if (!ok && !storageWarned) { storageWarned = true; toast('이 브라우저가 저장을 막고 있어요. 창을 닫으면 기록이 사라질 수 있어요.'); }
+    if (!ok && !storageWarned) { storageWarned = true; toast(tx('이 브라우저가 저장을 막고 있어요. 창을 닫으면 기록이 사라질 수 있어요.', 'This browser is blocking storage. Your records may be lost when you close it.')); }
   };
   return {
     kind: 'local',
@@ -864,14 +999,14 @@ function cloudStore(db, uidv) {
   function onSubError(which, e) {
     console.warn('subscription error', which, e);
     if (dead) return;
-    if (e && e.code === 'revoked') { switchToLocal('클라우드 연결이 끊겼어요. 지금부터는 이 기기에만 저장돼요.'); return; }
+    if (e && e.code === 'revoked') { switchToLocal(tx('클라우드 연결이 끊겼어요. 지금부터는 이 기기에만 저장돼요.', 'Lost the connection to your account. From now on, records are saved on this device only.')); return; }
     if (e && e.code === 'unavailable' && !retried[which]) {
       retried[which] = true;
       setTimeout(() => { if (!dead) unsubs[which] = subs[which](); }, 3000);
       return;
     }
     if (which !== 'profile') S.loaded[which] = true;
-    toast('기록을 불러오지 못했어요. 새로고침해 보세요.');
+    toast(tx('기록을 불러오지 못했어요. 새로고침해 보세요.', "Couldn't load your records. Try refreshing."));
     scheduleRender();
   }
   return {
@@ -900,13 +1035,13 @@ function onWriteError(e) {
   const code = e && e.code;
   if (store && store.kind === 'cloud' && code === 'invalid_argument' && !S.wroteOk) {
     if (S.uid) { lsSet('setnote:cloud-denied:' + S.uid, '1'); S.deniedUid = S.uid; }
-    switchToLocal('이 링크에서는 계정에 저장할 권한이 없어서, 이 기기에만 저장할게요.');
+    switchToLocal(tx('이 링크에서는 계정에 저장할 권한이 없어서, 이 기기에만 저장할게요.', "This link can't save to your account, so records will be saved on this device only."));
     return;
   }
-  if (code === 'revoked') { switchToLocal('클라우드 연결이 끊겼어요. 지금부터는 이 기기에만 저장돼요.'); return; }
-  if (code === 'quota_exceeded') { toast('저장 공간이 가득 찼어요. 오래된 기록을 백업한 뒤 지워 주세요.'); return; }
-  if (code === 'resource_exhausted') { toast('저장 요청이 너무 많아요. 잠시 후 다시 해 주세요.'); return; }
-  toast('저장하지 못했어요. 인터넷 연결을 확인해 주세요.');
+  if (code === 'revoked') { switchToLocal(tx('클라우드 연결이 끊겼어요. 지금부터는 이 기기에만 저장돼요.', 'Lost the connection to your account. From now on, records are saved on this device only.')); return; }
+  if (code === 'quota_exceeded') { toast(tx('저장 공간이 가득 찼어요. 오래된 기록을 백업한 뒤 지워 주세요.', 'Storage is full. Back up old records, then delete them.')); return; }
+  if (code === 'resource_exhausted') { toast(tx('저장 요청이 너무 많아요. 잠시 후 다시 해 주세요.', 'Too many saves at once. Try again in a moment.')); return; }
+  toast(tx('저장하지 못했어요. 인터넷 연결을 확인해 주세요.', "Couldn't save. Check your internet connection."));
 }
 
 function switchToLocal(msg) {
@@ -965,7 +1100,7 @@ async function migrateLocal() {
   if (!L || !L.n || !store || store.kind !== 'cloud') return;
   S.migrateHidden = true;
   render();
-  toast('계정으로 옮기는 중…', 60000);
+  toast(tx('계정으로 옮기는 중…', 'Moving to your account…'), 60000);
   let fail = 0, csOk = !L.cs.length;
   const doneR = new Set(), doneS = new Set();
   if (L.cs.length) {
@@ -993,17 +1128,17 @@ async function migrateLocal() {
     S.localOnly = null;
     checkLocalOnly();
   }
-  if (store.kind === 'cloud') toast(fail ? `${fail}개는 옮기지 못했어요. 나중에 다시 시도해 주세요.` : '계정으로 모두 옮겼어요', 3600);
+  if (store.kind === 'cloud') toast(fail ? tx(`${fail}개는 옮기지 못했어요. 나중에 다시 시도해 주세요.`, `Couldn't move ${fail}. Try again later.`) : tx('계정으로 모두 옮겼어요', 'Everything moved to your account'), 3600);
   render();
 }
 function migrateBanner() {
   const L = S.localOnly;
   if (S.mode !== 'cloud' || !L || !L.n || S.migrateHidden) return '';
   const parts = [];
-  if (L.rs.length) parts.push(`루틴 ${L.rs.length}개`);
-  if (L.ss.length) parts.push(`운동 기록 ${L.ss.length}개`);
-  if (L.cs.length) parts.push(`직접 만든 운동 ${L.cs.length}개`);
-  return `<div class="intro"><b>이 브라우저에만 저장된 ${parts.join(', ')}가 있어요</b><p>계정으로 옮기면 다른 기기에서도 보이고, ‘지난번’ 기록에도 반영돼요.</p><div class="row2"><button class="btn btn-sm" data-act="migrate-hide">나중에</button><button class="btn btn-sm btn-primary" data-act="migrate">계정으로 옮기기</button></div></div>`;
+  if (L.rs.length) parts.push(tx(`루틴 ${L.rs.length}개`, pl(L.rs.length, 'routine')));
+  if (L.ss.length) parts.push(tx(`운동 기록 ${L.ss.length}개`, pl(L.ss.length, 'workout')));
+  if (L.cs.length) parts.push(tx(`직접 만든 운동 ${L.cs.length}개`, pl(L.cs.length, 'custom exercise')));
+  return `<div class="intro"><b>${tx(`이 브라우저에만 저장된 ${parts.join(', ')}가 있어요`, `You have ${parts.join(', ')} saved only in this browser`)}</b><p>${tx('계정으로 옮기면 다른 기기에서도 보이고, ‘지난번’ 기록에도 반영돼요.', 'Move them to your account to see them on other devices and in “Previous”.')}</p><div class="row2"><button class="btn btn-sm" data-act="migrate-hide">${tx('나중에', 'Later')}</button><button class="btn btn-sm btn-primary" data-act="migrate">${tx('계정으로 옮기기', 'Move to account')}</button></div></div>`;
 }
 
 /* active workout persistence: mirror immediately, cloud debounced */
@@ -1103,9 +1238,10 @@ function render() {
   const key = top ? S.sheets.length + ':' + top.kind + ':' + (top.id || '') : '';
   rendering = true;
   try {
-    $('#main').innerHTML = headerHtml() + viewHtml();
+    $('#main').innerHTML = headerHtml() + `<div class="view${S.enter.has('view') ? ' enter' : ''}">${viewHtml()}</div>`;
     const tb = $('#tabbar');
     tb.innerHTML = tabbarHtml();
+    tb.setAttribute('aria-label', tx('메뉴', 'Menu'));
     tb.hidden = !!(S.active && S.workoutOpen);
     $('#pill-root').innerHTML = S.active && !S.workoutOpen ? pillHtml() : '';
     $('#wo-root').innerHTML = S.active && S.workoutOpen ? workoutHtml() : '';
@@ -1119,6 +1255,7 @@ function render() {
   lastSheetKey = key;
   S.sheetEnter = false;
   S.pop = null;
+  S.enter.clear();
 
   if (fid) {
     const el = document.getElementById(fid);
@@ -1133,19 +1270,19 @@ function render() {
 
 function headerHtml() {
   const sync = S.mode === 'cloud'
-    ? `<button class="sync cloud" data-act="settings" title="계정에 저장 중">${I('cloud')}동기화</button>`
+    ? `<button class="sync cloud" data-act="settings" title="${tx('계정에 저장 중', 'Saving to your account')}">${I('cloud')}${tx('동기화', 'Synced')}</button>`
     : S.mode === 'local'
-      ? `<button class="sync" data-act="settings" title="이 브라우저에만 저장 중">${I('phone')}이 기기</button>`
-      : `<span class="sync">연결 중…</span>`;
+      ? `<button class="sync" data-act="settings" title="${tx('이 브라우저에만 저장 중', 'Saving in this browser only')}">${I('phone')}${tx('이 기기', 'Local')}</button>`
+      : `<span class="sync">${tx('연결 중…', 'Connecting…')}</span>`;
   return `<header class="top">
-    <div class="brand">${LOGO}세트노트</div>
-    <div class="top-actions">${sync}<button class="icon-btn round" data-act="settings" aria-label="설정">${I('sliders')}</button></div>
+    <div class="brand">${LOGO}${tx('세트노트', 'SetNote')}</div>
+    <div class="top-actions">${sync}<button class="icon-btn round" data-act="settings" aria-label="${tx('설정', 'Settings')}">${I('sliders')}</button></div>
   </header>`;
 }
 
 function tabbarHtml() {
   const t = (k, icon, label) => `<button class="tab" data-act="tab" data-tab="${k}" ${S.tab === k ? 'aria-current="page"' : ''}>${I(icon)}<span>${label}</span></button>`;
-  return `<div class="tabbar-in">${t('routines', 'list', '루틴')}${t('exercises', 'dumbbell', '운동')}${t('history', 'cal', '기록')}</div>`;
+  return `<div class="tabbar-in">${t('routines', 'list', tx('루틴', 'Routines'))}${t('exercises', 'dumbbell', tx('운동', 'Exercises'))}${t('history', 'cal', tx('기록', 'History'))}</div>`;
 }
 
 function viewHtml() {
@@ -1167,21 +1304,21 @@ function routineCard(r, nextId) {
   const last = idx().routineLast.get(r.id);
   const exs = r.exercises || [];
   const sets = exs.reduce((a, e) => a + (e.sets || 0), 0);
-  const names = exs.slice(0, 4).map(e => exInfo(e.exId).name).join(' · ') + (exs.length > 4 ? ` 외 ${exs.length - 4}개` : '');
+  const names = exs.slice(0, 4).map(e => exInfo(e.exId).name).join(' · ') + (exs.length > 4 ? tx(` 외 ${exs.length - 4}개`, ` +${exs.length - 4} more`) : '');
   return `<article class="rcard">
     <button class="rcard-main" data-act="open-routine" data-id="${esc(r.id)}">
-      <span class="rcard-title">${esc(r.name)}${r.id === nextId ? '<span class="badge">다음 차례</span>' : ''}</span>
-      <span class="rcard-meta">${exs.length}개 운동 · ${sets}세트 · ${last ? '마지막 ' + relDay(last) : '아직 안 해봤어요'}</span>
+      <span class="rcard-title">${esc(r.name)}${r.id === nextId ? `<span class="badge">${tx('다음 차례', 'Up next')}</span>` : ''}</span>
+      <span class="rcard-meta">${tx(`${exs.length}개 운동 · ${sets}세트`, `${pl(exs.length, 'exercise')} · ${pl(sets, 'set')}`)} · ${last ? lastDone(last) : tx('아직 안 해봤어요', 'Not done yet')}</span>
       ${names ? `<span class="rcard-ex">${esc(names)}</span>` : ''}
     </button>
-    <button class="play" data-act="start-routine" data-id="${esc(r.id)}" aria-label="${esc(r.name)} 시작">${I('play')}</button>
+    <button class="play" data-act="start-routine" data-id="${esc(r.id)}" aria-label="${tx(`${esc(r.name)} 시작`, `Start ${esc(r.name)}`)}">${I('play')}</button>
   </article>`;
 }
 function templateCard(t) {
   return `<div class="tpl">
-    <div class="tpl-head"><span class="tpl-name">${esc(t.name)}</span><span class="muted" style="font-size:13px">${esc(t.note)} · ${t.ex.length}개 운동</span></div>
+    <div class="tpl-head"><span class="tpl-name">${esc(t.name)}</span><span class="muted" style="font-size:calc(13 * var(--fs))">${esc(t.note)} · ${tx(`${t.ex.length}개 운동`, pl(t.ex.length, 'exercise'))}</span></div>
     <div class="tpl-list">${t.ex.map(([id, s, r]) => `${esc(exInfo(id).name)} ${s}×${esc(r)}`).join(' · ')}</div>
-    <div class="row2"><button class="btn btn-sm" data-act="tpl-save" data-key="${t.key}">내 루틴에 추가</button><button class="btn btn-sm btn-primary" data-act="tpl-start" data-key="${t.key}">${I('play')}바로 시작</button></div>
+    <div class="row2"><button class="btn btn-sm" data-act="tpl-save" data-key="${t.key}">${tx('내 루틴에 추가', 'Add to my routines')}</button><button class="btn btn-sm btn-primary" data-act="tpl-start" data-key="${t.key}">${I('play')}${tx('바로 시작', 'Start now')}</button></div>
   </div>`;
 }
 /* the routine due next, shown big at the top so starting today's workout is one tap */
@@ -1189,71 +1326,79 @@ function heroHtml(r, isNext) {
   const last = idx().routineLast.get(r.id);
   const exs = r.exercises || [];
   const sets = exs.reduce((a, e) => a + (e.sets || 0), 0);
-  const names = exs.slice(0, 4).map(e => exInfo(e.exId).name).join(' · ') + (exs.length > 4 ? ` 외 ${exs.length - 4}개` : '');
-  return `<section class="hero" aria-label="${isNext ? '다음 차례 루틴' : '내 루틴'}">
-    <div class="hero-top"><span class="hero-label">${isNext ? '다음 차례' : '오늘의 운동'}</span><span class="hero-when">${last ? '마지막 ' + relDay(last) : '아직 안 해봤어요'}</span></div>
+  const names = exs.slice(0, 4).map(e => exInfo(e.exId).name).join(' · ') + (exs.length > 4 ? tx(` 외 ${exs.length - 4}개`, ` +${exs.length - 4} more`) : '');
+  return `<section class="hero" aria-label="${isNext ? tx('다음 차례 루틴', 'Next routine') : tx('내 루틴', 'My routine')}">
+    <div class="hero-top"><span class="hero-label">${isNext ? tx('다음 차례', 'Up next') : tx('오늘의 운동', "Today's workout")}</span><span class="hero-when">${last ? lastDone(last) : tx('아직 안 해봤어요', 'Not done yet')}</span></div>
     <button class="hero-name" data-act="open-routine" data-id="${esc(r.id)}">${esc(r.name)}</button>
-    <div class="hero-meta"><span><b class="num">${exs.length}</b>개 운동</span><span><b class="num">${sets}</b>세트</span></div>
+    <div class="hero-meta"><span><b class="num">${exs.length}</b>${tx('개 운동', exs.length === 1 ? ' exercise' : ' exercises')}</span><span><b class="num">${sets}</b>${tx('세트', sets === 1 ? ' set' : ' sets')}</span></div>
     ${names ? `<div class="hero-ex">${esc(names)}</div>` : ''}
-    <button class="hero-go" data-act="start-routine" data-id="${esc(r.id)}">${I('play')}운동 시작</button>
+    <button class="hero-go" data-act="start-routine" data-id="${esc(r.id)}">${I('play')}${tx('운동 시작', 'Start workout')}</button>
   </section>`;
 }
-function todayLabel() { const d = new Date(); return `${d.getMonth() + 1}월 ${d.getDate()}일 ${DOW[d.getDay()]}요일`; }
+function todayLabel() { const d = new Date(); return tx(`${d.getMonth() + 1}월 ${d.getDate()}일 ${dow(d.getDay())}요일`, d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })); }
 function routinesView() {
-  const head = `<div class="view-head"><div><p class="eyebrow">${todayLabel()}</p><h1>루틴</h1></div><button class="btn btn-sm" data-act="new-routine">${I('plus')}새 루틴</button></div>`;
-  if (!S.loaded.routines) return head + '<p class="empty">루틴을 불러오는 중…</p>';
+  const head = `<div class="view-head"><div><p class="eyebrow">${todayLabel()}</p><h1>${tx('루틴', 'Routines')}</h1></div><button class="btn btn-sm" data-act="new-routine">${I('plus')}${tx('새 루틴', 'New routine')}</button></div>`;
+  if (!S.loaded.routines) return head + `<p class="empty">${tx('루틴을 불러오는 중…', 'Loading routines…')}</p>`;
   const banner = migrateBanner() + installBanner();
-  const tplLeft = TEMPLATES.filter(t => !S.routines.some(r => r.name === t.name));
+  const tplLeft = TEMPLATES.filter(t => !S.routines.some(r => r.name === t.ko[0] || r.name === t.en[0]));
   if (!S.routines.length) {
-    return head + banner + `<div class="welcome">${LOGO}<h2>첫 루틴을 만들어 볼까요?</h2><p>추천 루틴을 추가해서 바로 시작하거나, 원하는 운동으로 새 루틴을 만들 수 있어요. 한 번 기록하면 다음부터는 세트마다 지난번 무게와 횟수가 옆에 떠요.</p></div>
+    return head + banner + `<div class="welcome">${LOGO}<h2>${tx('첫 루틴을 만들어 볼까요?', 'Make your first routine')}</h2><p>${tx('추천 루틴을 추가해서 바로 시작하거나, 원하는 운동으로 새 루틴을 만들 수 있어요. 한 번 기록하면 다음부터는 세트마다 지난번 무게와 횟수가 옆에 떠요.', "Add a suggested routine and start right away, or build your own. Once you've logged a workout, every set shows last time's weight and reps next to it.")}</p></div>
       <div class="stack">${TEMPLATES.map(templateCard).join('')}</div>
-      <div class="after-list"><button class="btn btn-ghost wide" data-act="new-routine">${I('plus')}직접 루틴 만들기</button><button class="btn btn-text wide" data-act="start-empty">루틴 없이 빈 운동 시작</button></div>`;
+      <div class="after-list"><button class="btn btn-ghost wide" data-act="new-routine">${I('plus')}${tx('직접 루틴 만들기', 'Build my own routine')}</button><button class="btn btn-text wide" data-act="start-empty">${tx('루틴 없이 빈 운동 시작', 'Start an empty workout')}</button></div>`;
   }
   const nextId = nextRoutineId();
   const heroR = S.routines.find(r => r.id === nextId) || (S.routines.length === 1 ? S.routines[0] : null);
   return head + banner + (heroR ? heroHtml(heroR, !!nextId) : '')
-    + `<h3 class="sub-h"><span>내 루틴</span><span>${S.routines.length}개</span></h3>
+    + `<h3 class="sub-h"><span>${tx('내 루틴', 'My routines')}</span><span>${S.routines.length}${tx('개', '')}</span></h3>
     <div class="stack">${S.routines.map(r => routineCard(r, heroR ? null : nextId)).join('')}</div>
-    <div class="after-list"><button class="btn btn-ghost wide" data-act="start-empty">${I('plus')}루틴 없이 빈 운동 시작</button></div>
-    ${tplLeft.length ? `<details class="tpl-more"><summary>추천 루틴 둘러보기 (${tplLeft.length})</summary><div class="stack">${tplLeft.map(templateCard).join('')}</div></details>` : ''}`;
+    <div class="after-list"><button class="btn btn-ghost wide" data-act="start-empty">${I('plus')}${tx('루틴 없이 빈 운동 시작', 'Start an empty workout')}</button></div>
+    ${tplLeft.length ? `<details class="tpl-more"><summary>${tx('추천 루틴 둘러보기', 'More suggested routines')} (${tplLeft.length})</summary><div class="stack">${tplLeft.map(templateCard).join('')}</div></details>` : ''}`;
 }
 
 /* exercises tab */
 function exRow(e) {
   const b = idx().best.get(e.id);
   const bestHtml = !e.bw && b && b.e1 > 0
-    ? `<span class="exrow-best"><span class="num">${fmtW(round1(b.e1))}</span><small>추정 1RM kg</small></span>`
-    : b && b.maxR ? `<span class="exrow-best"><span class="num">${b.maxR}</span><small>최다 반복</small></span>` : '';
-  return `<button class="exrow" data-act="open-ex" data-id="${esc(e.id)}"><span class="extile" data-cat="${esc(e.cat)}" aria-hidden="true">${esc(e.cat)}</span><span class="exrow-txt"><span class="exrow-name">${esc(e.name)}</span><span class="exrow-sub">${lastHtml(e.id)}</span></span>${bestHtml}</button>`;
+    ? `<span class="exrow-best"><span class="num">${fmtW(round1(b.e1))}</span><small>${tx('추정 1RM kg', 'est. 1RM kg')}</small></span>`
+    : b && b.maxR ? `<span class="exrow-best"><span class="num">${b.maxR}</span><small>${tx('최다 반복', 'most reps')}</small></span>` : '';
+  return `<button class="exrow" data-act="open-ex" data-id="${esc(e.id)}"><span class="extile" data-cat="${esc(e.cat)}" aria-hidden="true">${esc(catName(e.cat, true))}</span><span class="exrow-txt"><span class="exrow-name">${esc(e.name)}</span><span class="exrow-sub">${lastHtml(e.id)}</span></span>${bestHtml}</button>`;
 }
 function filteredExercises(q, cat) {
   const I2 = idx(), nq = norm(q);
-  const list = allExercises().filter(e => (cat === '전체' || e.cat === cat) && (!nq || norm(e.name).includes(nq)));
+  const list = allExercises().filter(e => (cat === '전체' || e.cat === cat) && (!nq || nameHas(e, nq)));
   list.sort((a, b) => {
     const la = I2.last.get(a.id)?.s.endedAt || 0, lb = I2.last.get(b.id)?.s.endedAt || 0;
-    return la !== lb ? lb - la : a.name.localeCompare(b.name, 'ko');
+    return la !== lb ? lb - la : a.name.localeCompare(b.name, LANG);
   });
   return list;
 }
 function exListHtml() {
   const list = filteredExercises(S.exQ, S.exCat);
-  if (!list.length) return `<p class="empty">${S.exQ.trim() ? `‘${esc(S.exQ.trim())}’에 맞는 운동이 없어요.` : '이 부위에는 아직 운동이 없어요.'} 새 운동은 루틴 편집이나 운동 중 ‘운동 추가’에서 만들 수 있어요.</p>`;
+  if (!list.length) return `<p class="empty">${S.exQ.trim() ? tx(`‘${esc(S.exQ.trim())}’에 맞는 운동이 없어요.`, `No exercise matches “${esc(S.exQ.trim())}”.`) : tx('이 부위에는 아직 운동이 없어요.', 'No exercises for this body part yet.')} ${tx('새 운동은 루틴 편집이나 운동 중 ‘운동 추가’에서 만들 수 있어요.', 'You can create one from “Add exercise” in a routine or a workout.')}</p>`;
   const I2 = idx();
   const done = list.filter(e => I2.last.has(e.id)), rest = list.filter(e => !I2.last.has(e.id));
-  return (done.length ? `<h3 class="sub-h">최근에 한 운동</h3><div class="exlist">${done.map(exRow).join('')}</div>` : '')
-    + (rest.length ? `<h3 class="sub-h">${done.length ? '아직 기록 없는 운동' : '전체 운동'}</h3><div class="exlist">${rest.map(exRow).join('')}</div>` : '');
+  return (done.length ? `<h3 class="sub-h">${tx('최근에 한 운동', 'Recently done')}</h3><div class="exlist">${done.map(exRow).join('')}</div>` : '')
+    + (rest.length ? `<h3 class="sub-h">${done.length ? tx('아직 기록 없는 운동', 'Not done yet') : tx('전체 운동', 'All exercises')}</h3><div class="exlist">${rest.map(exRow).join('')}</div>` : '');
 }
 function exercisesView() {
-  return `<div class="view-head"><div><h1>운동</h1><p>운동을 누르면 최근 기록과 변화가 나와요</p></div></div>
-    <div class="search">${I('search')}<input id="ex-q" class="txt" type="search" data-field="ex-q" placeholder="운동 이름 검색 (예: 벤치, 스쿼트)" value="${esc(S.exQ)}" autocomplete="off" enterkeyhint="search"></div>
-    <div class="chips" role="group" aria-label="부위">${['전체', ...CATS].map(c => `<button class="chip" data-act="ex-cat" data-cat="${c}" aria-pressed="${S.exCat === c}">${c}</button>`).join('')}</div>
-    <div id="ex-list">${S.loaded.sessions ? exListHtml() : '<p class="empty">기록을 불러오는 중…</p>'}</div>`;
+  return `<div class="view-head"><div><h1>${tx('운동', 'Exercises')}</h1><p>${tx('운동을 누르면 최근 기록과 변화가 나와요', 'Tap an exercise to see its recent sets and progress')}</p></div></div>
+    <div class="search">${I('search')}<input id="ex-q" class="txt" type="search" data-field="ex-q" placeholder="${tx('운동 이름 검색 (예: 벤치, 스쿼트)', 'Search exercises')}" value="${esc(S.exQ)}" autocomplete="off" enterkeyhint="search"></div>
+    <div class="chips" role="group" aria-label="${tx('부위', 'Body part')}">${['전체', ...CATS].map(c => `<button class="chip" data-act="ex-cat" data-cat="${c}" aria-pressed="${S.exCat === c}">${catName(c)}</button>`).join('')}</div>
+    <div id="ex-list">${S.loaded.sessions ? exListHtml() : `<p class="empty">${tx('기록을 불러오는 중…', 'Loading records…')}</p>`}</div>`;
 }
 
 /* history tab */
+/* empty history says what fills it and gives the one button that starts filling it */
+function historyEmpty() {
+  const one = S.routines.length === 1 ? S.routines[0] : null;
+  const btn = S.active ? `<button class="btn btn-primary wide" data-act="wo-open">${I('play')}${tx('진행 중인 운동 이어서 하기', 'Continue current workout')}</button>`
+    : one ? `<button class="btn btn-primary wide" data-act="start-routine" data-id="${esc(one.id)}">${I('play')}${tx(`${esc(one.name)} 시작`, `Start ${esc(one.name)}`)}</button>`
+    : `<button class="btn btn-primary wide" data-act="tab" data-tab="routines">${I('list')}${S.routines.length ? tx('루틴 고르러 가기', 'Choose a routine') : tx('추천 루틴 보러 가기', 'See suggested routines')}</button>`;
+  return `<div class="empty-state"><b>${tx('아직 기록이 없어요', 'No workouts yet')}</b><p>${tx('운동을 끝내고 ‘완료’를 누르면 여기에 날짜별로 쌓여요.', 'Finish a workout with “Finish” and it shows up here by date.')}</p>${btn}</div>`;
+}
 function historyView() {
-  const head = `<div class="view-head"><div><h1>기록</h1><p>끝낸 운동이 날짜별로 쌓여요</p></div></div>`;
-  if (!S.loaded.sessions) return head + '<p class="empty">기록을 불러오는 중…</p>';
+  const head = `<div class="view-head"><div><h1>${tx('기록', 'History')}</h1><p>${tx('끝낸 운동이 날짜별로 쌓여요', 'Finished workouts, by date')}</p></div></div>`;
+  if (!S.loaded.sessions) return head + `<p class="empty">${tx('기록을 불러오는 중…', 'Loading records…')}</p>`;
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const mon = new Date(today); mon.setDate(today.getDate() - ((today.getDay() + 6) % 7));
   const days = new Map();
@@ -1265,40 +1410,40 @@ function historyView() {
     const d = new Date(mon); d.setDate(mon.getDate() + i);
     const on = days.has(dayKey(d.getTime()));
     const isToday = d.getTime() === today.getTime();
-    cells.push(`<div class="wk${on ? ' on' : ''}${isToday ? ' today' : ''}"><span>${DOW[d.getDay()]}</span><span class="wk-dot">${d.getDate()}</span></div>`);
+    cells.push(`<div class="wk${on ? ' on' : ''}${isToday ? ' today' : ''}"><span>${dow(d.getDay())}</span><span class="wk-dot">${d.getDate()}</span></div>`);
   }
   const streak = weekStreak(mon.getTime());
   const week = `<div class="week"><div class="week-sum">
-      <div class="wstat"><span class="num">${wkCount}<em>회</em></span><small>이번 주 운동</small></div>
-      <div class="wstat"><span class="num">${fmtInt(wkVol)}<em>kg</em></span><small>이번 주 볼륨</small></div>
-      <div class="wstat"><span class="num">${streak}<em>주</em></span><small>연속 운동</small></div>
+      <div class="wstat"><span class="num">${wkCount}<em>${tx('회', '')}</em></span><small>${tx('이번 주 운동', 'Workouts this week')}</small></div>
+      <div class="wstat"><span class="num">${fmtInt(wkVol)}<em>kg</em></span><small>${tx('이번 주 볼륨', 'Volume this week')}</small></div>
+      <div class="wstat"><span class="num">${streak}<em>${tx('주', ' wk')}</em></span><small>${tx('연속 운동', 'Streak')}</small></div>
     </div><div class="week-days">${cells.join('')}</div></div>`;
-  if (!S.sessions.length) return head + migrateBanner() + week + `<p class="empty">아직 기록이 없어요. 루틴 탭에서 운동을 시작하고, 끝나면 ‘완료’를 눌러 저장하세요.</p>`;
+  if (!S.sessions.length) return head + migrateBanner() + week + historyEmpty();
   let html = '', curMonth = '';
   const groups = new Map();
-  for (const s of S.sessions) { const d = new Date(s.endedAt); const k = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월'; groups.set(k, (groups.get(k) || 0) + 1); }
+  for (const s of S.sessions) { const d = new Date(s.endedAt); const k = monthLabel(d); groups.set(k, (groups.get(k) || 0) + 1); }
   for (const s of S.sessions) {
-    const d = new Date(s.endedAt); const k = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월';
-    if (k !== curMonth) { if (curMonth) html += '</div>'; curMonth = k; html += `<h3 class="month-h"><span>${k}</span><span>${groups.get(k)}회</span></h3><div class="stack">`; }
+    const d = new Date(s.endedAt); const k = monthLabel(d);
+    if (k !== curMonth) { if (curMonth) html += '</div>'; curMonth = k; html += `<h3 class="month-h"><span>${k}</span><span>${tx(`${groups.get(k)}회`, pl(groups.get(k), 'workout'))}</span></h3><div class="stack">`; }
     const exs = s.exercises || [];
     html += `<button class="scard" data-act="open-session" data-id="${esc(s.id)}">
-      <span class="scard-date" aria-hidden="true"><b>${d.getDate()}</b><small>${DOW[d.getDay()]}</small></span><span class="sr">${esc(fmtDate(s.endedAt))}</span>
+      <span class="scard-date" aria-hidden="true"><b>${d.getDate()}</b><small>${dow(d.getDay())}</small></span><span class="sr">${esc(fmtDate(s.endedAt))}</span>
       <span class="scard-main">
-        <span class="scard-top"><span class="scard-title">${esc(s.routineName || '자유 운동')}</span><span class="scard-when">${relDay(s.endedAt)}</span></span>
-        <span class="scard-stats"><span><span class="num">${fmtDur((s.endedAt || 0) - (s.startedAt || 0))}</span></span><span><span class="num">${s.setCount || 0}</span>세트</span><span><span class="num">${fmtInt(s.volume)}</span>kg</span></span>
-        <span class="scard-ex">${esc(exs.map(e => `${e.name} ${e.sets.length}`).join(' · '))}</span>
+        <span class="scard-top"><span class="scard-title">${esc(rName(s.routineName))}</span><span class="scard-when">${relDay(s.endedAt)}</span></span>
+        <span class="scard-stats"><span><span class="num">${fmtDur((s.endedAt || 0) - (s.startedAt || 0))}</span></span><span><span class="num">${s.setCount || 0}</span>${tx('세트', s.setCount === 1 ? ' set' : ' sets')}</span><span><span class="num">${fmtInt(s.volume)}</span>kg</span></span>
+        <span class="scard-ex">${esc(exs.map(e => `${exName(e)} ${e.sets.length}`).join(' · '))}</span>
       </span>
     </button>`;
   }
   if (curMonth) html += '</div>';
-  return head + migrateBanner() + week + html;
+  return head + migrateBanner() + installBanner() + week + html;
 }
 
 /* workout */
 function pillHtml() {
   const a = S.active;
-  const sub = S.rest ? `휴식 <span id="pill-time" class="num">${fmtClock((S.rest.end - Date.now()) / 1000)}</span> 남음` : `진행 중 · <span id="pill-time" class="num">${fmtClock((Date.now() - a.startedAt) / 1000)}</span>`;
-  return `<button class="pill" data-act="wo-open"><span class="pill-dot" aria-hidden="true"></span><span class="pill-txt"><b>${esc(a.routineName || '자유 운동')}</b><span>${sub}</span></span><span class="pill-go">이어서 하기</span></button>`;
+  const sub = S.rest ? `${tx('휴식', 'Rest')} <span id="pill-time" class="num">${fmtClock((S.rest.end - Date.now()) / 1000)}</span>${tx(' 남음', ' left')}` : `${tx('진행 중', 'In progress')} · <span id="pill-time" class="num">${fmtClock((Date.now() - a.startedAt) / 1000)}</span>`;
+  return `<button class="pill" data-act="wo-open"><span class="pill-dot" aria-hidden="true"></span><span class="pill-txt"><b>${esc(rName(a.routineName))}</b><span>${sub}</span></span><span class="pill-go">${tx('이어서 하기', 'Resume')}</span></button>`;
 }
 function findEx(u) { return S.active && S.active.exercises.find(e => e.u === u); }
 /* value a set logs when ✓ is tapped with empty inputs:
@@ -1327,8 +1472,8 @@ function fillFor(ex, i) {
 function placeholders(ex, i) {
   const f = fillFor(ex, i);
   return {
-    w: f.w != null ? (ex.bw && f.w === 0 ? '0' : fmtW(f.w)) : (ex.bw ? '맨몸' : 'kg'),
-    r: f.r != null ? String(f.r) : (ex.target && ex.target.reps ? String(ex.target.reps) : '회'),
+    w: f.w != null ? (ex.bw && f.w === 0 ? '0' : fmtW(f.w)) : (ex.bw ? tx('맨몸', 'BW') : 'kg'),
+    r: f.r != null ? String(f.r) : (ex.target && ex.target.reps ? String(ex.target.reps) : tx('회', 'reps')),
   };
 }
 function validDone(ex, s) {
@@ -1341,49 +1486,49 @@ function progressHtml(ex) {
   const cur = metric(done), prev = metric(L.ex.sets);
   if (cur.vol > 0 && prev.vol > 0) {
     const d = cur.vol - prev.vol;
-    return `<span class="prog${d > 0 ? ' up' : ''}">볼륨 <b class="num">${fmtInt(cur.vol)}</b> / 지난번 ${fmtInt(prev.vol)}kg${d > 0 ? ` · <b>+${fmtInt(d)}kg</b>` : ''}</span>`;
+    return `<span class="prog${d > 0 ? ' up' : ''}">${tx('볼륨', 'Volume')} <b class="num">${fmtInt(cur.vol)}</b> / ${tx('지난번', 'last')} ${fmtInt(prev.vol)}kg${d > 0 ? ` · <b>+${fmtInt(d)}kg</b>` : ''}</span>`;
   }
   const d = cur.reps - prev.reps;
-  return `<span class="prog${d > 0 ? ' up' : ''}">총 <b class="num">${cur.reps}</b>회 / 지난번 ${prev.reps}회${d > 0 ? ` · <b>+${d}회</b>` : ''}</span>`;
+  return `<span class="prog${d > 0 ? ' up' : ''}">${tx('총', '')} <b class="num">${cur.reps}</b>${tx('회', ' reps')} / ${tx('지난번', 'last')} ${prev.reps}${tx('회', '')}${d > 0 ? ` · <b>+${d}${tx('회', '')}</b>` : ''}</span>`;
 }
 function exCardHtml(ex, k, n) {
   const L = idx().last.get(ex.exId);
   const lastLine = L
-    ? `<span class="tag acc">지난번</span><span>${relDay(L.s.endedAt)}</span>`
-    : `<span class="tag">첫 기록</span><span>이번이 첫 기록이에요</span>`;
-  const target = ex.target ? `<span class="muted">· 목표 ${ex.target.sets}세트 × ${esc(ex.target.reps || '-')}회${ex.target.weight != null ? ' · ' + fmtW(ex.target.weight) + 'kg' : ''}</span>` : '';
+    ? `<span class="tag acc">${tx('지난번', 'Last time')}</span><span>${relDay(L.s.endedAt)}</span>`
+    : `<span class="tag">${tx('첫 기록', 'First')}</span><span>${tx('이번이 첫 기록이에요', 'Your first time with this one')}</span>`;
+  const target = ex.target ? `<span class="muted">· ${tx(`목표 ${ex.target.sets}세트 × ${esc(ex.target.reps || '-')}회`, `Goal ${pl(ex.target.sets, 'set')} × ${esc(ex.target.reps || '-')}`)}${ex.target.weight != null ? ' · ' + fmtW(ex.target.weight) + 'kg' : ''}</span>` : '';
   const rows = ex.sets.map((st, i) => {
     const f = fillFor(ex, i);
-    const ph = st.done ? { w: ex.bw ? '맨몸' : '', r: '' } : placeholders(ex, i);
+    const ph = st.done ? { w: ex.bw ? tx('맨몸', 'BW') : '', r: '' } : placeholders(ex, i);
     const p = f.prev;
-    const prevTxt = p ? `${p.w ? (ex.bw ? '+' : '') + fmtW(p.w) : (ex.bw ? '맨몸' : '—')}×${p.r ?? '-'}` : '—';
+    const prevTxt = p ? `${p.w ? (ex.bw ? '+' : '') + fmtW(p.w) : (ex.bw ? tx('맨몸', 'BW') : '—')}×${p.r ?? '-'}` : '—';
     const prevHtml = prevTxt.replace('×', '<wbr>×');
-    return `<div class="set${st.done ? ' done' : ''}${S.pop === ex.u + ':' + i ? ' pop' : ''}">
+    return `<div class="set${st.done ? ' done' : ''}${S.pop === ex.u + ':' + i ? ' pop' : ''}${S.enter.has('set:' + ex.u + ':' + i) ? ' add' : ''}">
       <span class="set-n">${i + 1}</span>
-      <button class="set-prev" data-act="wo-copy-prev" data-u="${ex.u}" data-i="${i}" ${p ? '' : 'disabled'} aria-label="${p ? '지난번 값 ' + prevTxt + ' 넣기' : '지난번 기록 없음'}">${prevHtml}</button>
-      <input id="w-${ex.u}-${i}" class="num-in" inputmode="decimal" enterkeyhint="next" autocomplete="off" data-field="w" data-u="${ex.u}" data-i="${i}" value="${esc(st.w)}" placeholder="${esc(ph.w)}" aria-label="${i + 1}세트 무게 kg">
-      <input id="r-${ex.u}-${i}" class="num-in" inputmode="numeric" enterkeyhint="done" autocomplete="off" data-field="r" data-u="${ex.u}" data-i="${i}" value="${esc(st.r)}" placeholder="${esc(ph.r)}" aria-label="${i + 1}세트 횟수">
-      <button class="set-check" data-act="wo-check" data-u="${ex.u}" data-i="${i}" aria-pressed="${!!st.done}" aria-label="${i + 1}세트 완료">${I('check')}</button>
+      <button class="set-prev" data-act="wo-copy-prev" data-u="${ex.u}" data-i="${i}" ${p ? '' : 'disabled'} aria-label="${p ? tx('지난번 값 ' + prevTxt + ' 넣기', 'Use last time: ' + prevTxt) : tx('지난번 기록 없음', 'No previous record')}">${prevHtml}</button>
+      <input id="w-${ex.u}-${i}" class="num-in" inputmode="decimal" enterkeyhint="next" autocomplete="off" data-field="w" data-u="${ex.u}" data-i="${i}" value="${esc(st.w)}" placeholder="${esc(ph.w)}" aria-label="${tx(`${i + 1}세트 무게 kg`, `Set ${i + 1} weight kg`)}">
+      <input id="r-${ex.u}-${i}" class="num-in" inputmode="numeric" enterkeyhint="done" autocomplete="off" data-field="r" data-u="${ex.u}" data-i="${i}" value="${esc(st.r)}" placeholder="${esc(ph.r)}" aria-label="${tx(`${i + 1}세트 횟수`, `Set ${i + 1} reps`)}">
+      <button class="set-check" data-act="wo-check" data-u="${ex.u}" data-i="${i}" aria-pressed="${!!st.done}" aria-label="${tx(`${i + 1}세트 완료`, `Set ${i + 1} done`)}">${I('check')}</button>
     </div>`;
   }).join('');
   const allDone = ex.sets.length > 0 && ex.sets.every(s => s.done);
-  return `<section class="excard${allDone ? ' all-done' : ''}">
+  return `<section class="excard${allDone ? ' all-done' : ''}${S.enter.has('ex:' + ex.u) ? ' add' : ''}">
     <div class="excard-head">
       <span class="ex-idx num" aria-hidden="true">${k + 1}</span>
-      <button class="excard-name" data-act="open-ex" data-id="${esc(ex.exId)}">${esc(ex.name)}</button>
+      <button class="excard-name" data-act="open-ex" data-id="${esc(ex.exId)}">${esc(exName(ex))}</button>
       <div class="excard-tools">
-        <button class="icon-btn sm" data-act="wo-move" data-u="${ex.u}" data-dir="-1" ${k === 0 ? 'disabled' : ''} aria-label="위로">${I('up')}</button>
-        <button class="icon-btn sm" data-act="wo-move" data-u="${ex.u}" data-dir="1" ${k === n - 1 ? 'disabled' : ''} aria-label="아래로">${I('dn')}</button>
-        <button class="icon-btn sm" data-act="wo-remove-ex" data-u="${ex.u}" aria-label="${esc(ex.name)} 빼기">${I('x')}</button>
+        <button class="icon-btn sm" data-act="wo-move" data-u="${ex.u}" data-dir="-1" ${k === 0 ? 'disabled' : ''} aria-label="${tx('위로', 'Move up')}">${I('up')}</button>
+        <button class="icon-btn sm" data-act="wo-move" data-u="${ex.u}" data-dir="1" ${k === n - 1 ? 'disabled' : ''} aria-label="${tx('아래로', 'Move down')}">${I('dn')}</button>
+        <button class="icon-btn sm" data-act="wo-remove-ex" data-u="${ex.u}" aria-label="${tx(`${esc(exName(ex))} 빼기`, `Remove ${esc(exName(ex))}`)}">${I('x')}</button>
       </div>
     </div>
     <div class="excard-last">${lastLine}${target}</div>
     <div class="sets">
-      <div class="set-h"><span>세트</span><span>지난번</span><span>kg</span><span>회</span><span></span></div>
+      <div class="set-h"><span>${tx('세트', 'Set')}</span><span>${tx('지난번', 'Previous')}</span><span>kg</span><span>${tx('회', 'Reps')}</span><span></span></div>
       ${rows}
     </div>
     <div class="excard-foot">
-      <div class="btns"><button class="btn btn-sm btn-soft" data-act="wo-add-set" data-u="${ex.u}">${I('plus')}세트 추가</button>${ex.sets.length > 1 ? `<button class="btn btn-sm btn-text" data-act="wo-del-set" data-u="${ex.u}" aria-label="마지막 세트 빼기">${I('minus')}세트 빼기</button>` : ''}</div>
+      <div class="btns"><button class="btn btn-sm btn-soft" data-act="wo-add-set" data-u="${ex.u}">${I('plus')}${tx('세트 추가', 'Add set')}</button>${ex.sets.length > 1 ? `<button class="btn btn-sm btn-text" data-act="wo-del-set" data-u="${ex.u}" aria-label="${tx('마지막 세트 빼기', 'Remove last set')}">${I('minus')}${tx('세트 빼기', 'Remove set')}</button>` : ''}</div>
       ${progressHtml(ex)}
     </div>
   </section>`;
@@ -1395,30 +1540,30 @@ function workoutHtml() {
   const vol = a.exercises.reduce((v, e) => v + metric(e.sets.filter(s => validDone(e, s)).map(s => ({ w: num(s.w), r: int(s.r) }))).vol, 0);
   const body = a.exercises.length
     ? a.exercises.map((e, k) => exCardHtml(e, k, a.exercises.length)).join('')
-    : `<div class="wo-empty">아직 운동이 없어요.<br>아래 ‘운동 추가’를 눌러 오늘 할 운동을 고르세요.</div>`;
-  return `<div class="wo" id="wo" role="dialog" aria-label="운동 기록 중">
+    : `<div class="wo-empty">${tx('아직 운동이 없어요.<br>아래 ‘운동 추가’를 눌러 오늘 할 운동을 고르세요.', 'No exercises yet.<br>Tap “Add exercise” below to pick what you’ll do today.')}</div>`;
+  return `<div class="wo${S.enter.has('wo') ? ' enter' : ''}" id="wo" role="dialog" aria-label="${tx('운동 기록 중', 'Workout in progress')}">
     <header class="wo-head"><div class="wo-head-in">
-      <button class="icon-btn" data-act="wo-minimize" aria-label="접어두기">${I('down')}</button>
-      <div class="wo-title"><div class="wo-name">${esc(a.routineName || '자유 운동')}</div><div class="wo-sub">${fmtTime(a.startedAt)} 시작</div></div>
-      <button class="btn btn-primary btn-sm" data-act="wo-finish">완료</button>
+      <button class="icon-btn" data-act="wo-minimize" aria-label="${tx('접어두기', 'Minimize')}">${I('down')}</button>
+      <div class="wo-title"><div class="wo-name">${esc(rName(a.routineName))}</div><div class="wo-sub">${tx(`${fmtTime(a.startedAt)} 시작`, `Started ${fmtTime(a.startedAt)}`)}</div></div>
+      <button class="btn btn-primary btn-sm" data-act="wo-finish">${tx('완료', 'Finish')}</button>
     </div>
     <div class="wo-stats">
-      <div class="wo-stat"><span id="wo-elapsed" class="num">${fmtClock((Date.now() - a.startedAt) / 1000)}</span><small>운동 시간</small></div>
-      <div class="wo-stat"><span class="num">${fmtInt(vol)}<em>kg</em></span><small>볼륨</small></div>
-      <div class="wo-stat"><span class="num">${done}<em>/${total}</em></span><small>세트</small></div>
+      <div class="wo-stat"><span id="wo-elapsed" class="num">${fmtClock((Date.now() - a.startedAt) / 1000)}</span><small>${tx('운동 시간', 'Duration')}</small></div>
+      <div class="wo-stat"><span class="num">${fmtInt(vol)}<em>kg</em></span><small>${tx('볼륨', 'Volume')}</small></div>
+      <div class="wo-stat"><span class="num">${done}<em>/${total}</em></span><small>${tx('세트', 'Sets')}</small></div>
     </div>
-    <div class="wo-bar" role="progressbar" aria-label="완료한 세트" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><i style="width:${total ? Math.round(done / total * 100) : 0}%"></i></div>
+    <div class="wo-bar" role="progressbar" aria-label="${tx('완료한 세트', 'Sets done')}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><i style="width:${total ? Math.round(done / total * 100) : 0}%"></i></div>
     </header>
     <div class="wo-body">
       ${body}
-      <button class="btn btn-ghost wide" data-act="wo-add-ex">${I('plus')}운동 추가</button>
-      <button class="btn btn-text danger wide" data-act="wo-discard">이 운동 취소하기</button>
+      <button class="btn btn-ghost wide" data-act="wo-add-ex">${I('plus')}${tx('운동 추가', 'Add exercise')}</button>
+      <button class="btn btn-text danger wide" data-act="wo-discard">${tx('이 운동 취소하기', 'Cancel this workout')}</button>
     </div>
     <div class="rest" id="rest" ${S.rest ? '' : 'hidden'}>
       <div class="rest-prog" id="rest-prog"></div>
       <div class="rest-in">
-        <div><div class="rest-label">휴식</div><div class="rest-time num" id="rest-time">0:00</div></div>
-        <div class="rest-btns"><button data-act="rest-adj" data-d="-15" aria-label="15초 줄이기">−15</button><button data-act="rest-adj" data-d="15" aria-label="15초 늘리기">+15</button><button data-act="rest-skip">건너뛰기</button></div>
+        <div><div class="rest-label">${tx('휴식', 'Rest')}</div><div class="rest-time num" id="rest-time">0:00</div></div>
+        <div class="rest-btns"><button data-act="rest-adj" data-d="-15" aria-label="${tx('15초 줄이기', '15 seconds less')}">−15</button><button data-act="rest-adj" data-d="15" aria-label="${tx('15초 늘리기', '15 seconds more')}">+15</button><button data-act="rest-skip">${tx('건너뛰기', 'Skip')}</button></div>
       </div>
     </div>
   </div>`;
@@ -1436,7 +1581,7 @@ function sheetHtml(t) {
   const { title, body, foot } = f(t);
   return `<div class="backdrop" data-act="sheet-bg"></div>
     <div class="sheet${S.sheetEnter ? ' enter' : ''}" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
-      <div class="sheet-head"><h2 id="sheet-title">${title}</h2><button class="icon-btn" data-act="sheet-close" aria-label="닫기">${I('x')}</button></div>
+      <div class="sheet-head"><h2 id="sheet-title">${title}</h2><button class="icon-btn" data-act="sheet-close" aria-label="${tx('닫기', 'Close')}">${I('x')}</button></div>
       <div class="sheet-body">${body}</div>
       ${foot ? `<div class="sheet-foot">${foot}</div>` : ''}
     </div>`;
@@ -1446,26 +1591,26 @@ const SHEETS = {
   confirm: t => ({
     title: esc(t.title),
     body: `<p class="confirm-msg">${esc(t.msg)}</p>`,
-    foot: `<div class="row2">${t.alt ? `<button class="btn" data-act="${t.alt.act}">${esc(t.alt.label)}</button>` : `<button class="btn" data-act="sheet-close">취소</button>`}<button class="btn ${t.danger ? 'btn-danger' : 'btn-primary'}" data-act="confirm-ok">${esc(t.ok)}</button></div>`,
+    foot: `<div class="row2">${t.alt ? `<button class="btn" data-act="${t.alt.act}">${esc(t.alt.label)}</button>` : `<button class="btn" data-act="sheet-close">${tx('취소', 'Cancel')}</button>`}<button class="btn ${t.danger ? 'btn-danger' : 'btn-primary'}" data-act="confirm-ok">${esc(t.ok)}</button></div>`,
   }),
 
   routine: t => {
     const r = S.routines.find(x => x.id === t.id);
-    if (!r) return { title: '루틴', body: '<p class="empty">삭제된 루틴이에요.</p>' };
+    if (!r) return { title: tx('루틴', 'Routine'), body: `<p class="empty">${tx('삭제된 루틴이에요.', 'This routine was deleted.')}</p>` };
     const last = idx().routineLast.get(r.id);
     const list = (r.exercises || []).map(e => {
       const info = exInfo(e.exId);
       return `<li><button class="rd-ex" data-act="open-ex" data-id="${esc(e.exId)}">
-        <span class="rd-top"><span class="rd-name">${esc(info.name)}</span><span class="rd-target">${e.sets}세트 × ${esc(e.reps || '-')}회${e.weight != null ? ' · ' + fmtW(e.weight) + 'kg' : ''}</span></span>
+        <span class="rd-top"><span class="rd-name">${esc(info.name)}</span><span class="rd-target">${tx(`${e.sets}세트 × ${esc(e.reps || '-')}회`, `${pl(e.sets, 'set')} × ${esc(e.reps || '-')}`)}${e.weight != null ? ' · ' + fmtW(e.weight) + 'kg' : ''}</span></span>
         <span class="rd-last">${lastHtml(e.exId)}</span></button></li>`;
     }).join('');
     return {
       title: esc(r.name),
       body: `${r.note ? `<p class="muted" style="margin-bottom:6px">${esc(r.note)}</p>` : ''}
-        <p class="kv">마지막으로 한 날: <b>${last ? fmtDate(last) + ' · ' + relDay(last) : '아직 안 해봤어요'}</b></p>
+        <p class="kv">${tx('마지막으로 한 날', 'Last done')}: <b>${last ? fmtDate(last) + ' · ' + relDay(last) : tx('아직 안 해봤어요', 'Not yet')}</b></p>
         <ol class="rd-list">${list}</ol>`,
-      foot: `<button class="btn btn-primary wide" data-act="start-routine" data-id="${esc(r.id)}">${I('play')}이 루틴으로 운동 시작</button>
-        <div class="row3"><button class="btn btn-sm" data-act="edit-routine" data-id="${esc(r.id)}">${I('edit')}편집</button><button class="btn btn-sm" data-act="dup-routine" data-id="${esc(r.id)}">${I('copy')}복제</button><button class="btn btn-sm btn-danger" data-act="del-routine" data-id="${esc(r.id)}">${I('trash')}삭제</button></div>`,
+      foot: `<button class="btn btn-primary wide" data-act="start-routine" data-id="${esc(r.id)}">${I('play')}${tx('이 루틴으로 운동 시작', 'Start this routine')}</button>
+        <div class="row3"><button class="btn btn-sm" data-act="edit-routine" data-id="${esc(r.id)}">${I('edit')}${tx('편집', 'Edit')}</button><button class="btn btn-sm" data-act="dup-routine" data-id="${esc(r.id)}">${I('copy')}${tx('복제', 'Copy')}</button><button class="btn btn-sm btn-danger" data-act="del-routine" data-id="${esc(r.id)}">${I('trash')}${tx('삭제', 'Delete')}</button></div>`,
     };
   },
 
@@ -1476,34 +1621,34 @@ const SHEETS = {
       const info = exInfo(e.exId);
       return `<div class="ed-row">
         <div class="ed-top"><span class="ed-name">${esc(info.name)}</span>
-          <span class="ed-tools"><button class="icon-btn sm" data-act="ed-move" data-i="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''} aria-label="위로">${I('up')}</button><button class="icon-btn sm" data-act="ed-move" data-i="${i}" data-dir="1" ${i === n - 1 ? 'disabled' : ''} aria-label="아래로">${I('dn')}</button><button class="icon-btn sm" data-act="ed-remove" data-i="${i}" aria-label="${esc(info.name)} 빼기">${I('x')}</button></span></div>
-        <div class="ed-last">지난번 · ${lastHtml(e.exId)}</div>
+          <span class="ed-tools"><button class="icon-btn sm" data-act="ed-move" data-i="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''} aria-label="${tx('위로', 'Move up')}">${I('up')}</button><button class="icon-btn sm" data-act="ed-move" data-i="${i}" data-dir="1" ${i === n - 1 ? 'disabled' : ''} aria-label="${tx('아래로', 'Move down')}">${I('dn')}</button><button class="icon-btn sm" data-act="ed-remove" data-i="${i}" aria-label="${tx(`${esc(info.name)} 빼기`, `Remove ${esc(info.name)}`)}">${I('x')}</button></span></div>
+        <div class="ed-last">${tx('지난번', 'Last time')} · ${lastHtml(e.exId)}</div>
         <div class="ed-fields">
-          <span class="stepper"><button data-act="ed-sets" data-i="${i}" data-d="-1" aria-label="세트 줄이기">${I('minus')}</button><span class="num">${e.sets}</span><small>세트</small><button data-act="ed-sets" data-i="${i}" data-d="1" aria-label="세트 늘리기">${I('plus')}</button></span>
-          <label class="mini"><input id="ed-reps-${i}" data-field="ed-reps" data-i="${i}" value="${esc(e.reps ?? '')}" placeholder="8-12" maxlength="10" autocomplete="off" aria-label="${esc(info.name)} 목표 횟수"><small>회</small></label>
-          <label class="mini"><input id="ed-w-${i}" data-field="ed-w" data-i="${i}" value="${esc(e.weight ?? '')}" placeholder="—" inputmode="decimal" autocomplete="off" aria-label="${esc(info.name)} 목표 무게"><small>kg (선택)</small></label>
+          <span class="stepper"><button data-act="ed-sets" data-i="${i}" data-d="-1" aria-label="${tx('세트 줄이기', 'Fewer sets')}">${I('minus')}</button><span class="num">${e.sets}</span><small>${tx('세트', 'sets')}</small><button data-act="ed-sets" data-i="${i}" data-d="1" aria-label="${tx('세트 늘리기', 'More sets')}">${I('plus')}</button></span>
+          <label class="mini"><input id="ed-reps-${i}" data-field="ed-reps" data-i="${i}" value="${esc(e.reps ?? '')}" placeholder="8-12" maxlength="10" autocomplete="off" aria-label="${tx(`${esc(info.name)} 목표 횟수`, `${esc(info.name)} target reps`)}"><small>${tx('회', 'reps')}</small></label>
+          <label class="mini"><input id="ed-w-${i}" data-field="ed-w" data-i="${i}" value="${esc(e.weight ?? '')}" placeholder="—" inputmode="decimal" autocomplete="off" aria-label="${tx(`${esc(info.name)} 목표 무게`, `${esc(info.name)} target weight`)}"><small>${tx('kg (선택)', 'kg (optional)')}</small></label>
         </div>
       </div>`;
     }).join('');
     return {
-      title: d.id ? '루틴 편집' : '새 루틴',
-      body: `<label class="field"><span>루틴 이름</span><input id="ed-name" class="txt" data-field="ed-name" value="${esc(d.name)}" maxlength="40" placeholder="예: 상체 A, 월요일 하체" autocomplete="off"></label>
-        <label class="field"><span>메모 (선택)</span><input id="ed-note" class="txt" data-field="ed-note" value="${esc(d.note || '')}" maxlength="80" placeholder="예: 가슴 · 삼두" autocomplete="off"></label>
-        <div class="field" style="margin-bottom:6px"><span>운동 ${n ? n + '개' : ''}</span></div>
-        ${n ? `<div class="ed-list">${rows}</div>` : '<p class="empty" style="padding-top:0">아직 운동이 없어요. 아래 버튼으로 추가하세요.</p>'}
-        <button class="btn btn-ghost wide" data-act="ed-add">${I('plus')}운동 추가</button>`,
-      foot: `<div class="row2"><button class="btn" data-act="sheet-close">취소</button><button class="btn btn-primary" data-act="ed-save">저장</button></div>`,
+      title: d.id ? tx('루틴 편집', 'Edit routine') : tx('새 루틴', 'New routine'),
+      body: `<label class="field"><span>${tx('루틴 이름', 'Routine name')}</span><input id="ed-name" class="txt" data-field="ed-name" value="${esc(d.name)}" maxlength="40" placeholder="${tx('예: 상체 A, 월요일 하체', 'e.g. Upper A, Monday legs')}" autocomplete="off"></label>
+        <label class="field"><span>${tx('메모 (선택)', 'Note (optional)')}</span><input id="ed-note" class="txt" data-field="ed-note" value="${esc(d.note || '')}" maxlength="80" placeholder="${tx('예: 가슴 · 삼두', 'e.g. Chest · Triceps')}" autocomplete="off"></label>
+        <div class="field" style="margin-bottom:6px"><span>${tx(`운동 ${n ? n + '개' : ''}`, `Exercises${n ? ' (' + n + ')' : ''}`)}</span></div>
+        ${n ? `<div class="ed-list">${rows}</div>` : `<p class="empty" style="padding-top:0">${tx('아직 운동이 없어요. 아래 버튼으로 추가하세요.', 'No exercises yet. Add some with the button below.')}</p>`}
+        <button class="btn btn-ghost wide" data-act="ed-add">${I('plus')}${tx('운동 추가', 'Add exercise')}</button>`,
+      foot: `<div class="row2"><button class="btn" data-act="sheet-close">${tx('취소', 'Cancel')}</button><button class="btn btn-primary" data-act="ed-save">${tx('저장', 'Save')}</button></div>`,
     };
   },
 
   picker: p => {
     const n = p.sel.length;
     return {
-      title: p.target === 'editor' ? '루틴에 넣을 운동' : '운동 추가',
-      body: `<div class="search">${I('search')}<input id="pk-q" class="txt" type="search" data-field="pk-q" placeholder="운동 이름 검색 (예: 벤치)" value="${esc(p.q)}" autocomplete="off" enterkeyhint="search"></div>
-        <div class="chips" role="group" aria-label="부위">${['전체', ...CATS].map(c => `<button class="chip" data-act="pk-cat" data-cat="${c}" aria-pressed="${p.cat === c}">${c}</button>`).join('')}</div>
+      title: p.target === 'editor' ? tx('루틴에 넣을 운동', 'Exercises for this routine') : tx('운동 추가', 'Add exercise'),
+      body: `<div class="search">${I('search')}<input id="pk-q" class="txt" type="search" data-field="pk-q" placeholder="${tx('운동 이름 검색 (예: 벤치)', 'Search exercises')}" value="${esc(p.q)}" autocomplete="off" enterkeyhint="search"></div>
+        <div class="chips" role="group" aria-label="${tx('부위', 'Body part')}">${['전체', ...CATS].map(c => `<button class="chip" data-act="pk-cat" data-cat="${c}" aria-pressed="${p.cat === c}">${catName(c)}</button>`).join('')}</div>
         <div id="pk-list" style="margin-top:6px">${pickerListHtml(p)}</div>`,
-      foot: `<button class="btn btn-primary wide" data-act="pk-done" id="pk-done" ${n ? '' : 'disabled'}>${n ? n + '개 추가하기' : '추가할 운동을 고르세요'}</button>`,
+      foot: `<button class="btn btn-primary wide" data-act="pk-done" id="pk-done" ${n ? '' : 'disabled'}>${n ? tx(n + '개 추가하기', 'Add ' + n) : tx('추가할 운동을 고르세요', 'Pick exercises to add')}</button>`,
     };
   },
 
@@ -1511,111 +1656,115 @@ const SHEETS = {
     const info = exInfo(t.id, idx().last.get(t.id)?.ex.name);
     const hist = S.sessions.map(s => ({ s, ex: (s.exercises || []).find(e => e.exId === t.id) })).filter(h => h.ex && h.ex.sets.length);
     if (!hist.length) {
-      return { title: esc(info.name), body: `<p class="muted">${esc(info.cat)}</p><p class="empty">아직 기록이 없어요. 루틴에 넣고 한 번 해 보면 여기에 쌓여요.</p>` };
+      return { title: esc(info.name), body: `<p class="muted">${esc(catName(info.cat))}</p><p class="empty">${tx('아직 기록이 없어요. 루틴에 넣고 한 번 해 보면 여기에 쌓여요.', 'No records yet. Add it to a routine and do it once to see it here.')}</p>` };
     }
     const b = idx().best.get(t.id) || {};
     const useE1 = !(info.bw || hist[0].ex.bw) && (b.e1 || 0) > 0;
     const pts = hist.slice(0, 24).reverse().map(h => ({ t: h.s.endedAt, v: useE1 ? Math.max(...h.ex.sets.map(st => e1rm(st.w, st.r))) : Math.max(...h.ex.sets.map(st => st.r || 0)) }));
     const stats = `<div class="stats">
-      <div class="stat"><small>최근</small><span class="num">${relDay(hist[0].s.endedAt)}</span></div>
-      ${useE1 ? `<div class="stat"><small>최고 무게</small><span class="num">${fmtW(b.maxW)}<em>kg × ${b.maxWR}</em></span></div>
-      <div class="stat"><small>추정 1RM</small><span class="num">${fmtW(round1(b.e1))}<em>kg</em></span></div>` : `<div class="stat"><small>최다 반복</small><span class="num">${b.maxR || 0}<em>회</em></span></div>`}
-      <div class="stat"><small>한 횟수</small><span class="num">${hist.length}<em>번</em></span></div>
+      <div class="stat"><small>${tx('최근', 'Last')}</small><span class="num">${relDay(hist[0].s.endedAt)}</span></div>
+      ${useE1 ? `<div class="stat"><small>${tx('최고 무게', 'Heaviest')}</small><span class="num">${fmtW(b.maxW)}<em>kg × ${b.maxWR}</em></span></div>
+      <div class="stat"><small>${tx('추정 1RM', 'Est. 1RM')}</small><span class="num">${fmtW(round1(b.e1))}<em>kg</em></span></div>` : `<div class="stat"><small>${tx('최다 반복', 'Most reps')}</small><span class="num">${b.maxR || 0}<em>${tx('회', '')}</em></span></div>`}
+      <div class="stat"><small>${tx('한 횟수', 'Sessions')}</small><span class="num">${hist.length}<em>${tx('번', '')}</em></span></div>
     </div>`;
-    const chart = pts.length >= 2 ? `<div class="chart"><div class="chart-h"><span>${useE1 ? '세션별 추정 1RM (kg)' : '세션별 최다 반복 (회)'}</span><span>최근 ${pts.length}번</span></div>${sparkline(pts)}</div>` : '';
-    const list = hist.slice(0, 40).map(h => `<div class="hist-row"><div class="hist-top"><span>${fmtDate(h.s.endedAt)} · ${relDay(h.s.endedAt)}</span><span>${esc(h.s.routineName || '자유 운동')}</span></div><div class="hist-sets">${esc(setsStr(h.ex.sets, h.ex.bw))}</div></div>`).join('');
+    const chart = pts.length >= 2 ? `<div class="chart"><div class="chart-h"><span>${useE1 ? tx('세션별 추정 1RM (kg)', 'Est. 1RM per session (kg)') : tx('세션별 최다 반복 (회)', 'Most reps per session')}</span><span>${tx(`최근 ${pts.length}번`, `Last ${pts.length}`)}</span></div>${sparkline(pts, S.sheetEnter)}</div>` : '';
+    const list = hist.slice(0, 40).map(h => `<div class="hist-row"><div class="hist-top"><span>${fmtDate(h.s.endedAt)} · ${relDay(h.s.endedAt)}</span><span>${esc(rName(h.s.routineName))}</span></div><div class="hist-sets">${esc(setsStr(h.ex.sets, h.ex.bw))}</div></div>`).join('');
     return {
       title: esc(info.name),
-      body: `<p class="muted" style="margin-bottom:8px">${esc(info.cat)} · 추정 1RM은 Epley 공식(무게 × (1 + 횟수/30))으로 계산해요</p>${stats}${chart}<h3 class="sub-h" style="margin-top:4px">지난 기록</h3><div class="hist">${list}</div>${hist.length > 40 ? `<p class="empty">최근 40번만 보여요.</p>` : ''}`,
+      body: `<p class="muted" style="margin-bottom:8px">${esc(catName(info.cat))} · ${tx('추정 1RM은 Epley 공식(무게 × (1 + 횟수/30))으로 계산해요', 'Est. 1RM uses the Epley formula: weight × (1 + reps/30)')}</p>${stats}${chart}<h3 class="sub-h" style="margin-top:4px">${tx('지난 기록', 'Past sessions')}</h3><div class="hist">${list}</div>${hist.length > 40 ? `<p class="empty">${tx('최근 40번만 보여요.', 'Showing the last 40.')}</p>` : ''}`,
     };
   },
 
   session: t => {
     const s = S.sessions.find(x => x.id === t.id);
-    if (!s) return { title: '기록', body: '<p class="empty">삭제된 기록이에요.</p>' };
-    const exs = (s.exercises || []).map(e => `<div class="sd-ex"><button class="sd-name" data-act="open-ex" data-id="${esc(e.exId)}">${esc(e.name)}</button>
-      <ol class="sd-sets">${e.sets.map((st, i) => `<li><span>${i + 1}</span><span>${esc(wStr(st.w, e.bw))} × ${st.r ?? '-'}회</span></li>`).join('')}</ol></div>`).join('');
+    if (!s) return { title: tx('기록', 'Workout'), body: `<p class="empty">${tx('삭제된 기록이에요.', 'This workout was deleted.')}</p>` };
+    const exs = (s.exercises || []).map(e => `<div class="sd-ex"><button class="sd-name" data-act="open-ex" data-id="${esc(e.exId)}">${esc(exName(e))}</button>
+      <ol class="sd-sets">${e.sets.map((st, i) => `<li><span>${i + 1}</span><span>${esc(wStr(st.w, e.bw))} × ${st.r ?? '-'}${tx('회', '')}</span></li>`).join('')}</ol></div>`).join('');
     return {
       title: esc(fmtDate(s.endedAt)),
-      body: `<p class="kv"><b>${esc(s.routineName || '자유 운동')}</b> · ${fmtTime(s.startedAt)}–${fmtTime(s.endedAt)}</p>
-        <div class="stats"><div class="stat"><small>시간</small><span class="num">${fmtDur(s.endedAt - s.startedAt)}</span></div><div class="stat"><small>세트</small><span class="num">${s.setCount || 0}</span></div><div class="stat"><small>볼륨</small><span class="num">${fmtInt(s.volume)}<em>kg</em></span></div></div>
+      body: `<p class="kv"><b>${esc(rName(s.routineName))}</b> · ${fmtTime(s.startedAt)}–${fmtTime(s.endedAt)}</p>
+        <div class="stats"><div class="stat"><small>${tx('시간', 'Duration')}</small><span class="num">${fmtDur(s.endedAt - s.startedAt)}</span></div><div class="stat"><small>${tx('세트', 'Sets')}</small><span class="num">${s.setCount || 0}</span></div><div class="stat"><small>${tx('볼륨', 'Volume')}</small><span class="num">${fmtInt(s.volume)}<em>kg</em></span></div></div>
         ${exs}`,
-      foot: `<div class="row2"><button class="btn btn-danger" data-act="del-session" data-id="${esc(s.id)}">${I('trash')}기록 삭제</button><button class="btn btn-primary" data-act="repeat-session" data-id="${esc(s.id)}">${I('play')}이대로 다시 하기</button></div>`,
+      foot: `<div class="row2"><button class="btn btn-danger" data-act="del-session" data-id="${esc(s.id)}">${I('trash')}${tx('기록 삭제', 'Delete')}</button><button class="btn btn-primary" data-act="repeat-session" data-id="${esc(s.id)}">${I('play')}${tx('이대로 다시 하기', 'Do it again')}</button></div>`,
     };
   },
 
   finish: t => {
     const a = S.active;
-    if (!a) return { title: '운동 완료', body: '<p class="empty">진행 중인 운동이 없어요.</p>' };
+    if (!a) return { title: tx('운동 완료', 'Finish workout'), body: `<p class="empty">${tx('진행 중인 운동이 없어요.', 'No workout in progress.')}</p>` };
     const done = a.exercises.reduce((n, e) => n + e.sets.filter(s => validDone(e, s)).length, 0);
     const total = a.exercises.reduce((n, e) => n + e.sets.length, 0);
     if (!done) {
       return {
-        title: '완료한 세트가 없어요',
-        body: `<p class="confirm-msg">세트를 끝낼 때마다 오른쪽 체크 버튼을 눌러야 기록돼요. 계속하거나, 이번 운동을 취소할 수 있어요.</p>`,
-        foot: `<div class="row2"><button class="btn btn-danger" data-act="wo-discard-now">운동 취소</button><button class="btn btn-primary" data-act="sheet-close">계속 운동하기</button></div>`,
+        title: tx('완료한 세트가 없어요', 'No sets checked off'),
+        body: `<p class="confirm-msg">${tx('세트를 끝낼 때마다 오른쪽 체크 버튼을 눌러야 기록돼요. 계속하거나, 이번 운동을 취소할 수 있어요.', 'A set is logged only when you tap the check button on its right. Keep going, or cancel this workout.')}</p>`,
+        foot: `<div class="row2"><button class="btn btn-danger" data-act="wo-discard-now">${tx('운동 취소', 'Cancel workout')}</button><button class="btn btn-primary" data-act="sheet-close">${tx('계속 운동하기', 'Keep going')}</button></div>`,
       };
     }
     const vol = a.exercises.reduce((v, e) => v + metric(e.sets.filter(s => validDone(e, s)).map(s => ({ w: num(s.w), r: int(s.r) }))).vol, 0);
     const r = a.routineId && S.routines.find(x => x.id === a.routineId);
     const changed = r && routineChanged(a, r);
     return {
-      title: '운동을 끝낼까요?',
-      body: `<div class="stats"><div class="stat"><small>시간</small><span class="num">${fmtDur(Date.now() - a.startedAt)}</span></div><div class="stat"><small>완료 세트</small><span class="num">${done}<em>/ ${total}</em></span></div><div class="stat"><small>볼륨</small><span class="num">${fmtInt(vol)}<em>kg</em></span></div></div>
-        ${done < total ? `<p class="muted" style="margin-bottom:12px">체크하지 않은 ${total - done}세트는 저장되지 않아요.</p>` : ''}
-        ${changed ? `<button class="toggle" data-act="fin-toggle" aria-pressed="${!!t.upd}"><span class="toggle-txt"><b>‘${esc(r.name)}’ 루틴도 이 구성으로 바꾸기</b><small>오늘 추가하거나 뺀 운동·세트 수를 다음부터 그대로 써요</small></span><span class="switch"></span></button>` : ''}`,
-      foot: `<div class="row2"><button class="btn" data-act="sheet-close">계속 운동하기</button><button class="btn btn-primary" data-act="fin-save">${I('check')}저장하고 끝내기</button></div>`,
+      title: tx('운동을 끝낼까요?', 'Finish this workout?'),
+      body: `<div class="stats"><div class="stat"><small>${tx('시간', 'Duration')}</small><span class="num">${fmtDur(Date.now() - a.startedAt)}</span></div><div class="stat"><small>${tx('완료 세트', 'Sets done')}</small><span class="num">${done}<em>/ ${total}</em></span></div><div class="stat"><small>${tx('볼륨', 'Volume')}</small><span class="num">${fmtInt(vol)}<em>kg</em></span></div></div>
+        ${done < total ? `<p class="muted" style="margin-bottom:12px">${tx(`체크하지 않은 ${total - done}세트는 저장되지 않아요.`, `${pl(total - done, 'unchecked set')} won’t be saved.`)}</p>` : ''}
+        ${changed ? `<button class="toggle" data-act="fin-toggle" aria-pressed="${!!t.upd}"><span class="toggle-txt"><b>${tx(`‘${esc(r.name)}’ 루틴도 이 구성으로 바꾸기`, `Update “${esc(r.name)}” to match today`)}</b><small>${tx('오늘 추가하거나 뺀 운동·세트 수를 다음부터 그대로 써요', 'Exercises and set counts you changed today are kept for next time')}</small></span><span class="switch"></span></button>` : ''}`,
+      foot: `<div class="row2"><button class="btn" data-act="sheet-close">${tx('계속 운동하기', 'Keep going')}</button><button class="btn btn-primary" data-act="fin-save">${I('check')}${tx('저장하고 끝내기', 'Finish')}</button></div>`,
     };
   },
 
   done: t => {
     const s = t.session;
-    const prs = t.prs.length ? `<div class="pr-list">${t.prs.map(p => `<div class="pr-row">${I('trophy')}<span><b>${esc(p.name)}</b> 신기록 · 추정 1RM ${fmtW(round1(p.from))} → <b>${fmtW(round1(p.to))}kg</b></span></div>`).join('')}</div>` : '';
-    const cmp = t.cmp.map(c => `<div class="cmp-row"><b>${esc(c.name)}</b><span class="cmp-d${c.up ? ' up' : ''}">${c.up ? I('up') : c.dn ? I('dn') : ''}${esc(c.txt)}</span></div>`).join('');
+    // rows rise in one after another only while the sheet slides up, never on a later re-render
+    const st = (i, cls) => S.sheetEnter ? ` class="${cls} in" style="--i:${Math.min(i, 8)}"` : ` class="${cls}"`;
+    const prs = t.prs.length ? `<div class="pr-list">${t.prs.map((p, i) => `<div${st(i, 'pr-row')}>${I('trophy')}<span><b>${esc(p.name)}</b> ${tx('신기록 · 추정 1RM', 'new record · est. 1RM')} ${fmtW(round1(p.from))} → <b>${fmtW(round1(p.to))}kg</b></span></div>`).join('')}</div>` : '';
+    const cmp = t.cmp.map((c, i) => `<div${st(i + t.prs.length, 'cmp-row')}><b>${esc(c.name)}</b><span class="cmp-d${c.up ? ' up' : ''}">${c.up ? I('up') : c.dn ? I('dn') : ''}${esc(c.txt)}</span></div>`).join('');
+    const mile = t.mile ? `<div class="mile${S.sheetEnter ? ' stamp' : ''}" role="img" aria-label="${t.mile === 1 ? tx('첫 운동을 마쳤어요', 'First workout done') : tx(t.mile + '번째 운동을 마쳤어요', ordinal(t.mile) + ' workout done')}">${t.mile === 1 ? tx('<b>첫</b><span>운동</span>', '<b class="num">1st</b><span>workout</span>') : `<b class="num">${tx(t.mile, ordinal(t.mile))}</b><span>${tx('번째 운동', 'workout')}</span>`}</div>` : '';
     return {
-      title: '수고 많으셨어요!',
-      body: `<div class="done-hero"><div class="done-badge">${I(t.prs.length ? 'trophy' : 'check')}</div><div class="num">${fmtInt(s.volume)}<small>kg</small></div><p>총 볼륨</p>
-          <div class="done-stats"><div><b>${fmtDur(s.endedAt - s.startedAt)}</b><small>운동 시간</small></div><div><b>${s.setCount}</b><small>세트</small></div><div><b>${(s.exercises || []).length}</b><small>운동</small></div></div></div>
-        ${prs}<h3 class="sub-h">지난번과 비교</h3><div class="cmp">${cmp}</div>`,
-      foot: `<button class="btn btn-primary wide" data-act="sheet-close">확인</button>`,
+      title: tx('수고 많으셨어요!', 'Great work!'),
+      body: `<div class="done-hero${mile ? ' has-mile' : ''}">${mile}<div class="done-badge">${I(t.prs.length ? 'trophy' : 'check')}</div><div class="num"><span id="done-vol">${fmtInt(s.volume)}</span><small>kg</small></div><p>${tx('총 볼륨', 'Total volume')}</p>
+          <div class="done-stats"><div><b>${fmtDur(s.endedAt - s.startedAt)}</b><small>${tx('운동 시간', 'Duration')}</small></div><div><b>${s.setCount}</b><small>${tx('세트', 'Sets')}</small></div><div><b>${(s.exercises || []).length}</b><small>${tx('운동', 'Exercises')}</small></div></div></div>
+        ${prs}<h3 class="sub-h">${tx('지난번과 비교', 'Compared with last time')}</h3><div class="cmp">${cmp}</div>`,
+      foot: `<button class="btn btn-primary wide" data-act="sheet-close">${tx('확인', 'OK')}</button>`,
     };
   },
 
   settings: () => {
     const p = prof();
     const where = S.mode === 'cloud'
-      ? `<div class="where cloud">${I('cloud')}<div><b>내 계정에 저장 중</b><p>이 링크를 열면 폰이든 PC든 같은 기록이 보여요. 링크를 같이 쓰는 사람이 있어도 기록은 사람마다 따로 저장돼요.</p></div></div>`
-      : `<div class="where">${I('phone')}<div><b>${isApp() ? '이 기기에만' : '이 브라우저에만'} 저장 중</b><p>${isApp() ? '앱을 지우면' : '브라우저 데이터를 지우면'} 기록도 사라져요. 가끔 백업을 내보내 두세요.</p></div></div>${S.deniedUid ? '<button class="btn btn-sm" data-act="retry-cloud">계정에 저장 다시 시도</button>' : ''}`;
+      ? `<div class="where cloud">${I('cloud')}<div><b>${tx('내 계정에 저장 중', 'Saving to your account')}</b><p>${tx('이 링크를 열면 폰이든 PC든 같은 기록이 보여요. 링크를 같이 쓰는 사람이 있어도 기록은 사람마다 따로 저장돼요.', 'Open this link on your phone or computer to see the same records. If others use this link too, each person’s records are kept separately.')}</p></div></div>`
+      : `<div class="where">${I('phone')}<div><b>${isApp() ? tx('이 기기에만 저장 중', 'Saving on this device only') : tx('이 브라우저에만 저장 중', 'Saving in this browser only')}</b><p>${isApp() ? tx('앱을 지우면 기록도 사라져요.', 'Deleting the app deletes your records too.') : tx('브라우저 데이터를 지우면 기록도 사라져요.', 'Clearing browser data deletes your records too.')} ${tx('가끔 백업을 내보내 두세요.', 'Export a backup now and then.')}</p></div></div>${S.deniedUid ? `<button class="btn btn-sm" data-act="retry-cloud">${tx('다음에 열 때 계정 저장 다시 시도', 'Try saving to my account again next time')}</button>` : ''}`;
     const install = isWeb() && !isApp()
-      ? `<div class="set-group"><h3>앱으로 설치</h3>${installEvt ? `<button class="btn" data-act="install">${I('download')}홈 화면에 설치</button>` : installSteps()}</div>`
+      ? `<div class="set-group"><h3>${tx('앱으로 설치', 'Install as an app')}</h3>${installEvt ? `<button class="btn" data-act="install">${I('download')}${tx('홈 화면에 설치', 'Install on home screen')}</button>` : installSteps()}</div>`
       : '';
     const rests = [60, 90, 120, 150, 180, 240];
     const cust = p.custom.length
-      ? p.custom.map(c => `<div class="cust-row"><span>${esc(c.name)}<small>${esc(c.cat)}</small></span><button class="icon-btn sm" data-act="del-custom" data-id="${esc(c.id)}" aria-label="${esc(c.name)} 삭제">${I('trash')}</button></div>`).join('')
-      : '<p class="muted" style="font-size:13.5px">운동 추가 화면에서 검색해서 없는 운동을 직접 만들 수 있어요.</p>';
+      ? p.custom.map(c => `<div class="cust-row"><span>${esc(c.name)}<small>${esc(catName(c.cat))}</small></span><button class="icon-btn sm" data-act="del-custom" data-id="${esc(c.id)}" aria-label="${tx(`${esc(c.name)} 삭제`, `Delete ${esc(c.name)}`)}">${I('trash')}</button></div>`).join('')
+      : `<p class="muted" style="font-size:calc(13.5 * var(--fs))">${tx('운동 추가 화면에서 검색해서 없는 운동을 직접 만들 수 있어요.', 'Search in “Add exercise” to create one that isn’t listed.')}</p>`;
     return {
-      title: '설정',
-      body: `<div class="set-group"><h3>저장 위치</h3>${where}</div>
-        <div class="set-group"><h3>세트 끝나면 쉬는 시간</h3><div class="chips wrap">${rests.map(v => `<button class="chip" data-act="set-rest" data-v="${v}" aria-pressed="${p.rest === v}">${fmtClock(v)}</button>`).join('')}</div></div>
-        <div class="set-group"><h3>알림</h3><button class="toggle" data-act="set-sound" aria-pressed="${!!p.sound}"><span class="toggle-txt"><b>휴식 끝나면 소리 알림</b><small>소리는 휴대폰 무음 모드에서는 안 날 수 있어요</small></span><span class="switch"></span></button></div>
-        <div class="set-group"><h3>화면</h3><div class="chips wrap">${THEMES.map(([v, l]) => `<button class="chip" data-act="set-theme" data-v="${v}" aria-pressed="${themePref() === v}">${l}</button>`).join('')}</div></div>
+      title: tx('설정', 'Settings'),
+      body: `<div class="set-group"><h3>${tx('저장 위치', 'Where records are saved')}</h3>${where}</div>
+        <div class="set-group"><h3>${tx('세트 끝나면 쉬는 시간', 'Rest between sets')}</h3><div class="chips wrap">${rests.map(v => `<button class="chip" data-act="set-rest" data-v="${v}" aria-pressed="${p.rest === v}">${fmtClock(v)}</button>`).join('')}</div></div>
+        <div class="set-group"><h3>${tx('알림', 'Alerts')}</h3><button class="toggle" data-act="set-sound" aria-pressed="${!!p.sound}"><span class="toggle-txt"><b>${tx('휴식 끝나면 소리 알림', 'Sound when rest ends')}</b><small>${tx('소리는 휴대폰 무음 모드에서는 안 날 수 있어요', 'It may stay quiet when your phone is on silent')}</small></span><span class="switch"></span></button></div>
+        <div class="set-group"><h3>${tx('화면', 'Appearance')}</h3><div class="chips wrap">${themes().map(([v, l]) => `<button class="chip" data-act="set-theme" data-v="${v}" aria-pressed="${themePref() === v}">${l}</button>`).join('')}</div></div>
+        <div class="set-group"><h3>${tx('언어 (Language)', 'Language (언어)')}</h3><div class="chips wrap">${[['auto', tx('폰 언어 따라가기', 'Same as phone')], ['ko', '한국어'], ['en', 'English']].map(([v, l]) => `<button class="chip" data-act="set-lang" data-v="${v}" aria-pressed="${langPref() === v}"${v === 'auto' ? '' : ` lang="${v}"`}>${l}</button>`).join('')}</div></div>
         ${install}
-        <div class="set-group"><h3>직접 만든 운동</h3>${cust}</div>
-        <div class="set-group"><h3>백업</h3><p class="muted" style="font-size:13.5px">루틴과 모든 기록을 JSON 파일 하나로 내보내거나 다시 불러올 수 있어요.</p>
-          <div class="row2"><button class="btn" data-act="export">백업 내보내기</button><label class="btn file-btn">백업 가져오기<input type="file" id="imp-file" accept="application/json,.json" aria-label="백업 파일 선택"></label></div></div>`,
+        <div class="set-group"><h3>${tx('직접 만든 운동', 'Custom exercises')}</h3>${cust}</div>
+        <div class="set-group"><h3>${tx('백업', 'Backup')}</h3><p class="muted" style="font-size:calc(13.5 * var(--fs))">${tx('루틴과 모든 기록을 JSON 파일 하나로 내보내거나 다시 불러올 수 있어요.', 'Export your routines and all records as one JSON file, or bring them back in.')}</p>
+          <div class="row2"><button class="btn" data-act="export">${tx('백업 내보내기', 'Export backup')}</button><label class="btn file-btn">${tx('백업 가져오기', 'Import backup')}<input type="file" id="imp-file" accept="application/json,.json" aria-label="${tx('백업 파일 선택', 'Choose a backup file')}"></label></div></div>`,
     };
   },
 
   install: () => ({
-    title: '홈 화면에 추가하기',
-    body: `<p class="confirm-msg">홈 화면에 추가하면 아이콘을 눌러 주소창 없이 앱처럼 열 수 있어요. 인터넷이 없어도 기록돼요.</p>${installSteps()}`,
-    foot: `<button class="btn btn-primary wide" data-act="sheet-close">확인</button>`,
+    title: tx('홈 화면에 추가하기', 'Add to Home Screen'),
+    body: `<p class="confirm-msg">${tx('홈 화면에 추가하면 아이콘을 눌러 주소창 없이 앱처럼 열 수 있어요. 인터넷이 없어도 기록돼요.', 'Add it to your home screen to open it like an app, without the address bar. It works without internet, too.')}</p>${installSteps()}`,
+    foot: `<button class="btn btn-primary wide" data-act="sheet-close">${tx('확인', 'OK')}</button>`,
   }),
 
   exportText: t => ({
-    title: '백업 내용',
-    body: `<p class="muted" style="margin-bottom:10px;font-size:13.5px">이 화면에서는 파일 저장이 안 돼요. 아래 내용을 복사해서 메모장 등에 붙여넣어 보관하세요.</p><textarea id="export-box" class="export-box" readonly>${esc(t.json)}</textarea>`,
-    foot: `<button class="btn btn-primary wide" data-act="copy-export">복사하기</button>`,
+    title: tx('백업 내용', 'Backup data'),
+    body: `<p class="muted" style="margin-bottom:10px;font-size:calc(13.5 * var(--fs))">${tx('이 화면에서는 파일 저장이 안 돼요. 아래 내용을 복사해서 메모장 등에 붙여넣어 보관하세요.', 'Files can’t be saved here. Copy the text below and keep it somewhere safe, like a notes app.')}</p><textarea id="export-box" class="export-box" readonly>${esc(t.json)}</textarea>`,
+    foot: `<button class="btn btn-primary wide" data-act="copy-export">${tx('복사하기', 'Copy')}</button>`,
   }),
 };
 
@@ -1624,22 +1773,26 @@ function pickerListHtml(p) {
   const inTarget = new Set(p.target === 'editor' ? (topEditor()?.draft.exercises || []).map(e => e.exId) : (S.active ? S.active.exercises.map(e => e.exId) : []));
   const list = filteredExercises(q, p.cat);
   let html = '';
-  if (q && !allExercises().some(e => norm(e.name) === norm(q))) {
+  if (q && !allExercises().some(e => nameIs(e, q))) {
     html += p.creating
-      ? `<div class="pk-create"><div class="pk-create-t">‘${esc(q)}’은(는) 어느 부위 운동인가요?</div><div class="chips wrap">${CATS.map(c => `<button class="chip" data-act="pk-create-cat" data-cat="${c}">${c}</button>`).join('')}</div></div>`
-      : `<button class="pk-new" data-act="pk-create">${I('plus')}‘${esc(q)}’ 새 운동으로 만들기</button>`;
+      ? `<div class="pk-create"><div class="pk-create-t">${tx(`‘${esc(q)}’은(는) 어느 부위 운동인가요?`, `Which body part does “${esc(q)}” work?`)}</div><div class="chips wrap">${CATS.map(c => `<button class="chip" data-act="pk-create-cat" data-cat="${c}">${catName(c)}</button>`).join('')}</div></div>`
+      : `<button class="pk-new" data-act="pk-create">${I('plus')}${tx(`‘${esc(q)}’ 새 운동으로 만들기`, `Create “${esc(q)}” as a new exercise`)}</button>`;
   }
   if (list.length) {
     html += `<div class="exlist">${list.map(e => {
       const on = p.sel.includes(e.id);
-      return `<button class="pk-row${on ? ' on' : ''}" data-act="pk-toggle" data-id="${esc(e.id)}" aria-pressed="${on}"><span class="pk-box">${I('check')}</span><span class="pk-txt"><span class="pk-name">${esc(e.name)}${inTarget.has(e.id) ? '<span class="tag">이미 있음</span>' : ''}</span><span class="pk-sub">${esc(e.cat)} · ${lastHtml(e.id)}</span></span></button>`;
+      return `<button class="pk-row${on ? ' on' : ''}" data-act="pk-toggle" data-id="${esc(e.id)}" aria-pressed="${on}"><span class="pk-box">${I('check')}</span><span class="pk-txt"><span class="pk-name">${esc(e.name)}${inTarget.has(e.id) ? `<span class="tag">${tx('이미 있음', 'Added')}</span>` : ''}</span><span class="pk-sub">${esc(catName(e.cat))} · ${lastHtml(e.id)}</span></span></button>`;
     }).join('')}</div>`;
-  } else if (!q) html += '<p class="empty">이 부위에는 아직 운동이 없어요.</p>';
+  } else if (!q) html += `<p class="empty">${tx('이 부위에는 아직 운동이 없어요.', 'No exercises for this body part yet.')}</p>`;
   return html;
 }
 function topEditor() { for (let i = S.sheets.length - 1; i >= 0; i--) if (S.sheets[i].kind === 'editor') return S.sheets[i]; return null; }
 
-function sparkline(pts) {
+/* draw: the exercise sheet just opened. The line draws itself left to right (0.7 s), the area and labels fade in
+   under it, and the last dot lands; when the latest session is the best so far, one lime ring spreads from it.
+   Only on open (a re-render shows the finished chart). The line moves stroke-dashoffset on one small path,
+   which repaints that SVG only, no layout. Reduce Motion shows the finished chart. */
+function sparkline(pts, draw) {
   const W = 320, H = 132, pl = 6, pr = 66, pt = 14, pb = 24;
   const vs = pts.map(p => p.v);
   const vmax = Math.max(...vs), vmin = Math.min(...vs);
@@ -1654,18 +1807,21 @@ function sparkline(pts) {
   const lastV = pts[n - 1].v;
   const yMax = y(vmax), yMin = y(vmin), yLast = y(lastV);
   const labels = [`<text class="sp-txt hi" x="${W - pr + 8}" y="${(yLast + 4).toFixed(1)}">${fmtW(round1(lastV))}</text>`];
-  if (Math.abs(yMax - yLast) > 14) labels.push(`<text class="sp-txt" x="${W - pr + 8}" y="${(yMax + 4).toFixed(1)}">최고 ${fmtW(round1(vmax))}</text>`);
+  if (Math.abs(yMax - yLast) > 14) labels.push(`<text class="sp-txt" x="${W - pr + 8}" y="${(yMax + 4).toFixed(1)}">${tx('최고', 'Best')} ${fmtW(round1(vmax))}</text>`);
   if (Math.abs(yMin - yLast) > 14 && Math.abs(yMin - yMax) > 14) labels.push(`<text class="sp-txt" x="${W - pr + 8}" y="${(yMin + 4).toFixed(1)}">${fmtW(round1(vmin))}</text>`);
   const d0 = new Date(pts[0].t), d1 = new Date(pts[n - 1].t);
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="최근 ${n}번 기록 추이, 마지막 ${fmtW(round1(lastV))}">
+  const best = vs.slice(0, -1).every(v => v < lastV);
+  const lx = x(n - 1).toFixed(1), ly = yLast.toFixed(1);
+  return `<svg${draw ? ' class="draw"' : ''} viewBox="0 0 ${W} ${H}" role="img" aria-label="${tx(`최근 ${n}번 기록 추이, 마지막 ${fmtW(round1(lastV))}${best ? ', 지금까지 최고' : ''}`, `Trend over the last ${n} sessions, latest ${fmtW(round1(lastV))}${best ? ', best so far' : ''}`)}">
     <line class="sp-grid" x1="${pl}" x2="${W - pr}" y1="${yMax.toFixed(1)}" y2="${yMax.toFixed(1)}"/>
     <line class="sp-grid" x1="${pl}" x2="${W - pr}" y1="${yMin.toFixed(1)}" y2="${yMin.toFixed(1)}"/>
     <path class="sp-area" d="${area}" opacity=".7"/>
-    <polyline class="sp-line" points="${line}"/>
-    <circle class="sp-dot" cx="${x(n - 1).toFixed(1)}" cy="${yLast.toFixed(1)}" r="4.5"/>
-    ${labels.join('')}
+    <path class="sp-line" pathLength="1" d="M${line.split(' ').join(' L')}"/>
+    ${draw && best ? `<circle class="sp-ring" cx="${lx}" cy="${ly}" r="4.5"/>` : ''}
+    <circle class="sp-dot" cx="${lx}" cy="${ly}" r="4.5"/>
+    <g class="sp-labels">${labels.join('')}
     <text class="sp-txt" x="${pl}" y="${H - 6}">${d0.getMonth() + 1}/${d0.getDate()}</text>
-    <text class="sp-txt" x="${W - pr}" y="${H - 6}" text-anchor="end">${d1.getMonth() + 1}/${d1.getDate()}</text>
+    <text class="sp-txt" x="${W - pr}" y="${H - 6}" text-anchor="end">${d1.getMonth() + 1}/${d1.getDate()}</text></g>
   </svg>`;
 }
 
@@ -1678,19 +1834,19 @@ function mkWoEx(exId, t) {
   return { u: uid(), exId, name: info.name, bw: !!info.bw, target, sets: Array.from({ length: n }, () => ({ w: '', r: '', done: false })) };
 }
 function guardStart(fn) {
-  if (!S.activeReady) { toast('아직 불러오는 중이에요. 잠시만요.'); return; }
+  if (!S.activeReady) { toast(tx('아직 불러오는 중이에요. 잠시만요.', 'Still loading. One moment.')); return; }
   if (!S.active) { fn(); return; }
   confirmSheet({
-    title: '진행 중인 운동이 있어요',
-    msg: `‘${S.active.routineName || '자유 운동'}’ 운동이 아직 진행 중이에요. 이어서 할까요, 아니면 지금 운동을 버리고 새로 시작할까요?`,
-    ok: '버리고 새로 시작', danger: true,
-    alt: { label: '이어서 하기', act: 'resume-active' },
+    title: tx('진행 중인 운동이 있어요', 'A workout is in progress'),
+    msg: tx(`‘${rName(S.active.routineName)}’ 운동이 아직 진행 중이에요. 이어서 할까요, 아니면 지금 운동을 버리고 새로 시작할까요?`, `“${rName(S.active.routineName)}” is still in progress. Continue it, or discard it and start a new one?`),
+    ok: tx('버리고 새로 시작', 'Discard and start new'), danger: true,
+    alt: { label: tx('이어서 하기', 'Continue'), act: 'resume-active' },
     onOk: () => { discardWorkout(true); fn(); },
   });
 }
 function startWorkout(name, routineId, items) {
   S.active = { id: uid(), routineId: routineId || null, routineName: name || '자유 운동', startedAt: Date.now(), updatedAt: Date.now(), exercises: items.map(it => mkWoEx(it.exId, it)) };
-  S.sheets = []; S.workoutOpen = true; S.rest = null;
+  S.sheets = []; S.workoutOpen = true; S.rest = null; S.enter.add('wo');
   touchActive(); flushActive();
   keepAwake(true);
   render();
@@ -1700,7 +1856,7 @@ function discardWorkout(silent) {
   S.active = null; S.workoutOpen = false; S.rest = null;
   clearActiveEverywhere();
   keepAwake(false);
-  if (!silent) { S.sheets = []; render(); toast('운동을 취소했어요'); }
+  if (!silent) { S.sheets = []; render(); toast(tx('운동을 취소했어요', 'Workout canceled')); }
 }
 function checkSet(u, i) {
   ensureAudio();
@@ -1711,16 +1867,16 @@ function checkSet(u, i) {
   const wTxt = String(st.w).trim(), rTxt = String(st.r).trim();
   const w = wTxt === '' ? f.w : num(wTxt);
   const r = rTxt === '' ? f.r : int(rTxt);
-  if (wTxt !== '' && w == null) { toast('무게는 숫자로 입력해 주세요 (예: 62.5)'); focusField('w', u, i); return; }
-  if (w == null && !ex.bw) { toast('무게를 입력해 주세요'); focusField('w', u, i); return; }
-  if (r == null || r <= 0) { toast(rTxt !== '' ? '횟수는 숫자로 입력해 주세요' : '몇 회 했는지 입력해 주세요'); focusField('r', u, i); return; }
+  if (wTxt !== '' && w == null) { toast(tx('무게는 숫자로 입력해 주세요 (예: 62.5)', 'Enter the weight as a number (e.g. 62.5)')); focusField('w', u, i); return; }
+  if (w == null && !ex.bw) { toast(tx('무게를 입력해 주세요', 'Enter the weight')); focusField('w', u, i); return; }
+  if (r == null || r <= 0) { toast(rTxt !== '' ? tx('횟수는 숫자로 입력해 주세요', 'Enter reps as a number') : tx('몇 회 했는지 입력해 주세요', 'Enter how many reps you did')); focusField('r', u, i); return; }
   st.w = w == null ? '' : fmtW(w);
   st.r = String(r);
   st.cw = st.w; st.cr = st.r;
   st.done = true;
   S.pop = u + ':' + i;
   const all = S.active.exercises.every(e => e.sets.every(s => s.done));
-  if (all) { S.rest = null; toast('모든 세트 완료! 위의 ‘완료’를 눌러 저장하세요', 3200); }
+  if (all) { S.rest = null; toast(tx('모든 세트 완료! 위의 ‘완료’를 눌러 저장하세요', 'All sets done! Tap “Finish” at the top to save'), 3200); }
   else { const sec = prof().rest; S.rest = { end: Date.now() + sec * 1000, total: sec * 1000 }; }
   touchActive();
   render();
@@ -1747,6 +1903,11 @@ function commonReps(e) {
   for (const [r, c] of counts) if (c > bc) { best = r; bc = c; }
   return best;
 }
+/* asks the browser not to clear this site's data on its own (web build; claude.ai keeps records in the account).
+   Only Firefox turns this into a question, so it waits until a saved workout makes the reason obvious. */
+function keepData() {
+  if (isWeb() && navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(p => p || navigator.storage.persist()).catch(() => {});
+}
 function finishWorkout(upd) {
   const a = S.active; if (!a) return;
   const before = idx();
@@ -1759,17 +1920,17 @@ function finishWorkout(upd) {
   for (const e of exs) {
     const b = before.best.get(e.exId);
     const top = Math.max(...e.sets.map(s => e1rm(s.w, s.r)));
-    if (!e.bw && b && b.e1 > 0 && top > b.e1 + 0.05) prs.push({ name: e.name, from: b.e1, to: top });
+    if (!e.bw && b && b.e1 > 0 && top > b.e1 + 0.05) prs.push({ name: exName(e), from: b.e1, to: top });
     const L = before.last.get(e.exId);
     const cur = metric(e.sets);
-    if (!L) { cmp.push({ name: e.name, txt: '첫 기록', up: false }); continue; }
+    if (!L) { cmp.push({ name: exName(e), txt: tx('첫 기록', 'First time'), up: false }); continue; }
     const prev = metric(L.ex.sets);
     if (cur.vol > 0 && prev.vol > 0) {
       const d = cur.vol - prev.vol;
-      cmp.push({ name: e.name, txt: d > 0 ? `+${fmtInt(d)}kg` : d < 0 ? `${fmtInt(d)}kg` : '지난번과 같음', up: d > 0, dn: d < 0 });
+      cmp.push({ name: exName(e), txt: d > 0 ? `+${fmtInt(d)}kg` : d < 0 ? `${fmtInt(d)}kg` : tx('지난번과 같음', 'Same as last time'), up: d > 0, dn: d < 0 });
     } else {
       const d = cur.reps - prev.reps;
-      cmp.push({ name: e.name, txt: d > 0 ? `+${d}회` : d < 0 ? `${d}회` : '지난번과 같음', up: d > 0, dn: d < 0 });
+      cmp.push({ name: exName(e), txt: d > 0 ? `+${d}${tx('회', ' reps')}` : d < 0 ? `${d}${tx('회', ' reps')}` : tx('지난번과 같음', 'Same as last time'), up: d > 0, dn: d < 0 });
     }
   }
   S.sessions = sortSessions([session, ...S.sessions.filter(s => s.id !== session.id)]);
@@ -1790,17 +1951,61 @@ function finishWorkout(upd) {
   S.active = null; S.workoutOpen = false; S.rest = null;
   clearTimeout(actTimer); actTimer = null; clearMirror();
   sent.then(ok => {
+    if (ok) keepData();
     if (ok && !S.active && store.kind === 'cloud') store.saveActive(null);
     if (!ok && queued && store.kind === 'cloud' && !['quota_exceeded', 'invalid_argument', 'revoked'].includes(lastSendErr)) {
-      toast('기록을 아직 계정에 올리지 못했어요. 이 기기에 보관해 두고 다시 올릴게요.', 4200);
+      toast(tx('기록을 아직 계정에 올리지 못했어요. 이 기기에 보관해 두고 다시 올릴게요.', 'Couldn’t upload this workout yet. It’s kept on this device and will be sent again.'), 4200);
     }
   });
   keepAwake(false);
+  const mile = milestoneFor(S.sessions.length);
   S.tab = 'history'; lsSet('setnote:tab', 'history');
-  S.sheets = [{ kind: 'done', session, prs, cmp }];
+  S.sheets = [{ kind: 'done', session, prs, cmp, mile }];
   S.sheetEnter = true;
   render();
   window.scrollTo(0, 0);
+  countUp($('#done-vol'), session.volume);
+  // after the sheet has slid up (--dur-base), so the burst starts where the trophy finally sits;
+  // on a milestone day it waits until the stamp has landed and its ripple has faded, so only one big effect plays at a time
+  if (!prs.length) return;
+  let fired = false;
+  const burst = () => { if (fired) return; fired = true; const top = topSheet(); if (top && top.kind === 'done') celebrate($('.done-badge')); };
+  const stamp = mile && $('.mile.stamp');
+  if (stamp) {
+    // the CSS clock starts at the first painted frame, which comes late on a long history or a slow phone,
+    // so follow the ripple's own end; the timer only covers a ripple that never runs
+    stamp.addEventListener('animationend', e => { if (e.animationName === 'ripple') burst(); });
+    setTimeout(burst, 2500);
+  } else setTimeout(burst, 300);
+}
+
+/* Workout-count milestones (1st, 5th, 10th, 25th, 50th, 75th, 100th, then every 50th) get a stamp on the done
+   sheet. Early ones come closer together so the first weeks feel like progress. Each number is stamped once per
+   device: the highest one shown is remembered, so deleting old sessions and finishing again doesn't repeat it.
+   Skipped until the account's sessions are known, or a half-loaded list would call a 40th workout the first. */
+const MILESTONES = [1, 5, 10, 25, 50, 75, 100];
+function milestoneFor(n) {
+  if (!S.loaded.sessions || (S.mode === 'cloud' && !S.fresh.sessions)) return 0;
+  if (!(MILESTONES.includes(n) || (n > 100 && n % 50 === 0))) return 0;
+  const key = 'setnote:milestone:' + (S.uid || 'local');
+  if (n <= (parseInt(lsGet(key), 10) || 0)) return 0;
+  lsSet(key, String(n));
+  return n;
+}
+
+/* The total volume rolls up from 0 while the done sheet slides in (0.7 s, ease-out), a value-change reaction.
+   The final number is already in the HTML, so Reduce Motion, a hidden tab or a re-render just shows it. */
+function countUp(el, to) {
+  if (!el || !(to > 0) || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const DUR = 700, t0 = performance.now();
+  const step = now => {
+    if (!el.isConnected) return;
+    const k = Math.min((now - t0) / DUR, 1);
+    el.textContent = fmtInt(Math.round(to * (1 - Math.pow(1 - k, 3))));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  el.textContent = '0';
+  requestAnimationFrame(step);
 }
 
 /* ---------- rest timer, wake lock, sound ---------- */
@@ -1838,7 +2043,7 @@ async function keepAwake(on) {
 function restDone() {
   if (prof().sound) beep();
   try { navigator.vibrate && navigator.vibrate([180, 90, 180]); } catch {}
-  toast('휴식 끝! 다음 세트 가요', 2600);
+  toast(tx('휴식 끝! 다음 세트 가요', 'Rest over! Next set'), 2600);
 }
 function tickUi() {
   if (S.rest && S.rest.end - Date.now() <= 0) { S.rest = null; restDone(); const pr = $('#pill-root'); if (pr && S.active && !S.workoutOpen) pr.innerHTML = pillHtml(); }
@@ -1869,10 +2074,75 @@ function toast(msg, ms = 2400) {
   toastTimer = setTimeout(() => el.classList.remove('show'), ms);
 }
 
+/* ---------- celebrate ---------- */
+/* One short confetti burst from the trophy when a finished workout has a new record (t.prs). It only fires on
+   record days so it keeps meaning something. Opaque paper bits instead of the practice page's additive glow,
+   which vanishes on the white sheet; ink bits keep the lime ones visible on white. About 1.6 s and 80 bits,
+   then the canvas removes itself. The canvas lets touches through, so 확인 works mid-burst.
+   Reduce Motion gets nothing (the trophy and the 신기록 rows already say it); a hidden tab stops it. */
+let confettiStop = null;
+function celebrate(el) {
+  if (!el || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = el.getBoundingClientRect();
+  if (!box.width) return;
+  if (confettiStop) confettiStop();
+  const css = getComputedStyle(document.documentElement);
+  const tok = n => css.getPropertyValue(n).trim();
+  const colors = [tok('--accent'), tok('--pr-fill'), tok('--accent'), tok('--pr-fill'), tok('--ink')];
+  const W = window.innerWidth, H = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const cv = document.createElement('canvas');
+  cv.className = 'confetti';
+  cv.setAttribute('aria-hidden', 'true');
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const ox = box.left + box.width / 2, oy = box.top + box.height / 2;
+  const bits = [];
+  for (let i = 0; i < 80; i++) {
+    const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.25; // upward fan, about ±110°
+    const v = 260 + Math.random() * 440; // px per second
+    bits.push({ x: ox, y: oy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, rot: Math.random() * 6.3, vr: (Math.random() - 0.5) * 14,
+      flip: Math.random() * 6.3, vf: 7 + Math.random() * 9, w: 6 + Math.random() * 5, h: 3.5 + Math.random() * 3,
+      round: i % 4 === 0, c: colors[i % colors.length] });
+  }
+  const DUR = 1.6, FADE = 0.5;
+  let raf = 0, t = 0, last = 0;
+  const stop = () => {
+    cancelAnimationFrame(raf); cv.remove();
+    document.removeEventListener('visibilitychange', stop);
+    if (confettiStop === stop) confettiStop = null;
+  };
+  confettiStop = stop;
+  document.addEventListener('visibilitychange', stop);
+  const frame = now => {
+    const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 0;
+    last = now; t += dt;
+    if (t >= DUR) return stop();
+    ctx.clearRect(0, 0, W, H);
+    const drag = Math.exp(-2.4 * dt);
+    ctx.globalAlpha = t < DUR - FADE ? 1 : (DUR - t) / FADE;
+    for (const b of bits) {
+      b.vx *= drag; b.vy = b.vy * drag + 900 * dt;
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      b.rot += b.vr * dt; b.flip += b.vf * dt;
+      ctx.save();
+      ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+      ctx.fillStyle = b.c;
+      if (b.round) { ctx.beginPath(); ctx.arc(0, 0, b.h * 0.8, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.scale(1, Math.cos(b.flip)); ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h); }
+      ctx.restore();
+    }
+    raf = requestAnimationFrame(frame);
+  };
+  raf = requestAnimationFrame(frame);
+}
+
 /* ---------- theme, install, back button ---------- */
 /* The claude.ai host may set :root[data-theme] itself. "시스템" hands the attribute back to it,
    and a host change while the user picked light/dark is overridden again. The web build has no host. */
-const THEMES = [['system', '시스템'], ['light', '밝게'], ['dark', '어둡게']];
+const themes = () => [['system', tx('시스템', 'System')], ['light', tx('밝게', 'Light')], ['dark', tx('어둡게', 'Dark')]];
 const rootEl = document.documentElement;
 let hostTheme = window.SETNOTE_WEB ? null : rootEl.getAttribute('data-theme'), ownTheme;
 function themePref() { const v = lsGet('setnote:theme'); return v === 'light' || v === 'dark' ? v : 'system'; }
@@ -1901,17 +2171,21 @@ const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.pla
 const isAndroid = () => /Android/i.test(navigator.userAgent);
 let installEvt = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; scheduleRender(); });
-window.addEventListener('appinstalled', () => { installEvt = null; lsSet('setnote:install-hide', '1'); toast('홈 화면에 설치했어요'); scheduleRender(); });
+window.addEventListener('appinstalled', () => { installEvt = null; lsSet('setnote:install-hide', '1'); toast(tx('홈 화면에 설치했어요', 'Installed on your home screen')); scheduleRender(); });
 function installSteps() {
-  if (isIOS()) return `<ol class="install-steps"><li>Safari에서 공유 버튼 ${I('share')}을 누르세요. 안 보이면 ${I('dots', 'rot')} 버튼을 먼저 누르세요.</li><li>‘홈 화면에 추가’를 누르세요. 목록에 없으면 ‘더 보기’를 누르세요.</li><li>오른쪽 위 ‘추가’를 누르면 끝이에요.</li></ol>`;
-  if (isAndroid()) return `<ol class="install-steps"><li>Chrome 오른쪽 위 ${I('dots')} 메뉴를 누르세요.</li><li>‘홈 화면에 추가’ 또는 ‘앱 설치’를 누르세요.</li><li>‘설치’를 누르면 끝이에요.</li></ol>`;
-  return `<ol class="install-steps"><li>휴대폰에서 이 주소를 여세요.</li><li>아이폰은 Safari 공유 버튼에서 ‘홈 화면에 추가’, 안드로이드는 Chrome 메뉴에서 ‘앱 설치’를 누르세요.</li></ol>`;
+  if (isIOS()) return `<ol class="install-steps">${tx(`<li>Safari에서 공유 버튼 ${I('share')}을 누르세요. 안 보이면 ${I('dots', 'rot')} 버튼을 먼저 누르세요.</li><li>‘홈 화면에 추가’를 누르세요. 목록에 없으면 ‘더 보기’를 누르세요.</li><li>오른쪽 위 ‘추가’를 누르면 끝이에요.</li>`,
+    `<li>In Safari, tap the Share button ${I('share')}. If you don’t see it, tap ${I('dots', 'rot')} first.</li><li>Tap “Add to Home Screen”. If it’s not in the list, tap “More”.</li><li>Tap “Add” at the top right and you’re done.</li>`)}</ol>`;
+  if (isAndroid()) return `<ol class="install-steps">${tx(`<li>Chrome 오른쪽 위 ${I('dots')} 메뉴를 누르세요.</li><li>‘홈 화면에 추가’ 또는 ‘앱 설치’를 누르세요.</li><li>‘설치’를 누르면 끝이에요.</li>`,
+    `<li>Tap the ${I('dots')} menu at the top right of Chrome.</li><li>Tap “Add to Home screen” or “Install app”.</li><li>Tap “Install” and you’re done.</li>`)}</ol>`;
+  return `<ol class="install-steps">${tx('<li>휴대폰에서 이 주소를 여세요.</li><li>아이폰은 Safari 공유 버튼에서 ‘홈 화면에 추가’, 안드로이드는 Chrome 메뉴에서 ‘앱 설치’를 누르세요.</li>',
+    '<li>Open this address on your phone.</li><li>On iPhone, tap “Add to Home Screen” from Safari’s Share button. On Android, tap “Install app” in Chrome’s menu.</li>')}</ol>`;
 }
+/* asked only after the first saved workout, once the app has shown what it is for */
 function installBanner() {
-  if (!isWeb() || isApp() || lsGet('setnote:install-hide')) return '';
+  if (!isWeb() || isApp() || lsGet('setnote:install-hide') || !S.sessions.length) return '';
   if (!installEvt && !isIOS() && !isAndroid()) return '';
-  return `<div class="inst">${LOGO}<div class="inst-txt"><b>홈 화면에 추가하세요</b><small>앱처럼 바로 열리고, 인터넷이 없어도 기록돼요</small></div>
-    <button class="btn btn-sm btn-ink" data-act="install">${installEvt ? '설치' : '방법 보기'}</button><button class="icon-btn sm" data-act="install-hide" aria-label="설치 안내 닫기">${I('x')}</button></div>`;
+  return `<div class="inst">${LOGO}<div class="inst-txt"><b>${tx('홈 화면에 추가하세요', 'Add it to your home screen')}</b><small>${tx('앱처럼 바로 열리고, 인터넷이 없어도 기록돼요', 'Opens like an app and works offline')}</small></div>
+    <button class="btn btn-sm btn-ink" data-act="install">${installEvt ? tx('설치', 'Install') : tx('방법 보기', 'How')}</button><button class="icon-btn sm" data-act="install-hide" aria-label="${tx('설치 안내 닫기', 'Dismiss')}">${I('x')}</button></div>`;
 }
 async function doInstall() {
   const e = installEvt;
@@ -1920,7 +2194,6 @@ async function doInstall() {
   try { await e.prompt(); const c = await e.userChoice; if (c && c.outcome === 'accepted') lsSet('setnote:install-hide', '1'); } catch {}
   render();
 }
-if (isWeb() && navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(p => p || navigator.storage.persist()).catch(() => {});
 
 /* Android back button in the web build: one history entry stands for "a sheet or the workout is open",
    so back closes the top sheet (like ✕) or folds the workout (like ▼) instead of leaving the app. */
@@ -1942,23 +2215,23 @@ window.addEventListener('popstate', () => {
 /* ---------- routines ---------- */
 function saveTemplate(key, start) {
   const t = TEMPLATES.find(x => x.key === key); if (!t) return;
-  if (start && !S.activeReady) { toast('아직 불러오는 중이에요. 잠시만요.'); return; }
+  if (start && !S.activeReady) { toast(tx('아직 불러오는 중이에요. 잠시만요.', 'Still loading. One moment.')); return; }
   const now = Date.now();
   const r = { id: uid(), name: t.name, note: t.note, exercises: t.ex.map(([exId, sets, reps]) => ({ exId, sets, reps, weight: null })), createdAt: now, updatedAt: now };
   S.routines = sortRoutines([...S.routines, r]);
   store.saveRoutine(r);
   if (start) guardStart(() => startWorkout(r.name, r.id, r.exercises));
-  else { toast(`‘${t.name}’ 루틴을 추가했어요`); render(); }
+  else { toast(tx(`‘${t.name}’ 루틴을 추가했어요`, `Added “${t.name}”`)); render(); }
 }
 function saveDraft() {
   const ed = topSheet(); if (!ed || ed.kind !== 'editor') return;
   const d = ed.draft;
   const name = String(d.name || '').trim();
-  if (!name) { toast('루틴 이름을 입력해 주세요'); const el = $('#ed-name'); if (el) el.focus(); return; }
-  if (!d.exercises.length) { toast('운동을 하나 이상 넣어 주세요'); return; }
+  if (!name) { toast(tx('루틴 이름을 입력해 주세요', 'Enter a routine name')); const el = $('#ed-name'); if (el) el.focus(); return; }
+  if (!d.exercises.length) { toast(tx('운동을 하나 이상 넣어 주세요', 'Add at least one exercise')); return; }
   for (let i = 0; i < d.exercises.length; i++) {
     const wv = d.exercises[i].weight;
-    if (wv != null && String(wv).trim() !== '' && num(wv) == null) { toast('목표 무게는 숫자로 입력해 주세요'); const el = document.getElementById('ed-w-' + i); if (el) el.focus(); return; }
+    if (wv != null && String(wv).trim() !== '' && num(wv) == null) { toast(tx('목표 무게는 숫자로 입력해 주세요', 'Enter the target weight as a number')); const el = document.getElementById('ed-w-' + i); if (el) el.focus(); return; }
   }
   const now = Date.now();
   const r = {
@@ -1969,7 +2242,7 @@ function saveDraft() {
   S.routines = sortRoutines([...S.routines.filter(x => x.id !== r.id), r]);
   store.saveRoutine(r);
   S.sheets.pop();
-  toast(d.id ? '루틴을 저장했어요' : `‘${r.name}’ 루틴을 만들었어요`);
+  toast(d.id ? tx('루틴을 저장했어요', 'Routine saved') : tx(`‘${r.name}’ 루틴을 만들었어요`, `Created “${r.name}”`));
   render();
 }
 
@@ -1985,7 +2258,7 @@ function applyPicker() {
     });
     render();
   } else if (S.active) {
-    ids.forEach(id => S.active.exercises.push(mkWoEx(id, null)));
+    ids.forEach(id => { const e = mkWoEx(id, null); S.active.exercises.push(e); S.enter.add('ex:' + e.u); });
     touchActive();
     render();
     const wo = $('#wo'); if (wo) wo.scrollTop = wo.scrollHeight;
@@ -1996,7 +2269,7 @@ function createCustom(name, cat) {
   name = String(name || '').trim().slice(0, 40);
   if (!name) return;
   if (!profileReady()) return;
-  const existing = allExercises().find(e => norm(e.name) === norm(name));
+  const existing = allExercises().find(e => nameIs(e, name));
   const id = existing ? existing.id : 'c_' + uid();
   if (!existing) {
     S.profile = { ...S.profile, custom: [...prof().custom, { id, name, cat: CATS.includes(cat) ? cat : '기타', bw: false }] };
@@ -2004,7 +2277,7 @@ function createCustom(name, cat) {
   }
   if (!p.sel.includes(id)) p.sel.push(id);
   p.q = ''; p.creating = false; p.cat = '전체';
-  toast(`‘${name}’ 운동을 만들었어요`);
+  toast(tx(`‘${name}’ 운동을 만들었어요`, `Created “${name}”`));
   render();
 }
 
@@ -2020,8 +2293,8 @@ async function doExport() {
     try {
       const file = new File([json], filename, { type: 'application/json' });
       if (matchMedia('(pointer: coarse)').matches && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: '세트노트 백업' });
-        toast('백업 파일을 보냈어요');
+        await navigator.share({ files: [file], title: tx('세트노트 백업', 'SetNote backup') });
+        toast(tx('백업 파일을 보냈어요', 'Backup file sent'));
         return;
       }
     } catch (e) { if (e && e.name === 'AbortError') return; }
@@ -2031,17 +2304,17 @@ async function doExport() {
       a.href = url; a.download = filename;
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 30000);
-      toast('백업 파일을 저장했어요');
+      toast(tx('백업 파일을 저장했어요', 'Backup file saved'));
       return;
     } catch {}
   }
   const dl = await use('downloads');
   if (dl) {
-    try { await dl.save({ filename, data: json }); toast('백업 파일을 저장했어요'); return; }
+    try { await dl.save({ filename, data: json }); toast(tx('백업 파일을 저장했어요', 'Backup file saved')); return; }
     catch (e) {
       const c = e && e.code;
       if (c === 'declined') return;
-      if (c === 'rate_limited') { toast('잠시 후 다시 눌러 주세요'); return; }
+      if (c === 'rate_limited') { toast(tx('잠시 후 다시 눌러 주세요', 'Try again in a moment')); return; }
     }
   }
   pushSheet({ kind: 'exportText', json });
@@ -2072,23 +2345,24 @@ function cleanCustom(c) {
 }
 function readImport(file) {
   if (!file) return;
-  if (file.size > 20 * 1024 * 1024) { toast('파일이 너무 커요'); return; }
+  if (file.size > 20 * 1024 * 1024) { toast(tx('파일이 너무 커요', 'The file is too large')); return; }
   const fr = new FileReader();
   fr.onload = () => {
     let d;
-    try { d = JSON.parse(String(fr.result)); } catch { toast('백업 파일을 읽지 못했어요. 세트노트에서 내보낸 JSON 파일인지 확인해 주세요.', 3600); return; }
+    try { d = JSON.parse(String(fr.result)); } catch { toast(tx('백업 파일을 읽지 못했어요. 세트노트에서 내보낸 JSON 파일인지 확인해 주세요.', 'Couldn’t read the backup. Make sure it’s a JSON file exported from SetNote.'), 3600); return; }
     const rs = (Array.isArray(d && d.routines) ? d.routines : []).map(cleanRoutine).filter(Boolean);
     const ss = (Array.isArray(d && d.sessions) ? d.sessions : []).map(cleanSession).filter(Boolean);
     const cust = (d && d.profile && Array.isArray(d.profile.custom) ? d.profile.custom : []).map(cleanCustom).filter(Boolean);
-    if (!rs.length && !ss.length && !cust.length) { toast('가져올 루틴이나 기록이 없어요'); return; }
+    if (!rs.length && !ss.length && !cust.length) { toast(tx('가져올 루틴이나 기록이 없어요', 'No routines or records to import')); return; }
     confirmSheet({
-      title: '백업 가져오기',
-      msg: `루틴 ${rs.length}개, 운동 기록 ${ss.length}개${cust.length ? `, 직접 만든 운동 ${cust.length}개` : ''}를 가져올까요? 같은 항목이 이미 있으면 백업 내용으로 바뀌어요.`,
-      ok: '가져오기',
+      title: tx('백업 가져오기', 'Import backup'),
+      msg: tx(`루틴 ${rs.length}개, 운동 기록 ${ss.length}개${cust.length ? `, 직접 만든 운동 ${cust.length}개` : ''}를 가져올까요? 같은 항목이 이미 있으면 백업 내용으로 바뀌어요.`,
+        `Import ${pl(rs.length, 'routine')}, ${pl(ss.length, 'workout')}${cust.length ? ', ' + pl(cust.length, 'custom exercise') : ''}? Anything already here with the same ID is replaced by the backup.`),
+      ok: tx('가져오기', 'Import'),
       onOk: () => importData(rs, ss, cust),
     });
   };
-  fr.onerror = () => toast('파일을 읽지 못했어요');
+  fr.onerror = () => toast(tx('파일을 읽지 못했어요', 'Couldn’t read the file'));
   fr.readAsText(file);
 }
 async function importData(rs, ss, cust) {
@@ -2103,34 +2377,34 @@ async function importData(rs, ss, cust) {
   }
   S.sheets = [];
   render();
-  if (store.kind === 'local') { await store.saveProfile(); toast('백업을 가져왔어요'); return; }
-  toast('백업을 저장하는 중…', 60000);
+  if (store.kind === 'local') { await store.saveProfile(); toast(tx('백업을 가져왔어요', 'Backup imported')); return; }
+  toast(tx('백업을 저장하는 중…', 'Saving backup…'), 60000);
   let fail = 0, n = 0;
   const total = rs.length + ss.length + (cust.length ? 1 : 0);
   const step = async fn => {
     try { await fn(); } catch { fail++; }
     n++;
-    if (n % 15 === 0) toast(`백업 저장 중… ${n}/${total}`, 60000);
+    if (n % 15 === 0) toast(`${tx('백업 저장 중…', 'Saving backup…')} ${n}/${total}`, 60000);
     await sleep(60);
   };
   if (cust.length) await step(() => store.saveProfile());
   for (const r of rs) { if (store.kind !== 'cloud') break; await step(() => store.saveRoutine(r)); }
   for (const s of ss) { if (store.kind !== 'cloud') break; await step(() => store.saveSession(s)); }
-  if (store.kind === 'local') { await store.saveProfile(); toast('백업을 이 기기에 저장했어요'); return; }
-  toast(fail ? `${total - fail}개 저장, ${fail}개는 저장하지 못했어요` : '백업을 모두 가져왔어요', 3600);
+  if (store.kind === 'local') { await store.saveProfile(); toast(tx('백업을 이 기기에 저장했어요', 'Backup saved on this device')); return; }
+  toast(fail ? tx(`${total - fail}개 저장, ${fail}개는 저장하지 못했어요`, `Saved ${total - fail}, couldn’t save ${fail}`) : tx('백업을 모두 가져왔어요', 'Backup fully imported'), 3600);
 }
 
 /* ---------- actions ---------- */
 const A = {
-  tab: d => { S.tab = d.tab; lsSet('setnote:tab', d.tab); render(); window.scrollTo(0, 0); },
+  tab: d => { if (S.tab !== d.tab) S.enter.add('view'); S.tab = d.tab; lsSet('setnote:tab', d.tab); render(); window.scrollTo(0, 0); },
   settings: () => pushSheet({ kind: 'settings' }),
   'sheet-close': () => popSheet(),
   'sheet-bg': () => { const t = topSheet(); if (t && !['editor', 'finish', 'picker'].includes(t.kind)) popSheet(); },
   'confirm-ok': () => { const t = topSheet(); S.sheets.pop(); if (t && t.onOk) t.onOk(); render(); },
   migrate: () => migrateLocal(),
   'migrate-hide': () => { S.migrateHidden = true; render(); },
-  'retry-cloud': () => { if (S.deniedUid) lsDel('setnote:cloud-denied:' + S.deniedUid); S.deniedUid = null; toast('페이지를 새로고침하면 계정 저장을 다시 시도해요', 3600); render(); },
-  'resume-active': () => { S.sheets = []; S.workoutOpen = true; keepAwake(true); render(); },
+  'retry-cloud': () => { if (S.deniedUid) lsDel('setnote:cloud-denied:' + S.deniedUid); S.deniedUid = null; toast(tx('새로고침하면 바로 다시 시도해요', 'It will try again when you refresh'), 3600); render(); },
+  'resume-active': () => { S.sheets = []; S.workoutOpen = true; S.enter.add('wo'); keepAwake(true); render(); },
 
   'new-routine': () => pushSheet({ kind: 'editor', draft: { id: null, name: '', note: '', exercises: [] } }),
   'open-routine': d => pushSheet({ kind: 'routine', id: d.id }),
@@ -2142,19 +2416,19 @@ const A = {
   'dup-routine': d => {
     const r = S.routines.find(x => x.id === d.id); if (!r) return;
     const now = Date.now();
-    const c = { ...clone(r), id: uid(), name: (r.name + ' 복사').slice(0, 40), createdAt: now, updatedAt: now };
+    const c = { ...clone(r), id: uid(), name: (r.name + tx(' 복사', ' copy')).slice(0, 40), createdAt: now, updatedAt: now };
     S.routines = sortRoutines([...S.routines, c]);
     store.saveRoutine(c);
     S.sheets = S.sheets.filter(s => !(s.kind === 'routine' && s.id === r.id));
     S.sheets.push({ kind: 'routine', id: c.id });
-    toast(`‘${c.name}’ 루틴을 만들었어요`);
+    toast(tx(`‘${c.name}’ 루틴을 만들었어요`, `Created “${c.name}”`));
     render();
   },
   'del-routine': d => {
     const r = S.routines.find(x => x.id === d.id); if (!r) return;
     confirmSheet({
-      title: '루틴 삭제', msg: `‘${r.name}’ 루틴을 삭제할까요? 지금까지의 운동 기록은 그대로 남아요.`, ok: '삭제', danger: true,
-      onOk: () => { S.routines = S.routines.filter(x => x.id !== r.id); store.deleteRoutine(r.id); if (S.mode === 'cloud') pruneV1({ r: [r.id] }); S.sheets = S.sheets.filter(s => !(s.kind === 'routine' && s.id === r.id)); toast('루틴을 삭제했어요'); },
+      title: tx('루틴 삭제', 'Delete routine'), msg: tx(`‘${r.name}’ 루틴을 삭제할까요? 지금까지의 운동 기록은 그대로 남아요.`, `Delete “${r.name}”? Your workout history stays.`), ok: tx('삭제', 'Delete'), danger: true,
+      onOk: () => { S.routines = S.routines.filter(x => x.id !== r.id); store.deleteRoutine(r.id); if (S.mode === 'cloud') pruneV1({ r: [r.id] }); S.sheets = S.sheets.filter(s => !(s.kind === 'routine' && s.id === r.id)); toast(tx('루틴을 삭제했어요', 'Routine deleted')); },
     });
   },
 
@@ -2177,8 +2451,8 @@ const A = {
   'del-session': d => {
     const s = S.sessions.find(x => x.id === d.id); if (!s) return;
     confirmSheet({
-      title: '기록 삭제', msg: `${fmtDate(s.endedAt)} ‘${s.routineName || '자유 운동'}’ 기록을 삭제할까요? 되돌릴 수 없어요.`, ok: '삭제', danger: true,
-      onOk: () => { S.sessions = S.sessions.filter(x => x.id !== s.id); writeOb(readOb().filter(x => x.id !== s.id)); store.deleteSession(s.id); if (S.mode === 'cloud') pruneV1({ s: [s.id] }); S.sheets = S.sheets.filter(x => !(x.kind === 'session' && x.id === s.id)); toast('기록을 삭제했어요'); },
+      title: tx('기록 삭제', 'Delete workout'), msg: tx(`${fmtDate(s.endedAt)} ‘${rName(s.routineName)}’ 기록을 삭제할까요? 되돌릴 수 없어요.`, `Delete “${rName(s.routineName)}” from ${fmtDate(s.endedAt)}? This can’t be undone.`), ok: tx('삭제', 'Delete'), danger: true,
+      onOk: () => { S.sessions = S.sessions.filter(x => x.id !== s.id); writeOb(readOb().filter(x => x.id !== s.id)); store.deleteSession(s.id); if (S.mode === 'cloud') pruneV1({ s: [s.id] }); S.sheets = S.sheets.filter(x => !(x.kind === 'session' && x.id === s.id)); toast(tx('기록을 삭제했어요', 'Workout deleted')); },
     });
   },
   'repeat-session': d => {
@@ -2190,7 +2464,7 @@ const A = {
     })));
   },
 
-  'wo-open': () => { S.workoutOpen = true; keepAwake(true); render(); },
+  'wo-open': () => { S.workoutOpen = true; S.enter.add('wo'); keepAwake(true); render(); },
   'wo-minimize': () => { S.workoutOpen = false; flushActive(); render(); },
   'wo-check': d => checkSet(d.u, +d.i),
   'wo-copy-prev': d => {
@@ -2201,8 +2475,8 @@ const A = {
   },
   'wo-add-set': d => {
     const ex = findEx(d.u); if (!ex) return;
-    if (ex.sets.length >= 30) { toast('세트는 30개까지 넣을 수 있어요'); return; }
-    ex.sets.push({ w: '', r: '', done: false }); touchActive(); render();
+    if (ex.sets.length >= 30) { toast(tx('세트는 30개까지 넣을 수 있어요', 'Up to 30 sets')); return; }
+    ex.sets.push({ w: '', r: '', done: false }); S.enter.add('set:' + ex.u + ':' + (ex.sets.length - 1)); touchActive(); render();
   },
   'wo-del-set': d => { const ex = findEx(d.u); if (!ex || ex.sets.length <= 1) return; ex.sets.pop(); touchActive(); render(); },
   'wo-move': d => {
@@ -2213,12 +2487,12 @@ const A = {
   'wo-remove-ex': d => {
     const ex = findEx(d.u); if (!ex) return;
     const rm = () => { S.active.exercises = S.active.exercises.filter(e => e.u !== d.u); touchActive(); };
-    if (ex.sets.some(s => s.done)) confirmSheet({ title: '운동 빼기', msg: `‘${ex.name}’에 완료한 세트가 있어요. 빼면 이 운동의 오늘 기록이 사라져요.`, ok: '빼기', danger: true, onOk: rm });
+    if (ex.sets.some(s => s.done)) confirmSheet({ title: tx('운동 빼기', 'Remove exercise'), msg: tx(`‘${exName(ex)}’에 완료한 세트가 있어요. 빼면 이 운동의 오늘 기록이 사라져요.`, `“${exName(ex)}” has finished sets. Removing it deletes today’s sets for it.`), ok: tx('빼기', 'Remove'), danger: true, onOk: rm });
     else { rm(); render(); }
   },
   'wo-add-ex': () => pushSheet({ kind: 'picker', target: 'workout', sel: [], q: '', cat: '전체', creating: false }),
   'wo-finish': () => { flushActive(); pushSheet({ kind: 'finish', upd: false }); },
-  'wo-discard': () => confirmSheet({ title: '운동 취소', msg: '지금까지 입력한 세트가 모두 사라져요. 취소할까요?', ok: '운동 취소', danger: true, onOk: () => discardWorkout(false) }),
+  'wo-discard': () => confirmSheet({ title: tx('운동 취소', 'Cancel workout'), msg: tx('지금까지 입력한 세트가 모두 사라져요. 취소할까요?', 'Everything you’ve entered will be lost. Cancel the workout?'), ok: tx('운동 취소', 'Cancel workout'), danger: true, onOk: () => discardWorkout(false) }),
   'wo-discard-now': () => discardWorkout(false),
   'fin-toggle': () => { const t = topSheet(); t.upd = !t.upd; render(); },
   'fin-save': () => { const t = topSheet(); finishWorkout(!!(t && t.upd)); },
@@ -2237,20 +2511,21 @@ const A = {
     const c = prof().custom.find(x => x.id === d.id); if (!c) return;
     if (!profileReady()) return;
     confirmSheet({
-      title: '운동 삭제', msg: `‘${c.name}’을(를) 목록에서 지울까요? 이미 저장된 기록은 남아요.`, ok: '삭제', danger: true,
+      title: tx('운동 삭제', 'Delete exercise'), msg: tx(`‘${c.name}’을(를) 목록에서 지울까요? 이미 저장된 기록은 남아요.`, `Remove “${c.name}” from the list? Saved records stay.`), ok: tx('삭제', 'Delete'), danger: true,
       onOk: () => { S.profile = { ...S.profile, custom: prof().custom.filter(x => x.id !== c.id) }; store.saveProfile(); if (S.mode === 'cloud') pruneV1({ c: [c.id] }); },
     });
   },
   export: () => doExport(),
+  'set-lang': d => { if (d.v === 'ko' || d.v === 'en') lsSet('setnote:lang', d.v); else lsDel('setnote:lang'); applyLang(); render(); },
   'set-theme': d => { if (d.v === 'light' || d.v === 'dark') lsSet('setnote:theme', d.v); else lsDel('setnote:theme'); applyTheme(); render(); },
   install: () => doInstall(),
   'install-hide': () => { lsSet('setnote:install-hide', '1'); render(); },
   'copy-export': () => {
     const box = $('#export-box'); if (!box) return;
     const text = box.value;
-    const fallback = () => { box.focus(); box.select(); toast('선택된 내용을 복사하세요'); };
+    const fallback = () => { box.focus(); box.select(); toast(tx('선택된 내용을 복사하세요', 'Copy the selected text')); };
     try {
-      navigator.clipboard.writeText(text).then(() => toast('복사했어요'), fallback);
+      navigator.clipboard.writeText(text).then(() => toast(tx('복사했어요', 'Copied')), fallback);
     } catch { fallback(); }
   },
 };
@@ -2262,7 +2537,7 @@ document.addEventListener('click', e => {
   if (!fn) return;
   e.preventDefault();
   if (performance.now() - sheetChangedAt < 350) return;
-  if (!store && !['tab', 'settings', 'sheet-close', 'sheet-bg', 'ex-cat', 'open-ex', 'open-routine', 'open-session', 'set-theme', 'install', 'install-hide'].includes(t.dataset.act)) { toast('아직 불러오는 중이에요. 잠시만요.'); return; }
+  if (!store && !['tab', 'settings', 'sheet-close', 'sheet-bg', 'ex-cat', 'open-ex', 'open-routine', 'open-session', 'set-theme', 'set-lang', 'install', 'install-hide'].includes(t.dataset.act)) { toast(tx('아직 불러오는 중이에요. 잠시만요.', 'Still loading. One moment.')); return; }
   fn(t.dataset, t, e);
 });
 
@@ -2298,7 +2573,7 @@ document.addEventListener('focusout', e => {
     if (f === 'r' && int(st.cr) > 0) st.r = st.cr;
     else if (f === 'w' && st.cw != null && okW(st.cw)) st.w = st.cw;
     else st.done = false;
-    toast(st.done ? '빈 값은 저장할 수 없어서 원래 값으로 되돌렸어요' : '값이 비어 있어서 체크를 해제했어요');
+    toast(st.done ? tx('빈 값은 저장할 수 없어서 원래 값으로 되돌렸어요', 'A set can’t be saved empty, so it went back to its value') : tx('값이 비어 있어서 체크를 해제했어요', 'The value was empty, so the set was unchecked'));
   } else if (f === 'w') { st.w = String(st.w).trim() === '' ? '' : fmtW(num(st.w)); st.cw = st.w; }
   else { st.r = String(int(st.r)); st.cr = st.r; }
   el.value = f === 'r' ? st.r : st.w;
