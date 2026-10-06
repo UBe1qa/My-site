@@ -48,11 +48,12 @@ var DC = (function () {
   function between(a, b, includeStart) {
     var days = b - a;
     var abs = Math.abs(days) + (includeStart ? 1 : 0);
-    var p = ymd(a, b);
+    // 시작일 포함이면 끝을 하루 늘려 년·개월·일을 센다(1/1~12/31 포함 = 1년 0개월 0일, '11개월 31일'이 아니라)
+    var p = includeStart ? ymd(a, days < 0 ? b - 1 : b + 1) : ymd(a, b);
     return {
       days: abs, sign: days < 0 ? -1 : 1,
       weeks: Math.floor(abs / 7), weekRest: abs % 7,
-      years: p.years, months: p.months, restDays: p.days + (includeStart ? 1 : 0),
+      years: p.years, months: p.months, restDays: p.days,
       totalMonths: p.totalMonths,
       hours: abs * 24
     };

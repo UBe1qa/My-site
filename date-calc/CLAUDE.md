@@ -58,7 +58,7 @@
 - 광고를 켜면 같은 변경에서 `ads.txt` 추가 + `privacy.html` 광고 문단 수정.
 - Cloudflare가 `privacy.html`을 `/privacy`로 307 넘긴다. 링크·sitemap은 확장자 없이 쓴다.
 - 애드센스는 workers.dev 같은 공용 서브도메인으로는 승인받기 어렵다. 승인된 자기 도메인이 필요.
-- 광고 코드가 있는 실제 주소를 Playwright로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽).
+- 광고 코드가 있는 실제 주소를 Playwright로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽). **글롭 `**/*googlesyndication*`은 안 막힌다**(2026-10-06 발견) → `re.compile(r"googlesyndication|doubleclick|adservice|fundingchoices")`.
 
 ## 미완성
 - RSS(`https://date.lumenlab.page/rss.xml`) 네이버 서치어드바이저 제출은 사용자가 할 일(2026-10-05 만듦).

@@ -43,6 +43,8 @@ eq("생일 전엔 null", DC.age(P("2026-10-04"), P("2026-10-03")), null);
 // 가이드 글(tools/build_guides.py)에 적은 예시 숫자
 eq("가이드: 10/3~12/25", [DC.between(P("2026-10-03"), P("2026-12-25"), false).days, DC.between(P("2026-10-03"), P("2026-12-25"), true).days], [83, 84]);
 eq("가이드: 1/1~12/31", DC.between(P("2026-01-01"), P("2026-12-31"), false).days, 364);
+(function () { var r = DC.between(P("2026-01-01"), P("2026-12-31"), true); eq("시작일 포함 1/1~12/31 = 1년 0개월 0일", [r.days, r.years, r.months, r.restDays], [365, 1, 0, 0]); })();
+(function () { var r = DC.between(P("2026-10-01"), P("2026-10-03"), true); eq("시작일 포함 10/1~10/3 = 3일", [r.years, r.months, r.restDays], [0, 0, 3]); })();
 var g1 = DC.ymd(P("2026-03-01"), P("2026-04-15")), g2 = DC.ymd(P("2026-01-31"), P("2026-03-01"));
 eq("가이드: 개월 환산", [g1.months, g1.days, g2.months, g2.days], [1, 14, 1, 1]);
 var a1 = DC.age(P("2000-05-15"), P("2026-10-03")), a2 = DC.age(P("2000-12-20"), P("2026-10-03"));

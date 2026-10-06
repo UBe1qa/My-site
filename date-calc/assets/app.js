@@ -231,7 +231,7 @@
   // ---------- 연출 ----------
   // 기본 반응(누름·바뀜·실수 흔들림)은 style.css. 여기는 방문자가 직접 넣은 값으로 '그 순간'이 된 때만:
   // 그날이에요(디데이 당일·생일·기념일 당일 → 계산기 카드 안 색종이), 공휴일 도장(고른 날이 공휴일).
-  // 처음 열 때·다른 계산기로 바꿀 때·같은 값을 다시 그릴 때는 안 나온다. 광고 칸에 닿지 않게 카드 안에서만 그린다.
+  // 처음 열 때·다른 계산기로 바꿀 때·같은 값을 다시 그릴 때는 안 나온다. 입력칸을 가리지 않고 광고 칸에 닿지 않게 결과 칸 안에서만 그린다.
   var mark = {}, last = {}, byUser = false;
   function calm() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
   function replay(el, cls) {
@@ -249,9 +249,9 @@
     card.appendChild(cv); g.scale(dpr, dpr);
     var css = getComputedStyle(document.documentElement), cols = ["--band", "--main", "--red", "--ink"].map(function (v) { return css.getPropertyValue(v).trim(); });
     var big = card.querySelector(".big"), cr = card.getBoundingClientRect(), br = big ? big.getBoundingClientRect() : cr;
-    var ox = Math.min(br.left - cr.left + 80, w / 2), oy = br.top - cr.top + 20, ps = [];
+    var ox = Math.min(br.left - cr.left + 80, w / 2), oy = br.top - cr.top + br.height / 2, ps = [];
     for (var i = 0; i < 60; i++) {
-      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2, v = 5 + Math.random() * 6;
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.8, v = 3 + Math.random() * 4;
       ps.push({ x: ox, y: oy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, s: 5 + Math.random() * 4, c: cols[i % cols.length], round: i % 3 === 0 });
     }
     var t0 = performance.now(), prev = t0, LIFE = 1600, raf;
@@ -263,7 +263,7 @@
       g.clearRect(0, 0, w, h);
       g.globalAlpha = age > LIFE - 400 ? (LIFE - age) / 400 : 1;
       ps.forEach(function (p) {
-        p.vy += 0.28 * k; p.vx *= Math.pow(0.985, k); p.x += p.vx * k; p.y += p.vy * k; p.r += p.vr * k;
+        p.vy += 0.2 * k; p.vx *= Math.pow(0.985, k); p.x += p.vx * k; p.y += p.vy * k; p.r += p.vr * k;
         g.fillStyle = p.c; g.save(); g.translate(p.x, p.y); g.rotate(p.r);
         if (p.round) { g.beginPath(); g.arc(0, 0, p.s / 2, 0, 6.283); g.fill(); } else g.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
         g.restore();
@@ -278,7 +278,7 @@
     try { box.innerHTML = tools[name](); }
     catch (e) { box.innerHTML = warn(L("계산하지 못했어요. 입력을 확인해 주세요.")); }
     if (byUser) {
-      if (mark.moment && mark.moment !== last[name + "m"]) confetti(box.closest(".tool"));
+      if (mark.moment && mark.moment !== last[name + "m"]) confetti(box);
       if (mark.stamp && mark.stamp !== last[name + "s"]) { var st = box.querySelector(".stamp"); if (st) st.classList.add("go"); }
       if (!wasErr && box.querySelector(".err")) replay(box, "shake");
     }
