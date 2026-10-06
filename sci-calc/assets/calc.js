@@ -82,6 +82,7 @@ function evaluateNow(forceDecimal) {
   hist.unshift({ e: SC.rowToText(row), r: UI.ser(main) });
   if (hist.length > 40) hist.length = 40;
   UI.store.set('sc.hist', hist);
+  drawSideHist();
   state.histPos = -1;
   ME.render(row, exprEl, {});
   drawResult();
@@ -435,9 +436,7 @@ function setSheet(body) {
   lab.appendChild(cb); lab.appendChild(document.createTextNode(' ' + W.decIn));
   body.appendChild(lab);
 }
-function histSheet(body) {
-  if (!hist.length) { body.appendChild(el('p', 'sheet-note', W.emptyHist)); return; }
-  var list = el('ol', 'hist-list');
+function histItems(list, onPick) {
   hist.forEach(function (h, i) {
     var li = el('li');
     var b = el('button', 'hist-item', null, { type: 'button' });
@@ -446,18 +445,38 @@ function histSheet(body) {
     var v = UI.deser(h.r);
     if (v) UI.cell(rs, v, UI.valueOpts(settings, { decimal: !SC.hasExactDisplay(v) }));
     b.appendChild(ex); b.appendChild(el('span', 'hist-eq', '=')); b.appendChild(rs);
-    b.addEventListener('click', function () {
-      closeSheet(); state.done = false; state.histPos = i;
-      try { ed.setRow(SC.parseText(h.e)); } catch (e) {}
-      onEdit(); exprEl.focus({ preventScroll: true });
-    });
+    b.addEventListener('click', function () { onPick(i, h); });
     li.appendChild(b); list.appendChild(li);
   });
+}
+function loadHist(i, h) {
+  state.done = false; state.histPos = i;
+  try { ed.setRow(SC.parseText(h.e)); } catch (e) {}
+  onEdit(); exprEl.focus({ preventScroll: true });
+}
+function clearHist() {
+  if (!confirm(W.clearHist + '?')) return false;
+  hist = []; UI.store.set('sc.hist', hist); drawSideHist(); return true;
+}
+function histSheet(body) {
+  if (!hist.length) { body.appendChild(el('p', 'sheet-note', W.emptyHist)); return; }
+  var list = el('ol', 'hist-list');
+  histItems(list, function (i, h) { closeSheet(); loadHist(i, h); });
   body.appendChild(list);
   var c = el('button', 'var-btn', W.clearHist, { type: 'button' });
-  c.addEventListener('click', function () { if (!confirm(W.clearHist + '?')) return; hist = []; UI.store.set('sc.hist', hist); openSheet('history'); });
+  c.addEventListener('click', function () { if (clearHist()) openSheet('history'); });
   body.appendChild(c);
 }
+// 첫 페이지 오른쪽(휴대폰은 계산기 아래) 기록 칸: 늘 보이고, 누르면 그 식을 다시 불러온다
+var sideList = document.querySelector('[data-hist]'), sideEmpty = document.querySelector('[data-hist-empty]'), sideClear = document.querySelector('[data-hist-clear]');
+function drawSideHist() {
+  if (!sideList) return;
+  sideList.textContent = '';
+  histItems(sideList, loadHist);
+  var empty = !hist.length;
+  sideList.hidden = empty; sideClear.hidden = empty; sideEmpty.hidden = !empty;
+}
+if (sideClear) sideClear.addEventListener('click', clearHist);
 
 // 주소에 ?e=식 이 있으면 넣어 둔다 (글 페이지의 '계산기에서 열기' 링크)
 (function () {
@@ -470,6 +489,7 @@ function histSheet(body) {
 })();
 drawStatus();
 drawActions();
+drawSideHist();
 root.classList.add('is-ready');
 window.__calcReady = true;
 })();

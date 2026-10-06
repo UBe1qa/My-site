@@ -19,7 +19,7 @@ import articles  # noqa: E402
 SITE = 'https://calc.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = datetime.date(2026, 10, 6)
-ASSET_V = '3'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
+ASSET_V = '4'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
 
 esc = html.escape
 
@@ -104,11 +104,37 @@ MODES = [('/', '계산', 'Calculate'), ('/stats/', '통계', 'Statistics'), ('/d
 
 
 def modes_nav(lang, current):
+    desc = {p: d for p, n, d in content.HOME[lang]['modes']}
     items = []
     for p, ko, en in MODES:
         cur = ' aria-current="page"' if p == current else ''
-        items.append('<li><a href="%s"%s>%s</a></li>' % (url(lang, p), cur, T(lang, ko, en)))
+        items.append('<li><a href="%s"%s><b>%s</b><small>%s</small></a></li>' % (url(lang, p), cur, T(lang, ko, en), desc[p]))
     return '<ul class="modes" aria-label="%s">%s</ul>' % (T(lang, '계산 모드', 'Calculator modes'), ''.join(items))
+
+
+KBD_ROWS = {
+    'ko': [(['sin', 'sqrt', 'log'], '글자가 함수로'), (['/'], '분수'), (['^'], '거듭제곱'), (['Enter'], '= 계산'),
+           (['Shift+Enter'], '소수로'), (['Esc'], '모두 지우기'), (['↑', '↓'], '이전 식')],
+    'en': [(['sin', 'sqrt', 'log'], 'words → functions'), (['/'], 'fraction'), (['^'], 'power'), (['Enter'], '= equals'),
+           (['Shift+Enter'], 'decimal'), (['Esc'], 'clear'), (['↑', '↓'], 'previous')],
+}
+
+
+def side_panel(lang):
+    """첫 페이지 오른쪽 칸: 늘 보이는 기록(calc.js 가 채움) + 키보드 단축키."""
+    rows = ''.join('<div><dt>%s</dt><dd>%s</dd></div>' % (' '.join('<kbd>%s</kbd>' % esc(k) for k in ks), esc(d))
+                   for ks, d in KBD_ROWS[lang])
+    return ('<aside class="side" aria-label="%s">'
+            '<section class="side-box side-hist"><div class="side-h"><h2>%s</h2><button type="button" class="side-x" data-hist-clear hidden>%s</button></div>'
+            '<ol class="hist-list" data-hist hidden></ol><p class="side-note" data-hist-empty>%s</p></section>'
+            '<section class="side-box side-kbd"><h2>%s</h2><p class="side-sub">%s</p><dl class="kbd-list" id="kbd-help">%s</dl>'
+            '<a class="side-link" href="#keys">%s</a></section>'
+            '</aside>') % (
+        T(lang, '기록과 키보드', 'History and keyboard'), T(lang, '기록', 'History'), T(lang, '지우기', 'Clear'),
+        T(lang, '계산하면 여기에 쌓여요. 누르면 그 식을 다시 불러와요.', 'Your calculations appear here. Tap one to bring it back.'),
+        T(lang, '키보드로 쓰기', 'Typing on a keyboard'),
+        T(lang, '숫자와 + − * ( ) 는 그대로 쳐요.', 'Digits and + − * ( ) work as usual.'), rows,
+        T(lang, '키 뜻 전체 보기 →', 'What every key does →'))
 
 
 def ad_slot(lang, name):
@@ -322,12 +348,14 @@ def home(lang):
     guides = ''.join('<li><a href="%s">%s<span>%s</span></a></li>' % (url(lang, '/guide/%s/' % a['slug']), a['title'], a['short'])
                      for a in articles.list_for(lang))
     body = ('<main id="main">'
-            '<section class="hero"><div class="wrap hero-grid">'
-            '<div class="hero-copy"><h1>%s</h1><p class="lede">%s</p>'
-            '<ul class="hero-points">%s</ul>%s<p class="kbd-help" id="kbd-help">%s</p></div>'
+            '<section class="hero"><div class="wrap work">'
+            '<h1>%s</h1><p class="lede">%s</p>'
+            '<div class="w-nav">%s</div>'
             '<div class="tool">%s</div>'
+            '%s'
             '</div></section>'
             '<div class="after-hero">'
+            '<section class="wrap feat-wrap"><ul class="feat">%s</ul></section>'
             '%s'
             '<section class="section wrap"><h2>%s</h2><div class="tips">%s</div></section>'
             '%s'
@@ -336,8 +364,8 @@ def home(lang):
             '<section class="section wrap faq prose"><h2>%s</h2>%s</section>'
             '%s'
             '</div></main>') % (
-        C['h1'], C['lede'], ''.join('<li><span class="dot"></span><span>%s</span></li>' % p for p in C['points']),
-        modes_nav(lang, '/'), C['kbd'], calculator(lang),
+        C['h1'], C['lede'], modes_nav(lang, '/'), calculator(lang), side_panel(lang),
+        ''.join('<li><span class="dot"></span><span>%s</span></li>' % p for p in C['points']),
         ad_slot(lang, 'below-tool'),
         C['tips_h'], tips, key_legend(lang), C['modes_h'], links, C['guides_h'], guides, C['faq_h'], faq_html,
         ad_slot(lang, 'bottom'))
@@ -360,9 +388,9 @@ def mode_page(lang, m):
     links = ''.join('<li><a href="%s">%s<span>%s</span></a></li>' % (url(lang, p), n, d)
                     for p, n, d in content.HOME[lang]['modes'] if p != path)
     body = ('<main id="main">'
-            '<section class="hero hero-mode"><div class="wrap">'
-            '<h1>%s</h1><p class="lede">%s</p>%s'
-            '<div class="panel mode-ui" id="mode-ui" data-mode="%s"><noscript><p>%s</p></noscript></div>'
+            '<section class="hero hero-mode"><div class="wrap work work-mode">'
+            '<h1>%s</h1><p class="lede">%s</p><div class="w-nav">%s</div>'
+            '<div class="tool"><div class="panel mode-ui" id="mode-ui" data-mode="%s"><noscript><p>%s</p></noscript></div></div>'
             '</div></section>'
             '<div class="after-hero">%s'
             '<section class="section wrap prose"><h2>%s</h2><ol>%s</ol>%s</section>'

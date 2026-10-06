@@ -1,0 +1,21 @@
+/* 시안 A '가로 작업대' — 계산기를 가로로 넓게(화면 위, 키는 함수|숫자 좌우), 오른쪽에 기록·키보드 패널. 노트북 한 화면에 = 키까지 */
+.hero { padding: 16px 0 28px; }
+.hero-a .head-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; }
+.hero-a h1 { font-size: clamp(22px, 5.6vw, 30px); margin: 0; letter-spacing: -0.03em; }
+.hero-a .lede { font-size: 15px; margin: 0; max-width: none; }
+.hero-a .modes { margin: 12px 0 12px; }
+.hero-a .work { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.hero-a .tool { margin: 0 !important; }
+.feat { display: flex; flex-wrap: wrap; gap: 6px 22px; list-style: none; padding: 0; margin: 16px 0 0; font-size: 14px; color: var(--hero-2); }
+.feat li { display: flex; gap: 8px; align-items: baseline; } .feat .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.after-hero { padding-top: 10px !important; }
+@media (min-width: 1000px) {
+  .hero-a .work { grid-template-columns: minmax(0, 1fr) 290px; align-items: start; }
+  .hero-a .calc { padding: 14px 16px 16px; }
+  .hero-a .calc .pads { display: grid; grid-template-columns: 6fr 5fr; gap: 0 18px; align-items: start; }
+  .hero-a .keys-f, .hero-a .keys-n { margin-top: 10px; gap: 8px 7px; }
+  .hero-a .keys-f .k, .hero-a .keys-n .k { min-height: 50px; }
+  .hero-a .expr { min-height: 46px; font-size: 24px; }
+  .hero-a .result { font-size: 34px; min-height: 48px; }
+}
+@media (max-width: 999px) { .hero-a .side .side-box + .side-box { display: none; } .hero-a .lede { font-size: 13.5px; } }

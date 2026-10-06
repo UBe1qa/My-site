@@ -1,0 +1,14 @@
+/* 두 시안 공통 휴대폰 배치: 제목 한 줄, 소개 글은 계산기 아래로, 계산기를 화면 폭 가득 + 숫자 키 크게, 기록은 계산기 바로 아래 */
+@media (max-width: 600px) {
+  .hero { padding: 8px 0 18px; }
+  .hero-a h1, .hero-b h1 { font-size: 21px; }
+  .hero-a .lede, .hero-b .lede { display: none; }
+  .hero-a .modes, .hero-b .modes { margin: 8px -16px 10px; padding: 0 16px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  .hero-a .calc, .hero-b .calc { margin: 0 -10px; padding: 10px 8px 12px; border-radius: 22px; }
+  .hero-a .calc-brand, .hero-b .calc-brand { display: none; }
+  .hero-a .keys-n .k, .hero-b .keys-n .k { min-height: 56px; font-size: 22px; }
+  .hero-a .keys-f .k, .hero-b .keys-f .k { min-height: 42px; }
+  .hero-a .side, .hero-b .side { margin-top: 4px; }
+  .m-lede { display: block !important; font-size: 14px; color: var(--hero-2); margin: 14px 0 0; }
+}
+.m-lede { display: none; }

@@ -158,5 +158,12 @@ root.UI = { LANG: LANG, t: t, MSG: MSG, errorText: errorText, store: store, ser:
   loadSettings: loadSettings, saveSettings: saveSettings, loadVars: loadVars, saveVars: saveVars, loadAns: loadAns, saveAns: saveAns,
   envFrom: envFrom, valueOpts: valueOpts, drawValue: drawValue, plain: plain, cell: cell, copyText: copyText, toast: toast,
   langBar: langBar, markNav: markNav };
-document.addEventListener('DOMContentLoaded', function () { langBar(); });
+// 휴대폰에서 모드 줄이 옆으로 넘칠 때 지금 모드가 보이게 옮긴다
+function showCurrentMode() {
+  var cur = document.querySelector('.modes [aria-current]'), ul = cur && cur.closest('.modes');
+  if (!ul || ul.scrollWidth <= ul.clientWidth) return;
+  var li = cur.parentNode;
+  if (li.offsetLeft + li.offsetWidth > ul.scrollLeft + ul.clientWidth) ul.scrollLeft = li.offsetLeft - 16;
+}
+document.addEventListener('DOMContentLoaded', function () { langBar(); showCurrentMode(); });
 })(window);

@@ -1,0 +1,21 @@
+/* 시안 B '세로 기기 + 옆 메뉴' — 왼쪽 세로 메뉴(모드와 설명), 가운데 실제 계산기 모양, 오른쪽 기록·키보드 패널 */
+.hero { padding: 16px 0 28px; }
+.hero-b { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.hero-b h1 { font-size: clamp(22px, 5.6vw, 30px); margin: 0; letter-spacing: -0.03em; }
+.hero-b .lede { font-size: 14px; margin: 2px 0 0; }
+.hero-b .modes { margin: 12px 0 0; }
+.hero-b .modes small { display: none; }
+.hero-b .tool { margin: 0 !important; }
+.after-hero { padding-top: 10px !important; }
+@media (min-width: 1000px) {
+  .hero-b { grid-template-columns: 220px 450px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .hero-b .modes { flex-direction: column; flex-wrap: nowrap; gap: 2px; margin-top: 18px; }
+  .hero-b .modes a { display: block; border: 0; background: transparent; border-radius: 12px; padding: 9px 12px; font-size: 15px; }
+  .hero-b .modes a:hover { background: var(--main-soft); }
+  .hero-b .modes a[aria-current="page"] { background: var(--card); color: var(--ink); box-shadow: inset 3px 0 0 var(--accent), 0 1px 0 var(--line-2); }
+  .hero-b .modes small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 1px; line-height: 1.35; }
+  .hero-b .keys-f .k { min-height: 42px; } .hero-b .keys-n .k { min-height: 48px; }
+  .hero-b .keys-f { gap: 7px 6px; } .hero-b .keys-n { gap: 7px 7px; margin-top: 10px; }
+  .hero-b .expr { min-height: 44px; } .hero-b .result { min-height: 42px; }
+}
+@media (max-width: 999px) { .hero-b .side .side-box + .side-box { display: none; } .hero-b .lede { font-size: 13.5px; } }
