@@ -247,7 +247,7 @@
     cv.className = "fx"; cv.setAttribute("aria-hidden", "true");
     cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
     card.appendChild(cv); g.scale(dpr, dpr);
-    var css = getComputedStyle(document.documentElement), cols = ["--band", "--main", "--red", "--ink"].map(function (v) { return css.getPropertyValue(v).trim(); });
+    var css = getComputedStyle(document.documentElement), cols = ["--g-span", "--g-move", "--g-life", "--g-cal"].map(function (v) { return css.getPropertyValue(v).trim(); });
     var big = card.querySelector(".big"), cr = card.getBoundingClientRect(), br = big ? big.getBoundingClientRect() : cr;
     var ox = Math.min(br.left - cr.left + 80, w / 2), oy = br.top - cr.top + br.height / 2, ps = [];
     for (var i = 0; i < 60; i++) {
