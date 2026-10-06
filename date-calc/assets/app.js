@@ -63,7 +63,9 @@
   // 요일 색: 일요일·공휴일은 빨강, 토요일은 파랑(달력 약속)
   function dayCls(n) { var w = DC.weekday(n); return holName(n) || w === 0 ? "is-sun" : w === 6 ? "is-sat" : ""; }
   function warn(text) { return '<p class="warn">' + esc(text) + "</p>"; }
-  function empty(text) { return '<p class="empty">' + esc(text || L("날짜를 넣어 주세요.")) + "</p>"; }
+  function empty(text) { return '<p class="empty' + (text ? " err" : "") + '">' + esc(text || L("날짜를 넣어 주세요.")) + "</p>"; }
+  // 고른 날이 공휴일이면 큰 결과 옆에 '공휴일' 도장(뜻은 아래 줄 글에도 있어 화면 읽기에선 숨김)
+  function stamp(html, key) { mark.stamp = key; return html.replace("</p>", '<span class="stamp" aria-hidden="true">' + esc(L("공휴일")) + "</span></p>"); }
   function intVal(id) {
     var v = $(id).value.trim();
     if (v === "" || v === "-") return 0;
@@ -100,6 +102,7 @@
       var t = P($("dday-t").value), b = P($("dday-b").value);
       if (t === null || b === null) return empty();
       var diff = t - b;
+      if (diff === 0) mark.moment = "dday" + t;
       var sub = diff === 0 ? L("바로 그날이에요.") : diff > 0 ? F("%s까지 %s일 남았어요.", fmtDate(t), num(diff)) : F("%s부터 %s일 지났어요.", fmtDate(t), num(-diff));
       var p = DC.ymd(b, t);
       return big(dLabel(diff), esc(sub)) + spanBar(b, t) + rows([[L("개월로"), F("%s년 %s개월 %s일", num(p.years), num(p.months), num(p.days))], [L("주로"), F("%s주 %s일", num(Math.floor(Math.abs(diff) / 7)), num(Math.abs(diff) % 7))]]);
@@ -114,7 +117,8 @@
       var t = DC.toYMD(n);
       if (t.y < 1 || t.y > 9999) return empty(L("계산할 수 있는 범위를 벗어났어요."));
       var h = holName(n);
-      return big(fmtDate(n), h ? esc(F("공휴일이에요: %s", h)) : "", dayCls(n)) + rows([[L("기준일에서"), F("%s일 차이", num(Math.abs(n - a)))]]);
+      var head = big(fmtDate(n), h ? esc(F("공휴일이에요: %s", h)) : "", dayCls(n));
+      return (h ? stamp(head, n) : head) + rows([[L("기준일에서"), F("%s일 차이", num(Math.abs(n - a)))]]);
     },
     workdays: function () {
       var a = P($("wd-a").value), b = P($("wd-b").value);
@@ -154,6 +158,7 @@
       if (b === null || t === null) return empty();
       var r = DC.age(b, t);
       if (!r) return empty(L("기준일이 생년월일보다 앞이에요."));
+      if (r.birthdayToday) mark.moment = "age" + b + "-" + t;
       var sub = r.birthdayToday ? L("오늘이 생일이에요. 축하해요!") : F("다음 생일까지 %s일 (%s)", num(r.toNext), fmtShort(r.nextBirthday));
       return big(F("만 %s세", num(r.full)), esc(sub)) + rows([
         [L("정확히"), F("%s년 %s개월 %s일", num(r.full), num(r.months), num(r.days))],
@@ -172,6 +177,7 @@
       return head + '<ul class="anniv">' + list.map(function (x) {
         var diff = x.day - today, cls = diff < 0 ? "past" : "";
         if (diff >= 0 && !nextMarked) { cls = "next"; nextMarked = true; }
+        if (diff === 0) mark.moment = "anniv" + a + "-" + x.kind + x.n;
         var label = x.kind === "days" ? F("%s일", num(x.n)) : F("%s주년", num(x.n));
         return '<li class="' + cls + '"><b>' + esc(label) + "</b><span>" + esc(fmtShort(x.day)) + "</span><em>" + esc(dLabel(diff)) + "</em></li>";
       }).join("") + "</ul>";
@@ -181,7 +187,8 @@
       if (a === null) return empty();
       var h = holName(a), w = DC.weekday(a);
       var kind = h ? F("%s 공휴일: %s", countryName(), h) : (w === 0 || w === 6) ? L("주말이에요.") : L("평일이에요.");
-      return big(weekdayName(a), esc(fmtDate(a) + " · " + kind), dayCls(a));
+      var head = big(weekdayName(a), esc(fmtDate(a) + " · " + kind), dayCls(a));
+      return h ? stamp(head, a) : head;
     },
     week: function () {
       var a = P($("wn-a").value);
@@ -221,10 +228,61 @@
     }
   };
 
+  // ---------- 연출 ----------
+  // 기본 반응(누름·바뀜·실수 흔들림)은 style.css. 여기는 방문자가 직접 넣은 값으로 '그 순간'이 된 때만:
+  // 그날이에요(디데이 당일·생일·기념일 당일 → 계산기 카드 안 색종이), 공휴일 도장(고른 날이 공휴일).
+  // 처음 열 때·다른 계산기로 바꿀 때·같은 값을 다시 그릴 때는 안 나온다. 광고 칸에 닿지 않게 카드 안에서만 그린다.
+  var mark = {}, last = {}, byUser = false;
+  function calm() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  function replay(el, cls) {
+    if (!el) return;
+    el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+    el.addEventListener("animationend", function () { el.classList.remove(cls); }, { once: true });
+  }
+  function confetti(card) {
+    if (calm() || document.hidden || card.querySelector(".fx")) return;
+    var cv = document.createElement("canvas"), g = cv.getContext && cv.getContext("2d");
+    if (!g) return;
+    var w = card.clientWidth, h = card.clientHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.className = "fx"; cv.setAttribute("aria-hidden", "true");
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    card.appendChild(cv); g.scale(dpr, dpr);
+    var css = getComputedStyle(document.documentElement), cols = ["--band", "--main", "--red", "--ink"].map(function (v) { return css.getPropertyValue(v).trim(); });
+    var big = card.querySelector(".big"), cr = card.getBoundingClientRect(), br = big ? big.getBoundingClientRect() : cr;
+    var ox = Math.min(br.left - cr.left + 80, w / 2), oy = br.top - cr.top + 20, ps = [];
+    for (var i = 0; i < 60; i++) {
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2, v = 5 + Math.random() * 6;
+      ps.push({ x: ox, y: oy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, s: 5 + Math.random() * 4, c: cols[i % cols.length], round: i % 3 === 0 });
+    }
+    var t0 = performance.now(), prev = t0, LIFE = 1600, raf;
+    function end() { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", end); cv.remove(); }
+    document.addEventListener("visibilitychange", end);
+    (function frame(now) {
+      var k = Math.min((now - prev) / 16.7, 3), age = now - t0; prev = now;
+      if (age > LIFE) return end();
+      g.clearRect(0, 0, w, h);
+      g.globalAlpha = age > LIFE - 400 ? (LIFE - age) / 400 : 1;
+      ps.forEach(function (p) {
+        p.vy += 0.28 * k; p.vx *= Math.pow(0.985, k); p.x += p.vx * k; p.y += p.vy * k; p.r += p.vr * k;
+        g.fillStyle = p.c; g.save(); g.translate(p.x, p.y); g.rotate(p.r);
+        if (p.round) { g.beginPath(); g.arc(0, 0, p.s / 2, 0, 6.283); g.fill(); } else g.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+        g.restore();
+      });
+      raf = requestAnimationFrame(frame);
+    })(t0);
+  }
+
   function render(name) {
-    var box = $("r-" + name);
+    var box = $("r-" + name), wasErr = !!box.querySelector(".err");
+    mark = {};
     try { box.innerHTML = tools[name](); }
     catch (e) { box.innerHTML = warn(L("계산하지 못했어요. 입력을 확인해 주세요.")); }
+    if (byUser) {
+      if (mark.moment && mark.moment !== last[name + "m"]) confetti(box.closest(".tool"));
+      if (mark.stamp && mark.stamp !== last[name + "s"]) { var st = box.querySelector(".stamp"); if (st) st.classList.add("go"); }
+      if (!wasErr && box.querySelector(".err")) replay(box, "shake");
+    }
+    last[name + "m"] = mark.moment; last[name + "s"] = mark.stamp;
   }
   // 오늘 카드(첫 화면 일력): 오늘 날짜, 올해 며칠째, 다음 공휴일까지. 다시 올 이유가 되는 '오늘의 한 장'
   function renderToday() {
@@ -272,6 +330,7 @@
     if (!a) return;
     e.preventDefault();
     history.replaceState(null, "", "#" + a.getAttribute("data-tool"));
+    document.querySelector(".stage").classList.add("live"); // 이제부터 카드 바뀜을 보여 준다(처음 열 때는 안 함)
     show(a.getAttribute("data-tool"));
     // 휴대폰에서는 고른 계산기로 내려 준다
     if (window.matchMedia("(max-width: 720px)").matches) $(a.getAttribute("data-tool")).scrollIntoView({ behavior: "smooth", block: "start" });
@@ -322,8 +381,18 @@
   $("hol-y").value = Math.min(Math.max(DC.toYMD(today).y, DC.holidayYears()[0]), DC.holidayYears()[1]);
 
   document.querySelectorAll(".tool input, .tool select").forEach(function (el) {
-    el.addEventListener("input", function () { render(el.closest(".tool").id); });
-    el.addEventListener("change", function () { render(el.closest(".tool").id); });
+    // input과 change가 같은 값으로 두 번 오면 한 번만 그린다(도장이 찍히다 지워지지 않게)
+    function upd() {
+      var v = el.type === "checkbox" || el.type === "radio" ? String(el.checked) : el.value;
+      if (el._v === v) return;
+      el._v = v; byUser = true; render(el.closest(".tool").id); byUser = false;
+    }
+    el.addEventListener("input", upd);
+    el.addEventListener("change", function () {
+      upd();
+      // 체크·고르기를 바꾸면 결과가 바뀌었다고 짧게 알려 준다(글자를 치는 중엔 안 함)
+      if (el.type === "checkbox" || el.type === "radio") replay($("r-" + el.closest(".tool").id), "swap");
+    });
   });
 
   show(fromHash());

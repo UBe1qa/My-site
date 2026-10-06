@@ -12,6 +12,8 @@
   --chip-on: #ffffff; --chip-on-ink: #9a3412;
   --warn-bg: #fff4d6; --warn-ink: #6f4b00;
   --past: #7a7067; --radius: 18px; --pad: 26px;
+  /* 움직임 값 하나: 기본 반응은 전부 이 길이·곡선 */
+  --dur: .18s; --ease: cubic-bezier(.2, .7, .2, 1);
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
   color-scheme: light;
 }
@@ -337,4 +339,35 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   .grid2 { grid-template-columns: minmax(0, 1fr); }
   .rows { grid-template-columns: minmax(0, 1fr); }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* ---------- 연출 ----------
+   기본 반응(전부 --dur·--ease, transform·opacity만): 누르면 살짝 눌림, 계산기를 바꾸면 카드가 들어옴,
+   체크·고르기를 바꾸면 결과가 바뀜 표시, 입력 실수 때 작은 흔들림. 광고 칸에는 아무것도 안 건다.
+   핵심 순간 두 가지(app.js): 그날이에요 색종이(.fx, 카드 안), 공휴일 도장(.stamp.go). */
+.picker a, .lang, .btn, .seg label, .faq summary, .langbar-x, .today-facts a { transition: transform var(--dur) var(--ease), background-color .15s, border-color .15s, color .15s; }
+.picker a:active, .lang:active, .btn:active, .seg label:active, .langbar-x:active { transform: scale(.95); }
+.mini select:active { transform: scale(.97); }
+.faq summary:active { transform: scale(.99); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+@keyframes swap { from { opacity: .35; transform: translateY(4px); } }
+@keyframes shake { 25% { transform: translateX(-4px); } 50% { transform: translateX(4px); } 75% { transform: translateX(-2px); } }
+@keyframes stamp-in { 0% { opacity: 0; transform: rotate(-8deg) scale(1.9); } 70% { opacity: 1; transform: rotate(-8deg) scale(.92); } }
+@keyframes fade { from { opacity: 0; } }
+.stage.live .tool:not([hidden]) { animation: rise .22s var(--ease); }
+.result.swap { animation: swap var(--dur) var(--ease); }
+.result.shake .err { animation: shake .26s var(--ease); }
+.faq details[open] p { animation: fade var(--dur) var(--ease); }
+/* 공휴일 도장: 늘 보이는 작은 빨간 도장(뜻), 방문자가 공휴일을 고른 순간에만 찍히는 움직임(.go) */
+.stamp {
+  display: inline-block; margin-left: 12px; padding: 3px 9px 2px; border: 2.5px solid var(--red); border-radius: 8px;
+  color: var(--red); font-size: 15px; font-weight: 800; letter-spacing: 0; line-height: 1.3; vertical-align: .55em;
+  transform: rotate(-8deg); white-space: nowrap;
+}
+.stamp.go { animation: stamp-in .3s var(--ease); }
+/* 그날이에요 색종이: 계산기 카드 위에만 그리는 캔버스(누름은 그대로 통과, 끝나면 지움) */
+.fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; border-radius: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  /* 미끄러짐·튐·흔들림은 끄고 짧은 페이드만. 도장은 움직이지 않아도 보인다 */
+  .stage.live .tool:not([hidden]), .result.swap, .stamp.go, .faq details[open] p { animation: fade .15s linear; }
+  .result.shake .err { animation: none; }
+}

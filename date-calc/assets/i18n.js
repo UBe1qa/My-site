@@ -127,6 +127,7 @@ var I18N = (function () {
     "%s 공휴일: %s": "%s holiday: %s",
     "주말이에요.": "It's a weekend.",
     "오늘": "Today",
+    "공휴일": "Holiday",
     "오늘은 %s": "Today is %s",
     "%s까지 %s일": "%2$s days to %1$s",
     "올해 %s일째, 남은 날 %s일": "Day %s of the year, %s days left",
