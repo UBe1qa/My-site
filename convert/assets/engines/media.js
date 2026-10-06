@@ -106,8 +106,11 @@ export async function thumbs(file, count, height) {
 
 function fadeProcessor(fade, start, end) {
   const fi = fade.in || 0, fo = fade.out || 0;
+  // 자르기를 하면 샘플 시각이 원본 기준이 아니라 결과 기준(0부터)으로 온다 → 첫 샘플을 보고 맞춘다
+  let off = null;
   return (sample) => {
-    const t0 = sample.timestamp, sr = sample.sampleRate, n = sample.numberOfFrames, ch = sample.numberOfChannels;
+    if (off === null) off = sample.timestamp < start - 0.05 ? start : 0;
+    const t0 = sample.timestamp + off, sr = sample.sampleRate, n = sample.numberOfFrames, ch = sample.numberOfChannels;
     const t1 = t0 + n / sr;
     if (!(fi && t0 < start + fi) && !(fo && t1 > end - fo)) return sample;
     const data = new Float32Array(n * ch);
@@ -119,7 +122,7 @@ function fadeProcessor(fade, start, end) {
       if (fo && t > end - fo) g = Math.min(g, Math.max(0, (end - t) / fo));
       if (g < 1) for (let c = 0; c < ch; c++) data[c * n + i] *= g;
     }
-    const ns = new AudioSample({ data, format: 'f32-planar', numberOfChannels: ch, sampleRate: sr, timestamp: t0 });
+    const ns = new AudioSample({ data, format: 'f32-planar', numberOfChannels: ch, sampleRate: sr, timestamp: sample.timestamp });
     sample.close();
     return ns;
   };
@@ -195,7 +198,7 @@ export function convert(file, opts, onProgress) {
     const copied = conversion.utilizedTracks.length > 0 && isCopy(conversion, audio, video);
     conversion.onProgress = (p) => onProgress && onProgress(p);
     await conversion.execute();
-    return { blob: new Blob([output.target.buffer], { type: out.mime }), ext: out.ext, mime: out.mime, copied, compat };
+    return { blob: new Blob([output.target.buffer], { type: out.mime }), ext: out.ext, mime: out.mime, copied, compat, vcodec: video && video.codec };
   })();
   return { promise: job, cancel: () => { canceled = true; conversion && conversion.cancel(); } };
 }

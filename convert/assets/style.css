@@ -67,6 +67,7 @@ p{margin:0}
 /* 첫 화면 */
 .hub-hero{padding-top:28px;padding-bottom:18px;text-align:center}
 .hero-flaps{margin-bottom:18px;white-space:nowrap}
+.hero-flaps .flap b{width:1.06em}
 .hub-hero h1{font-size:clamp(28px,5vw,46px);max-width:17em;margin:0 auto}
 .hub-hero .lead{margin:12px auto 0;max-width:36em;color:var(--ink2);font-size:17px}
 .tool-hero{padding-top:18px;padding-bottom:16px}
@@ -297,7 +298,7 @@ th{background:var(--soft);font-weight:700}
   .top-nav a{padding:6px 8px;font-size:14px}
   .hub-hero{padding-top:14px;padding-bottom:12px}
   .hero-flaps{margin-bottom:12px}
-  .flap.lg{font-size:30px}
+  .flap.lg{font-size:min(30px,8.4vw)}
   .hub-hero .lead,.tool-hero .lead{font-size:15.5px}
   .tool-hero{padding-top:10px;padding-bottom:12px}
   .hero-row{gap:6px}
@@ -328,8 +329,9 @@ th{background:var(--soft);font-weight:700}
 /* 화려한 연출 1: 출발 안내판 — 글자가 몇 번 넘어가다 결과 형식에 멈춘다(세션에서 처음 끝날 때만) */
 .flap b.flip-fast{animation:flip .15s linear}
 /* 화려한 연출 2: 용량 줄어듦 막대 */
-.shrink{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--ink2)}
-.shrink-row{display:grid;grid-template-columns:3.2em minmax(0,1fr) 3.6em;align-items:center;gap:8px}
+.shrink{display:grid;grid-template-columns:max-content minmax(0,1fr) 3.6em;gap:6px 8px;align-items:center;font-size:13px;font-weight:700;color:var(--ink2)}
+.shrink-row{display:contents}
+.shrink-row>span:first-child{white-space:nowrap}
 .shrink-bar{display:block;height:10px;border-radius:999px;background:var(--soft);overflow:hidden}
 .shrink-bar i{display:block;height:100%;border-radius:999px;transform-origin:0 50%}
 .shrink-before{background:var(--muted);opacity:.55}
@@ -353,7 +355,8 @@ th{background:var(--soft);font-weight:700}
   .file.enter,.result,.working,.saved-tick{animation:ip-fade var(--t) both}
   .file.leave{animation:none}
   .err[role=alert],.drop-msg,.tl-row + .warn:not([hidden]){animation:ip-fade var(--t) both}
-  .shrink-after,.lock-anim .shackle,.lock-anim .body,.flap b.flip-fast{animation:none}
+  .shrink-after,.lock-anim .shackle,.lock-anim .body,.flap b.flip-fast,
+  .lock-anim.open .shackle,.lock-anim.close .shackle,.lock-anim.close .body{animation:none}
 }
 
 /* 루멘랩 가는 길: 출발 안내판 한 줄(사이트 공통 규칙 — 루멘랩 링크에는 연출을 넣는다) */

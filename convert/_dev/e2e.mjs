@@ -89,15 +89,18 @@ const CASES = [
   { name: 'audio-flac2ogg', tool: 'audio-converter', files: ['tone.flac'], actions: [chip('OGG')], check: async ([f]) => { const p = probe(f.path); assert(p.streams[0].codec_name === 'opus', 'not opus'); return 'opus ' + p.format.duration; } },
   { name: 'audio-mp32wav', tool: 'audio-converter', files: ['tone.mp3'], actions: [chip('WAV')], check: async ([f]) => { const p = probe(f.path); assert(near(+p.format.duration, 5, 0.2), 'dur ' + p.format.duration); return p.streams[0].codec_name + ' ' + p.format.duration; } },
   { name: 'audio-m4a2mp3', tool: 'audio-converter', files: ['tone.m4a'], check: async ([f]) => { const p = probe(f.path); return p.streams[0].codec_name + ' ' + p.format.duration; } },
-  { name: 'cut-audio-fade', tool: 'cut-audio', files: ['tone.wav'], actions: [async (p) => { await p.fill('.tl-row input.time >> nth=0', '0:01.0'); await p.press('.tl-row input.time >> nth=0', 'Enter'); await p.fill('.tl-row input.time >> nth=1', '0:03.5'); await p.press('.tl-row input.time >> nth=1', 'Enter'); }, async (p) => { await p.click('.field:has-text("Fade in") .chips button:has-text("1")'); }, chip('WAV')],
+  { name: 'cut-audio-fade', tool: 'cut-audio', files: ['tone.wav'], actions: [async (p) => { await p.fill('.tl-row input.time >> nth=0', '0:01.0'); await p.press('.tl-row input.time >> nth=0', 'Enter'); await p.fill('.tl-row input.time >> nth=1', '0:03.5'); await p.press('.tl-row input.time >> nth=1', 'Enter'); }, async (p) => { await p.click('.field:has-text("Fade in") .chips button:has-text("1")'); await p.click('.field:has-text("Fade out") .chips button:has-text("1")'); }, chip('WAV')],
     check: async ([f]) => {
       const p = probe(f.path); assert(near(+p.format.duration, 2.5, 0.06), 'dur ' + p.format.duration);
       // 첫 0.1초는 거의 조용, 1.5초 뒤는 원래 크기
       const vol = (ss) => { const o = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(ss), '-t', '0.1', '-i', f.path, '-af', 'volumedetect', '-f', 'null', '-'], { stdio: ['ignore', 'pipe', 'pipe'] }); return o; };
       const lv = (ss) => { const r = require_spawn(['-ss', String(ss), '-t', '0.1', '-i', f.path, '-af', 'volumedetect', '-f', 'null', '-']); const m = r.match(/max_volume: (-?[\d.]+) dB/); return m ? +m[1] : null; };
-      const a = lv(0), b = lv(1.6);
-      assert(a < b - 12, `fade not applied ${a} vs ${b}`);
-      return `cut ${p.format.duration}s fadeStart ${a}dB mid ${b}dB`;
+      // 1초 페이드인·1초 페이드아웃: 시작은 조용, 0.6초쯤은 중간 크기, 가운데는 원래 크기, 끝은 다시 조용
+      const a = lv(0), m = lv(0.6), b = lv(1.2), z = lv(2.4);
+      assert(a < b - 12, `fade in not applied ${a} vs ${b}`);
+      assert(m > a + 6 && m < b - 1, `fade in curve wrong ${a} ${m} ${b}`);
+      assert(z < b - 12, `fade out not applied ${z} vs ${b}`);
+      return `cut ${p.format.duration}s start ${a} 0.6s ${m} mid ${b} end ${z} dB`;
     } },
   // MP4로 바꾸면 H.264(+AAC)여야 한다. 이 브라우저가 H.264를 못 만들면 그 사실을 알려야 한다.
   { name: 'video-webm2mp4', tool: 'video-converter', files: ['clip.webm'], timeout: 180000, check: async ([f], note) => { const p = probe(f.path); const v = p.streams.find((s) => s.codec_type === 'video'); const a = p.streams.find((s) => s.codec_type === 'audio'); assert(v, 'no video'); assert(near(+p.format.duration, 6, 0.4), 'dur'); assert(v.codec_name === 'h264' || /H\.264/.test(note), 'vp9 in mp4 without notice'); assert(!a || a.codec_name === 'aac', 'audio ' + (a && a.codec_name)); assert(!/Copied/.test(note), 'false copied notice'); return `mp4 ${v.codec_name}+${a && a.codec_name} ${(+p.format.duration).toFixed(2)}s notice=${/H\.264/.test(note)}`; } },
@@ -143,6 +146,8 @@ const CASES = [
   { name: 'json2csv-en-bom', tool: 'csv-json', files: ['items.json'], check: async ([f]) => { assert(fs.readFileSync(f.path, 'utf8').startsWith('﻿'), 'no bom'); return 'BOM on (en)'; } },
   // ---- 새 PDF 도구 ----
   { name: 'compress-pdf', tool: 'compress-pdf', files: ['scan.pdf'], timeout: 180000, shot: true, check: async ([f]) => { const a = fs.statSync(fx('scan.pdf')).size, b = fs.statSync(f.path).size; assert(b < a * 0.7, `${a} → ${b}`); assert(await pdfPages(f.path) === 3, 'pages'); const tx = execFileSync('pdftotext', [f.path, '-']).toString(); assert(/Scan page/.test(tx), 'text lost'); return `${a} → ${b} (${Math.round(100 - b / a * 100)}% smaller)`; } },
+  // 그림이 ASCII85 → JPEG 두 겹으로 싸인 PDF도 줄어야 한다
+  { name: 'compress-pdf-a85', tool: 'compress-pdf', files: ['a85.pdf'], timeout: 180000, check: async ([f]) => { const a = fs.statSync(fx('a85.pdf')).size, b = fs.statSync(f.path).size; assert(b < a * 0.5, `${a} → ${b}`); assert(await pdfPages(f.path) === 1, 'pages'); return `${a} → ${b}`; } },
   { name: 'compress-pdf-strong', tool: 'compress-pdf', files: ['scan.pdf'], timeout: 180000, actions: [chip('Strong')], check: async ([f]) => `${fs.statSync(f.path).size}B` },
   { name: 'compress-pdf-text', tool: 'compress-pdf', files: ['doc3.pdf'], check: async ([f], note) => `${fs.statSync(fx('doc3.pdf')).size} → ${fs.statSync(f.path).size} ${/already/.test(note) ? '(kept)' : ''}` },
   { name: 'rotate-pdf', tool: 'rotate-pdf', files: ['doc3.pdf'], shot: true, actions: [async (p) => { await p.waitForSelector('.pg-img canvas'); await p.click('.pg-img >> nth=0'); await p.click('.pg-img >> nth=0'); await p.click('.pg-img >> nth=2'); }],

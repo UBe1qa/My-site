@@ -323,6 +323,28 @@ export async function watermark(file, opts) {
 // ---- PDF 압축: 안의 사진·스캔 그림을 해상도·품질을 낮춘 JPEG로 다시 저장 + 파일 구조 압축 ----
 const LEVEL = { strong: { side: 1240, q: 0.55 }, balanced: { side: 1600, q: 0.7 }, light: { side: 2400, q: 0.82 } };
 
+// 글자로 감싼 데이터(ASCII85·ASCIIHex) 풀기. 앞단 필터로 흔히 쓰인다(ReportLab 등).
+function ascii85(bytes) {
+  const out = []; let n = 0, k = 0;
+  for (let i = 0; i < bytes.length; i++) {
+    const c = bytes[i];
+    if (c === 126) break; // ~>
+    if (c <= 32) continue;
+    if (c === 122 && k === 0) { out.push(0, 0, 0, 0); continue; } // z
+    if (c < 33 || c > 117) throw new Error('a85');
+    n = n * 85 + (c - 33); k++;
+    if (k === 5) { out.push((n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255); n = 0; k = 0; }
+  }
+  if (k) { for (let j = k; j < 5; j++) n = n * 85 + 84; for (let j = 0; j < k - 1; j++) out.push((n >>> (24 - 8 * j)) & 255); }
+  return new Uint8Array(out);
+}
+function asciiHex(bytes) {
+  const hex = new TextDecoder('latin1').decode(bytes).split('>')[0].replace(/[^0-9a-fA-F]/g, '');
+  const s = hex.length % 2 ? hex + '0' : hex; const out = new Uint8Array(s.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(s.substr(i * 2, 2), 16);
+  return out;
+}
+
 function unpredictPng(data, colors, columns) {
   const bpr = colors * columns, out = new Uint8Array(bpr * Math.floor(data.length / (bpr + 1)));
   let prev = new Uint8Array(bpr);
@@ -360,9 +382,18 @@ export async function compress(file, level, onProgress) {
       const w = num(N(d, 'Width')), h = num(N(d, 'Height')), bpc = num(N(d, 'BitsPerComponent'));
       if (!w || !h || w * h < 200 * 200) continue;
       if (N(d, 'ImageMask') || N(d, 'Decode') || N(d, 'Mask') instanceof PDFArray) continue;
-      let filter = N(d, 'Filter');
-      if (filter instanceof PDFArray) { if (filter.size() !== 1) continue; filter = ctx.lookup(filter.get(0)); }
-      const f = nm(filter);
+      // 필터가 여러 겹이면(예: ASCII85 → DCT) 앞의 것은 풀고 마지막 것으로 판단한다
+      const fl = N(d, 'Filter');
+      const chain = fl instanceof PDFArray ? Array.from({ length: fl.size() }, (_, i) => nm(ctx.lookup(fl.get(i)))) : [nm(fl)];
+      const f = chain[chain.length - 1];
+      let data = obj.contents;
+      for (const pre of chain.slice(0, -1)) {
+        if (pre === 'ASCII85Decode' || pre === 'A85') data = ascii85(data);
+        else if (pre === 'ASCIIHexDecode' || pre === 'AHx') data = asciiHex(data);
+        else if (pre === 'FlateDecode' || pre === 'Fl') data = unzlibSync(data);
+        else { data = null; break; }
+      }
+      if (!data) continue;
       let cs = N(d, 'ColorSpace'), comps;
       const csName = nm(cs);
       if (csName === 'DeviceRGB') comps = 3; else if (csName === 'DeviceGray') comps = 1;
@@ -374,10 +405,11 @@ export async function compress(file, level, onProgress) {
       const scale = Math.min(1, L.side / Math.max(w, h));
       let bmp;
       if (f === 'DCTDecode') {
-        bmp = await createImageBitmap(new Blob([obj.contents], { type: 'image/jpeg' }));
+        bmp = await createImageBitmap(new Blob([data], { type: 'image/jpeg' }));
       } else if (f === 'FlateDecode' && bpc === 8) {
-        let raw = unzlibSync(obj.contents);
-        const parms = N(d, 'DecodeParms');
+        let raw = unzlibSync(data);
+        let parms = N(d, 'DecodeParms');
+        if (parms instanceof PDFArray) parms = ctx.lookup(parms.get(parms.size() - 1));
         const pred = parms && parms.get ? num(N(parms, 'Predictor')) : undefined;
         if (pred && pred >= 10) raw = unpredictPng(raw, comps, w);
         else if (pred && pred !== 1) continue;

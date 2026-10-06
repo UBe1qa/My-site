@@ -158,7 +158,7 @@ def head(lang, title, desc, path, alt=None, jsonld=(), og_type='website', noinde
 
 
 def flap(text, size=''):
-    return f'<span class="flap {size}" aria-hidden="true" data-text="{esc(text)}">' + ''.join(f'<b>{esc(c)}</b>' for c in text) + '</span>'
+    return f'<span class="flap {size}" aria-hidden="true" data-text="{esc(text)}">' + ''.join(f'<b class="blank"> </b>' if c == ' ' else f'<b>{esc(c)}</b>' for c in text) + '</span>'
 
 
 def header(lang, alt_path=None):
@@ -313,7 +313,7 @@ def hub_page(lang):
           {'@context': 'https://schema.org', '@type': 'ItemList', 'itemListElement': [
               {'@type': 'ListItem', 'position': i + 1, 'url': url(lang, t['id'] + '/'), 'name': tool_text(t['id'], lang)['name']} for i, t in enumerate(TOOLS)]}]
     body = f'''<section class="hub-hero wrap">
-  <p class="hero-flaps" aria-hidden="true" data-pairs='{json.dumps(pairs)}'>{flap('MP4', 'lg')}<span class="arrow">→</span>{flap('MP3', 'lg')}</p>
+  <p class="hero-flaps" aria-hidden="true" data-pairs='{json.dumps(pairs)}'>{flap('MP4 ', 'lg')}<span class="arrow">→</span>{flap('MP3 ', 'lg')}</p>
   <h1>{esc(hc['h1'])}</h1>
   <p class="lead">{esc(hc['lead'])}</p>
 </section>

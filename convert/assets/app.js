@@ -37,7 +37,7 @@ const T = {
     notHere: 'No tool here opens .{ext} files yet.', files: '{n} files', items: '{n} items', sizeWarn: 'Large file: phones may run out of memory.',
     gifLong: 'GIFs over 15 seconds get very large.', copiedHint: 'Will copy without re-encoding if possible.', seconds: 's',
     noAudio: 'This file has no audio track.', noVideo: 'This file has no video track.', result: 'Result',
-    level: 'Compression', strong: 'Strong', light: 'Light', notSmaller: 'This PDF is already well compressed, so the original was kept.',
+    level: 'Compression', strong: 'Strong', light: 'Light', notSmaller: 'This PDF is already well compressed, so the original was kept.', littleSmaller: 'Only a little smaller: this PDF is mostly text, or its images are already compressed or in formats left as they are. Try Strong, or split it into parts.', noH264c: 'This browser can’t create H.264, so the video was compressed as {codec}. It may not play on iPhone or in some apps; try Chrome or Edge on a computer.', keptSome: 'Kept the original for {names}: the converted file was bigger.',
     keptOriginal: 'The converted file was bigger, so the original was kept.',
     rotateAllL: 'Rotate all left', rotateAllR: 'Rotate all right', resetAll: 'Reset', tapRotate: 'Tap a page to turn it 90°.',
     keepN: '{k} of {n} pages kept', removePage: 'Remove page', restorePage: 'Bring back', moveL: 'Move earlier', moveR: 'Move later', removed: 'Removed', pageN: 'Page {n}',
@@ -84,7 +84,7 @@ const T = {
     notHere: '.{ext} 파일을 여는 도구는 아직 없어요.', files: '파일 {n}개', items: '{n}개', sizeWarn: '큰 파일이라 휴대폰에선 메모리가 모자랄 수 있어요.',
     gifLong: '15초가 넘는 GIF는 아주 커져요.', copiedHint: '되면 다시 인코딩하지 않고 옮겨 담아요.', seconds: '초',
     noAudio: '이 파일에는 오디오가 없어요.', noVideo: '이 파일에는 영상이 없어요.', result: '결과',
-    level: '압축 정도', strong: '강하게', light: '약하게', notSmaller: '이미 잘 압축된 PDF라 원본을 그대로 뒀어요.',
+    level: '압축 정도', strong: '강하게', light: '약하게', notSmaller: '이미 잘 압축된 PDF라 원본을 그대로 뒀어요.', littleSmaller: '조금만 줄었어요. 글자 위주이거나, 안의 이미지가 이미 압축됐거나 그대로 두는 형식이에요. \'강하게\'로 해 보거나 나눠서 보내 보세요.', noH264c: '이 브라우저는 H.264를 만들지 못해 {codec}로 줄였어요. 아이폰이나 일부 앱에서 안 열릴 수 있어요. 컴퓨터의 크롬이나 엣지로 해 보세요.', keptSome: '{names}은(는) 변환한 파일이 더 커서 원본을 그대로 뒀어요.',
     keptOriginal: '변환한 파일이 더 커서 원본을 그대로 뒀어요.',
     rotateAllL: '모두 왼쪽으로', rotateAllR: '모두 오른쪽으로', resetAll: '처음대로', tapRotate: '쪽을 누르면 90°씩 돌아가요.',
     keepN: '{n}쪽 중 {k}쪽 남김', removePage: '쪽 빼기', restorePage: '되살리기', moveL: '앞으로', moveR: '뒤로', removed: '뺌', pageN: '{n}쪽',
@@ -150,6 +150,7 @@ function chips(name, options, value, onChange) {
     value = v;
     box.querySelectorAll('button').forEach((b) => { const on = b.dataset.v === String(v); b.setAttribute('aria-checked', on); b.tabIndex = on ? 0 : -1; });
     onChange && onChange(v);
+    box.dispatchEvent(new Event('ip-opt', { bubbles: true }));
   };
   for (const [v, label] of options) box.append(h('button', { type: 'button', role: 'radio', 'data-v': v, onclick: () => set(v) }, label));
   box.addEventListener('keydown', (e) => {
@@ -210,6 +211,12 @@ class Panel {
     this.actions = h('div', { class: 'actions' });
     this.out = h('div', { class: 'out', 'aria-live': 'polite' });
     this.work.append(this.head, this.opts, this.actions, this.out);
+    // 결과가 나온 뒤 설정을 바꾸면 옛 결과는 지운다(바뀐 설정과 안 맞는 파일을 받지 않게)
+    const stale = () => { if (!this.bar && this.out.querySelector('.result')) { (this.urls || []).forEach(URL.revokeObjectURL); this.urls = null; this.out.replaceChildren(); } };
+    for (const ev of ['input', 'change', 'ip-opt']) this.opts.addEventListener(ev, stale);
+    this.opts.addEventListener('click', (e) => { if (e.target.closest('button:not(.play)')) stale(); });
+    // 암호 칸에서 Enter = 실행
+    this.opts.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.closest('.pw') && this.go && !this.go.disabled) { e.preventDefault(); this.run(); } });
     this.renderFiles();
     try {
       this.ctl = await runner.setup(this, this.files);
@@ -309,6 +316,8 @@ class Panel {
       : t('errGeneric');
     const named = e && e.file && this.files.length > 1 ? t('inFile', { name: e.file.name || e.file, m: msg }) : msg;
     this.out.replaceChildren(h('p', { class: 'err', role: 'alert' }, named));
+    // 암호가 틀리거나 비었으면 다시 칠 수 있게 암호 칸으로 돌아간다
+    if (code === 'wrongPassword' || (code === 'msg' && LOCK_TOOLS[this.tool.id])) { const pw = this.opts.querySelector('.pw input'); if (pw) { pw.focus(); pw.select(); } }
   }
   // res: { items: [{ blob, name, note, preview: 'audio'|'video'|'image', meta }], note, zipName, before }
   showResult(res, ms) {
@@ -321,12 +330,12 @@ class Panel {
     const flap = lock ? lockEl(lock) : flapEl(fromExt, 'md');
     card.append(h('div', { class: 'result-top' }, flap,
       h('div', {}, h('p', { class: 'result-title' }, t('done')),
-        h('p', { class: 'muted' }, [res.before ? t('savings', { a: fmtSize(res.before), b: fmtSize(total) }) : fmtSize(total), ' · ', t('took', { s: (ms / 1000).toFixed(ms < 10000 ? 1 : 0) + (LANG === 'ko' ? '초' : ' s') })].join('')))));
+        h('p', { class: 'muted' }, [res.before ? t('savings', { a: fmtSize(res.before), b: fmtSize(total) }) : fmtSize(total), ' · ', t('took', { s: Math.max(0.1, ms / 1000).toFixed(ms < 10000 ? 1 : 0) + (LANG === 'ko' ? '초' : ' s') })].join('')))));
     if (!lock) setTimeout(() => (firstBoard() ? boardTo : flipTo)(flap, toExt), 60);
     const bar = res.before ? shrinkBar(res.before, total) : null;
     if (bar) card.append(bar);
     if (res.note) card.append(h('p', { class: 'note' }, res.note));
-    const urls = [];
+    const urls = this.urls = [];
     const one = items.length === 1;
     if (one) {
       const it = items[0];
@@ -522,6 +531,7 @@ function timeline(p, file, info, { kind, onChange, initEnd }) {
     len.textContent = t('length') + ' ' + fmtTime(end - start);
     warn.hidden = true;
     onChange && onChange(start, end);
+    wrap.dispatchEvent(new Event('ip-opt', { bubbles: true }));
   }
   function setA(v) { start = Math.max(0, Math.min(v, end - minLen)); draw(); }
   function setB(v) { end = Math.min(dur, Math.max(v, start + minLen)); draw(); }
@@ -743,7 +753,7 @@ const RUNNERS = {
         run: async (prog, setJob) => {
           const job = m.convert(file, { target: 'mp4', compress: true, quality: q, maxHeight: maxH || undefined }, prog); setJob(job);
           const r = await job.promise;
-          return { items: [{ blob: r.blob, name: outName(file, 'mp4', 'small'), preview: 'video' }], before: file.size };
+          return { items: [{ blob: r.blob, name: outName(file, 'mp4', 'small'), preview: 'video' }], before: file.size, note: r.vcodec && r.vcodec !== 'avc' ? t('noH264c', { codec: r.vcodec.toUpperCase().replace('AVC', 'H.264') }) : '' };
         }
       };
     }
@@ -981,7 +991,7 @@ const RUNNERS = {
           const pdf = await import('./engines/pdf.js');
           const file = p.files[0];
           const r = await pdf.compress(file, level, prog);
-          return { items: [{ blob: r.blob, name: outName(file, 'pdf', r.notSmaller ? '' : 'compressed') }], before: file.size, note: r.notSmaller ? t('notSmaller') : '' };
+          return { items: [{ blob: r.blob, name: outName(file, 'pdf', r.notSmaller ? '' : 'compressed') }], before: file.size, note: r.notSmaller ? t('notSmaller') : r.blob.size > file.size * 0.9 ? t('littleSmaller') : '' };
         }
       };
     }
@@ -1143,7 +1153,7 @@ const RUNNERS = {
         const showPrev = () => {
           const { rows } = d.parseCSV(text, delim === 'auto' ? undefined : delim);
           renderTable(prev, rows.slice(0, 6), header);
-          prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length }) + ' · ' + encoding));
+          prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length - (header ? 1 : 0) }) + ' · ' + encoding));
         };
         p.opts.replaceChildren(
           field(t('delimiter'), chips(t('delimiter'), [['auto', t('auto')], [',', t('comma')], [';', t('semicolon')], ['\t', t('tab')]], delim, (v) => { delim = v; showPrev(); })),
@@ -1182,14 +1192,14 @@ const RUNNERS = {
         const { text } = await d.readText(file);
         const { rows } = d.parseCSV(text);
         renderTable(prev, rows.slice(0, 6), true);
-        prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length })));
+        prev.prepend(h('p', { class: 'muted' }, t('rows', { n: Math.max(0, rows.length - 1) })));
         p.opts.replaceChildren(prev);
         return { label: 'CSV → Excel', run: async () => ({ items: [{ blob: await d.rowsToXlsx(rows, baseOf(file.name)), name: outName(file, 'xlsx') }] }) };
       }
       const wb = await d.readWorkbook(file);
       const names = wb.SheetNames;
       let sheet = names[0], bom = true;
-      const showPrev = async () => { if (sheet === '*') { prev.replaceChildren(); return; } const rows = await d.sheetToRows(wb, sheet); renderTable(prev, rows.slice(0, 6), true); prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length }))); };
+      const showPrev = async () => { if (sheet === '*') { prev.replaceChildren(); return; } const rows = await d.sheetToRows(wb, sheet); renderTable(prev, rows.slice(0, 6), true); prev.prepend(h('p', { class: 'muted' }, t('rows', { n: Math.max(0, rows.length - 1) }))); };
       const opts = names.map((n) => [n, n]); if (names.length > 1) opts.push(['*', t('allSheets')]);
       p.opts.replaceChildren(field(t('sheet'), chips(t('sheet'), opts, sheet, (v) => { sheet = v; showPrev(); })), toggle(t('bom'), bom, (v) => { bom = v; }), prev);
       await showPrev();
@@ -1260,8 +1270,7 @@ function renderTable(box, rows, header) {
 // 그림 여러 장 차례로
 // showSaving(용량 줄이기): 크기를 그대로 두었는데 결과가 더 크면 원본을 그대로 돌려준다.
 async function batchImages(files, img, optsFor, prog, showSaving, tail) {
-  const items = [], used = new Set();
-  let kept = 0;
+  const items = [], used = new Set(), kept = [];
   for (let i = 0; i < files.length; i++) {
     const f = files[i];
     const d = await img.decode(f); d.file = f;
@@ -1271,7 +1280,7 @@ async function batchImages(files, img, optsFor, prog, showSaving, tail) {
     const r = await img.encode(d, o);
     img.release(d);
     let blob = r.blob, ext = r.ext;
-    if (showSaving && r.width === W0 && blob.size >= f.size) { blob = f; ext = extOf(f.name) || r.ext; kept++; }
+    if (showSaving && r.width === W0 && blob.size >= f.size) { blob = f; ext = extOf(f.name) || r.ext; kept.push(f.name); }
     // 같은 이름이 둘 생기면(photo.png + photo.webp → photo.jpg) 뒤에 -2, -3
     let name = outName(f, ext, tail || ''), k = 2;
     while (used.has(name.toLowerCase())) name = outName(f, ext, (tail ? tail + '-' : '') + k++);
@@ -1280,7 +1289,7 @@ async function batchImages(files, img, optsFor, prog, showSaving, tail) {
     prog((i + 1) / files.length);
     await new Promise((res) => setTimeout(res));
   }
-  return { items, zipName: (tail || 'converted') + '-images.zip', note: kept ? t('keptOriginal') : '' };
+  return { items, zipName: (tail || 'converted') + '-images.zip', note: !kept.length ? '' : files.length === 1 ? t('keptOriginal') : t('keptSome', { names: kept.slice(0, 3).join(', ') + (kept.length > 3 ? ' …' : '') }) };
 }
 
 // ---------- 첫 페이지: 무엇이든 놓으면 맞는 도구를 고르게 ----------
@@ -1328,12 +1337,20 @@ function boot() {
   if (hero && !REDUCED.matches) {
     const pairs = JSON.parse(hero.dataset.pairs || '[]');
     const [a, b] = hero.querySelectorAll('.flap');
-    // 페이지가 다 뜬 뒤 짝을 한 바퀴만 돌고 첫 짝에서 멈춘다(멈춘 뒤엔 타이머 없음). 화면이 숨으면 쉬었다가 이어 간다.
-    let i = 0;
+    // 페이지가 다 뜬 뒤 짝 세 개를 보여 주고 첫 짝으로 돌아와 멈춘다(멈춘 뒤엔 타이머 없음).
+    // 글자판은 늘 네 칸(빈 칸 포함)이라 폭이 안 바뀐다. 화면 밖이거나 탭이 숨으면 쉬었다가 이어 간다.
+    const pad = (x) => x.padEnd(4, ' ');
+    let i = 0, seen = true;
+    let resume = null;
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => {
+      seen = es.some((e) => e.isIntersecting);
+      if (seen && resume) { const r = resume; resume = null; r(); }
+    }).observe(hero);
     const next = () => {
       if (document.hidden) { document.addEventListener('visibilitychange', next, { once: true }); return; }
-      i = (i + 1) % pairs.length;
-      flipTo(a, pairs[i][0]); setTimeout(() => flipTo(b, pairs[i][1]), 260);
+      if (!seen) { resume = next; return; }
+      i = (i + 1) % Math.min(pairs.length, 4);
+      flipTo(a, pad(pairs[i][0])); setTimeout(() => flipTo(b, pad(pairs[i][1])), 260);
       if (i !== 0) setTimeout(next, 2800);
     };
     const start = () => setTimeout(next, 2400);
