@@ -147,6 +147,10 @@ if (data.derived) {        // 정의로 계산한 상수: NIST 표의 앞자리(
   ok(near(n('der(1/x,0.05)'), -400, 1e-6), 'd/dx 1/x at 0.05', n('der(1/x,0.05)'));
   ok(near(n('der(tan(x),89)'), 57.30159, 1e-5), 'd/dx tan at 89°', n('der(tan(x),89)'));
   ok(near(n('der(ln(x),0.05)'), 20, 1e-6), 'd/dx ln at 0.05', n('der(ln(x),0.05)'));
+  ok(near(n('der(x^2,1E8)'), 2e8, 1e-9), 'd/dx x² at 10⁸ (2차 평가)', n('der(x^2,1E8)'));
+  ok(near(n('der(sin(x),1000000)', { angle: 'rad' }), Math.cos(1e6), 1e-6), 'd/dx sin at 10⁶ rad');
+  var cbrt0 = false; try { n('der(root(3,x),0)'); } catch (e) { cbrt0 = true; }
+  ok(cbrt0, 'd/dx ∛x at 0 은 오류 (2차 평가)');
   ['abs(sin(x))', 'sqrt((1+2)*3)', 'int(abs(sin(x)),0,1)', '2^((1+1)*2)'].forEach(function (t) {
     ok(SC.rowToText(SC.parseText(t)) === t, '겹친 괄호 되돌리기 ' + t, SC.rowToText(SC.parseText(t)));
   });

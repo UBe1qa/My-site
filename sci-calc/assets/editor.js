@@ -443,7 +443,7 @@ Editor.prototype.handleKey = function (ev) {
     case '+': this.leaveKbSlot(); this.insertChar('+'); return true;
     case '-': this.leaveKbSlot(); this.insertChar('−'); return true;
     case '*': this.leaveKbSlot(); this.insertChar('×'); return true;
-    case '/': this.insertTemplate('frac'); this.markKbSlot(); return true;
+    case '/': this.leaveKbSlot(); this.insertTemplate('frac'); this.markKbSlot(); return true;     // 8/2/2 = (8/2)/2, 2^3/2 = 2³/2
     case '^': this.insertTemplate('pow'); this.markKbSlot(); return true;
     case '(':
       if (this.pendFnParen && this.pendFnParen.row === this.cur.row && this.pendFnParen.i === this.cur.i) { this.pendFnParen = null; return true; }

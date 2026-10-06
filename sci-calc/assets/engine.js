@@ -1328,10 +1328,8 @@ function integrate(node, env) {
   return F(snapNum(v));
 }
 // 리더스 방법(중심 차분 + 리처드슨)
-function derivNum(f, x) {
-  // 처음 간격은 x 의 1%(최대 0.01). 예전 0.1×|x| 는 점근선·정의역 끝 근처(1/x 의 x=0.05, ln 의 x=0.05)와
-  // 아주 큰 x(sin x 의 x=10⁶)에서 틀린 값을 냈다 (2026-10-06 제3자 평가)
-  var h = x === 0 ? 0.01 : Math.min(0.01, 0.01 * Math.abs(x)), CON = 1.4, CON2 = CON * CON, NT = 12, SAFE = 2;
+function ridders(f, x, h) {                 // 리더스 외삽: [값, 오차 추정]
+  var CON = 1.4, CON2 = CON * CON, NT = 12, SAFE = 2;
   var a = [], err = Infinity, ans = NaN;
   a[0] = [(f(x + h) - f(x - h)) / (2 * h)];
   for (var i = 1; i < NT; i++) {
@@ -1346,8 +1344,23 @@ function derivNum(f, x) {
     }
     if (Math.abs(a[i][i] - a[i - 1][i - 1]) >= SAFE * err) break;
   }
-  if (!isFinite(ans)) throw mathErr('domain');
-  return ans;
+  return [ans, err];
+}
+function derivNum(f, x) {
+  // 처음 간격 두 가지로 해 보고 오차 추정이 작은 쪽: x 의 1%(최대 0.01)는 점근선·정의역 끝 근처(1/x 의 x=0.05)와
+  // 빨리 출렁이는 함수(sin x 의 x=10⁶)에, x 에 비례한 간격은 아주 큰 x(x² 의 x=10⁸)에 맞다 (2026-10-06 제3자 평가 1·2차)
+  var ax = Math.abs(x), best = null;
+  var hs = [x === 0 ? 0.01 : Math.min(0.01, 0.01 * ax)];
+  if (ax > 1) hs.push(0.01 * ax);
+  // x 가 너무 커서 x ± h 가 x 와 같아지는 간격은 뺀다(가장 작게 줄어든 h 기준)
+  hs = hs.filter(function (h) { var hm = h / 60; return Math.abs((x + hm) - x - hm) < 1e-3 * hm; });
+  hs.forEach(function (h) {
+    var r; try { r = ridders(f, x, h); } catch (e) { return; }
+    if (isFinite(r[0]) && (!best || r[1] < best[1])) best = r;
+  });
+  // 오차가 값에 비해 크면 미분할 수 없는 점(∛x 의 0 처럼 기울기가 끝없이 커짐)
+  if (!best || best[1] > 1e-5 * Math.max(1, Math.abs(best[0]))) throw mathErr('domain');
+  return best[0];
 }
 function derivative(node, env) {
   var x0 = toNum(realOnly(noMulti(evaluate(node.at, env))));

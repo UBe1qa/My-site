@@ -14,7 +14,7 @@ var W = {
     addRow: '줄 추가', clear: '모두 지우기', freq: '도수', pasteHint: '엑셀 열이나 “1, 2, 3” 같은 목록을 칸에 붙여 넣으면 아래로 나눠 들어가요.',
     n: '개수 n', mean: '평균', sum: '합', sum2: '제곱의 합', popSD: '모표준편차', sampleSD: '표본표준편차', popVar: '모분산', sampleVar: '표본분산',
     min: '최솟값', q1: '제1사분위수 Q1', med: '중앙값', q3: '제3사분위수 Q3', max: '최댓값', range: '범위', mode: '최빈값', regEq: '회귀식', r: '상관계수 r', r2: '결정계수 r²',
-    est: '추정', estX: 'x 를 넣으면 ŷ', estY: 'y 를 넣으면 x̂', xs: 'x 자료', ys: 'y 자료', yEmpty: '{n}번째 줄의 y 칸이 비어 있어요', modeMore: '외 {n}개 (모두 {c}번씩)',
+    est: '추정', estX: 'x 를 넣으면 ŷ', estY: 'y 를 넣으면 x̂', xs: 'x 자료', ys: 'y 자료', yEmpty: '{n}번째 줄의 y 칸이 비어 있어요', baseRange: '{b}비트에서 쓸 수 있는 수는 {lo} ~ {hi} (16진수 0 ~ {hx})예요', modeMore: '외 {n}개 (모두 {c}번씩)',
     lin: '일차 y=a+bx', quad: '이차 y=a+bx+cx²', log: '로그 y=a+b·ln x', exp: '지수 y=a·eᵇˣ', abx: '지수 y=a·bˣ', pow: '거듭제곱 y=a·xᵇ', inv: '역수 y=a+b/x',
     npd: '정규 밀도', ncd: '정규 누적', invn: '역정규', bpd: '이항 확률', bcd: '이항 누적', ppd: '푸아송 확률', pcd: '푸아송 누적',
     lower: '아래 끝 (비우면 −∞)', upper: '위 끝 (비우면 +∞)', mu: '평균 μ', sd: '표준편차 σ', area: '넓이(확률)', tail: '꼬리', left: '왼쪽', right: '오른쪽', center: '가운데',
@@ -33,7 +33,7 @@ var W = {
     addRow: 'Add row', clear: 'Clear all', freq: 'Freq', pasteHint: 'Paste a spreadsheet column or a list like “1, 2, 3” into a cell and it fills downward.',
     n: 'Count n', mean: 'Mean', sum: 'Sum', sum2: 'Sum of squares', popSD: 'Population SD', sampleSD: 'Sample SD', popVar: 'Population variance', sampleVar: 'Sample variance',
     min: 'Minimum', q1: 'First quartile Q1', med: 'Median', q3: 'Third quartile Q3', max: 'Maximum', range: 'Range', mode: 'Mode', regEq: 'Equation', r: 'Correlation r', r2: 'R²',
-    est: 'Estimate', estX: 'Enter x for ŷ', estY: 'Enter y for x̂', xs: 'x data', ys: 'y data', yEmpty: 'Row {n}: the y cell is empty', modeMore: 'and {n} more (each {c} times)',
+    est: 'Estimate', estX: 'Enter x for ŷ', estY: 'Enter y for x̂', xs: 'x data', ys: 'y data', yEmpty: 'Row {n}: the y cell is empty', baseRange: 'With {b} bits, numbers must be {lo} to {hi} (hex 0 to {hx})', modeMore: 'and {n} more (each {c} times)',
     lin: 'Linear y=a+bx', quad: 'Quadratic y=a+bx+cx²', log: 'Log y=a+b·ln x', exp: 'Exponential y=a·eᵇˣ', abx: 'Exponential y=a·bˣ', pow: 'Power y=a·xᵇ', inv: 'Inverse y=a+b/x',
     npd: 'Normal PDF', ncd: 'Normal CDF', invn: 'Inverse normal', bpd: 'Binomial PD', bcd: 'Binomial CD', ppd: 'Poisson PD', pcd: 'Poisson CD',
     lower: 'Lower bound (empty = −∞)', upper: 'Upper bound (empty = +∞)', mu: 'Mean μ', sd: 'Standard deviation σ', area: 'Area (probability)', tail: 'Tail', left: 'Left', right: 'Right', center: 'Center',
@@ -255,7 +255,7 @@ function statsUI() {
         kv(out, rows.slice(0, 4));
         var sy = SCM.stats1(ys, F, st.quart);
         out.appendChild(el('h3', 'out-h', W.ys));
-        kv(out, [[W.mean + ' ȳ', sy.mean], [W.popSD + ' σy', sy.popSD], sy.sampleSD ? [W.sampleSD + ' sy', sy.sampleSD] : null]);
+        kv(out, [[W.mean + ' ȳ', sy.mean, dec], [W.popSD + ' σy', sy.popSD, dec], sy.sampleSD ? [W.sampleSD + ' sy', sy.sampleSD, dec] : null]);
         out.appendChild(el('h3', 'out-h', W.regEq + ' · ' + W[st.reg]));
         var reg = SCM.regression(xs, ys, F, st.reg); lastReg = reg;
         var rr = [['a', reg.a, true], ['b', reg.b, true]];
@@ -622,7 +622,13 @@ function baseUI() {
         var d = el('div'); d.appendChild(el('b', null, b));
         var c = el('code', null, b === 'BIN' ? all[b].replace(/(?=(\d{4})+$)/g, ' ').trim() : all[b]); d.appendChild(c); out.appendChild(d);
       });
-    } catch (e) { showErr(out, e); }
+    } catch (e) {
+      if (e && e.message === 'range') {                   // 범위를 넘으면 쓸 수 있는 범위를 같이 알려 준다
+        var B = BigInt(st.bits), half = 1n << (B - 1n);
+        e = { msg: W.baseRange.replace('{b}', st.bits).replace('{lo}', (-half).toString()).replace('{hi}', (half - 1n).toString()).replace('{hx}', ((1n << B) - 1n).toString(16).toUpperCase()) };
+      }
+      showErr(out, e);
+    }
   }
   root.addEventListener('input', debounce(go, 150));
   root.addEventListener('change', go);

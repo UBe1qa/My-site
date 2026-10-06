@@ -37,6 +37,32 @@ var sheet = root.querySelector('.sheet');
 var state = { done: false, value: null, view: {}, shift: false, histPos: -1, row: null };
 
 var ed = new ME.Editor(exprEl, { onChange: onEdit, onHistory: histNav });
+
+// 계산 화면 칸 높이는 고정: 분수·∫·Σ 가 들어와도 키판이 위아래로 밀리지 않게(누르려던 자리에 다른 키가 오지 않게).
+// 넘치면 글자를 줄여(60% 까지) 칸에 맞추고, 답은 칸 아래쪽에 붙인다
+function fitBox(el, bottom) {
+  el.style.fontSize = ''; el.style.paddingTop = '';
+  if (!el.firstChild || el.classList.contains('is-err')) return;
+  var r = document.createRange(); r.selectNodeContents(el);
+  var cs = getComputedStyle(el), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  var room = el.clientHeight - pad, need = r.getBoundingClientRect().height;
+  if (need > room + 1) {
+    var fs = parseFloat(cs.fontSize);
+    el.style.fontSize = Math.max(fs * 0.6, fs * room / need) + 'px';
+    need = r.getBoundingClientRect().height;
+  }
+  if (bottom && need < room) el.style.paddingTop = (parseFloat(cs.paddingTop) + room - need) + 'px';
+}
+var fitQueued = 0;
+function fitScreen() {
+  if (fitQueued) return;
+  fitQueued = requestAnimationFrame(function () { fitQueued = 0; fitBox(exprEl, false); if (resEl) fitBox(resEl, true); });
+}
+if (window.MutationObserver) {
+  var fitObs = new MutationObserver(fitScreen);
+  fitObs.observe(exprEl, { childList: true, subtree: true, characterData: true });
+  if (resEl) fitObs.observe(resEl, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+}
 ed.draw();
 
 // ---------------------------------------------------------------- 상태 줄
@@ -292,7 +318,11 @@ function act(a) {
   if (a === 'fact') { state.view.fact = !state.view.fact; state.view.dms = false; state.view.eng = null; }
   if (a === 'copy') {
     var txt = copyTextOf(v);
-    UI.copyText(txt, function (ok) { UI.toast(ok ? t('copied') + ': ' + txt : t('copyFail')); if (ok) mo(root.querySelector('[data-act=copy]'), 'mo-ok'); });
+    UI.copyText(txt, function (ok) { UI.toast(ok ? t('copied') + ': ' + txt : t('copyFail')); if (ok) {
+      var cb = root.querySelector('[data-act=copy]'); mo(cb, 'mo-ok');
+      if (!cb.__label) cb.__label = cb.textContent;        // 단추 글자도 잠깐 '복사했어요'
+      cb.textContent = t('copied'); clearTimeout(cb.__t); cb.__t = setTimeout(function () { cb.textContent = cb.__label; }, 1400);
+    } });
     return;
   }
   drawResult();

@@ -724,3 +724,28 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .ktip { transition: none; transform: none; } }
 /* 지수 칸 안의 분수(x^½)는 지수 자리로 올려 대분수 5½ 와 헷갈리지 않게 */
 .msup .mfrac { vertical-align: text-bottom; font-size: .86em; margin: 0 .04em; }
+
+/* 2차 평가(2026-10-06): 계산 화면 칸 높이 고정, 꺼진 보기 단추는 자리만 두고 숨김 → 입력 중 키판이 움직이지 않게 */
+.acts button:disabled { display: inline-block; visibility: hidden; }
+.work .calc .expr { box-sizing: border-box; height: 56px; min-height: 0; overflow-y: hidden; }
+.work .calc .result { box-sizing: border-box; height: 66px; min-height: 0; overflow-y: hidden; }
+.work .calc .result.is-err { overflow-y: auto; }
+@media (max-width: 600px) {
+  .work .calc .expr { height: 50px; }
+  .work .calc .result { height: 60px; }
+}
+/* 키가 작은 휴대폰(보이는 높이 760px 이하): = 키까지 첫 화면에 들어오게. 모드 칩은 계산기 바로 아래로 */
+@media (max-width: 600px) and (max-height: 760px) {
+  .work { grid-template-areas: "h1" "tool" "nav" "side" "lede"; }
+  .hero .work > h1 { margin-bottom: 8px; }
+  .work .modes { margin: 12px -16px 4px; }
+  .work .calc .expr { height: 46px; }
+  .work .calc .result { height: 54px; }
+  .work .keys-f .k { min-height: 35px; padding-top: 10px; }
+  .work .keys-n .k { min-height: 44px; }
+  .work .keys-f .k.arrows { padding: 0; }
+  .k.arrows button { min-height: 35px; }
+}
+/* ▲▼ 는 키 칸 높이를 다 쓰게 (컴퓨터에서 32×14px 였음) */
+.keys-f .k.arrows, .work .keys-f .k.arrows { padding: 0; }
+.k.arrows button { height: 100%; min-height: 34px; }
