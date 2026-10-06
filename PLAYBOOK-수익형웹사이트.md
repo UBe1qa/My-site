@@ -34,6 +34,7 @@
 ## 5. 배포
 - `wrangler.jsonc`에 `routes: [{ pattern: "이름.lumenlab.page", custom_domain: true }]` + **`"workers_dev": true`**(빼면 workers.dev 주소가 꺼진다).
 - 배포 후 실제 주소에서 모든 페이지 200, `tools/` `tests/`는 404인지 확인.
+- **도구 사이트에서 루멘랩으로 가는 링크도 처음부터**: 사이트 콘셉트에 맞는 모양·자리로 `https://lumenlab.page/` 링크 한 곳(같은 모양을 찍어 넣지 않는다). 광고 자리 바로 옆·광고처럼 보이는 상자는 피한다(며칠 계산기: 꼬리말 맨 위 '펴낸 곳' 줄, 광고와 40px 넘게).
 - **루멘랩 본페이지(lumenlab.page)에 카드 추가**: `lumenlab/_dev/catalog.json`의 `tools`에 항목 하나(이름·한 줄 설명 한국어/영어, 주소, 아이콘은 `lumenlab/img/`) → `python3 lumenlab/_dev/build_home.py` → 같은 푸시에. 홈 카드·첫 화면 '웹 도구 N개'·꼬리말·영어 문구가 같이 바뀐다(손으로 HTML을 고치지 않는다). 새 앱이면 `apps`에.
 
 ## 6. 등록 (배포 직후)

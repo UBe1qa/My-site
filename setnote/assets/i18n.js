@@ -37,6 +37,8 @@
     fact2: '<b>Your log stays on this device</b> and is never sent to a server',
     fact3: '<b>Backup files</b> let you export and import to move devices',
     endTitle: 'Start with today’s workout',
+    nextK: 'Next set',
+    nextT: 'More apps and tools from Lumen Lab, the makers of SetNote',
     madeBy: 'Made by',
     sole: 'Sole proprietorship',
     ask: 'Contact',

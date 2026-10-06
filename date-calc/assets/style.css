@@ -211,6 +211,13 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 .faq p { margin: 0 0 16px; color: var(--ink-2); }
 
 .foot { margin-top: 40px; padding-top: 22px; padding-bottom: 44px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+/* 만든 곳: 벽걸이 달력 맨 아래 '펴낸 곳' 줄처럼. 루멘랩 표시(주황 불빛)만 달력 색(파랑·빨강) 밖의 색으로 두고, 광고처럼 보이는 상자·그림은 쓰지 않는다 */
+.maker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding-bottom: 18px; margin-bottom: 16px; border-bottom: 1.5px dashed var(--line-2); }
+.maker-mark { width: 20px; height: 20px; flex: none; fill: #f2b33d; }
+.maker p { margin: 0; flex: 1 1 260px; color: var(--ink-2); font-size: 15px; }
+.maker b { color: var(--ink); }
+.maker a { font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; border-bottom: 1.5px solid #f2b33d; white-space: nowrap; }
+.maker a:hover { color: var(--main); }
 
 @media (max-width: 720px) {
   .top { padding-top: 10px; gap: 6px 10px; }

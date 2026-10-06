@@ -92,6 +92,8 @@
     a7: 'The <a href="https://lumenlab.page/owlight/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.',
     endTitle: 'Getting ready for <span class="nw">the Mac App Store</span>',
     endLead: 'Buy it once for US$5.99. When it is out, the App Store link will be right here.',
+    lumenLine: 'Owlight is one light Lumen Lab has switched on',
+    lumenGo: 'See our other apps and tools →',
     footMaker: 'Owlight is made by <a href="https://lumenlab.page/" class="nw">Lumen Lab</a>, a sole proprietorship in Korea.',
     lostTitle: 'This page doesn’t exist',
     lostText: 'The address may have changed. Head back to the Owlight page.',

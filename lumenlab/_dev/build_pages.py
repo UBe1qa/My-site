@@ -50,7 +50,7 @@ for page, app, icon, key, label, desc in PAGES:
 {header}<main id="main">
 <div class="doc-head">
 <div class="wrap doc-head__in">
-<p class="crumb"><img class="icon" src="{icon}" width="28" height="28" alt=""><a href="/#{slug}">{app}</a><span aria-hidden="true">›</span><span data-i18n="{key}">{label}</span></p>
+<p class="crumb"><img class="icon" src="{icon}" width="28" height="28" alt=""><a href="https://{slug}.lumenlab.page/">{app}</a><span aria-hidden="true">›</span><span data-i18n="{key}">{label}</span></p>
 <!-- 아래 제목·이동 줄과 본문은 원래 사이트(lumenlab-site)의 문구 그대로 -->
 {top}
 </div>

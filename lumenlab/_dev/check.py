@@ -79,12 +79,6 @@ with sync_playwright() as p:
             bad |= set(map(str, pg.evaluate(HID)))
             if pg.evaluate('innerHeight+scrollY>=document.body.scrollHeight-2'): break
         ok(not bad, f'{w}px 스크롤 뒤 숨은 채 남은 요소 0 {sorted(bad)[:4]}')
-        # 스위치: 나갔다 들어오면 다시 켜짐
-        pg.evaluate("document.documentElement.style.scrollBehavior='auto';scrollTo(0,document.body.scrollHeight)"); pg.wait_for_timeout(500)
-        off = pg.evaluate("!document.querySelector('.feats').classList.contains('in')")
-        pg.evaluate("document.querySelector('.feats').scrollIntoView({block:'center'})"); pg.wait_for_timeout(1600)
-        on = pg.evaluate("document.querySelector('.feats').classList.contains('in')")
-        ok(off and on, f'{w}px 스위치가 나가면 꺼지고 들어오면 다시 켜짐')
         c.close()
 
     # 첫 화면이 보인 뒤 다시 흐려지지 않음

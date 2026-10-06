@@ -408,8 +408,9 @@ HEADER_DOC = """<body class="doc-page">
 
 def foot_en(ko_href="/"):
     return f"""<footer class="foot wrap">
+  <div class="maker"><svg class="maker-mark" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" opacity=".28"/><circle cx="11" cy="11" r="5"/></svg><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div>
   <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="{ko_href}" hreflang="ko" lang="ko">한국어</a></p>
-  <p>© 2026 Lumen Lab · <a href="https://lumenlab.page/">lumenlab.page</a></p>
+  <p>© 2026 Lumen Lab</p>
 </footer>
 </body>
 </html>
@@ -563,7 +564,7 @@ def tool_page():
     body = one(r'<ul class="guide-list">.*?</ul>', '<ul class="guide-list">\n' + guide_list() + "\n    </ul>", body)
     body = one(r'(<h2 id="h-faq"[^>]*>[^<]*</h2>\n).*?(\n\s*<div class="ad-slot" data-ad="bottom")', lambda m: m.group(1) + faq_html() + m.group(2), body)
     body = one(r'<footer class="foot wrap">.*?</footer>',
-               '<footer class="foot wrap">\n  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · '
+               '<footer class="foot wrap">\n  <div class="maker"><svg class="maker-mark" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" opacity=".28"/><circle cx="11" cy="11" r="5"/></svg><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div>\n  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · '
                '<a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a></p>\n</footer>', body)
     # 영어 사용자에겐 '시작한 날을 1일째로(한국식)'를 기본으로 끈다: 100일 = 시작일 + 100일
     body = one(r'<input type="checkbox" id="an-one" checked>', '<input type="checkbox" id="an-one">', body)
