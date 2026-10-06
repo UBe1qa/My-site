@@ -92,7 +92,7 @@ h1, h2, h3 { text-wrap: balance; }
 
 /* 배치 (2026-10-06 4차, 시안 B '세로 기기 + 옆 메뉴'): 왼쪽 제목·모드 메뉴(설명 포함), 가운데 계산기, 오른쪽 기록·키보드.
    휴대폰: 제목 → 모드 줄 → 계산기 → 소개 → 기록 */
-.work { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "h1" "nav" "tool" "lede" "side"; gap: 0; padding-top: 8px; }
+.work { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "h1" "nav" "tool" "side" "lede"; gap: 0; padding-top: 8px; }
 .hero .work > h1 { grid-area: h1; }
 .work > .lede { grid-area: lede; }
 .work > .w-nav { grid-area: nav; }
@@ -150,12 +150,30 @@ h1, h2, h3 { text-wrap: balance; }
   .work .expr { min-height: 44px; }
   .work .result { min-height: 42px; }
 }
+@media (min-width: 900px) and (max-width: 1139px) {
+  .work { grid-template-columns: 170px minmax(0, 440px) minmax(0, 1fr); grid-template-rows: auto auto 1fr;
+    grid-template-areas: "h1 tool side" "lede tool side" "nav tool side"; gap: 0 20px; }
+  .work-mode { grid-template-columns: 170px minmax(0, 1fr); grid-template-areas: "h1 tool" "lede tool" "nav tool"; }
+  .hero .work > h1 { font-size: 25px; }
+  .work .modes small { display: none; }
+  .side { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+}
 @media (min-width: 1140px) {
   .work { grid-template-columns: 220px 450px minmax(0, 1fr); grid-template-rows: auto auto 1fr;
     grid-template-areas: "h1 tool side" "lede tool side" "nav tool side"; gap: 0 24px; }
   .work-mode { grid-template-columns: 220px minmax(0, 1fr); grid-template-areas: "h1 tool" "lede tool" "nav tool"; }
-  .work > .tool { max-width: none; }
   .side { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+}
+@media (min-width: 900px) {
+  .work > .tool { max-width: none; }
+  .work .calc-brand { display: none; }
+  .work .calc { padding-top: 12px; }
+  .work .modes a { white-space: normal; }
+  .side .hist-list { max-height: 236px; }
+  .work-mode .chart { max-width: 520px; }
+}
+@media (min-width: 900px) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .work .modes a[aria-current="page"] { background: rgba(139, 109, 255, .16); color: var(--ink); box-shadow: inset 3px 0 0 var(--accent); }
 }
 @media (max-width: 899px) {
   .hero .work > h1 { font-size: 22px; margin: 0; letter-spacing: -0.03em; }
@@ -164,7 +182,8 @@ h1, h2, h3 { text-wrap: balance; }
 }
 @media (max-width: 600px) {
   .hero { padding: 0 0 18px; }
-  .work .modes { margin: 10px -16px 12px; padding: 0 16px 2px; -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); }
+  .work .modes { margin: 10px -16px 12px; padding: 0 16px 2px; }
+  .work .modes.more-r { -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); }
   .work > .tool .calc { margin: 0 -10px; padding: 10px 8px 12px; }
   .work .keys-n .k { min-height: 56px; }
   .work .keys-n .k .kl { font-size: 22px; }
