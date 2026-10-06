@@ -23,9 +23,10 @@
       "sub": "SetNote",
       "kind": {"ko": "브라우저로 여는 앱 <span aria-hidden=\"true\">·</span> <span class=\"nw\">홈 화면에 추가</span>", "en": "Opens in your browser <span aria-hidden=\"true\">·</span> <span class=\"nw\">add it to your Home Screen</span>"},
       "line": {"ko": "루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.", "en": "Save your routines and log every set with last time’s weight and reps beside it."},
+      "url": "https://setnote.lumenlab.page/",
       "links": [
-        {"href": "/setnote/", "go": true, "ko": "세트노트 열기", "en": "Open SetNote"},
-        {"href": "/#setnote", "ko": "어떤 앱인지", "en": "What it does"}
+        {"href": "https://setnote.lumenlab.page/app/", "go": true, "ko": "세트노트 열기", "en": "Open SetNote"},
+        {"href": "https://setnote.lumenlab.page/", "ko": "어떤 앱인지", "en": "What it does"}
       ]
     }
   ],

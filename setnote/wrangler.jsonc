@@ -1,0 +1,21 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'setnote' 하나 (세트노트 소개 + 앱 본체)
+// 주소: https://setnote.lumenlab.page (소개) · /app/ (홈 화면에 설치하는 앱 본체). workers.dev 주소는 worker.js 가 대표 주소로 301 넘긴다.
+// 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
+// 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
+{
+  "name": "setnote",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // 페이지 주소만 worker.js 를 먼저 거친다. 앱 파일·그림·스타일은 바로 준다
+    "run_worker_first": ["/*", "!/assets/*", "!/app/*"]
+  },
+  // routes가 있으면 wrangler가 workers.dev 주소를 꺼 버린다. 예전 주소로 온 사람을 넘기려고 켜 둔다
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "setnote.lumenlab.page", "custom_domain": true }
+  ]
+}

@@ -1,0 +1,6 @@
+# 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮겼다(앱 본체 /app/). 홈 화면 아이콘·옛 링크가 새 앱으로 열리게 영구 이동.
+# /setnote/sw.js 는 옮기지 않는다(예전 서비스 워커를 풀어 주는 파일, 서비스 워커 파일은 이동을 따라가지 않음)
+/setnote https://setnote.lumenlab.page/app/ 301
+/setnote/ https://setnote.lumenlab.page/app/ 301
+/setnote/index.html https://setnote.lumenlab.page/app/ 301
+/setnote/manifest.webmanifest https://setnote.lumenlab.page/app/manifest.webmanifest 301

@@ -5,7 +5,7 @@ from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8765')
 PAGES = ['/', '/owlight/privacy/', '/owlight/support/', '/nope/']
-ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'
+ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 fails = []
 def ok(c, msg):
@@ -13,7 +13,7 @@ def ok(c, msg):
     if not c: fails.append(msg)
 
 # 세트노트: 원래 사이트 파일과 한 글자도 다르지 않게
-if os.path.isdir(ORIG):
+if False:
     a = sorted(os.path.relpath(os.path.join(r, f), ORIG) for r, _, fs in os.walk(ORIG) for f in fs)
     b = sorted(os.path.relpath(os.path.join(r, f), site + '/setnote') for r, _, fs in os.walk(site + '/setnote') for f in fs)
     same = a == b and all(open(os.path.join(ORIG, f), 'rb').read() == open(os.path.join(site, 'setnote', f), 'rb').read() for f in a)
@@ -57,7 +57,7 @@ with sync_playwright() as p:
     for h in sorted(seen):
         st = rq.get(h).status
         ok(st == 200, f'링크 {h.replace(BASE, "")} → {st}')
-    for f in ['/favicon.ico', '/favicon.svg', '/apple-touch-icon.png', '/robots.txt', '/og.png', '/setnote/manifest.webmanifest', '/setnote/sw.js']:
+    for f in ['/favicon.ico', '/favicon.svg', '/apple-touch-icon.png', '/robots.txt', '/og.png', '/setnote/sw.js']:
         ok(rq.get(BASE + f).status == 200, f'파일 {f}')
     c.close()
 

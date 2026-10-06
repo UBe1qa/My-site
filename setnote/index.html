@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-i18n="docTitle">세트노트 · 지난번 기록을 보며 적는 헬스 기록 앱</title>
+<meta name="description" content="세트노트는 헬스 기록 웹앱이에요. 루틴을 저장해 두고, 세트마다 지난번 무게와 횟수를 옆에 보면서 기록해요. 쉬는 시간 타이머, 운동별 최고 무게와 추정 1RM, 홈 화면에 추가하면 인터넷 없이도 열려요. 가입 없이 바로.">
+<link rel="canonical" href="https://setnote.lumenlab.page/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="세트노트 SetNote">
+<meta property="og:title" content="세트노트 · 지난번 기록을 보며 적는 헬스 기록 앱">
+<meta property="og:description" content="루틴을 저장해 두고, 세트마다 지난번 무게와 횟수를 옆에 보면서 기록해요. 가입 없이 바로.">
+<meta property="og:url" content="https://setnote.lumenlab.page/">
+<meta property="og:image" content="https://setnote.lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0B09" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/app/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/app/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script>
+/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기는 body 끝의 i18n.js */
+(function(d){var l;try{l=localStorage.getItem('setnote-site:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+/* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 늘 보이게 */
+(function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"세트노트","alternateName":"SetNote","url":"https://setnote.lumenlab.page/","applicationCategory":"HealthApplication","operatingSystem":"Any","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="세트노트 처음으로" data-i18n-aria="brandLabel">
+      <img src="/icon.webp" width="30" height="30" alt="">
+      <span data-i18n="brand">세트노트</span>
+    </a>
+    <nav aria-label="이 페이지" data-i18n-aria="navLabel">
+      <a class="nav-sec" href="#features" data-i18n="navFeatures">기능</a>
+      <a class="nav-sec" href="#install" data-i18n="navInstall">설치와 기록</a>
+      <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <p class="kicker rv" data-i18n="heroKicker">헬스 기록 앱</p>
+        <h1 id="hero-title" class="rv" data-i18n="heroTitle">지난번 기록을 <span class="nw">옆에 두고</span> <span class="nw">이번 세트를 적어요</span></h1>
+        <p class="lead rv" data-i18n="heroLead">루틴을 저장해 두고, 운동할 때 불러와요. 세트마다 지난번 무게와 횟수가 바로 옆에 있어서, 오늘 얼마나 더 들지 고민하지 않아도 돼요.</p>
+        <p class="cta rv"><a class="btn btn--go" href="/app/" data-i18n="open">세트노트 열기</a><span class="cta__note" data-i18n="ctaNote">가입 없이 바로 · 휴대폰 브라우저에서</span></p>
+      </div>
+      <figure class="log rv" aria-label="세트 기록 화면 예시" data-i18n-aria="logLabel">
+        <span class="log__tag" data-i18n="example">예시</span>
+        <div class="log__head"><b data-i18n="bench">벤치프레스</b><span data-i18n="lastToday">지난번 → 오늘</span></div>
+        <ol class="sets">
+          <li class="setrow"><span class="setrow__n">1</span><span class="setrow__prev">60kg × 10</span><span class="setrow__now">60kg × 10</span></li>
+          <li class="setrow"><span class="setrow__n">2</span><span class="setrow__prev">60kg × 8</span><span class="setrow__now">60kg × 9</span></li>
+          <li class="setrow"><span class="setrow__n">3</span><span class="setrow__prev">60kg × 6</span><span class="setrow__now">60kg × 8</span></li>
+        </ol>
+        <figcaption data-i18n="logCap">칠해진 칸이 오늘 적은 기록이에요</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="feats" id="features" aria-labelledby="feats-title">
+    <div class="wrap">
+      <p class="kicker" data-i18n="ftKicker">기능</p>
+      <h2 id="feats-title" class="sec-title" data-i18n="ftTitle">운동하는 동안 필요한 것만</h2>
+      <ul class="cards">
+        <li class="card rv">
+          <span class="card__n">01</span>
+          <h3 data-i18n="f1">루틴을 저장해 두기</h3>
+          <p data-i18n="f1d">자주 하는 운동 순서를 루틴으로 만들어 두고, 운동할 때 한 번에 불러와요. 추천 루틴에서 골라 시작해도 돼요.</p>
+        </li>
+        <li class="card rv">
+          <span class="card__n">02</span>
+          <h3 data-i18n="f2">지난번과 바로 비교</h3>
+          <p data-i18n="f2d">세트마다 지난번 무게와 횟수가 옆에 보여요. 오늘 기록이 지난번보다 늘었는지 그 자리에서 알 수 있어요.</p>
+        </li>
+        <li class="card rv">
+          <span class="card__n">03</span>
+          <h3 data-i18n="f3">세트 사이 쉬는 시간</h3>
+          <p data-i18n="f3d">세트를 끝내면 쉬는 시간이 흘러가요. 끝날 때 소리로 알려 주게 켤 수도 있어요.</p>
+        </li>
+        <li class="card rv">
+          <span class="card__n">04</span>
+          <h3 data-i18n="f4">쌓이는 기록 보기</h3>
+          <p data-i18n="f4d">끝낸 운동은 날짜별로 쌓여요. 운동마다 최고 무게와 추정 1RM, 이번 주 볼륨과 연속 운동도 볼 수 있어요.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="install" id="install" aria-labelledby="install-title">
+    <div class="wrap install__in">
+      <div>
+        <p class="kicker" data-i18n="inKicker">설치와 기록</p>
+        <h2 id="install-title" class="sec-title" data-i18n="inTitle">앱스토어 없이 <span class="nw">홈 화면에 두고 써요</span></h2>
+        <p class="sec-lead" data-i18n="inLead">세트노트는 브라우저로 여는 앱이에요. 휴대폰에서 열고 홈 화면에 추가하면 앱처럼 아이콘이 생기고, 헬스장에 인터넷이 안 돼도 열려요.</p>
+      </div>
+      <ul class="facts">
+        <li data-i18n="fact1"><b>홈 화면에 추가하면</b> 인터넷이 없어도 열려요</li>
+        <li data-i18n="fact2"><b>기록은 이 기기에만</b> 저장되고, 서버로 보내지 않아요</li>
+        <li data-i18n="fact3"><b>백업 파일로</b> 내보내고 가져와서 다른 기기로 옮겨요</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="end" aria-labelledby="end-title">
+    <div class="wrap end__in">
+      <img src="/app/icons/icon-192.png" width="72" height="72" alt="" loading="lazy">
+      <h2 id="end-title" data-i18n="endTitle">오늘 운동부터 적어 볼까요</h2>
+      <p><a class="btn btn--go" href="/app/" data-i18n="open">세트노트 열기</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><span data-i18n="madeBy">만든 곳</span> <a href="https://lumenlab.page/">Lumen Lab(<span lang="ko">루멘랩</span>)</a> <span aria-hidden="true">·</span> <span data-i18n="sole">개인사업자</span></p>
+    <p><span data-i18n="ask">문의</span> <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+    <p>© 2026 Lumen Lab</p>
+  </div>
+</footer>
+<script src="/assets/i18n.js"></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

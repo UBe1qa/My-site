@@ -7,7 +7,7 @@ LIVE=https://lumenlab.mysitebox.workers.dev
 if [ "$1" = live ]; then
   for i in $(seq 1 40); do
     bad=0
-    for f in / /assets/site.css /assets/home.css /assets/site.js /owlight/privacy/ /owlight/support/ /setnote/ /setnote/sw.js; do
+    for f in / /assets/site.css /assets/home.css /assets/site.js /owlight/privacy/ /owlight/support/ /setnote/sw.js /_redirects; do
       local=".$f"; case "$f" in */) local=".${f}index.html";; esac
       curl -sL "$LIVE$f" -o /tmp/lumen_live 2>/dev/null
       cmp -s /tmp/lumen_live "$local" || { bad=1; echo "아직 다름: $f"; }
