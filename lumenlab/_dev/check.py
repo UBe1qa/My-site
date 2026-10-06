@@ -43,6 +43,8 @@ with sync_playwright() as p:
             sw = pg.evaluate('document.documentElement.scrollWidth')
             ok(sw <= w, f'{path} {w}px 가로 넘침 없음 ({sw})')
             ok(not errs, f'{path} {w}px 콘솔 오류 0 {errs[:2]}')
+            left = pg.evaluate(r"(document.body.innerText.match(/\\[0-9]|\{\{|\$\{|undefined|NaN/g)||[]).slice(0,3)")
+            ok(not left, f'{path} {w}px 화면 글에 자리표시자(\\1, {{{{, ${{, undefined) 없음 {left}')
             if w == 1366:
                 # 끝까지 내렸다 올라와 lazy 사진까지 부른 뒤 깨진 사진 세기
                 pg.evaluate('async()=>{for(let y=0;y<document.body.scrollHeight;y+=300){scrollTo(0,y);await new Promise(r=>setTimeout(r,40))}scrollTo(0,0)}'); pg.wait_for_timeout(300)

@@ -43,7 +43,7 @@ def app_card(it, n):
 
 def tool_card(it):
     a, line = t(f"c_{it['id']}_line", it['line'])
-    host = re.sub(r'^https?://([^/]+).*$', r'\\1', it['url'])
+    host = re.match(r'https?://([^/]+)', it['url']).group(1)
     return '\n'.join([
         '        <li class="tool rv">',
         f'          <a class="tool__a" href="{it["url"]}">',
@@ -188,13 +188,19 @@ def to_en(page, path):
     page = page.replace('<a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>English</a>', '<a class="lang" href="/" hreflang="ko" lang="ko" data-other-lang>한국어</a>')
     return page
 
+LEFT = re.compile(r'\\[0-9]|\{\{|\$\{|\{[a-z_]+\[')  # 치환·템플릿 자리표시자가 글자로 남은 것(예: \\1, {{, ${)
+def no_left(page, where):
+    body = re.sub(r'<script\b.*?</script>', '', page, flags=re.S)
+    m = LEFT.search(body); assert not m, f'{where}: 자리표시자가 그대로 남음 {body[max(0, m.start()-40):m.end()+20]!r}'
+
 def write_en(path, page):
-    page = to_en(page, path)
+    page = to_en(page, path); no_left(page, path)
     if path != 'en/':  # 목록 페이지의 '한국어' 단추는 같은 목록의 한국어 쪽으로
         page = page.replace('<a class="lang" href="/" hreflang="ko"', f'<a class="lang" href="/{path[3:]}" hreflang="ko"')
     d = os.path.join(site, path); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, 'index.html'), 'w').write(page)
 
+no_left(open(idx).read(), 'index.html')
 write_en('en/', open(idx).read())
 for kind, en_t, page in lists:
     page = page.replace('<a class="lang" href="/en/" hreflang="en"', f'<a class="lang" href="/en/{kind}/" hreflang="en"')
