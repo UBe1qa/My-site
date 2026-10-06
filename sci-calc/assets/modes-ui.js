@@ -431,7 +431,7 @@ function eqUI() {
           if (parts.length > 2) throw SC.synErr('eq');
           var L_ = SC.parseRow(SC.parseText(parts[0])), R_ = parts.length === 2 && parts[1].trim() ? SC.parseRow(SC.parseText(parts[1])) : null;
           var f = function (x) {
-            var e2 = Object.create(env); e2.x = SC.F(x);
+            var e2 = Object.create(env || SC.defaultEnv()); e2.x = SC.F(x);
             var a = SC.toNum(SC.evaluate(L_, e2)), b = R_ ? SC.toNum(SC.evaluate(R_, e2)) : 0;
             return a - b;
           };
@@ -661,30 +661,69 @@ function tableUI() {
       out.appendChild(br);
     } catch (e) { showErr(out, e); }
   }
+  // 그래프: 표 간격과 따로 화면 폭에 맞춰 촘촘히(약 2px마다) 계산해 매끄러운 곡선으로. 표 값은 점으로 표시.
+  // 끊긴 곳(정의역 밖, 1/x·tan x 점근선)은 선을 잇지 않는다. 계산이 오래 걸리면(적분 등) 표 점만 잇는다.
   function chart(rows) {
-    var NS = 'http://www.w3.org/2000/svg', w = 320, h = 160, pad = 8;
-    var pts = { f: [], g: [] }, xs = [], ys = [];
+    var NS = 'http://www.w3.org/2000/svg';
+    var w = Math.round(Math.max(280, Math.min(1000, (root.clientWidth - 28) || 320))), h = Math.round(Math.max(170, Math.min(320, w * 0.42))), pad = 10;
+    var keys = st.g.trim() ? ['f', 'g'] : ['f'];
+    var tbl = { f: [], g: [] }, xs = [], ys = [];
     rows.forEach(function (r) {
       var x = SC.toNum(r.x); xs.push(x);
-      ['f', 'g'].forEach(function (k) { var v = r[k]; if (v && !v.error && !SC.isC(v)) { var y = SC.toNum(v); if (isFinite(y)) { pts[k].push([x, y]); ys.push(y); } } });
+      keys.forEach(function (k) { var v = r[k]; if (v && !v.error && !SC.isC(v)) { var y = SC.toNum(v); if (isFinite(y)) { tbl[k].push([x, y]); ys.push(y); } } });
     });
     var svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h); svg.setAttribute('class', 'chart'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'f(x)');
     if (!ys.length) return svg;
-    ys.sort(function (a, b) { return a - b; });
     var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
-    // 너무 큰 값 하나가 그래프를 납작하게 만들지 않게 5%~95% 범위로
+    // 촘촘한 점 (x 는 소수로 계산: 빠르고, 그리기에는 충분히 정확)
+    var fns = { f: SC.parseRow(SC.parseText(st.f.trim())), g: st.g.trim() ? SC.parseRow(SC.parseText(st.g.trim())) : null };
+    var N = x1 > x0 ? Math.round((w - 2 * pad) / 2) : 0, dense = { f: [], g: [] }, t0 = Date.now(), slow = false;
+    for (var i = 0; i <= N && !slow; i++) {
+      var x = x0 + (x1 - x0) * i / N, e2 = Object.create(env || SC.defaultEnv()); e2.x = SC.F(x);
+      keys.forEach(function (k) {
+        var y = NaN;
+        try { var v = SC.evaluate(fns[k], e2); if (!SC.isC(v)) y = SC.toNum(v); } catch (e) {}
+        dense[k].push([x, isFinite(y) ? y : NaN]);
+      });
+      if (Date.now() - t0 > 250) slow = true;
+    }
+    var src = slow || !N ? tbl : dense;
+    // 세로 범위: 표 값 기준(너무 큰 값 하나가 그래프를 납작하게 만들지 않게 2%~98%), 촘촘한 점은 그 안에서만 넓힘
+    ys.sort(function (a, b) { return a - b; });
     var lo = ys[Math.floor(ys.length * 0.02)], hi = ys[Math.ceil(ys.length * 0.98) - 1];
+    if (src === dense && ys.length >= 4) {
+      var dy = []; keys.forEach(function (k) { dense[k].forEach(function (p) { if (isFinite(p[1])) dy.push(p[1]); }); });
+      dy.sort(function (a, b) { return a - b; });
+      var dlo = dy[Math.floor(dy.length * 0.02)], dhi = dy[Math.ceil(dy.length * 0.98) - 1], span = (hi - lo) || 1;
+      if (dlo < lo) lo = Math.max(dlo, lo - span * 0.5);
+      if (dhi > hi) hi = Math.min(dhi, hi + span * 0.5);
+    }
     if (hi === lo) { hi += 1; lo -= 1; }
+    var m = (hi - lo) * 0.06; hi += m; lo -= m;
     var X = function (x) { return pad + (x - x0) / ((x1 - x0) || 1) * (w - 2 * pad); }, Y = function (y) { return h - pad - (y - lo) / (hi - lo) * (h - 2 * pad); };
     function line(x1_, y1_, x2_, y2_) { var l = document.createElementNS(NS, 'line'); l.setAttribute('x1', x1_); l.setAttribute('y1', y1_); l.setAttribute('x2', x2_); l.setAttribute('y2', y2_); l.setAttribute('class', 'ax'); svg.appendChild(l); }
     if (lo < 0 && hi > 0) line(pad, Y(0), w - pad, Y(0));
     if (x0 < 0 && x1 > 0) line(X(0), pad, X(0), h - pad);
-    ['f', 'g'].forEach(function (k) {
-      if (pts[k].length < 2) return;
-      var p = document.createElementNS(NS, 'polyline');
-      p.setAttribute('points', pts[k].map(function (a) { return X(a[0]).toFixed(1) + ',' + Math.max(-10, Math.min(h + 10, Y(a[1]))).toFixed(1); }).join(' '));
-      p.setAttribute('class', k === 'f' ? 'lf' : 'lg'); svg.appendChild(p);
+    var top = -h, bot = 2 * h;
+    keys.forEach(function (k) {
+      var pts = src[k], d = '', pen = false, prev = null;
+      pts.forEach(function (p) {
+        if (!isFinite(p[1])) { pen = false; prev = null; return; }
+        var py = Y(p[1]);
+        // 점근선: 화면 위쪽 밖과 아래쪽 밖을 바로 건너뛰면 잇지 않는다
+        if (prev !== null && ((prev < 0 && py > h) || (prev > h && py < 0))) pen = false;
+        d += (pen ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Math.max(top, Math.min(bot, py)).toFixed(1);
+        pen = true; prev = py;
+      });
+      if (!d) return;
+      var path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d); path.setAttribute('class', k === 'f' ? 'lf' : 'lg'); svg.appendChild(path);
+      if (src === dense && tbl[k].length <= 60) tbl[k].forEach(function (p) {
+        var py = Y(p[1]); if (py < 0 || py > h) return;
+        var c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', X(p[0]).toFixed(1)); c.setAttribute('cy', py.toFixed(1)); c.setAttribute('r', 3);
+        c.setAttribute('class', k === 'f' ? 'pt' : 'pt pg'); svg.appendChild(c);
+      });
     });
     return svg;
   }
