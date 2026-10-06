@@ -1,0 +1,47 @@
+/* 시안 D '스튜디오' — 따뜻한 미색 + 공업 디자인 계산기(밝은 몸체, 어두운 화면, 주황 =) */
+:root {
+  --bg: #f4f1ea; --card: #fffdf8; --ink: #1f1d1a; --ink-2: #3a3732; --muted: #6f6a61; --line: #e6e0d4; --line-2: #d6cfc1;
+  --main: #1f1d1a; --main-ink: #fffdf8; --main-soft: #ece6da; --link: #b84300;
+  --accent: #f25c05; --accent-ink: #ffffff;
+  --hero: #ebe5d9; --hero-ink: #1f1d1a; --hero-2: #5d584f;
+  --body: #e4ded2; --body-2: #d6cfc1; --body-ink: #2b2925;
+  --screen: #2b2a27; --screen-ink: #f6f1e4; --screen-line: #4a4741; --screen-muted: #b3ac9e;
+  --fkey: #34322e; --fkey-ink: #f6f1e4; --fkey-shadow: #151412;
+  --nkey: #fbf9f4; --nkey-ink: #1f1d1a; --key-shadow: #b9b1a2;
+  --opkey: #cbc4b6; --opkey-ink: #1f1d1a;
+  --eqkey: #f25c05; --eqkey-ink: #ffffff; --eqkey-shadow: #a63c00;
+  --ackey: #d9452b; --ackey-ink: #ffffff; --ackey-shadow: #8f2a18;
+  --shift: #e8a317; --cursor: #f6f1e4;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #131210; --card: #1c1b18; --ink: #f2ede2; --ink-2: #d4cec2; --muted: #a29c90; --line: #2b2925; --line-2: #3a3833;
+  --main: #f2ede2; --main-ink: #131210; --main-soft: #2b2925; --link: #ff8a3d;
+  --accent: #ff7a2e; --accent-ink: #131210;
+  --hero: #1b1a17; --hero-ink: #f2ede2; --hero-2: #b8b1a4;
+  --body: #2b2925; --body-2: #1f1d1a; --body-ink: #f2ede2;
+  --screen: #0f0e0d; --screen-ink: #f6f1e4; --screen-line: #34322e; --screen-muted: #9a9385;
+  --fkey: #1c1b19; --fkey-ink: #f2ede2; --fkey-shadow: #000;
+  --nkey: #46433d; --nkey-ink: #f6f1e4; --key-shadow: #0f0e0d;
+  --opkey: #5a564f; --opkey-ink: #f6f1e4;
+  --eqkey: #ff7a2e; --eqkey-ink: #131210; --eqkey-shadow: #a63c00;
+  --cursor: #ff7a2e;
+}}
+.hero, .top-band, .page-head { background-color: var(--hero); background-image: radial-gradient(1200px 500px at 85% 10%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%); }
+.top-band { background-image: none; }
+.hero h1 { font-weight: 850; letter-spacing: -0.05em; }
+.hero .lede b { background: var(--accent); color: var(--accent-ink); }
+.modes a[aria-current="page"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.hero-points .dot { background: var(--accent); border-radius: 50%; }
+.calc { border: 1px solid color-mix(in srgb, var(--body-ink) 10%, transparent); box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 40px 70px -35px rgba(60, 40, 10, .55); }
+.calc-brand span:first-child::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; }
+.screen { box-shadow: inset 0 3px 8px rgba(0,0,0,.45); }
+.acts button { background: color-mix(in srgb, var(--body-ink) 10%, transparent); color: var(--body-ink); }
+.acts .starter { color: color-mix(in srgb, var(--body-ink) 60%, transparent); }
+.acts .starter button { background: var(--accent); color: #fff; }
+.k.shift { color: #2b1d00; box-shadow: 0 3px 0 #a87400; }
+.keys-n .k .ks { color: #b35a00; }
+.answer { border-left-color: var(--accent); }
+.prose a.try { color: #fff; background: var(--accent); }
+.lm-b { fill: var(--hero-ink); } .lm-s { fill: var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .calc { box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 40px 70px -35px rgba(0,0,0,.8); }
+  :root:not([data-theme="light"]) .keys-n .k .ks { color: #ffb36b; } }

@@ -1,0 +1,45 @@
+/* 시안 F '민트 문구점' — 민트 바탕 + 네이비 계산기 + 복숭아·민트 키 (학생용 컬러 계산기 느낌) */
+:root {
+  --bg: #f6f9f8; --card: #ffffff; --ink: #10233f; --ink-2: #263b5c; --muted: #5d6b80; --line: #e2e9ec; --line-2: #ccd8dd;
+  --main: #10233f; --main-ink: #ffffff; --main-soft: #e3f4ec; --link: #0f7a55;
+  --accent: #ff7a59; --accent-ink: #ffffff;
+  --hero: #d6f1e4; --hero-ink: #10233f; --hero-2: #3a5068;
+  --body: #14294b; --body-2: #0e1f3a; --body-ink: #eaf2ff;
+  --screen: #e4f5ec; --screen-ink: #10233f; --screen-line: #b5d9c6; --screen-muted: #4a6a5a;
+  --fkey: #22406d; --fkey-ink: #ffffff; --fkey-shadow: #0a1830;
+  --nkey: #ffffff; --nkey-ink: #10233f; --key-shadow: #8ea3c2;
+  --opkey: #ffd9c9; --opkey-ink: #8a2e12;
+  --eqkey: #33d39a; --eqkey-ink: #062a1c; --eqkey-shadow: #1a9468;
+  --ackey: #ff7a59; --ackey-ink: #ffffff; --ackey-shadow: #c24a2c;
+  --shift: #ffc93c; --cursor: #10233f;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0a1220; --card: #111c30; --ink: #e8f1ff; --ink-2: #c3d2ea; --muted: #8fa1bd; --line: #1d2a42; --line-2: #2a3a57;
+  --main: #5fe3b2; --main-ink: #0a1220; --main-soft: #13302a; --link: #5fe3b2;
+  --accent: #ff8a6b; --accent-ink: #0a1220;
+  --hero: #0e2a2a; --hero-ink: #dff8ee; --hero-2: #9fc4b8;
+  --body: #13223f; --body-2: #0d1830; --body-ink: #eaf2ff;
+  --screen: #0d2a22; --screen-ink: #dff8ee; --screen-line: #1d4a3c; --screen-muted: #8fc2ae;
+  --fkey: #1f3760; --nkey: #e9eef7; --key-shadow: #050c18; --opkey: #f2b9a3;
+  --cursor: #5fe3b2;
+}}
+.hero, .page-head { background-color: var(--hero); background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--hero-ink) 14%, transparent) 1.2px, transparent 1.6px); background-size: 22px 22px; }
+.hero h1 { font-weight: 900; letter-spacing: -0.05em; }
+.hero h1::after { content: ""; display: block; width: 84px; height: 8px; border-radius: 8px; margin-top: 10px; background: linear-gradient(90deg, var(--accent) 0 50%, #33d39a 50% 100%); }
+.hero .lede b { background: var(--accent); color: #fff; }
+.modes a { background: color-mix(in srgb, #ffffff 60%, transparent); border-color: color-mix(in srgb, var(--hero-ink) 14%, transparent); }
+.modes a[aria-current="page"] { background: var(--hero-ink); color: var(--hero); border-color: var(--hero-ink); }
+.hero-points .dot { background: var(--accent); border-radius: 50%; }
+.hero-points li:nth-child(2) .dot { background: #33d39a; } .hero-points li:nth-child(3) .dot { background: #ffc93c; }
+.calc { box-shadow: 0 1px 0 rgba(255,255,255,.18) inset, 0 36px 70px -30px rgba(16, 35, 63, .65); }
+.acts button { background: rgba(255,255,255,.12); }
+.acts .starter button { background: #33d39a; color: #062a1c; }
+.k.shift { color: #3a2a00; box-shadow: 0 3px 0 #b8880a; }
+.keys-n .k .ks { color: #d0501f; }
+.answer { border-left-color: #33d39a; }
+.prose a.try { color: #062a1c; background: #33d39a; }
+.lm-b { fill: var(--hero-ink); } .lm-s { fill: #33d39a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .modes a { background: rgba(255,255,255,.05); }
+  :root:not([data-theme="light"]) .keys-n .k .ks { color: #c2481c; }
+  :root:not([data-theme="light"]) .modes a[aria-current="page"] { background: var(--hero-ink); color: var(--hero); border-color: var(--hero-ink); }
+}

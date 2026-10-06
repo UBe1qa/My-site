@@ -1,19 +1,19 @@
 /* 공학용 계산기 — 공통 모양. 색·글꼴·모서리는 :root 토큰에만. */
-/* 디자인: 시안 C '형광 포스터' (라임 첫 화면 + 검은 계산기). 2026-10-06 시안 A(모눈 노트)·B(파란 기기)와 비교해 골랐다 */
+/* 디자인: 시안 E '오로라' (보라·하늘·분홍 번짐 바탕 + 반투명 유리 계산기). 2026-10-06 2차 디자인 */
 :root {
-  --bg: #f6f7f2; --card: #ffffff; --ink: #101214; --ink-2: #2c3036; --muted: #5f6570; --line: #e3e6dc; --line-2: #cfd4c4;
-  --main: #101214; --main-ink: #d8ff3e; --main-soft: #ecf6c8; --link: #3a5a00;
-  --accent: #101214; --accent-ink: #d8ff3e;
-  --hero: #d8ff3e; --hero-ink: #101214; --hero-2: #2c3315;
-  --body: #15171b; --body-2: #0d0f12; --body-ink: #f2f4f7;
-  --screen: #e9f2d8; --screen-ink: #101214; --screen-line: #b9c79a; --screen-muted: #4d5a35;
-  --key: #f2f4f7; --key-ink: #101214; --key-shadow: #8a8f98;
-  --fkey: #2a2e35; --fkey-ink: #f2f4f7; --fkey-shadow: #000000;
-  --nkey: #f2f4f7; --nkey-ink: #101214;
-  --opkey: #3a3f48; --opkey-ink: #ffffff;
-  --eqkey: #d8ff3e; --eqkey-ink: #101214; --eqkey-shadow: #8db500;
-  --ackey: #ff5a3c; --ackey-ink: #ffffff; --ackey-shadow: #a8321c;
-  --shift: #ffb020; --cursor: #101214;
+  --bg: #f7f7fc; --card: #ffffff; --ink: #15132b; --ink-2: #2f2c4d; --muted: #66638a; --line: #e7e5f3; --line-2: #d7d3ec;
+  --main: #5b3df5; --main-ink: #ffffff; --main-soft: #efebff; --link: #5b3df5;
+  --accent: #6d4aff; --accent-ink: #ffffff;
+  --hero: #f1efff; --hero-ink: #15132b; --hero-2: #4c4870;
+  --body: rgba(255, 255, 255, .66); --body-2: #ffffff; --body-ink: #15132b;
+  --screen: #f4f2ff; --screen-ink: #15132b; --screen-line: #d8d1ff; --screen-muted: #6b65a6;
+  --key: #f2f4f7; --key-ink: #101214; --key-shadow: #d9d6ec;
+  --fkey: #eceaf8; --fkey-ink: #2a2650; --fkey-shadow: #cfcbe6;
+  --nkey: #ffffff; --nkey-ink: #15132b;
+  --opkey: #e6e0ff; --opkey-ink: #4b2fe0;
+  --eqkey: #6d4aff; --eqkey-ink: #ffffff; --eqkey-shadow: #3d22b8;
+  --ackey: #ff5d7a; --ackey-ink: #ffffff; --ackey-shadow: #c23452;
+  --shift: #ff8a3d; --cursor: #6d4aff;
   --err: #c2321f; --err-bg: #fff0ec;
   --radius: 18px; --kr: 10px;
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
@@ -22,16 +22,21 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e1012; --card: #181b1f; --ink: #eef1f4; --ink-2: #c9cdd4; --muted: #99a0aa; --line: #262a30; --line-2: #363b43;
-    --main: #d8ff3e; --main-ink: #101214; --main-soft: #262d12; --link: #d8ff3e;
-    --accent: #d8ff3e; --accent-ink: #101214;
-    --hero: #1b2008; --hero-ink: #f2ffc2; --hero-2: rgba(236, 248, 200, .82);
-    --body: #1d2026; --body-2: #121418;
-    --screen: #1f2617; --screen-ink: #e6f0d8; --screen-line: #3a4632; --screen-muted: #a5b28f;
-    --fkey: #2e333b; --nkey: #e6e9ee; --opkey: #424852; --key-shadow: #000000;
-    --cursor: #d8ff3e;
+    --bg: #0b0a16; --card: #15132a; --ink: #eeecff; --ink-2: #cfcbf2; --muted: #9a96c4; --line: #232042; --line-2: #322e5a;
+    --main: #a48dff; --main-ink: #0b0a16; --main-soft: #221d48; --link: #b6a4ff;
+    --accent: #8b6dff; --accent-ink: #ffffff;
+    --hero: #0f0d22; --hero-ink: #f1efff; --hero-2: #b5b0dc;
+    --body: rgba(28, 25, 56, .62); --body-2: #15132a;
+    --screen: #120f2a; --screen-ink: #eeecff; --screen-line: #2f2a5e; --screen-muted: #9f98d8;
+    --fkey: #26224a; --nkey: #343062; --opkey: #3b2f86; --key-shadow: #0b0a16;
+    --cursor: #a48dff;
     --err: #ff8a73; --err-bg: #3a1d17;
     color-scheme: dark;
+    --body-ink: #eeecff;
+    --fkey-ink: #eeecff;
+    --fkey-shadow: #0b0a16;
+    --nkey-ink: #ffffff;
+    --opkey-ink: #e3dbff;
   }
 }
 * { box-sizing: border-box; }
@@ -388,25 +393,45 @@ h1, h2, h3 { text-wrap: balance; }
   .keys-n .k { min-height: 50px; }
 }
 
-/* 시안 C 모양 */
-.hero h1 { font-size: clamp(34px, 9vw, 64px); letter-spacing: -0.045em; font-weight: 900; }
-.hero .lede b { background: var(--hero-ink); color: var(--hero); padding: 0 4px; border-radius: 4px; }
-.modes a { background: color-mix(in srgb, var(--hero-ink) 7%, transparent); border-color: color-mix(in srgb, var(--hero-ink) 25%, transparent); color: var(--hero-ink); }
-.modes a:hover { background: color-mix(in srgb, var(--hero-ink) 14%, transparent); }
-.modes a[aria-current="page"] { background: var(--hero-ink); color: var(--hero); border-color: var(--hero-ink); }
-.hero-points .dot { background: var(--hero-ink); }
-.calc { box-shadow: 0 30px 60px -25px rgba(0, 0, 0, .6); }
-.hero .kbd-help .kbd { background: color-mix(in srgb, var(--hero-ink) 8%, transparent); border-color: color-mix(in srgb, var(--hero-ink) 30%, transparent); color: var(--hero-ink); }
-.acts button { background: rgba(255, 255, 255, .1); }
-.answer { border-left-color: #a6cc00; }
+/* 시안 E 모양 (2026-10-06 2차: 라임 단색이 촌스럽다는 의견으로 D 스튜디오·F 민트와 비교) */
 .prose a, .faq a, .foot a { color: var(--link); }
-.prose a.try { color: var(--main-ink); }
-.prose a.try:hover { filter: brightness(1.15); }
+.prose a.try:hover { filter: brightness(1.1); }
 .prose th, .prose td:first-child { white-space: nowrap; }
 .page-head a, .crumbs a { color: inherit; }
-.lm-b { fill: var(--hero-ink); }
-.lm-s { fill: var(--hero); }
-.keys-n .k .ks { color: #b35f00; }
+.hero, .page-head { background-color: var(--hero); background-image:
+  radial-gradient(520px 380px at 12% 18%, rgba(160, 130, 255, .55), transparent 70%),
+  radial-gradient(520px 360px at 88% 6%, rgba(110, 200, 255, .5), transparent 70%),
+  radial-gradient(620px 420px at 62% 105%, rgba(255, 150, 200, .5), transparent 70%); }
+.top-band { background: transparent; position: relative; z-index: 3; }
+body:has(.hero) .top-band, body:has(.page-head) .top-band { background: color-mix(in srgb, var(--hero) 70%, transparent); backdrop-filter: blur(10px); }
+.hero h1 { font-weight: 850; letter-spacing: -0.05em; background: linear-gradient(100deg, var(--hero-ink) 30%, #6d4aff 75%, #e0459b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .lede b { background: linear-gradient(100deg, #6d4aff, #e0459b); color: #fff; }
+.modes a { background: color-mix(in srgb, #ffffff 55%, transparent); border-color: color-mix(in srgb, var(--hero-ink) 10%, transparent); backdrop-filter: blur(6px); }
+.modes a[aria-current="page"] { background: var(--hero-ink); color: var(--hero); border-color: var(--hero-ink); }
+.hero-points .dot { background: linear-gradient(135deg, #6d4aff, #e0459b); border-radius: 50%; }
+.calc { background: var(--body); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,.75); box-shadow: 0 40px 80px -30px rgba(70, 40, 180, .45); }
+.screen { box-shadow: inset 0 0 0 1px var(--screen-line); }
+.keys-n .k.eq { background: linear-gradient(135deg, #6d4aff, #e0459b); }
+.acts button { background: color-mix(in srgb, var(--body-ink) 8%, transparent); color: var(--body-ink); }
+.acts .starter { color: var(--muted); }
+.acts .starter button { background: linear-gradient(135deg, #6d4aff, #e0459b); color: #fff; }
+.k.shift { color: #fff; box-shadow: 0 3px 0 #c45a12; }
+.keys-n .k .ks { color: #d0601a; }
+.answer { border-left-color: var(--accent); }
+.prose a.try { color: #fff; background: linear-gradient(135deg, #6d4aff, #e0459b); }
+.lm-b { fill: #6d4aff; } .lm-s { fill: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero, :root:not([data-theme="light"]) .page-head { background-image:
+  radial-gradient(520px 380px at 12% 18%, rgba(110, 70, 255, .45), transparent 70%),
+  radial-gradient(520px 360px at 88% 6%, rgba(30, 120, 220, .38), transparent 70%),
+  radial-gradient(620px 420px at 62% 105%, rgba(220, 60, 150, .35), transparent 70%); }
+  :root:not([data-theme="light"]) .hero h1 { background-image: linear-gradient(100deg, #ffffff 30%, #b6a4ff 70%, #ff8cc6); }
+  :root:not([data-theme="light"]) .modes a { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14); }
+  :root:not([data-theme="light"]) .calc { border-color: rgba(255,255,255,.12); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
+  :root:not([data-theme="light"]) .keys-n .k .ks { color: #ffab6b; }
+  :root:not([data-theme="light"]) .modes a[aria-current="page"] { background: #f1efff; color: #15132b; border-color: #f1efff; }
+}
+
 
 /* ------------------------------------------------ 모드 화면 부품 */
 .mode-ui { display: grid; gap: 12px; align-content: start; }
@@ -455,10 +480,9 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
 .inp { color: var(--ink); }
 
 /* ------------------------------------------------ 처음 화면 예시 칩 + 키 뜻 */
-.acts .starter { display: none; align-items: center; gap: 6px; flex: none; font-size: 12px; color: rgba(255, 255, 255, .62); white-space: nowrap; }
+.acts .starter { display: none; align-items: center; gap: 6px; flex: none; font-size: 12px; white-space: nowrap; }
 .acts.is-start .starter { display: flex; }
 .acts.is-start > button, .acts.is-start .acts-sep { display: none; }
-.acts .starter button { background: #d8ff3e; color: #15171b; }
 .status .st-right a { border: 1px solid var(--screen-line); color: inherit; text-decoration: none; border-radius: 6px; padding: 1px 7px; }
 
 .keyhelp > p { color: var(--muted); margin: 0 0 12px; }
