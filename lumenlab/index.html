@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,6 +8,9 @@
 <!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
 <meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
 <link rel="canonical" href="https://lumenlab.page/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lumen Lab 루멘랩">
 <meta property="og:title" content="Lumen Lab 루멘랩 · 앱과 무료 웹 도구">
@@ -23,8 +26,6 @@
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/home.css">
 <script>
-/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기는 body 끝의 i18n.js */
-(function(d){var l;try{l=localStorage.getItem('lumen:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
 /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
 (function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
 </script>
@@ -33,7 +34,7 @@
 <a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
 <header class="top">
   <div class="wrap top__in">
-    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
       <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
       <span>Lumen Lab <small lang="ko">루멘랩</small></span>
     </a>
@@ -41,7 +42,7 @@
       <a class="nav-cat" href="/#apps" data-i18n="navApps">앱</a>
       <a class="nav-cat" href="/#tools" data-i18n="navTools">웹 도구</a>
       <a href="/#contact" data-i18n="navContact">문의</a>
-      <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
+      <a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>English</a>
     </nav>
   </div>
 </header>
@@ -120,15 +121,15 @@
             <img class="tool__icon" src="/img/daycount.svg" width="48" height="48" alt="" loading="lazy">
             <h3 class="tool__name" data-i18n="c_daycount_name">며칠 계산기 <span class="app__en">Daycount</span></h3>
             <p class="tool__line" data-i18n="c_daycount_line">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.</p>
-            <p class="tool__url"><span>date.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
           </a>
         </li>
         <li class="tool rv">
-          <a class="tool__a" href="https://convert.lumenlab.page/">
+          <a class="tool__a" href="https://convert.lumenlab.page/ko/">
             <img class="tool__icon" src="/img/convert.svg" width="48" height="48" alt="" loading="lazy">
             <h3 class="tool__name" data-i18n="c_inplace_name">인플레이스 <span class="app__en">Inplace</span></h3>
             <p class="tool__line" data-i18n="c_inplace_line">영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.</p>
-            <p class="tool__url"><span>convert.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
           </a>
         </li>
         <li class="tool rv">
@@ -136,7 +137,7 @@
             <img class="tool__icon" src="/img/sci-calc.svg" width="48" height="48" alt="" loading="lazy">
             <h3 class="tool__name" data-i18n="c_scicalc_name">공학용 계산기 <span class="app__en">Scientific Calculator</span></h3>
             <p class="tool__line" data-i18n="c_scicalc_line">분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.</p>
-            <p class="tool__url"><span>calc.lumenlab.page</span><span class="tool__go" aria-hidden="true">→</span></p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
           </a>
         </li>
       </ul>
@@ -163,13 +164,12 @@
     <div class="foot__links">
       <!-- gen:foot -->
       <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
-      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">인플레이스</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a></div>
       <div><b data-i18n="privacy">개인정보 처리방침</b><a href="/owlight/privacy/" data-i18n="f_owlight">Owlight</a></div>
       <!-- /gen:foot -->
     </div>
   </div>
 </footer>
-<script src="/assets/i18n.js"></script>
 <script src="/assets/site.js" defer></script>
 </body>
 </html>

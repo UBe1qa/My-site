@@ -4,7 +4,7 @@ import os, sys, hashlib, re
 from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8765')
-PAGES = ['/', '/owlight/privacy/', '/owlight/support/', '/nope/']
+PAGES = ['/', '/en/', '/owlight/privacy/', '/owlight/support/', '/nope/']
 ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 fails = []
@@ -95,23 +95,37 @@ with sync_playwright() as p:
     ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄')
     c.close()
 
-    # 언어: 영어 브라우저면 영어로, 버튼으로 바꾸면 기억, 방침 페이지는 고른 언어 칸만
+    # 언어: 한국어 / 와 영어 /en/ 은 따로 된 페이지. 자동으로 넘기지 않고 띠로만 알림, 방침 페이지는 #en 이면 영어 칸
+    for path, lang, other in [('/', 'ko', '/en/'), ('/en/', 'en', '/')]:
+        html = open(os.path.join(site, path.strip('/'), 'index.html')).read()
+        alts = dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="https://lumenlab\.page([^"]*)"', html))
+        ok(alts == {'ko': '/', 'en': '/en/', 'x-default': '/en/'}, f'{path} hreflang 짝 {alts}')
+        ok(f'<link rel="canonical" href="https://lumenlab.page{path}">' in html, f'{path} canonical 은 자기 주소')
+        ok(f'<html lang="{lang}"' in html and 'i18n.js' not in html, f'{path} 언어 {lang}, 글 바꾸는 스크립트 없음')
+    sm = open(os.path.join(site, 'sitemap.xml')).read()
+    ok('<loc>https://lumenlab.page/</loc>' in sm and '<loc>https://lumenlab.page/en/</loc>' in sm, 'sitemap 에 / 와 /en/')
     c = br.new_context(viewport={'width': 390, 'height': 844}, locale='en-US'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
-    ok(pg.evaluate("document.documentElement.lang") == 'en', '영어 브라우저는 영어로 열림')
+    ok(pg.evaluate("document.documentElement.lang") == 'ko' and pg.url == BASE + '/', '영어 브라우저도 / 는 한국어 그대로(자동 이동 없음)')
+    ok(pg.locator('.langbar a[href="/en/"]').count() == 1, '영어 브라우저면 영어 페이지 제안 띠')
+    pg.click('.langbar a'); pg.wait_for_timeout(400)
+    ok(pg.url == BASE + '/en/' and pg.evaluate("document.documentElement.lang") == 'en', '띠를 누르면 /en/')
+    ok(pg.locator('.langbar').count() == 0, '/en/ 에선 띠 없음')
     ko_left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
     ok(not ko_left, f'영어 화면에 한국어가 남지 않음 {ko_left}')
     sw = pg.evaluate('document.documentElement.scrollWidth'); ok(sw <= 390, f'영어 390px 가로 넘침 없음 ({sw})')
     lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__title');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
-    pg.click('[data-lang-toggle]'); pg.wait_for_timeout(200)
-    ok(pg.evaluate("document.documentElement.lang") == 'ko' and '만드는 곳' in pg.inner_text('h1'), '버튼으로 한국어로 바뀜')
-    pg.goto(BASE + '/owlight/privacy/'); pg.wait_for_timeout(300)
-    ok(pg.evaluate("document.documentElement.lang") == 'ko', '고른 언어가 다른 페이지에도 이어짐')
+    hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
+    ok(all(h.startswith(('/en/', '#', 'http', 'mailto:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not h.startswith(("/en/", "#", "http", "mailto:"))]}')
+    pg.click('a.lang'); pg.wait_for_timeout(400)
+    ok(pg.url == BASE + '/' and '만드는 곳' in pg.inner_text('h1'), '한국어 단추로 / 로')
+    ok(pg.locator('.langbar').count() == 0, '한국어를 고르면 띠가 다시 안 뜸')
+    pg.goto(BASE + '/owlight/privacy/#en'); pg.wait_for_timeout(300)
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")
-    ok(vis == ['ko:true', 'en:false'], f'방침 페이지는 고른 언어 칸만 {vis}')
-    pg.click('.doc-head nav a[href=\"#en\"]'); pg.wait_for_timeout(200)
+    ok(vis == ['ko:false', 'en:true'], f'방침 #en 이면 영어 칸 {vis}')
+    pg.click('.doc-head nav a[href=\"#ko\"]'); pg.wait_for_timeout(200)
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")
-    ok(vis == ['ko:false', 'en:true'], f'English 누르면 영어 칸 {vis}')
+    ok(vis == ['ko:true', 'en:false'], f'한국어 누르면 한국어 칸 {vis}')
     c.close()
     br.close()
 

@@ -127,6 +127,12 @@
     document.querySelectorAll('source[data-shot]').forEach(function (s) {
       s.setAttribute('srcset', s.getAttribute('srcset').replace(/\/img\/(ko|en)-/g, '/img/' + l + '-'));
     });
+    /* 루멘랩 본페이지는 한국어 / 와 영어 /en/ 이 따로 된 페이지: 고른 언어 쪽으로. 방침·지원(한 주소에 두 언어)은 #en 으로 영어 칸 */
+    document.querySelectorAll('a[href^="https://lumenlab.page/"]').forEach(function (a) {
+      var h = a.getAttribute('href').replace(/#(ko|en)$/, '');
+      if (h === 'https://lumenlab.page/' || h === 'https://lumenlab.page/en/') a.setAttribute('href', 'https://lumenlab.page/' + (l === 'en' ? 'en/' : ''));
+      else if (/\/(privacy|support)\/$/.test(h)) a.setAttribute('href', h + (l === 'en' ? '#en' : ''));
+    });
     root.setAttribute('data-lang', l); root.lang = l;
     var b = document.querySelector('[data-lang-btn]');
     if (b) { b.textContent = l === 'en' ? '한국어' : 'English'; b.setAttribute('lang', l === 'en' ? 'ko' : 'en'); }

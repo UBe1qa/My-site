@@ -122,6 +122,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 /* 언어 버튼 */
 .lang{font:inherit;font-size:15px;font-weight:600;color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:999px;padding:0 14px;min-height:38px;cursor:pointer;margin-left:6px}
 .lang:hover{border-color:var(--muted)}
+a.lang{display:inline-flex;align-items:center;text-decoration:none}
+/* 다른 언어 페이지 제안 띠(site.js) */
+.langbar{background:var(--card,var(--paper));color:var(--ink-2);font-size:14px;border-bottom:1px solid var(--line)}
+.langbar p{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;margin:0;padding-top:6px;padding-bottom:6px}
+.langbar a{color:var(--ink);font-weight:700;text-underline-offset:3px}
+.langbar__x{margin-left:auto;background:none;border:0;color:var(--muted);font-size:20px;line-height:1;width:36px;height:36px;border-radius:8px;cursor:pointer}
+.langbar__x:hover{background:var(--line)}
 /* 방침·지원 페이지: 고른 언어의 칸만 (스크립트가 없으면 둘 다 보임) */
 html[data-lang="en"] .doc section#ko,html[data-lang="ko"] .doc section#en{display:none}
 html[data-lang] .doc section h2{border-top:0;padding-top:20px;margin-top:20px}

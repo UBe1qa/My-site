@@ -412,7 +412,7 @@ HEADER_DOC = """<body class="doc-page">
 
 def foot_en(ko_href="/"):
     return f"""<footer class="foot wrap">
-  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div><script>(function(m){{if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){{if(e[0].isIntersecting){{m.classList.add("in");o.disconnect()}}}},{{threshold:.6}});o.observe(m)}})(document.querySelector(".maker"))</script>
+  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/en/">Visit Lumen Lab →</a></div><script>(function(m){{if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){{if(e[0].isIntersecting){{m.classList.add("in");o.disconnect()}}}},{{threshold:.6}});o.observe(m)}})(document.querySelector(".maker"))</script>
   <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="{ko_href}" hreflang="ko" lang="ko">한국어</a></p>
   <p>© 2026 Lumen Lab</p>
 </footer>
@@ -494,7 +494,7 @@ def about_page():
     <p>Daycount is a free date calculator. It counts the days between two dates, counts down to a date, adds or subtracts days, weeks, months and years, counts business days, finds a date a number of business days away, and works out exact age, anniversaries, the day of the week, ISO week numbers, the time between two moments and the public holidays of a year. There's no sign-up, and the dates you enter are never sent to a server.</p>
 
     <h2>Who makes it</h2>
-    <p>Daycount is made and run by <a href="https://lumenlab.page/">Lumen Lab</a>, a one-person software studio that also makes Owlight, a Mac menu bar app, and SetNote, a workout log web app. The Korean edition of this site is called <a href="/about/" hreflang="ko" lang="ko">며칠 계산기</a>.</p>
+    <p>Daycount is made and run by <a href="https://lumenlab.page/en/">Lumen Lab</a>, a one-person software studio that also makes Owlight, a Mac menu bar app, and SetNote, a workout log web app. The Korean edition of this site is called <a href="/about/" hreflang="ko" lang="ko">며칠 계산기</a>.</p>
 
     <h2>How it calculates</h2>
     <ul>
@@ -568,7 +568,7 @@ def tool_page():
     body = one(r'<ul class="guide-list">.*?</ul>', '<ul class="guide-list">\n' + guide_list() + "\n    </ul>", body)
     body = one(r'(<h2 id="h-faq"[^>]*>[^<]*</h2>\n).*?(\n\s*<div class="ad-slot" data-ad="bottom")', lambda m: m.group(1) + faq_html() + m.group(2), body)
     body = one(r'<footer class="foot wrap">.*?</footer>',
-               '<footer class="foot wrap">\n  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>\n  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · '
+               '<footer class="foot wrap">\n  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/en/">Visit Lumen Lab →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>\n  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · '
                '<a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a></p>\n</footer>', body)
     # 영어 사용자에겐 '시작한 날을 1일째로(한국식)'를 기본으로 끈다: 100일 = 시작일 + 100일
     body = one(r'<input type="checkbox" id="an-one" checked>', '<input type="checkbox" id="an-one">', body)

@@ -4,6 +4,8 @@
 (function () {
   var EN = {
     docTitle: 'Lumen Lab · Apps and free web tools',
+    metaDesc: 'Lumen Lab makes small apps and free web tools: Owlight (a menu bar app for Mac), SetNote (a workout log), Daycount, Inplace and a scientific calculator. Support pages and privacy policies for our apps.',
+    brandLabel: 'Lumen Lab home',
     skip: 'Skip to content',
     navLabel: 'Site',
     navContact: 'Contact',

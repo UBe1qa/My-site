@@ -185,7 +185,7 @@ def footer(lang):
     return f'''<footer class="foot">
   <div class="wrap">
     <div class="foot-cols">{''.join(cols)}</div>
-    <a class="lumen" href="https://lumenlab.page/" data-lumen><span class="lumen-k">{u['next_stop']}</span>{flap('LUMEN', 'sm')}<span class="lumen-t"><b>{u['made']} Lumen Lab</b><small>{u['more_from']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+    <a class="lumen" href="https://lumenlab.page/{'en/' if lang == 'en' else ''}" data-lumen><span class="lumen-k">{u['next_stop']}</span>{flap('LUMEN', 'sm')}<span class="lumen-t"><b>{u['made']} Lumen Lab</b><small>{u['more_from']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
     <p class="foot-links"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
     <p class="muted small">© 2026 Lumen Lab</p>
   </div>

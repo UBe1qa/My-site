@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-i18n="docTitle">Lumen Lab · Apps and free web tools</title>
+<meta name="description" content="Lumen Lab makes small apps and free web tools: Owlight (a menu bar app for Mac), SetNote (a workout log), Daycount, Inplace and a scientific calculator. Support pages and privacy policies for our apps.">
+<!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
+<meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
+<link rel="canonical" href="https://lumenlab.page/en/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:title" content="Lumen Lab · Apps and free web tools">
+<meta property="og:description" content="Lumen Lab makes small apps and free web tools: Owlight (a menu bar app for Mac), SetNote (a workout log), Daycount, Inplace and a scientific calculator. Support pages and privacy policies for our apps.">
+<meta property="og:url" content="https://lumenlab.page/en/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/home.css">
+<script>
+/* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
+(function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
+</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-cat" href="/en/#apps" data-i18n="navApps">Apps</a>
+      <a class="nav-cat" href="/en/#tools" data-i18n="navTools">Tools</a>
+      <a href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <h1 id="hero-title" class="hero__title rv"><span class="lm"><span data-i18n="h1a">We make small apps</span></span> <span class="lm"><span data-i18n="h1b">and web tools</span></span></h1>
+        <p class="hero__lead rv" data-i18n="lead">Apps you keep on your device, and free web tools you just open and use. Support pages and privacy policies for our apps live here too.</p>
+      </div>
+      <ul class="shelves" aria-label="What Lumen Lab makes" data-i18n-aria="shelvesLabel">
+        <!-- gen:shelves -->
+        <li class="rv"><a class="shelf" href="#apps">
+          <span class="shelf__icons" aria-hidden="true"><img src="/img/owlight.webp" width="36" height="36" alt=""><img src="/img/setnote.webp" width="36" height="36" alt=""></span>
+          <span class="shelf__text"><b data-i18n="sh_apps">Apps</b> <span class="shelf__n" data-i18n="sh_apps_n">2 apps</span><span class="shelf__names" data-i18n="sh_apps_names">Owlight · SetNote</span></span>
+          <span class="shelf__go" aria-hidden="true">→</span>
+        </a></li>
+        <li class="rv"><a class="shelf" href="#tools">
+          <span class="shelf__icons" aria-hidden="true"><img src="/img/daycount.svg" width="36" height="36" alt=""><img src="/img/convert.svg" width="36" height="36" alt=""><img src="/img/sci-calc.svg" width="36" height="36" alt=""></span>
+          <span class="shelf__text"><b data-i18n="sh_tools">Web tools</b> <span class="shelf__n" data-i18n="sh_tools_n">3 tools</span><span class="shelf__names" data-i18n="sh_tools_names">Daycount · Inplace · Scientific Calculator</span></span>
+          <span class="shelf__go" aria-hidden="true">→</span>
+        </a></li>
+        <!-- /gen:shelves -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- 앱·웹 도구 카드는 _dev/catalog.json 에 한 줄 더하고 python3 _dev/build_home.py 로 만든다 -->
+  <section class="cat" id="apps" aria-labelledby="apps-title">
+    <div class="wrap">
+      <p class="sec-kicker" data-i18n="apKicker">Apps</p>
+      <h2 id="apps-title" class="sec-title" data-i18n="apTitle">Apps you keep <span class="nw">and use every day</span></h2>
+      <!-- gen:apps -->
+      <ul class="cat__grid cat__grid--apps" aria-label="Apps by Lumen Lab" data-i18n-aria="appsLabel">
+        <li class="app rv">
+          <img class="icon" src="/img/owlight.webp" width="64" height="64" alt="">
+          <div class="app__body">
+            <h3 class="app__name" data-i18n="c_owlight_name">Owlight</h3>
+            <p class="app__kind" data-i18n="c_owlight_kind">Menu bar app for Mac <span aria-hidden="true">·</span> <span class="nw">macOS 14 or later</span></p>
+            <p class="app__status"><span data-i18n="c_owlight_status">Getting ready for the App Store</span></p>
+            <p class="app__line" data-i18n="c_owlight_line">Keep your Mac awake, cover the desktop, highlight the front-most window and more, right from the menu bar.</p>
+            <p class="app__links">
+              <a class="chip chip--go" href="https://owlight.lumenlab.page/" data-i18n="c_owlight_l0">What it does</a>
+              <a class="chip" href="/owlight/support/#en" data-i18n="c_owlight_l1">Support</a>
+              <a class="chip" href="/owlight/privacy/#en" data-i18n="c_owlight_l2">Privacy Policy</a>
+            </p>
+          </div>
+        </li>
+        <li class="app rv">
+          <img class="icon" src="/img/setnote.webp" width="64" height="64" alt="">
+          <div class="app__body">
+            <h3 class="app__name" data-i18n="c_setnote_name">SetNote</h3>
+            <p class="app__kind" data-i18n="c_setnote_kind">Opens in your browser <span aria-hidden="true">·</span> <span class="nw">add it to your Home Screen</span></p>
+            <p class="app__line" data-i18n="c_setnote_line">Save your routines and log every set with last time’s weight and reps beside it.</p>
+            <p class="app__links">
+              <a class="chip chip--go" href="https://setnote.lumenlab.page/app/" data-i18n="c_setnote_l0">Open SetNote</a>
+              <a class="chip" href="https://setnote.lumenlab.page/" data-i18n="c_setnote_l1">What it does</a>
+            </p>
+          </div>
+        </li>
+      </ul>
+      <!-- /gen:apps -->
+    </div>
+  </section>
+
+  <section class="cat cat--tools" id="tools" aria-labelledby="tools-title">
+    <div class="wrap">
+      <p class="sec-kicker" data-i18n="tlKicker">Web tools</p>
+      <h2 id="tools-title" class="sec-title" data-i18n="tlTitle">Free tools you just <span class="nw">open and use</span></h2>
+      <p class="sec-lead cat__lead" data-i18n="tlLead">No sign-up, nothing to install. Each tool has its own address <span class="nw">(e.g. date.lumenlab.page)</span>.</p>
+      <!-- gen:tools -->
+      <ul class="cat__grid cat__grid--tools" aria-label="Free web tools by Lumen Lab" data-i18n-aria="toolsLabel">
+        <li class="tool rv">
+          <a class="tool__a" href="https://date.lumenlab.page/en/">
+            <img class="tool__icon" src="/img/daycount.svg" width="48" height="48" alt="" loading="lazy">
+            <h3 class="tool__name" data-i18n="c_daycount_name">Daycount</h3>
+            <p class="tool__line" data-i18n="c_daycount_line">Days between dates, countdowns, business days excluding holidays, age and anniversaries.</p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
+          </a>
+        </li>
+        <li class="tool rv">
+          <a class="tool__a" href="https://convert.lumenlab.page/">
+            <img class="tool__icon" src="/img/convert.svg" width="48" height="48" alt="" loading="lazy">
+            <h3 class="tool__name" data-i18n="c_inplace_name">Inplace</h3>
+            <p class="tool__line" data-i18n="c_inplace_line">Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload.</p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
+          </a>
+        </li>
+        <li class="tool rv">
+          <a class="tool__a" href="https://calc.lumenlab.page/en/">
+            <img class="tool__icon" src="/img/sci-calc.svg" width="48" height="48" alt="" loading="lazy">
+            <h3 class="tool__name" data-i18n="c_scicalc_name">Scientific Calculator</h3>
+            <p class="tool__line" data-i18n="c_scicalc_line">Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n.</p>
+            <p class="tool__url"><span>\1</span><span class="tool__go" aria-hidden="true">→</span></p>
+          </a>
+        </li>
+      </ul>
+      <!-- /gen:tools -->
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact__in">
+      <h2 id="contact-title" class="contact__title" data-i18n="ctTitle">Something not working? Let us know by email</h2>
+      <p class="contact__lead" data-i18n="ctLead">Tell us which app, your device and version, and what happened. It helps us help you faster.</p>
+      <p class="contact__mail"><a class="btn btn--lamp" href="mailto:woxocoso@gmail.com" data-i18n="ctBtn">Write an email</a> <span class="contact__addr">woxocoso@gmail.com</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a></div>
+      <div><b data-i18n="privacy">Privacy Policy</b><a href="/owlight/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

@@ -64,6 +64,12 @@
       var k = el.getAttribute('data-i18n-aria');
       el.setAttribute('aria-label', lang === 'en' && EN[k] != null ? EN[k] : KOA[k]);
     });
+    /* 루멘랩 본페이지는 한국어 / 와 영어 /en/ 이 따로 된 페이지: 고른 언어 쪽으로. 방침·지원(한 주소에 두 언어)은 #en 으로 영어 칸 */
+    document.querySelectorAll('a[href^="https://lumenlab.page/"]').forEach(function (a) {
+      var h = a.getAttribute('href').replace(/#(ko|en)$/, '');
+      if (h === 'https://lumenlab.page/' || h === 'https://lumenlab.page/en/') a.setAttribute('href', 'https://lumenlab.page/' + (lang === 'en' ? 'en/' : ''));
+      else if (/\/(privacy|support)\/$/.test(h)) a.setAttribute('href', h + (lang === 'en' ? '#en' : ''));
+    });
     if (btn) {
       btn.innerHTML = lang === 'en' ? '<span lang="ko">한국어</span>' : '<span lang="en">English</span>';
       btn.setAttribute('aria-label', lang === 'en' ? '한국어로 보기' : 'View in English');

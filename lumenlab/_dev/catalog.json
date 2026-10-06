@@ -1,5 +1,5 @@
 {
-  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
+  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
   "limit": 6,
   "apps": [
     {
@@ -34,6 +34,7 @@
     {
       "id": "daycount",
       "url": "https://date.lumenlab.page/",
+      "url_en": "https://date.lumenlab.page/en/",
       "icon": "/img/daycount.svg",
       "name": {"ko": "며칠 계산기", "en": "Daycount"},
       "sub": "Daycount",
@@ -41,7 +42,8 @@
     },
     {
       "id": "inplace",
-      "url": "https://convert.lumenlab.page/",
+      "url": "https://convert.lumenlab.page/ko/",
+      "url_en": "https://convert.lumenlab.page/",
       "icon": "/img/convert.svg",
       "name": {"ko": "인플레이스", "en": "Inplace"},
       "sub": "Inplace",
@@ -50,6 +52,7 @@
     {
       "id": "scicalc",
       "url": "https://calc.lumenlab.page/",
+      "url_en": "https://calc.lumenlab.page/en/",
       "icon": "/img/sci-calc.svg",
       "name": {"ko": "공학용 계산기", "en": "Scientific Calculator"},
       "sub": "Scientific Calculator",
