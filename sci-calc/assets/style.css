@@ -749,3 +749,34 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
 /* ▲▼ 는 키 칸 높이를 다 쓰게 (컴퓨터에서 32×14px 였음) */
 .keys-f .k.arrows, .work .keys-f .k.arrows { padding: 0; }
 .k.arrows button { height: 100%; min-height: 34px; }
+
+/* 화면 밀림(CLS) 막기, 2026-10-06 Cloudflare 측정 /stats/ 0.159: 모드 판은 스크립트가 그리므로
+   처음 그린 높이만큼 자리를 미리 잡는다(기본 입력값 기준, 폭마다 줄바꿈이 달라 가장 큰 값. 모드 화면을 바꾸면 다시 잴 것) */
+.mode-ui[data-mode="stats"] { min-height: 1146px; }
+.mode-ui[data-mode="distribution"] { min-height: 404px; }
+.mode-ui[data-mode="equation"] { min-height: 440px; }
+.mode-ui[data-mode="matrix"] { min-height: 284px; }
+.mode-ui[data-mode="base"] { min-height: 396px; }
+.mode-ui[data-mode="table"] { min-height: 1046px; }
+@media (max-width: 980px) { html[lang="en"] .mode-ui[data-mode="distribution"] { min-height: 444px; } }
+@media (max-width: 960px) { .mode-ui[data-mode="matrix"] { min-height: 334px; } }
+@media (max-width: 700px) { .mode-ui[data-mode="table"] { min-height: 996px; } }
+@media (max-width: 639px) { .mode-ui[data-mode="distribution"] { min-height: 444px; } .mode-ui[data-mode="matrix"] { min-height: 474px; } }
+@media (max-width: 600px) {
+  .mode-ui[data-mode="stats"] { min-height: 1166px; }
+  .mode-ui[data-mode="equation"] { min-height: 480px; }
+  .mode-ui[data-mode="matrix"] { min-height: 524px; }
+  .mode-ui[data-mode="base"] { min-height: 438px; }
+  .mode-ui[data-mode="table"] { min-height: 952px; }
+  html[lang="en"] .mode-ui[data-mode="stats"] { min-height: 1196px; }
+  html[lang="en"] .mode-ui[data-mode="distribution"] { min-height: 506px; }
+}
+@media (max-width: 440px) { html[lang="en"] .mode-ui[data-mode="stats"] { min-height: 1248px; } }
+@media (max-width: 374px) {
+  .mode-ui[data-mode="stats"] { min-height: 1248px; }
+  .mode-ui[data-mode="distribution"] { min-height: 486px; }
+  .mode-ui[data-mode="equation"] { min-height: 508px; }
+  html[lang="en"] .mode-ui[data-mode="distribution"] { min-height: 568px; }
+  html[lang="en"] .mode-ui[data-mode="equation"] { min-height: 532px; }
+}
+}

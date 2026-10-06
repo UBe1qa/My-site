@@ -19,7 +19,7 @@ import articles  # noqa: E402
 SITE = 'https://calc.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = datetime.date(2026, 10, 6)
-ASSET_V = '11'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
+ASSET_V = '12'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
 
 esc = html.escape
 
@@ -93,6 +93,11 @@ def header(lang, path, alt=True):
     return ('<a class="skip" href="#main">%s</a>\n' % T(lang, '본문으로 건너뛰기', 'Skip to content') +
             '<div class="langbar" id="langbar" hidden lang="%s"><span>%s</span><a href="%s" hreflang="%s">%s</a>'
             '<button type="button" aria-label="%s">×</button></div>\n' % (other, bar_text, other_href, other, bar_link, T(lang, '닫기', 'Close')) +
+            # 안내 띠를 보일지는 본문을 읽기 전에 바로 정한다. 예전엔 ui.js 가 다 읽은 뒤 띠를 끼워 넣어 페이지 전체가 36px 밀렸다
+            # (Cloudflare CLS 0.6). 규칙은 ui.js langBar() 와 같다
+            '<script>(function(b){try{var n=(navigator.languages&&navigator.languages[0])||navigator.language||"",k=/^ko\\b/i.test(n),'
+            'd=localStorage.getItem("sc.langbar");if(d!==null&&JSON.parse(d)==="%s")return;if(%s)b.hidden=false}catch(e){}})'
+            '(document.getElementById("langbar"))</script>\n' % (lang, '!k&&n' if lang == 'ko' else 'k') +
             '<div class="top-band"><header class="top wrap">'
             '<a class="logo" href="%s">%s<span>%s</span></a>' % (url(lang, '/'), LOGO, T(lang, '공학용 계산기', 'Scientific Calculator')) +
             '<nav class="top-nav" aria-label="%s">%s</nav>' % (T(lang, '사이트 메뉴', 'Site menu'),

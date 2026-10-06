@@ -25,15 +25,16 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="/assets/style.css?v=11">
+<link rel="stylesheet" href="/assets/style.css?v=12">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기","description":"공학용 계산기 답이 √2/2, 1/3, π/4처럼 분수·루트로 나오는 이유와 S⇔D로 소수로 바꾸는 법, 소수점 자리 고정(Fix)·유효숫자(Sci) 설정, 0.1+0.2 반올림 오차 이야기를 정리했어요.","inLanguage":"ko","datePublished":"2026-10-06","dateModified":"2026-10-06","author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"publisher":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"},"mainEntityOfPage":"https://calc.lumenlab.page/guide/exact-vs-decimal/"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"공학용 계산기","item":"https://calc.lumenlab.page/"},{"@type":"ListItem","position":2,"name":"가이드","item":"https://calc.lumenlab.page/guide/"},{"@type":"ListItem","position":3,"name":"계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기","item":"https://calc.lumenlab.page/guide/exact-vs-decimal/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
-<script src="/assets/ads-config.js?v=11" defer></script>
+<script src="/assets/ads-config.js?v=12" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <div class="langbar" id="langbar" hidden lang="en"><span>This page is also available in English.</span><a href="/en/" hreflang="en">Open English</a><button type="button" aria-label="닫기">×</button></div>
+<script>(function(b){try{var n=(navigator.languages&&navigator.languages[0])||navigator.language||"",k=/^ko\b/i.test(n),d=localStorage.getItem("sc.langbar");if(d!==null&&JSON.parse(d)==="ko")return;if(!k&&n)b.hidden=false}catch(e){}})(document.getElementById("langbar"))</script>
 <div class="top-band"><header class="top wrap"><a class="logo" href="/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="7" class="lm-b"/><rect x="7.5" y="6.5" width="17" height="7" rx="2" class="lm-s"/><g class="lm-s"><circle cx="10.5" cy="19" r="2"/><circle cx="16" cy="19" r="2"/><circle cx="21.5" cy="19" r="2"/><circle cx="10.5" cy="25" r="2"/><circle cx="16" cy="25" r="2"/></g><rect x="19.5" y="23" width="4" height="4" rx="1.2" fill="#ffb020"/></svg><span>공학용 계산기</span></a><nav class="top-nav" aria-label="사이트 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a></nav><a class="lang" href="/en/" hreflang="en" lang="en" title="English version">EN</a></header></div>
 <main id="main"><div class="page-head"><div class="wrap"><nav class="crumbs" aria-label="현재 위치"><a href="/">계산기</a> › <a href="/guide/">가이드</a> › <span>계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</span></nav><h1>계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</h1><p>공학용 계산기 답이 √2/2, 1/3, π/4처럼 분수·루트로 나오는 이유와 S⇔D로 소수로 바꾸는 법, 소수점 자리 고정(Fix)·유효숫자(Sci) 설정, 0.1+0.2 반올림 오차 이야기를 정리했어요.</p></div></div><article class="wrap section prose"><div class="answer"><p>이 계산기는 답을 먼저 <b>정확값</b>(분수, 루트, π)으로 보여 줘요. 결과 아래 <b>S⇔D</b> 를 누르면 소수로, 다시 누르면 정확값으로 돌아와요. 처음부터 소수로 받으려면 <b>SHIFT =</b>(≈)로 계산해요.</p></div>
 <h2>정확값으로 나오는 것</h2>
@@ -66,6 +67,6 @@
 </ul>
 <p>반올림은 사사오입이에요. 표시만 반올림하고 계산은 원래 값으로 이어 가요. 반올림한 값으로 계산하고 싶으면 함수 목록의 Rnd 를 써요.</p><p class="updated">처음 쓴 날 2026-10-06 · 고친 날 2026-10-06 · 루멘랩</p></article><aside class="ad wrap" data-ad-wrap="below-tool" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="below-tool"></div></aside><section class="section wrap"><h2>다른 가이드</h2><ul class="links"><li><a href="/guide/order-of-operations/">6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리<span>곱하기 생략, −2², 지수가 계산기마다 다른 이유</span></a></li><li><a href="/guide/standard-deviation/">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법<span>n으로 나눌까 n−1로 나눌까, 예제로 비교</span></a></li><li><a href="/guide/degrees-radians/">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때<span>각도 단위 바꾸기와 도 ↔ 라디안 환산표</span></a></li><li><a href="/guide/equations/">이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법<span>근의 공식과 판별식, 해가 없거나 무수히 많을 때</span></a></li></ul></section><aside class="ad wrap" data-ad-wrap="bottom" hidden aria-label="광고"><span class="ad-label">광고</span><div data-ad="bottom"></div></aside></main>
 <footer class="foot"><div class="wrap"><a class="lab-plate" href="https://lumenlab.page/"><span class="lab-sun" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="lab-txt"><b>LUMEN LAB</b><small>이 계산기를 만든 곳 · 다른 도구와 앱 보기</small></span><span class="lab-go" aria-hidden="true">→</span></a><nav aria-label="아래 메뉴"><a href="/guide/">가이드</a><a href="/about/">소개</a><a href="/privacy/">개인정보 처리방침</a></nav><p>계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.</p><p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p></div></footer>
-<script src="/assets/ui.js?v=11" defer></script>
+<script src="/assets/ui.js?v=12" defer></script>
 </body>
 </html>
