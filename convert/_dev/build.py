@@ -62,7 +62,8 @@ CATS = {
     'data': {'en': 'Spreadsheets & data', 'ko': '표·데이터'},
 }
 CAT_ORDER = ['video', 'audio', 'image', 'pdf', 'data']
-ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal', 'compress-pdf-without-upload': 'pdf-yongryang-julgi'}
+ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal', 'compress-pdf-without-upload': 'pdf-yongryang-julgi',
+                 'remove-pdf-password': 'pdf-amho-haeje', 'reduce-video-size-for-email': 'dongyeongsang-yongryang-julgi'}
 
 UI = {
     'en': dict(brand='Inplace', all='All tools', guides='Guides', about='About', privacy='Privacy', licenses='Open-source licenses',
