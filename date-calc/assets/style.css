@@ -1,21 +1,29 @@
-/* 며칠 계산기 — 달력 종이.
-   색의 뜻: 파랑 = 고른 것·평일·토요일, 빨강 = 일요일·공휴일(달력 약속). 다른 데엔 색을 쓰지 않는다. */
+/* 며칠 계산기 — 오늘의 일력.
+   첫 화면은 뜯어 쓰는 일력: 토마토색 머리 띠 위에 오늘 한 장, 그 띠에 걸친 계산기 카드.
+   색의 뜻: 띠(주황 벽돌색) = 일력 머리(브랜드, 첫 화면 띠에만), 파랑 = 고른 것·평일·토요일, 빨강 = 일요일·공휴일(달력 약속).
+   띠는 공휴일 빨강과 헷갈리지 않게 주황 쪽으로 둔다(블라인드 검토: '빨강 뜻이 너무 많다'). */
 :root {
-  --bg: #f2f3f5; --card: #ffffff; --ink: #151922; --ink-2: #3b414e; --muted: #5f6674; --line: #e0e3e9; --line-2: #ccd1da;
-  --main: #1d4ed8; --main-ink: #ffffff; --main-soft: #e9effd;
+  --bg: #faf6f0; --card: #ffffff; --ink: #1c1612; --ink-2: #463d36; --muted: #6e645b; --line: #ece4d8; --line-2: #d9cebf;
+  --cell: #f6f0e7;
+  --main: #1d4ed8; --main-ink: #ffffff; --main-soft: #e8eefc;
   --red: #d33a2c; --red-soft: #fdeceb;
+  --band: #c2410c; --band-ink: #ffffff; --band-2: rgba(255, 255, 255, .9);
+  --chip: rgba(255, 255, 255, .13); --chip-line: rgba(255, 255, 255, .3); --chip-hover: rgba(255, 255, 255, .24);
+  --chip-on: #ffffff; --chip-on-ink: #9a3412;
   --warn-bg: #fff4d6; --warn-ink: #6f4b00;
-  --past: #9aa0ab; --radius: 16px;
+  --past: #7a7067; --radius: 18px; --pad: 26px;
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0e1116; --card: #171b22; --ink: #eceff4; --ink-2: #c9ced8; --muted: #9ba3b1; --line: #262c36; --line-2: #343b47;
-    --main: #7b9bff; --main-ink: #0b1020; --main-soft: #1b2440;
-    --red: #ff7a6c; --red-soft: #3a1d1b;
+    --bg: #15110f; --card: #211b18; --ink: #f6f0ea; --ink-2: #dbd2c9; --muted: #a99d92; --line: #332a26; --line-2: #4a3f39;
+    --cell: #2b2420;
+    --main: #8ea8ff; --main-ink: #0b1020; --main-soft: #1f2645;
+    --red: #ff7f6e; --red-soft: #3d1f1a;
+    --band: #8f3210; --chip-on: #fff7f0; --chip-on-ink: #8f3210;
     --warn-bg: #3a2f14; --warn-ink: #f2d38a;
-    --past: #646b78;
+    --past: #958a80;
     color-scheme: dark;
   }
 }
@@ -25,7 +33,7 @@ img { max-width: 100%; height: auto; }
 .nw { white-space: nowrap; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  margin: 0; background: var(--bg); color: var(--ink);
+  margin: 0; background: var(--bg); color: var(--ink); border-top: 6px solid var(--band);
   font: 16px/1.6 var(--font); letter-spacing: -0.005em;
   word-break: keep-all; overflow-wrap: anywhere;
 }
@@ -64,15 +72,53 @@ h1, h2 { text-wrap: balance; }
 .mini select:hover, .lang:hover { border-color: var(--ink-2); }
 
 /* 언어 제안 띠: 브라우저 언어가 페이지 언어와 다를 때만 app.js가 넣는다. 자동으로 넘기지 않는다 */
-.langbar { background: var(--main-soft); color: var(--ink-2); font-size: 14px; }
+.langbar { background: var(--ink); color: var(--bg); font-size: 14px; }
 .langbar p { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin: 0; padding-top: 6px; padding-bottom: 6px; }
-.langbar a { color: var(--main); font-weight: 700; text-underline-offset: 3px; }
-.langbar-x { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 20px; line-height: 1; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; }
-.langbar-x:hover { background: var(--card); color: var(--ink); }
+.langbar a { color: var(--bg); font-weight: 700; text-underline-offset: 3px; }
+.langbar-x { margin-left: auto; background: none; border: 0; color: var(--bg); font-size: 20px; line-height: 1; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; }
+.langbar-x:hover { background: rgba(127, 127, 127, .25); }
 
 .hero { padding-top: 22px; padding-bottom: 4px; }
 h1 { font-size: clamp(25px, 5.2vw, 38px); line-height: 1.22; margin: 0 0 10px; letter-spacing: -0.035em; font-weight: 800; }
 .lede { color: var(--muted); margin: 0; max-width: 40em; }
+
+/* 첫 화면 띠: 머리·소개·고르기를 한 장의 일력 머리처럼 화면 끝까지 칠한다.
+   border-image로 칠해 가로 스크롤이 생기지 않는다. 계산기 카드는 띠에 반쯤 걸친다 */
+body:has(#today) .top, body:has(#today) .hero, body:has(#today) .picker {
+  border-image: linear-gradient(var(--band) 0 0) fill 0 / / 0 100vmax; color: var(--band-ink);
+}
+body:has(#today) .stage { border-image: linear-gradient(var(--band) 72px, transparent 72px) fill 0 / / 0 100vmax; }
+body:has(#today) .logo-mark { border-color: var(--band-ink); }
+body:has(#today) .logo-mark::before { background: var(--ink); }
+body:has(#today) .top-nav a { color: var(--band-2); }
+body:has(#today) .top-nav a:hover { background: var(--chip-hover); color: var(--band-ink); }
+body:has(#today) .mini select, body:has(#today) .lang { background-color: var(--chip); border-color: var(--chip-line); color: var(--band-ink); }
+body:has(#today) .mini select:hover, body:has(#today) .lang:hover { border-color: var(--band-ink); }
+.mini option { color: #1c1612; background: #fff; }
+/* 넓은 화면: 제목은 한 줄 가득, 그 아래 소개(왼쪽)와 오늘 한 장(오른쪽) */
+body:has(#today) .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 48px; padding-top: 30px; padding-bottom: 8px; }
+body:has(#today) .hero-text { display: contents; }
+body:has(#today) .hero h1 { grid-column: 1 / -1; max-width: 20em; }
+body:has(#today) h1 { font-size: clamp(27px, 5.4vw, 44px); line-height: 1.16; letter-spacing: -0.04em; }
+body:has(#today) .lede { color: var(--band-2); font-size: 17px; font-weight: 500; }
+
+/* 오늘 한 장: 일력 종이(테마와 상관없이 종이색) + 옆에 올해 진행 */
+.today { display: flex; align-items: center; gap: 18px; }
+.today-sheet {
+  flex: none; display: flex; flex-direction: column; align-items: center; width: 108px; padding-bottom: 10px;
+  background: #fffdf8; color: #1c1612; border-radius: 12px; overflow: hidden; transform: rotate(-3deg);
+  box-shadow: 5px 5px 0 -1px rgba(255, 255, 255, .45), 0 14px 26px -10px rgba(50, 8, 0, .55);
+}
+.today-m { align-self: stretch; text-align: center; background: #1c1612; color: #fff; font-size: 13px; font-weight: 800; padding: 5px 0 4px; }
+.today-d { font-size: 60px; font-weight: 800; line-height: 1; margin-top: 8px; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.today-w { font-size: 13px; font-weight: 700; color: #6e645b; }
+.today-sheet.is-sun .today-d { color: #d33a2c; } .today-sheet.is-sat .today-d { color: #1d4ed8; }
+.today-facts { min-width: 0; max-width: 16em; font-size: 15px; line-height: 1.45; color: var(--band-2); }
+.today-facts p { margin: 0; }
+.today-facts .today-k { color: var(--band-ink); font-weight: 800; }
+.today-facts a { color: var(--band-ink); font-weight: 700; text-underline-offset: 3px; }
+.today-bar { height: 6px; margin: 8px 0; border-radius: 3px; background: rgba(255, 255, 255, .25); overflow: hidden; }
+.today-bar i { display: block; height: 100%; border-radius: 3px; background: var(--band-ink); }
 
 /* 계산기 고르기 + 계산기 */
 .bench { padding-top: 20px; }
@@ -84,12 +130,19 @@ h1 { font-size: clamp(25px, 5.2vw, 38px); line-height: 1.22; margin: 0 0 10px; l
 }
 .picker a:hover { border-color: var(--line-2); color: var(--ink); }
 .picker a.on { background: var(--ink); color: var(--card); border-color: var(--ink); }
+body:has(#today) .bench { padding-top: 0; }
+body:has(#today) .picker { padding-top: 24px; padding-bottom: 22px; }
+body:has(#today) .picker a { background: var(--chip); border-color: var(--chip-line); color: var(--band-ink); }
+body:has(#today) .picker a:hover { background: var(--chip-hover); }
+body:has(#today) .picker a.on { background: var(--chip-on); color: var(--chip-on-ink); border-color: var(--chip-on); box-shadow: 0 6px 14px -6px rgba(40, 6, 0, .5); }
 
 /* 계산기 카드 */
 .tool {
   position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 24px 24px 22px; scroll-margin-top: 12px; box-shadow: 0 1px 2px rgba(15, 20, 30, .04), 0 8px 24px -12px rgba(15, 20, 30, .12);
+  padding: var(--pad) var(--pad) 22px; scroll-margin-top: 12px;
+  box-shadow: 0 1px 2px rgba(40, 20, 10, .05), 0 26px 50px -24px rgba(70, 24, 10, .38);
 }
+body:has(#today) .tool { border-color: transparent; }
 .tool h2 { font-size: 21px; margin: 0 0 16px; letter-spacing: -0.025em; }
 .hint { color: var(--muted); margin: -8px 0 16px; font-size: 15px; }
 .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: end; }
@@ -105,13 +158,14 @@ h1 { font-size: clamp(25px, 5.2vw, 38px); line-height: 1.22; margin: 0 0 10px; l
 .field input:focus { outline: none; border-color: var(--main); box-shadow: 0 0 0 3px var(--main-soft); }
 .check { display: flex; align-items: center; gap: 9px; margin-top: 12px; font-size: 15px; cursor: pointer; width: fit-content; }
 .check input { width: 19px; height: 19px; margin: 0; accent-color: var(--main); }
-.seg { display: inline-flex; margin-top: 12px; padding: 3px; gap: 3px; background: var(--bg); border-radius: 12px; }
+.seg { display: inline-flex; margin-top: 12px; padding: 3px; gap: 3px; background: var(--cell); border-radius: 12px; }
 .seg label { padding: 7px 14px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 6px; border-radius: 9px; color: var(--ink-2); }
 .seg label:has(input:checked) { background: var(--card); color: var(--ink); font-weight: 700; box-shadow: 0 1px 3px rgba(15, 20, 30, .12); }
 .seg input { accent-color: var(--main); margin: 0; }
 
 /* 결과 */
-.result { margin-top: 22px; padding-top: 20px; border-top: 1.5px dashed var(--line-2); min-height: 60px; }
+/* 결과는 뜯는 점선 아래 */
+.result { position: relative; margin-top: 24px; padding-top: 22px; border-top: 2px dashed var(--line-2); min-height: 60px; }
 .big {
   font-size: clamp(34px, 8.5vw, 52px); font-weight: 800; margin: 0; letter-spacing: -0.04em; line-height: 1.1;
   color: var(--ink); font-variant-numeric: tabular-nums;
@@ -121,7 +175,7 @@ h1 { font-size: clamp(25px, 5.2vw, 38px); line-height: 1.22; margin: 0 0 10px; l
 .empty { color: var(--muted); margin: 0; }
 .warn { background: var(--warn-bg); color: var(--warn-ink); padding: 10px 12px; border-radius: 10px; margin: 14px 0 0; font-size: 14px; }
 .rows { margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
-.rows div { display: flex; flex-direction: column; gap: 2px; padding: 11px 14px; border-radius: 12px; background: var(--bg); min-width: 0; }
+.rows div { display: flex; flex-direction: column; gap: 2px; padding: 11px 14px; border-radius: 12px; background: var(--cell); min-width: 0; }
 .rows dt { color: var(--muted); font-size: 13px; font-weight: 600; }
 .rows dd { margin: 0; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
 .mix-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: 13px; color: var(--muted); }
@@ -169,9 +223,9 @@ html[lang="en"] .ad-slot::before { content: "Advertisement"; }
 .guide-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .guide-list a {
   display: block; height: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-  padding: 16px 18px 16px 18px; text-decoration: none; border-left: 4px solid var(--main); transition: border-color .15s;
+  padding: 16px 18px 16px 18px; text-decoration: none; border-left: 4px solid var(--ink); transition: border-color .15s, transform .15s;
 }
-.guide-list a:hover { border-color: var(--line-2); border-left-color: var(--main); }
+.guide-list a:hover { border-color: var(--line-2); border-left-color: var(--ink); transform: translateY(-2px); }
 .guide-list b { display: block; margin-bottom: 4px; }
 .guide-list span { display: block; color: var(--muted); font-size: 14px; }
 
@@ -184,19 +238,19 @@ html[lang="en"] .ad-slot::before { content: "Advertisement"; }
 .article h2 { font-size: 20px; margin: 32px 0 8px; letter-spacing: -0.02em; }
 .article p, .article li { line-height: 1.8; }
 .article ul, .article ol { padding-left: 1.2em; }
-.article code { font-size: .92em; background: var(--bg); border-radius: 5px; padding: 1px 5px; overflow-wrap: anywhere; }
+.article code { font-size: .92em; background: var(--cell); border-radius: 5px; padding: 1px 5px; overflow-wrap: anywhere; }
 .article .sources { font-size: 14px; color: var(--muted); }
 .article .sources li { line-height: 1.7; }
 .article table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; display: block; overflow-x: auto; font-variant-numeric: tabular-nums; }
 .article th, .article td { border-bottom: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
-.article th { background: var(--bg); font-weight: 700; }
+.article th { background: var(--cell); font-weight: 700; }
 .article td:not(:first-child), .article th:not(:first-child) { white-space: nowrap; }
 /* 영어 글 표는 칸이 길어 단어 단위로 줄 바꿈(안 그러면 휴대폰에서 첫 칸이 글자 하나씩 세로로 선다) */
 html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; overflow-wrap: normal; }
 .article .tip { background: var(--main-soft); border-radius: 12px; padding: 12px 16px; }
 .article .guide-list { margin-top: 16px; }
 .cta { margin: 28px 0 4px; }
-.btn { display: inline-block; background: var(--main); color: var(--main-ink); text-decoration: none; font-weight: 700; padding: 13px 20px; border-radius: 12px; }
+.btn { display: inline-block; background: var(--ink); color: var(--bg); text-decoration: none; font-weight: 700; padding: 13px 20px; border-radius: 12px; }
 .btn:hover { filter: brightness(1.08); }
 .related h2 { font-size: 18px; margin: 0 0 8px; }
 .related ul { margin: 0; padding-left: 1.2em; line-height: 1.9; }
@@ -226,15 +280,37 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   /* 계산기 머리: 첫 줄 = 로고 + 나라 고르기, 둘째 줄 = 메뉴 + 언어 링크 (영어판 로고·고르기가 길어도 넘치지 않게) */
   .top-ctl { display: contents; }
   .top-ctl .mini { margin-left: auto; }
-  .top:has(.top-ctl) .top-nav { width: auto; flex: 1 1 calc(100% - 100px); }
-  .top-ctl .lang { order: 4; }
+  .mini select { font-size: 13px; padding: 7px 24px 7px 9px; background-position: right 8px center; }
+  .lang { font-size: 13px; padding: 7px 9px; }
+  .top { column-gap: 6px; }
+  .logo { margin-right: 4px; }
+  /* 첫 줄 = 로고 + 나라 고르기 + 언어, 둘째 줄 = 메뉴 */
   .hero { padding-top: 10px; }
   .lede { font-size: 15px; }
   /* 고르기는 작게 줄 바꿈: 11개가 다 보이고, 첫 화면에 입력칸까지 */
   .bench { padding-top: 16px; }
   .picker { gap: 5px; padding-bottom: 12px; }
   .picker a { padding: 6px 10px; font-size: 14px; border-radius: 9px; }
-  .tool { padding: 24px 16px 18px; }
+  :root { --pad: 16px; }
+  .tool { padding-top: 22px; padding-bottom: 18px; }
+  /* 휴대폰: 오늘 한 장은 제목 옆에 작게(첫 화면에 입력칸까지 보이게 진행 막대·설명은 뺀다) */
+  body:has(#today) .hero { grid-template-columns: minmax(0, 1fr) auto; gap: 0 12px; align-items: start; padding-top: 12px; padding-bottom: 4px; }
+  body:has(#today) .hero h1 { grid-column: 1; }
+  body:has(#today) .lede { grid-column: 1 / -1; }
+  .today { grid-column: 2; grid-row: 1; padding-top: 4px; }
+  .today-facts { display: none; }
+  body:has(#today) .lede { font-size: 15px; }
+  body:has(#today) .picker { padding-bottom: 18px; }
+  body:has(#today) .stage { border-image: linear-gradient(var(--band) 52px, transparent 52px) fill 0 / / 0 100vmax; }
+  .today-sheet { width: 62px; padding-bottom: 5px; border-radius: 9px; transform: rotate(-2deg); box-shadow: 3px 3px 0 -1px rgba(255, 255, 255, .45), 0 8px 16px -8px rgba(50, 8, 0, .55); }
+  .today-m { font-size: 11px; padding: 2px 0; }
+  .today-d { font-size: 32px; margin-top: 4px; }
+  .today-w { font-size: 11px; }
+  body:has(#today) .picker { padding-top: 14px; }
+  html[lang="en"] .picker { gap: 4px; }
+  html[lang="en"] .picker a { padding: 5px 8px; font-size: 13.5px; }
+  html[lang="en"] body:has(#today) .hero h1 { font-size: 25px; }
+  html[lang="en"] body:has(#today) .lede { font-size: 14px; line-height: 1.5; }
   .tool h2 { font-size: 19px; }
   .field input { font-size: 16px; padding: 10px 10px; min-height: 48px; }
   .grid4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
@@ -249,6 +325,11 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   .anniv { column-gap: 8px; }
   .anniv li { padding: 8px 8px; font-size: 14px; }
   .anniv li span { white-space: nowrap; }
+}
+/* 아주 좁은 화면: 언어 링크는 둘째 줄 메뉴 끝으로 */
+@media (max-width: 379px) {
+  .top-ctl .lang { order: 4; margin-left: auto; }
+  .top:has(.top-ctl) .top-nav { width: auto; flex: 1 1 auto; }
 }
 @media (max-width: 360px) {
   .grid2 { grid-template-columns: minmax(0, 1fr); }

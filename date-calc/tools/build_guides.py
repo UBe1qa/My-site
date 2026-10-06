@@ -264,8 +264,8 @@ def head(title, desc, path, extra_ld, alt=""):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#faf6f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15110f" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="{url}">
 {alt}<meta property="og:type" content="article">
 <meta property="og:site_name" content="며칠 계산기">

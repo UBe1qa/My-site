@@ -221,7 +221,23 @@
     try { box.innerHTML = tools[name](); }
     catch (e) { box.innerHTML = warn(L("계산하지 못했어요. 입력을 확인해 주세요.")); }
   }
-  function renderAll() { for (var k in tools) render(k); }
+  // 오늘 카드(첫 화면 일력): 오늘 날짜, 올해 며칠째, 다음 공휴일까지. 다시 올 이유가 되는 '오늘의 한 장'
+  function renderToday() {
+    var box = $("today");
+    if (!box) return;
+    var t = todayN(), d = DC.toYMD(t), doy = DC.dayOfYear(t), total = DC.daysInYear(d.y), next = null;
+    for (var n = t; n < t + 400; n++) { var h = holName(n); if (h) { next = [n, h]; break; } }
+    var hol = next ? (next[0] === t ? F("오늘은 %s", next[1]) : F("%s까지 %s일", next[1], num(next[0] - t))) : "";
+    box.innerHTML =
+      '<div class="today-sheet ' + dayCls(t) + '"><span class="today-m">' + esc(lang === "ko" ? d.m + "월" : MON_EN[d.m - 1]) + "</span>" +
+      '<b class="today-d">' + d.d + '</b><span class="today-w">' + esc(weekdayName(t)) + "</span></div>" +
+      '<div class="today-facts"><p class="today-k">' + esc(L("오늘")) + " · " + esc(fmtShort(t)) + "</p>" +
+      "<p>" + esc(F("올해 %s일째, 남은 날 %s일", num(doy), num(total - doy))) + "</p>" +
+      '<div class="today-bar" aria-hidden="true"><i style="width:' + (doy / total * 100).toFixed(1) + '%"></i></div>' +
+      (hol ? '<p><a href="#holidays">' + esc(hol) + "</a></p>" : "") + "</div>";
+    box.hidden = false;
+  }
+  function renderAll() { for (var k in tools) render(k); renderToday(); }
 
   // ---------- 고르기(해시) ----------
   var names = Object.keys(tools);

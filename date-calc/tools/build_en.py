@@ -379,8 +379,8 @@ def head_en(title, desc, path, ld_list, og_type="article", alt=None):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#c2410c" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#8f3210" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="{url}">
 {alt or ""}<meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Daycount">

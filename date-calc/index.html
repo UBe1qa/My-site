@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>며칠 계산기 — 날짜 사이 기간, 디데이, 영업일, 만 나이</title>
 <meta name="description" content="두 날짜 사이가 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일, 요일, 몇 주차까지 한곳에서 계산해요. 한국·미국 공휴일 반영, 한국어·영어 지원.">
-<meta name="theme-color" content="#f2f3f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#c2410c" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#8f3210" media="(prefers-color-scheme: dark)">
 <!-- 구글 서치 콘솔 소유 확인: 위 = date.lumenlab.page, 아래 = 예전 workers.dev 주소. 지우면 확인이 풀린다 -->
 <meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
 <meta name="google-site-verification" content="2RMEcBntEXiQzBBC-DO7gSquHWrYDbutdE28dDcH9ro">
@@ -64,8 +64,11 @@
 
 <main id="tools">
   <section class="hero wrap">
-    <h1 data-i18n="날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지">날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지</h1>
-    <p class="lede" data-i18n="두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.</p>
+    <div class="hero-text">
+      <h1 data-i18n="날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지">날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지</h1>
+      <p class="lede" data-i18n="두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.</p>
+    </div>
+    <div class="today" id="today" hidden></div>
   </section>
 
   <div class="bench wrap">
