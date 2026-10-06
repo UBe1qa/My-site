@@ -37,7 +37,7 @@ const T = {
     notHere: 'No tool here opens .{ext} files yet.', files: '{n} files', items: '{n} items', sizeWarn: 'Large file: phones may run out of memory.',
     gifLong: 'GIFs over 15 seconds get very large.', copiedHint: 'Will copy without re-encoding if possible.', seconds: 's',
     noAudio: 'This file has no audio track.', noVideo: 'This file has no video track.', result: 'Result',
-    level: 'Compression', strong: 'Strong', light: 'Light', notSmaller: 'This PDF is already well compressed, so the original was kept.', littleSmaller: 'Only a little smaller: this PDF is mostly text, or its images are already compressed or in formats left as they are. Try Strong, or split it into parts.', noH264c: 'This browser can’t create H.264, so the video was compressed as {codec}. It may not play on iPhone or in some apps; try Chrome or Edge on a computer.', keptSome: 'Kept the original for {names}: the converted file was bigger.',
+    level: 'Compression', strong: 'Strong', light: 'Light', notSmaller: 'This PDF is already well compressed, so the original was kept.', littleSmaller: 'Only a little smaller: this PDF is mostly text, or its images are already compressed or in formats left as they are. Try Strong, or split it into parts.', noH264c: 'This browser can’t create H.264, so the video was compressed as {codec}. It may not play on iPhone or in some apps; try Chrome or Edge on a computer.', keptSome: 'Kept the original for {names}: the converted file was bigger.', gifTip: 'The preview above is the real GIF. On a Mac, the Preview app shows a GIF as separate frames; select the file in Finder and press Space to see it move, or open it in a browser.',
     keptOriginal: 'The converted file was bigger, so the original was kept.',
     rotateAllL: 'Rotate all left', rotateAllR: 'Rotate all right', resetAll: 'Reset', tapRotate: 'Tap a page to turn it 90°.',
     keepN: '{k} of {n} pages kept', removePage: 'Remove page', restorePage: 'Bring back', moveL: 'Move earlier', moveR: 'Move later', removed: 'Removed', pageN: 'Page {n}',
@@ -84,7 +84,7 @@ const T = {
     notHere: '.{ext} 파일을 여는 도구는 아직 없어요.', files: '파일 {n}개', items: '{n}개', sizeWarn: '큰 파일이라 휴대폰에선 메모리가 모자랄 수 있어요.',
     gifLong: '15초가 넘는 GIF는 아주 커져요.', copiedHint: '되면 다시 인코딩하지 않고 옮겨 담아요.', seconds: '초',
     noAudio: '이 파일에는 오디오가 없어요.', noVideo: '이 파일에는 영상이 없어요.', result: '결과',
-    level: '압축 정도', strong: '강하게', light: '약하게', notSmaller: '이미 잘 압축된 PDF라 원본을 그대로 뒀어요.', littleSmaller: '조금만 줄었어요. 글자 위주이거나, 안의 이미지가 이미 압축됐거나 그대로 두는 형식이에요. \'강하게\'로 해 보거나 나눠서 보내 보세요.', noH264c: '이 브라우저는 H.264를 만들지 못해 {codec}로 줄였어요. 아이폰이나 일부 앱에서 안 열릴 수 있어요. 컴퓨터의 크롬이나 엣지로 해 보세요.', keptSome: '{names}은(는) 변환한 파일이 더 커서 원본을 그대로 뒀어요.',
+    level: '압축 정도', strong: '강하게', light: '약하게', notSmaller: '이미 잘 압축된 PDF라 원본을 그대로 뒀어요.', littleSmaller: '조금만 줄었어요. 글자 위주이거나, 안의 이미지가 이미 압축됐거나 그대로 두는 형식이에요. \'강하게\'로 해 보거나 나눠서 보내 보세요.', noH264c: '이 브라우저는 H.264를 만들지 못해 {codec}로 줄였어요. 아이폰이나 일부 앱에서 안 열릴 수 있어요. 컴퓨터의 크롬이나 엣지로 해 보세요.', keptSome: '{names}은(는) 변환한 파일이 더 커서 원본을 그대로 뒀어요.', gifTip: '위 미리보기가 만들어진 GIF 그대로예요. 맥의 \'미리보기\' 앱은 GIF를 장면별로 나눠 보여 줘요. Finder에서 파일을 고르고 스페이스바를 누르거나 브라우저로 열면 움직여요.',
     keptOriginal: '변환한 파일이 더 커서 원본을 그대로 뒀어요.',
     rotateAllL: '모두 왼쪽으로', rotateAllR: '모두 오른쪽으로', resetAll: '처음대로', tapRotate: '쪽을 누르면 90°씩 돌아가요.',
     keepN: '{n}쪽 중 {k}쪽 남김', removePage: '쪽 빼기', restorePage: '되살리기', moveL: '앞으로', moveR: '뒤로', removed: '뺌', pageN: '{n}쪽',
@@ -776,7 +776,7 @@ const RUNNERS = {
           const r = tl.get();
           const job = m.toGif(file, { start: r.start, end: r.end, fps, width }, prog); setJob(job);
           const res = await job.promise;
-          return { items: [{ blob: res.blob, name: outName(file, 'gif'), preview: 'image', meta: { width: res.width, height: res.height } }] };
+          return { items: [{ blob: res.blob, name: outName(file, 'gif'), preview: 'image', meta: { width: res.width, height: res.height } }], note: /Mac/.test(navigator.platform || navigator.userAgent) ? t('gifTip') : '' };
         }
       };
     }
