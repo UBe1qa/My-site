@@ -50,6 +50,7 @@
 <script src="assets/ads-config.js"></script>
 </head>
 <body>
+<script>(function(){var m={period:"span",dday:"span",time:"span",add:"move",workdays:"move",workadd:"move",age:"life",anniv:"life",weekday:"cal",week:"cal",holidays:"cal"},h=location.hash.slice(1),d=document.documentElement;if(!m.hasOwnProperty(h))h="period";d.setAttribute("data-tool",h);d.setAttribute("data-g",m[h])})()</script>
 <a class="skip" href="#tools" data-i18n="본문으로 건너뛰기">본문으로 건너뛰기</a>
 <header class="top wrap">
   <a class="logo" href="./"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span data-i18n="며칠 계산기">며칠 계산기</span></a>
@@ -72,7 +73,7 @@
       <h1 data-i18n="날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지">날짜 계산기: 며칠 남았는지, 영업일, 만 나이까지</h1>
       <p class="lede" data-i18n="두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.">두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 입력하는 즉시 계산해요.</p>
     </div>
-    <div class="today" id="today" hidden></div>
+    <div class="today" id="today"><div class="today-sheet"><span class="today-m">&nbsp;</span><b class="today-d">&nbsp;</b><span class="today-w">&nbsp;</span></div><div class="today-facts"><p class="today-k">&nbsp;</p><p>&nbsp;</p><div class="today-bar"></div><p>&nbsp;</p></div></div>
   </section>
 
   <div class="bench wrap">
@@ -215,6 +216,8 @@
     </section>
 
   </div>
+  <!-- 고른 계산기(#해시)를 첫 그림 전에 정한다: app.js(맨 아래)가 늦게 바꾸면 화면이 밀림(CLS) -->
+  <script>(function(){var h=location.hash.slice(1),s=document.getElementById(h);if(!s||!s.classList.contains("tool"))h="period";document.querySelectorAll(".stage .tool").forEach(function(t){t.hidden=t.id!==h});document.querySelectorAll(".picker a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-tool")===h)});document.querySelectorAll(".pg").forEach(function(g){var o=!!g.querySelector('a[data-tool="'+h+'"]');g.classList.toggle("open",o);g.querySelector(".pg-h").setAttribute("aria-expanded",o?"true":"false")})})()</script>
   <div class="ad-slot" data-ad="below-tool" hidden></div>
   </div>
 

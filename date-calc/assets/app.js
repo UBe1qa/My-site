@@ -298,7 +298,7 @@
       "<p>" + esc(F("올해 %s일째, 남은 날 %s일", num(doy), num(total - doy))) + "</p>" +
       '<div class="today-bar" aria-hidden="true"><i style="width:' + (doy / total * 100).toFixed(1) + '%"></i></div>' +
       (hol ? '<p><a href="#holidays">' + esc(hol) + "</a></p>" : "") + "</div>";
-    box.hidden = false;
+    box.classList.add("ready");
   }
   function renderAll() { for (var k in tools) render(k); renderToday(); }
 
@@ -307,6 +307,9 @@
   function show(name) {
     if (names.indexOf(name) < 0) name = "period";
     names.forEach(function (n) { $(n).hidden = n !== name; });
+    // 첫 그림 전(body 첫 줄 인라인 스크립트)에 정한 값도 같이 바꾼다: CSS가 이 값으로 고른 계산기·묶음만 보여 줌(CLS)
+    document.documentElement.setAttribute("data-tool", name);
+    document.documentElement.setAttribute("data-g", $(name).getAttribute("data-g"));
     document.querySelectorAll(".picker a").forEach(function (a) {
       var on = a.getAttribute("data-tool") === name;
       a.classList.toggle("on", on);
@@ -368,7 +371,8 @@
       '<a data-other-lang hreflang="' + other + '" href="' + esc(otherHref()) + '">' + (other === "en" ? "English version →" : "한국어로 보기 →") + "</a>" +
       '<button type="button" class="langbar-x" aria-label="' + (other === "en" ? "Close" : "닫기") + '">×</button></p>';
     bar.querySelector("button").addEventListener("click", function () { save("lang", lang); bar.remove(); });
-    document.body.insertBefore(bar, document.querySelector("header"));
+    // 화면 위에 겹쳐 띄움(position: absolute, 스크롤하면 같이 올라감): 끼워 넣으면 페이지 전체가 아래로 밀려 CLS가 크게 남(2026-10-06 실제 방문 0.47~0.98)
+    document.body.appendChild(bar);
   }
   $("country").value = country;
   $("country").addEventListener("change", function () {

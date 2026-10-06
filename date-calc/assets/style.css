@@ -85,7 +85,7 @@ h1, h2 { text-wrap: balance; }
 .mini select:hover, .lang:hover { border-color: var(--ink-2); }
 
 /* 언어 제안 띠: 브라우저 언어가 페이지 언어와 다를 때만 app.js가 넣는다. 자동으로 넘기지 않는다 */
-.langbar { background: var(--card); color: var(--ink-2); font-size: 14px; border-bottom: 1px solid var(--line); }
+.langbar { position: absolute; top: 8px; left: 8px; right: 8px; z-index: 60; max-width: 620px; margin: 0 auto; background: var(--card); color: var(--ink-2); font-size: 14px; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
 .langbar p { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin: 0; padding-top: 6px; padding-bottom: 6px; }
 .langbar a { color: var(--main); font-weight: 700; text-underline-offset: 3px; }
 .langbar-x { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 20px; line-height: 1; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; }
@@ -102,6 +102,9 @@ body:has(#today) h1 { font-size: clamp(27px, 4.6vw, 40px); line-height: 1.18; le
 body:has(#today) .lede { font-size: 16.5px; }
 
 /* 오늘 한 장: 흰 일력 종이(한 장 뒤에 넘겨질 장이 겹쳐 있음) + 올해 진행 */
+/* 오늘 한 장은 HTML에 같은 꼴의 빈 자리를 먼저 두고(보이지 않게) app.js가 채운다: 늦게 나타나며 제목·소개를 밀지 않게(CLS) */
+.today:not(.ready) > * { visibility: hidden; }
+.today-facts { width: 15em; }
 .today { display: flex; align-items: center; gap: 18px; padding: 14px 18px 14px 14px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
 .today-sheet {
   position: relative; flex: none; display: flex; flex-direction: column; align-items: center; width: 92px; padding-bottom: 8px;
@@ -138,6 +141,19 @@ body:has(#today) .lede { font-size: 16.5px; }
 .picker a b { display: block; font-size: 15px; font-weight: 700; line-height: 1.35; }
 .picker a span { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
 .picker a:hover { background: var(--cell); }
+/* 고른 계산기·묶음은 body 첫 줄 스크립트가 html[data-tool]·[data-g]에 적어 둔다: HTML을 다 읽기 전에 그려도 다른 계산기가 잠깐 보였다 사라지지 않게(CLS) */
+html[data-tool] .stage > .tool { display: none; }
+html[data-tool="period"] #period,
+html[data-tool="dday"] #dday,
+html[data-tool="time"] #time,
+html[data-tool="add"] #add,
+html[data-tool="workdays"] #workdays,
+html[data-tool="workadd"] #workadd,
+html[data-tool="age"] #age,
+html[data-tool="anniv"] #anniv,
+html[data-tool="weekday"] #weekday,
+html[data-tool="week"] #week,
+html[data-tool="holidays"] #holidays { display: block; }
 .picker a.on { background: var(--gs); }
 .picker a.on b { color: var(--g); }
 .picker a.on::before { content: ""; position: absolute; left: 18px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--g); }
@@ -182,6 +198,10 @@ body:has(#today) .lede { font-size: 16.5px; }
 .field:focus-within .dt-eg { opacity: 1; }
 .field .dt-txt.bad { border-color: var(--red); }
 .result.stale { opacity: .4; transition: opacity .15s; }
+/* 결과는 app.js가 채운다: 비어 있는 동안 첫 계산기(두 날짜 사이) 결과 높이만큼 자리를 잡아 아래를 밀지 않게(CLS) */
+.result:empty { min-height: 250px; }
+@media (max-width: 720px) { .result:empty { min-height: 280px; } }
+@media (max-width: 380px) { .result:empty { min-height: 430px; } }
 .field .dt-txt.bad:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 22%, transparent); }
 .check { display: flex; align-items: center; gap: 9px; margin-top: 12px; font-size: 15px; cursor: pointer; width: fit-content; }
 .check input { width: 19px; height: 19px; margin: 0; accent-color: var(--main); }
@@ -332,7 +352,8 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   /* 오늘 한 장은 제목 옆, 올해 며칠째·다음 공휴일은 소개 아래 한 줄 */
   .today { display: contents; }
   .today-sheet { grid-column: 2; grid-row: 1; margin-top: 4px; }
-  .today-facts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0 12px; max-width: none; margin-top: 8px; font-size: 13.5px; }
+  .today-facts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0 12px; width: auto; max-width: none; margin-top: 8px; font-size: 13.5px; }
+  html[lang="en"] .today-facts { min-height: 2.9em; }
   .today-facts .today-k, .today-bar { display: none; }
   body:has(#today) .top-nav { display: none; }
   .today-sheet { width: 58px; padding-bottom: 4px; border-radius: 9px; transform: rotate(-3deg); box-shadow: 3px 3px 0 -1px #fffefb, 3px 3px 0 0 #e3e1da, 0 6px 12px -8px rgba(20, 28, 45, .45); }
@@ -346,10 +367,10 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
     grid-row: 1; grid-column: span 3; flex-direction: column; justify-content: center; gap: 3px; margin: 0; padding: 8px 2px 7px; min-height: 64px;
     border-radius: 13px; background: var(--card); box-shadow: var(--shadow); color: var(--ink-2); font-size: 12px; text-align: center; line-height: 1.25; cursor: pointer;
   }
-  .pg.open .pg-h { background: var(--gs); color: var(--g); box-shadow: none; }
+  .pg.open .pg-h, html[data-g="span"] .pg[data-g="span"] .pg-h, html[data-g="move"] .pg[data-g="move"] .pg-h, html[data-g="life"] .pg[data-g="life"] .pg-h, html[data-g="cal"] .pg[data-g="cal"] .pg-h { background: var(--gs); color: var(--g); box-shadow: none; }
   /* 둘째 줄(계산기)은 밑줄 탭: 첫째 줄 묶음 칸과 모양이 달라 단계가 보인다 */
   .picker a { display: none; grid-column: span 4; padding: 9px 4px 8px; border-radius: 0; background: none; border-bottom: 2px solid var(--line); text-align: center; color: var(--ink-2); }
-  .pg.open a { display: block; }
+  .pg.open a, html[data-g="span"] .pg[data-g="span"] a, html[data-g="move"] .pg[data-g="move"] a, html[data-g="life"] .pg[data-g="life"] a, html[data-g="cal"] .pg[data-g="cal"] a { display: block; }
   .pg[data-g="life"] a { grid-column: span 6; }
   .picker a span { display: none; }
   .picker a b { font-size: 14px; }
@@ -424,7 +445,7 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 .fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; border-radius: inherit; }
 /* 좁은 휴대폰: 날짜 칸 반 폭엔 '2026.10.06'이 다 안 들어가서 한 줄에 하나씩 */
 @media (max-width: 480px) {
-  .grid2:has(.dt) { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .grid2:has(input[type="date"]) { grid-template-columns: minmax(0, 1fr); gap: 10px; }
 }
 /* 반 폭 두 칸(481~720px)에선 이름과 예시가 겹칠 수 있어 예시를 숨긴다 */
 @media (min-width: 481px) and (max-width: 720px) { .grid2 .dt-eg { display: none; } }

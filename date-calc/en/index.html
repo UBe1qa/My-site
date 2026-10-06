@@ -37,6 +37,7 @@
 <script src="/assets/ads-config.js"></script>
 </head>
 <body>
+<script>(function(){var m={period:"span",dday:"span",time:"span",add:"move",workdays:"move",workadd:"move",age:"life",anniv:"life",weekday:"cal",week:"cal",holidays:"cal"},h=location.hash.slice(1),d=document.documentElement;if(!m.hasOwnProperty(h))h="period";d.setAttribute("data-tool",h);d.setAttribute("data-g",m[h])})()</script>
 <a class="skip" href="#tools">Skip to content</a>
 <header class="top wrap">
   <a class="logo" href="/en/"><span class="logo-mark" aria-hidden="true"><b></b><b></b><b></b></span><span>Daycount</span></a>
@@ -59,7 +60,7 @@
       <h1>Date calculator: days between dates, business days, age</h1>
       <p class="lede">Days between dates, countdowns, exact age, and business days that skip US federal holidays and their observed days off. Calculated as you type, right in your browser.</p>
     </div>
-    <div class="today" id="today" hidden></div>
+    <div class="today" id="today"><div class="today-sheet"><span class="today-m">&nbsp;</span><b class="today-d">&nbsp;</b><span class="today-w">&nbsp;</span></div><div class="today-facts"><p class="today-k">&nbsp;</p><p>&nbsp;</p><div class="today-bar"></div><p>&nbsp;</p></div></div>
   </section>
 
   <div class="bench wrap">
@@ -191,6 +192,7 @@
     </section>
 
   </div>
+  <script>(function(){var h=location.hash.slice(1),s=document.getElementById(h);if(!s||!s.classList.contains("tool"))h="period";document.querySelectorAll(".stage .tool").forEach(function(t){t.hidden=t.id!==h});document.querySelectorAll(".picker a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-tool")===h)});document.querySelectorAll(".pg").forEach(function(g){var o=!!g.querySelector('a[data-tool="'+h+'"]');g.classList.toggle("open",o);g.querySelector(".pg-h").setAttribute("aria-expanded",o?"true":"false")})})()</script>
   <div class="ad-slot" data-ad="below-tool" hidden></div>
   </div>
 
