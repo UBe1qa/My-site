@@ -19,6 +19,6 @@
       io.unobserve(e.target);
     });
   }, { rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('.rv, .sets').forEach(function (n) { io.observe(n); });
+  document.querySelectorAll('.rv, .sets, .next').forEach(function (n) { io.observe(n); });
   addEventListener('beforeprint', function () { d.classList.remove('anim'); });
 })();

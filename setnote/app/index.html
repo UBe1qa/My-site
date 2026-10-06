@@ -24,6 +24,26 @@ window.SETNOTE_WEB = true;
 try { var t = localStorage.getItem('setnote:theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
 if ('serviceWorker' in navigator) addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 </script>
+<script>
+/* setnote.lumenlab.page 만 (앱 저장소 빌드에 없는 줄): 왼쪽 위 로고·이름을 누르면 소개 페이지(/)로. 같은 탭이라 뒤로 가기로 돌아온다.
+   홈 화면에 설치한 앱(standalone)에서는 쓰던 흐름이 끊기지 않게 링크로 만들지 않는다. 머리말은 다시 그려지므로 문서에서 받는다. */
+(function () {
+  var app = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  if (app) return;
+  var lab = function () { return document.documentElement.lang === 'en' ? 'SetNote: what it is' : '세트노트 소개'; };
+  var go = function (e) {
+    var b = e.target.closest && e.target.closest('header.top .brand');
+    if (!b || (e.type === 'keydown' && e.key !== 'Enter')) return;
+    e.preventDefault(); location.href = '/';
+  };
+  document.addEventListener('click', go); document.addEventListener('keydown', go);
+  new MutationObserver(function () {
+    var b = document.querySelector('header.top .brand:not([role])');
+    if (b) { b.setAttribute('role', 'link'); b.setAttribute('tabindex', '0'); b.setAttribute('aria-label', lab()); }
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+<style>header.top .brand[role=link]{cursor:pointer;border-radius:10px;transition:opacity .15s}header.top .brand[role=link]:hover{opacity:.75}header.top .brand[role=link]:active{opacity:.55}header.top .brand[role=link]:focus-visible{outline:2px solid currentColor;outline-offset:4px}</style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
 <body>
