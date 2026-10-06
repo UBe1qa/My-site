@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDF 페이지 번호 넣기 – 위치·형식 골라서</title>
+<meta name="description" content="PDF 아래나 위에 1, 1 / 10, - 1 - 형식으로 쪽 번호를 넣어요. 시작 번호를 정할 수 있고, 표지에는 번호를 빼고 넣을 수도 있어요.">
+
+<meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://convert.lumenlab.page/ko/pdf-page-numbers/">
+<link rel="alternate" hreflang="en" href="https://convert.lumenlab.page/pdf-page-numbers/">
+<link rel="alternate" hreflang="ko" href="https://convert.lumenlab.page/ko/pdf-page-numbers/">
+<link rel="alternate" hreflang="x-default" href="https://convert.lumenlab.page/pdf-page-numbers/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PDF 페이지 번호 넣기 – 위치·형식 골라서">
+<meta property="og:description" content="PDF 아래나 위에 1, 1 / 10, - 1 - 형식으로 쪽 번호를 넣어요. 시작 번호를 정할 수 있고, 표지에는 번호를 빼고 넣을 수도 있어요.">
+<meta property="og:url" content="https://convert.lumenlab.page/ko/pdf-page-numbers/">
+<meta property="og:site_name" content="인플레이스">
+<meta property="og:image" content="https://convert.lumenlab.page/og.png">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="importmap">{"imports":{"mediabunny":"/assets/vendor/mediabunny.min.mjs"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "PDF 쪽 번호 넣기", "url": "https://convert.lumenlab.page/ko/pdf-page-numbers/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "inLanguage": "ko", "isAccessibleForFree": true, "description": "PDF 아래나 위에 1, 1 / 10, - 1 - 형식으로 쪽 번호를 넣어요. 시작 번호를 정할 수 있고, 표지에는 번호를 빼고 넣을 수도 있어요.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "모든 도구", "item": "https://convert.lumenlab.page/ko/"}, {"@type": "ListItem", "position": 2, "name": "PDF 쪽 번호 넣기", "item": "https://convert.lumenlab.page/ko/pdf-page-numbers/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "'1쪽'이나 '페이지 1' 같은 한글 형식은 없나요?", "acceptedAnswer": {"@type": "Answer", "text": "번호를 Helvetica 글꼴의 글자로 넣는데, 이 글꼴에는 한글이 없어요. 그래서 숫자와 기호로 된 형식만 있어요."}}, {"@type": "Question", "name": "이미 쪽 번호가 있는 문서는요?", "acceptedAnswer": {"@type": "Answer", "text": "기존 번호는 지워지지 않고 새 번호가 그 위에 더해져요. 겹치지 않는 위치를 고르세요."}}, {"@type": "Question", "name": "일부 쪽에만 번호를 넣을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "첫 쪽은 건너뛸 수 있어요. 그 밖의 경우는 'PDF 나누기'로 나눈 뒤 부분마다 시작 번호를 정해 번호를 넣고, 'PDF 합치기'로 다시 합치면 돼요."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body class="tool-page">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top wrap">
+  <a class="logo" href="/ko/"><span class="flap logo-flap" aria-hidden="true" data-text="IN"><b>I</b><b>N</b></span><span>인플레이스</span></a>
+  <nav class="top-nav" aria-label="사이트 메뉴"><a href="/ko/#tools">모든 도구</a><a href="/ko/guide/">가이드</a><a class="lang" href="/pdf-page-numbers/" lang="en" hreflang="en">English</a></nav>
+</header>
+<main id="main">
+<section class="tool-hero wrap cat-pdf">
+  <p class="crumb"><a href="/ko/">모든 도구</a> <span aria-hidden="true">›</span> <a href="/ko/#pdf">PDF</a></p>
+  <div class="hero-row">
+    <h1>PDF 쪽 번호 넣기 (페이지 번호)</h1>
+    <p class="pair" aria-hidden="true"><span class="flap md" aria-hidden="true" data-text="PDF"><b>P</b><b>D</b><b>F</b></span><span class="arrow">→</span><span class="flap md" aria-hidden="true" data-text="1/9"><b>1</b><b>/</b><b>9</b></span></p>
+  </div>
+  <p class="lead">보고서·과제·논문을 인쇄하거나 제출하기 전에 쪽 번호를 넣어요. 파일은 업로드되지 않아요.</p>
+</section>
+<section class="tool wrap" data-tool="pdf-page-numbers" aria-label="PDF 쪽 번호 넣기">
+  <div class="drop">
+    <input type="file" id="f" class="sr" accept=".pdf">
+    <label for="f" class="btn-pick">파일 고르기</label>
+    <p class="drop-or">또는 여기에 끌어 놓기</p>
+    <p class="drop-fmts"><span class="sr">받는 형식: </span>PDF</p>
+  </div>
+  <p class="stays"><svg class="lock" viewBox="0 0 16 18" width="14" height="16" aria-hidden="true"><rect x="2" y="8" width="12" height="9" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 8V5.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="2"/></svg>이 기기 안에서 변환해요. 파일이 어디에도 올라가지 않아요.</p>
+  <div class="work" hidden></div>
+</section>
+<div class="prose wrap narrow"><section class="prose-sec"><h2>위치와 형식, 크기를 골라요</h2><p>아래 가운데(기본), 아래 오른쪽, 아래 왼쪽, 위 오른쪽, 위 가운데 중에서 고르고, 크기는 작게·보통 중에서 골라요.</p><p>형식은 1, 1 / 10, - 1 - 세 가지예요.</p></section><section class="prose-sec"><h2>표지는 빼고, 원하는 번호부터</h2><p>&#x27;첫 쪽(표지) 건너뛰기&#x27;를 켜면 첫 쪽에는 번호가 들어가지 않아요. 앞부분에 이어지는 문서라면 시작 번호를 바꾸세요. 예를 들어 31쪽부터 시작하는 장이라면 31로 정하면 돼요.</p></section><section class="prose-sec"><h2>번호는 진짜 글자로 들어가요</h2><p>번호는 그림이 아니라 PDF 기본 글꼴인 Helvetica 글자로 넣어서, 인쇄해도 선명하고 검색으로도 찾을 수 있어요.</p><p>쪽 내용은 다시 그리지 않고 그 위에 번호만 얹어요. 문서에서 비어 있는 자리를 고르세요.</p></section></div>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">광고</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<section class="faq wrap narrow"><h2>자주 묻는 질문</h2><details><summary>&#x27;1쪽&#x27;이나 &#x27;페이지 1&#x27; 같은 한글 형식은 없나요?</summary><p>번호를 Helvetica 글꼴의 글자로 넣는데, 이 글꼴에는 한글이 없어요. 그래서 숫자와 기호로 된 형식만 있어요.</p></details><details><summary>이미 쪽 번호가 있는 문서는요?</summary><p>기존 번호는 지워지지 않고 새 번호가 그 위에 더해져요. 겹치지 않는 위치를 고르세요.</p></details><details><summary>일부 쪽에만 번호를 넣을 수 있나요?</summary><p>첫 쪽은 건너뛸 수 있어요. 그 밖의 경우는 &#x27;PDF 나누기&#x27;로 나눈 뒤 부분마다 시작 번호를 정해 번호를 넣고, &#x27;PDF 합치기&#x27;로 다시 합치면 돼요.</p></details></section>
+<section class="related wrap"><h2>다른 PDF 도구</h2><div class="cards"><a class="card cat-pdf" href="/ko/merge-pdf/"><span class="flap xs" aria-hidden="true" data-text="1PDF"><b>1</b><b>P</b><b>D</b><b>F</b></span><span class="card-name">PDF 합치기</span><span class="card-line">여러 PDF를 원하는 순서로 하나로</span></a><a class="card cat-pdf" href="/ko/watermark-pdf/"><span class="flap xs" aria-hidden="true" data-text="MARK"><b>M</b><b>A</b><b>R</b><b>K</b></span><span class="card-name">PDF 워터마크</span><span class="card-line">모든 쪽에 글자 워터마크</span></a><a class="card cat-pdf" href="/ko/organize-pdf/"><span class="flap xs" aria-hidden="true" data-text="1234"><b>1</b><b>2</b><b>3</b><b>4</b></span><span class="card-name">PDF 쪽 삭제·정리</span><span class="card-line">쪽 빼고 순서 바꾸기</span></a><a class="card cat-pdf" href="/ko/images-to-pdf/"><span class="flap xs" aria-hidden="true" data-text="PDF"><b>P</b><b>D</b><b>F</b></span><span class="card-name">JPG PDF 변환</span><span class="card-line">사진·스캔을 PDF 하나로</span></a><a class="card cat-pdf" href="/ko/pdf-to-jpg/"><span class="flap xs" aria-hidden="true" data-text="JPG"><b>J</b><b>P</b><b>G</b></span><span class="card-name">PDF JPG 변환</span><span class="card-line">쪽마다 그림 파일로</span></a><a class="card cat-pdf" href="/ko/split-pdf/"><span class="flap xs" aria-hidden="true" data-text="P1-3"><b>P</b><b>1</b><b>-</b><b>3</b></span><span class="card-name">PDF 나누기</span><span class="card-line">쪽 범위나 같은 쪽 수로 나누기</span></a></div>
+<p class="all-link"><a href="/ko/#tools">모든 도구 →</a></p></section>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="maker">만든 곳 <a href="https://lumenlab.page/">Lumen Lab</a> <span aria-hidden="true">·</span> <a href="https://lumenlab.page/">루멘랩: 다른 앱과 도구 보기 →</a></p>
+    <div class="foot-cols"><div><p class="foot-h">동영상</p><ul><li><a href="/ko/video-to-mp3/">동영상 MP3 변환</a></li><li><a href="/ko/video-converter/">동영상 변환</a></li><li><a href="/ko/cut-video/">동영상 자르기</a></li><li><a href="/ko/compress-video/">동영상 용량 줄이기</a></li><li><a href="/ko/video-to-gif/">동영상 GIF 변환</a></li></ul></div><div><p class="foot-h">오디오</p><ul><li><a href="/ko/audio-converter/">오디오 변환</a></li><li><a href="/ko/cut-audio/">오디오 자르기</a></li></ul></div><div><p class="foot-h">이미지</p><ul><li><a href="/ko/image-converter/">이미지 변환</a></li><li><a href="/ko/heic-to-jpg/">HEIC JPG 변환</a></li><li><a href="/ko/compress-image/">이미지 용량 줄이기</a></li><li><a href="/ko/resize-image/">이미지 크기 조절</a></li></ul></div><div><p class="foot-h">PDF</p><ul><li><a href="/ko/images-to-pdf/">JPG PDF 변환</a></li><li><a href="/ko/pdf-to-jpg/">PDF JPG 변환</a></li><li><a href="/ko/merge-pdf/">PDF 합치기</a></li><li><a href="/ko/split-pdf/">PDF 나누기</a></li><li><a href="/ko/compress-pdf/">PDF 압축</a></li><li><a href="/ko/organize-pdf/">PDF 쪽 삭제·정리</a></li><li><a href="/ko/rotate-pdf/">PDF 회전</a></li><li><a href="/ko/pdf-page-numbers/">PDF 쪽 번호 넣기</a></li><li><a href="/ko/watermark-pdf/">PDF 워터마크</a></li><li><a href="/ko/protect-pdf/">PDF 암호 걸기</a></li><li><a href="/ko/unlock-pdf/">PDF 암호 풀기</a></li></ul></div><div><p class="foot-h">표·데이터</p><ul><li><a href="/ko/csv-json/">CSV ↔ JSON 변환</a></li><li><a href="/ko/excel-csv/">엑셀 ↔ CSV 변환</a></li></ul></div></div>
+    <p class="foot-links"><a href="/ko/about/">소개</a><a href="/ko/guide/">가이드</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+    <p class="muted small">© 2026 Lumen Lab</p>
+  </div>
+</footer>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

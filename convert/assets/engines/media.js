@@ -57,6 +57,8 @@ export async function probe(file) {
     const info = { duration, hasVideo: !!v, hasAudio: !!a };
     if (v) { info.width = v.displayWidth; info.height = v.displayHeight; info.videoCodec = v.codec; }
     if (a) { info.audioCodec = a.codec; info.sampleRate = a.sampleRate; info.channels = a.numberOfChannels; }
+    // 소리만 있는 파일은 크기 ÷ 길이로 대략의 비트레이트(kbps). 기본 음질을 원본보다 높게 잡지 않으려고 쓴다.
+    if (a && !v && duration > 0) info.kbps = Math.round((file.size * 8) / duration / 1000);
     return info;
   } finally { input.dispose && input.dispose(); }
 }
@@ -138,6 +140,7 @@ export function convert(file, opts, onProgress) {
     const trim = opts.trim && (opts.trim.start > 0.01 || opts.trim.end < dur - 0.01) ? { start: opts.trim.start, end: opts.trim.end } : undefined;
     const start = trim ? trim.start : 0, end = trim ? trim.end : dur;
     const audio = { };
+    let compat = true;
     if (out.audioOnly) { audio.codec = out.codec; }
     if (opts.bitrate) audio.bitrate = opts.bitrate * 1000;
     if (opts.fade && (opts.fade.in || opts.fade.out)) { audio.process = fadeProcessor(opts.fade, start, end); audio.forceTranscode = true; }
@@ -156,6 +159,16 @@ export function convert(file, opts, onProgress) {
         audio.bitrate = 128000;
       }
       if (opts.exact) video.forceTranscode = true;
+      // MP4·MOV로 바꾸는 이유는 대개 '어디서나 열리게'라서, VP9·AV1 영상과 Opus·Vorbis 소리는 H.264·AAC로 다시 만든다
+      if (out.ext === 'mp4' || out.ext === 'mov') {
+        const [vt, at] = await Promise.all([input.getPrimaryVideoTrack(), input.getPrimaryAudioTrack()]);
+        if (vt && !video.codec && !['avc', 'hevc'].includes(vt.codec)) {
+          const vc = await getFirstEncodableVideoCodec(['avc', 'hevc']);
+          if (vc) { video.codec = vc; if (!video.bitrate) video.bitrate = new Quality('high'); }
+          else compat = false; // 이 브라우저가 H.264·HEVC를 못 만들면 그대로 담고 화면에 알린다
+        }
+        if (at && !audio.codec && !['aac', 'mp3'].includes(at.codec)) audio.codec = 'aac';
+      }
     }
     const conf = { input, output, audio, video, showWarnings: false };
     if (trim) conf.trim = trim;
@@ -166,7 +179,10 @@ export function convert(file, opts, onProgress) {
         video.width = w; video.height = opts.maxHeight; video.fit = 'contain';
       }
     }
-    if (trim && !opts.exact && !out.audioOnly) conf.copy = { region: 'expand' };
+    // 빠른 자르기: 다시 인코딩하지 않고 가장 가까운 경계(영상은 키프레임, 소리는 수십 ms 단위 프레임)에서 자른다.
+    // 소리만 자를 때도 같은 코덱이면 옮겨 담아 음질·비트레이트를 그대로 둔다(128kbps MP3가 320kbps로 커지지 않게).
+    // 영상은 기본값(키프레임까지 넓혀서 옮겨 담기). 소리는 프레임 경계에 맞추려면 아주 조금(0.1초 이하) 밀어야 해서 그만큼 허용한다.
+    if (trim && !opts.exact && out.audioOnly && !audio.process && !opts.bitrate) conf.copy = { shiftTolerance: 0.1 };
     conversion = await Conversion.init(conf);
     if (canceled) throw new DOMException('canceled', 'AbortError');
     if (!conversion.isValid) {
@@ -176,21 +192,24 @@ export function convert(file, opts, onProgress) {
       const err = new Error('invalid:' + why); err.code = /undecodable/.test(why) ? 'decode' : /encod/.test(why) ? 'encode' : 'format';
       throw err;
     }
-    const copied = conversion.utilizedTracks.length > 0 && !opts.exact && !opts.compress && !(audio.process) && await isCopy(conversion);
+    const copied = conversion.utilizedTracks.length > 0 && isCopy(conversion, audio, video);
     conversion.onProgress = (p) => onProgress && onProgress(p);
     await conversion.execute();
-    return { blob: new Blob([output.target.buffer], { type: out.mime }), ext: out.ext, mime: out.mime, copied };
+    return { blob: new Blob([output.target.buffer], { type: out.mime }), ext: out.ext, mime: out.mime, copied, compat };
   })();
   return { promise: job, cancel: () => { canceled = true; conversion && conversion.cancel(); } };
 }
 
-// 모든 트랙이 옮겨 담기(copy)로 처리되는지. Mediabunny는 이를 바로 알려 주지 않아서, 코덱이 같고 출력 형식이 받는지로 판단한다.
-async function isCopy(conversion) {
+// 모든 트랙이 옮겨 담기(copy)로 처리되는지. 코덱·비트레이트·크기를 바꾸라고 했거나 출력 형식이 그 코덱을 못 받으면 다시 인코딩된다.
+function isCopy(conversion, audio, video) {
   try {
     const fmt = conversion.output.format;
     for (const t of conversion.utilizedTracks) {
+      const o = t.isVideoTrack() ? video : audio;
       const codecs = t.isVideoTrack() ? fmt.getSupportedVideoCodecs() : fmt.getSupportedAudioCodecs();
       if (!codecs.includes(t.codec)) return false;
+      if (o.forceTranscode || o.process || o.bitrate || o.width || o.height || o.sampleRate || o.numberOfChannels) return false;
+      if (o.codec && o.codec !== t.codec) return false;
     }
     return true;
   } catch (e) { return false; }

@@ -23,4 +23,6 @@ t('toCSV quoting+nested', () => assert.equal(toCSV([['a','b'],['x,y',{c:1}],[nul
 t('toCSV bom', () => assert.ok(toCSV([['가']], {bom:true}).startsWith(BOM)));
 t('roundtrip', () => { const rows=[['a','b'],['1,2','line\nbreak'],['"q"','  sp ']]; assert.deepEqual(parseCSV(toCSV(rows)).rows, rows); });
 t('roundtrip semicolon', () => { const rows=[['a','b'],['1;2','x']]; assert.deepEqual(parseCSV(toCSV(rows,{delimiter:';'}),';').rows, rows); });
+t('json types per column', () => assert.deepEqual(rowsToJson([['code','n'],['01234','1'],['12345','']], {types:true}), [{code:'01234',n:1},{code:'12345',n:''}]));
+t('json types no header', () => assert.deepEqual(rowsToJson([['a','1'],['b','2']], {header:false, types:true}), [['a',1],['b',2]]));
 console.log('data tests passed:', n);

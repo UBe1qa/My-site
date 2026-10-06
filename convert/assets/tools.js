@@ -34,8 +34,8 @@ export const TOOLS = {
    "ko": "오디오 변환"
   },
   "short": {
-   "en": "MP3, M4A, WAV, OGG, FLAC and bitrate",
-   "ko": "MP3·M4A·WAV·OGG·FLAC, 음질 고르기"
+   "en": "Save as MP3, M4A, WAV or OGG",
+   "ko": "MP3·M4A·WAV·OGG로, 음질 고르기"
   }
  },
  "cut-audio": {
@@ -283,6 +283,139 @@ export const TOOLS = {
   "short": {
    "en": "By page range or equal chunks",
    "ko": "쪽 범위나 같은 쪽 수로 나누기"
+  }
+ },
+ "compress-pdf": {
+  "id": "compress-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "9MB",
+   "2MB"
+  ],
+  "name": {
+   "en": "Compress PDF",
+   "ko": "PDF 압축"
+  },
+  "short": {
+   "en": "Smaller PDFs, text stays sharp",
+   "ko": "스캔 PDF 용량 줄이기, 글자는 선명"
+  }
+ },
+ "organize-pdf": {
+  "id": "organize-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "3412",
+   "1234"
+  ],
+  "name": {
+   "en": "Delete & Reorder PDF Pages",
+   "ko": "PDF 쪽 삭제·정리"
+  },
+  "short": {
+   "en": "Remove pages, change their order",
+   "ko": "쪽 빼고 순서 바꾸기"
+  }
+ },
+ "rotate-pdf": {
+  "id": "rotate-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "PDF",
+   "90°"
+  ],
+  "name": {
+   "en": "Rotate PDF",
+   "ko": "PDF 회전"
+  },
+  "short": {
+   "en": "Turn pages 90° at a time",
+   "ko": "쪽마다 90°씩 돌리기"
+  }
+ },
+ "pdf-page-numbers": {
+  "id": "pdf-page-numbers",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "PDF",
+   "1/9"
+  ],
+  "name": {
+   "en": "Add Page Numbers",
+   "ko": "PDF 쪽 번호 넣기"
+  },
+  "short": {
+   "en": "Number pages, choose where",
+   "ko": "위치·형식 골라 쪽 번호 넣기"
+  }
+ },
+ "watermark-pdf": {
+  "id": "watermark-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "PDF",
+   "MARK"
+  ],
+  "name": {
+   "en": "Watermark PDF",
+   "ko": "PDF 워터마크"
+  },
+  "short": {
+   "en": "Your text on every page",
+   "ko": "모든 쪽에 글자 워터마크"
+  }
+ },
+ "protect-pdf": {
+  "id": "protect-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "PDF",
+   "LOCK"
+  ],
+  "name": {
+   "en": "Protect PDF",
+   "ko": "PDF 암호 걸기"
+  },
+  "short": {
+   "en": "Lock a PDF with a password",
+   "ko": "PDF에 비밀번호 걸기"
+  }
+ },
+ "unlock-pdf": {
+  "id": "unlock-pdf",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "LOCK",
+   "OPEN"
+  ],
+  "name": {
+   "en": "Unlock PDF",
+   "ko": "PDF 암호 풀기"
+  },
+  "short": {
+   "en": "Take the password off a PDF",
+   "ko": "PDF 비밀번호 없애기"
   }
  },
  "csv-json": {

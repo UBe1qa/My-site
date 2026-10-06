@@ -1,4 +1,4 @@
-// 실제 파일로 도구 17개를 눌러 보고 결과 파일을 검사한다.
+// 실제 파일로 도구 24개를 눌러 보고 결과 파일을 검사한다.
 // node convert/_dev/e2e.mjs <fixtures 폴더> <결과 폴더> [base=http://localhost:8431] [도구id…]
 // playwright-core 필요(NODE_PATH로 지정). 광고 요청은 막는다.
 import { chromium } from 'playwright-core';
@@ -31,12 +31,27 @@ async function run(c) {
     } else {
       await page.setInputFiles('.tool input[type=file]', c.files.map(fx));
     }
-    await page.waitForSelector('.btn-go:not(.btn-pick), .err', { timeout: 30000 });
-    if (await page.$('.err')) throw new Error('setup: ' + (await page.textContent('.err')));
+    await page.waitForSelector('.btn-go:not(.btn-pick), .err, .opts > .note', { timeout: 30000 });
+    if (c.expectErr && !(await page.$('.actions .btn-go')) && (await page.$('.opts > .note'))) {
+      const tx = await page.textContent('.opts > .note');
+      assert(c.expectErr.test(tx), 'wrong note: ' + tx);
+      results.push({ name: c.name, ok: true, ms: Date.now() - t0, check: 'note shown: ' + tx.slice(0, 90), errors: [] });
+      await ctx.close(); return;
+    }
+    // expectErr: 이 오류 문구가 나와야 통과(잘못된 입력 시험)
+    const errOut = async (where) => {
+      const tx = await page.textContent(where);
+      if (!c.expectErr) throw new Error((where === '.err' ? 'setup: ' : 'run: ') + tx);
+      assert(c.expectErr.test(tx), 'wrong error: ' + tx);
+      results.push({ name: c.name, ok: true, ms: Date.now() - t0, check: 'error shown: ' + tx.slice(0, 90), errors: [] });
+      return true;
+    };
+    if (await page.$('.err')) { await errOut('.err'); await ctx.close(); return; }
     for (const a of c.actions || []) await a(page);
     await page.click('.actions .btn-go');
     await page.waitForSelector('.result, .out .err', { timeout: c.timeout || 120000 });
-    if (await page.$('.out .err')) throw new Error('run: ' + (await page.textContent('.out .err')));
+    if (await page.$('.out .err')) { await errOut('.out .err'); await ctx.close(); return; }
+    if (c.expectErr) throw new Error('expected an error, got a result');
     const files = await page.evaluate(async () => {
       const as = [...document.querySelectorAll('.result a[download]')];
       const out = [];
@@ -84,7 +99,8 @@ const CASES = [
       assert(a < b - 12, `fade not applied ${a} vs ${b}`);
       return `cut ${p.format.duration}s fadeStart ${a}dB mid ${b}dB`;
     } },
-  { name: 'video-webm2mp4', tool: 'video-converter', files: ['clip.webm'], timeout: 180000, check: async ([f], note) => { const p = probe(f.path); const v = p.streams.find((s) => s.codec_type === 'video'); assert(v, 'no video'); assert(near(+p.format.duration, 6, 0.4), 'dur'); return `mp4 ${v.codec_name} ${v.width}x${v.height} ${(+p.format.duration).toFixed(2)}s copied=${/Copied|옮겨/.test(note)}`; } },
+  // MP4로 바꾸면 H.264(+AAC)여야 한다. 이 브라우저가 H.264를 못 만들면 그 사실을 알려야 한다.
+  { name: 'video-webm2mp4', tool: 'video-converter', files: ['clip.webm'], timeout: 180000, check: async ([f], note) => { const p = probe(f.path); const v = p.streams.find((s) => s.codec_type === 'video'); const a = p.streams.find((s) => s.codec_type === 'audio'); assert(v, 'no video'); assert(near(+p.format.duration, 6, 0.4), 'dur'); assert(v.codec_name === 'h264' || /H\.264/.test(note), 'vp9 in mp4 without notice'); assert(!a || a.codec_name === 'aac', 'audio ' + (a && a.codec_name)); assert(!/Copied/.test(note), 'false copied notice'); return `mp4 ${v.codec_name}+${a && a.codec_name} ${(+p.format.duration).toFixed(2)}s notice=${/H\.264/.test(note)}`; } },
   { name: 'video-mp42webm', tool: 'video-converter', files: ['clip.mp4'], actions: [chip('WebM')], timeout: 180000, check: async ([f]) => { const p = probe(f.path); return p.streams.map((s) => s.codec_name).join('+'); } },
   { name: 'video-webm2mkv-copy', tool: 'video-converter', files: ['clip.webm'], actions: [chip('MOV')], timeout: 180000, check: async ([f], note) => { const p = probe(f.path); return p.streams.map((s) => s.codec_name).join('+') + ' copied=' + /Copied/.test(note); } },
   { name: 'cut-video', tool: 'cut-video', files: ['clip.webm'], actions: [async (p) => { await p.fill('.tl-row input.time >> nth=0', '0:02.0'); await p.press('.tl-row input.time >> nth=0', 'Enter'); await p.fill('.tl-row input.time >> nth=1', '0:04.0'); await p.press('.tl-row input.time >> nth=1', 'Enter'); }],
@@ -110,6 +126,40 @@ const CASES = [
   { name: 'xlsx2csv', tool: 'excel-csv', files: ['book.xlsx'], lang: 'ko', check: async ([f]) => { const s = fs.readFileSync(f.path, 'utf8'); assert(s.startsWith('﻿품목,수량,단가,합계\r\n사과,3,1200,3600'), JSON.stringify(s)); return JSON.stringify(s.slice(0, 60)); } },
   { name: 'xlsx2csv-all', tool: 'excel-csv', files: ['book.xlsx'], actions: [chip('All sheets')], check: async (fl) => { assert(fl.length === 2, 'n'); return fl.map((f) => f.name).join(','); } },
   { name: 'csv2xlsx', tool: 'excel-csv', files: ['people.csv'], check: async ([f]) => { assert(fs.readFileSync(f.path).subarray(0, 2).toString() === 'PK', 'zip'); return 'xlsx ' + fs.statSync(f.path).size + 'B'; } },
+  // ---- 결함 수정 확인(2026-10-06 제3자 평가) ----
+  { name: 'img2pdf-exif', tool: 'images-to-pdf', files: ['rot6.jpg'], check: async ([f]) => { const d = await PDFDocument.load(fs.readFileSync(f.path)); const { width, height } = d.getPage(0).getSize(); assert(height > width, `page lies sideways ${width}x${height}`); return `portrait page ${Math.round(width)}x${Math.round(height)}`; } },
+  { name: 'cut-mp3-keep', tool: 'cut-audio', files: ['tone.mp3'], actions: [async (p) => { await p.fill('.tl-row input.time >> nth=0', '0:01.0'); await p.press('.tl-row input.time >> nth=0', 'Enter'); await p.fill('.tl-row input.time >> nth=1', '0:03.0'); await p.press('.tl-row input.time >> nth=1', 'Enter'); }],
+    check: async ([f], note) => { const p = probe(f.path); const kb = Math.round(+p.format.bit_rate / 1000); assert(p.streams[0].codec_name === 'mp3' && kb <= 140, 'kbps ' + kb); return `mp3 ${kb}kbps ${(+p.format.duration).toFixed(2)}s copied=${/Copied/.test(note)}`; } },
+  { name: 'audio-wav2m4a-note', tool: 'audio-converter', files: ['tone.wav'], actions: [chip('M4A')], timeout: 180000, check: async ([f], note) => { assert(!/Copied/.test(note), 'false copied notice'); return 'aac, no copied notice'; } },
+  { name: 'cut-order-warn', tool: 'cut-audio', files: ['tone.wav'], actions: [async (p) => { await p.fill('.tl-row input.time >> nth=1', '0:00.5'); await p.press('.tl-row input.time >> nth=1', 'Enter'); await p.fill('.tl-row input.time >> nth=0', '0:03.0'); await p.press('.tl-row input.time >> nth=0', 'Enter'); const w = await p.textContent('.tl-row + .warn'); assert(/after the start/.test(w) && await p.isVisible('.tl-row + .warn'), 'no warning: ' + w); }],
+    check: async ([f]) => { const d = +probe(f.path).format.duration; assert(d > 0.4, 'dur ' + d); return 'warned, kept 0:00–0:00.5 (' + d.toFixed(2) + 's)'; } },
+  { name: 'merge-restricted', tool: 'merge-pdf', files: ['restricted.pdf', 'doc2.pdf'], check: async ([f]) => { const n = await pdfPages(f.path); return 'merged ' + n + ' pages'; } },
+  { name: 'merge-locked', tool: 'merge-pdf', files: ['doc2.pdf', 'locked.pdf'], expectErr: /locked\.pdf.*Unlock PDF/ },
+  { name: 'split-n0', tool: 'split-pdf', files: ['doc3.pdf'], actions: [chip('Every N'), async (p) => p.fill('.num input', '0')], expectErr: /whole number/ },
+  { name: 'compress-img-alpha', tool: 'compress-image', files: ['alpha.png'], check: async ([f], note) => { const s = fs.statSync(f.path).size; assert(s <= fs.statSync(fx('alpha.png')).size, 'bigger ' + s); return f.name + ' ' + s + 'B ' + (/original/.test(note) ? '(kept original)' : ''); } },
+  { name: 'img-dup-names', tool: 'image-converter', files: ['photo.png', 'photo.webp'], check: async (fl) => { assert(fl[0].name !== fl[1].name, 'same names ' + fl[0].name); return fl.map((f) => f.name).join(','); } },
+  { name: 'resize-too-big', tool: 'resize-image', files: ['photo.jpg'], lang: 'ko', actions: [async (p) => { await p.fill('.num:has-text("가로") input', '99999'); await p.dispatchEvent('.num:has-text("가로") input', 'input'); }], expectErr: /16,000px/ },
+  { name: 'csv2xlsx-num', tool: 'excel-csv', files: ['people.csv'], check: async ([f]) => { const x = execFileSync('unzip', ['-p', f.path, 'xl/worksheets/sheet1.xml']).toString(); const b2 = (x.match(/<c r="B2"[^>]*>.*?<\/c>/) || [''])[0], c2 = (x.match(/<c r="C2"[^>]*>.*?<\/c>/) || [''])[0]; assert(!/t="s"|t="str"|inlineStr/.test(b2), 'age is text: ' + b2); assert(/t="s"|t="str"|inlineStr/.test(c2), 'zip lost: ' + c2); return 'B2 number, C2 text'; } },
+  { name: 'json2csv-en-bom', tool: 'csv-json', files: ['items.json'], check: async ([f]) => { assert(fs.readFileSync(f.path, 'utf8').startsWith('﻿'), 'no bom'); return 'BOM on (en)'; } },
+  // ---- 새 PDF 도구 ----
+  { name: 'compress-pdf', tool: 'compress-pdf', files: ['scan.pdf'], timeout: 180000, shot: true, check: async ([f]) => { const a = fs.statSync(fx('scan.pdf')).size, b = fs.statSync(f.path).size; assert(b < a * 0.7, `${a} → ${b}`); assert(await pdfPages(f.path) === 3, 'pages'); const tx = execFileSync('pdftotext', [f.path, '-']).toString(); assert(/Scan page/.test(tx), 'text lost'); return `${a} → ${b} (${Math.round(100 - b / a * 100)}% smaller)`; } },
+  { name: 'compress-pdf-strong', tool: 'compress-pdf', files: ['scan.pdf'], timeout: 180000, actions: [chip('Strong')], check: async ([f]) => `${fs.statSync(f.path).size}B` },
+  { name: 'compress-pdf-text', tool: 'compress-pdf', files: ['doc3.pdf'], check: async ([f], note) => `${fs.statSync(fx('doc3.pdf')).size} → ${fs.statSync(f.path).size} ${/already/.test(note) ? '(kept)' : ''}` },
+  { name: 'rotate-pdf', tool: 'rotate-pdf', files: ['doc3.pdf'], shot: true, actions: [async (p) => { await p.waitForSelector('.pg-img canvas'); await p.click('.pg-img >> nth=0'); await p.click('.pg-img >> nth=0'); await p.click('.pg-img >> nth=2'); }],
+    check: async ([f]) => { const d = await PDFDocument.load(fs.readFileSync(f.path)); const r = d.getPages().map((x) => x.getRotation().angle); assert(r.join() === '180,0,90', 'rot ' + r); return 'rotations ' + r.join(','); } },
+  { name: 'rotate-pdf-all', tool: 'rotate-pdf', files: ['restricted.pdf'], actions: [async (p) => p.click('button:has-text("Rotate all left")')], check: async ([f]) => { const d = await PDFDocument.load(fs.readFileSync(f.path)); return 'rotations ' + d.getPages().map((x) => x.getRotation().angle).join(','); } },
+  { name: 'organize-pdf', tool: 'organize-pdf', files: ['doc3.pdf'], shot: true, actions: [async (p) => { await p.click('.pg-del >> nth=1'); await p.click('.pg >> nth=2 >> button[aria-label^="Move earlier"]'); }],
+    check: async ([f]) => { assert(await pdfPages(f.path) === 2, 'pages'); const tx = execFileSync('pdftotext', [f.path, '-']).toString().replace(/\s+/g, ' '); return 'text: ' + tx.slice(0, 80); } },
+  { name: 'unlock-restricted', tool: 'unlock-pdf', files: ['restricted.pdf'], check: async ([f]) => { assert(!/\/Encrypt/.test(fs.readFileSync(f.path).toString('latin1')), 'still encrypted'); return 'restrictions removed'; } },
+  { name: 'unlock-locked', tool: 'unlock-pdf', files: ['locked.pdf'], actions: [async (p) => p.fill('input[type=password]', 'user1')], check: async ([f]) => { assert(!/\/Encrypt/.test(fs.readFileSync(f.path).toString('latin1')), 'still encrypted'); return 'unlocked ' + (await pdfPages(f.path)) + ' pages'; } },
+  { name: 'unlock-wrongpw', tool: 'unlock-pdf', files: ['locked.pdf'], actions: [async (p) => p.fill('input[type=password]', 'nope')], expectErr: /doesn’t open/ },
+  { name: 'unlock-none', tool: 'unlock-pdf', files: ['doc3.pdf'], expectErr: /no password/, actions: [] },
+  { name: 'protect-pdf', tool: 'protect-pdf', files: ['doc3.pdf'], actions: [async (p) => { await p.fill('input[type=password] >> nth=0', 'pw123'); await p.fill('input[type=password] >> nth=1', 'pw123'); await p.check('.toggle:has-text("block") input'); }],
+    check: async ([f]) => { const raw = fs.readFileSync(f.path).toString('latin1'); assert(/\/Encrypt/.test(raw), 'not encrypted'); const bad = spawnSync('pdftotext', [f.path, '-'], { encoding: 'utf8' }); const good = spawnSync('pdftotext', ['-upw', 'pw123', f.path, '-'], { encoding: 'utf8' }); assert(bad.status !== 0, 'opens without password'); assert(good.status === 0, 'password fails: ' + good.stderr); return 'AES, opens only with password'; } },
+  { name: 'protect-mismatch', tool: 'protect-pdf', files: ['doc3.pdf'], actions: [async (p) => { await p.fill('input[type=password] >> nth=0', 'a'); await p.fill('input[type=password] >> nth=1', 'b'); }], expectErr: /don’t match/ },
+  { name: 'page-numbers', tool: 'pdf-page-numbers', files: ['doc3.pdf'], actions: [async (p) => p.click('.chips button:has-text("1 / 9")')], check: async ([f]) => { const tx = execFileSync('pdftotext', [f.path, '-']).toString(); assert(/1\s*\/\s*3/.test(tx) && /3\s*\/\s*3/.test(tx), 'numbers missing: ' + tx.slice(0, 200)); return 'has 1 / 3 … 3 / 3'; } },
+  { name: 'page-numbers-ko', tool: 'pdf-page-numbers', files: ['restricted.pdf'], lang: 'ko', actions: [async (p) => { await p.check('.toggle input'); }], check: async ([f]) => { const tx = execFileSync('pdftotext', [f.path, '-']).toString(); return 'text tail: ' + tx.replace(/\s+/g, ' ').slice(-40); } },
+  { name: 'watermark-ko', tool: 'watermark-pdf', files: ['doc3.pdf'], lang: 'ko', shot: true, actions: [chip('바둑판')], check: async ([f]) => { const a = fs.statSync(fx('doc3.pdf')).size, b = fs.statSync(f.path).size; assert(b > a, 'no change'); assert(await pdfPages(f.path) === 3, 'pages'); return `${a} → ${b}B`; } },
   { name: 'hub-heic', hub: true, files: ['sample.heic'], hubPick: 'HEIC', timeout: 120000, check: async ([f]) => { const p = probe(f.path); return 'hub → ' + p.streams[0].codec_name; } },
 ];
 import { spawnSync } from 'node:child_process';

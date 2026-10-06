@@ -2,7 +2,7 @@
 """인플레이스(convert.lumenlab.page) 페이지 전부 만들기: python3 convert/_dev/build.py
 
 - 도구 목록·설정 = 아래 TOOLS, 글 = _dev/content.json(도구·첫 페이지·소개) + _dev/articles.json(가이드 글).
-- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 17개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml, rss.xml(한국어 글),
+- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 24개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml, rss.xml(한국어 글),
   assets/tools.js(화면 코드가 쓰는 도구 목록). 만든 파일은 손으로 고치지 않는다.
 - lastmod는 UPDATED에 실제로 고친 날만 적는다.
 """
@@ -36,6 +36,13 @@ TOOLS = [
     dict(id='pdf-to-jpg', cat='pdf', accept='.pdf', pair=('PDF', 'JPG'), fmts='PDF'),
     dict(id='merge-pdf', cat='pdf', accept='.pdf', multiple=True, order=True, pair=('PDF', '1PDF'), fmts='PDF'),
     dict(id='split-pdf', cat='pdf', accept='.pdf', pair=('PDF', 'P1-3'), fmts='PDF'),
+    dict(id='compress-pdf', cat='pdf', accept='.pdf', pair=('9MB', '2MB'), fmts='PDF'),
+    dict(id='organize-pdf', cat='pdf', accept='.pdf', pair=('3412', '1234'), fmts='PDF'),
+    dict(id='rotate-pdf', cat='pdf', accept='.pdf', pair=('PDF', '90°'), fmts='PDF'),
+    dict(id='pdf-page-numbers', cat='pdf', accept='.pdf', pair=('PDF', '1/9'), fmts='PDF'),
+    dict(id='watermark-pdf', cat='pdf', accept='.pdf', pair=('PDF', 'MARK'), fmts='PDF'),
+    dict(id='protect-pdf', cat='pdf', accept='.pdf', pair=('PDF', 'LOCK'), fmts='PDF'),
+    dict(id='unlock-pdf', cat='pdf', accept='.pdf', pair=('LOCK', 'OPEN'), fmts='PDF'),
     # 표
     dict(id='csv-json', cat='data', accept='.csv,.tsv,.txt,.json', pair=('CSV', 'JSON'), fmts='CSV, TSV, JSON'),
     dict(id='excel-csv', cat='data', accept='.xlsx,.xls,.xlsm,.ods,.csv', pair=('XLSX', 'CSV'), fmts='XLSX, XLS, ODS, CSV'),
@@ -55,7 +62,7 @@ CATS = {
     'data': {'en': 'Spreadsheets & data', 'ko': '표·데이터'},
 }
 CAT_ORDER = ['video', 'audio', 'image', 'pdf', 'data']
-ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal'}
+ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal', 'compress-pdf-without-upload': 'pdf-yongryang-julgi'}
 
 UI = {
     'en': dict(brand='Inplace', all='All tools', guides='Guides', about='About', privacy='Privacy', licenses='Open-source licenses',
@@ -227,8 +234,10 @@ def tool_page(tool, lang):
     if faq:
         faq_html = f'<section class="faq wrap narrow"><h2>{u["faq"]}</h2>' + ''.join(
             f'<details><summary>{esc(q["q"])}</summary><p>{esc(q["a"])}</p></details>' for q in faq) + '</section>'
-    rel = [t for t in TOOLS if t['cat'] == tool['cat'] and t['id'] != tool['id']]
-    rel += [t for t in TOOLS if t['cat'] != tool['cat'] and t['id'] in RELATED.get(tool['id'], [])]
+    # 직접 고른 짝을 먼저, 그다음 같은 분류
+    picks = RELATED.get(tool['id'], [])
+    rel = [t for i in picks for t in TOOLS if t['id'] == i]
+    rel += [t for t in TOOLS if t['cat'] == tool['cat'] and t['id'] != tool['id'] and t['id'] not in picks]
     rel_html = ''.join(card(t, lang) for t in rel[:6])
     ld = [{
         '@context': 'https://schema.org', '@type': 'WebApplication', 'name': c['name'], 'url': url(lang, path),
@@ -270,6 +279,11 @@ RELATED = {
     'video-to-mp3': ['cut-audio', 'audio-converter'], 'heic-to-jpg': ['compress-image', 'images-to-pdf'],
     'images-to-pdf': ['heic-to-jpg', 'compress-image'], 'pdf-to-jpg': ['compress-image', 'images-to-pdf'],
     'csv-json': ['excel-csv'], 'excel-csv': ['csv-json'], 'compress-image': ['pdf-to-jpg'],
+    'merge-pdf': ['compress-pdf', 'organize-pdf', 'pdf-page-numbers'], 'split-pdf': ['organize-pdf', 'merge-pdf'],
+    'compress-pdf': ['merge-pdf', 'compress-image', 'pdf-to-jpg'], 'organize-pdf': ['rotate-pdf', 'split-pdf', 'merge-pdf'],
+    'rotate-pdf': ['organize-pdf', 'merge-pdf'], 'pdf-page-numbers': ['merge-pdf', 'watermark-pdf', 'organize-pdf'],
+    'watermark-pdf': ['protect-pdf', 'pdf-page-numbers'], 'protect-pdf': ['watermark-pdf', 'unlock-pdf', 'compress-pdf'],
+    'unlock-pdf': ['protect-pdf', 'merge-pdf', 'compress-pdf'],
 }
 
 
@@ -409,6 +423,7 @@ LICENSES = [
     ('PDF.js', 'Mozilla Foundation', 'Apache-2.0', 'https://github.com/mozilla/pdf.js', 'https://www.apache.org/licenses/LICENSE-2.0'),
     ('libheif-js (libheif)', 'catdad; struktur AG', 'LGPL-3.0', 'https://github.com/catdad-experiments/libheif-js', 'https://www.gnu.org/licenses/lgpl-3.0.html'),
     ('gifenc', 'Matt DesLauriers', 'MIT', 'https://github.com/mattdesl/gifenc', 'https://github.com/mattdesl/gifenc/blob/master/LICENSE.md'),
+    ('qpdf (WebAssembly build by @neslinesli93/qpdf-wasm)', 'Jay Berkenbilt and contributors; Tommaso Pifferi', 'Apache-2.0 (qpdf); ISC (wasm build)', 'https://github.com/qpdf/qpdf', 'https://www.apache.org/licenses/LICENSE-2.0'),
     ('fflate', 'Arjun Barrett', 'MIT', 'https://github.com/101arrowz/fflate', 'https://github.com/101arrowz/fflate/blob/master/LICENSE'),
     ('SheetJS Community Edition', 'SheetJS LLC', 'Apache-2.0', 'https://sheetjs.com/', 'https://www.apache.org/licenses/LICENSE-2.0'),
     ('Pretendard', 'Kil Hyung-jin', 'SIL Open Font License 1.1', 'https://github.com/orioncactus/pretendard', 'https://openfontlicense.org/'),

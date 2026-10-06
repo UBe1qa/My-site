@@ -10,7 +10,7 @@ const T = {
     stays: 'Converted on this device. Nothing is uploaded.', convert: 'Convert', working: 'Converting…',
     cancel: 'Cancel', done: 'Done', download: 'Download', downloadAll: 'Download all (ZIP)', share: 'Share',
     again: 'Convert another file', change: 'Choose another file', remove: 'Remove', addMore: 'Add more',
-    took: 'Took {s}', copied: 'Copied without re-encoding: same quality, near-instant.',
+    took: 'Took {s}', keepQuality: 'Keep original', noH264: 'This browser can’t create H.264 video, so the original video stream was kept. It may not play on iPhone or in editing apps; try Chrome or Edge on a computer.', copied: 'Copied without re-encoding: same quality, near-instant.',
     estimate: 'Estimated size about {size}', from: 'from', to: 'to', start: 'Start', end: 'End', length: 'Length',
     play: 'Play selection', pause: 'Pause', format: 'Format', quality: 'Quality', bitrate: 'Bitrate',
     fadeIn: 'Fade in', fadeOut: 'Fade out', off: 'Off', exact: 'Exact cut (slower, re-encodes)',
@@ -27,23 +27,37 @@ const T = {
     loading: 'Loading the converter…', reading: 'Reading the file…', waveform: 'Drawing the waveform…',
     errDecode: 'This browser can’t read the {what} in this file. Try the latest Chrome or Edge, or a different file.',
     errEncode: 'This browser can’t create that format. Try another format or the latest Chrome or Edge.',
-    errFormat: 'This file type isn’t supported here.', errEncrypted: 'This PDF is password-protected, so it can’t be opened here.',
+    errFormat: 'This file type isn’t supported here.', errEncrypted: 'This PDF is password-protected. Unlock it first with Unlock PDF, then try again.',
     errPdf: 'This PDF couldn’t be read. It may be damaged.', errRange: 'Check the page numbers (1 to {n}), e.g. 1-3, 5.',
     errJson: 'This JSON needs to be a list of objects or a list of rows.', errJsonParse: 'This isn’t valid JSON: {m}',
     errXlsx: 'This spreadsheet couldn’t be read.', errMemory: 'The device ran out of memory. Try a shorter range, a smaller file, or a computer.',
     errBrowser: 'This browser doesn’t support in-browser video and audio processing. Use a recent Chrome, Edge, Safari or Firefox.',
-    errGeneric: 'Something went wrong: {m}', errType: '{name} isn’t a file this tool can open.', errEmpty: 'No pages selected.',
+    errGeneric: 'Something went wrong with this file. Try another file, or the latest Chrome or Edge.', errType: '{name} isn’t a file this tool can open.', errEmpty: 'No pages selected.',
     whatToDo: 'What do you want to do with it?', openPage: 'Open the full {name} page', video: 'video', audio: 'audio', image: 'image',
     notHere: 'No tool here opens .{ext} files yet.', files: '{n} files', items: '{n} items', sizeWarn: 'Large file: phones may run out of memory.',
     gifLong: 'GIFs over 15 seconds get very large.', copiedHint: 'Will copy without re-encoding if possible.', seconds: 's',
-    noAudio: 'This file has no audio track.', noVideo: 'This file has no video track.', result: 'Result'
+    noAudio: 'This file has no audio track.', noVideo: 'This file has no video track.', result: 'Result',
+    level: 'Compression', strong: 'Strong', light: 'Light', notSmaller: 'This PDF is already well compressed, so the original was kept.',
+    keptOriginal: 'The converted file was bigger, so the original was kept.',
+    rotateAllL: 'Rotate all left', rotateAllR: 'Rotate all right', resetAll: 'Reset', tapRotate: 'Tap a page to turn it 90°.',
+    keepN: '{k} of {n} pages kept', removePage: 'Remove page', restorePage: 'Bring back', moveL: 'Move earlier', moveR: 'Move later', removed: 'Removed', pageN: 'Page {n}',
+    password: 'Password', password2: 'Type it again', showPw: 'Show password', restrict: 'Also block printing and copying',
+    noLock: 'This PDF has no password or restrictions.', restrictedOnly: 'This PDF opens without a password but blocks printing or copying. Unlocking removes those limits.', needPw: 'This PDF needs its password to open.',
+    errWrongPw: 'That password doesn’t open this PDF.', errPwEmpty: 'Enter a password.', errPwMatch: 'The two passwords don’t match.',
+    pwWarn: 'Keep the password somewhere safe. Nobody, including us, can recover it.',
+    position: 'Position', bc: 'Bottom center', br: 'Bottom right', bl: 'Bottom left', tr: 'Top right', tc: 'Top center',
+    numFmt: 'Style', startAt: 'Start at', skipFirst: 'Skip first page (cover)', size: 'Size', medium: 'Medium', large: 'Large',
+    wmText: 'Text', wmDefault: 'CONFIDENTIAL', style: 'Layout', diagonal: 'Diagonal', center: 'Center', tile: 'Tiled',
+    opacity: 'Opacity', faint: 'Faint', strongO: 'Strong', color: 'Color', gray: 'Gray', red: 'Red', errWmEmpty: 'Enter the watermark text.',
+    errTooBig: 'That size is too large. Keep each side under 16,000 px.', errOrder: 'The end must come after the start.',
+    errN: 'Enter a whole number from 1 to {n}.', notPdfPw: 'Use Unlock PDF first if you know the password.', inFile: '{name}: {m}'
   },
   ko: {
     choose: '파일 고르기', chooseMany: '파일 고르기', orDrop: '또는 여기에 끌어 놓기', orDropMany: '또는 여러 개를 끌어 놓기',
     stays: '이 기기 안에서 변환해요. 아무것도 올라가지 않아요.', convert: '변환하기', working: '변환 중…',
     cancel: '그만두기', done: '다 됐어요', download: '받기', downloadAll: '모두 받기 (ZIP)', share: '공유',
     again: '다른 파일 변환하기', change: '다른 파일 고르기', remove: '빼기', addMore: '더 넣기',
-    took: '{s} 걸림', copied: '다시 인코딩하지 않고 옮겨 담았어요. 화질 그대로, 거의 바로 끝나요.',
+    took: '{s} 걸림', keepQuality: '원본 그대로', noH264: '이 브라우저는 H.264 영상을 만들지 못해 원래 영상을 그대로 담았어요. 아이폰이나 편집 앱에서 안 열릴 수 있어요. 컴퓨터의 크롬이나 엣지로 해 보세요.', copied: '다시 인코딩하지 않고 옮겨 담았어요. 화질 그대로, 거의 바로 끝나요.',
     estimate: '예상 크기 약 {size}', from: '', to: '', start: '시작', end: '끝', length: '길이',
     play: '고른 구간 듣기', pause: '멈춤', format: '형식', quality: '품질', bitrate: '비트레이트',
     fadeIn: '서서히 커지기', fadeOut: '서서히 작아지기', off: '안 함', exact: '정확히 자르기 (느림, 다시 인코딩)',
@@ -60,16 +74,30 @@ const T = {
     loading: '변환기를 불러오는 중…', reading: '파일을 읽는 중…', waveform: '파형을 그리는 중…',
     errDecode: '이 브라우저는 이 파일의 {what}를 읽지 못해요. 최신 크롬·엣지로 열거나 다른 파일로 해 보세요.',
     errEncode: '이 브라우저는 그 형식을 만들지 못해요. 다른 형식을 고르거나 최신 크롬·엣지로 해 보세요.',
-    errFormat: '이 파일 형식은 여기서 열 수 없어요.', errEncrypted: '암호가 걸린 PDF라 여기서 열 수 없어요.',
+    errFormat: '이 파일 형식은 여기서 열 수 없어요.', errEncrypted: '암호가 걸린 PDF예요. \'PDF 암호 풀기\'로 먼저 푼 다음 다시 해 보세요.',
     errPdf: 'PDF를 읽지 못했어요. 파일이 손상됐을 수 있어요.', errRange: '쪽 번호를 확인해 주세요 (1~{n}). 예: 1-3, 5',
     errJson: 'JSON이 객체 목록이나 줄 목록이어야 해요.', errJsonParse: '올바른 JSON이 아니에요: {m}',
     errXlsx: '표 파일을 읽지 못했어요.', errMemory: '기기 메모리가 부족해요. 구간을 줄이거나, 작은 파일로, 또는 컴퓨터에서 해 보세요.',
     errBrowser: '이 브라우저는 동영상·오디오 변환을 지원하지 않아요. 최신 크롬, 엣지, 사파리, 파이어폭스로 열어 주세요.',
-    errGeneric: '문제가 생겼어요: {m}', errType: '{name}은(는) 이 도구가 열 수 있는 파일이 아니에요.', errEmpty: '고른 쪽이 없어요.',
+    errGeneric: '이 파일을 처리하다 문제가 생겼어요. 다른 파일이나 최신 크롬·엣지로 해 보세요.', errType: '{name}은(는) 이 도구가 열 수 있는 파일이 아니에요.', errEmpty: '고른 쪽이 없어요.',
     whatToDo: '이 파일로 무엇을 할까요?', openPage: '{name} 페이지로 가기', video: '동영상', audio: '오디오', image: '이미지',
     notHere: '.{ext} 파일을 여는 도구는 아직 없어요.', files: '파일 {n}개', items: '{n}개', sizeWarn: '큰 파일이라 휴대폰에선 메모리가 모자랄 수 있어요.',
     gifLong: '15초가 넘는 GIF는 아주 커져요.', copiedHint: '되면 다시 인코딩하지 않고 옮겨 담아요.', seconds: '초',
-    noAudio: '이 파일에는 오디오가 없어요.', noVideo: '이 파일에는 영상이 없어요.', result: '결과'
+    noAudio: '이 파일에는 오디오가 없어요.', noVideo: '이 파일에는 영상이 없어요.', result: '결과',
+    level: '압축 정도', strong: '강하게', light: '약하게', notSmaller: '이미 잘 압축된 PDF라 원본을 그대로 뒀어요.',
+    keptOriginal: '변환한 파일이 더 커서 원본을 그대로 뒀어요.',
+    rotateAllL: '모두 왼쪽으로', rotateAllR: '모두 오른쪽으로', resetAll: '처음대로', tapRotate: '쪽을 누르면 90°씩 돌아가요.',
+    keepN: '{n}쪽 중 {k}쪽 남김', removePage: '쪽 빼기', restorePage: '되살리기', moveL: '앞으로', moveR: '뒤로', removed: '뺌', pageN: '{n}쪽',
+    password: '암호', password2: '한 번 더', showPw: '암호 보기', restrict: '인쇄와 복사도 막기',
+    noLock: '이 PDF에는 암호나 제한이 없어요.', restrictedOnly: '암호 없이 열리지만 인쇄나 복사가 막힌 PDF예요. 풀면 그 제한이 없어져요.', needPw: '이 PDF는 열 때 암호가 필요해요.',
+    errWrongPw: '이 암호로는 열리지 않아요.', errPwEmpty: '암호를 넣어 주세요.', errPwMatch: '두 암호가 서로 달라요.',
+    pwWarn: '암호를 잘 적어 두세요. 저희를 포함해 누구도 되찾아 드릴 수 없어요.',
+    position: '위치', bc: '아래 가운데', br: '아래 오른쪽', bl: '아래 왼쪽', tr: '위 오른쪽', tc: '위 가운데',
+    numFmt: '모양', startAt: '시작 번호', skipFirst: '첫 쪽(표지) 건너뛰기', size: '크기', medium: '보통', large: '크게',
+    wmText: '글자', wmDefault: '대외비', style: '배치', diagonal: '대각선', center: '가운데', tile: '바둑판',
+    opacity: '진하기', faint: '연하게', strongO: '진하게', color: '색', gray: '회색', red: '빨강', errWmEmpty: '워터마크 글자를 넣어 주세요.',
+    errTooBig: '크기가 너무 커요. 한 변을 16,000px 아래로 해 주세요.', errOrder: '끝이 시작보다 뒤여야 해요.',
+    errN: '1에서 {n} 사이의 정수를 넣어 주세요.', notPdfPw: '암호를 알면 먼저 \'PDF 암호 풀기\'로 풀어 주세요.', inFile: '{name}: {m}'
   }
 }[LANG];
 const t = (k, v = {}) => (T[k] || k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
@@ -269,9 +297,12 @@ class Panel {
       : code === 'json-parse' ? t('errJsonParse', { m: e.message })
       : code === 'xlsx' ? t('errXlsx')
       : code === 'browser' ? t('errBrowser')
+      : code === 'wrongPassword' ? t('errWrongPw')
+      : code === 'tooBig' ? t('errTooBig')
       : code === 'msg' ? e.message
-      : t('errGeneric', { m: (e && e.message) || e });
-    this.out.replaceChildren(h('p', { class: 'err', role: 'alert' }, msg));
+      : t('errGeneric');
+    const named = e && e.file && this.files.length > 1 ? t('inFile', { name: e.file.name || e.file, m: msg }) : msg;
+    this.out.replaceChildren(h('p', { class: 'err', role: 'alert' }, named));
   }
   // res: { items: [{ blob, name, note, preview: 'audio'|'video'|'image', meta }], note, zipName, before }
   showResult(res, ms) {
@@ -377,6 +408,10 @@ const ACTION = {
   'resize-image': { en: 'Resize images', ko: '크기 바꾸기' }, 'images-to-pdf': { en: 'Make PDF', ko: 'PDF 만들기' },
   'pdf-to-jpg': { en: 'Save as images', ko: '이미지로 저장하기' }, 'csv-json': { en: 'Convert data', ko: '데이터 변환하기' },
   'excel-csv': { en: 'Convert sheet', ko: '표 변환하기' },
+  'compress-pdf': { en: 'Compress PDF', ko: 'PDF 줄이기' }, 'rotate-pdf': { en: 'Save rotated PDF', ko: '돌린 PDF 저장하기' },
+  'organize-pdf': { en: 'Save PDF', ko: 'PDF 저장하기' }, 'unlock-pdf': { en: 'Unlock PDF', ko: '암호 풀기' },
+  'protect-pdf': { en: 'Protect PDF', ko: '암호 걸기' }, 'pdf-page-numbers': { en: 'Add page numbers', ko: '쪽 번호 넣기' },
+  'watermark-pdf': { en: 'Add watermark', ko: '워터마크 넣기' },
 };
 
 // ---------- 공통 옵션 조각 ----------
@@ -409,7 +444,8 @@ function timeline(p, file, info, { kind, onChange, initEnd }) {
   const row = h('div', { class: 'tl-row' },
     h('label', {}, h('span', {}, t('start')), inA), h('label', {}, h('span', {}, t('end')), inB), len, playBtn);
   if (kind === 'video') wrap.append(mediaEl); else wrap.append(mediaEl);
-  wrap.append(strip, row);
+  const warn = h('p', { class: 'warn', role: 'alert', hidden: true });
+  wrap.append(strip, row, warn);
   const minLen = Math.min(0.2, dur);
   function draw() {
     const pa = (start / dur) * 100, pb = (end / dur) * 100;
@@ -421,6 +457,7 @@ function timeline(p, file, info, { kind, onChange, initEnd }) {
     if (document.activeElement !== inA) inA.value = fmtTime(start);
     if (document.activeElement !== inB) inB.value = fmtTime(end);
     len.textContent = t('length') + ' ' + fmtTime(end - start);
+    warn.hidden = true;
     onChange && onChange(start, end);
   }
   function setA(v) { start = Math.max(0, Math.min(v, end - minLen)); draw(); }
@@ -449,7 +486,13 @@ function timeline(p, file, info, { kind, onChange, initEnd }) {
     (Math.abs(x - start) < Math.abs(x - end) ? setA : setB)(x);
   });
   for (const [inp, setter] of [[inA, setA], [inB, setB]]) {
-    inp.addEventListener('change', () => { const v = parseTime(inp.value); if (isFinite(v)) setter(v); else draw(); });
+    inp.addEventListener('change', () => {
+      const v = parseTime(inp.value);
+      if (!isFinite(v)) { draw(); return; }
+      // 끝을 시작보다 앞에 적으면 몰래 고치지 않고 알려 준다
+      if (setter === setA ? v > end - minLen : v < start + minLen) { inp.blur(); draw(); warn.textContent = t('errOrder'); warn.hidden = false; return; }
+      setter(v);
+    });
     inp.addEventListener('blur', draw);
   }
   function seek(x) { try { mediaEl.currentTime = x; } catch (e) {} }
@@ -529,19 +572,34 @@ async function audioRunner(p, files, { formats, defaultFormat, trimUI, fadeUI, t
   p.ctlWhat = info.hasVideo ? t('video') : t('audio');
   const can = await m.encodableAudio();
   const list = formats.filter((f) => can.includes(f));
-  let fmt = list.includes(defaultFormat) ? defaultFormat : list[0], kbps = 192, fadeIn = 0, fadeOut = 0;
+  const CODEC = { mp3: 'mp3', m4a: 'aac', wav: 'pcm-s16' };
+  // 기본 음질은 원본보다 높게 잡지 않는다(128kbps를 192로 다시 만들면 파일만 커지고 음질은 조금 나빠짐)
+  const src = info.kbps && !info.hasVideo ? info.kbps : 0;
+  const pickKbps = () => (src && src < 150 ? 128 : 192);
+  let fmt = list.includes(defaultFormat) ? defaultFormat : list[0], kbps = pickKbps(), fadeIn = 0, fadeOut = 0;
+  // 원본과 같은 코덱이면 '원본 그대로'(다시 인코딩 없음)를 고를 수 있다
+  const sameCodec = () => CODEC[fmt] && CODEC[fmt] === info.audioCodec && !info.hasVideo;
+  let keep = sameCodec();
   const est = h('p', { class: 'est muted' });
   let tl = null;
+  const brBox = h('div');
   const update = () => {
     const r = tl ? tl.get() : { start: 0, end: info.duration };
     const secs = r.end - r.start;
-    const rate = fmt === 'wav' ? WAV_KBPS(info) : fmt === 'flac' ? null : kbps;
+    const k = keep && sameCodec();
+    const rate = k ? (src || null) : fmt === 'wav' ? WAV_KBPS(info) : fmt === 'flac' ? null : kbps;
     est.textContent = rate ? t('estimate', { size: sizeEst(rate, secs) }) : '';
     brField.hidden = fmt === 'wav' || fmt === 'flac';
   };
-  const fmtChips = chips(t('format'), list.map((f) => [f, AUDIO_LABEL[f]]), fmt, (v) => { fmt = v; update(); });
-  const brChips = chips(t('bitrate'), [[128, '128 kbps'], [192, '192 kbps'], [320, '320 kbps']], kbps, (v) => { kbps = +v; update(); });
-  const brField = field(t('bitrate'), brChips);
+  const renderBr = () => {
+    const opts = [[128, '128 kbps'], [192, '192 kbps'], [320, '320 kbps']];
+    if (sameCodec()) opts.unshift(['keep', t('keepQuality') + (src ? ' (' + src + ' kbps)' : '')]);
+    else if (keep) keep = false;
+    brBox.replaceChildren(chips(t('bitrate'), opts, keep && sameCodec() ? 'keep' : kbps, (v) => { if (v === 'keep') keep = true; else { keep = false; kbps = +v; } update(); }));
+  };
+  const fmtChips = chips(t('format'), list.map((f) => [f, AUDIO_LABEL[f]]), fmt, (v) => { fmt = v; keep = sameCodec(); renderBr(); update(); });
+  const brField = field(t('bitrate'), brBox);
+  renderBr();
   p.opts.replaceChildren();
   if (trimUI) { tl = timeline(p, file, info, { kind: info.hasVideo && trimUI === 'video' ? 'video' : 'audio', onChange: () => update() }); p.opts.append(tl.el); }
   p.opts.append(field(t('format'), fmtChips), brField);
@@ -555,7 +613,11 @@ async function audioRunner(p, files, { formats, defaultFormat, trimUI, fadeUI, t
     dispose: () => tl && tl.dispose(),
     run: async (prog, setJob) => {
       const r = tl ? tl.get() : null;
-      const job = m.convert(file, { target: fmt, bitrate: fmt === 'wav' || fmt === 'flac' ? undefined : kbps, trim: r, fade: { in: fadeIn, out: fadeOut } }, prog);
+      const k = keep && sameCodec();
+      const fading = fadeIn || fadeOut;
+      // '원본 그대로'라도 페이드를 넣으면 다시 만들어야 하니 원본에 가까운 음질로
+      const br = fmt === 'wav' || fmt === 'flac' ? undefined : k ? (fading ? (src && src < 150 ? 128 : src && src < 220 ? 192 : 320) : undefined) : kbps;
+      const job = m.convert(file, { target: fmt, bitrate: br, trim: r, fade: { in: fadeIn, out: fadeOut } }, prog);
       setJob(job);
       const res = await job.promise;
       const cut = r && (r.start > 0.01 || r.end < info.duration - 0.01);
@@ -581,7 +643,7 @@ const RUNNERS = {
         run: async (prog, setJob) => {
           const job = m.convert(file, { target: fmt }, prog); setJob(job);
           const res = await job.promise;
-          return { items: [{ blob: res.blob, name: outName(file, res.ext), preview: 'video' }], note: res.copied ? t('copied') : '' };
+          return { items: [{ blob: res.blob, name: outName(file, res.ext), preview: 'video' }], note: res.compat === false ? t('noH264') : res.copied ? t('copied') : '' };
         }
       };
     }
@@ -600,7 +662,7 @@ const RUNNERS = {
           const target = ['mp4', 'webm', 'mov'].includes(extOf(file.name)) ? extOf(file.name) : 'mp4';
           const job = m.convert(file, { target, trim: r, exact: ex.get() }, prog); setJob(job);
           const res = await job.promise;
-          return { items: [{ blob: res.blob, name: outName(file, res.ext, 'cut'), preview: 'video' }] };
+          return { items: [{ blob: res.blob, name: outName(file, res.ext, 'cut'), preview: 'video' }], note: res.compat === false ? t('noH264') : '' };
         }
       };
     }
@@ -676,7 +738,8 @@ const RUNNERS = {
   'compress-image': {
     async setup(p, files) {
       const img = await import('./engines/image.js');
-      let fmt = (await img.canEncode('webp')) && img.sameFormat(files[0]) === 'webp' ? 'webp' : 'jpg', q = 0.75, maxW = 0;
+      // PNG는 투명한 부분이 있을 수 있어 JPG(투명 → 흰색) 대신 WebP를 기본으로
+      let fmt = (await img.canEncode('webp')) && ['webp', 'png'].includes(img.sameFormat(files[0])) ? 'webp' : 'jpg', q = 0.75, maxW = 0;
       const qVal = h('output', {}, '75');
       // 움직이는 동안 첫 사진을 실제로 다시 저장해 용량과 모습을 바로 보여 준다
       const live = h('div', { class: 'live', 'aria-live': 'polite' });
@@ -721,7 +784,7 @@ const RUNNERS = {
       const first = await img.decode(files[0]);
       const W0 = first.width, H0 = first.height; img.release(first);
       let mode = 'px', lock = true, pct = 50;
-      const w = numInput(t('width'), W0, { max: 20000 }), hh = numInput(t('height'), H0, { max: 20000 });
+      const w = numInput(t('width'), W0, { max: 16000 }), hh = numInput(t('height'), H0, { max: 16000 });
       const pc = numInput(t('percent'), 50, { max: 400 });
       w.input.addEventListener('input', () => { if (lock && +w.input.value) hh.input.value = Math.round((+w.input.value * H0) / W0); });
       hh.input.addEventListener('input', () => { if (lock && +hh.input.value) w.input.value = Math.round((+hh.input.value * W0) / H0); });
@@ -739,6 +802,7 @@ const RUNNERS = {
             const tw = +w.input.value || W0, th = +hh.input.value || H0;
             if (lock) { const s = Math.min(tw / im.width, th / im.height); W = im.width * s; H = im.height * s; } else { W = tw; H = th; }
           }
+          if (!(W >= 1 && H >= 1) || W > 16000 || H > 16000) throw Object.assign(new Error('too big'), { code: 'tooBig' });
           const f = img.sameFormat(im.file);
           return { format: f, quality: 0.92, width: W, height: H };
         }, prog, false, 'resized')
@@ -762,7 +826,9 @@ const RUNNERS = {
             const f = p.files[i];
             const isJpg = /\.jpe?g$/i.test(f.name) || f.type === 'image/jpeg';
             const isPng = /\.png$/i.test(f.name) || f.type === 'image/png';
-            if (isJpg || isPng) items.push({ bytes: new Uint8Array(await f.arrayBuffer()), kind: isJpg ? 'jpg' : 'png' });
+            const bytes = (isJpg || isPng) ? new Uint8Array(await f.arrayBuffer()) : null;
+            // 회전 정보가 없는 JPG·PNG는 그대로 넣고(화질 그대로), 휴대폰 세로 사진처럼 회전값이 있으면 돌려서 다시 저장
+            if (isPng || (isJpg && img.jpegOrientation(bytes) === 1)) items.push({ bytes, kind: isJpg ? 'jpg' : 'png' });
             else { const d = await img.decode(f); const e = await img.encode(d, { format: 'jpg', quality: 0.92 }); img.release(d); items.push({ bytes: new Uint8Array(await e.blob.arrayBuffer()), kind: 'jpg' }); }
             prog((i + 1) / p.files.length * 0.5);
           }
@@ -828,13 +894,175 @@ const RUNNERS = {
           let groups;
           if (mode === 'extract') { try { groups = [pdf.parseRanges(pages.value, n)]; } catch (e) { e.n = n; throw e; } }
           else if (mode === 'every') groups = [...Array(n).keys()].map((i) => [i]);
-          else { const k = Math.max(1, Math.min(n, +nIn.input.value || 1)); groups = []; for (let i = 0; i < n; i += k) groups.push([...Array(Math.min(k, n - i)).keys()].map((j) => i + j)); }
+          else {
+            const k = Number(nIn.input.value);
+            if (!Number.isInteger(k) || k < 1 || k > n) throw Object.assign(new Error(t('errN', { n })), { code: 'msg' });
+            groups = []; for (let i = 0; i < n; i += k) groups.push([...Array(Math.min(k, n - i)).keys()].map((j) => i + j)); }
           const blobs = await pdf.split(files[0], groups, prog);
           const label = (g) => g.length === 1 ? String(g[0] + 1) : (g[g.length - 1] - g[0] === g.length - 1 ? (g[0] + 1) + '-' + (g[g.length - 1] + 1) : 'pages');
           return {
             items: blobs.map((b, i) => ({ blob: b, name: baseOf(files[0].name) + '-' + label(groups[i]) + '.pdf', meta: { label: (LANG === 'ko' ? groups[i].length + '쪽 · ' : groups[i].length + ' p · ') + fmtSize(b.size) } })),
             zipName: baseOf(files[0].name) + '-split.zip'
           };
+        }
+      };
+    }
+  },
+
+  'compress-pdf': {
+    async setup(p, files) {
+      let level = 'balanced';
+      p.opts.replaceChildren(field(t('level'), chips(t('level'), [['strong', t('strong')], ['balanced', t('balanced')], ['light', t('light')]], level, (v) => { level = v; })));
+      return {
+        run: async (prog) => {
+          const pdf = await import('./engines/pdf.js');
+          const file = p.files[0];
+          const r = await pdf.compress(file, level, prog);
+          return { items: [{ blob: r.blob, name: outName(file, 'pdf', r.notSmaller ? '' : 'compressed') }], before: file.size, note: r.notSmaller ? t('notSmaller') : '' };
+        }
+      };
+    }
+  },
+  'rotate-pdf': {
+    async setup(p, files) {
+      const g = await pageGrid(p, files[0]);
+      const turns = new Array(g.n).fill(0);
+      const show = (i) => g.cells[i].setTurn(turns[i]);
+      g.cells.forEach((c, i) => c.box.addEventListener('click', () => { turns[i] = (turns[i] + 90) % 360; show(i); }));
+      const all = (d) => { for (let i = 0; i < g.n; i++) { turns[i] = (turns[i] + d + 360) % 360; show(i); } };
+      p.opts.replaceChildren(
+        h('div', { class: 'grid-bar' },
+          h('button', { type: 'button', class: 'chip-btn', onclick: () => all(-90) }, '↺ ' + t('rotateAllL')),
+          h('button', { type: 'button', class: 'chip-btn', onclick: () => all(90) }, '↻ ' + t('rotateAllR')),
+          h('button', { type: 'button', class: 'chip-btn', onclick: () => { turns.fill(0); g.cells.forEach((c, i) => show(i)); } }, t('resetAll'))),
+        h('p', { class: 'muted' }, t('tapRotate')), g.grid);
+      return {
+        dispose: g.stop,
+        run: async () => {
+          const pdf = await import('./engines/pdf.js');
+          return { items: [{ blob: await pdf.rotate(p.files[0], turns), name: outName(p.files[0], 'pdf', 'rotated') }] };
+        }
+      };
+    }
+  },
+  'organize-pdf': {
+    async setup(p, files) {
+      const g = await pageGrid(p, files[0], { tools: true });
+      let order = [...Array(g.n).keys()];
+      const gone = new Set();
+      const count = h('p', { class: 'muted', 'aria-live': 'polite' });
+      const draw = () => {
+        g.grid.replaceChildren(...order.map((i) => g.cells[i].el));
+        order.forEach((i, k) => {
+          const c = g.cells[i];
+          c.el.classList.toggle('gone', gone.has(i));
+          c.left.disabled = k === 0; c.right.disabled = k === order.length - 1;
+          c.del.textContent = gone.has(i) ? '↺' : '×';
+          c.del.setAttribute('aria-label', (gone.has(i) ? t('restorePage') : t('removePage')) + ' ' + (i + 1));
+        });
+        count.textContent = t('keepN', { k: g.n - gone.size, n: g.n });
+      };
+      const move = (i, d) => { const k = order.indexOf(i), j = k + d; if (j < 0 || j >= order.length) return; order.splice(k, 1); order.splice(j, 0, i); draw(); };
+      g.cells.forEach((c, i) => {
+        c.left.onclick = () => move(i, -1);
+        c.right.onclick = () => move(i, 1);
+        c.del.onclick = () => { gone.has(i) ? gone.delete(i) : gone.add(i); draw(); };
+        // 컴퓨터에선 끌어서 옮기기도 된다
+        c.el.draggable = true;
+        c.el.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', String(i)); e.dataTransfer.effectAllowed = 'move'; });
+        c.el.addEventListener('dragover', (e) => { e.preventDefault(); c.el.classList.add('over'); });
+        c.el.addEventListener('dragleave', () => c.el.classList.remove('over'));
+        c.el.addEventListener('drop', (e) => {
+          e.preventDefault(); c.el.classList.remove('over');
+          const from = +e.dataTransfer.getData('text/plain');
+          if (!isFinite(from) || from === i) return;
+          order.splice(order.indexOf(from), 1); order.splice(order.indexOf(i), 0, from); draw();
+        });
+      });
+      draw();
+      p.opts.replaceChildren(count, g.grid);
+      return {
+        dispose: g.stop,
+        run: async () => {
+          const keep = order.filter((i) => !gone.has(i));
+          if (!keep.length) throw Object.assign(new Error('empty'), { code: 'empty' });
+          const pdf = await import('./engines/pdf.js');
+          return { items: [{ blob: await pdf.organize(p.files[0], keep), name: outName(p.files[0], 'pdf', 'edited') }] };
+        }
+      };
+    }
+  },
+  'unlock-pdf': {
+    async setup(p, files) {
+      const pdf = await import('./engines/pdf.js');
+      const state = await pdf.lockState(files[0]);
+      if (state === 'none') { p.opts.replaceChildren(h('p', { class: 'note' }, t('noLock'))); return null; }
+      const pw = pwField(t('password'));
+      p.opts.replaceChildren(h('p', { class: 'est' }, state === 'password' ? t('needPw') : t('restrictedOnly')), state === 'password' ? pw.el : null);
+      return {
+        run: async () => {
+          if (state === 'password' && !pw.input.value) throw Object.assign(new Error(t('errPwEmpty')), { code: 'msg' });
+          return { items: [{ blob: await pdf.unlock(p.files[0], state === 'password' ? pw.input.value : ''), name: outName(p.files[0], 'pdf', 'unlocked') }] };
+        }
+      };
+    }
+  },
+  'protect-pdf': {
+    async setup(p, files) {
+      const pdf = await import('./engines/pdf.js');
+      if (await pdf.lockState(files[0]) === 'password') throw Object.assign(new Error('encrypted'), { code: 'encrypted' });
+      const a = pwField(t('password'), 'new-password'), b = pwField(t('password2'), 'new-password', false);
+      const show = toggle(t('showPw'), false, (v) => { a.input.type = b.input.type = v ? 'text' : 'password'; });
+      const restrict = toggle(t('restrict'), false);
+      p.opts.replaceChildren(h('div', { class: 'two' }, a.el, b.el), show, restrict, h('p', { class: 'muted' }, t('pwWarn')));
+      return {
+        run: async () => {
+          if (!a.input.value) throw Object.assign(new Error(t('errPwEmpty')), { code: 'msg' });
+          if (a.input.value !== b.input.value) throw Object.assign(new Error(t('errPwMatch')), { code: 'msg' });
+          return { items: [{ blob: await pdf.protect(p.files[0], a.input.value, restrict.get()), name: outName(p.files[0], 'pdf', 'protected') }] };
+        }
+      };
+    }
+  },
+  'pdf-page-numbers': {
+    async setup(p) {
+      let pos = 'bc', fmt = 'n', size = 's', skip = false;
+      const fmts = [['n', '1'], ['nOfTotal', '1 / 9'], ['dash', '- 1 -']];
+      if (LANG === 'en') fmts.push(['page', 'Page 1 of 9']);
+      const st = numInput(t('startAt'), 1, { min: 0, max: 9999 });
+      p.opts.replaceChildren(
+        field(t('position'), chips(t('position'), [['bc', t('bc')], ['br', t('br')], ['bl', t('bl')], ['tc', t('tc')], ['tr', t('tr')]], pos, (v) => { pos = v; })),
+        h('div', { class: 'two' },
+          field(t('numFmt'), chips(t('numFmt'), fmts, fmt, (v) => { fmt = v; })),
+          field(t('size'), chips(t('size'), [['s', t('small')], ['m', t('medium')]], size, (v) => { size = v; }))),
+        st.el, toggle(t('skipFirst'), false, (v) => { skip = v; }));
+      return {
+        run: async () => {
+          const start = Math.max(0, Math.floor(+st.input.value || 0));
+          const pdf = await import('./engines/pdf.js');
+          return { items: [{ blob: await pdf.pageNumbers(p.files[0], { pos, fmt, start, skipFirst: skip, size }), name: outName(p.files[0], 'pdf', 'numbered') }] };
+        }
+      };
+    }
+  },
+  'watermark-pdf': {
+    async setup(p) {
+      let style = 'diagonal', opacity = 0.2, size = 'm', color = 'gray';
+      const text = h('input', { type: 'text', value: t('wmDefault'), class: 'text', maxlength: 60, 'aria-label': t('wmText') });
+      p.opts.replaceChildren(
+        field(t('wmText'), text),
+        h('div', { class: 'two' },
+          field(t('style'), chips(t('style'), [['diagonal', t('diagonal')], ['center', t('center')], ['tile', t('tile')]], style, (v) => { style = v; })),
+          field(t('opacity'), chips(t('opacity'), [[0.12, t('faint')], [0.2, t('balanced')], [0.35, t('strongO')]], opacity, (v) => { opacity = +v; }))),
+        h('div', { class: 'two' },
+          field(t('size'), chips(t('size'), [['s', t('small')], ['m', t('medium')], ['l', t('large')]], size, (v) => { size = v; })),
+          field(t('color'), chips(t('color'), [['gray', t('gray')], ['red', t('red')]], color, (v) => { color = v; }))));
+      return {
+        run: async () => {
+          const s = text.value.trim();
+          if (!s) throw Object.assign(new Error(t('errWmEmpty')), { code: 'msg' });
+          const pdf = await import('./engines/pdf.js');
+          return { items: [{ blob: await pdf.watermark(p.files[0], { text: s, style, opacity, size, color }), name: outName(p.files[0], 'pdf', 'watermarked') }] };
         }
       };
     }
@@ -870,7 +1098,7 @@ const RUNNERS = {
       let value;
       try { value = JSON.parse(text); } catch (e) { throw Object.assign(new Error(e.message), { code: 'json-parse' }); }
       const rows = d.jsonToRows(value);
-      let bom = LANG === 'ko', delim = ',';
+      let bom = true, delim = ',';
       renderTable(prev, rows.slice(0, 6), true);
       prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length - 1 })));
       p.opts.replaceChildren(
@@ -897,7 +1125,7 @@ const RUNNERS = {
       }
       const wb = await d.readWorkbook(file);
       const names = wb.SheetNames;
-      let sheet = names[0], bom = LANG === 'ko';
+      let sheet = names[0], bom = true;
       const showPrev = async () => { if (sheet === '*') { prev.replaceChildren(); return; } const rows = await d.sheetToRows(wb, sheet); renderTable(prev, rows.slice(0, 6), true); prev.prepend(h('p', { class: 'muted' }, t('rows', { n: rows.length }))); };
       const opts = names.map((n) => [n, n]); if (names.length > 1) opts.push(['*', t('allSheets')]);
       p.opts.replaceChildren(field(t('sheet'), chips(t('sheet'), opts, sheet, (v) => { sheet = v; showPrev(); })), toggle(t('bom'), bom, (v) => { bom = v; }), prev);
@@ -918,6 +1146,43 @@ const RUNNERS = {
   }
 };
 
+// 암호 입력칸
+function pwField(label, auto = 'current-password') {
+  const input = h('input', { type: 'password', class: 'text', autocomplete: auto, spellcheck: 'false', 'aria-label': label });
+  return { el: h('label', { class: 'num pw' }, h('span', {}, label), input), input };
+}
+
+// PDF 쪽 미리보기 격자: 칸을 먼저 만들고, 그림은 그려지는 대로 채운다.
+// 돌려주는 값: { n, grid, cells: [{ el, box, setTurn, left, right, del }], stop }
+async function pageGrid(p, file, { tools = false } = {}) {
+  const pdf = await import('./engines/pdf.js');
+  const n = await pdf.numPagesJs(file);
+  p.head.append(h('p', { class: 'file-info muted' }, (LANG === 'ko' ? n + '쪽' : n + (n === 1 ? ' page' : ' pages'))));
+  const grid = h('div', { class: 'pgrid' + (tools ? ' tools' : '') });
+  const cells = [...Array(n).keys()].map((i) => {
+    const box = h(tools ? 'div' : 'button', { class: 'pg-img', type: tools ? null : 'button', 'aria-label': t('pageN', { n: i + 1 }) });
+    const c = { box, base: 0, turn: 0 };
+    c.setTurn = (d) => { c.turn = d; const cv = box.firstChild; if (cv) cv.style.transform = 'rotate(' + (c.base + d) + 'deg)'; box.dataset.turn = d; };
+    const kids = [box, h('span', { class: 'pg-n' }, String(i + 1))];
+    if (tools) {
+      c.left = h('button', { type: 'button', class: 'icon', 'aria-label': t('moveL') + ' ' + (i + 1) }, '←');
+      c.right = h('button', { type: 'button', class: 'icon', 'aria-label': t('moveR') + ' ' + (i + 1) }, '→');
+      c.del = h('button', { type: 'button', class: 'icon pg-del' }, '×');
+      kids.push(h('span', { class: 'pg-tools' }, c.left, c.del, c.right));
+    }
+    c.el = h('figure', { class: 'pg' }, ...kids);
+    grid.append(c.el);
+    return c;
+  });
+  const ctrl = new AbortController();
+  pdf.thumbnails(file, 132, (i, cv, rot) => {
+    const c = cells[i];
+    cv.className = cv.width >= cv.height ? 'wide' : 'tall';
+    c.base = rot; c.box.replaceChildren(cv); c.setTurn(c.turn);
+  }, ctrl.signal).catch((e) => console.warn(e));
+  return { n, grid, cells, stop: () => ctrl.abort() };
+}
+
 function renderTable(box, rows, header) {
   const tbl = h('table', {});
   const cols = Math.min(8, Math.max(0, ...rows.map((r) => r.length)));
@@ -930,19 +1195,29 @@ function renderTable(box, rows, header) {
 }
 
 // 그림 여러 장 차례로
+// showSaving(용량 줄이기): 크기를 그대로 두었는데 결과가 더 크면 원본을 그대로 돌려준다.
 async function batchImages(files, img, optsFor, prog, showSaving, tail) {
-  const items = [];
+  const items = [], used = new Set();
+  let kept = 0;
   for (let i = 0; i < files.length; i++) {
     const f = files[i];
     const d = await img.decode(f); d.file = f;
-    const o = optsFor(d);
+    const W0 = d.width;
+    let o;
+    try { o = optsFor(d); } catch (e) { img.release(d); e.file = f.name; throw e; }
     const r = await img.encode(d, o);
     img.release(d);
-    items.push({ blob: r.blob, name: outName(f, r.ext, tail || ''), preview: 'image', meta: { width: r.width, height: r.height, label: (showSaving ? fmtSize(f.size) + ' → ' : '') + fmtSize(r.blob.size) + ' · ' + r.width + '×' + r.height } });
+    let blob = r.blob, ext = r.ext;
+    if (showSaving && r.width === W0 && blob.size >= f.size) { blob = f; ext = extOf(f.name) || r.ext; kept++; }
+    // 같은 이름이 둘 생기면(photo.png + photo.webp → photo.jpg) 뒤에 -2, -3
+    let name = outName(f, ext, tail || ''), k = 2;
+    while (used.has(name.toLowerCase())) name = outName(f, ext, (tail ? tail + '-' : '') + k++);
+    used.add(name.toLowerCase());
+    items.push({ blob, name, preview: 'image', meta: { width: r.width, height: r.height, label: (showSaving ? fmtSize(f.size) + ' → ' : '') + fmtSize(blob.size) + ' · ' + r.width + '×' + r.height } });
     prog((i + 1) / files.length);
     await new Promise((res) => setTimeout(res));
   }
-  return { items, zipName: (tail || 'converted') + '-images.zip' };
+  return { items, zipName: (tail || 'converted') + '-images.zip', note: kept ? t('keptOriginal') : '' };
 }
 
 // ---------- 첫 페이지: 무엇이든 놓으면 맞는 도구를 고르게 ----------

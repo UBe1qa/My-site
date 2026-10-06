@@ -127,6 +127,30 @@ input.sr:focus-visible + .btn-pick{outline:3px solid var(--focus);outline-offset
 .range input{flex:1;accent-color:var(--ink);height:32px}
 .range output{min-width:2.5em;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
 .est{font-size:14px}
+
+/* PDF 쪽 격자(돌리기·정리) */
+.grid-bar{display:flex;flex-wrap:wrap;gap:6px}
+.chip-btn{min-height:40px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.chip-btn:hover{border-color:var(--ink2)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px;max-height:min(70vh,640px);overflow:auto;padding:4px;margin:0 -4px}
+.pg{margin:0;display:grid;gap:4px;justify-items:center;min-width:0}
+.pg-img{width:100%;aspect-ratio:1;display:grid;place-items:center;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--soft);overflow:hidden;font:inherit;color:inherit}
+button.pg-img{cursor:pointer}
+button.pg-img:hover{border-color:var(--ink2)}
+.pg-img[data-turn]:not([data-turn="0"]){border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.pg-img canvas{display:block;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s;background:#fff}
+.pg-img canvas.wide{width:100%;height:auto}
+.pg-img canvas.tall{height:100%;width:auto}
+.pg-n{font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.pg-tools{display:flex;gap:2px}
+.pg-tools .icon{min-width:34px;height:34px;font-size:16px}
+.pg-del{font-weight:700}
+.pg.gone .pg-img{opacity:.3}
+.pg.gone .pg-n{text-decoration:line-through}
+.pg.gone .pg-del{background:var(--soft);color:var(--ink)}
+.pg.over .pg-img{border-color:var(--ink);border-style:dashed}
+.tools .pg{cursor:grab}
+@media (prefers-reduced-motion:reduce){.pg-img canvas{transition:none}}
 .live{display:flex;gap:12px;align-items:center;padding:10px;border-radius:12px;background:var(--soft)}
 .live-img{width:128px;height:128px;object-fit:cover;border-radius:8px;background:var(--card);flex:none}
 .live-img:not([src]){visibility:hidden}

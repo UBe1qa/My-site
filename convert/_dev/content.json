@@ -103,23 +103,23 @@
   "audio-converter": {
    "en": {
     "name": "Audio Converter",
-    "h1": "Audio Converter: MP3, WAV, M4A, FLAC, OGG",
-    "title": "Audio Converter – MP3, WAV, M4A, FLAC, OGG Free",
-    "desc": "Convert between MP3, WAV, M4A (AAC), OGG (Opus) and FLAC and pick the bitrate for lossy formats. Files are converted inside your browser and never uploaded.",
+    "h1": "Audio Converter: Save as MP3, M4A, WAV or OGG",
+    "title": "Audio Converter – MP3, M4A, WAV, OGG, FLAC to MP3",
+    "desc": "Convert MP3, WAV, M4A, OGG and FLAC files to MP3, M4A (AAC), WAV or OGG (Opus), and keep the original quality when the format stays the same. Nothing is uploaded.",
     "lead": "Change an audio file's format and bitrate without sending it anywhere. The work happens in this browser tab.",
     "about": [
      {
       "h": "Lossless to lossy is a one-way trip",
       "p": [
        "WAV and FLAC are lossless: FLAC is compressed, but it decodes back to exactly the same audio. MP3, AAC (M4A) and Opus are lossy and discard detail the ear is less likely to notice.",
-       "Going from FLAC or WAV to MP3 saves a lot of space. Going from MP3 to FLAC or WAV makes the file several times bigger without restoring anything MP3 removed."
+       "Going from FLAC or WAV to MP3 saves a lot of space. Going from MP3 to WAV makes the file several times bigger without restoring anything MP3 removed."
       ]
      },
      {
       "h": "Choose the output by where it will play",
       "p": [
        "MP3 plays almost everywhere, including car stereos and older players. M4A (AAC) is the native format on iPhone and Mac. OGG with the Opus codec handles speech and music well at low bitrates, but some older devices can't play it.",
-       "The list only shows formats your browser can encode, so the options can differ between browsers."
+       "FLAC files can be opened and converted, but FLAC isn't offered as an output; to keep audio lossless, save as WAV. The list only shows formats your browser can encode, so the options can differ between browsers."
       ]
      },
      {
@@ -136,35 +136,39 @@
       "a": "No. The WAV holds the decoded MP3 exactly as it sounds now. It's useful when an editor or device requires WAV, not for better sound."
      },
      {
-      "q": "Why is FLAC or OGG missing from the output list?",
-      "a": "Formats your browser can't encode are hidden. Try another up-to-date browser, or pick a different format."
+      "q": "Can I save as FLAC?",
+      "a": "No. FLAC files can be opened and converted to other formats, but FLAC isn't an output option. For lossless audio, save as WAV. OGG is hidden if your browser can't encode it."
      },
      {
       "q": "What bitrate should I use for a podcast or voice memo?",
       "a": "Speech sounds fine at 128 kbps MP3, and Opus stays clear at even lower bitrates. Music benefits from 192 kbps or more."
+     },
+     {
+      "q": "What does “Keep original” mean?",
+      "a": "When the output uses the same codec as the input, for example M4A to M4A, Keep original is offered and selected by default: the audio isn't re-encoded, so nothing is lost. Otherwise the default bitrate isn't set higher than the source: a 128 kbps file starts at 128 kbps, others at 192 kbps."
      }
     ],
-    "short": "MP3, M4A, WAV, OGG, FLAC and bitrate"
+    "short": "Save as MP3, M4A, WAV or OGG"
    },
    "ko": {
     "name": "오디오 변환",
     "h1": "오디오 파일 변환기",
-    "title": "오디오 변환 – MP3 WAV FLAC M4A 무료",
-    "desc": "MP3, WAV, M4A, OGG, FLAC를 서로 바꾸고 비트레이트도 고를 수 있어요. 파일을 올리지 않고 브라우저에서 바로 변환해요.",
+    "title": "오디오 변환 – FLAC·WAV·M4A를 MP3로, 무료",
+    "desc": "MP3, WAV, M4A, OGG, FLAC 파일을 MP3·M4A·WAV·OGG로 바꾸고 비트레이트도 골라요. 같은 형식이면 원본 음질 그대로 둘 수 있고, 파일은 올리지 않아요.",
     "lead": "음악이나 녹음 파일의 형식을 바꿔요. 변환은 이 브라우저 탭 안에서 끝나요.",
     "about": [
      {
       "h": "무손실에서 손실 형식으로 가면 되돌릴 수 없어요",
       "p": [
        "WAV와 FLAC는 무손실 형식이에요. FLAC는 용량을 줄였지만 풀면 원본과 똑같은 소리가 나와요. MP3·AAC(M4A)·Opus는 귀에 잘 안 들리는 부분을 버려서 용량을 줄이는 손실 형식이에요.",
-       "그래서 FLAC를 MP3로 바꾸면 용량이 크게 줄지만, MP3를 FLAC나 WAV로 바꾸면 용량만 커지고 음질은 그대로예요."
+       "그래서 FLAC를 MP3로 바꾸면 용량이 크게 줄지만, MP3를 WAV로 바꾸면 용량만 커지고 음질은 그대로예요."
       ]
      },
      {
       "h": "듣는 기기에 맞춰 고르세요",
       "p": [
        "차량 오디오나 오래된 기기까지 생각하면 MP3가 가장 무난해요. 아이폰·맥에서는 M4A(AAC)가 기본 형식이고, 강의 녹음처럼 말소리 위주라면 낮은 비트레이트에서도 깨끗한 OGG(Opus)가 효율적이에요.",
-       "목록에는 지금 쓰는 브라우저가 만들 수 있는 형식만 보여요. 그래서 브라우저마다 고를 수 있는 형식이 다를 수 있어요."
+       "FLAC 파일은 열어서 다른 형식으로 바꿀 수 있지만, FLAC로 저장하지는 않아요. 무손실로 남기려면 WAV를 고르세요. 목록에는 지금 쓰는 브라우저가 만들 수 있는 형식만 보여서, 브라우저마다 고를 수 있는 형식이 다를 수 있어요."
       ]
      },
      {
@@ -181,15 +185,19 @@
       "a": "아니요. WAV에는 지금 MP3 소리가 그대로 담길 뿐이에요. 편집 프로그램이나 기기가 WAV만 받을 때 쓰는 변환이에요."
      },
      {
-      "q": "출력 목록에 FLAC나 OGG가 안 보여요.",
-      "a": "브라우저가 만들 수 없는 형식은 숨겨져요. 다른 최신 브라우저에서 열어 보거나 다른 형식을 고르세요."
+      "q": "FLAC로 저장할 수는 없나요?",
+      "a": "네, FLAC 파일을 열어서 다른 형식으로 바꿀 수는 있지만 FLAC로 저장하는 기능은 없어요. 무손실이 필요하면 WAV로 저장하세요. OGG는 브라우저가 만들 수 없으면 목록에서 숨겨져요."
      },
      {
       "q": "아이폰 음성 메모를 MP3로 바꿀 수 있나요?",
       "a": "음성 메모를 '파일' 앱에 저장한 뒤 그 파일을 선택하면 돼요. 말소리라면 128kbps MP3로도 충분해요."
+     },
+     {
+      "q": "'원본 그대로'는 뭔가요?",
+      "a": "M4A를 M4A로 바꿀 때처럼 원본과 같은 코덱으로 저장하면 '원본 그대로'가 나오고 처음부터 골라져 있어요. 다시 인코딩하지 않아서 음질이 전혀 안 바뀌어요. 다른 형식으로 바꿀 때는 기본 비트레이트를 원본보다 높게 잡지 않아요. 128kbps 파일은 128kbps, 그 밖에는 192kbps가 기본이에요."
      }
     ],
-    "short": "MP3·M4A·WAV·OGG·FLAC, 음질 고르기"
+    "short": "MP3·M4A·WAV·OGG로, 음질 고르기"
    }
   },
   "cut-audio": {
@@ -204,7 +212,7 @@
       "h": "A short fade makes a clip sound finished",
       "p": [
        "Cutting in the middle of a sound leaves an abrupt start or a click at the end. A 1-second fade-in or fade-out softens that, and 3 seconds suits music that should trail off.",
-       "The clip is saved as a new file, so your original stays untouched."
+       "A fade changes the sound itself, so the clip is re-encoded at a bitrate close to the source. The clip is saved as a new file, so your original stays untouched."
       ]
      },
      {
@@ -224,7 +232,7 @@
     "faq": [
      {
       "q": "Does cutting lower the quality?",
-      "a": "Saving as MP3 or M4A re-encodes the clip, which is one more lossy step. Saving as WAV avoids that, at the cost of a much larger file."
+      "a": "Not if you keep the format. Cutting an MP3 to MP3 (or M4A to M4A) offers Keep original, selected by default, which copies the audio without re-encoding. Adding a fade means re-encoding at a bitrate close to the source. Saving to another format also re-encodes; WAV avoids further loss but makes a much larger file."
      },
      {
       "q": "Why can't I use a song from a streaming app?",
@@ -255,7 +263,7 @@
       "h": "페이드를 넣으면 뚝 끊기는 느낌이 사라져요",
       "p": [
        "노래 중간을 자르면 시작이 툭 튀어나오거나 끝이 뚝 끊겨요. 1초 페이드면 자연스러워지고, 노래가 서서히 사라지게 하려면 3초가 좋아요.",
-       "원본 파일은 그대로 두고, 잘라낸 부분만 새 파일로 저장해요."
+       "페이드는 소리 자체를 바꾸는 거라 원본에 가까운 비트레이트로 다시 인코딩해요. 원본 파일은 그대로 두고, 잘라낸 부분만 새 파일로 저장해요."
       ]
      },
      {
@@ -268,7 +276,7 @@
     "faq": [
      {
       "q": "자르면 음질이 떨어지나요?",
-      "a": "MP3나 M4A로 저장하면 한 번 더 압축하는 셈이라 아주 조금 손실이 생겨요. WAV로 저장하면 그런 손실은 없지만 용량이 훨씬 커요."
+      "a": "형식을 그대로 두면 안 떨어져요. MP3를 MP3로, M4A를 M4A로 자르면 '원본 그대로'가 기본으로 골라져 있어서 다시 인코딩하지 않아요. 페이드를 넣으면 원본에 가까운 비트레이트로 다시 인코딩해요. 다른 형식으로 저장할 때도 다시 인코딩하는데, WAV는 더 이상 손실이 없는 대신 용량이 훨씬 커요."
      },
      {
       "q": "스트리밍 앱에서 저장한 곡도 자를 수 있나요?",
@@ -301,7 +309,7 @@
       "h": "If the codecs fit, it's a copy, not a conversion",
       "p": [
        "When the new container allows the existing codecs, the streams are copied as they are. That is near-instant and the picture is unchanged; many iPhone MOV files become MP4 this way.",
-       "When they don't fit, the video is re-encoded. WebM, for example, only allows VP8, VP9 or AV1 video with Vorbis or Opus audio, so turning an H.264 MP4 into WebM means a slower, lossy encode."
+       "When they don't fit, the streams are re-encoded. Choosing MP4 or MOV turns VP9 or AV1 video into H.264 (or HEVC if H.264 isn't available) and Opus or Vorbis audio into AAC, so the file plays on iPhone, Mac and in editing apps. WebM only allows VP8, VP9 or AV1 video with Vorbis or Opus audio, so an H.264 MP4 has to be re-encoded to become WebM."
       ]
      },
      {
@@ -324,6 +332,10 @@
      {
       "q": "Will the file get smaller?",
       "a": "A stream copy keeps the size about the same. To shrink a video, use Compress video."
+     },
+     {
+      "q": "Why did my WebM to MP4 conversion take longer?",
+      "a": "WebM files usually hold VP9 or AV1 video and Opus audio, so for MP4 they're re-encoded to H.264 and AAC, which takes time. Files that already hold H.264 or HEVC with AAC are copied almost instantly. If your browser can't create H.264 or HEVC video, the page tells you."
      }
     ],
     "short": "MOV, MKV, WebM to MP4 and back"
@@ -346,7 +358,7 @@
       "h": "코덱이 맞으면 '복사'라서 금방 끝나요",
       "p": [
        "새 상자에 기존 코덱을 그대로 담을 수 있으면 다시 압축하지 않고 옮기기만 해요. 화질이 그대로고 거의 바로 끝나요. 아이폰 MOV를 MP4로 바꿀 때 대부분 이렇게 처리돼요.",
-       "WebM처럼 담을 수 있는 코덱이 정해진 형식(영상 VP8·VP9·AV1, 소리 Vorbis·Opus)으로 바꿀 때는 다시 인코딩해야 해서 시간이 걸리고 화질이 조금 떨어져요."
+       "코덱이 맞지 않으면 다시 인코딩해요. MP4나 MOV를 고르면 VP9·AV1 영상은 H.264(안 되면 HEVC)로, Opus·Vorbis 소리는 AAC로 바꿔서 아이폰·맥·편집 앱에서 열리게 해요. WebM은 영상 VP8·VP9·AV1, 소리 Vorbis·Opus만 담을 수 있어서, H.264 MP4를 WebM으로 바꿀 때도 다시 인코딩해요. 이때는 시간이 걸리고 화질이 조금 떨어져요."
       ]
      },
      {
@@ -369,6 +381,10 @@
      {
       "q": "휴대폰에서도 변환할 수 있나요?",
       "a": "최신 브라우저라면 돼요. 다만 영상 전체를 메모리에서 처리하기 때문에 길고 화질이 높은 영상은 컴퓨터에서 하는 편이 안전해요."
+     },
+     {
+      "q": "WebM을 MP4로 바꾸는데 오래 걸려요.",
+      "a": "WebM에는 보통 VP9·AV1 영상과 Opus 소리가 들어 있어서, MP4로 바꿀 때 H.264와 AAC로 다시 인코딩하느라 시간이 걸려요. 이미 H.264·HEVC 영상과 AAC 소리인 파일은 거의 바로 끝나요. 브라우저가 H.264·HEVC 영상을 만들 수 없으면 화면에 알려 드려요."
      }
     ],
     "short": "MOV·MKV·WebM을 MP4로, 거꾸로도"
@@ -858,14 +874,14 @@
       "h": "PNG files are converted, not optimized",
       "p": [
        "This tool doesn't do lossless PNG optimization. A PNG is saved as JPG or WebP, which saves a lot for photos but can soften text in screenshots.",
-       "JPG can't store transparency, so choose WebP for logos or graphics with transparent backgrounds."
+       "JPG can't store transparency and would turn transparent areas white, so PNGs with transparency default to WebP, which keeps it."
       ]
      }
     ],
     "faq": [
      {
-      "q": "Why did the file get bigger?",
-      "a": "That can happen when the original was already heavily compressed. The page shows both sizes, so just keep the original in that case."
+      "q": "What if compressing makes a file bigger?",
+      "a": "It shouldn't. If a compressed image would be bigger than the original, which can happen when the original was already heavily compressed, the original is kept and marked as such."
      },
      {
       "q": "Is location data removed?",
@@ -903,14 +919,14 @@
       "h": "PNG는 최적화가 아니라 변환돼요",
       "p": [
        "이 도구는 PNG를 무손실로 줄이는 기능이 없어요. PNG는 JPG나 WebP로 바뀌어서 사진이면 크게 줄지만, 글자 캡처는 조금 흐려질 수 있어요.",
-       "JPG는 투명 배경을 담지 못하니, 투명한 로고나 그래픽은 WebP로 저장하세요."
+       "JPG는 투명 배경을 담지 못해서 투명한 부분이 흰색이 돼요. 그래서 투명한 부분이 있는 PNG는 투명함이 유지되는 WebP가 기본으로 골라져요."
       ]
      }
     ],
     "faq": [
      {
-      "q": "오히려 용량이 커졌어요.",
-      "a": "원본이 이미 많이 압축된 경우 그럴 수 있어요. 원본과 결과 크기를 둘 다 보여 드리니, 그럴 땐 원본을 쓰세요."
+      "q": "압축했는데 오히려 커지면요?",
+      "a": "원본이 이미 많이 압축된 경우 그럴 수 있어요. 그럴 땐 결과 대신 원본을 그대로 두고 따로 표시해 드려서, 더 큰 파일을 받을 일은 없어요."
      },
      {
       "q": "위치 정보도 지워지나요?",
@@ -1039,7 +1055,8 @@
      {
       "h": "Check the order before you save",
       "p": [
-       "Use the ↑ and ↓ buttons in the file list to reorder pages. The PDF follows the order on screen, one image per page."
+       "Use the ↑ and ↓ buttons in the file list to reorder pages. The PDF follows the order on screen, one image per page.",
+       "Phone photos are placed upright: the orientation the camera recorded in the photo's EXIF data is applied, so pictures taken in portrait don't end up sideways."
       ]
      }
     ],
@@ -1083,7 +1100,8 @@
      {
       "h": "저장 전에 순서를 확인하세요",
       "p": [
-       "파일 목록의 ↑·↓ 버튼으로 순서를 바꿀 수 있어요. 화면에 보이는 순서대로 한 장에 한 페이지씩 들어가요."
+       "파일 목록의 ↑·↓ 버튼으로 순서를 바꿀 수 있어요. 화면에 보이는 순서대로 한 장에 한 페이지씩 들어가요.",
+       "휴대폰 사진은 카메라가 사진에 기록한 회전 정보(EXIF)를 반영해서 바로 선 방향으로 들어가요. 세로로 찍은 사진이 옆으로 눕지 않아요."
       ]
      }
     ],
@@ -1128,7 +1146,7 @@
      {
       "h": "Limits worth knowing",
       "p": [
-       "Password-protected PDFs aren't supported yet. Pages are drawn by PDF.js, the PDF engine built into Firefox, so unusual fonts or effects can look slightly different than in other viewers.",
+       "A PDF that asks for a password when you open it has to be unlocked with Unlock PDF first. Pages are drawn by PDF.js, the PDF engine built into Firefox, so unusual fonts or effects can look slightly different than in other viewers.",
        "The output is a picture of each page: text in it can't be selected or searched."
       ]
      }
@@ -1172,7 +1190,7 @@
      {
       "h": "알아 두면 좋은 한계",
       "p": [
-       "비밀번호가 걸린 PDF는 아직 지원하지 않아요. 페이지는 파이어폭스에 들어 있는 PDF 엔진인 PDF.js로 그려서, 특이한 글꼴은 다른 뷰어와 조금 다르게 보일 수 있어요.",
+       "열 때 비밀번호를 묻는 PDF는 먼저 'PDF 암호 풀기'로 암호를 풀어 주세요. 페이지는 파이어폭스에 들어 있는 PDF 엔진인 PDF.js로 그려서, 특이한 글꼴은 다른 뷰어와 조금 다르게 보일 수 있어요.",
        "결과는 페이지를 찍은 그림이라 글자를 선택하거나 검색할 수 없어요."
       ]
      }
@@ -1212,7 +1230,7 @@
       "h": "Bookmarks and some form fields may not survive",
       "p": [
        "The outline (bookmarks panel) and some form fields may not carry over. If a document has fields you still need, fill them in and save it before merging.",
-       "Encrypted or password-protected PDFs can't be merged."
+       "PDFs that only restrict copying or printing can be merged. A PDF that needs a password to open has to be unlocked with Unlock PDF first."
       ]
      },
      {
@@ -1225,7 +1243,7 @@
     "faq": [
      {
       "q": "Will the merged PDF be smaller?",
-      "a": "No. Merging doesn't compress anything, and this site doesn't offer PDF compression yet."
+      "a": "No. Merging doesn't compress anything. If the merged file is too big, run it through Compress PDF afterwards."
      },
      {
       "q": "Can I merge Word files or images?",
@@ -1255,7 +1273,7 @@
       "h": "책갈피와 일부 입력란은 빠질 수 있어요",
       "p": [
        "목차 역할을 하는 책갈피(개요)와 일부 입력 양식은 합친 파일에 옮겨지지 않을 수 있어요. 입력해야 할 칸이 있다면 먼저 채워서 저장한 뒤 합치세요.",
-       "암호가 걸린 PDF는 합칠 수 없어요."
+       "복사·인쇄만 막힌 PDF는 합칠 수 있어요. 열 때 암호를 묻는 PDF는 먼저 'PDF 암호 풀기'로 암호를 풀어 주세요."
       ]
      },
      {
@@ -1268,7 +1286,7 @@
     "faq": [
      {
       "q": "합치면 용량이 줄어드나요?",
-      "a": "아니요. 합치기는 압축하지 않아요. 이 사이트에는 아직 PDF 압축 기능이 없어요."
+      "a": "아니요. 합치기는 압축하지 않아요. 합친 파일이 크면 'PDF 압축'으로 줄이세요."
      },
      {
       "q": "한글(HWP)이나 워드 파일도 합칠 수 있나요?",
@@ -1322,7 +1340,11 @@
      },
      {
       "q": "Can I put the extracted pages in a different order?",
-      "a": "Extract them as separate files, then combine them in the order you want with Merge PDF."
+      "a": "Yes: Delete & Reorder PDF Pages lets you remove and move pages on thumbnails. You can also extract them as separate files and combine them in the order you want with Merge PDF."
+     },
+     {
+      "q": "Can I split a password-protected PDF?",
+      "a": "If it only restricts copying or printing, yes. If it asks for a password when you open it, remove the password with Unlock PDF first."
      }
     ],
     "short": "By page range or equal chunks"
@@ -1367,7 +1389,11 @@
      },
      {
       "q": "뽑은 페이지 순서를 바꿀 수 있나요?",
-      "a": "따로따로 뽑은 뒤 'PDF 합치기'에서 원하는 순서로 합치면 돼요."
+      "a": "'PDF 쪽 삭제·정리'에서 미리보기를 보며 쪽을 빼고 옮길 수 있어요. 따로따로 뽑은 뒤 'PDF 합치기'에서 원하는 순서로 합쳐도 돼요."
+     },
+     {
+      "q": "암호가 걸린 PDF도 나눌 수 있나요?",
+      "a": "복사·인쇄만 막힌 PDF는 바로 나눌 수 있어요. 열 때 암호를 묻는 PDF는 먼저 'PDF 암호 풀기'로 암호를 풀어 주세요."
      }
     ],
     "short": "쪽 범위나 같은 쪽 수로 나누기"
@@ -1385,7 +1411,7 @@
       "h": "CSV to JSON: decide on keys and types",
       "p": [
        "With \"first row as keys\", each row becomes an object such as {\"name\": \"Kim\", \"age\": \"34\"}; without it you get arrays of values. Comma, semicolon or tab delimiters are detected automatically.",
-       "CSV has no data types, so values stay strings unless you turn on \"detect numbers & true/false\". Leave it off for ZIP codes, phone numbers or IDs with leading zeros, which would otherwise lose them (\"007\" would become 7)."
+       "CSV has no data types, so values stay strings unless you turn on “Detect numbers and true/false”. Numbers are decided per column: a column becomes numbers only if every non-empty value is a plain number without a leading zero. Otherwise the whole column stays text, so 01234 and 12345 in one ZIP code column both stay text."
       ]
      },
      {
@@ -1399,7 +1425,7 @@
       "h": "Add a BOM if the CSV will be opened in Excel",
       "p": [
        "Excel recognizes a CSV as UTF-8 only when the file starts with a byte order mark (BOM, the bytes EF BB BF). Without it, Korean, accented or other non-English text can show up garbled.",
-       "Turn on \"Excel-friendly CSV (UTF-8 with BOM)\" for files people will double-click open in Excel."
+       "“Excel-friendly (UTF-8 with BOM)” is on by default, so files people double-click open in Excel show correctly. Turn it off for files meant for scripts."
       ]
      }
     ],
@@ -1410,7 +1436,7 @@
      },
      {
       "q": "Should I always add the BOM?",
-      "a": "No. Some scripts and tools don't expect it and read it as stray characters at the start of the first header. Use it for Excel, and leave it off for files meant for code."
+      "a": "No. Some scripts and tools don't expect it and read it as stray characters at the start of the first header. It's on by default for Excel; turn it off for files meant for code."
      },
      {
       "q": "Is there a size limit?",
@@ -1430,14 +1456,14 @@
       "h": "엑셀에서 열 CSV라면 BOM을 켜세요",
       "p": [
        "엑셀은 파일 맨 앞에 BOM(바이트 순서 표시, EF BB BF 세 바이트)이 있을 때만 UTF-8로 알아봐요. BOM이 없으면 한국어 윈도우의 기본 코드 페이지(949)로 읽어서 한글이 '�븞�뀞'처럼 깨져 보여요.",
-       "다른 사람이 더블클릭으로 열 파일이라면 'Excel용 CSV(UTF-8 BOM)' 옵션을 켜 두세요."
+       "그래서 '엑셀에서 한글 안 깨지게 (UTF-8 BOM)' 옵션이 처음부터 켜져 있어요. 프로그램에서 읽을 파일이라면 꺼 주세요."
       ]
      },
      {
       "h": "CSV → JSON: 키와 자료형을 정하세요",
       "p": [
        "'첫 줄을 키로'를 켜면 각 줄이 {\"이름\": \"김민지\", \"나이\": \"34\"} 같은 객체가 되고, 끄면 값만 담긴 배열이 돼요. 구분자(쉼표, 세미콜론, 탭)는 자동으로 찾아요.",
-       "CSV에는 자료형이 없어서 '숫자·true/false 감지'를 켜지 않으면 모든 값이 문자열로 남아요. 우편번호나 '010'으로 시작하는 전화번호가 있다면 꺼 두세요. 켜면 앞자리 0이 사라질 수 있어요."
+       "CSV에는 자료형이 없어서 '숫자와 true/false를 값으로'를 켜지 않으면 모든 값이 문자열로 남아요. 켜면 열마다 판단해요. 빈칸을 뺀 모든 값이 앞자리 0 없는 평범한 숫자인 열만 숫자가 되고, 아니면 그 열 전체가 글자로 남아요. 그래서 우편번호 열에 01234와 12345가 섞여 있으면 둘 다 글자 그대로예요."
       ]
      },
      {
@@ -1451,7 +1477,7 @@
     "faq": [
      {
       "q": "BOM은 항상 켜는 게 좋나요?",
-      "a": "아니요. BOM을 예상하지 않는 프로그램은 첫 머리글 앞에 이상한 글자가 붙은 것처럼 읽어요. 엑셀용이면 켜고, 개발용이면 끄세요."
+      "a": "아니요. BOM을 예상하지 않는 프로그램은 첫 머리글 앞에 이상한 글자가 붙은 것처럼 읽어요. 엑셀용으로 처음엔 켜져 있지만, 개발용이면 끄세요."
      },
      {
       "q": "이미 받은 CSV가 엑셀에서 깨져요.",
@@ -1490,7 +1516,8 @@
      {
       "h": "CSV to XLSX gives you a real workbook",
       "p": [
-       "Converting a CSV to XLSX lets you add formatting, formulas and more sheets in Excel. One worksheet holds at most 1,048,576 rows and 16,384 columns."
+       "Converting a CSV to XLSX lets you add formatting, formulas and more sheets in Excel. One worksheet holds at most 1,048,576 rows and 16,384 columns.",
+       "A column where every value is a plain number with no leading zero is saved as real numbers, so you can sum it. Columns such as ZIP codes or phone numbers with leading zeros stay text, so the zeros aren't lost."
       ]
      }
     ],
@@ -1513,7 +1540,7 @@
    "ko": {
     "name": "엑셀 ↔ CSV 변환",
     "h1": "엑셀 CSV 변환기 (XLSX·XLS·ODS)",
-    "title": "엑셀 CSV 변환 – XLSX·XLS·ODS ↔ CSV 무료",
+    "title": "엑셀 CSV 변환 – XLSX·XLS·ODS↔CSV 무료",
     "desc": "XLSX·XLS·ODS 시트를 CSV로 내보내거나(모든 시트는 ZIP으로), CSV를 XLSX 통합 문서로 바꿔요. 파일은 브라우저 안에서만 처리돼요.",
     "lead": "엑셀 파일에서 CSV를 뽑거나 CSV로 엑셀 파일을 만들어요. 업로드는 없어요.",
     "about": [
@@ -1534,7 +1561,8 @@
      {
       "h": "CSV를 XLSX로 바꾸면 진짜 엑셀 파일이 돼요",
       "p": [
-       "CSV를 XLSX로 바꾸면 서식, 수식, 시트를 더할 수 있는 통합 문서가 돼요. 시트 하나에는 최대 1,048,576행, 16,384열까지 들어가요."
+       "CSV를 XLSX로 바꾸면 서식, 수식, 시트를 더할 수 있는 통합 문서가 돼요. 시트 하나에는 최대 1,048,576행, 16,384열까지 들어가요.",
+       "값이 모두 앞자리 0 없는 평범한 숫자인 열은 진짜 숫자로 저장돼서 바로 합계를 낼 수 있어요. 우편번호나 010으로 시작하는 전화번호처럼 앞자리 0이 있는 열은 글자로 남아서 0이 사라지지 않아요."
       ]
      }
     ],
@@ -1554,12 +1582,658 @@
     ],
     "short": "엑셀은 CSV로, CSV는 엑셀로"
    }
+  },
+  "compress-pdf": {
+   "en": {
+    "name": "Compress PDF",
+    "h1": "Compress PDF: Reduce PDF File Size",
+    "title": "Compress PDF – Shrink Scanned PDFs Without Uploading",
+    "desc": "Make a PDF smaller by re-saving its photos and scans at a lower resolution while the text stays sharp. Pick Strong, Balanced or Light and see the size before and after.",
+    "lead": "Shrink a scanned or photo-heavy PDF for email or an upload form. It's compressed on your device, not on a server.",
+    "about": [
+     {
+      "h": "What gets smaller and what doesn't",
+      "p": [
+       "Most of a large PDF's size is usually images: scanned pages and photos. Compression re-saves each of them as a JPEG at a lower resolution and quality, and also compacts the file's structure by packing objects into compressed object streams and recompressing other streams.",
+       "Text and vector graphics, such as lines, tables and charts drawn as shapes, aren't touched, so typed text stays sharp and you can still select and search it. That's also why a PDF that is mostly text gets only a little smaller."
+      ]
+     },
+     {
+      "h": "Three levels",
+      "p": [
+       "Strong scales each image down to about 1240 pixels on its long side at JPEG quality 55. Balanced, the default, uses about 1600 pixels at quality 70, and Light about 2400 pixels at quality 82.",
+       "For a scan that fills an A4 page, that works out to roughly 106, 137 and 205 DPI. Start with Balanced; if small print looks soft, try Light, and if the file is still too big, try Strong."
+      ]
+     },
+     {
+      "h": "When the result isn't smaller",
+      "p": [
+       "The page shows the size before and after. If the compressed file wouldn't be smaller, you get the original back with a note, so you never end up with a bigger file.",
+       "Images in less common color formats (CMYK, 16-bit, JPEG 2000 or indexed color) are left as they are. A PDF that needs a password to open must be unlocked with Unlock PDF first; PDFs that only restrict copying or printing can be compressed directly."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "How much smaller will my PDF get?",
+      "a": "It depends on what's inside. Scanned documents and PDFs full of photos often shrink a lot. A PDF that is mostly typed text shrinks little, because text is already compact and isn't changed."
+     },
+     {
+      "q": "Will the text still be sharp and selectable?",
+      "a": "Typed text, yes: only images are re-saved, so it stays real text you can select, copy and search. In a scanned document the text is part of the page image, so it can get slightly softer, most noticeably at Strong."
+     },
+     {
+      "q": "It's still over the limit after Strong. What now?",
+      "a": "Split it into parts with Split PDF and send them separately, or ask whether the receiver accepts a link to a cloud file instead of an attachment."
+     },
+     {
+      "q": "Can I compress a password-protected PDF?",
+      "a": "If it asks for a password when you open it, remove the password with Unlock PDF first (you'll need to know it). PDFs that only block copying or printing work as they are."
+     }
+    ],
+    "short": "Smaller PDFs, text stays sharp"
+   },
+   "ko": {
+    "name": "PDF 압축",
+    "h1": "PDF 용량 줄이기 (PDF 압축)",
+    "title": "PDF 용량 줄이기 – 스캔 PDF 압축, 업로드 없이",
+    "desc": "PDF 안의 사진과 스캔 이미지를 낮은 해상도로 다시 저장해 용량을 줄여요. 글자는 그대로 선명하고, 강하게·균형·약하게 중에서 골라 줄어든 크기를 바로 확인해요.",
+    "lead": "메일 첨부나 제출 용량 제한에 걸린 스캔 PDF를 줄여요. 압축은 내 기기 안에서 해요.",
+    "about": [
+     {
+      "h": "줄어드는 건 사진이고, 글자는 그대로예요",
+      "p": [
+       "PDF가 큰 이유는 대부분 안에 든 이미지예요. 스캔한 페이지와 사진을 JPEG로 다시 저장하면서 해상도와 품질을 낮추고, 파일 안의 구조도 압축된 묶음(객체 스트림)으로 다시 정리해요.",
+       "글자와 표·선·도형 같은 벡터 그래픽은 건드리지 않아요. 그래서 입력한 글자는 흐려지지 않고 선택·검색도 그대로 돼요. 대신 글자 위주의 PDF는 조금밖에 안 줄어요."
+      ]
+     },
+     {
+      "h": "단계는 세 가지예요",
+      "p": [
+       "강하게는 이미지의 긴 변을 약 1240픽셀(JPEG 품질 55)로, 균형(기본)은 약 1600픽셀(품질 70)로, 약하게는 약 2400픽셀(품질 82)로 맞춰요.",
+       "A4 한 장을 꽉 채운 스캔이라면 각각 약 106·137·205DPI쯤이에요. 먼저 균형으로 해 보고, 작은 글씨가 뭉개지면 약하게, 그래도 크면 강하게를 고르세요."
+      ]
+     },
+     {
+      "h": "안 줄어들면 원본을 그대로 드려요",
+      "p": [
+       "압축 전후 크기를 보여 드려요. 결과가 원본보다 작지 않으면 안내와 함께 원본을 그대로 돌려 드려서, 오히려 커진 파일을 받을 일은 없어요.",
+       "CMYK, 16비트, JPEG 2000, 인덱스 색상처럼 흔하지 않은 형식의 이미지는 그대로 둬요. 열 때 암호를 묻는 PDF는 먼저 'PDF 암호 풀기'로 암호를 풀어 주세요. 복사·인쇄만 막힌 PDF는 바로 압축할 수 있어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "얼마나 줄어드나요?",
+      "a": "안에 든 내용에 따라 달라요. 스캔 문서나 사진이 많은 PDF는 많이 줄고, 한글·워드에서 PDF로 저장한 글자 위주 문서는 조금만 줄어요."
+     },
+     {
+      "q": "압축하면 글자가 흐려지나요?",
+      "a": "입력한 글자는 아니에요. 다시 저장하는 건 이미지뿐이라 글자는 글자 그대로 선명하고 복사·검색도 돼요. 다만 스캔한 문서의 글자는 이미지의 일부라서, 특히 '강하게'에서는 조금 흐려질 수 있어요."
+     },
+     {
+      "q": "강하게로 해도 제한보다 커요.",
+      "a": "'PDF 나누기'로 몇 쪽씩 나눠서 따로 보내거나, 제출처가 파일 여러 개나 링크를 받는지 확인해 보세요."
+     },
+     {
+      "q": "암호가 걸린 PDF도 되나요?",
+      "a": "열 때 암호를 묻는 파일은 'PDF 암호 풀기'에서 먼저 암호를 풀어야 해요(암호를 알아야 해요). 복사·인쇄만 막힌 파일은 그대로 넣으면 돼요."
+     }
+    ],
+    "short": "스캔 PDF 용량 줄이기, 글자는 선명"
+   }
+  },
+  "rotate-pdf": {
+   "en": {
+    "name": "Rotate PDF",
+    "h1": "Rotate PDF Pages",
+    "title": "Rotate PDF – Turn Single Pages or All Pages, Free",
+    "desc": "Turn sideways or upside-down PDF pages the right way up. Tap a page to rotate it 90°, or rotate every page at once. Nothing is re-rendered, so quality doesn't change.",
+    "lead": "Fix scanned pages that came out sideways. Turn them on the thumbnails and save a new PDF, all in your browser.",
+    "about": [
+     {
+      "h": "Tap a page, or turn them all",
+      "p": [
+       "Every page is shown as a thumbnail. Tap a page to turn it 90° clockwise; tap again to keep turning, through 180° and 270° and back to where it started.",
+       "The rotate-all buttons turn every page left or right at once, and the reset button undoes all your turns."
+      ]
+     },
+     {
+      "h": "Rotation is lossless",
+      "p": [
+       "Each PDF page has a rotation value that tells viewers to show it turned by a multiple of 90°. This tool only changes that value: nothing is re-rendered or recompressed, so text stays sharp and selectable and the file size stays about the same."
+      ]
+     },
+     {
+      "h": "Right angles only",
+      "p": [
+       "PDF page rotation works in steps of 90°, so a scan that is a few degrees crooked can't be straightened here.",
+       "Your original file isn't changed; you download a new PDF."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does rotating lower the quality?",
+      "a": "No. Only each page's rotation value changes; the content isn't redrawn."
+     },
+     {
+      "q": "Can I rotate just one page?",
+      "a": "Yes. Tap only the pages that need turning; the rest are saved as they are."
+     },
+     {
+      "q": "Can I also delete or reorder pages?",
+      "a": "Not on this page. Rotate first, then open the result in Delete & Reorder PDF Pages."
+     }
+    ],
+    "short": "Turn pages 90° at a time"
+   },
+   "ko": {
+    "name": "PDF 회전",
+    "h1": "PDF 회전 (페이지 돌리기)",
+    "title": "PDF 회전 – 옆으로 누운 페이지 바로 세우기",
+    "desc": "옆으로 눕거나 거꾸로 스캔된 PDF 페이지를 바로 세워요. 누를 때마다 90°씩 돌고, 모든 쪽을 한 번에 돌릴 수도 있어요. 다시 그리지 않아 화질은 그대로예요.",
+    "lead": "스캔하다 옆으로 누운 쪽을 바로잡아요. 미리보기를 보면서 돌리고, 파일은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "누를 때마다 90°씩 돌아요",
+      "p": [
+       "모든 쪽이 작은 미리보기로 보여요. 쪽을 누르면 시계 방향으로 90° 돌고, 또 누르면 180°, 270°를 거쳐 처음 방향으로 돌아와요.",
+       "전체 왼쪽·오른쪽 버튼은 모든 쪽을 한꺼번에 돌리고, 초기화 버튼은 돌린 것을 모두 되돌려요."
+      ]
+     },
+     {
+      "h": "화질이 바뀌지 않아요",
+      "p": [
+       "PDF의 각 쪽에는 몇 도 돌려서 보여 줄지 정하는 회전 값이 있어요. 이 도구는 그 값만 바꾸고 내용을 다시 그리거나 압축하지 않아서, 글자는 선명하고 선택도 되고 용량도 거의 그대로예요."
+      ]
+     },
+     {
+      "h": "90° 단위로만 돌아가요",
+      "p": [
+       "PDF 쪽 회전은 90°씩만 돼요. 몇 도 비뚤어진 스캔을 똑바로 펴는 건 여기서 할 수 없어요.",
+       "원본 파일은 그대로 두고 새 PDF로 저장해요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "돌리면 화질이 떨어지나요?",
+      "a": "아니요. 쪽마다 회전 값만 바꾸고 내용은 다시 그리지 않아요."
+     },
+     {
+      "q": "한 쪽만 돌릴 수 있나요?",
+      "a": "네. 돌릴 쪽만 누르면 나머지는 그대로 저장돼요."
+     },
+     {
+      "q": "돌리면서 쪽을 지우거나 순서를 바꿀 수 있나요?",
+      "a": "여기서는 회전만 해요. 돌린 파일을 'PDF 쪽 삭제·정리'에 넣으면 돼요."
+     }
+    ],
+    "short": "쪽마다 90°씩 돌리기"
+   }
+  },
+  "organize-pdf": {
+   "en": {
+    "name": "Delete & Reorder PDF Pages",
+    "h1": "Delete and Reorder PDF Pages",
+    "title": "Delete PDF Pages & Reorder Them – Free, No Upload",
+    "desc": "See every page as a thumbnail, remove the ones you don't need and move the rest into a new order. Kept pages are copied as they are into a new PDF.",
+    "lead": "Drop blank or unwanted pages and fix the page order in one go, on your own device.",
+    "about": [
+     {
+      "h": "Remove, restore, move",
+      "p": [
+       "Each thumbnail has a remove toggle. A removed page is greyed out rather than gone, so one more tap brings it back before you save.",
+       "The ← and → buttons move a page one place earlier or later. The new PDF holds the kept pages in the order shown on screen."
+      ]
+     },
+     {
+      "h": "Pages are copied, not re-rendered",
+      "p": [
+       "Kept pages are copied into the new file with their content as it is, so text stays selectable and images keep their quality. Your original file isn't changed.",
+       "Links or bookmarks that pointed to removed pages won't have anywhere to go in the new file."
+      ]
+     },
+     {
+      "h": "Typical uses",
+      "p": [
+       "Removing the blank pages a double-sided scan leaves behind, taking out a page with personal details before you send a document, or moving an appendix to the end."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "How is this different from Split PDF?",
+      "a": "Split PDF works from typed page ranges and can make several files. This page shows thumbnails, which helps when you need to see the pages, and always makes one PDF."
+     },
+     {
+      "q": "Can I add pages from another PDF?",
+      "a": "Not here. Combine the files with Merge PDF first, then remove or move pages in the result."
+     },
+     {
+      "q": "What happens to the pages I remove?",
+      "a": "They're left out of the new file. The original PDF on your device still has them."
+     }
+    ],
+    "short": "Remove pages, change their order"
+   },
+   "ko": {
+    "name": "PDF 쪽 삭제·정리",
+    "h1": "PDF 페이지 삭제·순서 바꾸기",
+    "title": "PDF 페이지 삭제·순서 바꾸기 – 미리보기로",
+    "desc": "모든 쪽을 미리보기로 보면서 필요 없는 쪽은 빼고, 남은 쪽은 순서를 바꿔 새 PDF로 저장해요. 남긴 쪽은 내용 그대로 복사돼요.",
+    "lead": "빈 쪽이나 필요 없는 쪽을 빼고 순서를 바로잡아요. 파일은 내 기기 밖으로 나가지 않아요.",
+    "about": [
+     {
+      "h": "빼고, 되살리고, 옮겨요",
+      "p": [
+       "쪽마다 빼기 버튼이 있어요. 뺀 쪽은 바로 사라지지 않고 흐리게 표시돼서, 저장하기 전에 한 번 더 누르면 되살아나요.",
+       "← → 버튼으로 쪽을 한 칸씩 앞뒤로 옮겨요. 새 PDF에는 남긴 쪽이 화면에 보이는 순서대로 들어가요."
+      ]
+     },
+     {
+      "h": "쪽을 그대로 복사해요",
+      "p": [
+       "남긴 쪽은 내용 그대로 새 파일에 복사돼요. 다시 그리지 않아서 글자는 선택할 수 있고 사진 화질도 그대로예요. 원본 파일은 바뀌지 않아요.",
+       "뺀 쪽을 가리키던 링크나 책갈피는 새 파일에서 연결될 곳이 없어요."
+      ]
+     },
+     {
+      "h": "이럴 때 써요",
+      "p": [
+       "양면 스캔에서 생긴 빈 쪽을 뺄 때, 제출하기 전에 주민등록번호 같은 개인정보가 있는 쪽을 뺄 때, 첨부 서류를 맨 뒤로 옮길 때 편해요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "'PDF 나누기'와 뭐가 달라요?",
+      "a": "'PDF 나누기'는 쪽 번호 범위를 입력해서 나누고 파일 여러 개를 만들 수 있어요. 여기서는 미리보기를 보면서 고르고, 결과는 항상 PDF 한 개예요."
+     },
+     {
+      "q": "다른 PDF의 쪽을 넣을 수 있나요?",
+      "a": "여기서는 안 돼요. 'PDF 합치기'로 먼저 합친 뒤, 그 파일에서 쪽을 빼거나 옮기세요."
+     },
+     {
+      "q": "뺀 쪽은 어디로 가나요?",
+      "a": "새 파일에 안 들어갈 뿐이에요. 내 기기에 있는 원본 PDF에는 그대로 남아 있어요."
+     }
+    ],
+    "short": "쪽 빼고 순서 바꾸기"
+   }
+  },
+  "unlock-pdf": {
+   "en": {
+    "name": "Unlock PDF",
+    "h1": "Unlock PDF: Remove a PDF Password",
+    "title": "Unlock PDF – Remove a Password You Know, No Upload",
+    "desc": "Remove the open password and the printing or copying restrictions from a PDF you're allowed to open, and save an unlocked copy. Nothing is uploaded.",
+    "lead": "Save a copy of a protected PDF that opens without a password. It's decrypted in your browser with qpdf.",
+    "about": [
+     {
+      "h": "Two kinds of PDF password",
+      "p": [
+       "An open password (the user password) is needed to view the file at all. A permissions password (the owner password) lets the file open but limits what you can do, such as printing or copying text.",
+       "If the file asks for a password when you open it, type it here. If it opens without one and only blocks printing or copying, it's unlocked without asking for anything. Either way you get a PDF with no password and no restrictions."
+      ]
+     },
+     {
+      "h": "It can't recover a forgotten password",
+      "p": [
+       "This tool doesn't guess or crack passwords. Just as a PDF viewer can't open the file without its open password, this page can't unlock it either.",
+       "Only unlock files you have the right to change, such as your own documents or statements sent to you. Restrictions someone else set may be there for a reason."
+      ]
+     },
+     {
+      "h": "How it works in the browser",
+      "p": [
+       "The page runs qpdf, an open-source PDF tool, compiled to WebAssembly. Your file and password stay on your device: they aren't sent to a server or stored.",
+       "The pages are kept exactly as they are; only the encryption is removed."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "I forgot the password. Can you unlock it?",
+      "a": "No. You need the password to open the file. Ask whoever sent it, or check the email or letter that came with it for how the password is formed."
+     },
+     {
+      "q": "Why unlock a PDF at all?",
+      "a": "Some tools, including Merge PDF, Split PDF and PDF to JPG here, can't open a file that needs a password. An unlocked copy also saves typing the password every time."
+     },
+     {
+      "q": "Is the unlocked copy safe to keep?",
+      "a": "Anyone who gets the file can now open it, so keep it somewhere private or delete it when you're done. Protect PDF can add a new password."
+     }
+    ],
+    "short": "Take the password off a PDF"
+   },
+   "ko": {
+    "name": "PDF 암호 풀기",
+    "h1": "PDF 암호 풀기 (비밀번호 해제)",
+    "title": "PDF 암호 풀기 – 아는 비밀번호 해제, 무료",
+    "desc": "열 때마다 비밀번호를 묻거나 인쇄·복사가 막힌 PDF를 암호와 제한이 없는 사본으로 저장해요. 열 수 있는 파일만 풀 수 있고, 파일은 업로드되지 않아요.",
+    "lead": "명세서처럼 열 때마다 비밀번호를 묻는 PDF를 암호 없는 사본으로 저장해요. 브라우저 안에서 qpdf로 풀어요.",
+    "about": [
+     {
+      "h": "PDF 암호는 두 가지예요",
+      "p": [
+       "열기 암호(사용자 암호)는 파일을 열 때부터 필요해요. 권한 암호(소유자 암호)는 파일은 열리지만 인쇄나 글자 복사 같은 일을 막아요.",
+       "열 때 암호를 묻는 파일이면 여기에 암호를 입력하세요. 암호 없이 열리고 인쇄·복사만 막힌 파일은 아무것도 입력하지 않아도 풀려요. 어느 쪽이든 암호도 제한도 없는 PDF가 나와요."
+      ]
+     },
+     {
+      "h": "잊어버린 암호는 찾을 수 없어요",
+      "p": [
+       "이 도구는 암호를 알아내거나 추측하지 않아요. 열기 암호를 모르면 PDF 뷰어에서도 열 수 없듯이, 여기서도 풀 수 없어요.",
+       "내 문서나 나에게 온 문서처럼 바꿀 권한이 있는 파일에만 쓰세요. 다른 사람이 걸어 둔 제한에는 이유가 있을 수 있어요."
+      ]
+     },
+     {
+      "h": "브라우저 안에서 qpdf로 풀어요",
+      "p": [
+       "오픈소스 PDF 도구 qpdf를 웹어셈블리로 만들어 이 페이지에서 돌려요. 파일과 암호는 서버로 보내지지도, 저장되지도 않아요.",
+       "쪽 내용은 그대로 두고 암호화만 벗겨요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "비밀번호를 잊어버렸어요.",
+      "a": "풀 수 없어요. 열기 암호를 알아야 풀 수 있어요. 보낸 곳에 물어보거나, 함께 온 메일·안내문에 비밀번호 규칙이 적혀 있는지 확인해 보세요."
+     },
+     {
+      "q": "암호는 왜 풀어야 하나요?",
+      "a": "'PDF 합치기', 'PDF 나누기', 'PDF JPG 변환' 같은 도구는 열기 암호가 걸린 파일을 열지 못해요. 매번 비밀번호를 입력하는 번거로움도 사라져요."
+     },
+     {
+      "q": "푼 파일은 어떻게 보관하나요?",
+      "a": "이제 파일만 있으면 누구나 열 수 있으니 안전한 곳에 두거나 다 쓰면 지우세요. 새 비밀번호는 'PDF 암호 걸기'로 걸 수 있어요."
+     }
+    ],
+    "short": "PDF 비밀번호 없애기"
+   }
+  },
+  "protect-pdf": {
+   "en": {
+    "name": "Protect PDF",
+    "h1": "Protect a PDF with a Password",
+    "title": "Protect PDF – Add a Password with AES-256 Encryption",
+    "desc": "Add an open password to a PDF and encrypt it with AES-256, with an option to block printing and copying too. The password never leaves your browser.",
+    "lead": "Lock a PDF before you email or share it. It's encrypted on your device, and the password isn't sent anywhere.",
+    "about": [
+     {
+      "h": "What the password does",
+      "p": [
+       "Type the password twice so a typo can't lock you out. The PDF is encrypted with AES-256, the encryption described in the PDF 2.0 specification, and a viewer can't open it without the password.",
+       "Encryption is only as strong as the password. A long one that's hard to guess, such as a few unrelated words, is far better than a birthdate. Send the password a different way than the file, for example by text when the PDF goes by email."
+      ]
+     },
+     {
+      "h": "Also block printing and copying",
+      "p": [
+       "Turn this on to restrict printing and copying text. The restrictions are tied to a separate owner password that is generated for you and never shown, so knowing the open password isn't enough to lift them in a viewer that follows the PDF rules.",
+       "Restrictions are enforced by the viewer software, and qpdf's documentation notes that they only stop people who don't know how to get around them. Count on the open password, not the restrictions, to keep a file private."
+      ]
+     },
+     {
+      "h": "Which apps can open it",
+      "p": [
+       "Current versions of Adobe Acrobat, Chrome, Edge, Safari and Preview, and PDF apps on phones open AES-256 files. Very old PDF viewers may not, because this format needs PDF 1.7 extension level 8 or later.",
+       "Inplace never sees or stores your password. If it's lost, it can't be reset and the file can't be opened, so keep the unprotected original or write the password down somewhere safe."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "What if I forget the password?",
+      "a": "The file can't be opened, and nobody can reset the password for you. Keep an unprotected copy if you might need it later."
+     },
+     {
+      "q": "Can I change or remove the password later?",
+      "a": "Remove it with Unlock PDF (you'll need the current password), then protect the result again with a new one."
+     },
+     {
+      "q": "The person I sent it to can't open it. Why?",
+      "a": "Their PDF viewer may be too old for AES-256. Ask them to try a current browser such as Chrome or Edge, or the PDF app on their phone."
+     }
+    ],
+    "short": "Lock a PDF with a password"
+   },
+   "ko": {
+    "name": "PDF 암호 걸기",
+    "h1": "PDF 암호 걸기 (비밀번호 설정)",
+    "title": "PDF 암호 걸기 – AES-256 비밀번호 설정",
+    "desc": "PDF에 열기 비밀번호를 걸고 AES-256으로 암호화해요. 인쇄·복사 막기도 함께 켤 수 있고, 비밀번호는 브라우저 밖으로 나가지 않아요.",
+    "lead": "개인정보가 담긴 PDF를 메일로 보내기 전에 비밀번호를 걸어요. 암호화는 내 기기 안에서 해요.",
+    "about": [
+     {
+      "h": "비밀번호를 걸면 이렇게 돼요",
+      "p": [
+       "오타로 잠기는 일이 없게 비밀번호를 두 번 입력해요. PDF는 PDF 2.0 규격에 나오는 AES-256 방식으로 암호화되고, 비밀번호 없이는 PDF 뷰어에서 열리지 않아요.",
+       "암호화는 비밀번호만큼만 튼튼해요. 생년월일이나 휴대폰 번호 뒷자리처럼 짐작하기 쉬운 것보다, 길고 남이 떠올리기 어려운 비밀번호가 훨씬 나아요. 파일은 메일로, 비밀번호는 문자로 보내는 식으로 따로 전하세요."
+      ]
+     },
+     {
+      "h": "인쇄·복사도 막을 수 있어요",
+      "p": [
+       "'인쇄와 복사도 막기'를 켜면 인쇄와 글자 복사를 제한해요. 이 제한은 자동으로 만들어지고 화면에 보이지 않는 별도의 소유자 암호에 묶여서, 열기 암호를 아는 사람도 규칙을 따르는 뷰어에서는 제한을 풀 수 없어요.",
+       "다만 이 제한은 뷰어 프로그램이 지켜 주는 것이라, qpdf 문서도 피해 가는 방법을 모르는 사람만 막는다고 설명해요. 내용을 지키는 건 제한이 아니라 열기 암호예요."
+      ]
+     },
+     {
+      "h": "어떤 앱에서 열리나요",
+      "p": [
+       "최신 Adobe Acrobat, 크롬, 엣지, 사파리·미리보기, 휴대폰 PDF 앱은 AES-256 파일을 열어요. 아주 오래된 PDF 뷰어는 열지 못할 수 있어요. 이 방식은 PDF 1.7 확장 레벨 8 이상이 필요하거든요.",
+       "인플레이스는 비밀번호를 보지도, 저장하지도 않아요. 잊어버리면 다시 설정할 방법이 없고 파일도 열 수 없으니, 암호 없는 원본을 따로 두거나 비밀번호를 안전한 곳에 적어 두세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "비밀번호를 잊어버리면요?",
+      "a": "파일을 열 수 없고, 누구도 비밀번호를 대신 찾아 줄 수 없어요. 나중에 필요할 수 있다면 암호 없는 사본을 보관하세요."
+     },
+     {
+      "q": "비밀번호를 바꾸거나 없앨 수 있나요?",
+      "a": "'PDF 암호 풀기'에서 지금 비밀번호로 푼 뒤, 여기서 새 비밀번호를 걸면 돼요."
+     },
+     {
+      "q": "받는 사람이 파일이 안 열린대요.",
+      "a": "PDF 뷰어가 너무 오래돼서 AES-256을 못 여는 경우일 수 있어요. 최신 크롬·엣지 브라우저나 휴대폰 PDF 앱으로 열어 보라고 알려 주세요."
+     }
+    ],
+    "short": "PDF에 비밀번호 걸기"
+   }
+  },
+  "pdf-page-numbers": {
+   "en": {
+    "name": "Add Page Numbers",
+    "h1": "Add Page Numbers to a PDF",
+    "title": "Add Page Numbers to PDF – Choose Position & Format",
+    "desc": "Number the pages of a PDF at the bottom or top as 1, 1 / 10, - 1 - or Page 1 of 10. Set the start number and leave the cover page unnumbered if you like.",
+    "lead": "Put page numbers on a report, thesis or handout before you print or send it, without uploading the file.",
+    "about": [
+     {
+      "h": "Position, format and size",
+      "p": [
+       "Choose bottom center (the default), bottom right, bottom left, top right or top center, and a small or medium size.",
+       "Formats: 1, 1 / 10, - 1 - or Page 1 of 10."
+      ]
+     },
+     {
+      "h": "Skip the cover, start where you need",
+      "p": [
+       "Turn on Skip first page (cover) to leave the first page without a number. Change the start number when the PDF continues an earlier part, such as a chapter that begins on page 31."
+      ]
+     },
+     {
+      "h": "The numbers are real text",
+      "p": [
+       "Numbers are added as text in Helvetica, one of the standard PDF fonts, not as a picture, so they print sharply and can be found with search.",
+       "The pages themselves aren't re-rendered. Numbers are drawn on top of what's already there, so pick a position that is empty in your document."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I number only part of the document?",
+      "a": "You can skip the first page. For other cases, split the PDF with Split PDF, number each part with its own start number, then join them again with Merge PDF."
+     },
+     {
+      "q": "My document already has page numbers. What happens?",
+      "a": "The new numbers are added on top; existing ones aren't removed. Choose a position where they won't overlap."
+     },
+     {
+      "q": "Does the file get re-compressed?",
+      "a": "No. The pages are kept as they are and only the numbers are added, so the size barely changes."
+     }
+    ],
+    "short": "Number pages, choose where"
+   },
+   "ko": {
+    "name": "PDF 쪽 번호 넣기",
+    "h1": "PDF 쪽 번호 넣기 (페이지 번호)",
+    "title": "PDF 페이지 번호 넣기 – 위치·형식 골라서",
+    "desc": "PDF 아래나 위에 1, 1 / 10, - 1 - 형식으로 쪽 번호를 넣어요. 시작 번호를 정할 수 있고, 표지에는 번호를 빼고 넣을 수도 있어요.",
+    "lead": "보고서·과제·논문을 인쇄하거나 제출하기 전에 쪽 번호를 넣어요. 파일은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "위치와 형식, 크기를 골라요",
+      "p": [
+       "아래 가운데(기본), 아래 오른쪽, 아래 왼쪽, 위 오른쪽, 위 가운데 중에서 고르고, 크기는 작게·보통 중에서 골라요.",
+       "형식은 1, 1 / 10, - 1 - 세 가지예요."
+      ]
+     },
+     {
+      "h": "표지는 빼고, 원하는 번호부터",
+      "p": [
+       "'첫 쪽(표지) 건너뛰기'를 켜면 첫 쪽에는 번호가 들어가지 않아요. 앞부분에 이어지는 문서라면 시작 번호를 바꾸세요. 예를 들어 31쪽부터 시작하는 장이라면 31로 정하면 돼요."
+      ]
+     },
+     {
+      "h": "번호는 진짜 글자로 들어가요",
+      "p": [
+       "번호는 그림이 아니라 PDF 기본 글꼴인 Helvetica 글자로 넣어서, 인쇄해도 선명하고 검색으로도 찾을 수 있어요.",
+       "쪽 내용은 다시 그리지 않고 그 위에 번호만 얹어요. 문서에서 비어 있는 자리를 고르세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "'1쪽'이나 '페이지 1' 같은 한글 형식은 없나요?",
+      "a": "번호를 Helvetica 글꼴의 글자로 넣는데, 이 글꼴에는 한글이 없어요. 그래서 숫자와 기호로 된 형식만 있어요."
+     },
+     {
+      "q": "이미 쪽 번호가 있는 문서는요?",
+      "a": "기존 번호는 지워지지 않고 새 번호가 그 위에 더해져요. 겹치지 않는 위치를 고르세요."
+     },
+     {
+      "q": "일부 쪽에만 번호를 넣을 수 있나요?",
+      "a": "첫 쪽은 건너뛸 수 있어요. 그 밖의 경우는 'PDF 나누기'로 나눈 뒤 부분마다 시작 번호를 정해 번호를 넣고, 'PDF 합치기'로 다시 합치면 돼요."
+     }
+    ],
+    "short": "위치·형식 골라 쪽 번호 넣기"
+   }
+  },
+  "watermark-pdf": {
+   "en": {
+    "name": "Watermark PDF",
+    "h1": "Add a Text Watermark to a PDF",
+    "title": "Watermark PDF – Stamp DRAFT or CONFIDENTIAL on Pages",
+    "desc": "Stamp text such as DRAFT, CONFIDENTIAL or your name on every page of a PDF. Choose diagonal, centered or tiled, plus opacity, size and grey or red. Any language works.",
+    "lead": "Mark a PDF as a draft, a copy or your work before you share it. The watermark is added in your browser.",
+    "about": [
+     {
+      "h": "Three styles",
+      "p": [
+       "Diagonal across the center (the default) is the classic draft or copy stamp. Straight in the center reads like a label, and repeated tiles cover the whole page, so even part of a page still carries the mark.",
+       "Opacity can be light (15%), medium (30%) or strong (50%); size small, medium or large; color grey (the default) or red."
+      ]
+     },
+     {
+      "h": "Any language works",
+      "p": [
+       "The watermark is drawn as a transparent image and placed on top of each page. Because it's an image rather than text in a PDF font, any language works, including Korean, accented letters and symbols.",
+       "The page content underneath isn't re-rendered, so the document's own text stays sharp and selectable. The watermark itself can't be selected or searched."
+      ]
+     },
+     {
+      "h": "What a watermark can and can't do",
+      "p": [
+       "A visible watermark shows where a copy came from and discourages reuse. It isn't a lock: someone with PDF editing software can remove or cover it.",
+       "If a document shouldn't be read by others at all, add a password with Protect PDF as well."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can someone remove the watermark?",
+      "a": "Yes, with PDF editing tools it can be removed or covered. Treat it as a deterrent, not as protection."
+     },
+     {
+      "q": "Will it hide the text underneath?",
+      "a": "At light or medium opacity the text stays readable through it. Strong is more noticeable but can make small print harder to read."
+     },
+     {
+      "q": "Can I use a logo image?",
+      "a": "No. Only text you type can be used as a watermark here."
+     }
+    ],
+    "short": "Your text on every page"
+   },
+   "ko": {
+    "name": "PDF 워터마크",
+    "h1": "PDF 워터마크 넣기",
+    "title": "PDF 워터마크 넣기 – 대외비·사본 표시, 한글 가능",
+    "desc": "'대외비', '사본', '○○ 제출용' 같은 글자를 PDF 모든 쪽에 워터마크로 넣어요. 대각선·가운데·반복 배치와 투명도, 크기, 색을 고를 수 있고 한글도 돼요.",
+    "lead": "제출용 사본이나 공유할 문서에 워터마크를 넣어요. 파일은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "배치는 세 가지예요",
+      "p": [
+       "가운데 대각선(기본)은 흔히 보는 '사본' 도장 같은 모양이에요. 가운데 가로는 표시처럼 보이고, 반복은 쪽 전체를 덮어서 일부만 잘라 가도 표시가 남아요.",
+       "투명도는 연하게(15%)·보통(30%)·진하게(50%), 크기는 작게·보통·크게, 색은 회색(기본)과 빨간색 중에서 골라요."
+      ]
+     },
+     {
+      "h": "한글도 그대로 들어가요",
+      "p": [
+       "워터마크는 투명한 이미지로 그려서 각 쪽 위에 얹어요. PDF 글꼴이 아니라 이미지라서 한글, 한자, 기호까지 어떤 글자든 넣을 수 있어요.",
+       "아래 쪽 내용은 다시 그리지 않아서 문서 글자는 선명하고 선택도 돼요. 워터마크 자체는 이미지라 선택하거나 검색할 수 없어요."
+      ]
+     },
+     {
+      "h": "워터마크로 할 수 있는 것과 없는 것",
+      "p": [
+       "신분증 사본에 '○○은행 제출용'처럼 용도를 적어 두면 어디에 내려고 만든 사본인지 드러나서 다른 곳에 쓰기 어려워져요.",
+       "하지만 잠금장치는 아니에요. PDF 편집 프로그램이 있으면 지우거나 가릴 수 있어요. 남이 보면 안 되는 문서라면 'PDF 암호 걸기'로 비밀번호도 함께 거세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "워터마크를 지울 수 있나요?",
+      "a": "네. PDF 편집 도구로 지우거나 가릴 수 있어요. 함부로 쓰지 못하게 하는 표시일 뿐, 보안 장치는 아니에요."
+     },
+     {
+      "q": "아래 글자가 가려지지 않나요?",
+      "a": "연하게나 보통이면 글자가 비쳐 보여서 읽을 수 있어요. 진하게는 눈에 잘 띄지만 작은 글씨는 읽기 어려워질 수 있어요."
+     },
+     {
+      "q": "로고 이미지를 넣을 수 있나요?",
+      "a": "아니요. 여기서는 직접 입력한 글자만 워터마크로 넣을 수 있어요."
+     }
+    ],
+    "short": "모든 쪽에 글자 워터마크"
+   }
   }
  },
  "hub": {
   "en": {
    "title": "Free File Converter – Video, Audio, Image, PDF, No Upload",
-   "desc": "17 free tools for video, audio, images, PDF and spreadsheet files. Everything runs in your browser, so files are never uploaded. No sign-up, no watermark.",
+   "desc": "24 free tools for video, audio, images, PDF and spreadsheet files. Everything runs in your browser, so files are never uploaded. No sign-up, no watermark.",
    "h1": "Convert files on your own device",
    "lead": "Drop any file and pick what to do with it. Video, audio, image, PDF and CSV tools that work in your browser, with nothing uploaded and no account.",
    "how": [
@@ -1569,7 +2243,7 @@
   },
   "ko": {
    "title": "무료 파일 변환기 – 동영상·오디오·이미지·PDF",
-   "desc": "동영상, 음악, 사진, PDF, 엑셀·CSV 파일을 바꾸는 무료 도구 17가지예요. 모든 변환이 브라우저 안에서 이뤄져 파일이 업로드되지 않고, 가입이나 워터마크도 없어요.",
+   "desc": "동영상, 음악, 사진, PDF, 엑셀·CSV 파일을 바꾸는 무료 도구 24가지예요. 모든 변환이 브라우저 안에서 이뤄져 파일이 업로드되지 않고, 가입이나 워터마크도 없어요.",
    "h1": "파일을 내 기기에서 바로 변환하세요",
    "lead": "아무 파일이나 끌어다 놓고 할 일을 고르세요. 동영상·오디오·이미지·PDF·CSV 도구가 브라우저 안에서 돌아가서 파일을 올릴 필요도, 가입할 필요도 없어요.",
    "how": [
@@ -1585,10 +2259,10 @@
    "body": [
     "Inplace is made by Lumen Lab, a one-person app studio. Questions, bug reports and tool requests go to woxocoso@gmail.com.",
     "When you choose a file, your browser reads it from your device and converts it with code that runs on this page. The file isn't sent to a server, and the result is saved straight back to your device. Because of that, the practical limit is your device's memory: very large videos can fail on phones.",
-    "The work is done by open-source libraries running in your browser: Mediabunny (with the browser's WebCodecs) for video and audio, the LAME MP3 encoder compiled to WebAssembly, libheif for HEIC photos, PDF.js and pdf-lib for PDFs, gifenc for GIFs, fflate for ZIP files and SheetJS for spreadsheets.",
+    "The work is done by open-source libraries running in your browser: Mediabunny (with the browser's WebCodecs) for video and audio, the LAME MP3 encoder compiled to WebAssembly, libheif for HEIC photos, PDF.js and pdf-lib for PDFs, qpdf (compiled to WebAssembly) for PDF passwords, gifenc for GIFs, fflate for ZIP files and SheetJS for spreadsheets.",
     "The site is paid for by ads served by Google AdSense; ad providers may use cookies to show and measure ads. There is no sign-up, no watermark and no daily limit.",
     "Inplace does not download from YouTube or other streaming sites. Their terms don't allow it, so the tools here only work on files you already have.",
-    "Not available yet: PDF compression, Word/HWP/PowerPoint to PDF, PDF to Word, OCR, and merging audio or video. If you need one of these, an email helps decide what comes next."
+    "Not available yet: Word/HWP/PowerPoint to PDF, PDF to Word, OCR, and merging audio or video. If you need one of these, an email helps decide what comes next."
    ]
   },
   "ko": {
@@ -1597,10 +2271,10 @@
    "body": [
     "인플레이스는 1인 앱 스튜디오 루멘랩(Lumen Lab)이 만들어요. 문의, 오류 제보, 도구 요청은 woxocoso@gmail.com으로 보내 주세요.",
     "파일을 고르면 브라우저가 내 기기에서 파일을 읽고, 이 페이지에서 돌아가는 코드로 변환해요. 파일은 서버로 보내지지 않고 결과도 바로 내 기기에 저장돼요. 그래서 실제 한계는 기기 메모리예요. 아주 큰 영상은 휴대폰에서 실패할 수 있어요.",
-    "변환은 브라우저 안에서 돌아가는 오픈소스 라이브러리가 맡아요. 동영상·오디오는 Mediabunny(브라우저의 WebCodecs 사용), MP3는 웹어셈블리로 만든 LAME, HEIC 사진은 libheif, PDF는 PDF.js와 pdf-lib, GIF는 gifenc, ZIP은 fflate, 엑셀·CSV는 SheetJS를 써요.",
+    "변환은 브라우저 안에서 돌아가는 오픈소스 라이브러리가 맡아요. 동영상·오디오는 Mediabunny(브라우저의 WebCodecs 사용), MP3는 웹어셈블리로 만든 LAME, HEIC 사진은 libheif, PDF는 PDF.js와 pdf-lib, PDF 암호는 웹어셈블리로 만든 qpdf, GIF는 gifenc, ZIP은 fflate, 엑셀·CSV는 SheetJS를 써요.",
     "사이트는 Google AdSense 광고로 운영돼요. 광고 제공업체는 광고를 보여 주고 측정하려고 쿠키를 쓸 수 있어요. 가입, 워터마크, 하루 사용 제한은 없어요.",
     "인플레이스는 유튜브나 다른 스트리밍 사이트에서 다운로드하지 않아요. 해당 서비스 약관이 허용하지 않기 때문에, 이미 갖고 있는 파일만 변환해요.",
-    "아직 없는 기능: PDF 압축, 워드·한글(HWP)·파워포인트를 PDF로, PDF를 워드로, 글자 인식(OCR), 오디오·동영상 합치기. 필요한 기능이 있으면 메일로 알려 주세요. 다음에 만들 도구를 정하는 데 도움이 돼요."
+    "아직 없는 기능: 워드·한글(HWP)·파워포인트를 PDF로, PDF를 워드로, 글자 인식(OCR), 오디오·동영상 합치기. 필요한 기능이 있으면 메일로 알려 주세요. 다음에 만들 도구를 정하는 데 도움이 돼요."
    ]
   }
  },
@@ -1654,7 +2328,9 @@
   "resize-image": [
    "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
   ],
-  "images-to-pdf": [],
+  "images-to-pdf": [
+   "https://developer.mozilla.org/en-US/docs/Web/CSS/image-orientation"
+  ],
   "pdf-to-jpg": [
    "https://kb.itextpdf.com/itext/how-to-get-the-userunit-from-a-pdf-file",
    "https://github.com/mozilla/pdf.js"
@@ -1673,6 +2349,33 @@
    "https://support.microsoft.com/en-us/office/date-systems-in-excel-e7fe7167-48a9-4b96-bb53-5612a800b487",
    "https://learn.microsoft.com/en-us/power-query/connectors/text-csv",
    "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032"
+  ],
+  "compress-pdf": [
+   "https://qpdf.readthedocs.io/en/stable/cli.html",
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types",
+   "https://kb.itextpdf.com/itext/how-to-get-the-userunit-from-a-pdf-file"
+  ],
+  "rotate-pdf": [
+   "https://pdf-lib.js.org/docs/api/classes/pdfpage",
+   "https://qpdf.readthedocs.io/en/stable/cli.html"
+  ],
+  "organize-pdf": [
+   "https://pdf-lib.js.org/docs/api/classes/pdfdocument"
+  ],
+  "unlock-pdf": [
+   "https://qpdf.readthedocs.io/en/stable/cli.html",
+   "https://qpdf.readthedocs.io/en/stable/encryption.html"
+  ],
+  "protect-pdf": [
+   "https://qpdf.readthedocs.io/en/stable/cli.html",
+   "https://qpdf.readthedocs.io/en/stable/encryption.html"
+  ],
+  "pdf-page-numbers": [
+   "https://pdf-lib.js.org/docs/api/classes/pdfdocument",
+   "https://pdf-lib.js.org/docs/api/classes/pdfpage"
+  ],
+  "watermark-pdf": [
+   "https://pdf-lib.js.org/docs/api/classes/pdfpage"
   ]
  }
 }

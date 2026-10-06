@@ -64,18 +64,38 @@ function typed(v) {
   return v;
 }
 
+// 열마다 정한다: 빈칸을 뺀 값이 모두 바뀌는 열만 바꾼다(01234와 12345가 섞인 열은 전부 글자로 둔다).
+function typedColumns(body, numbersOnly) {
+  const width = Math.max(0, ...body.map((r) => r.length));
+  const ok = [];
+  for (let c = 0; c < width; c++) {
+    let any = false, all = true;
+    for (const r of body) {
+      const v = r[c];
+      if (v == null || v === '') continue;
+      any = true;
+      const x = typed(v);
+      if (numbersOnly ? typeof x !== 'number' : typeof x === 'string') { all = false; break; }
+    }
+    ok.push(any && all);
+  }
+  return ok;
+}
+const typeRow = (r, ok) => r.map((v, i) => (ok[i] && v !== '' && v != null ? typed(v) : v));
+
 // rows → JSON 값. header: 첫 줄을 키로(객체 배열) / 아니면 배열의 배열
 export function rowsToJson(rows, { header = true, types = false } = {}) {
-  const conv = types ? typed : (v) => v;
-  if (!header) return rows.map((r) => r.map(conv));
-  const [head, ...body] = rows;
+  if (!header) { if (!types) return rows; const ok = typedColumns(rows); return rows.map((r) => typeRow(r, ok)); }
+  const [head, ...rest] = rows;
   if (!head) return [];
+  const body = rest.filter((r) => !(r.length === 1 && r[0] === ''));
+  const ok = types ? typedColumns(body) : [];
   const keys = head.map((k, i) => (k === '' ? 'column' + (i + 1) : k));
   const seen = {};
   const uniq = keys.map((k) => { if (seen[k]) { seen[k]++; return k + '_' + seen[k]; } seen[k] = 1; return k; });
-  return body.filter((r) => !(r.length === 1 && r[0] === '')).map((r) => {
+  return body.map((r) => {
     const o = {};
-    uniq.forEach((k, i) => { o[k] = conv(r[i] ?? ''); });
+    uniq.forEach((k, i) => { const v = r[i] ?? ''; o[k] = ok[i] && v !== '' ? typed(v) : v; });
     return o;
   });
 }
@@ -140,7 +160,9 @@ export async function sheetToRows(wb, name) {
 
 export async function rowsToXlsx(rows, sheetName) {
   const X = await xlsx();
-  const ws = X.utils.aoa_to_sheet(rows);
+  // 숫자 열은 숫자로 넣어야 엑셀에서 합계를 낼 수 있다(첫 줄은 제목으로 보고 그대로)
+  const ok = typedColumns(rows.slice(1), true);
+  const ws = X.utils.aoa_to_sheet(rows.length ? [rows[0], ...rows.slice(1).map((r) => typeRow(r, ok))] : rows);
   const wb = X.utils.book_new();
   X.utils.book_append_sheet(wb, ws, (sheetName || 'Sheet1').slice(0, 31));
   const out = X.write(wb, { type: 'array', bookType: 'xlsx' });

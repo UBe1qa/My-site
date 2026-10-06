@@ -56,6 +56,31 @@ async function decodeSvg(file) {
   } finally { URL.revokeObjectURL(url); }
 }
 
+// JPG의 EXIF 회전값(1~8). 없거나 못 읽으면 1. 휴대폰 세로 사진은 보통 6.
+export function jpegOrientation(bytes) {
+  const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (v.byteLength < 4 || v.getUint16(0) !== 0xffd8) return 1;
+  let o = 2;
+  while (o + 4 <= v.byteLength) {
+    const marker = v.getUint16(o), len = v.getUint16(o + 2);
+    if (marker === 0xffe1 && o + 10 <= v.byteLength && v.getUint32(o + 4) === 0x45786966) {
+      const t = o + 10, le = v.getUint16(t) === 0x4949;
+      const ifd = t + v.getUint32(t + 4, le);
+      if (ifd + 2 > v.byteLength) return 1;
+      const n = v.getUint16(ifd, le);
+      for (let i = 0; i < n; i++) {
+        const e = ifd + 2 + i * 12;
+        if (e + 10 > v.byteLength) return 1;
+        if (v.getUint16(e, le) === 0x0112) { const x = v.getUint16(e + 8, le); return x >= 1 && x <= 8 ? x : 1; }
+      }
+      return 1;
+    }
+    if ((marker & 0xff00) !== 0xff00 || marker === 0xffda) return 1;
+    o += 2 + len;
+  }
+  return 1;
+}
+
 // 파일 → 그릴 수 있는 그림 { source, width, height }
 export async function decode(file) {
   if (isSvg(file)) return decodeSvg(file);
