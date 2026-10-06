@@ -120,14 +120,15 @@
         if (v != null) el.setAttribute(pair[1], v);
       });
     });
-    /* 스크린숏: 앱 화면이 언어마다 따로 있다(/img/ko-… ↔ /img/en-…) */
-    document.querySelectorAll('img[data-shot]').forEach(function (img) {
-      var re = /\/img\/(ko|en)-/g, to = '/img/' + l + '-';
-      img.src = img.getAttribute('src').replace(re, to);
-      if (img.getAttribute('srcset')) img.setAttribute('srcset', img.getAttribute('srcset').replace(re, to));
-    });
-    document.querySelectorAll('source[data-shot]').forEach(function (s) {
-      s.setAttribute('srcset', s.getAttribute('srcset').replace(/\/img\/(ko|en)-/g, '/img/' + l + '-'));
+    /* 스크린숏: 앱 화면이 언어마다 따로 있다(/img/ko-… ↔ /img/en-…). 처음 열 때 영어는 머리말 스크립트가 이미 바꿔 둠.
+       값이 같으면 다시 넣지 않는다(넣기만 해도 그림을 다시 고른다) */
+    document.querySelectorAll('[data-shot]').forEach(function (el) {
+      ['src', 'srcset'].forEach(function (a) {
+        var v = el.getAttribute(a);
+        if (!v) return;
+        var w = v.replace(/\/img\/(ko|en)-/g, '/img/' + l + '-');
+        if (w !== v) el.setAttribute(a, w);
+      });
     });
     /* 루멘랩 본페이지는 한국어 / 와 영어 /en/ 이 따로 된 페이지: 고른 언어 쪽으로.
        지원·방침(/support/, /privacy/)은 한 주소에 두 언어라 영어면 #en 을 붙여 영어 칸이 열리게 */

@@ -17,13 +17,16 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css">
 <script>
-/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글·스크린숏 바꾸기는 body 끝의 i18n.js */
-(function(d){var l;try{l=localStorage.getItem('owlight:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+/* 스타일시트보다 위에 둔다: 아래에 두면 CSS가 다 올 때까지 이 스크립트와 파서가 멈춰 영어 그림을 늦게 고른다 */
+/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기와 언어 버튼은 body 끝의 i18n.js */
+(function(d){var l;try{l=localStorage.getItem('owlight:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l;
+/* 영어면 스크린숏(/img/ko-…)을 파서가 넣는 즉시 /img/en-… 로. body 끝 i18n.js까지 기다리면 한국어 그림을 먼저 받고 다시 받아서 늦었다 */
+if(l==='en'&&window.MutationObserver){var sw=function(e){['src','srcset'].forEach(function(a){var v=e.getAttribute(a);if(v&&v.indexOf('/img/ko-')>-1)e.setAttribute(a,v.replace(/\/img\/ko-/g,'/img/en-'))})};var mo=new MutationObserver(function(rs){rs.forEach(function(r){r.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.hasAttribute('data-shot'))sw(n);n.querySelectorAll('[data-shot]').forEach(sw)})})});mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect()})}})(document.documentElement);
 /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 늘 보이게 */
 (function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
 </script>
+<link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Owlight","operatingSystem":"macOS 14 or later","applicationCategory":"UtilitiesApplication","url":"https://owlight.lumenlab.page/","image":"https://owlight.lumenlab.page/img/owlight-256.webp","inLanguage":["ko","en"],"author":{"@type":"Organization","name":"Lumen Lab","url":"https://lumenlab.page/"}}
 </script>
@@ -107,16 +110,16 @@
       <div class="scenery">
         <h3 id="sg-title" data-i18n="sgTitle">커튼에 들어 있는 풍경 그림 10장</h3>
         <ul class="scenery__list" role="list" tabindex="0" aria-labelledby="sg-title">
-          <li><img src="/img/scenery/scenery-01-misty-hills.jpg" width="2688" height="1520" alt="안개 낀 초록 언덕" data-i18n-alt="sg1" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-02-dusk-lake.jpg" width="2688" height="1520" alt="해 질 녘 호수" data-i18n-alt="sg2" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-03-night-ridge.jpg" width="2688" height="1520" alt="밤하늘 아래 산등성이" data-i18n-alt="sg3" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-04-sand-dunes.jpg" width="2688" height="1520" alt="모래 언덕" data-i18n-alt="sg4" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-05-fog-sea.jpg" width="2688" height="1520" alt="안개 낀 바다" data-i18n-alt="sg5" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-06-fog-forest.jpg" width="2688" height="1520" alt="안개 낀 숲" data-i18n-alt="sg6" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-07-paper-waves-rose.jpg" width="2688" height="1520" alt="장밋빛 종이 물결" data-i18n-alt="sg7" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-08-paper-hills-teal.jpg" width="2688" height="1520" alt="청록빛 종이 언덕" data-i18n-alt="sg8" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-09-snow-plain.jpg" width="2688" height="1520" alt="눈 덮인 들판" data-i18n-alt="sg9" loading="lazy" decoding="async"></li>
-          <li><img src="/img/scenery/scenery-10-tea-terraces.jpg" width="2688" height="1520" alt="안개 속 계단식 차밭" data-i18n-alt="sg10" loading="lazy" decoding="async"></li>
+          <li><img src="/img/scenery/scenery-01-misty-hills.jpg" width="2688" height="1520" alt="안개 낀 초록 언덕" data-i18n-alt="sg1" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-02-dusk-lake.jpg" width="2688" height="1520" alt="해 질 녘 호수" data-i18n-alt="sg2" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-03-night-ridge.jpg" width="2688" height="1520" alt="밤하늘 아래 산등성이" data-i18n-alt="sg3" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-04-sand-dunes.jpg" width="2688" height="1520" alt="모래 언덕" data-i18n-alt="sg4" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-05-fog-sea.jpg" width="2688" height="1520" alt="안개 낀 바다" data-i18n-alt="sg5" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-06-fog-forest.jpg" width="2688" height="1520" alt="안개 낀 숲" data-i18n-alt="sg6" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-07-paper-waves-rose.jpg" width="2688" height="1520" alt="장밋빛 종이 물결" data-i18n-alt="sg7" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-08-paper-hills-teal.jpg" width="2688" height="1520" alt="청록빛 종이 언덕" data-i18n-alt="sg8" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-09-snow-plain.jpg" width="2688" height="1520" alt="눈 덮인 들판" data-i18n-alt="sg9" loading="lazy" decoding="async" fetchpriority="low"></li>
+          <li><img src="/img/scenery/scenery-10-tea-terraces.jpg" width="2688" height="1520" alt="안개 속 계단식 차밭" data-i18n-alt="sg10" loading="lazy" decoding="async" fetchpriority="low"></li>
         </ul>
         <p class="note" data-i18n="ctNote">풍경 그림 10장은 AI 이미지 생성 도구로 만들었어요. 앱 안에 들어 있고, 앱이 그림을 새로 만들지는 않아요.</p>
       </div>
@@ -136,7 +139,7 @@
         <p class="note" data-i18n="nwNote">자동 잠자기만 막아요. 덮개를 닫거나 직접 잠자기를 고르면 맥은 그대로 잠들어요.</p>
       </div>
       <figure class="feat__shot">
-        <picture><source media="(max-width: 699px)" data-shot="3m" srcset="/img/ko-3m-800.webp"><img class="shot" data-shot="3" src="/img/ko-3-1600.webp" srcset="/img/ko-3-800.webp 800w, /img/ko-3-1600.webp 1600w" sizes="(min-width: 900px) 600px, 100vw" width="1600" height="912" alt="불침번 설정 화면: 기본 시간, 디스플레이 켜 두기, 배터리 지킴이와 멈출 배터리 잔량" data-i18n-alt="nwAlt" loading="lazy"></picture>
+        <picture><source media="(max-width: 699px)" data-shot="3m" srcset="/img/ko-3m-800.webp" width="800" height="527"><img class="shot" data-shot="3" src="/img/ko-3-1600.webp" srcset="/img/ko-3-800.webp 800w, /img/ko-3-1600.webp 1600w" sizes="(min-width: 900px) 600px, 100vw" width="1600" height="912" alt="불침번 설정 화면: 기본 시간, 디스플레이 켜 두기, 배터리 지킴이와 멈출 배터리 잔량" data-i18n-alt="nwAlt" loading="lazy"></picture>
       </figure>
     </div>
   </section>
@@ -172,12 +175,12 @@
       <h2 id="mo-title" data-i18n="moTitle">타이머와 단축키로 <span class="nw">더 빨리 켜요</span></h2>
       <div class="more__grid">
         <article class="more__item">
-          <picture><source media="(max-width: 699px)" data-shot="5m" srcset="/img/ko-5m-800.webp"><img class="shot" data-shot="5" src="/img/ko-5-800.webp" srcset="/img/ko-5-800.webp 800w, /img/ko-5-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="몰입 세션이 진행 중인 메뉴 패널: 24분 54초 남음, 오늘 몰입 95분" data-i18n-alt="ssAlt" loading="lazy"></picture>
+          <picture><source media="(max-width: 699px)" data-shot="5m" srcset="/img/ko-5m-800.webp" width="800" height="513"><img class="shot" data-shot="5" src="/img/ko-5-800.webp" srcset="/img/ko-5-800.webp 800w, /img/ko-5-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="몰입 세션이 진행 중인 메뉴 패널: 24분 54초 남음, 오늘 몰입 95분" data-i18n-alt="ssAlt" loading="lazy"></picture>
           <h3 data-i18n="ssTitle">몰입 세션: 기록이 남는 몰입</h3>
           <p data-i18n="ssText">시간을 정하면 고른 기능이 켜지고, 끝나면 꺼져요. 시간이 다 되면 부드러운 알림음과 알림으로 알려 주고, 오늘 몰입한 시간과 마친 세션 수를 한눈에 볼 수 있어요.</p>
         </article>
         <article class="more__item">
-          <picture><source media="(max-width: 699px)" data-shot="6m" srcset="/img/ko-6m-800.webp"><img class="shot" data-shot="6" src="/img/ko-6-800.webp" srcset="/img/ko-6-800.webp 800w, /img/ko-6-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="단축키 설정 화면: 불침번, 커튼, 후광, 몰입 세션과 장면마다 단축키 칸" data-i18n-alt="hkAlt" loading="lazy"></picture>
+          <picture><source media="(max-width: 699px)" data-shot="6m" srcset="/img/ko-6m-800.webp" width="800" height="520"><img class="shot" data-shot="6" src="/img/ko-6-800.webp" srcset="/img/ko-6-800.webp 800w, /img/ko-6-1600.webp 1600w" sizes="(min-width: 900px) 500px, 100vw" width="800" height="456" alt="단축키 설정 화면: 불침번, 커튼, 후광, 몰입 세션과 장면마다 단축키 칸" data-i18n-alt="hkAlt" loading="lazy"></picture>
           <h3 data-i18n="hkTitle">단축키와 링크로 내 방식대로</h3>
           <p data-i18n="hkText">모든 기능과 장면, 몰입 세션에 전역 단축키를 달 수 있어요. 단축어, 런처, 스크립트에서는 이런 링크로 불러요.</p>
           <code class="code" translate="no">owlight://nightwatch/on?minutes=90</code>

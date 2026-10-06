@@ -49,10 +49,17 @@
   if (anim) {
     window.__rvOn = true;
     var targets = d.querySelectorAll('.feat__text, .feat__head, .feat__shot, .more__item, .scenery, .privacy__card, .faq__list, .scenes__text, .board');
-    targets.forEach(function (el) { el.setAttribute('data-rv', ''); });
+    /* 숨기기는 첫 알림에서 화면 밖인 칸만. 새로고침이 중간 위치를 되살렸을 때 이미 보이는 칸(스크린숏 포함)이
+       사라졌다 다시 나타나며 늦게 그려지지 않게 */
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        var el = e.target;
+        if (!el.hasAttribute('data-rv')) {
+          var r = e.boundingClientRect;
+          if (r.top < innerHeight && r.bottom > 0) { io.unobserve(el); return; }
+          el.setAttribute('data-rv', '');
+        }
+        if (e.isIntersecting) { el.classList.add('in'); io.unobserve(el); }
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     targets.forEach(function (el) { io.observe(el); });

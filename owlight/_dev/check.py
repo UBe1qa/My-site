@@ -1,7 +1,9 @@
 # Owlight 배포 전 확인: bash _dev/check.sh (사이트 폴더를 8766으로 띄우고 이 파일을 돌림)
 # 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 페이지 안 링크, 영어에 한글 남음, 제목 줄 수, 장면 판 누르기,
 # 동작 줄이기에서 다 보임, 움직임 켠 채 끝까지 내린 뒤 숨은 요소, 첫 화면이 다시 흐려지지 않음,
-# 지원·방침(/support/, /privacy/) 본문이 lumenlab.page/owlight/… 와 같은지, 고른 언어 칸만 보이는지
+# 지원·방침(/support/, /privacy/) 본문이 lumenlab.page/owlight/… 와 같은지, 고른 언어 칸만 보이는지,
+# 불침번 칸에서 새로고침했을 때(LCP 그림) 영어 방문자가 한국어 스크린숏을 받지 않고 그림이 숨었다 다시 나타나지 않는지,
+# 휴대폰용 잘라 낸 그림의 <source> 크기가 실제 파일과 같은지(자리 밀림 방지)
 import os, re, sys
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from playwright.sync_api import sync_playwright
@@ -101,6 +103,36 @@ with sync_playwright() as p:
     c = br.new_context(viewport={'width': 390, 'height': 800}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(300)
     n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
     ok(n == 0 and pg.evaluate('document.querySelectorAll(".sw.is-on").length') == 2, '동작 줄이기: 숨은 요소 0, 장면 판 바로 켜짐')
+    c.close()
+
+    # 불침번 칸까지 내린 뒤 새로고침(브라우저가 그 위치를 되살림, Cloudflare가 LCP 4.5초로 잡은 경우):
+    # 영어면 한국어 스크린숏을 받지 않음(맨 위 큰 그림은 미리 읽기가 먼저 받아서 빼고), 그 그림이 숨었다 다시 나타나지 않음
+    for loc in ('en-US', 'ko-KR'):
+        for w in (390, 1366):
+            c = br.new_context(viewport={'width': w, 'height': 800}, locale=loc); pg = c.new_page()
+            pg.goto(BASE + '/'); pg.evaluate("document.getElementById('nightwatch').scrollIntoView()"); pg.wait_for_timeout(1200)
+            pg.add_init_script("""window.__hid=0;(function f(){var e=document.querySelector('#nightwatch .feat__shot');
+              if(e&&(e.hasAttribute('data-rv')||+getComputedStyle(e).opacity<.95))window.__hid++;if(performance.now()<4000)requestAnimationFrame(f)})()""")
+            cdp = c.new_cdp_session(pg); cdp.send('Network.enable'); cdp.send('Network.clearBrowserCache')
+            # 느린 망·느린 CPU에서만 드러남(빠르면 i18n.js가 먼저 돌아 옛 방식도 통과했다)
+            cdp.send('Network.emulateNetworkConditions', {'offline': False, 'latency': 150, 'downloadThroughput': 200000, 'uploadThroughput': 94000})
+            cdp.send('Emulation.setCPUThrottlingRate', {'rate': 4})
+            pg.reload(); pg.wait_for_timeout(4500)
+            r = pg.evaluate("""({y: scrollY, hid: window.__hid, src: document.querySelector('#nightwatch img.shot').currentSrc.replace(location.origin, ''),
+              ko: performance.getEntriesByType('resource').map(e => e.name.replace(location.origin, '')).filter(n => /\/img\/ko-/.test(n) && !/ko-hero/.test(n))})""")
+            tag = f'불침번 칸 새로고침 {loc[:2]} {w}px'
+            ok(r['y'] > 1500 and r['hid'] == 0, f'{tag}: 그림이 숨지 않음 (scrollY {r["y"]}, 숨은 프레임 {r["hid"]})')
+            if loc == 'en-US':
+                ok('/img/en-3' in r['src'] and not r['ko'], f'{tag}: 영어 그림만 받음 ({r["src"]}, 한국어 {r["ko"]})')
+            c.close()
+
+    # 휴대폰용 잘라 낸 그림(<source>)의 width·height = 실제 파일 크기 (다르면 그림이 뜰 때 아래 글이 밀림)
+    c = br.new_context(viewport={'width': 390, 'height': 800}, locale='ko-KR'); pg = c.new_page(); pg.goto(BASE + '/')
+    scroll_all(pg)
+    bad = pg.evaluate("""[...document.querySelectorAll('picture source[data-shot]')].map(s => { const i = s.parentElement.querySelector('img');
+      return [s.dataset.shot, +s.getAttribute('width'), +s.getAttribute('height'), i.naturalWidth, i.naturalHeight, i.currentSrc.includes(s.dataset.shot + '-')] })
+      .filter(a => !a[5] || a[1] !== a[3] || a[2] !== a[4])""")
+    ok(not bad, f'휴대폰 그림 <source> 크기 = 파일 크기 {bad}')
     c.close()
 
     # 첫 화면이 보인 뒤 다시 흐려지지 않음 (제목·버튼·스크린숏 opacity 2.5초 기록)
