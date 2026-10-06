@@ -77,22 +77,34 @@
 
   <div class="bench wrap">
   <nav class="picker" aria-label="계산기 고르기" data-i18n-aria="계산기 고르기">
-    <a href="#period" data-tool="period" data-i18n="두 날짜 사이">두 날짜 사이</a>
-    <a href="#dday" data-tool="dday" data-i18n="디데이">디데이</a>
-    <a href="#add" data-tool="add" data-i18n="날짜 더하기·빼기">날짜 더하기·빼기</a>
-    <a href="#workdays" data-tool="workdays" data-i18n="영업일 세기">영업일 세기</a>
-    <a href="#workadd" data-tool="workadd" data-i18n="영업일 뒤 날짜">영업일 뒤 날짜</a>
-    <a href="#age" data-tool="age" data-i18n="만 나이">만 나이</a>
-    <a href="#anniv" data-tool="anniv" data-i18n="기념일">기념일</a>
-    <a href="#weekday" data-tool="weekday" data-i18n="무슨 요일">무슨 요일</a>
-    <a href="#week" data-tool="week" data-i18n="몇 주차">몇 주차</a>
-    <a href="#time" data-tool="time" data-i18n="시간 차이">시간 차이</a>
-    <a href="#holidays" data-tool="holidays" data-i18n="공휴일 달력">공휴일 달력</a>
+    <div class="pg" data-g="span">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="12" r="2.2"/><path d="M8.5 12h7"/></svg><span data-i18n="기간·디데이">기간·디데이</span></button>
+      <a href="#period" data-tool="period"><b data-i18n="두 날짜 사이">두 날짜 사이</b><span data-i18n="며칠·몇 주·몇 개월">며칠·몇 주·몇 개월</span></a>
+      <a href="#dday" data-tool="dday"><b data-i18n="디데이">디데이</b><span data-i18n="남은 날, 지난 날">남은 날, 지난 날</span></a>
+      <a href="#time" data-tool="time"><b data-i18n="시간 차이">시간 차이</b><span data-i18n="두 시각 사이 시간·분">두 시각 사이 시간·분</span></a>
+    </div>
+    <div class="pg" data-g="move">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 7l5 5-5 5"/></svg><span data-i18n="날짜 옮기기">날짜 옮기기</span></button>
+      <a href="#add" data-tool="add"><b data-i18n="날짜 더하기·빼기">날짜 더하기·빼기</b><span data-i18n="며칠·몇 달 뒤 날짜">며칠·몇 달 뒤 날짜</span></a>
+      <a href="#workdays" data-tool="workdays"><b data-i18n="영업일 세기">영업일 세기</b><span data-i18n="주말·공휴일 빼고 세기">주말·공휴일 빼고 세기</span></a>
+      <a href="#workadd" data-tool="workadd"><b data-i18n="영업일 뒤 날짜">영업일 뒤 날짜</b><span data-i18n="N영업일 뒤 마감일">N영업일 뒤 마감일</span></a>
+    </div>
+    <div class="pg" data-g="life">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.5 3.5 0 0 1 12 8a3.5 3.5 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg><span data-i18n="나이·기념일">나이·기념일</span></button>
+      <a href="#age" data-tool="age"><b data-i18n="만 나이">만 나이</b><span data-i18n="만·연·세는 나이">만·연·세는 나이</span></a>
+      <a href="#anniv" data-tool="anniv"><b data-i18n="기념일">기념일</b><span data-i18n="100일, 1주년 날짜">100일, 1주년 날짜</span></a>
+    </div>
+    <div class="pg" data-g="cal">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span data-i18n="달력 보기">달력 보기</span></button>
+      <a href="#weekday" data-tool="weekday"><b data-i18n="무슨 요일">무슨 요일</b><span data-i18n="그날의 요일·공휴일">그날의 요일·공휴일</span></a>
+      <a href="#week" data-tool="week"><b data-i18n="몇 주차">몇 주차</b><span data-i18n="주차, 올해 며칠째">주차, 올해 며칠째</span></a>
+      <a href="#holidays" data-tool="holidays"><b data-i18n="공휴일 달력">공휴일 달력</b><span data-i18n="한 해 공휴일 목록">한 해 공휴일 목록</span></a>
+    </div>
   </nav>
 
   <div class="stage">
     <!-- 1. 두 날짜 사이 -->
-    <section class="tool" id="period" aria-labelledby="h-period">
+    <section class="tool" data-g="span" id="period" aria-labelledby="h-period">
       <h2 id="h-period" data-i18n="두 날짜 사이 기간">두 날짜 사이 기간</h2>
       <div class="grid2">
         <label class="field"><span data-i18n="시작일">시작일</span><input type="date" id="period-a"></label>
@@ -103,7 +115,7 @@
     </section>
 
     <!-- 2. 디데이 -->
-    <section class="tool" id="dday" aria-labelledby="h-dday">
+    <section class="tool" data-g="span" id="dday" aria-labelledby="h-dday">
       <h2 id="h-dday" data-i18n="디데이 계산">디데이 계산</h2>
       <div class="grid2">
         <label class="field"><span data-i18n="목표 날짜">목표 날짜</span><input type="date" id="dday-t"></label>
@@ -113,7 +125,7 @@
     </section>
 
     <!-- 3. 날짜 더하기·빼기 -->
-    <section class="tool" id="add" aria-labelledby="h-add">
+    <section class="tool" data-g="move" id="add" aria-labelledby="h-add">
       <h2 id="h-add" data-i18n="날짜 더하기·빼기">날짜 더하기·빼기</h2>
       <label class="field"><span data-i18n="기준일">기준일</span><input type="date" id="add-a"></label>
       <div class="grid4">
@@ -130,7 +142,7 @@
     </section>
 
     <!-- 4. 영업일 세기 -->
-    <section class="tool" id="workdays" aria-labelledby="h-workdays">
+    <section class="tool" data-g="move" id="workdays" aria-labelledby="h-workdays">
       <h2 id="h-workdays" data-i18n="영업일 세기">영업일 세기</h2>
       <p class="hint" data-i18n="주말과 공휴일(대체 휴일 포함)을 빼고 일하는 날만 세요.">주말과 공휴일(대체 휴일 포함)을 빼고 일하는 날만 세요.</p>
       <div class="grid2">
@@ -143,7 +155,7 @@
     </section>
 
     <!-- 5. 영업일 뒤 날짜 -->
-    <section class="tool" id="workadd" aria-labelledby="h-workadd">
+    <section class="tool" data-g="move" id="workadd" aria-labelledby="h-workadd">
       <h2 id="h-workadd" data-i18n="영업일 뒤 날짜">영업일 뒤 날짜</h2>
       <p class="hint" data-i18n="배송·처리 기한처럼 ‘영업일 기준 며칠 뒤’를 찾아요. 기준일은 세지 않아요.">배송·처리 기한처럼 ‘영업일 기준 며칠 뒤’를 찾아요. 기준일은 세지 않아요.</p>
       <div class="grid2">
@@ -154,7 +166,7 @@
     </section>
 
     <!-- 6. 만 나이 -->
-    <section class="tool" id="age" aria-labelledby="h-age">
+    <section class="tool" data-g="life" id="age" aria-labelledby="h-age">
       <h2 id="h-age" data-i18n="만 나이 계산">만 나이 계산</h2>
       <div class="grid2">
         <label class="field"><span data-i18n="생년월일">생년월일</span><input type="date" id="age-b"></label>
@@ -164,7 +176,7 @@
     </section>
 
     <!-- 7. 기념일 -->
-    <section class="tool" id="anniv" aria-labelledby="h-anniv">
+    <section class="tool" data-g="life" id="anniv" aria-labelledby="h-anniv">
       <h2 id="h-anniv" data-i18n="기념일 계산 (100일, 1주년…)">기념일 계산 (100일, 1주년…)</h2>
       <label class="field"><span data-i18n="시작한 날">시작한 날</span><input type="date" id="an-a"></label>
       <label class="check"><input type="checkbox" id="an-one" checked> <span data-i18n="시작한 날을 1일째로 세기 (한국식)">시작한 날을 1일째로 세기 (한국식)</span></label>
@@ -172,21 +184,21 @@
     </section>
 
     <!-- 8. 무슨 요일 -->
-    <section class="tool" id="weekday" aria-labelledby="h-weekday">
+    <section class="tool" data-g="cal" id="weekday" aria-labelledby="h-weekday">
       <h2 id="h-weekday" data-i18n="그날은 무슨 요일?">그날은 무슨 요일?</h2>
       <label class="field"><span data-i18n="날짜">날짜</span><input type="date" id="wk-a"></label>
       <div class="result" id="r-weekday" aria-live="polite"></div>
     </section>
 
     <!-- 9. 몇 주차 -->
-    <section class="tool" id="week" aria-labelledby="h-week">
+    <section class="tool" data-g="cal" id="week" aria-labelledby="h-week">
       <h2 id="h-week" data-i18n="몇 주차 · 올해 며칠째">몇 주차 · 올해 며칠째</h2>
       <label class="field"><span data-i18n="날짜">날짜</span><input type="date" id="wn-a"></label>
       <div class="result" id="r-week" aria-live="polite"></div>
     </section>
 
     <!-- 10. 시간 차이 -->
-    <section class="tool" id="time" aria-labelledby="h-time">
+    <section class="tool" data-g="span" id="time" aria-labelledby="h-time">
       <h2 id="h-time" data-i18n="두 시각 사이 시간">두 시각 사이 시간</h2>
       <div class="grid2">
         <label class="field"><span data-i18n="시작 시각">시작 시각</span><input type="datetime-local" id="tm-a"></label>
@@ -196,7 +208,7 @@
     </section>
 
     <!-- 11. 공휴일 달력 -->
-    <section class="tool" id="holidays" aria-labelledby="h-holidays">
+    <section class="tool" data-g="cal" id="holidays" aria-labelledby="h-holidays">
       <h2 id="h-holidays" data-i18n="공휴일 목록">공휴일 목록</h2>
       <label class="field narrow"><span data-i18n="연도">연도</span><input type="number" id="hol-y" inputmode="numeric" min="2015" max="2035" step="1"></label>
       <div class="result" id="r-holidays" aria-live="polite"></div>
@@ -233,7 +245,7 @@
 </main>
 
 <footer class="foot wrap">
-  <div class="maker"><svg class="maker-mark" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" opacity=".28"/><circle cx="11" cy="11" r="5"/></svg><p>며칠 계산기는 <b>루멘랩</b>이 만들었어요. 다른 앱과 도구도 있어요.</p><a href="https://lumenlab.page/">루멘랩 둘러보기 →</a></div>
+  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>며칠 계산기는 <b>루멘랩</b>이 만들었어요. 다른 앱과 도구도 있어요.</p><a href="https://lumenlab.page/">루멘랩 둘러보기 →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>
   <p><span data-i18n="© 2026 루멘랩">© 2026 루멘랩</span> · <a href="/guide/" data-i18n="가이드">가이드</a> · <a href="/about/" data-i18n="소개">소개</a> · <a href="privacy" data-i18n="개인정보 처리방침">개인정보 처리방침</a> · <a href="mailto:woxocoso@gmail.com" data-i18n="문의">문의</a></p>
 </footer>
 

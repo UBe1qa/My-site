@@ -261,8 +261,8 @@ if slots(ko) != slots(en) or len(slots(en)) != 3:
     fail(f"광고 자리 다름: 한국어 {slots(ko)} / 영어 {slots(en)}")
 if '<script src="/assets/ads-config.js"></script>' not in en:
     fail("en/index.html: ads-config.js 없음")
-tools_ko = re.findall(r'<section class="tool" id="([^"]+)"', ko)
-if tools_ko != re.findall(r'<section class="tool" id="([^"]+)"', en) or len(tools_ko) != 11:
+tools_ko = re.findall(r'<section class="tool"[^>]* id="([^"]+)"', ko)
+if tools_ko != re.findall(r'<section class="tool"[^>]* id="([^"]+)"', en) or len(tools_ko) != 11:
     fail("계산기 섹션이 한국어·영어에서 다름")
 
 # 6) sitemap

@@ -1,17 +1,19 @@
-/* 며칠 계산기 — 오늘의 일력.
-   첫 화면은 뜯어 쓰는 일력: 토마토색 머리 띠 위에 오늘 한 장, 그 띠에 걸친 계산기 카드.
-   색의 뜻: 띠(주황 벽돌색) = 일력 머리(브랜드, 첫 화면 띠에만), 파랑 = 고른 것·평일·토요일, 빨강 = 일요일·공휴일(달력 약속).
-   띠는 공휴일 빨강과 헷갈리지 않게 주황 쪽으로 둔다(블라인드 검토: '빨강 뜻이 너무 많다'). */
+/* 며칠 계산기 — 쓰임별 네 묶음.
+   밝고 차분한 바탕(흰 카드 + 옅은 회색) 위에 묶음마다 제 색 하나: 기간·디데이 파랑, 날짜 옮기기 초록, 나이·기념일 귤색, 달력 보기 장미색.
+   묶음 색은 고르기·카드 머리·아이콘에만 쓴다. 결과 속 색의 뜻은 그대로: 빨강 = 일요일·공휴일, 파랑 = 토요일·영업일·기간 막대.
+   (2026-10-06 사용자: '단색이라 촌스럽고 나열식' → 한 가지 진한 색 띠를 버리고 묶음 + 여러 색) */
 :root {
-  --bg: #faf6f0; --card: #ffffff; --ink: #1c1612; --ink-2: #463d36; --muted: #6e645b; --line: #ece4d8; --line-2: #d9cebf;
-  --cell: #f6f0e7;
-  --main: #1d4ed8; --main-ink: #ffffff; --main-soft: #e8eefc;
-  --red: #d33a2c; --red-soft: #fdeceb;
-  --band: #c2410c; --band-ink: #ffffff; --band-2: rgba(255, 255, 255, .9);
-  --chip: rgba(255, 255, 255, .13); --chip-line: rgba(255, 255, 255, .3); --chip-hover: rgba(255, 255, 255, .24);
-  --chip-on: #ffffff; --chip-on-ink: #9a3412;
+  --bg: #f4f5f8; --card: #ffffff; --ink: #161b26; --ink-2: #3c4353; --muted: #636a7a; --line: #e2e5eb; --line-2: #cdd2db;
+  --cell: #f3f4f7;
+  --main: #2557d6; --main-ink: #ffffff; --main-soft: #e7edfc;
+  --red: #d8342b; --red-soft: #fdeceb;
+  --g-span: #2f62e0; --g-span-s: #e8eefd;
+  --g-move: #0b8f63; --g-move-s: #e2f4ec;
+  --g-life: #d9730d; --g-life-s: #fcefdc;
+  --g-cal: #d23a7c; --g-cal-s: #fbe7f0;
   --warn-bg: #fff4d6; --warn-ink: #6f4b00;
-  --past: #7a7067; --radius: 18px; --pad: 26px;
+  --past: #6f7584; --radius: 18px; --pad: 26px;
+  --shadow: 0 1px 2px rgba(20, 28, 45, .05), 0 12px 32px -18px rgba(20, 28, 45, .22);
   /* 움직임 값 하나: 기본 반응은 전부 이 길이·곡선 */
   --dur: .18s; --ease: cubic-bezier(.2, .7, .2, 1);
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
@@ -19,23 +21,32 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15110f; --card: #211b18; --ink: #f6f0ea; --ink-2: #dbd2c9; --muted: #a99d92; --line: #332a26; --line-2: #4a3f39;
-    --cell: #2b2420;
-    --main: #8ea8ff; --main-ink: #0b1020; --main-soft: #1f2645;
-    --red: #ff7f6e; --red-soft: #3d1f1a;
-    --band: #8f3210; --chip-on: #fff7f0; --chip-on-ink: #8f3210;
+    --bg: #101319; --card: #191d26; --ink: #eef0f5; --ink-2: #cfd4de; --muted: #9aa1b0; --line: #282d38; --line-2: #383e4b;
+    --cell: #20252f;
+    --main: #86a6ff; --main-ink: #0b1020; --main-soft: #1d2645;
+    --red: #ff7f73; --red-soft: #3d1f1d;
+    --g-span: #86a6ff; --g-span-s: rgba(134, 166, 255, .14);
+    --g-move: #4fd3a1; --g-move-s: rgba(79, 211, 161, .13);
+    --g-life: #ffae55; --g-life-s: rgba(255, 174, 85, .13);
+    --g-cal: #ff86b8; --g-cal-s: rgba(255, 134, 184, .13);
     --warn-bg: #3a2f14; --warn-ink: #f2d38a;
-    --past: #958a80;
+    --past: #8e95a3;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px -18px rgba(0, 0, 0, .6);
     color-scheme: dark;
   }
 }
+[data-g="span"] { --g: var(--g-span); --gs: var(--g-span-s); }
+[data-g="move"] { --g: var(--g-move); --gs: var(--g-move-s); }
+[data-g="life"] { --g: var(--g-life); --gs: var(--g-life-s); }
+[data-g="cal"] { --g: var(--g-cal); --gs: var(--g-cal-s); }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 img { max-width: 100%; height: auto; }
 .nw { white-space: nowrap; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  margin: 0; background: var(--bg); color: var(--ink); border-top: 6px solid var(--band);
+  margin: 0; background: var(--bg); color: var(--ink);
+
   font: 16px/1.6 var(--font); letter-spacing: -0.005em;
   word-break: keep-all; overflow-wrap: anywhere;
 }
@@ -84,67 +95,61 @@ h1, h2 { text-wrap: balance; }
 h1 { font-size: clamp(25px, 5.2vw, 38px); line-height: 1.22; margin: 0 0 10px; letter-spacing: -0.035em; font-weight: 800; }
 .lede { color: var(--muted); margin: 0; max-width: 40em; }
 
-/* 첫 화면 띠: 머리·소개·고르기를 한 장의 일력 머리처럼 화면 끝까지 칠한다.
-   border-image로 칠해 가로 스크롤이 생기지 않는다. 계산기 카드는 띠에 반쯤 걸친다 */
-body:has(#today) .top, body:has(#today) .hero, body:has(#today) .picker {
-  border-image: linear-gradient(var(--band) 0 0) fill 0 / / 0 100vmax; color: var(--band-ink);
-}
-body:has(#today) .stage { border-image: linear-gradient(var(--band) 72px, transparent 72px) fill 0 / / 0 100vmax; }
-body:has(#today) .logo-mark { border-color: var(--band-ink); }
-body:has(#today) .logo-mark::before { background: var(--ink); }
-body:has(#today) .top-nav a { color: var(--band-2); }
-body:has(#today) .top-nav a:hover { background: var(--chip-hover); color: var(--band-ink); }
-body:has(#today) .mini select, body:has(#today) .lang { background-color: var(--chip); border-color: var(--chip-line); color: var(--band-ink); }
-body:has(#today) .mini select:hover, body:has(#today) .lang:hover { border-color: var(--band-ink); }
-.mini option { color: #1c1612; background: #fff; }
-/* 넓은 화면: 제목은 한 줄 가득, 그 아래 소개(왼쪽)와 오늘 한 장(오른쪽) */
-body:has(#today) .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 48px; padding-top: 30px; padding-bottom: 8px; }
-body:has(#today) .hero-text { display: contents; }
-body:has(#today) .hero h1 { grid-column: 1 / -1; max-width: 20em; }
-body:has(#today) h1 { font-size: clamp(27px, 5.4vw, 44px); line-height: 1.16; letter-spacing: -0.04em; }
-body:has(#today) .lede { color: var(--band-2); font-size: 17px; font-weight: 500; }
+.mini option { color: #161b26; background: #fff; }
+/* 첫 화면: 왼쪽 제목·소개, 오른쪽 오늘 한 장 */
+body:has(#today) .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 40px; padding-top: 26px; padding-bottom: 6px; }
+body:has(#today) h1 { font-size: clamp(27px, 4.6vw, 40px); line-height: 1.18; letter-spacing: -0.04em; }
+body:has(#today) .lede { font-size: 16.5px; }
 
-/* 오늘 한 장: 일력 종이(테마와 상관없이 종이색) + 옆에 올해 진행 */
-.today { display: flex; align-items: center; gap: 18px; }
+/* 오늘 한 장: 흰 일력 종이(한 장 뒤에 넘겨질 장이 겹쳐 있음) + 올해 진행 */
+.today { display: flex; align-items: center; gap: 18px; padding: 14px 18px 14px 14px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
 .today-sheet {
-  flex: none; display: flex; flex-direction: column; align-items: center; width: 108px; padding-bottom: 10px;
-  background: #fffdf8; color: #1c1612; border-radius: 12px; overflow: hidden; transform: rotate(-3deg);
-  box-shadow: 5px 5px 0 -1px rgba(255, 255, 255, .45), 0 14px 26px -10px rgba(50, 8, 0, .55);
+  position: relative; flex: none; display: flex; flex-direction: column; align-items: center; width: 92px; padding-bottom: 8px;
+  background: #fffefb; color: #161b26; border-radius: 11px; border: 1px solid #e3e1da; transform: rotate(-3deg);
+  box-shadow: 4px 4px 0 -1px #fffefb, 4px 4px 0 0 #e3e1da, 0 10px 20px -12px rgba(20, 28, 45, .45);
 }
-.today-m { align-self: stretch; text-align: center; background: #1c1612; color: #fff; font-size: 13px; font-weight: 800; padding: 5px 0 4px; }
-.today-d { font-size: 60px; font-weight: 800; line-height: 1; margin-top: 8px; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
-.today-w { font-size: 13px; font-weight: 700; color: #6e645b; }
-.today-sheet.is-sun .today-d { color: #d33a2c; } .today-sheet.is-sat .today-d { color: #1d4ed8; }
-.today-facts { min-width: 0; max-width: 16em; font-size: 15px; line-height: 1.45; color: var(--band-2); }
+.today-m { align-self: stretch; text-align: center; background: var(--g-cal); color: #fff; font-size: 12.5px; font-weight: 800; padding: 4px 0 3px; border-radius: 10px 10px 0 0; }
+.today-d { font-size: 50px; font-weight: 800; line-height: 1; margin-top: 7px; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.today-w { font-size: 12.5px; font-weight: 700; color: #6b6f7a; }
+@media (prefers-color-scheme: dark) { .today-sheet { filter: brightness(.86); } }
+.today-sheet.is-sun .today-d { color: #d8342b; } .today-sheet.is-sat .today-d { color: #2557d6; }
+.today-facts { min-width: 0; max-width: 15em; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
 .today-facts p { margin: 0; }
-.today-facts .today-k { color: var(--band-ink); font-weight: 800; }
-.today-facts a { color: var(--band-ink); font-weight: 700; text-underline-offset: 3px; }
-.today-bar { height: 6px; margin: 8px 0; border-radius: 3px; background: rgba(255, 255, 255, .25); overflow: hidden; }
-.today-bar i { display: block; height: 100%; border-radius: 3px; background: var(--band-ink); }
+.today-facts .today-k { color: var(--ink); font-weight: 800; }
+.today-facts a { color: var(--g-cal); font-weight: 700; text-underline-offset: 3px; }
+.today-bar { height: 6px; margin: 8px 0; border-radius: 3px; background: var(--cell); overflow: hidden; }
+.today-bar i { display: block; height: 100%; border-radius: 3px; background: var(--g-span); }
 
-/* 계산기 고르기 + 계산기 */
-.bench { padding-top: 20px; }
-.picker { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 14px; }
-.picker a {
-  text-decoration: none; padding: 8px 13px; border-radius: 10px; background: var(--card);
-  border: 1px solid var(--line); font-size: 15px; font-weight: 600; color: var(--ink-2); white-space: nowrap;
-  transition: background-color .15s, border-color .15s, color .15s;
+/* 계산기 고르기: 쓰임별 네 묶음. 넓은 화면은 왼쪽 목록(이름 + 한 줄 설명) | 오른쪽 계산기 */
+.bench { padding-top: 22px; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 22px; align-items: start; }
+.bench > .ad-slot { grid-column: 1 / -1; }
+.picker { position: sticky; top: 12px; display: flex; flex-direction: column; gap: 14px; padding: 14px 10px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.pg { display: flex; flex-direction: column; gap: 2px; }
+.pg-h {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 2px; padding: 2px 8px; background: none; border: 0; text-align: left;
+  font-size: 13px; font-weight: 800; color: var(--g); letter-spacing: -0.01em; cursor: default;
 }
-.picker a:hover { border-color: var(--line-2); color: var(--ink); }
-.picker a.on { background: var(--ink); color: var(--card); border-color: var(--ink); }
-body:has(#today) .bench { padding-top: 0; }
-body:has(#today) .picker { padding-top: 24px; padding-bottom: 22px; }
-body:has(#today) .picker a { background: var(--chip); border-color: var(--chip-line); color: var(--band-ink); }
-body:has(#today) .picker a:hover { background: var(--chip-hover); }
-body:has(#today) .picker a.on { background: var(--chip-on); color: var(--chip-on-ink); border-color: var(--chip-on); box-shadow: 0 6px 14px -6px rgba(40, 6, 0, .5); }
+.pg-ic { width: 22px; height: 22px; padding: 3px; border-radius: 7px; background: var(--gs); fill: none; stroke: var(--g); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.pg-ic rect { fill: none; }
+.picker a {
+  display: block; position: relative; text-decoration: none; padding: 7px 10px 7px 38px; border-radius: 11px; color: var(--ink);
+  transition: background-color .15s, color .15s;
+}
+.picker a b { display: block; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.picker a span { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.picker a:hover { background: var(--cell); }
+.picker a.on { background: var(--gs); }
+.picker a.on b { color: var(--g); }
+.picker a.on::before { content: ""; position: absolute; left: 18px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--g); }
 
 /* 계산기 카드 */
 .tool {
   position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
   padding: var(--pad) var(--pad) 22px; scroll-margin-top: 12px;
-  box-shadow: 0 1px 2px rgba(40, 20, 10, .05), 0 26px 50px -24px rgba(70, 24, 10, .38);
+  box-shadow: var(--shadow); border-color: transparent;
 }
-body:has(#today) .tool { border-color: transparent; }
+/* 카드 머리: 묶음 색 윗줄 */
+.tool[data-g] { box-shadow: inset 0 4px 0 var(--g), var(--shadow); }
 .tool h2 { font-size: 21px; margin: 0 0 16px; letter-spacing: -0.025em; }
 .hint { color: var(--muted); margin: -8px 0 16px; font-size: 15px; }
 .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: end; }
@@ -176,7 +181,7 @@ body:has(#today) .tool { border-color: transparent; }
 .sub { margin: 8px 0 0; color: var(--ink-2); }
 .empty { color: var(--muted); margin: 0; }
 .warn { background: var(--warn-bg); color: var(--warn-ink); padding: 10px 12px; border-radius: 10px; margin: 14px 0 0; font-size: 14px; }
-.rows { margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.rows { margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
 .rows div { display: flex; flex-direction: column; gap: 2px; padding: 11px 14px; border-radius: 12px; background: var(--cell); min-width: 0; }
 .rows dt { color: var(--muted); font-size: 13px; font-weight: 600; }
 .rows dd { margin: 0; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
@@ -225,9 +230,9 @@ html[lang="en"] .ad-slot::before { content: "Advertisement"; }
 .guide-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .guide-list a {
   display: block; height: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-  padding: 16px 18px 16px 18px; text-decoration: none; border-left: 4px solid var(--ink); transition: border-color .15s, transform .15s;
+  padding: 16px 18px 16px 18px; text-decoration: none; box-shadow: var(--shadow); border-color: transparent; transition: border-color .15s, transform .15s;
 }
-.guide-list a:hover { border-color: var(--line-2); border-left-color: var(--ink); transform: translateY(-2px); }
+.guide-list a:hover { border-color: var(--line-2); transform: translateY(-2px); }
 .guide-list b { display: block; margin-bottom: 4px; }
 .guide-list span { display: block; color: var(--muted); font-size: 14px; }
 
@@ -267,52 +272,72 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 .faq p { margin: 0 0 16px; color: var(--ink-2); }
 
 .foot { margin-top: 40px; padding-top: 22px; padding-bottom: 44px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
-/* 만든 곳: 벽걸이 달력 맨 아래 '펴낸 곳' 줄처럼. 루멘랩 표시(주황 불빛)만 달력 색(파랑·빨강) 밖의 색으로 두고, 광고처럼 보이는 상자·그림은 쓰지 않는다 */
-.maker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding-bottom: 18px; margin-bottom: 16px; border-bottom: 1.5px dashed var(--line-2); }
-.maker-mark { width: 20px; height: 20px; flex: none; fill: #f2b33d; }
-.maker p { margin: 0; flex: 1 1 260px; color: var(--ink-2); font-size: 15px; }
+/* 만든 곳(루멘랩 링크): 벽걸이 달력 맨 아래 '펴낸 곳'처럼, 루멘랩의 도구 세 장(이 사이트 묶음 색)이 포개진 작은 일력 묶음.
+   화면에 들어오면 한 번 부채처럼 펼쳐지고(.in), 링크에 손을 올리면 앞장이 살짝 들린다. 광고 칸과는 꼬리말 위 여백으로 떨어뜨린다 */
+.foot { margin-top: 64px; }
+.maker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 18px; margin-bottom: 18px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.maker-fan { position: relative; flex: none; width: 54px; height: 42px; }
+.maker-fan i { position: absolute; left: 13px; top: 4px; width: 28px; height: 34px; border-radius: 6px; background: var(--card); border: 1.5px solid var(--line-2); overflow: hidden; transform-origin: 50% 100%; transition: transform .6s var(--ease); }
+.maker-fan i::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: var(--g-span); }
+.maker-fan i:nth-child(1)::before { background: var(--g-move); } .maker-fan i:nth-child(2)::before { background: var(--g-life); }
+.maker-fan i::after { content: ""; position: absolute; left: 7px; right: 7px; top: 14px; height: 12px; border-radius: 2px; background: repeating-linear-gradient(var(--line-2) 0 2px, transparent 2px 5px); }
+.maker.in .maker-fan i:nth-child(1) { transform: translateX(-9px) rotate(-14deg); }
+.maker.in .maker-fan i:nth-child(2) { transform: translateX(9px) rotate(14deg); }
+.maker:has(a:hover) .maker-fan i:nth-child(3) { transform: translateY(-4px); transition-duration: var(--dur); }
+.maker p { margin: 0; flex: 1 1 240px; color: var(--ink-2); font-size: 15px; }
 .maker b { color: var(--ink); }
-.maker a { font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; border-bottom: 1.5px solid #f2b33d; white-space: nowrap; }
-.maker a:hover { color: var(--main); }
+.maker a { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; padding: 9px 14px; border-radius: 11px; background: var(--cell); white-space: nowrap; transition: background-color .15s, transform var(--dur) var(--ease); }
+.maker a:hover { background: var(--line); }
+.maker a:active { transform: scale(.96); }
 
 @media (max-width: 720px) {
   .top { padding-top: 10px; gap: 6px 10px; }
   .logo { font-size: 17px; }
   .top-nav { order: 3; width: 100%; margin-left: -10px; font-size: 14px; }
-  /* 계산기 머리: 첫 줄 = 로고 + 나라 고르기, 둘째 줄 = 메뉴 + 언어 링크 (영어판 로고·고르기가 길어도 넘치지 않게) */
+  /* 첫 줄 = 로고 + 나라 고르기 + 언어, 둘째 줄 = 메뉴 */
   .top-ctl { display: contents; }
   .top-ctl .mini { margin-left: auto; }
   .mini select { font-size: 13px; padding: 7px 24px 7px 9px; background-position: right 8px center; }
   .lang { font-size: 13px; padding: 7px 9px; }
   .top { column-gap: 6px; }
   .logo { margin-right: 4px; }
-  /* 첫 줄 = 로고 + 나라 고르기 + 언어, 둘째 줄 = 메뉴 */
-  .hero { padding-top: 10px; }
   .lede { font-size: 15px; }
-  /* 고르기는 작게 줄 바꿈: 11개가 다 보이고, 첫 화면에 입력칸까지 */
-  .bench { padding-top: 16px; }
-  .picker { gap: 5px; padding-bottom: 12px; }
-  .picker a { padding: 6px 10px; font-size: 14px; border-radius: 9px; }
   :root { --pad: 16px; }
   .tool { padding-top: 22px; padding-bottom: 18px; }
-  /* 휴대폰: 오늘 한 장은 제목 옆에 작게(첫 화면에 입력칸까지 보이게 진행 막대·설명은 뺀다) */
-  body:has(#today) .hero { grid-template-columns: minmax(0, 1fr) auto; gap: 0 12px; align-items: start; padding-top: 12px; padding-bottom: 4px; }
-  body:has(#today) .hero h1 { grid-column: 1; }
-  body:has(#today) .lede { grid-column: 1 / -1; }
-  .today { grid-column: 2; grid-row: 1; padding-top: 4px; }
-  .today-facts { display: none; }
-  body:has(#today) .lede { font-size: 15px; }
-  body:has(#today) .picker { padding-bottom: 18px; }
-  body:has(#today) .stage { border-image: linear-gradient(var(--band) 52px, transparent 52px) fill 0 / / 0 100vmax; }
-  .today-sheet { width: 62px; padding-bottom: 5px; border-radius: 9px; transform: rotate(-2deg); box-shadow: 3px 3px 0 -1px rgba(255, 255, 255, .45), 0 8px 16px -8px rgba(50, 8, 0, .55); }
-  .today-m { font-size: 11px; padding: 2px 0; }
-  .today-d { font-size: 32px; margin-top: 4px; }
-  .today-w { font-size: 11px; }
-  body:has(#today) .picker { padding-top: 14px; }
-  html[lang="en"] .picker { gap: 4px; }
-  html[lang="en"] .picker a { padding: 5px 8px; font-size: 13.5px; }
-  html[lang="en"] body:has(#today) .hero h1 { font-size: 25px; }
-  html[lang="en"] body:has(#today) .lede { font-size: 14px; line-height: 1.5; }
+  /* 휴대폰 첫 화면: 제목 옆에 오늘 한 장(작게), 아래 네 묶음 단추 + 열린 묶음의 계산기, 그 아래 입력칸 */
+  body:has(#today) .hero { grid-template-columns: minmax(0, 1fr) auto; gap: 0 12px; align-items: start; padding-top: 12px; padding-bottom: 2px; }
+  body:has(#today) .hero-text { display: contents; }
+  body:has(#today) .hero h1 { grid-column: 1; font-size: 25px; }
+  body:has(#today) .lede { grid-column: 1 / -1; font-size: 15px; }
+  /* 오늘 한 장은 제목 옆, 올해 며칠째·다음 공휴일은 소개 아래 한 줄 */
+  .today { display: contents; }
+  .today-sheet { grid-column: 2; grid-row: 1; margin-top: 4px; }
+  .today-facts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0 12px; max-width: none; margin-top: 8px; font-size: 13.5px; }
+  .today-facts .today-k, .today-bar { display: none; }
+  body:has(#today) .top-nav { display: none; }
+  .today-sheet { width: 58px; padding-bottom: 4px; border-radius: 9px; transform: rotate(-3deg); box-shadow: 3px 3px 0 -1px #fffefb, 3px 3px 0 0 #e3e1da, 0 6px 12px -8px rgba(20, 28, 45, .45); }
+  .today-m { font-size: 10.5px; padding: 2px 0; border-radius: 8px 8px 0 0; }
+  .today-d { font-size: 28px; margin-top: 3px; }
+  .today-w { font-size: 10.5px; }
+  .bench { display: block; padding-top: 14px; }
+  .picker { position: static; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; padding: 0; background: none; box-shadow: none; margin-bottom: 12px; }
+  .pg { display: contents; }
+  .pg-h {
+    grid-row: 1; grid-column: span 3; flex-direction: column; justify-content: center; gap: 3px; margin: 0; padding: 8px 2px 7px; min-height: 64px;
+    border-radius: 13px; background: var(--card); box-shadow: var(--shadow); color: var(--ink-2); font-size: 12px; text-align: center; line-height: 1.25; cursor: pointer;
+  }
+  .pg.open .pg-h { background: var(--gs); color: var(--g); box-shadow: none; }
+  /* 둘째 줄(계산기)은 밑줄 탭: 첫째 줄 묶음 칸과 모양이 달라 단계가 보인다 */
+  .picker a { display: none; grid-column: span 4; padding: 9px 4px 8px; border-radius: 0; background: none; border-bottom: 2px solid var(--line); text-align: center; color: var(--ink-2); }
+  .pg.open a { display: block; }
+  .pg[data-g="life"] a { grid-column: span 6; }
+  .picker a span { display: none; }
+  .picker a b { font-size: 14px; }
+  .picker a:hover { background: none; }
+  .picker a.on { background: none; border-bottom-color: var(--g); color: var(--g); }
+  .picker a.on::before { display: none; }
+  html[lang="en"] .pg-h { font-size: 11px; overflow-wrap: normal; hyphens: auto; }
+  html[lang="en"] .picker a b { font-size: 13.5px; }
   .tool h2 { font-size: 19px; }
   .field input { font-size: 16px; padding: 10px 10px; min-height: 48px; }
   .grid4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
@@ -354,6 +379,8 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 @keyframes fade { from { opacity: 0; } }
 .stage.live .tool:not([hidden]) { animation: rise .22s var(--ease); }
 .result.swap { animation: swap var(--dur) var(--ease); }
+/* 휴대폰: 묶음을 바꾸면 그 묶음의 계산기 탭이 살짝 올라오며 바뀐다(처음 열 때는 안 함) */
+@media (max-width: 720px) { .picker.live .pg.open a { animation: swap var(--dur) var(--ease); } }
 .result.shake .err { animation: shake .26s var(--ease); }
 .faq details[open] p { animation: fade var(--dur) var(--ease); }
 /* 공휴일 도장: 늘 보이는 작은 빨간 도장(뜻), 방문자가 공휴일을 고른 순간에만 찍히는 움직임(.go) */
@@ -368,6 +395,6 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
   /* 미끄러짐·튐·흔들림은 끄고 짧은 페이드만. 도장은 움직이지 않아도 보인다 */
-  .stage.live .tool:not([hidden]), .result.swap, .stamp.go, .faq details[open] p { animation: fade .15s linear; }
+  .stage.live .tool:not([hidden]), .picker.live .pg.open a, .result.swap, .stamp.go, .faq details[open] p { animation: fade .15s linear; }
   .result.shake .err { animation: none; }
 }

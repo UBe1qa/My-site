@@ -64,21 +64,33 @@
 
   <div class="bench wrap">
   <nav class="picker" aria-label="Choose a calculator">
-    <a href="#period" data-tool="period">Between dates</a>
-    <a href="#dday" data-tool="dday">Countdown</a>
-    <a href="#add" data-tool="add">Add / subtract</a>
-    <a href="#workdays" data-tool="workdays">Business days</a>
-    <a href="#workadd" data-tool="workadd">Business-day deadline</a>
-    <a href="#age" data-tool="age">Age</a>
-    <a href="#anniv" data-tool="anniv">Anniversaries</a>
-    <a href="#weekday" data-tool="weekday">Day of week</a>
-    <a href="#week" data-tool="week">Week number</a>
-    <a href="#time" data-tool="time">Time between</a>
-    <a href="#holidays" data-tool="holidays">Holidays</a>
+    <div class="pg" data-g="span">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="12" r="2.2"/><path d="M8.5 12h7"/></svg><span>Spans &amp; countdowns</span></button>
+      <a href="#period" data-tool="period"><b>Between dates</b><span>Days, weeks, months</span></a>
+      <a href="#dday" data-tool="dday"><b>Countdown</b><span>Days left or since</span></a>
+      <a href="#time" data-tool="time"><b>Time between</b><span>Hours and minutes between</span></a>
+    </div>
+    <div class="pg" data-g="move">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 7l5 5-5 5"/></svg><span>Move a date</span></button>
+      <a href="#add" data-tool="add"><b>Add / subtract</b><span>A date days or months away</span></a>
+      <a href="#workdays" data-tool="workdays"><b>Business days</b><span>Skip weekends and holidays</span></a>
+      <a href="#workadd" data-tool="workadd"><b>Business-day deadline</b><span>Deadline N business days out</span></a>
+    </div>
+    <div class="pg" data-g="life">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.5 3.5 0 0 1 12 8a3.5 3.5 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg><span>Age &amp; anniversaries</span></button>
+      <a href="#age" data-tool="age"><b>Age</b><span>Exact age, three ways</span></a>
+      <a href="#anniv" data-tool="anniv"><b>Anniversaries</b><span>100 days, 1 year and more</span></a>
+    </div>
+    <div class="pg" data-g="cal">
+      <button type="button" class="pg-h" aria-expanded="false"><svg class="pg-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Calendar</span></button>
+      <a href="#weekday" data-tool="weekday"><b>Day of week</b><span>Weekday and holiday check</span></a>
+      <a href="#week" data-tool="week"><b>Week number</b><span>ISO week, day of year</span></a>
+      <a href="#holidays" data-tool="holidays"><b>Holidays</b><span>Public holidays by year</span></a>
+    </div>
   </nav>
 
   <div class="stage">
-    <section class="tool" id="period" aria-labelledby="h-period">
+    <section class="tool" data-g="span" id="period" aria-labelledby="h-period">
       <h2 id="h-period">Days between two dates</h2>
       <div class="grid2">
         <label class="field"><span>Start date</span><input type="date" id="period-a"></label>
@@ -88,7 +100,7 @@
       <div class="result" id="r-period" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="dday" aria-labelledby="h-dday">
+    <section class="tool" data-g="span" id="dday" aria-labelledby="h-dday">
       <h2 id="h-dday">Countdown (D-day)</h2>
       <div class="grid2">
         <label class="field"><span>Target date</span><input type="date" id="dday-t"></label>
@@ -97,7 +109,7 @@
       <div class="result" id="r-dday" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="add" aria-labelledby="h-add">
+    <section class="tool" data-g="move" id="add" aria-labelledby="h-add">
       <h2 id="h-add">Add / subtract</h2>
       <label class="field"><span>From date</span><input type="date" id="add-a"></label>
       <div class="grid4">
@@ -113,7 +125,7 @@
       <div class="result" id="r-add" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="workdays" aria-labelledby="h-workdays">
+    <section class="tool" data-g="move" id="workdays" aria-labelledby="h-workdays">
       <h2 id="h-workdays">Business days</h2>
       <p class="hint">Counts working days only, skipping weekends and public holidays (including substitute holidays).</p>
       <div class="grid2">
@@ -125,7 +137,7 @@
       <div class="result" id="r-workdays" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="workadd" aria-labelledby="h-workadd">
+    <section class="tool" data-g="move" id="workadd" aria-labelledby="h-workadd">
       <h2 id="h-workadd">Business-day deadline</h2>
       <p class="hint">Finds a date N business days away, like a shipping or processing deadline. The start date itself isn't counted.</p>
       <div class="grid2">
@@ -135,7 +147,7 @@
       <div class="result" id="r-workadd" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="age" aria-labelledby="h-age">
+    <section class="tool" data-g="life" id="age" aria-labelledby="h-age">
       <h2 id="h-age">Age calculator</h2>
       <div class="grid2">
         <label class="field"><span>Date of birth</span><input type="date" id="age-b"></label>
@@ -144,26 +156,26 @@
       <div class="result" id="r-age" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="anniv" aria-labelledby="h-anniv">
+    <section class="tool" data-g="life" id="anniv" aria-labelledby="h-anniv">
       <h2 id="h-anniv">Anniversaries (100 days, 1 year…)</h2>
       <label class="field"><span>Start date</span><input type="date" id="an-a"></label>
       <label class="check"><input type="checkbox" id="an-one"> <span>Count the start date as day 1 (Korean style)</span></label>
       <div class="result" id="r-anniv" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="weekday" aria-labelledby="h-weekday">
+    <section class="tool" data-g="cal" id="weekday" aria-labelledby="h-weekday">
       <h2 id="h-weekday">What day of the week?</h2>
       <label class="field"><span>Date</span><input type="date" id="wk-a"></label>
       <div class="result" id="r-weekday" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="week" aria-labelledby="h-week">
+    <section class="tool" data-g="cal" id="week" aria-labelledby="h-week">
       <h2 id="h-week">Week number &amp; day of year</h2>
       <label class="field"><span>Date</span><input type="date" id="wn-a"></label>
       <div class="result" id="r-week" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="time" aria-labelledby="h-time">
+    <section class="tool" data-g="span" id="time" aria-labelledby="h-time">
       <h2 id="h-time">Time between two moments</h2>
       <div class="grid2">
         <label class="field"><span>Start</span><input type="datetime-local" id="tm-a"></label>
@@ -172,7 +184,7 @@
       <div class="result" id="r-time" aria-live="polite"></div>
     </section>
 
-    <section class="tool" id="holidays" aria-labelledby="h-holidays">
+    <section class="tool" data-g="cal" id="holidays" aria-labelledby="h-holidays">
       <h2 id="h-holidays">Public holidays</h2>
       <label class="field narrow"><span>Year</span><input type="number" id="hol-y" inputmode="numeric" min="2015" max="2035" step="1"></label>
       <div class="result" id="r-holidays" aria-live="polite"></div>
@@ -208,7 +220,7 @@
 </main>
 
 <footer class="foot wrap">
-  <div class="maker"><svg class="maker-mark" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" opacity=".28"/><circle cx="11" cy="11" r="5"/></svg><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div>
+  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/">Visit Lumen Lab →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>
   <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a></p>
 </footer>
 

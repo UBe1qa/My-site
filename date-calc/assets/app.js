@@ -312,6 +312,12 @@
       a.classList.toggle("on", on);
       if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
+    // 쓰임별 묶음: 고른 계산기가 든 묶음을 연다(휴대폰에선 열린 묶음의 계산기만 보인다)
+    document.querySelectorAll(".pg").forEach(function (g) {
+      var open = !!g.querySelector('a[data-tool="' + name + '"]');
+      g.classList.toggle("open", open);
+      g.querySelector(".pg-h").setAttribute("aria-expanded", open ? "true" : "false");
+    });
     render(name);
     syncLangLinks();
     // 휴대폰에서 가로로 넘기는 고르기 줄: 고른 칸이 보이게 줄만 옮긴다(페이지는 그대로)
@@ -326,11 +332,14 @@
     if (names.indexOf(fromHash()) >= 0) { show(fromHash()); }
   });
   document.querySelector(".picker").addEventListener("click", function (e) {
+    // 묶음 이름을 누르면 그 묶음의 첫 계산기로(이미 그 묶음이면 그대로)
+    var h = e.target.closest(".pg-h");
+    if (h && !h.parentNode.classList.contains("open")) { h.parentNode.querySelector("a[data-tool]").click(); return; }
     var a = e.target.closest("a[data-tool]");
     if (!a) return;
     e.preventDefault();
     history.replaceState(null, "", "#" + a.getAttribute("data-tool"));
-    document.querySelector(".stage").classList.add("live"); // 이제부터 카드 바뀜을 보여 준다(처음 열 때는 안 함)
+    document.querySelector(".stage").classList.add("live"); document.querySelector(".picker").classList.add("live"); // 이제부터 카드 바뀜을 보여 준다(처음 열 때는 안 함)
     show(a.getAttribute("data-tool"));
     // 휴대폰에서는 고른 계산기로 내려 준다
     if (window.matchMedia("(max-width: 720px)").matches) $(a.getAttribute("data-tool")).scrollIntoView({ behavior: "smooth", block: "start" });
