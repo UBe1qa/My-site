@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSV to JSON &amp; JSON to CSV Converter – No Upload</title>
+<meta name="description" content="Convert CSV to JSON (array of objects or arrays) with delimiter auto-detection, or flatten JSON into CSV with an Excel-friendly UTF-8 BOM option. Preview before saving.">
+
+<meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://convert.lumenlab.page/csv-json/">
+<link rel="alternate" hreflang="en" href="https://convert.lumenlab.page/csv-json/">
+<link rel="alternate" hreflang="ko" href="https://convert.lumenlab.page/ko/csv-json/">
+<link rel="alternate" hreflang="x-default" href="https://convert.lumenlab.page/csv-json/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CSV to JSON &amp; JSON to CSV Converter – No Upload">
+<meta property="og:description" content="Convert CSV to JSON (array of objects or arrays) with delimiter auto-detection, or flatten JSON into CSV with an Excel-friendly UTF-8 BOM option. Preview before saving.">
+<meta property="og:url" content="https://convert.lumenlab.page/csv-json/">
+<meta property="og:site_name" content="Inplace">
+<meta property="og:image" content="https://convert.lumenlab.page/og.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="importmap">{"imports":{"mediabunny":"/assets/vendor/mediabunny.min.mjs"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "CSV ↔ JSON", "url": "https://convert.lumenlab.page/csv-json/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "inLanguage": "en", "isAccessibleForFree": true, "description": "Convert CSV to JSON (array of objects or arrays) with delimiter auto-detection, or flatten JSON into CSV with an Excel-friendly UTF-8 BOM option. Preview before saving.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://convert.lumenlab.page/"}, {"@type": "ListItem", "position": 2, "name": "CSV ↔ JSON", "item": "https://convert.lumenlab.page/csv-json/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do some CSV files use semicolons?", "acceptedAnswer": {"@type": "Answer", "text": "Excel uses the list separator from the system's regional settings, which in many countries that write decimals with a comma is a semicolon. Auto-detection handles comma, semicolon and tab."}}, {"@type": "Question", "name": "Should I always add the BOM?", "acceptedAnswer": {"@type": "Answer", "text": "No. Some scripts and tools don't expect it and read it as stray characters at the start of the first header. Use it for Excel, and leave it off for files meant for code."}}, {"@type": "Question", "name": "Is there a size limit?", "acceptedAnswer": {"@type": "Answer", "text": "Only your device's memory. Very large files can make the preview slow, but the data never leaves your browser."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body class="tool-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/"><span class="flap logo-flap" aria-hidden="true" data-text="IN"><b>I</b><b>N</b></span><span>Inplace</span></a>
+  <nav class="top-nav" aria-label="Site"><a href="/#tools">All tools</a><a href="/guide/">Guides</a><a class="lang" href="/ko/csv-json/" lang="ko" hreflang="ko">한국어</a></nav>
+</header>
+<main id="main">
+<section class="tool-hero wrap cat-data">
+  <p class="crumb"><a href="/">All tools</a> <span aria-hidden="true">›</span> <a href="/#data">Spreadsheets & data</a></p>
+  <div class="hero-row">
+    <h1>CSV to JSON and JSON to CSV Converter</h1>
+    <p class="pair" aria-hidden="true"><span class="flap md" aria-hidden="true" data-text="CSV"><b>C</b><b>S</b><b>V</b></span><span class="arrow">→</span><span class="flap md" aria-hidden="true" data-text="JSON"><b>J</b><b>S</b><b>O</b><b>N</b></span></p>
+  </div>
+  <p class="lead">Turn spreadsheet exports into JSON and JSON into CSV with a live preview; your data stays in the browser.</p>
+</section>
+<section class="tool wrap" data-tool="csv-json" aria-label="CSV ↔ JSON">
+  <div class="drop">
+    <input type="file" id="f" class="sr" accept=".csv,.tsv,.txt,.json">
+    <label for="f" class="btn-pick">Choose file</label>
+    <p class="drop-or">or drop it here</p>
+    <p class="drop-fmts"><span class="sr">Accepts: </span>CSV, TSV, JSON</p>
+  </div>
+  <p class="stays"><svg class="lock" viewBox="0 0 16 18" width="14" height="16" aria-hidden="true"><rect x="2" y="8" width="12" height="9" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 8V5.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Converted on this device. Your files are never uploaded.</p>
+  <div class="work" hidden></div>
+</section>
+<div class="prose wrap narrow"><section class="prose-sec"><h2>CSV to JSON: decide on keys and types</h2><p>With &quot;first row as keys&quot;, each row becomes an object such as {&quot;name&quot;: &quot;Kim&quot;, &quot;age&quot;: &quot;34&quot;}; without it you get arrays of values. Comma, semicolon or tab delimiters are detected automatically.</p><p>CSV has no data types, so values stay strings unless you turn on &quot;detect numbers &amp; true/false&quot;. Leave it off for ZIP codes, phone numbers or IDs with leading zeros, which would otherwise lose them (&quot;007&quot; would become 7).</p></section><section class="prose-sec"><h2>JSON to CSV: nested data becomes text</h2><p>Give it an array of objects, the shape most APIs return. The header row is the union of keys across all objects, so a key missing from some objects leaves empty cells there.</p><p>Nested objects and arrays are written into the cell as JSON text, for example [&quot;a&quot;,&quot;b&quot;].</p></section><section class="prose-sec"><h2>Add a BOM if the CSV will be opened in Excel</h2><p>Excel recognizes a CSV as UTF-8 only when the file starts with a byte order mark (BOM, the bytes EF BB BF). Without it, Korean, accented or other non-English text can show up garbled.</p><p>Turn on &quot;Excel-friendly CSV (UTF-8 with BOM)&quot; for files people will double-click open in Excel.</p></section></div>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">Advertisement</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<section class="faq wrap narrow"><h2>Questions</h2><details><summary>Why do some CSV files use semicolons?</summary><p>Excel uses the list separator from the system&#x27;s regional settings, which in many countries that write decimals with a comma is a semicolon. Auto-detection handles comma, semicolon and tab.</p></details><details><summary>Should I always add the BOM?</summary><p>No. Some scripts and tools don&#x27;t expect it and read it as stray characters at the start of the first header. Use it for Excel, and leave it off for files meant for code.</p></details><details><summary>Is there a size limit?</summary><p>Only your device&#x27;s memory. Very large files can make the preview slow, but the data never leaves your browser.</p></details></section>
+<section class="related wrap"><h2>More spreadsheets & data tools</h2><div class="cards"><a class="card cat-data" href="/excel-csv/"><span class="flap xs" aria-hidden="true" data-text="CSV"><b>C</b><b>S</b><b>V</b></span><span class="card-name">Excel ↔ CSV</span><span class="card-line">XLSX to CSV, CSV to XLSX</span></a></div>
+<p class="all-link"><a href="/#tools">Every tool →</a></p></section>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">Advertisement</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="maker">Made by <a href="https://lumenlab.page/">Lumen Lab</a> <span aria-hidden="true">·</span> <a href="https://lumenlab.page/">Lumen Lab: more apps and tools →</a></p>
+    <div class="foot-cols"><div><p class="foot-h">Video</p><ul><li><a href="/video-to-mp3/">Video to MP3</a></li><li><a href="/video-converter/">Video Converter</a></li><li><a href="/cut-video/">Video Cutter</a></li><li><a href="/compress-video/">Compress Video</a></li><li><a href="/video-to-gif/">Video to GIF</a></li></ul></div><div><p class="foot-h">Audio</p><ul><li><a href="/audio-converter/">Audio Converter</a></li><li><a href="/cut-audio/">Audio Cutter</a></li></ul></div><div><p class="foot-h">Images</p><ul><li><a href="/image-converter/">Image Converter</a></li><li><a href="/heic-to-jpg/">HEIC to JPG</a></li><li><a href="/compress-image/">Compress Image</a></li><li><a href="/resize-image/">Resize Image</a></li></ul></div><div><p class="foot-h">PDF</p><ul><li><a href="/images-to-pdf/">JPG to PDF</a></li><li><a href="/pdf-to-jpg/">PDF to JPG</a></li><li><a href="/merge-pdf/">Merge PDF</a></li><li><a href="/split-pdf/">Split PDF</a></li></ul></div><div><p class="foot-h">Spreadsheets & data</p><ul><li><a href="/csv-json/">CSV ↔ JSON</a></li><li><a href="/excel-csv/">Excel ↔ CSV</a></li></ul></div></div>
+    <p class="foot-links"><a href="/about/">About</a><a href="/guide/">Guides</a><a href="/privacy/">Privacy</a><a href="/licenses/">Open-source licenses</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+    <p class="muted small">© 2026 Lumen Lab</p>
+  </div>
+</footer>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1678 @@
+{
+ "tools": {
+  "video-to-mp3": {
+   "en": {
+    "name": "Video to MP3",
+    "h1": "Video to MP3 Converter",
+    "title": "MP4 to MP3 Converter – No Upload, Free",
+    "desc": "Pull the audio out of an MP4, MOV, WebM or MKV video and save it as MP3, M4A or WAV. It runs in your browser, so the video never leaves your device.",
+    "lead": "Extract the soundtrack of a video as MP3, M4A or WAV. The file is processed on your device, not on a server.",
+    "about": [
+     {
+      "h": "Only the audio track is kept, so the file shrinks a lot",
+      "p": [
+       "The converter opens the video container (MP4, MOV, M4V, WebM, MKV or MPEG-TS), takes the audio track and discards the picture. The output size depends only on the audio bitrate and the length, not on the video's resolution.",
+       "Size is bitrate × seconds ÷ 8. A 3-minute clip at 192 kbps is 192 × 180 ÷ 8 = 4,320 kB, about 4.3 MB (counting 1 MB as 1,000,000 bytes). The page shows this estimate before you convert."
+      ]
+     },
+     {
+      "h": "192 kbps MP3 suits most uses; WAV is for editing",
+      "p": [
+       "128 kbps is enough for speech such as lectures and voice notes, 192 kbps (the default) suits music on phones and earbuds, and 320 kbps is the highest bitrate the MP3 format (MPEG-1 Layer III) allows.",
+       "M4A holds AAC audio and plays natively on iPhone and Mac. WAV is uncompressed, about 10.6 MB per minute for 44.1 kHz 16-bit stereo, so choose it only when another program needs uncompressed audio."
+      ]
+     },
+     {
+      "h": "Converting can't make the sound better than the video's",
+      "p": [
+       "The audio inside a video is already compressed, usually AAC in MP4 and MOV, and Opus or Vorbis in WebM. Turning it into MP3 is a second lossy step: 320 kbps keeps what is there, but it can't restore detail the video never had.",
+       "Use the trim handles to keep only the part you need. A shorter range means a smaller file and a faster conversion."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I convert a YouTube link?",
+      "a": "No. This tool only converts files that are already on your device and does not download from YouTube or other streaming sites. YouTube's Terms of Service don't allow downloading content except where YouTube itself offers it, such as offline viewing in the YouTube app with Premium."
+     },
+     {
+      "q": "Is my video uploaded anywhere?",
+      "a": "No. Decoding uses your browser's WebCodecs and the MP3 is made by the LAME encoder compiled to WebAssembly, both running on this page. The result is saved straight to your device."
+     },
+     {
+      "q": "Why did a long video fail on my phone?",
+      "a": "Everything happens in the device's memory, and phones have less of it. Trim the range first or use a computer for very long or high-resolution files."
+     },
+     {
+      "q": "Why won't one of my MKV files open?",
+      "a": "MKV can hold many different codecs, and the browser can only convert the ones it can decode. If a file uses an audio codec your browser doesn't support, the conversion can't start."
+     }
+    ],
+    "short": "Pull the audio out as MP3, M4A or WAV"
+   },
+   "ko": {
+    "name": "동영상 MP3 변환",
+    "h1": "동영상 MP3 변환기",
+    "title": "MP4 MP3 변환 – 업로드 없이 무료",
+    "desc": "MP4·MOV·WebM·MKV 영상에서 소리만 뽑아 MP3, M4A, WAV로 저장해요. 브라우저 안에서 변환하니 영상이 서버로 올라가지 않아요.",
+    "lead": "영상에서 소리만 꺼내 MP3로 저장해요. 파일은 내 기기 안에서만 처리돼요.",
+    "about": [
+     {
+      "h": "소리만 남기니 용량이 확 줄어요",
+      "p": [
+       "영상 파일에서 화면은 버리고 오디오 트랙만 꺼내요. 결과 파일 크기는 영상 화질과 상관없이 비트레이트(1초에 쓰는 데이터 양)와 길이로만 정해져요.",
+       "계산은 비트레이트 × 초 ÷ 8이에요. 192kbps로 3분짜리를 만들면 192 × 180 ÷ 8 = 4,320kB, 약 4.3MB예요. 변환 전에 화면에 예상 크기를 먼저 보여드려요."
+      ]
+     },
+     {
+      "h": "대부분은 192kbps면 충분해요",
+      "p": [
+       "강의나 녹음처럼 말소리 위주라면 128kbps로도 충분하고, 음악은 기본값인 192kbps를 권해요. 320kbps는 MP3 규격이 허용하는 가장 높은 비트레이트예요.",
+       "아이폰에서 바로 들을 거라면 M4A(AAC)도 좋아요. WAV는 압축하지 않은 형식이라 1분에 약 10.6MB까지 커지니, 편집 프로그램에 넣을 때만 고르세요."
+      ]
+     },
+     {
+      "h": "원본 영상보다 음질이 좋아지지는 않아요",
+      "p": [
+       "영상 속 소리는 이미 한 번 압축된 상태예요. 320kbps로 바꿔도 원래 없던 소리가 살아나지는 않고, 지금 음질을 최대한 지킬 뿐이에요.",
+       "필요한 부분만 쓰려면 타임라인에서 시작과 끝을 잘라 주세요. 짧을수록 파일도 작고 변환도 빨라요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "유튜브 링크를 넣어서 MP3로 받을 수 있나요?",
+      "a": "아니요. 이 도구는 내 기기에 이미 있는 파일만 변환해요. 유튜브 약관은 유튜브가 직접 제공하는 방법(예: 유튜브 프리미엄 오프라인 저장) 말고는 다운로드를 허용하지 않아서 링크 다운로드 기능은 만들지 않았어요."
+     },
+     {
+      "q": "갤럭시나 아이폰에서도 되나요?",
+      "a": "최신 크롬, 엣지, 사파리, 파이어폭스라면 휴대폰에서도 돼요. 다만 휴대폰은 메모리가 적어서 아주 긴 영상은 실패할 수 있으니, 그럴 땐 구간을 잘라서 변환해 보세요."
+     },
+     {
+      "q": "카카오톡으로 받은 동영상도 되나요?",
+      "a": "기기에 저장된 동영상 파일이면 돼요. 대화방에서 동영상을 먼저 저장한 뒤 그 파일을 선택하세요."
+     },
+     {
+      "q": "영상이 서버에 남지 않나요?",
+      "a": "애초에 올라가지 않아요. 파일은 브라우저가 내 기기에서 바로 읽고, 결과도 내 기기에 바로 저장돼요."
+     }
+    ],
+    "short": "영상 속 소리만 MP3·M4A·WAV로"
+   }
+  },
+  "audio-converter": {
+   "en": {
+    "name": "Audio Converter",
+    "h1": "Audio Converter: MP3, WAV, M4A, FLAC, OGG",
+    "title": "Audio Converter – MP3, WAV, M4A, FLAC, OGG Free",
+    "desc": "Convert between MP3, WAV, M4A (AAC), OGG (Opus) and FLAC and pick the bitrate for lossy formats. Files are converted inside your browser and never uploaded.",
+    "lead": "Change an audio file's format and bitrate without sending it anywhere. The work happens in this browser tab.",
+    "about": [
+     {
+      "h": "Lossless to lossy is a one-way trip",
+      "p": [
+       "WAV and FLAC are lossless: FLAC is compressed, but it decodes back to exactly the same audio. MP3, AAC (M4A) and Opus are lossy and discard detail the ear is less likely to notice.",
+       "Going from FLAC or WAV to MP3 saves a lot of space. Going from MP3 to FLAC or WAV makes the file several times bigger without restoring anything MP3 removed."
+      ]
+     },
+     {
+      "h": "Choose the output by where it will play",
+      "p": [
+       "MP3 plays almost everywhere, including car stereos and older players. M4A (AAC) is the native format on iPhone and Mac. OGG with the Opus codec handles speech and music well at low bitrates, but some older devices can't play it.",
+       "The list only shows formats your browser can encode, so the options can differ between browsers."
+      ]
+     },
+     {
+      "h": "Worked example: what a bitrate change saves",
+      "p": [
+       "A 4-minute song at 320 kbps is 320 × 240 ÷ 8 = 9,600 kB (9.6 MB); at 128 kbps it is 3,840 kB (3.84 MB).",
+       "The same song as uncompressed CD-quality WAV (44.1 kHz, 16-bit stereo = 1,411.2 kbps) is about 42.3 MB. As FLAC it gets smaller, since lossless compression can cut the size by up to 40–50%, but it stays far larger than MP3."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does converting MP3 to WAV improve quality?",
+      "a": "No. The WAV holds the decoded MP3 exactly as it sounds now. It's useful when an editor or device requires WAV, not for better sound."
+     },
+     {
+      "q": "Why is FLAC or OGG missing from the output list?",
+      "a": "Formats your browser can't encode are hidden. Try another up-to-date browser, or pick a different format."
+     },
+     {
+      "q": "What bitrate should I use for a podcast or voice memo?",
+      "a": "Speech sounds fine at 128 kbps MP3, and Opus stays clear at even lower bitrates. Music benefits from 192 kbps or more."
+     }
+    ],
+    "short": "MP3, M4A, WAV, OGG, FLAC and bitrate"
+   },
+   "ko": {
+    "name": "오디오 변환",
+    "h1": "오디오 파일 변환기",
+    "title": "오디오 변환 – MP3 WAV FLAC M4A 무료",
+    "desc": "MP3, WAV, M4A, OGG, FLAC를 서로 바꾸고 비트레이트도 고를 수 있어요. 파일을 올리지 않고 브라우저에서 바로 변환해요.",
+    "lead": "음악이나 녹음 파일의 형식을 바꿔요. 변환은 이 브라우저 탭 안에서 끝나요.",
+    "about": [
+     {
+      "h": "무손실에서 손실 형식으로 가면 되돌릴 수 없어요",
+      "p": [
+       "WAV와 FLAC는 무손실 형식이에요. FLAC는 용량을 줄였지만 풀면 원본과 똑같은 소리가 나와요. MP3·AAC(M4A)·Opus는 귀에 잘 안 들리는 부분을 버려서 용량을 줄이는 손실 형식이에요.",
+       "그래서 FLAC를 MP3로 바꾸면 용량이 크게 줄지만, MP3를 FLAC나 WAV로 바꾸면 용량만 커지고 음질은 그대로예요."
+      ]
+     },
+     {
+      "h": "듣는 기기에 맞춰 고르세요",
+      "p": [
+       "차량 오디오나 오래된 기기까지 생각하면 MP3가 가장 무난해요. 아이폰·맥에서는 M4A(AAC)가 기본 형식이고, 강의 녹음처럼 말소리 위주라면 낮은 비트레이트에서도 깨끗한 OGG(Opus)가 효율적이에요.",
+       "목록에는 지금 쓰는 브라우저가 만들 수 있는 형식만 보여요. 그래서 브라우저마다 고를 수 있는 형식이 다를 수 있어요."
+      ]
+     },
+     {
+      "h": "비트레이트에 따라 용량이 이만큼 달라져요",
+      "p": [
+       "4분짜리 곡을 320kbps MP3로 만들면 320 × 240 ÷ 8 = 9,600kB(약 9.6MB), 128kbps면 3,840kB(약 3.8MB)예요.",
+       "같은 곡을 CD 음질 WAV(1,411.2kbps)로 저장하면 약 42.3MB가 돼요. FLAC는 이보다 최대 40~50%까지 작아질 수 있지만, 그래도 MP3보다는 훨씬 커요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "MP3를 WAV로 바꾸면 음질이 좋아지나요?",
+      "a": "아니요. WAV에는 지금 MP3 소리가 그대로 담길 뿐이에요. 편집 프로그램이나 기기가 WAV만 받을 때 쓰는 변환이에요."
+     },
+     {
+      "q": "출력 목록에 FLAC나 OGG가 안 보여요.",
+      "a": "브라우저가 만들 수 없는 형식은 숨겨져요. 다른 최신 브라우저에서 열어 보거나 다른 형식을 고르세요."
+     },
+     {
+      "q": "아이폰 음성 메모를 MP3로 바꿀 수 있나요?",
+      "a": "음성 메모를 '파일' 앱에 저장한 뒤 그 파일을 선택하면 돼요. 말소리라면 128kbps MP3로도 충분해요."
+     }
+    ],
+    "short": "MP3·M4A·WAV·OGG·FLAC, 음질 고르기"
+   }
+  },
+  "cut-audio": {
+   "en": {
+    "name": "Audio Cutter",
+    "h1": "Audio Cutter: Trim Songs and Make Ringtones",
+    "title": "Audio Cutter – Trim MP3, Make a Ringtone, Free",
+    "desc": "Select a start and end on the waveform, add an optional 1- or 3-second fade, and save the clip as MP3, M4A or WAV. Your audio stays on your device.",
+    "lead": "Trim a song or recording on its waveform and add a fade. Nothing is uploaded.",
+    "about": [
+     {
+      "h": "A short fade makes a clip sound finished",
+      "p": [
+       "Cutting in the middle of a sound leaves an abrupt start or a click at the end. A 1-second fade-in or fade-out softens that, and 3 seconds suits music that should trail off.",
+       "The clip is saved as a new file, so your original stays untouched."
+      ]
+     },
+     {
+      "h": "Ringtones: Galaxy takes the file directly, iPhone goes through GarageBand",
+      "p": [
+       "On Samsung Galaxy phones, open Settings › Sounds and vibration › Ringtone, tap Add and choose the music file saved on the phone.",
+       "On iPhone, Apple's instructions use the GarageBand app to turn an audio file into a ringtone, and Apple says ringtones can be up to 30 seconds long. Cutting the clip to 30 seconds or less here means GarageBand won't shorten it for you."
+      ]
+     },
+     {
+      "h": "A 30-second clip is small",
+      "p": [
+       "A 30-second clip at 192 kbps MP3 is 192 × 30 ÷ 8 = 720 kB. The same clip as WAV (44.1 kHz, 16-bit stereo) is about 5.3 MB, so WAV is only worth it if another app needs uncompressed audio."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does cutting lower the quality?",
+      "a": "Saving as MP3 or M4A re-encodes the clip, which is one more lossy step. Saving as WAV avoids that, at the cost of a much larger file."
+     },
+     {
+      "q": "Why can't I use a song from a streaming app?",
+      "a": "Copy-protected (DRM) files can't be opened here. Apple and Samsung also note that protected files can't be set as ringtones."
+     },
+     {
+      "q": "Can I cut the sound from a video?",
+      "a": "Use Video to MP3, which has its own trim range, then bring the result here if you want fades."
+     }
+    ],
+    "short": "Trim on the waveform, add a fade"
+   },
+   "ko": {
+    "name": "오디오 자르기",
+    "h1": "MP3 자르기 · 벨소리 만들기",
+    "title": "MP3 자르기 – 벨소리 만들기, 업로드 없음",
+    "desc": "파형에서 시작과 끝을 골라 원하는 부분만 MP3·M4A·WAV로 저장해요. 페이드 인·아웃도 넣을 수 있고, 파일은 기기 밖으로 나가지 않아요.",
+    "lead": "노래나 녹음에서 필요한 구간만 잘라요. 업로드 없이 브라우저에서 처리해요.",
+    "about": [
+     {
+      "h": "갤럭시는 바로, 아이폰은 개러지밴드를 거쳐요",
+      "p": [
+       "갤럭시는 설정 › 소리 및 진동 › 벨소리에서 오른쪽 위 추가(+) 버튼을 누르고, 휴대폰에 저장한 음악 파일을 고르면 바로 벨소리가 돼요.",
+       "아이폰은 애플 안내대로 GarageBand(개러지밴드) 앱에서 오디오 파일을 벨소리로 만들어야 해요. 애플은 벨소리를 최대 30초로 안내하니, 여기서 30초 이하로 잘라 가면 원하는 부분이 잘려 나가지 않아요."
+      ]
+     },
+     {
+      "h": "페이드를 넣으면 뚝 끊기는 느낌이 사라져요",
+      "p": [
+       "노래 중간을 자르면 시작이 툭 튀어나오거나 끝이 뚝 끊겨요. 1초 페이드면 자연스러워지고, 노래가 서서히 사라지게 하려면 3초가 좋아요.",
+       "원본 파일은 그대로 두고, 잘라낸 부분만 새 파일로 저장해요."
+      ]
+     },
+     {
+      "h": "30초 벨소리는 1MB도 안 돼요",
+      "p": [
+       "192kbps MP3로 30초를 저장하면 192 × 30 ÷ 8 = 720kB예요. 같은 길이를 WAV로 저장하면 약 5.3MB라서, 편집용이 아니라면 MP3나 M4A가 나아요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "자르면 음질이 떨어지나요?",
+      "a": "MP3나 M4A로 저장하면 한 번 더 압축하는 셈이라 아주 조금 손실이 생겨요. WAV로 저장하면 그런 손실은 없지만 용량이 훨씬 커요."
+     },
+     {
+      "q": "스트리밍 앱에서 저장한 곡도 자를 수 있나요?",
+      "a": "저작권 보호(DRM)가 걸린 파일은 열 수 없어요. 애플과 삼성도 보호된 파일은 벨소리로 쓸 수 없다고 안내해요."
+     },
+     {
+      "q": "동영상 속 소리를 잘라 벨소리로 쓰고 싶어요.",
+      "a": "먼저 '동영상 MP3 변환'에서 구간을 정해 MP3로 뽑은 뒤, 여기서 페이드를 넣어 다듬으면 돼요."
+     }
+    ],
+    "short": "파형 보며 자르고 페이드 넣기"
+   }
+  },
+  "video-converter": {
+   "en": {
+    "name": "Video Converter",
+    "h1": "Video Converter: MOV, MKV, WebM to MP4",
+    "title": "Video Converter – MOV to MP4, MKV to MP4, WebM",
+    "desc": "Change a video's container to MP4, WebM or MOV. When the codecs already fit, the streams are copied without re-encoding, so it's quick and lossless.",
+    "lead": "Switch MOV, MKV, WebM or TS videos to MP4 (or WebM/MOV) in your browser, with no upload and often no re-encoding.",
+    "about": [
+     {
+      "h": "A container is the box; the codec is what's inside",
+      "p": [
+       "MP4, MOV, MKV and WebM are containers: they hold a video stream, audio streams and timing information. The codec (H.264, HEVC, VP9, AV1, AAC, Opus and so on) is how each stream is compressed.",
+       "The MP4 format is derived from Apple's QuickTime (MOV) format, which is why the two often carry the same H.264 or HEVC video and AAC audio."
+      ]
+     },
+     {
+      "h": "If the codecs fit, it's a copy, not a conversion",
+      "p": [
+       "When the new container allows the existing codecs, the streams are copied as they are. That is near-instant and the picture is unchanged; many iPhone MOV files become MP4 this way.",
+       "When they don't fit, the video is re-encoded. WebM, for example, only allows VP8, VP9 or AV1 video with Vorbis or Opus audio, so turning an H.264 MP4 into WebM means a slower, lossy encode."
+      ]
+     },
+     {
+      "h": "What your device can decode matters",
+      "p": [
+       "Re-encoding uses the browser's WebCodecs, which can use the device's hardware. HEVC (H.265) decoding depends on the device's hardware and operating system, so an iPhone HEVC video may convert on one computer and not on another.",
+       "Long, high-resolution videos need a lot of memory, and phones can fail where a computer succeeds."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why is MP4 the default?",
+      "a": "MP4 with H.264 video and AAC audio is accepted by almost every phone, TV, editing app and website, so it's the safest target."
+     },
+     {
+      "q": "Will MOV to MP4 lower the quality?",
+      "a": "Not when the streams can be copied, which is the usual case for iPhone videos. If re-encoding is needed, there is some loss, as with any lossy encode."
+     },
+     {
+      "q": "Will the file get smaller?",
+      "a": "A stream copy keeps the size about the same. To shrink a video, use Compress video."
+     }
+    ],
+    "short": "MOV, MKV, WebM to MP4 and back"
+   },
+   "ko": {
+    "name": "동영상 변환",
+    "h1": "동영상 변환기 (MOV·MKV → MP4)",
+    "title": "MOV MP4 변환 – 동영상 변환기, 무료",
+    "desc": "MOV, MKV, WebM, TS 영상을 MP4·WebM·MOV로 바꿔요. 코덱이 맞으면 다시 인코딩하지 않고 그대로 옮겨 담아서 빠르고 화질도 그대로예요.",
+    "lead": "아이폰 MOV나 MKV 영상을 MP4로 바꿔요. 업로드 없이, 가능하면 재인코딩도 없이요.",
+    "about": [
+     {
+      "h": "컨테이너는 상자, 코덱은 내용물이에요",
+      "p": [
+       "MP4·MOV·MKV·WebM은 영상과 소리를 담는 상자(컨테이너)예요. 그 안의 H.264, HEVC, AAC 같은 코덱이 실제로 영상과 소리를 압축하는 방식이에요.",
+       "MP4는 애플의 QuickTime(MOV) 형식에서 나온 형식이라, 둘은 같은 코덱을 담고 있는 경우가 많아요."
+      ]
+     },
+     {
+      "h": "코덱이 맞으면 '복사'라서 금방 끝나요",
+      "p": [
+       "새 상자에 기존 코덱을 그대로 담을 수 있으면 다시 압축하지 않고 옮기기만 해요. 화질이 그대로고 거의 바로 끝나요. 아이폰 MOV를 MP4로 바꿀 때 대부분 이렇게 처리돼요.",
+       "WebM처럼 담을 수 있는 코덱이 정해진 형식(영상 VP8·VP9·AV1, 소리 Vorbis·Opus)으로 바꿀 때는 다시 인코딩해야 해서 시간이 걸리고 화질이 조금 떨어져요."
+      ]
+     },
+     {
+      "h": "윈도우에서 아이폰 영상이 안 열린다면 코덱 문제예요",
+      "p": [
+       "아이폰은 기본 설정에서 HEVC(H.265)로 촬영해요. 마이크로소프트는 윈도우 사진 앱에서 HEVC를 보려면 스토어의 'HEVC 비디오 확장'(유료)이 필요하다고 안내해요.",
+       "MP4로 상자만 바꾸면 코덱은 HEVC 그대로라서 이 문제는 남을 수 있어요. 또 HEVC를 읽을 수 있는지는 기기 하드웨어와 운영체제에 따라 달라요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "MOV를 MP4로 바꾸면 화질이 떨어지나요?",
+      "a": "스트림을 그대로 복사할 수 있으면 화질은 전혀 바뀌지 않아요. 아이폰 영상은 대부분 이 경우예요. 다시 인코딩해야 할 때만 약간 손실이 생겨요."
+     },
+     {
+      "q": "용량도 줄어드나요?",
+      "a": "복사 방식이면 용량은 거의 같아요. 용량을 줄이려면 '동영상 용량 줄이기'를 쓰세요."
+     },
+     {
+      "q": "휴대폰에서도 변환할 수 있나요?",
+      "a": "최신 브라우저라면 돼요. 다만 영상 전체를 메모리에서 처리하기 때문에 길고 화질이 높은 영상은 컴퓨터에서 하는 편이 안전해요."
+     }
+    ],
+    "short": "MOV·MKV·WebM을 MP4로, 거꾸로도"
+   }
+  },
+  "cut-video": {
+   "en": {
+    "name": "Video Cutter",
+    "h1": "Video Cutter: Trim MP4 Without Re-encoding",
+    "title": "Video Cutter – Trim MP4, MOV, WebM, No Upload",
+    "desc": "Set the start and end of a video on a preview timeline. Fast mode cuts without re-encoding; Exact cut re-encodes so the clip starts on the frame you chose.",
+    "lead": "Trim a video to the part you want, with a live preview, entirely on your device.",
+    "about": [
+     {
+      "h": "Fast mode cuts on keyframes, so it may start a bit early",
+      "p": [
+       "Compressed video stores a complete picture (a keyframe) every so often and only the changes in between. Fast mode copies the streams without re-encoding, so the clip has to begin on a keyframe and may start slightly before the point you picked.",
+       "Because nothing is re-encoded, fast mode keeps the original quality and finishes quickly even for long videos."
+      ]
+     },
+     {
+      "h": "Exact cut re-encodes for a precise start",
+      "p": [
+       "Exact cut decodes and re-encodes the video, so it can start on any frame. It's slower and, like any lossy encode, changes the picture slightly.",
+       "Use it when the first frame matters, such as a clip for a presentation or a moment that starts right after a scene change."
+      ]
+     },
+     {
+      "h": "The trimmed file is roughly proportional to its length",
+      "p": [
+       "With a stream copy, size follows duration: keeping 30 seconds of a 5-minute video gives a file around one-tenth the size, give or take where the keyframes fall and how the bitrate varies across the video."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why does my clip start a little before where I set it?",
+      "a": "That's fast mode snapping to the nearest keyframe. Switch to Exact cut if you need the precise frame."
+     },
+     {
+      "q": "Can I remove a section from the middle?",
+      "a": "Not yet. The cutter keeps one continuous range between the start and end you set."
+     },
+     {
+      "q": "Do iPhone videos work?",
+      "a": "Yes, as long as your browser can decode them. HEVC (H.265) support depends on the device's hardware and operating system."
+     }
+    ],
+    "short": "Keep only the part you want"
+   },
+   "ko": {
+    "name": "동영상 자르기",
+    "h1": "동영상 자르기 (구간 편집)",
+    "title": "동영상 자르기 – MP4 구간 자르기, 무료",
+    "desc": "미리보기를 보면서 시작과 끝을 정해 영상을 잘라요. 빠른 모드는 재인코딩 없이 원본 화질 그대로, 정확히 자르기는 고른 프레임에서 바로 잘라요.",
+    "lead": "영상에서 필요한 구간만 남겨요. 미리보기를 보면서 내 기기 안에서 잘라요.",
+    "about": [
+     {
+      "h": "빠른 모드는 키프레임에서 잘려요",
+      "p": [
+       "압축된 영상은 몇 초마다 화면 전체를 저장한 프레임(키프레임)을 두고, 그 사이에는 바뀐 부분만 저장해요. 빠른 모드는 다시 인코딩하지 않으니 키프레임에서만 시작할 수 있어서, 고른 위치보다 조금 앞에서 시작될 수 있어요.",
+       "대신 화질이 원본 그대로고, 긴 영상도 금방 끝나요."
+      ]
+     },
+     {
+      "h": "정확히 자르기는 다시 인코딩해요",
+      "p": [
+       "정확히 자르기는 영상을 풀었다가 다시 압축해서 원하는 프레임에서 바로 시작해요. 시간이 더 걸리고 화질이 아주 조금 바뀌어요.",
+       "발표용 클립처럼 첫 장면이 중요할 때 쓰세요."
+      ]
+     },
+     {
+      "h": "남긴 길이만큼 용량이 줄어요",
+      "p": [
+       "빠른 모드로 5분짜리 영상에서 30초만 남기면 용량도 대략 10분의 1 정도가 돼요. 키프레임 위치나 장면마다 다른 비트레이트 때문에 조금씩 차이는 있어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "고른 지점보다 조금 앞에서 시작돼요.",
+      "a": "빠른 모드가 가장 가까운 키프레임에 맞춰 자르기 때문이에요. 정확한 프레임이 필요하면 '정확히 자르기'를 고르세요."
+     },
+     {
+      "q": "중간 부분만 빼고 앞뒤를 이어 붙일 수 있나요?",
+      "a": "아직은 안 돼요. 시작과 끝 사이의 한 구간만 남길 수 있어요."
+     },
+     {
+      "q": "잘랐는데도 카카오톡으로 보내기엔 커요.",
+      "a": "'동영상 용량 줄이기'에서 720p 같은 낮은 해상도를 고르면 크게 줄어요."
+     }
+    ],
+    "short": "원하는 부분만 남기기"
+   }
+  },
+  "compress-video": {
+   "en": {
+    "name": "Compress Video",
+    "h1": "Compress Video: Reduce MP4 File Size",
+    "title": "Compress Video – Reduce MP4 Size Without Upload",
+    "desc": "Shrink a video with three presets and an optional maximum resolution (1080p, 720p, 480p). See the original and new size side by side; output is MP4.",
+    "lead": "Make a video small enough for email or messaging, compressed on your own device.",
+    "about": [
+     {
+      "h": "File size is bitrate × length",
+      "p": [
+       "A video's size is roughly its total bitrate (video plus audio) times its duration. At 5 Mbps, one minute is 5,000 × 60 ÷ 8 = 37,500 kB, about 37.5 MB; at 2 Mbps the same minute is 15 MB.",
+       "Compression lowers that bitrate. The presets set how far to go: Smaller file, Balanced or Better quality."
+      ]
+     },
+     {
+      "h": "Lowering the resolution is the biggest lever",
+      "p": [
+       "A 1080p frame has 1920 × 1080 ≈ 2.07 million pixels; 720p has 1280 × 720 ≈ 0.92 million, less than half. Fewer pixels need fewer bits for the same sharpness, so 720p with Balanced often looks better than a 1080p video squeezed hard.",
+       "The resolution setting is a maximum: a video that is already 720p isn't enlarged by a 1080p limit."
+      ]
+     },
+     {
+      "h": "What compression can't do",
+      "p": [
+       "Every pass is lossy, and fine detail, grain and fast motion degrade first. Compress from the original, not from a copy that was already compressed.",
+       "Results depend on the content: a mostly static screen recording shrinks far more than handheld footage with lots of movement."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "How small will my video get?",
+      "a": "It depends on the footage and settings. The page shows the original and new size after compressing, so you can try another preset if it isn't small enough."
+     },
+     {
+      "q": "Which settings for watching on a phone?",
+      "a": "Start with Balanced at 720p. If the result is still too large, choose Smaller file or 480p."
+     },
+     {
+      "q": "Can I compress a 4K video on my phone?",
+      "a": "Maybe not. Everything runs in the device's memory, and long 4K videos can exceed what a phone browser allows. A computer handles them more reliably."
+     }
+    ],
+    "short": "Shrink a video for email or chat"
+   },
+   "ko": {
+    "name": "동영상 용량 줄이기",
+    "h1": "동영상 용량 줄이기 (압축)",
+    "title": "동영상 용량 줄이기 – 업로드 없는 압축",
+    "desc": "프리셋 세 가지와 최대 해상도(1080p·720p·480p)로 영상 용량을 줄여요. 압축 뒤 원본과 결과 크기를 나란히 보여 주고 MP4로 저장해요.",
+    "lead": "카카오톡이나 메일로 보내기엔 너무 큰 영상을 기기 안에서 줄여요.",
+    "about": [
+     {
+      "h": "용량은 비트레이트 × 길이로 정해져요",
+      "p": [
+       "영상 용량은 대략 비트레이트(1초에 쓰는 데이터 양) × 재생 시간이에요. 5Mbps 영상 1분은 5,000 × 60 ÷ 8 = 37,500kB, 약 37.5MB이고, 2Mbps로 낮추면 같은 1분이 15MB가 돼요.",
+       "압축은 이 비트레이트를 낮추는 일이에요. '더 작게', '균형', '화질 우선' 프리셋으로 얼마나 낮출지 고르면 돼요."
+      ]
+     },
+     {
+      "h": "해상도를 낮추는 게 가장 효과가 커요",
+      "p": [
+       "1080p 화면은 1920 × 1080, 약 207만 화소이고 720p는 1280 × 720, 약 92만 화소로 절반도 안 돼요. 화소가 적으면 같은 선명도에 필요한 데이터도 줄어서, 휴대폰으로 볼 영상이면 720p로 낮추는 편이 1080p를 억지로 누르는 것보다 보기 좋은 경우가 많아요.",
+       "해상도 설정은 '최대값'이라서, 이미 720p인 영상을 1080p로 키우지는 않아요."
+      ]
+     },
+     {
+      "h": "압축으로 안 되는 것도 있어요",
+      "p": [
+       "압축할 때마다 화질이 조금씩 깎여요. 이미 압축한 영상을 또 압축하기보다 원본에서 한 번에 줄이는 게 좋아요.",
+       "화면 녹화처럼 움직임이 적은 영상은 많이 줄고, 손으로 들고 찍은 움직임 많은 영상은 덜 줄어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "얼마나 줄어드나요?",
+      "a": "영상 내용과 설정에 따라 달라요. 압축 뒤 원본과 새 파일 크기를 보여 드리니, 부족하면 다른 프리셋으로 다시 해 보세요."
+     },
+     {
+      "q": "카카오톡으로 보낼 땐 어떤 설정이 좋아요?",
+      "a": "휴대폰으로 볼 영상이면 720p와 '균형'부터 해 보세요. 그래도 크면 '더 작게'나 480p를 고르면 돼요."
+     },
+     {
+      "q": "4K 영상도 휴대폰에서 압축되나요?",
+      "a": "실패할 수 있어요. 모든 처리가 기기 메모리 안에서 이뤄지니 긴 4K 영상은 컴퓨터에서 하는 편이 안정적이에요."
+     }
+    ],
+    "short": "메일·메신저로 보낼 만큼 작게"
+   }
+  },
+  "video-to-gif": {
+   "en": {
+    "name": "Video to GIF",
+    "h1": "Video to GIF Converter",
+    "title": "Video to GIF – MP4 to GIF Maker, No Upload",
+    "desc": "Turn a few seconds of video into an animated GIF at 10, 15 or 20 fps and 320, 480 or 640 px wide. Made in your browser, with no watermark.",
+    "lead": "Make a GIF from a short part of a video without uploading the clip.",
+    "about": [
+     {
+      "h": "GIF is limited to 256 colors per frame",
+      "p": [
+       "The GIF format stores each frame with a color table of at most 256 colors. Gradients, skies and skin tones show banding or dithering (a dot pattern that fakes in-between colors), while flat graphics and screen recordings look clean.",
+       "GIF transparency is all-or-nothing, and a GIF has no sound."
+      ]
+     },
+     {
+      "h": "A GIF is much bigger than the video it came from",
+      "p": [
+       "Modern video codecs predict motion between frames; GIF doesn't, so the same few seconds usually take far more space as a GIF than as an MP4.",
+       "Frames add up fast: 10 seconds at 15 fps is 150 full images. Keep clips to 15 seconds or less and start at 480 px wide."
+      ]
+     },
+     {
+      "h": "How frame rate and width affect the result",
+      "p": [
+       "GIF stores each frame's delay in hundredths of a second, so 10 fps (10/100 s) and 20 fps (5/100 s) are exact, while 15 fps (6.67/100 s) can only be approximated.",
+       "Going from 320 to 640 px wide means four times as many pixels per frame, and the file grows roughly in step."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why is my GIF so large?",
+      "a": "Shorten the range, lower the frame rate to 10 fps, or choose 320 px. Each of these cuts the number of pixels the GIF has to store."
+     },
+     {
+      "q": "Can the GIF have sound?",
+      "a": "No. The GIF format has no audio track. Share a short MP4 if sound matters."
+     },
+     {
+      "q": "When is MP4 a better choice than GIF?",
+      "a": "Wherever video is accepted: a short MP4 looks better and is smaller. GIF remains the safe option where only images are allowed."
+     }
+    ],
+    "short": "Turn a short clip into a GIF"
+   },
+   "ko": {
+    "name": "동영상 GIF 변환",
+    "h1": "동영상으로 GIF(움짤) 만들기",
+    "title": "동영상 GIF 만들기 – MP4 GIF 변환 무료",
+    "desc": "영상의 몇 초를 골라 움짤(GIF)로 만들어요. 초당 10·15·20프레임, 가로 320·480·640px 중에서 고르고 워터마크 없이 저장해요.",
+    "lead": "영상 몇 초로 움짤을 만들어요. 영상은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "GIF는 한 장면에 256색까지만 써요",
+      "p": [
+       "GIF 규격은 프레임마다 최대 256가지 색만 담을 수 있어요. 하늘이나 피부처럼 색이 부드럽게 바뀌는 부분은 계단처럼 끊기거나 점무늬(디더링)가 생기고, 단색 그래픽이나 화면 녹화는 깔끔하게 나와요.",
+       "투명도는 '있음/없음'만 되고, 소리는 담을 수 없어요."
+      ]
+     },
+     {
+      "h": "움짤은 원본 영상보다 훨씬 커요",
+      "p": [
+       "요즘 영상 코덱은 앞뒤 장면의 움직임을 예측해서 용량을 아끼지만 GIF는 그렇지 않아요. 그래서 같은 몇 초라도 MP4보다 GIF가 훨씬 무거운 경우가 많아요.",
+       "10초를 15fps로 만들면 이미지 150장이 들어가요. 15초 이하, 가로 480px부터 시작해 보세요."
+      ]
+     },
+     {
+      "h": "프레임 수와 가로 크기 고르는 법",
+      "p": [
+       "GIF는 프레임 간격을 100분의 1초 단위로 저장해요. 그래서 10fps(0.10초)와 20fps(0.05초)는 정확하지만, 15fps(0.0667초)는 근사값으로만 들어가요.",
+       "가로를 320px에서 640px로 늘리면 프레임마다 화소가 4배가 되고, 용량도 비슷하게 늘어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "움짤 용량이 너무 커요.",
+      "a": "구간을 줄이거나, 10fps나 320px로 낮춰 보세요. 셋 다 GIF가 담아야 할 화소 수를 줄여 줘요."
+     },
+     {
+      "q": "소리도 넣을 수 있나요?",
+      "a": "GIF 형식에는 소리가 없어요. 소리가 필요하면 짧은 MP4로 공유하세요."
+     },
+     {
+      "q": "색이 뭉개져 보여요.",
+      "a": "256색 제한 때문이에요. 색 변화가 적은 장면을 고르면 훨씬 깔끔해져요."
+     }
+    ],
+    "short": "짧은 장면을 GIF로"
+   }
+  },
+  "image-converter": {
+   "en": {
+    "name": "Image Converter",
+    "h1": "Image Converter: JPG, PNG, WebP, AVIF",
+    "title": "Image Converter – PNG to JPG, WebP to JPG, Batch",
+    "desc": "Convert JPG, PNG, WebP, GIF, BMP, AVIF and SVG images to JPG, PNG, WebP or AVIF, one file or a whole batch, downloaded singly or as a ZIP.",
+    "lead": "Convert many images at once between JPG, PNG and WebP, processed locally in your browser.",
+    "about": [
+     {
+      "h": "Pick the format by what's in the picture",
+      "p": [
+       "JPG is lossy and suits photos, but it has no transparency. PNG is lossless and keeps transparency, which suits screenshots, logos and text.",
+       "WebP and AVIF support both transparency and lossy compression; MDN puts lossy WebP at 25–35% smaller than JPEG and AVIF at about 50% smaller. AVIF output only appears if your browser can encode it."
+      ]
+     },
+     {
+      "h": "What changes in the conversion",
+      "p": [
+       "Transparent areas become white when saved as JPG, because JPG can't store transparency. An animated GIF is converted from its first frame only.",
+       "Re-encoding removes EXIF metadata, including camera model, date and GPS location. That's useful before posting a photo publicly; keep the original if you need that data."
+      ]
+     },
+     {
+      "h": "Converting can't add quality",
+      "p": [
+       "Turning a JPG into PNG makes a bigger file but doesn't undo the JPG's compression. Converting a PNG screenshot to JPG makes it smaller but can blur sharp text edges.",
+       "BMP files are uncompressed, so converting them to PNG (lossless) shrinks them with no change to the picture."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I convert SVG to PNG or JPG?",
+      "a": "Yes, if your browser can open the SVG. The result is a fixed-size pixel image, so it won't stay sharp when enlarged the way the SVG did."
+     },
+     {
+      "q": "How many images can I convert at once?",
+      "a": "There's no set limit; it depends on your device's memory. Download the results one by one or as a single ZIP."
+     },
+     {
+      "q": "Why is AVIF not in the output list?",
+      "a": "AVIF appears only when your browser can encode it. You can still convert AVIF files to JPG or PNG."
+     }
+    ],
+    "short": "JPG, PNG, WebP, many at once"
+   },
+   "ko": {
+    "name": "이미지 변환",
+    "h1": "이미지 변환기 (JPG·PNG·WebP)",
+    "title": "이미지 변환 – PNG JPG WebP 일괄 변환",
+    "desc": "JPG, PNG, WebP, GIF, BMP, AVIF, SVG 이미지를 JPG·PNG·WebP·AVIF로 바꿔요. 여러 장을 한 번에 변환해 하나씩 또는 ZIP으로 받을 수 있어요.",
+    "lead": "여러 장의 이미지를 한 번에 JPG·PNG·WebP로 바꿔요. 사진은 브라우저 밖으로 나가지 않아요.",
+    "about": [
+     {
+      "h": "웹에서 저장한 WebP가 안 열리면 JPG로 바꾸세요",
+      "p": [
+       "웹사이트에서 저장한 사진이 .webp라서 다른 프로그램이나 업로드 창에서 안 받아 주는 경우가 있어요. JPG로 바꾸면 거의 모든 곳에서 열려요.",
+       "반대로 내 사이트나 블로그에 올릴 이미지라면 WebP가 좋아요. MDN 자료로는 손실 WebP가 JPEG보다 25~35%, AVIF는 약 50% 작아요."
+      ]
+     },
+     {
+      "h": "변환할 때 바뀌는 것",
+      "p": [
+       "JPG는 투명도를 저장할 수 없어서 투명한 부분이 흰색으로 바뀌어요. 투명 배경을 지키려면 PNG나 WebP를 고르세요. 움직이는 GIF는 첫 장면만 변환돼요.",
+       "다시 인코딩하면 촬영 날짜, 기종, GPS 위치 같은 EXIF 정보가 빠져요. 중고거래나 SNS에 올리기 전에는 오히려 안심이 되지만, 정보가 필요하면 원본을 따로 보관하세요."
+      ]
+     },
+     {
+      "h": "화질이 좋아지는 변환은 없어요",
+      "p": [
+       "JPG를 PNG로 바꾸면 용량만 커지고 JPG 압축 흔적은 그대로예요. 글자가 많은 PNG 캡처를 JPG로 바꾸면 작아지지만 글자 테두리가 번질 수 있어요.",
+       "BMP는 압축이 안 된 형식이라 PNG로 바꾸면 화질 변화 없이 용량이 줄어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "쇼핑몰이나 관공서 사이트가 JPG만 받아요.",
+      "a": "파일을 여기에 넣고 JPG를 고르면 돼요. 용량 제한도 있다면 '이미지 용량 줄이기'에서 품질을 조절하세요."
+     },
+     {
+      "q": "한 번에 몇 장까지 되나요?",
+      "a": "정해진 제한은 없고 기기 메모리에 따라 달라요. 결과는 하나씩 받거나 ZIP 하나로 받을 수 있어요."
+     },
+     {
+      "q": "SVG도 PNG로 바꿀 수 있나요?",
+      "a": "브라우저가 열 수 있는 SVG라면 돼요. 결과는 크기가 고정된 그림이라 SVG처럼 확대해도 선명하지는 않아요."
+     }
+    ],
+    "short": "JPG·PNG·WebP, 여러 장 한 번에"
+   }
+  },
+  "heic-to-jpg": {
+   "en": {
+    "name": "HEIC to JPG",
+    "h1": "HEIC to JPG Converter",
+    "title": "HEIC to JPG Converter – iPhone Photos, No Upload",
+    "desc": "Convert iPhone HEIC/HEIF photos to JPG or PNG in your browser, one at a time or in batches with a ZIP download. Your photos are never uploaded.",
+    "lead": "Turn iPhone HEIC photos into JPGs that open anywhere, without sending them to a server.",
+    "about": [
+     {
+      "h": "iPhones save HEIC because it takes less space",
+      "p": [
+       "Since iOS 11, iPhone 7 and later capture photos in HEIF (saved as .heic) by default. Apple says HEIF compresses better than JPEG, using less storage at the same visual quality.",
+       "The catch is compatibility: on Windows the Photos app needs Microsoft's HEIF Image Extensions to open them, and many upload forms only accept JPG or PNG."
+      ]
+     },
+     {
+      "h": "Converted in your browser, even without HEIC support",
+      "p": [
+       "Safari can decode HEIC itself, so the page uses the browser's own decoder there. Chrome, Edge and Firefox can't, so the page uses libheif compiled to WebAssembly. Either way the photo is processed on your device.",
+       "If a HEIC file contains more than one image, the primary image is converted."
+      ]
+     },
+     {
+      "h": "Expect a bigger file and no location data",
+      "p": [
+       "JPEG compresses less efficiently than HEIF, so the JPG is normally larger than the HEIC it came from; PNG, being lossless, is larger still.",
+       "Metadata such as the capture date and GPS location isn't copied to the new file. That's good for privacy when sharing, but keep the originals if you sort photos by date."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I make my iPhone take JPG photos instead?",
+      "a": "Yes: Settings › Camera › Formats › Most Compatible. New photos are then saved as JPEG (and videos as H.264); photos you already took stay HEIC."
+     },
+     {
+      "q": "Can the iPhone convert to JPG when I copy photos to a PC?",
+      "a": "Apple says media imported from an attached iPhone into Photos, Image Capture or a PC might be converted to JPEG. That happens with Settings › Apps › Photos › Transfer to Mac or PC set to Automatic; Keep Originals turns it off."
+     },
+     {
+      "q": "Does this work for Live Photos?",
+      "a": "The still image of a Live Photo is a HEIC file and converts normally. The motion part is stored as a separate video and isn't included."
+     }
+    ],
+    "short": "iPhone photos that open anywhere"
+   },
+   "ko": {
+    "name": "HEIC JPG 변환",
+    "h1": "HEIC JPG 변환기 (아이폰 사진)",
+    "title": "HEIC JPG 변환 – 아이폰 사진, 업로드 없이",
+    "desc": "아이폰 HEIC 사진을 JPG나 PNG로 바꿔요. 여러 장을 한 번에 변환해 ZIP으로 받을 수 있고, 사진은 서버에 올라가지 않아요.",
+    "lead": "아이폰 사진(HEIC)을 어디서나 열리는 JPG로 바꿔요. 사진은 내 기기 안에서만 처리돼요.",
+    "about": [
+     {
+      "h": "아이폰 사진이 HEIC인 건 용량을 아끼려고예요",
+      "p": [
+       "iOS 11 이후 아이폰 7부터는 사진을 기본으로 HEIF(.heic)로 저장해요. 애플은 HEIF가 JPEG보다 압축률이 높아 같은 화질에 저장 공간을 덜 쓴다고 설명해요.",
+       "문제는 호환성이에요. 윈도우 사진 앱은 'HEIF 이미지 확장'을 설치해야 열리고, 관공서·쇼핑몰·학교 사이트처럼 JPG·PNG만 받는 업로드 창도 많아요."
+      ]
+     },
+     {
+      "h": "HEIC를 못 여는 브라우저에서도 변환돼요",
+      "p": [
+       "사파리는 HEIC를 직접 읽을 수 있어서 브라우저 기능을 그대로 써요. 크롬·엣지·파이어폭스는 못 읽기 때문에 웹어셈블리로 만든 libheif로 풀어요. 어느 쪽이든 사진은 내 기기 안에서 처리돼요.",
+       "HEIC 한 파일에 이미지가 여러 장 들어 있으면 대표 이미지를 변환해요."
+      ]
+     },
+     {
+      "h": "용량은 커지고 위치 정보는 빠져요",
+      "p": [
+       "JPEG는 HEIF보다 압축 효율이 낮아서 변환한 JPG가 원래 HEIC보다 큰 게 정상이에요. PNG는 무손실이라 더 커요.",
+       "촬영 날짜나 GPS 위치 같은 정보는 새 파일에 옮겨지지 않아요. 다른 사람에게 보낼 땐 안심이지만, 날짜순 정리가 필요하면 원본도 보관하세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "아이폰에서 처음부터 JPG로 찍을 수 있나요?",
+      "a": "설정 › 카메라 › 포맷에서 '높은 호환성'을 고르면 돼요. 이후 찍는 사진은 JPEG, 동영상은 H.264로 저장되고, 이미 찍은 사진은 HEIC 그대로예요."
+     },
+     {
+      "q": "PC로 옮길 때 자동으로 JPG가 되게 할 수 있나요?",
+      "a": "설정 › 앱 › 사진의 'Mac 또는 PC로 전송'을 '자동'으로 두면 케이블로 옮길 때 JPEG로 바뀔 수 있어요. '원본 유지'를 고르면 HEIC 그대로 옮겨져요."
+     },
+     {
+      "q": "라이브 포토도 변환되나요?",
+      "a": "라이브 포토의 사진 부분은 HEIC라서 정상적으로 바뀌어요. 움직이는 부분은 별도 동영상이라 포함되지 않아요."
+     }
+    ],
+    "short": "아이폰 사진을 어디서나 열리게"
+   }
+  },
+  "compress-image": {
+   "en": {
+    "name": "Compress Image",
+    "h1": "Compress Images (JPG and WebP)",
+    "title": "Compress Image – Reduce JPG File Size, See KB Live",
+    "desc": "Lower photo file sizes with a quality slider and optional max width, watching the before-and-after size of each image. Output JPG or WebP, in batches with ZIP.",
+    "lead": "Shrink photos for forms, email or the web and watch the size change as you move the slider, all on your device.",
+    "about": [
+     {
+      "h": "Limiting the width cuts size faster than the quality slider",
+      "p": [
+       "File size follows pixel count. A 12-megapixel photo (4032 × 3024) has about 12.2 million pixels; capping the width at 1600 px (1600 × 1200) leaves 1.92 million, less than a sixth.",
+       "If the image will be viewed on a phone or a web page, set a max width first and use the slider for the last few kilobytes."
+      ]
+     },
+     {
+      "h": "Lower quality removes fine detail first",
+      "p": [
+       "Turning quality down blurs fine texture and can add blocky artifacts around edges and text. Watch the live size and the preview together and stop where it still looks right.",
+       "Quality numbers aren't comparable between apps: 80 in one program doesn't mean the same as 80 in another."
+      ]
+     },
+     {
+      "h": "PNG files are converted, not optimized",
+      "p": [
+       "This tool doesn't do lossless PNG optimization. A PNG is saved as JPG or WebP, which saves a lot for photos but can soften text in screenshots.",
+       "JPG can't store transparency, so choose WebP for logos or graphics with transparent backgrounds."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why did the file get bigger?",
+      "a": "That can happen when the original was already heavily compressed. The page shows both sizes, so just keep the original in that case."
+     },
+     {
+      "q": "Is location data removed?",
+      "a": "Yes. Re-encoding in the browser doesn't carry over EXIF data such as GPS location, camera model or capture time."
+     },
+     {
+      "q": "A site wants images under 500 KB. How do I hit that?",
+      "a": "Set a max width such as 1600 px, then lower the quality until the live size drops below 500 KB."
+     }
+    ],
+    "short": "Smaller photos, size shown live"
+   },
+   "ko": {
+    "name": "이미지 용량 줄이기",
+    "h1": "사진 용량 줄이기 (JPG·WebP 압축)",
+    "title": "사진 용량 줄이기 – JPG 압축, KB 바로 확인",
+    "desc": "품질 슬라이더를 움직이면 사진마다 줄어든 용량이 바로 보여요. 최대 가로 크기도 정할 수 있고, JPG·WebP로 여러 장을 한 번에 저장해요.",
+    "lead": "용량 제한이 있는 사이트에 올릴 사진을 줄여요. 슬라이더를 움직이는 동안 크기가 바로 보여요.",
+    "about": [
+     {
+      "h": "'○○KB 이하' 제한은 가로 크기부터 줄이세요",
+      "p": [
+       "용량은 화소 수를 따라가요. 1,200만 화소 사진(4032 × 3024)은 약 1,219만 화소인데, 가로를 1600px(1600 × 1200)로 줄이면 192만 화소로 6분의 1도 안 돼요.",
+       "입사 지원서나 민원 서류처럼 용량 제한이 있는 곳이라면 최대 가로를 먼저 정하고, 마지막 몇 KB는 품질 슬라이더로 맞추세요."
+      ]
+     },
+     {
+      "h": "품질을 낮추면 세밀한 부분부터 사라져요",
+      "p": [
+       "품질을 많이 낮추면 머리카락 같은 결이 뭉개지고 글자 주변에 네모난 얼룩이 생겨요. 실시간 용량과 미리보기를 같이 보면서 괜찮아 보이는 지점에서 멈추세요.",
+       "품질 숫자는 프로그램마다 기준이 달라서, 다른 앱의 80과 여기의 80은 같지 않아요."
+      ]
+     },
+     {
+      "h": "PNG는 최적화가 아니라 변환돼요",
+      "p": [
+       "이 도구는 PNG를 무손실로 줄이는 기능이 없어요. PNG는 JPG나 WebP로 바뀌어서 사진이면 크게 줄지만, 글자 캡처는 조금 흐려질 수 있어요.",
+       "JPG는 투명 배경을 담지 못하니, 투명한 로고나 그래픽은 WebP로 저장하세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "오히려 용량이 커졌어요.",
+      "a": "원본이 이미 많이 압축된 경우 그럴 수 있어요. 원본과 결과 크기를 둘 다 보여 드리니, 그럴 땐 원본을 쓰세요."
+     },
+     {
+      "q": "위치 정보도 지워지나요?",
+      "a": "네. 브라우저에서 다시 저장하면 GPS 위치, 기종, 촬영 시각 같은 EXIF 정보가 옮겨지지 않아요."
+     },
+     {
+      "q": "증명사진을 100KB 이하로 맞춰야 해요.",
+      "a": "최대 가로를 작게(예: 600px) 정한 뒤 품질을 낮추면서 실시간 용량이 100KB 아래로 내려가는지 보면 돼요."
+     }
+    ],
+    "short": "용량 줄이기, 크기 바로 확인"
+   }
+  },
+  "resize-image": {
+   "en": {
+    "name": "Resize Image",
+    "h1": "Resize Images by Pixels or Percent",
+    "title": "Resize Image – Change Pixel Size or Percent, Batch",
+    "desc": "Set a new width and height in pixels with the aspect ratio locked, or scale by percent. JPG, PNG and WebP keep their format; resize a batch and get a ZIP.",
+    "lead": "Change image dimensions for a form, profile or web page, resized locally in your browser.",
+    "about": [
+     {
+      "h": "Keep the ratio locked to avoid stretching",
+      "p": [
+       "With the lock on, changing the width recalculates the height: a 4000 × 3000 photo set to 1200 px wide becomes 1200 × 900.",
+       "With the lock off you can type both values, but the picture is stretched or squashed unless the new ratio matches the old one."
+      ]
+     },
+     {
+      "h": "Shrinking is safe; enlarging adds no detail",
+      "p": [
+       "Scaling down discards pixels and usually looks sharp. Scaling up, say to 200%, fills in new pixels by interpolation, so the image gets bigger but softer, not more detailed."
+      ]
+     },
+     {
+      "h": "You're setting pixels, not print size",
+      "p": [
+       "Print size depends on the resolution you print at: 1200 px printed at 300 DPI is 4 inches (about 10 cm) wide.",
+       "Files keep their format where possible: JPG stays JPG, PNG stays PNG with its transparency, and WebP stays WebP."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does resizing reduce the file size?",
+      "a": "Yes. Fewer pixels means a smaller file. If you need a specific size in KB, use Compress image."
+     },
+     {
+      "q": "Can I resize many images to the same width?",
+      "a": "Yes. Add them all, set the size once, and download them individually or as a ZIP."
+     },
+     {
+      "q": "Can I crop to a square?",
+      "a": "No, this tool only scales. Cropping needs another app."
+     }
+    ],
+    "short": "Exact pixels or a percentage"
+   },
+   "ko": {
+    "name": "이미지 크기 조절",
+    "h1": "이미지 크기 조절 (픽셀·퍼센트)",
+    "title": "이미지 크기 조절 – 픽셀·퍼센트로 변경",
+    "desc": "가로·세로 픽셀을 입력하거나 퍼센트로 사진 크기를 바꿔요. 비율 고정을 켜면 찌그러지지 않고, JPG·PNG·WebP 형식은 그대로 유지돼요.",
+    "lead": "프로필, 서류, 블로그에 맞게 사진 크기를 바꿔요. 내 브라우저 안에서 처리해요.",
+    "about": [
+     {
+      "h": "비율 고정을 켜 두면 찌그러지지 않아요",
+      "p": [
+       "비율 고정을 켜면 가로만 바꿔도 세로가 자동으로 계산돼요. 4000 × 3000 사진을 가로 1200px로 바꾸면 1200 × 900이 돼요.",
+       "끄고 둘 다 입력하면 원래 비율과 다를 때 사진이 늘어나거나 눌려 보여요."
+      ]
+     },
+     {
+      "h": "줄이는 건 괜찮지만, 키운다고 선명해지지 않아요",
+      "p": [
+       "크기를 줄이면 화소를 덜어내는 거라 대체로 선명해 보여요. 200%처럼 키우면 없는 화소를 주변 색으로 채워 넣어서 크기만 커지고 흐릿해져요."
+      ]
+     },
+     {
+      "h": "센티미터 규격은 픽셀로 바꿔서 입력하세요",
+      "p": [
+       "이 도구는 픽셀 단위로 조절해요. 인쇄 기준 300DPI에서 3.5 × 4.5cm는 약 413 × 531픽셀이에요(1인치 = 2.54cm).",
+       "형식은 가능한 한 그대로예요. JPG는 JPG로, PNG는 투명도까지 PNG로, WebP는 WebP로 저장돼요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "크기를 줄이면 용량도 줄어드나요?",
+      "a": "네, 화소가 줄면 용량도 줄어요. 'OOKB 이하'처럼 용량을 맞춰야 하면 '이미지 용량 줄이기'를 쓰세요."
+     },
+     {
+      "q": "여러 장을 같은 크기로 바꿀 수 있나요?",
+      "a": "네. 한꺼번에 넣고 크기를 한 번만 정하면 돼요. 결과는 하나씩 또는 ZIP으로 받아요."
+     },
+     {
+      "q": "정사각형으로 자를 수도 있나요?",
+      "a": "이 도구는 크기만 바꾸고 자르기는 하지 않아요."
+     }
+    ],
+    "short": "픽셀이나 비율로 크기 바꾸기"
+   }
+  },
+  "images-to-pdf": {
+   "en": {
+    "name": "JPG to PDF",
+    "h1": "JPG to PDF: Combine Images into One PDF",
+    "title": "JPG to PDF Converter – Combine Images, No Upload",
+    "desc": "Put JPG, PNG and WebP images into a single PDF in the order you choose, on A4, US Letter or pages sized to each image, with or without a margin.",
+    "lead": "Combine photos or scans into one PDF, arranged and built in your browser and never uploaded.",
+    "about": [
+     {
+      "h": "Choose the page size by what happens next",
+      "p": [
+       "Fit to image makes each page exactly the size of its picture, which is best for reading on screen. A4 (210 × 297 mm) or US Letter (8.5 × 11 in) puts each image on a standard sheet, which is what you want if someone will print it.",
+       "A small margin keeps edges from being lost on printers that can't print to the edge of the paper."
+      ]
+     },
+     {
+      "h": "The PDF is about as big as the images inside it",
+      "p": [
+       "The images make up most of the PDF, so 20 phone photos of about 3 MB each give a PDF of roughly 60 MB. To make it smaller, run the photos through Compress image or Resize image first.",
+       "Text in scanned images doesn't become searchable; this tool doesn't do OCR."
+      ]
+     },
+     {
+      "h": "Check the order before you save",
+      "p": [
+       "Use the ↑ and ↓ buttons in the file list to reorder pages. The PDF follows the order on screen, one image per page."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I add an existing PDF to the images?",
+      "a": "Not here; this tool takes images. Make the image PDF first, then combine it with other PDFs in Merge PDF."
+     },
+     {
+      "q": "My photos are HEIC. Will they work?",
+      "a": "Convert them with HEIC to JPG first, then add the JPGs here."
+     },
+     {
+      "q": "Is there a page limit?",
+      "a": "No fixed limit. Very large batches of big photos can run out of memory, especially on phones."
+     }
+    ],
+    "short": "Photos or scans into one PDF"
+   },
+   "ko": {
+    "name": "JPG PDF 변환",
+    "h1": "JPG PDF 변환 (사진 여러 장을 PDF 하나로)",
+    "title": "JPG PDF 변환 – 사진 여러 장 PDF로 합치기",
+    "desc": "JPG·PNG·WebP 사진을 원하는 순서로 놓고 PDF 한 파일로 만들어요. A4, US Letter, 사진 크기 맞춤 중에서 고르고 여백도 정할 수 있어요.",
+    "lead": "영수증, 서류 사진, 스캔본을 PDF 한 파일로 묶어요. 사진은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "제출용이라면 A4를 고르세요",
+      "p": [
+       "'사진 크기에 맞춤'은 페이지가 사진 크기 그대로라 화면으로 볼 때 좋아요. 받는 쪽에서 인쇄할 서류라면 A4(210 × 297mm)를 고르세요. US Letter(8.5 × 11인치)는 미국에서 쓰는 용지예요.",
+       "여백을 '작게'로 두면 가장자리까지 인쇄되지 않는 프린터에서도 내용이 잘리지 않아요."
+      ]
+     },
+     {
+      "h": "PDF 용량은 들어간 사진 용량과 비슷해요",
+      "p": [
+       "PDF 용량은 대부분 사진이 차지해요. 3MB짜리 휴대폰 사진 20장을 넣으면 약 60MB가 돼요. '파일 10MB 이하'처럼 제한이 있으면 '이미지 용량 줄이기'나 '이미지 크기 조절'로 먼저 줄이세요.",
+       "스캔한 글자는 그림이라 검색이나 복사는 안 돼요. 이 도구는 글자 인식(OCR)을 하지 않아요."
+      ]
+     },
+     {
+      "h": "저장 전에 순서를 확인하세요",
+      "p": [
+       "파일 목록의 ↑·↓ 버튼으로 순서를 바꿀 수 있어요. 화면에 보이는 순서대로 한 장에 한 페이지씩 들어가요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "기존 PDF에 사진을 붙일 수 있나요?",
+      "a": "여기서는 사진만 넣을 수 있어요. 사진으로 PDF를 만든 뒤 'PDF 합치기'에서 기존 PDF와 합치세요."
+     },
+     {
+      "q": "아이폰 사진(HEIC)도 되나요?",
+      "a": "먼저 'HEIC JPG 변환'으로 JPG로 바꾼 뒤 넣어 주세요."
+     },
+     {
+      "q": "몇 장까지 넣을 수 있나요?",
+      "a": "정해진 제한은 없어요. 다만 큰 사진을 아주 많이 넣으면 휴대폰에서는 메모리가 부족할 수 있어요."
+     }
+    ],
+    "short": "사진·스캔을 PDF 하나로"
+   }
+  },
+  "pdf-to-jpg": {
+   "en": {
+    "name": "PDF to JPG",
+    "h1": "PDF to JPG Converter",
+    "title": "PDF to JPG – Save PDF Pages as Images, Free",
+    "desc": "Render each PDF page as a JPG or PNG at 72, 150 or 300 DPI. Pick the pages you need and download many at once as a ZIP.",
+    "lead": "Save PDF pages as images at the resolution you choose. The PDF is read in your browser, not uploaded.",
+    "about": [
+     {
+      "h": "DPI sets the pixel size of each page",
+      "p": [
+       "PDF pages are measured in units of 1/72 inch, so at 72 DPI an A4 page becomes about 595 × 842 pixels. At 150 DPI it is 1240 × 1754, and at 300 DPI 2480 × 3508.",
+       "72 DPI suits thumbnails, 150 DPI is readable on screens and in messages, and 300 DPI is for printing or zooming into small text."
+      ]
+     },
+     {
+      "h": "JPG for photos, PNG for crisp text",
+      "p": [
+       "JPG files are much smaller for pages with photos. PNG keeps text and line drawings perfectly sharp, but at 300 DPI the files get large."
+      ]
+     },
+     {
+      "h": "Limits worth knowing",
+      "p": [
+       "Password-protected PDFs aren't supported yet. Pages are drawn by PDF.js, the PDF engine built into Firefox, so unusual fonts or effects can look slightly different than in other viewers.",
+       "The output is a picture of each page: text in it can't be selected or searched."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I get the original photos out of a PDF?",
+      "a": "No. Each page is rendered as one whole image, including text and background."
+     },
+     {
+      "q": "Why does the text look blurry?",
+      "a": "Use a higher DPI. 150 DPI is fine for screens; choose 300 DPI if you'll zoom in or print."
+     },
+     {
+      "q": "Can I convert just a few pages?",
+      "a": "Yes, choose the pages you want. Several pages download together as a ZIP."
+     }
+    ],
+    "short": "Every page as an image"
+   },
+   "ko": {
+    "name": "PDF JPG 변환",
+    "h1": "PDF JPG 변환 (페이지를 이미지로)",
+    "title": "PDF JPG 변환 – 페이지별 이미지 저장, 무료",
+    "desc": "PDF 각 페이지를 72·150·300DPI의 JPG나 PNG 이미지로 저장해요. 필요한 페이지만 골라 여러 장은 ZIP으로 받을 수 있어요.",
+    "lead": "PDF 페이지를 원하는 해상도의 이미지로 저장해요. PDF는 브라우저 안에서만 읽어요.",
+    "about": [
+     {
+      "h": "단톡방에 공유할 땐 150DPI가 적당해요",
+      "p": [
+       "PDF는 휴대폰에서 바로 열어 보기 불편할 때가 많아요. 카카오톡 단톡방처럼 여러 사람이 볼 곳에는 페이지를 이미지로 바꿔 올리면 편해요.",
+       "PDF는 1/72인치 단위로 크기를 재요. 그래서 A4 한 장은 72DPI에서 약 595 × 842픽셀, 150DPI에서 1240 × 1754픽셀, 300DPI에서 2480 × 3508픽셀이 돼요. 휴대폰 화면용은 150DPI, 인쇄나 작은 글씨 확대용은 300DPI를 고르세요."
+      ]
+     },
+     {
+      "h": "사진이 많으면 JPG, 글자가 중요하면 PNG",
+      "p": [
+       "사진이 들어간 페이지는 JPG가 훨씬 가벼워요. PNG는 글자와 선이 또렷하지만 300DPI에서는 파일이 꽤 커져요."
+      ]
+     },
+     {
+      "h": "알아 두면 좋은 한계",
+      "p": [
+       "비밀번호가 걸린 PDF는 아직 지원하지 않아요. 페이지는 파이어폭스에 들어 있는 PDF 엔진인 PDF.js로 그려서, 특이한 글꼴은 다른 뷰어와 조금 다르게 보일 수 있어요.",
+       "결과는 페이지를 찍은 그림이라 글자를 선택하거나 검색할 수 없어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "PDF 안에 들어 있는 원본 사진만 뽑을 수 있나요?",
+      "a": "아니요. 페이지 전체를 이미지 한 장으로 그려요."
+     },
+     {
+      "q": "글자가 흐릿해요.",
+      "a": "DPI를 높여 보세요. 화면용은 150DPI, 확대하거나 인쇄할 거면 300DPI가 좋아요."
+     },
+     {
+      "q": "몇 페이지만 바꿀 수 있나요?",
+      "a": "네, 원하는 페이지만 고르면 돼요. 여러 장은 ZIP 하나로 받아요."
+     }
+    ],
+    "short": "쪽마다 그림 파일로"
+   }
+  },
+  "merge-pdf": {
+   "en": {
+    "name": "Merge PDF",
+    "h1": "Merge PDF Files",
+    "title": "Merge PDF – Combine PDF Files in Your Browser",
+    "desc": "Join several PDF files into one, in the order you set. Pages are copied as they are, and nothing is uploaded to a server.",
+    "lead": "Combine several PDFs into a single file, merged locally on your device.",
+    "about": [
+     {
+      "h": "Pages are copied, not re-printed",
+      "p": [
+       "Merging copies each page's content into the new file, so text stays selectable and nothing is re-rendered or recompressed. The result is roughly the combined size of the inputs."
+      ]
+     },
+     {
+      "h": "Bookmarks and some form fields may not survive",
+      "p": [
+       "The outline (bookmarks panel) and some form fields may not carry over. If a document has fields you still need, fill them in and save it before merging.",
+       "Encrypted or password-protected PDFs can't be merged."
+      ]
+     },
+     {
+      "h": "Need only some pages? Split first",
+      "p": [
+       "Set the order with the ↑ and ↓ buttons before merging. To include only part of a document, extract those pages with Split PDF, then merge the pieces."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Will the merged PDF be smaller?",
+      "a": "No. Merging doesn't compress anything, and this site doesn't offer PDF compression yet."
+     },
+     {
+      "q": "Can I merge Word files or images?",
+      "a": "Word files aren't supported. Images can be turned into a PDF with JPG to PDF and then merged here."
+     },
+     {
+      "q": "How many PDFs can I merge?",
+      "a": "There's no fixed limit; very large files can run out of memory, especially on phones."
+     }
+    ],
+    "short": "Several PDFs, one file, your order"
+   },
+   "ko": {
+    "name": "PDF 합치기",
+    "h1": "PDF 합치기 (병합)",
+    "title": "PDF 합치기 – 여러 PDF를 하나로, 무료",
+    "desc": "여러 PDF 파일을 원하는 순서로 놓고 한 파일로 합쳐요. 페이지는 그대로 복사되고, 파일은 서버에 올라가지 않아요.",
+    "lead": "'파일은 1개만 첨부'라는 제출 조건에 맞게 PDF를 하나로 묶어요. 내 기기 안에서 합쳐요.",
+    "about": [
+     {
+      "h": "페이지를 그대로 옮겨서 화질이 안 바뀌어요",
+      "p": [
+       "합칠 때 각 페이지 내용을 새 파일로 그대로 복사해요. 다시 그리거나 압축하지 않아서 글자도 선택할 수 있는 상태로 남고, 용량은 원래 파일들을 더한 정도예요."
+      ]
+     },
+     {
+      "h": "책갈피와 일부 입력란은 빠질 수 있어요",
+      "p": [
+       "목차 역할을 하는 책갈피(개요)와 일부 입력 양식은 합친 파일에 옮겨지지 않을 수 있어요. 입력해야 할 칸이 있다면 먼저 채워서 저장한 뒤 합치세요.",
+       "암호가 걸린 PDF는 합칠 수 없어요."
+      ]
+     },
+     {
+      "h": "일부 페이지만 넣으려면 먼저 나누세요",
+      "p": [
+       "↑·↓ 버튼으로 순서를 정한 뒤 합치면 돼요. 문서의 일부만 넣고 싶다면 'PDF 나누기'로 필요한 페이지를 뽑은 뒤 합치세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "합치면 용량이 줄어드나요?",
+      "a": "아니요. 합치기는 압축하지 않아요. 이 사이트에는 아직 PDF 압축 기능이 없어요."
+     },
+     {
+      "q": "한글(HWP)이나 워드 파일도 합칠 수 있나요?",
+      "a": "아니요, PDF만 돼요. 사진은 'JPG PDF 변환'으로 PDF를 만든 뒤 여기서 합칠 수 있어요."
+     },
+     {
+      "q": "몇 개까지 합칠 수 있나요?",
+      "a": "정해진 제한은 없지만, 아주 큰 파일이 많으면 휴대폰에서는 메모리가 부족할 수 있어요."
+     }
+    ],
+    "short": "여러 PDF를 원하는 순서로 하나로"
+   }
+  },
+  "split-pdf": {
+   "en": {
+    "name": "Split PDF",
+    "h1": "Split PDF and Extract Pages",
+    "title": "Split PDF – Extract Pages or Split Every Page, Free",
+    "desc": "Pull out page ranges like \"1-3, 5\" into a new PDF, save every page as its own file, or split every N pages. It all runs in your browser.",
+    "lead": "Take a big PDF apart by range, by page or in equal chunks, without uploading it.",
+    "about": [
+     {
+      "h": "Three ways to split",
+      "p": [
+       "Ranges: type 1-3, 5 to get one PDF with pages 1, 2, 3 and 5. Every page: each page becomes its own PDF, delivered together as a ZIP.",
+       "Every N pages: a 30-page file split every 10 pages gives three PDFs (pages 1–10, 11–20 and 21–30)."
+      ]
+     },
+     {
+      "h": "Splitting doubles as deleting pages",
+      "p": [
+       "To drop page 5 from a 10-page file, extract 1-4, 6-10. The original file isn't changed; you get a new PDF."
+      ]
+     },
+     {
+      "h": "Pages keep their content as it is",
+      "p": [
+       "Pages are copied rather than turned into images, so text that was selectable stays selectable.",
+       "Links or bookmarks that pointed to pages you left out won't have anywhere to go in the new file."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does splitting make the file smaller?",
+      "a": "Each part is usually smaller than the whole, but pages are not compressed."
+     },
+     {
+      "q": "Can I split by file size?",
+      "a": "No. Split by pages; if a part is still too big, split it into smaller ranges."
+     },
+     {
+      "q": "Can I put the extracted pages in a different order?",
+      "a": "Extract them as separate files, then combine them in the order you want with Merge PDF."
+     }
+    ],
+    "short": "By page range or equal chunks"
+   },
+   "ko": {
+    "name": "PDF 나누기",
+    "h1": "PDF 나누기 (페이지 추출)",
+    "title": "PDF 나누기 – 페이지 추출·분할, 업로드 없이",
+    "desc": "\"1-3, 5\"처럼 원하는 페이지만 뽑아 새 PDF로 만들거나, 모든 페이지를 따로 나누거나, N쪽마다 나눠요. 브라우저 안에서 처리해요.",
+    "lead": "큰 PDF를 범위, 한 장씩, 같은 분량으로 나눠요. 파일은 업로드되지 않아요.",
+    "about": [
+     {
+      "h": "나누는 방법은 세 가지예요",
+      "p": [
+       "범위 지정: 1-3, 5라고 입력하면 1, 2, 3, 5쪽만 담긴 PDF 한 개가 나와요. 한 장씩: 모든 페이지가 각각 PDF가 되고 ZIP으로 묶어서 받아요.",
+       "N쪽마다: 30쪽 문서를 10쪽마다 나누면 1–10, 11–20, 21–30쪽 세 파일이 돼요. 첨부 용량 제한 때문에 나눠서 올려야 할 때 편해요."
+      ]
+     },
+     {
+      "h": "필요 없는 페이지를 빼는 데도 써요",
+      "p": [
+       "10쪽 문서에서 5쪽만 빼고 싶다면 1-4, 6-10을 추출하면 돼요. 원본은 그대로 두고 새 PDF가 만들어져요.",
+       "주민등록번호처럼 민감한 정보가 있는 페이지를 빼고 제출할 때도 이렇게 하면 돼요."
+      ]
+     },
+     {
+      "h": "페이지 내용은 그대로 남아요",
+      "p": [
+       "페이지를 이미지로 바꾸지 않고 그대로 복사해서, 선택 가능하던 글자는 그대로 선택돼요.",
+       "빠진 페이지를 가리키던 링크나 책갈피는 새 파일에서 연결될 곳이 없어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "나누면 용량이 줄어드나요?",
+      "a": "나눈 각 파일은 보통 원본보다 작지만, 페이지 자체를 압축하지는 않아요."
+     },
+     {
+      "q": "용량 기준으로 나눌 수 있나요?",
+      "a": "아니요, 페이지 기준으로 나눠요. 한 파일이 여전히 크면 범위를 더 잘게 나누세요."
+     },
+     {
+      "q": "뽑은 페이지 순서를 바꿀 수 있나요?",
+      "a": "따로따로 뽑은 뒤 'PDF 합치기'에서 원하는 순서로 합치면 돼요."
+     }
+    ],
+    "short": "쪽 범위나 같은 쪽 수로 나누기"
+   }
+  },
+  "csv-json": {
+   "en": {
+    "name": "CSV ↔ JSON",
+    "h1": "CSV to JSON and JSON to CSV Converter",
+    "title": "CSV to JSON & JSON to CSV Converter – No Upload",
+    "desc": "Convert CSV to JSON (array of objects or arrays) with delimiter auto-detection, or flatten JSON into CSV with an Excel-friendly UTF-8 BOM option. Preview before saving.",
+    "lead": "Turn spreadsheet exports into JSON and JSON into CSV with a live preview; your data stays in the browser.",
+    "about": [
+     {
+      "h": "CSV to JSON: decide on keys and types",
+      "p": [
+       "With \"first row as keys\", each row becomes an object such as {\"name\": \"Kim\", \"age\": \"34\"}; without it you get arrays of values. Comma, semicolon or tab delimiters are detected automatically.",
+       "CSV has no data types, so values stay strings unless you turn on \"detect numbers & true/false\". Leave it off for ZIP codes, phone numbers or IDs with leading zeros, which would otherwise lose them (\"007\" would become 7)."
+      ]
+     },
+     {
+      "h": "JSON to CSV: nested data becomes text",
+      "p": [
+       "Give it an array of objects, the shape most APIs return. The header row is the union of keys across all objects, so a key missing from some objects leaves empty cells there.",
+       "Nested objects and arrays are written into the cell as JSON text, for example [\"a\",\"b\"]."
+      ]
+     },
+     {
+      "h": "Add a BOM if the CSV will be opened in Excel",
+      "p": [
+       "Excel recognizes a CSV as UTF-8 only when the file starts with a byte order mark (BOM, the bytes EF BB BF). Without it, Korean, accented or other non-English text can show up garbled.",
+       "Turn on \"Excel-friendly CSV (UTF-8 with BOM)\" for files people will double-click open in Excel."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why do some CSV files use semicolons?",
+      "a": "Excel uses the list separator from the system's regional settings, which in many countries that write decimals with a comma is a semicolon. Auto-detection handles comma, semicolon and tab."
+     },
+     {
+      "q": "Should I always add the BOM?",
+      "a": "No. Some scripts and tools don't expect it and read it as stray characters at the start of the first header. Use it for Excel, and leave it off for files meant for code."
+     },
+     {
+      "q": "Is there a size limit?",
+      "a": "Only your device's memory. Very large files can make the preview slow, but the data never leaves your browser."
+     }
+    ],
+    "short": "Both ways, with a live preview"
+   },
+   "ko": {
+    "name": "CSV ↔ JSON 변환",
+    "h1": "CSV JSON 변환기",
+    "title": "CSV JSON 변환 – 엑셀 한글 깨짐 방지",
+    "desc": "CSV를 JSON 배열로, JSON을 CSV로 바꿔요. 구분자 자동 감지와 미리보기를 지원하고, 엑셀에서 한글이 안 깨지는 UTF-8 BOM 저장도 돼요.",
+    "lead": "CSV와 JSON을 미리보기로 확인하면서 바꿔요. 데이터는 브라우저 밖으로 나가지 않아요.",
+    "about": [
+     {
+      "h": "엑셀에서 열 CSV라면 BOM을 켜세요",
+      "p": [
+       "엑셀은 파일 맨 앞에 BOM(바이트 순서 표시, EF BB BF 세 바이트)이 있을 때만 UTF-8로 알아봐요. BOM이 없으면 한국어 윈도우의 기본 코드 페이지(949)로 읽어서 한글이 '�븞�뀞'처럼 깨져 보여요.",
+       "다른 사람이 더블클릭으로 열 파일이라면 'Excel용 CSV(UTF-8 BOM)' 옵션을 켜 두세요."
+      ]
+     },
+     {
+      "h": "CSV → JSON: 키와 자료형을 정하세요",
+      "p": [
+       "'첫 줄을 키로'를 켜면 각 줄이 {\"이름\": \"김민지\", \"나이\": \"34\"} 같은 객체가 되고, 끄면 값만 담긴 배열이 돼요. 구분자(쉼표, 세미콜론, 탭)는 자동으로 찾아요.",
+       "CSV에는 자료형이 없어서 '숫자·true/false 감지'를 켜지 않으면 모든 값이 문자열로 남아요. 우편번호나 '010'으로 시작하는 전화번호가 있다면 꺼 두세요. 켜면 앞자리 0이 사라질 수 있어요."
+      ]
+     },
+     {
+      "h": "JSON → CSV: 중첩된 값은 글자로 들어가요",
+      "p": [
+       "객체가 담긴 배열을 넣으면 돼요. 머리글은 모든 객체의 키를 합친 것이라, 어떤 객체에 없는 키는 빈칸이 돼요.",
+       "객체 안의 객체나 배열은 [\"a\",\"b\"]처럼 JSON 글자 그대로 한 칸에 들어가요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "BOM은 항상 켜는 게 좋나요?",
+      "a": "아니요. BOM을 예상하지 않는 프로그램은 첫 머리글 앞에 이상한 글자가 붙은 것처럼 읽어요. 엑셀용이면 켜고, 개발용이면 끄세요."
+     },
+     {
+      "q": "이미 받은 CSV가 엑셀에서 깨져요.",
+      "a": "엑셀의 데이터 › 텍스트/CSV에서 메뉴로 가져오면서 파일 원본을 65001(UTF-8)로 고르면 제대로 보여요. 아니면 여기서 BOM을 붙여 다시 저장해도 돼요."
+     },
+     {
+      "q": "용량 제한이 있나요?",
+      "a": "기기 메모리만큼이에요. 아주 큰 파일은 미리보기가 느릴 수 있지만 데이터는 브라우저 밖으로 나가지 않아요."
+     }
+    ],
+    "short": "양쪽으로, 미리 보면서"
+   }
+  },
+  "excel-csv": {
+   "en": {
+    "name": "Excel ↔ CSV",
+    "h1": "Excel to CSV and CSV to Excel Converter",
+    "title": "Excel to CSV & CSV to XLSX Converter – Free",
+    "desc": "Export a sheet from XLSX, XLS or ODS to CSV, or all sheets at once as a ZIP, or turn a CSV into an XLSX workbook. Converted in your browser.",
+    "lead": "Get CSV out of a spreadsheet or build an XLSX from a CSV, without uploading the file.",
+    "about": [
+     {
+      "h": "CSV keeps values, not the workbook",
+      "p": [
+       "A CSV file is plain text: one sheet, with no formatting, formulas or charts. Exporting writes each cell's last calculated value, so a cell containing =SUM(A1:A3) becomes its result.",
+       "Because a CSV holds only one sheet, choose a sheet, or export every sheet as its own CSV inside a ZIP."
+      ]
+     },
+     {
+      "h": "Dates come out as the text you see",
+      "p": [
+       "Excel stores dates as serial numbers counting days from January 1, 1900; October 6, 2026 is 46301. This converter writes dates as their displayed text instead, so they don't turn into bare numbers in the CSV.",
+       "The text follows each cell's display format, so check that it matches what the receiving system expects."
+      ]
+     },
+     {
+      "h": "CSV to XLSX gives you a real workbook",
+      "p": [
+       "Converting a CSV to XLSX lets you add formatting, formulas and more sheets in Excel. One worksheet holds at most 1,048,576 rows and 16,384 columns."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Are formulas kept?",
+      "a": "No. CSV can't store formulas; only each cell's last calculated value is written."
+     },
+     {
+      "q": "Can I open old .xls or LibreOffice .ods files?",
+      "a": "Yes. XLS (Excel 97–2003) and ODS files can be exported to CSV just like XLSX."
+     },
+     {
+      "q": "The CSV shows garbled characters in Excel. What now?",
+      "a": "Turn on “Excel-friendly (UTF-8 with BOM)” on this page before converting, so Excel reads the file as UTF-8. For a CSV you already have, import it with Data › From Text/CSV and set File Origin to 65001: Unicode (UTF-8)."
+     }
+    ],
+    "short": "XLSX to CSV, CSV to XLSX"
+   },
+   "ko": {
+    "name": "엑셀 ↔ CSV 변환",
+    "h1": "엑셀 CSV 변환기 (XLSX·XLS·ODS)",
+    "title": "엑셀 CSV 변환 – XLSX·XLS·ODS ↔ CSV 무료",
+    "desc": "XLSX·XLS·ODS 시트를 CSV로 내보내거나(모든 시트는 ZIP으로), CSV를 XLSX 통합 문서로 바꿔요. 파일은 브라우저 안에서만 처리돼요.",
+    "lead": "엑셀 파일에서 CSV를 뽑거나 CSV로 엑셀 파일을 만들어요. 업로드는 없어요.",
+    "about": [
+     {
+      "h": "CSV에는 값만 남아요",
+      "p": [
+       "CSV는 그냥 글자 파일이라 시트 하나, 값만 담겨요. 서식, 수식, 차트는 빠지고, =SUM(A1:A3) 같은 수식 칸은 마지막으로 계산된 결과값으로 저장돼요.",
+       "CSV 하나에는 시트 하나만 들어가니 시트를 고르거나, 모든 시트를 각각 CSV로 만들어 ZIP으로 받으세요."
+      ]
+     },
+     {
+      "h": "날짜는 화면에 보이는 글자 그대로 나가요",
+      "p": [
+       "엑셀은 날짜를 1900년 1월 1일부터 센 일련번호로 저장해요. 2026년 10월 6일은 46301이에요. 이 도구는 날짜를 숫자가 아니라 화면에 표시된 글자로 내보내서 CSV에 엉뚱한 숫자가 찍히지 않아요.",
+       "표시 형식(예: 2026-10-06, 2026년 10월 6일)을 따라가니, 받는 시스템이 원하는 형식인지 확인하세요."
+      ]
+     },
+     {
+      "h": "CSV를 XLSX로 바꾸면 진짜 엑셀 파일이 돼요",
+      "p": [
+       "CSV를 XLSX로 바꾸면 서식, 수식, 시트를 더할 수 있는 통합 문서가 돼요. 시트 하나에는 최대 1,048,576행, 16,384열까지 들어가요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "수식도 같이 저장되나요?",
+      "a": "아니요. CSV는 수식을 담을 수 없어서 계산된 값만 저장돼요."
+     },
+     {
+      "q": "옛날 .xls나 리브레오피스 .ods 파일도 되나요?",
+      "a": "네. XLS(엑셀 97–2003)와 ODS도 XLSX처럼 CSV로 내보낼 수 있어요."
+     },
+     {
+      "q": "만든 CSV를 엑셀에서 열었더니 한글이 깨져요.",
+      "a": "바꾸기 전에 이 페이지의 '엑셀에서 한글 안 깨지게 (UTF-8 BOM)'를 켜 두세요(한국어 페이지는 처음부터 켜져 있어요). 이미 만든 CSV라면 데이터 › 텍스트/CSV에서로 가져오면서 파일 원본을 65001(UTF-8)로 고르면 돼요."
+     }
+    ],
+    "short": "엑셀은 CSV로, CSV는 엑셀로"
+   }
+  }
+ },
+ "hub": {
+  "en": {
+   "title": "Free File Converter – Video, Audio, Image, PDF, No Upload",
+   "desc": "17 free tools for video, audio, images, PDF and spreadsheet files. Everything runs in your browser, so files are never uploaded. No sign-up, no watermark.",
+   "h1": "Convert files on your own device",
+   "lead": "Drop any file and pick what to do with it. Video, audio, image, PDF and CSV tools that work in your browser, with nothing uploaded and no account.",
+   "how": [
+    "Most online converters send your file to their server, convert it there and send it back. Inplace does the work inside this browser tab instead, using features every modern browser already has (WebCodecs for audio and video, canvas for images) plus open-source libraries for PDF and spreadsheets.",
+    "That means your file never leaves your device: there is no upload to wait for, no copy on someone else's computer, and no file size limit set by a server. The only limit is your device's memory, so very long videos work best on a computer."
+   ]
+  },
+  "ko": {
+   "title": "무료 파일 변환기 – 동영상·오디오·이미지·PDF",
+   "desc": "동영상, 음악, 사진, PDF, 엑셀·CSV 파일을 바꾸는 무료 도구 17가지예요. 모든 변환이 브라우저 안에서 이뤄져 파일이 업로드되지 않고, 가입이나 워터마크도 없어요.",
+   "h1": "파일을 내 기기에서 바로 변환하세요",
+   "lead": "아무 파일이나 끌어다 놓고 할 일을 고르세요. 동영상·오디오·이미지·PDF·CSV 도구가 브라우저 안에서 돌아가서 파일을 올릴 필요도, 가입할 필요도 없어요.",
+   "how": [
+    "보통 온라인 변환기는 파일을 서버로 올려서 바꾼 뒤 다시 내려보내요. 인플레이스는 그 일을 지금 보고 있는 브라우저 탭 안에서 해요. 요즘 브라우저에 들어 있는 기능(동영상·소리는 WebCodecs, 사진은 캔버스)과 PDF·엑셀용 오픈소스 라이브러리를 써요.",
+    "그래서 파일이 기기 밖으로 나가지 않아요. 올리는 시간을 기다릴 필요가 없고, 남의 컴퓨터에 사본이 남지 않고, 서버가 정한 용량 제한도 없어요. 한계는 기기의 메모리뿐이라 아주 긴 영상은 컴퓨터에서 하는 게 좋아요."
+   ]
+  }
+ },
+ "about": {
+  "en": {
+   "title": "About Inplace – How This File Converter Works",
+   "desc": "Who makes Inplace, how it converts files without uploading them, how the site is paid for, and what it deliberately doesn't do.",
+   "body": [
+    "Inplace is made by Lumen Lab, a one-person app studio. Questions, bug reports and tool requests go to woxocoso@gmail.com.",
+    "When you choose a file, your browser reads it from your device and converts it with code that runs on this page. The file isn't sent to a server, and the result is saved straight back to your device. Because of that, the practical limit is your device's memory: very large videos can fail on phones.",
+    "The work is done by open-source libraries running in your browser: Mediabunny (with the browser's WebCodecs) for video and audio, the LAME MP3 encoder compiled to WebAssembly, libheif for HEIC photos, PDF.js and pdf-lib for PDFs, gifenc for GIFs, fflate for ZIP files and SheetJS for spreadsheets.",
+    "The site is paid for by ads served by Google AdSense; ad providers may use cookies to show and measure ads. There is no sign-up, no watermark and no daily limit.",
+    "Inplace does not download from YouTube or other streaming sites. Their terms don't allow it, so the tools here only work on files you already have.",
+    "Not available yet: PDF compression, Word/HWP/PowerPoint to PDF, PDF to Word, OCR, and merging audio or video. If you need one of these, an email helps decide what comes next."
+   ]
+  },
+  "ko": {
+   "title": "인플레이스 소개 – 파일 변환 방식과 운영",
+   "desc": "인플레이스를 누가 만드는지, 파일을 올리지 않고 어떻게 변환하는지, 사이트는 어떻게 운영되는지, 일부러 하지 않는 일은 무엇인지 정리했어요.",
+   "body": [
+    "인플레이스는 1인 앱 스튜디오 루멘랩(Lumen Lab)이 만들어요. 문의, 오류 제보, 도구 요청은 woxocoso@gmail.com으로 보내 주세요.",
+    "파일을 고르면 브라우저가 내 기기에서 파일을 읽고, 이 페이지에서 돌아가는 코드로 변환해요. 파일은 서버로 보내지지 않고 결과도 바로 내 기기에 저장돼요. 그래서 실제 한계는 기기 메모리예요. 아주 큰 영상은 휴대폰에서 실패할 수 있어요.",
+    "변환은 브라우저 안에서 돌아가는 오픈소스 라이브러리가 맡아요. 동영상·오디오는 Mediabunny(브라우저의 WebCodecs 사용), MP3는 웹어셈블리로 만든 LAME, HEIC 사진은 libheif, PDF는 PDF.js와 pdf-lib, GIF는 gifenc, ZIP은 fflate, 엑셀·CSV는 SheetJS를 써요.",
+    "사이트는 Google AdSense 광고로 운영돼요. 광고 제공업체는 광고를 보여 주고 측정하려고 쿠키를 쓸 수 있어요. 가입, 워터마크, 하루 사용 제한은 없어요.",
+    "인플레이스는 유튜브나 다른 스트리밍 사이트에서 다운로드하지 않아요. 해당 서비스 약관이 허용하지 않기 때문에, 이미 갖고 있는 파일만 변환해요.",
+    "아직 없는 기능: PDF 압축, 워드·한글(HWP)·파워포인트를 PDF로, PDF를 워드로, 글자 인식(OCR), 오디오·동영상 합치기. 필요한 기능이 있으면 메일로 알려 주세요. 다음에 만들 도구를 정하는 데 도움이 돼요."
+   ]
+  }
+ },
+ "sources": {
+  "video-to-mp3": [
+   "https://sources.debian.org/src/lame/3.100-6/USAGE",
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs",
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers",
+   "https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API",
+   "https://www.youtube.com/static?template=terms",
+   "https://support.google.com/youtube/answer/6141269"
+  ],
+  "audio-converter": [
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs",
+   "https://sources.debian.org/src/lame/3.100-6/USAGE"
+  ],
+  "cut-audio": [
+   "https://support.apple.com/en-us/120692",
+   "https://www.samsung.com/sg/support/mobile-devices/how-to-set-a-music-file-as-a-ringtone-on-samsung-galaxy-smartphone",
+   "https://www.samsungsvc.co.kr/solution/39489"
+  ],
+  "video-converter": [
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers",
+   "https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API",
+   "https://support.apple.com/en-us/116944",
+   "https://support.apple.com/ko-kr/116944",
+   "https://support.microsoft.com/help/4494024"
+  ],
+  "cut-video": [
+   "https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API"
+  ],
+  "compress-video": [
+   "https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API"
+  ],
+  "video-to-gif": [
+   "https://www.w3.org/Graphics/GIF/spec-gif89a.txt",
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+  ],
+  "image-converter": [
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+  ],
+  "heic-to-jpg": [
+   "https://support.apple.com/en-us/116944",
+   "https://support.apple.com/ko-kr/116944",
+   "https://support.microsoft.com/help/4494024",
+   "https://caniuse.com/heif"
+  ],
+  "compress-image": [
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+  ],
+  "resize-image": [
+   "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+  ],
+  "images-to-pdf": [],
+  "pdf-to-jpg": [
+   "https://kb.itextpdf.com/itext/how-to-get-the-userunit-from-a-pdf-file",
+   "https://github.com/mozilla/pdf.js"
+  ],
+  "merge-pdf": [],
+  "split-pdf": [],
+  "csv-json": [
+   "https://learn.microsoft.com/en-us/power-query/connectors/text-csv",
+   "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032",
+   "https://www.unicode.org/faq/utf_bom.html",
+   "https://learn.microsoft.com/en-us/windows/win32/intl/code-page-identifiers",
+   "https://support.microsoft.com/en-us/office/import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba"
+  ],
+  "excel-csv": [
+   "https://support.microsoft.com/en-us/office/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3",
+   "https://support.microsoft.com/en-us/office/date-systems-in-excel-e7fe7167-48a9-4b96-bb53-5612a800b487",
+   "https://learn.microsoft.com/en-us/power-query/connectors/text-csv",
+   "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032"
+  ]
+ }
+}

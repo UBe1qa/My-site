@@ -1,0 +1,26 @@
+// CSV·JSON 순수 함수 시험: node convert/_dev/test_data.mjs
+import { parseCSV, toCSV, rowsToJson, jsonToRows, detectDelimiter, BOM } from '../assets/engines/data.js';
+import assert from 'node:assert/strict';
+let n = 0; const t = (name, f) => { f(); n++; };
+t('basic', () => assert.deepEqual(parseCSV('a,b\n1,2\n').rows, [['a','b'],['1','2']]));
+t('crlf+quotes', () => assert.deepEqual(parseCSV('a,b\r\n"x, y","he said ""hi"""\r\n').rows, [['a','b'],['x, y','he said "hi"']]));
+t('newline in quotes', () => assert.deepEqual(parseCSV('a\n"l1\nl2"\n').rows, [['a'],['l1\nl2']]));
+t('bom stripped', () => assert.deepEqual(parseCSV(BOM + '이름,나이\n홍길동,30').rows, [['이름','나이'],['홍길동','30']]));
+t('semicolon', () => assert.equal(detectDelimiter('a;b;c\n1;2,5;3\n4;5;6'), ';'));
+t('tab', () => assert.equal(detectDelimiter('a\tb\n1\t2'), '\t'));
+t('comma in quoted not counted', () => assert.equal(detectDelimiter('"a,b";c\n"1,2";3'), ';'));
+t('empty trailing field', () => assert.deepEqual(parseCSV('a,b,\n1,,\n').rows, [['a','b',''],['1','','']]));
+t('json header', () => assert.deepEqual(rowsToJson([['a','b'],['1','x']]), [{a:'1',b:'x'}]));
+t('json types', () => assert.deepEqual(rowsToJson([['zip','n','f','ok','big'],['01234','42','3.5','true','12345678901234567890']], {types:true}), [{zip:'01234',n:42,f:3.5,ok:true,big:'12345678901234567890'}]));
+t('dup + empty keys', () => assert.deepEqual(Object.keys(rowsToJson([['a','a',''],['1','2','3']])[0]), ['a','a_2','column3']));
+t('no header', () => assert.deepEqual(rowsToJson([['1','2']], {header:false}), [['1','2']]));
+t('skip blank line', () => assert.deepEqual(rowsToJson(parseCSV('a\n1\n\n2\n').rows), [{a:'1'},{a:'2'}]));
+t('json->rows union', () => assert.deepEqual(jsonToRows([{a:1},{b:2,a:3}]), [['a','b'],[1,undefined],[3,2]]));
+t('json wrapped', () => assert.deepEqual(jsonToRows({data:[{a:1}]}), [['a'],[1]]));
+t('json single object', () => assert.deepEqual(jsonToRows({a:1,b:{c:2}}), [['a','b'],[1,{c:2}]]));
+t('json bad', () => assert.throws(() => jsonToRows(5)));
+t('toCSV quoting+nested', () => assert.equal(toCSV([['a','b'],['x,y',{c:1}],[null,'q"']]), 'a,b\r\n"x,y","{""c"":1}"\r\n,"q"""\r\n'));
+t('toCSV bom', () => assert.ok(toCSV([['가']], {bom:true}).startsWith(BOM)));
+t('roundtrip', () => { const rows=[['a','b'],['1,2','line\nbreak'],['"q"','  sp ']]; assert.deepEqual(parseCSV(toCSV(rows)).rows, rows); });
+t('roundtrip semicolon', () => { const rows=[['a','b'],['1;2','x']]; assert.deepEqual(parseCSV(toCSV(rows,{delimiter:';'}),';').rows, rows); });
+console.log('data tests passed:', n);

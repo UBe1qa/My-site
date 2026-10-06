@@ -38,6 +38,14 @@
       "name": {"ko": "며칠 계산기", "en": "Daycount"},
       "sub": "Daycount",
       "line": {"ko": "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.", "en": "Days between dates, countdowns, business days excluding holidays, age and anniversaries."}
+    },
+    {
+      "id": "inplace",
+      "url": "https://convert.lumenlab.page/",
+      "icon": "/img/convert.svg",
+      "name": {"ko": "인플레이스", "en": "Inplace"},
+      "sub": "Inplace",
+      "line": {"ko": "영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.", "en": "Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload."}
     }
   ]
 }

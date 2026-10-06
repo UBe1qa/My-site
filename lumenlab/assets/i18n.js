@@ -31,8 +31,8 @@
     /* gen:start */
     sh_apps_n: "2 apps",
     sh_apps_names: "Owlight · SetNote",
-    sh_tools_n: "1 tool",
-    sh_tools_names: "Daycount",
+    sh_tools_n: "2 tools",
+    sh_tools_names: "Daycount · Inplace",
     c_owlight_kind: "Menu bar app for Mac <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 or later</span>",
     c_owlight_name: "Owlight",
     c_owlight_status: "Getting ready for the App Store",
@@ -47,9 +47,12 @@
     c_setnote_l1: "What it does",
     c_daycount_line: "Days between dates, countdowns, business days excluding holidays, age and anniversaries.",
     c_daycount_name: "Daycount",
+    c_inplace_line: "Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload.",
+    c_inplace_name: "Inplace",
     f_owlight: "Owlight",
     f_setnote: "SetNote",
     f_daycount: "Daycount",
+    f_inplace: "Inplace",
     backHome: "Back to Lumen Lab",
     /* gen:end */
     owlTitle: 'Five switches in your menu bar',

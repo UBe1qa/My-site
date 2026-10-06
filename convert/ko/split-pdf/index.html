@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDF 나누기 – 페이지 추출·분할, 업로드 없이</title>
+<meta name="description" content="&quot;1-3, 5&quot;처럼 원하는 페이지만 뽑아 새 PDF로 만들거나, 모든 페이지를 따로 나누거나, N쪽마다 나눠요. 브라우저 안에서 처리해요.">
+
+<meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://convert.lumenlab.page/ko/split-pdf/">
+<link rel="alternate" hreflang="en" href="https://convert.lumenlab.page/split-pdf/">
+<link rel="alternate" hreflang="ko" href="https://convert.lumenlab.page/ko/split-pdf/">
+<link rel="alternate" hreflang="x-default" href="https://convert.lumenlab.page/split-pdf/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PDF 나누기 – 페이지 추출·분할, 업로드 없이">
+<meta property="og:description" content="&quot;1-3, 5&quot;처럼 원하는 페이지만 뽑아 새 PDF로 만들거나, 모든 페이지를 따로 나누거나, N쪽마다 나눠요. 브라우저 안에서 처리해요.">
+<meta property="og:url" content="https://convert.lumenlab.page/ko/split-pdf/">
+<meta property="og:site_name" content="인플레이스">
+<meta property="og:image" content="https://convert.lumenlab.page/og.png">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="importmap">{"imports":{"mediabunny":"/assets/vendor/mediabunny.min.mjs"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "PDF 나누기", "url": "https://convert.lumenlab.page/ko/split-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "inLanguage": "ko", "isAccessibleForFree": true, "description": "\"1-3, 5\"처럼 원하는 페이지만 뽑아 새 PDF로 만들거나, 모든 페이지를 따로 나누거나, N쪽마다 나눠요. 브라우저 안에서 처리해요.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "모든 도구", "item": "https://convert.lumenlab.page/ko/"}, {"@type": "ListItem", "position": 2, "name": "PDF 나누기", "item": "https://convert.lumenlab.page/ko/split-pdf/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "나누면 용량이 줄어드나요?", "acceptedAnswer": {"@type": "Answer", "text": "나눈 각 파일은 보통 원본보다 작지만, 페이지 자체를 압축하지는 않아요."}}, {"@type": "Question", "name": "용량 기준으로 나눌 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요, 페이지 기준으로 나눠요. 한 파일이 여전히 크면 범위를 더 잘게 나누세요."}}, {"@type": "Question", "name": "뽑은 페이지 순서를 바꿀 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "따로따로 뽑은 뒤 'PDF 합치기'에서 원하는 순서로 합치면 돼요."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body class="tool-page">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top wrap">
+  <a class="logo" href="/ko/"><span class="flap logo-flap" aria-hidden="true" data-text="IN"><b>I</b><b>N</b></span><span>인플레이스</span></a>
+  <nav class="top-nav" aria-label="사이트 메뉴"><a href="/ko/#tools">모든 도구</a><a href="/ko/guide/">가이드</a><a class="lang" href="/split-pdf/" lang="en" hreflang="en">English</a></nav>
+</header>
+<main id="main">
+<section class="tool-hero wrap cat-pdf">
+  <p class="crumb"><a href="/ko/">모든 도구</a> <span aria-hidden="true">›</span> <a href="/ko/#pdf">PDF</a></p>
+  <div class="hero-row">
+    <h1>PDF 나누기 (페이지 추출)</h1>
+    <p class="pair" aria-hidden="true"><span class="flap md" aria-hidden="true" data-text="PDF"><b>P</b><b>D</b><b>F</b></span><span class="arrow">→</span><span class="flap md" aria-hidden="true" data-text="P1-3"><b>P</b><b>1</b><b>-</b><b>3</b></span></p>
+  </div>
+  <p class="lead">큰 PDF를 범위, 한 장씩, 같은 분량으로 나눠요. 파일은 업로드되지 않아요.</p>
+</section>
+<section class="tool wrap" data-tool="split-pdf" aria-label="PDF 나누기">
+  <div class="drop">
+    <input type="file" id="f" class="sr" accept=".pdf">
+    <label for="f" class="btn-pick">파일 고르기</label>
+    <p class="drop-or">또는 여기에 끌어 놓기</p>
+    <p class="drop-fmts"><span class="sr">받는 형식: </span>PDF</p>
+  </div>
+  <p class="stays"><svg class="lock" viewBox="0 0 16 18" width="14" height="16" aria-hidden="true"><rect x="2" y="8" width="12" height="9" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 8V5.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="2"/></svg>이 기기 안에서 변환해요. 파일이 어디에도 올라가지 않아요.</p>
+  <div class="work" hidden></div>
+</section>
+<div class="prose wrap narrow"><section class="prose-sec"><h2>나누는 방법은 세 가지예요</h2><p>범위 지정: 1-3, 5라고 입력하면 1, 2, 3, 5쪽만 담긴 PDF 한 개가 나와요. 한 장씩: 모든 페이지가 각각 PDF가 되고 ZIP으로 묶어서 받아요.</p><p>N쪽마다: 30쪽 문서를 10쪽마다 나누면 1–10, 11–20, 21–30쪽 세 파일이 돼요. 첨부 용량 제한 때문에 나눠서 올려야 할 때 편해요.</p></section><section class="prose-sec"><h2>필요 없는 페이지를 빼는 데도 써요</h2><p>10쪽 문서에서 5쪽만 빼고 싶다면 1-4, 6-10을 추출하면 돼요. 원본은 그대로 두고 새 PDF가 만들어져요.</p><p>주민등록번호처럼 민감한 정보가 있는 페이지를 빼고 제출할 때도 이렇게 하면 돼요.</p></section><section class="prose-sec"><h2>페이지 내용은 그대로 남아요</h2><p>페이지를 이미지로 바꾸지 않고 그대로 복사해서, 선택 가능하던 글자는 그대로 선택돼요.</p><p>빠진 페이지를 가리키던 링크나 책갈피는 새 파일에서 연결될 곳이 없어요.</p></section></div>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">광고</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<section class="faq wrap narrow"><h2>자주 묻는 질문</h2><details><summary>나누면 용량이 줄어드나요?</summary><p>나눈 각 파일은 보통 원본보다 작지만, 페이지 자체를 압축하지는 않아요.</p></details><details><summary>용량 기준으로 나눌 수 있나요?</summary><p>아니요, 페이지 기준으로 나눠요. 한 파일이 여전히 크면 범위를 더 잘게 나누세요.</p></details><details><summary>뽑은 페이지 순서를 바꿀 수 있나요?</summary><p>따로따로 뽑은 뒤 &#x27;PDF 합치기&#x27;에서 원하는 순서로 합치면 돼요.</p></details></section>
+<section class="related wrap"><h2>다른 PDF 도구</h2><div class="cards"><a class="card cat-pdf" href="/ko/images-to-pdf/"><span class="flap xs" aria-hidden="true" data-text="PDF"><b>P</b><b>D</b><b>F</b></span><span class="card-name">JPG PDF 변환</span><span class="card-line">사진·스캔을 PDF 하나로</span></a><a class="card cat-pdf" href="/ko/pdf-to-jpg/"><span class="flap xs" aria-hidden="true" data-text="JPG"><b>J</b><b>P</b><b>G</b></span><span class="card-name">PDF JPG 변환</span><span class="card-line">쪽마다 그림 파일로</span></a><a class="card cat-pdf" href="/ko/merge-pdf/"><span class="flap xs" aria-hidden="true" data-text="1PDF"><b>1</b><b>P</b><b>D</b><b>F</b></span><span class="card-name">PDF 합치기</span><span class="card-line">여러 PDF를 원하는 순서로 하나로</span></a></div>
+<p class="all-link"><a href="/ko/#tools">모든 도구 →</a></p></section>
+<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="maker">만든 곳 <a href="https://lumenlab.page/">Lumen Lab</a> <span aria-hidden="true">·</span> <a href="https://lumenlab.page/">루멘랩: 다른 앱과 도구 보기 →</a></p>
+    <div class="foot-cols"><div><p class="foot-h">동영상</p><ul><li><a href="/ko/video-to-mp3/">동영상 MP3 변환</a></li><li><a href="/ko/video-converter/">동영상 변환</a></li><li><a href="/ko/cut-video/">동영상 자르기</a></li><li><a href="/ko/compress-video/">동영상 용량 줄이기</a></li><li><a href="/ko/video-to-gif/">동영상 GIF 변환</a></li></ul></div><div><p class="foot-h">오디오</p><ul><li><a href="/ko/audio-converter/">오디오 변환</a></li><li><a href="/ko/cut-audio/">오디오 자르기</a></li></ul></div><div><p class="foot-h">이미지</p><ul><li><a href="/ko/image-converter/">이미지 변환</a></li><li><a href="/ko/heic-to-jpg/">HEIC JPG 변환</a></li><li><a href="/ko/compress-image/">이미지 용량 줄이기</a></li><li><a href="/ko/resize-image/">이미지 크기 조절</a></li></ul></div><div><p class="foot-h">PDF</p><ul><li><a href="/ko/images-to-pdf/">JPG PDF 변환</a></li><li><a href="/ko/pdf-to-jpg/">PDF JPG 변환</a></li><li><a href="/ko/merge-pdf/">PDF 합치기</a></li><li><a href="/ko/split-pdf/">PDF 나누기</a></li></ul></div><div><p class="foot-h">표·데이터</p><ul><li><a href="/ko/csv-json/">CSV ↔ JSON 변환</a></li><li><a href="/ko/excel-csv/">엑셀 ↔ CSV 변환</a></li></ul></div></div>
+    <p class="foot-links"><a href="/ko/about/">소개</a><a href="/ko/guide/">가이드</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+    <p class="muted small">© 2026 Lumen Lab</p>
+  </div>
+</footer>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>
