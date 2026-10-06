@@ -163,6 +163,24 @@ body:has(#today) .lede { font-size: 16.5px; }
 }
 .field input:hover { border-color: var(--ink-2); }
 .field input:focus { outline: none; border-color: var(--main); box-shadow: 0 0 0 3px var(--main-soft); }
+/* 날짜 칸: 숫자로 치는 칸 + 오른쪽 달력 단추(원래 date 칸을 투명하게 겹침) */
+.field { position: relative; }
+.dt { position: relative; display: block; }
+.field .dt-txt { padding-right: 50px; }
+.field .dt-txt::placeholder { color: var(--muted); font-weight: 500; opacity: .7; }
+.field .dt input[type="date"], .field .dt input[type="datetime-local"] {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 48px; min-height: 0; padding: 0; border: 0;
+  opacity: 0; cursor: pointer; box-shadow: none; background: none;
+}
+.field .dt input[type="date"]::-webkit-calendar-picker-indicator, .field .dt input[type="datetime-local"]::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: auto; height: auto; cursor: pointer; }
+.dt-ic { position: absolute; top: 50%; right: 8px; width: 34px; height: 34px; margin-top: -17px; display: grid; place-items: center; border-radius: 9px; color: var(--g, var(--main)); background: var(--gs, var(--main-soft)); pointer-events: none; transition: transform var(--dur) var(--ease); }
+.dt:has(input[type="date"]:active, input[type="datetime-local"]:active) .dt-ic { transform: scale(.92); }
+.dt-msg:empty { display: none; }
+.dt-msg { position: absolute; left: 0; top: calc(100% + 4px); z-index: 3; max-width: 100%; padding: 5px 9px; border-radius: 8px; background: var(--ink); color: var(--card); font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: var(--shadow); }
+.field:has(.dt-txt.bad) .dt-msg { background: var(--red); color: #fff; }
+.field .dt-txt.bad { border-color: var(--red); }
+.result.stale { opacity: .4; transition: opacity .15s; }
+.field .dt-txt.bad:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 22%, transparent); }
 .check { display: flex; align-items: center; gap: 9px; margin-top: 12px; font-size: 15px; cursor: pointer; width: fit-content; }
 .check input { width: 19px; height: 19px; margin: 0; accent-color: var(--main); }
 .seg { display: inline-flex; margin-top: 12px; padding: 3px; gap: 3px; background: var(--cell); border-radius: 12px; }
@@ -345,6 +363,8 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   .grid4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   /* 날짜+시각 칸은 반 폭에선 시각이 잘려("10/06/2026, (") 휴대폰에선 한 칸씩 */
   .grid2:has(input[type="datetime-local"]) { grid-template-columns: minmax(0, 1fr); }
+  .field .dt-txt { padding-right: 46px; }
+  .dt-ic { right: 6px; width: 32px; height: 32px; margin-top: -16px; }
   .rows { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .rows div { padding: 10px 12px; }
   .rows dd { font-size: 16px; }
@@ -400,6 +420,10 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 .stamp.go { animation: stamp-in .3s var(--ease); }
 /* 그날이에요 색종이: 계산기 카드 위에만 그리는 캔버스(누름은 그대로 통과, 끝나면 지움) */
 .fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; border-radius: inherit; }
+/* 좁은 휴대폰: 날짜 칸 반 폭엔 '2026.10.06'이 다 안 들어가서 한 줄에 하나씩 */
+@media (max-width: 480px) {
+  .grid2:has(.dt) { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
   /* 미끄러짐·튐·흔들림은 끄고 짧은 페이드만. 도장은 움직이지 않아도 보인다 */

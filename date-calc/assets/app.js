@@ -404,6 +404,66 @@
     });
   });
 
+  // ---------- 날짜를 숫자로 치기 ----------
+  // 휴대폰 달력은 2004년처럼 먼 날로 가기가 힘들어서, 날짜 칸마다 숫자로 치는 칸을 앞에 두고 달력 칸은 오른쪽 달력 단추로 줄인다.
+  // 계산은 여전히 원래 date 칸 값을 읽는다(치는 칸은 그 값을 채워 주기만 함).
+  var mdy = lang === "en", thisYear = DC.toYMD(today).y;
+  document.querySelectorAll('.tool input[type="date"], .tool input[type="datetime-local"]').forEach(function (nat) {
+    var wt = nat.type === "datetime-local";
+    var box = document.createElement("span"), txt = document.createElement("input"), msg = document.createElement("small");
+    box.className = "dt";
+    txt.type = "text"; txt.className = "dt-txt"; txt.inputMode = "decimal"; txt.autocomplete = "off"; txt.spellcheck = false;
+    txt.setAttribute("enterkeyhint", "done");
+    txt.placeholder = wt ? (mdy ? "e.g. 10/06/2026 14:30" : "예: 202610061430") : (mdy ? "e.g. 03/15/2004" : "예: 20040315");
+    msg.className = "dt-msg"; msg.setAttribute("aria-live", "polite"); msg.id = nat.id + "-msg";
+    txt.setAttribute("aria-describedby", msg.id);
+    nat.parentNode.insertBefore(box, nat);
+    box.appendChild(txt); box.appendChild(nat);
+    var ic = document.createElement("span");
+    ic.className = "dt-ic"; ic.setAttribute("aria-hidden", "true");
+    ic.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+    box.appendChild(ic);
+    box.parentNode.appendChild(msg);
+    nat.tabIndex = -1;
+    nat.setAttribute("aria-label", L("달력에서 고르기"));
+    var hint = wt ? L("숫자만 쳐도 돼요. 예: 202610061430") : L("숫자만 쳐도 돼요. 예: 20040315");
+    var fromTxt = false;
+    function say(t, bad) {
+      msg.textContent = t; txt.classList.toggle("bad", !!bad); txt.setAttribute("aria-invalid", bad ? "true" : "false");
+      // 틀린 날짜가 남아 있으면 결과는 앞 값이라 흐리게 둔다
+      var tool = txt.closest(".tool");
+      $("r-" + tool.id).classList.toggle("stale", !!tool.querySelector(".dt-txt.bad"));
+    }
+    function fill() { txt.value = DC.showDate(nat.value, mdy); }
+    function put(v) {
+      if (nat.value === v) return;
+      nat.value = v; fromTxt = true;
+      nat.dispatchEvent(new Event("input", { bubbles: true }));
+      fromTxt = false;
+    }
+    function read(final) { return DC.readDate(txt.value, { mdy: mdy, final: final, withTime: wt, year: thisYear }); }
+    function noDay(r) { return r.y ? F("없는 날짜예요: %s", DC.showDate(r.y + "-" + (r.m < 10 ? "0" : "") + r.m + "-" + (r.d < 10 ? "0" : "") + r.d, mdy) || txt.value) : ""; }
+    txt.addEventListener("input", function () {
+      var r = read(false);
+      if (r.state === "ok") { put(r.value); say(hint); }
+      else if (r.state === "bad" && r.y) say(noDay(r), true);
+      else say(hint);
+    });
+    txt.addEventListener("focus", function () { if (!txt.classList.contains("bad")) say(hint); });
+    txt.addEventListener("blur", function () {
+      var r = read(true);
+      if (r.state === "ok") { put(r.value); fill(); say(""); }
+      else if (r.state === "empty") { fill(); say(""); }
+      else say(noDay(r) || (wt ? L("날짜를 읽지 못했어요. 예: 202610061430") : L("날짜를 읽지 못했어요. 예: 20040315")), true);
+    });
+    txt.addEventListener("keydown", function (e) { if (e.key === "Enter") txt.blur(); });
+    // 달력에서 고르면 치는 칸도 맞춘다. 컴퓨터 크롬은 칸을 눌러도 달력이 안 열려서 showPicker로 연다.
+    nat.addEventListener("input", function () { if (!fromTxt) { fill(); say(""); } });
+    nat.addEventListener("change", function () { if (!fromTxt) { fill(); say(""); } });
+    nat.addEventListener("click", function () { try { if (nat.showPicker) nat.showPicker(); } catch (e) { /* 지원 안 하는 브라우저는 기본 동작 */ } });
+    fill();
+  });
+
   show(fromHash());
   renderAll();
   if (window.DC_ADS) window.DC_ADS.mount();

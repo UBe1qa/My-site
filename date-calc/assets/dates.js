@@ -179,12 +179,68 @@ var DC = (function () {
     return out;
   }
 
+  // 손으로 친 날짜 읽기(휴대폰 숫자 자판용). 결과 {state: "ok"|"partial"|"bad"|"empty", value}.
+  // value는 date 칸 값(YYYY-MM-DD) 또는 withTime이면 datetime-local 값(YYYY-MM-DDTHH:MM).
+  // 받는 꼴: 20040315, 2004.3.15, 2004-03-15, 04/3/15, 2004년 3월 15일, 3.15(올해). mdy면(영어) 03/15/2004·03152004도.
+  // final=false(치는 중)면 숫자만 4·6자리, 두 칸(월.일)은 아직 'partial'로 둔다(중간값으로 계산이 튀지 않게).
+  function readDate(s, opt) {
+    opt = opt || {};
+    var mdy = !!opt.mdy, fin = !!opt.final, wt = !!opt.withTime, thisY = opt.year || 2026;
+    s = String(s || "").replace(/[년월]/g, ".").replace(/[일시]/g, " ").replace(/분/g, "").trim();
+    if (!s) return { state: "empty" };
+    if (/[^\d.\-\/\s,:T]/.test(s)) return { state: "bad" };
+    var hh = null, mm = null, t;
+    if (wt) {
+      if (/^\d{12}$/.test(s)) { hh = +s.slice(8, 10); mm = +s.slice(10); s = s.slice(0, 8); }
+      else if ((t = /^(.+?)[\sT]+(\d{1,2})[:.](\d{2})$/.exec(s)) || (t = /^(.+?)\s+(\d{1,2})(\d{2})$/.exec(s))) { s = t[1]; hh = +t[2]; mm = +t[3]; }
+      else if ((t = s.split(/[.\-\/\s,:T]+/).filter(Boolean)).length === 5) { hh = +t[3]; mm = +t[4]; s = t.slice(0, 3).join("."); }
+      s = s.trim();
+    }
+    var y, m, d, p;
+    function full(v, len) { return len === 2 ? (v <= thisY % 100 + 20 ? 2000 + v : 1900 + v) : v; }
+    if (/^\d+$/.test(s)) {
+      var n = s.length;
+      if (n === 8) {
+        var a = { y: +s.slice(4), m: +s.slice(0, 2), d: +s.slice(2, 4) };
+        if (mdy && a.m >= 1 && a.m <= 12 && a.d >= 1 && a.d <= daysInMonth(a.y, a.m)) { y = a.y; m = a.m; d = a.d; }
+        else { y = +s.slice(0, 4); m = +s.slice(4, 6); d = +s.slice(6); }
+      } else if (n === 6 && fin) {
+        if (mdy) { m = +s.slice(0, 2); d = +s.slice(2, 4); y = full(+s.slice(4), 2); }
+        else { y = full(+s.slice(0, 2), 2); m = +s.slice(2, 4); d = +s.slice(4); }
+      } else if (n === 4 && fin) { y = thisY; m = +s.slice(0, 2); d = +s.slice(2); }
+      else return { state: n > 8 ? "bad" : (fin ? "bad" : "partial") };
+    } else {
+      p = s.split(/[.\-\/\s,]+/).filter(Boolean);
+      if (p.length === 3) {
+        if (p[0].length >= 3 || !mdy) { y = full(+p[0], p[0].length); m = +p[1]; d = +p[2]; if (p[0].length === 1 || p[0].length === 3) return { state: fin ? "bad" : "partial" }; }
+        else { m = +p[0]; d = +p[1]; if (p[2].length !== 2 && p[2].length !== 4) return { state: fin ? "bad" : "partial" }; y = full(+p[2], p[2].length); }
+      } else if (p.length === 2 && fin && p[0].length <= 2) {
+        m = +p[0]; d = +p[1]; y = thisY;
+      } else return { state: p.length > 3 || fin ? "bad" : "partial" };
+    }
+    if (y < 1000 || y > 9999 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return { state: "bad", y: y, m: m, d: d };
+    var v = y + "-" + pad(m) + "-" + pad(d);
+    if (wt) {
+      if (hh === null) { if (!fin) return { state: "partial" }; hh = 0; mm = 0; }
+      if (hh > 23 || mm > 59) return { state: "bad" };
+      v += "T" + pad(hh) + ":" + pad(mm);
+    }
+    return { state: "ok", value: v };
+  }
+  // date·datetime-local 칸 값 → 보여 줄 글자(한국어 2004.03.15, 영어 03/15/2004)
+  function showDate(v, mdy) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?$/.exec(String(v || ""));
+    if (!m) return "";
+    return (mdy ? m[2] + "/" + m[3] + "/" + m[1] : m[1] + "." + m[2] + "." + m[3]) + (m[4] ? " " + m[4] : "");
+  }
+
   return {
     fromYMD: fromYMD, toYMD: toYMD, parse: parse, iso: iso, isLeap: isLeap, daysInMonth: daysInMonth,
     weekday: weekday, addMonths: addMonths, addYears: addYears, ymd: ymd, between: between,
     holidayName: holidayName, covered: covered, holidayYears: holidayYears, isBusinessDay: isBusinessDay,
     businessDays: businessDays, addBusinessDays: addBusinessDays, age: age, anniversaries: anniversaries,
     isoWeek: isoWeek, dayOfYear: dayOfYear, daysInYear: daysInYear, weekOfMonth: weekOfMonth,
-    parseLocal: parseLocal, timeDiff: timeDiff, holidaysOfYear: holidaysOfYear
+    parseLocal: parseLocal, timeDiff: timeDiff, holidaysOfYear: holidaysOfYear,
+    readDate: readDate, showDate: showDate
   };
 })();
