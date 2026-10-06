@@ -1,7 +1,8 @@
 # 첫 페이지의 앱·웹 도구 칸을 _dev/catalog.json 에서 다시 만든다: python3 lumenlab/_dev/build_home.py
 # index.html 의 <!-- gen:이름 --> ~ <!-- /gen:이름 --> 사이와 assets/i18n.js 의 /* gen:start */ ~ /* gen:end */ 사이만 바꾼다(손으로 고치지 말 것).
 # 칸마다 limit개를 넘으면 /apps/ · /tools/ 전체 목록 페이지를 만들고 홈에 '전체 보기'를 단다. 안 넘으면 그 페이지를 지운다.
-import json, os, re, shutil
+# sitemap.xml 도 여기서 만든다: 홈 + 전체 목록 페이지 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
+import json, os, re, shutil, subprocess, datetime
 from html import escape
 
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
@@ -140,3 +141,25 @@ js, n = re.subn(r'(/\* gen:start \*/).*?(\n[ \t]*/\* gen:end \*/)', lambda m: m.
 assert n == 1, 'i18n.js 표시 없음'
 open(i18n, 'w').write(js)
 print(f'앱 {len(apps)}개, 웹 도구 {len(tools)}개 (홈에는 칸마다 {LIMIT}개까지)')
+
+# sitemap.xml: 서브도메인 사이트는 각자 사이트맵이 있어서 여기엔 lumenlab.page 주소만 넣는다.
+# canonical이 다른 주소인 페이지(예: 앱스토어에 적힌 옛 주소를 canonical로 둔 방침·지원)는 빼서 사이트맵 = canonical을 지킨다.
+def lastmod(f):
+    rel = os.path.relpath(f, site)
+    dirty = subprocess.run(['git', 'status', '--porcelain', '--', rel], cwd=site, capture_output=True, text=True).stdout.strip()
+    day = '' if dirty else subprocess.run(['git', 'log', '-1', '--format=%cs', '--', rel], cwd=site, capture_output=True, text=True).stdout.strip()
+    return day or datetime.date.today().isoformat()
+paths = ['/'] + [f'/{k}/' for k, items in (('apps', apps), ('tools', tools)) if len(items) > LIMIT]
+paths += [l['href'] for it in apps + tools for l in it.get('links', []) if l['href'].startswith('/') and l['href'] not in paths]
+urls = []
+for pth in paths:
+    f = os.path.join(site, pth.strip('/'), 'index.html')
+    if not os.path.isfile(f): continue
+    m = re.search(r'<link rel="canonical" href="([^"]+)"', open(f).read())
+    if not m or m.group(1) != 'https://lumenlab.page' + pth: continue
+    urls.append(f'  <url><loc>https://lumenlab.page{pth}</loc><lastmod>{lastmod(f)}</lastmod></url>')
+sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(urls) + '\n</urlset>\n'
+smf = os.path.join(site, 'sitemap.xml')
+if not os.path.isfile(smf) or open(smf).read().split('<url>')[1:] != sm.split('<url>')[1:]:
+    open(smf, 'w').write(sm)
+print(f'sitemap.xml: 주소 {len(urls)}개')
