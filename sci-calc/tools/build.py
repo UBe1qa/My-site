@@ -19,7 +19,7 @@ import articles  # noqa: E402
 SITE = 'https://calc.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = datetime.date(2026, 10, 6)
-ASSET_V = '2'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
+ASSET_V = '3'   # 스크립트·스타일을 바꾸면 올린다 (브라우저 캐시 새로 받기)
 
 esc = html.escape
 
@@ -39,8 +39,8 @@ def head(lang, path, title, desc, *, alt=True, ads=True, jsonld=(), noindex=Fals
     out = ['<!doctype html>', '<html lang="%s">' % lang, '<head>', '<meta charset="utf-8">',
            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
            '<title>%s</title>' % esc(title), '<meta name="description" content="%s">' % esc(desc, quote=True),
-           '<meta name="theme-color" content="#f1efff" media="(prefers-color-scheme: light)">',
-           '<meta name="theme-color" content="#0f0d22" media="(prefers-color-scheme: dark)">']
+           '<meta name="theme-color" content="#f3f2fb" media="(prefers-color-scheme: light)">',
+           '<meta name="theme-color" content="#100f1f" media="(prefers-color-scheme: dark)">']
     if noindex:
         out.append('<meta name="robots" content="noindex">')
     else:

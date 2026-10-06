@@ -1,0 +1,20 @@
+/* 시안 E2a '차분한 오로라' — E의 보라 색은 두고, 번짐·그라데이션·유리를 걷어 낸 판 */
+:root { --hero: #f3f2fb; --body: #ffffff; --ackey: #ec5a6e; --ackey-shadow: #b8374b; --shift: #f28c38; }
+.hero, .page-head { background-color: var(--hero); background-image:
+  radial-gradient(640px 420px at 92% 0%, rgba(124, 92, 255, .16), transparent 70%),
+  radial-gradient(560px 380px at 0% 100%, rgba(120, 180, 255, .10), transparent 70%); }
+body:has(.hero) .top-band, body:has(.page-head) .top-band { background: var(--hero); backdrop-filter: none; }
+.hero h1 { background: none; color: var(--hero-ink); }
+.hero .lede b { background: var(--accent); color: #fff; }
+.hero-points .dot { background: var(--accent); }
+.modes a { background: #fff; border-color: var(--line-2); backdrop-filter: none; }
+.calc { background: var(--body); backdrop-filter: none; -webkit-backdrop-filter: none; border: 1px solid var(--line-2); box-shadow: 0 30px 60px -32px rgba(40, 28, 110, .32); }
+.keys-n .k.eq, .acts .starter button, .prose a.try { background: var(--eqkey); }
+.k.shift { box-shadow: 0 3px 0 #b8611c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --hero: #100f1f; --body: #17152c; }
+  :root:not([data-theme="light"]) .hero, :root:not([data-theme="light"]) .page-head { background-image:
+    radial-gradient(640px 420px at 92% 0%, rgba(124, 92, 255, .22), transparent 70%),
+    radial-gradient(560px 380px at 0% 100%, rgba(60, 120, 220, .12), transparent 70%); }
+  :root:not([data-theme="light"]) .hero h1 { background: none; color: var(--hero-ink); }
+  :root:not([data-theme="light"]) .modes a { background: rgba(255,255,255,.04); border-color: var(--line-2); }
+  :root:not([data-theme="light"]) .calc { border-color: var(--line-2); box-shadow: 0 30px 60px -30px rgba(0,0,0,.7); } }

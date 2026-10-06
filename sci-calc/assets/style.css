@@ -1,19 +1,19 @@
 /* 공학용 계산기 — 공통 모양. 색·글꼴·모서리는 :root 토큰에만. */
-/* 디자인: 시안 E '오로라' (보라·하늘·분홍 번짐 바탕 + 반투명 유리 계산기). 2026-10-06 2차 디자인 */
+/* 디자인: 시안 E2 '차분한 오로라' (연보라 바탕 + 보라 포인트, 어두운 화면·기능 키 계산기). 2026-10-06 3차 디자인 */
 :root {
   --bg: #f7f7fc; --card: #ffffff; --ink: #15132b; --ink-2: #2f2c4d; --muted: #66638a; --line: #e7e5f3; --line-2: #d7d3ec;
   --main: #5b3df5; --main-ink: #ffffff; --main-soft: #efebff; --link: #5b3df5;
   --accent: #6d4aff; --accent-ink: #ffffff;
-  --hero: #f1efff; --hero-ink: #15132b; --hero-2: #4c4870;
-  --body: rgba(255, 255, 255, .66); --body-2: #ffffff; --body-ink: #15132b;
-  --screen: #f4f2ff; --screen-ink: #15132b; --screen-line: #d8d1ff; --screen-muted: #6b65a6;
-  --key: #f2f4f7; --key-ink: #101214; --key-shadow: #d9d6ec;
-  --fkey: #eceaf8; --fkey-ink: #2a2650; --fkey-shadow: #cfcbe6;
+  --hero: #f3f2fb; --hero-ink: #15132b; --hero-2: #4c4870;
+  --body: #ecebf6; --body-2: #ffffff; --body-ink: #15132b;
+  --screen: #1c1a33; --screen-ink: #f3f1ff; --screen-line: #35315a; --screen-muted: #b9b3e6;
+  --key: #f2f4f7; --key-ink: #101214; --key-shadow: #c9c6dc;
+  --fkey: #2b2848; --fkey-ink: #f3f1ff; --fkey-shadow: #14122a;
   --nkey: #ffffff; --nkey-ink: #15132b;
-  --opkey: #e6e0ff; --opkey-ink: #4b2fe0;
+  --opkey: #dcd6fb; --opkey-ink: #4b2fe0;
   --eqkey: #6d4aff; --eqkey-ink: #ffffff; --eqkey-shadow: #3d22b8;
-  --ackey: #ff5d7a; --ackey-ink: #ffffff; --ackey-shadow: #c23452;
-  --shift: #ff8a3d; --cursor: #6d4aff;
+  --ackey: #ec5a6e; --ackey-ink: #ffffff; --ackey-shadow: #b8374b;
+  --shift: #f28c38; --cursor: #6d4aff;
   --err: #c2321f; --err-bg: #fff0ec;
   --radius: 18px; --kr: 10px;
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
@@ -25,10 +25,10 @@
     --bg: #0b0a16; --card: #15132a; --ink: #eeecff; --ink-2: #cfcbf2; --muted: #9a96c4; --line: #232042; --line-2: #322e5a;
     --main: #a48dff; --main-ink: #0b0a16; --main-soft: #221d48; --link: #b6a4ff;
     --accent: #8b6dff; --accent-ink: #ffffff;
-    --hero: #0f0d22; --hero-ink: #f1efff; --hero-2: #b5b0dc;
-    --body: rgba(28, 25, 56, .62); --body-2: #15132a;
-    --screen: #120f2a; --screen-ink: #eeecff; --screen-line: #2f2a5e; --screen-muted: #bcb6ee;
-    --fkey: #26224a; --nkey: #343062; --opkey: #3b2f86; --key-shadow: #0b0a16;
+    --hero: #100f1f; --hero-ink: #f1efff; --hero-2: #b5b0dc;
+    --body: #201d3a; --body-2: #15132a;
+    --screen: #0e0c1e; --screen-ink: #eeecff; --screen-line: #2f2a5e; --screen-muted: #bcb6ee;
+    --fkey: #15132a; --nkey: #3a3666; --opkey: #3b2f86; --key-shadow: #0b0a16;
     --cursor: #a48dff;
     --err: #ff8a73; --err-bg: #3a1d17;
     color-scheme: dark;
@@ -393,45 +393,37 @@ h1, h2, h3 { text-wrap: balance; }
   .keys-n .k { min-height: 50px; }
 }
 
-/* 시안 E 모양 (2026-10-06 2차: 라임 단색이 촌스럽다는 의견으로 D 스튜디오·F 민트와 비교) */
+/* 시안 E2 모양 (2026-10-06 3차: E는 너무 튄다는 의견으로 D처럼 차분하게. 보라는 두고 번짐·그라데이션·유리는 뺌,
+   계산기는 D처럼 어두운 화면 + 어두운 기능 키 + 흰 숫자 키) */
 .prose a, .faq a, .foot a { color: var(--link); }
+.prose a.try { color: #fff; background: var(--accent); }
 .prose a.try:hover { filter: brightness(1.1); }
 .prose th, .prose td:first-child { white-space: nowrap; }
 .page-head a, .crumbs a { color: inherit; }
 .hero, .page-head { background-color: var(--hero); background-image:
-  radial-gradient(520px 380px at 12% 18%, rgba(160, 130, 255, .55), transparent 70%),
-  radial-gradient(520px 360px at 88% 6%, rgba(110, 200, 255, .5), transparent 70%),
-  radial-gradient(620px 420px at 62% 105%, rgba(255, 150, 200, .5), transparent 70%); }
-.top-band { background: transparent; position: relative; z-index: 3; }
-body:has(.hero) .top-band, body:has(.page-head) .top-band { background: color-mix(in srgb, var(--hero) 70%, transparent); backdrop-filter: blur(10px); }
-.hero h1 { font-weight: 850; letter-spacing: -0.05em; background: linear-gradient(100deg, var(--hero-ink) 30%, #6d4aff 75%, #e0459b); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero .lede b { background: linear-gradient(100deg, #6d4aff, #e0459b); color: #fff; }
-.modes a { background: color-mix(in srgb, #ffffff 55%, transparent); border-color: color-mix(in srgb, var(--hero-ink) 10%, transparent); backdrop-filter: blur(6px); }
+  radial-gradient(640px 420px at 92% 0%, rgba(124, 92, 255, .16), transparent 70%),
+  radial-gradient(520px 340px at 0% 55%, rgba(120, 180, 255, .10), transparent 70%); border-bottom: 1px solid var(--line); }
+.top-band { background: var(--hero); position: relative; z-index: 3; }
+.hero h1 { font-size: clamp(34px, 9vw, 64px); letter-spacing: -0.05em; font-weight: 850; color: var(--hero-ink); }
+.hero .lede b { background: var(--accent); color: #fff; padding: 0 4px; border-radius: 4px; }
+.hero .kbd-help .kbd { background: var(--card); border-color: var(--line-2); color: var(--hero-ink); }
+.modes a { background: var(--card); border-color: var(--line-2); color: var(--hero-ink); }
+.modes a:hover { background: var(--main-soft); }
 .modes a[aria-current="page"] { background: var(--hero-ink); color: var(--hero); border-color: var(--hero-ink); }
-.hero-points .dot { background: linear-gradient(135deg, #6d4aff, #e0459b); border-radius: 50%; }
-.calc { background: var(--body); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4);
-  border: 1px solid rgba(255,255,255,.75); box-shadow: 0 40px 80px -30px rgba(70, 40, 180, .45); }
-.screen { box-shadow: inset 0 0 0 1px var(--screen-line); }
-.keys-n .k.eq { background: linear-gradient(135deg, #6d4aff, #e0459b); }
+.hero-points .dot { background: var(--accent); border-radius: 50%; }
+.calc { background: var(--body); border: 1px solid var(--line-2); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 30px 60px -32px rgba(40, 28, 110, .38); }
+.screen { box-shadow: inset 0 3px 8px rgba(0, 0, 0, .4); }
 .acts button { background: color-mix(in srgb, var(--body-ink) 8%, transparent); color: var(--body-ink); }
-.acts .starter { color: var(--muted); }
-.acts .starter button { background: linear-gradient(135deg, #6d4aff, #e0459b); color: #fff; }
-.k.shift { color: #fff; box-shadow: 0 3px 0 #c45a12; }
-.keys-n .k .ks { color: #d0601a; }
+.acts .starter button { background: var(--accent); color: #fff; }
+.k.shift { color: #fff; box-shadow: 0 3px 0 #b8611c; }
 .answer { border-left-color: var(--accent); }
-.prose a.try { color: #fff; background: linear-gradient(135deg, #6d4aff, #e0459b); }
 .lm-b { fill: #6d4aff; } .lm-s { fill: #fff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero, :root:not([data-theme="light"]) .page-head { background-image:
-  radial-gradient(520px 380px at 12% 18%, rgba(110, 70, 255, .45), transparent 70%),
-  radial-gradient(520px 360px at 88% 6%, rgba(30, 120, 220, .38), transparent 70%),
-  radial-gradient(620px 420px at 62% 105%, rgba(220, 60, 150, .35), transparent 70%); }
-  :root:not([data-theme="light"]) .hero h1 { background-image: linear-gradient(100deg, #ffffff 30%, #b6a4ff 70%, #ff8cc6); }
-  :root:not([data-theme="light"]) .modes a { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14); }
-  :root:not([data-theme="light"]) .calc { border-color: rgba(255,255,255,.12); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
-  :root:not([data-theme="light"]) .keys-n .k .ks { color: #ffab6b; }
+  radial-gradient(640px 420px at 92% 0%, rgba(124, 92, 255, .22), transparent 70%),
+  radial-gradient(520px 340px at 0% 55%, rgba(60, 120, 220, .12), transparent 70%); }
+  :root:not([data-theme="light"]) .calc { box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 30px 60px -30px rgba(0,0,0,.75); }
   :root:not([data-theme="light"]) .modes a[aria-current="page"] { background: #f1efff; color: #15132b; border-color: #f1efff; }
 }
-
 
 /* ------------------------------------------------ 모드 화면 부품 */
 .mode-ui { display: grid; gap: 12px; align-content: start; }
@@ -493,7 +485,8 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
 
 /* 2차 블라인드 검토 반영: 보조 글자 대비, 휴대폰 첫 화면에 = 키까지, 어두운 화면 안내 띠 */
 .k .ks { font-size: 10.5px; }
-.keys-f .k .ks, .keys-n .k .ks { color: #b4460a; }
+.keys-f .k .ks { color: #ffb27a; }
+.keys-n .k .ks { color: #b4460a; }
 .keys-n .k.op .ks { color: #9c3a00; }
 .keys-n .k.eq .ks, .keys-n .k.ac .ks { color: rgba(255, 255, 255, .92); }
 .calc.is-shift .k[data-s] .ks { text-decoration: none; }
@@ -511,3 +504,15 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
   .keys-n .k { min-height: 47px; }
   .keys-n { margin-top: 8px; gap: 7px; }
 }
+
+/* 3차 블라인드 검토 반영: SHIFT 누른 상태의 보조 글자 대비, 어두운 화면 보라 버튼 글자 대비, 어두운 계산 화면 위 그래프 색 */
+.calc.is-shift .k[data-s] { box-shadow: 0 3px 0 color-mix(in srgb, var(--shift) 55%, var(--key-shadow)); }
+.calc.is-shift .keys-n .k[data-s] .ks { color: #b4460a; }
+.calc.is-shift .keys-n .k.op[data-s] .ks { color: #9c3a00; }
+.calc.is-shift .keys-f .k[data-s] .ks { color: #ffb27a; }
+.calc.is-shift .keys-n .k.eq[data-s] .ks, .calc.is-shift .keys-n .k.ac[data-s] .ks { color: rgba(255, 255, 255, .92); }
+.chart .lf, .chart .pt { stroke: #b6a4ff; } .chart .pt { fill: #b6a4ff; stroke: none; }
+.chart .lg { stroke: #ffb27a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .prose a.try, :root:not([data-theme="light"]) .acts .starter button { background: #6d4aff; }
+  :root:not([data-theme="light"]) .calc.is-shift .keys-n .k[data-s] .ks { color: #ffb27a; }
+  :root:not([data-theme="light"]) .calc.is-shift .keys-n .k.op[data-s] .ks { color: #ffc49b; } }
