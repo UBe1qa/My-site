@@ -1,6 +1,6 @@
 /* 한국어·영어 전환. 한국어는 HTML에 그대로 있고, 영어만 여기 모아 둔다 (lumenlab 과 같은 방식).
    <head>의 짧은 스크립트가 html[data-lang]을 먼저 정해 두고(저장한 선택 > 브라우저 언어), 이 파일이 body 끝에서 글을 바꾼다.
-   앱 본체(/app/)는 한국어 앱이라 바꾸지 않는다. */
+   앱 본체(/app/)는 이 파일을 쓰지 않는다. 앱은 자기 안에 한국어·영어가 있고 폰 언어를 따른다(설정에서도 바꿈). */
 (function () {
   var EN = {
     docTitle: 'SetNote · A workout log that keeps last time beside you',
@@ -14,7 +14,7 @@
     heroTitle: 'Log this set with last time <span class="nw">right beside it</span>',
     heroLead: 'Save your routines and bring them up at the gym. Last time’s weight and reps sit next to every set, so you know what to lift today without guessing.',
     open: 'Open SetNote',
-    ctaNote: 'No sign-up · works in your phone’s browser (app is in Korean)',
+    ctaNote: 'No sign-up · works in your phone’s browser',
     logLabel: 'Example of a SetNote log',
     example: 'Example',
     bench: 'Bench press',
