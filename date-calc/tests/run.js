@@ -150,7 +150,12 @@ eq("읽기: 없는 날·틀린 꼴", ["20040230", "2025.2.29", "2004.13.1", "abc
   ["bad", "bad", "bad", "bad", "bad", "bad", "bad", "bad", "empty"]);
 eq("읽기: 치는 중엔 짧은 숫자·두 칸은 기다림", ["2004", "200403", "2004031", "2004.3", "3.1", "0315"].map(function (s) { return rdv(s, KT); }),
   ["partial", "partial", "partial", "partial", "partial", "partial"]);
-eq("읽기: 2024.2.29는 있음, 2자리 연도 기준", [rdv("2024.2.29", KF), rdv("46.1.1", KF), rdv("47.1.1", KF)], ["2024-02-29", "2046-01-01", "1947-01-01"]);
+eq("읽기: 2024.2.29는 있음, 2자리 연도 기준(보통 올해+10, 생일 칸은 올해까지)", [rdv("2024.2.29", KF), rdv("36.1.1", KF), rdv("37.1.1", KF), rdv("450101", { final: true, year: 2026, past: true }), rdv("260101", { final: true, year: 2026, past: true }), rdv("270101", { final: true, year: 2026, past: true })], ["2024-02-29", "2036-01-01", "1937-01-01", "1945-01-01", "2026-01-01", "1927-01-01"]);
+eq("읽기: 치는 중 한 자리 날·0일·영어 두 자리 연도·세 자리 시각은 기다림", ["2004.03.0", "2004.3.1", "2004.12.3"].map(function (s) { return rdv(s, KT); }).concat([rdv("3/15/20", { year: 2026, mdy: true }), rdv("12/31/20", { year: 2026, mdy: true }), rdv("2026.10.06 143", { year: 2026, withTime: true }), rdv("2026.10.06 14:3", { year: 2026, withTime: true })]),
+  ["partial", "partial", "partial", "partial", "partial", "partial", "partial"]);
+eq("읽기: 없는 날만 y·m·d를 돌려줌(꼴이 틀리면 '못 읽음')", [DC.readDate("20040230", KF).y, DC.readDate("03152004", KF).y, DC.readDate("12/31/99", KF).y], [2004, undefined, undefined]);
+eq("읽기: 오전·오후, AM/PM, 전각 숫자, 시각 없으면 원래 시각", [rdv("10/06/2026 2:30 PM", { final: true, year: 2026, withTime: true, mdy: true }), rdv("2026.10.6 오후 2:30", { final: true, year: 2026, withTime: true }), rdv("2026.10.6 12:05 am", { final: true, year: 2026, withTime: true }), rdv("２００４０３１５", KF), rdv("2026.10.06", { final: true, year: 2026, withTime: true, keepTime: "2020-01-01T09:15" })],
+  ["2026-10-06T14:30", "2026-10-06T14:30", "2026-10-06T00:05", "2004-03-15", "2026-10-06T09:15"]);
 var WT = { final: true, year: 2026, withTime: true };
 eq("읽기: 날짜+시각", ["202610061430", "2026.10.06 14:30", "2026.10.6 14.30", "2026.10.06 1430", "2026년 10월 6일 14시 30분", "20261006", "2026.10.06 24:00", "10/06/2026 09:05"].map(function (s, i) { return rdv(s, i === 7 ? { final: true, year: 2026, withTime: true, mdy: true } : WT); }),
   ["2026-10-06T14:30", "2026-10-06T14:30", "2026-10-06T14:30", "2026-10-06T14:30", "2026-10-06T14:30", "2026-10-06T00:00", "bad", "2026-10-06T09:05"]);

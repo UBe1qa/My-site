@@ -414,7 +414,7 @@
     box.className = "dt";
     txt.type = "text"; txt.className = "dt-txt"; txt.inputMode = "decimal"; txt.autocomplete = "off"; txt.spellcheck = false;
     txt.setAttribute("enterkeyhint", "done");
-    txt.placeholder = wt ? (mdy ? "e.g. 10/06/2026 14:30" : "예: 202610061430") : (mdy ? "e.g. 03/15/2004" : "예: 20040315");
+    txt.placeholder = wt ? (mdy ? "e.g. 100620261430" : "예: 202610061430") : (mdy ? "e.g. 03152004" : "예: 20040315");
     msg.className = "dt-msg"; msg.setAttribute("aria-live", "polite"); msg.id = nat.id + "-msg";
     txt.setAttribute("aria-describedby", msg.id);
     nat.parentNode.insertBefore(box, nat);
@@ -424,9 +424,14 @@
     ic.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
     box.appendChild(ic);
     box.parentNode.appendChild(msg);
+    // 칸에 들어가 있을 때만 이름 줄 오른쪽에 '숫자로 쳐도 돼요' 예시(자리를 새로 차지하지 않음)
+    var eg = document.createElement("em");
+    eg.className = "dt-eg"; eg.setAttribute("aria-hidden", "true");
+    eg.textContent = wt ? (mdy ? "e.g. 100620261430" : "예: 202610061430") : (mdy ? "e.g. 03152004" : "예: 20040315");
+    box.parentNode.insertBefore(eg, box);
+    var past = nat.id === "age-b" || nat.id === "an-a";   // 생일·시작한 날: 두 자리 연도는 지난 해로
     nat.tabIndex = -1;
     nat.setAttribute("aria-label", L("달력에서 고르기"));
-    var hint = wt ? L("숫자만 쳐도 돼요. 예: 202610061430") : L("숫자만 쳐도 돼요. 예: 20040315");
     var fromTxt = false;
     function say(t, bad) {
       msg.textContent = t; txt.classList.toggle("bad", !!bad); txt.setAttribute("aria-invalid", bad ? "true" : "false");
@@ -441,15 +446,19 @@
       nat.dispatchEvent(new Event("input", { bubbles: true }));
       fromTxt = false;
     }
-    function read(final) { return DC.readDate(txt.value, { mdy: mdy, final: final, withTime: wt, year: thisYear }); }
+    function read(final) { return DC.readDate(txt.value, { mdy: mdy, final: final, withTime: wt, year: thisYear, past: past, keepTime: nat.value }); }
     function noDay(r) { return r.y ? F("없는 날짜예요: %s", DC.showDate(r.y + "-" + (r.m < 10 ? "0" : "") + r.m + "-" + (r.d < 10 ? "0" : "") + r.d, mdy) || txt.value) : ""; }
     txt.addEventListener("input", function () {
       var r = read(false);
-      if (r.state === "ok") { put(r.value); say(hint); }
+      if (r.state === "ok") { put(r.value); say(""); }
       else if (r.state === "bad" && r.y) say(noDay(r), true);
-      else say(hint);
+      else if (txt.classList.contains("bad")) say("");
     });
-    txt.addEventListener("focus", function () { if (!txt.classList.contains("bad")) say(hint); });
+    // 누르면 원래 값을 통째로 골라 둔다(휴대폰에서 지우지 않고 바로 새 숫자를 치게)
+    var justFocused = false;
+    txt.addEventListener("focus", function () { justFocused = true; txt.select(); setTimeout(function () { justFocused = false; }, 400); });
+    txt.addEventListener("mouseup", function (e) { if (justFocused) { e.preventDefault(); txt.select(); } });
+    txt.addEventListener("touchend", function () { if (justFocused) setTimeout(function () { txt.select(); }, 0); });
     txt.addEventListener("blur", function () {
       var r = read(true);
       if (r.state === "ok") { put(r.value); fill(); say(""); }

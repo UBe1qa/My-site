@@ -186,18 +186,23 @@ var DC = (function () {
   function readDate(s, opt) {
     opt = opt || {};
     var mdy = !!opt.mdy, fin = !!opt.final, wt = !!opt.withTime, thisY = opt.year || 2026;
-    s = String(s || "").replace(/[년월]/g, ".").replace(/[일시]/g, " ").replace(/분/g, "").trim();
+    s = String(s || "").replace(/[\uff10-\uff19]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xfee0); });
+    var pm = /오후|p\.?\s?m\.?/i.test(s), am = /오전|a\.?\s?m\.?/i.test(s);
+    s = s.replace(/오전|오후|[ap]\.?\s?m\.?/gi, " ").replace(/[년월]/g, ".").replace(/[일시]/g, " ").replace(/분/g, "").trim();
     if (!s) return { state: "empty" };
     if (/[^\d.\-\/\s,:T]/.test(s)) return { state: "bad" };
     var hh = null, mm = null, t;
     if (wt) {
+      if (!fin && /[\sT]\d{1,3}$|[\sT]\d{1,2}:\d?$/.test(s)) return { state: "partial" };   // 14:3, 143 → 시각을 마저 칠 때까지
       if (/^\d{12}$/.test(s)) { hh = +s.slice(8, 10); mm = +s.slice(10); s = s.slice(0, 8); }
       else if ((t = /^(.+?)[\sT]+(\d{1,2})[:.](\d{2})$/.exec(s)) || (t = /^(.+?)\s+(\d{1,2})(\d{2})$/.exec(s))) { s = t[1]; hh = +t[2]; mm = +t[3]; }
       else if ((t = s.split(/[.\-\/\s,:T]+/).filter(Boolean)).length === 5) { hh = +t[3]; mm = +t[4]; s = t.slice(0, 3).join("."); }
       s = s.trim();
+      if (hh !== null && (pm || am)) { if (hh < 1 || hh > 12) return { state: "bad" }; hh = hh % 12 + (pm ? 12 : 0); }
     }
     var y, m, d, p;
-    function full(v, len) { return len === 2 ? (v <= thisY % 100 + 20 ? 2000 + v : 1900 + v) : v; }
+    // 두 자리 연도: 생일처럼 지난 날 칸(past)은 올해까지 20xx, 그 밖은 올해+10까지 20xx
+    function full(v, len) { return len === 2 ? (v <= thisY % 100 + (opt.past ? 0 : 10) ? 2000 + v : 1900 + v) : v; }
     if (/^\d+$/.test(s)) {
       var n = s.length;
       if (n === 8) {
@@ -211,6 +216,8 @@ var DC = (function () {
       else return { state: n > 8 ? "bad" : (fin ? "bad" : "partial") };
     } else {
       p = s.split(/[.\-\/\s,]+/).filter(Boolean);
+      // 치는 중: 마지막 칸이 한 자리(2004.3.1 → 15를 칠 수 있음)거나 영어 연도가 두 자리(3/15/20 → 2004)면 기다린다
+      if (!fin && p.length === 3 && (p[2].length < 2 || (mdy && p[0].length < 3 && p[2].length < 4))) return { state: "partial" };
       if (p.length === 3) {
         if (p[0].length >= 3 || !mdy) { y = full(+p[0], p[0].length); m = +p[1]; d = +p[2]; if (p[0].length === 1 || p[0].length === 3) return { state: fin ? "bad" : "partial" }; }
         else { m = +p[0]; d = +p[1]; if (p[2].length !== 2 && p[2].length !== 4) return { state: fin ? "bad" : "partial" }; y = full(+p[2], p[2].length); }
@@ -218,10 +225,12 @@ var DC = (function () {
         m = +p[0]; d = +p[1]; y = thisY;
       } else return { state: p.length > 3 || fin ? "bad" : "partial" };
     }
-    if (y < 1000 || y > 9999 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return { state: "bad", y: y, m: m, d: d };
+    if (y < 1000 || y > 9999 || m < 1 || m > 12 || d < 1 || d > 31) return { state: "bad" };
+    if (d > daysInMonth(y, m)) return { state: "bad", y: y, m: m, d: d };     // 2월 30일처럼 '없는 날'
+
     var v = y + "-" + pad(m) + "-" + pad(d);
     if (wt) {
-      if (hh === null) { if (!fin) return { state: "partial" }; hh = 0; mm = 0; }
+      if (hh === null) { if (!fin) return { state: "partial" }; t = /T(\d{2}):(\d{2})/.exec(opt.keepTime || ""); hh = t ? +t[1] : 0; mm = t ? +t[2] : 0; }
       if (hh > 23 || mm > 59) return { state: "bad" };
       v += "T" + pad(hh) + ":" + pad(mm);
     }

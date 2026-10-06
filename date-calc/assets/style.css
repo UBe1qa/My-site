@@ -176,8 +176,10 @@ body:has(#today) .lede { font-size: 16.5px; }
 .dt-ic { position: absolute; top: 50%; right: 8px; width: 34px; height: 34px; margin-top: -17px; display: grid; place-items: center; border-radius: 9px; color: var(--g, var(--main)); background: var(--gs, var(--main-soft)); pointer-events: none; transition: transform var(--dur) var(--ease); }
 .dt:has(input[type="date"]:active, input[type="datetime-local"]:active) .dt-ic { transform: scale(.92); }
 .dt-msg:empty { display: none; }
-.dt-msg { position: absolute; left: 0; top: calc(100% + 4px); z-index: 3; max-width: 100%; padding: 5px 9px; border-radius: 8px; background: var(--ink); color: var(--card); font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: var(--shadow); }
-.field:has(.dt-txt.bad) .dt-msg { background: var(--red); color: #fff; }
+.dt-msg { color: var(--red); font-size: 13px; font-weight: 600; line-height: 1.35; }
+.grid2:has(.dt) { align-items: start; }
+.dt-eg { position: absolute; top: 1px; right: 2px; font-style: normal; font-size: 12px; font-weight: 600; color: var(--g, var(--main)); opacity: 0; transition: opacity .15s; pointer-events: none; }
+.field:focus-within .dt-eg { opacity: 1; }
 .field .dt-txt.bad { border-color: var(--red); }
 .result.stale { opacity: .4; transition: opacity .15s; }
 .field .dt-txt.bad:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 22%, transparent); }
@@ -424,6 +426,8 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
 @media (max-width: 480px) {
   .grid2:has(.dt) { grid-template-columns: minmax(0, 1fr); gap: 10px; }
 }
+/* 반 폭 두 칸(481~720px)에선 이름과 예시가 겹칠 수 있어 예시를 숨긴다 */
+@media (min-width: 481px) and (max-width: 720px) { .grid2 .dt-eg { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
   /* 미끄러짐·튐·흔들림은 끄고 짧은 페이드만. 도장은 움직이지 않아도 보인다 */
