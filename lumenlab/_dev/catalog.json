@@ -1,5 +1,5 @@
 {
-  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
+  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
   "limit": 6,
   "apps": [
     {
@@ -25,8 +25,8 @@
       "line": {"ko": "루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.", "en": "Save your routines and log every set with last time’s weight and reps beside it."},
       "url": "https://setnote.lumenlab.page/",
       "links": [
-        {"href": "https://setnote.lumenlab.page/app/", "go": true, "ko": "세트노트 열기", "en": "Open SetNote"},
-        {"href": "https://setnote.lumenlab.page/", "ko": "어떤 앱인지", "en": "What it does"}
+        {"href": "https://setnote.lumenlab.page/", "go": true, "ko": "어떤 앱인지", "en": "What it does"},
+        {"href": "https://setnote.lumenlab.page/app/", "ko": "세트노트 열기", "en": "Open SetNote"}
       ]
     }
   ],

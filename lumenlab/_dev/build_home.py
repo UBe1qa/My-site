@@ -34,6 +34,8 @@ def app_card(it, n):
         out.append(f'            <p class="app__status"><span {a}>{s}</span></p>')
     a, line = t(f"c_{it['id']}_line", it['line'])
     out.append(f'            <p class="app__line" {a}>{line}</p>')
+    # 앱 카드 단추 규칙: 첫째 = 소개 페이지(it['url'])로 가는 강조 단추, 그다음 열기·지원·방침(강조 없음)
+    assert it['links'][0]['href'] == it['url'] and it['links'][0].get('go') and not any(l.get('go') for l in it['links'][1:]), f"{it['id']}: 첫 단추는 소개(url)·강조여야 함"
     out.append('            <p class="app__links">')
     for i, l in enumerate(it['links']):
         k = f"c_{it['id']}_l{i}"; EN[k] = l['en']
