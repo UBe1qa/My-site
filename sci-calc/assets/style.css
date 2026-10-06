@@ -184,9 +184,11 @@ h1, h2, h3 { text-wrap: balance; }
   .work .modes { margin: 10px -16px 12px; padding: 0 16px 2px; }
   .work .modes.more-r { -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); }
   .work > .tool .calc { margin: 0 -10px; padding: 10px 8px 12px; }
-  .work .keys-n .k { min-height: 56px; }
+  .work .keys-n .k { min-height: 50px; }
   .work .keys-n .k .kl { font-size: 22px; }
-  .work .keys-f .k { min-height: 42px; padding-top: 13px; }
+  .work .keys-f .k { min-height: 39px; padding-top: 12px; }
+  .work .keys-f { gap: 6px 5px; }
+  .work .keys-n { gap: 6px 6px; margin-top: 8px; }
 }
 
 
