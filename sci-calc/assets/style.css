@@ -27,7 +27,7 @@
     --accent: #8b6dff; --accent-ink: #ffffff;
     --hero: #0f0d22; --hero-ink: #f1efff; --hero-2: #b5b0dc;
     --body: rgba(28, 25, 56, .62); --body-2: #15132a;
-    --screen: #120f2a; --screen-ink: #eeecff; --screen-line: #2f2a5e; --screen-muted: #9f98d8;
+    --screen: #120f2a; --screen-ink: #eeecff; --screen-line: #2f2a5e; --screen-muted: #bcb6ee;
     --fkey: #26224a; --nkey: #343062; --opkey: #3b2f86; --key-shadow: #0b0a16;
     --cursor: #a48dff;
     --err: #ff8a73; --err-bg: #3a1d17;
@@ -130,7 +130,7 @@ h1, h2, h3 { text-wrap: balance; }
 .acts::-webkit-scrollbar { display: none; }
 .acts button { flex: none; border: 0; border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 700; cursor: pointer;
   background: rgba(255, 255, 255, .16); color: var(--body-ink); }
-.acts button:disabled { opacity: .38; cursor: default; }
+.acts button:disabled { opacity: .5; cursor: default; }
 .acts .acts-sep { flex: 1 0 4px; }
 
 /* 키 */
@@ -490,3 +490,24 @@ select.inp, .set-digits { background-color: var(--card); color: var(--ink); }
 .keyhelp dl div { display: flex; gap: 10px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .keyhelp dt { flex: none; min-width: 64px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .keyhelp dd { margin: 0; font-size: 14px; }
+
+/* 2차 블라인드 검토 반영: 보조 글자 대비, 휴대폰 첫 화면에 = 키까지, 어두운 화면 안내 띠 */
+.k .ks { font-size: 10.5px; }
+.keys-f .k .ks, .keys-n .k .ks { color: #b4460a; }
+.keys-n .k.op .ks { color: #9c3a00; }
+.keys-n .k.eq .ks, .keys-n .k.ac .ks { color: rgba(255, 255, 255, .92); }
+.calc.is-shift .k[data-s] .ks { text-decoration: none; }
+.acts .starter { color: var(--ink-2); }
+.langbar { background: #15132b; color: #f1efff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .langbar { background: #1c1a35; border-bottom: 1px solid #2f2a5e; }
+  :root:not([data-theme="light"]) .keys-f .k .ks, :root:not([data-theme="light"]) .keys-n .k .ks { color: #ffb27a; }
+  :root:not([data-theme="light"]) .keys-n .k.op .ks { color: #ffc49b; } }
+@media (max-width: 600px) {
+  .modes { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-left: -16px; margin-right: -16px; padding: 0 16px 2px; }
+  .modes::-webkit-scrollbar { display: none; }
+  .modes li { flex: none; }
+  .hero { padding-bottom: 20px; }
+  .keys-f .k { min-height: 40px; padding-top: 13px; }
+  .keys-n .k { min-height: 47px; }
+  .keys-n { margin-top: 8px; gap: 7px; }
+}
