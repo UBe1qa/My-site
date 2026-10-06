@@ -184,7 +184,7 @@ def to_en(page, path):
     page = re.sub(r'(property="og:url" content="https://lumenlab\.page/)', r'\1en/', page)
     # 사이트 안 이동은 영어 쪽으로, 앱 방침·지원(한 주소에 두 언어)은 #en 으로, 도구는 영어 주소로
     page = re.sub(r'href="/(#[^"]*|apps/|tools/)?"', lambda m: f'href="/en/{m.group(1) or ""}"', page)
-    page = re.sub(r'href="(/[a-z]+/(?:privacy|support)/)"', r'href="\1#en"', page)
+    page = re.sub(r'href="((?:https://[a-z0-9-]+\.lumenlab\.page)?/(?:[a-z]+/)?(?:privacy|support)/)"', r'href="\1#en"', page)  # 앱 주소의 방침·지원도(owlight.lumenlab.page/support/)
     for it in tools + apps:
         if it.get('url_en'): page = page.replace(f'href="{it["url"]}"', f'href="{it["url_en"]}"')
     page = page.replace('<a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>English</a>', '<a class="lang" href="/" hreflang="ko" lang="ko" data-other-lang>한국어</a>')

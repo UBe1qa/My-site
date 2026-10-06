@@ -5,42 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Owlight 개인정보 처리방침 · Privacy Policy</title>
 <meta name="description" content="Owlight(macOS 메뉴 막대 앱)의 개인정보 처리방침. Owlight privacy policy.">
-<link rel="canonical" href="https://lumenlab.mysitebox.workers.dev/owlight/privacy/">
+<link rel="canonical" href="https://owlight.lumenlab.page/privacy/">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:site_name" content="Owlight">
 <meta property="og:title" content="Owlight 개인정보 처리방침 · Privacy Policy">
 <meta property="og:description" content="Owlight(macOS 메뉴 막대 앱)의 개인정보 처리방침. Owlight privacy policy.">
-<meta property="og:url" content="https://lumenlab.mysitebox.workers.dev/owlight/privacy/">
-<meta property="og:image" content="https://lumenlab.mysitebox.workers.dev/og.png">
+<meta property="og:url" content="https://owlight.lumenlab.page/privacy/">
+<meta property="og:image" content="https://owlight.lumenlab.page/og.png">
+<meta name="theme-color" content="#14132A">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/site.css">
 <script>
-/* 언어: 저장한 선택 > 브라우저 언어(한국어가 아니면 영어). 글 바꾸기는 body 끝의 i18n.js */
-(function(d){var l;try{l=localStorage.getItem('lumen:lang')}catch(e){}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
+/* 언어: 주소 끝 #ko·#en > 저장한 선택 > 브라우저 언어. 한 페이지에 두 언어가 있고 고른 쪽 칸만 보인다 */
+(function(d){var l=location.hash.slice(1);if(l!=='ko'&&l!=='en'){try{l=localStorage.getItem('owlight:lang')}catch(e){}}if(l!=='ko'&&l!=='en')l=/^ko/i.test(navigator.language||'')?'ko':'en';d.setAttribute('data-lang',l);d.lang=l})(document.documentElement);
 </script>
 </head>
 <body>
+<!-- 만든 파일: 고치려면 _dev/make_docs.py 와 lumenlab/owlight/privacy/index.html -->
 <a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
 <header class="top">
   <div class="wrap top__in">
-    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로">
-      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
-      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    <a class="brand" href="/" aria-label="Owlight 처음으로" data-i18n-aria="brandLabel">
+      <img src="/favicon.svg" width="30" height="30" alt="">
+      <span translate="no">Owlight</span>
     </a>
-    <nav aria-label="사이트" data-i18n-aria="navLabel">
-      <a href="/#contact" data-i18n="navContact">문의</a>
-      <button class="lang" type="button" data-lang-toggle hidden><span lang="en">English</span></button>
+    <nav class="nav" aria-label="이 사이트" data-i18n-aria="navLabel">
+      <a href="/#features" data-i18n="navFeatures">기능</a>
+      <a href="/#scenes" data-i18n="navScenes">장면</a>
+      <a href="/#faq" data-i18n="navFaq">자주 묻는 질문</a>
+      <a href="/support/" data-i18n="navSupport">지원</a>
     </nav>
+    <button class="lang" type="button" hidden data-lang-btn>English</button>
   </div>
 </header>
 
 <main id="main">
 <div class="doc-head">
 <div class="wrap doc-head__in">
-<p class="crumb"><img class="icon" src="/img/owlight.webp" width="28" height="28" alt=""><a href="https://owlight.lumenlab.page/">Owlight</a><span aria-hidden="true">›</span><span data-i18n="crumbPrivacy">개인정보 처리방침</span></p>
-<!-- 아래 제목·이동 줄과 본문은 원래 사이트(lumenlab-site)의 문구 그대로 -->
+<p class="crumb"><img class="icon" src="/favicon.svg" width="28" height="28" alt=""><a href="/">Owlight</a><span aria-hidden="true">›</span><span data-i18n="crumbPrivacy">개인정보 처리방침</span></p>
+<!-- 아래 제목·이동 줄과 본문은 lumenlab.page/owlight/privacy/ 와 글자 하나 다르지 않음 -->
 <h1>Owlight 개인정보 처리방침<br>Privacy Policy</h1>
 <p class="meta">Lumen Lab</p>
 <nav><a href="#ko">한국어</a><a href="#en">English</a><a href="../support/">지원 · Support</a></nav>
@@ -131,21 +136,11 @@
 
 <footer class="foot">
   <div class="wrap foot__in">
-    <div>
-      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
-      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
-      <p>© 2026 Lumen Lab</p>
-    </div>
-    <div class="foot__links">
-      <!-- gen:foot -->
-      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
-      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a></div>
-      <div><b data-i18n="privacy">개인정보 처리방침</b><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
-      <!-- /gen:foot -->
-    </div>
+    <p data-i18n="footMaker">Owlight는 <a href="https://lumenlab.page/" class="nw">Lumen Lab(루멘랩)</a>이 만들어요. <span class="nw">Lumen Lab</span>은 개인사업자예요.</p>
+    <p class="nw">© 2026 Lumen Lab</p>
   </div>
 </footer>
+
 <script src="/assets/i18n.js"></script>
-<script src="/assets/site.js" defer></script>
 </body>
 </html>

@@ -12,8 +12,8 @@
       "url": "https://owlight.lumenlab.page/",
       "links": [
         {"href": "https://owlight.lumenlab.page/", "go": true, "ko": "어떤 앱인지", "en": "What it does"},
-        {"href": "/owlight/support/", "ko": "지원", "en": "Support"},
-        {"href": "/owlight/privacy/", "ko": "개인정보 처리방침", "en": "Privacy Policy"}
+        {"href": "https://owlight.lumenlab.page/support/", "ko": "지원", "en": "Support"},
+        {"href": "https://owlight.lumenlab.page/privacy/", "ko": "개인정보 처리방침", "en": "Privacy Policy"}
       ]
     },
     {

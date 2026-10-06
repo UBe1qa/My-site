@@ -76,7 +76,7 @@ a{color:inherit}
 .lang{font:inherit;font-size:14px;color:var(--night-ink);background:transparent;border:1px solid var(--night-line);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap}
 .lang:hover{background:var(--night-2)}
 @media (max-width:719px){
-  .nav a[href="#scenes"],.nav a[href="#faq"]{display:none}
+  .nav a[href$="#scenes"],.nav a[href$="#faq"]{display:none}
   .nav a{padding:8px 6px}
 }
 @media (max-width:359px){.brand span{display:none}}
@@ -222,6 +222,30 @@ picture{display:block}
 .foot{background:var(--night);color:var(--night-muted);font-size:15px;border-top:1px solid var(--night-line)}
 .foot__in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 .foot a{color:var(--night-ink);text-underline-offset:3px}
+
+/* 지원·개인정보 처리방침(/support/, /privacy/). 본문은 lumenlab.page/owlight/… 와 같은 글(_dev/make_docs.py), 고른 언어 칸만 보임 */
+.doc-head{background:radial-gradient(ellipse 70% 90% at 85% 0%,var(--night-3),transparent 70%),var(--night);color:var(--night-ink)}
+.doc-head__in{max-width:800px;padding-top:40px;padding-bottom:32px}
+.crumb{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--night-muted);margin-bottom:18px}
+.crumb a{color:var(--night-ink);font-weight:600;text-decoration:none}
+.crumb a:hover{text-decoration:underline;text-underline-offset:3px}
+.crumb .icon{border-radius:7px}
+.doc-head h1{font-size:clamp(28px,4.6vw,40px);font-weight:800}
+.doc-head .meta{color:var(--night-muted);font-size:15px;margin-top:8px}
+.doc-head nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.doc-head nav a{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1px solid var(--night-line);border-radius:999px;color:var(--night-ink);text-decoration:none;font-size:15px;font-weight:600}
+.doc-head nav a:hover{border-color:var(--night-muted)}
+html[data-lang="en"] .doc-head nav a[href="#en"],html[data-lang="ko"] .doc-head nav a[href="#ko"]{background:var(--amber);border-color:var(--amber);color:var(--night)}
+.doc{max-width:800px;padding-top:8px;padding-bottom:80px}
+.doc h2{font-size:22px;font-weight:800;margin:28px 0 8px}
+.doc h3{font-size:18px;font-weight:700;margin:30px 0 6px}
+.doc p,.doc li{margin:8px 0;color:var(--ink-2)}
+.doc strong{color:var(--ink)}
+.doc ul{padding-left:1.2em}
+.doc .meta{color:var(--muted);font-size:15px}
+.doc a{color:var(--amber-ink);text-underline-offset:3px}
+.doc section[lang="en"] p,.doc section[lang="en"] li{word-break:normal}
+html[data-lang="en"] .doc section#ko,html[data-lang="ko"] .doc section#en{display:none}
 
 /* 움직임: html.anim 일 때만(동작 줄이기면 없음). 칸이 들어오면 제자리에서 흐리게만 → 선명하게 */
 .anim [data-rv]{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}

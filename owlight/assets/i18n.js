@@ -89,12 +89,14 @@
     q6: 'When can I get it?',
     a6: 'We are getting it ready for the Mac App Store. When it is out, the App Store link will be right here on this page.',
     q7: 'More questions?',
-    a7: 'The <a href="https://lumenlab.page/owlight/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.',
+    a7: 'The <a href="/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.',
     endTitle: 'Getting ready for <span class="nw">the Mac App Store</span>',
     endLead: 'Buy it once for US$5.99. When it is out, the App Store link will be right here.',
     lumenLine: 'Owlight is one light Lumen Lab has switched on',
     lumenGo: 'See our other apps and tools →',
     footMaker: 'Owlight is made by <a href="https://lumenlab.page/" class="nw">Lumen Lab</a>, a sole proprietorship in Korea.',
+    crumbSupport: 'Support',
+    crumbPrivacy: 'Privacy Policy',
     lostTitle: 'This page doesn’t exist',
     lostText: 'The address may have changed. Head back to the Owlight page.',
     lostBack: 'Go to Owlight'
@@ -127,17 +129,28 @@
     document.querySelectorAll('source[data-shot]').forEach(function (s) {
       s.setAttribute('srcset', s.getAttribute('srcset').replace(/\/img\/(ko|en)-/g, '/img/' + l + '-'));
     });
-    /* 루멘랩 본페이지는 한국어 / 와 영어 /en/ 이 따로 된 페이지: 고른 언어 쪽으로. 방침·지원(한 주소에 두 언어)은 #en 으로 영어 칸 */
-    document.querySelectorAll('a[href^="https://lumenlab.page/"]').forEach(function (a) {
+    /* 루멘랩 본페이지는 한국어 / 와 영어 /en/ 이 따로 된 페이지: 고른 언어 쪽으로.
+       지원·방침(/support/, /privacy/)은 한 주소에 두 언어라 영어면 #en 을 붙여 영어 칸이 열리게 */
+    document.querySelectorAll('a[href]').forEach(function (a) {
       var h = a.getAttribute('href').replace(/#(ko|en)$/, '');
       if (h === 'https://lumenlab.page/' || h === 'https://lumenlab.page/en/') a.setAttribute('href', 'https://lumenlab.page/' + (l === 'en' ? 'en/' : ''));
-      else if (/\/(privacy|support)\/$/.test(h)) a.setAttribute('href', h + (l === 'en' ? '#en' : ''));
+      else if (h === '/support/' || h === '/privacy/') a.setAttribute('href', h + (l === 'en' ? '#en' : ''));
     });
     root.setAttribute('data-lang', l); root.lang = l;
     var b = document.querySelector('[data-lang-btn]');
     if (b) { b.textContent = l === 'en' ? '한국어' : 'English'; b.setAttribute('lang', l === 'en' ? 'ko' : 'en'); }
   };
   if (lang === 'en') apply('en');
+  /* 지원·방침 페이지의 '한국어 / English' 단추: 그 언어 칸으로 바꾸고 기억한다 */
+  document.querySelectorAll('.doc-head nav a[href="#ko"], .doc-head nav a[href="#en"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      lang = a.getAttribute('href').slice(1);
+      try { localStorage.setItem('owlight:lang', lang); } catch (err) {}
+      apply(lang);
+      history.replaceState(null, '', a.getAttribute('href'));
+    });
+  });
   var btn = document.querySelector('[data-lang-btn]');
   if (btn) {
     btn.hidden = false;

@@ -1,7 +1,9 @@
 # Owlight 배포 전 확인: bash _dev/check.sh (사이트 폴더를 8766으로 띄우고 이 파일을 돌림)
 # 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 페이지 안 링크, 영어에 한글 남음, 제목 줄 수, 장면 판 누르기,
-# 동작 줄이기에서 다 보임, 움직임 켠 채 끝까지 내린 뒤 숨은 요소, 첫 화면이 다시 흐려지지 않음
+# 동작 줄이기에서 다 보임, 움직임 켠 채 끝까지 내린 뒤 숨은 요소, 첫 화면이 다시 흐려지지 않음,
+# 지원·방침(/support/, /privacy/) 본문이 lumenlab.page/owlight/… 와 같은지, 고른 언어 칸만 보이는지
 import os, re, sys
+SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8766')
 CHROME = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
@@ -16,9 +18,16 @@ def scroll_all(pg):
         pg.mouse.wheel(0, 500); pg.wait_for_timeout(60)
     pg.wait_for_timeout(900)
 
+# 지원·방침 본문(<h1>부터 마지막 </section>까지)이 앱·App Store에 등록된 lumenlab.page/owlight/… 와 글자까지 같음
+def body_text(f):
+    t = open(f, encoding='utf-8').read(); return t[t.index('<h1>'):t.rindex('</section>')]
+for name in ('support', 'privacy'):
+    a = os.path.join(SITE, name, 'index.html'); b = os.path.join(os.path.dirname(SITE), 'lumenlab', 'owlight', name, 'index.html')
+    ok(os.path.exists(a) and body_text(a) == body_text(b), f'/{name}/ 본문이 lumenlab.page/owlight/{name}/ 와 같음 (다르면 python3 _dev/make_docs.py)')
+
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path=CHROME)
-    for path in ('/', '/404.html'):
+    for path in ('/', '/404.html', '/support/', '/privacy/'):
         for loc in ('ko-KR', 'en-US'):
             for w in (320, 390, 1366):
                 c = br.new_context(viewport={'width': w, 'height': 800}, locale=loc)
@@ -76,6 +85,16 @@ with sync_playwright() as p:
     pg.click('[data-lang-btn]'); pg.wait_for_timeout(100)
     l1 = pg.evaluate('document.documentElement.lang'); pg.reload(); pg.wait_for_timeout(300)
     ok(l1 == 'en' and pg.evaluate('document.documentElement.lang') == 'en', '언어 버튼으로 영어 전환·기억')
+    sup = pg.evaluate('[...document.querySelectorAll("a[href^=\'/support/\'], a[href^=\'/privacy/\']")].map(a => a.getAttribute("href"))')
+    ok(sup and all(h.endswith('#en') for h in sup), f'영어 화면의 지원·방침 링크는 #en {sup}')
+    # 지원·방침: 기억한 언어(영어) 칸만 보이고, 한국어 단추를 누르면 한국어 칸으로 바뀌고 기억
+    vis = lambda: pg.evaluate("[...document.querySelectorAll('.doc section')].map(s => s.id + ':' + (s.offsetHeight > 0)).join(' ')")
+    pg.goto(BASE + '/privacy/'); pg.wait_for_timeout(200)
+    ok(vis() == 'ko:false en:true', f'방침: 영어를 골랐으면 영어 칸만 ({vis()})')
+    pg.click('.doc-head nav a[href="#ko"]'); pg.wait_for_timeout(200)
+    ok(vis() == 'ko:true en:false' and pg.evaluate('localStorage.getItem("owlight:lang")') == 'ko', f'방침: 한국어 단추로 한국어 칸 ({vis()})')
+    pg.goto(BASE + '/support/#en'); pg.wait_for_timeout(200)
+    ok(vis() == 'ko:false en:true', f'지원 #en 이면 영어 칸 ({vis()})')
     c.close()
 
     # 동작 줄이기: 내리지 않아도 전부 보임
