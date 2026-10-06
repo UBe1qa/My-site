@@ -55,7 +55,11 @@ def head(lang, path, title, desc, *, alt=True, ads=True, jsonld=(), noindex=Fals
                 '<meta property="og:url" content="%s">' % canon,
                 '<meta property="og:site_name" content="%s">' % T(lang, '공학용 계산기', 'Scientific Calculator'),
                 '<meta property="og:locale" content="%s">' % T(lang, 'ko_KR', 'en_US'),
-                '<meta name="twitter:card" content="summary">']
+                # 공유 사진은 언어마다 한 장(_dev/og.py 로 찍는다). 디자인과 따로라 화면을 바꿔도 다시 찍지 않아도 된다
+                '<meta property="og:image" content="%s/%s">' % (SITE, T(lang, 'og.png', 'og-en.png')),
+                '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
+                '<meta property="og:image:alt" content="%s">' % T(lang, '공학용 계산기: 분수·루트가 교과서처럼 보이는 무료 계산기', 'Scientific Calculator: fractions and roots shown like a textbook'),
+                '<meta name="twitter:card" content="summary_large_image">']
         if lang == 'ko':
             out.append('<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="%s/rss.xml">' % SITE)
     out += ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
