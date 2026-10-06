@@ -1339,6 +1339,16 @@ function boot() {
     const start = () => setTimeout(next, 2400);
     document.readyState === 'complete' ? start() : addEventListener('load', start, { once: true });
   }
+  // 루멘랩 가는 길: 화면에 처음 들어올 때 한 번, 안내판 글자가 넘어가다 LUMEN에 멈추고 화살표가 한 번 움직인다.
+  const lumen = document.querySelector('[data-lumen]');
+  if (lumen && !REDUCED.matches && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      boardTo(lumen.querySelector('.flap'), 'LUMEN'); lumen.classList.add('arrived');
+    }, { threshold: 0.8 });
+    io.observe(lumen);
+  }
   // 다른 언어판 안내 띠(자동으로 넘기지 않음)
   const other = document.querySelector('link[rel=alternate][hreflang="' + (LANG === 'ko' ? 'en' : 'ko') + '"]');
   let dismissed = null; try { dismissed = localStorage.getItem('ip.lang'); } catch (e) {}

@@ -71,7 +71,7 @@ UI = {
                drop_many='or drop them here', accepts='Accepts', stays='Converted on this device. Your files are never uploaded.',
                faq='Questions', related='More {cat} tools', every='Every tool', ad='Advertisement', skip='Skip to content',
                hub_drop='We’ll show what you can do with it', hub_drop2='Video, audio, image, PDF, CSV or Excel · or drop it here', hub_pick='Choose a file',
-               made='Made by', more_from='Lumen Lab: more apps and tools', guides_h='Guides', tools_n='{n} tools',
+               made='Made by', next_stop='Next stop', more_from='Lumen Lab: more apps and tools', guides_h='Guides', tools_n='{n} tools',
                not_found='This page doesn’t exist.', home='Go to all tools', read='Read', updated='Updated',
                how_h='Why nothing gets uploaded', crumb_home='All tools'),
     'ko': dict(brand='인플레이스', all='모든 도구', guides='가이드', about='소개', privacy='개인정보 처리방침', licenses='오픈소스 고지',
@@ -79,7 +79,7 @@ UI = {
                drop_many='또는 여러 개를 끌어 놓기', accepts='받는 형식', stays='이 기기 안에서 변환해요. 파일이 어디에도 올라가지 않아요.',
                faq='자주 묻는 질문', related='다른 {cat} 도구', every='모든 도구', ad='광고', skip='본문으로 건너뛰기',
                hub_drop='고른 파일로 할 수 있는 일을 바로 보여 드려요', hub_drop2='동영상, 오디오, 이미지, PDF, CSV, 엑셀 · 여기에 끌어 놓아도 돼요', hub_pick='파일 고르기',
-               made='만든 곳', more_from='루멘랩: 다른 앱과 도구 보기', guides_h='가이드', tools_n='도구 {n}개',
+               made='만든 곳', next_stop='다음 행선지', more_from='루멘랩: 다른 앱과 도구 보기', guides_h='가이드', tools_n='도구 {n}개',
                not_found='찾는 페이지가 없어요.', home='모든 도구 보기', read='읽기', updated='고친 날',
                how_h='파일이 올라가지 않는 이유', crumb_home='모든 도구'),
 }
@@ -184,8 +184,8 @@ def footer(lang):
         cols.append(f'<div><p class="foot-h">{CATS[c][lang]}</p><ul>{items}</ul></div>')
     return f'''<footer class="foot">
   <div class="wrap">
-    <p class="maker">{u['made']} <a href="https://lumenlab.page/">Lumen Lab</a> <span aria-hidden="true">·</span> <a href="https://lumenlab.page/">{u['more_from']} →</a></p>
     <div class="foot-cols">{''.join(cols)}</div>
+    <a class="lumen" href="https://lumenlab.page/" data-lumen><span class="lumen-k">{u['next_stop']}</span>{flap('LUMEN', 'sm')}<span class="lumen-t"><b>{u['made']} Lumen Lab</b><small>{u['more_from']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
     <p class="foot-links"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
     <p class="muted small">© 2026 Lumen Lab</p>
   </div>
