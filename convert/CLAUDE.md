@@ -40,4 +40,5 @@
 - 작업 공간(리눅스 Playwright Chromium)에는 AAC·H.264 디코더가 없어 MP4(H.264)·M4A 입력 시험이 실패한다. 실제 크롬·사파리에서는 된다. 이 3개 시험 실패는 코드 문제가 아님.
 - PDF.js 5·6은 너무 새 JS(`getOrInsertComputed`)를 써서 조금 오래된 브라우저에서 깨진다 → 4.10 legacy 빌드를 쓴다. 문서 닫기는 `loadingTask.destroy()`.
 - 캔버스 `toBlob('image/webp')`이 안 되는 브라우저(옛 사파리)는 PNG를 돌려준다 → 결과 `blob.type`을 확인한다(image.js `canEncode`).
+- GIF(256색)는 그냥 가장 가까운 색으로 바꾸면 안개·흐린 배경이 얼룩진다 → `engines/dither.js`의 순서 디더링(프레임마다 무늬 자리가 같아 지글거림 없음). 팔레트가 앞 프레임 것으로 충분하면(오차 1.25배 이내) 다시 쓰고, 앞 프레임과 거의 같은 점(색 차이 7 이하)은 투명으로 둬 용량을 줄인다(정지 배경 영상 3.4MB→0.3MB). 시험: e2e `gif-quality` (fx/static.webm = 안개 사진 위로 상자 하나가 움직이는 3초 영상).
 - 광고 코드가 있는 실제 주소를 자동으로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽).

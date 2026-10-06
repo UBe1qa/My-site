@@ -255,10 +255,21 @@ async function audioFallback(file, out, opts, start, end, onProgress) {
 }
 
 // 영상 → GIF. 프레임을 그림으로 꺼내 gifenc로 묶는다. opts: { start, end, fps, width }
+// 이 팔레트로 그림을 그리면 평균 얼마나 틀리나(점 일부만 본다)
+function palErr(data, pal) {
+  let sum = 0, cnt = 0;
+  for (let q = 0; q < data.length; q += 4 * 53) {
+    let best = 1e9;
+    for (const c of pal) { const dr = c[0] - data[q], dg = c[1] - data[q + 1], db = c[2] - data[q + 2]; const d = dr * dr + dg * dg + db * db; if (d < best) best = d; }
+    sum += best; cnt++;
+  }
+  return sum / cnt + 1;
+}
 export function toGif(file, opts, onProgress) {
   let canceled = false;
   const job = (async () => {
-    const { GIFEncoder, quantize, applyPalette } = await import('/assets/vendor/gifenc.mjs');
+    const { GIFEncoder, quantize } = await import('/assets/vendor/gifenc.mjs');
+    const { ditherIndex } = await import('./dither.js');
     const input = openInput(file);
     const track = await input.getPrimaryVideoTrack();
     if (!track) { const e = new Error('novideo'); e.code = 'format'; throw e; }
@@ -270,14 +281,33 @@ export function toGif(file, opts, onProgress) {
     for (let t = opts.start; t < opts.end - 1e-6; t += step) times.push(t);
     const gif = GIFEncoder();
     const delay = Math.round(1000 / opts.fps);
-    let i = 0;
+    // 색 255개 + 투명 1칸. 앞 프레임과 거의 같은 점은 투명으로 둬서(앞 그림이 비침) 용량을 줄인다.
+    // 팔레트가 앞 프레임 것으로 충분하면 그대로 써야 점을 비교할 수 있다.
+    const TR = 255, T2 = 3 * 7 * 7;
+    let prevPal = null, prevIdx = null, ref = null, i = 0;
     for await (const wc of sink.canvasesAtTimestamps(times)) {
       if (canceled) throw new DOMException('canceled', 'AbortError');
       if (!wc) continue;
       const ctx = wc.canvas.getContext('2d', { willReadFrequently: true });
       const { data } = ctx.getImageData(0, 0, w, h);
-      const palette = quantize(data, 256);
-      gif.writeFrame(applyPalette(data, palette), w, h, { palette, delay });
+      const cand = quantize(data, 255);
+      const keep = prevPal && palErr(data, prevPal) <= palErr(data, cand) * 1.25;
+      const pal = keep ? prevPal : cand;
+      const idx = ditherIndex(data, w, h, pal, 10);
+      const full = pal.concat(Array.from({ length: 256 - pal.length }, () => [0, 0, 0]));
+      if (keep) {
+        const out = new Uint8Array(idx.length);
+        for (let k = 0, q = 0; k < idx.length; k++, q += 4) {
+          const dr = data[q] - ref[q], dg = data[q + 1] - ref[q + 1], db = data[q + 2] - ref[q + 2];
+          if (dr * dr + dg * dg + db * db < T2) { out[k] = TR; idx[k] = prevIdx[k]; }
+          else { out[k] = idx[k]; ref[q] = data[q]; ref[q + 1] = data[q + 1]; ref[q + 2] = data[q + 2]; }
+        }
+        gif.writeFrame(out, w, h, { palette: full, delay, transparent: true, transparentIndex: TR, dispose: 1 });
+      } else {
+        gif.writeFrame(idx, w, h, { palette: full, delay, dispose: 1 });
+        ref = new Uint8ClampedArray(data);
+      }
+      prevPal = pal; prevIdx = idx;
       i++; onProgress && onProgress(i / times.length);
       if (i % 4 === 0) await new Promise((r) => setTimeout(r));
     }

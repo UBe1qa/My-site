@@ -111,6 +111,12 @@ const CASES = [
   { name: 'cut-video-exact', tool: 'cut-video', files: ['clip.webm'], timeout: 180000, actions: [async (p) => { await p.fill('.tl-row input.time >> nth=0', '0:02.5'); await p.press('.tl-row input.time >> nth=0', 'Enter'); await p.fill('.tl-row input.time >> nth=1', '0:04.0'); await p.press('.tl-row input.time >> nth=1', 'Enter'); await p.check('.toggle input'); }],
     check: async ([f]) => { const p = probe(f.path); const d = +p.format.duration; assert(near(d, 1.5, 0.15), 'dur ' + d); return 'exact ' + d.toFixed(3) + 's'; } },
   { name: 'compress-video', tool: 'compress-video', files: ['silent.webm'], timeout: 240000, actions: [chip('480p'), chip('Smaller')], check: async ([f]) => { const p = probe(f.path); const v = p.streams.find((s) => s.codec_type === 'video'); assert(v.height === 480, 'h ' + v.height); return `${v.codec_name} ${v.width}x${v.height} ${fs.statSync(f.path).size}B (from 491646)`; } },
+  // 안개 낀 배경(부드러운 색 변화)이 얼룩지지 않고, 안 움직이는 부분은 다시 저장하지 않아 작아야 한다 (fx/static.webm: 안개 사진 위로 상자 하나가 움직임)
+  { name: 'gif-quality', tool: 'video-to-gif', files: ['static.webm'], timeout: 180000, check: async ([f]) => {
+      const r = spawnSync('ffmpeg', ['-i', f.path, '-i', fx('static.webm'), '-lavfi', '[1]fps=10,scale=480:-2,format=rgb24[s];[0]format=rgb24[g];[g]gblur=sigma=1.2[a];[s]gblur=sigma=1.2[b];[a][b]psnr', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
+      const db = +(r.match(/average:([\d.]+)/) || [])[1], size = fs.statSync(f.path).size;
+      assert(db > 36, 'blotchy ' + db); assert(size < 1500000, 'too big ' + size);
+      return `psnr ${db} ${size}B`; } },
   { name: 'gif', tool: 'video-to-gif', files: ['clip.webm'], timeout: 180000, actions: [chip('320 px')], check: async ([f]) => { const p = probe(f.path); const v = p.streams[0]; assert(v.codec_name === 'gif' && v.width === 320, v.codec_name + v.width); return `gif ${v.width}x${v.height} frames=${v.nb_frames || '?'} ${fs.statSync(f.path).size}B`; } },
   { name: 'img-png2jpg', tool: 'image-converter', files: ['photo.png', 'alpha.png'], shot: true, check: async (fs_) => { assert(fs_.length === 2, 'n ' + fs_.length); const p = probe(fs_[0].path); assert(p.streams[0].codec_name === 'mjpeg' && p.streams[0].width === 1200, 'jpg'); return fs_.map((f) => f.name).join(','); } },
   { name: 'img-jpg2webp', tool: 'image-converter', files: ['photo.jpg'], actions: [chip('WebP')], check: async ([f]) => { const p = probe(f.path); assert(p.streams[0].codec_name === 'webp', 'webp'); return 'webp ' + fs.statSync(f.path).size; } },
