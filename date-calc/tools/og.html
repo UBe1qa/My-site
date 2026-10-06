@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- 공유 사진(og.png, og-en.png) 원본. 디자인이 바뀌어도 쓸 수 있게 사이트 CSS를 쓰지 않는다.
+     다시 찍기: python3 date-calc/tools/og.py  (?lang=en 이면 영어판). 예시 날짜 2026-10-06 → 2026-12-25 = 80일 -->
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:P;font-weight:500;src:url(FONTDIR/Pretendard-Medium.woff2)}
+@font-face{font-family:P;font-weight:700;src:url(FONTDIR/Pretendard-Bold.woff2)}
+@font-face{font-family:P;font-weight:800;src:url(FONTDIR/Pretendard-ExtraBold.woff2)}
+html,body{margin:0;width:1200px;height:630px;background:#faf6f0;color:#1c1612;font-family:P,sans-serif}
+.card{box-sizing:border-box;width:1200px;height:630px;padding:70px 80px;display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:center}
+.brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:700;margin:0 0 34px}
+.mark{position:relative;display:inline-grid;grid-template-columns:repeat(3,7px);gap:4px;width:44px;height:46px;box-sizing:border-box;padding:17px 0 0 8px;border-radius:10px;background:#fff;border:3px solid #1c1612;overflow:hidden}
+.mark:before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:#d33a2c}
+.mark b{width:7px;height:7px;border-radius:2px;background:#1c1612}.mark b:nth-child(3){background:#d33a2c}
+h1{font-size:58px;line-height:1.22;letter-spacing:-.03em;font-weight:800;margin:0}
+h1 em{font-style:normal;color:#c2410c}
+.sub{font-size:25px;font-weight:500;color:#463d36;margin:26px 0 0;line-height:1.45}
+.url{font-size:23px;font-weight:700;color:#6e645b;margin:30px 0 0}
+.cal{background:#fff;border:2px solid #ece4d8;border-radius:28px;overflow:hidden;box-shadow:0 18px 40px rgba(28,22,18,.14)}
+.top{background:#c2410c;color:#fff;font-size:24px;font-weight:700;padding:20px 32px;display:flex;justify-content:space-between}
+.body{padding:30px 32px 34px}
+.row{display:flex;align-items:center;justify-content:space-between;font-size:27px;font-weight:700;color:#463d36}
+.row span{background:#f6f0e7;border-radius:12px;padding:10px 14px}
+.row i{font-style:normal;color:#6e645b}
+.big{font-size:118px;font-weight:800;letter-spacing:-.04em;line-height:1;margin:30px 0 6px;color:#1c1612}
+.big small{font-size:48px;margin-left:6px}
+.note{font-size:24px;font-weight:500;color:#6e645b;margin:0}
+</style></head><body>
+<div class="card"><div>
+<p class="brand"><span class="mark"><b></b><b></b><b></b></span><span data-ko="며칠 계산기" data-en="Daycount"></span></p>
+<h1 data-ko="날짜 사이 며칠인지<br><em>바로</em> 계산해요" data-en="How many days<br>between <em>two dates?</em>"></h1>
+<p class="sub" data-ko="기간 · 디데이 · 영업일 · 만 나이 · 기념일" data-en="Days between · Countdown · Business days · Age"></p>
+<p class="url">date.lumenlab.page</p>
+</div>
+<div class="cal"><div class="top"><span data-ko="기간 계산" data-en="Days between"></span><span>2026</span></div>
+<div class="body"><div class="row"><span data-ko="10월 6일" data-en="Oct 6"></span><i>→</i><span data-ko="12월 25일" data-en="Dec 25"></span></div>
+<p class="big" data-ko="80<small>일</small>" data-en="80<small>days</small>"></p>
+<p class="note" data-ko="11주 3일" data-en="11 weeks 3 days"></p></div></div>
+</div>
+<script>var en=location.search.indexOf('lang=en')>=0;if(en)document.documentElement.lang='en';document.querySelectorAll('[data-ko]').forEach(function(e){e.innerHTML=en?e.dataset.en:e.dataset.ko})</script>
+</body></html>

@@ -19,6 +19,7 @@
 - `404.html`(한국어·영어 두 줄, `/`·`/en/` 링크, 광고 없음·noindex)과 `rss.xml`(한국어 가이드 글 본문 전체, 네이버 서치어드바이저 제출용. 영어 RSS는 없음)도 `tools/build_guides.py`가 만든다. sitemap은 영어 주소까지 넣는다. lastmod는 `LASTMOD`(한국어)·`build_en.UPDATED`(영어)에 실제로 고친 페이지·날짜만 적는다.
 - **한 명령으로 전부 다시 만든다**: `python3 tools/build_guides.py` (한국어 가이드·목록·소개·404·sitemap·rss + `build_en.py`의 영어판 전부). 영어 페이지에 `lang="ko"` 밖 한글이 있으면 빌드가 멈춘다.
 - `worker.js` 예전 workers.dev 주소 → 새 주소 같은 경로로 301(`/en/…`도 그대로 넘어감). `wrangler.jsonc`의 `run_worker_first: ["/*", "!/assets/*"]`라 **새 주소의 페이지 조회도 하나하나 Worker 요청 1건으로 센다**(계정 전체 무료 한도 하루 10만 건, 넘으면 요청이 실패). 즉 예전 주소 넘기기의 값 = 페이지 조회마다 Worker 요청 1건. `/assets/` 파일은 Worker를 안 거친다.
+- 공유 사진 `og.png`(한국어)·`og-en.png`(영어) 1200×630: `python3 tools/og.py`가 `tools/og.html`을 찍는다. 사이트 CSS와 따로라 디자인을 바꿔도 다시 안 찍어도 된다. 머리말 태그는 index.html·build_guides.py·build_en.py에 있다(2026-10-06).
 - `privacy.html` 개인정보 처리방침(한·영, 제3자 쿠키·웹 비콘 문장과 구글 파트너 사이트 링크 포함 = 애드센스 게시자 정책). 두 칸에 `id="ko"`·`id="en"`, 영어 페이지는 `/privacy#en`으로 링크한다. `tools/` `tests/` `worker.js` 는 `.assetsignore`로 배포에서 뺌.
 
 ## 명령어
@@ -59,6 +60,6 @@
 
 ## 미완성
 - RSS(`https://date.lumenlab.page/rss.xml`) 네이버 서치어드바이저 제출은 사용자가 할 일(2026-10-05 만듦).
-- 애드센스: pub-9496167591465154, ads.txt는 메인(lumenlab 폴더)과 이 폴더 둘 다. 사이트 심사(lumenlab.page)는 2026-10-03 신청 대기. 수동 광고 단위 번호 아직 없음(자동 광고만). og 이미지 없음.
+- 애드센스: pub-9496167591465154, ads.txt는 메인(lumenlab 폴더)과 이 폴더 둘 다. 사이트 심사(lumenlab.page)는 2026-10-03 신청 대기. 수동 광고 단위 번호 아직 없음(자동 광고만).
 - 임시공휴일은 라이브러리 업데이트 후 표를 다시 만들어야 반영(예: 2026 제헌절 공휴일 재지정 여부 확인 필요). 미국 행정명령 휴무(예: 2025-12-24·26, EO 14371)는 법정 공휴일이 아니라 표에 없다.
-- 영어판(2026-10-05): 서치 콘솔에 sitemap 다시 제출·/en/ 색인 요청은 사용자가 할 일. 영어 og 이미지 없음.
+- 영어판(2026-10-05): 서치 콘솔에 sitemap 다시 제출·/en/ 색인 요청은 사용자가 할 일.

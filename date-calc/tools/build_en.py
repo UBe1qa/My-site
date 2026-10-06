@@ -388,7 +388,11 @@ def head_en(title, desc, path, ld_list, og_type="article", alt=None):
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://date.lumenlab.page/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Daycount: how many days between two dates">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 {FONT}

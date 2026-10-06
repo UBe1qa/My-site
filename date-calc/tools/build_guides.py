@@ -273,7 +273,11 @@ def head(title, desc, path, extra_ld, alt=""):
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:locale" content="ko_KR">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://date.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="며칠 계산기: 날짜 사이 며칠인지 바로 계산">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
