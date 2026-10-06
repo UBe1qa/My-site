@@ -27,6 +27,7 @@
   var WD_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var WD_EN_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   var MON_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var MONTH_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   function num(n) { return Number(n).toLocaleString(lang === "ko" ? "ko-KR" : "en-US"); }
   function fmtDate(n) {
     var t = DC.toYMD(n), w = DC.weekday(n);
@@ -187,7 +188,7 @@
       if (a === null) return empty();
       var t = DC.toYMD(a), iw = DC.isoWeek(a), doy = DC.dayOfYear(a), total = DC.daysInYear(t.y);
       return big(F("%s년 %s주차", iw.year, num(iw.week)), esc(L("ISO 기준 (월요일 시작, 첫 목요일이 든 주가 1주차)"))) + rows([
-        [L("그 달의"), F("%s월 %s 주", t.m, ordinal(DC.weekOfMonth(a)))],
+        [L("그 달의"), F("%s월 %s 주", lang === "ko" ? t.m : MONTH_EN[t.m - 1], ordinal(DC.weekOfMonth(a)))],
         [L("올해"), F("%s일째 / %s일", num(doy), num(total))],
         [L("올해 남은 날"), F("%s일", num(total - doy))],
         [L("분기"), F("%s분기", Math.floor((t.m - 1) / 3) + 1)],
@@ -208,7 +209,11 @@
       if (isNaN(y) || y < r[0] || y > r[1]) return empty(F("%d~%d년 중에서 골라 주세요.", r[0], r[1]));
       var list = DC.holidaysOfYear(y, country), today = todayN();
       var weekdayCount = list.filter(function (h) { var w = DC.weekday(h.day); return w !== 0 && w !== 6; }).length;
-      return big(F("%s년 %s 공휴일 %s일", y, countryName(), num(list.length)), esc(F("그중 평일은 %s일이에요.", num(weekdayCount)))) +
+      // 미국의 '(observed)' 줄은 따로 된 공휴일이 아니라 쉬는 날을 옮긴 것 → 공휴일 수에서 빼고, 평일에 쉬는 날 수에만 넣는다
+      // (한국 대체 휴일은 법정 공휴일이라 그대로 센다)
+      var count = list.filter(function (h) { return !/\(observed\)$/.test(h.names[1]); }).length;
+      var sub = count < list.length ? F("평일에 쉬는 날은 대체 휴일을 포함해 %s일이에요.", num(weekdayCount)) : F("그중 평일은 %s일이에요.", num(weekdayCount));
+      return big(F("%s년 %s 공휴일 %s일", y, countryName(), num(count)), esc(sub)) +
         '<ul class="hols">' + list.map(function (h) {
           var w = DC.weekday(h.day), cls = (h.day < today ? "past" : "") + (w === 0 || w === 6 ? " wkend" : "");
           return '<li class="' + cls + '"><span>' + esc(fmtShort(h.day)) + "</span> " + esc(h.names[lang === "ko" ? 0 : 1]) + "</li>";

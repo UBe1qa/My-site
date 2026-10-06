@@ -314,6 +314,8 @@ html[lang="en"] .article th, html[lang="en"] .article td { white-space: normal; 
   .tool h2 { font-size: 19px; }
   .field input { font-size: 16px; padding: 10px 10px; min-height: 48px; }
   .grid4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  /* 날짜+시각 칸은 반 폭에선 시각이 잘려("10/06/2026, (") 휴대폰에선 한 칸씩 */
+  .grid2:has(input[type="datetime-local"]) { grid-template-columns: minmax(0, 1fr); }
   .rows { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .rows div { padding: 10px 12px; }
   .rows dd { font-size: 16px; }

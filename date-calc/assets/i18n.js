@@ -135,7 +135,7 @@ var I18N = (function () {
     "%s년 %s주차": "%s, week %s",
     "ISO 기준 (월요일 시작, 첫 목요일이 든 주가 1주차)": "ISO week (Monday start; week 1 contains the first Thursday)",
     "그 달의": "In the month",
-    "%s월 %s 주": "%2$s week of month %1$s",
+    "%s월 %s 주": "%2$s week of %1$s",
     "올해": "This year",
     "%s일째 / %s일": "Day %s of %s",
     "올해 남은 날": "Days left this year",
@@ -151,7 +151,8 @@ var I18N = (function () {
     "%s분": "%s minutes",
     "%d~%d년 중에서 골라 주세요.": "Choose a year between %d and %d.",
     "%s년 %s 공휴일 %s일": "%1$s: %3$s %2$s public holidays",
-    "그중 평일은 %s일이에요.": "%s of them fall on weekdays."
+    "그중 평일은 %s일이에요.": "%s of them fall on weekdays.",
+    "평일에 쉬는 날은 대체 휴일을 포함해 %s일이에요.": "%s days off fall on weekdays, counting observed dates."
   };
   var lang = "ko";
   function L(key) { return lang === "en" && Object.prototype.hasOwnProperty.call(EN, key) ? EN[key] : key; }
