@@ -9,6 +9,7 @@ img{max-width:100%;height:auto}
   --tile:#1c1c21; --tile2:#27272e; --tile-ink:#ffd23f; --accent:#ffd23f; --on-ink:#fff; --btn:#17171b; --btn-ink:#ffd23f; --btn-sub:#e6d9a6;
   --focus:#2563eb; --err:#b42318; --warn:#8a5a00; --ok:#1d7a3e; --wave:#8a877e;
   --c-video:#6a52d9; --c-audio:#0b8189; --c-image:#d45f12; --c-pdf:#cc3535; --c-data:#21804a;
+  --t-fast:.12s; --t:.2s; --t-slow:.3s; --ease:cubic-bezier(.2,.7,.2,1);
   --r:16px; --r-sm:10px; --shadow:0 1px 0 rgba(0,0,0,.04),0 8px 24px -12px rgba(0,0,0,.18);
   --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,"Noto Sans KR",sans-serif;
   color-scheme:light;
@@ -307,4 +308,50 @@ th{background:var(--soft);font-weight:700}
   .btn-pick,.btn-go{width:100%;max-width:360px}
   .tl-row .play{margin-left:0;width:100%}
   .crumb{margin-bottom:4px}
+}
+
+/* ---------- 연출 (2026-10-06, 설계서 '연출 요청문') ----------
+   기본 반응: 길이 --t-fast·--t·--t-slow, 곡선 --ease 하나로. transform·opacity만 움직인다. */
+.chips button,.chip-btn,.btn-ghost,.btn-small,.icon,.link,.pick-card,.card,.pg-img,.toggle input{transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),color var(--t) var(--ease),opacity var(--t) var(--ease),transform var(--t-fast) var(--ease),box-shadow var(--t) var(--ease)}
+.chips button:active,.chip-btn:active,.btn-ghost:active,.btn-small:active,.icon:active,.pick-card:active,.card:active,button.pg-img:active{transform:scale(.96)}
+.file.enter{animation:ip-rise var(--t) var(--ease) both}
+.file.leave{animation:ip-leave var(--t-fast) var(--ease) both}
+.working{animation:ip-fade var(--t) var(--ease) both}
+.result{animation:ip-rise var(--t-slow) var(--ease) both}
+.err[role=alert],.drop-msg,.tl-row + .warn:not([hidden]){animation:ip-shake var(--t-slow) var(--ease)}
+.saved-tick{display:inline-block;margin-left:6px;animation:ip-pop var(--t-slow) var(--ease) both}
+@keyframes ip-fade{from{opacity:0}}
+@keyframes ip-rise{from{opacity:0;transform:translateY(6px)}}
+@keyframes ip-leave{to{opacity:0;transform:translateX(-8px)}}
+@keyframes ip-shake{0%,100%{transform:none}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+@keyframes ip-pop{from{opacity:0;transform:scale(.6)}}
+/* 화려한 연출 1: 출발 안내판 — 글자가 몇 번 넘어가다 결과 형식에 멈춘다(세션에서 처음 끝날 때만) */
+.flap b.flip-fast{animation:flip .15s linear}
+/* 화려한 연출 2: 용량 줄어듦 막대 */
+.shrink{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--ink2)}
+.shrink-row{display:grid;grid-template-columns:3.2em minmax(0,1fr) 3.6em;align-items:center;gap:8px}
+.shrink-bar{display:block;height:10px;border-radius:999px;background:var(--soft);overflow:hidden}
+.shrink-bar i{display:block;height:100%;border-radius:999px;transform-origin:0 50%}
+.shrink-before{background:var(--muted);opacity:.55}
+.shrink-after{background:var(--ok);transform:scaleX(var(--r,1));animation:ip-shrink .9s var(--ease) .15s both}
+.shrink strong{color:var(--ok);font-variant-numeric:tabular-nums;text-align:right}
+@keyframes ip-shrink{from{transform:scaleX(1)}}
+/* 화려한 연출 3: 자물쇠 열림·잠김 */
+.lock-anim{flex:none;color:var(--tile);overflow:visible}
+.lock-anim .body{fill:var(--tile)}
+.lock-anim .hole{fill:var(--tile-ink)}
+.lock-anim .shackle{fill:none;stroke:var(--ink2);stroke-width:5;stroke-linecap:round;transform-box:view-box;transform-origin:34px 24px}
+.lock-anim.open .shackle{transform:translateY(-7px) rotate(-28deg);animation:ip-unlock .8s var(--ease) .1s both}
+.lock-anim.close .shackle{animation:ip-lock .7s var(--ease) .1s both}
+.lock-anim.close .body{transform-box:view-box;transform-origin:24px 52px;animation:ip-click .2s var(--ease) .7s}
+@keyframes ip-unlock{0%{transform:none}45%{transform:translateY(-7px)}100%{transform:translateY(-7px) rotate(-28deg)}}
+@keyframes ip-lock{0%{transform:translateY(-7px) rotate(-28deg)}55%{transform:translateY(-7px)}100%{transform:none}}
+@keyframes ip-click{50%{transform:scale(.95,.92)}}
+@media (prefers-reduced-motion:reduce){
+  .chips button,.chip-btn,.btn-ghost,.btn-small,.icon,.link,.pick-card,.card,.pg-img{transition:opacity var(--t-fast),background-color var(--t-fast),color var(--t-fast)}
+  .chips button:active,.chip-btn:active,.btn-ghost:active,.btn-small:active,.icon:active,.pick-card:active,.card:active,button.pg-img:active{transform:none}
+  .file.enter,.result,.working,.saved-tick{animation:ip-fade var(--t) both}
+  .file.leave{animation:none}
+  .err[role=alert],.drop-msg,.tl-row + .warn:not([hidden]){animation:ip-fade var(--t) both}
+  .shrink-after,.lock-anim .shackle,.lock-anim .body,.flap b.flip-fast{animation:none}
 }

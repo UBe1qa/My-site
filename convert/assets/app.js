@@ -224,14 +224,20 @@ class Panel {
     const list = h('ul', { class: 'files' });
     this.files.forEach((f, i) => {
       const ext = extOf(f.name).toUpperCase().slice(0, 4) || '?';
-      const li = h('li', { class: 'file' },
+      // 새로 들어온 파일만 살짝 올라오며 나타난다(이미 있던 줄은 다시 움직이지 않음)
+      const isNew = !(this.seen ||= new WeakSet()).has(f); this.seen.add(f);
+      const li = h('li', { class: 'file' + (isNew && this.files.length < 20 ? ' enter' : '') },
         flapEl(ext, 'sm'),
         h('span', { class: 'file-name', title: f.name }, f.name),
         h('span', { class: 'file-size' }, fmtSize(f.size)),
         this.tool.order && this.files.length > 1 ? h('span', { class: 'file-order' },
           h('button', { type: 'button', class: 'icon', 'aria-label': t('up'), disabled: i === 0 || null, onclick: () => { this.move(i, -1); } }, '↑'),
           h('button', { type: 'button', class: 'icon', 'aria-label': t('down'), disabled: i === this.files.length - 1 || null, onclick: () => { this.move(i, 1); } }, '↓')) : null,
-        this.tool.multiple ? h('button', { type: 'button', class: 'icon', 'aria-label': t('remove') + ' ' + f.name, onclick: () => { this.files.splice(i, 1); this.files.length ? this.refresh() : this.reset(); } }, '×') : null
+        this.tool.multiple ? h('button', { type: 'button', class: 'icon', 'aria-label': t('remove') + ' ' + f.name, onclick: (e) => {
+          const go = () => { const k = this.files.indexOf(f); if (k < 0) return; this.files.splice(k, 1); this.files.length ? this.refresh() : this.reset(); };
+          if (REDUCED.matches) return go();
+          e.currentTarget.disabled = true; li.classList.add('leave'); setTimeout(go, 120);
+        } }, '×') : null
       );
       list.append(li);
     });
@@ -311,11 +317,14 @@ class Panel {
     const total = items.reduce((a, x) => a + x.blob.size, 0);
     const toExt = extOf(items[0].name).toUpperCase().slice(0, 4);
     const fromExt = extOf(this.files[0].name).toUpperCase().slice(0, 4);
-    const flap = flapEl(fromExt, 'md');
+    const lock = LOCK_TOOLS[this.tool.id];
+    const flap = lock ? lockEl(lock) : flapEl(fromExt, 'md');
     card.append(h('div', { class: 'result-top' }, flap,
       h('div', {}, h('p', { class: 'result-title' }, t('done')),
         h('p', { class: 'muted' }, [res.before ? t('savings', { a: fmtSize(res.before), b: fmtSize(total) }) : fmtSize(total), ' · ', t('took', { s: (ms / 1000).toFixed(ms < 10000 ? 1 : 0) + (LANG === 'ko' ? '초' : ' s') })].join('')))));
-    setTimeout(() => flipTo(flap, toExt), 60);
+    if (!lock) setTimeout(() => (firstBoard() ? boardTo : flipTo)(flap, toExt), 60);
+    const bar = res.before ? shrinkBar(res.before, total) : null;
+    if (bar) card.append(bar);
     if (res.note) card.append(h('p', { class: 'note' }, res.note));
     const urls = [];
     const one = items.length === 1;
@@ -326,7 +335,7 @@ class Panel {
       if (it.preview === 'video') card.append(h('video', { controls: true, src: url, preload: 'metadata', playsinline: true, class: 'preview' }));
       if (it.preview === 'image') card.append(h('img', { src: url, alt: '', class: 'preview img', width: it.meta?.width, height: it.meta?.height }));
       const btns = h('div', { class: 'result-btns' },
-        h('a', { class: 'btn-go', href: url, download: it.name }, h('span', {}, t('download')), h('small', {}, it.name)));
+        h('a', { class: 'btn-go', href: url, download: it.name, onclick: savedTick }, h('span', {}, t('download')), h('small', {}, it.name)));
       const sf = new File([it.blob], it.name, { type: it.blob.type });
       if (navigator.canShare && navigator.canShare({ files: [sf] })) {
         btns.append(h('button', { type: 'button', class: 'btn-ghost', onclick: () => navigator.share({ files: [sf] }).catch(() => {}) }, t('share')));
@@ -337,7 +346,7 @@ class Panel {
       for (const it of items) {
         const url = URL.createObjectURL(it.blob); urls.push(url);
         ul.append(h('li', {}, h('span', { class: 'file-name' }, it.name), h('span', { class: 'file-size' }, it.meta?.label || fmtSize(it.blob.size)),
-          h('a', { class: 'btn-small', href: url, download: it.name }, t('download'))));
+          h('a', { class: 'btn-small', href: url, download: it.name, onclick: savedTick }, t('download'))));
       }
       const zipBtn = h('button', { type: 'button', class: 'btn-go', onclick: async () => {
         zipBtn.disabled = true;
@@ -362,6 +371,60 @@ class Panel {
     card.focus({ preventScroll: true });
     card.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
+}
+
+// ---------- 연출 (설계서 '연출 요청문' 1~3) ----------
+// 받기를 누르면 버튼 안에 ✓가 잠깐(저장됨 표시)
+function savedTick(e) {
+  const a = e.currentTarget, host = a.querySelector('span') || a;
+  if (host.querySelector('.saved-tick')) return;
+  const tick = h('span', { class: 'saved-tick', 'aria-hidden': 'true' }, '✓');
+  host.append(tick); setTimeout(() => tick.remove(), 1600);
+}
+// 1. 출발 안내판: 세션에서 처음 끝난 변환만 글자가 몇 번 넘어가다 멈춘다. 그 뒤로는 짧게 한 번만 넘김(flipTo).
+const BOARD = 'ABCDEFGHJKLMNPRSTUVWXYZ0123456789';
+function firstBoard() {
+  if (REDUCED.matches) return false;
+  let seen = false; try { seen = sessionStorage.getItem('ip.board') === '1'; sessionStorage.setItem('ip.board', '1'); } catch (e) {}
+  return !seen;
+}
+function boardTo(el, text) {
+  while (el.children.length < text.length) el.append(h('b', {}, ' '));
+  while (el.children.length > text.length) el.lastChild.remove();
+  el.dataset.text = text;
+  [...el.children].forEach((b, i) => {
+    const ch = text[i];
+    const steps = 3 + i; // 오른쪽 글자일수록 조금 더 돈다 → 왼쪽부터 차례로 멈춤
+    let k = 0;
+    const tick = () => {
+      if (!b.isConnected) return; // 다른 파일을 고르면 바로 멈춤
+      b.classList.remove('flip-fast'); void b.offsetWidth; b.classList.add('flip-fast');
+      const last = k >= steps;
+      setTimeout(() => { b.textContent = last ? ch : BOARD[(Math.random() * BOARD.length) | 0]; }, 70);
+      if (!last) { k++; setTimeout(tick, 150); } else setTimeout(() => b.classList.remove('flip-fast'), 160);
+    };
+    setTimeout(tick, i * 90);
+  });
+}
+// 2. 용량 줄어듦 막대: 결과가 원본보다 10% 이상 작을 때만. 숫자(−N%)는 처음부터 최종값.
+function shrinkBar(before, after) {
+  const r = after / before;
+  if (!(r > 0 && r <= 0.9)) return null;
+  const fill = h('i', { class: 'shrink-after' });
+  fill.style.setProperty('--r', Math.max(0.01, r).toFixed(3));
+  return h('div', { class: 'shrink', 'aria-hidden': 'true' },
+    h('div', { class: 'shrink-row' }, h('span', {}, t('original')), h('b', { class: 'shrink-bar' }, h('i', { class: 'shrink-before' })), h('span')),
+    h('div', { class: 'shrink-row' }, h('span', {}, t('result')), h('b', { class: 'shrink-bar' }, fill), h('strong', {}, '−' + Math.round((1 - r) * 100) + '%')));
+}
+// 3. 자물쇠: 암호 풀기는 고리가 올라가 열리고, 암호 걸기는 내려와 잠긴다.
+const LOCK_TOOLS = { 'unlock-pdf': 'open', 'protect-pdf': 'close' };
+function lockEl(kind) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 48 56'); svg.setAttribute('width', '44'); svg.setAttribute('height', '52');
+  svg.setAttribute('class', 'lock-anim ' + kind); svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML = '<path class="shackle" d="M14 26V16a10 10 0 0 1 20 0v10"/><rect class="body" x="6" y="24" width="36" height="28" rx="6"/><circle class="hole" cx="24" cy="37" r="4"/><rect class="hole" x="22.5" y="38" width="3" height="7" rx="1.5"/>';
+  return svg;
 }
 
 function bindDrop(zone, onFiles) {
@@ -1265,8 +1328,16 @@ function boot() {
   if (hero && !REDUCED.matches) {
     const pairs = JSON.parse(hero.dataset.pairs || '[]');
     const [a, b] = hero.querySelectorAll('.flap');
+    // 페이지가 다 뜬 뒤 짝을 한 바퀴만 돌고 첫 짝에서 멈춘다(멈춘 뒤엔 타이머 없음). 화면이 숨으면 쉬었다가 이어 간다.
     let i = 0;
-    setInterval(() => { if (document.hidden) return; i = (i + 1) % pairs.length; flipTo(a, pairs[i][0]); setTimeout(() => flipTo(b, pairs[i][1]), 260); }, 2800);
+    const next = () => {
+      if (document.hidden) { document.addEventListener('visibilitychange', next, { once: true }); return; }
+      i = (i + 1) % pairs.length;
+      flipTo(a, pairs[i][0]); setTimeout(() => flipTo(b, pairs[i][1]), 260);
+      if (i !== 0) setTimeout(next, 2800);
+    };
+    const start = () => setTimeout(next, 2400);
+    document.readyState === 'complete' ? start() : addEventListener('load', start, { once: true });
   }
   // 다른 언어판 안내 띠(자동으로 넘기지 않음)
   const other = document.querySelector('link[rel=alternate][hreflang="' + (LANG === 'ko' ? 'en' : 'ko') + '"]');
