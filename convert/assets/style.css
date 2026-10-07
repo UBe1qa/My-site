@@ -267,7 +267,10 @@ th{background:var(--soft);font-weight:700}
 .article-body p{margin:12px 0}
 .article-body ul,.article-body ol{padding-left:1.3em}
 .article-body li{margin:6px 0}
-.article-body table{margin:16px 0;border:1px solid var(--line);border-radius:12px;display:block;overflow-x:auto}
+.article-body .tbl{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow-x:auto;
+  /* 옆으로 밀 수 있는 표: 가려진 쪽 가장자리에 그림자 (끝까지 밀면 사라짐) */
+  background:linear-gradient(to right,var(--bg) 60%,transparent) left/30px 100% no-repeat local,linear-gradient(to left,var(--bg) 60%,transparent) right/30px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgb(0 0 0/.3),transparent) left/16px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgb(0 0 0/.3),transparent) right/16px 100% no-repeat scroll}
+.article-body .tbl table{margin:0}
 .article-body td,.article-body th{white-space:normal}
 .doc{padding-top:24px;padding-bottom:24px}
 .doc h1{font-size:32px;margin-bottom:12px}

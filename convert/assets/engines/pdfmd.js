@@ -3,7 +3,11 @@
 // extractPages(PDF.js 모듈, 바이트) → buildMarkdown(쪽들, 설정)으로 나눠 둬서 노드에서도 시험할 수 있다.
 
 const BULLET = /^[•●○◦▪▫■□◆◇‣∙・\u2043\u2219\uf0b7\uf0a7\uf076\uf0d8\uf0fc]\s*/; // 글머리 기호(\uf0..는 Symbol·Wingdings 글꼴의 점)
-const DASH_BULLET = /^[-–*]\s+/;
+const DASH_BULLET = /^[-–]\s+/;
+const KO_BULLET = /^ㅇ\s+/; // 공문서 글머리 'ㅇ'(이응)
+const MARK = /^(?:※|\*|[①-⑳]|\(\d{1,2}\)|\[\d{1,3}\](?=\s+\p{Lu}))/u; // 주석·참고문헌 줄: 새 문단, 내어쓴 다음 줄은 이어 붙임
+const CAPTION = /^(?:Figure|Fig\.|Table|그림|표|<그림|<표|\[그림|\[표)\s*\d+[.:]/i;
+const SUBSEC = /^(\d{1,2}(?:\.\d{1,2}){1,3})\.?\s+(?=[\p{Lu}\uac00-\ud7af])/u; // 3.1 소절 제목
 const NUMBERED = /^(\d{1,3})[.)]\s+/;
 const HANGUL = /[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/;
 const CJK_NOSPACE = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uff00-\uffef]/; // 한자·가나: 줄을 이을 때 띄우지 않는다
@@ -32,12 +36,18 @@ export async function extractPages(m, data, { cMapUrl, standardFontDataUrl, onPr
       if (m.OPS && toLines(items.filter((i) => !i.rot)).some((l) => l.cells.length >= 2)) {
         try { rules = ruleSegments(await page.getOperatorList(), m.OPS, page.view); } catch { /* 선 없이 계속 */ }
       }
+      // 글이 아주 적은 쪽: 그림이 쪽 대부분을 덮는지 본다(스캔 그림 + 머리글 한 줄 같은 쪽을 알리려고)
+      let cover = 0;
+      const chars = items.reduce((a, i) => a + i.str.trim().length, 0);
+      if (m.OPS && chars && chars < 40) {
+        try { cover = imageCover(await page.getOperatorList(), m.OPS, (x1 - x0) * (y1 - y0)); } catch { /* 몰라도 계속 */ }
+      }
       let links = [];
       try {
         links = (await page.getAnnotations()).filter((a) => a.subtype === 'Link' && a.url && a.rect)
           .map((a) => ({ url: a.url, l: a.rect[0] - x0, r: a.rect[2] - x0, t: y1 - a.rect[3], b: y1 - a.rect[1] }));
       } catch { /* 링크를 못 읽어도 글은 살린다 */ }
-      pages.push({ n, w: x1 - x0, h: y1 - y0, items, links, rules });
+      pages.push({ n, w: x1 - x0, h: y1 - y0, items, links, rules, cover });
       page.cleanup();
       onProgress && onProgress(n / doc.numPages);
       if (n % 8 === 0) await new Promise((r) => setTimeout(r));
@@ -91,8 +101,24 @@ function ruleSegments(ol, OPS, view) {
   return H.length && V.length ? { H, V } : null;
 }
 
+// 그림(이미지)이 쪽 넓이에서 차지하는 몫
+function imageCover(ol, OPS, area) {
+  const mul = (m, n) => [m[0] * n[0] + m[2] * n[1], m[1] * n[0] + m[3] * n[1], m[0] * n[2] + m[2] * n[3], m[1] * n[2] + m[3] * n[3], m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5]];
+  const img = new Set([OPS.paintImageXObject, OPS.paintInlineImageXObject, OPS.paintImageMaskXObject, OPS.paintJpegXObject].filter((v) => v != null));
+  let ctm = [1, 0, 0, 1, 0, 0], sum = 0;
+  const stack = [];
+  const { fnArray: fn, argsArray: args } = ol;
+  for (let i = 0; i < fn.length; i++) {
+    if (fn[i] === OPS.save) stack.push(ctm);
+    else if (fn[i] === OPS.restore) ctm = stack.pop() || [1, 0, 0, 1, 0, 0];
+    else if (fn[i] === OPS.transform) ctm = mul(ctm, args[i]);
+    else if (img.has(fn[i])) sum += Math.abs(ctm[0] * ctm[3] - ctm[1] * ctm[2]);
+  }
+  return Math.min(1, sum / area);
+}
+
 // 서로 닿는 선끼리 묶어, 가로선 2개·세로선(바깥 포함) 3개 이상이면 칸이 그려진 표로 본다
-function ruledGrids(rules) {
+function ruledGrids(rules, pw, ph) {
   if (!rules) return [];
   const segs = [...rules.H.map((s) => ({ ...s, h: 1 })), ...rules.V.map((s) => ({ ...s, h: 0 }))];
   if (segs.length > 4000) return [];
@@ -118,6 +144,7 @@ function ruledGrids(rules) {
     const top = Math.min(...vs.map((s) => s.a), ...hs.map((s) => s.y)), bot = Math.max(...vs.map((s) => s.b), ...hs.map((s) => s.y));
     const xs = uniq([L, R, ...vs.map((s) => s.x)]), ys = uniq([top, bot, ...hs.map((s) => s.y)]);
     if (xs.length < 3 || ys.length < 3 || R - L < 30) continue;
+    if (R - L > pw * 0.9 && bot - top > ph * 0.85) continue; // 쪽 테두리·사진 틀
     grids.push({ L, R, top, bot, xs, ys });
   }
   return grids;
@@ -165,7 +192,7 @@ function pageLines(pg) {
     for (const L of pg.links) if (cx >= L.l - 1 && cx <= L.r + 1 && cy >= L.t - 2 && cy <= L.b + 2) { it.url = L.url; break; }
   }
   const tables = [];
-  for (const g of ruledGrids(pg.rules)) {
+  for (const g of ruledGrids(pg.rules, pg.w, pg.h)) {
     const inside = (it) => { const cx = it.x + it.w / 2, cy = it.y - it.size * 0.35; return cx > g.L && cx < g.R && cy > g.top && cy < g.bot; };
     const mine = items.filter(inside);
     const t = mine.length && gridTable(g, mine);
@@ -173,7 +200,18 @@ function pageLines(pg) {
   }
   const gutter = findGutter(items, pg.w);
   const groups = gutter == null ? { all: items } : { full: [], left: [], right: [] };
-  if (gutter != null) for (const it of items) (it.x < gutter && it.x + it.w > gutter ? groups.full : it.x + it.w <= gutter ? groups.left : groups.right).push(it);
+  if (gutter != null) {
+    // 쪽 전체로 줄을 묶어, 띠를 가로지르는 조각이 있거나 가운데 맞춤으로 양쪽에 걸친 줄(저자 이름 등)은 통째로 가로 줄
+    const lm = Math.min(...items.filter((it) => it.x + it.w <= gutter).map((it) => it.x));
+    const rm = Math.max(...items.filter((it) => it.x >= gutter).map((it) => it.x + it.w));
+    for (const L of toLines(items.map((it) => ({ ...it, sup: false, src: it })))) {
+      const its = L.items.map((i) => i.src);
+      const cross = its.some((it) => it.x < gutter && it.x + it.w > gutter);
+      const both = its.some((it) => it.x + it.w <= gutter) && its.some((it) => it.x >= gutter);
+      const centered = both && L.x0 > lm + L.size * 2 && L.x1 < rm - L.size * 2 && Math.abs((L.x0 + L.x1) / 2 - pg.w / 2) < pg.w * 0.04;
+      for (const it of its) (cross || centered ? groups.full : it.x + it.w <= gutter ? groups.left : groups.right).push(it);
+    }
+  }
   const lines = {};
   for (const k in groups) lines[k] = toLines(groups[k]);
   for (const t of tables) {
@@ -206,9 +244,11 @@ function findGutter(items, W) {
     const a = Math.max(lo, Math.floor(it.x)), b = Math.min(hi, Math.ceil(it.x + it.w));
     for (let x = a; x <= b; x++) cover[x - lo]++;
   }
+  // 가운데 맞춤 제목·저자·그림 설명 몇 줄은 띠를 가로질러도 된다(아래 글자 수 검사가 한 단 문서를 걸러 낸다)
+  const thr = Math.max(items.length * 0.01, 4);
   let best = -1, bestLen = 0;
   for (let x = 0; x < cover.length;) {
-    if (cover[x] <= items.length * 0.01) { let e = x; while (e < cover.length && cover[e] <= items.length * 0.01) e++; if (e - x > bestLen) { bestLen = e - x; best = x + ((e - x) >> 1); } x = e; } else x++;
+    if (cover[x] <= thr) { let e = x; while (e < cover.length && cover[e] <= thr) e++; if (e - x > bestLen) { bestLen = e - x; best = x + ((e - x) >> 1); } x = e; } else x++;
   }
   if (best < 0 || bestLen < 6) return null;
   const g = lo + best;
@@ -309,7 +349,10 @@ function repeatedKeys(pages) {
   const count = new Map();
   for (const pg of pages) {
     const seen = new Set();
-    for (const ln of pg.lines) if (!ln.table && (ln.top < pg.h * 0.1 || ln.top > pg.h * 0.88)) seen.add(key(ln.text));
+    for (const ln of pg.lines) if (!ln.table && (ln.top < pg.h * 0.1 || ln.top > pg.h * 0.88)) {
+      seen.add(key(ln.text));
+      for (const c of ln.cells || []) seen.add('c:' + key(c.text)); // 꼬리말이 칸으로 나뉘어 쪽마다 붙었다 떨어졌다 하는 경우
+    }
     for (const k of seen) count.set(k, (count.get(k) || 0) + 1);
   }
   const min = Math.max(3, Math.ceil(pages.length * 0.5));
@@ -321,25 +364,51 @@ export function buildMarkdown(pages, { pageMarks = true, dropRepeats = true } = 
   let removed = 0;
   if (dropRepeats) {
     const { key, rep } = repeatedKeys(pages);
+    const onlyRep = []; // 꼬리말밖에 없는 쪽(그림만 있는 발표 쪽 등)
     for (const pg of pages) {
       const keep = pg.lines.filter((ln) => {
         const edge = !ln.table && (ln.top < pg.h * 0.1 || ln.top > pg.h * 0.88);
-        const drop = edge && (rep.has(key(ln.text)) || PAGE_NO.test(ln.text));
+        const drop = edge && (rep.has(key(ln.text)) || PAGE_NO.test(ln.text) ||
+          (ln.cells && ln.cells.length && ln.cells.every((c) => rep.has('c:' + key(c.text)) || PAGE_NO.test(c.text))));
         if (drop) removed++;
         return !drop;
       });
-      if (keep.length || !pg.lines.length) pg.lines = keep; else removed -= pg.lines.length; // 쪽에 그것밖에 없으면 머리말이 아니라 본문
+      if (keep.length || !pg.lines.length) pg.lines = keep; else { removed -= pg.lines.length; onlyRep.push(pg); }
+      // 표 칸에 들어간 꼬리말 행
+      for (const ln of pg.lines) if (ln.table) ln.rows = ln.rows.filter((r) => { const f = r.filter(Boolean); const d = f.length && f.every((t) => rep.has('c:' + key(t)) || PAGE_NO.test(t)); if (d) removed++; return !d; });
+      pg.lines = pg.lines.filter((ln) => !ln.table || ln.rows.length >= 2);
     }
+    // 대부분 쪽이 그 줄뿐이면 머리말이 아니라 본문이니 남기고, 몇 쪽만 그렇다면 그 쪽은 그림만 있는 쪽
+    if (onlyRep.length < pages.length * 0.5) for (const pg of onlyRep) { removed += pg.lines.length; pg.lines = []; }
   }
+  buildVocab(pages);
   // 본문 글자 크기 = 글자 수로 가장 많은 크기. 그보다 12% 이상 크면 제목 후보
   const bySize = new Map();
   for (const pg of pages) for (const ln of pg.lines) if (!ln.table) bySize.set(ln.size, (bySize.get(ln.size) || 0) + ln.text.length);
   const body = [...bySize].sort((a, b) => b[1] - a[1])[0]?.[0] || 10;
   const perPage = new Map();
   for (const pg of pages) { const c = new Map(); for (const ln of pg.lines) if (!ln.table) c.set(ln.size, (c.get(ln.size) || 0) + 1); for (const [k, v] of c) perPage.set(k, Math.max(perPage.get(k) || 0, v)); }
-  const bigger = [...bySize.keys()].filter((s) => s >= body * 1.12 && perPage.get(s) <= 6).sort((a, b) => b - a);
-  const level = (s) => { const i = bigger.indexOf(s); return i < 0 ? 0 : Math.min(i + 1, 4); };
-  // 제목 크기인데 글이 아주 많으면(본문 일부를 크게 쓴 것) 제목으로 치지 않는다
+  // 문서 제목 = 첫 쪽 위쪽에서 가장 큰 글. 그보다 큰 글은 그림 속 글자일 때가 많아서, 여러 쪽에 서로 다른 글로 나올 때(장 제목)만 제목으로 친다
+  const firstPg = pages.find((p) => p.lines.length);
+  let titleSize = 0;
+  if (firstPg) for (const ln of firstPg.lines) if (!ln.table && ln.top < firstPg.h * 0.45 && /\p{L}/u.test(ln.text)) titleSize = Math.max(titleSize, ln.size);
+  if (titleSize < body * 1.12) titleSize = 0;
+  const seenAt = new Map();
+  for (const pg of pages) for (const ln of pg.lines) if (!ln.table) { const e = seenAt.get(ln.size) || { pages: new Set(), texts: new Set(), n: 0 }; e.pages.add(pg.n); e.texts.add(ln.text); e.n++; seenAt.set(ln.size, e); }
+  const bigger = [...bySize.keys()].filter((s) => s >= body * 1.12 && perPage.get(s) <= 6 &&
+    (!titleSize || s <= titleSize || (seenAt.get(s).pages.size >= 2 && seenAt.get(s).texts.size >= seenAt.get(s).n * 0.7))).sort((a, b) => b - a);
+  const lvOf = (s) => { const i = bigger.indexOf(s); return i < 0 ? 0 : Math.min(i + 1, 4); };
+  // 발표 자료(가로 쪽, 쪽마다 글이 적음): 쪽 위쪽의 가장 큰 글만 그 쪽 제목, 나머지는 크기가 커도 본문·목록
+  const chars = pages.map((p) => p.lines.reduce((a, l) => a + (l.table ? 0 : l.text.length), 0));
+  const slides = pages.length >= 2 && pages.filter((p) => p.w > p.h * 1.15).length >= pages.length * 0.8 && median(chars) < 1500;
+  const levelFor = (pg) => {
+    if (!slides) return (ln) => (ln.text.length <= 140 ? lvOf(ln.size) : 0);
+    const tops = pg.lines.filter((l) => !l.table && l.top < pg.h * 0.3);
+    const maxS = Math.max(0, ...tops.map((l) => l.size));
+    const mid = median(pg.lines.filter((l) => !l.table).map((l) => l.size));
+    const lv = pg === firstPg ? 1 : 2;
+    return (ln) => (maxS >= mid * 1.15 && ln.size === maxS && ln.top < pg.h * 0.3 && ln.text.length <= 140 ? lv : 0);
+  };
   const out = [];
   const empty = [];
   let tables = 0, headings = 0;
@@ -350,18 +419,47 @@ export function buildMarkdown(pages, { pageMarks = true, dropRepeats = true } = 
       continue;
     }
     if (pageMarks && pages.length > 1) out.push({ t: 'mark', text: `<!-- page ${pg.n} -->` });
-    const blocks = pageBlocks(pg, body, level);
-    for (const b of blocks) { if (b.t === 'table') tables++; if (b.t === 'h') headings++; out.push(b); }
+    const blocks = pageBlocks(pg, body, levelFor(pg));
+    for (const b of blocks) out.push(b);
   }
-  // 쪽을 넘어 이어지는 문단은 붙인다(쪽 표시는 그 사이에 남기지 않고 문단 뒤로)
+  // 번호 붙은 짧은 한 줄(3.1 Residual Learning)은 소절 제목: 절 제목 단계 + 점 수
+  const secLv = (() => { const c = new Map(); for (const b of out) if (b.t === 'h' && /^(?:\d{1,2}|[A-Z]|[IVX]{1,4})\.?\s+\S/.test(b.text)) c.set(b.level, (c.get(b.level) || 0) + 1); return [...c].sort((a, b) => b[1] - a[1])[0]?.[0] || (titleSize ? 2 : 1); })();
+  for (const b of out) {
+    const m = b.t === 'p' && b.n === 1 && b.text.length <= 90 && !/[.:;,]$|\d$/.test(b.text) && b.text.match(SUBSEC);
+    if (m) { b.t = 'h'; b.level = Math.min(6, secLv + m[1].split('.').length - 1); }
+  }
+  for (const b of out) { if (b.t === 'table') tables++; if (b.t === 'h') headings++; }
+  // 끊긴 문단 잇기: 다음 쪽 첫 문단, 또는 그림 글자·그림 제목·각주가 끼어들어 끊긴 문장(소문자로 시작)을 앞 문단에 붙인다.
+  // 끼어든 것들은 이은 문단 뒤로 밀리고, 쪽을 넘었으면 문단 안에 쪽 표시를 남긴다.
   const md = [];
   for (let i = 0; i < out.length; i++) {
     const b = out[i];
-    if (b.t === 'p' && b.cont && md.length) {
-      // 바로 앞 문단(쪽 표시 건너뛰고)에 잇는다
-      let j = md.length - 1, marks = [];
-      while (j >= 0 && md[j].t === 'mark') marks.unshift(md[j--]);
-      if (j >= 0 && md[j].t === 'p' && !(md[j].done && md[j].room > b.firstW + 5) && md[j].wide && md[j].lastBase > md[j].pageH * 0.7) { md[j].text = joinText(md[j].text, b.text); md[j].done = b.done; md.length = j + 1; md.push(...marks); continue; }
+    const lower = b.t === 'p' && /^[a-z]/.test(b.text);
+    if (b.t === 'p' && (b.cont || lower) && !CAPTION.test(b.text) && !b.mark && md.length) {
+      let j = md.length - 1, crossed = false, skipped = 0;
+      for (; j >= 0 && skipped <= 12; j--) {
+        const x = md[j];
+        if (x.t === 'mark') { if (/no text layer/.test(x.text)) { j = -1; break; } crossed = true; continue; }
+        if (x.t === 'p' && x.size0 === b.size0 && !CAPTION.test(x.text) && !(x.text.length < 40 && skipped)) break;
+        const small = (x.t === 'p' || x.t === 'li') && (x.size0 < b.size0 * 0.93 || CAPTION.test(x.text) || x.text.length < 40);
+        if (small || (x.t === 'table' && !crossed)) { skipped++; continue; }
+        j = -1; break;
+      }
+      const x = j >= 0 ? md[j] : null;
+      const ok = x && !(x.done && x.room > b.firstW + 5) && x.wide && (crossed
+        ? b.cont && x.lastBase > x.pageH * 0.7
+        : lower && skipped > 0 && !/[.!?:]$/.test(x.text));
+      if (ok) {
+        if (crossed && pageMarks && pages.length > 1) {
+          const joined = joinText(x.text, b.text);
+          let k = Math.min(x.text.length, joined.length);
+          while (k < joined.length && joined[k] !== ' ') k++;
+          x.text = joined.slice(0, k) + ` <!-- page ${b.pg} -->` + joined.slice(k);
+          for (let q = md.length - 1; q > j; q--) if (md[q].t === 'mark') md.splice(q, 1);
+        } else x.text = joinText(x.text, b.text);
+        x.done = b.done; x.room = b.room; x.wide = b.wide; x.lastBase = b.lastBase; x.pageH = b.pageH;
+        continue;
+      }
     }
     // 쪽 끝 표가 다음 쪽 맨 위 표로 이어지면(칸 수 같음) 한 표로 잇는다
     if (b.t === 'table' && b.first && md.length) {
@@ -377,20 +475,42 @@ export function buildMarkdown(pages, { pageMarks = true, dropRepeats = true } = 
   let text = '';
   md.forEach((b, i) => { if (i) text += b.t === 'li' && md[i - 1].t === 'li' ? '\n' : '\n\n'; text += render(b); });
   text = text.replace(/\n{3,}/g, '\n\n').trim() + '\n';
-  return { text, pages: pages.length, empty, removed, tables, headings, chars: text.length };
+  const sparse = pages.filter((p) => p.lines.length && p.cover > 0.25).map((p) => p.n); // 그림이 대부분이고 글은 조금
+  return { text, pages: pages.length, empty, sparse, removed, tables, headings, chars: text.length };
 }
 
 function render(b) {
   if (b.t === 'h') return '#'.repeat(b.level) + ' ' + b.text;
-  if (b.t === 'li') return (b.num ? b.num + '. ' : '- ') + b.text;
+  if (b.t === 'li') return (b.indent || '') + (b.num ? b.num + '. ' : '- ') + b.text;
   if (b.t === 'table') return [b.rows[0], b.rows[0].map(() => '---'), ...b.rows.slice(1)].map((r) => '| ' + r.join(' | ') + ' |').join('\n');
-  if (b.t === 'p') return b.text.replace(/^([#>])/, '\\$1').replace(/^(\d+)\. /, '$1\\. ');
+  if (b.t === 'p') return b.text.replace(/^([#>*+]|- )/, '\\$1').replace(/^(\d+)\. /, '$1\\. ');
   return b.text;
 }
 
+// 문서에 나온 낱말 모음: 줄 끝에서 나뉜 낱말을 이을 때 하이픈·띄어쓰기를 정하는 데 쓴다
+let VOCAB = new Set();
+const tok = (t) => t.replace(/^[("'“‘\[<]+|[)"'”’\].,;:!?>]+$/g, '');
+function buildVocab(pages) {
+  VOCAB = new Set();
+  for (const pg of pages) for (const ln of pg.lines) if (!ln.table) for (const w of ln.text.split(/\s+/)) VOCAB.add(tok(w).toLowerCase());
+}
+const COMPOUND = /(?:^|-)(?:self|non|multi|pre|post|co|well|high|low|fine|large|small|long|short|end|state|real|open|cross|semi|sub|inter|intra|over|under|one|two|three|top|first|second|third|left|right|zero|few|full|half|built|user|task|data|time|word|sentence|token|byte|state-of-the)-$/i;
+// 한글 줄바꿈은 낱말 중간에서도 일어난다: 이어 붙인 낱말이 문서에 있거나 다음 줄이 조사·어미로 시작하면 붙여 쓴다
+const KO_TAIL = /^(?:은|는|이|가|을|를|과|와|과는|와는|의|에|에는|에도|에서|에서는|에게|로|로는|으로|으로는|도|만|까지|부터|이다|입니다|됩니다|합니다|했습니다|하였습니다|됐습니다|되었습니다|하겠습니다|하고|하며|하여|해|했|되는|되어|된|될|한|할|함|됨|임|적|적인|적으로|하는|이며|이고|으며|이라는|라는|처럼|보다|이나|씩|들|들은|들이|들을|들의)(?=[.,)」』’”]*$)/;
 function joinText(a, b) {
-  if (/[A-Za-z]-$/.test(a) && /^[a-z]/.test(b)) return a + b; // 줄 끝 하이픈: 'English-to'처럼 원래 하이픈일 수도 있어 지우지 않고 붙인다
+  if (/[A-Za-z]-$/.test(a) && /^[a-z]/.test(b)) {
+    // 줄 끝 하이픈: 붙인 낱말이 문서에 있거나, 하이픈 낱말(English-to)·합성어 앞말이 아니면 하이픈을 지운다
+    const head = tok(a.slice(a.lastIndexOf(' ') + 1)), tail = tok(b.split(/\s/)[0]);
+    const keep = VOCAB.has((head + tail).toLowerCase()) || COMPOUND.test(head);
+    const drop = VOCAB.has((head.slice(0, -1) + tail).toLowerCase());
+    return drop || !keep ? a.slice(0, -1) + b : a + b;
+  }
   if (CJK_NOSPACE.test(a.slice(-1)) && CJK_NOSPACE.test(b[0]) && !HANGUL.test(a.slice(-1))) return a + b;
+  if (/[‧·ㆍ]$/.test(a) && HANGUL.test(b[0])) return a + b; // 도‧소매
+  if (HANGUL.test(a.slice(-1)) && HANGUL.test(b[0])) {
+    const head = a.slice(a.lastIndexOf(' ') + 1), tail = tok(b.split(/\s/)[0]);
+    if (KO_TAIL.test(tail) || VOCAB.has(tok(head + tail))) return a + b;
+  }
   return a + ' ' + b;
 }
 
@@ -403,38 +523,52 @@ function pageBlocks(pg, body, level) {
   for (let i = 1; i < lines.length; i++) if (lines[i].col === lines[i - 1].col && lines[i].size && lines[i].size === lines[i - 1].size) { const d = lines[i].base - lines[i - 1].base; if (d > 0) pitches.push(d / lines[i].size); }
   const pitch = median(pitches) || 1.25;
   const blocks = [];
-  let cur = null;
+  let cur = null, stack = []; // stack: 목록 들여쓰기 단계(글머리 x, 표시 너비)
   const flush = () => { if (cur) { blocks.push(cur); cur = null; } };
   for (let i = 0; i < lines.length; i++) {
     const ln = lines[i], prev = lines[i - 1];
-    if (ln.table) { flush(); blocks.push({ t: 'table', rows: ln.rows, first: !blocks.length }); continue; }
+    if (ln.table) { flush(); stack = []; blocks.push({ t: 'table', rows: ln.rows, first: !blocks.length }); continue; }
     // 표: 칸이 2개 이상인 줄이 2줄 넘게 이어지고 칸 시작 위치가 맞으면
     const tbl = tableAt(lines, i);
-    if (tbl) { flush(); blocks.push({ t: 'table', rows: tbl.rows, first: !blocks.length }); i = tbl.end - 1; continue; }
-    const lv = ln.text.length <= 140 ? level(ln.size) : 0;
+    if (tbl) { flush(); stack = []; blocks.push({ t: 'table', rows: tbl.rows, first: !blocks.length }); i = tbl.end - 1; continue; }
     const c = ln.col || 'all';
     const colW = Math.max(right[c] - left[c], c === 'all' ? pg.w * 0.6 : pg.w * 0.3);
     const gap = prev && prev.col === ln.col ? (ln.base - prev.base) / ln.size : 99;
-    if (lv) {
-      if (cur && cur.t === 'h' && cur.level === lv && gap < pitch * 1.8) { cur.text += ' ' + ln.text; continue; }
-      flush(); cur = { t: 'h', level: lv, text: ln.text }; continue;
-    }
     let text = ln.text, li = null;
     const firstStr = ln.items[0].str.trim();
-    if (BULLET.test(text) || (DASH_BULLET.test(text) && firstStr.length <= 2)) { li = { num: null }; text = text.replace(BULLET, '').replace(DASH_BULLET, ''); }
-    else { const m = text.match(NUMBERED); if (m && ln.x0 < left[c] + colW * 0.15) { li = { num: m[1] }; text = text.slice(m[0].length); } }
-    if (li) { flush(); cur = { t: 'li', num: li.num, text, x0: ln.x0, textX: ln.x0 + ln.size * 1.2 }; markEnd(cur, ln, right[c], colW); continue; }
-    if (cur && (cur.t === 'p' || cur.t === 'li') && !(cur.done && cur.room > firstWordW(ln) + ln.size * 0.5) && ln.size === cur.size0 && gap < pitch * 1.45 &&
-        !(cur.t === 'p' && ln.x0 > cur.lastX0 + ln.size * 1.2) &&
+    // 글머리표는 글자가 커도 목록(발표 자료의 • · –)
+    if (BULLET.test(text) || KO_BULLET.test(text) || (DASH_BULLET.test(text) && firstStr.length <= 2)) { li = { num: null }; text = text.replace(BULLET, '').replace(KO_BULLET, '').replace(DASH_BULLET, ''); }
+    const lv = li ? 0 : level(ln);
+    if (lv) {
+      stack = [];
+      if (cur && cur.t === 'h' && cur.level === lv && gap < pitch * 1.8) { cur.text += ' ' + ln.text; cur.n++; continue; }
+      flush(); cur = { t: 'h', level: lv, text: ln.text, n: 1, size0: ln.size }; continue;
+    }
+    // 번호 목록: 앞 문단이 줄 끝까지 차서 이어지는 중이면 줄 첫머리 숫자는 문장 일부('ResNet-' / '34. Right')
+    const midSentence = cur && cur.t === 'p' && !cur.done && ln.size === cur.size0 && gap < pitch * 1.45;
+    if (!li && !midSentence) { const m = text.match(NUMBERED); if (m && ln.x0 < left[c] + colW * 0.15) { li = { num: m[1] }; text = text.slice(m[0].length); } }
+    if (li) {
+      flush();
+      while (stack.length && ln.x0 < stack[stack.length - 1].x - ln.size * 0.5) stack.pop();
+      if (!stack.length || ln.x0 > stack[stack.length - 1].x + ln.size * 0.8) { if (stack.length < 4) stack.push({ x: ln.x0, w: li.num ? li.num.length + 2 : 2 }); }
+      const indent = ' '.repeat(stack.slice(0, -1).reduce((a, e) => a + e.w, 0));
+      cur = { t: 'li', num: li.num, text, x0: ln.x0, indent, n: 1 }; markEnd(cur, ln, right[c], colW); continue;
+    }
+    const mark = MARK.test(text) || (CAPTION.test(text) && cur && /[.!?:)”"]$/.test(cur.text));
+    const hang = cur && cur.t === 'p' && cur.mark && cur.n === 1 && !cur.done && ln.x0 > cur.lastX0 && ln.x0 < cur.lastX0 + ln.size * 4; // 내어쓰기: 첫 줄보다 들어간 다음 줄
+    if (!mark && cur && (cur.t === 'p' || cur.t === 'li') && !(cur.done && cur.room > firstWordW(ln) + ln.size * 0.5) && ln.size === cur.size0 && gap < pitch * 1.45 &&
+        (hang || !(cur.t === 'p' && ln.x0 > cur.lastX0 + ln.size * 1.2)) &&
         !(cur.t === 'li' && ln.x0 < cur.x0 - 1)) {
-      cur.text = joinText(cur.text, text); cur.lastX0 = ln.x0; markEnd(cur, ln, right[c], colW); continue;
+      cur.text = joinText(cur.text, text); cur.lastX0 = ln.x0; cur.n++; markEnd(cur, ln, right[c], colW); continue;
     }
     flush();
-    cur = { t: 'p', text, size0: ln.size, lastX0: ln.x0, cont: i === 0 && ln.x0 <= left[c] + ln.size * 0.6, firstW: firstWordW(ln) };
+    cur = { t: 'p', text, size0: ln.size, lastX0: ln.x0, n: 1, mark: MARK.test(text), cont: i === 0 && ln.x0 <= left[c] + ln.size * 0.6, firstW: firstWordW(ln) };
     markEnd(cur, ln, right[c], colW);
   }
   flush();
-  for (const b of blocks) b.pageH = pg.h;
+  // 여러 줄이 붙은 '제목'(저작권 안내처럼 크게 쓴 문장)은 문단으로 되돌린다
+  for (const b of blocks) if (b.t === 'h' && (b.n > (b.level === 1 ? 3 : 2) || b.text.length > 160 || (/[.。]$/.test(b.text) && b.text.split(/\s+/).length >= 10))) b.t = 'p';
+  for (const b of blocks) { b.pageH = pg.h; b.pg = pg.n; }
   return blocks;
 }
 
@@ -535,6 +669,7 @@ export async function toMarkdown(file, opts = {}, onProgress, signal) {
   } catch (e) {
     if (e && e.name === 'PasswordException') throw Object.assign(new Error('encrypted'), { code: 'encrypted' });
     if (e && e.name === 'AbortError') throw e;
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) throw Object.assign(new Error('offline'), { code: 'offline' });
     throw Object.assign(new Error(e && e.message), { code: 'pdf' });
   }
   const res = buildMarkdown(pages, opts);

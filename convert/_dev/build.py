@@ -370,7 +370,7 @@ def article_page(a, lang):
   <p class="crumb"><a href="{p}guide/">{u['guides']}</a></p>
   <h1>{esc(a['h1'])}</h1>
   <p class="muted small">{u['updated']} <time datetime="{day}">{day}</time> · Lumen Lab</p>
-  <div class="article-body">{a['body_html']}</div>
+  <div class="article-body">{a['body_html'].replace('<table>', '<div class="tbl"><table>').replace('</table>', '</table></div>')}</div>
 </article>
 {ad_slot(lang, 'bottom')}'''
     return page(lang, head(lang, a['title'], a['desc'], path, alt=alt, jsonld=ld, og_type='article'), body,
