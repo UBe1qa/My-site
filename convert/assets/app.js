@@ -50,7 +50,12 @@ const T = {
     wmText: 'Text', wmDefault: 'CONFIDENTIAL', style: 'Layout', diagonal: 'Diagonal', center: 'Center', tile: 'Tiled',
     opacity: 'Opacity', faint: 'Faint', strongO: 'Strong', color: 'Color', gray: 'Gray', red: 'Red', errWmEmpty: 'Enter the watermark text.',
     errTooBig: 'That size is too large. Keep each side under 16,000 px.', errOrder: 'The end must come after the start.',
-    errN: 'Enter a whole number from 1 to {n}.', notPdfPw: 'Use Unlock PDF first if you know the password.', inFile: '{name}: {m}'
+    errN: 'Enter a whole number from 1 to {n}.', notPdfPw: 'Use Unlock PDF first if you know the password.', inFile: '{name}: {m}',
+    mdMarks: 'Mark where each page starts', mdMarksHint: 'Adds <!-- page 3 --> lines so you can ask about a page.', mdRepeats: 'Remove headers, footers and page numbers repeated on every page',
+    mdStats: '{p} pages → {c} characters of Markdown{t}', mdTables: ', {n} tables', copy: 'Copy text', copiedMd: 'Copied',
+    mdScan: 'No text came out of page {list}: it is a scan or a picture with no text layer. Upload those pages to Claude as images or PDF instead.',
+    errNoText: 'This PDF has no text layer (it is a scan or made of pictures), so there is no text to turn into Markdown. Upload it to Claude as a PDF, or run OCR on it first.',
+    mdTip: 'Paste this into Claude instead of the PDF when the words are what matter. Charts, pictures and the page look are not included. ', mdGuide: 'When does this help?'
   },
   ko: {
     choose: '파일 고르기', chooseMany: '파일 고르기', orDrop: '또는 여기에 끌어 놓기', orDropMany: '또는 여러 개를 끌어 놓기',
@@ -97,7 +102,12 @@ const T = {
     wmText: '글자', wmDefault: '대외비', style: '배치', diagonal: '대각선', center: '가운데', tile: '바둑판',
     opacity: '진하기', faint: '연하게', strongO: '진하게', color: '색', gray: '회색', red: '빨강', errWmEmpty: '워터마크 글자를 넣어 주세요.',
     errTooBig: '크기가 너무 커요. 한 변을 16,000px 아래로 해 주세요.', errOrder: '끝이 시작보다 뒤여야 해요.',
-    errN: '1에서 {n} 사이의 정수를 넣어 주세요.', notPdfPw: '암호를 알면 먼저 \'PDF 암호 풀기\'로 풀어 주세요.', inFile: '{name}: {m}'
+    errN: '1에서 {n} 사이의 정수를 넣어 주세요.', notPdfPw: '암호를 알면 먼저 \'PDF 암호 풀기\'로 풀어 주세요.', inFile: '{name}: {m}',
+    mdMarks: '쪽이 시작하는 곳 표시하기', mdMarksHint: '<!-- page 3 --> 같은 줄이 들어가서 몇 쪽 내용인지 물어볼 수 있어요.', mdRepeats: '쪽마다 되풀이되는 머리말·꼬리말·쪽 번호 빼기',
+    mdStats: '{p}쪽 → 마크다운 {c}자{t}', mdTables: ', 표 {n}개', copy: '글 복사하기', copiedMd: '복사했어요',
+    mdScan: '{list}쪽에서는 글을 못 뽑았어요. 글자 층이 없는 스캔본이나 그림이에요. 그 쪽은 클로드에 PDF나 그림으로 올려 주세요.',
+    errNoText: '이 PDF에는 글자 층이 없어요(스캔본이거나 그림으로 된 PDF). 마크다운으로 바꿀 글이 없으니 클로드에 PDF로 올리거나, 먼저 OCR(글자 인식)을 거쳐 주세요.',
+    mdTip: '글 내용이 중요할 때 PDF 대신 이걸 클로드에 붙여 넣으세요. 표 모양은 남지만 그래프·사진·쪽 모양은 빠져요. ', mdGuide: '언제 도움이 될까요?'
   }
 }[LANG];
 const t = (k, v = {}) => (T[k] || k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
@@ -177,6 +187,12 @@ function numInput(label, value, attrs = {}) {
 function memErr(e) { return e && (e.name === 'RangeError' || /memory|allocation/i.test(e.message || '')); }
 
 // 결과 이름: 원래이름(-꼬리).확장자
+// 쪽 목록을 짧게: [1,2,3,7] → '1–3, 7'
+function listPages(a) {
+  const out = [];
+  for (let i = 0; i < a.length; i++) { let j = i; while (j + 1 < a.length && a[j + 1] === a[j] + 1) j++; out.push(j > i ? a[i] + '–' + a[j] : String(a[i])); i = j; }
+  return out.length > 8 ? out.slice(0, 8).join(', ') + '…' : out.join(', ');
+}
 const outName = (file, ext, tail) => baseOf(file.name) + (tail ? '-' + tail : '') + '.' + ext;
 
 // ---------- 도구 화면 ----------
@@ -335,6 +351,8 @@ class Panel {
     const bar = res.before ? shrinkBar(res.before, total) : null;
     if (bar) card.append(bar);
     if (res.note) card.append(h('p', { class: 'note' }, res.note));
+    if (res.warn) card.append(h('p', { class: 'warn' }, res.warn));
+    if (res.tip) card.append(h('p', { class: 'muted tip' }, ...res.tip));
     const urls = this.urls = [];
     const one = items.length === 1;
     if (one) {
@@ -343,8 +361,15 @@ class Panel {
       if (it.preview === 'audio') card.append(h('audio', { controls: true, src: url, preload: 'metadata', class: 'preview' }));
       if (it.preview === 'video') card.append(h('video', { controls: true, src: url, preload: 'metadata', playsinline: true, class: 'preview' }));
       if (it.preview === 'image') card.append(h('img', { src: url, alt: '', class: 'preview img', width: it.meta?.width, height: it.meta?.height }));
+      if (it.preview === 'text') card.append(h('pre', { class: 'preview text', tabindex: '0', 'aria-label': t('preview') }, it.text.length > 20000 ? it.text.slice(0, 20000) + '\n…' : it.text));
       const btns = h('div', { class: 'result-btns' },
         h('a', { class: 'btn-go', href: url, download: it.name, onclick: savedTick }, h('span', {}, t('download')), h('small', {}, it.name)));
+      if (it.preview === 'text' && navigator.clipboard) {
+        const cp = h('button', { type: 'button', class: 'btn-ghost', onclick: async () => {
+          try { await navigator.clipboard.writeText(it.text); cp.textContent = t('copiedMd'); setTimeout(() => { cp.textContent = t('copy'); }, 1600); } catch (e) { /* 복사가 막히면 받기 버튼을 쓴다 */ }
+        } }, t('copy'));
+        btns.append(cp);
+      }
       const sf = new File([it.blob], it.name, { type: it.blob.type });
       if (navigator.canShare && navigator.canShare({ files: [sf] })) {
         btns.append(h('button', { type: 'button', class: 'btn-ghost', onclick: () => navigator.share({ files: [sf] }).catch(() => {}) }, t('share')));
@@ -483,7 +508,7 @@ const ACTION = {
   'compress-pdf': { en: 'Compress PDF', ko: 'PDF 줄이기' }, 'rotate-pdf': { en: 'Save rotated PDF', ko: '돌린 PDF 저장하기' },
   'organize-pdf': { en: 'Save PDF', ko: 'PDF 저장하기' }, 'unlock-pdf': { en: 'Unlock PDF', ko: '암호 풀기' },
   'protect-pdf': { en: 'Protect PDF', ko: '암호 걸기' }, 'pdf-page-numbers': { en: 'Add page numbers', ko: '쪽 번호 넣기' },
-  'watermark-pdf': { en: 'Add watermark', ko: '워터마크 넣기' },
+  'watermark-pdf': { en: 'Add watermark', ko: '워터마크 넣기' }, 'pdf-to-markdown': { en: 'Convert to Markdown', ko: '마크다운으로 바꾸기' },
 };
 
 // ---------- 공통 옵션 조각 ----------
@@ -1114,6 +1139,30 @@ const RUNNERS = {
           const start = Math.max(0, Math.floor(+st.input.value || 0));
           const pdf = await import('./engines/pdf.js');
           return { items: [{ blob: await pdf.pageNumbers(p.files[0], { pos, fmt, start, skipFirst: skip, size }), name: outName(p.files[0], 'pdf', 'numbered') }] };
+        }
+      };
+    }
+  },
+  'pdf-to-markdown': {
+    async setup(p, files) {
+      const pdf = await import('./engines/pdf.js');
+      const n = await pdf.numPagesJs(files[0]);
+      p.head.append(h('p', { class: 'file-info muted' }, (LANG === 'ko' ? n + '쪽' : n + (n === 1 ? ' page' : ' pages'))));
+      const marks = toggle(t('mdMarks'), n > 1), reps = toggle(t('mdRepeats'), true);
+      p.opts.replaceChildren(marks, h('small', { class: 'muted hint' }, t('mdMarksHint')), reps);
+      return {
+        run: async (prog, setJob) => {
+          const ac = new AbortController(); setJob({ cancel: () => ac.abort() });
+          const md = await import('./engines/pdfmd.js');
+          const r = await md.toMarkdown(files[0], { pageMarks: marks.get(), dropRepeats: reps.get() }, prog, ac.signal);
+          if (r.empty.length === r.pages) throw Object.assign(new Error(t('errNoText')), { code: 'msg' });
+          const blob = new Blob([r.text], { type: 'text/markdown;charset=utf-8' });
+          const stats = t('mdStats', { p: r.pages, c: r.chars.toLocaleString(LANG), t: r.tables ? t('mdTables', { n: r.tables }) : '' });
+          return {
+            items: [{ blob, name: outName(files[0], 'md'), preview: 'text', text: r.text }],
+            note: stats, warn: r.empty.length ? t('mdScan', { list: listPages(r.empty) }) : '',
+            tip: [t('mdTip'), h('a', { href: BASE + 'guide/' + (LANG === 'ko' ? 'pdf-markdown-claude-token' : 'pdf-to-markdown-for-claude') + '/' }, t('mdGuide'))]
+          };
         }
       };
     }

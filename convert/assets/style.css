@@ -197,6 +197,9 @@ button.pg-img:hover{border-color:var(--ink2)}
 .preview{width:100%;border-radius:12px}
 .preview.img{max-height:340px;object-fit:contain;background:repeating-conic-gradient(var(--soft) 0 25%,var(--card) 0 50%) 0 0/16px 16px}
 video.preview{max-height:360px;background:#000}
+.preview.text{max-height:360px;overflow:auto;margin:0;padding:12px 14px;background:var(--soft);color:var(--ink);border:1px solid var(--line);font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"D2Coding",monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.tip{font-size:14px}
+.tip a{color:inherit}
 .result-btns{display:flex;flex-wrap:wrap;gap:10px}
 .result-btns .btn-go{flex:1 1 260px}
 .result-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;font-size:14px}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://convert.lumenlab.page/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/video-to-mp3/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/audio-converter/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/cut-audio/</loc><lastmod>2026-10-06</lastmod></url>
@@ -14,6 +14,7 @@
   <url><loc>https://convert.lumenlab.page/resize-image/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/images-to-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/pdf-to-jpg/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/pdf-to-markdown/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/merge-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/split-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/compress-pdf/</loc><lastmod>2026-10-06</lastmod></url>
@@ -25,7 +26,7 @@
   <url><loc>https://convert.lumenlab.page/unlock-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/csv-json/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/excel-csv/</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://convert.lumenlab.page/guide/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/guide/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/guide/heic-vs-jpg/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/guide/mp3-bitrate/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/guide/youtube-to-mp3-legal/</loc><lastmod>2026-10-06</lastmod></url>
@@ -33,10 +34,11 @@
   <url><loc>https://convert.lumenlab.page/guide/remove-pdf-password/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/guide/reduce-video-size-for-email/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/guide/webp-vs-jpg-vs-png/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/guide/pdf-to-markdown-for-claude/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/about/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/privacy/</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://convert.lumenlab.page/licenses/</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://convert.lumenlab.page/ko/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/licenses/</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/ko/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/video-to-mp3/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/audio-converter/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/cut-audio/</loc><lastmod>2026-10-06</lastmod></url>
@@ -50,6 +52,7 @@
   <url><loc>https://convert.lumenlab.page/ko/resize-image/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/images-to-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/pdf-to-jpg/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/ko/pdf-to-markdown/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/merge-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/split-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/compress-pdf/</loc><lastmod>2026-10-06</lastmod></url>
@@ -61,7 +64,7 @@
   <url><loc>https://convert.lumenlab.page/ko/unlock-pdf/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/csv-json/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/excel-csv/</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://convert.lumenlab.page/ko/guide/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/ko/guide/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/guide/iphone-heic-jpg/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/guide/csv-excel-hangul/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/guide/youtube-mp3-legal/</loc><lastmod>2026-10-06</lastmod></url>
@@ -69,7 +72,8 @@
   <url><loc>https://convert.lumenlab.page/ko/guide/pdf-amho-haeje/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/guide/dongyeongsang-yongryang-julgi/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/guide/pdf-hapchigi/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/ko/guide/pdf-markdown-claude-token/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/about/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://convert.lumenlab.page/ko/privacy/</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://convert.lumenlab.page/ko/licenses/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://convert.lumenlab.page/ko/licenses/</loc><lastmod>2026-10-07</lastmod></url>
 </urlset>

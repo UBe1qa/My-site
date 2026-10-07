@@ -1,6 +1,6 @@
 # 인플레이스 / Inplace (convert)
 
-브라우저 안에서 파일을 바꾸는 도구 24개(영상·소리 7, 그림 4, PDF 11, 표 2). 2026-10-06 제3자 평가 뒤 결함 13개를 고치고 PDF 도구 7개(압축·쪽 정리·돌리기·쪽 번호·워터마크·암호 걸기·암호 풀기)를 더했다. 파일은 서버로 올라가지 않는다(서버 코드 없음, 정적 사이트).
+브라우저 안에서 파일을 바꾸는 도구 25개(영상·소리 7, 그림 4, PDF 12, 표 2). 2026-10-07 'PDF → 마크다운'(클로드에 PDF 대신 글만 넣어 토큰 줄이기)과 가이드 글을 더했다. 2026-10-06 제3자 평가 뒤 결함 13개를 고치고 PDF 도구 7개(압축·쪽 정리·돌리기·쪽 번호·워터마크·암호 걸기·암호 풀기)를 더했다. 파일은 서버로 올라가지 않는다(서버 코드 없음, 정적 사이트).
 - 주소: https://convert.lumenlab.page (Worker `convert`, workers.dev 끔). 영어 `/`, 한국어 `/ko/`. 2026-10-06 처음 배포.
 - 출발점: 운영자가 '유튜브 다운로더(mp3, mp4)'를 원했으나 애드센스 정책(저작권 침해 도구 금지)과 유튜브 약관(다운로드 금지) 때문에 다운로더는 만들지 않고, **자기 파일을 바꾸는 변환기**로 바꿨다. smallpdf·123apps 분량(도구 여러 개, 도구마다 페이지 하나)을 참고했지만 디자인·문구·코드는 가져오지 않았다.
 - **유튜브 주소를 받는 기능, 다운로드 기능은 넣지 않는다.** 넣으면 애드센스 계정 전체가 위험해진다.
@@ -9,7 +9,7 @@
 - `_dev/build.py` **모든 HTML을 만든다**: `python3 convert/_dev/build.py` (→ "built N pages"). 도구 목록·분류·받는 파일 = `TOOLS`, 화면 글자 = `UI`, 방침·오픈소스 고지 = `PRIVACY`·`LICENSES`. 만든 HTML·`sitemap.xml`·`rss.xml`(한국어 글)·`assets/tools.js`는 손으로 고치지 않는다.
 - `_dev/content.json` 도구마다 영어·한국어 이름·제목·설명·본문·FAQ, 첫 페이지·소개 글. `_dev/articles.json` 가이드 글(영어·한국어 따로 고른 주제, 같은 주제만 `ARTICLE_PAIRS`로 hreflang 짝). 글을 고치면 build.py를 다시 돌리고, 실제로 고친 주소·날짜를 `UPDATED`에 적는다(sitemap lastmod).
 - `assets/app.js` 화면 전부(파일 넣기, 도구별 옵션 `RUNNERS`, 시간 띠 `timeline`, 결과·ZIP·공유, 첫 페이지의 '파일 먼저 넣고 도구 고르기'). 페이지 언어는 `<html lang>`으로만 정한다. 브라우저 언어가 다르면 닫을 수 있는 띠만 띄운다(자동으로 안 넘김).
-- `assets/engines/` 변환 엔진(DOM을 거의 모름): `media.js`(Mediabunny = WebCodecs, MP3는 LAME wasm, AAC는 wasm 인코더), `image.js`(캔버스, HEIC는 libheif wasm), `pdf.js`(pdf-lib + PDF.js 4.10 legacy + qpdf wasm: 암호 풀기·걸기, 구조 압축), `data.js`(CSV·JSON 직접 구현, 엑셀은 SheetJS).
+- `assets/engines/` 변환 엔진(DOM을 거의 모름): `media.js`(Mediabunny = WebCodecs, MP3는 LAME wasm, AAC는 wasm 인코더), `image.js`(캔버스, HEIC는 libheif wasm), `pdf.js`(pdf-lib + PDF.js 4.10 legacy + qpdf wasm: 암호 풀기·걸기, 구조 압축), `pdfmd.js`(PDF → 마크다운: PDF.js 글자 조각 위치만 보고 제목·문단·목록·표·두 단을 다시 짬), `data.js`(CSV·JSON 직접 구현, 엑셀은 SheetJS).
 - `assets/vendor/` 라이브러리 원본(손으로 안 고침). 버전·라이선스는 `/licenses/` 페이지(build.py `LICENSES`).
 - `assets/ads-config.js` 애드센스: client 들어 있음(자동 광고 켜짐), 수동 광고 단위 번호(slots)는 비어 있음. 자리 2곳(mid = 도구 카드 아래, bottom). localhost나 `?adpreview`면 점선 상자.
 - `ads.txt`, `robots.txt`(AI 검색 크롤러 명시 허용), `og.png`·`favicon.*`·`apple-touch-icon.png`(만드는 스크립트는 없음, 바꾸려면 새로 그린다).
@@ -18,7 +18,7 @@
 - 페이지 다시 만들기: `python3 convert/_dev/build.py`
 - CSV·JSON 단위 시험(21개): convert 폴더에서 `node --input-type=module -e "import('./_dev/test_data.mjs')"`
 - 로컬 보기: `node convert/_dev/serve.mjs` → http://localhost:8431 (폴더→index.html, 없는 주소→404.html, `_dev` 막음)
-- 실제 파일 변환 시험(62개): `_dev/e2e.mjs`를 playwright-core가 깔린 폴더(scratchpad)에 복사해 `node e2e.mjs <시험 파일 폴더> <결과 폴더> http://localhost:8431 [도구 앞글자…]`. 시험 파일은 ffmpeg로 만든다(tone.wav/ogg/mp3/flac/m4a, clip.webm(VP9+Opus), clip.mp4(H.264+AAC), photo.png/jpg/webp, alpha.png, sample.heic, doc3.pdf, people.csv, items.json, book.xlsx). 2026-10-06에 더한 것: rot6.jpg(EXIF 회전 6, PIL로), scan.pdf(큰 JPG·PNG가 든 3쪽, pdf-lib로), restricted.pdf(열기 암호 없이 인쇄·복사만 막음), locked.pdf(열기 암호 user1) — 두 암호 PDF는 qpdf로 만든다.
+- 실제 파일 변환 시험(68개): `_dev/e2e.mjs`를 playwright-core가 깔린 폴더(scratchpad)에 복사해 `node e2e.mjs <시험 파일 폴더> <결과 폴더> http://localhost:8431 [도구 앞글자…]`. 시험 파일은 ffmpeg로 만든다(tone.wav/ogg/mp3/flac/m4a, clip.webm(VP9+Opus), clip.mp4(H.264+AAC), photo.png/jpg/webp, alpha.png, sample.heic, doc3.pdf, people.csv, items.json, book.xlsx). 2026-10-06에 더한 것: rot6.jpg(EXIF 회전 6, PIL로), scan.pdf(큰 JPG·PNG가 든 3쪽, pdf-lib로), restricted.pdf(열기 암호 없이 인쇄·복사만 막음), locked.pdf(열기 암호 user1) — 두 암호 PDF는 qpdf로 만든다. 2026-10-07: paper.pdf(arXiv 1706.03762 논문), ko-guide.pdf(한국어 가이드 글을 LibreOffice `soffice --convert-to pdf:writer_web_pdf_Export`로 저장, 글꼴 WenQuanYi), notext.pdf(글자 층 없는 그림 3쪽), mixed.pdf(doc3 1쪽 + notext 1쪽 + doc3 3쪽, pdf-lib로).
 - 화면 사진: `_dev/shots.mjs` (같은 방법, `ONLY=이름,이름`으로 골라 찍기).
 - 배포: `.deploy-actions`가 있어 main에 푸시하면 GitHub Actions가 wrangler로 배포.
 
@@ -42,3 +42,5 @@
 - 캔버스 `toBlob('image/webp')`이 안 되는 브라우저(옛 사파리)는 PNG를 돌려준다 → 결과 `blob.type`을 확인한다(image.js `canEncode`).
 - GIF(256색)는 그냥 가장 가까운 색으로 바꾸면 안개·흐린 배경이 얼룩진다 → `engines/dither.js`의 순서 디더링(프레임마다 무늬 자리가 같아 지글거림 없음). 팔레트가 앞 프레임 것으로 충분하면(오차 1.25배 이내) 다시 쓰고, 앞 프레임과 거의 같은 점(색 차이 7 이하)은 투명으로 둬 용량을 줄인다(정지 배경 영상 3.4MB→0.3MB). 시험: e2e `gif-quality` (fx/static.webm = 안개 사진 위로 상자 하나가 움직이는 3초 영상).
 - 광고 코드가 있는 실제 주소를 자동으로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽).
+- PDF → 마크다운(`pdfmd.js`): 노드에서도 돈다(`extractPages(PDF.js 모듈, 바이트)` → `buildMarkdown`). 한글 CID 글꼴은 `assets/vendor/cmaps/`(Adobe bcmap), 문서에 안 박힌 기본 글꼴(Helvetica 등)은 `assets/vendor/standard_fonts/`가 있어야 글자가 나온다. 표는 두 가지로 찾는다: 테두리 선이 있으면 `getOperatorList`의 가로·세로 선으로 칸을 나누고(칸 나뉜 줄이 있는 쪽만 읽음 — 스캔 쪽에서 쪽마다 1초씩 걸려서), 없으면 모든 줄에서 글자가 안 걸치는 세로 틈(칸 경계)을 찾는다. 쪽에 머리말과 같은 줄밖에 없으면 지우지 않는다(지우면 '글자 없는 쪽'으로 잘못 알림). 문단 끝은 '다음 줄 첫 낱말이 앞 줄 남은 자리에 들어갈 수 있었나'로 본다(한글 문서는 오른쪽이 들쭉날쭉해서 줄 길이만 보면 문단이 끊김).
+- 토큰 숫자: 앤트로픽 문서에서 확인한 것만 쓴다(쪽마다 글 1,500~3,000토큰 + 쪽 그림, 그림은 ⌈w/28⌉×⌈h/28⌉에 한도 1,568토큰/클로드 4.7 이후 4,784토큰, 베드록 3쪽 약 1,000 대 7,000, claude.ai 100쪽 이하만 그림 분석). API 키가 없어 실제 토큰은 못 쟀다 — 가이드 표는 잰 글자 수와 계산한 그림 최대치로만 썼다.

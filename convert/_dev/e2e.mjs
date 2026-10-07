@@ -1,4 +1,4 @@
-// 실제 파일로 도구 24개를 눌러 보고 결과 파일을 검사한다.
+// 실제 파일로 도구 25개를 눌러 보고 결과 파일을 검사한다.
 // node convert/_dev/e2e.mjs <fixtures 폴더> <결과 폴더> [base=http://localhost:8431] [도구id…]
 // playwright-core 필요(NODE_PATH로 지정). 광고 요청은 막는다.
 import { chromium } from 'playwright-core';
@@ -171,6 +171,12 @@ const CASES = [
   { name: 'page-numbers', tool: 'pdf-page-numbers', files: ['doc3.pdf'], actions: [async (p) => p.click('.chips button:has-text("1 / 9")')], check: async ([f]) => { const tx = execFileSync('pdftotext', [f.path, '-']).toString(); assert(/1\s*\/\s*3/.test(tx) && /3\s*\/\s*3/.test(tx), 'numbers missing: ' + tx.slice(0, 200)); return 'has 1 / 3 … 3 / 3'; } },
   { name: 'page-numbers-ko', tool: 'pdf-page-numbers', files: ['restricted.pdf'], lang: 'ko', actions: [async (p) => { await p.check('.toggle input'); }], check: async ([f]) => { const tx = execFileSync('pdftotext', [f.path, '-']).toString(); return 'text tail: ' + tx.replace(/\s+/g, ' ').slice(-40); } },
   { name: 'watermark-ko', tool: 'watermark-pdf', files: ['doc3.pdf'], lang: 'ko', shot: true, actions: [chip('바둑판')], check: async ([f]) => { const a = fs.statSync(fx('doc3.pdf')).size, b = fs.statSync(f.path).size; assert(b > a, 'no change'); assert(await pdfPages(f.path) === 3, 'pages'); return `${a} → ${b}B`; } },
+  { name: 'pdf2md', tool: 'pdf-to-markdown', files: ['doc3.pdf'], check: async ([f]) => { const tx = fs.readFileSync(f.path, 'utf8'); assert(/\.md$/.test(f.name), f.name); assert(/<!-- page 2 -->/.test(tx) && tx.length > 50, 'text: ' + tx.slice(0, 120)); return tx.length + ' chars'; } },
+  { name: 'pdf2md-paper', tool: 'pdf-to-markdown', files: ['paper.pdf'], timeout: 60000, check: async ([f]) => { const tx = fs.readFileSync(f.path, 'utf8'); assert(/^\| Parser \| Training \| WSJ 23 F1 \|$/m.test(tx), 'table 4 missing'); assert(/English-to-German/.test(tx), 'hyphen'); return tx.length + ' chars, ' + (tx.match(/^\| --- /gm) || []).length + ' tables'; } },
+  { name: 'pdf2md-ko', tool: 'pdf-to-markdown', files: ['ko-guide.pdf'], lang: 'ko', shot: true, check: async ([f]) => { const tx = fs.readFileSync(f.path, 'utf8'); assert(/^\| 상황 \| 할 일 \|$/m.test(tx), 'ko table'); assert(/\[Unicode FAQ: UTF-8, UTF-16, UTF-32 & BOM\]\(https:\/\/www\.unicode\.org\/faq\/utf_bom\.html\)/.test(tx), 'link'); return tx.length + ' chars'; } },
+  { name: 'pdf2md-scan', tool: 'pdf-to-markdown', files: ['notext.pdf'], expectErr: /no text layer/ },
+  { name: 'pdf2md-mixed', tool: 'pdf-to-markdown', files: ['mixed.pdf'], check: async ([f]) => { const tx = fs.readFileSync(f.path, 'utf8'); assert(/page 2: no text layer/.test(tx), 'no empty-page mark'); return 'empty page marked'; } },
+  { name: 'pdf2md-locked', tool: 'pdf-to-markdown', files: ['locked.pdf'], expectErr: /password-protected/ },
   { name: 'hub-heic', hub: true, files: ['sample.heic'], hubPick: 'HEIC', timeout: 120000, check: async ([f]) => { const p = probe(f.path); return 'hub → ' + p.streams[0].codec_name; } },
 ];
 import { spawnSync } from 'node:child_process';

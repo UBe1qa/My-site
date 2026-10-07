@@ -247,6 +247,25 @@ export const TOOLS = {
    "ko": "쪽마다 그림 파일로"
   }
  },
+ "pdf-to-markdown": {
+  "id": "pdf-to-markdown",
+  "cat": "pdf",
+  "accept": ".pdf",
+  "multiple": false,
+  "order": false,
+  "pair": [
+   "PDF",
+   "MD"
+  ],
+  "name": {
+   "en": "PDF to Markdown",
+   "ko": "PDF 마크다운 변환"
+  },
+  "short": {
+   "en": "Text for Claude, fewer tokens",
+   "ko": "클로드에 넣을 글, 토큰은 적게"
+  }
+ },
  "merge-pdf": {
   "id": "merge-pdf",
   "cat": "pdf",

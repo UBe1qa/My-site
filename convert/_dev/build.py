@@ -2,7 +2,7 @@
 """인플레이스(convert.lumenlab.page) 페이지 전부 만들기: python3 convert/_dev/build.py
 
 - 도구 목록·설정 = 아래 TOOLS, 글 = _dev/content.json(도구·첫 페이지·소개) + _dev/articles.json(가이드 글).
-- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 24개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml, rss.xml(한국어 글),
+- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 25개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml, rss.xml(한국어 글),
   assets/tools.js(화면 코드가 쓰는 도구 목록). 만든 파일은 손으로 고치지 않는다.
 - lastmod는 UPDATED에 실제로 고친 날만 적는다.
 """
@@ -14,7 +14,11 @@ DEV = ROOT / '_dev'
 SITE = 'https://convert.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 TODAY = '2026-10-06'
-UPDATED = {}  # 주소: 'YYYY-MM-DD' (처음 판은 TODAY)
+UPDATED = {  # 주소: 'YYYY-MM-DD' (처음 판은 TODAY)
+    '/': '2026-10-07', '/ko/': '2026-10-07', '/pdf-to-markdown/': '2026-10-07', '/ko/pdf-to-markdown/': '2026-10-07',
+    '/guide/': '2026-10-07', '/ko/guide/': '2026-10-07', '/licenses/': '2026-10-07', '/ko/licenses/': '2026-10-07',
+    '/guide/pdf-to-markdown-for-claude/': '2026-10-07', '/ko/guide/pdf-markdown-claude-token/': '2026-10-07',
+}
 
 # 도구: id, 분류, 받는 파일, 여러 개, 순서 바꾸기, 글자판 짝(보여 주기용)
 TOOLS = [
@@ -34,6 +38,7 @@ TOOLS = [
     # PDF
     dict(id='images-to-pdf', cat='pdf', accept='.jpg,.jpeg,.png,.webp,.gif,.bmp,.avif', multiple=True, order=True, pair=('JPG', 'PDF'), fmts='JPG, PNG, WebP'),
     dict(id='pdf-to-jpg', cat='pdf', accept='.pdf', pair=('PDF', 'JPG'), fmts='PDF'),
+    dict(id='pdf-to-markdown', cat='pdf', accept='.pdf', pair=('PDF', 'MD'), fmts='PDF'),
     dict(id='merge-pdf', cat='pdf', accept='.pdf', multiple=True, order=True, pair=('PDF', '1PDF'), fmts='PDF'),
     dict(id='split-pdf', cat='pdf', accept='.pdf', pair=('PDF', 'P1-3'), fmts='PDF'),
     dict(id='compress-pdf', cat='pdf', accept='.pdf', pair=('9MB', '2MB'), fmts='PDF'),
@@ -63,7 +68,8 @@ CATS = {
 }
 CAT_ORDER = ['video', 'audio', 'image', 'pdf', 'data']
 ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal', 'compress-pdf-without-upload': 'pdf-yongryang-julgi',
-                 'remove-pdf-password': 'pdf-amho-haeje', 'reduce-video-size-for-email': 'dongyeongsang-yongryang-julgi'}
+                 'remove-pdf-password': 'pdf-amho-haeje', 'reduce-video-size-for-email': 'dongyeongsang-yongryang-julgi',
+                 'pdf-to-markdown-for-claude': 'pdf-markdown-claude-token'}
 
 UI = {
     'en': dict(brand='Inplace', all='All tools', guides='Guides', about='About', privacy='Privacy', licenses='Open-source licenses',
@@ -285,6 +291,7 @@ RELATED = {
     'rotate-pdf': ['organize-pdf', 'merge-pdf'], 'pdf-page-numbers': ['merge-pdf', 'watermark-pdf', 'organize-pdf'],
     'watermark-pdf': ['protect-pdf', 'pdf-page-numbers'], 'protect-pdf': ['watermark-pdf', 'unlock-pdf', 'compress-pdf'],
     'unlock-pdf': ['protect-pdf', 'merge-pdf', 'compress-pdf'],
+    'pdf-to-markdown': ['split-pdf', 'pdf-to-jpg', 'unlock-pdf'],
 }
 
 
@@ -353,7 +360,7 @@ def article_page(a, lang):
             alt = f'guide/{inv[a["slug"]]}/'
     day = UPDATED.get(prefix(lang) + path, TODAY)
     ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['h1'], 'description': a['desc'], 'inLanguage': lang,
-           'datePublished': TODAY, 'dateModified': day, 'mainEntityOfPage': url(lang, path),
+           'datePublished': a.get('published', TODAY), 'dateModified': day, 'mainEntityOfPage': url(lang, path),
            'author': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': 'https://lumenlab.page/'},
            'publisher': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': 'https://lumenlab.page/'}},
           {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
@@ -422,6 +429,8 @@ LICENSES = [
     ('@mediabunny/aac-encoder', 'Vanilagy and contributors', 'MPL-2.0 (see package for bundled encoder license)', 'https://www.npmjs.com/package/@mediabunny/aac-encoder', 'https://mozilla.org/MPL/2.0/'),
     ('pdf-lib', 'Andrew Dillon', 'MIT', 'https://github.com/Hopding/pdf-lib', 'https://github.com/Hopding/pdf-lib/blob/master/LICENSE.md'),
     ('PDF.js', 'Mozilla Foundation', 'Apache-2.0', 'https://github.com/mozilla/pdf.js', 'https://www.apache.org/licenses/LICENSE-2.0'),
+    ('PDF.js standard fonts (Foxit fonts, Liberation Sans)', 'The PDFium Authors; Red Hat and Google', 'BSD-3-Clause (Foxit); SIL Open Font License 1.1 (Liberation)', 'https://github.com/mozilla/pdf.js/tree/master/external/standard_fonts', 'https://github.com/liberationfonts/liberation-fonts/blob/main/LICENSE'),
+    ('Adobe CMap resources (bcmaps from pdfjs-dist)', 'Adobe', 'BSD-3-Clause', 'https://github.com/adobe-type-tools/cmap-resources', 'https://github.com/adobe-type-tools/cmap-resources/blob/master/LICENSE.md'),
     ('libheif-js (libheif)', 'catdad; struktur AG', 'LGPL-3.0', 'https://github.com/catdad-experiments/libheif-js', 'https://www.gnu.org/licenses/lgpl-3.0.html'),
     ('gifenc', 'Matt DesLauriers', 'MIT', 'https://github.com/mattdesl/gifenc', 'https://github.com/mattdesl/gifenc/blob/master/LICENSE.md'),
     ('qpdf (WebAssembly build by @neslinesli93/qpdf-wasm)', 'Jay Berkenbilt and contributors; Tommaso Pifferi', 'Apache-2.0 (qpdf); ISC (wasm build)', 'https://github.com/qpdf/qpdf', 'https://www.apache.org/licenses/LICENSE-2.0'),
