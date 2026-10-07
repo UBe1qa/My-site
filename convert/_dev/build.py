@@ -17,7 +17,7 @@ TODAY = '2026-10-06'
 UPDATED = {  # 주소: 'YYYY-MM-DD' (처음 판은 TODAY)
     '/': '2026-10-07', '/ko/': '2026-10-07', '/pdf-to-markdown/': '2026-10-07', '/ko/pdf-to-markdown/': '2026-10-07',
     '/guide/': '2026-10-07', '/ko/guide/': '2026-10-07', '/licenses/': '2026-10-07', '/ko/licenses/': '2026-10-07',
-    '/guide/pdf-to-markdown-for-claude/': '2026-10-07', '/ko/guide/pdf-markdown-claude-token/': '2026-10-07',
+    '/guide/pdf-to-markdown-for-ai/': '2026-10-07', '/ko/guide/pdf-markdown-ai-token/': '2026-10-07',
 }
 
 # 도구: id, 분류, 받는 파일, 여러 개, 순서 바꾸기, 글자판 짝(보여 주기용)
@@ -69,7 +69,7 @@ CATS = {
 CAT_ORDER = ['video', 'audio', 'image', 'pdf', 'data']
 ARTICLE_PAIRS = {'heic-vs-jpg': 'iphone-heic-jpg', 'youtube-to-mp3-legal': 'youtube-mp3-legal', 'compress-pdf-without-upload': 'pdf-yongryang-julgi',
                  'remove-pdf-password': 'pdf-amho-haeje', 'reduce-video-size-for-email': 'dongyeongsang-yongryang-julgi',
-                 'pdf-to-markdown-for-claude': 'pdf-markdown-claude-token'}
+                 'pdf-to-markdown-for-ai': 'pdf-markdown-ai-token'}
 
 UI = {
     'en': dict(brand='Inplace', all='All tools', guides='Guides', about='About', privacy='Privacy', licenses='Open-source licenses',

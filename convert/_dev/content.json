@@ -2232,16 +2232,16 @@
   "pdf-to-markdown": {
    "en": {
     "name": "PDF to Markdown",
-    "h1": "PDF to Markdown: Turn a PDF into Text for Claude",
-    "title": "PDF to Markdown Converter – Fewer Tokens in Claude, No Upload",
-    "desc": "Turn a PDF into a Markdown text file with headings, lists and tables, right in your browser. Paste it into Claude or another AI chat instead of the PDF to skip the page images and use fewer tokens.",
-    "lead": "Pull the text out of a PDF as clean Markdown, ready to paste into Claude or ChatGPT. The PDF is read on your device and never uploaded.",
+    "h1": "PDF to Markdown: Turn a PDF into Text for AI",
+    "title": "PDF to Markdown Converter for AI Chats – Fewer Tokens, No Upload",
+    "desc": "Turn a PDF into a Markdown text file with headings, lists and tables, right in your browser. Paste it into ChatGPT, Claude, Gemini or any AI agent instead of the PDF, often with fewer tokens.",
+    "lead": "Pull the text out of a PDF as clean Markdown, ready to paste into any AI chat or agent. The PDF is read on your device and never uploaded.",
     "about": [
      {
-      "h": "Why Markdown costs fewer tokens than a PDF",
+      "h": "Why Markdown can cost fewer tokens than a PDF",
       "p": [
-       "When you give Claude a PDF, each page is used twice: its text is extracted, and the page is also turned into an image so Claude can see charts and layout. Anthropic’s documentation puts the text at about 1,500 to 3,000 tokens per page and charges the page image on top of that, using the same rules as any other image.",
-       "A Markdown file is only the text, so the image part goes away. How much that saves depends on the document. Anthropic gives one example for Amazon Bedrock: a 3-page PDF used about 1,000 tokens as text only and about 7,000 with full visual understanding."
+       "Many AI services read a PDF twice: they extract its text and also look at an image of each page, so they can follow charts and layout. OpenAI’s and Anthropic’s documentation both describe sending text and page images together, and Anthropic puts the text alone at about 1,500 to 3,000 tokens per page before the image is added.",
+       "A Markdown file is only text, so the page-image part goes away. How much that saves depends on the service and the document, and it isn’t always a saving: Google’s Gemini API counts a PDF page as 258 tokens and, on Gemini 3, doesn’t charge for the PDF’s own text, so pasting the text there can cost more."
       ]
      },
      {
@@ -2261,12 +2261,16 @@
     ],
     "faq": [
      {
+      "q": "Does this work with ChatGPT, Gemini and other AI tools?",
+      "a": "Yes. Markdown is plain text, so any AI chat, agent or LLM can read it: paste it in or attach the .md file. What differs between services is how they charge for a PDF, so the token saving differs too."
+     },
+     {
       "q": "How many tokens will I save?",
-      "a": "There is no single number. The text costs about the same either way; what you save is the page images. By Anthropic’s image formula, one A4 page image is capped at about 1,550 tokens on most Claude models and about 4,750 on Claude 4.7 and later models, which see images in higher resolution. Pages full of text save less in proportion than pages with little text."
+      "a": "There is no single number. Where a service reads both the text and an image of each page (OpenAI and Anthropic describe this), converting removes the image part; by Anthropic’s published formula, one A4 page image is up to about 1,550 tokens on most Claude models. Where a page is billed at a flat rate and the text is free, as on the Gemini 3 API, Markdown may not save anything."
      },
      {
       "q": "When should I keep the PDF instead?",
-      "a": "When the meaning is in the picture: charts, graphs, drawings, slides, handwriting, scans, or forms where the layout matters. Claude can only see those if it gets the PDF or an image of the page."
+      "a": "When the meaning is in the picture: charts, graphs, drawings, slides, handwriting, scans, or forms where the layout matters. The AI can only see those if it gets the PDF or an image of the page."
      },
      {
       "q": "Is my PDF uploaded?",
@@ -2278,23 +2282,23 @@
      },
      {
       "q": "It says no text came out of some pages.",
-      "a": "Those pages are pictures: a scan, a photo of a page, or a PDF made from images. There is no text to extract, so upload those pages to Claude as a PDF or image, or run OCR on them first."
+      "a": "Those pages are pictures: a scan, a photo of a page, or a PDF made from images. There is no text to extract, so give those pages to the AI as a PDF or image, or run OCR on them first."
      }
     ],
-    "short": "Text for Claude, fewer tokens"
+    "short": "Text for AI, often fewer tokens"
    },
    "ko": {
     "name": "PDF 마크다운 변환",
-    "h1": "PDF를 마크다운으로 바꾸기 (클로드 토큰 줄이기)",
-    "title": "PDF 마크다운 변환 – 클로드 토큰 줄이기, 업로드 없이",
-    "desc": "PDF를 제목·목록·표가 살아 있는 마크다운 글로 바꿔요. 클로드 같은 AI 채팅에 PDF 대신 붙여 넣으면 쪽 그림이 빠져서 토큰이 줄어요. 브라우저 안에서 바꿔서 파일이 올라가지 않아요.",
-    "lead": "PDF 속 글을 깔끔한 마크다운으로 뽑아서 클로드나 챗GPT에 바로 붙여 넣어요. PDF는 내 기기 안에서 읽고 어디에도 올라가지 않아요.",
+    "h1": "PDF를 마크다운으로 바꾸기 (AI 토큰 줄이기)",
+    "title": "PDF 마크다운 변환 – AI에 넣을 PDF 토큰 줄이기, 업로드 없이",
+    "desc": "PDF를 제목·목록·표가 살아 있는 마크다운 글로 바꿔요. ChatGPT·클로드·제미나이 같은 AI에 PDF 대신 붙여 넣으면 토큰이 줄어드는 경우가 많아요. 브라우저 안에서 바꿔서 파일이 올라가지 않아요.",
+    "lead": "PDF 속 글을 깔끔한 마크다운으로 뽑아서 AI 채팅이나 에이전트에 바로 붙여 넣어요. PDF는 내 기기 안에서 읽고 어디에도 올라가지 않아요.",
     "about": [
      {
-      "h": "마크다운이 PDF보다 토큰을 덜 쓰는 이유",
+      "h": "마크다운이 PDF보다 토큰을 덜 쓸 수 있는 이유",
       "p": [
-       "클로드에 PDF를 넣으면 쪽마다 두 번 쓰여요. 글자를 뽑아 읽고, 그래프와 배치를 보려고 쪽 전체를 그림으로도 바꿔 봐요. 앤트로픽 문서에 따르면 글자는 쪽마다 보통 1,500~3,000토큰이고, 쪽 그림은 다른 그림과 같은 계산법으로 따로 더해져요.",
-       "마크다운 파일은 글만 있어서 그림 몫이 빠져요. 얼마나 줄지는 문서마다 달라요. 앤트로픽이 든 예로는 아마존 베드록에서 3쪽짜리 PDF가 글만 읽으면 약 1,000토큰, 그림까지 보면 약 7,000토큰이었어요."
+       "AI 서비스 상당수는 PDF를 두 번 읽어요. 글자를 뽑아 읽고, 그래프와 배치를 보려고 쪽마다 그림으로도 봐요. OpenAI와 앤트로픽 문서 모두 글과 쪽 그림을 함께 보낸다고 설명하고, 앤트로픽 문서에 따르면 글만 해도 쪽마다 보통 1,500~3,000토큰이고 여기에 그림이 더해져요.",
+       "마크다운 파일은 글만 있어서 쪽 그림 몫이 빠져요. 얼마나 줄지는 서비스와 문서마다 다르고, 늘 줄지도 않아요. 구글 제미나이 API는 PDF 한 쪽을 258토큰으로 세고 제미나이 3에서는 PDF 속 글자를 따로 세지 않아서, 거기서는 글을 붙여 넣는 쪽이 오히려 더 들 수 있어요."
       ]
      },
      {
@@ -2314,12 +2318,16 @@
     ],
     "faq": [
      {
+      "q": "ChatGPT나 제미나이에도 쓸 수 있나요?",
+      "a": "네. 마크다운은 그냥 글자 파일이라 어떤 AI 채팅·에이전트·LLM에도 붙여 넣거나 .md 파일로 올릴 수 있어요. 서비스마다 다른 건 PDF를 세는 방식이라, 토큰이 줄어드는 정도도 달라요."
+     },
+     {
       "q": "토큰이 얼마나 줄어요?",
-      "a": "정해진 숫자는 없어요. 글 몫은 어느 쪽이든 비슷하고, 줄어드는 건 쪽 그림 몫이에요. 앤트로픽의 그림 계산법으로 A4 한 쪽 그림은 대부분의 클로드 모델에서 최대 약 1,550토큰, 그림을 더 크게 보는 클로드 4.7 이후 모델에서는 최대 약 4,750토큰이에요. 글이 빽빽한 쪽일수록 줄어드는 비율은 작아요."
+      "a": "정해진 숫자는 없어요. 쪽마다 글과 그림을 함께 읽는 서비스(OpenAI·앤트로픽 문서에 나와요)에서는 그림 몫이 빠져요. 앤트로픽이 공개한 계산법으로 A4 한 쪽 그림은 대부분의 클로드 모델에서 최대 약 1,550토큰이에요. 반대로 쪽마다 정해진 값만 세고 글자는 공짜인 제미나이 3 API에서는 줄지 않을 수 있어요."
      },
      {
       "q": "언제는 PDF 그대로 넣는 게 나아요?",
-      "a": "그림에 뜻이 있을 때요. 그래프, 도표, 도면, 발표 자료, 손글씨, 스캔본, 칸 배치가 중요한 서식 같은 건 클로드가 PDF나 쪽 그림을 받아야 볼 수 있어요."
+      "a": "그림에 뜻이 있을 때요. 그래프, 도표, 도면, 발표 자료, 손글씨, 스캔본, 칸 배치가 중요한 서식 같은 건 AI가 PDF나 쪽 그림을 받아야 볼 수 있어요."
      },
      {
       "q": "PDF가 서버로 올라가나요?",
@@ -2331,10 +2339,10 @@
      },
      {
       "q": "몇 쪽에서 글을 못 뽑았다고 나와요.",
-      "a": "그 쪽은 그림이에요. 스캔했거나 종이를 찍었거나 그림으로 만든 PDF라 뽑을 글이 없어요. 그 쪽은 클로드에 PDF나 그림으로 올리거나 먼저 OCR을 거쳐 주세요."
+      "a": "그 쪽은 그림이에요. 스캔했거나 종이를 찍었거나 그림으로 만든 PDF라 뽑을 글이 없어요. 그 쪽은 AI에 PDF나 그림으로 올리거나 먼저 OCR을 거쳐 주세요."
      }
     ],
-    "short": "클로드에 넣을 글, 토큰은 적게"
+    "short": "AI에 넣을 글, 토큰은 적게"
    }
   }
  },

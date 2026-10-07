@@ -262,8 +262,8 @@ export const TOOLS = {
    "ko": "PDF 마크다운 변환"
   },
   "short": {
-   "en": "Text for Claude, fewer tokens",
-   "ko": "클로드에 넣을 글, 토큰은 적게"
+   "en": "Text for AI, often fewer tokens",
+   "ko": "AI에 넣을 글, 토큰은 적게"
   }
  },
  "merge-pdf": {

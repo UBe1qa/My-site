@@ -53,9 +53,9 @@ const T = {
     errN: 'Enter a whole number from 1 to {n}.', notPdfPw: 'Use Unlock PDF first if you know the password.', inFile: '{name}: {m}',
     mdMarks: 'Mark where each page starts', mdMarksHint: 'Adds <!-- page 3 --> lines so you can ask about a page.', mdRepeats: 'Remove headers, footers and page numbers repeated on every page',
     mdStats: '{p} pages → {c} characters of Markdown{t}', mdTables: ', {n} tables', copy: 'Copy text', copiedMd: 'Copied',
-    mdScan: 'No text came out of page {list}: it is a scan or a picture with no text layer. Upload those pages to Claude as images or PDF instead.',
-    errNoText: 'This PDF has no text layer (it is a scan or made of pictures), so there is no text to turn into Markdown. Upload it to Claude as a PDF, or run OCR on it first.',
-    mdTip: 'Paste this into Claude instead of the PDF when the words are what matter. Charts, pictures and the page look are not included. ', mdGuide: 'When does this help?'
+    mdScan: 'No text came out of page {list}: it is a scan or a picture with no text layer. Give those pages to the AI as images or PDF instead.',
+    errNoText: 'This PDF has no text layer (it is a scan or made of pictures), so there is no text to turn into Markdown. Give the AI the PDF itself, or run OCR on it first.',
+    mdTip: 'Paste this into ChatGPT, Claude, Gemini or any AI instead of the PDF when the words are what matter. Charts, pictures and the page look are not included. ', mdGuide: 'When does this help?'
   },
   ko: {
     choose: '파일 고르기', chooseMany: '파일 고르기', orDrop: '또는 여기에 끌어 놓기', orDropMany: '또는 여러 개를 끌어 놓기',
@@ -105,9 +105,9 @@ const T = {
     errN: '1에서 {n} 사이의 정수를 넣어 주세요.', notPdfPw: '암호를 알면 먼저 \'PDF 암호 풀기\'로 풀어 주세요.', inFile: '{name}: {m}',
     mdMarks: '쪽이 시작하는 곳 표시하기', mdMarksHint: '<!-- page 3 --> 같은 줄이 들어가서 몇 쪽 내용인지 물어볼 수 있어요.', mdRepeats: '쪽마다 되풀이되는 머리말·꼬리말·쪽 번호 빼기',
     mdStats: '{p}쪽 → 마크다운 {c}자{t}', mdTables: ', 표 {n}개', copy: '글 복사하기', copiedMd: '복사했어요',
-    mdScan: '{list}쪽에서는 글을 못 뽑았어요. 글자 층이 없는 스캔본이나 그림이에요. 그 쪽은 클로드에 PDF나 그림으로 올려 주세요.',
-    errNoText: '이 PDF에는 글자 층이 없어요(스캔본이거나 그림으로 된 PDF). 마크다운으로 바꿀 글이 없으니 클로드에 PDF로 올리거나, 먼저 OCR(글자 인식)을 거쳐 주세요.',
-    mdTip: '글 내용이 중요할 때 PDF 대신 이걸 클로드에 붙여 넣으세요. 표 모양은 남지만 그래프·사진·쪽 모양은 빠져요. ', mdGuide: '언제 도움이 될까요?'
+    mdScan: '{list}쪽에서는 글을 못 뽑았어요. 글자 층이 없는 스캔본이나 그림이에요. 그 쪽은 AI에 PDF나 그림으로 올려 주세요.',
+    errNoText: '이 PDF에는 글자 층이 없어요(스캔본이거나 그림으로 된 PDF). 마크다운으로 바꿀 글이 없으니 AI에 PDF 그대로 올리거나, 먼저 OCR(글자 인식)을 거쳐 주세요.',
+    mdTip: '글 내용이 중요할 때 PDF 대신 이걸 ChatGPT·클로드·제미나이 같은 AI에 붙여 넣으세요. 표 모양은 남지만 그래프·사진·쪽 모양은 빠져요. ', mdGuide: '언제 도움이 될까요?'
   }
 }[LANG];
 const t = (k, v = {}) => (T[k] || k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
@@ -1161,7 +1161,7 @@ const RUNNERS = {
           return {
             items: [{ blob, name: outName(files[0], 'md'), preview: 'text', text: r.text }],
             note: stats, warn: r.empty.length ? t('mdScan', { list: listPages(r.empty) }) : '',
-            tip: [t('mdTip'), h('a', { href: BASE + 'guide/' + (LANG === 'ko' ? 'pdf-markdown-claude-token' : 'pdf-to-markdown-for-claude') + '/' }, t('mdGuide'))]
+            tip: [t('mdTip'), h('a', { href: BASE + 'guide/' + (LANG === 'ko' ? 'pdf-markdown-ai-token' : 'pdf-to-markdown-for-ai') + '/' }, t('mdGuide'))]
           };
         }
       };
