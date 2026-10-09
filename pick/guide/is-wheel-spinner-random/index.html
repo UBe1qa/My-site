@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Is an Online Wheel Spinner Really Random? How This One Picks | Pickboard</title>
+<meta name="description" content="Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c2127" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://pick.lumenlab.page/guide/is-wheel-spinner-random/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Is an Online Wheel Spinner Really Random? How This One Picks | Pickboard">
+<meta property="og:description" content="Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.">
+<meta property="og:url" content="https://pick.lumenlab.page/guide/is-wheel-spinner-random/">
+<meta property="og:site_name" content="Pickboard">
+<meta property="og:image" content="https://pick.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Is an online wheel spinner really random?", "description": "Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://pick.lumenlab.page/guide/is-wheel-spinner-random/", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://pick.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Is an online wheel spinner really random?", "item": "https://pick.lumenlab.page/guide/is-wheel-spinner-random/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="logo" href="/"><svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="5.5" stroke-dasharray="11.75 1.6" transform="rotate(-39.6 12 13)"/><path d="M18.55 7.58A8.5 8.5 0 0 1 18.55 18.42" fill="none" stroke="var(--s1)" stroke-width="5.5"/><path d="M28 13l-9.4-4.6v9.2z" fill="var(--pick)"/></svg><span>Pickboard</span></a>
+  <nav class="tools-nav" aria-label="Ways to pick"><a href="/"><span class="l">Wheel</span><span class="s">Wheel</span></a><a href="/ladder/"><span class="l">Ladder game</span><span class="s">Ladder</span></a><a href="/name-picker/"><span class="l">Name picker</span><span class="s">Picker</span></a><a href="/team-generator/"><span class="l">Team generator</span><span class="s">Teams</span></a><a href="/random-number/"><span class="l">Random number</span><span class="s">Number</span></a><a href="/coin-flip/"><span class="l">Coin flip</span><span class="s">Coin</span></a><a href="/dice/"><span class="l">Dice</span><span class="s">Dice</span></a></nav>
+  <div class="top-side"><a href="/guide/">Guides</a><a class="lang" href="/ko/guide/" lang="ko" hreflang="ko">한국어</a></div>
+</header>
+<main id="main">
+<article class="article wrap narrow">
+  <p class="crumb"><a href="/guide/">Guides</a></p>
+  <h1>Is an online wheel spinner really random?</h1>
+  <p class="meta">Updated <time datetime="2026-10-09">2026-10-09</time>, Lumen Lab</p>
+  <div class="prose" style="padding-top:0"><p>It depends on three things: where the wheel gets its random numbers, how it turns a number into a slot, and whether the spinning animation decides the result or only shows it. You can ask these questions of any wheel. Below is how the Pickboard <a href="/">wheel</a> answers each one.</p>
+
+<h2>1. Where the randomness comes from</h2>
+<p>Browsers offer two sources. <code>Math.random()</code> is fast and fine for animations, but MDN states that it does not provide cryptographically secure random numbers (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random">MDN: Math.random()</a>). The other is <code>crypto.getRandomValues()</code>, which MDN describes as giving cryptographically strong random values (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues">MDN: Crypto.getRandomValues()</a>).</p>
+<p>Pickboard asks <code>crypto.getRandomValues()</code> for a fresh 32-byte seed on every spin and never calls <code>Math.random()</code>. The seed starts a deterministic generator (xoshiro256**) that supplies the numbers for that one spin.</p>
+
+<h2>2. How a number becomes a slot</h2>
+<p>A common shortcut is to take a large random number and keep the remainder after dividing by the number of slots. Unless the number of slots divides the range evenly, some slots end up very slightly more likely than others.</p>
+<p>Pickboard avoids that. For a wheel with n slots it reads only as many random bits as n needs, and if the value is n or more it throws the value away and reads again. Every slot gets exactly the same chance. Our tests feed the picker every possible bit pattern for wheels of 2 to 256 slots and confirm that each slot comes out exactly once.</p>
+
+<h2>3. Whether the spin decides anything</h2>
+<p>Some wheels simulate a spin with a random speed and read the result from wherever the wheel stops. That ties fairness to animation timing. Pickboard works the other way round: the slot is chosen first, then the wheel is turned by exactly the angle that brings that slot under the pointer. The animation is only a display. Our tests check, for wheels of 1 to 5,000 slots, that the stopping angle always puts the chosen slot under the pointer.</p>
+
+<h2>What we measured</h2>
+<p>For wheels with 2, 8, 30 and 500 slots, the tests run at least 100,000 spins each, every spin with its own seed as on the site, and count how often each slot wins. A chi-square test compares the counts with an even split. All four pass at the 0.1% level. The same test is also pointed at a deliberately biased picker to confirm that it catches bias when there is some.</p>
+
+<h2>What random does not promise</h2>
+<ul>
+<li><strong>No memory.</strong> With 8 names, the name that just won has the same 1 in 8 chance on the next spin. Use Remove and spin again if a winner should not come up twice.</li>
+<li><strong>Streaks happen.</strong> A fair wheel will sometimes favour one side of a list for a while. Over many spins the counts even out.</li>
+<li><strong>Duplicates count.</strong> A name entered twice has two slots. That is visible on the wheel and is the only kind of weighting there is.</li>
+</ul>
+
+<h2>Can it be rigged?</h2>
+<p>There is no setting, hidden or otherwise, that makes a chosen name come up. After a spin you can copy a result link that holds the list and the seed; anyone who opens it sees the wheel stop on the same slot. That shows the result was not altered afterwards. It does not show how many times someone spun before sharing, so for anything that matters, agree on a single spin in advance or spin where everyone can watch.</p>
+</div>
+  <div class="try"><p>Try it with your own list</p><a class="btn btn-go" href="/">Spin the Wheel</a></div>
+</article>
+<div class="ad-wrap wrap" hidden><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="lumen" href="https://lumenlab.page/en/" data-lumen><span class="lumen-wheel" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48"><g class="lw-disc"><circle cx="24" cy="24" r="21" fill="var(--rim)" stroke="var(--line-2)"/><path d="M24 24 43 24A19 19 0 0 1 24 43z" fill="var(--s1)"/><path class="lw-off" d="M24 24 24 43A19 19 0 0 1 5 24z" fill="var(--s2)"/><path class="lw-off" d="M24 24 5 24A19 19 0 0 1 24 5z" fill="var(--s3)"/><path class="lw-off" d="M24 24 24 5A19 19 0 0 1 43 24z" fill="var(--s4)"/><circle cx="24" cy="24" r="4" fill="var(--card)"/></g><path class="lw-needle" d="M48 24l-9-4.4v8.8z" fill="var(--pick)"/></svg></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span></a>
+    <p class="foot-links"><a href="/about/">About</a><a href="/guide/">Guides</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+    <small>© 2026 Lumen Lab</small>
+  </div>
+</footer>
+<script type="application/json" id="i18n">{"count": "{n} names", "count1": "1 name", "picked": "Picked", "wait": "Spin the wheel and the name shows up here.", "copied": "Link copied. Anyone who opens it sees this same result.", "copyFail": "Couldn’t copy. Select the address below and copy it.", "stamp": "Same result as the link", "stampSr": "The result stored in this link was replayed as it was.", "badLink": "This link is cut off or damaged. Check that the whole link was copied.", "badVersion": "This link uses a newer format that this page can’t open.", "otherTool": "This link is a {tool} result.", "openThere": "Open it there", "emptyList": "The list is empty. Add one name per line.", "listSample": "This is a sample list. Clear it and add your own.", "listSaved": "Saved on this device only.", "listShared": "This list came from the link. It isn’t saved unless you edit it.", "warnCut": "{n} long names were cut at 100 characters.", "warnOver": "{n} lines over the 5,000 limit were left out.", "warnDupes": "{n} duplicate names (each still gets its own slot).", "soundOn": "Sound on", "soundOff": "Sound off", "present": "Full screen", "presentExit": "Exit full screen", "recentEmpty": "Nothing yet. Results you draw on this device are listed here.", "replay": "Replay", "toolNames": {"wheel": "Wheel", "ladder": "Ladder game", "draw": "Name picker", "teams": "Team generator", "number": "Random number", "coin": "Coin flip", "dice": "Dice"}, "ladderRange": "The ladder works for 2 to 30 people. Your list has {n}.", "ladderTip": "Tap a name to follow that person’s path.", "ladderAll": "Results", "blank": "—", "win": "Winner", "lose": "No luck", "needMore": "Add at least {n} names first.", "pickTooMany": "You can’t pick more than the {n} on the list.", "order": "Order", "pickedN": "Picked {m} of {n}", "slipsHead": "Slips for {n} people: tap one to open it", "openAll": "Open all", "slipClosed": "Tap to open", "team": "Team {n}", "people": "{n}", "teamsHead": "{n} people in {k} teams", "teamsBad": "Teams must be between 1 and {n}.", "sizeBad": "Team size must be between 1 and {n}.", "copyText": "Copy as text", "copiedText": "Copied.", "numInt": "Use whole numbers only.", "numOrder": "The first number is larger than the second.", "numCount": "Count must be between 1 and 10,000.", "numUnique": "Not enough numbers in that range: asked for {m}, only {n} available.", "numWide": "That range is too wide.", "numHead": "{m} from {a} to {b}", "heads": "Heads", "tails": "Tails", "coinWait": "Flip", "coinTally": "Heads {a}, tails {b}", "coinCount": "Flips must be between 1 and 1,000.", "diceSum": "Total {n}", "diceCount": "Dice must be between 1 and 100.", "diceSides": "Sides must be between 2 and 1,000.", "lang": "en", "paths": {"wheel": "/", "ladder": "/ladder/", "draw": "/name-picker/", "teams": "/team-generator/", "number": "/random-number/", "coin": "/coin-flip/", "dice": "/dice/"}, "other": {"lang": "ko", "label": "한국어로 보기"}}</script>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

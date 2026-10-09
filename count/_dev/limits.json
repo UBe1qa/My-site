@@ -1,0 +1,46 @@
+{
+  "_note": "공식 출처로 확인하기 전에는 verified=false 로 둔다. 화면·글은 verified=true 인 값만 쓴다(false인 항목은 빌드가 화면에 내보내지 않는다). 값·출처·확인한 날을 함께 적는다.",
+  "neis": {
+    "verified": false,
+    "bytes": { "hangul": null, "ascii": null, "newline": null, "other_symbols": null },
+    "items": [],
+    "school_year": null,
+    "source": null,
+    "checked": null,
+    "need": "나이스 학교생활기록부 바이트 셈법(한글·영문·숫자·줄바꿈·특수문자 각각 몇 바이트)과 항목별 최대 글자 수, 적용 학년도"
+  },
+  "kr_sms": {
+    "verified": false,
+    "sms_bytes": null,
+    "lms_bytes": null,
+    "encoding": null,
+    "source": null,
+    "checked": null,
+    "need": "한국 통신사 문자 한 통 기준(SMS·LMS 바이트)과 어떤 인코딩으로 세는지"
+  },
+  "sns": [
+    { "id": "x", "name": "X", "unit": "weighted", "limit": 280, "verified": false, "source": null, "checked": null, "note": "280·가중치·주소 23은 twitter-text v3 설정에서 온 값(시험이 라이브러리와 대조). 공식 문서 문장 확인 대기" },
+    { "id": "instagram_caption", "name": "Instagram caption", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "instagram_bio", "name": "Instagram bio", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "youtube_title", "name": "YouTube title", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "youtube_description", "name": "YouTube description", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "threads", "name": "Threads", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "bluesky", "name": "Bluesky", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "linkedin_post", "name": "LinkedIn post", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
+    { "id": "tiktok_caption", "name": "TikTok caption", "unit": null, "limit": null, "verified": false, "source": null, "checked": null }
+  ],
+  "reading": {
+    "verified": false,
+    "read_wpm": null,
+    "speak_wpm": null,
+    "source": null,
+    "checked": null,
+    "need": "읽기·말하기 속도 기본값의 출처(확인 전에는 화면에 '가정: 분당 N단어'라고 표시하고 사용자가 바꿀 수 있게)"
+  },
+  "wongoji_rules": {
+    "verified": false,
+    "source": null,
+    "checked": null,
+    "need": "원고지 쓰기 규칙의 공식 출처(숫자·영문 소문자 두 자 한 칸, 문단 첫 칸 비우기, 줄 끝 문장부호·띄어쓰기 처리). 확인 전에는 선택 규칙 네 가지를 화면에 내놓지 않는다"
+  }
+}

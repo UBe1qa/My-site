@@ -1,0 +1,595 @@
+{
+  "ui": {
+    "ko": {
+      "brand": "칸칸",
+      "skip": "본문으로 건너뛰기",
+      "nav_label": "도구",
+      "guides": "가이드",
+      "about": "소개",
+      "privacy": "개인정보 처리방침",
+      "licenses": "오픈소스 고지",
+      "contact": "문의",
+      "lang_other": "English",
+      "lang_offer": "English version",
+      "ad": "광고",
+      "faq": "자주 묻는 질문",
+      "more_guides": "더 읽을 글",
+      "all_guides": "가이드 전체 보기",
+      "updated": "고친 날",
+      "lumen_b": "만든 곳 루멘랩",
+      "lumen_s": "다른 앱과 도구 보기",
+      "lumen_cells": [
+        "루",
+        "멘",
+        "랩",
+        ""
+      ],
+      "placeholder": "여기에 글을 쓰거나 붙여 넣으세요.\n쓰는 대로 숫자가 바뀌어요.",
+      "ta_label": "셀 글",
+      "nums_label": "센 결과",
+      "sample_btn": "예시 글 넣어 보기",
+      "copy": "글 복사",
+      "clear": "지우기",
+      "undo_msg": "지웠어요.",
+      "undo": "되돌리기",
+      "safe": "글은 이 기기 밖으로 나가지 않아요",
+      "goal_open": "목표 정하기",
+      "goal": "목표",
+      "goal_clear": "목표 지우기",
+      "goal_basis": "목표를 셀 기준",
+      "basis_sum": "세는 기준",
+      "basis_change": "바꾸기",
+      "nl_why": "엔터 한 번을 0자로 세는 곳, 1자로 세는 곳, 2자로 세는 곳이 따로 있어요. 글을 낼 곳의 입력창과 숫자가 다르면 여기를 바꿔 맞춰 봐요.",
+      "nl_group": "줄바꿈 한 번을 몇 자로 셀지",
+      "nl_opts": [
+        "0자",
+        "1자",
+        "2자"
+      ],
+      "crumb": "가이드",
+      "try_h": "직접 세어 보기",
+      "sources": "출처",
+      "nf_title": "페이지를 찾을 수 없어요",
+      "home": "글자수 세기로 가기"
+    },
+    "en": {
+      "brand": "Kankan",
+      "skip": "Skip to content",
+      "nav_label": "Tools",
+      "guides": "Guides",
+      "about": "About",
+      "privacy": "Privacy",
+      "licenses": "Open-source licenses",
+      "contact": "Contact",
+      "lang_other": "한국어",
+      "lang_offer": "한국어로 보기",
+      "ad": "Ad",
+      "faq": "Questions",
+      "more_guides": "Keep reading",
+      "all_guides": "All guides",
+      "updated": "Updated",
+      "lumen_b": "Made by Lumen Lab",
+      "lumen_s": "More apps and tools",
+      "lumen_cells": [
+        "L",
+        "U",
+        "M",
+        "E",
+        "N",
+        "L",
+        "A",
+        "B"
+      ],
+      "placeholder": "Type or paste your text here.\nThe counts update as you write.",
+      "ta_label": "Text to count",
+      "nums_label": "Counts",
+      "sample_btn": "Try a sample text",
+      "copy": "Copy text",
+      "clear": "Clear",
+      "undo_msg": "Cleared.",
+      "undo": "Undo",
+      "safe": "Your text never leaves this device",
+      "goal_open": "Set a goal",
+      "goal": "Goal",
+      "goal_clear": "Remove goal",
+      "goal_basis": "What the goal counts",
+      "basis_sum": "How this counts",
+      "basis_change": "change",
+      "nl_why": "Some forms count pressing Enter as 0 characters, some as 1 and some as 2. If the form you are writing for shows a different number, switch this to match it.",
+      "nl_group": "How many characters a line break counts as",
+      "nl_opts": [
+        "0",
+        "1",
+        "2"
+      ],
+      "crumb": "Guides",
+      "try_h": "Try it",
+      "sources": "Sources",
+      "nf_title": "Page not found",
+      "home": "Go to the word counter"
+    }
+  },
+  "t": {
+    "ko": {
+      "minsec": "{m}분 {s}초",
+      "sec": "{s}초",
+      "close": "닫기",
+      "copied": "복사했어요",
+      "inspTry": "눌러 보세요",
+      "inspFound": "이 글에서 찾은 글자",
+      "inspSum": "사람이 보기엔 {g}글자 · 코드 포인트 {cp}개 · UTF-16 {u16}단위 · UTF-8 {u8}바이트",
+      "inspMore": "(뒤 {n}개는 줄였어요)",
+      "inspX": "",
+      "miss": "EUC-KR로 못 담는 글자 {n}개는 바이트에서 뺐어요: {ex}",
+      "ks": "옛 완성형 2,350자에 없는 한글이 {n}자 있어요. 완성형 한글만 받는 곳에서는 못 쓸 수 있어요.",
+      "over": "{n}{u} 넘었어요",
+      "left": "{n}{u} 남았어요",
+      "exact": "딱 맞아요",
+      "goalOf": "목표 {g}{u}({b})",
+      "stripLeft": "남음",
+      "stripOver": "넘음",
+      "nlNow": "줄바꿈은 {n}자로 셈",
+      "wgGhost": "글을 쓰면 여기에 한 칸씩 놓여요",
+      "unitChar": "자",
+      "unitByte": "바이트",
+      "qSub": "공백 포함 {a}자 · 공백 제외 {b}자 · {c}바이트",
+      "qDelAsk": "이 문항에 쓴 글도 함께 지워져요. 지울까요?",
+      "wipeAsk": "이 기기에 저장한 자소서를 모두 지울까요?"
+    },
+    "en": {
+      "minsec": "{m} min {s} sec",
+      "sec": "{s} sec",
+      "close": "Close",
+      "copied": "Copied",
+      "inspTry": "Try one",
+      "inspFound": "Found in your text",
+      "inspSum": "{g} character as people see it · {cp} code points · {u16} UTF-16 units · {u8} UTF-8 bytes",
+      "inspMore": "(+{n} more pieces not shown)",
+      "inspX": "· counts as {x} on X",
+      "miss": "",
+      "ks": "",
+      "over": "{n} {u} over",
+      "left": "{n} {u} left",
+      "exact": "Right on target",
+      "goalOf": "Goal: {g} {u}",
+      "stripLeft": "Left",
+      "stripOver": "Over",
+      "nlNow": "Line breaks count as {n}",
+      "smsGsm": "GSM-7",
+      "smsUni": "Unicode (UCS-2)",
+      "smsSeptets": "{n} GSM-7 slots",
+      "smsUnits": "{n} UTF-16 units",
+      "smsBad": "Not in the GSM-7 alphabet, so the whole text is sent as Unicode:",
+      "xLeft": "{n} left.",
+      "xOver": "{n} over the limit."
+    }
+  },
+  "sample": {
+    "ko": "저는 문제를 숫자로 확인하는 습관이 있습니다. 대학 3학년 때 학교 앞 무인 복사실의 대기 줄이 길다는 불만이 많았는데, 일주일 동안 시간대별 이용자 수를 직접 세어 보니 점심 직후 40분에 전체의 절반이 몰려 있었습니다.\n\n이 결과를 학생회에 전달해 예약 시간표를 만들었고, 한 달 뒤 평균 대기 시간이 12분에서 4분으로 줄었습니다. 작은 변화였지만, 느낌이 아니라 기록으로 말할 때 사람들이 움직인다는 것을 배웠습니다.\n\n입사 후에도 고객의 불편을 먼저 세어 보고, 고칠 수 있는 것부터 하나씩 줄여 가겠습니다.",
+    "en": "The library closes at six, which is exactly when most of us finish work. Last spring I counted the people waiting outside on a Saturday morning: forty-one before the doors opened, and half of them were there to return a single book.\n\nI wrote to the council with those numbers and a simple request: a drop box by the entrance. It took three months and one well-timed photo of the queue, but the box is there now.\n\nSmall counts change small things. That's enough to keep counting.",
+    "sms": "Hi! Your table for 4 is booked for Fri 7:30pm. Reply YES to confirm or call 020 7946 0958 to change.",
+    "x": "Counted the queue outside the library again: 41 people before opening, and half were only returning one book 📚 A drop box by the door would fix it. Details: https://example.org/library/drop-box-proposal"
+  },
+  "inspect": [
+    "👨‍👩‍👧",
+    "🇰🇷",
+    "👍🏽",
+    "é",
+    "각",
+    "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+  ],
+  "pages": {
+    "ko": {
+      "home": {
+        "title": "글자수 세기 - 공백 포함·제외, 바이트, 원고지 | 칸칸",
+        "desc": "글을 붙여 넣으면 공백 포함·제외 글자 수와 UTF-8·EUC-KR 바이트, 단어, 문장, 원고지 장수를 바로 세요. 줄바꿈을 0·1·2자로 바꿔 볼 수 있고, 글은 브라우저 밖으로 나가지 않아요.",
+        "h1": "글자수 세기",
+        "lead": "쓰는 대로 바로 세요. 공백, 줄바꿈, 바이트 기준을 바꿔 볼 수 있어요.",
+        "inspect_h": "한 글자를 뜯어보면",
+        "inspect_p": "화면에는 한 글자인데 컴퓨터 안에서는 여러 조각일 때가 있어요. 도구마다 글자 수가 다르게 나오는 이유 가운데 하나예요.",
+        "tools_h": "쓰임에 맞춰 세기",
+        "basis_h": "이렇게 세요",
+        "defs": [
+          [
+            "글자",
+            "사람이 보는 한 글자를 1자로 세요(유니코드 표준 UAX #29의 글자 묶음). 👨‍👩‍👧처럼 여러 조각으로 된 이모지도 1자예요."
+          ],
+          [
+            "공백",
+            "띄어쓰기, 탭, 줄바꿈이에요. '공백 제외'는 이것들을 뺀 수예요."
+          ],
+          [
+            "줄바꿈",
+            "엔터 한 번을 0자, 1자, 2자 가운데 무엇으로 볼지 고를 수 있어요. 처음에는 1자예요."
+          ],
+          [
+            "바이트",
+            "UTF-8은 한글 3바이트, 영문 1바이트예요. EUC-KR은 한글 2바이트, 영문 1바이트이고, EUC-KR로 못 담는 글자는 따로 알려 줘요."
+          ],
+          [
+            "단어",
+            "띄어쓰기로 나눈 덩어리(어절) 수예요."
+          ],
+          [
+            "문장",
+            "유니코드 문장 나누기 규칙을 따라요. 마침표, 물음표, 느낌표 뒤와 줄바꿈에서 끊어요."
+          ],
+          [
+            "원고지",
+            "띄어쓰기를 포함하고 줄바꿈을 뺀 글자 수를 200으로 나눠 올림한 장수예요."
+          ]
+        ],
+        "faq": [
+          [
+            "공백 포함과 공백 제외는 무엇이 다른가요?",
+            "공백 포함은 띄어쓰기와 줄바꿈까지 센 수예요. 공백 제외는 띄어쓰기, 탭, 줄바꿈을 빼고 글자만 센 수예요. 어느 쪽으로 제한하는지는 글을 내는 곳마다 달라서 안내문에 적힌 기준을 확인하는 게 좋아요."
+          ],
+          [
+            "같은 글인데 다른 곳과 숫자가 달라요.",
+            "주로 줄바꿈과 이모지 때문이에요. 줄바꿈을 0자, 1자, 2자로 세는 곳이 따로 있고, 이모지를 한 글자가 아니라 조각 수대로 세는 곳도 있어요. '세는 기준'에서 줄바꿈을 바꿔 가며 맞춰 볼 수 있어요."
+          ],
+          [
+            "붙여 넣은 글이 어딘가에 저장되나요?",
+            "아니요. 글은 브라우저 안에서만 세고, 이 사이트가 서버로 보내거나 저장하지 않아요. 페이지를 닫으면 사라져요."
+          ],
+          [
+            "한글 한 글자는 몇 바이트인가요?",
+            "UTF-8에서는 3바이트, EUC-KR(CP949)에서는 2바이트, UTF-16에서는 2바이트예요. 영문과 숫자는 UTF-8과 EUC-KR에서 1바이트예요."
+          ]
+        ],
+        "proof": "글자는 사람이 보는 한 글자씩 세요(유니코드 UAX #29)."
+      },
+      "byte": {
+        "nav": "바이트",
+        "name": "바이트 계산기",
+        "line": "UTF-8, EUC-KR, UTF-16 바이트를 나란히",
+        "title": "바이트 계산기 - UTF-8·EUC-KR·UTF-16 바이트 수 세기 | 칸칸",
+        "desc": "글을 붙여 넣으면 UTF-8, EUC-KR(CP949), UTF-16 바이트 수를 바로 세요. 한글 3바이트와 2바이트 기준을 나란히 보고, EUC-KR로 못 담는 글자는 따로 알려 줘요.",
+        "h1": "바이트 계산기",
+        "lead": "한글 3바이트(UTF-8)와 2바이트(EUC-KR)를 나란히 세요.",
+        "basis_h": "바이트는 이렇게 세요",
+        "defs": [
+          [
+            "UTF-8",
+            "영문과 숫자는 1바이트, 한글과 한자는 3바이트예요. 이모지는 조각마다 3~4바이트라서 😀는 4바이트, 👨‍👩‍👧는 18바이트예요."
+          ],
+          [
+            "EUC-KR",
+            "영문과 숫자는 1바이트, 한글과 한자는 2바이트예요. 윈도우의 확장 완성형(CP949) 표를 기준으로 해서 한글 11,172자를 모두 2바이트로 세요."
+          ],
+          [
+            "못 담는 글자",
+            "이모지처럼 EUC-KR 표에 없는 글자는 바이트에 넣지 않고, 몇 개인지와 어떤 글자인지 알려 줘요."
+          ],
+          [
+            "UTF-16",
+            "대부분의 글자는 2바이트, 이모지 같은 보충 글자는 4바이트예요. 맨 앞의 BOM은 세지 않아요."
+          ],
+          [
+            "줄바꿈",
+            "0, 1, 2 가운데 골라요. 엔터를 2바이트(CR+LF)로 세는 곳에 맞출 때는 2로 바꿔요. UTF-16에서는 그 두 배예요."
+          ]
+        ],
+        "faq": [
+          [
+            "한글은 왜 어디서는 2바이트이고 어디서는 3바이트인가요?",
+            "글자를 숫자로 적는 방식(인코딩)이 달라서예요. EUC-KR은 한글 한 자를 2바이트로, UTF-8은 3바이트로 적어요. 바이트로 제한하는 곳은 어느 방식이냐에 따라 쓸 수 있는 글자 수가 달라져요."
+          ],
+          [
+            "이모지는 몇 바이트인가요?",
+            "UTF-8로 😀는 4바이트, 👍🏽는 8바이트, 👨‍👩‍👧는 18바이트예요. EUC-KR에는 이모지가 없어서 바이트로 셀 수 없고, 이 계산기는 그런 글자를 따로 알려 줘요."
+          ],
+          [
+            "띄어쓰기와 줄바꿈은 몇 바이트인가요?",
+            "띄어쓰기는 UTF-8과 EUC-KR 모두 1바이트예요. 줄바꿈은 1바이트(LF)로 세는 곳과 2바이트(CR+LF)로 세는 곳이 있어서 고를 수 있게 했어요."
+          ]
+        ],
+        "proof": "EUC-KR은 윈도우 CP949 표(2바이트 글자 17,048자)로 세요."
+      },
+      "jasoseo": {
+        "nav": "자소서",
+        "name": "자소서 글자수 세기",
+        "line": "문항마다 목표 글자 수와 남은 글자",
+        "title": "자소서 글자수 세기 - 문항별 목표 글자 수와 남은 글자 | 칸칸",
+        "desc": "자기소개서 문항마다 목표 글자 수를 정하고 공백 포함, 공백 제외, 바이트 기준으로 남은 글자를 바로 확인해요. 글은 브라우저 밖으로 나가지 않고, 원할 때만 이 기기에 저장해요.",
+        "h1": "자소서 글자수 세기",
+        "lead": "문항마다 목표를 정하고 남은 글자를 보면서 써요.",
+        "q_title": "문항 이름(예: 지원 동기)",
+        "q_goal": "목표",
+        "q_basis": "기준",
+        "q_text": "이 문항의 답을 쓰거나 붙여 넣으세요",
+        "q_del": "문항 지우기",
+        "q_add": "문항 추가",
+        "tot": [
+          "문항",
+          "개 · 모두",
+          "자(공백 포함)"
+        ],
+        "save": "이 기기에 저장",
+        "wipe": "저장한 글 지우기",
+        "bases": [
+          [
+            "chars",
+            "공백 포함"
+          ],
+          [
+            "nospace",
+            "공백 제외"
+          ],
+          [
+            "utf8",
+            "바이트(UTF-8)"
+          ]
+        ],
+        "how_h": "쓰는 법",
+        "how": [
+          "문항 이름과 목표 글자 수를 적고 기준(공백 포함, 공백 제외, 바이트)을 골라요.",
+          "글을 쓰면 칸이 차고 남은 글자가 보여요. 목표를 넘으면 주홍색으로 바뀌어요.",
+          "지원하는 곳의 입력창과 숫자가 다르면 '세는 기준'에서 줄바꿈을 0자, 1자, 2자로 바꿔 가며 맞춰 봐요."
+        ],
+        "save_h": "저장은 켰을 때만",
+        "save_p": "처음에는 아무것도 저장하지 않아요. '이 기기에 저장'을 켜면 문항과 글이 이 브라우저에만 남고, 끄거나 '저장한 글 지우기'를 누르면 바로 지워져요. 여럿이 쓰는 컴퓨터에서는 켜지 않는 게 좋아요.",
+        "faq": [
+          [
+            "글자 수 제한은 공백 포함인가요, 제외인가요?",
+            "지원하는 곳마다 달라요. 채용 공고나 입력 화면에 적힌 기준을 따르고, 적혀 있지 않으면 입력창에 직접 넣어 본 숫자와 같은 기준을 골라요. 여기서는 세 기준을 한꺼번에 보여 줘요."
+          ],
+          [
+            "지원 사이트 입력창과 글자 수가 달라요.",
+            "줄바꿈을 세는 방식이 다를 수 있어요. '세는 기준'에서 줄바꿈을 0자, 1자, 2자로 바꿔 가며 맞춰 봐요. 그래도 다르면 글에 이모지나 특수문자가 있는지 확인해요."
+          ],
+          [
+            "쓴 글이 서버에 저장되나요?",
+            "아니요. 글은 브라우저 안에서만 세요. '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남고, 이 사이트의 서버로는 보내지 않아요."
+          ]
+        ]
+      },
+      "wongoji": {
+        "nav": "원고지",
+        "name": "원고지 글자수 세기",
+        "line": "200자 원고지 몇 장인지, 칸에 놓은 모습",
+        "title": "원고지 글자수 세기 - 200자 원고지 몇 장인지 계산 | 칸칸",
+        "desc": "글을 붙여 넣으면 200자 원고지로 몇 장인지 두 가지로 계산해요. 글자 수를 200으로 나눈 장수와, 20칸 10줄 원고지에 한 칸씩 놓아 본 장수를 함께 보여 줘요.",
+        "h1": "원고지 글자수 세기",
+        "lead": "200자 원고지로 몇 장인지, 칸에 놓은 모습과 함께 봐요.",
+        "sheet_title": "200자 원고지",
+        "sheet_rule": "한 칸에 한 글자씩 놓은 모습이에요. 원고지 쓰기 규칙과 다를 수 있어요.",
+        "prev": "앞 장",
+        "next": "다음 장",
+        "basis_h": "장수를 두 가지로 세요",
+        "defs": [
+          [
+            "글자 수로 환산",
+            "띄어쓰기를 포함하고 줄바꿈을 뺀 글자 수를 200으로 나눠 올림해요. 분량을 대략 가늠할 때 쓰는 셈이에요."
+          ],
+          [
+            "칸에 놓으면",
+            "한 줄 20칸, 한 장 10줄인 원고지에 한 칸에 한 글자씩 놓아요. 띄어쓰기도 한 칸을 쓰고, 줄을 바꾸면 다음 줄 첫 칸부터 놓아서 줄 끝에 빈칸이 남아요. 그래서 환산한 장수보다 많이 나올 수 있어요."
+          ],
+          [
+            "반영하지 않은 것",
+            "숫자 두 자를 한 칸에 쓰기, 문단 첫 칸 비우기 같은 원고지 쓰기 규칙은 넣지 않았어요. 규칙대로 써야 하는 글이라면 이 화면은 어림으로만 봐 주세요."
+          ]
+        ],
+        "faq": [
+          [
+            "원고지 1장은 몇 자인가요?",
+            "이 계산기는 한 줄 20칸, 10줄짜리 200자 원고지를 기준으로 해요. 띄어쓰기도 한 칸을 차지해요."
+          ],
+          [
+            "두 장수가 왜 다른가요?",
+            "글자 수로 환산한 장수는 글자를 빈틈없이 이어 붙였다고 본 값이에요. 칸에 놓은 장수는 줄을 바꿀 때마다 그 줄의 남은 칸이 비기 때문에 더 많이 나와요. 예를 들어 한 글자짜리 줄 11개는 글자 수로는 1장이지만 칸에 놓으면 2장이에요."
+          ]
+        ],
+        "proof": "한 줄 20칸, 한 장 10줄(200자) 기준이에요."
+      },
+      "guide": {
+        "title": "가이드 - 글자 수와 바이트 | 칸칸",
+        "desc": "글자 수가 사이트마다 다른 이유, 이모지와 바이트를 세는 법을 우리 도구로 직접 센 숫자와 함께 정리했어요.",
+        "h1": "가이드",
+        "lead": "글자 수와 바이트에 대해 자주 묻는 것들이에요. 숫자는 모두 이 사이트의 도구로 직접 센 값이에요."
+      },
+      "about": {
+        "title": "칸칸 소개 - 세는 기준과 출처 | 칸칸",
+        "desc": "칸칸이 글자, 공백, 바이트, 원고지를 어떤 기준으로 세는지, 그 기준의 출처와 확인 방법, 만든 곳을 적었어요.",
+        "body": "<h1>칸칸 소개</h1>\n<p>칸칸은 글자 수를 세는 도구예요. 같은 글도 공백을 넣느냐, 줄바꿈을 몇 자로 보느냐, 글자로 세느냐 바이트로 세느냐에 따라 숫자가 달라져요. 칸칸은 그 기준들을 한 화면에 나란히 놓고 보여 줘요.</p>\n<p>이름은 원고지의 칸에서 왔어요. 한 칸에 한 글자.</p>\n<h2>세는 기준과 출처</h2>\n<ul>\n<li><b>글자</b>: 유니코드 표준 부속서 <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>의 글자 묶음을 따라요(브라우저의 Intl.Segmenter). 이모지는 <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>의 이모지 묶음이에요.</li>\n<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>\n<li><b>X 가중 글자 수</b>(영어판): X의 공개 라이브러리 twitter-text 3.1.0을 기준으로 했어요(확인일 2026-10-09).</li>\n<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 TS 23.040의 이어 붙이기 규칙이에요.</li>\n<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 한 칸 한 글자로 놓아요. 원고지 쓰기 규칙은 반영하지 않았어요.</li>\n</ul>\n<h2>어떻게 확인했나요</h2>\n<p>세는 로직은 화면과 따로 두고 자동 테스트 2만 3천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>\n<h2>글은 어디로 가나요</h2>\n<p>어디로도 가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를 써요. 자세한 내용은 <a href=\"/ko/privacy/\">개인정보 처리방침</a>에 있어요.</p>\n<h2>만든 곳과 문의</h2>\n<p><a href=\"https://lumenlab.page/\">루멘랩(Lumen Lab)</a>이 만들었어요. 틀린 숫자를 발견하면 <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>으로 알려 주세요.</p>"
+      },
+      "privacy": {
+        "title": "개인정보 처리방침 | 칸칸",
+        "desc": "칸칸은 글을 브라우저 안에서만 세고 서버로 보내지 않아요. 기기에 남는 것과 광고 쿠키에 대해 적었어요.",
+        "body": "<h1>개인정보 처리방침</h1>\n<p>시행일: 2026년 10월 9일 · 운영: 루멘랩(Lumen Lab)</p>\n<h2>쓰거나 붙여 넣은 글</h2>\n<p>칸칸은 글을 이용자의 브라우저 안에서 세요. 쓰거나 붙여 넣은 글을 이 사이트가 서버로 보내거나 모으지 않아요. 페이지를 닫거나 새로 고치면 글은 사라져요. 회원 가입은 없어요.</p>\n<h2>기기에 저장하는 정보</h2>\n<p>브라우저 저장소(localStorage)에 아래 항목만 남겨요. 브라우저의 사이트 데이터 지우기로 언제든 지울 수 있어요.</p>\n<ul>\n<li><code>kk.lang</code>: 다른 언어판 안내 띠를 닫았거나 눌렀다는 표시예요. 띠를 다시 띄우지 않으려고 기억해요.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 생겨요. 문항 이름, 목표 글자 수, 쓴 글, 줄바꿈 기준이 들어 있어요. 스위치를 끄거나 '저장한 글 지우기'를 누르면 바로 지워요.</li>\n</ul>\n<p>그 밖에는 저장하지 않아요.</p>\n<h2>광고</h2>\n<p>이 사이트는 Google 애드센스로 광고를 보여 줘요. Google을 비롯한 광고 회사는 쿠키를 써서 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 고를 수 있어요. 광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요. Google이 이 정보를 어떻게 쓰는지는 <a href=\"https://policies.google.com/technologies/partner-sites?hl=ko\">Google 파트너 사이트에서 Google이 데이터를 사용하는 방식</a>에 있어요. 맞춤 광고는 <a href=\"https://www.google.com/settings/ads\">Google 광고 설정</a>에서 끌 수 있어요. 방문 분석 도구는 따로 쓰지 않아요.</p>\n<h2>글꼴과 서버 기록</h2>\n<p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 쓴 글은 받지 않아요.</p>\n<h2>문의</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+      },
+      "licenses": {
+        "title": "오픈소스 고지 | 칸칸",
+        "desc": "칸칸이 가져다 쓴 오픈소스와 라이선스예요.",
+        "h1": "오픈소스 고지",
+        "intro": "칸칸의 세는 로직은 직접 만들었어요. 아래 두 가지는 다른 곳의 것을 가져다 썼어요.",
+        "tt": "X 가중 글자 수 화면에서 주소를 찾는 정규식과 도메인 끝 목록(<code>assets/lc-x.js</code>, <code>assets/lc-x-tld.js</code>)을 이 라이브러리에서 옮겼어요. 라이브러리 자체는 싣지 않았어요.",
+        "pt": "화면 글꼴이에요. 글꼴 파일은 싣지 않고 jsDelivr에서 받아요. 글꼴을 가리키는 CSS(<code>assets/pretendard.css</code>)만 가져와 표시 방식 한 줄을 바꿨어요."
+      }
+    },
+    "en": {
+      "home": {
+        "title": "Word Counter - words, characters, sentences, reading time | Kankan",
+        "desc": "Paste text to count words, characters with and without spaces, sentences, paragraphs and reading time as you type. An emoji counts as one character. Your text never leaves the browser.",
+        "h1": "Word Counter",
+        "lead": "Counts as you type: words, characters, sentences and reading time in one view.",
+        "inspect_h": "One character, taken apart",
+        "inspect_p": "A character you see as one can be several pieces inside the computer. It is one of the reasons counters disagree.",
+        "tools_h": "Counting for a specific limit",
+        "basis_h": "How this counts",
+        "defs": [
+          [
+            "Words",
+            "Runs of text separated by spaces or line breaks, so “well-known” and “don't” are one word each. The Unicode-rules figure splits at hyphens and also works for scripts written without spaces."
+          ],
+          [
+            "Characters",
+            "One for each character as people see it (grapheme clusters, Unicode UAX #29). An emoji such as 👨‍👩‍👧 is 1, however many pieces it is built from."
+          ],
+          [
+            "Spaces",
+            "Spaces, tabs and line breaks. “Without spaces” leaves all of them out."
+          ],
+          [
+            "Line breaks",
+            "A line break counts as 0, 1 or 2 characters, whichever you choose. It starts at 1."
+          ],
+          [
+            "Sentences",
+            "Unicode sentence boundaries: after a full stop, question mark or exclamation mark, and at line breaks."
+          ],
+          [
+            "Paragraphs",
+            "Lines that contain text. Blank lines are not counted."
+          ],
+          [
+            "Reading and speaking time",
+            "Words divided by a speed in words per minute. The speeds are assumptions you can change: they start at 200 for reading and 130 for speaking."
+          ]
+        ],
+        "faq": [
+          [
+            "Does the character count include spaces?",
+            "“Characters” includes spaces and line breaks. “Without spaces” leaves out spaces, tabs and line breaks. Both are shown side by side."
+          ],
+          [
+            "Why does another counter show a different number?",
+            "Usually because of line breaks, hyphenated words or emoji. Some tools count a line break as two characters, some split “well-known” into two words, and some count an emoji by its internal pieces instead of as one character. Open “How this counts” to switch the line-break rule."
+          ],
+          [
+            "Is my text uploaded or saved?",
+            "No. Counting happens in your browser. This site does not send your text to a server or store it, and it is gone when you close the page."
+          ],
+          [
+            "How is reading time worked out?",
+            "It is the word count divided by a reading speed. The starting value of 200 words per minute is an assumption, not a measurement of you, so set your own pace under “How this counts”."
+          ]
+        ],
+        "proof": "Characters are counted as people see them (Unicode UAX #29)."
+      },
+      "chars": {
+        "nav": "Character Counter",
+        "name": "Character Counter",
+        "line": "With and without spaces, bytes, and X weighted length",
+        "title": "Character Counter - with and without spaces, bytes, X limit | Kankan",
+        "desc": "Count characters with and without spaces, UTF-8 and UTF-16 bytes and code points as you type, and check the weighted length X uses for its 280 limit.",
+        "h1": "Character Counter",
+        "lead": "Characters with and without spaces, bytes, and the weighted length X uses.",
+        "x_title": "X weighted length",
+        "x_note": "A link counts as 23 and an emoji as 2, whatever their real length. Based on twitter-text 3.1.0, the open-source library X published for counting posts. Checked 2026-10-09.",
+        "inspect_h": "One character, taken apart",
+        "inspect_p": "Tap a character to see the code points it is made of and how each way of counting sees it.",
+        "basis_h": "How this counts",
+        "defs": [
+          [
+            "Characters",
+            "One for each character as people see it (grapheme clusters, Unicode UAX #29). Spaces and line breaks are included."
+          ],
+          [
+            "Without spaces",
+            "The same count with spaces, tabs and line breaks left out."
+          ],
+          [
+            "Bytes",
+            "UTF-8 uses 1 byte for ASCII, 2 for most accented Latin letters, 3 for Korean, Chinese and Japanese characters and 4 for most emoji. UTF-16 uses 2 bytes for most characters and 4 for those outside the Basic Multilingual Plane. No byte-order mark is counted."
+          ],
+          [
+            "Code points",
+            "The number of Unicode code points. One visible character can be several: 👍🏽 is 2 and 👨‍👩‍👧 is 5."
+          ],
+          [
+            "X weighted length",
+            "Latin letters, digits and common punctuation count 1. Korean, Chinese, Japanese and most other characters count 2. Every link counts 23, and an emoji counts 2 even when it is built from several code points. The limit is 280. We follow twitter-text 3.1.0 except for emoji sequences that release does not know: it counts those piece by piece, and we count each as 2."
+          ]
+        ],
+        "faq": [
+          [
+            "How many characters is an emoji?",
+            "One, when you count characters as people see them. Inside, 👍🏽 is 2 code points and 8 UTF-8 bytes, and 👨‍👩‍👧 is 5 code points and 18 UTF-8 bytes. Tap a character under “One character, taken apart” to see its pieces."
+          ],
+          [
+            "Why is the X number different from the character count?",
+            "X uses a weighted length. In the twitter-text rules, Korean, Chinese and Japanese characters count as 2, each emoji counts as 2 and every link counts as 23, so a text of 140 Korean characters is already 280 on X."
+          ],
+          [
+            "Does a line break count as a character?",
+            "Here it counts as 1 to begin with. Some forms count it as 2 (a carriage return plus a line feed) and some ignore it, so you can switch between 0, 1 and 2."
+          ]
+        ],
+        "proof": "Characters are counted as people see them (Unicode UAX #29)."
+      },
+      "sms": {
+        "nav": "SMS Counter",
+        "name": "SMS Character Counter",
+        "line": "Message parts: 160 or 153, 70 or 67",
+        "title": "SMS Character Counter - message parts for GSM-7 and Unicode | Kankan",
+        "desc": "See how many SMS parts your text needs. A GSM-7 text fits 160 characters, or 153 per part when split. One emoji or a letter outside GSM-7 drops the limit to 70, or 67 per part.",
+        "h1": "SMS Character Counter",
+        "lead": "How many message parts your text needs, and which characters force Unicode.",
+        "basis_h": "How SMS length works",
+        "defs": [
+          [
+            "GSM-7",
+            "The default SMS alphabet (3GPP TS 23.038) has 128 slots: basic Latin letters, digits, common punctuation and a handful of accented letters and Greek capitals. One message holds 160 slots."
+          ],
+          [
+            "Two-slot characters",
+            "^ { } [ ] \\ ~ | and € are sent as an escape code plus a character, so each one uses 2 slots."
+          ],
+          [
+            "Split messages",
+            "A longer text is sent as parts that the phone joins back together. Each part carries a short header (3GPP TS 23.040), which leaves 153 slots per part."
+          ],
+          [
+            "Unicode",
+            "If even one character is outside GSM-7, the whole text is sent as UCS-2: 70 units in a single message and 67 per part. Most emoji use 2 units."
+          ],
+          [
+            "Not covered",
+            "National language shift tables (Turkish, Spanish, Portuguese) that some networks support, and how your carrier or messaging provider bills the parts."
+          ]
+        ],
+        "faq": [
+          [
+            "Why did my 161-character text become two messages?",
+            "A single GSM-7 message holds 160 characters. One more and the text is split into parts of 153, because each part needs room for the header that lets the phone rejoin them. 161 characters become 153 + 8."
+          ],
+          [
+            "Which characters switch a text to Unicode?",
+            "Anything outside the GSM-7 alphabet: emoji, curly quotes (’ “ ”), the long dash (—), the ellipsis character (…) and letters such as ç, á or ê. The letters é, è, à, ñ, ü and ö are in the alphabet and are fine. The tool lists the characters it found in your text."
+          ],
+          [
+            "How long can a text with an emoji be?",
+            "70 UTF-16 units in one message, and most emoji use 2 of them. A text of 69 letters plus one emoji is 71 units, so it is sent as two parts."
+          ]
+        ],
+        "proof": "Limits follow 3GPP TS 23.038 and TS 23.040."
+      },
+      "guide": {
+        "title": "Guides - characters, bytes and message limits | Kankan",
+        "desc": "Short explainers on how X counts characters, why a 161-character text is two messages, and why one emoji can be 1, 5 or 18. Every number was counted with the tools on this site.",
+        "h1": "Guides",
+        "lead": "Short answers to counting questions. Every number here was counted with the tools on this site and checked by its tests."
+      },
+      "about": {
+        "title": "About Kankan - what it counts and where the rules come from | Kankan",
+        "desc": "What Kankan counts, the standards behind each rule, how the results are tested, and who makes it.",
+        "body": "<h1>About Kankan</h1>\n<p>Kankan counts text. The same text gives different numbers depending on whether spaces are included, how a line break is counted, and whether you count characters or bytes. Kankan puts those rules side by side.</p>\n<p>The name comes from <span lang=\"ko\">칸</span> (kan), one square on Korean manuscript paper: one square, one character.</p>\n<h2>The rules and where they come from</h2>\n<ul>\n<li><b>Characters</b>: grapheme clusters as defined in Unicode Standard Annex <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>, through the browser's Intl.Segmenter. Emoji sequences follow <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>.</li>\n<li><b>Words and sentences</b>: words are runs of text between spaces, with a second figure that uses the UAX #29 word rules. Sentences use the UAX #29 sentence rules.</li>\n<li><b>Bytes</b>: UTF-8 and UTF-16 as defined by the Unicode Standard. The Korean pages also count EUC-KR using the Windows code page 949 table.</li>\n<li><b>X weighted length</b>: twitter-text 3.1.0, the open-source library X published for counting posts (checked 2026-10-09).</li>\n<li><b>SMS</b>: the GSM 7-bit alphabet in 3GPP TS 23.038 and the concatenation rules in TS 23.040.</li>\n</ul>\n<h2>How the results are checked</h2>\n<p>The counting code is kept apart from the page and is covered by about 23,000 automated tests. The expected values were not produced by writing the same logic twice. They come from Python's standard codecs and Unicode libraries, from the twitter-text package, and from three independent SMS calculators.</p>\n<h2>Where your text goes</h2>\n<p>Nowhere. Text is counted inside your browser, and this site has no server that receives it. Ads are served by Google AdSense. The details are in the <a href=\"/privacy/\">privacy policy</a>.</p>\n<h2>Who makes it</h2>\n<p>Kankan is made by <a href=\"https://lumenlab.page/en/\">Lumen Lab</a>. If you find a wrong number, write to <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>.</p>"
+      },
+      "privacy": {
+        "title": "Privacy policy | Kankan",
+        "desc": "Kankan counts your text inside the browser and never sends it to a server. What is stored on your device and how ads use cookies.",
+        "body": "<h1>Privacy policy</h1>\n<p>Effective October 9, 2026 · Operated by Lumen Lab</p>\n<h2>The text you type or paste</h2>\n<p>Kankan counts text inside your browser. This site does not send the text you type or paste to a server and does not collect it. It is gone when you close or reload the page. There are no accounts.</p>\n<h2>What is stored on your device</h2>\n<p>Only the following items are kept in your browser's localStorage. Clearing site data removes them.</p>\n<ul>\n<li><code>kk.lang</code>: a note that you closed or followed the language suggestion bar, so that it does not come back.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: created only if you turn on “save on this device” on the Korean cover-letter counter. They hold the question names, goals, your text and the line-break setting, and are deleted as soon as you turn the switch off or press the delete button there.</li>\n</ul>\n<p>Nothing else is stored.</p>\n<h2>Ads</h2>\n<p>This site shows ads through Google AdSense. Google and other ad vendors use cookies to serve ads based on your visits to this and other websites. Because of these ads, third parties such as Google may place or read cookies in your browser and collect information through web beacons (tiny invisible images). See <a href=\"https://policies.google.com/technologies/partner-sites\">how Google uses information from sites or apps that use its services</a>. You can turn off personalized ads in <a href=\"https://www.google.com/settings/ads\">Google Ad Settings</a>. We don't use separate analytics tools.</p>\n<h2>Fonts and server logs</h2>\n<p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives your text.</p>\n<h2>Contact</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+      },
+      "licenses": {
+        "title": "Open-source licenses | Kankan",
+        "desc": "Open-source work that Kankan builds on, and its licenses.",
+        "h1": "Open-source licenses",
+        "intro": "The counting code in Kankan is our own. Two things come from elsewhere.",
+        "tt": "The regular expressions that find links and the list of domain endings used for the X weighted length (<code>assets/lc-x.js</code>, <code>assets/lc-x-tld.js</code>) were ported from this library. The library itself is not shipped.",
+        "pt": "The typeface. The font files are not bundled; they are loaded from jsDelivr. Only the CSS that points to them (<code>assets/pretendard.css</code>) is included, with its font-display setting changed."
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Random Team Generator: Split a List Into Even Groups | Pickboard</title>
+<meta name="description" content="Split any list into random teams by number of teams or by maximum team size. Team sizes never differ by more than one. Copy the teams as text or share a replay link.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c2127" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://pick.lumenlab.page/team-generator/">
+<link rel="alternate" hreflang="en" href="https://pick.lumenlab.page/team-generator/">
+<link rel="alternate" hreflang="ko" href="https://pick.lumenlab.page/ko/teams/">
+<link rel="alternate" hreflang="x-default" href="https://pick.lumenlab.page/team-generator/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Random Team Generator: Split a List Into Even Groups | Pickboard">
+<meta property="og:description" content="Split any list into random teams by number of teams or by maximum team size. Team sizes never differ by more than one. Copy the teams as text or share a replay link.">
+<meta property="og:url" content="https://pick.lumenlab.page/team-generator/">
+<meta property="og:site_name" content="Pickboard">
+<meta property="og:image" content="https://pick.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Random team generator | Pickboard", "url": "https://pick.lumenlab.page/team-generator/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser with JavaScript", "inLanguage": "en", "isAccessibleForFree": true, "description": "Split any list into random teams by number of teams or by maximum team size. Team sizes never differ by more than one. Copy the teams as text or share a replay link.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What happens when the list does not divide evenly?", "acceptedAnswer": {"@type": "Answer", "text": "The extra people are spread one each over the first teams, so sizes differ by one at most."}}, {"@type": "Question", "name": "Can I send the teams to a group chat?", "acceptedAnswer": {"@type": "Answer", "text": "Use Copy as text to paste the teams as plain text, or Copy result link to send an address that shows the same teams again."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="logo" href="/"><svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="5.5" stroke-dasharray="11.75 1.6" transform="rotate(-39.6 12 13)"/><path d="M18.55 7.58A8.5 8.5 0 0 1 18.55 18.42" fill="none" stroke="var(--s1)" stroke-width="5.5"/><path d="M28 13l-9.4-4.6v9.2z" fill="var(--pick)"/></svg><span>Pickboard</span></a>
+  <nav class="tools-nav" aria-label="Ways to pick"><a href="/"><span class="l">Wheel</span><span class="s">Wheel</span></a><a href="/ladder/"><span class="l">Ladder game</span><span class="s">Ladder</span></a><a href="/name-picker/"><span class="l">Name picker</span><span class="s">Picker</span></a><a href="/team-generator/" aria-current="page"><span class="l">Team generator</span><span class="s">Teams</span></a><a href="/random-number/"><span class="l">Random number</span><span class="s">Number</span></a><a href="/coin-flip/"><span class="l">Coin flip</span><span class="s">Coin</span></a><a href="/dice/"><span class="l">Dice</span><span class="s">Dice</span></a></nav>
+  <div class="top-side"><a href="/guide/">Guides</a><a class="lang" href="/ko/teams/" lang="ko" hreflang="ko">한국어</a></div>
+</header>
+<main id="main">
+<section class="tool wrap" id="tool" data-tool="teams">
+<div class="tool-head"><h1>Random team generator</h1><p class="aka">Split a list into even groups by number of teams or team size.</p></div>
+<div class="grid grid-list">
+  <div class="panel">
+    <div class="controls-main">
+      <span class="seg" id="mode" role="group" aria-label="Team generator"><button type="button" data-v="teams" aria-pressed="true">Number of teams</button><button type="button" data-v="size" aria-pressed="false">Max per team</button></span>
+      <label class="field"><span class="sr" id="lk">Number of teams</span><input type="number" id="k" min="1" value="2" inputmode="numeric" aria-labelledby="lk"></label>
+      <button type="button" class="btn btn-go" id="go">Make teams</button>
+    </div>
+    <p class="msg" id="msg" role="alert"></p>
+    <div class="out" id="out" aria-live="polite"><p class="out-empty">Choose how to split and press Make teams.</p></div>
+    <div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="copytext">Copy as text</button><button type="button" class="btn btn-sm" id="copy"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.7 9.3a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.7.7M9.3 6.7a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.7-.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Copy result link</button><span class="note" id="copynote" style="align-self:center">The link includes your list.</span></div><p class="toast" id="toast" role="status"></p>
+    <p class="trust"><b>How does it pick?</b> It uses your browser’s cryptographic random numbers, and your list never leaves this device. <a href="/about/">See how picks are made</a></p>
+  </div>
+  <aside class="list" id="list">
+    <div class="list-head"><h2><label for="names">Your list</label></h2><span class="count num" id="count">8 names</span></div>
+    <p class="list-note" id="listnote" data-saved="Saved on this device only." data-clear="Clear" data-clearall="Clear list"><span>This is a sample list. Clear it and add your own.</span><button type="button" class="btn btn-sm" id="listclear">Clear</button></p>
+    <textarea class="names" id="names" rows="8" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Names, one per line" data-sample="Olivia
+Noah
+Emma
+Liam
+Ava
+Mason
+Sophia
+Lucas">Olivia
+Noah
+Emma
+Liam
+Ava
+Mason
+Sophia
+Lucas</textarea>
+    <script>(function(){try{var v=localStorage.getItem('pick.list');if(v!==null){var t=document.getElementById('names');t.value=v;t.dataset.own='1';var n=document.getElementById('listnote');n.firstElementChild.textContent=n.dataset.saved;n.lastElementChild.textContent=n.dataset.clearall}}catch(e){}})()</script>
+    <div class="list-tools"><button type="button" class="btn btn-sm" id="shuffle">Shuffle</button><button type="button" class="btn btn-sm" id="sortaz">Sort A–Z</button><button type="button" class="btn btn-sm" id="dedupe">Remove duplicates</button></div>
+    <p class="list-warn" id="listwarn" role="status"></p>
+    <p class="note">One per line. You can paste a column from a spreadsheet.</p>
+  </aside>
+</div>
+<details class="recent" id="recent"><summary>Recent results on this device</summary><ul></ul><button type="button" class="btn btn-sm" id="recentclear">Clear results</button></details>
+</section>
+<section class="prose wrap narrow"><h2>How to use it</h2><p>Choose Number of teams or Max per team, set the number and press Make teams. The list is shuffled and dealt out, so the first teams get any extra person and no team is more than one person larger than another.</p><p>With Max per team, the number of teams is the list size divided by that maximum, rounded up. Thirteen people with a maximum of four gives four teams of 4, 3, 3 and 3.</p><h2>What it does not do</h2><p>Teams are random. The tool does not balance skill, keep certain people together or keep them apart. There are no hidden rules that place a particular person in a particular team.</p><h2>Questions</h2><div class="faq"><details><summary>What happens when the list does not divide evenly?</summary><p>The extra people are spread one each over the first teams, so sizes differ by one at most.</p></details><details><summary>Can I send the teams to a group chat?</summary><p>Use Copy as text to paste the teams as plain text, or Copy result link to send an address that shows the same teams again.</p></details></div></section>
+<div class="ad-wrap wrap" hidden><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+<section class="sec wrap narrow"><h2>Same list, another way</h2><div class="ways"><a href="/"><b>Wheel</b><span>Spin a wheel of the names</span></a><a href="/ladder/"><b>Ladder game</b><span>Follow a hidden ladder down to a result</span></a><a href="/name-picker/"><b>Name picker</b><span>Draw several names, deal slips or set an order</span></a></div></section>
+<section class="sec wrap narrow"><h2>Guides</h2><ul class="guide-list"><li><a href="/guide/is-wheel-spinner-random/">Is an online wheel spinner really random?</a><span>Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.</span></li><li><a href="/guide/pick-winners-without-repeats/">How to pick winners from a list without repeats</a><span>A short, checkable way to draw several winners from a list: clean the list, draw once, keep alternates, and share a link that replays the result.</span></li><li><a href="/guide/ladder-lottery-fairness/">Ladder lottery (Ghost Leg): how it works and how fair it is</a><span>A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.</span></li></ul></section>
+<div class="ad-wrap wrap" hidden><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="lumen" href="https://lumenlab.page/en/" data-lumen><span class="lumen-wheel" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48"><g class="lw-disc"><circle cx="24" cy="24" r="21" fill="var(--rim)" stroke="var(--line-2)"/><path d="M24 24 43 24A19 19 0 0 1 24 43z" fill="var(--s1)"/><path class="lw-off" d="M24 24 24 43A19 19 0 0 1 5 24z" fill="var(--s2)"/><path class="lw-off" d="M24 24 5 24A19 19 0 0 1 24 5z" fill="var(--s3)"/><path class="lw-off" d="M24 24 24 5A19 19 0 0 1 43 24z" fill="var(--s4)"/><circle cx="24" cy="24" r="4" fill="var(--card)"/></g><path class="lw-needle" d="M48 24l-9-4.4v8.8z" fill="var(--pick)"/></svg></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span></a>
+    <p class="foot-links"><a href="/about/">About</a><a href="/guide/">Guides</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+    <small>© 2026 Lumen Lab</small>
+  </div>
+</footer>
+<script type="application/json" id="i18n">{"count": "{n} names", "count1": "1 name", "picked": "Picked", "wait": "Spin the wheel and the name shows up here.", "copied": "Link copied. Anyone who opens it sees this same result.", "copyFail": "Couldn’t copy. Select the address below and copy it.", "stamp": "Same result as the link", "stampSr": "The result stored in this link was replayed as it was.", "badLink": "This link is cut off or damaged. Check that the whole link was copied.", "badVersion": "This link uses a newer format that this page can’t open.", "otherTool": "This link is a {tool} result.", "openThere": "Open it there", "emptyList": "The list is empty. Add one name per line.", "listSample": "This is a sample list. Clear it and add your own.", "listSaved": "Saved on this device only.", "listShared": "This list came from the link. It isn’t saved unless you edit it.", "warnCut": "{n} long names were cut at 100 characters.", "warnOver": "{n} lines over the 5,000 limit were left out.", "warnDupes": "{n} duplicate names (each still gets its own slot).", "soundOn": "Sound on", "soundOff": "Sound off", "present": "Full screen", "presentExit": "Exit full screen", "recentEmpty": "Nothing yet. Results you draw on this device are listed here.", "replay": "Replay", "toolNames": {"wheel": "Wheel", "ladder": "Ladder game", "draw": "Name picker", "teams": "Team generator", "number": "Random number", "coin": "Coin flip", "dice": "Dice"}, "ladderRange": "The ladder works for 2 to 30 people. Your list has {n}.", "ladderTip": "Tap a name to follow that person’s path.", "ladderAll": "Results", "blank": "—", "win": "Winner", "lose": "No luck", "needMore": "Add at least {n} names first.", "pickTooMany": "You can’t pick more than the {n} on the list.", "order": "Order", "pickedN": "Picked {m} of {n}", "slipsHead": "Slips for {n} people: tap one to open it", "openAll": "Open all", "slipClosed": "Tap to open", "team": "Team {n}", "people": "{n}", "teamsHead": "{n} people in {k} teams", "teamsBad": "Teams must be between 1 and {n}.", "sizeBad": "Team size must be between 1 and {n}.", "copyText": "Copy as text", "copiedText": "Copied.", "numInt": "Use whole numbers only.", "numOrder": "The first number is larger than the second.", "numCount": "Count must be between 1 and 10,000.", "numUnique": "Not enough numbers in that range: asked for {m}, only {n} available.", "numWide": "That range is too wide.", "numHead": "{m} from {a} to {b}", "heads": "Heads", "tails": "Tails", "coinWait": "Flip", "coinTally": "Heads {a}, tails {b}", "coinCount": "Flips must be between 1 and 1,000.", "diceSum": "Total {n}", "diceCount": "Dice must be between 1 and 100.", "diceSides": "Sides must be between 2 and 1,000.", "lang": "en", "paths": {"wheel": "/", "ladder": "/ladder/", "draw": "/name-picker/", "teams": "/team-generator/", "number": "/random-number/", "coin": "/coin-flip/", "dice": "/dice/"}, "other": {"lang": "ko", "label": "한국어로 보기"}, "tool": "teams"}</script>
+<script type="module" src="/assets/tools/teams.js"></script>
+</body>
+</html>

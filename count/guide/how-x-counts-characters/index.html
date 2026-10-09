@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How X counts characters: emoji, links and the 280 limit | Kankan</title>
+<meta name="description" content="X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191c23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://count.lumenlab.page/guide/how-x-counts-characters/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How X counts characters: emoji, links and the 280 limit | Kankan">
+<meta property="og:description" content="X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.">
+<meta property="og:url" content="https://count.lumenlab.page/guide/how-x-counts-characters/">
+<meta property="og:site_name" content="Kankan">
+<meta property="og:image" content="https://count.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How X counts characters: emoji, links and the 280 limit", "description": "X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://count.lumenlab.page/guide/how-x-counts-characters/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://count.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "How X counts characters: emoji, links and the 280 limit", "item": "https://count.lumenlab.page/guide/how-x-counts-characters/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>Kankan</a>
+  <nav class="nav" aria-label="Tools"><a href="/">Words</a><a href="/character-counter/">Characters</a><a href="/sms/">SMS</a><a href="/guide/" aria-current="page">Guides</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a class="wide" href="/about/">About</a><a href="/ko/" lang="ko" hreflang="ko">한국어</a></div>
+</div></header>
+<main id="main">
+<article class="art wrap narrow">
+  <p class="crumb"><a href="/guide/">Guides</a></p>
+  <h1>How X counts characters: emoji, links and the 280 limit</h1>
+  <p class="meta">Updated <time datetime="2026-10-09">2026-10-09</time> · Lumen Lab</p>
+  <p class="answer">X counts a weighted length, not characters. In twitter-text, the open-source library X published for this, Latin letters and common punctuation count 1, most other characters count 2, every link counts 23, each emoji counts 2, and the total may not go over 280.</p>
+  <div class="prose"><h2>The weights</h2>
+<p>These values come from the version 3 configuration of twitter-text 3.1.0. We counted each example with our own implementation and with the library; they agree.</p>
+<div class="tbl"><table>
+<tr><th>What you type</th><th class="r">Counts as</th></tr>
+<tr><td>a, é, Ж (Latin, accented Latin, Cyrillic)</td><td class="r">1 each</td></tr>
+<tr><td>“ and the long dash</td><td class="r">1 each</td></tr>
+<tr><td>… (the single ellipsis character), ™, €</td><td class="r">2 each</td></tr>
+<tr><td>Korean, Chinese or Japanese characters</td><td class="r">2 each</td></tr>
+<tr><td>😀</td><td class="r">2</td></tr>
+<tr><td>👍🏽 or 👨‍👩‍👧 (one emoji built from several pieces)</td><td class="r">2</td></tr>
+<tr><td>https://example.com</td><td class="r">23</td></tr>
+</table></div>
+<p>The rule behind the table is a set of code point ranges. Characters up to U+10FF, which covers Latin, Greek, Cyrillic, Arabic, Hebrew and Thai among others, weigh 1, together with a few ranges of general punctuation. Everything else weighs 2.</p>
+<h2>Links are always 23</h2>
+<p>Every link counts as 23, whether it is 19 characters or 83. That includes a bare domain: <code>example.com</code> with no <code>https://</code> in front still counts as 23, so “see example.com now” is 31, not 19.</p>
+<p>Not everything with a dot is a link. The library only treats a word as one when it ends in a real domain ending, so <code>file.txt</code> counts as 8 ordinary characters.</p>
+</div>
+</article>
+<div class="ad-wrap wrap" data-slot="mid"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<div class="wrap narrow"><div class="prose">
+<h2>Emoji are 2, with a catch</h2>
+<p>An emoji counts as 2 no matter how many code points it is made of. 👨‍👩‍👧 is five code points and still 2.</p>
+<p>The catch is which emoji the library knows. Release 3.1.0 carries an older emoji list, and it counts sequences it does not recognise piece by piece. 🧑‍🚀 and ❤️‍🔥 each come out as 5 there. We ran all 3,773 emoji in Emoji 15.1 through both: 2,963 agree at 2, and 810 newer ones get a larger number from the library. Our counter gives every one of them 2, the same as the emoji the library does know. We could not test X's own composer, so if a brand-new emoji decides whether your post fits, check it there.</p>
+<h2>What 280 holds</h2>
+<ul>
+<li>280 Latin letters.</li>
+<li>140 Korean, Chinese or Japanese characters.</li>
+<li>140 emoji.</li>
+<li>A link plus 257 Latin characters, spaces included.</li>
+</ul>
+<p>Text is normalised first, so an é typed as one character and an é typed as e plus a combining accent both count as 1.</p>
+<h2>How we checked</h2>
+<p>The regular expression our counter uses to find links is identical, character for character, to the one in twitter-text 3.1.0, and a test compares the two. On top of that, 1,655 sample texts mixing links, emoji and several scripts get the same weighted length and the same link positions from both.</p><div class="try"><p>See the weighted length of your own text as you type.</p><a class="btn go" href="/character-counter/">Open the character counter</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://github.com/twitter/twitter-text">twitter-text, X&#x27;s open-source text library (version 3.1.0, checked 2026-10-09)</a></li><li><a href="https://unicode.org/reports/tr51/">Unicode Technical Standard #51: Unicode Emoji</a></li></ul></div></div></div>
+<section class="sec wrap narrow"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/why-161-characters-is-two-sms/"><b>Why a 161-character text costs two messages</b><span>One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
+<div class="ad-wrap wrap" data-slot="bottom"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>L</span></i><i style="--i:1"><span>U</span></i><i style="--i:2"><span>M</span></i><i style="--i:3"><span>E</span></i><i style="--i:4"><span>N</span></i><i style="--i:5"><span>L</span></i><i style="--i:6"><span>A</span></i><i style="--i:7"><span>B</span></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/character-counter/">Character Counter</a><a href="/sms/">SMS Character Counter</a><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/licenses/">Open-source licenses</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="kk">{"lang": "en", "t": {"close": "Close"}, "other": "/ko/", "otherLabel": "한국어로 보기"}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

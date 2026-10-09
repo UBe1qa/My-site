@@ -1,0 +1,25 @@
+<p>It depends on three things: where the wheel gets its random numbers, how it turns a number into a slot, and whether the spinning animation decides the result or only shows it. You can ask these questions of any wheel. Below is how the Pickboard <a href="{{u_wheel}}">wheel</a> answers each one.</p>
+
+<h2>1. Where the randomness comes from</h2>
+<p>Browsers offer two sources. <code>Math.random()</code> is fast and fine for animations, but MDN states that it does not provide cryptographically secure random numbers (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random">MDN: Math.random()</a>). The other is <code>crypto.getRandomValues()</code>, which MDN describes as giving cryptographically strong random values (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues">MDN: Crypto.getRandomValues()</a>).</p>
+<p>Pickboard asks <code>crypto.getRandomValues()</code> for a fresh 32-byte seed on every spin and never calls <code>Math.random()</code>. The seed starts a deterministic generator (xoshiro256**) that supplies the numbers for that one spin.</p>
+
+<h2>2. How a number becomes a slot</h2>
+<p>A common shortcut is to take a large random number and keep the remainder after dividing by the number of slots. Unless the number of slots divides the range evenly, some slots end up very slightly more likely than others.</p>
+<p>Pickboard avoids that. For a wheel with n slots it reads only as many random bits as n needs, and if the value is n or more it throws the value away and reads again. Every slot gets exactly the same chance. Our tests feed the picker every possible bit pattern for wheels of 2 to 256 slots and confirm that each slot comes out exactly once.</p>
+
+<h2>3. Whether the spin decides anything</h2>
+<p>Some wheels simulate a spin with a random speed and read the result from wherever the wheel stops. That ties fairness to animation timing. Pickboard works the other way round: the slot is chosen first, then the wheel is turned by exactly the angle that brings that slot under the pointer. The animation is only a display. Our tests check, for wheels of 1 to 5,000 slots, that the stopping angle always puts the chosen slot under the pointer.</p>
+
+<h2>What we measured</h2>
+<p>For wheels with 2, 8, 30 and 500 slots, the tests run at least 100,000 spins each, every spin with its own seed as on the site, and count how often each slot wins. A chi-square test compares the counts with an even split. All four pass at the 0.1% level. The same test is also pointed at a deliberately biased picker to confirm that it catches bias when there is some.</p>
+
+<h2>What random does not promise</h2>
+<ul>
+<li><strong>No memory.</strong> With 8 names, the name that just won has the same 1 in 8 chance on the next spin. Use Remove and spin again if a winner should not come up twice.</li>
+<li><strong>Streaks happen.</strong> A fair wheel will sometimes favour one side of a list for a while. Over many spins the counts even out.</li>
+<li><strong>Duplicates count.</strong> A name entered twice has two slots. That is visible on the wheel and is the only kind of weighting there is.</li>
+</ul>
+
+<h2>Can it be rigged?</h2>
+<p>There is no setting, hidden or otherwise, that makes a chosen name come up. After a spin you can copy a result link that holds the list and the seed; anyone who opens it sees the wheel stop on the same slot. That shows the result was not altered afterwards. It does not show how many times someone spun before sharing, so for anything that matters, agree on a single spin in advance or spin where everyone can watch.</p>

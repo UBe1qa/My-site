@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>이모지 하나는 몇 글자일까: 1글자, 5조각, 18바이트 | 칸칸</title>
+<meta name="description" content="👨‍👩‍👧 하나가 세는 방식에 따라 1, 5, 8, 18이 되는 이유를 조각으로 뜯어 보고, 자주 쓰는 이모지와 한글 자모를 네 가지 방식으로 센 표를 실었어요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191c23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/">
+<link rel="alternate" hreflang="en" href="https://count.lumenlab.page/guide/characters-code-points-bytes/">
+<link rel="alternate" hreflang="ko" href="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/">
+<link rel="alternate" hreflang="x-default" href="https://count.lumenlab.page/guide/characters-code-points-bytes/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="이모지 하나는 몇 글자일까: 1글자, 5조각, 18바이트 | 칸칸">
+<meta property="og:description" content="👨‍👩‍👧 하나가 세는 방식에 따라 1, 5, 8, 18이 되는 이유를 조각으로 뜯어 보고, 자주 쓰는 이모지와 한글 자모를 네 가지 방식으로 센 표를 실었어요.">
+<meta property="og:url" content="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/">
+<meta property="og:site_name" content="칸칸">
+<meta property="og:image" content="https://count.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "이모지 하나는 몇 글자일까", "description": "👨‍👩‍👧 하나가 세는 방식에 따라 1, 5, 8, 18이 되는 이유를 조각으로 뜯어 보고, 자주 쓰는 이모지와 한글 자모를 네 가지 방식으로 센 표를 실었어요.", "inLanguage": "ko", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/", "image": "https://count.lumenlab.page/og-ko.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://count.lumenlab.page/ko/guide/"}, {"@type": "ListItem", "position": 2, "name": "이모지 하나는 몇 글자일까", "item": "https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/ko/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>칸칸</a>
+  <nav class="nav" aria-label="도구"><a href="/ko/">글자수 세기</a><a href="/ko/jasoseo/">자소서</a><a href="/ko/byte/">바이트</a><a href="/ko/wongoji/">원고지</a><a href="/ko/guide/" aria-current="page">가이드</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a class="wide" href="/ko/about/">소개</a><a href="/guide/characters-code-points-bytes/" lang="en" hreflang="en">English</a></div>
+</div></header>
+<main id="main">
+<article class="art wrap narrow">
+  <p class="crumb"><a href="/ko/guide/">가이드</a></p>
+  <h1>이모지 하나는 몇 글자일까</h1>
+  <p class="meta">고친 날 <time datetime="2026-10-09">2026-10-09</time> · Lumen Lab</p>
+  <p class="answer">사람이 보기엔 한 글자예요. 하지만 컴퓨터 안에서는 여러 조각으로 이루어져 있어서, 세는 방식에 따라 👨‍👩‍👧 하나가 1이 되기도 하고 5, 8, 18이 되기도 해요.</p>
+  <div class="prose"><h2>조각으로 뜯어보면</h2>
+<p>가족 이모지 👨‍👩‍👧은 사실 이모지 세 개를 보이지 않는 이음 글자(ZWJ)로 붙인 거예요.</p>
+<p><span class="cellrow" aria-hidden="true"><i>👨</i><i class="inv">ZWJ</i><i>👩</i><i class="inv">ZWJ</i><i>👧</i></span></p>
+<p>조각은 5개이고, 이 조각들을 UTF-16으로 적으면 8단위, UTF-8로 적으면 18바이트예요. 화면에는 한 칸만 차지하니 사람에게는 1글자예요.</p>
+<h2>네 가지 방식으로 센 표</h2>
+<p>이 사이트의 글자 뜯어보기로 직접 센 값이에요.</p>
+<div class="tbl"><table>
+<tr><th>글자</th><th class="r">보이는 글자</th><th class="r">코드 포인트</th><th class="r">UTF-16 단위</th><th class="r">UTF-8 바이트</th></tr>
+<tr><td>가</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="r">3</td></tr>
+<tr><td>😀</td><td class="r">1</td><td class="r">1</td><td class="r">2</td><td class="r">4</td></tr>
+<tr><td>👍🏽 (엄지 + 피부색)</td><td class="r">1</td><td class="r">2</td><td class="r">4</td><td class="r">8</td></tr>
+<tr><td>🇰🇷 (K + R)</td><td class="r">1</td><td class="r">2</td><td class="r">4</td><td class="r">8</td></tr>
+<tr><td>1️⃣ (숫자 + 꾸밈 둘)</td><td class="r">1</td><td class="r">3</td><td class="r">3</td><td class="r">7</td></tr>
+<tr><td>👨‍👩‍👧</td><td class="r">1</td><td class="r">5</td><td class="r">8</td><td class="r">18</td></tr>
+<tr><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 (잉글랜드 깃발)</td><td class="r">1</td><td class="r">7</td><td class="r">14</td><td class="r">28</td></tr>
+</table></div>
+</div>
+</article>
+<div class="ad-wrap wrap" data-slot="mid"><p class="ad-label">광고</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<div class="wrap narrow"><div class="prose">
+<h2>어느 숫자가 맞나요</h2>
+<p>무엇을 재느냐에 따라 달라요.</p>
+<ul>
+<li><b>사람이 읽는 길이</b>를 재려면 보이는 글자 수가 맞아요. 유니코드 표준은 이것을 글자 묶음(grapheme cluster)이라고 불러요. 이 사이트는 이 기준으로 세요.</li>
+<li><b>저장 용량이나 전송 길이</b>를 재려면 바이트가 맞아요.</li>
+<li><b>UTF-16 단위</b>는 자바스크립트 같은 언어에서 글의 길이를 물었을 때 돌아오는 값이에요. 그래서 이 값으로 세는 입력창에서는 👨‍👩‍👧 하나가 8자로 나와요.</li>
+</ul>
+<p>글자 수 제한이 있는 곳에 이모지를 넣었더니 생각보다 빨리 한도에 걸렸다면, 그곳은 조각이나 단위로 세고 있는 거예요.</p>
+<h2>이모지만 그런 게 아니에요</h2>
+<p>한글도 조각으로 풀어 적을 수 있어요. '한'은 보통 한 조각으로 저장되지만, 초성과 중성과 종성 세 조각(ᄒ, ᅡ, ᆫ)으로 풀어 적는 방식도 있어요. 이렇게 풀린 '한'은 화면에서는 똑같이 보이는데 코드 포인트는 3개, UTF-8로는 9바이트예요. 보이는 글자로 세면 여전히 1글자예요.</p>
+<p>글 속에 풀어 적힌 글자나 보이지 않는 글자가 섞여 있으면 눈으로는 찾기 어려워요. 글자 뜯어보기에 글을 넣으면 여러 조각으로 된 글자만 골라서 보여 줘요.</p><div class="try"><p>글자를 눌러 조각을 볼 수 있어요.</p><a class="btn go" href="/ko/#inspect">글자 뜯어보기 열기</a></div><div class="src"><h2>출처</h2><ul><li><a href="https://unicode.org/reports/tr29/">유니코드 표준 부속서 UAX #29: 글자 묶음을 나누는 규칙</a></li><li><a href="https://unicode.org/reports/tr51/">유니코드 기술 표준 UTS #51: 이모지</a></li></ul></div></div></div>
+<section class="sec wrap narrow"><h2>더 읽을 글</h2><ul class="jump jump-g"><li><a href="/ko/guide/geulja-su-dareun-iyu/"><b>같은 글인데 글자 수가 다르게 나오는 이유</b><span>같은 글을 넣어도 도구마다 글자 수가 다른 건 공백, 줄바꿈, 이모지, 바이트를 세는 기준이 달라서예요. 한 글을 일곱 가지 기준으로 세어 본 표로 확인해요.</span></a></li><li><a href="/ko/guide/hangul-byte-utf8-euckr/"><b>한글은 왜 2바이트이기도 하고 3바이트이기도 할까</b><span>한글 한 자는 EUC-KR에서 2바이트, UTF-8에서 3바이트예요. 인코딩마다 글자별 바이트 수를 표로 비교하고, 바이트 제한을 글자 수로 바꾸는 법을 적었어요.</span></a></li></ul></section>
+<div class="ad-wrap wrap" data-slot="bottom"><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>루</span></i><i style="--i:1"><span>멘</span></i><i style="--i:2"><span>랩</span></i><i style="--i:3"><span></span></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/jasoseo/">자소서 글자수 세기</a><a href="/ko/byte/">바이트 계산기</a><a href="/ko/wongoji/">원고지 글자수 세기</a><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="kk">{"lang": "ko", "t": {"close": "닫기"}, "other": "/guide/characters-code-points-bytes/", "otherLabel": "English version"}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

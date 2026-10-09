@@ -66,6 +66,24 @@
       "name": {"ko": "한장달력", "en": "Onesheet"},
       "sub": "Onesheet",
       "line": {"ko": "공휴일 넣은 1년 달력을 한 장 PDF로 받고, 월별 달력·음력·손 없는 날까지 인쇄해요.", "en": "Printable year-on-a-page and monthly calendars with holidays, as PDF, image or print."}
+    },
+    {
+      "id": "pickboard",
+      "url": "https://pick.lumenlab.page/ko/",
+      "url_en": "https://pick.lumenlab.page/",
+      "icon": "/img/pick.svg",
+      "name": {"ko": "공평뽑기", "en": "Pickboard"},
+      "sub": "Pickboard",
+      "line": {"ko": "돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 몇 명이든 넣고 결과는 링크로 다시 보여 줘요.", "en": "Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result."}
+    },
+    {
+      "id": "kankan",
+      "url": "https://count.lumenlab.page/ko/",
+      "url_en": "https://count.lumenlab.page/",
+      "icon": "/img/count.svg",
+      "name": {"ko": "칸칸", "en": "Kankan"},
+      "sub": "Kankan",
+      "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세요. 자소서 문항, 원고지 장수까지.", "en": "Word and character counter that shows every counting rule side by side, plus X and SMS limits."}
     }
   ]
 }

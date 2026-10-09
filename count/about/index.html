@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About Kankan - what it counts and where the rules come from | Kankan</title>
+<meta name="description" content="What Kankan counts, the standards behind each rule, how the results are tested, and who makes it.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191c23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://count.lumenlab.page/about/">
+<link rel="alternate" hreflang="en" href="https://count.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://count.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://count.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About Kankan - what it counts and where the rules come from | Kankan">
+<meta property="og:description" content="What Kankan counts, the standards behind each rule, how the results are tested, and who makes it.">
+<meta property="og:url" content="https://count.lumenlab.page/about/">
+<meta property="og:site_name" content="Kankan">
+<meta property="og:image" content="https://count.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>Kankan</a>
+  <nav class="nav" aria-label="Tools"><a href="/">Words</a><a href="/character-counter/">Characters</a><a href="/sms/">SMS</a><a href="/guide/">Guides</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a class="wide" href="/about/">About</a><a href="/ko/about/" lang="ko" hreflang="ko">한국어</a></div>
+</div></header>
+<main id="main">
+<div class="wrap narrow doc prose"><h1>About Kankan</h1>
+<p>Kankan counts text. The same text gives different numbers depending on whether spaces are included, how a line break is counted, and whether you count characters or bytes. Kankan puts those rules side by side.</p>
+<p>The name comes from <span lang="ko">칸</span> (kan), one square on Korean manuscript paper: one square, one character.</p>
+<h2>The rules and where they come from</h2>
+<ul>
+<li><b>Characters</b>: grapheme clusters as defined in Unicode Standard Annex <a href="https://unicode.org/reports/tr29/">UAX #29</a>, through the browser's Intl.Segmenter. Emoji sequences follow <a href="https://unicode.org/reports/tr51/">UTS #51</a>.</li>
+<li><b>Words and sentences</b>: words are runs of text between spaces, with a second figure that uses the UAX #29 word rules. Sentences use the UAX #29 sentence rules.</li>
+<li><b>Bytes</b>: UTF-8 and UTF-16 as defined by the Unicode Standard. The Korean pages also count EUC-KR using the Windows code page 949 table.</li>
+<li><b>X weighted length</b>: twitter-text 3.1.0, the open-source library X published for counting posts (checked 2026-10-09).</li>
+<li><b>SMS</b>: the GSM 7-bit alphabet in 3GPP TS 23.038 and the concatenation rules in TS 23.040.</li>
+</ul>
+<h2>How the results are checked</h2>
+<p>The counting code is kept apart from the page and is covered by about 23,000 automated tests. The expected values were not produced by writing the same logic twice. They come from Python's standard codecs and Unicode libraries, from the twitter-text package, and from three independent SMS calculators.</p>
+<h2>Where your text goes</h2>
+<p>Nowhere. Text is counted inside your browser, and this site has no server that receives it. Ads are served by Google AdSense. The details are in the <a href="/privacy/">privacy policy</a>.</p>
+<h2>Who makes it</h2>
+<p>Kankan is made by <a href="https://lumenlab.page/en/">Lumen Lab</a>. If you find a wrong number, write to <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.</p></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>L</span></i><i style="--i:1"><span>U</span></i><i style="--i:2"><span>M</span></i><i style="--i:3"><span>E</span></i><i style="--i:4"><span>N</span></i><i style="--i:5"><span>L</span></i><i style="--i:6"><span>A</span></i><i style="--i:7"><span>B</span></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/character-counter/">Character Counter</a><a href="/sms/">SMS Character Counter</a><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/licenses/">Open-source licenses</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="kk">{"lang": "en", "t": {"close": "Close"}, "other": "/ko/about/", "otherLabel": "한국어로 보기"}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

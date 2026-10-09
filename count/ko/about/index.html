@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>칸칸 소개 - 세는 기준과 출처 | 칸칸</title>
+<meta name="description" content="칸칸이 글자, 공백, 바이트, 원고지를 어떤 기준으로 세는지, 그 기준의 출처와 확인 방법, 만든 곳을 적었어요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191c23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://count.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="en" href="https://count.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://count.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://count.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="칸칸 소개 - 세는 기준과 출처 | 칸칸">
+<meta property="og:description" content="칸칸이 글자, 공백, 바이트, 원고지를 어떤 기준으로 세는지, 그 기준의 출처와 확인 방법, 만든 곳을 적었어요.">
+<meta property="og:url" content="https://count.lumenlab.page/ko/about/">
+<meta property="og:site_name" content="칸칸">
+<meta property="og:image" content="https://count.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/ko/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>칸칸</a>
+  <nav class="nav" aria-label="도구"><a href="/ko/">글자수 세기</a><a href="/ko/jasoseo/">자소서</a><a href="/ko/byte/">바이트</a><a href="/ko/wongoji/">원고지</a><a href="/ko/guide/">가이드</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a class="wide" href="/ko/about/">소개</a><a href="/about/" lang="en" hreflang="en">English</a></div>
+</div></header>
+<main id="main">
+<div class="wrap narrow doc prose"><h1>칸칸 소개</h1>
+<p>칸칸은 글자 수를 세는 도구예요. 같은 글도 공백을 넣느냐, 줄바꿈을 몇 자로 보느냐, 글자로 세느냐 바이트로 세느냐에 따라 숫자가 달라져요. 칸칸은 그 기준들을 한 화면에 나란히 놓고 보여 줘요.</p>
+<p>이름은 원고지의 칸에서 왔어요. 한 칸에 한 글자.</p>
+<h2>세는 기준과 출처</h2>
+<ul>
+<li><b>글자</b>: 유니코드 표준 부속서 <a href="https://unicode.org/reports/tr29/">UAX #29</a>의 글자 묶음을 따라요(브라우저의 Intl.Segmenter). 이모지는 <a href="https://unicode.org/reports/tr51/">UTS #51</a>의 이모지 묶음이에요.</li>
+<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>
+<li><b>X 가중 글자 수</b>(영어판): X의 공개 라이브러리 twitter-text 3.1.0을 기준으로 했어요(확인일 2026-10-09).</li>
+<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 TS 23.040의 이어 붙이기 규칙이에요.</li>
+<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 한 칸 한 글자로 놓아요. 원고지 쓰기 규칙은 반영하지 않았어요.</li>
+</ul>
+<h2>어떻게 확인했나요</h2>
+<p>세는 로직은 화면과 따로 두고 자동 테스트 2만 3천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>
+<h2>글은 어디로 가나요</h2>
+<p>어디로도 가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를 써요. 자세한 내용은 <a href="/ko/privacy/">개인정보 처리방침</a>에 있어요.</p>
+<h2>만든 곳과 문의</h2>
+<p><a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a>이 만들었어요. 틀린 숫자를 발견하면 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 알려 주세요.</p></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>루</span></i><i style="--i:1"><span>멘</span></i><i style="--i:2"><span>랩</span></i><i style="--i:3"><span></span></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/jasoseo/">자소서 글자수 세기</a><a href="/ko/byte/">바이트 계산기</a><a href="/ko/wongoji/">원고지 글자수 세기</a><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="kk">{"lang": "ko", "t": {"close": "닫기"}, "other": "/about/", "otherLabel": "English version"}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

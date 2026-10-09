@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spin the Wheel: Random Name Picker Wheel With No Entry Limit | Pickboard</title>
+<meta name="description" content="Paste any number of names and spin. Remove the winner and spin again, and share a link that replays the exact same result for everyone.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c2127" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://pick.lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://pick.lumenlab.page/">
+<link rel="alternate" hreflang="ko" href="https://pick.lumenlab.page/ko/">
+<link rel="alternate" hreflang="x-default" href="https://pick.lumenlab.page/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Spin the Wheel: Random Name Picker Wheel With No Entry Limit | Pickboard">
+<meta property="og:description" content="Paste any number of names and spin. Remove the winner and spin again, and share a link that replays the exact same result for everyone.">
+<meta property="og:url" content="https://pick.lumenlab.page/">
+<meta property="og:site_name" content="Pickboard">
+<meta property="og:image" content="https://pick.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Spin the Wheel | Pickboard", "url": "https://pick.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser with JavaScript", "inLanguage": "en", "isAccessibleForFree": true, "description": "Paste any number of names and spin. Remove the winner and spin again, and share a link that replays the exact same result for everyone.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I make a certain name win?", "acceptedAnswer": {"@type": "Answer", "text": "No. That feature does not exist here. The only way to change the odds is one everybody can see, such as entering a name more than once."}}, {"@type": "Question", "name": "Is my list uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. The list and your recent results are kept in this browser only. Use the Clear button above the list to remove them."}}, {"@type": "Question", "name": "Can I use it as a yes or no wheel?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Put Yes and No on two lines and spin. Any short list works the same way, such as lunch options or numbers."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="logo" href="/"><svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="5.5" stroke-dasharray="11.75 1.6" transform="rotate(-39.6 12 13)"/><path d="M18.55 7.58A8.5 8.5 0 0 1 18.55 18.42" fill="none" stroke="var(--s1)" stroke-width="5.5"/><path d="M28 13l-9.4-4.6v9.2z" fill="var(--pick)"/></svg><span>Pickboard</span></a>
+  <nav class="tools-nav" aria-label="Ways to pick"><a href="/" aria-current="page"><span class="l">Wheel</span><span class="s">Wheel</span></a><a href="/ladder/"><span class="l">Ladder game</span><span class="s">Ladder</span></a><a href="/name-picker/"><span class="l">Name picker</span><span class="s">Picker</span></a><a href="/team-generator/"><span class="l">Team generator</span><span class="s">Teams</span></a><a href="/random-number/"><span class="l">Random number</span><span class="s">Number</span></a><a href="/coin-flip/"><span class="l">Coin flip</span><span class="s">Coin</span></a><a href="/dice/"><span class="l">Dice</span><span class="s">Dice</span></a></nav>
+  <div class="top-side"><a href="/guide/">Guides</a><a class="lang" href="/ko/" lang="ko" hreflang="ko">한국어</a></div>
+</header>
+<main id="main">
+<section class="tool wrap" id="tool" data-tool="wheel">
+<div class="tool-head"><h1>Spin the Wheel</h1><p class="aka">A name picker wheel with no limit on entries.</p></div>
+<div class="grid grid-wheel">
+  <div class="stage-wheel"><div class="wheel" id="wheel"><div class="disc"><canvas width="16" height="16" role="img" aria-label="Wheel"></canvas></div><span class="needle" aria-hidden="true"><svg viewBox="0 0 50 40"><path d="M3 20 44 4.4Q49 2.6 49 8v24q0 5.4-5 3.6z" fill="var(--pick)"/><circle cx="40.5" cy="20" r="4.2" fill="#fff" fill-opacity=".92"/></svg></span><button type="button" class="hub" id="go">Spin</button></div></div>
+  <div class="result result-wheel" id="result">
+    <div class="result-top"><p class="trust"><b>How does it pick?</b> It uses your browser’s cryptographic random numbers, and your list never leaves this device. <a href="/about/">See how picks are made</a></p><div class="opts"><button type="button" class="btn btn-sm" id="sound" aria-pressed="true">Sound on</button><button type="button" class="btn btn-sm" id="present" hidden>Full screen</button></div></div>
+    <div class="result-mid" aria-live="polite"><p class="result-label"><span id="rlabel">Result</span><span class="stamp" id="stamp" hidden></span></p><p class="result-name wait" id="rname">Spin the wheel and the name shows up here.</p></div>
+    <div class="result-bot"><div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="again">Remove and spin again</button><button type="button" class="btn btn-sm" id="copy"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.7 9.3a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.7.7M9.3 6.7a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.7-.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Copy result link</button><span class="note" style="flex-basis:100%">The link includes your list.</span></div><p class="toast" id="toast" role="status"></p>
+    <div class="history" id="history" data-off><h2>Picked so far</h2><ol></ol></div></div>
+  </div>
+  <aside class="list" id="list">
+    <div class="list-head"><h2><label for="names">Your list</label></h2><span class="count num" id="count">8 names</span></div>
+    <p class="list-note" id="listnote" data-saved="Saved on this device only." data-clear="Clear" data-clearall="Clear list"><span>This is a sample list. Clear it and add your own.</span><button type="button" class="btn btn-sm" id="listclear">Clear</button></p>
+    <textarea class="names" id="names" rows="8" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Names, one per line" data-sample="Olivia
+Noah
+Emma
+Liam
+Ava
+Mason
+Sophia
+Lucas">Olivia
+Noah
+Emma
+Liam
+Ava
+Mason
+Sophia
+Lucas</textarea>
+    <script>(function(){try{var v=localStorage.getItem('pick.list');if(v!==null){var t=document.getElementById('names');t.value=v;t.dataset.own='1';var n=document.getElementById('listnote');n.firstElementChild.textContent=n.dataset.saved;n.lastElementChild.textContent=n.dataset.clearall}}catch(e){}})()</script>
+    <div class="list-tools"><button type="button" class="btn btn-sm" id="shuffle">Shuffle</button><button type="button" class="btn btn-sm" id="sortaz">Sort A–Z</button><button type="button" class="btn btn-sm" id="dedupe">Remove duplicates</button></div>
+    <p class="list-warn" id="listwarn" role="status"></p>
+    <p class="note">One per line. You can paste a column from a spreadsheet.</p>
+  </aside>
+</div>
+<details class="recent" id="recent"><summary>Recent results on this device</summary><ul></ul><button type="button" class="btn btn-sm" id="recentclear">Clear results</button></details>
+</section>
+<section class="prose wrap narrow"><h2>How to use it</h2><p>Type one name per line in the list, or paste a whole column from a spreadsheet. A single line separated by commas is split for you. Press Spin in the middle of the wheel and the name under the pointer appears large on the right.</p><p>Remove and spin again takes the name that was just picked off the list and spins straight away. If you enter a name twice it gets two slots and twice the chance. That is the only kind of weighting here, and it is always visible on the wheel.</p><h2>How many entries can it take?</h2><p>The list accepts up to 5,000 lines. The wheel has been checked to spin smoothly with 500 slots. When there are too many slots to read the names, the result still appears large beside the wheel.</p><h2>How the pick is made</h2><p>Each spin creates a fresh seed from your browser’s cryptographic random numbers (crypto.getRandomValues). The winning slot is decided from that seed first, and then the wheel is turned so that it stops on that slot. The result is never read from where the wheel happened to stop, so the screen and the result cannot disagree. There is no setting that makes a chosen name come up.</p><h2>The result link</h2><p>Copy result link builds an address that holds your list and the seed. Anyone who opens it sees the wheel stop on the same slot again. The data sits after the # in the address, so it is not sent to a server, but whoever gets the link can read the list.</p><h2>Questions</h2><div class="faq"><details><summary>Can I make a certain name win?</summary><p>No. That feature does not exist here. The only way to change the odds is one everybody can see, such as entering a name more than once.</p></details><details><summary>Is my list uploaded anywhere?</summary><p>No. The list and your recent results are kept in this browser only. Use the Clear button above the list to remove them.</p></details><details><summary>Can I use it as a yes or no wheel?</summary><p>Yes. Put Yes and No on two lines and spin. Any short list works the same way, such as lunch options or numbers.</p></details></div></section>
+<div class="ad-wrap wrap" hidden><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+<section class="sec wrap narrow"><h2>Same list, another way</h2><div class="ways"><a href="/ladder/"><b>Ladder game</b><span>Follow a hidden ladder down to a result</span></a><a href="/name-picker/"><b>Name picker</b><span>Draw several names, deal slips or set an order</span></a><a href="/team-generator/"><b>Team generator</b><span>Split the list into even teams</span></a></div></section>
+<section class="sec wrap narrow"><h2>Guides</h2><ul class="guide-list"><li><a href="/guide/is-wheel-spinner-random/">Is an online wheel spinner really random?</a><span>Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.</span></li><li><a href="/guide/pick-winners-without-repeats/">How to pick winners from a list without repeats</a><span>A short, checkable way to draw several winners from a list: clean the list, draw once, keep alternates, and share a link that replays the result.</span></li><li><a href="/guide/ladder-lottery-fairness/">Ladder lottery (Ghost Leg): how it works and how fair it is</a><span>A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.</span></li></ul></section>
+<div class="ad-wrap wrap" hidden><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="lumen" href="https://lumenlab.page/en/" data-lumen><span class="lumen-wheel" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48"><g class="lw-disc"><circle cx="24" cy="24" r="21" fill="var(--rim)" stroke="var(--line-2)"/><path d="M24 24 43 24A19 19 0 0 1 24 43z" fill="var(--s1)"/><path class="lw-off" d="M24 24 24 43A19 19 0 0 1 5 24z" fill="var(--s2)"/><path class="lw-off" d="M24 24 5 24A19 19 0 0 1 24 5z" fill="var(--s3)"/><path class="lw-off" d="M24 24 24 5A19 19 0 0 1 43 24z" fill="var(--s4)"/><circle cx="24" cy="24" r="4" fill="var(--card)"/></g><path class="lw-needle" d="M48 24l-9-4.4v8.8z" fill="var(--pick)"/></svg></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span></a>
+    <p class="foot-links"><a href="/about/">About</a><a href="/guide/">Guides</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+    <small>© 2026 Lumen Lab</small>
+  </div>
+</footer>
+<script type="application/json" id="i18n">{"count": "{n} names", "count1": "1 name", "picked": "Picked", "wait": "Spin the wheel and the name shows up here.", "copied": "Link copied. Anyone who opens it sees this same result.", "copyFail": "Couldn’t copy. Select the address below and copy it.", "stamp": "Same result as the link", "stampSr": "The result stored in this link was replayed as it was.", "badLink": "This link is cut off or damaged. Check that the whole link was copied.", "badVersion": "This link uses a newer format that this page can’t open.", "otherTool": "This link is a {tool} result.", "openThere": "Open it there", "emptyList": "The list is empty. Add one name per line.", "listSample": "This is a sample list. Clear it and add your own.", "listSaved": "Saved on this device only.", "listShared": "This list came from the link. It isn’t saved unless you edit it.", "warnCut": "{n} long names were cut at 100 characters.", "warnOver": "{n} lines over the 5,000 limit were left out.", "warnDupes": "{n} duplicate names (each still gets its own slot).", "soundOn": "Sound on", "soundOff": "Sound off", "present": "Full screen", "presentExit": "Exit full screen", "recentEmpty": "Nothing yet. Results you draw on this device are listed here.", "replay": "Replay", "toolNames": {"wheel": "Wheel", "ladder": "Ladder game", "draw": "Name picker", "teams": "Team generator", "number": "Random number", "coin": "Coin flip", "dice": "Dice"}, "ladderRange": "The ladder works for 2 to 30 people. Your list has {n}.", "ladderTip": "Tap a name to follow that person’s path.", "ladderAll": "Results", "blank": "—", "win": "Winner", "lose": "No luck", "needMore": "Add at least {n} names first.", "pickTooMany": "You can’t pick more than the {n} on the list.", "order": "Order", "pickedN": "Picked {m} of {n}", "slipsHead": "Slips for {n} people: tap one to open it", "openAll": "Open all", "slipClosed": "Tap to open", "team": "Team {n}", "people": "{n}", "teamsHead": "{n} people in {k} teams", "teamsBad": "Teams must be between 1 and {n}.", "sizeBad": "Team size must be between 1 and {n}.", "copyText": "Copy as text", "copiedText": "Copied.", "numInt": "Use whole numbers only.", "numOrder": "The first number is larger than the second.", "numCount": "Count must be between 1 and 10,000.", "numUnique": "Not enough numbers in that range: asked for {m}, only {n} available.", "numWide": "That range is too wide.", "numHead": "{m} from {a} to {b}", "heads": "Heads", "tails": "Tails", "coinWait": "Flip", "coinTally": "Heads {a}, tails {b}", "coinCount": "Flips must be between 1 and 1,000.", "diceSum": "Total {n}", "diceCount": "Dice must be between 1 and 100.", "diceSides": "Sides must be between 2 and 1,000.", "lang": "en", "paths": {"wheel": "/", "ladder": "/ladder/", "draw": "/name-picker/", "teams": "/team-generator/", "number": "/random-number/", "coin": "/coin-flip/", "dice": "/dice/"}, "other": {"lang": "ko", "label": "한국어로 보기"}, "tool": "wheel"}</script>
+<script type="module" src="/assets/tools/wheel.js"></script>
+</body>
+</html>

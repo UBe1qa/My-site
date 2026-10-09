@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* 공유 그림(1200×630). 사이트 CSS와 따로 둔다: python3 count/_dev/og.py 가 찍는다. */
+*{box-sizing:border-box}
+body{margin:0;width:1200px;height:630px;background:#f5f5f2;color:#141925;font-family:"Pretendard Variable",Pretendard,"Noto Sans CJK KR",sans-serif;overflow:hidden}
+.og-in{position:absolute;inset:0;padding:70px 80px;display:flex;flex-direction:column}
+.og-brand{display:flex;align-items:center;gap:16px;font-size:34px;font-weight:800;letter-spacing:-.01em}
+.og-h{margin-top:54px;font-size:86px;line-height:1.1;font-weight:800;letter-spacing:-.03em;color:#1e3a6e}
+.og-p{margin-top:20px;font-size:32px;color:#373f52;font-weight:500}
+.og-row{margin-top:auto;display:flex;align-items:flex-end;gap:36px}
+.og-cells{display:flex;border:2px solid #9fb0cf;border-radius:6px;overflow:hidden;background:#fff}
+.og-cells i{display:grid;place-items:center;width:76px;height:84px;border-left:2px solid #9fb0cf;font-style:normal;font-size:44px;font-weight:600}
+.og-cells i:first-child{border-left:0}
+.og-n{font-size:30px;color:#373f52;font-weight:600;line-height:1.35}
+.og-n b{color:#1e3a6e;font-size:44px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="og-in">
+  <div class="og-brand"><svg width="46" height="46" viewBox="0 0 22 22"><rect x="1" y="1" width="20" height="20" rx="3" fill="#fff" stroke="#1e3a6e" stroke-width="2"/><path d="M11 1v20M1 11h20" stroke="#1e3a6e" stroke-width="2" fill="none"/><rect x="1" y="1" width="10" height="10" rx="2" fill="#1e3a6e"/></svg><span id="b"></span></div>
+  <div class="og-h" id="h"></div>
+  <div class="og-p" id="p"></div>
+  <div class="og-row"><div class="og-cells" id="c"></div><div class="og-n" id="n"></div></div>
+</div>
+<script>
+var ko = /lang=ko/.test(location.search);
+var d = ko ? { b: '칸칸', h: '글자수 세기', p: '공백 포함·제외, 바이트, 원고지까지 기준을 나란히', c: ['한', ' ', '칸', '에', ' ', '한', ' ', '글', '자'], n: '공백 포함 <b>9</b>자<br>공백 제외 <b>6</b>자' }
+           : { b: 'Kankan', h: 'Word Counter', p: 'Words, characters, bytes and message limits, side by side', c: ['O', 'n', 'e', ' ', 'b', 'o', 'x', ' ', '👍🏽'], n: '<b>9</b> characters<br><b>3</b> words' };
+document.getElementById('b').textContent = d.b; document.getElementById('h').textContent = d.h; document.getElementById('p').textContent = d.p;
+document.getElementById('n').innerHTML = d.n;
+d.c.forEach(function (ch) { var i = document.createElement('i'); i.textContent = ch; document.getElementById('c').appendChild(i); });
+</script>
+</body>
+</html>

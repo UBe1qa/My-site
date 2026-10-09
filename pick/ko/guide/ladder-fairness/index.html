@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>사다리타기 확률은 정말 공평할까: 직접 돌려 본 숫자 | 공평뽑기</title>
+<meta name="description" content="사다리만으로는 출발한 자리 근처에 도착하기 쉬워요. 8명 사다리에서 맨 끝 사람이 바로 아래 칸에 도착하는 비율과, 그걸 고르게 만드는 방법을 숫자로 보여 드려요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c2127" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://pick.lumenlab.page/ko/guide/ladder-fairness/">
+<link rel="alternate" hreflang="en" href="https://pick.lumenlab.page/guide/ladder-lottery-fairness/">
+<link rel="alternate" hreflang="ko" href="https://pick.lumenlab.page/ko/guide/ladder-fairness/">
+<link rel="alternate" hreflang="x-default" href="https://pick.lumenlab.page/guide/ladder-lottery-fairness/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="사다리타기 확률은 정말 공평할까: 직접 돌려 본 숫자 | 공평뽑기">
+<meta property="og:description" content="사다리만으로는 출발한 자리 근처에 도착하기 쉬워요. 8명 사다리에서 맨 끝 사람이 바로 아래 칸에 도착하는 비율과, 그걸 고르게 만드는 방법을 숫자로 보여 드려요.">
+<meta property="og:url" content="https://pick.lumenlab.page/ko/guide/ladder-fairness/">
+<meta property="og:site_name" content="공평뽑기">
+<meta property="og:image" content="https://pick.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "사다리타기는 정말 공평할까: 직접 돌려 본 숫자", "description": "사다리만으로는 출발한 자리 근처에 도착하기 쉬워요. 8명 사다리에서 맨 끝 사람이 바로 아래 칸에 도착하는 비율과, 그걸 고르게 만드는 방법을 숫자로 보여 드려요.", "inLanguage": "ko", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://pick.lumenlab.page/ko/guide/ladder-fairness/", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://pick.lumenlab.page/ko/guide/"}, {"@type": "ListItem", "position": 2, "name": "사다리타기는 정말 공평할까: 직접 돌려 본 숫자", "item": "https://pick.lumenlab.page/ko/guide/ladder-fairness/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top">
+  <a class="logo" href="/ko/"><svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="5.5" stroke-dasharray="11.75 1.6" transform="rotate(-39.6 12 13)"/><path d="M18.55 7.58A8.5 8.5 0 0 1 18.55 18.42" fill="none" stroke="var(--s1)" stroke-width="5.5"/><path d="M28 13l-9.4-4.6v9.2z" fill="var(--pick)"/></svg><span>공평뽑기</span></a>
+  <nav class="tools-nav" aria-label="뽑는 방식"><a href="/ko/"><span class="l">돌림판</span><span class="s">돌림판</span></a><a href="/ko/ladder/"><span class="l">사다리타기</span><span class="s">사다리</span></a><a href="/ko/draw/"><span class="l">제비뽑기</span><span class="s">제비뽑기</span></a><a href="/ko/teams/"><span class="l">팀 나누기</span><span class="s">팀 나누기</span></a><a href="/ko/number/"><span class="l">랜덤 숫자</span><span class="s">숫자</span></a><a href="/ko/coin/"><span class="l">동전 던지기</span><span class="s">동전</span></a><a href="/ko/dice/"><span class="l">주사위</span><span class="s">주사위</span></a></nav>
+  <div class="top-side"><a href="/ko/guide/">가이드</a><a class="lang" href="/guide/ladder-lottery-fairness/" lang="en" hreflang="en">English</a></div>
+</header>
+<main id="main">
+<article class="article wrap narrow">
+  <p class="crumb"><a href="/ko/guide/">가이드</a></p>
+  <h1>사다리타기는 정말 공평할까: 직접 돌려 본 숫자</h1>
+  <p class="meta">고친 날 <time datetime="2026-10-09">2026-10-09</time>, Lumen Lab</p>
+  <div class="prose" style="padding-top:0"><p>사다리만으로는 공평하지 않아요. 보통 그리는 가로줄 수로는 출발한 자리 근처에 도착하기 쉬워요. 그래서 공평뽑기의 <a href="/ko/ladder/">사다리타기</a>는 아래 칸을 먼저 무작위로 섞은 다음 사다리를 만들어요. 아래는 그렇게 정한 근거예요.</p>
+
+<h2>8명이 타면 맨 끝 사람은 어디에 도착할까</h2>
+<p>8명이 타는 보통 사다리(틈마다 가로줄이 평균 4.7개)를 400,000개 만들어서, 맨 왼쪽 1번 자리에서 출발한 사람이 어느 칸에 도착했는지 셌어요. 공평하다면 여덟 칸이 모두 12.5%여야 해요.</p>
+<div class="bars" role="img" aria-label="1번 자리에서 출발해 1번 칸부터 8번 칸까지 도착한 비율: 24.8%, 22.8%, 18.7%, 13.8%, 9.3%, 5.6%, 3.1%, 1.9%">
+<div class="a"><span>1번 칸</span><i style="--v:24.8*3"></i><b>24.8%</b></div>
+<div><span>2번 칸</span><i style="--v:22.8*3"></i><b>22.8%</b></div>
+<div><span>3번 칸</span><i style="--v:18.7*3"></i><b>18.7%</b></div>
+<div><span>4번 칸</span><i style="--v:13.8*3"></i><b>13.8%</b></div>
+<div><span>5번 칸</span><i style="--v:9.3*3"></i><b>9.3%</b></div>
+<div><span>6번 칸</span><i style="--v:5.6*3"></i><b>5.6%</b></div>
+<div><span>7번 칸</span><i style="--v:3.1*3"></i><b>3.1%</b></div>
+<div><span>8번 칸</span><i style="--v:1.9*3"></i><b>1.9%</b></div>
+</div>
+<p class="tbl-note">아래 칸을 섞지 않은 사다리. 1번 자리 출발, 가로줄 ‘보통’.</p>
+<p>바로 아래 칸에 도착한 비율이 24.8%이고 반대쪽 끝 칸은 1.9%예요. 약 13배 차이가 나요. 벌칙이 맨 오른쪽 칸에 있다면 맨 왼쪽에 선 사람은 거의 걸리지 않는다는 뜻이에요.</p>
+
+<h2>가로줄을 늘리면 나아지지만 사람이 많으면 감당이 안 돼요</h2>
+<p>맨 끝 자리에서 출발해 바로 아래 칸에 도착한 비율이에요. ‘높이’는 가로줄을 놓을 수 있는 층 수이고, 이 도구의 ‘적게·보통·많이’가 8·14·24예요.</p>
+<div class="tbl"><table>
+<thead><tr><th>인원</th><th>공평하면</th><th>높이 8</th><th>높이 14</th><th>높이 24</th><th>높이 48</th><th>높이 100</th><th>높이 400</th></tr></thead>
+<tbody>
+<tr><td>4명</td><td>25.0%</td><td>27.8%</td><td>26.5%</td><td>25.2%</td><td>25.0%</td><td>25.0%</td><td>24.9%</td></tr>
+<tr><td>8명</td><td>12.5%</td><td class="hot">27.6%</td><td class="hot">24.8%</td><td class="hot">19.4%</td><td>14.4%</td><td>12.6%</td><td>12.3%</td></tr>
+<tr><td>15명</td><td>6.7%</td><td class="hot">27.6%</td><td class="hot">24.7%</td><td class="hot">19.5%</td><td class="hot">14.0%</td><td>10.0%</td><td>6.7%</td></tr>
+<tr><td>30명</td><td>3.3%</td><td class="hot">27.6%</td><td class="hot">24.7%</td><td class="hot">19.2%</td><td class="hot">13.7%</td><td class="hot">9.5%</td><td>4.9%</td></tr>
+</tbody>
+</table></div>
+<p>4명은 가로줄을 조금만 그려도 고르게 섞여요. 하지만 사람이 늘면 필요한 가로줄이 훨씬 빠르게 늘어요. 한 사람의 도착 칸 분포가 고른 분포에서 벗어난 정도를 5% 아래로 내리려면 4명은 높이 12칸, 8명은 49칸, 15명은 173칸, 30명은 696칸이 필요해요. 30명이면 가로줄이 모두 약 6,728개예요. 화면에도 종이에도 그릴 수 없는 수예요.</p>
+
+<h2>왜 가까운 칸에 도착할까</h2>
+<p>가로줄 하나는 이웃한 두 세로줄만 맞바꿔요. 한 층을 지날 때 옆으로 한 칸 가거나 그대로 내려갈 뿐이에요. 왼쪽 끝에서 오른쪽 끝까지 가려면 오른쪽 가로줄을 여러 번 연달아 만나야 하고, 그 사이 왼쪽으로 되돌아가는 가로줄도 만나요. 그래서 층이 적으면 멀리 못 가요.</p>
+
+<h2>아래 칸을 먼저 섞으면 고르게 돼요</h2>
+<p>같은 8명·보통 사다리에서 아래 칸을 먼저 섞으면 1번 자리 사람이 받는 결과는 여덟 가지 모두 12.4%에서 12.6% 사이였어요. 우연히 생기는 차이 수준이에요. 무작위로 고르게 섞은 것에는 그 뒤에 어떤 사다리를 붙여도 여전히 고르게 섞인 것이라서, 가로줄이 적어도 상관없어요.</p>
+<p>종이에 그릴 때도 같은 방법을 쓸 수 있어요. 아래 칸을 가린 채 적고, 누가 어느 세로줄에 설지를 제비로 정하거나 각자 고르게 하면 돼요. 출발 자리가 무작위면 사다리가 덜 섞여도 결과는 고르게 나와요.</p>
+
+<h2>이 숫자는 이렇게 쟀어요</h2>
+<ul>
+<li>이 사이트가 실제로 쓰는 사다리 만들기 코드로 사다리를 인원·높이마다 2만 개에서 40만 개씩 만들었어요. 씨앗을 고정해서 다시 돌려도 같은 숫자가 나와요.</li>
+<li>사다리 규칙: 층마다 왼쪽부터, 각 틈에 가로줄이 놓일 확률은 3분의 1이고 같은 층에서 이웃한 두 틈에는 함께 놓지 않아요. 가로줄이 하나도 없는 틈에는 하나를 넣어요.</li>
+<li>표의 숫자는 가로줄을 채우는 규칙이 거의 쓰이지 않는 높이 24 이상에서, 식으로 따로 계산한 정확한 값과 0.5%포인트 안에서 같았어요.</li>
+<li>사람이 손으로 그리는 사다리는 규칙이 달라서 숫자가 조금 다를 수 있어요. 가로줄이 적을수록, 사람이 많을수록 가까운 칸이 유리하다는 방향은 같아요.</li>
+</ul>
+</div>
+  <div class="try"><p>내 명단으로 해 보기</p><a class="btn btn-go" href="/ko/ladder/">사다리타기</a></div>
+</article>
+<div class="ad-wrap wrap" hidden><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom"></div><script>window.PK_ADS&&PK_ADS.mount(document.currentScript.previousElementSibling)</script></div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="lumen" href="https://lumenlab.page/" data-lumen><span class="lumen-wheel" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48"><g class="lw-disc"><circle cx="24" cy="24" r="21" fill="var(--rim)" stroke="var(--line-2)"/><path d="M24 24 43 24A19 19 0 0 1 24 43z" fill="var(--s1)"/><path class="lw-off" d="M24 24 24 43A19 19 0 0 1 5 24z" fill="var(--s2)"/><path class="lw-off" d="M24 24 5 24A19 19 0 0 1 24 5z" fill="var(--s3)"/><path class="lw-off" d="M24 24 24 5A19 19 0 0 1 43 24z" fill="var(--s4)"/><circle cx="24" cy="24" r="4" fill="var(--card)"/></g><path class="lw-needle" d="M48 24l-9-4.4v8.8z" fill="var(--pick)"/></svg></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span></a>
+    <p class="foot-links"><a href="/ko/about/">소개</a><a href="/ko/guide/">가이드</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+    <small>© 2026 Lumen Lab</small>
+  </div>
+</footer>
+<script type="application/json" id="i18n">{"count": "{n}명", "count1": "1명", "picked": "뽑혔어요", "wait": "판을 돌리면 여기에 이름이 나와요.", "copied": "링크를 복사했어요. 누가 열어도 같은 결과가 다시 나와요.", "copyFail": "복사하지 못했어요. 아래 주소를 직접 복사해 주세요.", "stamp": "링크의 결과 그대로", "stampSr": "이 링크에 담긴 결과가 그대로 재생됐어요.", "badLink": "링크가 잘렸거나 잘못됐어요. 받은 링크를 끝까지 복사했는지 확인해 주세요.", "badVersion": "이 링크는 새 형식이라 이 페이지에서 열 수 없어요.", "otherTool": "이 링크는 {tool} 결과예요.", "openThere": "거기서 열기", "emptyList": "명단이 비어 있어요. 이름을 한 줄에 하나씩 넣어 주세요.", "listSample": "예시 명단이에요. 지우고 내 명단을 넣어요.", "listSaved": "이 기기에만 저장돼요.", "listShared": "링크에 들어 있던 명단이에요. 고치기 전에는 저장하지 않아요.", "warnCut": "긴 이름 {n}개는 100자에서 잘랐어요.", "warnOver": "한도 5,000줄을 넘은 {n}줄은 뺐어요.", "warnDupes": "겹치는 이름 {n}개(각각 한 칸씩 들어가요).", "soundOn": "소리 켬", "soundOff": "소리 끔", "present": "전체 화면", "presentExit": "전체 화면 끝내기", "recentEmpty": "아직 없어요. 이 기기에서 뽑은 결과가 여기에 쌓여요.", "replay": "다시 보기", "toolNames": {"wheel": "돌림판", "ladder": "사다리타기", "draw": "제비뽑기", "teams": "팀 나누기", "number": "랜덤 숫자", "coin": "동전 던지기", "dice": "주사위"}, "ladderRange": "사다리는 2명부터 30명까지 돼요. 지금 명단은 {n}명이에요.", "ladderTip": "이름을 누르면 그 사람의 길을 따라가요.", "ladderAll": "결과", "blank": "꽝", "win": "당첨", "lose": "꽝", "needMore": "먼저 이름을 {n}명 이상 넣어 주세요.", "pickTooMany": "명단({n}명)보다 많이 뽑을 수는 없어요.", "order": "순서", "pickedN": "{n}명 중 {m}명", "slipsHead": "쪽지 {n}장: 눌러서 펼쳐요", "openAll": "모두 펼치기", "slipClosed": "눌러서 펼치기", "team": "{n}팀", "people": "{n}명", "teamsHead": "{n}명을 {k}팀으로", "teamsBad": "팀 수는 1부터 {n}까지 돼요.", "sizeBad": "한 팀 인원은 1부터 {n}까지 돼요.", "copyText": "글자로 복사", "copiedText": "복사했어요.", "numInt": "정수만 넣어 주세요.", "numOrder": "앞의 수가 뒤의 수보다 커요.", "numCount": "개수는 1부터 10,000까지 돼요.", "numUnique": "그 범위에는 숫자가 모자라요: {m}개를 뽑으려는데 {n}개뿐이에요.", "numWide": "범위가 너무 넓어요.", "numHead": "{a}부터 {b}까지에서 {m}개", "heads": "앞", "tails": "뒤", "coinWait": "던지기", "coinTally": "앞 {a}번, 뒤 {b}번", "coinCount": "횟수는 1부터 1,000까지 돼요.", "diceSum": "합계 {n}", "diceCount": "주사위는 1개부터 100개까지 돼요.", "diceSides": "면 수는 2부터 1,000까지 돼요.", "lang": "ko", "paths": {"wheel": "/ko/", "ladder": "/ko/ladder/", "draw": "/ko/draw/", "teams": "/ko/teams/", "number": "/ko/number/", "coin": "/ko/coin/", "dice": "/ko/dice/"}, "other": {"lang": "en", "label": "English version"}}</script>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

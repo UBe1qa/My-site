@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why a 161-character text costs two messages (GSM-7 vs Unicode) | Kankan</title>
+<meta name="description" content="One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191c23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://count.lumenlab.page/guide/why-161-characters-is-two-sms/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why a 161-character text costs two messages (GSM-7 vs Unicode) | Kankan">
+<meta property="og:description" content="One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.">
+<meta property="og:url" content="https://count.lumenlab.page/guide/why-161-characters-is-two-sms/">
+<meta property="og:site_name" content="Kankan">
+<meta property="og:image" content="https://count.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why a 161-character text costs two messages", "description": "One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://count.lumenlab.page/guide/why-161-characters-is-two-sms/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://count.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Why a 161-character text costs two messages", "item": "https://count.lumenlab.page/guide/why-161-characters-is-two-sms/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>Kankan</a>
+  <nav class="nav" aria-label="Tools"><a href="/">Words</a><a href="/character-counter/">Characters</a><a href="/sms/">SMS</a><a href="/guide/" aria-current="page">Guides</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a class="wide" href="/about/">About</a><a href="/ko/" lang="ko" hreflang="ko">한국어</a></div>
+</div></header>
+<main id="main">
+<article class="art wrap narrow">
+  <p class="crumb"><a href="/guide/">Guides</a></p>
+  <h1>Why a 161-character text costs two messages</h1>
+  <p class="meta">Updated <time datetime="2026-10-09">2026-10-09</time> · Lumen Lab</p>
+  <p class="answer">A single SMS holds 160 characters of the GSM-7 alphabet. Once a text is split, every part gives up 7 of those slots to a header that tells the phone how to put the parts back together, so 161 characters travel as 153 + 8.</p>
+  <div class="prose"><h2>Where the breaks fall</h2>
+<p>Counted with the SMS counter on this site, using plain letters.</p>
+<div class="tbl"><table>
+<tr><th>Length</th><th class="r">Parts</th><th>How it splits</th></tr>
+<tr><td>160</td><td class="r">1</td><td>160</td></tr>
+<tr><td>161</td><td class="r">2</td><td>153 + 8</td></tr>
+<tr><td>306</td><td class="r">2</td><td>153 + 153</td></tr>
+<tr><td>307</td><td class="r">3</td><td>153 + 153 + 1</td></tr>
+<tr><td>460</td><td class="r">4</td><td>153 + 153 + 153 + 1</td></tr>
+</table></div>
+<p>The 7 missing slots are the concatenation header defined in 3GPP TS 23.040. It is 6 bytes long, and 6 bytes need 7 of the 7-bit slots. A message that fits in one part does not carry it, which is why the first limit is 160 and every later one is 153.</p>
+<h2>One character can change the alphabet</h2>
+<p>GSM-7, defined in 3GPP TS 23.038, has room for basic Latin letters, digits, common punctuation and a short list of accented letters. If a text contains anything else, the whole message is sent as Unicode (UCS-2) instead, and the limits become 70 for a single message and 67 per part.</p>
+<div class="tbl"><table>
+<tr><th>Text</th><th class="r">Parts</th></tr>
+<tr><td>160 letters</td><td class="r">1</td></tr>
+<tr><td>160 letters and one 😀</td><td class="r">3</td></tr>
+<tr><td>100 letters, é, 100 letters</td><td class="r">2</td></tr>
+<tr><td>100 letters, ê, 100 letters</td><td class="r">3</td></tr>
+</table></div>
+<p>The last two rows differ by one accent. é is in the GSM-7 alphabet; ê is not.</p>
+</div>
+</article>
+<div class="ad-wrap wrap" data-slot="mid"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<div class="wrap narrow"><div class="prose">
+<h2>Characters that look harmless</h2>
+<p>These are outside GSM-7 and switch the whole text to Unicode:</p>
+<ul>
+<li>Curly quotes and apostrophes: ’ “ ”. Phones and word processors often insert them for you, so “it’s” can cost more than “it's”.</li>
+<li>The long dash and the single-character ellipsis (…).</li>
+<li>The backtick (`) and the tab character.</li>
+<li>Letters such as ç, á and ê. The capital Ç is in the alphabet, the small ç is not.</li>
+<li>Every emoji. Most take 2 of the 70 units, so 69 letters and one emoji is 71 units and two parts.</li>
+</ul>
+<p>These are fine: é, è, à, ñ, ü, ö.</p>
+<h2>Characters that take two slots</h2>
+<p>A few characters stay in GSM-7 but are sent as an escape code plus a character, so each uses 2 slots: [ ] { } ^ ~ | \ and €. A text of 80 curly brackets fills a message exactly; 81 make it two parts. A part never ends in the middle of one of these pairs, so the first part of that 81-bracket text carries 152 slots, not 153.</p>
+<h2>What this does not tell you</h2>
+<p>The part count is what the standard says the text needs. What you pay depends on your carrier or messaging provider, and some networks support national tables for Turkish, Spanish and Portuguese that change which letters fit. The counter does not model those.</p><div class="try"><p>Paste a text to see its parts and the characters that force Unicode.</p><a class="btn go" href="/sms/">Open the SMS counter</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://www.3gpp.org/dynareport/23038.htm">3GPP TS 23.038: Alphabets and language-specific information</a></li><li><a href="https://www.3gpp.org/dynareport/23040.htm">3GPP TS 23.040: Technical realization of the Short Message Service (SMS)</a></li></ul></div></div></div>
+<section class="sec wrap narrow"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/how-x-counts-characters/"><b>How X counts characters: emoji, links and the 280 limit</b><span>X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
+<div class="ad-wrap wrap" data-slot="bottom"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>L</span></i><i style="--i:1"><span>U</span></i><i style="--i:2"><span>M</span></i><i style="--i:3"><span>E</span></i><i style="--i:4"><span>N</span></i><i style="--i:5"><span>L</span></i><i style="--i:6"><span>A</span></i><i style="--i:7"><span>B</span></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/character-counter/">Character Counter</a><a href="/sms/">SMS Character Counter</a><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/licenses/">Open-source licenses</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="kk">{"lang": "en", "t": {"close": "Close"}, "other": "/ko/", "otherLabel": "한국어로 보기"}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>
