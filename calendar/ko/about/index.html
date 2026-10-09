@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>소개 | 한장달력</title>
+<meta name="description" content="한장달력이 무엇이고 누가 만들었는지, 공휴일·음력·절기를 어떤 자료로 계산하고 어떻게 검산하는지 적었어요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a201d" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://calendar.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="en" href="https://calendar.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://calendar.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://calendar.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="소개 | 한장달력">
+<meta property="og:description" content="한장달력이 무엇이고 누가 만들었는지, 공휴일·음력·절기를 어떤 자료로 계산하고 어떻게 검산하는지 적었어요.">
+<meta property="og:url" content="https://calendar.lumenlab.page/ko/about/">
+<meta property="og:site_name" content="한장달력">
+<meta property="og:image" content="https://calendar.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){if(window.IntersectionObserver&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('anim');setTimeout(function(){if(!window.__calOn)d.classList.remove('anim')},3000)}})(document.documentElement)</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top">
+  <a class="logo" href="/ko/"><svg width="20" height="24" viewBox="0 0 22 26" aria-hidden="true"><path d="M2 1.5h12.5L20 7v17.5H2z" fill="#fff" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.5 1.5V7H20z" fill="var(--brand)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><g fill="#17201b"><rect x="5" y="11" width="2.5" height="2.5" rx=".6"/><rect x="9.7" y="11" width="2.5" height="2.5" rx=".6"/><rect x="5" y="15.4" width="2.5" height="2.5" rx=".6"/><rect x="9.7" y="15.4" width="2.5" height="2.5" rx=".6"/><rect x="14.4" y="15.4" width="2.5" height="2.5" rx=".6"/><rect x="5" y="19.8" width="2.5" height="2.5" rx=".6"/></g><rect x="14.4" y="11" width="2.5" height="2.5" rx=".6" fill="#cf3027"/></svg><span>한장달력</span></a>
+  <nav class="nav" aria-label="사이트 메뉴"><a href="/ko/">달력 만들기</a><a href="/ko/2027/">2027년 달력</a><a href="/ko/2026/10/" data-nav-month="2026-10,2026-11,2026-12,2027-1,2027-2,2027-3,2027-4,2027-5,2027-6,2027-7,2027-8,2027-9,2027-10,2027-11,2027-12">월 달력</a><a href="/ko/2027/holidays/">공휴일·연휴</a><a href="/ko/lunar/">음력 변환</a><a href="/ko/son-eomneun-nal/">손 없는 날</a><a href="/ko/guide/">가이드</a></nav>
+  <a class="lang" href="/about/" lang="en" hreflang="en">English</a>
+</header>
+<main id="main">
+<article class="doc wrap narrow"><h1>한장달력 소개</h1>
+<p class="lead">공휴일이 들어간 1년 달력을 한 장으로 인쇄하거나 PDF·이미지로 받는 곳이에요. 가입이 없고, 받는 파일에 광고가 없어요.</p>
+<div class="prose">
+<h2>누가 만들었나요</h2>
+<p>개인사업자 루멘랩(Lumen Lab)이 만들고 운영해요. 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩</a>에 있어요. 문의는 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 보내 주세요.</p>
+<h2>공휴일은 무엇을 기준으로 하나요</h2>
+<ul>
+<li>한국: <a href="https://www.law.go.kr/법령/관공서의공휴일에관한규정">관공서의 공휴일에 관한 규정</a>(시행 2026. 5. 11., 대통령령 제36290호)의 공휴일과 대체공휴일 규칙을 그대로 옮겨 계산해요. 2026·2027년은 공식 발표와 한 날도 다르지 않은지 맞춰 봤어요. 2027년은 <a href="https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431">우주항공청 2027년 월력요항</a> 기준 공휴일 72일, 주5일 휴일 119일이에요.</li>
+<li>2028년은 <a href="https://astro.kasi.re.kr/kor/life/post/calendarData">한국천문연구원 달력자료</a> 기준이고, 월력요항 발표 전이라 ‘공식 발표 전 자료’라고 표시해요. 2029·2030년은 규정으로 계산한 예상이에요.</li>
+<li>선거일과 임시공휴일은 규칙으로 구할 수 없어서 확정된 날만 넣어요.</li>
+<li>미국: 연방 공휴일(5 U.S.C. 6103)과 주말에 겹칠 때의 관측일이에요. 공식 일정은 <a href="https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/">미국 인사관리처(OPM)</a>가 공지해요.</li>
+</ul>
+<h2>음력·절기·손 없는 날</h2>
+<ul>
+<li>음력은 한국천문연구원 자료를 따른 표(1912~2049년)를 써요. 천문 계산으로 모든 달의 시작일을 따로 구해 표와 같은지 검산했고, 2025~2028년은 천문연구원 달력자료와 직접 대조했어요.</li>
+<li>24절기는 한국천문연구원 자료가 있는 2025~2028년만 보여 줘요. 그 밖의 해는 지어내지 않아요.</li>
+<li>손 없는 날은 음력 날짜 끝자리가 9와 0인 날이에요. 전해 오는 풍습이라 공식 기준은 없어요.</li>
+</ul>
+<h2>결과는 어떻게 확인하나요</h2>
+<p>요일은 1900~2100년 모든 날을, 주 번호와 달 격자는 표준 라이브러리 값과, 공휴일은 공식 표와 자동으로 대조해요. 틀린 곳을 발견하면 메일로 알려 주세요.</p>
+<h2>내 정보는 어디로 가나요</h2>
+<p>달력은 이 기기의 브라우저 안에서 만들어요. 고른 설정과 만든 파일은 어디에도 전송되지 않아요. 자세한 내용은 <a href="/ko/privacy/">개인정보 처리방침</a>에 있어요.</p>
+</div></article>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div>
+      <a class="lumen" href="https://lumenlab.page/"><small>펴낸 곳</small><b>루멘랩</b><span>다른 앱과 도구 보기</span></a>
+      <small>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">문의</a></small>
+    </div>
+    <div class="foot-cols"><div><p>연간 달력</p><a href="/ko/2026/">2026년 달력</a><a href="/ko/2027/">2027년 달력</a><a href="/ko/2028/">2028년 달력</a></div><div><p>공휴일·음력</p><a href="/ko/2026/holidays/">2026년 공휴일</a><a href="/ko/2027/holidays/">2027년 공휴일</a><a href="/ko/lunar/">음력 변환</a><a href="/ko/son-eomneun-nal/">손 없는 날</a></div><div><p>한장달력</p><a href="/ko/about/">소개</a><a href="/ko/guide/">가이드</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a></div></div>
+  </div>
+</footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>

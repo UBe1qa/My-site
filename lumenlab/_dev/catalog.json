@@ -57,6 +57,15 @@
       "name": {"ko": "공학용 계산기", "en": "Scientific Calculator"},
       "sub": "Scientific Calculator",
       "line": {"ko": "분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.", "en": "Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n."}
+    },
+    {
+      "id": "onesheet",
+      "url": "https://calendar.lumenlab.page/ko/",
+      "url_en": "https://calendar.lumenlab.page/",
+      "icon": "/img/calendar.svg",
+      "name": {"ko": "한장달력", "en": "Onesheet"},
+      "sub": "Onesheet",
+      "line": {"ko": "공휴일 넣은 1년 달력을 한 장 PDF로 받고, 월별 달력·음력·손 없는 날까지 인쇄해요.", "en": "Printable year-on-a-page and monthly calendars with holidays, as PDF, image or print."}
     }
   ]
 }
