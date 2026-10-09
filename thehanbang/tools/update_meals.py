@@ -135,23 +135,43 @@ def find_menu(lines):
     return []
 
 
+SERVE = r'(?:준비|제공|대접|마련|드)'  # '준비해 드렸어요', '제공해 드렸습니다', '드셨어요' …
+ITEMS = r'[^\s,]+(?:(?:\s*,\s*|(?<=[와과])\s+)[^\s,]+)*'  # '팥죽', '대추차, 빵', '찐계란과 대추차'
+
+
 def find_snack(lines):
-    """'간식(샤인머스캣, 보리과자)', '간식은? 찐빵을 준비해드렸어요', '간식으로 과일 도시락을 준비해 드렸어요' 같은 문장에서 간식 이름만"""
+    """간식 이름만 뽑는다 (문장 끝 '준비해 드렸어요' 같은 말은 뺀다).
+
+    '간식(샤인머스캣, 보리과자)' / '간식은? 찐빵을 준비해드렸어요' / '간식으로 과일 도시락을 준비해 드렸어요'
+    '팥죽을 오전 간식으로 준비해 드렸어요' / '오후 간식으로 대추차, 빵 제공해 드렸습니다'
+    """
     text = ''
     for k, line in enumerate(lines):
         par = re.search(r'간식\s*\(([^)]+)\)', line)
         q = re.search(r'간식\s*(?:은|는)\s*\?\s*(.*)', line)
-        by = re.search(r'간식으로\s*(.+?)(?:을|를)?\s*(?:준비|드)', line)
+        before = re.search(r'(' + ITEMS + r')(?:을|를)\s*(?:오전|오후)?\s*간식으로\s*' + SERVE, line)
+        by = re.search(r'간식으로\s*(.+?)(?:을|를)?\s*' + SERVE, line)
         if par:
             text = par.group(1)
         elif q:
             text = q.group(1) or (lines[k + 1] if k + 1 < len(lines) else '')
+        elif before:
+            text = before.group(1)
         elif by:
             text = by.group(1)
+        text = tidy_snack(text)
         if text:
             break
-    text = re.sub(r'\s*(?:을|를)?\s*(?:준비해\s*드|드).*$', '', text).strip(' .~!')
     return text[:40]
+
+
+def tidy_snack(text):
+    """이름 뒤에 붙은 말투를 뗀다: '대추차, 빵 제공해' → '대추차, 빵', '수프와 호박죽이에요' → '수프와 호박죽'"""
+    text = re.sub(r'\s*(?:을|를)?\s*' + SERVE + r'(?:해|하)?\s*(?:드|주).*$', '', text)
+    text = re.sub(r'\s*(?:을|를)?\s*(?:준비|제공|대접|마련)(?:해|했|하|한).*$', '', text)
+    text = re.sub(r'\s*(?:을|를)?\s*드(?:셨|렸|시|려|립).*$', '', text)
+    text = re.sub(r'(?:이에요|예요|입니다|이랍니다|랍니다)$', '', text.strip(' .~!'))
+    return text.strip(' .~!')
 
 
 def extract(comps):
