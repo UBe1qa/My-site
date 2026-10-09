@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """화면을 실제로 눌러 보는 확인(Playwright). 먼저 `node calendar/_dev/serve.mjs` 로 http://localhost:8441 을 띄운다.
   python3 calendar/_dev/e2e.py
-보는 것: 콘솔 오류·깨진 그림·가로 넘침(320·390·1366), 도구의 모든 단추, 받는 파일(PDF 쪽 수·크기, PNG 크기), 인쇄 화면 쪽 수,
-음력 변환, 다가오는 쉬는 날, 언어 띠, 휴대폰 설정 판, 화면 밀림(CLS), 동작 줄이기, 광고 자리와 누르는 것 사이 거리."""
+보는 것: 콘솔 오류·깨진 그림·가로 넘침(320·360·390·1366), 휴대폰에서 표 잘림·단추 글자 넘침·누르는 곳 크기(44px),
+도구의 모든 단추, 받는 파일(PDF 쪽 수·크기·글꼴이 담겼는지, PNG 크기), 글꼴을 못 받았을 때의 그림 PDF, 인쇄 화면 쪽 수,
+주소에 담긴 설정, 나라를 바꾸면 따라오는 링크·목록, 기기 날짜가 달라졌을 때, 음력 변환, 다가오는 쉬는 날, 언어 띠, 휴대폰 설정 판,
+화면 밀림(CLS, 달 고르는 줄), 동작 줄이기, 광고 자리(폭 = 글 기둥, 누르는 것과의 거리)."""
 import sys
 sys.dont_write_bytecode = True
 import os
@@ -27,6 +29,35 @@ def pdfinfo(path):
     pages = int(re.search(r'Pages:\s+(\d+)', out).group(1))
     w, h = (float(x) for x in re.search(r'Page size:\s+([\d.]+) x ([\d.]+)', out).groups())
     return pages, round(w), round(h)
+
+
+def fonts_of(path):
+    """PDF에 담긴 글꼴: [(이름, 종류, 담겼는지)]"""
+    out = subprocess.run(['pdffonts', path], capture_output=True, text=True).stdout.splitlines()[2:]
+    return [(ln.split()[0], 'CID TrueType' in ln, ln.split()[-5] == 'yes') for ln in out if ln.strip()]
+
+
+def text_of(path):
+    return subprocess.run(['pdftotext', '-layout', path, '-'], capture_output=True, text=True).stdout
+
+
+def is_text_pdf(path, n=None):
+    """내 설정 PDF: 그림이 아니라 글자(글꼴이 담긴 CID TrueType), 말줄임 없음"""
+    f = fonts_of(path)
+    t = text_of(path)
+    return len(f) >= 3 and all(x[1] and x[2] and 'OnesheetSans' in x[0] for x in f) and not re.search(r'…|\+\d+ more|외 \d+일', t) and (n is None or n in t)
+
+
+# 휴대폰에서: 잘린 표, 글자가 넘친 단추, 44px보다 작은 누르는 곳(문단 속 링크는 뺀다)
+PROBE = r"""() => {
+  const out = { tables: [], btns: [], small: [] };
+  document.querySelectorAll('main table').forEach(t => { const w = t.closest('.tbl-wrap,.wm-box') || t.parentElement; if (w.scrollWidth > w.clientWidth + 1) out.tables.push([w.scrollWidth, w.clientWidth]); });
+  document.querySelectorAll('.btn, .seg button, .shape, .pills a, .years a, .m-nav a, .nav a').forEach(b => { if (!b.offsetParent) return;
+    if (b.scrollWidth > b.clientWidth + 1 || b.scrollHeight > b.clientHeight + 1) out.btns.push(b.textContent.trim().slice(0, 30)); });
+  document.querySelectorAll('a, button, select, summary, label.check').forEach(el => { if (!el.offsetParent) return; const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
+    if (el.closest('.prose p, .prose li, .faq p, .lead, .prose td, .src, .notice')) return;
+    if (r.height < 43.5 || r.width < 24) out.small.push((el.className || el.tagName) + ':' + el.textContent.trim().slice(0, 16) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height)); });
+  return out; }"""
 
 
 def ctx_of(b, w=1366, h=768, mobile=False, locale='ko-KR', **kw):
@@ -55,21 +86,26 @@ def download(pg, selector):
     return f.suggested_filename, path
 
 
-PAGES = ['/', '/ko/', '/2027/', '/ko/2027/', '/ko/2028/', '/2026/october/', '/ko/2026/10/', '/ko/2027/2/', '/2027/holidays/', '/ko/2027/holidays/', '/ko/2026/holidays/',
-         '/ko/lunar/', '/ko/son-eomneun-nal/', '/guide/', '/ko/guide/', '/guide/2027-long-weekends/', '/guide/south-korea-public-holidays-2027/', '/ko/guide/daeche-gonghyuil/',
-         '/ko/guide/a4-han-jang-inswae/', '/about/', '/ko/privacy/', '/licenses/', '/no-such-page']
+PAGES = ['/', '/ko/', '/2027/', '/ko/2027/', '/ko/2028/', '/2026/october/', '/2027/may/', '/ko/2026/10/', '/ko/2027/2/', '/ko/2027/5/', '/2027/holidays/', '/2026/holidays/', '/ko/2027/holidays/', '/ko/2026/holidays/',
+         '/ko/lunar/', '/ko/son-eomneun-nal/', '/guide/', '/ko/guide/', '/guide/2027-long-weekends/', '/guide/south-korea-public-holidays-2027/', '/guide/week-numbers-iso-vs-us/', '/guide/print-calendar-on-one-page/',
+         '/ko/guide/daeche-gonghyuil/', '/ko/guide/2026-nodongjeol-jeheonjeol/', '/ko/guide/eumnyeok-yundal/', '/ko/guide/a4-han-jang-inswae/', '/about/', '/ko/about/', '/ko/privacy/', '/licenses/', '/ko/licenses/', '/no-such-page']
 
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=CHROME, args=['--proxy-bypass-list=localhost;127.0.0.1'])
 
     # 1) 모든 종류의 페이지: 콘솔 오류, 깨진 그림, 가로 넘침
-    for w, mobile in ((1366, False), (390, True), (320, True)):
-        c = ctx_of(b, w, 800, mobile)
+    for w, mobile in ((1366, False), (390, True), (360, True), (320, True)):
+        c = ctx_of(b, w, 800, mobile, locale='en-US' if w == 360 else 'ko-KR')
         for path in PAGES:
             pg, errs = open_page(c, path)
             sw = pg.evaluate('document.documentElement.scrollWidth')
             broken = pg.evaluate('[...document.images].filter(i => i.complete && i.naturalWidth === 0).length')
             ok(sw <= w and not errs and broken == 0, f'{path} @{w}: 가로 {sw}, 콘솔 {errs[:2]}, 깨진 그림 {broken}')
+            if mobile and path != '/no-such-page':
+                pr = pg.evaluate(PROBE)
+                ok(not pr['tables'] and not pr['btns'], f'{path} @{w}: 잘린 표 {pr["tables"]}, 글자가 넘친 단추 {pr["btns"]}')
+                if w == 390:
+                    ok(not pr['small'], f'{path} @{w}: 44px보다 작은 누르는 곳 {pr["small"][:4]}')
             if path == '/no-such-page':
                 ok('Page not found' in pg.inner_text('h1'), '없는 주소는 404 화면')
             pg.close()
@@ -91,7 +127,14 @@ with sync_playwright() as p:
     pg.click(T + '[data-step="1"]')
     ok('예상' in pg.inner_text(T + '[data-basis]') and pg.get_attribute(T + '[data-pdf]', 'download') is None and pg.is_hidden(T + '[data-xlsx]'), '2029: 예상 표시, 미리 만든 파일·엑셀 없음')
     name, path = download(pg, T + '[data-pdf]')
-    ok(name == '2029-calendar-korea-a4-landscape.pdf' and pdfinfo(path) == (1, 842, 595) and os.path.getsize(path) > 100000, f'기기에서 만든 PDF: {name} {pdfinfo(path)} {os.path.getsize(path)}')
+    ok(name == '2029-calendar-korea-a4-landscape.pdf' and pdfinfo(path) == (1, 842, 595) and is_text_pdf(path, '2029') and os.path.getsize(path) < 200000,
+       f'내 설정 PDF는 글자 그대로(글꼴이 담김): {name} {pdfinfo(path)} {os.path.getsize(path)}바이트 {fonts_of(path)[:2]}')
+    info = subprocess.run(['pdfinfo', path], capture_output=True, text=True).stdout
+    ok('2029년 달력' in info and '한장달력' in info, '내 설정 PDF에 제목·만든 곳')
+    ok(pg.is_hidden(T + '[data-note]'), '글자 PDF면 그림 안내 줄은 안 보인다')
+    ok('2029' in pg.title(), f'탭 제목이 연도를 따라간다: {pg.title()}')
+    ok('y=2029' in pg.evaluate('location.search') and pg.get_attribute('link[rel=canonical]', 'href').endswith('/ko/'), '연도가 주소에 담기고 canonical 은 그대로')
+    ok(pg.is_disabled(T + '[data-opt="terms"]') or pg.is_hidden(T + '[data-opt="terms"]'), '2029년: 24절기 칸은 꺼짐(자료 없음)')
     pg.click(T + '[data-step="1"]')
     ok(pg.is_disabled(T + '[data-step="1"]') and pg.inner_text(T + 'output') == '2030', '2030에서 다음 해 단추 꺼짐')
     for _ in range(3):
@@ -104,12 +147,14 @@ with sync_playwright() as p:
     ok(pg.get_attribute(T + '[data-pdf]', 'href').endswith('a4-portrait.pdf') and float(pg.evaluate("getComputedStyle(document.querySelector('.crop')).getPropertyValue('--ratio')")) < 1, '세로: 파일·종이 비율')
     pg.click(T + '.shape[data-kind="months"]')
     ok('12쪽' in pg.inner_text(T + '[data-meta]') and pg.get_attribute(T + '[data-pdf]', 'href').endswith('korea-monthly-a4.pdf') and pg.is_visible(T + '.mstep'), '월별 12장: 12쪽, 파일, 달 넘기기')
+    ok(pg.inner_text(T + '[data-png]') == '이 달만 이미지로', "월별 12장: 이미지 단추에 '이 달만'")
     pg.click(T + '[data-mstep="1"]')
     ok(pg.inner_text(T + '.mstep b') == '2월' and '>2월<' in pg.inner_html(T + '.paper'), '달 넘기기 → 2월')
     pg.click(T + '.shape[data-kind="month"]')
-    ok('한 달 · 2월' in pg.inner_text(T + '[data-what]') and pg.get_attribute(T + '[data-pdf]', 'download') is None, '한 달: 어느 달인지 보임')
+    ok(pg.inner_text(T + '[data-what]') == '한 달' and pg.inner_text(T + '.mstep b') == '2월' and pg.get_attribute(T + '[data-pdf]', 'download') is None, '한 달: 어느 달인지 보임')
     name, path = download(pg, T + '[data-pdf]')
-    ok(name == '2027-02-calendar-korea-a4.pdf' and pdfinfo(path)[0] == 1, f'한 달 PDF {name}')
+    ok(name == '2027-02-calendar-korea-a4.pdf' and pdfinfo(path)[0] == 1 and is_text_pdf(path, '2월'), f'한 달 PDF {name} (글자)')
+    ok(pg.inner_text(T + '[data-png]') == '이미지로 저장', '한 달: 이미지 단추 글자는 원래대로')
     # 설정
     pg.click(T + '.opt-toggle')
     ok(pg.is_visible('#opts') and pg.is_visible(T + '[data-opt="lunar"]'), '내 설정 펼침, 달 모양에서는 음력 보임')
@@ -121,6 +166,7 @@ with sync_playwright() as p:
     ok(pg.is_hidden(T + '[data-opt="lunar"]'), '1년 한 장에서는 음력·절기 칸 숨김')
     pg.click(T + '[data-seg="weekStart"][data-v="1"]')
     ok('월요일 시작' in pg.inner_html(T + '.paper') and pg.get_attribute(T + '[data-pdf]', 'download') is None, '월요일 시작 → 기기에서 만들기')
+    ok('w=mon' in pg.evaluate('location.search'), '주 시작이 주소에 담긴다')
     pg.click(T + '[data-opt="week"]')
     ok('>53<' in pg.inner_html(T + '.paper'), '주 번호(ISO, 2027-01-01 = 53주)')
     pg.click(T + '[data-opt="mono"]')
@@ -129,6 +175,10 @@ with sync_playwright() as p:
     ok(abs(float(pg.evaluate("getComputedStyle(document.querySelector('.crop')).getPropertyValue('--ratio')")) - 1.2941) < 0.001 and 'Letter' in pg.inner_text(T + '[data-meta]'), 'Letter 용지 비율')
     pg.select_option('#o-country', 'US')
     ok('미국 연방 공휴일' in pg.inner_html(T + '.paper') and '5 U.S.C. 6103' in pg.inner_text(T + '[data-basis]'), '미국 공휴일로 바꿈')
+    ok(pg.get_attribute(T + '[data-basis] a', 'href') == '/2027/holidays/' and '대신 쉬는 날' in pg.inner_text(T + '[data-basis]'), "나라를 바꾸면 '공휴일 보기' 링크도 미국 쪽으로")
+    up = pg.inner_text('.up')
+    ok(re.search('콜럼버스|재향군인|추수감사|크리스마스|새해', up) and '한글날' not in up, f'다가오는 쉬는 날도 미국 것으로: {up[:40]!r}')
+    ok(pg.evaluate('location.search') == '?w=mon&p=letter&c=us&wk=1&lunar=0&son=1&ink=bw', f"주소에 담긴 설정: {pg.evaluate('location.search')}")
     pg.click(T + '[data-opt="names"]')
     ok('마틴 루서 킹' not in pg.inner_html(T + '.paper'), '공휴일 이름 끄기')
     pg.click(T + '[data-opt="names"]')
@@ -138,7 +188,7 @@ with sync_playwright() as p:
     ok(name == '2027-calendar-us-letter-landscape.png' and im.size == (2200, 1700), f'이미지로 저장: {name} {im.size}')
     pg.click(T + '.shape[data-kind="months"]')
     name, path = download(pg, T + '[data-pdf]')
-    ok(pdfinfo(path) == (12, 792, 612), f'내 설정 월별 12장 PDF: {pdfinfo(path)}')
+    ok(pdfinfo(path) == (12, 792, 612) and is_text_pdf(path) and os.path.getsize(path) < 300000, f'내 설정 월별 12장 PDF: {pdfinfo(path)} {os.path.getsize(path)}바이트 (글자)')
     pg.click(T + '[data-print]')
     ok(pg.evaluate('window.__printed') == 1 and pg.evaluate("document.querySelectorAll('#print-root svg').length") == 12, '인쇄 단추: 인쇄 창 호출, 종이 12장 준비')
     pg.emulate_media(media='print')
@@ -159,6 +209,17 @@ with sync_playwright() as p:
     pg.click('.zoom-x')
     ok(pg.locator('dialog.zoom').count() == 0, '크게 보기 닫기')
     ok(pg.locator('[data-pdf]').count() == 1, '받기 단추는 하나')
+    # 공휴일 표시 안 함
+    pg.select_option('#o-country', 'NONE')
+    ok('표시하지 않은' in pg.inner_text(T + '[data-basis]') and pg.is_hidden(T + '[data-opt="names"]') and '공휴일' not in pg.inner_html(T + '.paper'), '공휴일 표시 안 함: 안내 줄·이름 칸·종이')
+    name, path = download(pg, T + '[data-pdf]')
+    ok(name == '2027-calendar-no-holidays-letter-portrait.pdf' and is_text_pdf(path), f'공휴일 없는 달력 PDF: {name}')
+    # 주소를 다시 열면 같은 설정
+    url = pg.evaluate('location.href')
+    pg.goto(url, wait_until='load'); pg.wait_for_timeout(500)
+    ok(pg.input_value('#o-country') == 'NONE' and pg.input_value('#o-paper') == 'letter' and pg.is_checked(T + '[data-opt="week"]') and pg.is_checked(T + '[data-opt="mono"]')
+       and pg.get_attribute(T + '[data-seg="weekStart"][data-v="1"]', 'aria-pressed') == 'true' and pg.get_attribute(T + '.shape[data-orient="portrait"]', 'aria-pressed') == 'true'
+       and '월요일 시작' in pg.inner_html(T + '.paper'), f'주소를 다시 열면 같은 설정: {url}')
     ok(not errs, f'도구 콘솔 오류 {errs[:3]}')
     pg.close(); c.close()
 
@@ -172,18 +233,29 @@ with sync_playwright() as p:
     pg.select_option('#o-country', 'KR')
     ok('Seollal holiday' in pg.inner_html(T + '.paper') and '설' not in pg.inner_html(T + '.paper'), '영어 화면 + 한국 공휴일은 영어 이름')
     ok(not re.search('[가-힣]', pg.inner_text('main')), '영어 화면 본문에 한글 없음(설정을 바꾼 뒤에도)')
+    ok(pg.get_attribute(T + '[data-basis] a', 'href') == '/guide/south-korea-public-holidays-2027/' and 'Chuseok' in pg.inner_text('.up') + pg.inner_html(T + '.paper'), '영어 + 한국: 링크와 종이가 한국 공휴일')
+    ok('Hangeul Day' in pg.inner_text('.up') or 'Christmas' in pg.inner_text('.up'), f"영어 + 한국: 다가오는 공휴일도 한국 것 {pg.inner_text('.up')[:50]!r}")
+    html_ = pg.inner_html(T + '.paper')
+    ok('+1 more' not in html_ and 'Substitute holiday (Labor Day)' in html_ and "Buddha's Birthday" in html_, "영어 + 한국 + Letter: '+1 more' 없이 이름이 다 나온다")
+    pg.click(T + '.shape[data-kind="months"]')
+    name, path = download(pg, T + '[data-pdf]')
+    t = text_of(path)
+    ok(is_text_pdf(path) and 'Movement' in t and 'Substitute holiday' in t and 'Foundation' in t, f'영어 + 한국 월별 PDF: 이름이 잘리지 않는다 ({name})')
     pg.close()
     pg, errs = open_page(c, '/2027/')
     ok(pg.locator(T + '[data-step]').count() == 0 and pg.locator('.years a[aria-current]').inner_text() == '2027', '연간 페이지: 연도는 링크')
     pg.click(T + '.shape[data-kind="months"]')
     ok(pg.get_attribute(T + '[data-pdf]', 'href') == '/files/2027-calendar-us-monthly-letter.pdf', '연간 페이지 월별 파일')
+    name, path = download(pg, T + '[data-pdf]')
+    t = text_of(path)
+    ok('…' not in t and 'Martin Luther' in t and 'King Jr. Day' in t and '(observed)' in t and "New Year's Day" in t, '미리 만든 영어 월별 PDF: 이름이 잘리지 않는다')
     pg.close(); c.close()
 
     # 4) 월 페이지
     c = ctx_of(b)
     pg, errs = open_page(c, '/ko/2026/10/')
     name, path = download(pg, '[data-month-page] [data-pdf]')
-    ok(name == '2026-10-calendar-korea-a4.pdf' and pdfinfo(path) == (1, 842, 595), f'이 달 PDF {name}')
+    ok(name == '2026-10-calendar-korea-a4.pdf' and pdfinfo(path) == (1, 842, 595) and is_text_pdf(path, '한글날'), f'이 달 PDF {name} (글자)')
     name, path = download(pg, '[data-month-page] [data-png]')
     ok(name.endswith('.png') and Image.open(path).size == (2339, 1654), '이 달 이미지 A4 200dpi')
     pg.click('[data-month-page] [data-print]')
@@ -212,6 +284,8 @@ with sync_playwright() as p:
     ok('음력 2027년 1월 1일' in pg.inner_text('[data-out="s2l"]'), '양력 2027-02-07 = 음력 1월 1일')
     conv(dict(sy=2025, sm=7, sd=25))
     ok('윤6월 1일' in pg.inner_text('[data-out="s2l"]'), '2025-07-25 = 윤6월 1일')
+    conv(dict(sy='２０２７', sm='２', sd='７'))
+    ok('음력 2027년 1월 1일' in pg.inner_text('[data-out="s2l"]'), '전각 숫자(２０２７)도 받는다')
     conv(dict(sy=1900, sm=1, sd=1))
     ok('지원 범위 밖' in pg.inner_text('[data-out="s2l"]'), '범위 밖 알림')
     conv(dict(sy=2027, sm=2, sd=30))
@@ -235,7 +309,10 @@ with sync_playwright() as p:
     # 6) 언어 안내 띠: 브라우저 언어가 다를 때만, 닫으면 기억
     c = ctx_of(b, locale='en-US')
     pg, errs = open_page(c, '/ko/')
-    ok(pg.is_visible('.lang-bar') and pg.evaluate("getComputedStyle(document.querySelector('.lang-bar')).position") == 'absolute', '영어 브라우저 → 한국어판에 띠(겹쳐 띄움)')
+    g = pg.evaluate("""(() => { const b = document.querySelector('.lang-bar'), r = b.getBoundingClientRect(), h = document.querySelector('header.top').getBoundingClientRect(), x = b.querySelector('button').getBoundingClientRect();
+      return { pos: getComputedStyle(b).position, top: r.top, bottom: r.bottom, vh: innerHeight, header: h.bottom, x: [x.width, x.height] }; })()""")
+    ok(pg.is_visible('.lang-bar') and g['pos'] == 'fixed' and g['top'] > g['header'] + 200 and g['bottom'] <= g['vh'] and min(g['x']) >= 44, f'영어 브라우저 → 한국어판에 띠: 메뉴를 가리지 않고 ×는 44px 이상 {g}')
+    ok(pg.evaluate("(() => { const e = document.elementFromPoint(200, 28); return !!e && !!e.closest('header.top'); })()"), '띠가 떠 있어도 머리 메뉴를 누를 수 있다')
     pg.click('.lang-bar button')
     pg.reload(); pg.wait_for_timeout(300)
     ok(pg.locator('.lang-bar').count() == 0 and pg.evaluate("localStorage.getItem('cal.lang')") == 'ko', '띠를 닫으면 기억(cal.lang)')
@@ -258,9 +335,75 @@ with sync_playwright() as p:
     ok(pg.is_visible('dialog.zoom svg') and pg.evaluate("document.querySelector('dialog.zoom svg').getBoundingClientRect().width") >= 1000, '휴대폰: 미리보기를 누르면 크게(가로 1000px 이상)')
     pg.close(); c.close()
 
+    # 7-2) 주소에 담긴 설정으로 바로 열기(남이 보낸 주소) + 모르는 값은 버린다
+    c = ctx_of(b)
+    pg, errs = open_page(c, '/ko/?y=2028&k=monthly&m=5&w=mon&p=letter&c=us&wk=1&ink=bw&zzz=1&p2=x')
+    T = '[data-tool] '
+    ok(pg.inner_text(T + 'output') == '2028' and '12쪽' in pg.inner_text(T + '[data-meta]') and 'Letter' in pg.inner_text(T + '[data-meta]') and pg.inner_text(T + '.mstep b') == '5월'
+       and pg.get_attribute(T + '[data-seg="weekStart"][data-v="1"]', 'aria-pressed') == 'true' and '22주' in pg.inner_html(T + '.paper') and '메모리얼 데이' in pg.inner_html(T + '.paper')
+       and '#d2332a' not in pg.inner_html(T + '.paper') and '2028' in pg.title() and not errs,
+       f'주소의 설정으로 열기: {pg.inner_text(T + "[data-what]")} / {pg.inner_text(T + "[data-meta]")} / {errs[:2]}')
+    pg.close()
+    pg, errs = open_page(c, '/ko/?y=1999&k=zzz&m=44&c=jp&p=b5')
+    ok(pg.inner_text(T + 'output') == '2027' and pg.get_attribute(T + '[data-pdf]', 'href') == '/files/2027-calendar-korea-a4-landscape.pdf' and not errs, '주소에 모르는 값이 있어도 기본 달력')
+    pg.close()
+    pg, errs = open_page(c, '/ko/2027/?y=2029&w=mon')
+    ok(pg.locator('.years a[aria-current]').inner_text() == '2027' and '월요일 시작' in pg.inner_html(T + '.paper') and '2027' in pg.inner_html(T + '.paper'), '연간 페이지: 주소의 연도는 무시, 다른 설정은 받는다')
+    pg.close()
+    pg, errs = open_page(c, '/ko/2027/5/')
+    href = pg.get_attribute('a[href*="k=month"]', 'href')
+    pg.goto(BASE + href, wait_until='load'); pg.wait_for_timeout(500)
+    ok(href == '/ko/?k=month&y=2027&m=5' and pg.inner_text(T + '[data-what]') == '한 달' and pg.inner_text(T + '.mstep b') == '5월' and '부처님오신날' in pg.inner_html(T + '.paper'), f'월 페이지 → 내 설정으로 이 달 만들기: {href}')
+    pg.close(); c.close()
+
+    # 7-3) 휴대폰: 모양을 바꿔 달 고르는 줄이 나와도 아래가 밀리지 않는다
+    for path, loc in (('/ko/', 'ko-KR'), ('/', 'en-US')):
+        for w in (390, 360, 320):
+            c = ctx_of(b, w, 844, True, locale=loc)
+            pg, errs = open_page(c, path)
+            top = "document.querySelector('.paper-box').getBoundingClientRect().top + scrollY"
+            y0 = pg.evaluate(top)
+            pg.tap('.shape[data-kind="months"]'); pg.wait_for_timeout(250)
+            y1 = pg.evaluate(top)
+            pg.tap('.shape[data-kind="month"]'); pg.wait_for_timeout(250)
+            y2 = pg.evaluate(top)
+            pr = pg.evaluate(PROBE)
+            ok(abs(y1 - y0) < 1 and abs(y2 - y0) < 1 and pg.is_visible('.mstep') and not pr['btns'], f'달 고르는 줄 밀림 0 {path} @{w}: {y0:.0f} → {y1:.0f} → {y2:.0f}, 넘친 단추 {pr["btns"]}')
+            pg.close(); c.close()
+
+    # 7-4) 기기 날짜가 달라졌을 때(시간이 지나도 낡지 않게)
+    def dated(y, m, d, **kw):
+        cx = ctx_of(b, **kw)
+        cx.add_init_script("(() => { const D = Date, fixed = new D(%d, %d, %d, 10).getTime(); class F extends D { constructor(...a) { if (a.length) super(...a); else super(fixed); } static now() { return fixed; } } window.Date = F; })()" % (y, m - 1, d))
+        return cx
+    c = dated(2028, 6, 15)
+    pg, errs = open_page(c, '/ko/')
+    ok(pg.inner_text(T + 'output') == '2028' and '2028' in pg.inner_html(T + '.paper') and pg.get_attribute('a[data-nav-month]', 'href') == '/ko/2027/12/' and '2028' in pg.title(),
+       f"2028년 6월: 기본 연도 {pg.inner_text(T + 'output')}, 월 달력 메뉴 {pg.get_attribute('a[data-nav-month]', 'href')}")
+    ok(pg.locator('.up li time').first.get_attribute('datetime') == '2028-07-17' and pg.inner_text('.up li:first-child small') == '32일 뒤', f"2028년 6월: 다가오는 쉬는 날은 기기 날짜 기준 {pg.inner_text('.up li:first-child')!r}")
+    pg.close(); c.close()
+    c = dated(2027, 11, 20)
+    pg, errs = open_page(c, '/ko/')
+    ok(pg.inner_text(T + 'output') == '2028' and pg.get_attribute('a[data-nav-month]', 'href') == '/ko/2027/11/', '2027년 11월: 기본 연도는 다음 해, 월 달력은 이번 달')
+    pg.close(); c.close()
+    c = dated(2031, 1, 15, locale='en-US')
+    pg, errs = open_page(c, '/')
+    ok(pg.inner_text(T + 'output') == '2030' and pg.locator('.up').count() == 1 and pg.is_hidden('.up') and not errs, '2031년(미국 자료 범위 밖): 다가오는 공휴일 칸을 숨긴다, 연도는 2030까지')
+    pg.close(); c.close()
+
+    # 7-5) 글꼴을 못 받으면 300ppi 그림 PDF로 대신하고 그렇게 알린다
+    c = ctx_of(b)
+    c.route(re.compile(r'/assets/fonts/'), lambda r: r.abort())
+    pg, errs = open_page(c, '/ko/?w=mon')
+    name, path = download(pg, T + '[data-pdf]')
+    imgs = subprocess.run(['pdfimages', '-list', path], capture_output=True, text=True).stdout
+    ok(not fonts_of(path) and re.search(r'\b3508\s+2480\b', imgs) and pg.is_visible(T + '[data-note]') and '300ppi' in pg.inner_text(T + '[data-note]') and '2027년 달력' in subprocess.run(['pdfinfo', path], capture_output=True, text=True).stdout,
+       f'글꼴을 못 받은 경우: 300ppi 그림 PDF + 안내 줄 + 제목 ({imgs.splitlines()[-1] if imgs else imgs})')
+    pg.close(); c.close()
+
     # 8) 화면 밀림(CLS): CPU 4배 느리게, 브라우저 언어가 달라도
     for path, locale in (('/ko/', 'ko-KR'), ('/', 'ko-KR'), ('/ko/2027/', 'en-US'), ('/ko/2026/10/', 'ko-KR'), ('/2026/october/', 'en-US'), ('/ko/lunar/', 'ko-KR')):
-        for w, mobile in ((1366, False), (390, True)):
+        for w, mobile in ((1366, False), (390, True), (360, True)):
             c = ctx_of(b, w, 800, mobile, locale=locale)
             c.add_init_script("window.__cls = 0; new PerformanceObserver(l => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: 'layout-shift', buffered: true });")
             pg = c.new_page()
@@ -297,6 +440,14 @@ with sync_playwright() as p:
                   const gap = r.bottom <= a.top ? a.top - r.bottom : r.top >= a.bottom ? r.top - a.bottom : 0; if (gap < min) min = gap; }); });
               return [n, min]; })()""")
             ok(d[0] >= 1 and d[1] >= 40, f'광고 자리 {path} @{w}: {d[0]}곳, 가장 가까운 단추까지 {d[1]:.0f}px')
+            pg.close(); c.close()
+    # 광고 자리 폭 = 본문 글 기둥, 표시 글자 11px 이상
+    for path, col in (('/ko/guide/daeche-gonghyuil/', '.prose'), ('/guide/2027-long-weekends/', '.prose'), ('/ko/', '.faq'), ('/2027/holidays/', '.note')):
+        for w, mobile in ((1366, False), (390, True)):
+            c = ctx_of(b, w, 800, mobile)
+            pg, errs = open_page(c, path)
+            g = pg.evaluate("(sel => { const a = document.querySelector('[data-ad]').getBoundingClientRect(), t = document.querySelector('main ' + sel).getBoundingClientRect(); return [a.left, a.width, t.left, t.width, parseFloat(getComputedStyle(document.querySelector('.ad-label')).fontSize)]; })", col)
+            ok(abs(g[0] - g[2]) < 1.5 and abs(g[1] - g[3]) < 1.5 and g[4] >= 11, f'광고 자리 폭 = 글 기둥 {path} @{w}: 자리 {g[0]:.0f}+{g[1]:.0f}, 글 {g[2]:.0f}+{g[3]:.0f}, 표시 글자 {g[4]}px')
             pg.close(); c.close()
     c = ctx_of(b)
     pg, errs = open_page(c, '/ko/about/')

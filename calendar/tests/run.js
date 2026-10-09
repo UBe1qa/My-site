@@ -346,6 +346,25 @@ group('미국 연방 공휴일: 5 U.S.C. 6103 규칙으로 직접 계산(2025~20
     '미국 2027 3일 이상 연휴(손으로 확인: 월요일 공휴일 6 + 금요일 관측일 3 + 새해)');
 }
 
+group('미국 연방 공휴일: OPM 일정표(2026·2027, 2026-10-10 열람)와 쉬는 날·이름이 같다');
+{
+  // 미국 인사관리처(OPM) 'Federal Holidays' 2026·2027 Holiday Schedule 그대로(쉬는 날만 적힌 표). 지휘자 쪽 사실 확인 기록 10번.
+  const OPM = {
+    2026: [['01-01', "New Year's Day"], ['01-19', 'Birthday of Martin Luther King, Jr.'], ['02-16', "Washington's Birthday"], ['05-25', 'Memorial Day'], ['06-19', 'Juneteenth National Independence Day'],
+      ['07-03', 'Independence Day'], ['09-07', 'Labor Day'], ['10-12', 'Columbus Day'], ['11-11', 'Veterans Day'], ['11-26', 'Thanksgiving Day'], ['12-25', 'Christmas Day']],
+    2027: [['01-01', "New Year's Day"], ['01-18', 'Birthday of Martin Luther King, Jr.'], ['02-15', "Washington's Birthday"], ['05-31', 'Memorial Day'], ['06-18', 'Juneteenth National Independence Day'],
+      ['07-05', 'Independence Day'], ['09-06', 'Labor Day'], ['10-11', 'Columbus Day'], ['11-11', 'Veterans Day'], ['11-25', 'Thanksgiving Day'], ['12-24', 'Christmas Day']],
+  };
+  const official = { 'Martin Luther King Jr. Day': 'Birthday of Martin Luther King, Jr.' };
+  for (const y of Object.keys(OPM)) {
+    // 우리 표에서 그 해 공휴일의 '쉬는 날': 평일인 날. 다음 해 새해 첫날을 당겨 쉬는 12월 31일은 OPM이 다음 해 표에 적는다.
+    const ours = C.holidays('US', +y).list.filter((x) => x.wd !== 0 && x.wd !== 6 && !(x.m === 12 && x.d === 31))
+      .map((x) => { const b = x.en.replace(' (observed)', ''); return [x.date.slice(5), official[b] || b]; });
+    eq(ours, OPM[y], y + '년 쉬는 날 11일');
+  }
+  eq(C.holidays('US', 2027).list.filter((x) => x.kind === 'substitute').map((x) => x.date.slice(5)), ['06-18', '07-05', '12-24', '12-31'], '2027년 대신 쉬는 날(12-31은 2028년 새해 첫날 몫)');
+}
+
 // ───────── 7. 손 없는 날 ─────────
 group('손 없는 날(라이브러리 음력 날짜 끝자리 9·0, 2026-10 ~ 2027-12)');
 for (const k of Object.keys(P.son)) {
@@ -433,6 +452,118 @@ group('종이 배치: 글자가 종이 안에 있고(위·옆 11mm, 아래 6mm �
   ok(S.webMonth({ year: 2026, month: 10, lang: 'ko' }).includes('<em>한글날</em>') && S.webMonth({ year: 2026, month: 10, lang: 'ko' }).includes('음 9.1'), '큰 달 표에 공휴일·음력');
 }
 
+// ───────── 10-2. 종이에 찍히는 글자: 말줄임·'외 N일' 0, 칸을 넘는 이름 0, PDF 글꼴에 모든 글자 ─────────
+const PDF = require(path.join(__dirname, '..', 'assets', 'pdf.js'));
+const FM = require(path.join(__dirname, '..', 'assets', 'fonts', 'metrics.json'));
+const fs = require('fs'), zlib = require('zlib');
+group("종이 글자: 말줄임(…)·'+N more'·'외 N일' 0, 이름이 제 칸 안, 글꼴 폭 표가 실제 폭보다 좁지 않다");
+{
+  let sheets = 0, ell = [], over = [], thin = [], miss = [], weights = new Set(), minName = 9, minRow = 9, minK = 1, wkBad = 0;
+  const each = (o) => {
+    const sh = S.build(o), tag = JSON.stringify(o);
+    sheets++;
+    if (!PDF.covers([sh], FM)) miss.push(tag);
+    const wkX = new Set();
+    for (const i of sh.items) {
+      if (!i.t) continue;
+      weights.add(i.w);
+      if (/…|\.\.\.|\+\d+ more|외 \d+일/.test(i.s)) ell.push(i.s + ' ' + tag);
+      const real = PDF.width(i.s, i.z, i.w, FM), est = S.estW(i.s, i.z);
+      if (est < real - 1e-6) thin.push(i.s);
+      if (i.r && i.x + real > i.r + 0.06) over.push(i.s + ' (' + (i.x + real - i.r).toFixed(2) + 'mm) ' + tag);
+      if (o.kind === 'month' && o.show && o.show.week && i.z === 2.3 && i.a === 'e') wkX.add(i.x.toFixed(2));
+    }
+    if (o.kind === 'year' && sh.nameSize) minName = Math.min(minName, sh.nameSize);
+    if (o.kind === 'year') minRow = Math.min(minRow, sh.rowH);
+    if (o.kind === 'month') { minK = Math.min(minK, sh.minScale); if (o.show && o.show.week && wkX.size !== 1) wkBad++; }
+  };
+  for (const year of [2025, 2026, 2027, 2028, 2029, 2030]) for (const [lang, country] of [['ko', 'KR'], ['en', 'US'], ['en', 'KR'], ['ko', 'US'], ['ko', 'NONE'], ['en', 'NONE']])
+    for (const paper of ['a4', 'letter']) for (const weekStart of [0, 1]) {
+      for (const orient of ['landscape', 'portrait']) for (const week of [false, true]) for (const names of [true, false]) each({ kind: 'year', year, lang, country, paper, weekStart, orient, show: { week, names } });
+      for (let month = 1; month <= 12; month++) for (const show of [{ week: true, lunar: true, terms: true, son: true }, { names: true }, { lunar: true, terms: true }])
+        each({ kind: 'month', year, month, lang, country, paper, weekStart, show });
+    }
+  eq(ell.slice(0, 5), [], '말줄임·+N more·외 N일이 찍힌 종이 (' + sheets + '장 가운데)');
+  eq(over.slice(0, 5), [], '제 칸을 넘는 이름(Pretendard 실제 글자 폭으로 잼)');
+  eq([...new Set(thin)].slice(0, 5), [], '어림 폭(estW)이 실제 폭보다 좁은 글자열');
+  eq(miss.slice(0, 3), [], 'PDF 글꼴(assets/fonts)에 없는 글자가 든 종이 → _dev/make_fonts.py 를 다시 돌린다');
+  eq([...weights].sort(), [500, 600, 700, 800], '글자 굵기는 네 가지(PDF에 담는 글꼴과 같다)');
+  ok(minName >= 2.45, '1년 한 장 이름 글자 가장 작은 크기 ' + minName + 'mm (2.45mm 이상)');
+  ok(minRow >= 4.6, '1년 한 장 날짜 줄 높이 가장 낮은 값 ' + minRow.toFixed(2) + 'mm (4.6mm 이상)');
+  ok(minK >= 0.8, '달 칸 글자를 줄인 비율 ' + minK.toFixed(2) + ' (0.8 이상)');
+  eq(wkBad, 0, '월 달력의 주 번호는 모두 첫 열 같은 자리');
+  // 평가에서 잘렸던 이름이 다 보이는지(영어 + 미국, 영어 + 한국)
+  const texts = (o) => S.build(o).items.filter((i) => i.t).map((i) => i.s);
+  const has = (o, parts) => { const t = texts(o).join('|'); return parts.every((x) => t.includes(x)); };
+  ok(has({ kind: 'month', year: 2027, month: 1, lang: 'en', country: 'US', paper: 'letter' }, ['Martin Luther', 'King Jr. Day']), '영어 1월: Martin Luther King Jr. Day 다 보임(두 줄, 끝에 Day만 남지 않게)');
+  ok(has({ kind: 'month', year: 2027, month: 7, lang: 'en', country: 'US', paper: 'letter' }, ['Independence Day', '(observed)']), '영어 7월: Independence Day (observed)');
+  ok(has({ kind: 'month', year: 2027, month: 12, lang: 'en', country: 'US', paper: 'a4' }, ["New Year's Day", '(observed)', 'Christmas Day']), "영어 12월: New Year's Day (observed)");
+  ok(has({ kind: 'month', year: 2027, month: 3, lang: 'en', country: 'KR', paper: 'letter' }, ['Independence', 'Movement', 'Day']), '영어 + 한국 3월: Independence Movement Day');
+  ok(has({ kind: 'month', year: 2028, month: 4, lang: 'en', country: 'KR', paper: 'letter' }, ['National', 'Assembly', 'Election', 'Day']), '영어 + 한국 2028년 4월: National Assembly Election Day');
+  ok(has({ kind: 'month', year: 2028, month: 10, lang: 'en', country: 'KR', paper: 'letter' }, ['Chuseok;', 'National', 'Foundation', 'Day']), '영어 + 한국 2028년 10월: Chuseok; National Foundation Day');
+  // 영어 + 한국 + Letter 가로 1년 한 장(평가의 '+1 more'): 5월·10월 이름 넷이 모두
+  ok(has({ kind: 'year', year: 2027, lang: 'en', country: 'KR', paper: 'letter' }, ['Labor Day', 'Substitute holiday (Labor Day)', "Children's Day", "Buddha's Birthday", 'Substitute holiday (Hangeul Day)', 'National Foundation Day']), '영어 + 한국 Letter 1년: 5월·10월 이름 전부');
+  // 1년 한 장의 이름 줄: 미국은 실제 날과 대신 쉬는 날을 한 줄로, 한국은 무엇의 대체공휴일인지
+  const pairs = (o) => { const it = S.build(o).items.filter((i) => i.t && i.z === S.build(o).nameSize); const out = []; for (let k = 0; k + 1 < it.length; k++) if (it[k].c === 'sun') out.push(it[k].s + ' ' + it[k + 1].s); return out; };
+  const us27 = pairs({ kind: 'year', year: 2027, lang: 'en', country: 'US', paper: 'letter' });
+  ok(['18–19 Juneteenth (observed Fri)', '4–5 Independence Day (observed Mon)', '24–25 Christmas Day (observed Fri)', "31 New Year's Day (observed)"].every((x) => us27.includes(x)), '미국 2027: ' + us27.filter((x) => /observed/.test(x)).join(' / '));
+  ok(pairs({ kind: 'year', year: 2026, lang: 'en', country: 'US', paper: 'letter' }).includes('3–4 Independence Day (observed Fri)'), '미국 2026: 3–4 Independence Day (observed Fri)');
+  ok(pairs({ kind: 'year', year: 2027, lang: 'ko', country: 'US', paper: 'a4' }).includes('24–25 크리스마스(금요일에 대신 쉼)'), '한국어 화면 + 미국: 24–25 크리스마스(금요일에 대신 쉼)');
+  const kr27 = pairs({ kind: 'year', year: 2027, lang: 'ko', country: 'KR', paper: 'a4' });
+  ok(['3 대체공휴일(노동절)', '19 대체공휴일(제헌절)', '27 대체공휴일(성탄절)', '6–9 설 연휴'].every((x) => kr27.includes(x)), '한국 2027: ' + kr27.filter((x) => /대체/.test(x)).join(' / '));
+  eq(S.label(C.holidays('KR', 2025).byDate['2025-03-03'], { lang: 'ko', country: 'KR' }), '대체공휴일(삼일절)', '2025년 표의 대체공휴일도 무엇의 대체인지');
+  eq(S.label(C.holidays('KR', 2027).byDate['2027-05-03'], { lang: 'ko', country: 'KR' }, true), '대체공휴일', '좁은 칸(화면의 큰 달)에서는 짧은 이름');
+  eq(S.label(C.holidays('KR', 2027).byDate['2027-05-03'], { lang: 'en', country: 'KR' }), 'Substitute holiday (Labor Day)', '영어: Substitute holiday (Labor Day)');
+  // 공휴일 표시 안 함
+  const none = S.build({ kind: 'year', year: 2027, lang: 'ko', country: 'NONE', paper: 'a4' });
+  ok(!none.items.some((i) => i.t && i.w === 800 && i.z === 3.8) && !none.items.some((i) => i.t && /공휴일/.test(i.s)), '공휴일 표시 안 함: 굵은 빨간 날짜·이름·안내 줄 없음');
+  ok(none.items.some((i) => i.t && i.c === 'sun' && i.z === 3.8), '공휴일 표시 안 함(한국어): 일요일은 그대로 빨강');
+  eq(S.fileBase({ kind: 'year', year: 2027, lang: 'ko', country: 'NONE', paper: 'a4' }), '2027-calendar-no-holidays-a4-landscape', '공휴일 없는 달력의 파일 이름');
+  ok(S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>부처님<wbr>오신날</em>') && S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>대체<wbr>공휴일</em>'), '큰 달 표: 긴 한글 이름에 나눌 자리');
+}
+
+group('글자 PDF(pdf.js): 구조가 맞고 글꼴·제목이 들어 있다');
+{
+  const G = cur, fonts = {};
+  for (const w of [500, 600, 700, 800]) fonts[w] = new Uint8Array(fs.readFileSync(path.join(__dirname, '..', 'assets', 'fonts', 'onesheet-' + w + '.ttf')));
+  const deflate = (b) => Promise.resolve(new Uint8Array(zlib.deflateSync(Buffer.from(b))));
+  const parse = (bytes) => {
+    const txt = Buffer.from(bytes).toString('latin1');
+    const sx = +txt.slice(txt.lastIndexOf('startxref') + 9).trim().split('\n')[0];
+    const lines = txt.slice(sx).split('\n'), total = +lines[1].split(' ')[1];
+    let bad = 0;
+    for (let k = 1; k < total; k++) { const off = +lines[2 + k].slice(0, 10); if (txt.substr(off, (k + ' 0 obj').length) !== k + ' 0 obj') bad++; }
+    return { txt, total, bad, pages: (txt.match(/\/Type \/Page /g) || []).length };
+  };
+  const jobs = [
+    [[{ kind: 'year', year: 2029, lang: 'ko', country: 'KR', paper: 'a4', weekStart: 1, show: { week: true } }], '2029년 달력', true],
+    [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => ({ kind: 'month', year: 2027, month, lang: 'en', country: 'KR', paper: 'letter', show: { lunar: true, terms: true, son: true } })), '2027 monthly calendar', true],
+    [[{ kind: 'month', year: 2027, month: 5, lang: 'ko', country: 'KR', paper: 'a4', mono: true, show: { lunar: true } }], '2027년 5월', false],
+  ];
+  global.__pdfTests = Promise.all(jobs.map(([opts, title, zip]) => {
+    const sheets = opts.map((o) => S.build(o));
+    return PDF.make(sheets, { metrics: FM, fonts }, { title, lang: opts[0].lang, color: S.color, date: new Date(Date.UTC(2026, 9, 10)) }, zip ? deflate : null).then((bytes) => {
+      cur = G;
+      const r = parse(bytes), used = [...new Set(sheets.flatMap((sh) => sh.items.filter((i) => i.t).map((i) => i.w)))];
+      ok(r.txt.startsWith('%PDF-1.') && r.txt.trimEnd().endsWith('%%EOF') && r.bad === 0, title + ': 머리·꼬리·xref 위치 (' + r.bad + '개 어긋남)');
+      eq(r.pages, sheets.length, title + ': 쪽 수');
+      eq((r.txt.match(/\/FontFile2 /g) || []).length, used.length, title + ': 쓰는 굵기만큼 글꼴이 담김');
+      ok(r.txt.includes('/Title <FEFF' + [...title].map((ch) => ('000' + ch.charCodeAt(0).toString(16)).slice(-4).toUpperCase()).join('') + '>') && r.txt.includes('/Producer <FEFF'), title + ': 문서 제목·만든 곳');
+      ok(r.txt.includes('/MediaBox [0 0 ' + (Math.round(sheets[0].w * 72 / 25.4 * 1000) / 1000) + ' '), title + ': 종이 크기');
+      ok(bytes.length < (zip ? 160000 : 260000), title + ': 크기 ' + bytes.length + '바이트');
+      if (!zip) {   // 안 줄인 판: 글자가 글리프 번호로 들어 있고 흑백이면 빨강이 없다
+        const gid = (ch) => ('000' + FM.gid[FM.chars.indexOf(ch)].toString(16)).slice(-4).toUpperCase();
+        ok(r.txt.includes('<' + [...'5월'].map(gid).join('') + '> Tj'), title + ": '5월'이 글자로 들어 있다");
+        ok(!/0\.82\d* 0\.2 0\.16\d* rg/.test(r.txt), title + ': 흑백에는 빨강이 없다');
+      }
+    });
+  }).concat([Promise.resolve().then(() => {
+    cur = G;
+    const img = PDF.image([{ jpeg: new Uint8Array([255, 216, 255, 217]), wpx: 3508, hpx: 2480, wmm: 297, hmm: 210 }], { title: '2029년 달력', lang: 'ko' }), r = parse(img);
+    ok(r.bad === 0 && r.pages === 1 && r.txt.includes('/DCTDecode') && r.txt.includes('/Title <FEFF'), '그림 PDF(대신 쓰는 길): 구조·제목');
+  })]));
+}
+
 // ───────── 11. 글·화면 문구 속 숫자 ─────────
 group('글 속 숫자(가이드·자주 묻는 질문·공휴일 페이지)');
 {
@@ -479,7 +610,9 @@ group('글 속 숫자(가이드·자주 묻는 질문·공휴일 페이지)');
 }
 
 // ───────── 결과 ─────────
-console.log('');
-for (const g of groups) console.log((g.fail ? '✗ ' : '✓ ') + g.name + ' : ' + g.n + '개' + (g.fail ? ', 실패 ' + g.fail : ''));
-console.log('\n합계 ' + total + '개, 통과 ' + (total - failed) + ', 실패 ' + failed);
-process.exit(failed ? 1 : 0);
+(global.__pdfTests || Promise.resolve()).catch((e) => { total++; failed++; console.log('  ✗ PDF 테스트 오류: ' + (e && e.stack || e)); }).then(() => {
+  console.log('');
+  for (const g of groups) console.log((g.fail ? '✗ ' : '✓ ') + g.name + ' : ' + g.n + '개' + (g.fail ? ', 실패 ' + g.fail : ''));
+  console.log('\n합계 ' + total + '개, 통과 ' + (total - failed) + ', 실패 ' + failed);
+  process.exit(failed ? 1 : 0);
+});

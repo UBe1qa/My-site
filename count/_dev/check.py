@@ -3,8 +3,9 @@
 
 보는 것: 페이지마다 title·description 다름 / canonical = sitemap 주소 = 내부 링크 주소(끝 /까지), 깨진 내부 링크·#해시 0 /
 hreflang 짝·자기 자신·x-default / <html lang> / 영어 페이지의 lang="ko" 밖 한글 0 / FAQPage·Article JSON-LD가 화면 글자와 같음 /
-방침의 웹 비콘 문장과 partner-sites 링크 / 광고 없는 페이지에 adsbygoogle 없음, 도구·글 페이지엔 있음 / 첫 HTML에 제목·본문·내부 링크 /
-공개 페이지에 noindex 없음 / .html 링크 없음 / 화면 글에 줄표(—) 없음.
+방침의 웹 비콘 문장과 partner-sites 링크·방문 통계(Cloudflare Web Analytics) 문장 / 광고 없는 페이지에 adsbygoogle 없음, 도구·글 페이지엔 있음 / 첫 HTML에 제목·본문·내부 링크 /
+공개 페이지에 noindex 없음 / .html 링크 없음 / 화면 글에 줄표(—) 없음 /
+확인된 사실(_dev/limits.json): 출처 링크와 확인한 날이 화면에 있음, 나이스·SNS 숫자가 그 파일과 같음, 확인 못 한 것(페이스북·SKT 한도 등)이 없음.
 """
 import json
 import re
@@ -184,7 +185,7 @@ def main():
             ok('WebApplication' in types, f'{p}: WebApplication 없음')
             app = [j for j in d.ld if j.get('@type') == 'WebApplication'][0]
             ok(app['url'] == SITE + p and app['description'] == d.desc, f'{p}: WebApplication 주소·설명이 화면과 다름')
-        ok(not any(k in json.dumps(d.ld) for k in ('aggregateRating', 'review')), f'{p}: 없는 평점·후기')
+        ok(not re.search(r'"(aggregateRating|review|reviewRating)"\s*:', json.dumps(d.ld)), f'{p}: 없는 평점·후기')
         ok('—' not in ''.join(d.visible).replace('(—)', ''), f'{p}: 화면 글에 줄표(—)')
     # 방침
     for p, word in (('/privacy/', 'web beacons'), ('/ko/privacy/', '웹 비콘')):
@@ -208,12 +209,79 @@ def main():
     ok(rss.count('<item>') == sum(1 for p in paths if p.startswith('/ko/guide/') and p != '/ko/guide/'), 'rss.xml 글 수 = 한국어 글 수')
     for junk in ('node_modules', '__pycache__', '.wrangler'):
         ok(not list(ROOT.rglob(junk)), f'폴더 안에 {junk}가 남아 있음')
-    # 확인 안 된 값이 화면에 없는지: limits.json 의 verified=false 항목 이름
+    # ── 확인된 사실(_dev/limits.json): 확인된 것만, 출처 링크와 확인한 날을 화면에 같이 ──
     lim = json.loads((ROOT / '_dev' / 'limits.json').read_text(encoding='utf-8'))
-    ok(all(v.get('verified') is False for k, v in lim.items() if isinstance(v, dict)), 'limits.json: 확인된 값이 생겼으면 화면에 쓸지 정하고 이 검사를 고친다')
-    allhtml = ''.join(''.join(d.visible) for d in docs.values())
-    for word in ('나이스', 'NEIS', '인스타그램', 'Instagram', 'LMS'):
-        ok(word not in allhtml, f'확인 안 된 주제({word})가 화면에 있음')
+    ok(all(v.get('verified') is True and v.get('checked') == '2026-10-10' for k, v in lim.items() if isinstance(v, dict)), 'limits.json: verified·checked 가 빠진 묶음이 있음')
+    raw = {p: (ROOT / p.lstrip('/') / 'index.html').read_text(encoding='utf-8') for p in docs}
+    vis = {p: ''.join(d.visible) for p, d in docs.items()}
+    hrefs = {p: {h for h, _ in d.links} for p, d in docs.items()}
+    need = {
+        '/ko/neis/': [lim['neis']['source']],
+        '/ko/guide/neis-500ja-1500byte/': [lim['neis']['source']],
+        '/ko/byte/': [u for _, u in lim['kr_sms']['sources']],
+        '/ko/sns/': [r['src'] for r in lim['sns']['rows']],
+        '/character-counter/': [r['src'] for r in lim['sns']['rows']] + [lim['sns']['x_config']['src']],
+        '/guide/how-x-counts-characters/': ['https://docs.x.com/fundamentals/counting-characters', lim['sns']['x_config']['src']],
+        '/': [lim['reading']['source']],
+        '/ko/wongoji/': [lim['wongoji_rules']['source'], lim['wongoji_rules']['custom_source']],
+        '/ko/jasoseo/': [r['url'] for r in lim['jobsites']['rows']],
+        '/ko/guide/geulja-su-dareun-iyu/': [r['url'] for r in lim['jobsites']['rows']],
+    }
+    for p, urls in need.items():
+        ok(p in docs, f'{p}: 페이지가 없음')
+        if p not in docs:
+            continue
+        for u in urls:
+            ok(u in hrefs[p], f'{p}: 출처 링크가 없음 {u}')
+        day = 'checked 2026-10-10' if not p.startswith('/ko/') else ('2026년 10월 10일' if 'jobsites' in str(urls) or p in ('/ko/jasoseo/', '/ko/guide/geulja-su-dareun-iyu/') else '2026-10-10 확인')
+        ok(day in vis[p] or '2026-10-10' in vis[p], f'{p}: 확인한 날이 화면에 없음')
+    ok('2026년 10월 10일' in vis['/ko/jasoseo/'] and '2026년 10월 10일' in vis['/ko/guide/geulja-su-dareun-iyu/'], '취업 사이트 측정값: 넣어 본 날짜가 화면에 없음')
+    # 나이스: 2026학년도 고등학교 기준이라고 밝히고, 표의 숫자 = limits.json, 원문 인용 그대로
+    n = lim['neis']
+    for p in ('/ko/neis/', '/ko/guide/neis-500ja-1500byte/'):
+        ok('2026학년도' in vis[p] and '고등학교' in vis[p], f'{p}: 학년도·학교급을 밝혀야 함')
+        ok(n['quote'].lstrip('※ ') in vis[p], f'{p}: 기재요령 원문 인용이 다름')
+        for it in n['items']:
+            ok(f'{it["name"]}' in vis[p] and f'{it["chars"]:,}자' in vis[p] and f'{it["chars"] * 3:,}Byte' in vis[p], f'{p}: 항목 {it["name"]} 숫자가 없음')
+    ok('계산' in vis['/ko/neis/'] and '엔터 1Byte' in vis['/ko/neis/'], '/ko/neis/: 바이트는 계산한 값이라고 밝히고 엔터 1Byte를 적는다')
+    # SNS 한도: 목록의 한도·단위 = limits.json
+    for p, lang in (('/ko/sns/', 'ko'), ('/character-counter/', 'en')):
+        for r in lim['sns']['rows']:
+            ok(f'data-unit="{r["unit"]}" data-limit="{r["limit"]}" data-id="{r["id"]}"' in raw[p] and r[lang] in vis[p], f'{p}: SNS 한도 {r["id"]} 줄이 limits.json 과 다름')
+    # 확인하지 못한 것은 싣지 않는다
+    allvis = '\n'.join(vis.values())
+    for word in ('페이스북', 'Facebook', '63,206', 'SKT', '3gpp.org', 'dynareport'):
+        ok(word not in allvis and word not in ''.join(raw.values()), f'확인 못 한 것({word})이 화면·링크에 있음')
+    for m in re.finditer(r'[^.。\n]*SK텔레콤[^.。\n]*', allvis):
+        ok('확인하지 못했' in m.group(0), f'SK텔레콤은 확인하지 못했다는 문장에서만: {m.group(0)[:50]}')
+    for m in re.finditer(r'[^.。\n]*(?:중학교|초등학교)[^.。\n]*', allvis):
+        ok('확인하지 못' in m.group(0) or '초등 원고지' in m.group(0), f'중학교·초등학교 값은 싣지 않는다: {m.group(0)[:50]}')
+    for p, t in vis.items():
+        if '700자' in t:
+            ok('2025학년도' in t, f'{p}: 진로활동 700자는 2025학년도까지의 값이라고 밝혀야 함')
+    for m in re.finditer(r'[^.\n]*90byte[^.\n]*', allvis):
+        ok(any(w in m.group(0) for w in ('웹 문자 발송', '직접 입력', '45자')), f'90byte는 웹 문자 발송 서비스 쪽 숫자라고 밝힌 곳에서만: {m.group(0)[:60]}')
+    en2 = vis.get('/guide/why-161-characters-is-two-sms/', '')
+    ok('6 bytes' not in en2 and '7 of the' not in en2 and '3GPP TS 23.040' in en2, 'SMS 글: 머리 크기 문장은 빼고 표준 번호만 글자로')
+    # 방침: 방문 통계(Cloudflare Web Analytics)를 적고, '분석 도구 없음' 뜻의 문장이 없을 것
+    for p in ('/privacy/', '/ko/privacy/'):
+        ok('Cloudflare Web Analytics' in vis[p] and 'https://www.cloudflare.com/web-analytics/' in hrefs[p], f'{p}: Cloudflare Web Analytics 문장·링크')
+    for p in ('/privacy/', '/ko/privacy/', '/about/', '/ko/about/', '/', '/ko/'):
+        bad = re.search(r'분석 도구[를는은]? ?(쓰지|사용하지|없)|통계[를는은]? ?(모으지|수집하지) 않|추적하지 않|no analytics|(do not|don\'t|never) (use|run) (any )?analytics|no tracking|(do not|don\'t) track|아무것도 (보내지|전송하지) 않', vis[p], re.I)
+        ok(not bad, f'{p}: 방문 통계가 없다는 뜻의 문장 "{bad.group(0) if bad else ""}"')
+    # 새 페이지(나이스·SNS)는 다른 언어 짝이 없다
+    for p in ('/ko/neis/', '/ko/sns/'):
+        ok(not docs[p].alts, f'{p}: 짝이 없는 페이지에 hreflang')
+    # '세다'의 높임 '세요'는 명령과 헷갈린다: '세어요'로 쓴다
+    for p, t in vis.items():
+        m = re.search(r'(로|씩|따로|나란히|바이트를|글자를|수를|이렇게) 세요', t)
+        ok(not m, f'{p}: 헷갈리는 "세요" → "세어요": {m.group(0) if m else ""}')
+    # '고친 날' → '마지막 확인'
+    ok('고친 날' not in allvis and 'Updated ' not in allvis, "'고친 날'/'Updated' 가 남아 있음")
+    # 표는 한 겹만 감싼다(두 겹이면 넓은 표가 옆으로 밀리지 않는다)
+    ok(not any(re.search(r'<div class="tbl[^>]*>\s*<div class="tbl', r) for r in raw.values()) and all(r.count('<table') == r.count('<div class="tbl') for r in raw.values()), '표를 감싼 칸(.tbl)이 표 수와 다르거나 두 겹')
+    # 광고 자리: 안쪽 틀(.ad-in)이 있어 글 기둥 폭에 맞는다
+    ok(all(r.count('class="ad-in"') == r.count('data-ad=') for r in raw.values()), '광고 자리에 .ad-in 틀이 없음')
 
     print(f'{"실패" if fails else "통과"}  정적 검사: {passed}개 통과' + (f', {len(fails)}개 실패' if fails else '') + f' (페이지 {len(docs)}장)')
     for m in fails[:40]:

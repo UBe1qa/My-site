@@ -317,6 +317,34 @@
     return { codePoints: cps, units: s.length, utf8: u8 };
   };
 
+  /* 한도마다 다른 '세는 단위'로 글 길이를 잰다(글은 주어진 그대로, 줄바꿈도 있는 그대로).
+     grapheme = 사람이 보는 글자, utf16 = UTF-16 단위(자바스크립트 length), utf8 = UTF-8 바이트,
+     euckr = EUC-KR(CP949) 바이트(못 담는 글자는 뺌), x = X 가중 글자 수(lc-x.js가 있을 때) */
+  LC.measure = function (text, unit) {
+    text = text == null ? '' : String(text);
+    if (unit === 'utf16') return text.length;
+    if (unit === 'x') return LC.x ? LC.x.count(text).weighted : null;
+    var lf = text.replace(/\r\n?/g, '\n'), cr = text.length - lf.length;
+    var r = LC.analyze(lf, { newline: 1, segment: false });
+    if (unit === 'grapheme') return r.raw.graphemes;
+    if (unit === 'utf8') return r.bytes.utf8 + cr;
+    if (unit === 'euckr') return r.bytes.euckr ? r.bytes.euckr.bytes + cr : null;
+    return null;
+  };
+
+  /* 나이스(교육정보시스템) 학교생활기록부 바이트. 기재요령에 적힌 것: 한글 1자 3Byte, 영문·숫자 1자 1Byte, 엔터 1Byte.
+     원문에 없는 것(띄어쓰기·문장부호·특수문자)은 UTF-8 바이트로 센다(ASCII 1Byte). 화면에 그렇게 밝힌다.
+     maxChars = 그 항목의 최대 글자 수(한글 기준). 한도 바이트 = maxChars × 3. */
+  LC.neis = function (text, maxChars) {
+    var r = LC.analyze(text == null ? '' : String(text), { newline: 1, segment: false });
+    var max = Math.max(0, Math.floor(+maxChars || 0)), limit = max * 3, bytes = r.bytes.utf8;
+    return {
+      bytes: bytes, limit: limit, left: limit - bytes, over: bytes > limit,
+      chars: r.chars, charsNoSpace: r.charsNoSpace, lineBreaks: r.spaces.lineBreaks,
+      hangulLeft: limit > bytes ? Math.floor((limit - bytes) / 3) : 0
+    };
+  };
+
   /* 읽는·말하는 시간(초). perMinute = 1분에 읽는 단어(또는 글자) 수. 기본값은 화면 설정이 정한다. */
   LC.seconds = function (count, perMinute) {
     if (!(perMinute > 0) || !(count > 0)) return 0;

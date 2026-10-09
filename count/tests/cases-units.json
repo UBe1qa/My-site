@@ -1,0 +1,3093 @@
+{
+"note": "파이썬으로 따로 센 값(gen_units.py). 고치지 말고 다시 만든다.",
+"neis": [
+{
+"text": "",
+"max": 500,
+"bytes": 0,
+"limit": 1500,
+"left": 1500,
+"chars": 0,
+"lineBreaks": 0,
+"hangulLeft": 500
+},
+{
+"text": "가",
+"max": 500,
+"bytes": 3,
+"limit": 1500,
+"left": 1497,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 499
+},
+{
+"text": "a",
+"max": 500,
+"bytes": 1,
+"limit": 1500,
+"left": 1499,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 499
+},
+{
+"text": "1",
+"max": 500,
+"bytes": 1,
+"limit": 1500,
+"left": 1499,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 499
+},
+{
+"text": " ",
+"max": 500,
+"bytes": 1,
+"limit": 1500,
+"left": 1499,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 499
+},
+{
+"text": "\n",
+"max": 500,
+"bytes": 1,
+"limit": 1500,
+"left": 1499,
+"chars": 1,
+"lineBreaks": 1,
+"hangulLeft": 499
+},
+{
+"text": "가나다",
+"max": 500,
+"bytes": 9,
+"limit": 1500,
+"left": 1491,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 497
+},
+{
+"text": "abc123",
+"max": 500,
+"bytes": 6,
+"limit": 1500,
+"left": 1494,
+"chars": 6,
+"lineBreaks": 0,
+"hangulLeft": 498
+},
+{
+"text": "가나다\nabc",
+"max": 500,
+"bytes": 13,
+"limit": 1500,
+"left": 1487,
+"chars": 7,
+"lineBreaks": 1,
+"hangulLeft": 495
+},
+{
+"text": "독서 토론에 참여함.",
+"max": 500,
+"bytes": 27,
+"limit": 1500,
+"left": 1473,
+"chars": 11,
+"lineBreaks": 0,
+"hangulLeft": 491
+},
+{
+"text": "학급 회의에서 안건을 제안함.\n발표를 맡아 근거를 들어 설명함.",
+"max": 500,
+"bytes": 85,
+"limit": 1500,
+"left": 1415,
+"chars": 35,
+"lineBreaks": 1,
+"hangulLeft": 471
+},
+{
+"text": "TED 강연 3편을 듣고 요약함.",
+"max": 500,
+"bytes": 36,
+"limit": 1500,
+"left": 1464,
+"chars": 18,
+"lineBreaks": 0,
+"hangulLeft": 488
+},
+{
+"text": "줄\r\n바꿈",
+"max": 500,
+"bytes": 10,
+"limit": 1500,
+"left": 1490,
+"chars": 4,
+"lineBreaks": 1,
+"hangulLeft": 496
+},
+{
+"text": "줄\r바꿈",
+"max": 500,
+"bytes": 10,
+"limit": 1500,
+"left": 1490,
+"chars": 4,
+"lineBreaks": 1,
+"hangulLeft": 496
+},
+{
+"text": "\n\n",
+"max": 500,
+"bytes": 2,
+"limit": 1500,
+"left": 1498,
+"chars": 2,
+"lineBreaks": 2,
+"hangulLeft": 499
+},
+{
+"text": "ㄱㄴㄷ",
+"max": 500,
+"bytes": 9,
+"limit": 1500,
+"left": 1491,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 497
+},
+{
+"text": "漢字",
+"max": 500,
+"bytes": 6,
+"limit": 1500,
+"left": 1494,
+"chars": 2,
+"lineBreaks": 0,
+"hangulLeft": 498
+},
+{
+"text": "‘따옴표’ “큰따옴표”",
+"max": 500,
+"bytes": 34,
+"limit": 1500,
+"left": 1466,
+"chars": 12,
+"lineBreaks": 0,
+"hangulLeft": 488
+},
+{
+"text": "①②③",
+"max": 500,
+"bytes": 9,
+"limit": 1500,
+"left": 1491,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 497
+},
+{
+"text": "가·나",
+"max": 500,
+"bytes": 8,
+"limit": 1500,
+"left": 1492,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 497
+},
+{
+"text": "A～Z",
+"max": 500,
+"bytes": 5,
+"limit": 1500,
+"left": 1495,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 498
+},
+{
+"text": "😀",
+"max": 500,
+"bytes": 4,
+"limit": 1500,
+"left": 1496,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 498
+},
+{
+"text": "가😀나",
+"max": 500,
+"bytes": 10,
+"limit": 1500,
+"left": 1490,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 496
+},
+{
+"text": "👨‍👩‍👧",
+"max": 500,
+"bytes": 18,
+"limit": 1500,
+"left": 1482,
+"chars": 1,
+"lineBreaks": 0,
+"hangulLeft": 494
+},
+{
+"text": "2026학년도 1학기: 수학Ⅰ, 영어Ⅱ",
+"max": 500,
+"bytes": 43,
+"limit": 1500,
+"left": 1457,
+"chars": 21,
+"lineBreaks": 0,
+"hangulLeft": 485
+},
+{
+"text": "café",
+"max": 500,
+"bytes": 5,
+"limit": 1500,
+"left": 1495,
+"chars": 4,
+"lineBreaks": 0,
+"hangulLeft": 498
+},
+{
+"text": "음 ”활\n㉠다다나나활다 다나가(임가~XZ함나동9~나생생함임학,나 함가생가…漢가함 함임음함👍🏽\n가ca활a학학①9함“임”c다·…음90é 9학0동 9나활다가나cca\n漢활",
+"max": 250,
+"bytes": 215,
+"limit": 750,
+"left": 535,
+"chars": 90,
+"lineBreaks": 3,
+"hangulLeft": 178
+},
+{
+"text": "학 \n1가다음~a생\ncX생b함0학다 임생나음’함생 학동학1 음임 …학 활가함",
+"max": 300,
+"bytes": 94,
+"limit": 900,
+"left": 806,
+"chars": 42,
+"lineBreaks": 2,
+"hangulLeft": 268
+},
+{
+"text": "🇰🇷 …Y 1 생 ㉠1생0“학임가동)b 임XX나학생다a’c🇰🇷·나Y학나임",
+"max": 500,
+"bytes": 91,
+"limit": 1500,
+"left": 1409,
+"chars": 38,
+"lineBreaks": 0,
+"hangulLeft": 469
+},
+{
+"text": "다가가(Y·…\n 다( 생9Y9b~0음임임함Y생생.임0c생  c \n",
+"max": 1000,
+"bytes": 65,
+"limit": 3000,
+"left": 2935,
+"chars": 36,
+"lineBreaks": 2,
+"hangulLeft": 978
+},
+{
+"text": ".활 Y동임활나임활(음\n 가다 \n,c”1가학함나학임동다 가a 동 é(활나가가91’함학학漢ac동동나,음 생다학Z생.음음Y함임학나생학가Y다9임b 나\n나 ① \n.\n…함‘\n생 활b😀나동9a’나X",
+"max": 250,
+"bytes": 230,
+"limit": 750,
+"left": 520,
+"chars": 104,
+"lineBreaks": 6,
+"hangulLeft": 173
+},
+{
+"text": "음 “…🇰🇷생임활나’동가음 동가a생음임음\n\nY가함생‘9 학 가)함1임 함\n1활다X”’음 · 동나c 다다동나”생(a함가…가동\n①漢(“다1함학’1Z학”Y 함b생학학나é동학c음“a동나함학~~음🇰🇷)가임‘9 동 😀가(음1동‘학가가임가漢X",
+"max": 250,
+"bytes": 307,
+"limit": 750,
+"left": 443,
+"chars": 126,
+"lineBreaks": 4,
+"hangulLeft": 147
+},
+{
+"text": "”음 생활c생\n함\n\n가Zé동임동👍🏽~음 임0함나가 생다나나임Y동생임다함나학a①다 c①동”가X0가 가나c동학c a함다 \n  1다🇰🇷🇰🇷음생학활활나 임학 나b함‘가생나음동임Y‘동 함학함9나é함활0X동음학…가’ 9다음임함함다다 …나함 생c학X동1)학1,다동음생가Y\n생’X학 )·함0나0👍🏽음동동Y나동함",
+"max": 300,
+"bytes": 396,
+"limit": 900,
+"left": 504,
+"chars": 161,
+"lineBreaks": 5,
+"hangulLeft": 168
+},
+{
+"text": "생생임학나\n동9가생가학함가 c 활나활\n나b동동 …0함c· 0~\n임활0동생 다활함   “학 나함 생다~X학다생함음나(👍🏽학漢‘학,음음함가가생학  임가임생동나가생X함다",
+"max": 500,
+"bytes": 218,
+"limit": 1500,
+"left": 1282,
+"chars": 90,
+"lineBreaks": 3,
+"hangulLeft": 427
+},
+{
+"text": "\n🇰🇷(음임 c임다(생함임 .임임활학\n생생생생나나나0 생동\né다다함가 학c음 임😀다다Y9 생 ‘임c나 c다 9‘활학’가다’활Y동함동함1 함0X생b생임 😀1Y음0 1음Z생생 (함①㉠b생함①1㉠음 ’\n 가 .가 \n학Zb다학함①동활~나함 \n학학c다 활 1학함\n활,Y동\n0",
+"max": 250,
+"bytes": 325,
+"limit": 750,
+"left": 425,
+"chars": 147,
+"lineBreaks": 8,
+"hangulLeft": 141
+},
+{
+"text": "음c,X 음c임Z9 생함임㉠가a활a음)~음함임활활9)Za a나 학다1함함함다음음’Y…다가임é다음가漢‘“나동함b😀 ·\n학😀1임(….생다👍🏽X👍🏽 함학다 동0임1a임 학생” “다임나다,漢임1활a학생함é\n나학다동①가나Y.나음활가 활생동임0음음임‘나\n학학함동나1학나학1생활Xc나X가 학🇰🇷①임“Z학9함",
+"max": 500,
+"bytes": 393,
+"limit": 1500,
+"left": 1107,
+"chars": 161,
+"lineBreaks": 3,
+"hangulLeft": 369
+},
+{
+"text": "나동나동\n학활함음함나‘ 학 가나다동Y 나é👍🏽X동학\n음활 a다가다생함.a음다음. ①동…漢가‘ 🇰🇷Z함,함0 동Y.“가1학 가음임활임①㉠생함X다가함음가.9Z가 ~  나활다 활Z \n동 임Z 1나음학(”동함  임0 나c나가~생漢가함활”생음음 Za함)c 활임동나\n“ 음음함b漢임학동임c가0 ”동나동0 X",
+"max": 1000,
+"bytes": 378,
+"limit": 3000,
+"left": 2622,
+"chars": 163,
+"lineBreaks": 4,
+"hangulLeft": 874
+},
+{
+"text": "임\n\n“ ‘나다Y👍🏽동함가 임생가b나음가생 나9 😀㉠a 생🇰🇷학1👍🏽학  가”동1나학나\n1학Za😀가동함😀임X 생\n다나1X함생음a나·🇰🇷 ",
+"max": 50,
+"bytes": 186,
+"limit": 150,
+"left": -36,
+"chars": 72,
+"lineBreaks": 4,
+"hangulLeft": 0
+},
+{
+"text": "나음음 함음다학① Z동생나 함\n동동음임함활생㉠ 가임동활Z)YY음음   漢학다 학활😀임\n漢👍🏽나\n 가임동동학다함생임",
+"max": 50,
+"bytes": 158,
+"limit": 150,
+"left": -8,
+"chars": 62,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "생…가가  👍🏽함가활나c음漢a학  생 나함임활활활생a1나음활가가동음활9학다 활활활다\n가동",
+"max": 500,
+"bytes": 125,
+"limit": 1500,
+"left": 1375,
+"chars": 48,
+"lineBreaks": 1,
+"hangulLeft": 458
+},
+{
+"text": "“생생1…0생c동\nb학)",
+"max": 250,
+"bytes": 27,
+"limit": 750,
+"left": 723,
+"chars": 13,
+"lineBreaks": 1,
+"hangulLeft": 241
+},
+{
+"text": "음함.",
+"max": 50,
+"bytes": 7,
+"limit": 150,
+"left": 143,
+"chars": 3,
+"lineBreaks": 0,
+"hangulLeft": 47
+},
+{
+"text": "bY9동 9음,학9생a0생Y  Z가 漢YY( 가임다\n나c음가나활\n·학다 나9漢나동 음X임b임가함다가\nY 음🇰🇷음\n생  임 함",
+"max": 500,
+"bytes": 142,
+"limit": 1500,
+"left": 1358,
+"chars": 68,
+"lineBreaks": 4,
+"hangulLeft": 452
+},
+{
+"text": "활가함\n생동음동임(다임활임 학c함가임 활학 음c…b가생가·9~ a·음다다학생가활함…0가가생Z나c 음함…함생 음학학함활가생함 함음(생b동0음 활다음동활생학 함활나임다X 다",
+"max": 50,
+"bytes": 230,
+"limit": 150,
+"left": -80,
+"chars": 94,
+"lineBreaks": 1,
+"hangulLeft": 0
+},
+{
+"text": "학 a다 ①“‘함학Xb함 漢함동가(다㉠~👍🏽함나동다\n👍🏽다b가음활음b함나임다활①Z 동생활 학동”1임 활X “,9동학다학Z다a나활다활생)漢가가 임9,함🇰🇷 é활~㉠, 나다활 Z😀é다 나다임가음가가1 다생 나함함,활X가함c동임활동음㉠임동\n…다🇰🇷함학가나함음  함①㉠활활함활나 .음· 생가다  활활함활 Y음”생다활음생동",
+"max": 50,
+"bytes": 433,
+"limit": 150,
+"left": -283,
+"chars": 171,
+"lineBreaks": 2,
+"hangulLeft": 0
+},
+{
+"text": ")다 가  9\n다Z9 활학학 임활나음나활다漢동다·나 ㉠ 학임음.다생c다c함함 나 음0임활 동학b 가0 음”활나 cb학Y 활·\n9漢🇰🇷나생활 음학나”9…동9 활음Y나X“①음학 나😀학가  가0다‘함가Y 漢동 ~“임Z활‘9학…함가음 음활 활학 활(Z동학’X음나동함",
+"max": 250,
+"bytes": 329,
+"limit": 750,
+"left": 421,
+"chars": 143,
+"lineBreaks": 2,
+"hangulLeft": 140
+},
+{
+"text": "Y학 .나 나 생\n학㉠음함활함동  나”나임 동활음X가음다활생나생나함👍🏽함다임동동학 활~é(동c)활👍🏽“ aY함 동나다나~漢·임X다임나동함“생①생0a가Z동음“…다함동가9활임음다\nX가,\nZ학Z활생다 X나나생😀학1",
+"max": 300,
+"bytes": 283,
+"limit": 900,
+"left": 617,
+"chars": 114,
+"lineBreaks": 3,
+"hangulLeft": 205
+},
+{
+"text": " 활함학c\n학~9임학생 생·함활é  나다  Xb   활다X다㉠활활가9음 나함학·나임)함함 가0가함9 음’😀동함é b다🇰🇷éba 음학함활임다X함Xa,나‘  생활\n㉠생’학활생9학Y…생동①활‘가함나1가나나임다나XX(생漢함생X학c1임임활~a동‘나생동)임\n음 동 생 다c활학a다함 함9나함활임“함c음가임생나음다나가다다 가함",
+"max": 1000,
+"bytes": 409,
+"limit": 3000,
+"left": 2591,
+"chars": 174,
+"lineBreaks": 3,
+"hangulLeft": 863
+},
+{
+"text": "다,가…학0가임漢동함X0🇰🇷 함가 생 동다다학1Y나임다나  b가동é임ZX가\n함가함다생9 나학학 … ①함b \n함c동학1\n 가  가함나함다9임다동(0임생임가나다漢 ~Xbb함①다😀9 함”a활임 다활1…\nY가Y나다임‘함b동함다😀동동활학함활b함음9 )나활a\n함동나0함동함학나학나 학漢음🇰🇷생X 함XY“㉠음漢~0’동…임a\n",
+"max": 50,
+"bytes": 405,
+"limit": 150,
+"left": -255,
+"chars": 172,
+"lineBreaks": 6,
+"hangulLeft": 0
+},
+{
+"text": "학동b나 학0가c0다)0다Zc동함함(😀학다.)다b음생\n다다Xb 생 함b 학가· 생Y…나음\n활 임활 )(생활가활음학함가활0생생a“\n나🇰🇷\n생동.학동활음㉠동학함  학생",
+"max": 300,
+"bytes": 207,
+"limit": 900,
+"left": 693,
+"chars": 90,
+"lineBreaks": 4,
+"hangulLeft": 231
+},
+{
+"text": "함”①…임가9‘b~임\n다나",
+"max": 50,
+"bytes": 34,
+"limit": 150,
+"left": 116,
+"chars": 14,
+"lineBreaks": 1,
+"hangulLeft": 38
+},
+{
+"text": "활다학가임\n  0나임10①1임생음동동학학나 동동활생‘ X다…함다X다9활동 나학9 1c가a학나다동다…가 활 · 생임나학👍🏽활나a함b0음함 …음9X다활활다생9나동 동활9a학· 임 활다학  9나👍🏽생 동나동동다 )나다활 ‘임나",
+"max": 300,
+"bytes": 291,
+"limit": 900,
+"left": 609,
+"chars": 121,
+"lineBreaks": 1,
+"hangulLeft": 203
+},
+{
+"text": ")9 0é음가😀가. ‘동a음임a음음음…b\n…활동\n생학  나나0나é·’학 임함나나가동Z다)음동활생 \n “나 ”·활c임,ba함b활 임다다 Z임함\nc  \n0동a.동 활활임임  0학a 0c’음활9 생é음나활학㉠활 활학b동가임동음 0가9Z다 나·Z① ~ 함b생가나임함. .a9다함다~Z동임다Z0생 학활다",
+"max": 500,
+"bytes": 349,
+"limit": 1500,
+"left": 1151,
+"chars": 164,
+"lineBreaks": 5,
+"hangulLeft": 383
+},
+{
+"text": "학생1 cc나활다학가0Z나임漢임a 🇰🇷함)나활음나함1😀 동활활0가다음음다“ 활생éé나)학음X음생a漢나음Y  생 생가9Yb.가9‘X동Y나생음다함가학다학 동활a생“동가임91임b9음다c학함0",
+"max": 1000,
+"bytes": 240,
+"limit": 3000,
+"left": 2760,
+"chars": 102,
+"lineBreaks": 0,
+"hangulLeft": 920
+},
+{
+"text": "다동나  가 생학음9 임",
+"max": 1000,
+"bytes": 29,
+"limit": 3000,
+"left": 2971,
+"chars": 13,
+"lineBreaks": 0,
+"hangulLeft": 990
+},
+{
+"text": "X나음 함활학9가생나활 음",
+"max": 1000,
+"bytes": 34,
+"limit": 3000,
+"left": 2966,
+"chars": 14,
+"lineBreaks": 0,
+"hangulLeft": 988
+},
+{
+"text": "활임동함학c",
+"max": 50,
+"bytes": 16,
+"limit": 150,
+"left": 134,
+"chars": 6,
+"lineBreaks": 0,
+"hangulLeft": 44
+},
+{
+"text": "😀a음생Z동활 XX 학다활 활생\n c생a학나활함활학동b 함학Y동음나“임음가동가0\n👍🏽\n1나동.나9활음b9👍🏽 ‘…  음생 👍🏽음 \na동 생생동c다Z‘음 ,동생Y함",
+"max": 50,
+"bytes": 207,
+"limit": 150,
+"left": -57,
+"chars": 87,
+"lineBreaks": 4,
+"hangulLeft": 0
+},
+{
+"text": "  음· Y🇰🇷함  가 ’생함(0임1임가🇰🇷학나가나)bZ1 활 생음학나0é 👍🏽bY   다음~임다함임임a생é.임다임음동음가X",
+"max": 1000,
+"bytes": 156,
+"limit": 3000,
+"left": 2844,
+"chars": 66,
+"lineBreaks": 0,
+"hangulLeft": 948
+},
+{
+"text": "~나a漢학 1가음임a임a활활00나’a1음 😀… )음 가함1임활é학학X나)X함” 나음(음함동동가 함생활동음XY생 동Z임a 학함가임👍🏽나음음Z\n\n음0나다임동㉠ 생b활함임“활9\n가다음 음 다다음음0임다임b9  생👍🏽임 학임생임 음🇰🇷학활①동 éZ가가1동함 활동생 👍🏽생임X 임,임",
+"max": 250,
+"bytes": 362,
+"limit": 750,
+"left": 388,
+"chars": 149,
+"lineBreaks": 3,
+"hangulLeft": 129
+},
+{
+"text": "임생임\n…임학(활함함가활활음동임함학Y 가가임“음“학~‘동함9Z임음9동다 ~동생‘0학나\n 다  생  )Y🇰🇷생X생\n다a나학활9 ‘함c1임나,동㉠활음Y함함다다함활활학동나음음활나가1 학 X 9동음 (c 가 ",
+"max": 50,
+"bytes": 260,
+"limit": 150,
+"left": -110,
+"chars": 111,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "b ,a활  )나활생음c임다학동·함㉠동👍🏽임학나~\n활동a나漢😀",
+"max": 50,
+"bytes": 82,
+"limit": 150,
+"left": 68,
+"chars": 33,
+"lineBreaks": 1,
+"hangulLeft": 22
+},
+{
+"text": "“가함\n함임 임 나음c나",
+"max": 50,
+"bytes": 31,
+"limit": 150,
+"left": 119,
+"chars": 13,
+"lineBreaks": 1,
+"hangulLeft": 39
+},
+{
+"text": "Y학👍🏽동활동다0Y 학함동생활0 👍🏽활생다동“음학동X동함 ,함🇰🇷 가활é ’동음생임漢\nX동’  생1음(활가생\n생‘b생다학임임\nb나학가가 가학학임학임🇰🇷다Y생학baZ동 (활생)함동임다😀👍🏽학생  Zé.활나함",
+"max": 1000,
+"bytes": 285,
+"limit": 3000,
+"left": 2715,
+"chars": 109,
+"lineBreaks": 3,
+"hangulLeft": 905
+},
+{
+"text": " 1학함 학b함  음가 0가1나0음나a",
+"max": 1000,
+"bytes": 41,
+"limit": 3000,
+"left": 2959,
+"chars": 21,
+"lineBreaks": 0,
+"hangulLeft": 986
+},
+{
+"text": "동Y음1함가 가\n나나 동동9 임 가임🇰🇷생함함Z“동동학임동①👍🏽c다동음임가9함X가생함·활Y학나다생 학나나임‘다임 🇰🇷“임활학 다Y임함Y·나음나음  동함동함 나함c)다 함동동임",
+"max": 300,
+"bytes": 247,
+"limit": 900,
+"left": 653,
+"chars": 94,
+"lineBreaks": 1,
+"hangulLeft": 217
+},
+{
+"text": "90  임동 임생\n함가Z함음c🇰🇷임  동활다생가Y①a활‘학Y…",
+"max": 1000,
+"bytes": 78,
+"limit": 3000,
+"left": 2922,
+"chars": 33,
+"lineBreaks": 1,
+"hangulLeft": 974
+},
+{
+"text": "나음다,Z활다함동동학생가 활함함음 가음👍🏽b활a다가생음Y.동나동 다함가학Y다나’다가생나나나임 Z다가漢  나Y‘’나활음\n학 함\n생생학학Y음 다임학활  임Z생임)활 \na함임 생1생다학음Y가함(다동0‘다c😀활음…가임함가다0 가생다함é동X c함\nY~임X’함생음) 활.활 함\n함, b",
+"max": 300,
+"bytes": 361,
+"limit": 900,
+"left": 539,
+"chars": 152,
+"lineBreaks": 5,
+"hangulLeft": 179
+},
+{
+"text": "다음a‘함나학漢 생가’학, 함임생가~“…다90 활생생생임함함",
+"max": 1000,
+"bytes": 83,
+"limit": 3000,
+"left": 2917,
+"chars": 33,
+"lineBreaks": 0,
+"hangulLeft": 972
+},
+{
+"text": "활학생가 활Zb생Z가\n동음활㉠학학다활동a생나 학X음활0동\n동  YY1임다함㉠동음~  다함0가학,학0함활㉠활가bY)함함b)é\n임임임\n가,가함다”함동동동생가 “동)활가활함🇰🇷é 나나 ①학漢’음가다나0c나’임임c다 ’활a음동 다함가·다a학학🇰🇷활X임다동동Y임함가 ㉠임함활\n漢활활나동\n “a나91다활 음…다가 동😀",
+"max": 1000,
+"bytes": 413,
+"limit": 3000,
+"left": 2587,
+"chars": 169,
+"lineBreaks": 6,
+"hangulLeft": 862
+},
+{
+"text": "\n임동다음0🇰🇷\n①다가함활X생a활생가활가 나 나함 👍🏽가  나bXXb학음동다Z다1활,가음 다 음 학동 \n🇰🇷Y학다가학, ‘나’Za c학다임 임동활음① \n활음활 생 ~동동활 c가다 ·음활a활가9漢 a·가1다Y\n a학나음학·함…,①동학aX나음가함음 다.😀 가",
+"max": 250,
+"bytes": 324,
+"limit": 750,
+"left": 426,
+"chars": 139,
+"lineBreaks": 5,
+"hangulLeft": 142
+},
+{
+"text": "Y음(Y활Z가漢 생활,\n 음생임 동b학다나다…동Z임생 다Z가음함음음생  다활다XXé😀동학XY생9학임 9  c다음학활음 임다\n동임 가…함다생함 9가9.나㉠b다Z동",
+"max": 300,
+"bytes": 199,
+"limit": 900,
+"left": 701,
+"chars": 89,
+"lineBreaks": 2,
+"hangulLeft": 233
+},
+{
+"text": " 9 Y9함가Y음b漢생‘다 동다함동👍🏽가나,다다학임①9 다다”나생aX가활음\n함 생다다생음생음가임생c\n😀동cc㉠  \n음\n 가활… X학)나a  학함1  임다학Y다함X\n함😀\n나(함동나~Y임9漢함\n\n’임0009X가.①생c동 \n·(음생음함0\n함활a 가 학👍🏽음😀“동가c 함 다",
+"max": 300,
+"bytes": 331,
+"limit": 900,
+"left": 569,
+"chars": 147,
+"lineBreaks": 10,
+"hangulLeft": 189
+},
+{
+"text": "9음 동㉠나학다임다.다활가~활동 나\nbc임Y동Z나c가가학 다다활 가…나👍🏽임0임나동Z학é동음9생bY",
+"max": 250,
+"bytes": 130,
+"limit": 750,
+"left": 620,
+"chars": 54,
+"lineBreaks": 1,
+"hangulLeft": 206
+},
+{
+"text": "가X‘동( 1학Zac음동생’X생생 漢활가Y학\n 다활동함생漢①다생”\n다\n나😀가Y음9Y 나1생가임생\n다임동활활다함·함함.가나 생음 (동다가함임활다함①\n동0b활함🇰🇷·임가음a나Z생학음음~“ ”9학나X생c활음학1임함①가나임함…임👍🏽음다\n9~🇰🇷활음 나음(나a\nZé생생가활동가활다 Y나함Y임 ~학임활 a",
+"max": 1000,
+"bytes": 396,
+"limit": 3000,
+"left": 2604,
+"chars": 161,
+"lineBreaks": 7,
+"hangulLeft": 868
+},
+{
+"text": "임b활나활음. Y가 a\nb다9~동 함음a\n(\nb임“임임동’가동생b  (가”다9함학 학학다.· 함동함가임c함é \n“가 다가0a…동 😀생é동학X가’. 나활 동동함다 함동함함👍🏽음‘” 가 다가 함.생a.,b나나 다1a나“활 나음가다 나 생",
+"max": 250,
+"bytes": 290,
+"limit": 750,
+"left": 460,
+"chars": 129,
+"lineBreaks": 4,
+"hangulLeft": 153
+},
+{
+"text": "0학漢.음 1음b9漢함c .b임 Y 다다가😀임a학 Y 활👍🏽,다음Z0활",
+"max": 250,
+"bytes": 80,
+"limit": 750,
+"left": 670,
+"chars": 38,
+"lineBreaks": 0,
+"hangulLeft": 223
+},
+{
+"text": "음9음나학나 임0 학학9( 다학\n0X활9학함음생X 음학나.가동‘동~ Y a다 Z① 나c🇰🇷 동\n활음0음함가생Z)임학동함동동임. 동학1가음다임가·생“다 a나음) 동활①①\nb…다 나\n,임나😀Y다가동가동 ZZ생활 b·동학~나임다Z🇰🇷학가.\n\n\n함",
+"max": 1000,
+"bytes": 301,
+"limit": 3000,
+"left": 2699,
+"chars": 132,
+"lineBreaks": 7,
+"hangulLeft": 899
+},
+{
+"text": "a나음음~학 漢생음동bbZ학함 1다임임“\n동음다다X다 \n 👍🏽생·9( 다학 임학㉠동동생\n학 0가😀활🇰🇷가 👍🏽생음a다활나함임생나학 나\n👍🏽Z동1다漢.Z생①·㉠음㉠~\n임음Y가 임활㉠생\nc활생나임b나활Z 9학임음동임임임동0음함학0음",
+"max": 1000,
+"bytes": 308,
+"limit": 3000,
+"left": 2692,
+"chars": 123,
+"lineBreaks": 6,
+"hangulLeft": 897
+},
+{
+"text": "ba9활 동Z Z동a“9가a다나 활다음c생다 함음c음활생나9‘ 활09é①aY함다임,Z 함 a생“함1a  나나생학…임漢c활학생é가…’漢9·활다음학음b활9동학1 활음임가음 다Xc",
+"max": 500,
+"bytes": 212,
+"limit": 1500,
+"left": 1288,
+"chars": 97,
+"lineBreaks": 0,
+"hangulLeft": 429
+},
+{
+"text": ".가·X\n 나Y~Y활나가Y가학b학\n음나b가0나🇰🇷 임Z· 임다동가1활동함동임학 동 동1,활  활다Y음  b임음0활 0b동 😀가동",
+"max": 1000,
+"bytes": 152,
+"limit": 3000,
+"left": 2848,
+"chars": 70,
+"lineBreaks": 2,
+"hangulLeft": 949
+},
+{
+"text": "가다나임 함漢b음음,음c나함 함🇰🇷 임👍🏽함음 0활동㉠ 漢 가생임가’나나‘~’ 음\n임임생생임동 X①,”X임생나동나0활함漢나a학(음   0동😀가나나생(0활1c 학(🇰🇷동활학0🇰🇷나가 나함 다활음다활함학b동  0漢 활\n \n함가생‘학b",
+"max": 500,
+"bytes": 309,
+"limit": 1500,
+"left": 1191,
+"chars": 124,
+"lineBreaks": 3,
+"hangulLeft": 397
+},
+{
+"text": "…)함 a활음생Y음” 임X  학음함가음동다활(음…b  Y활학\n함음음다임(",
+"max": 50,
+"bytes": 90,
+"limit": 150,
+"left": 60,
+"chars": 40,
+"lineBreaks": 1,
+"hangulLeft": 20
+},
+{
+"text": "생동 Y함임c0함활9\n Z( ”…나음(학·음🇰🇷Z생(음생함음생Z다 ·다9다 생음활\n‘생나다 1a가다나임음임활임가…함 b동동나다漢\n활나 임  ~동생다·활㉠漢👍🏽동음 음👍🏽다가가b漢나다 가 c동a 가학b나b동음a Z동나음함생) 동‘학학가b가👍🏽활\n( 나활X0임음가X다é나나 생음생음1나나임🇰🇷a임b가·동” Z",
+"max": 300,
+"bytes": 405,
+"limit": 900,
+"left": 495,
+"chars": 165,
+"lineBreaks": 4,
+"hangulLeft": 165
+},
+{
+"text": "다다👍🏽0학漢가(1🇰🇷\n학학 aé나~임음나\ncb함동생생가 가음① bé다학함나 X임  다동다함함c나활임나“임활음👍🏽 다다)~ 임㉠X가활함c임나Y…활동 활활.0\n생임c학\n동생함 가‘…9가a, 생”임 다함1다다생학X다음가활c음생학함임동é동활활활漢cZbX동임음\n🇰🇷임학0음활Y·①X활가다a1음동활 학 함X漢",
+"max": 50,
+"bytes": 399,
+"limit": 150,
+"left": -249,
+"chars": 163,
+"lineBreaks": 5,
+"hangulLeft": 0
+},
+{
+"text": "가9활학X 다 .👍🏽 X함bY임다음임가😀a동활 Y임 é학b1 동학학동함😀나 동“1”다생a1나나\n임\n1동생a동 …\n가나㉠생다동함활동가 나나함 c나a활,나임 ,  1다학”임㉠생가  ’생함가 학 동다0ZZ😀학’임Y🇰🇷학생동😀음“다Z나가동·활가가X학1 생“생동)가”나~활X나동나함aé동~활생\n다  \n 👍🏽1음음b ‘음(👍🏽Zb다",
+"max": 500,
+"bytes": 418,
+"limit": 1500,
+"left": 1082,
+"chars": 175,
+"lineBreaks": 5,
+"hangulLeft": 360
+},
+{
+"text": "나함(함나활임학음동0a나함Y다다임다 é음학 함학 함학\n가Z함학a함\n다.b👍🏽 가,생é👍🏽활함~동 활①…’나bb\nb\n가😀가",
+"max": 250,
+"bytes": 160,
+"limit": 750,
+"left": 590,
+"chars": 65,
+"lineBreaks": 4,
+"hangulLeft": 196
+},
+{
+"text": " 음 ’ 함나가\n  음~0\n생나a학\n나임함’활다\n(동활나활1임Y)c  다다,9가활)\n음0나함 👍🏽활함c함활👍🏽함 ①(0가é“bY활활나임가\n“생학음나음.함.임 음\n “ 나b임임“X,함 함생0음학 다",
+"max": 1000,
+"bytes": 242,
+"limit": 3000,
+"left": 2758,
+"chars": 107,
+"lineBreaks": 7,
+"hangulLeft": 919
+},
+{
+"text": "(음\n임임학생동…a😀나음다“생함 1 다동활0함동생\n 생Z 다👍🏽나생음 \n1",
+"max": 300,
+"bytes": 98,
+"limit": 900,
+"left": 802,
+"chars": 40,
+"lineBreaks": 3,
+"hangulLeft": 267
+},
+{
+"text": "‘활활다활0임 가나 ㉠가다c나활’다~1👍🏽다·함활漢임동임 a 다활 함 \n활나 활음동함임.나학)나다㉠~ 나나 동생 ①음나학다나함‘·학Z다학 활,Yb 활임임활.가다① Z9,Z\n활c(동임가함동 ~   ‘~임.X,Za함활활\nY가임함나함생다활1음가가\na",
+"max": 300,
+"bytes": 308,
+"limit": 900,
+"left": 592,
+"chars": 135,
+"lineBreaks": 4,
+"hangulLeft": 197
+},
+{
+"text": "\n음생 가나.Y학.X활1생b음함 학 … 임9  Y\n가함9학음나X다학학동👍🏽음함함~9임학1.漢Y다.동활다”활가㉠활 임나다나동동 \n 활임동 \n다b음 임 …활X09학임생임漢~9음9\nX함함다🇰🇷 함X漢임Z‘활가나다음a함 동임활함👍🏽①나1 음임X동\n함학가함학漢임0가활,가함b나··(X함나9c다.생\n\n1\n학 함",
+"max": 1000,
+"bytes": 379,
+"limit": 3000,
+"left": 2621,
+"chars": 164,
+"lineBreaks": 9,
+"hangulLeft": 873
+},
+{
+"text": "\n①0동다다다나동·X  1활임학a가~학’함… 가 ~b‘임,생c가a)(임함X함함다다활X활·학활 나 학  “임나학·“나가0나漢음함0Z생활임동활학c함㉠ X)나ba 다0,동음 \n함활활학😀나( ",
+"max": 50,
+"bytes": 229,
+"limit": 150,
+"left": -79,
+"chars": 103,
+"lineBreaks": 2,
+"hangulLeft": 0
+},
+{
+"text": " ·생가학 ZZ음,동생다…X학\n”임학㉠ 1가음생다음학\n생다 b㉠활가음가9임임b”)활  임Z활a 학함\n임임Z\n🇰🇷 활학동(동0임a(9활 다생임· 학  활ca(학동c다c👍🏽 함Z나가  a동👍🏽임‘함",
+"max": 1000,
+"bytes": 242,
+"limit": 3000,
+"left": 2758,
+"chars": 105,
+"lineBreaks": 4,
+"hangulLeft": 919
+},
+{
+"text": "학a가학 생활활임동함동 가0가음1다 음학생9\nY생함 동9다 활생) 9학c학다~다b…임’다👍🏽임9임 학함임Z활함Y나나함나  ~X·다X생임0~ 동가임①cb 동함 Y임9Z가나생   활\n 漢음9 Z Z가X학학가활다~漢다다다Z활다b\n임활(‘활다동 동漢 가9",
+"max": 250,
+"bytes": 303,
+"limit": 750,
+"left": 447,
+"chars": 137,
+"lineBreaks": 3,
+"hangulLeft": 149
+},
+{
+"text": ")임생c다 0Zé 다가동👍🏽”동㉠9생0학음임0나음’ ①함음  Y    함 동",
+"max": 250,
+"bytes": 91,
+"limit": 750,
+"left": 659,
+"chars": 41,
+"lineBreaks": 0,
+"hangulLeft": 219
+},
+{
+"text": "b임가활음1나함동학👍🏽09.생나 가Y나😀학임0  활다㉠다음.c 활함생동가임임 함함1 생漢YZ나활함함학①다…👍🏽”함 é임Y나임\n9 1Z함🇰🇷가Z동 다)\n활",
+"max": 300,
+"bytes": 203,
+"limit": 900,
+"left": 697,
+"chars": 82,
+"lineBreaks": 2,
+"hangulLeft": 232
+},
+{
+"text": "활활a임나동1 활 😀동·😀활생Xc음 0다(나ac가학임가a ~동음음1음X다Z· \n·\n음동cY동) 1“ 활0동가나a9’함학 임학c학나a  음①활생 나bY X다\n음동함😀다다1 임활생나1😀임나활가나활 함",
+"max": 50,
+"bytes": 240,
+"limit": 150,
+"left": -90,
+"chars": 109,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "1漢생다학동생함Z1학다임동음나·생 함학음①. 🇰🇷가漢나함a·0나, 다·학b나동가동함b동\n생~“활👍🏽 ·0활임활c ”🇰🇷학a가a·“0é활활함9다1동bZ나😀a활가동다나ba 함함😀 b나음😀c임가가가👍🏽임생① 생생가a9학1임생”Y다🇰🇷 생음다음)~생 11활 활…”동활’동a(음漢임학 …’활①음👍🏽동함활\n생임임 임0‘음Y다0",
+"max": 50,
+"bytes": 433,
+"limit": 150,
+"left": -283,
+"chars": 170,
+"lineBreaks": 2,
+"hangulLeft": 0
+},
+{
+"text": "나활漢학함b가임함 가학가가학생생다가 다가동b임b다음  활함임”생😀·나👍🏽 음함활 나학…",
+"max": 250,
+"bytes": 128,
+"limit": 750,
+"left": 622,
+"chars": 47,
+"lineBreaks": 0,
+"hangulLeft": 207
+},
+{
+"text": "임학0활학음가👍🏽다 임가나임·함 가9함나0.10함나a나음Y생👍🏽다,가학0함Y가다학가0생가b함다\n\n“활‘X생나나(음동임다학임漢 …다음㉠임생  임학…가생활X학·다 임동활동Z나0\n다a함 가①학Y①나임동생b임 가생학동활가임가😀다학생학ac나가함🇰🇷나함 함“b활a  ~함 c생 활9생~b학가음생나c함Y나가",
+"max": 50,
+"bytes": 401,
+"limit": 150,
+"left": -251,
+"chars": 161,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "X생  학b생동b 함\n가나  é나Yc다\n임🇰🇷가학동가,학음활학c1음 ,  음 Y…활활 함생함Z함1생생  ’0“임학1음 동생나함학다임(나활임X9🇰🇷음함음함 활다 음학",
+"max": 500,
+"bytes": 208,
+"limit": 1500,
+"left": 1292,
+"chars": 89,
+"lineBreaks": 2,
+"hangulLeft": 430
+},
+{
+"text": "나Z함Y학나활가 생~함생나학나😀c~👍🏽학①c생학XY학임가임음cb음\n가‘ 함b (①“생생 ",
+"max": 300,
+"bytes": 116,
+"limit": 900,
+"left": 784,
+"chars": 48,
+"lineBreaks": 1,
+"hangulLeft": 261
+},
+{
+"text": "  다 임   ·a함학\n학Y1가음c가 👍🏽학c",
+"max": 300,
+"bytes": 50,
+"limit": 900,
+"left": 850,
+"chars": 24,
+"lineBreaks": 1,
+"hangulLeft": 283
+},
+{
+"text": "”🇰🇷Y éc🇰🇷,1👍🏽😀가나다a활👍🏽. 음생YX음음1음‘ c다동학나가‘👍🏽X(cb음①“다생Z가 가㉠ 함0①나나동함 a0)활임가Z임Z음a음동 동나b생동é활XX가음활학동👍🏽동é활‘임 나활c생가漢임Y임Y생 1 활😀함 동b👍🏽함동생9c ①생음함나,동함활’임다 학…음㉠ .가다나생생c동b다가동음 동함학Z” 학생漢학①👍🏽Y동”Z(· ",
+"max": 1000,
+"bytes": 443,
+"limit": 3000,
+"left": 2557,
+"chars": 173,
+"lineBreaks": 0,
+"hangulLeft": 852
+},
+{
+"text": "가’ 생활9 생임활",
+"max": 300,
+"bytes": 24,
+"limit": 900,
+"left": 876,
+"chars": 10,
+"lineBreaks": 0,
+"hangulLeft": 292
+},
+{
+"text": "Y학”   가 .함 생 동활생가동임1( ”나활,다생학활   임함임임 ,동나생 나활학음.함X0음임’다활 é가생㉠음1가생  함다가 X~  Y임임0",
+"max": 1000,
+"bytes": 172,
+"limit": 3000,
+"left": 2828,
+"chars": 79,
+"lineBreaks": 0,
+"hangulLeft": 942
+},
+{
+"text": "c가활나활X\nX동 학Y·\n음Y  생 학“·) 😀가0활 9임음동🇰🇷ca\n함.동학가임c동\n임   음생음활생나가임활다학\n생생 9생b임X~나생학①1 c동생가Z다0생 나㉠\n 임가~aaZ \n학\n음cZ나.Z 가임활  음음~가함…Z 1다임생다~ 가나다임나 활",
+"max": 250,
+"bytes": 289,
+"limit": 750,
+"left": 461,
+"chars": 135,
+"lineBreaks": 8,
+"hangulLeft": 153
+},
+{
+"text": "학\n함(함생다·Z0.다 생Z다)나활생X다활Z”가”c·X활c👍🏽 동나 생학1활함나생X㉠Z가Y \n함가①함 음\n가X동 1다임a동X다 생생“0다 음‘함1”임~Y함함(학학다 함 음.임음 학가다학. ~생0다.활( 가😀1 동 임음다임  음활가음1Y임 ,가\n",
+"max": 500,
+"bytes": 297,
+"limit": 1500,
+"left": 1203,
+"chars": 135,
+"lineBreaks": 4,
+"hangulLeft": 401
+},
+{
+"text": "가Y활활🇰🇷Y생🇰🇷👍🏽 나다🇰🇷\na 동학a음c학생0ZX🇰🇷0동나0a함Z🇰🇷a9가다학생c Y㉠1 ’다동",
+"max": 500,
+"bytes": 136,
+"limit": 1500,
+"left": 1364,
+"chars": 50,
+"lineBreaks": 1,
+"hangulLeft": 454
+},
+{
+"text": "음동학다c학함가동",
+"max": 1000,
+"bytes": 25,
+"limit": 3000,
+"left": 2975,
+"chars": 9,
+"lineBreaks": 0,
+"hangulLeft": 991
+},
+{
+"text": "다생b임함X”😀 Z활활Y가 😀 Z음①a생음Z함함동활0c ’나 나 임X학·가X·활cX동Y가Y 생 漢동학나0생함나· 임 생다Z9동학나Z임생학학Y1활나학)·활(음나😀c다 c~ 나가9. 1음😀함함~함\n가임동“~0 동 생학Z함함b‘음. 동음Y ,①함가다0가(‘생 활활함0",
+"max": 500,
+"bytes": 320,
+"limit": 1500,
+"left": 1180,
+"chars": 146,
+"lineBreaks": 1,
+"hangulLeft": 393
+},
+{
+"text": "나동가나음",
+"max": 250,
+"bytes": 15,
+"limit": 750,
+"left": 735,
+"chars": 5,
+"lineBreaks": 0,
+"hangulLeft": 245
+},
+{
+"text": "학동음나동함생나9\n  임\n) Y🇰🇷활 동활1é동a가나㉠나9생\n학함~99~‘활가음 Y😀나.음Y  생학1음 나활   “음🇰🇷”c👍🏽😀c나함생다\n 임가 aY임생학가c‘ 동임)가\nc활나음음é’임😀(함’활동가활,1동학다b동음é 함가생임",
+"max": 250,
+"bytes": 294,
+"limit": 750,
+"left": 456,
+"chars": 123,
+"lineBreaks": 5,
+"hangulLeft": 152
+},
+{
+"text": "  학나음동임0  함활함1임’\n 활\n임\n 9c 학(생a가Y다\n동함동임가생Z 생활함…”)다음생동😀함함활.음학)음   다음생임1동나나활 漢활함생임학 동·활”가가다동생Y1생임c가①’활동éb생 활음91생 a동’다다학음음다나동",
+"max": 500,
+"bytes": 286,
+"limit": 1500,
+"left": 1214,
+"chars": 121,
+"lineBreaks": 4,
+"hangulLeft": 404
+},
+{
+"text": "활임c활‘’함~활가다\n활X가동Y생👍🏽a다가생 . 학다 다\n임 ,함동활1①함a9생활·동9음학 é\nX 동학동함임\n학‘ 나음함b“acY漢동활b다생 다X 음 가㉠학임다학   음🇰🇷1함함1 함동\n‘9활( 漢 활a 동  0임음1동활가 함음함가1다c동)생 1🇰🇷①\n”학임 함음동 다a①나생나\n함활생함음음…",
+"max": 300,
+"bytes": 373,
+"limit": 900,
+"left": 527,
+"chars": 160,
+"lineBreaks": 7,
+"hangulLeft": 175
+},
+{
+"text": "다동\n음학임,임활~다Z학다활생함 다활0임 함🇰🇷Z함0 (éb활👍🏽다a음나9”동음Y활생\n동활㉠X ①나Y임생음",
+"max": 500,
+"bytes": 142,
+"limit": 1500,
+"left": 1358,
+"chars": 57,
+"lineBreaks": 2,
+"hangulLeft": 452
+},
+{
+"text": "나‘🇰🇷X임가함다활…나‘다생활다다학임a㉠①임ZZ 00”생임나“동X임👍🏽~활 가Z 동 학임aY나  활학 ,a학 ‘동“임음음학생동가동음동임0임함학é함~함1임가활0 생음 활. 임함Z음음함 음bX(다é임다음생1활c  Z함다9①다Y㉠임👍🏽 😀c👍🏽학다음 임학1 ’\n학",
+"max": 50,
+"bytes": 345,
+"limit": 150,
+"left": -195,
+"chars": 140,
+"lineBreaks": 1,
+"hangulLeft": 0
+},
+{
+"text": "생 다 é생😀학나",
+"max": 300,
+"bytes": 23,
+"limit": 900,
+"left": 877,
+"chars": 9,
+"lineBreaks": 0,
+"hangulLeft": 292
+},
+{
+"text": "🇰🇷학㉠학X 활 가Z활다다생활동다\nb음음a음함㉠·漢①임생나다동활활0음가Z가음 다\n활Z가학)나éa음 다동생a다임동생임~\n활동함가나,나 함함, Z동임학 ·漢동Y나생 éY 임é漢~임음학0나함동활’…9\n생0다Z임다활 나생가생학é나漢 생’가가㉠다9. 학활음생학함생~0음다활XY활동‘생학활X활",
+"max": 250,
+"bytes": 379,
+"limit": 750,
+"left": 371,
+"chars": 156,
+"lineBreaks": 4,
+"hangulLeft": 123
+},
+{
+"text": " 가다함9함동b임활漢㉠ 활생   함Z(가“함 다 é동a가9동“음음 👍🏽활)다함bZ…음동활a\n활나생생…나👍🏽음학Z가임é학 다X   나활 é\n함👍🏽  1😀다임①동다동나c다19음동 나Y다",
+"max": 300,
+"bytes": 237,
+"limit": 900,
+"left": 663,
+"chars": 98,
+"lineBreaks": 2,
+"hangulLeft": 221
+},
+{
+"text": " b음 나(가다동漢가함나학함🇰🇷음음a ZZY학다…다가음\n가생 다\n0가가 생1Z 음학c1함나\né동다 ㉠활Y동.학나함X가1\n다0가가다 다.음Z음가함나“ …활’a다함b활  🇰🇷a함음생다漢학동함학0음임음,\n나학학,임음나가① 음다함)  Z함음음a음㉠활b가생임a 가XY함 음활 나음1동9임동동동 임Z임.다",
+"max": 500,
+"bytes": 379,
+"limit": 1500,
+"left": 1121,
+"chars": 162,
+"lineBreaks": 5,
+"hangulLeft": 373
+},
+{
+"text": "학음임  가동·가Y가9,나漢가 학생a‘임,가다㉠음0함“음동’ \n 활다함,활다학Z음’~ ‘ X, 함·\n 임 함\n 나가c😀음\n",
+"max": 1000,
+"bytes": 149,
+"limit": 3000,
+"left": 2851,
+"chars": 68,
+"lineBreaks": 4,
+"hangulLeft": 950
+},
+{
+"text": " 가 임나  😀 활9\n. ㉠가생다“학동나다임 ”①“ 가활”漢음9가가가 함)생동함XZ~.나\n함😀나b 음가학a생다임b~함a 음.0동\n함음😀“다학생나👍🏽학나임함·X임다",
+"max": 50,
+"bytes": 214,
+"limit": 150,
+"left": -64,
+"chars": 89,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "①9가학c9b다9함임동나다b동 é임 함함함 1나가\n동동가활Y임Y(생생나학가c동 c생 다임다 활활0임(1활“9  가동생Y음 함다Y·학임 나~漢9동‘Y동X함학 동가학동다동나음다Z생생함“👍🏽다Z학임활)음함c",
+"max": 50,
+"bytes": 260,
+"limit": 150,
+"left": -110,
+"chars": 111,
+"lineBreaks": 1,
+"hangulLeft": 0
+},
+{
+"text": " Y~”가학 é음생漢“éY학임c Yé임다동생 0가 동임가활임 동가가활 91😀(X’함함활활가 ‘1”음1…Z동c음생9c0나함(0임임·함생0ac0생Y학동㉠활임나c학\n 다 함 漢음다학… Z 다음9다활…a임학생함” Z활음①나생 임가🇰🇷다나동  Z생",
+"max": 1000,
+"bytes": 302,
+"limit": 3000,
+"left": 2698,
+"chars": 132,
+"lineBreaks": 1,
+"hangulLeft": 899
+},
+{
+"text": "(c나①0다\nXY가가동,함학임”다음다함학음 생다\n 활~동㉠① \nX다 활생(…학생  😀 학 음동…나나c활활가 9학Y(가생다동🇰🇷 생활가함‘동가학생’나😀X동다학다동,😀임동 ~a생나함다.b·동) 학음나, 동음 X\n생…X함 함é)동 .9생”음임임aba음 임👍🏽임 활a“ 가동\n 생생\n동漢㉠‘X①활b\nY다Z활👍🏽①",
+"max": 250,
+"bytes": 395,
+"limit": 750,
+"left": 355,
+"chars": 167,
+"lineBreaks": 7,
+"hangulLeft": 118
+},
+{
+"text": "생함 b활생나 b활",
+"max": 500,
+"bytes": 22,
+"limit": 1500,
+"left": 1478,
+"chars": 10,
+"lineBreaks": 0,
+"hangulLeft": 492
+},
+{
+"text": "동임9a 함“ 1😀“ ",
+"max": 1000,
+"bytes": 25,
+"limit": 3000,
+"left": 2975,
+"chars": 12,
+"lineBreaks": 0,
+"hangulLeft": 991
+},
+{
+"text": "학생학학é동 b임생다다…음 )음c 함동‘음음활Z학임 학가음\nX 🇰🇷가㉠”",
+"max": 50,
+"bytes": 99,
+"limit": 150,
+"left": 51,
+"chars": 39,
+"lineBreaks": 1,
+"hangulLeft": 17
+},
+{
+"text": "\n~”학 학’a가나.漢가 b다동 동임1다나Y생함음함 임‘나가다동임X활~ 동활가’\n 임   임漢(함9임😀함é동·학b생 a활😀1동학X음동”’활생‘음  학 가‘함漢임c임)동1 🇰🇷 임동\n학학\n음임🇰🇷🇰🇷 동①활다 a나함학😀  학임생\n임음 ",
+"max": 50,
+"bytes": 311,
+"limit": 150,
+"left": -161,
+"chars": 127,
+"lineBreaks": 5,
+"hangulLeft": 0
+},
+{
+"text": "생가생음활학임Y①  나“漢”\n.학 나.나ZZ다함생 활음  함나 생 학학생함X…동a함9학함……음활함漢a활함가함함Zé,0생 함‘Z함학학 임a동음임 X생가漢다가))c음임,가임다학동학음동c😀음 나😀활 다학학\n😀함 동다학Y다.a나😀 가음음  Y 나 임동동생학🇰🇷X\n\n생‘학생①동 활가활가임1,임동학동학임·함다동임a임",
+"max": 50,
+"bytes": 413,
+"limit": 150,
+"left": -263,
+"chars": 170,
+"lineBreaks": 4,
+"hangulLeft": 0
+},
+{
+"text": "…(👍🏽생9 생b가0다활나동”가다a가X가  9생 함활c함함bb가㉠X활cY학 활함 다다c0\n. 임가 가’ “\n 1음동가👍🏽생 활 활함음 0 가학 생동동나\n활 a함aa🇰🇷·활 동음함 1활생나다9나\n동학 (1함학학생 다음음임나생임음활다함생학9a학a동cY가활 학 나활동함음가활학나학임가 학생 a(임a다.다생~가  ‘생 ",
+"max": 50,
+"bytes": 395,
+"limit": 150,
+"left": -245,
+"chars": 171,
+"lineBreaks": 4,
+"hangulLeft": 0
+},
+{
+"text": "나나음나음학9동생음임㉠ 활임·동b\n임임 다음동\n생\n임활·🇰🇷’가활X활학임1   ”임함b~ 학 .생생음나활함  음㉠나학Z활a~가학생다함나동1( 임활활활~ 학함함활a음임학  c 음\n다음\n함학함가함 함음a1다다1임음가0다①🇰🇷가음학1é임  🇰🇷😀 학漢 동\n가생1 c함‘다9활(임",
+"max": 300,
+"bytes": 360,
+"limit": 900,
+"left": 540,
+"chars": 149,
+"lineBreaks": 6,
+"hangulLeft": 180
+},
+{
+"text": "나  9함.\n가다임함 “ 가활X다 漢😀음 🇰🇷c가 9학나나생다나b”나활가👍🏽함Y활①X.생생음함c나 😀가동함생b 동漢동 다” 9음가나다다임나생가🇰🇷활 Y나음(\n’동생 음 다생음음👍🏽다 나0생’활함 생",
+"max": 50,
+"bytes": 274,
+"limit": 150,
+"left": -124,
+"chars": 106,
+"lineBreaks": 2,
+"hangulLeft": 0
+},
+{
+"text": " …aX\n9동가함“함①나· ’ 활음 ‘”활활🇰🇷임동가활 생 1 漢漢나9 é나활함\n활동)음9동함동다 b나①X“YY’ 음 Yé0.c, 1,漢0나활나\n음Y,동 함漢동음 활 c\n임학.😀음.a 가\n9 😀",
+"max": 250,
+"bytes": 229,
+"limit": 750,
+"left": 521,
+"chars": 107,
+"lineBreaks": 5,
+"hangulLeft": 173
+},
+{
+"text": "다음음0임다👍🏽0(c동 ① ①Z음  나가Z9‘Z나음가\n활다음🇰🇷함XX동)가”나활임b다㉠함함함생00활”가 ·X가9나b함cc생,)9나활 활함동음👍🏽😀\n 임c임c생동 나임함 Y\n c임생생생”😀 \n음9  동㉠",
+"max": 500,
+"bytes": 255,
+"limit": 1500,
+"left": 1245,
+"chars": 109,
+"lineBreaks": 4,
+"hangulLeft": 415
+},
+{
+"text": "나 가😀é ,㉠생  Y나가임생…동학1함함다다생”X1함0漢.임활활다Y가X.나활Y①\n“a나 나나👍🏽활Y활 …임함a음다가함가나음음 활 가漢함동학다생임b음 임음다동Ya음음”함Z 임a다함가임b학나Z 학9동생다 학동나함c0생음😀~함 활1동동 나 🇰🇷다~.음임음Y나생 가생가.활생생 ",
+"max": 250,
+"bytes": 362,
+"limit": 750,
+"left": 388,
+"chars": 149,
+"lineBreaks": 1,
+"hangulLeft": 129
+},
+{
+"text": "·  나다나동나漢①…bb나가다가b9 학b동X학가 음다다😀\n9 함Y)가 😀\n동동나나동\n漢 ‘”함,다①…학동”①음c다😀다c함가b가😀Z  활임X학학다’Y㉠’ 함음 Z생음음생… 가동동Y0“동동가Z 활학다0’X다Yé①동생  ca",
+"max": 300,
+"bytes": 282,
+"limit": 900,
+"left": 618,
+"chars": 122,
+"lineBreaks": 3,
+"hangulLeft": 206
+},
+{
+"text": "동a다생나다漢학임X가X동 음",
+"max": 300,
+"bytes": 37,
+"limit": 900,
+"left": 863,
+"chars": 15,
+"lineBreaks": 0,
+"hangulLeft": 287
+},
+{
+"text": " 활학다~임임”동생음漢학①다a~생동🇰🇷생음漢동“음임 동Z\n동 학음가음가함~나함나음함다①c “함학  생🇰🇷음Z9aY음다활가“나활음Z다함학a생Y나가.漢동임X다  함동임\n동가함음임생\n생 음 동음다학임음동임 다함나나음생1다a다학생나…음나c🇰🇷b생 음임생생’생😀학Z생😀",
+"max": 1000,
+"bytes": 373,
+"limit": 3000,
+"left": 2627,
+"chars": 142,
+"lineBreaks": 3,
+"hangulLeft": 875
+},
+{
+"text": " 동X다a 다임 나임1함c함가①함나임함a ’다X임1가나나생a동학학Xé활 b동나0학임 다漢 c ,학가0~가다X0함㉠나‘다0동 활동”……a학0활함)\n다다음다‘나(동임  19학생9“학Z학함함가생( 임 😀🇰🇷생임학생가동활9다㉠X학학  9다a·\n,(·’동🇰🇷漢가다~학",
+"max": 1000,
+"bytes": 332,
+"limit": 3000,
+"left": 2668,
+"chars": 142,
+"lineBreaks": 2,
+"hangulLeft": 889
+},
+{
+"text": "가활음\n나음나”생X활가   함함동’동학~다동c음음가다임동다~ ~함Y임활’나👍🏽👍🏽  나음“다학음”  …다 .Y\n‘나활다동 a학a  b1활학㉠ ~😀😀학",
+"max": 1000,
+"bytes": 199,
+"limit": 3000,
+"left": 2801,
+"chars": 81,
+"lineBreaks": 2,
+"hangulLeft": 933
+},
+{
+"text": ")가X임함 다가 1“활가학 활생c9나“ ’1a나생동다a활aYb0\n음음c다①,임9음é가가 ~나1다가함생 😀함 …활가Y다임학1나동",
+"max": 250,
+"bytes": 156,
+"limit": 750,
+"left": 594,
+"chars": 70,
+"lineBreaks": 1,
+"hangulLeft": 198
+},
+{
+"text": "a  “활9다활bY漢음동 음 동 다0음함음함Z생함 b 함다가나 활함㉠가  학함가0활 다😀활활나생. 임나👍🏽다다Z생가다가다)나 생함가임활다음X 👍🏽①.나”( ,·  Xa나나임함Y나다😀9다함동 ‘Y학🇰🇷동나학다나漢함다활나활Y활  음함 👍🏽다a가1활  …임é활임b학“함동\n활음활.나학음다”생a생나9임동b임가bc활",
+"max": 1000,
+"bytes": 413,
+"limit": 3000,
+"left": 2587,
+"chars": 167,
+"lineBreaks": 1,
+"hangulLeft": 862
+},
+{
+"text": "X  ·, Y학가학가~👍🏽동활 ",
+"max": 1000,
+"bytes": 36,
+"limit": 3000,
+"left": 2964,
+"chars": 16,
+"lineBreaks": 0,
+"hangulLeft": 988
+},
+{
+"text": "활漢가활 동활음👍🏽b동함가다9학다é생가가c나🇰🇷①함 ㉠음생학함다활,· 함~활동나생임다활 임 漢①0동a임Z‘함동\n 다활  활X활ac Y음나  X다가”나생음학0학🇰🇷임cc학활함가함 99 음함임음다a …나함생나나 \n👍🏽학임활동  Y나1동👍🏽é가 ㉠c임가음생“함임9·\n동Z나학 음 가👍🏽 🇰🇷생가다활다생0학가다·①음동학생1",
+"max": 250,
+"bytes": 437,
+"limit": 750,
+"left": 313,
+"chars": 169,
+"lineBreaks": 3,
+"hangulLeft": 104
+},
+{
+"text": "é·\n학함a·~동동😀,c활함다임생b활Y1나다",
+"max": 1000,
+"bytes": 54,
+"limit": 3000,
+"left": 2946,
+"chars": 24,
+"lineBreaks": 1,
+"hangulLeft": 982
+},
+{
+"text": "음동가9동Y생음 음가음 가임.함생다생다음다.학 동   ㉠Z9음~활1a나”~활X \n다나나함나é.9㉠ 가 ",
+"max": 500,
+"bytes": 124,
+"limit": 1500,
+"left": 1376,
+"chars": 57,
+"lineBreaks": 1,
+"hangulLeft": 458
+},
+{
+"text": " 다c 동학나c가a임임음 가Z임①,함Y 학(동생생동다나생함임동 학Y함,다임 \n…0 c생 ~ 나é함나생동생음나학나학함생나생①활나X~  🇰🇷음학Y b활 .가함생 나\n나)\n가임생다동 학동함bX활학생éaY동Y 활함다나 임음 9함나생나동~임㉠생.9X활동    \n함임나 다가생~·학함“함학\n활\n가음Y…동함함Z\n임활“a",
+"max": 500,
+"bytes": 388,
+"limit": 1500,
+"left": 1112,
+"chars": 170,
+"lineBreaks": 7,
+"hangulLeft": 370
+},
+{
+"text": "동㉠학” Z동9나다학임 나",
+"max": 500,
+"bytes": 34,
+"limit": 1500,
+"left": 1466,
+"chars": 14,
+"lineBreaks": 0,
+"hangulLeft": 488
+},
+{
+"text": "나’Y생학동\n가음생🇰🇷활b활학동가 a학…활동YZ나Y함  함생함임활학임,~X漢함b 😀 학학나 음함a동활9동다b함① )다\n㉠임임나\n) 함X다학 함다생👍🏽활다🇰🇷활…함음임동음다다동활a0Ya가나0음\n학학나활",
+"max": 250,
+"bytes": 272,
+"limit": 750,
+"left": 478,
+"chars": 108,
+"lineBreaks": 4,
+"hangulLeft": 159
+},
+{
+"text": "임함동①”동생c",
+"max": 300,
+"bytes": 22,
+"limit": 900,
+"left": 878,
+"chars": 8,
+"lineBreaks": 0,
+"hangulLeft": 292
+},
+{
+"text": "나é가함b함임나👍🏽”함동나.🇰🇷음임동 🇰🇷학’🇰🇷함‘다나나 나a동bXZé임 ·동활9“다🇰🇷 ①함함나b다a나나학활9함다가다·㉠c임다 c가0b 생함함다동”c음학 다‘ 😀X임a생 가동음음다.👍🏽다9음cb함다 a‘임함·",
+"max": 300,
+"bytes": 298,
+"limit": 900,
+"left": 602,
+"chars": 112,
+"lineBreaks": 0,
+"hangulLeft": 200
+},
+{
+"text": "‘a가·㉠생 활동 나0\nX 함동c음활  학생 학음) 학학다음음학c …c나동학X나활 ~…동 0임 ",
+"max": 300,
+"bytes": 114,
+"limit": 900,
+"left": 786,
+"chars": 53,
+"lineBreaks": 1,
+"hangulLeft": 262
+},
+{
+"text": "활)9동학‘  (\n\n생 가음임함",
+"max": 50,
+"bytes": 35,
+"limit": 150,
+"left": 115,
+"chars": 17,
+"lineBreaks": 2,
+"hangulLeft": 38
+},
+{
+"text": "   .Z“함. 생나생학생생활)학,음 c1활c)나X다동가활’음음 동다함동음임함… 나동동나é임활X생다활동\n함함cb음임c 함나 😀동 함~“임동다b 나다a다가나‘가 Y ‘생 다Y·a다나함·가~b다생동생0동Y다활함 é1함동가9 🇰🇷생",
+"max": 500,
+"bytes": 291,
+"limit": 1500,
+"left": 1209,
+"chars": 125,
+"lineBreaks": 1,
+"hangulLeft": 403
+},
+{
+"text": "é나가’ 음 음·동활Y1 다학cX학함임c 생 ,·임(\n“임c9함함 가  c나🇰🇷 임활’동음음,나학\n…함활·임동동\n임  활 …다 생학다활함ZbX동동동가  생임학나동 생활Z음학 음 , 활학나임‘동함활함생나활c생나0가Y음다\n다가임\n1 동임함학임함함\n0 동활활함👍🏽다함다생가” X a",
+"max": 250,
+"bytes": 358,
+"limit": 750,
+"left": 392,
+"chars": 152,
+"lineBreaks": 6,
+"hangulLeft": 130
+},
+{
+"text": "임 생생c나임함다bY㉠음9동다동c생aZ…학 b음‘생음생음Z함·’음 가0함음동漢X생음나 ①’음 임다나생c다Y학c활학생 가Y임임X 동)Z가임동\n음a임다생c 학 다동생X‘ 임임동. 동음활임가b음동“생학학  임활동학생0Xa생X다,함음   활 나 생 a’ 함활학나c임c학나~학가음漢Xa동👍🏽학Z임다생생",
+"max": 1000,
+"bytes": 378,
+"limit": 3000,
+"left": 2622,
+"chars": 162,
+"lineBreaks": 1,
+"hangulLeft": 874
+},
+{
+"text": "음가학,.X👍🏽가·Z가나 1. 학생활다가 생임 생함활\n학c 음임학Z🇰🇷학 함동가’학a 나가 · 학 나’1”함’가a함c나 👍🏽학…음가함동 학다음임학생é함나다 “나음가음Y가 동‘다YY\n임임 ㉠·학“( 활학 함나X활나나학X동나함임Y동“생다동활다음활생학 임음 X동‘학다(9‘‘1漢음동함",
+"max": 50,
+"bytes": 379,
+"limit": 150,
+"left": -229,
+"chars": 152,
+"lineBreaks": 2,
+"hangulLeft": 0
+},
+{
+"text": "😀임가음 음\nb가동0\nY학활a생9함…함Y  가Z다Y 생함\n)나생)(활활 다다가…음😀가 🇰🇷임a동 동음b함’  음c함생c임漢 생활 함활동  😀,음음다나나동 나동가가Z생 가가9나b함.~9 함Z활다학함가 a나학학동0임생임X생X생함 생",
+"max": 1000,
+"bytes": 290,
+"limit": 3000,
+"left": 2710,
+"chars": 126,
+"lineBreaks": 3,
+"hangulLeft": 903
+},
+{
+"text": "임a학함 다나“Z1학함학동가‘ ’다활음👍🏽 임Y”漢활음다c활 가임🇰🇷나·",
+"max": 50,
+"bytes": 105,
+"limit": 150,
+"left": 45,
+"chars": 38,
+"lineBreaks": 0,
+"hangulLeft": 15
+},
+{
+"text": "나학동생활Y동\n나동다Z’ 나b생임생함가”~음 임c임다b동음다음음다활학음",
+"max": 250,
+"bytes": 99,
+"limit": 750,
+"left": 651,
+"chars": 39,
+"lineBreaks": 1,
+"hangulLeft": 217
+},
+{
+"text": " a~.임나가함학음c,함함나 ,음 Y음함a활 ",
+"max": 300,
+"bytes": 51,
+"limit": 900,
+"left": 849,
+"chars": 25,
+"lineBreaks": 0,
+"hangulLeft": 283
+},
+{
+"text": "생”가‘학YX)다c활다9함학동’c음가Y활임음X ca학함함활a다가함함\n.생활임다漢 ‘함음漢임함음~\n다나음(활학동‘함·음나①동b1 학‘a\n다 가생함동음다음음,생음X함활활 활 생\n 생~Z나활9가활\n생cba활🇰🇷나생b음학 동가학X다 a’임",
+"max": 500,
+"bytes": 304,
+"limit": 1500,
+"left": 1196,
+"chars": 128,
+"lineBreaks": 5,
+"hangulLeft": 398
+},
+{
+"text": "임임.동함음 임생다 임1함학가나다~학 함학…다’음c‘다’‘가활다가가활😀 동①~Y‘임㉠임Z”c나나활함",
+"max": 250,
+"bytes": 142,
+"limit": 750,
+"left": 608,
+"chars": 55,
+"lineBreaks": 0,
+"hangulLeft": 202
+},
+{
+"text": "활생1 임 학“나”é0나🇰🇷활학(~\n음😀음나생· 임가나01다나0“동Z 다함“ 🇰🇷음생함함b 동㉠생활…X( 활나 가학“cé다 학㉠ 1나~",
+"max": 50,
+"bytes": 177,
+"limit": 150,
+"left": -27,
+"chars": 73,
+"lineBreaks": 1,
+"hangulLeft": 0
+},
+{
+"text": "나학Y 다 음동동’ \n“1동가생1활함함다나음임~동동(임가음가음b “활음생1동 다음,가함 함생·  다’활\n漢 다1·나생🇰🇷\n·.생c ㉠가\nc 😀다가다음생 .활생,가음음 9Xa활다.생 漢é  1다음학   \nY임 ·X\n활X나다“생 가임0나활9함·  생①0임함c임” 임 음생~임활Y생음éZYcZ함 임X다c활①학 9다학1\n가\n동 동",
+"max": 500,
+"bytes": 392,
+"limit": 1500,
+"left": 1108,
+"chars": 179,
+"lineBreaks": 8,
+"hangulLeft": 369
+},
+{
+"text": "~함함활활임”음활·b”나동…함학YYc함”9동9b임c가a생임 동가나활생①음동😀다 나학생동활 (0가학 함음활🇰🇷음함“가활 학 학다0”학”·가음가학 동c활함X 다다생  ,  \n ’함, 동(함함함‘",
+"max": 1000,
+"bytes": 253,
+"limit": 3000,
+"left": 2747,
+"chars": 105,
+"lineBreaks": 1,
+"hangulLeft": 915
+},
+{
+"text": "음“임X   0Z가활  함나b활생a동생동~”함·임학Y1활동Y생X활b생함생\n동9활a가 X다X음가 음🇰🇷가임a가Z 가임",
+"max": 500,
+"bytes": 141,
+"limit": 1500,
+"left": 1359,
+"chars": 63,
+"lineBreaks": 1,
+"hangulLeft": 453
+},
+{
+"text": "임활임다다나 \n동 생X(활함동학 활학음😀임다 음1가임임Z다X학가Z학다음9함X생\nZ나cZ동a활~함함",
+"max": 1000,
+"bytes": 125,
+"limit": 3000,
+"left": 2875,
+"chars": 54,
+"lineBreaks": 2,
+"hangulLeft": 958
+},
+{
+"text": "(·학나임활漢…가 다함다나”bX 함\n임나나동음9‘0함①Z임 학가①동…c학é다활생(0음·동음학(생1  X나,학다)가Z함 가활 a함\n“,나임c다다동😀가\n동함가나😀다학가 X 활나음’ca",
+"max": 300,
+"bytes": 233,
+"limit": 900,
+"left": 667,
+"chars": 100,
+"lineBreaks": 3,
+"hangulLeft": 222
+},
+{
+"text": "생)1 임학함함생㉠생X  ①👍🏽Z학X😀99활동학a동9é” .   활”함a함b생생 함가",
+"max": 300,
+"bytes": 103,
+"limit": 900,
+"left": 797,
+"chars": 46,
+"lineBreaks": 0,
+"hangulLeft": 265
+},
+{
+"text": "생생c. X음.漢🇰🇷9가임🇰🇷😀 가나 다학\n\n동Z생음 다음음 동함1 음 “학함Y가나가나가동\n다활 음음 “활漢나나X가다bc다학나활음가b다😀다\n생동가다생”\n임 음나다다활임  생0음019함",
+"max": 1000,
+"bytes": 246,
+"limit": 3000,
+"left": 2754,
+"chars": 100,
+"lineBreaks": 5,
+"hangulLeft": 918
+},
+{
+"text": "다가0Z동 임\n다나👍🏽함생함🇰🇷활활🇰🇷🇰🇷0bc)b 학X임다漢b 음é) 생활음 1다활  ,임동함b활가활\n0생학생임학Z🇰🇷다나“생음활활0~학 \n학동임“생동  1나동 생X생\n나나 90\nXXa “생활c음9a 가임임 漢활9나학bY활활 0임 가’나·)c생“”다",
+"max": 500,
+"bytes": 318,
+"limit": 1500,
+"left": 1182,
+"chars": 135,
+"lineBreaks": 5,
+"hangulLeft": 394
+},
+{
+"text": "0음b..함나활X함활 ZZ\n활다나0임)임음가)",
+"max": 50,
+"bytes": 51,
+"limit": 150,
+"left": 99,
+"chars": 25,
+"lineBreaks": 1,
+"hangulLeft": 33
+},
+{
+"text": "…漢임가임동동생생음 ..다0 임 👍🏽생漢 임·“음 동동㉠임c동”활\n음함a음 나b\n가Z학b동 ",
+"max": 500,
+"bytes": 120,
+"limit": 1500,
+"left": 1380,
+"chars": 50,
+"lineBreaks": 2,
+"hangulLeft": 460
+},
+{
+"text": "활 🇰🇷 음가함9👍🏽다임다,동활생c가, ,9 활 음· 활동b음학0생학 🇰🇷 함1~학a음학나c임 임😀다🇰🇷함함 aX음 학  음  임",
+"max": 300,
+"bytes": 166,
+"limit": 900,
+"left": 734,
+"chars": 68,
+"lineBreaks": 0,
+"hangulLeft": 244
+},
+{
+"text": "Z  \n활 0학가가학,함·활 생\n~c음생동생음”활 b)임 👍🏽활다·나 다 함활음함가함음0b학 ’ Y’①활…다동👍🏽가활다…a함가학음생임c나다동c91 학함다다학활…나동,생생음㉠ 0동\n학Z(a①0나활b나활학 함”~생Z\n함)다 나 동활🇰🇷음학생·나함나 나임 동가",
+"max": 250,
+"bytes": 337,
+"limit": 750,
+"left": 413,
+"chars": 139,
+"lineBreaks": 4,
+"hangulLeft": 137
+},
+{
+"text": "활\n 가🇰🇷동다다",
+"max": 300,
+"bytes": 25,
+"limit": 900,
+"left": 875,
+"chars": 8,
+"lineBreaks": 1,
+"hangulLeft": 291
+},
+{
+"text": "활~0임함éX활(음 )학활ab1a생9생활나1다다(학 ’ 가임   👍🏽a나활함 c동나…🇰🇷음 임음학동다 a·생 동다활음㉠학다가”임음동음가\n함…😀",
+"max": 1000,
+"bytes": 188,
+"limit": 3000,
+"left": 2812,
+"chars": 77,
+"lineBreaks": 1,
+"hangulLeft": 937
+},
+{
+"text": " 학학활동 음9동음0“ 🇰🇷 동학함임)Z’.나학가😀0다🇰🇷🇰🇷🇰🇷·학다 “㉠… 함나음a나. 나다임b임㉠학cX0   음음 b‘함09 임함생나X \n㉠”·임\n생 동나학)다a·Z가다1음’활다",
+"max": 1000,
+"bytes": 240,
+"limit": 3000,
+"left": 2760,
+"chars": 98,
+"lineBreaks": 2,
+"hangulLeft": 920
+},
+{
+"text": "9동.\nb 음Z음음 ,‘ZY0é나다동 음)활학임나a㉠활\n )Z가임학가’다학😀9)c 활함a1생다가 Xa·나학 .9음음음 X동다 학가생a임가다Z임  임\n함0’ 0 Y활漢.…9b활생🇰🇷c 생생생",
+"max": 500,
+"bytes": 220,
+"limit": 1500,
+"left": 1280,
+"chars": 104,
+"lineBreaks": 3,
+"hangulLeft": 426
+},
+{
+"text": "가음~ 나Y임음é.Y\n가“ 나가 b1함.~임 음c‘1 함9나🇰🇷임é  함임0 학X함가동다 …나’ )😀Y가임 활1임’0활생1학Z\n나“ 음①00 🇰🇷\n다🇰🇷나,다 가학다bc학나임”😀 )11동동활생",
+"max": 50,
+"bytes": 237,
+"limit": 150,
+"left": -87,
+"chars": 104,
+"lineBreaks": 3,
+"hangulLeft": 0
+},
+{
+"text": "나임9동Y0가임 0학다ca다함9 학… 생~)동학~음 함9“가임 동동다  \n생임함😀함",
+"max": 500,
+"bytes": 101,
+"limit": 1500,
+"left": 1399,
+"chars": 46,
+"lineBreaks": 1,
+"hangulLeft": 466
+},
+{
+"text": "가가학활다  음’9학활함다b동bY활나",
+"max": 250,
+"bytes": 48,
+"limit": 750,
+"left": 702,
+"chars": 20,
+"lineBreaks": 0,
+"hangulLeft": 234
+},
+{
+"text": "‘생활학다 음생나👍🏽함9 나b 임생) 😀 c나다X가생다음 학👍🏽음가 Zb임함  학다나가🇰🇷a함)다가동 학동 임활😀활함가학 생 학X나임학함동👍🏽1다 ㉠음활㉠1X",
+"max": 300,
+"bytes": 220,
+"limit": 900,
+"left": 680,
+"chars": 84,
+"lineBreaks": 0,
+"hangulLeft": 226
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 500,
+"bytes": 1500,
+"limit": 1500,
+"left": 0,
+"chars": 500,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 500,
+"bytes": 1503,
+"limit": 1500,
+"left": -3,
+"chars": 501,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 300,
+"bytes": 900,
+"limit": 900,
+"left": 0,
+"chars": 300,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 300,
+"bytes": 903,
+"limit": 900,
+"left": -3,
+"chars": 301,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 50,
+"bytes": 150,
+"limit": 150,
+"left": 0,
+"chars": 50,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 1000,
+"bytes": 3000,
+"limit": 3000,
+"left": 0,
+"chars": 1000,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 1000,
+"bytes": 3003,
+"limit": 3000,
+"left": -3,
+"chars": 1001,
+"lineBreaks": 0,
+"hangulLeft": 0
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"max": 250,
+"bytes": 750,
+"limit": 750,
+"left": 0,
+"chars": 250,
+"lineBreaks": 0,
+"hangulLeft": 0
+}
+],
+"units": [
+{
+"text": "",
+"utf16": 0,
+"utf8": 0,
+"grapheme": 0
+},
+{
+"text": "가",
+"utf16": 1,
+"utf8": 3,
+"grapheme": 1
+},
+{
+"text": "a",
+"utf16": 1,
+"utf8": 1,
+"grapheme": 1
+},
+{
+"text": "1",
+"utf16": 1,
+"utf8": 1,
+"grapheme": 1
+},
+{
+"text": " ",
+"utf16": 1,
+"utf8": 1,
+"grapheme": 1
+},
+{
+"text": "\n",
+"utf16": 1,
+"utf8": 1,
+"grapheme": 1
+},
+{
+"text": "가나다",
+"utf16": 3,
+"utf8": 9,
+"grapheme": 3
+},
+{
+"text": "abc123",
+"utf16": 6,
+"utf8": 6,
+"grapheme": 6
+},
+{
+"text": "가나다\nabc",
+"utf16": 7,
+"utf8": 13,
+"grapheme": 7
+},
+{
+"text": "독서 토론에 참여함.",
+"utf16": 11,
+"utf8": 27,
+"grapheme": 11
+},
+{
+"text": "학급 회의에서 안건을 제안함.\n발표를 맡아 근거를 들어 설명함.",
+"utf16": 35,
+"utf8": 85,
+"grapheme": 35
+},
+{
+"text": "TED 강연 3편을 듣고 요약함.",
+"utf16": 18,
+"utf8": 36,
+"grapheme": 18
+},
+{
+"text": "줄\r\n바꿈",
+"utf16": 5,
+"utf8": 11,
+"grapheme": 4
+},
+{
+"text": "줄\r바꿈",
+"utf16": 4,
+"utf8": 10,
+"grapheme": 4
+},
+{
+"text": "\n\n",
+"utf16": 2,
+"utf8": 2,
+"grapheme": 2
+},
+{
+"text": "ㄱㄴㄷ",
+"utf16": 3,
+"utf8": 9,
+"grapheme": 3
+},
+{
+"text": "漢字",
+"utf16": 2,
+"utf8": 6,
+"grapheme": 2
+},
+{
+"text": "‘따옴표’ “큰따옴표”",
+"utf16": 12,
+"utf8": 34,
+"grapheme": 12
+},
+{
+"text": "①②③",
+"utf16": 3,
+"utf8": 9,
+"grapheme": 3
+},
+{
+"text": "가·나",
+"utf16": 3,
+"utf8": 8,
+"grapheme": 3
+},
+{
+"text": "A～Z",
+"utf16": 3,
+"utf8": 5,
+"grapheme": 3
+},
+{
+"text": "😀",
+"utf16": 2,
+"utf8": 4,
+"grapheme": 1
+},
+{
+"text": "가😀나",
+"utf16": 4,
+"utf8": 10,
+"grapheme": 3
+},
+{
+"text": "👨‍👩‍👧",
+"utf16": 8,
+"utf8": 18,
+"grapheme": 1
+},
+{
+"text": "2026학년도 1학기: 수학Ⅰ, 영어Ⅱ",
+"utf16": 21,
+"utf8": 43,
+"grapheme": 21
+},
+{
+"text": "café",
+"utf16": 4,
+"utf8": 5,
+"grapheme": 4
+},
+{
+"text": "음 ”활\n㉠다다나나활다 다나가(임가~XZ함나동9~나생생함임학,나 함가생가…漢가함 함임음함👍🏽\n가ca활a학학①9함“임”c다·…음90é 9학0동 9나활다가나cca\n漢활",
+"utf16": 93,
+"utf8": 215,
+"grapheme": 90
+},
+{
+"text": "학 \n1가다음~a생\ncX생b함0학다 임생나음’함생 학동학1 음임 …학 활가함",
+"utf16": 42,
+"utf8": 94,
+"grapheme": 42
+},
+{
+"text": "🇰🇷 …Y 1 생 ㉠1생0“학임가동)b 임XX나학생다a’c🇰🇷·나Y학나임",
+"utf16": 44,
+"utf8": 91,
+"grapheme": 38
+},
+{
+"text": "다가가(Y·…\n 다( 생9Y9b~0음임임함Y생생.임0c생  c \n",
+"utf16": 36,
+"utf8": 65,
+"grapheme": 36
+},
+{
+"text": ".활 Y동임활나임활(음\n 가다 \n,c”1가학함나학임동다 가a 동 é(활나가가91’함학학漢ac동동나,음 생다학Z생.음음Y함임학나생학가Y다9임b 나\n나 ① \n.\n…함‘\n생 활b😀나동9a’나X",
+"utf16": 105,
+"utf8": 230,
+"grapheme": 104
+},
+{
+"text": "음 “…🇰🇷생임활나’동가음 동가a생음임음\n\nY가함생‘9 학 가)함1임 함\n1활다X”’음 · 동나c 다다동나”생(a함가…가동\n①漢(“다1함학’1Z학”Y 함b생학학나é동학c음“a동나함학~~음🇰🇷)가임‘9 동 😀가(음1동‘학가가임가漢X",
+"utf16": 133,
+"utf8": 307,
+"grapheme": 126
+},
+{
+"text": "”음 생활c생\n함\n\n가Zé동임동👍🏽~음 임0함나가 생다나나임Y동생임다함나학a①다 c①동”가X0가 가나c동학c a함다 \n  1다🇰🇷🇰🇷음생학활활나 임학 나b함‘가생나음동임Y‘동 함학함9나é함활0X동음학…가’ 9다음임함함다다 …나함 생c학X동1)학1,다동음생가Y\n생’X학 )·함0나0👍🏽음동동Y나동함",
+"utf16": 173,
+"utf8": 396,
+"grapheme": 161
+},
+{
+"text": "생생임학나\n동9가생가학함가 c 활나활\n나b동동 …0함c· 0~\n임활0동생 다활함   “학 나함 생다~X학다생함음나(👍🏽학漢‘학,음음함가가생학  임가임생동나가생X함다",
+"utf16": 93,
+"utf8": 218,
+"grapheme": 90
+},
+{
+"text": "\n🇰🇷(음임 c임다(생함임 .임임활학\n생생생생나나나0 생동\né다다함가 학c음 임😀다다Y9 생 ‘임c나 c다 9‘활학’가다’활Y동함동함1 함0X생b생임 😀1Y음0 1음Z생생 (함①㉠b생함①1㉠음 ’\n 가 .가 \n학Zb다학함①동활~나함 \n학학c다 활 1학함\n활,Y동\n0",
+"utf16": 152,
+"utf8": 325,
+"grapheme": 147
+},
+{
+"text": "음c,X 음c임Z9 생함임㉠가a활a음)~음함임활활9)Za a나 학다1함함함다음음’Y…다가임é다음가漢‘“나동함b😀 ·\n학😀1임(….생다👍🏽X👍🏽 함학다 동0임1a임 학생” “다임나다,漢임1활a학생함é\n나학다동①가나Y.나음활가 활생동임0음음임‘나\n학학함동나1학나학1생활Xc나X가 학🇰🇷①임“Z학9함",
+"utf16": 172,
+"utf8": 393,
+"grapheme": 161
+},
+{
+"text": "나동나동\n학활함음함나‘ 학 가나다동Y 나é👍🏽X동학\n음활 a다가다생함.a음다음. ①동…漢가‘ 🇰🇷Z함,함0 동Y.“가1학 가음임활임①㉠생함X다가함음가.9Z가 ~  나활다 활Z \n동 임Z 1나음학(”동함  임0 나c나가~생漢가함활”생음음 Za함)c 활임동나\n“ 음음함b漢임학동임c가0 ”동나동0 X",
+"utf16": 169,
+"utf8": 378,
+"grapheme": 163
+},
+{
+"text": "임\n\n“ ‘나다Y👍🏽동함가 임생가b나음가생 나9 😀㉠a 생🇰🇷학1👍🏽학  가”동1나학나\n1학Za😀가동함😀임X 생\n다나1X함생음a나·🇰🇷 ",
+"utf16": 87,
+"utf8": 186,
+"grapheme": 72
+},
+{
+"text": "나음음 함음다학① Z동생나 함\n동동음임함활생㉠ 가임동활Z)YY음음   漢학다 학활😀임\n漢👍🏽나\n 가임동동학다함생임",
+"utf16": 66,
+"utf8": 158,
+"grapheme": 62
+},
+{
+"text": "생…가가  👍🏽함가활나c음漢a학  생 나함임활활활생a1나음활가가동음활9학다 활활활다\n가동",
+"utf16": 51,
+"utf8": 125,
+"grapheme": 48
+},
+{
+"text": "“생생1…0생c동\nb학)",
+"utf16": 13,
+"utf8": 27,
+"grapheme": 13
+},
+{
+"text": "음함.",
+"utf16": 3,
+"utf8": 7,
+"grapheme": 3
+},
+{
+"text": "bY9동 9음,학9생a0생Y  Z가 漢YY( 가임다\n나c음가나활\n·학다 나9漢나동 음X임b임가함다가\nY 음🇰🇷음\n생  임 함",
+"utf16": 71,
+"utf8": 142,
+"grapheme": 68
+},
+{
+"text": "활가함\n생동음동임(다임활임 학c함가임 활학 음c…b가생가·9~ a·음다다학생가활함…0가가생Z나c 음함…함생 음학학함활가생함 함음(생b동0음 활다음동활생학 함활나임다X 다",
+"utf16": 94,
+"utf8": 230,
+"grapheme": 94
+},
+{
+"text": "학 a다 ①“‘함학Xb함 漢함동가(다㉠~👍🏽함나동다\n👍🏽다b가음활음b함나임다활①Z 동생활 학동”1임 활X “,9동학다학Z다a나활다활생)漢가가 임9,함🇰🇷 é활~㉠, 나다활 Z😀é다 나다임가음가가1 다생 나함함,활X가함c동임활동음㉠임동\n…다🇰🇷함학가나함음  함①㉠활활함활나 .음· 생가다  활활함활 Y음”생다활음생동",
+"utf16": 184,
+"utf8": 433,
+"grapheme": 171
+},
+{
+"text": ")다 가  9\n다Z9 활학학 임활나음나활다漢동다·나 ㉠ 학임음.다생c다c함함 나 음0임활 동학b 가0 음”활나 cb학Y 활·\n9漢🇰🇷나생활 음학나”9…동9 활음Y나X“①음학 나😀학가  가0다‘함가Y 漢동 ~“임Z활‘9학…함가음 음활 활학 활(Z동학’X음나동함",
+"utf16": 147,
+"utf8": 329,
+"grapheme": 143
+},
+{
+"text": "Y학 .나 나 생\n학㉠음함활함동  나”나임 동활음X가음다활생나생나함👍🏽함다임동동학 활~é(동c)활👍🏽“ aY함 동나다나~漢·임X다임나동함“생①생0a가Z동음“…다함동가9활임음다\nX가,\nZ학Z활생다 X나나생😀학1",
+"utf16": 121,
+"utf8": 283,
+"grapheme": 114
+},
+{
+"text": " 활함학c\n학~9임학생 생·함활é  나다  Xb   활다X다㉠활활가9음 나함학·나임)함함 가0가함9 음’😀동함é b다🇰🇷éba 음학함활임다X함Xa,나‘  생활\n㉠생’학활생9학Y…생동①활‘가함나1가나나임다나XX(생漢함생X학c1임임활~a동‘나생동)임\n음 동 생 다c활학a다함 함9나함활임“함c음가임생나음다나가다다 가함",
+"utf16": 178,
+"utf8": 409,
+"grapheme": 174
+},
+{
+"text": "다,가…학0가임漢동함X0🇰🇷 함가 생 동다다학1Y나임다나  b가동é임ZX가\n함가함다생9 나학학 … ①함b \n함c동학1\n 가  가함나함다9임다동(0임생임가나다漢 ~Xbb함①다😀9 함”a활임 다활1…\nY가Y나다임‘함b동함다😀동동활학함활b함음9 )나활a\n함동나0함동함학나학나 학漢음🇰🇷생X 함XY“㉠음漢~0’동…임a\n",
+"utf16": 180,
+"utf8": 405,
+"grapheme": 172
+},
+{
+"text": "학동b나 학0가c0다)0다Zc동함함(😀학다.)다b음생\n다다Xb 생 함b 학가· 생Y…나음\n활 임활 )(생활가활음학함가활0생생a“\n나🇰🇷\n생동.학동활음㉠동학함  학생",
+"utf16": 94,
+"utf8": 207,
+"grapheme": 90
+},
+{
+"text": "함”①…임가9‘b~임\n다나",
+"utf16": 14,
+"utf8": 34,
+"grapheme": 14
+},
+{
+"text": "활다학가임\n  0나임10①1임생음동동학학나 동동활생‘ X다…함다X다9활동 나학9 1c가a학나다동다…가 활 · 생임나학👍🏽활나a함b0음함 …음9X다활활다생9나동 동활9a학· 임 활다학  9나👍🏽생 동나동동다 )나다활 ‘임나",
+"utf16": 127,
+"utf8": 291,
+"grapheme": 121
+},
+{
+"text": ")9 0é음가😀가. ‘동a음임a음음음…b\n…활동\n생학  나나0나é·’학 임함나나가동Z다)음동활생 \n “나 ”·활c임,ba함b활 임다다 Z임함\nc  \n0동a.동 활활임임  0학a 0c’음활9 생é음나활학㉠활 활학b동가임동음 0가9Z다 나·Z① ~ 함b생가나임함. .a9다함다~Z동임다Z0생 학활다",
+"utf16": 165,
+"utf8": 349,
+"grapheme": 164
+},
+{
+"text": "학생1 cc나활다학가0Z나임漢임a 🇰🇷함)나활음나함1😀 동활활0가다음음다“ 활생éé나)학음X음생a漢나음Y  생 생가9Yb.가9‘X동Y나생음다함가학다학 동활a생“동가임91임b9음다c학함0",
+"utf16": 106,
+"utf8": 240,
+"grapheme": 102
+},
+{
+"text": "다동나  가 생학음9 임",
+"utf16": 13,
+"utf8": 29,
+"grapheme": 13
+},
+{
+"text": "X나음 함활학9가생나활 음",
+"utf16": 14,
+"utf8": 34,
+"grapheme": 14
+},
+{
+"text": "활임동함학c",
+"utf16": 6,
+"utf8": 16,
+"grapheme": 6
+},
+{
+"text": "😀a음생Z동활 XX 학다활 활생\n c생a학나활함활학동b 함학Y동음나“임음가동가0\n👍🏽\n1나동.나9활음b9👍🏽 ‘…  음생 👍🏽음 \na동 생생동c다Z‘음 ,동생Y함",
+"utf16": 97,
+"utf8": 207,
+"grapheme": 87
+},
+{
+"text": "  음· Y🇰🇷함  가 ’생함(0임1임가🇰🇷학나가나)bZ1 활 생음학나0é 👍🏽bY   다음~임다함임임a생é.임다임음동음가X",
+"utf16": 75,
+"utf8": 156,
+"grapheme": 66
+},
+{
+"text": "~나a漢학 1가음임a임a활활00나’a1음 😀… )음 가함1임활é학학X나)X함” 나음(음함동동가 함생활동음XY생 동Z임a 학함가임👍🏽나음음Z\n\n음0나다임동㉠ 생b활함임“활9\n가다음 음 다다음음0임다임b9  생👍🏽임 학임생임 음🇰🇷학활①동 éZ가가1동함 활동생 👍🏽생임X 임,임",
+"utf16": 162,
+"utf8": 362,
+"grapheme": 149
+},
+{
+"text": "임생임\n…임학(활함함가활활음동임함학Y 가가임“음“학~‘동함9Z임음9동다 ~동생‘0학나\n 다  생  )Y🇰🇷생X생\n다a나학활9 ‘함c1임나,동㉠활음Y함함다다함활활학동나음음활나가1 학 X 9동음 (c 가 ",
+"utf16": 114,
+"utf8": 260,
+"grapheme": 111
+},
+{
+"text": "b ,a활  )나활생음c임다학동·함㉠동👍🏽임학나~\n활동a나漢😀",
+"utf16": 37,
+"utf8": 82,
+"grapheme": 33
+},
+{
+"text": "“가함\n함임 임 나음c나",
+"utf16": 13,
+"utf8": 31,
+"grapheme": 13
+},
+{
+"text": "Y학👍🏽동활동다0Y 학함동생활0 👍🏽활생다동“음학동X동함 ,함🇰🇷 가활é ’동음생임漢\nX동’  생1음(활가생\n생‘b생다학임임\nb나학가가 가학학임학임🇰🇷다Y생학baZ동 (활생)함동임다😀👍🏽학생  Zé.활나함",
+"utf16": 125,
+"utf8": 285,
+"grapheme": 109
+},
+{
+"text": " 1학함 학b함  음가 0가1나0음나a",
+"utf16": 21,
+"utf8": 41,
+"grapheme": 21
+},
+{
+"text": "동Y음1함가 가\n나나 동동9 임 가임🇰🇷생함함Z“동동학임동①👍🏽c다동음임가9함X가생함·활Y학나다생 학나나임‘다임 🇰🇷“임활학 다Y임함Y·나음나음  동함동함 나함c)다 함동동임",
+"utf16": 103,
+"utf8": 247,
+"grapheme": 94
+},
+{
+"text": "90  임동 임생\n함가Z함음c🇰🇷임  동활다생가Y①a활‘학Y…",
+"utf16": 36,
+"utf8": 78,
+"grapheme": 33
+},
+{
+"text": "나음다,Z활다함동동학생가 활함함음 가음👍🏽b활a다가생음Y.동나동 다함가학Y다나’다가생나나나임 Z다가漢  나Y‘’나활음\n학 함\n생생학학Y음 다임학활  임Z생임)활 \na함임 생1생다학음Y가함(다동0‘다c😀활음…가임함가다0 가생다함é동X c함\nY~임X’함생음) 활.활 함\n함, b",
+"utf16": 156,
+"utf8": 361,
+"grapheme": 152
+},
+{
+"text": "다음a‘함나학漢 생가’학, 함임생가~“…다90 활생생생임함함",
+"utf16": 33,
+"utf8": 83,
+"grapheme": 33
+},
+{
+"text": "활학생가 활Zb생Z가\n동음활㉠학학다활동a생나 학X음활0동\n동  YY1임다함㉠동음~  다함0가학,학0함활㉠활가bY)함함b)é\n임임임\n가,가함다”함동동동생가 “동)활가활함🇰🇷é 나나 ①학漢’음가다나0c나’임임c다 ’활a음동 다함가·다a학학🇰🇷활X임다동동Y임함가 ㉠임함활\n漢활활나동\n “a나91다활 음…다가 동😀",
+"utf16": 176,
+"utf8": 413,
+"grapheme": 169
+},
+{
+"text": "\n임동다음0🇰🇷\n①다가함활X생a활생가활가 나 나함 👍🏽가  나bXXb학음동다Z다1활,가음 다 음 학동 \n🇰🇷Y학다가학, ‘나’Za c학다임 임동활음① \n활음활 생 ~동동활 c가다 ·음활a활가9漢 a·가1다Y\n a학나음학·함…,①동학aX나음가함음 다.😀 가",
+"utf16": 149,
+"utf8": 324,
+"grapheme": 139
+},
+{
+"text": "Y음(Y활Z가漢 생활,\n 음생임 동b학다나다…동Z임생 다Z가음함음음생  다활다XXé😀동학XY생9학임 9  c다음학활음 임다\n동임 가…함다생함 9가9.나㉠b다Z동",
+"utf16": 90,
+"utf8": 199,
+"grapheme": 89
+},
+{
+"text": " 9 Y9함가Y음b漢생‘다 동다함동👍🏽가나,다다학임①9 다다”나생aX가활음\n함 생다다생음생음가임생c\n😀동cc㉠  \n음\n 가활… X학)나a  학함1  임다학Y다함X\n함😀\n나(함동나~Y임9漢함\n\n’임0009X가.①생c동 \n·(음생음함0\n함활a 가 학👍🏽음😀“동가c 함 다",
+"utf16": 156,
+"utf8": 331,
+"grapheme": 147
+},
+{
+"text": "9음 동㉠나학다임다.다활가~활동 나\nbc임Y동Z나c가가학 다다활 가…나👍🏽임0임나동Z학é동음9생bY",
+"utf16": 57,
+"utf8": 130,
+"grapheme": 54
+},
+{
+"text": "가X‘동( 1학Zac음동생’X생생 漢활가Y학\n 다활동함생漢①다생”\n다\n나😀가Y음9Y 나1생가임생\n다임동활활다함·함함.가나 생음 (동다가함임활다함①\n동0b활함🇰🇷·임가음a나Z생학음음~“ ”9학나X생c활음학1임함①가나임함…임👍🏽음다\n9~🇰🇷활음 나음(나a\nZé생생가활동가활다 Y나함Y임 ~학임활 a",
+"utf16": 171,
+"utf8": 396,
+"grapheme": 161
+},
+{
+"text": "임b활나활음. Y가 a\nb다9~동 함음a\n(\nb임“임임동’가동생b  (가”다9함학 학학다.· 함동함가임c함é \n“가 다가0a…동 😀생é동학X가’. 나활 동동함다 함동함함👍🏽음‘” 가 다가 함.생a.,b나나 다1a나“활 나음가다 나 생",
+"utf16": 133,
+"utf8": 290,
+"grapheme": 129
+},
+{
+"text": "0학漢.음 1음b9漢함c .b임 Y 다다가😀임a학 Y 활👍🏽,다음Z0활",
+"utf16": 42,
+"utf8": 80,
+"grapheme": 38
+},
+{
+"text": "음9음나학나 임0 학학9( 다학\n0X활9학함음생X 음학나.가동‘동~ Y a다 Z① 나c🇰🇷 동\n활음0음함가생Z)임학동함동동임. 동학1가음다임가·생“다 a나음) 동활①①\nb…다 나\n,임나😀Y다가동가동 ZZ생활 b·동학~나임다Z🇰🇷학가.\n\n\n함",
+"utf16": 139,
+"utf8": 301,
+"grapheme": 132
+},
+{
+"text": "a나음음~학 漢생음동bbZ학함 1다임임“\n동음다다X다 \n 👍🏽생·9( 다학 임학㉠동동생\n학 0가😀활🇰🇷가 👍🏽생음a다활나함임생나학 나\n👍🏽Z동1다漢.Z생①·㉠음㉠~\n임음Y가 임활㉠생\nc활생나임b나활Z 9학임음동임임임동0음함학0음",
+"utf16": 136,
+"utf8": 308,
+"grapheme": 123
+},
+{
+"text": "ba9활 동Z Z동a“9가a다나 활다음c생다 함음c음활생나9‘ 활09é①aY함다임,Z 함 a생“함1a  나나생학…임漢c활학생é가…’漢9·활다음학음b활9동학1 활음임가음 다Xc",
+"utf16": 97,
+"utf8": 212,
+"grapheme": 97
+},
+{
+"text": ".가·X\n 나Y~Y활나가Y가학b학\n음나b가0나🇰🇷 임Z· 임다동가1활동함동임학 동 동1,활  활다Y음  b임음0활 0b동 😀가동",
+"utf16": 74,
+"utf8": 152,
+"grapheme": 70
+},
+{
+"text": "가다나임 함漢b음음,음c나함 함🇰🇷 임👍🏽함음 0활동㉠ 漢 가생임가’나나‘~’ 음\n임임생생임동 X①,”X임생나동나0활함漢나a학(음   0동😀가나나생(0활1c 학(🇰🇷동활학0🇰🇷나가 나함 다활음다활함학b동  0漢 활\n \n함가생‘학b",
+"utf16": 137,
+"utf8": 309,
+"grapheme": 124
+},
+{
+"text": "…)함 a활음생Y음” 임X  학음함가음동다활(음…b  Y활학\n함음음다임(",
+"utf16": 40,
+"utf8": 90,
+"grapheme": 40
+},
+{
+"text": "생동 Y함임c0함활9\n Z( ”…나음(학·음🇰🇷Z생(음생함음생Z다 ·다9다 생음활\n‘생나다 1a가다나임음임활임가…함 b동동나다漢\n활나 임  ~동생다·활㉠漢👍🏽동음 음👍🏽다가가b漢나다 가 c동a 가학b나b동음a Z동나음함생) 동‘학학가b가👍🏽활\n( 나활X0임음가X다é나나 생음생음1나나임🇰🇷a임b가·동” Z",
+"utf16": 180,
+"utf8": 405,
+"grapheme": 165
+},
+{
+"text": "다다👍🏽0학漢가(1🇰🇷\n학학 aé나~임음나\ncb함동생생가 가음① bé다학함나 X임  다동다함함c나활임나“임활음👍🏽 다다)~ 임㉠X가활함c임나Y…활동 활활.0\n생임c학\n동생함 가‘…9가a, 생”임 다함1다다생학X다음가활c음생학함임동é동활활활漢cZbX동임음\n🇰🇷임학0음활Y·①X활가다a1음동활 학 함X漢",
+"utf16": 175,
+"utf8": 399,
+"grapheme": 163
+},
+{
+"text": "가9활학X 다 .👍🏽 X함bY임다음임가😀a동활 Y임 é학b1 동학학동함😀나 동“1”다생a1나나\n임\n1동생a동 …\n가나㉠생다동함활동가 나나함 c나a활,나임 ,  1다학”임㉠생가  ’생함가 학 동다0ZZ😀학’임Y🇰🇷학생동😀음“다Z나가동·활가가X학1 생“생동)가”나~활X나동나함aé동~활생\n다  \n 👍🏽1음음b ‘음(👍🏽Zb다",
+"utf16": 191,
+"utf8": 418,
+"grapheme": 175
+},
+{
+"text": "나함(함나활임학음동0a나함Y다다임다 é음학 함학 함학\n가Z함학a함\n다.b👍🏽 가,생é👍🏽활함~동 활①…’나bb\nb\n가😀가",
+"utf16": 72,
+"utf8": 160,
+"grapheme": 65
+},
+{
+"text": " 음 ’ 함나가\n  음~0\n생나a학\n나임함’활다\n(동활나활1임Y)c  다다,9가활)\n음0나함 👍🏽활함c함활👍🏽함 ①(0가é“bY활활나임가\n“생학음나음.함.임 음\n “ 나b임임“X,함 함생0음학 다",
+"utf16": 113,
+"utf8": 242,
+"grapheme": 107
+},
+{
+"text": "(음\n임임학생동…a😀나음다“생함 1 다동활0함동생\n 생Z 다👍🏽나생음 \n1",
+"utf16": 44,
+"utf8": 98,
+"grapheme": 40
+},
+{
+"text": "‘활활다활0임 가나 ㉠가다c나활’다~1👍🏽다·함활漢임동임 a 다활 함 \n활나 활음동함임.나학)나다㉠~ 나나 동생 ①음나학다나함‘·학Z다학 활,Yb 활임임활.가다① Z9,Z\n활c(동임가함동 ~   ‘~임.X,Za함활활\nY가임함나함생다활1음가가\na",
+"utf16": 138,
+"utf8": 308,
+"grapheme": 135
+},
+{
+"text": "\n음생 가나.Y학.X활1생b음함 학 … 임9  Y\n가함9학음나X다학학동👍🏽음함함~9임학1.漢Y다.동활다”활가㉠활 임나다나동동 \n 활임동 \n다b음 임 …활X09학임생임漢~9음9\nX함함다🇰🇷 함X漢임Z‘활가나다음a함 동임활함👍🏽①나1 음임X동\n함학가함학漢임0가활,가함b나··(X함나9c다.생\n\n1\n학 함",
+"utf16": 173,
+"utf8": 379,
+"grapheme": 164
+},
+{
+"text": "\n①0동다다다나동·X  1활임학a가~학’함… 가 ~b‘임,생c가a)(임함X함함다다활X활·학활 나 학  “임나학·“나가0나漢음함0Z생활임동활학c함㉠ X)나ba 다0,동음 \n함활활학😀나( ",
+"utf16": 104,
+"utf8": 229,
+"grapheme": 103
+},
+{
+"text": " ·생가학 ZZ음,동생다…X학\n”임학㉠ 1가음생다음학\n생다 b㉠활가음가9임임b”)활  임Z활a 학함\n임임Z\n🇰🇷 활학동(동0임a(9활 다생임· 학  활ca(학동c다c👍🏽 함Z나가  a동👍🏽임‘함",
+"utf16": 114,
+"utf8": 242,
+"grapheme": 105
+},
+{
+"text": "학a가학 생활활임동함동 가0가음1다 음학생9\nY생함 동9다 활생) 9학c학다~다b…임’다👍🏽임9임 학함임Z활함Y나나함나  ~X·다X생임0~ 동가임①cb 동함 Y임9Z가나생   활\n 漢음9 Z Z가X학학가활다~漢다다다Z활다b\n임활(‘활다동 동漢 가9",
+"utf16": 140,
+"utf8": 303,
+"grapheme": 137
+},
+{
+"text": ")임생c다 0Zé 다가동👍🏽”동㉠9생0학음임0나음’ ①함음  Y    함 동",
+"utf16": 44,
+"utf8": 91,
+"grapheme": 41
+},
+{
+"text": "b임가활음1나함동학👍🏽09.생나 가Y나😀학임0  활다㉠다음.c 활함생동가임임 함함1 생漢YZ나활함함학①다…👍🏽”함 é임Y나임\n9 1Z함🇰🇷가Z동 다)\n활",
+"utf16": 92,
+"utf8": 203,
+"grapheme": 82
+},
+{
+"text": "활활a임나동1 활 😀동·😀활생Xc음 0다(나ac가학임가a ~동음음1음X다Z· \n·\n음동cY동) 1“ 활0동가나a9’함학 임학c학나a  음①활생 나bY X다\n음동함😀다다1 임활생나1😀임나활가나활 함",
+"utf16": 113,
+"utf8": 240,
+"grapheme": 109
+},
+{
+"text": "1漢생다학동생함Z1학다임동음나·생 함학음①. 🇰🇷가漢나함a·0나, 다·학b나동가동함b동\n생~“활👍🏽 ·0활임활c ”🇰🇷학a가a·“0é활활함9다1동bZ나😀a활가동다나ba 함함😀 b나음😀c임가가가👍🏽임생① 생생가a9학1임생”Y다🇰🇷 생음다음)~생 11활 활…”동활’동a(음漢임학 …’활①음👍🏽동함활\n생임임 임0‘음Y다0",
+"utf16": 191,
+"utf8": 433,
+"grapheme": 170
+},
+{
+"text": "나활漢학함b가임함 가학가가학생생다가 다가동b임b다음  활함임”생😀·나👍🏽 음함활 나학…",
+"utf16": 51,
+"utf8": 128,
+"grapheme": 47
+},
+{
+"text": "임학0활학음가👍🏽다 임가나임·함 가9함나0.10함나a나음Y생👍🏽다,가학0함Y가다학가0생가b함다\n\n“활‘X생나나(음동임다학임漢 …다음㉠임생  임학…가생활X학·다 임동활동Z나0\n다a함 가①학Y①나임동생b임 가생학동활가임가😀다학생학ac나가함🇰🇷나함 함“b활a  ~함 c생 활9생~b학가음생나c함Y나가",
+"utf16": 171,
+"utf8": 401,
+"grapheme": 161
+},
+{
+"text": "X생  학b생동b 함\n가나  é나Yc다\n임🇰🇷가학동가,학음활학c1음 ,  음 Y…활활 함생함Z함1생생  ’0“임학1음 동생나함학다임(나활임X9🇰🇷음함음함 활다 음학",
+"utf16": 95,
+"utf8": 208,
+"grapheme": 89
+},
+{
+"text": "나Z함Y학나활가 생~함생나학나😀c~👍🏽학①c생학XY학임가임음cb음\n가‘ 함b (①“생생 ",
+"utf16": 52,
+"utf8": 116,
+"grapheme": 48
+},
+{
+"text": "  다 임   ·a함학\n학Y1가음c가 👍🏽학c",
+"utf16": 27,
+"utf8": 50,
+"grapheme": 24
+},
+{
+"text": "”🇰🇷Y éc🇰🇷,1👍🏽😀가나다a활👍🏽. 음생YX음음1음‘ c다동학나가‘👍🏽X(cb음①“다생Z가 가㉠ 함0①나나동함 a0)활임가Z임Z음a음동 동나b생동é활XX가음활학동👍🏽동é활‘임 나활c생가漢임Y임Y생 1 활😀함 동b👍🏽함동생9c ①생음함나,동함활’임다 학…음㉠ .가다나생생c동b다가동음 동함학Z” 학생漢학①👍🏽Y동”Z(· ",
+"utf16": 199,
+"utf8": 443,
+"grapheme": 173
+},
+{
+"text": "가’ 생활9 생임활",
+"utf16": 10,
+"utf8": 24,
+"grapheme": 10
+},
+{
+"text": "Y학”   가 .함 생 동활생가동임1( ”나활,다생학활   임함임임 ,동나생 나활학음.함X0음임’다활 é가생㉠음1가생  함다가 X~  Y임임0",
+"utf16": 79,
+"utf8": 172,
+"grapheme": 79
+},
+{
+"text": "c가활나활X\nX동 학Y·\n음Y  생 학“·) 😀가0활 9임음동🇰🇷ca\n함.동학가임c동\n임   음생음활생나가임활다학\n생생 9생b임X~나생학①1 c동생가Z다0생 나㉠\n 임가~aaZ \n학\n음cZ나.Z 가임활  음음~가함…Z 1다임생다~ 가나다임나 활",
+"utf16": 139,
+"utf8": 289,
+"grapheme": 135
+},
+{
+"text": "학\n함(함생다·Z0.다 생Z다)나활생X다활Z”가”c·X활c👍🏽 동나 생학1활함나생X㉠Z가Y \n함가①함 음\n가X동 1다임a동X다 생생“0다 음‘함1”임~Y함함(학학다 함 음.임음 학가다학. ~생0다.활( 가😀1 동 임음다임  음활가음1Y임 ,가\n",
+"utf16": 139,
+"utf8": 297,
+"grapheme": 135
+},
+{
+"text": "가Y활활🇰🇷Y생🇰🇷👍🏽 나다🇰🇷\na 동학a음c학생0ZX🇰🇷0동나0a함Z🇰🇷a9가다학생c Y㉠1 ’다동",
+"utf16": 68,
+"utf8": 136,
+"grapheme": 50
+},
+{
+"text": "음동학다c학함가동",
+"utf16": 9,
+"utf8": 25,
+"grapheme": 9
+},
+{
+"text": "다생b임함X”😀 Z활활Y가 😀 Z음①a생음Z함함동활0c ’나 나 임X학·가X·활cX동Y가Y 생 漢동학나0생함나· 임 생다Z9동학나Z임생학학Y1활나학)·활(음나😀c다 c~ 나가9. 1음😀함함~함\n가임동“~0 동 생학Z함함b‘음. 동음Y ,①함가다0가(‘생 활활함0",
+"utf16": 150,
+"utf8": 320,
+"grapheme": 146
+},
+{
+"text": "나동가나음",
+"utf16": 5,
+"utf8": 15,
+"grapheme": 5
+},
+{
+"text": "학동음나동함생나9\n  임\n) Y🇰🇷활 동활1é동a가나㉠나9생\n학함~99~‘활가음 Y😀나.음Y  생학1음 나활   “음🇰🇷”c👍🏽😀c나함생다\n 임가 aY임생학가c‘ 동임)가\nc활나음음é’임😀(함’활동가활,1동학다b동음é 함가생임",
+"utf16": 135,
+"utf8": 294,
+"grapheme": 123
+},
+{
+"text": "  학나음동임0  함활함1임’\n 활\n임\n 9c 학(생a가Y다\n동함동임가생Z 생활함…”)다음생동😀함함활.음학)음   다음생임1동나나활 漢활함생임학 동·활”가가다동생Y1생임c가①’활동éb생 활음91생 a동’다다학음음다나동",
+"utf16": 122,
+"utf8": 286,
+"grapheme": 121
+},
+{
+"text": "활임c활‘’함~활가다\n활X가동Y생👍🏽a다가생 . 학다 다\n임 ,함동활1①함a9생활·동9음학 é\nX 동학동함임\n학‘ 나음함b“acY漢동활b다생 다X 음 가㉠학임다학   음🇰🇷1함함1 함동\n‘9활( 漢 활a 동  0임음1동활가 함음함가1다c동)생 1🇰🇷①\n”학임 함음동 다a①나생나\n함활생함음음…",
+"utf16": 169,
+"utf8": 373,
+"grapheme": 160
+},
+{
+"text": "다동\n음학임,임활~다Z학다활생함 다활0임 함🇰🇷Z함0 (éb활👍🏽다a음나9”동음Y활생\n동활㉠X ①나Y임생음",
+"utf16": 63,
+"utf8": 142,
+"grapheme": 57
+},
+{
+"text": "나‘🇰🇷X임가함다활…나‘다생활다다학임a㉠①임ZZ 00”생임나“동X임👍🏽~활 가Z 동 학임aY나  활학 ,a학 ‘동“임음음학생동가동음동임0임함학é함~함1임가활0 생음 활. 임함Z음음함 음bX(다é임다음생1활c  Z함다9①다Y㉠임👍🏽 😀c👍🏽학다음 임학1 ’\n학",
+"utf16": 153,
+"utf8": 345,
+"grapheme": 140
+},
+{
+"text": "생 다 é생😀학나",
+"utf16": 10,
+"utf8": 23,
+"grapheme": 9
+},
+{
+"text": "🇰🇷학㉠학X 활 가Z활다다생활동다\nb음음a음함㉠·漢①임생나다동활활0음가Z가음 다\n활Z가학)나éa음 다동생a다임동생임~\n활동함가나,나 함함, Z동임학 ·漢동Y나생 éY 임é漢~임음학0나함동활’…9\n생0다Z임다활 나생가생학é나漢 생’가가㉠다9. 학활음생학함생~0음다활XY활동‘생학활X활",
+"utf16": 159,
+"utf8": 379,
+"grapheme": 156
+},
+{
+"text": " 가다함9함동b임활漢㉠ 활생   함Z(가“함 다 é동a가9동“음음 👍🏽활)다함bZ…음동활a\n활나생생…나👍🏽음학Z가임é학 다X   나활 é\n함👍🏽  1😀다임①동다동나c다19음동 나Y다",
+"utf16": 108,
+"utf8": 237,
+"grapheme": 98
+},
+{
+"text": " b음 나(가다동漢가함나학함🇰🇷음음a ZZY학다…다가음\n가생 다\n0가가 생1Z 음학c1함나\né동다 ㉠활Y동.학나함X가1\n다0가가다 다.음Z음가함나“ …활’a다함b활  🇰🇷a함음생다漢학동함학0음임음,\n나학학,임음나가① 음다함)  Z함음음a음㉠활b가생임a 가XY함 음활 나음1동9임동동동 임Z임.다",
+"utf16": 168,
+"utf8": 379,
+"grapheme": 162
+},
+{
+"text": "학음임  가동·가Y가9,나漢가 학생a‘임,가다㉠음0함“음동’ \n 활다함,활다학Z음’~ ‘ X, 함·\n 임 함\n 나가c😀음\n",
+"utf16": 69,
+"utf8": 149,
+"grapheme": 68
+},
+{
+"text": " 가 임나  😀 활9\n. ㉠가생다“학동나다임 ”①“ 가활”漢음9가가가 함)생동함XZ~.나\n함😀나b 음가학a생다임b~함a 음.0동\n함음😀“다학생나👍🏽학나임함·X임다",
+"utf16": 95,
+"utf8": 214,
+"grapheme": 89
+},
+{
+"text": "①9가학c9b다9함임동나다b동 é임 함함함 1나가\n동동가활Y임Y(생생나학가c동 c생 다임다 활활0임(1활“9  가동생Y음 함다Y·학임 나~漢9동‘Y동X함학 동가학동다동나음다Z생생함“👍🏽다Z학임활)음함c",
+"utf16": 114,
+"utf8": 260,
+"grapheme": 111
+},
+{
+"text": " Y~”가학 é음생漢“éY학임c Yé임다동생 0가 동임가활임 동가가활 91😀(X’함함활활가 ‘1”음1…Z동c음생9c0나함(0임임·함생0ac0생Y학동㉠활임나c학\n 다 함 漢음다학… Z 다음9다활…a임학생함” Z활음①나생 임가🇰🇷다나동  Z생",
+"utf16": 136,
+"utf8": 302,
+"grapheme": 132
+},
+{
+"text": "(c나①0다\nXY가가동,함학임”다음다함학음 생다\n 활~동㉠① \nX다 활생(…학생  😀 학 음동…나나c활활가 9학Y(가생다동🇰🇷 생활가함‘동가학생’나😀X동다학다동,😀임동 ~a생나함다.b·동) 학음나, 동음 X\n생…X함 함é)동 .9생”음임임aba음 임👍🏽임 활a“ 가동\n 생생\n동漢㉠‘X①활b\nY다Z활👍🏽①",
+"utf16": 179,
+"utf8": 395,
+"grapheme": 167
+},
+{
+"text": "생함 b활생나 b활",
+"utf16": 10,
+"utf8": 22,
+"grapheme": 10
+},
+{
+"text": "동임9a 함“ 1😀“ ",
+"utf16": 13,
+"utf8": 25,
+"grapheme": 12
+},
+{
+"text": "학생학학é동 b임생다다…음 )음c 함동‘음음활Z학임 학가음\nX 🇰🇷가㉠”",
+"utf16": 42,
+"utf8": 99,
+"grapheme": 39
+},
+{
+"text": "\n~”학 학’a가나.漢가 b다동 동임1다나Y생함음함 임‘나가다동임X활~ 동활가’\n 임   임漢(함9임😀함é동·학b생 a활😀1동학X음동”’활생‘음  학 가‘함漢임c임)동1 🇰🇷 임동\n학학\n음임🇰🇷🇰🇷 동①활다 a나함학😀  학임생\n임음 ",
+"utf16": 139,
+"utf8": 311,
+"grapheme": 127
+},
+{
+"text": "생가생음활학임Y①  나“漢”\n.학 나.나ZZ다함생 활음  함나 생 학학생함X…동a함9학함……음활함漢a활함가함함Zé,0생 함‘Z함학학 임a동음임 X생가漢다가))c음임,가임다학동학음동c😀음 나😀활 다학학\n😀함 동다학Y다.a나😀 가음음  Y 나 임동동생학🇰🇷X\n\n생‘학생①동 활가활가임1,임동학동학임·함다동임a임",
+"utf16": 177,
+"utf8": 413,
+"grapheme": 170
+},
+{
+"text": "…(👍🏽생9 생b가0다활나동”가다a가X가  9생 함활c함함bb가㉠X활cY학 활함 다다c0\n. 임가 가’ “\n 1음동가👍🏽생 활 활함음 0 가학 생동동나\n활 a함aa🇰🇷·활 동음함 1활생나다9나\n동학 (1함학학생 다음음임나생임음활다함생학9a학a동cY가활 학 나활동함음가활학나학임가 학생 a(임a다.다생~가  ‘생 ",
+"utf16": 180,
+"utf8": 395,
+"grapheme": 171
+},
+{
+"text": "나나음나음학9동생음임㉠ 활임·동b\n임임 다음동\n생\n임활·🇰🇷’가활X활학임1   ”임함b~ 학 .생생음나활함  음㉠나학Z활a~가학생다함나동1( 임활활활~ 학함함활a음임학  c 음\n다음\n함학함가함 함음a1다다1임음가0다①🇰🇷가음학1é임  🇰🇷😀 학漢 동\n가생1 c함‘다9활(임",
+"utf16": 159,
+"utf8": 360,
+"grapheme": 149
+},
+{
+"text": "나  9함.\n가다임함 “ 가활X다 漢😀음 🇰🇷c가 9학나나생다나b”나활가👍🏽함Y활①X.생생음함c나 😀가동함생b 동漢동 다” 9음가나다다임나생가🇰🇷활 Y나음(\n’동생 음 다생음음👍🏽다 나0생’활함 생",
+"utf16": 120,
+"utf8": 274,
+"grapheme": 106
+},
+{
+"text": " …aX\n9동가함“함①나· ’ 활음 ‘”활활🇰🇷임동가활 생 1 漢漢나9 é나활함\n활동)음9동함동다 b나①X“YY’ 음 Yé0.c, 1,漢0나활나\n음Y,동 함漢동음 활 c\n임학.😀음.a 가\n9 😀",
+"utf16": 112,
+"utf8": 229,
+"grapheme": 107
+},
+{
+"text": "다음음0임다👍🏽0(c동 ① ①Z음  나가Z9‘Z나음가\n활다음🇰🇷함XX동)가”나활임b다㉠함함함생00활”가 ·X가9나b함cc생,)9나활 활함동음👍🏽😀\n 임c임c생동 나임함 Y\n c임생생생”😀 \n음9  동㉠",
+"utf16": 120,
+"utf8": 255,
+"grapheme": 109
+},
+{
+"text": "나 가😀é ,㉠생  Y나가임생…동학1함함다다생”X1함0漢.임활활다Y가X.나활Y①\n“a나 나나👍🏽활Y활 …임함a음다가함가나음음 활 가漢함동학다생임b음 임음다동Ya음음”함Z 임a다함가임b학나Z 학9동생다 학동나함c0생음😀~함 활1동동 나 🇰🇷다~.음임음Y나생 가생가.활생생 ",
+"utf16": 157,
+"utf8": 362,
+"grapheme": 149
+},
+{
+"text": "·  나다나동나漢①…bb나가다가b9 학b동X학가 음다다😀\n9 함Y)가 😀\n동동나나동\n漢 ‘”함,다①…학동”①음c다😀다c함가b가😀Z  활임X학학다’Y㉠’ 함음 Z생음음생… 가동동Y0“동동가Z 활학다0’X다Yé①동생  ca",
+"utf16": 126,
+"utf8": 282,
+"grapheme": 122
+},
+{
+"text": "동a다생나다漢학임X가X동 음",
+"utf16": 15,
+"utf8": 37,
+"grapheme": 15
+},
+{
+"text": " 활학다~임임”동생음漢학①다a~생동🇰🇷생음漢동“음임 동Z\n동 학음가음가함~나함나음함다①c “함학  생🇰🇷음Z9aY음다활가“나활음Z다함학a생Y나가.漢동임X다  함동임\n동가함음임생\n생 음 동음다학임음동임 다함나나음생1다a다학생나…음나c🇰🇷b생 음임생생’생😀학Z생😀",
+"utf16": 153,
+"utf8": 373,
+"grapheme": 142
+},
+{
+"text": " 동X다a 다임 나임1함c함가①함나임함a ’다X임1가나나생a동학학Xé활 b동나0학임 다漢 c ,학가0~가다X0함㉠나‘다0동 활동”……a학0활함)\n다다음다‘나(동임  19학생9“학Z학함함가생( 임 😀🇰🇷생임학생가동활9다㉠X학학  9다a·\n,(·’동🇰🇷漢가다~학",
+"utf16": 149,
+"utf8": 332,
+"grapheme": 142
+},
+{
+"text": "가활음\n나음나”생X활가   함함동’동학~다동c음음가다임동다~ ~함Y임활’나👍🏽👍🏽  나음“다학음”  …다 .Y\n‘나활다동 a학a  b1활학㉠ ~😀😀학",
+"utf16": 89,
+"utf8": 199,
+"grapheme": 81
+},
+{
+"text": ")가X임함 다가 1“활가학 활생c9나“ ’1a나생동다a활aYb0\n음음c다①,임9음é가가 ~나1다가함생 😀함 …활가Y다임학1나동",
+"utf16": 71,
+"utf8": 156,
+"grapheme": 70
+},
+{
+"text": "a  “활9다활bY漢음동 음 동 다0음함음함Z생함 b 함다가나 활함㉠가  학함가0활 다😀활활나생. 임나👍🏽다다Z생가다가다)나 생함가임활다음X 👍🏽①.나”( ,·  Xa나나임함Y나다😀9다함동 ‘Y학🇰🇷동나학다나漢함다활나활Y활  음함 👍🏽다a가1활  …임é활임b학“함동\n활음활.나학음다”생a생나9임동b임가bc활",
+"utf16": 181,
+"utf8": 413,
+"grapheme": 167
+},
+{
+"text": "X  ·, Y학가학가~👍🏽동활 ",
+"utf16": 19,
+"utf8": 36,
+"grapheme": 16
+},
+{
+"text": "활漢가활 동활음👍🏽b동함가다9학다é생가가c나🇰🇷①함 ㉠음생학함다활,· 함~활동나생임다활 임 漢①0동a임Z‘함동\n 다활  활X활ac Y음나  X다가”나생음학0학🇰🇷임cc학활함가함 99 음함임음다a …나함생나나 \n👍🏽학임활동  Y나1동👍🏽é가 ㉠c임가음생“함임9·\n동Z나학 음 가👍🏽 🇰🇷생가다활다생0학가다·①음동학생1",
+"utf16": 190,
+"utf8": 437,
+"grapheme": 169
+},
+{
+"text": "é·\n학함a·~동동😀,c활함다임생b활Y1나다",
+"utf16": 25,
+"utf8": 54,
+"grapheme": 24
+},
+{
+"text": "음동가9동Y생음 음가음 가임.함생다생다음다.학 동   ㉠Z9음~활1a나”~활X \n다나나함나é.9㉠ 가 ",
+"utf16": 57,
+"utf8": 124,
+"grapheme": 57
+},
+{
+"text": " 다c 동학나c가a임임음 가Z임①,함Y 학(동생생동다나생함임동 학Y함,다임 \n…0 c생 ~ 나é함나생동생음나학나학함생나생①활나X~  🇰🇷음학Y b활 .가함생 나\n나)\n가임생다동 학동함bX활학생éaY동Y 활함다나 임음 9함나생나동~임㉠생.9X활동    \n함임나 다가생~·학함“함학\n활\n가음Y…동함함Z\n임활“a",
+"utf16": 173,
+"utf8": 388,
+"grapheme": 170
+},
+{
+"text": "동㉠학” Z동9나다학임 나",
+"utf16": 14,
+"utf8": 34,
+"grapheme": 14
+},
+{
+"text": "나’Y생학동\n가음생🇰🇷활b활학동가 a학…활동YZ나Y함  함생함임활학임,~X漢함b 😀 학학나 음함a동활9동다b함① )다\n㉠임임나\n) 함X다학 함다생👍🏽활다🇰🇷활…함음임동음다다동활a0Ya가나0음\n학학나활",
+"utf16": 118,
+"utf8": 272,
+"grapheme": 108
+},
+{
+"text": "임함동①”동생c",
+"utf16": 8,
+"utf8": 22,
+"grapheme": 8
+},
+{
+"text": "나é가함b함임나👍🏽”함동나.🇰🇷음임동 🇰🇷학’🇰🇷함‘다나나 나a동bXZé임 ·동활9“다🇰🇷 ①함함나b다a나나학활9함다가다·㉠c임다 c가0b 생함함다동”c음학 다‘ 😀X임a생 가동음음다.👍🏽다9음cb함다 a‘임함·",
+"utf16": 131,
+"utf8": 298,
+"grapheme": 112
+},
+{
+"text": "‘a가·㉠생 활동 나0\nX 함동c음활  학생 학음) 학학다음음학c …c나동학X나활 ~…동 0임 ",
+"utf16": 53,
+"utf8": 114,
+"grapheme": 53
+},
+{
+"text": "활)9동학‘  (\n\n생 가음임함",
+"utf16": 17,
+"utf8": 35,
+"grapheme": 17
+},
+{
+"text": "   .Z“함. 생나생학생생활)학,음 c1활c)나X다동가활’음음 동다함동음임함… 나동동나é임활X생다활동\n함함cb음임c 함나 😀동 함~“임동다b 나다a다가나‘가 Y ‘생 다Y·a다나함·가~b다생동생0동Y다활함 é1함동가9 🇰🇷생",
+"utf16": 129,
+"utf8": 291,
+"grapheme": 125
+},
+{
+"text": "é나가’ 음 음·동활Y1 다학cX학함임c 생 ,·임(\n“임c9함함 가  c나🇰🇷 임활’동음음,나학\n…함활·임동동\n임  활 …다 생학다활함ZbX동동동가  생임학나동 생활Z음학 음 , 활학나임‘동함활함생나활c생나0가Y음다\n다가임\n1 동임함학임함함\n0 동활활함👍🏽다함다생가” X a",
+"utf16": 158,
+"utf8": 358,
+"grapheme": 152
+},
+{
+"text": "임 생생c나임함다bY㉠음9동다동c생aZ…학 b음‘생음생음Z함·’음 가0함음동漢X생음나 ①’음 임다나생c다Y학c활학생 가Y임임X 동)Z가임동\n음a임다생c 학 다동생X‘ 임임동. 동음활임가b음동“생학학  임활동학생0Xa생X다,함음   활 나 생 a’ 함활학나c임c학나~학가음漢Xa동👍🏽학Z임다생생",
+"utf16": 165,
+"utf8": 378,
+"grapheme": 162
+},
+{
+"text": "음가학,.X👍🏽가·Z가나 1. 학생활다가 생임 생함활\n학c 음임학Z🇰🇷학 함동가’학a 나가 · 학 나’1”함’가a함c나 👍🏽학…음가함동 학다음임학생é함나다 “나음가음Y가 동‘다YY\n임임 ㉠·학“( 활학 함나X활나나학X동나함임Y동“생다동활다음활생학 임음 X동‘학다(9‘‘1漢음동함",
+"utf16": 161,
+"utf8": 379,
+"grapheme": 152
+},
+{
+"text": "😀임가음 음\nb가동0\nY학활a생9함…함Y  가Z다Y 생함\n)나생)(활활 다다가…음😀가 🇰🇷임a동 동음b함’  음c함생c임漢 생활 함활동  😀,음음다나나동 나동가가Z생 가가9나b함.~9 함Z활다학함가 a나학학동0임생임X생X생함 생",
+"utf16": 132,
+"utf8": 290,
+"grapheme": 126
+},
+{
+"text": "임a학함 다나“Z1학함학동가‘ ’다활음👍🏽 임Y”漢활음다c활 가임🇰🇷나·",
+"utf16": 44,
+"utf8": 105,
+"grapheme": 38
+},
+{
+"text": "나학동생활Y동\n나동다Z’ 나b생임생함가”~음 임c임다b동음다음음다활학음",
+"utf16": 39,
+"utf8": 99,
+"grapheme": 39
+},
+{
+"text": " a~.임나가함학음c,함함나 ,음 Y음함a활 ",
+"utf16": 25,
+"utf8": 51,
+"grapheme": 25
+},
+{
+"text": "생”가‘학YX)다c활다9함학동’c음가Y활임음X ca학함함활a다가함함\n.생활임다漢 ‘함음漢임함음~\n다나음(활학동‘함·음나①동b1 학‘a\n다 가생함동음다음음,생음X함활활 활 생\n 생~Z나활9가활\n생cba활🇰🇷나생b음학 동가학X다 a’임",
+"utf16": 131,
+"utf8": 304,
+"grapheme": 128
+},
+{
+"text": "임임.동함음 임생다 임1함학가나다~학 함학…다’음c‘다’‘가활다가가활😀 동①~Y‘임㉠임Z”c나나활함",
+"utf16": 56,
+"utf8": 142,
+"grapheme": 55
+},
+{
+"text": "활생1 임 학“나”é0나🇰🇷활학(~\n음😀음나생· 임가나01다나0“동Z 다함“ 🇰🇷음생함함b 동㉠생활…X( 활나 가학“cé다 학㉠ 1나~",
+"utf16": 80,
+"utf8": 177,
+"grapheme": 73
+},
+{
+"text": "나학Y 다 음동동’ \n“1동가생1활함함다나음임~동동(임가음가음b “활음생1동 다음,가함 함생·  다’활\n漢 다1·나생🇰🇷\n·.생c ㉠가\nc 😀다가다음생 .활생,가음음 9Xa활다.생 漢é  1다음학   \nY임 ·X\n활X나다“생 가임0나활9함·  생①0임함c임” 임 음생~임활Y생음éZYcZ함 임X다c활①학 9다학1\n가\n동 동",
+"utf16": 183,
+"utf8": 392,
+"grapheme": 179
+},
+{
+"text": "~함함활활임”음활·b”나동…함학YYc함”9동9b임c가a생임 동가나활생①음동😀다 나학생동활 (0가학 함음활🇰🇷음함“가활 학 학다0”학”·가음가학 동c활함X 다다생  ,  \n ’함, 동(함함함‘",
+"utf16": 109,
+"utf8": 253,
+"grapheme": 105
+},
+{
+"text": "음“임X   0Z가활  함나b활생a동생동~”함·임학Y1활동Y생X활b생함생\n동9활a가 X다X음가 음🇰🇷가임a가Z 가임",
+"utf16": 66,
+"utf8": 141,
+"grapheme": 63
+},
+{
+"text": "임활임다다나 \n동 생X(활함동학 활학음😀임다 음1가임임Z다X학가Z학다음9함X생\nZ나cZ동a활~함함",
+"utf16": 55,
+"utf8": 125,
+"grapheme": 54
+},
+{
+"text": "(·학나임활漢…가 다함다나”bX 함\n임나나동음9‘0함①Z임 학가①동…c학é다활생(0음·동음학(생1  X나,학다)가Z함 가활 a함\n“,나임c다다동😀가\n동함가나😀다학가 X 활나음’ca",
+"utf16": 102,
+"utf8": 233,
+"grapheme": 100
+},
+{
+"text": "생)1 임학함함생㉠생X  ①👍🏽Z학X😀99활동학a동9é” .   활”함a함b생생 함가",
+"utf16": 50,
+"utf8": 103,
+"grapheme": 46
+},
+{
+"text": "생생c. X음.漢🇰🇷9가임🇰🇷😀 가나 다학\n\n동Z생음 다음음 동함1 음 “학함Y가나가나가동\n다활 음음 “활漢나나X가다bc다학나활음가b다😀다\n생동가다생”\n임 음나다다활임  생0음019함",
+"utf16": 108,
+"utf8": 246,
+"grapheme": 100
+},
+{
+"text": "다가0Z동 임\n다나👍🏽함생함🇰🇷활활🇰🇷🇰🇷0bc)b 학X임다漢b 음é) 생활음 1다활  ,임동함b활가활\n0생학생임학Z🇰🇷다나“생음활활0~학 \n학동임“생동  1나동 생X생\n나나 90\nXXa “생활c음9a 가임임 漢활9나학bY활활 0임 가’나·)c생“”다",
+"utf16": 150,
+"utf8": 318,
+"grapheme": 135
+},
+{
+"text": "0음b..함나활X함활 ZZ\n활다나0임)임음가)",
+"utf16": 25,
+"utf8": 51,
+"grapheme": 25
+},
+{
+"text": "…漢임가임동동생생음 ..다0 임 👍🏽생漢 임·“음 동동㉠임c동”활\n음함a음 나b\n가Z학b동 ",
+"utf16": 53,
+"utf8": 120,
+"grapheme": 50
+},
+{
+"text": "활 🇰🇷 음가함9👍🏽다임다,동활생c가, ,9 활 음· 활동b음학0생학 🇰🇷 함1~학a음학나c임 임😀다🇰🇷함함 aX음 학  음  임",
+"utf16": 81,
+"utf8": 166,
+"grapheme": 68
+},
+{
+"text": "Z  \n활 0학가가학,함·활 생\n~c음생동생음”활 b)임 👍🏽활다·나 다 함활음함가함음0b학 ’ Y’①활…다동👍🏽가활다…a함가학음생임c나다동c91 학함다다학활…나동,생생음㉠ 0동\n학Z(a①0나활b나활학 함”~생Z\n함)다 나 동활🇰🇷음학생·나함나 나임 동가",
+"utf16": 148,
+"utf8": 337,
+"grapheme": 139
+},
+{
+"text": "활\n 가🇰🇷동다다",
+"utf16": 11,
+"utf8": 25,
+"grapheme": 8
+},
+{
+"text": "활~0임함éX활(음 )학활ab1a생9생활나1다다(학 ’ 가임   👍🏽a나활함 c동나…🇰🇷음 임음학동다 a·생 동다활음㉠학다가”임음동음가\n함…😀",
+"utf16": 84,
+"utf8": 188,
+"grapheme": 77
+},
+{
+"text": " 학학활동 음9동음0“ 🇰🇷 동학함임)Z’.나학가😀0다🇰🇷🇰🇷🇰🇷·학다 “㉠… 함나음a나. 나다임b임㉠학cX0   음음 b‘함09 임함생나X \n㉠”·임\n생 동나학)다a·Z가다1음’활다",
+"utf16": 111,
+"utf8": 240,
+"grapheme": 98
+},
+{
+"text": "9동.\nb 음Z음음 ,‘ZY0é나다동 음)활학임나a㉠활\n )Z가임학가’다학😀9)c 활함a1생다가 Xa·나학 .9음음음 X동다 학가생a임가다Z임  임\n함0’ 0 Y활漢.…9b활생🇰🇷c 생생생",
+"utf16": 108,
+"utf8": 220,
+"grapheme": 104
+},
+{
+"text": "가음~ 나Y임음é.Y\n가“ 나가 b1함.~임 음c‘1 함9나🇰🇷임é  함임0 학X함가동다 …나’ )😀Y가임 활1임’0활생1학Z\n나“ 음①00 🇰🇷\n다🇰🇷나,다 가학다bc학나임”😀 )11동동활생",
+"utf16": 115,
+"utf8": 237,
+"grapheme": 104
+},
+{
+"text": "나임9동Y0가임 0학다ca다함9 학… 생~)동학~음 함9“가임 동동다  \n생임함😀함",
+"utf16": 47,
+"utf8": 101,
+"grapheme": 46
+},
+{
+"text": "가가학활다  음’9학활함다b동bY활나",
+"utf16": 20,
+"utf8": 48,
+"grapheme": 20
+},
+{
+"text": "‘생활학다 음생나👍🏽함9 나b 임생) 😀 c나다X가생다음 학👍🏽음가 Zb임함  학다나가🇰🇷a함)다가동 학동 임활😀활함가학 생 학X나임학함동👍🏽1다 ㉠음활㉠1X",
+"utf16": 98,
+"utf8": 220,
+"grapheme": 84
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"utf16": 1666,
+"utf8": 4998,
+"grapheme": 1666
+},
+{
+"text": "가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가",
+"utf16": 1667,
+"utf8": 5001,
+"grapheme": 1667
+},
+{
+"text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"utf16": 5000,
+"utf8": 5000,
+"grapheme": 5000
+},
+{
+"text": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+"utf16": 2200,
+"utf8": 4400,
+"grapheme": 1100
+},
+{
+"text": "👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧👨‍👩‍👧",
+"utf16": 2400,
+"utf8": 5400,
+"grapheme": 300
+}
+]
+}

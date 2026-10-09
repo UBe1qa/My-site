@@ -83,7 +83,7 @@
       "icon": "/img/count.svg",
       "name": {"ko": "칸칸", "en": "Kankan"},
       "sub": "Kankan",
-      "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세요. 자소서 문항, 원고지 장수까지.", "en": "Word and character counter that shows every counting rule side by side, plus X and SMS limits."}
+      "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, SNS 한도, 원고지까지.", "en": "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits."}
     }
   ]
 }

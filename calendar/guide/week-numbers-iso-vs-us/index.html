@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){if(window.IntersectionObserver&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('anim');setTimeout(function(){if(!window.__calOn)d.classList.remove('anim')},3000)}})(document.documentElement)</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Week Numbers: ISO 8601 vs US Week Numbering", "description": "Two common ways to number weeks give different answers around New Year. How each works, with worked examples for 2026 and 2027.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://calendar.lumenlab.page/guide/week-numbers-iso-vs-us/", "image": "https://calendar.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/en/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/en/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Week Numbers: ISO 8601 vs US Week Numbering", "description": "Two common ways to number weeks give different answers around New Year. How each works, with worked examples for 2026 and 2027.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://calendar.lumenlab.page/guide/week-numbers-iso-vs-us/", "image": "https://calendar.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/en/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/en/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Calendar maker", "item": "https://calendar.lumenlab.page/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://calendar.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 3, "name": "Week Numbers: ISO 8601 vs US Week Numbering", "item": "https://calendar.lumenlab.page/guide/week-numbers-iso-vs-us/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
 <script src="/assets/ads-config.js"></script>
@@ -39,32 +39,32 @@
 </header>
 <main id="main">
 <article class="doc wrap narrow"><p class="crumb"><a href="/">Calendar maker</a> <span aria-hidden="true">›</span> <a href="/guide/">Guides</a></p>
-<h1>Week Numbers: ISO 8601 vs US Week Numbering</h1><p class="lead">ISO 8601 weeks start on Monday and week 1 is the week with the year’s first Thursday. The common US style starts weeks on Sunday and calls the week containing January 1 week 1. Around New Year the two disagree.</p><p class="meta">Updated October 9, 2026 · Onesheet</p>
+<h1>Week Numbers: ISO 8601 vs US Week Numbering</h1><p class="lead">ISO 8601 weeks start on Monday and week 1 is the week with the year’s first Thursday. The common US style starts weeks on Sunday and calls the week containing January 1 week 1. Around New Year the two disagree.</p><p class="meta">Last checked October 10, 2026 · Onesheet</p>
 <div class="prose"><h2>The two rules</h2>
-<table><thead><tr><th></th><th>ISO 8601</th><th>US style</th></tr></thead><tbody>
-<tr><td>Week starts on</td><td>Monday</td><td>Sunday</td></tr>
-<tr><td>Week 1 is</td><td>The week with the first Thursday (the week containing January 4)</td><td>The week containing January 1</td></tr>
-<tr><td>Days at the turn of the year</td><td>Can belong to the last week of the previous year, or week 1 of the next</td><td>Always belong to their own calendar year</td></tr>
-<tr><td>Weeks in a year</td><td>52 or 53</td><td>53 or 54, with short first and last weeks</td></tr>
-</tbody></table>
+<div class="tbl-wrap"><table class="stack"><thead><tr><th></th><th>ISO 8601</th><th>US style</th></tr></thead><tbody>
+<tr><td>Week starts on</td><td data-th="ISO 8601">Monday</td><td data-th="US style">Sunday</td></tr>
+<tr><td>Week 1 is</td><td data-th="ISO 8601">The week with the first Thursday (the week containing January 4)</td><td data-th="US style">The week containing January 1</td></tr>
+<tr><td>Days at the turn of the year</td><td data-th="ISO 8601">Can belong to the last week of the previous year, or week 1 of the next</td><td data-th="US style">Always belong to their own calendar year</td></tr>
+<tr><td>Weeks in a year</td><td data-th="ISO 8601">52 or 53</td><td data-th="US style">53 or 54, with short first and last weeks</td></tr>
+</tbody></table></div>
 <h2>Worked examples</h2>
-<table><thead><tr><th>Date</th><th>ISO 8601</th><th>US style</th></tr></thead><tbody>
+<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>ISO 8601</th><th>US style</th></tr></thead><tbody>
 <tr><td>Thu Dec 31, 2026</td><td>2026, week 53</td><td>Week 53</td></tr>
 <tr><td>Fri Jan 1, 2027</td><td>2026, week 53</td><td>Week 1</td></tr>
 <tr><td>Sun Jan 3, 2027</td><td>2026, week 53</td><td>Week 2</td></tr>
 <tr><td>Mon Jan 4, 2027</td><td>2027, week 1</td><td>Week 2</td></tr>
 <tr><td>Fri Dec 31, 2027</td><td>2027, week 52</td><td>Week 53</td></tr>
-</tbody></table>
+</tbody></table></div>
 <p>January 1, 2027 is a Friday. Its week has only three days in 2027, so ISO counts it as the last week of 2026. That makes 2026 a 53-week year in ISO numbering. In the US style the same Friday is in week 1, and a new week starts two days later on Sunday, January 3.</p>
-</div></article>
-<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
-<article class="wrap narrow"><div class="prose"><h2>Which one to use</h2>
+<p><a class="btn btn-main cta" href="/?wk=1">Make a calendar with week numbers</a></p></div></article>
+<div class="ad-wrap wrap narrow" data-ad-wrap><div class="ad-col"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
+<article class="wrap narrow"><div class="prose">
+<h2>Which one to use</h2>
 <p>Use ISO week numbers when you share schedules across countries or with software that says “ISO week”. Use the US style when your calendar starts on Sunday and you want week 1 to begin with January 1. What matters is that everyone reading the calendar uses the same rule.</p>
 <h2>On this site</h2>
-<p>Turn on “Week numbers” under “Change settings”. A Monday-start calendar is numbered by ISO 8601 and a Sunday-start calendar by the US style, so the numbers always match the rows you see.</p>
-<p><a class="btn btn-main cta" href="/">Make a calendar with week numbers</a></p></div></article>
-<section class="sec wrap"><h2>More guides</h2><ul class="glist"><li><a href="/guide/print-calendar-on-one-page/"><b>How to Print a Calendar on One Page (Letter vs A4)</b><span>Why a calendar spills onto a second page or gets cut off, and the print settings that fix it: paper size, scale, margins, headers and footers.</span></a></li><li><a href="/guide/2027-long-weekends/"><b>2027 Long Weekends from US Federal Holidays</b><span>The ten three-day weekends that US federal holidays create in 2027, with dates, plus the two Thursdays where one day off makes four.</span></a></li><li><a href="/guide/south-korea-public-holidays-2027/"><b>South Korea Public Holidays in 2027 (in English)</b><span>All 24 public holiday dates in South Korea for 2027 with weekdays, including the substitute holidays and the two holidays added by the 2026 rule change.</span></a></li></ul></section>
-<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+<p>Turn on “Week numbers” under “Change settings”. A Monday-start calendar is numbered by ISO 8601 and a Sunday-start calendar by the US style, so the numbers always match the rows you see.</p></div></article>
+<section class="sec wrap narrow"><h2>More guides</h2><ul class="glist"><li><a href="/guide/print-calendar-on-one-page/"><b>How to Print a Calendar on One Page (Letter vs A4)</b><span>Why a calendar spills onto a second page or gets cut off, and the print settings that fix it: paper size, scale, margins, headers and footers.</span></a></li><li><a href="/guide/2027-long-weekends/"><b>2027 Long Weekends from US Federal Holidays</b><span>The ten three-day weekends that US federal holidays create in 2027, with dates, plus the two Thursdays where one day off makes four.</span></a></li><li><a href="/guide/south-korea-public-holidays-2027/"><b>South Korea Public Holidays in 2027 (in English)</b><span>All 24 public holiday dates in South Korea for 2027 with weekdays, including the substitute holidays and the two holidays added by the 2026 rule change.</span></a></li></ul></section>
+<div class="ad-wrap wrap narrow" data-ad-wrap><div class="ad-col"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>
 <footer class="foot">
   <div class="wrap foot-in">

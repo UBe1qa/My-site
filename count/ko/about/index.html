@@ -27,13 +27,13 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
-<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="top"><div class="top-in wrap">
   <a class="brand" href="/ko/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>칸칸</a>
-  <nav class="nav" aria-label="도구"><a href="/ko/">글자수 세기</a><a href="/ko/jasoseo/">자소서</a><a href="/ko/byte/">바이트</a><a href="/ko/wongoji/">원고지</a><a href="/ko/guide/">가이드</a></nav>
+  <nav class="nav" aria-label="도구"><a href="/ko/">글자수 세기</a><a href="/ko/jasoseo/">자소서</a><a href="/ko/byte/">바이트</a><a href="/ko/neis/">나이스(생기부)</a><a href="/ko/sns/">SNS</a><a href="/ko/wongoji/">원고지</a><a href="/ko/guide/">가이드</a></nav>
   <span class="sp"></span>
   <div class="aux"><a class="wide" href="/ko/about/">소개</a><a href="/about/" lang="en" hreflang="en">English</a></div>
 </div></header>
@@ -44,21 +44,23 @@
 <h2>세는 기준과 출처</h2>
 <ul>
 <li><b>글자</b>: 유니코드 표준 부속서 <a href="https://unicode.org/reports/tr29/">UAX #29</a>의 글자 묶음을 따라요(브라우저의 Intl.Segmenter). 이모지는 <a href="https://unicode.org/reports/tr51/">UTS #51</a>의 이모지 묶음이에요.</li>
-<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>
-<li><b>X 가중 글자 수</b>(영어판): X의 공개 라이브러리 twitter-text 3.1.0을 기준으로 했어요(확인일 2026-10-09).</li>
-<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 TS 23.040의 이어 붙이기 규칙이에요.</li>
-<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 한 칸 한 글자로 놓아요. 원고지 쓰기 규칙은 반영하지 않았어요.</li>
+<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세어요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>
+<li><b>X 가중 글자 수</b>: X의 공식 문서 <a href="https://docs.x.com/fundamentals/counting-characters">Counting characters</a>와, X가 공개한 <a href="https://github.com/twitter/twitter-text">twitter-text 라이브러리</a>의 설정(v3.json)을 따라요. 테스트는 npm twitter-text 3.1.0과 견줬어요(2026-10-10 확인).</li>
+<li><b>나이스 생기부</b>: 「2026학년도 학교생활기록부 기재요령(고등학교)」 [참고자료 8]의 바이트 규칙과 항목별 최대 글자 수예요(<a href="https://star.moe.go.kr/web/contents/m21100.do">학교생활기록부 종합지원포털 자료실</a>, 2026-10-10 확인).</li>
+<li><b>SNS 한도, 문자 한 통 기준</b>: 각 서비스와 통신사의 공식 문서에서 2026-10-10에 확인한 값이고, 화면마다 출처 링크를 달았어요.</li>
+<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 3GPP TS 23.040의 이어 붙이기 규칙이에요.</li>
+<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 놓아요. 원고지 쓰는 법은 어문 규정에 없고 관행이라서(<a href="https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&amp;qna_seq=322356">국립국어원 온라인가나다 답변</a>), '한 칸에 한 글자'와 '관행대로' 두 가지로 놓아 볼 수 있게 했어요.</li>
 </ul>
 <h2>어떻게 확인했나요</h2>
-<p>세는 로직은 화면과 따로 두고 자동 테스트 2만 3천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>
+<p>세는 로직은 화면과 따로 두고 자동 테스트 2만 4천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. 나이스 바이트는 기재요령의 규칙대로 한 글자씩 더한 값과 견줘요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>
 <h2>글은 어디로 가나요</h2>
-<p>어디로도 가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를 써요. 자세한 내용은 <a href="/ko/privacy/">개인정보 처리방침</a>에 있어요.</p>
+<p>쓰거나 붙여 넣은 글은 이 기기 밖으로 나가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를, 방문 통계는 Cloudflare Web Analytics를 써요. 이 요청들에 글은 실리지 않아요. 자세한 내용은 <a href="/ko/privacy/">개인정보 처리방침</a>에 있어요.</p>
 <h2>만든 곳과 문의</h2>
 <p><a href="https://lumenlab.page/">루멘랩(Lumen Lab)</a>이 만들었어요. 틀린 숫자를 발견하면 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 알려 주세요.</p></div>
 </main>
 <footer class="foot"><div class="wrap">
-  <a class="lumen" href="https://lumenlab.page/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>루</span></i><i style="--i:1"><span>멘</span></i><i style="--i:2"><span>랩</span></i><i style="--i:3"><span></span></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
-  <p class="foot-links"><a href="/ko/jasoseo/">자소서 글자수 세기</a><a href="/ko/byte/">바이트 계산기</a><a href="/ko/wongoji/">원고지 글자수 세기</a><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <a class="lumen" href="https://lumenlab.page/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>루</span></i><i style="--i:1"><span>멘</span></i><i style="--i:2"><span>랩</span></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/jasoseo/">자소서 글자수 세기</a><a href="/ko/byte/">바이트 계산기</a><a href="/ko/neis/">나이스 생기부 바이트 계산기</a><a href="/ko/sns/">SNS 글자수 세기</a><a href="/ko/wongoji/">원고지 글자수 세기</a><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="/ko/licenses/">오픈소스 고지</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>
 <script type="application/json" id="kk">{"lang": "ko", "t": {"close": "닫기"}, "other": "/about/", "otherLabel": "English version"}</script>

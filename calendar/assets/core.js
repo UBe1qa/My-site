@@ -222,8 +222,13 @@
     var t = D.krFixed[y];
     if (!t) return null;
     return Object.keys(t).map(function (k) {
-      var name = t[k][0];
-      return { n: dn(y, +k.slice(0, 2), +k.slice(3)), names: name.split('; '), kind: krKind(name), en: t[k][1] };
+      var name = t[k][0], names = name.split('; '), sub = /^대체공휴일\((.*)\)$/.exec(name);
+      var it = { n: dn(y, +k.slice(0, 2), +k.slice(3)), names: names, kind: krKind(name), en: t[k][1] };
+      if (sub) {   // 무엇의 대체인지('3·1절'의 가운뎃점은 나누지 않는다)
+        it.of = sub[1].replace('3·1절', '3\u00011절').split('·').map(function (x) { return x.replace('\u0001', '·'); });
+        it.en = 'Substitute holiday (' + it.of.map(function (x) { return (KR_EN[x] || x).replace(/ \(.*\)$/, ''); }).join(', ') + ')';
+      } else if (names.every(function (x) { return KR_EN[x]; })) it.en = names.map(function (x) { return KR_EN[x]; }).join('; ');
+      return it;
     });
   }
 

@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
-<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why a 161-character text costs two messages", "description": "One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://count.lumenlab.page/guide/why-161-characters-is-two-sms/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why a 161-character text costs two messages", "description": "One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://count.lumenlab.page/guide/why-161-characters-is-two-sms/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://count.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Why a 161-character text costs two messages", "item": "https://count.lumenlab.page/guide/why-161-characters-is-two-sms/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
 <script src="/assets/ads-config.js"></script>
@@ -42,8 +42,8 @@
 <article class="art wrap narrow">
   <p class="crumb"><a href="/guide/">Guides</a></p>
   <h1>Why a 161-character text costs two messages</h1>
-  <p class="meta">Updated <time datetime="2026-10-09">2026-10-09</time> · Lumen Lab</p>
-  <p class="answer">A single SMS holds 160 characters of the GSM-7 alphabet. Once a text is split, every part gives up 7 of those slots to a header that tells the phone how to put the parts back together, so 161 characters travel as 153 + 8.</p>
+  <p class="meta">Last checked <time datetime="2026-10-10">2026-10-10</time> · Lumen Lab</p>
+  <p class="answer">A single SMS holds 160 characters of the GSM-7 alphabet. Once a text is split, the information that lets the phone put the parts back together takes up room in every part, so each part holds 153 and a 161-character text travels as 153 + 8.</p>
   <div class="prose"><h2>Where the breaks fall</h2>
 <p>Counted with the SMS counter on this site, using plain letters.</p>
 <div class="tbl"><table>
@@ -54,7 +54,7 @@
 <tr><td>307</td><td class="r">3</td><td>153 + 153 + 1</td></tr>
 <tr><td>460</td><td class="r">4</td><td>153 + 153 + 153 + 1</td></tr>
 </table></div>
-<p>The 7 missing slots are the concatenation header defined in 3GPP TS 23.040. It is 6 bytes long, and 6 bytes need 7 of the 7-bit slots. A message that fits in one part does not carry it, which is why the first limit is 160 and every later one is 153.</p>
+<p>When a text is split into several parts, the joining information takes up room in each one, so a part holds 153 characters, or 67 when the text is sent as Unicode. The rules are in 3GPP TS 23.040. A message that fits in one part does not carry that information, which is why the first limit is 160 and every later one is 153.</p>
 <h2>One character can change the alphabet</h2>
 <p>GSM-7, defined in 3GPP TS 23.038, has room for basic Latin letters, digits, common punctuation and a short list of accented letters. If a text contains anything else, the whole message is sent as Unicode (UCS-2) instead, and the limits become 70 for a single message and 67 per part.</p>
 <div class="tbl"><table>
@@ -67,7 +67,7 @@
 <p>The last two rows differ by one accent. é is in the GSM-7 alphabet; ê is not.</p>
 </div>
 </article>
-<div class="ad-wrap wrap" data-slot="mid"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<div class="ad-wrap wrap narrow" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <div class="wrap narrow"><div class="prose">
 <h2>Characters that look harmless</h2>
 <p>These are outside GSM-7 and switch the whole text to Unicode:</p>
@@ -82,9 +82,9 @@
 <h2>Characters that take two slots</h2>
 <p>A few characters stay in GSM-7 but are sent as an escape code plus a character, so each uses 2 slots: [ ] { } ^ ~ | \ and €. A text of 80 curly brackets fills a message exactly; 81 make it two parts. A part never ends in the middle of one of these pairs, so the first part of that 81-bracket text carries 152 slots, not 153.</p>
 <h2>What this does not tell you</h2>
-<p>The part count is what the standard says the text needs. What you pay depends on your carrier or messaging provider, and some networks support national tables for Turkish, Spanish and Portuguese that change which letters fit. The counter does not model those.</p><div class="try"><p>Paste a text to see its parts and the characters that force Unicode.</p><a class="btn go" href="/sms/">Open the SMS counter</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://www.3gpp.org/dynareport/23038.htm">3GPP TS 23.038: Alphabets and language-specific information</a></li><li><a href="https://www.3gpp.org/dynareport/23040.htm">3GPP TS 23.040: Technical realization of the Short Message Service (SMS)</a></li></ul></div></div></div>
-<section class="sec wrap narrow"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/how-x-counts-characters/"><b>How X counts characters: emoji, links and the 280 limit</b><span>X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
-<div class="ad-wrap wrap" data-slot="bottom"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+<p>The part count is what the standard says the text needs. What you pay depends on your carrier or messaging provider, and some networks support national tables for Turkish, Spanish and Portuguese that change which letters fit. The counter does not model those.</p><div class="try"><p>Paste a text to see its parts and the characters that force Unicode.</p><a class="btn go" href="/sms/">Open the SMS counter</a></div><div class="src"><h2>Sources</h2><ul><li>3GPP TS 23.038: Alphabets and language-specific information</li><li>3GPP TS 23.040: Technical realization of the Short Message Service (SMS)</li></ul></div></div></div>
+<section class="sec wrap narrow col"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/how-x-counts-characters/"><b>How X counts characters: emoji, links and the 280 limit</b><span>X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
+<div class="ad-wrap wrap narrow" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>
 <footer class="foot"><div class="wrap">
   <a class="lumen" href="https://lumenlab.page/en/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>L</span></i><i style="--i:1"><span>U</span></i><i style="--i:2"><span>M</span></i><i style="--i:3"><span>E</span></i><i style="--i:4"><span>N</span></i><i style="--i:5"><span>L</span></i><i style="--i:6"><span>A</span></i><i style="--i:7"><span>B</span></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>

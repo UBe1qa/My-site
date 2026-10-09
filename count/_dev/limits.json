@@ -1,46 +1,410 @@
 {
-  "_note": "공식 출처로 확인하기 전에는 verified=false 로 둔다. 화면·글은 verified=true 인 값만 쓴다(false인 항목은 빌드가 화면에 내보내지 않는다). 값·출처·확인한 날을 함께 적는다.",
-  "neis": {
-    "verified": false,
-    "bytes": { "hangul": null, "ascii": null, "newline": null, "other_symbols": null },
-    "items": [],
-    "school_year": null,
-    "source": null,
-    "checked": null,
-    "need": "나이스 학교생활기록부 바이트 셈법(한글·영문·숫자·줄바꿈·특수문자 각각 몇 바이트)과 항목별 최대 글자 수, 적용 학년도"
+ "_note": "공식 출처를 직접 열어 확인한 값만 verified=true. 화면·글은 verified=true 인 값만 쓰고, 출처 주소와 확인한 날(checked)을 같이 싣는다. build.py가 이 파일에서 한도·항목·출처를 읽는다. 확인 못 한 것은 not_verified 에 적어 두고 화면에 쓰지 않는다.",
+ "neis": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "school_year": "2026",
+  "level": "고등학교",
+  "doc": "「2026학년도 학교생활기록부 기재요령(고등학교)」 [참고자료 8]",
+  "source": "https://star.moe.go.kr/web/contents/m21100.do",
+  "quote": "※ 교육정보시스템에서 입력 글자의 단위는 Byte이며, 한글 1자는 3Byte, 영문･숫자 1자는 1Byte, 엔터(Enter)는 1Byte임.",
+  "bytes": {
+   "hangul": 3,
+   "ascii": 1,
+   "newline": 1
   },
-  "kr_sms": {
-    "verified": false,
-    "sms_bytes": null,
-    "lms_bytes": null,
-    "encoding": null,
-    "source": null,
-    "checked": null,
-    "need": "한국 통신사 문자 한 통 기준(SMS·LMS 바이트)과 어떤 인코딩으로 세는지"
-  },
-  "sns": [
-    { "id": "x", "name": "X", "unit": "weighted", "limit": 280, "verified": false, "source": null, "checked": null, "note": "280·가중치·주소 23은 twitter-text v3 설정에서 온 값(시험이 라이브러리와 대조). 공식 문서 문장 확인 대기" },
-    { "id": "instagram_caption", "name": "Instagram caption", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "instagram_bio", "name": "Instagram bio", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "youtube_title", "name": "YouTube title", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "youtube_description", "name": "YouTube description", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "threads", "name": "Threads", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "bluesky", "name": "Bluesky", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "linkedin_post", "name": "LinkedIn post", "unit": null, "limit": null, "verified": false, "source": null, "checked": null },
-    { "id": "tiktok_caption", "name": "TikTok caption", "unit": null, "limit": null, "verified": false, "source": null, "checked": null }
+  "items": [
+   {
+    "id": "jayul",
+    "name": "자율·자치활동 특기사항",
+    "chars": 500,
+    "note": "3학년은 자율활동"
+   },
+   {
+    "id": "dongari",
+    "name": "동아리활동 특기사항",
+    "chars": 500
+   },
+   {
+    "id": "jinro",
+    "name": "진로활동 특기사항",
+    "chars": 500
+   },
+   {
+    "id": "bongsa",
+    "name": "봉사활동실적 활동내용(실적별)",
+    "chars": 50
+   },
+   {
+    "id": "ilsang",
+    "name": "일상생활 활동상황 특기사항",
+    "chars": 1000
+   },
+   {
+    "id": "gwamok",
+    "name": "과목별 세부능력 및 특기사항(과목별)",
+    "chars": 500,
+    "note": "공통과목은 1·2를 합쳐 500자"
+   },
+   {
+    "id": "silmu",
+    "name": "전공실무과목 세부능력 및 특기사항(학기별)",
+    "chars": 500
+   },
+   {
+    "id": "gaein",
+    "name": "개인별 세부능력 및 특기사항",
+    "chars": 500
+   },
+   {
+    "id": "dokseo",
+    "name": "독서활동상황(공통)",
+    "chars": 500
+   },
+   {
+    "id": "dokseo2",
+    "name": "독서활동상황(과목별)",
+    "chars": 250
+   },
+   {
+    "id": "haengteuk",
+    "name": "행동특성 및 종합의견",
+    "chars": 300
+   },
+   {
+    "id": "chulgyeol",
+    "name": "출결상황 특기사항",
+    "chars": 500
+   },
+   {
+    "id": "injeok",
+    "name": "인적·학적사항 특기사항",
+    "chars": 500
+   }
   ],
-  "reading": {
-    "verified": false,
-    "read_wpm": null,
-    "speak_wpm": null,
-    "source": null,
-    "checked": null,
-    "need": "읽기·말하기 속도 기본값의 출처(확인 전에는 화면에 '가정: 분당 N단어'라고 표시하고 사용자가 바꿀 수 있게)"
+  "changed_from_2025": [
+   [
+    "진로활동 특기사항",
+    700,
+    500
+   ],
+   [
+    "봉사활동실적 활동내용",
+    250,
+    50
+   ],
+   [
+    "행동특성 및 종합의견",
+    500,
+    300
+   ]
+  ],
+  "not_verified": "중학교·초등학교 값, 띄어쓰기·문장부호·특수문자의 바이트(원문에 없음)"
+ },
+ "kr_sms": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "short_bytes": 140,
+  "long_from": 141,
+  "long_max_lgu": 2000,
+  "sources": [
+   [
+    "LG유플러스 메시지 전송 요금 안내",
+    "https://www.lguplus.com/mobile/plan/addon/addon-call-msg/Z100000009"
+   ],
+   [
+    "KT 문자 보내기 요금표",
+    "https://m.product.kt.com/static/prodetail/677/mobile/itemAccordion/html/677-scalable-1.html"
+   ],
+   [
+    "KT 채팅플러스 안내(기존 문자 70자/1,000자)",
+    "https://m.product.kt.com/mDic/productDetail.do?ItemCode=1274&CateCode=6003&filter_code=143"
+   ]
+  ],
+  "not_verified": "SK텔레콤 한도, 90byte의 통신사 공식 근거(웹 문자 발송 서비스 쪽 숫자로만 알려짐), 문자에서 한글 1자 = 2byte라는 통신사 문장"
+ },
+ "sns": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "rows": [
+   {
+    "id": "x",
+    "ko": "X 게시물",
+    "en": "X post",
+    "limit": 280,
+    "unit": "x",
+    "src": "https://docs.x.com/fundamentals/counting-characters"
+   },
+   {
+    "id": "xp",
+    "ko": "X 프리미엄 긴 글",
+    "en": "X Premium longer post",
+    "limit": 25000,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://help.x.com/en/using-x/x-premium"
+   },
+   {
+    "id": "igc",
+    "ko": "인스타그램 캡션",
+    "en": "Instagram caption",
+    "limit": 2200,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/media"
+   },
+   {
+    "id": "igb",
+    "ko": "인스타그램 소개",
+    "en": "Instagram bio",
+    "limit": 150,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://help.instagram.com/728994388226960/"
+   },
+   {
+    "id": "th",
+    "ko": "스레드 게시물",
+    "en": "Threads post",
+    "limit": 500,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://developers.facebook.com/docs/threads/overview"
+   },
+   {
+    "id": "bs",
+    "ko": "블루스카이 게시물",
+    "en": "Bluesky post",
+    "limit": 300,
+    "unit": "grapheme",
+    "src": "https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json"
+   },
+   {
+    "id": "ytt",
+    "ko": "유튜브 제목",
+    "en": "YouTube title",
+    "limit": 100,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://developers.google.com/youtube/v3/docs/videos"
+   },
+   {
+    "id": "ytd",
+    "ko": "유튜브 설명",
+    "en": "YouTube description",
+    "limit": 5000,
+    "unit": "utf8",
+    "src": "https://developers.google.com/youtube/v3/docs/videos"
+   },
+   {
+    "id": "tt",
+    "ko": "틱톡 캡션",
+    "en": "TikTok caption",
+    "limit": 2200,
+    "unit": "utf16",
+    "src": "https://developers.tiktok.com/doc/content-posting-api-reference-direct-post"
+   },
+   {
+    "id": "li",
+    "ko": "링크드인 게시물",
+    "en": "LinkedIn post",
+    "limit": 3000,
+    "unit": "utf16",
+    "undoc": true,
+    "src": "https://www.linkedin.com/help/linkedin/answer/a528176"
+   }
+  ],
+  "x_config": {
+   "maxWeightedTweetLength": 280,
+   "scale": 100,
+   "defaultWeight": 200,
+   "transformedURLLength": 23,
+   "ranges": [
+    [
+     0,
+     4351
+    ],
+    [
+     8192,
+     8205
+    ],
+    [
+     8208,
+     8223
+    ],
+    [
+     8242,
+     8247
+    ]
+   ],
+   "src": "https://raw.githubusercontent.com/twitter/twitter-text/master/config/v3.json"
   },
-  "wongoji_rules": {
-    "verified": false,
-    "source": null,
-    "checked": null,
-    "need": "원고지 쓰기 규칙의 공식 출처(숫자·영문 소문자 두 자 한 칸, 문단 첫 칸 비우기, 줄 끝 문장부호·띄어쓰기 처리). 확인 전에는 선택 규칙 네 가지를 화면에 내놓지 않는다"
+  "not_verified": "페이스북 게시물 한도, 인스타그램·스레드·링크드인·유튜브 제목·X 프리미엄이 글자를 세는 단위(공식 문서에 없음), 유튜브 태그(500자, 세는 규칙이 따로 있어 표에서 뺌)"
+ },
+ "reading": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "read_wpm": 238,
+  "aloud_wpm": 183,
+  "range": [
+   175,
+   300
+  ],
+  "source": "https://www.sciencedirect.com/science/article/abs/pii/S0749596X19300786",
+  "cite": "Brysbaert, M. (2019). How many words do we read per minute? A review and meta-analysis of reading rate. Journal of Memory and Language, 109, 104047.",
+  "not_verified": "한국어 분당 글자 수"
+ },
+ "wongoji_rules": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "status": "어문 규정에 없음(관행). 국립국어원 온라인가나다 답변",
+  "source": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=322356",
+  "custom_source": "https://www.ebsreadingtest.co.kr/eduData/reading/reading_page01_05.asp",
+  "applied": [
+   "문단이 바뀔 때만 첫 칸을 비움",
+   "줄 첫 칸에 오는 띄어쓰기는 칸을 쓰지 않음",
+   "덩어리 숫자는 한 칸에 두 자, 한 자리 숫자는 한 칸에 한 자",
+   "줄 끝에서 넘치는 온점·반점은 마지막 칸에 같이",
+   "온점과 닫는 따옴표는 한 칸에"
+  ],
+  "not_verified": "알파벳 소문자 두 자 한 칸, 대문자 한 자 한 칸"
+ },
+ "jobsites": {
+  "verified": true,
+  "checked": "2026-10-10",
+  "how": "2026-10-10에 로그인 없이 각 도구에 직접 넣어 본 값",
+  "samples": {
+   "A": "가나다 abc 123",
+   "B": "첫째 줄\n둘째 줄",
+   "C": "한글😀"
+  },
+  "rows": [
+   {
+    "name": "사람인 글자수세기",
+    "url": "https://www.saramin.co.kr/zf_user/tools/character-counter",
+    "A": [
+     11,
+     14,
+     9,
+     12
+    ],
+    "B": [
+     9,
+     15,
+     6,
+     12
+    ],
+    "C": null,
+    "hangul": 2,
+    "newline": 1,
+    "emoji": "숫자가 바뀌지 않음",
+    "short": "사람인"
+   },
+   {
+    "name": "잡코리아 글자수 세기",
+    "url": "https://www.jobkorea.co.kr/service/user/tool/textcount",
+    "A": [
+     11,
+     14,
+     9,
+     12
+    ],
+    "B": [
+     9,
+     15,
+     6,
+     12
+    ],
+    "C": [
+     4,
+     8,
+     4,
+     8
+    ],
+    "hangul": 2,
+    "newline": 1,
+    "emoji": "2자 · 4byte",
+    "short": "잡코리아"
+   },
+   {
+    "name": "인크루트 빠른 글자수세기",
+    "url": "https://www.incruit.com/tools/text/",
+    "A": [
+     11,
+     14,
+     9,
+     12
+    ],
+    "B": [
+     9,
+     16,
+     6,
+     12
+    ],
+    "C": [
+     4,
+     8,
+     4,
+     8
+    ],
+    "hangul": 2,
+    "newline": 2,
+    "emoji": "2자 · 4byte",
+    "short": "인크루트"
+   },
+   {
+    "name": "네이버 검색 글자수세기",
+    "url": "https://search.naver.com/search.naver?query=글자수세기",
+    "A": [
+     11,
+     14,
+     9,
+     12
+    ],
+    "B": [
+     9,
+     15,
+     6,
+     12
+    ],
+    "C": [
+     4,
+     8,
+     4,
+     8
+    ],
+    "hangul": 2,
+    "newline": 1,
+    "emoji": "2자 · 4byte",
+    "short": "네이버 검색"
+   }
+  ],
+  "ours": {
+   "_note": "칸칸으로 같은 예시를 센 값 [공백 포함 자, 한글 2byte 기준 byte, 공백 제외 자]. tests/run.mjs 가 로직과 대조한다.",
+   "nl1": {
+    "A": [
+     11,
+     14,
+     9
+    ],
+    "B": [
+     9,
+     15,
+     6
+    ],
+    "C": [
+     3,
+     4,
+     3
+    ]
+   },
+   "nl2": {
+    "B": [
+     10,
+     16,
+     6
+    ]
+   }
   }
+ }
 }

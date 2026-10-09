@@ -9,12 +9,13 @@ for (const c of ['KR', 'US']) {
   out.years[c] = {};
   for (let y = 2025; y <= 2030; y++) {
     const h = C.holidays(c, y);
-    out.years[c][y] = { basis: h.basis, list: h.list, facts: C.yearFacts(c, y), breaks: C.breaks(c, y, 3), bridges: C.bridges(c, y, 1) };
+    const lang0 = c === 'KR' ? 'ko' : 'en';
+    out.years[c][y] = { basis: h.basis, list: h.list.map((it) => Object.assign({}, it, { lab: S.label(it, { lang: lang0, country: c }) })), facts: C.yearFacts(c, y), breaks: C.breaks(c, y, 3), bridges: C.bridges(c, y, 1) };
   }
   for (const [y, m] of MONTHS) {
     const f = C.monthFacts(c, y, m), lang = c === 'KR' ? 'ko' : 'en';
     out.months[c + '-' + y + '-' + m] = { facts: f, web: S.webMonth({ year: y, month: m, lang, country: c }),
-      labels: f.holidays.map((it) => S.label(it, { lang, country: c })) };
+      labels: f.holidays.map((it) => S.label(it, { lang, country: c }, true)) };
   }
 }
 for (const y of [2026, 2027, 2028]) {

@@ -50,16 +50,21 @@
     top.appendChild(bar);
   }
 
-  /* ── 루멘랩 칸(화면에 들어올 때 한 번) ── */
+  /* ── 루멘랩 칸: 글자는 늘 보이고, 화면에 들어올 때 한 번 차례로 다시 놓인다 ── */
   function lumen() {
     var el = $('.lumen');
     if (!el) return;
     if (reduced || !('IntersectionObserver' in window)) { html.classList.remove('anim'); return; }
     var io = new IntersectionObserver(function (es) {
       if (es[0].isIntersecting) { el.classList.add('in'); io.disconnect(); }
-    }, { rootMargin: '0px 0px -8% 0px' });
+    });
     io.observe(el);
-    window.__kkAnim = true;
+  }
+
+  /* ── 휴대폰 메뉴: 한 줄로 두고 옆으로 민다. 지금 페이지가 보이게 맞춰 둔다(화면은 밀리지 않는다) ── */
+  function navScroll() {
+    var nav = $('.nav'), cur = $('.nav a[aria-current]');
+    if (nav && cur && nav.scrollWidth > nav.clientWidth + 2) nav.scrollLeft = Math.max(0, cur.offsetLeft - 16);
   }
 
   /* ── 글자 뜯어보기 ── */
@@ -130,9 +135,10 @@
   function counter() {
     var ta = $('#text'), nums = $('.nums');
     if (!ta || !nums) return;
-    var state = { nl: 1, goal: 0, basis: CFG.goal && CFG.goal[0] ? CFG.goal[0].k : null, ringDone: false, wasIn: false, userEdit: false, page: 0 };
-    var cellsBox = $('.goal .cells'), goalIn = $('#goal'), goalSel = $('#goalBasis'), goalMsg = $('#goalMsg'), goalForm = $('.goal-form'), goalOpen = $('[data-act="goal-open"]');
-    var wpmR = $('#wpmRead'), wpmS = $('#wpmSpeak'), undoBox = $('.undo'), undoText = null, undoTimer = 0, lateTimer = 0, xTimer = 0;
+    var state = { nl: 1, goal: 0, basis: CFG.goal && CFG.goal[0] ? CFG.goal[0].k : null, ringDone: false, wasIn: false, userEdit: false, page: 0, wg: 0 };
+    var cellsBox = CFG.goal && CFG.goal.length ? $('.goal .cells') : null, goalIn = $('#goal'), goalSel = $('#goalBasis'), goalMsg = $('#goalMsg'), goalForm = $('.goal-form'), goalOpen = $('[data-act="goal-open"]');
+    var wpmR = $('#wpmRead'), wpmS = $('#wpmSpeak'), undoBox = $('.undo'), undoText = null, undoTimer = 0, lateTimer = 0, xTimer = 0, limTimer = 0;
+    var hasLims = $$('[data-unit]').length > 0, neisSel = $('#neisItem'), neisCus = $('#neisCustom'), smsSel = $('#smsBase'), smsCus = $('#smsCustom');
     var refreshInspect = inspector(function () { return ta.value; });
     var sheet = CFG.tool === 'wongoji' ? wongojiSheet() : null;
 
@@ -177,12 +183,18 @@
       }
       /* 원고지 */
       if (sheet) {
-        var lay = LC.wongoji.layout(t), lastRows = lay.rows.length ? lay.rows.length - (Math.max(1, lay.sheets) - 1) * 10 : 0;
+        var lay = LC.wongoji.layout(t, state.wg ? LC.wongoji.CUSTOM : {}), lastRows = lay.rows.length ? lay.rows.length - (Math.max(1, lay.sheets) - 1) * 10 : 0;
         v.laid = lay.sheets; v.rowsUsed = lay.rows.length; v.lastRows = lastRows; v.plain = plain;
         set('laid', nf.format(lay.sheets)); set('rowsUsed', nf.format(lay.rows.length)); set('lastRows', nf.format(lastRows)); set('plain', nf.format(plain));
         sheet.draw(lay);
       }
       goalRender(v, fromUser, inputType, t);
+      if (neisSel) neisRender(t);
+      if (smsSel) krSmsRender(v.euckr);
+      if (hasLims) {
+        clearTimeout(limTimer);
+        if (t.length > 20000) limTimer = setTimeout(function () { limRender(ta.value); }, 300); else limRender(t);
+      }
       refreshInspect();
 
       /* 아주 긴 글: 단어(유니코드 규칙)·문장은 손을 멈춘 뒤에 */
@@ -198,15 +210,16 @@
       var s3 = $('[data-strip3]');
       var b = basisInfo(state.basis), g = state.goal, n = b ? v[b.k] : 0;
       $$('.bigrow').forEach(function (row) { row.classList.remove('is-over'); });
-      if (!cellsBox) return;
-      if (!g || !b) {
-        paintCells(cellsBox, 0, false);
+      if (!cellsBox || !g || !b) {
+        /* 목표가 없으면 목표 칸은 보이지 않는다(빈 막대가 무엇인지 헷갈린다는 지적) */
+        if (cellsBox) { cellsBox.hidden = true; paintCells(cellsBox, 0, false); }
         if (goalMsg) { goalMsg.textContent = ''; goalMsg.className = 'goal-msg'; }
-        if (s3 && CFG.strip3) { $('span', s3).textContent = CFG.strip3.label; $('b', s3).textContent = nf.format(v[CFG.strip3.k]); s3.classList.remove('is-over'); }
+        if (s3 && CFG.strip3 && v[CFG.strip3.k] != null) { $('span', s3).textContent = CFG.strip3.label; $('b', s3).textContent = nf.format(v[CFG.strip3.k]); s3.classList.remove('is-over'); }
         state.wasIn = false;
         return;
       }
       var over = n > g, ratio = n / g, left = g - n;
+      cellsBox.hidden = false;
       paintCells(cellsBox, ratio, over);
       var m = over ? fill(T.over, { n: nf.format(-left), u: unit(b.unit, -left) }) : left === 0 ? T.exact : fill(T.left, { n: nf.format(left), u: unit(b.unit, left) });
       goalMsg.textContent = fill(T.goalOf, { g: nf.format(g), u: unit(b.unit, g), b: b.label }) + ' · ' + m;
@@ -232,6 +245,47 @@
       p.setAttribute('pathLength', '1'); p.setAttribute('vector-effect', 'non-scaling-stroke');
       svg.appendChild(p); vv.appendChild(svg);
       setTimeout(function () { svg.remove(); }, 2300);
+    }
+
+    /* 나이스(생기부): 항목의 최대 글자 수(한글 기준) × 3 = 한도 바이트 */
+    function neisRender(t) {
+      var custom = neisSel.value === 'custom';
+      $('#neisCustomRow').hidden = !custom;
+      var max = custom ? (parseInt(String(neisCus.value).replace(/[^0-9]/g, ''), 10) || 0) : +neisSel.value;
+      var r = LC.neis(t, max), over = r.over && r.limit > 0, box = $('#neisCells');
+      set('neisB', nf.format(r.bytes)); set('neisMax', nf.format(r.limit));
+      set('neisLeft', nf.format(Math.abs(r.left)));
+      set('neisH', nf.format(r.hangulLeft)); set('breaks', nf.format(r.lineBreaks));
+      $$('[data-lab="neisLeft"]').forEach(function (el) { el.textContent = over ? T.neisOver : T.neisLeft; });
+      $$('[data-k="neisB"], [data-k="neisLeft"]').forEach(function (el) { el.classList.toggle('is-over', over); });
+      $('#neisEq').textContent = max ? fill(T.neisEq, { c: nf.format(max), b: nf.format(r.limit) }) : T.neisNone;
+      paintCells(box, r.limit ? r.bytes / r.limit : 0, over);
+    }
+    /* 문자 한 통 기준(EUC-KR 바이트로 견준다) */
+    function krSmsRender(bytes) {
+      var custom = smsSel.value === 'custom', msg = $('#smsMsg'), box = $('#smsCells');
+      $('#smsCustomWrap').hidden = !custom;
+      var base = custom ? (parseInt(String(smsCus.value).replace(/[^0-9]/g, ''), 10) || 0) : +smsSel.value;
+      if (!base) { msg.textContent = T.smsNone; msg.className = 'sms-msg'; paintCells(box, 0, false); return; }
+      var long = bytes > base;   /* 장문은 틀린 것이 아니라 종류가 바뀌는 것이라 넘침 색을 쓰지 않는다 */
+      paintCells(box, bytes / base, false);
+      msg.textContent = fill(long ? T.smsLong : T.smsShort, { n: nf.format(Math.abs(base - bytes)) });
+      msg.className = 'sms-msg' + (long ? ' is-long' : '');
+    }
+    /* SNS 한도: 서비스마다 세는 단위가 다르다(data-unit). 같은 단위는 한 번만 센다 */
+    function limRender(t) {
+      var memo = {};
+      $$('[data-unit]').forEach(function (li) {
+        var u = li.getAttribute('data-unit'), lim = +li.getAttribute('data-limit');
+        if (!(u in memo)) memo[u] = LC.measure(t, u);
+        var n = memo[u];
+        if (n == null) return;
+        var over = n > lim;
+        $('[data-lim-n]', li).textContent = nf.format(n);
+        $('.lim-bar i', li).style.width = Math.min(100, n / lim * 100) + '%';
+        li.classList.toggle('is-over', over);
+        $('[data-lim-left]', li).textContent = fill(over ? T.limOver : T.limLeft, { n: nf.format(Math.abs(lim - n)) });
+      });
     }
 
     function smsRender(t) {
@@ -292,7 +346,8 @@
         for (k = 0; k < 200; k++) {
           row = lay.rows[state.page * 10 + Math.floor(k / 20)]; cell = row && row[k % 20];
           texts[k].textContent = cell && cell.t !== ' ' ? cell.t : '';
-          texts[k].removeAttribute('class');
+          var len = cell && cell.t.length > 1 ? LC.graphemes(cell.t).length : 1;
+          if (len > 1) texts[k].setAttribute('class', len > 2 ? 't3' : 't2'); else texts[k].removeAttribute('class');
         }
         mark.setAttribute('visibility', 'hidden');
         if (!lay.rows.length) Array.from(T.wgGhost).forEach(function (ch, n) { if (ch !== ' ') { texts[n].textContent = ch; texts[n].setAttribute('class', 'ghost'); } });
@@ -322,7 +377,17 @@
         render(false);
       });
     });
-    [wpmR, wpmS].forEach(function (i) { if (i) i.addEventListener('input', function () { render(false); }); });
+    [wpmR, wpmS, neisCus, smsCus].forEach(function (i) { if (i) i.addEventListener('input', function () { render(false); }); });
+    [neisSel, smsSel].forEach(function (i) { if (i) i.addEventListener('change', function () { render(false); var c = i === neisSel ? neisCus : smsCus; if (i.value === 'custom') c.focus(); }); });
+    /* 원고지: 칸에 놓는 방법(한 칸에 한 글자 | 관행대로) */
+    $$('[data-wg]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.wg = +b.getAttribute('data-wg'); state.page = 0;
+        $$('[data-wg]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        var note = $('#wgNote'); if (note) note.textContent = state.wg ? T.wgCustom : T.wgPlain;
+        render(false);
+      });
+    });
 
     /* 목표 */
     if (goalOpen) {
@@ -376,12 +441,18 @@
     function renumber() { $$('.q', listEl).forEach(function (q, i) { $('.q-no', q).textContent = i + 1; $('.q-del', q).hidden = $$('.q', listEl).length < 2; }); }
     function count(q) {
       var d = readOne(q), r = LC.analyze(d.text, { newline: state.nl, segment: false });
-      var val = { chars: r.chars, nospace: r.charsNoSpace, utf8: r.bytes.utf8 }, n = val[d.basis];
-      var unit = d.basis === 'utf8' ? T.unitByte : T.unitChar, g = parseInt(String(d.goal).replace(/[^0-9]/g, ''), 10) || 0;
+      var e = r.bytes.euckr || { bytes: 0, unencodable: 0, samples: [] };
+      var val = { chars: r.chars, nospace: r.charsNoSpace, utf8: r.bytes.utf8, euckr: e.bytes }, n = val[d.basis] || 0;
+      var isByte = d.basis === 'utf8' || d.basis === 'euckr';
+      var unit = isByte ? T.unitByte : T.unitChar, g = parseInt(String(d.goal).replace(/[^0-9]/g, ''), 10) || 0;
       $('.q-n', q).textContent = nf.format(n); $('.q-u', q).textContent = unit;
-      $('.q-sub', q).textContent = fill(T.qSub, { a: nf.format(r.chars), b: nf.format(r.charsNoSpace), c: nf.format(r.bytes.utf8) });
-      var left = $('.left', q);
-      paintCells($('.cells', q), g ? n / g : 0, g && n > g);
+      $('.q-sub', q).textContent = fill(T.qSub, { a: nf.format(r.chars), b: nf.format(r.charsNoSpace), c: nf.format(r.bytes.utf8), d: nf.format(e.bytes) });
+      var miss = $('.q-miss', q), showMiss = d.basis === 'euckr' && e.unencodable > 0;
+      miss.hidden = !showMiss;
+      if (showMiss) miss.textContent = fill(T.qMiss, { n: nf.format(e.unencodable), ex: e.samples.slice(0, 5).join(' ') });
+      var left = $('.left', q), cells = $('.cells', q);
+      cells.hidden = !g;
+      paintCells(cells, g ? n / g : 0, g && n > g);
       left.className = 'left' + (g && n > g ? ' is-over' : '');
       left.textContent = !g ? '' : n > g ? fill(T.over, { n: nf.format(n - g), u: unit }) : n === g ? T.exact : fill(T.left, { n: nf.format(g - n), u: unit });
       return r.chars;
@@ -426,6 +497,17 @@
       });
     });
     $('#nlNow').textContent = fill(T.nlNow, { n: state.nl });
+    /* 취업 사이트 바이트에 맞추기: 모든 문항을 한글 2byte 기준으로, 줄바꿈을 1 또는 2로 */
+    $$('[data-preset]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.nl = +b.getAttribute('data-preset');
+        $$('.q-basis', listEl).forEach(function (sel) { sel.value = 'euckr'; });
+        $$('[data-nl]').forEach(function (x) { x.setAttribute('aria-pressed', String(+x.getAttribute('data-nl') === state.nl)); });
+        $('#nlNow').textContent = fill(T.nlNow, { n: state.nl });
+        $('#presetMsg').textContent = fill(T.presetDone, { n: state.nl });
+        total(); persist();
+      });
+    });
     $('#qAdd').addEventListener('click', function () { var q = add(); total(); persist(); $('.q-title', q).focus(); });
     saveBox.addEventListener('change', function () {
       if (saveBox.checked) { store(ON, '1'); wipe.hidden = false; persist(); }
@@ -442,6 +524,7 @@
   function start() {
     langbar();
     lumen();
+    navScroll();
     if (window.LC && LC.analyze) { counter(); jasoseo(); }
     if (window.KK_ADS) window.KK_ADS.mount();
   }

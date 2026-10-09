@@ -1,5 +1,6 @@
-/* 화면 연결. 계산은 core.js(CAL), 종이 배치는 sheet.js(SHEET). 입력은 이 기기 밖으로 나가지 않는다.
-   기기에 저장하는 것: localStorage 'cal.lang' 하나(다른 언어 안내 띠를 닫았는지). 달력 설정은 저장하지 않는다. */
+/* 화면 연결. 계산은 core.js(CAL), 종이 배치는 sheet.js(SHEET), 글자 PDF는 pdf.js(PDFDOC).
+   만든 파일과 음력 변환에 넣은 날짜는 이 기기 밖으로 나가지 않는다. 달력 설정은 주소(?w=mon&p=a4 …)에 담는다(저장은 하지 않는다).
+   기기에 저장하는 것: localStorage 'cal.lang' 하나(다른 언어 안내 띠를 닫았는지). */
 (function () {
   'use strict';
   var doc = document, html = doc.documentElement, KO = /^ko\b/i.test(html.lang), LANG = KO ? 'ko' : 'en';
@@ -14,17 +15,21 @@
     kinds: { 'year-landscape': '1년 한 장 · 가로', 'year-portrait': '1년 한 장 · 세로', months: '월별 12장', month: '한 달' },
     pages: function (n) { return n + '쪽'; }, land: '가로', port: '세로', saved: '받았어요 ✓', making: '만드는 중…', savedSr: '파일을 받았어요.',
     fail: '파일을 만들지 못했어요. 인쇄 단추를 눌러 PDF로 저장해 보세요.', close: '닫기', zoom: '크게 보기',
+    pngOne: '이 달만 이미지로', monthsTitle: function (y) { return y + '년 월별 달력'; }, site: '한장달력',
+    imgNote: '글꼴을 불러오지 못해 300ppi 그림으로 저장했어요. 글자 그대로 받으려면 인쇄에서 ‘PDF로 저장’을 고르세요.',
     today: '오늘', inDays: function (n) { return n + '일 뒤'; },
     date: function (h) { return h.m + '월 ' + h.d + '일 ' + WD[h.wd]; }
   } : {
     kinds: { 'year-landscape': 'Year on a page · landscape', 'year-portrait': 'Year on a page · portrait', months: '12 monthly pages', month: 'One month' },
     pages: function (n) { return n + (n > 1 ? ' pages' : ' page'); }, land: 'landscape', port: 'portrait', saved: 'Saved ✓', making: 'Working…', savedSr: 'File saved.',
     fail: 'Could not create the file. Use Print and choose “Save as PDF” instead.', close: 'Close', zoom: 'Enlarge',
+    pngOne: 'This month as image', monthsTitle: function (y) { return y + ' monthly calendar'; }, site: 'Onesheet',
+    imgNote: 'The font could not be loaded, so this PDF was saved as a 300 ppi image. For real text, use Print and choose “Save as PDF”.',
     today: 'today', inDays: function (n) { return 'in ' + n + (n === 1 ? ' day' : ' days'); },
     date: function (h) { return WD[h.wd] + ', ' + EN_M[h.m - 1].slice(0, 3) + ' ' + h.d; }
   };
 
-  // ---------- 다른 언어 안내 띠(겹쳐 띄움, 자동으로 넘기지 않음) ----------
+  // ---------- 다른 언어 안내 띠(화면 아래에 작게 띄움. 메뉴를 가리지 않고 내용을 밀지 않는다. 자동으로 넘기지 않음) ----------
   (function () {
     var saved = null; try { saved = localStorage.getItem('cal.lang'); } catch (e) {}
     var userKo = /^ko\b/i.test(navigator.language || '');
@@ -43,12 +48,16 @@
 
   if (window.CAL_ADS) window.CAL_ADS.mount();
 
-  // ---------- 머리 메뉴 '월 달력'은 오늘이 든 달로(그 달 페이지가 있을 때만) ----------
+  // ---------- 머리 메뉴 '월 달력'은 오늘이 든 달로(그 달 페이지가 없으면 가장 가까운 달로) ----------
   (function () {
     var a = $('a[data-nav-month]'); if (!a) return;
-    var t = today(), list = (a.dataset.navMonth || '').split(',');
-    if (list.indexOf(t[0] + '-' + t[1]) < 0) return;
-    a.setAttribute('href', KO ? '/ko/' + t[0] + '/' + t[1] + '/' : '/' + t[0] + '/' + EN_M[t[1] - 1].toLowerCase() + '/');
+    var t = today(), now = t[0] * 12 + t[1], best = null;
+    (a.dataset.navMonth || '').split(',').forEach(function (s) {
+      var p = s.split('-'), n = p[0] * 12 + (+p[1]);
+      if (p.length === 2 && (best === null || Math.abs(n - now) < Math.abs(best[0] - now))) best = [n, +p[0], +p[1]];
+    });
+    if (!best) return;
+    a.setAttribute('href', KO ? '/ko/' + best[1] + '/' + best[2] + '/' : '/' + best[1] + '/' + EN_M[best[2] - 1].toLowerCase() + '/');
   })();
 
   // ---------- 연출 3: 루멘랩 종이의 접힌 귀퉁이(화면에 들어올 때 한 번) ----------
@@ -68,7 +77,7 @@
     var text = {};
     sheets.forEach(function (s) { s.items.forEach(function (i) { if (i.t) for (var k = 0; k < i.s.length; k++) text[i.s[k]] = 1; }); });
     var all = Object.keys(text).join('');
-    var wait = Promise.all([450, 650, 800].map(function (w) { return doc.fonts.load(w + ' 20px "Pretendard Variable"', all); })).catch(function () {});
+    var wait = Promise.all([500, 600, 700, 800].map(function (w) { return doc.fonts.load(w + ' 20px "Pretendard Variable"', all); })).catch(function () {});
     return Promise.race([wait, new Promise(function (r) { setTimeout(r, 3000); })]);
   }
   function toCanvas(sheet, dpi) {
@@ -78,43 +87,46 @@
     return c;
   }
   function blobOf(canvas, type, q) { return new Promise(function (res, rej) { canvas.toBlob(function (b) { b ? res(b) : rej(new Error('toBlob')); }, type, q); }); }
-  // 라이브러리 없는 아주 작은 PDF: 쪽마다 JPEG 한 장.
-  function pdfOf(pages) {
-    var enc = new TextEncoder(), parts = [], offs = [], pos = 0, n = pages.length;
-    function put(x) { var b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); pos += b.length; }
-    function obj(id, body) { offs[id] = pos; put(id + ' 0 obj\n' + body + '\nendobj\n'); }
-    put('%PDF-1.4\n%âãÏÓ\n');
-    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
-    var kids = []; for (var i = 0; i < n; i++) kids.push((3 + i * 3) + ' 0 R');
-    obj(2, '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + n + ' >>');
-    pages.forEach(function (p, i) {
-      var id = 3 + i * 3, w = p.wpt.toFixed(2), h = p.hpt.toFixed(2), cs = 'q ' + w + ' 0 0 ' + h + ' 0 0 cm /Im0 Do Q';
-      obj(id, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + w + ' ' + h + '] /Resources << /XObject << /Im0 ' + (id + 2) + ' 0 R >> >> /Contents ' + (id + 1) + ' 0 R >>');
-      obj(id + 1, '<< /Length ' + cs.length + ' >>\nstream\n' + cs + '\nendstream');
-      offs[id + 2] = pos;
-      put((id + 2) + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + p.wpx + ' /Height ' + p.hpx + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + p.jpeg.length + ' >>\nstream\n');
-      put(p.jpeg); put('\nendstream\nendobj\n');
-    });
-    var total = 3 + n * 3, xref = pos, s = 'xref\n0 ' + total + '\n0000000000 65535 f \n';
-    for (var k = 1; k < total; k++) s += ('0000000000' + offs[k]).slice(-10) + ' 00000 n \n';
-    put(s + 'trailer\n<< /Size ' + total + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
-    return new Blob(parts, { type: 'application/pdf' });
+  // PDF: 글자 그대로(글꼴을 담는다). 미리 만든 파일이 없는 설정은 전부 이 길로 만든다.
+  // 글꼴(네 굵기, 하나에 30KB쯤)과 글자 폭 표는 처음 받을 때 한 번만 가져온다. 못 가져오면 300ppi 그림 PDF로 대신하고 그 사실을 알린다.
+  var kitP = null;
+  function loadKit() {
+    if (kitP) return kitP;
+    function get(u, kind) { return fetch(u).then(function (r) { if (!r.ok) throw new Error(u); return r[kind](); }); }
+    kitP = Promise.all([get('/assets/fonts/metrics.json', 'json')].concat([500, 600, 700, 800].map(function (w) { return get('/assets/fonts/onesheet-' + w + '.ttf', 'arrayBuffer'); })))
+      .then(function (a) { return { metrics: a[0], fonts: { 500: new Uint8Array(a[1]), 600: new Uint8Array(a[2]), 700: new Uint8Array(a[3]), 800: new Uint8Array(a[4]) } }; });
+    kitP.catch(function () { kitP = null; });
+    return kitP;
   }
-  function makePdf(sheets) {
-    var dpi = sheets.length > 1 ? 150 : 200;
+  function deflate(bytes) {
+    if (!window.CompressionStream) return Promise.resolve(null);
+    try { return new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer().then(function (b) { return new Uint8Array(b); }, function () { return null; }); }
+    catch (e) { return Promise.resolve(null); }
+  }
+  function imagePdf(sheets, meta) {
     return fontsReady(sheets).then(function () {
       var out = [], chain = Promise.resolve();
       sheets.forEach(function (sh) {
         chain = chain.then(function () {
-          var c = toCanvas(sh, dpi);
-          return blobOf(c, 'image/jpeg', 0.92).then(function (b) { return b.arrayBuffer(); }).then(function (buf) {
-            out.push({ jpeg: new Uint8Array(buf), wpx: c.width, hpx: c.height, wpt: sh.w / 25.4 * 72, hpt: sh.h / 25.4 * 72 });
+          var c = toCanvas(sh, 300);
+          return blobOf(c, 'image/jpeg', 0.94).then(function (b) { return b.arrayBuffer(); }).then(function (buf) {
+            out.push({ jpeg: new Uint8Array(buf), wpx: c.width, hpx: c.height, wmm: sh.w, hmm: sh.h });
             c.width = c.height = 0;
           });
         });
       });
-      return chain.then(function () { return pdfOf(out); });
+      return chain.then(function () { return PDFDOC.image(out, meta); });
     });
+  }
+  // → { blob, image }  image = true 면 그림 PDF로 대신 만든 것
+  function makePdf(sheets, title) {
+    if (!window.PDFDOC) return Promise.reject(new Error('pdf.js'));
+    var meta = { title: title, lang: LANG, color: SHEET.color, author: TX.site + ' (calendar.lumenlab.page)' };
+    return loadKit().then(function (kit) {
+      if (!PDFDOC.covers(sheets, kit.metrics)) throw new Error('glyph');
+      return PDFDOC.make(sheets, kit, meta, deflate);
+    }).then(function (bytes) { return { blob: new Blob([bytes], { type: 'application/pdf' }), image: false }; },
+      function () { return imagePdf(sheets, meta).then(function (bytes) { return { blob: new Blob([bytes], { type: 'application/pdf' }), image: true }; }); });
   }
   function makePng(sheet) { return fontsReady([sheet]).then(function () { return blobOf(toCanvas(sheet, 200), 'image/png'); }); }
   function save(blob, name) {
@@ -174,13 +186,65 @@
     if (d.showModal) d.showModal(); else d.setAttribute('open', '');
   }
 
+  // ---------- 다가오는 쉬는 날(기기 날짜 기준으로 다시 채움. 줄 수는 그대로, 자료가 없으면 칸을 숨긴다) ----------
+  function fillUp(ul, country) {
+    var t = today(), n0 = CAL.dn(t[0], t[1], t[2]), items = [], lis = $$('li', ul), sec = ul.closest('section');
+    [t[0], t[0] + 1].forEach(function (yy) {
+      var h = CAL.holidays(country, yy); if (!h) return;
+      h.list.forEach(function (x) { var n = CAL.dn(x.y, x.m, x.d); if (n >= n0 && items.length < lis.length) items.push([x, n - n0]); });
+    });
+    if (sec) sec.hidden = !items.length;
+    lis.forEach(function (li, i) {
+      li.hidden = !items[i];
+      if (!items[i]) return;
+      var x = items[i][0], d = items[i][1];
+      li.innerHTML = '<time datetime="' + x.date + '"></time><span></span><small></small>';
+      li.children[0].textContent = TX.date(x);
+      li.children[1].textContent = SHEET.label(x, { lang: LANG, country: country });
+      li.children[2].textContent = d === 0 ? TX.today : TX.inDays(d);
+    });
+  }
+  $$('[data-up]').forEach(function (ul) { fillUp(ul, ul.dataset.country); });
+
   // ---------- 달력 만들기(첫 화면·연간 페이지) ----------
   $$('[data-tool]').forEach(function (el) {
-    var t = today(), ds = el.dataset;
-    var S = { lang: LANG, country: ds.country, year: +ds.year, paper: ds.paper, kind: 'year', orient: 'landscape', month: (+ds.year === t[0] ? t[1] : 1),
+    var t = today(), ds = el.dataset, MIN = 2025, MAX = 2030, fixed = ds.fixed === '1', Q = new URLSearchParams(location.search);
+    // 기본 연도: 연간 페이지는 그 해. 첫 화면은 기기 날짜를 따른다(10~12월이면 다음 해 달력을 찾는 때라 다음 해).
+    var year0 = fixed ? +ds.year : Math.max(MIN, Math.min(MAX, t[1] >= 10 ? t[0] + 1 : t[0]));
+    var S = { lang: LANG, country: ds.country, year: year0, paper: ds.paper, kind: 'year', orient: 'landscape', month: 1,
       weekStart: 0, mono: false, names: true, week: false, lunar: true, terms: true, son: false };
-    var MIN = 2025, MAX = 2030, fixed = ds.fixed === '1';
-    var paper = $('.paper', el), crop = $('.crop', el), pdfBtn = $('[data-pdf]', el), first = true;
+    // 주소에 담긴 설정(?y=2028&k=monthly&m=5&w=mon&p=a4&c=kr&names=0&wk=1&lunar=0&terms=0&son=1&ink=bw). 모르는 값은 버린다.
+    (function () {
+      var y = +Q.get('y'), k = Q.get('k'), m = +Q.get('m'), c = (Q.get('c') || '').toUpperCase(), pp = Q.get('p');
+      if (!fixed && y >= MIN && y <= MAX && y === Math.floor(y)) S.year = y;
+      if (k === 'portrait') S.orient = 'portrait'; else if (k === 'monthly') S.kind = 'months'; else if (k === 'month') S.kind = 'month';
+      S.month = m >= 1 && m <= 12 && m === Math.floor(m) ? m : (S.year === t[0] ? t[1] : 1);
+      if (Q.get('w') === 'mon') S.weekStart = 1;
+      if (pp === 'a4' || pp === 'letter') S.paper = pp;
+      if (c === 'KR' || c === 'US' || c === 'NONE') S.country = c;
+      if (Q.get('names') === '0') S.names = false;
+      if (Q.get('wk') === '1') S.week = true;
+      if (Q.get('lunar') === '0') S.lunar = false;
+      if (Q.get('terms') === '0') S.terms = false;
+      if (Q.get('son') === '1') S.son = true;
+      if (Q.get('ink') === 'bw') S.mono = true;
+    })();
+    function writeUrl() {   // 기본값과 다른 것만, 늘 같은 순서로. 우리 것이 아닌 값(?adpreview 등)은 그대로 둔다.
+      var q = new URLSearchParams(location.search);
+      ['y', 'k', 'm', 'w', 'p', 'c', 'names', 'wk', 'lunar', 'terms', 'son', 'ink'].forEach(function (k) { q.delete(k); });
+      function put(k, v, on) { if (on) q.set(k, v); }
+      put('y', S.year, !fixed && S.year !== +ds.year);
+      put('k', S.kind === 'months' ? 'monthly' : S.kind === 'month' ? 'month' : 'portrait', !(S.kind === 'year' && S.orient === 'landscape'));
+      put('m', S.month, S.kind !== 'year');
+      put('w', 'mon', S.weekStart === 1);
+      put('p', S.paper, S.paper !== ds.paper);
+      put('c', S.country.toLowerCase(), S.country !== ds.country);
+      put('names', 0, !S.names); put('wk', 1, S.week); put('lunar', 0, !S.lunar); put('terms', 0, !S.terms); put('son', 1, S.son); put('ink', 'bw', S.mono);
+      var s = q.toString();
+      try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) {}
+    }
+    var paper = $('.paper', el), crop = $('.crop', el), pdfBtn = $('[data-pdf]', el), pngBtn = $('[data-png]', el), first = true;
+    var title0 = doc.title, pngLabel = pngBtn.textContent, upList = $('[data-up]');
     function opts(kind, month, orient) {
       var k = kind || S.kind;
       return { kind: k === 'year' ? 'year' : 'month', year: S.year, month: month || S.month, lang: S.lang, country: S.country, paper: S.paper,
@@ -192,31 +256,42 @@
       return [SHEET.build(opts())];
     }
     function fileOpts() { var o = opts(); o.kind = S.kind === 'months' ? 'months' : o.kind; return o; }
+    // 미리보기 아래 한 줄: 공휴일 기준과, 고른 나라의 공휴일 목록 링크. 처음 값은 build.py basis_line() 과 같은 글자.
     function basis() {
-      var h = CAL.holidays(S.country, S.year), b = h ? h.basis : '', p = KO ? '/ko/' : '/', y = S.year;
-      var link = (y === 2026 || y === 2027) ? (KO ? ' <a href="' + p + y + '/holidays/">' + y + '년 공휴일 보기</a>' : ' <a href="' + p + y + '/holidays/">See the ' + y + ' holiday list</a>') : '';
-      var est = b === 'rule', s;
+      var h = S.country === 'NONE' ? null : CAL.holidays(S.country, S.year), b = h ? h.basis : '', y = S.year, s, link = '';
+      function a(href, text, lang) { return ' <a href="' + href + '"' + (lang ? ' hreflang="' + lang + '"' : '') + '>' + text + '</a>'; }
       if (S.country === 'KR') {
-        if (KO) s = b === 'official' ? '공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영), ' + (y === 2027 ? '우주항공청 2027년 월력요항.' : '한국천문연구원 달력자료.')
-          : b === 'provisional' ? '공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영), 한국천문연구원 달력자료. ' + y + '년 월력요항은 아직 발표 전이에요.'
+        if (KO) s = b === 'official' ? '공휴일 기준: 관공서의 공휴일에 관한 규정, ' + (y === 2027 ? '우주항공청 2027년 월력요항.' : '한국천문연구원 달력자료.')
+          : b === 'provisional' ? '공휴일 기준: 관공서의 공휴일에 관한 규정, 한국천문연구원 달력자료. ' + y + '년 월력요항은 아직 발표 전이에요.'
           : b === 'rule' ? y + '년은 규정으로 계산한 예상이에요. 선거일·임시공휴일·절기는 정해지면 더해요.'
           : '공휴일 기준: ' + y + '년에 확정된 공휴일(임시공휴일·선거일 포함).';
         else s = b === 'rule' ? y + ' is projected from South Korea’s holiday rules. Election days and one-off holidays are added once they are announced.'
           : 'Holidays: South Korea’s public holiday rules as amended in April 2026' + (b === 'provisional' ? ' (the official ' + y + ' almanac notice is not out yet).' : '.');
-      } else s = KO ? '공휴일 기준: 미국 연방 공휴일(5 U.S.C. 6103), 주말과 겹치면 쉬는 날(관측일)까지 표시해요.' : 'Holidays: US federal holidays under 5 U.S.C. 6103, with the observed weekday when one falls on a weekend.';
-      var e = $('[data-basis]', el); e.innerHTML = s + link; e.classList.toggle('is-est', est);
+        if (KO && (y === 2026 || y === 2027)) link = a('/ko/' + y + '/holidays/', y + '년 공휴일 보기');
+        else if (!KO && y === 2027) link = a('/guide/south-korea-public-holidays-2027/', 'See South Korea’s 2027 holidays');
+        else if (!KO && y === 2026) link = a('/ko/2026/holidays/', 'See the 2026 list (in Korean)', 'ko');
+      } else if (S.country === 'US') {
+        s = KO ? '공휴일 기준: 미국 연방 공휴일(5 U.S.C. 6103). 주말과 겹치면 대신 쉬는 날까지 표시해요.' : 'Holidays: US federal holidays under 5 U.S.C. 6103, with the observed weekday when one falls on a weekend.';
+        if (y === 2026 || y === 2027) link = KO ? a('/' + y + '/holidays/', y + '년 미국 연방 공휴일 보기(영어)', 'en') : a('/' + y + '/holidays/', 'See the ' + y + ' holiday list');
+      } else s = KO ? '공휴일을 표시하지 않은 달력이에요.' : 'No holidays are marked on this calendar.';
+      var e = $('[data-basis]', el); e.innerHTML = s + link; e.classList.toggle('is-est', b === 'rule');
     }
+    function pdfTitle() { return S.kind === 'months' ? TX.monthsTitle(S.year) : SHEET.build(opts()).title; }
+    function note(text) { var n = $('[data-note]', el); if (n) { n.textContent = text || ''; n.hidden = !text; } }
     function render() {
       var o = opts(), sh = SHEET.build(o), key = S.kind === 'year' ? 'year-' + S.orient : S.kind;
       crop.style.setProperty('--ratio', (sh.w / sh.h).toFixed(4));
       paper.innerHTML = SHEET.svg(sh) + '<span class="zoom-hint" aria-hidden="true">' + TX.zoom + '</span>';
       if (!first && !reduce) { paper.classList.remove('is-swap'); void paper.offsetWidth; paper.classList.add('is-swap'); }
       $$('[data-y]', el).forEach(function (e) { e.textContent = S.year; });
-      $('[data-what]', el).textContent = TX.kinds[key] + (S.kind === 'month' ? ' · ' + mName(S.month) : '');
+      if (!fixed) doc.title = title0.replace(ds.year, S.year);
+      $('[data-what]', el).textContent = TX.kinds[key];      // 어느 달인지는 옆의 달 고르는 줄이 보여 준다
       $('[data-meta]', el).textContent = (S.paper === 'a4' ? 'A4' : 'Letter') + ' · PDF ' + TX.pages(S.kind === 'months' ? 12 : 1);
       var st = SHEET.staticFile(fileOpts());
       pdfBtn.setAttribute('href', st || '#'); if (st) pdfBtn.setAttribute('download', ''); else pdfBtn.removeAttribute('download');
-      var ms = $('.mstep', el); ms.hidden = S.kind === 'year'; $('b', ms).textContent = mName(S.month);
+      // '월별 12장'에서 이미지는 보이는 달 한 장만 저장한다 → 단추에 그렇게 적는다
+      pngBtn.textContent = S.kind === 'months' ? TX.pngOne : pngLabel;
+      var ms = $('.mstep', el); ms.hidden = S.kind === 'year'; $('b', ms).textContent = KO ? mName(S.month) : EN_M[S.month - 1].slice(0, 3);
       $$('.shape', el).forEach(function (b) {
         var k = b.dataset.kind, on = k === S.kind && (k !== 'year' || b.dataset.orient === S.orient);
         b.setAttribute('aria-pressed', on);
@@ -226,43 +301,55 @@
       });
       var x = $('[data-xlsx]', el);
       if (x) { var okx = KO && S.country === 'KR' && S.year >= 2026 && S.year <= 2028; x.hidden = !okx; if (okx) x.setAttribute('href', '/files/' + S.year + '-calendar-korea.xlsx'); }
-      $$('[data-only="month-kr"]', el).forEach(function (e) { e.hidden = !(S.kind !== 'year' && S.country === 'KR'); });
+      var krStyle = S.country === 'KR' || (S.country === 'NONE' && KO);
+      $$('[data-only="month-kr"]', el).forEach(function (e) { e.hidden = !(S.kind !== 'year' && krStyle); });
+      $$('[data-only="hol"]', el).forEach(function (e) { e.hidden = S.country === 'NONE'; });
+      // 24절기는 자료가 있는 해(2025~2028)만: 없는 해에는 칸을 끈 것처럼 보이게 한다
+      var tc = $('[data-opt="terms"]', el);
+      if (tc) { var noTerms = !CAL.terms(S.year); tc.disabled = noTerms; tc.parentNode.classList.toggle('is-off', noTerms); tc.parentNode.title = noTerms ? (KO ? S.year + '년 절기 자료는 아직 없어요' : 'No solar-term data for ' + S.year + ' yet') : ''; }
       var pv = $('[data-step="-1"]', el), nx = $('[data-step="1"]', el);
       if (pv) { pv.disabled = S.year <= MIN; nx.disabled = S.year >= MAX; }
-      basis();
+      if (!first || S.country !== ds.country || S.year !== +ds.year) basis();
+      if (first) {   // 주소에서 읽은 설정을 단추·칸에 비춘다
+        $$('[data-seg="weekStart"]', el).forEach(function (k) { k.setAttribute('aria-pressed', +k.dataset.v === S.weekStart); });
+        $$('[data-opt]', el).forEach(function (i) { if (i.type === 'checkbox') i.checked = !!S[i.dataset.opt]; else i.value = S[i.dataset.opt]; });
+      }
+      note('');
       first = false;
     }
+    function changed(country) { render(); writeUrl(); if (country && upList) fillUp(upList, S.country === 'NONE' ? ds.country : S.country); }
     el.addEventListener('click', function (e) {
       var b = e.target.closest('button,a'); if (!b || !el.contains(b)) return;
-      if (b.dataset.step && !fixed) { S.year = Math.max(MIN, Math.min(MAX, S.year + (+b.dataset.step))); render(); }
-      else if (b.dataset.mstep) { S.month = (S.month - 1 + (+b.dataset.mstep) + 12) % 12 + 1; render(); }
-      else if (b.classList.contains('shape')) { S.kind = b.dataset.kind; if (b.dataset.orient) S.orient = b.dataset.orient; render(); }
-      else if (b.dataset.seg) { S[b.dataset.seg] = +b.dataset.v; $$('[data-seg="' + b.dataset.seg + '"]', el).forEach(function (k) { k.setAttribute('aria-pressed', k === b); }); render(); }
+      if (b.dataset.step && !fixed) { S.year = Math.max(MIN, Math.min(MAX, S.year + (+b.dataset.step))); changed(); }
+      else if (b.dataset.mstep) { S.month = (S.month - 1 + (+b.dataset.mstep) + 12) % 12 + 1; changed(); }
+      else if (b.classList.contains('shape')) { S.kind = b.dataset.kind; if (b.dataset.orient) S.orient = b.dataset.orient; changed(); }
+      else if (b.dataset.seg) { S[b.dataset.seg] = +b.dataset.v; $$('[data-seg="' + b.dataset.seg + '"]', el).forEach(function (k) { k.setAttribute('aria-pressed', k === b); }); changed(); }
       else if (b.classList.contains('opt-toggle') || b.dataset.optClose !== undefined) toggleOpts();
       else if (b === paper) zoom(SHEET.svg(SHEET.build(opts())));
       else if (b === pdfBtn) {
         var key = JSON.stringify(fileOpts());
         if (pdfBtn.hasAttribute('download')) { celebrate(pdfBtn, paper, key); return; }
         e.preventDefault(); busy(pdfBtn, true);
-        makePdf(sheets()).then(function (blob) { return save(blob, SHEET.fileBase(fileOpts()) + '.pdf'); })
+        makePdf(sheets(), pdfTitle()).then(function (r) { note(r.image ? TX.imgNote : ''); return save(r.blob, SHEET.fileBase(fileOpts()) + '.pdf'); })
           .then(function () { busy(pdfBtn, false); celebrate(pdfBtn, paper, key); }, function () { busy(pdfBtn, false); failed(); });
-      } else if (b.dataset.png !== undefined) {
+      } else if (b === pngBtn) {
         busy(b, true);
         makePng(SHEET.build(opts())).then(function (blob) { return save(blob, SHEET.fileBase(opts()) + '.png'); })
           .then(function () { busy(b, false); celebrate(null, paper, 'png' + JSON.stringify(opts())); }, function () { busy(b, false); failed(); });
       } else if (b.dataset.print !== undefined) { printSource = sheets; if (preparePrint()) window.print(); }
     });
     el.addEventListener('change', function (e) {
-      var i = e.target;
-      if (i.dataset.opt === 'paper' || i.dataset.opt === 'country') S[i.dataset.opt] = i.value;
-      else if (i.dataset.opt) S[i.dataset.opt] = i.checked;
-      render();
+      var i = e.target, k = i.dataset.opt;
+      if (!k) return;
+      if (k === 'paper' || k === 'country') S[k] = i.value; else S[k] = i.checked;
+      changed(k === 'country');
     });
     function toggleOpts() {
       var tg = $('.opt-toggle', el), box = $('.opts', el), open = box.hidden;
       box.hidden = !open; tg.setAttribute('aria-expanded', open);
       var mobile = window.matchMedia('(max-width: 900px)').matches;
       el.classList.toggle('is-opts', open && mobile);
+      doc.body.classList.toggle('has-sheet', open && mobile);
       if (open && mobile) {
         el.style.setProperty('--ph0', crop.offsetHeight + 'px');
         requestAnimationFrame(function () {
@@ -273,6 +360,7 @@
     }
     printSource = sheets;
     render();
+    if (upList && S.country !== ds.country && S.country !== 'NONE') fillUp(upList, S.country);
   });
 
   // ---------- 월 페이지 ----------
@@ -280,13 +368,15 @@
     var ds = el.dataset, y = +ds.year, m = +ds.month, t = today();
     function sheet() { return SHEET.build({ kind: 'month', year: y, month: m, lang: LANG, country: ds.country, paper: ds.paper, show: { names: true, lunar: true, terms: true, son: true } }); }
     function base() { return SHEET.fileBase({ kind: 'month', year: y, month: m, lang: LANG, country: ds.country, paper: ds.paper }); }
+    function note(text) { var n = $('[data-note]', el); if (n) { n.textContent = text || ''; n.hidden = !text; } }
     printSource = function () { return [sheet()]; };
     var box = $('.wm-box', el);
     el.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b) return;
       if (b.dataset.pdf !== undefined) {
         busy(b, true);
-        makePdf([sheet()]).then(function (blob) { return save(blob, base() + '.pdf'); }).then(function () { busy(b, false); celebrate(b, box, 'm' + y + m); }, function () { busy(b, false); failed(); });
+        makePdf([sheet()], sheet().title).then(function (r) { note(r.image ? TX.imgNote : ''); return save(r.blob, base() + '.pdf'); })
+          .then(function () { busy(b, false); celebrate(b, box, 'm' + y + m); }, function () { busy(b, false); failed(); });
       } else if (b.dataset.png !== undefined) {
         busy(b, true);
         makePng(sheet()).then(function (blob) { return save(blob, base() + '.png'); }).then(function () { busy(b, false); celebrate(null, box, 'p' + y + m); }, function () { busy(b, false); failed(); });
@@ -309,27 +399,13 @@
     }
   });
 
-  // ---------- 다가오는 쉬는 날(오늘 기준으로 다시 채움, 줄 수는 그대로) ----------
-  $$('[data-up]').forEach(function (ul) {
-    var t = today(), n0 = CAL.dn(t[0], t[1], t[2]), items = [], c = ul.dataset.country, lis = $$('li', ul);
-    [t[0], t[0] + 1].forEach(function (yy) {
-      var h = CAL.holidays(c, yy); if (!h) return;
-      h.list.forEach(function (x) { var n = CAL.dn(x.y, x.m, x.d); if (n >= n0 && items.length < lis.length) items.push([x, n - n0]); });
-    });
-    if (items.length < lis.length) return;
-    lis.forEach(function (li, i) {
-      var x = items[i][0], d = items[i][1];
-      li.innerHTML = '<time datetime="' + x.date + '"></time><span></span><small></small>';
-      li.children[0].textContent = TX.date(x);
-      li.children[1].textContent = SHEET.label(x, { lang: LANG, country: c });
-      li.children[2].textContent = d === 0 ? TX.today : TX.inDays(d);
-    });
-  });
-
   // ---------- 음력 변환 ----------
   $$('[data-lunar]').forEach(function (el) {
     var t = today();
-    function val(n) { var v = $('[name="' + n + '"]', el).value.trim(); return /^\d+$/.test(v) ? +v : NaN; }
+    function val(n) {   // 전각 숫자(２０２７)는 반각으로 바꿔 받는다
+      var v = $('[name="' + n + '"]', el).value.trim().replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+      return /^\d+$/.test(v) ? +v : NaN;
+    }
     function out(sel, main, sub, err) { var o = $(sel, el); o.classList.toggle('is-err', !!err); o.innerHTML = '<b></b><span></span>'; o.children[0].textContent = main; o.children[1].textContent = sub || ''; }
     var RANGE = '지원 범위는 양력 1912년 2월 18일 ~ 2050년 1월 22일이에요.';
     function s2l() {

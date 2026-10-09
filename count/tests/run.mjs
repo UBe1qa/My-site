@@ -1,6 +1,7 @@
 // 글자수 세기 로직 시험: node count/tests/run.mjs  (추가 설치 없이 돈다)
 // 기준값은 다른 방법으로 구한 것: cases.json(파이썬 regex·grapheme·uniseg·표준 코덱), cases-x.json(npm twitter-text),
-// cases-sms.json(파이썬 smsutil·npm sms-segments-calculator·split-sms), 손으로 놓아 본 원고지 예시.
+// cases-sms.json(파이썬 smsutil·npm sms-segments-calculator·split-sms), cases-units.json(파이썬으로 규칙대로 더한 나이스 바이트·세는 단위),
+// 손으로 놓아 본 원고지 예시, _dev/limits.json(공식 출처에서 확인한 값).
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -291,7 +292,83 @@ if (want(group)) {
   // 도구 화면 FAQ
   eq([an('👍🏽').bytes.utf8, an('👨‍👩‍👧').bytes.utf8, an('😀').bytes.utf8], [8, 18, 4], '화면 FAQ: 👍🏽 8바이트, 👨‍👩‍👧 18바이트, 😀 4바이트');
   if (LC.wongoji) eq([LC.wongoji.simple(Array(11).fill('가').join('\n')).sheets, LC.wongoji.layout(Array(11).fill('가').join('\n')).sheets], [1, 2], '원고지 FAQ: 한 글자짜리 줄 11개 = 환산 1장, 칸에 놓으면 2장');
-  eq(LC.seconds(87, 200) < 60 && Math.round(LC.seconds(400, 200)) === 120, true, '읽는 시간: 400단어 ÷ 분당 200 = 2분');
+  eq(Math.round(LC.seconds(400, 200)), 120, '읽는 시간: 400단어 ÷ 분당 200 = 2분');
+}
+
+/* ───────────── 8-3. 확인된 사실(_dev/limits.json)로 만든 화면: 나이스·세는 단위·SNS 한도·문자 기준·취업 사이트 ───────────── */
+const LIM = JSON.parse(fs.readFileSync(path.join(HERE, '..', '_dev', 'limits.json'), 'utf8'));
+const CONTENT = JSON.parse(fs.readFileSync(path.join(HERE, '..', '_dev', 'content.json'), 'utf8'));
+group = 'neis';
+if (want(group) && has('cases-units.json')) {
+  const u = load('cases-units.json');
+  for (const c of u.neis) {
+    const r = LC.neis(c.text, c.max);
+    eq([r.bytes, r.limit, r.left, r.chars, r.lineBreaks, r.hangulLeft, r.over], [c.bytes, c.limit, c.left, c.chars, c.lineBreaks, c.hangulLeft, c.bytes > c.limit], `${show(c.text)} 나이스 바이트(최대 ${c.max}자) = 파이썬이 규칙대로 더한 값`);
+  }
+  const nb = (t) => LC.neis(t, 500).bytes;
+  eq([LIM.neis.bytes.hangul, LIM.neis.bytes.ascii, LIM.neis.bytes.newline], [nb('가'), nb('a'), nb('\n')], '기재요령: 한글 1자 3Byte, 영문·숫자 1자 1Byte, 엔터 1Byte');
+  eq([nb('7'), nb('\r\n'), nb('\r'), nb(' '), nb('.')], [1, 1, 1, 1, 1], '숫자 1Byte, 엔터는 CRLF·CR도 1Byte, 띄어쓰기·온점은 우리 기준 1Byte');
+  for (const it of LIM.neis.items) {
+    const full = LC.neis('가'.repeat(it.chars), it.chars), one = LC.neis('가'.repeat(it.chars + 1), it.chars);
+    eq([full.bytes, full.left, full.over, one.over, one.left], [it.chars * 3, 0, false, true, -3], `${it.name}: 한글 ${it.chars}자 = ${it.chars * 3}Byte로 딱 맞고 한 자 더 쓰면 넘친다`);
+  }
+  eq(LIM.neis.items.map((i) => [i.id, i.chars]), [['jayul', 500], ['dongari', 500], ['jinro', 500], ['bongsa', 50], ['ilsang', 1000], ['gwamok', 500], ['silmu', 500], ['gaein', 500], ['dokseo', 500], ['dokseo2', 250], ['haengteuk', 300], ['chulgyeol', 500], ['injeok', 500]], '항목별 최대 글자 수 = 2026학년도 고등학교 기재요령 [참고자료 8] (값을 두 군데에 적어 서로 지킨다)');
+  eq(LIM.neis.changed_from_2025, [['진로활동 특기사항', 700, 500], ['봉사활동실적 활동내용', 250, 50], ['행동특성 및 종합의견', 500, 300]], '2025학년도와 달라진 세 항목');
+  // 가이드 글(나이스 500자는 왜 1,500바이트일까)에 실은 숫자
+  const n4 = (t) => { const r = LC.neis(t, 500); return [r.chars, r.bytes]; };
+  eq([n4('가나다'), n4('abc123'), n4('가나다\nabc'), n4('독서 토론에 참여함.')], [[3, 9], [6, 6], [7, 13], [11, 27]], '가이드(나이스): 예시 표 3·9, 6·6, 7·13, 11·27');
+  const sm = LC.neis(CONTENT.sample.neis, 500);
+  eq([sm.chars, sm.bytes, sm.left, sm.hangulLeft], [144, 352, 1148, 382], '가이드(나이스): 계산기 예시 글 144자·352Byte, 500자 항목이면 1,148Byte 남음·한글로 382자');
+}
+
+group = 'units';
+if (want(group) && has('cases-units.json')) {
+  const u = load('cases-units.json');
+  for (const c of u.units) eq([LC.measure(c.text, 'utf16'), LC.measure(c.text, 'utf8'), LC.measure(c.text, 'grapheme')], [c.utf16, c.utf8, c.grapheme], `${show(c.text)} UTF-16 단위·UTF-8 바이트·글자소 = 파이썬`);
+  if (LC.x && has('cases-x.json')) {
+    let bad = [];
+    for (const c of load('cases-x.json').cases) if (LC.measure(c.text, 'x') !== c.weighted) bad.push(c.text);
+    eq(bad.slice(0, 5), [], 'measure(x) = twitter-text 가중 글자 수(모든 사례)');
+  }
+  eq([LC.measure(null, 'utf8'), LC.measure('a', 'nope')], [0, null], 'measure: 빈 글은 0, 모르는 단위는 null');
+  // SNS 한도(값·단위를 두 군데에 적어 서로 지킨다. 출처는 limits.json)
+  eq(LIM.sns.rows.map((r) => [r.id, r.limit, r.unit]), [['x', 280, 'x'], ['xp', 25000, 'utf16'], ['igc', 2200, 'utf16'], ['igb', 150, 'utf16'], ['th', 500, 'utf16'], ['bs', 300, 'grapheme'], ['ytt', 100, 'utf16'], ['ytd', 5000, 'utf8'], ['tt', 2200, 'utf16'], ['li', 3000, 'utf16']], 'SNS 한도 열 가지와 세는 단위');
+  eq(LIM.sns.rows.every((r) => /^https:\/\//.test(r.src) && r.ko && r.en), true, 'SNS 한도마다 출처 주소와 두 언어 이름');
+  eq(LIM.sns.rows.filter((r) => r.undoc).map((r) => r.id), ['xp', 'igc', 'igb', 'th', 'ytt', 'li'], '공식 문서에 세는 단위가 없는 여섯 가지(UTF-16 단위로 보여 준다고 밝힘)');
+  eq([LC.measure('가'.repeat(1666), 'utf8'), LC.measure('가'.repeat(1667), 'utf8')], [4998, 5001], '유튜브 설명 5,000바이트: 한글 1,666자는 4,998바이트, 1,667자는 5,001바이트');
+  eq([LC.measure('😀', 'utf16'), LC.measure('😀', 'grapheme'), LC.measure('👨‍👩‍👧', 'grapheme'), LC.measure('👨‍👩‍👧', 'utf16')], [2, 1, 1, 8], '틱톡(UTF-16)에서 😀는 2, 블루스카이(글자소)에서는 1');
+  eq([LC.measure('가'.repeat(140), 'x'), LC.measure('가'.repeat(141), 'x') > 280], [280, true], 'X: 한글 140자 = 280, 141자는 넘는다');
+  const xc = LIM.sns.x_config;
+  if (LC.x) eq([LC.x.CONFIG.max, LC.x.CONFIG.scale, LC.x.CONFIG.defaultWeight, LC.x.CONFIG.urlLength, LC.x.CONFIG.ranges.map((r) => [r[0], r[1]])], [xc.maxWeightedTweetLength, xc.scale, xc.defaultWeight, xc.transformedURLLength, xc.ranges], 'X 설정 = 확인한 v3.json 값(280·100·200·23, 범위 네 개)');
+  eq([0x10FF, 0x2000, 0x200D, 0x2010, 0x201F, 0x2032, 0x2037], [4351, 8192, 8205, 8208, 8223, 8242, 8247], '글에 적은 범위(U+0000~U+10FF 등) = 설정 파일의 십진수');
+  const s = CONTENT.sample.sns;
+  eq([LC.analyze(s).chars, LC.measure(s, 'utf16'), LC.measure(s, 'x')], [106, 107, 150], 'SNS 화면 예시 글: 글자 106, UTF-16 단위 107, X 150');
+}
+
+group = 'facts3';
+if (want(group)) {
+  const ek = (t, nl) => LC.analyze(t, { newline: nl == null ? 1 : nl }).bytes.euckr.bytes;
+  // 문자 한 통 기준(LG유플러스·KT 안내 140byte, EUC-KR로 견줌)
+  eq([LIM.kr_sms.short_bytes, LIM.kr_sms.long_from, LIM.kr_sms.long_max_lgu], [140, 141, 2000], '문자 한 통: 단문 140byte 이하, 장문 141byte부터(LG유플러스 2,000byte까지)');
+  eq([ek('가'.repeat(70)), ek('가'.repeat(71)), ek('가'.repeat(45)), ek('가'.repeat(1000))], [140, 142, 90, 2000], '한글 70자 = 140byte, 71자 = 142byte, 45자 = 90byte, 1,000자 = 2,000byte(EUC-KR로 세면)');
+  // 읽기 속도(Brysbaert 2019)
+  eq([LIM.reading.read_wpm, LIM.reading.aloud_wpm, LIM.reading.range], [238, 183, [175, 300]], '읽기 속도: 묵독 238, 소리 내어 183, 범위 175~300');
+  eq([LC.seconds(238, 238), LC.seconds(183, 183), Math.round(LC.seconds(87, 238)), Math.round(LC.seconds(87, 183))], [60, 60, 22, 29], '238단어 ÷ 238 = 1분, 영어 예시 글 87단어는 22초·29초');
+  // 취업 사이트에 직접 넣어 본 값과 칸칸으로 센 값
+  const J = LIM.jobsites, S = J.samples;
+  const ours = (t, nl) => { const r = LC.analyze(t, { newline: nl }); return [r.chars, r.bytes.euckr.bytes, r.charsNoSpace]; };
+  eq([ours(S.A, 1), ours(S.B, 1), ours(S.C, 1), ours(S.B, 2)], [J.ours.nl1.A, J.ours.nl1.B, J.ours.nl1.C, J.ours.nl2.B], '칸칸으로 센 예시 A·B·C = limits.json 에 적어 글에 싣는 값');
+  eq([ours(S.A, 2), ours(S.C, 2)], [J.ours.nl1.A, J.ours.nl1.C], '줄바꿈이 없는 A·C는 줄바꿈 기준을 바꿔도 같다');
+  eq(J.rows.map((r) => r.A.slice(0, 3)), Array(4).fill(ours(S.A, 1)), '예시 A: 네 곳 모두 11자·14byte·공백 제외 9자 = 칸칸(한글 2byte 기준)');
+  eq(J.rows.filter((r) => r.newline === 1).map((r) => r.B.slice(0, 3)), Array(3).fill(ours(S.B, 1)), '예시 B: 사람인·잡코리아·네이버 9자·15byte·공백 제외 6자 = 칸칸(줄바꿈 1)');
+  const inc = J.rows.find((r) => r.newline === 2);
+  eq([inc.short, inc.B[1], inc.B[0]], ['인크루트', ours(S.B, 2)[1], ours(S.B, 1)[0]], '예시 B: 인크루트 16byte = 칸칸(줄바꿈 2)의 바이트, 글자 수 9자 = 칸칸(줄바꿈 1)');
+  eq([J.rows.filter((r) => r.C).map((r) => r.C.slice(0, 2)), ours(S.C, 1).slice(0, 2), LC.analyze(S.C).bytes.euckr.unencodable], [Array(3).fill([4, 8]), [3, 4], 1], '예시 C: 세 곳은 4자·8byte, 칸칸은 3자·4byte(😀 하나는 EUC-KR에 못 담음)');
+  const cls = LC.analyze(S.A).classes, sp = LC.analyze(S.A).spaces.space, bsp = LC.analyze(S.B).spaces;
+  eq([sp, bsp.space, bsp.lineBreaks], [2, 2, 1], '예시 A 띄어쓰기 2번, 예시 B 띄어쓰기 2번·줄바꿈 1번');
+  if (LC.wongoji) eq(LC.wongoji.CUSTOM, { indent: true, skipLeadingSpace: true, pairDigits: true, hangPunct: true, dotQuote: true }, "원고지 '관행대로' = 확인된 관행 다섯 가지");
+  eq(LIM.wongoji_rules.applied.length, 5, '화면에 적은 관행 다섯 가지');
+  for (const [k, v] of Object.entries(LIM)) if (v && typeof v === 'object') eq([v.verified, v.checked], [true, '2026-10-10'], `limits.json ${k}: 확인됨·확인한 날`);
 }
 
 /* ───────────── 9. 속도(100만 자) ───────────── */

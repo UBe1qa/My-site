@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://count.lumenlab.page/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/character-counter/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/sms/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/guide/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/guide/how-x-counts-characters/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/guide/why-161-characters-is-two-sms/</loc><lastmod>2026-10-09</lastmod></url>
+  <url><loc>https://count.lumenlab.page/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/character-counter/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/sms/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/guide/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/guide/how-x-counts-characters/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/guide/why-161-characters-is-two-sms/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://count.lumenlab.page/guide/characters-code-points-bytes/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/about/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/privacy/</loc><lastmod>2026-10-09</lastmod></url>
+  <url><loc>https://count.lumenlab.page/about/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/privacy/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://count.lumenlab.page/licenses/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/byte/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/wongoji/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/jasoseo/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/guide/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/guide/geulja-su-dareun-iyu/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/guide/hangul-byte-utf8-euckr/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/about/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/privacy/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://count.lumenlab.page/ko/licenses/</loc><lastmod>2026-10-09</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/jasoseo/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/byte/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/neis/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/sns/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/wongoji/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/guide/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/guide/geulja-su-dareun-iyu/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/guide/neis-500ja-1500byte/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/guide/hangul-byte-utf8-euckr/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/about/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/privacy/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://count.lumenlab.page/ko/licenses/</loc><lastmod>2026-10-10</lastmod></url>
 </urlset>

@@ -57,7 +57,7 @@
     c_onesheet_name: "Onesheet",
     c_pickboard_line: "Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result.",
     c_pickboard_name: "Pickboard",
-    c_kankan_line: "Word and character counter that shows every counting rule side by side, plus X and SMS limits.",
+    c_kankan_line: "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits.",
     c_kankan_name: "Kankan",
     f_owlight: "Owlight",
     f_setnote: "SetNote",

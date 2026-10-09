@@ -4,7 +4,9 @@
   python3 calendar/_dev/make_files.py            # PDF 27개 + 엑셀 3개 (pdf 또는 xlsx 만 주면 그것만)
   python3 calendar/_dev/make_files.py icons      # favicon.svg/.ico, apple-touch-icon.png, og.png, og-ko.png
 
-필요한 것: playwright(크로미움), openpyxl, Pillow, 그리고 Pretendard 가변 글꼴 파일(woff2).
+필요한 것: playwright(크로미움), pypdf, openpyxl, Pillow, 그리고 Pretendard 가변 글꼴 파일(woff2).
+PDF는 크로미움이 글자 그대로 만들고, pypdf 로 문서 정보(제목, 만든 곳 = 사이트 이름)를 적는다.
+내 설정으로 받는 PDF는 화면에서 assets/pdf.js 가 따로 만든다(그 글꼴은 make_fonts.py).
 글꼴 경로는 환경 변수 CAL_FONT (없으면 /home/claude/sp/calendar/mock/shared/fonts/PretendardVariable.woff2).
 받는 파일 안에는 광고가 없다. 구석에 사이트 주소 한 줄만 아주 작게 들어간다.
 """
@@ -21,6 +23,7 @@ DEV = ROOT / '_dev'
 FONT = os.environ.get('CAL_FONT', '/home/claude/sp/calendar/mock/shared/fonts/PretendardVariable.woff2')
 CHROME = os.environ.get('CAL_CHROME', '/opt/pw-browsers/chromium-1194/chrome-linux/chrome')
 YEARS = [2026, 2027, 2028]
+BOTH = {'1월 1일': '신정', '3·1절': '삼일절', '기독탄신일': '성탄절'}   # 규정의 이름 → 흔히 쓰는 이름(build.py KR_BOTH 와 같다)
 FACE = '@font-face{font-family:"Pretendard Variable";font-weight:45 920;font-style:normal;src:url("file://%s") format("woff2-variations")}' % FONT
 
 
@@ -36,18 +39,22 @@ def jobs():
             for paper in papers:
                 base = dict(year=y, lang=lang, country=c, paper=paper)
                 for orient in ('landscape', 'portrait'):
-                    out.append(dict(name=f'{y}-calendar-{cname}-{paper}-{orient}.pdf', pages=[dict(base, kind='year', orient=orient)]))
+                    out.append(dict(name=f'{y}-calendar-{cname}-{paper}-{orient}.pdf', lang=lang, pages=[dict(base, kind='year', orient=orient)]))
                 show = dict(names=True, lunar=True, terms=True) if c == 'KR' else dict(names=True)
-                out.append(dict(name=f'{y}-calendar-{cname}-monthly-{paper}.pdf', title=(f'{y}년 월별 달력' if lang == 'ko' else f'{y} monthly calendar'),
+                out.append(dict(name=f'{y}-calendar-{cname}-monthly-{paper}.pdf', lang=lang, title=(f'{y}년 월별 달력' if lang == 'ko' else f'{y} monthly calendar'),
                                 pages=[dict(base, kind='month', month=m, show=show) for m in range(1, 13)]))
     return out
 
 
 def make_pdfs():
     from playwright.sync_api import sync_playwright
+    from pypdf import PdfReader, PdfWriter
     files = ROOT / 'files'
     files.mkdir(exist_ok=True)
-    res = node(jobs())
+    todo = jobs()
+    res = node(todo)
+    for r, j in zip(res, todo):
+        r['lang'] = j['lang']
     with tempfile.TemporaryDirectory() as tmp, sync_playwright() as p:
         b = p.chromium.launch(executable_path=CHROME)
         pg = b.new_page()
@@ -60,14 +67,21 @@ def make_pdfs():
             f.write_text(html, encoding='utf-8')
             pg.goto('file://' + str(f))
             pg.evaluate('document.fonts.ready')
-            pg.pdf(path=str(files / r['name']), prefer_css_page_size=True, print_background=True)
-            print(r['name'], (files / r['name']).stat().st_size)
+            raw = Path(tmp) / 'p.pdf'
+            pg.pdf(path=str(raw), prefer_css_page_size=True, print_background=True)
+            # 문서 정보: 제목과 만든 곳(사이트 이름). 크로미움이 적은 'HeadlessChrome'·'Skia/PDF'는 남기지 않는다.
+            who = ('한장달력' if r['lang'] == 'ko' else 'Onesheet') + ' (calendar.lumenlab.page)'
+            w = PdfWriter(clone_from=PdfReader(str(raw)))
+            w.add_metadata({'/Title': r['title'], '/Author': who, '/Creator': who, '/Producer': who})
+            w.write(str(files / r['name']))
+            print(r['name'], (files / r['name']).stat().st_size, len(w.pages))
         b.close()
 
 
 def make_xlsx():
     from openpyxl import Workbook
     from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    from openpyxl.worksheet.properties import PageSetupProperties
     files = ROOT / 'files'
     files.mkdir(exist_ok=True)
     for data in node([dict(xlsx=y) for y in YEARS]):
@@ -80,13 +94,25 @@ def make_xlsx():
         ws0.append(['날짜', '요일', '이름'])
         for c in ws0[2]:
             c.font = Font(bold=True)
-        for it in data['list']:
-            ws0.append([f'{it["m"]}월 {it["d"]}일', '일월화수목금토'[it['wd']], it['name']])
+        for it in data['list']:   # 이름: 규정의 이름, 괄호 안에 흔히 쓰는 이름
+            ws0.append([f'{it["m"]}월 {it["d"]}일', '일월화수목금토'[it['wd']], '; '.join(n + (f'({BOTH[n]})' if n in BOTH else '') for n in it['names'])])
         ws0.append([])
-        ws0.append(['공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영). 선거일·임시공휴일은 확정된 날만. calendar.lumenlab.page'])
+        for note in ('이름은 규정의 이름이고, 괄호 안은 흔히 쓰는 이름이에요. 달력 시트의 칸에는 흔히 쓰는 이름을 적었어요.',
+                     '공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영). 선거일·임시공휴일은 확정된 날만 들어 있어요.',
+                     '일요일 시작 기본판이에요. 주 시작 요일이나 용지를 바꾼 달력은 calendar.lumenlab.page 에서 PDF로 받을 수 있어요.'):
+            ws0.append([note])
+            r = ws0.max_row
+            ws0.merge_cells(start_row=r, start_column=1, end_row=r, end_column=3)
+            ws0.cell(row=r, column=1).alignment = Alignment(wrap_text=True, vertical='top')
+            ws0.cell(row=r, column=1).font = Font(size=10, color='5F6B65')
+            ws0.row_dimensions[r].height = 30
         ws0.column_dimensions['A'].width = 14
         ws0.column_dimensions['B'].width = 8
-        ws0.column_dimensions['C'].width = 34
+        ws0.column_dimensions['C'].width = 44
+        ws0.page_setup.paperSize = ws0.PAPERSIZE_A4
+        ws0.page_setup.fitToWidth = 1
+        ws0.page_setup.fitToHeight = 1
+        ws0.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
         thin = Side(style='thin', color='C9CFCB')
         red, blue, gray = 'CF3027', '2355C8', '727B75'
         for mo in data['months']:

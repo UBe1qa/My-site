@@ -33,7 +33,7 @@ a{color:inherit}
 button,select,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.skip{position:absolute;left:-999px;top:8px;background:var(--card);padding:8px 12px;border-radius:8px;z-index:50}
+.skip{position:absolute;left:-999px;top:8px;background:var(--card);padding:10px 12px;border-radius:8px;z-index:50}
 .skip:focus{left:8px}
 .wrap{max-width:1180px;margin-left:auto;margin-right:auto;padding-left:28px;padding-right:28px}
 .narrow{max-width:780px}
@@ -48,9 +48,11 @@ button,select,input{font:inherit;color:inherit}
 .nav a[aria-current]{color:var(--ink);font-weight:700;border-bottom-color:var(--brand)}
 .lang{margin-left:auto;font-size:13.5px;color:var(--muted);text-decoration:none;white-space:nowrap;padding:8px 0}
 .lang:hover{color:var(--brand)}
-.lang-bar{position:absolute;left:0;right:0;top:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:14px;min-height:44px;padding:6px 16px;background:var(--ink);color:var(--bg);font-size:14px}
-.lang-bar a{color:inherit;font-weight:700}
-.lang-bar button{border:0;background:none;color:inherit;font-size:20px;line-height:1;width:32px;height:32px;cursor:pointer;border-radius:6px}
+.lang-bar{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:2px;height:48px;padding:0 2px 0 18px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:14.5px;line-height:1;white-space:nowrap;box-shadow:0 8px 22px -10px rgba(0,0,0,.5)}
+.lang-bar a{color:inherit;font-weight:700;padding:15px 0}
+.lang-bar button{border:0;background:none;color:inherit;font-size:22px;line-height:1;width:44px;height:44px;cursor:pointer;border-radius:999px}
+body.has-sheet .lang-bar{display:none}
+@media (min-width:901px){.lang-bar{left:auto;right:24px;bottom:24px;transform:none}}
 
 /* 단추 */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 18px;border-radius:var(--r);border:1px solid var(--line-2);background:var(--card);font-weight:650;font-size:15.5px;line-height:1;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform var(--dur) var(--ease),background-color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
@@ -73,18 +75,23 @@ button,select,input{font:inherit;color:inherit}
 .tool{padding-top:26px;padding-bottom:8px}
 .tool-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px}
 .tool-head h1{font-size:32px;font-weight:800;letter-spacing:-.035em;line-height:1.2}
-.tool-head .lead{flex-basis:100%;color:var(--muted);font-size:15.5px}
+.why{flex-basis:100%;display:flex;flex-wrap:wrap;gap:2px 20px;color:var(--ink-2);font-size:15px;line-height:1.5}
+.why li{position:relative;padding-left:20px}
+.why .s-br{display:none}
+.why li::before{content:"";position:absolute;left:2px;top:.44em;width:10px;height:5px;border-left:2px solid var(--brand);border-bottom:2px solid var(--brand);transform:rotate(-45deg)}
 .years{display:flex;gap:6px;font-variant-numeric:tabular-nums}
 .years a{display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);text-decoration:none;font-weight:650;font-size:15px;line-height:1}
 .years a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .tool-body{display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:34px;margin-top:18px;align-items:start}
 .stage{min-width:0;position:sticky;top:12px}
-.acts{display:flex;align-items:center;gap:8px;min-height:46px}
-.what{margin-right:auto;font-size:14px;color:var(--muted);line-height:1.35;min-width:0}
+.bar{display:flex;align-items:center;gap:8px 14px;min-height:46px}
+.info{display:flex;align-items:center;gap:16px;margin-right:auto;min-width:0}
+.acts{display:flex;align-items:center;gap:8px}
+.what{font-size:14px;color:var(--muted);line-height:1.35;min-width:0}
 .what b{display:block;color:var(--ink);font-size:16px;font-weight:750;letter-spacing:-.01em}
-.mstep{display:flex;justify-content:center;margin-top:12px}
-.mstep .step{height:38px}
+.mstep .step{height:40px}
 .mstep .step b{min-width:92px;font-size:15.5px}
+.hint{margin-top:8px;font-size:13.5px;line-height:1.5;color:var(--warn-ink);background:var(--warn-bg);padding:8px 12px;border-radius:8px;max-width:760px}
 .paper-box{position:relative;margin-top:14px;display:grid;justify-items:center}
 .crop{position:relative;width:min(100%,calc((100vh - 306px) * var(--ratio,1.4143)));min-width:min(100%,300px)}
 .crop::before,.crop::after{content:"";position:absolute;inset:-12px;pointer-events:none;
@@ -124,6 +131,7 @@ button,select,input{font:inherit;color:inherit}
 .checks{display:flex;flex-wrap:wrap;gap:4px 14px}
 .check{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;line-height:1.3;padding:5px 0;cursor:pointer}
 .check input{width:17px;height:17px;accent-color:var(--brand);margin:0;flex:none}
+.check.is-off{color:var(--muted);cursor:default}
 .opts-note{font-size:12.5px;color:var(--muted);padding-top:6px;line-height:1.5}
 
 /* 섹션 */
@@ -151,7 +159,8 @@ button,select,input{font:inherit;color:inherit}
 .faq p{padding:0 0 16px;color:var(--ink-2)}
 
 /* 표·사실 */
-.tbl-wrap{overflow-x:auto;margin-top:12px}
+.tbl-wrap{overflow-x:auto;margin-top:12px;background:linear-gradient(90deg,var(--bg) 30%,transparent) 0 0/34px 100% no-repeat local,linear-gradient(270deg,var(--bg) 30%,transparent) 100% 0/34px 100% no-repeat local,
+  linear-gradient(90deg,color-mix(in srgb,var(--ink) 20%,transparent),transparent) 0 3px/12px calc(100% - 6px) no-repeat scroll,linear-gradient(270deg,color-mix(in srgb,var(--ink) 20%,transparent),transparent) 100% 3px/12px calc(100% - 6px) no-repeat scroll}
 table.tbl{border-collapse:collapse;width:100%;max-width:860px;font-size:15.5px;font-variant-numeric:tabular-nums}
 .tbl th,.tbl td{text-align:left;padding:10px 14px 10px 0;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4}
 .tbl thead th{font-size:13.5px;color:var(--muted);font-weight:650;border-bottom-color:var(--line-2)}
@@ -185,7 +194,7 @@ table.tbl{border-collapse:collapse;width:100%;max-width:860px;font-size:15.5px;f
 .m-nav{display:flex;gap:6px}
 .m-nav a{display:inline-flex;align-items:center;gap:4px;height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);text-decoration:none;font-size:14.5px;font-weight:600;line-height:1;white-space:nowrap}
 .m-nav a:hover{border-color:var(--brand)}
-.m-head .acts{margin-left:auto}
+.m-head .acts{margin-left:auto;min-height:46px}
 .m-body{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:30px;margin-top:16px;align-items:start}
 .wm-box{position:relative;overflow:hidden;background:var(--paper);color:var(--paper-ink);box-shadow:var(--paper-shadow);padding:4px 16px 8px}
 table.wm{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}
@@ -248,10 +257,12 @@ table.wm{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-num
 .prose ul{list-style:disc}
 .prose ol{list-style:decimal}
 .prose li{margin:6px 0}
-.prose table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums;margin:14px 0;display:block;overflow-x:auto}
-.prose th,.prose td{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--line);line-height:1.4;white-space:nowrap}
-.prose td:last-child,.prose th:last-child{white-space:normal;min-width:140px}
+.prose .tbl-wrap{margin:14px 0}
+.prose table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+.prose th,.prose td{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--line);line-height:1.45;vertical-align:top}
+.prose td:first-child{white-space:nowrap}
 .prose th{font-size:13.5px;color:var(--muted);font-weight:650}
+.src small{color:var(--muted);font-size:13px;white-space:nowrap}
 .prose .cta{display:inline-flex;margin:8px 0}
 .prose a.btn,.note a.btn,.doc a.btn-main{color:var(--brand-ink);font-weight:650}
 .src{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
@@ -262,7 +273,9 @@ table.wm{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-num
 /* 광고 자리: 누르는 것에서 멀리. 미리보기 상자는 빗금(입력 상자와 다르게). */
 .ad-wrap{margin-top:56px;margin-bottom:8px}
 .ad-wrap:has(.ad-slot[hidden]){display:none}
-.ad-label{font-size:11.5px;color:var(--muted);letter-spacing:.04em;text-align:center;margin-bottom:4px}
+.ad-col{max-width:780px}
+.ad-wrap.narrow .ad-col{max-width:none}
+.ad-label{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
 .ad-slot{min-height:250px}
 .ad-preview{display:grid;place-items:center;color:var(--muted);font-size:13px;border-radius:4px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--ink) 5%,transparent) 0 8px,transparent 8px 16px);outline:1px dashed var(--line-2)}
 
@@ -292,7 +305,7 @@ dialog.zoom{border:0;padding:0;max-width:none;max-height:none;width:100vw;height
 dialog.zoom::backdrop{background:none}
 .zoom-in{width:100%;height:100%;overflow:auto;padding:56px 16px 24px}
 .zoom-in svg{display:block;width:max(1100px,100%);max-width:none;height:auto;margin:0 auto;box-shadow:0 10px 40px rgba(0,0,0,.4)}
-.zoom-x{position:fixed;right:12px;top:10px;height:40px;padding:0 14px;border-radius:999px;border:0;background:#fff;color:#17201b;font-weight:700;font-size:14.5px;line-height:1;cursor:pointer}
+.zoom-x{position:fixed;right:12px;top:10px;height:44px;padding:0 14px;border-radius:999px;border:0;background:#fff;color:#17201b;font-weight:700;font-size:14.5px;line-height:1;cursor:pointer}
 
 /* 한 장 뽑기(받기 완료) */
 .sheet-out{position:absolute;inset:0;background:var(--paper);box-shadow:0 0 0 1px var(--line-2),var(--paper-shadow);pointer-events:none;z-index:2}
@@ -309,22 +322,40 @@ dialog.zoom::backdrop{background:none}
   .logo{height:50px}
   .nav{order:3;width:calc(100% + 32px);margin:0 -16px;padding:0 16px;gap:18px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--line);-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
   .nav::-webkit-scrollbar{display:none}
-  .nav a{padding:10px 0 8px;font-size:14px}
+  .nav a{padding:14px 0 12px;font-size:14px}
+  .lang{padding:13px 0}
   .nav::after{content:"";flex:none;width:28px}
   .tool{padding-top:16px}
   .tool-head h1{font-size:24px}
-  .tool-head .lead{font-size:14.5px}
-  .tool-head .step{height:40px}
+  .why{font-size:14px;gap:0 16px}
+  .tool-head .step{height:46px}
   .years{flex-basis:100%}
-  .tool-head .step button{width:34px}
-  .tool-head .step output{min-width:58px;font-size:17px}
+  .years a,.pills a,.m-nav a{height:44px}
+  .tool-head .step button{width:44px}
+  .tool-head .step output{min-width:52px;font-size:17px}
   .tool-body{grid-template-columns:minmax(0,1fr);gap:18px;margin-top:12px}
   .stage{position:static}
-  .acts{flex-wrap:wrap}
-  .what{flex-basis:100%;margin:0 0 2px}
-  .what b{display:inline;font-size:15px;margin-right:6px}
-  .acts .btn{padding:0 12px;font-size:15px}
-  .acts .btn-main{flex:1;min-width:0}
+  .bar{display:block}
+  .info{min-height:46px;justify-content:space-between;gap:10px}
+  .what{font-size:13.5px}
+  .what b{font-size:15px}
+  .mstep .step{height:46px}
+  .mstep .step button{width:44px}
+  .mstep .step b{min-width:58px;font-size:15px}
+  /* 단추 줄 수는 글꼴이 늦게 와도 달라지지 않게 정해 둔다(줄이 바뀌면 화면이 밀린다).
+     한국어 도구: 늘 한 줄. 영어와 월 페이지는 글자가 길어서 늘 두 줄(받기 단추 한 줄, 그 아래 둘을 반씩). */
+  .acts{margin-top:6px}
+  .acts .btn{flex:1 1 auto;min-width:0;padding:0 12px;font-size:15px}
+  .acts .btn-main{min-width:0}
+  html[lang="en"] .acts,.m-head .acts{display:grid;grid-template-columns:1fr 1fr}
+  html[lang="en"] .acts .btn-main,.m-head .acts .btn-main{grid-column:1/-1}
+  html[lang="en"] .acts .btn{white-space:normal;line-height:1.15;text-align:center}
+  html[lang="en"] .up li{grid-template-columns:104px minmax(0,1fr) auto}
+  .hint{font-size:13px}
+  .basis a,.note a:not(.btn),.sub a,.crumb a{padding:15px 0}
+  .seg button{height:44px}
+  .check{min-height:44px}
+  .field select{height:44px}
   .crop{width:100%}
   .crop::before,.crop::after{display:none}
   .zoom-hint{display:block;position:absolute;right:8px;bottom:8px;font-size:12px;font-weight:650;line-height:1;padding:6px 8px;border-radius:999px;background:rgba(23,32,27,.82);color:#fff}
@@ -341,20 +372,22 @@ dialog.zoom::backdrop{background:none}
   /* 내 설정: 아래에서 올라오는 판. 받기 단추(같은 단추)가 판 아래에 붙고, 종이는 위에 그대로 보인다. */
   .tool.is-opts .opts{position:fixed;left:0;right:0;bottom:66px;z-index:20;margin:0;border-radius:16px 16px 0 0;border-width:1px 0 0;max-height:calc(100dvh - 66px - var(--ph,260px) - 20px);overflow:auto;box-shadow:0 -10px 30px -12px rgba(0,0,0,.3);animation:rise .22s var(--ease)}
   .tool.is-opts .opts-h{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:750;padding-bottom:6px}
-  .tool.is-opts .opts-h button{height:36px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);font-size:14px;font-weight:650;line-height:1}
-  .tool.is-opts .acts{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--card);padding:10px 12px;border-top:1px solid var(--line);min-height:66px;flex-wrap:nowrap}
-  .tool.is-opts .acts .what{display:none}
+  .tool.is-opts .opts-h button{height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);font-size:14px;font-weight:650;line-height:1}
+  .tool.is-opts .acts{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--card);margin:0;padding:10px 12px;border-top:1px solid var(--line);min-height:66px;flex-wrap:nowrap}
+  .tool.is-opts .acts .btn{flex:1 1 auto;min-width:0}
+  html[lang="en"] .tool.is-opts .acts{display:flex}
+  html[lang="en"] .tool.is-opts .acts [data-png]{display:none}
   .tool.is-opts .paper-box{position:sticky;top:6px;z-index:5}
   .tool.is-opts .crop{width:auto;height:min(var(--ph0,260px),40dvh);aspect-ratio:var(--ratio,1.4143);max-width:100%}
   .m-head h1{font-size:23px}
-  .m-head .acts{margin:0;width:100%}
+  .m-head .acts{margin:0;width:100%;min-height:0}
   .m-body{grid-template-columns:minmax(0,1fr);gap:22px;margin-top:10px}
   .wm-box{padding:0 4px 4px;margin:0 -8px}
   .wm th{font-size:12px;padding:8px 0 6px 4px}
-  .wm td{height:74px;padding:5px 1px 18px 4px}
+  .wm td{height:74px;padding:5px 3px 18px 4px}
   .wm b{font-size:16px;display:block;margin:0}
-  .wm em{font-size:9.5px;letter-spacing:-.05em;line-height:1.15;display:block}
-  .wm i{font-size:9.5px;letter-spacing:-.05em;line-height:1.2}
+  .wm em{font-size:9.5px;letter-spacing:-.05em;line-height:1.15;display:block;overflow-wrap:anywhere;hyphens:auto}
+  .wm i{font-size:9.5px;letter-spacing:-.05em;line-height:1.2;overflow-wrap:anywhere}
   .wm small{font-size:9.5px;left:4px;bottom:3px;letter-spacing:-.03em}
   .today-ring{left:-4px;top:-3px;width:calc(100% + 9px);height:calc(100% + 6px)}
   .wm td.is-today b{margin-left:1px}
@@ -362,15 +395,32 @@ dialog.zoom::backdrop{background:none}
   .doc h1{font-size:25px}
   .prose{font-size:16px}
   .foot-in{grid-template-columns:1fr}
+  .foot-cols a{padding:11px 0}
+  .foot small a{display:inline-block;padding:12px 6px;margin:0 -6px}
+  .tbl th,.tbl td{padding-right:10px;font-size:14.5px}
+  .tbl td:nth-child(n+3){overflow-wrap:anywhere}
+  .tbl .tag{white-space:normal;line-height:1.25}
+  .prose table{font-size:14.5px}
+  .prose th,.prose td{padding-right:10px}
+  /* 칸이 셋 이하이고 글이 긴 표는 줄 카드로: 첫 칸이 제목, 나머지는 머리글을 작은 글자로 위에 */
+  table.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.stack,table.stack tbody,table.stack tr,table.stack td{display:block}
+  table.stack tr{padding:10px 0 11px;border-bottom:1px solid var(--line)}
+  table.stack td{border:0;padding:0;white-space:normal}
+  .prose table.stack td:first-child{font-weight:750;white-space:normal}
+  table.stack td[data-th]::before{content:attr(data-th);display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:6px;line-height:1.3}
   .facts dd{font-size:19px}
 }
 @keyframes rise{from{transform:translateY(40px);opacity:0}}
-@media (max-width:360px){.acts .btn{padding:0 9px;font-size:14px}.shape b{font-size:11.5px}}
+/* 글꼴이 늦게 와도 줄 수가 달라지지 않게: 좁은 화면에서는 연도 고르기를 제목 아래 줄로, 더 좁으면 긴 문장을 정한 자리에서 나눈다 */
+@media (max-width:380px){.tool-head h1{flex-basis:100%}}
+@media (max-width:340px){.why .s-br{display:inline}.acts{display:grid;grid-template-columns:1fr 1fr}.acts .btn-main{grid-column:1/-1}.tool.is-opts .acts{display:flex}}
+@media (max-width:360px){.tbl th,.tbl td{padding-right:8px;font-size:14px}.tbl td:first-child,.tbl td:nth-child(2){white-space:normal}.acts .btn{padding:0 9px;font-size:14px}.shape b{font-size:11.5px}.why{font-size:13.5px}.tool.is-opts .acts [data-png]{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* 인쇄: 달력 도구가 있는 페이지는 종이만, 그 밖의 페이지는 본문만 */
 @media print{
-  .top,.foot,.ad-wrap,.lang-bar,.skip,.acts,.side,.m-nav,.basis a,dialog{display:none!important}
+  .top,.foot,.ad-wrap,.lang-bar,.skip,.bar,.acts,.hint,.side,.m-nav,.basis a,dialog{display:none!important}
   body{background:#fff;display:block;min-height:0}
   html.print-sheet body>*:not(#print-root){display:none!important}
   html.print-sheet,html.print-sheet body{margin:0;padding:0;background:#fff}

@@ -5,7 +5,8 @@
 - 문구·글 = _dev/content.py. 만든 HTML·sitemap.xml·rss.xml·404.html·robots.txt 는 손으로 고치지 않는다.
 - 만드는 것: 영어 / , 한국어 /ko/ 의 도구(첫 화면), 연간(2026~2028), 월(2026-10~2027-12), 공휴일(2026·2027),
   음력·손 없는 날(한국어), 가이드, 소개·방침·오픈소스 고지, 404, sitemap, rss(한국어 글).
-- lastmod 는 UPDATED 에 실제로 고친 주소·날짜만 적는다(처음 판은 TODAY).
+- lastmod 는 본문·링크·구조화 데이터가 실제로 바뀐 쪽만 올린다(LASTMOD·UPDATED). 배치·CSS만 바뀐 페이지는 올리지 않는다.
+- 글 속 표는 tables() 가 가로로 밀리는 칸으로 감싸고, class="stack" 표에는 휴대폰용 머리글(data-th)을 단다.
 """
 import sys
 sys.dont_write_bytecode = True
@@ -22,8 +23,13 @@ import content as C  # noqa: E402
 
 SITE = 'https://calendar.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
-TODAY = '2026-10-09'
-UPDATED = {}   # 주소(경로): 'YYYY-MM-DD'
+TODAY = '2026-10-09'          # 처음 공개한 날(글의 datePublished, rss, 첫 HTML의 '다가오는 쉬는 날' 기준일)
+LASTMOD = '2026-10-10'        # 3단계(배포 뒤 고치기): 본문·링크·구조화 데이터가 바뀐 날. 배포된 판과 견줘 보니 영어 가이드 목록만 그대로였다.
+UPDATED = {'/guide/': TODAY}  # 주소(경로): 그 쪽의 lastmod. 여기 없는 쪽은 LASTMOD. 다음에 몇 쪽만 고치면 그 쪽만 새 날짜로 적는다(배치·CSS만 바뀐 쪽은 적지 않는다).
+
+
+def lastmod(path):
+    return UPDATED.get(path, LASTMOD)
 D = json.loads(subprocess.check_output(['node', str(DEV / 'export.js')]))
 MONTHS = [tuple(x) for x in D['months_list']]
 BUILD_MONTH = MONTHS[0]
@@ -33,6 +39,8 @@ WD_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satu
 YEARS = [2026, 2027, 2028]
 HOL_YEARS = [2026, 2027]
 KR_BOTH = {'1월 1일': '신정', '3·1절': '삼일절', '기독탄신일': '성탄절'}
+# 미국: 표에는 법(5 U.S.C. 6103)과 OPM 일정표의 이름을, 달력 칸에는 흔히 쓰는 이름을 쓴다.
+US_OFFICIAL = {'Martin Luther King Jr. Day': 'Birthday of Martin Luther King, Jr.'}
 DATECALC = {'ko': 'https://date.lumenlab.page/', 'en': 'https://date.lumenlab.page/en/'}
 LUMEN = {'ko': 'https://lumenlab.page/', 'en': 'https://lumenlab.page/en/'}
 esc = lambda s: html.escape(str(s), quote=True)
@@ -172,13 +180,31 @@ def footer(lang):
 </footer>'''
 
 
-def ad_slot(lang, name):
-    return f'<div class="ad-wrap wrap" data-ad-wrap><p class="ad-label">{C.UI[lang]["ad"]}</p><div class="ad-slot" data-ad="{name}" hidden></div></div>'
+def ad_slot(lang, name, narrow=False):
+    """폭은 본문 글 기둥과 같게(글 페이지는 narrow, 그 밖은 본문 칸 780px). 번호가 비어 있으면 통째로 숨는다."""
+    return (f'<div class="ad-wrap wrap{" narrow" if narrow else ""}" data-ad-wrap><div class="ad-col"><p class="ad-label">{C.UI[lang]["ad"]}</p>'
+            f'<div class="ad-slot" data-ad="{name}" hidden></div></div></div>')
+
+
+def tables(html_text):
+    """글 속 표: 가로로 밀 수 있는 칸(.tbl-wrap)으로 감싼다. class="stack" 표는 휴대폰에서 줄 카드가 되도록 칸마다 머리글(data-th)을 단다."""
+    def one(m):
+        t = m.group(0)
+        if 'class="stack"' in t:
+            head, body = t.split('<tbody>')
+            heads = [re.sub(r'<.*?>', '', h) for h in re.findall(r'<th>(.*?)</th>', head, flags=re.S)]
+
+            def row(rm):
+                cells = re.findall(r'<td>(.*?)</td>', rm.group(1), flags=re.S)
+                return '<tr>' + ''.join((f'<td data-th="{esc(heads[i])}">' if i and heads[i] else '<td>') + c + '</td>' for i, c in enumerate(cells)) + '</tr>'
+            t = head + '<tbody>' + re.sub(r'<tr>(.*?)</tr>', row, body, flags=re.S)
+        return '<div class="tbl-wrap">' + t + '</div>'
+    return re.sub(r'<table.*?</table>', one, html_text, flags=re.S)
 
 
 def page(lang, head_html, body, cur=None, alt_path=None, scripts=True, cls=''):
     js = ('<div id="print-root" aria-hidden="true"></div>\n<script src="/assets/data.js"></script>\n<script src="/assets/core.js"></script>\n'
-          '<script src="/assets/sheet.js"></script>\n<script src="/assets/app.js"></script>') if scripts else '<script src="/assets/app.js"></script>'
+          '<script src="/assets/sheet.js"></script>\n<script src="/assets/pdf.js"></script>\n<script src="/assets/app.js"></script>') if scripts else '<script src="/assets/app.js"></script>'
     return f'''{head_html}
 <body{f' class="{cls}"' if cls else ''}>
 {header(lang, cur, alt_path)}
@@ -195,7 +221,7 @@ def page(lang, head_html, body, cur=None, alt_path=None, scripts=True, cls=''):
 def put(lang, path, html_text, sitemap=True):
     OUT[(P(lang) + path).lstrip('/') + 'index.html'] = html_text
     if sitemap:
-        SITEMAP.append((U(lang, path), UPDATED.get(P(lang) + path, TODAY)))
+        SITEMAP.append((U(lang, path), lastmod(P(lang) + path)))
 
 
 def crumbs_ld(lang, items):
@@ -217,32 +243,37 @@ def tool(lang, year, fixed):
         h1 = (f'{year}년 달력' if lang == 'ko' else f'{year} Calendar')
         ctl = '<nav class="years" aria-label="' + ('연도' if lang == 'ko' else 'Year') + '">' + ''.join(
             f'<a href="{p}{y}/"{" aria-current=\"page\"" if y == year else ""}>{y}</a>' for y in YEARS) + '</nav>'
-        lead = ('공휴일을 넣은 한 장짜리 PDF와 월별 달력, 그 해 공휴일과 연휴예요.' if lang == 'ko' else 'One-page PDF, monthly pages, holidays and long weekends.')
     else:
         h1 = u['h1_tool'].format(y=year)
         ctl = (f'<div class="step" role="group" aria-label="{"연도" if lang == "ko" else "Year"}"><button type="button" data-step="-1" aria-label="{u["prev_year"]}">{I_L}</button>'
                f'<output data-y aria-live="polite">{year}</output><button type="button" data-step="1" aria-label="{u["next_year"]}">{I_R}</button></div>')
-        lead = u['lead']
     static = f'/files/{year}-calendar-{"korea" if c == "KR" else "us"}-{paper}-landscape.pdf'
     xlsx = (f'<a class="xlsx" href="/files/{year}-calendar-korea.xlsx" download data-xlsx><span class="xlsx-i" aria-hidden="true"></span><span>{u["xlsx"]}<small>{u["xlsx_sub"]}</small></span></a>'
             if lang == 'ko' else '')
     mname = (f'{BUILD_MONTH[1]}월' if lang == 'ko' else EN_M[BUILD_MONTH[1] - 1])
+    mshort = (f'{BUILD_MONTH[1]}월' if lang == 'ko' else EN_M[BUILD_MONTH[1] - 1][:3])
     basis = basis_line(lang, year)
+    why = '<ul class="why">' + ''.join(f'<li>{w}</li>' for w in u['why']) + '</ul>'
     return f'''<section class="tool wrap" data-tool data-country="{c}" data-year="{year}" data-paper="{paper}"{' data-fixed="1"' if fixed else ''}>
   <div class="tool-head">
     <h1>{h1}</h1>
     {ctl}
-    <p class="lead">{lead}</p>
+    {why}
   </div>
   <div class="tool-body">
     <div class="stage">
-      <div class="acts">
-        <p class="what"><b data-what>{'Year on a page · landscape' if lang == 'en' else '1년 한 장 · 가로'}</b><span data-meta>{'A4' if paper == 'a4' else 'Letter'} · PDF {'1쪽' if lang == 'ko' else '1 page'}</span></p>
-        <a class="btn btn-main" data-pdf href="{static}" download>{I_DL}<span>{u['pdf']}</span></a>
-        <button type="button" class="btn" data-print>{I_PR}{u['print']}</button>
-        <button type="button" class="btn" data-png>{u['png']}</button>
+      <div class="bar">
+        <div class="info">
+          <p class="what"><b data-what>{'Year on a page · landscape' if lang == 'en' else '1년 한 장 · 가로'}</b><span data-meta>{'A4' if paper == 'a4' else 'Letter'} · PDF {'1쪽' if lang == 'ko' else '1 page'}</span></p>
+          <div class="mstep" hidden><div class="step" role="group" aria-label="{u['month_group']}"><button type="button" data-mstep="-1" aria-label="{u['prev_month']}">{I_L}</button><b aria-live="polite">{mshort}</b><button type="button" data-mstep="1" aria-label="{u['next_month']}">{I_R}</button></div></div>
+        </div>
+        <div class="acts">
+          <a class="btn btn-main" data-pdf href="{static}" download>{I_DL}<span>{u['pdf']}</span></a>
+          <button type="button" class="btn" data-print>{I_PR}{u['print']}</button>
+          <button type="button" class="btn" data-png>{u['png']}</button>
+        </div>
       </div>
-      <div class="mstep" hidden><div class="step" role="group"><button type="button" data-mstep="-1" aria-label="{u['prev_month']}">{I_L}</button><b aria-live="polite">{mname}</b><button type="button" data-mstep="1" aria-label="{u['next_month']}">{I_R}</button></div></div>
+      <p class="hint" data-note role="status" hidden></p>
       <div class="paper-box"><div class="crop" style="--ratio:{ratio}"><button type="button" class="paper" aria-label="{u['zoom']}">{svg}</button></div></div>
       <p class="basis" data-basis>{basis}</p>
     </div>
@@ -260,9 +291,9 @@ def tool(lang, year, fixed):
         <p class="opts-h"><span>{u['opt_h']}</span><button type="button" data-opt-close>{u['close']}</button></p>
         <div class="field"><span>{u['f_ws']}</span><div class="seg"><button type="button" data-seg="weekStart" data-v="0" aria-pressed="true">{u['ws0']}</button><button type="button" data-seg="weekStart" data-v="1" aria-pressed="false">{u['ws1']}</button></div></div>
         <div class="field"><label for="o-paper">{u['f_paper']}</label><select id="o-paper" data-opt="paper"><option value="a4"{' selected' if paper == 'a4' else ''}>A4 (210 × 297mm)</option><option value="letter"{' selected' if paper == 'letter' else ''}>Letter (8.5 × 11in)</option></select></div>
-        <div class="field"><label for="o-country">{u['f_country']}</label><select id="o-country" data-opt="country"><option value="KR"{' selected' if c == 'KR' else ''}>{u['c_kr']}</option><option value="US"{' selected' if c == 'US' else ''}>{u['c_us']}</option></select></div>
+        <div class="field"><label for="o-country">{u['f_country']}</label><select id="o-country" data-opt="country"><option value="KR"{' selected' if c == 'KR' else ''}>{u['c_kr']}</option><option value="US"{' selected' if c == 'US' else ''}>{u['c_us']}</option><option value="NONE">{u['c_none']}</option></select></div>
         <div class="field"><span>{u['f_show']}</span><div class="checks">
-          <label class="check"><input type="checkbox" data-opt="names" checked>{u['o_names']}</label>
+          <label class="check" data-only="hol"><input type="checkbox" data-opt="names" checked>{u['o_names']}</label>
           <label class="check"><input type="checkbox" data-opt="week">{u['o_week']}</label>
           <label class="check" data-only="month-kr" hidden><input type="checkbox" data-opt="lunar" checked>{u['o_lunar']}</label>
           <label class="check" data-only="month-kr" hidden><input type="checkbox" data-opt="terms" checked>{u['o_terms']}</label>
@@ -284,9 +315,9 @@ def basis_line(lang, y):
         return 'Holidays: US federal holidays under 5 U.S.C. 6103, with the observed weekday when one falls on a weekend.' + link
     b = D['years']['KR'][str(y)]['basis']
     if b == 'official':
-        s = '공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영), ' + ('우주항공청 2027년 월력요항.' if y == 2027 else '한국천문연구원 달력자료.')
+        s = '공휴일 기준: 관공서의 공휴일에 관한 규정, ' + ('우주항공청 2027년 월력요항.' if y == 2027 else '한국천문연구원 달력자료.')
     else:
-        s = f'공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영), 한국천문연구원 달력자료. {y}년 월력요항은 아직 발표 전이에요.'
+        s = f'공휴일 기준: 관공서의 공휴일에 관한 규정, 한국천문연구원 달력자료. {y}년 월력요항은 아직 발표 전이에요.'
     return s + link
 
 
@@ -301,7 +332,7 @@ def up_list(lang):
             d = datetime.date(it['y'], it['m'], it['d'])
             if d >= t and len(rows) < 4:
                 n = (d - t).days
-                name = it['label'] if lang == 'ko' else us_short(it['en'])
+                name = it['lab']
                 when = ('오늘' if n == 0 else f'{n}일 뒤') if lang == 'ko' else ('today' if n == 0 else f'in {n} day' + ('' if n == 1 else 's'))
                 date = f'{it["m"]}월 {it["d"]}일 {WD_KO[it["wd"]]}' if lang == 'ko' else f'{WD_EN[it["wd"]][:3]}, {EN_M[it["m"] - 1][:3]} {it["d"]}'
                 rows.append(f'<li><time datetime="{it["date"]}">{date}</time><span>{esc(name)}</span><small>{when}</small></li>')
@@ -315,6 +346,11 @@ def us_short(en):
     return b + (' (observed)' if obs else '')
 
 
+def plain(html_text):
+    """태그를 뺀 글자(구조화 데이터용). 화면에 보이는 글자와 같다."""
+    return html.unescape(re.sub(r'<[^>]+>', '', html_text))
+
+
 def guide_list(lang, limit=None):
     arts = C.ARTICLES[lang][:limit] if limit else C.ARTICLES[lang]
     return '<ul class="glist">' + ''.join(f'<li><a href="{P(lang)}guide/{a["slug"]}/"><b>{esc(a["title"])}</b><span>{esc(a["desc"])}</span></a></li>' for a in arts) + '</ul>'
@@ -325,20 +361,20 @@ def home(lang):
     faq = C.FAQ[lang]
     if lang == 'ko':
         ways = [(f'2027/', '2027년 달력', '공휴일 표, 연휴, 받는 파일'), (f'2026/', '2026년 달력', '올해 남은 달과 공휴일'), (mpath(lang, *BUILD_MONTH), '월 달력', '음력·절기·손 없는 날이 든 큰 달'),
-                ('2027/holidays/', '2027년 공휴일·연휴', '대체공휴일 7일, 3일 이상 연휴 10번'), ('lunar/', '양력·음력 변환', '1912~2049년, 윤달 표시'), ('son-eomneun-nal/', '손 없는 날', '2026·2027년 달별 표')]
+                ('2027/holidays/', '2027년 공휴일·연휴', '대체공휴일 7일, 3일 이상 연휴 10번'), ('lunar/', '양력·음력 변환', '1912~2049년, 윤달 표시'), ('son-eomneun-nal/', '손 없는 날', '2026년 10월~2027년 12월 달별 표')]
     else:
         ways = [('2027/', '2027 calendar', 'Federal holidays, long weekends, files'), ('2026/', '2026 calendar', 'The rest of this year'), (mpath(lang, *BUILD_MONTH), 'Monthly calendars', 'One large month with holidays'),
                 ('2027/holidays/', '2027 federal holidays', 'All dates, observed days, ten long weekends'), ('2026/holidays/', '2026 federal holidays', 'All dates and long weekends'), ('guide/', 'Guides', 'Printing, week numbers, holidays')]
     ld = [{'@context': 'https://schema.org', '@type': 'WebApplication', 'name': u['brand'], 'url': U(lang), 'applicationCategory': 'UtilitiesApplication', 'operatingSystem': 'Any',
            'browserRequirements': 'Requires a modern web browser', 'inLanguage': lang, 'isAccessibleForFree': True, 'description': u['home_desc'],
            'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'KRW' if lang == 'ko' else 'USD'}},
-          {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq]}]
+          {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': plain(a)}} for q, a in faq]}]
     body = f'''{tool(lang, 2027, False)}
 <section class="sec wrap"><h2>{u['up_h']}</h2><p class="sub">{u['up_sub']}</p>{up_list(lang)}</section>
 {ad_slot(lang, 'mid')}
 <section class="sec wrap"><h2>{u['ways_h']}</h2><div class="ways">{''.join(f'<a href="{p}{k}"><b>{n}</b><span>{s}</span></a>' for k, n, s in ways)}</div></section>
 <section class="sec wrap"><h2>{u['guides_h']}</h2>{guide_list(lang)}</section>
-<section class="sec wrap"><h2>{u['faq_h']}</h2><div class="faq">{''.join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in faq)}</div></section>
+<section class="sec wrap"><h2>{u['faq_h']}</h2><div class="faq">{''.join(f'<details><summary>{esc(q)}</summary><p>{a}</p></details>' for q, a in faq)}</div></section>
 {ad_slot(lang, 'bottom')}'''
     put(lang, '', page(lang, head(lang, u['home_title'], u['home_desc'], '', alt='', jsonld=ld), body, cur='', alt_path=''))
 
@@ -350,12 +386,14 @@ def hol_table(lang, c, y):
     for it in yd['list']:
         cls = 'sun' if it['wd'] == 0 else 'sat' if it['wd'] == 6 else ''
         if lang == 'ko':
-            kind = {'holiday': '공휴일', 'substitute': '대체공휴일', 'election': '선거일', 'temporary': '임시공휴일'}[it['kind']] if c == 'KR' else ('관측일' if it['kind'] == 'substitute' else '공휴일')
+            kind = {'holiday': '공휴일', 'substitute': '대체공휴일', 'election': '선거일', 'temporary': '임시공휴일'}[it['kind']] if c == 'KR' else ('대신 쉬는 날' if it['kind'] == 'substitute' else '공휴일')
             name = kr_name(it) if c == 'KR' else it['name']
             rows.append(f'<tr><td class="d">{it["m"]}월 {it["d"]}일</td><td class="{cls}">{WD_KO[it["wd"]]}요일</td><td>{esc(name)}</td><td><span class="tag">{kind}</span></td></tr>')
         else:
             kind = 'Observed' if it['kind'] == 'substitute' else ('Falls on a weekend' if it['wd'] in (0, 6) else 'Holiday')
-            rows.append(f'<tr><td class="d">{EN_M[it["m"] - 1]} {it["d"]}</td><td>{WD_EN[it["wd"]]}</td><td>{esc(it["en"])}</td><td><span class="tag">{kind}</span></td></tr>')
+            base = it['en'].replace(' (observed)', '')
+            name = (f'{US_OFFICIAL[base]} ({base})' if base in US_OFFICIAL else base) + (' (observed)' if it['en'].endswith(' (observed)') else '') if c == 'US' else it['en']
+            rows.append(f'<tr><td class="d">{EN_M[it["m"] - 1][:3]} {it["d"]}</td><td>{WD_EN[it["wd"]][:3]}</td><td>{esc(name)}</td><td><span class="tag">{kind}</span></td></tr>')
     th = '<th>날짜</th><th>요일</th><th>이름</th><th>구분</th>' if lang == 'ko' else '<th>Date</th><th>Day</th><th>Holiday</th><th>Type</th>'
     return f'<div class="tbl-wrap"><table class="tbl"><thead><tr>{th}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
@@ -409,11 +447,18 @@ def month_pills(lang, cur=None):
     return '<div class="pills">' + ''.join(out) + '</div>'
 
 
+def count_note(y):
+    """공휴일 수 세 가지(이름이 붙는 날 / 일요일까지 / 토요일까지)가 어떻게 이어지는지 한 문단으로. 숫자는 core.js yearFacts."""
+    f = D['years']['KR'][str(y)]['facts']
+    return (f'달력에 이름이 붙는 공휴일은 대체공휴일까지 {f["holidayDates"]}일이고, 이 가운데 {f["holidaysOnSun"]}일은 일요일과 겹쳐요. '
+            f'일요일 {f["sundays"]}일을 더하고 겹치는 {f["holidaysOnSun"]}일을 빼면 {f["publicHolidays"]}일, 토요일까지 쉬면 {f["daysOff"]}일이에요.')
+
+
 def year_facts(lang, c, y):
     f = D['years'][c][str(y)]['facts']
     if lang == 'ko':
-        items = [('날 수', f'{f["days"]}<small>일{" · 윤년" if f["leap"] else ""}</small>'), ('공휴일(일요일 제외)', f'{f["holidayDates"]}<small>일</small>'),
-                 ('공휴일(일요일 포함)', f'{f["publicHolidays"]}<small>일</small>'), ('주5일 기준 휴일', f'{f["daysOff"]}<small>일</small>'),
+        items = [('날 수', f'{f["days"]}<small>일{" · 윤년" if f["leap"] else ""}</small>'), ('이름이 붙는 공휴일', f'{f["holidayDates"]}<small>일</small>'),
+                 ('일요일까지 더하면', f'{f["publicHolidays"]}<small>일</small>'), ('토요일까지 쉬면', f'{f["daysOff"]}<small>일</small>'),
                  ('평일에 걸린 공휴일', f'{f["holidaysOnWeekdays"]}<small>일</small>'), ('일하는 날(주5일)', f'{f["workdays"]}<small>일</small>')]
     else:
         items = [('Days', f'{f["days"]}<small>{" · leap year" if f["leap"] else ""}</small>'), ('Federal holidays', '11'),
@@ -430,7 +475,7 @@ def year_page(lang, y):
     path = f'{y}/'
     if lang == 'ko':
         title = f'{y}년 달력 한 장 PDF · 공휴일 포함 | 한장달력'
-        desc = (f'{y}년 달력을 공휴일을 넣은 A4 한 장 PDF로 받거나 인쇄해요. 공휴일은 일요일을 빼고 {f["holidayDates"]}일, 3일 이상 연휴는 {len(yd["breaks"])}번이에요. '
+        desc = (f'{y}년 달력을 공휴일을 넣은 A4 한 장 PDF로 받거나 인쇄해요. 공휴일은 대체공휴일까지 {f["holidayDates"]}일, 3일 이상 연휴는 {len(yd["breaks"])}번이에요. '
                 f'월별 달력과 엑셀 파일도 있어요.')
         notice = ('<p class="notice">2028년은 한국천문연구원 달력자료를 바탕으로 한 <b>공식 발표 전 자료</b>예요. 월력요항이 발표되면(해마다 6월 말) 다시 맞춰요. 임시공휴일은 들어 있지 않아요.</p>' if yd['basis'] == 'provisional' else '')
         hol_link = f'<p class="note"><a href="{p}{y}/holidays/">{y}년 공휴일과 연휴 자세히 보기</a></p>' if y in HOL_YEARS else ''
@@ -439,6 +484,7 @@ def year_page(lang, y):
 {ad_slot(lang, 'mid')}
 <section class="sec wrap"><h2>3일 이상 이어지는 연휴 {len(yd["breaks"])}번</h2><p class="sub">토요일·일요일과 공휴일이 붙은 기간이에요.</p>{break_rows(lang, c, y)}</section>
 <section class="sec wrap"><h2>{y}년 한눈에</h2>{year_facts(lang, c, y)}
+<p class="note">{count_note(y)}</p>
 <p class="note">두 날짜 사이의 일하는 날을 세려면 <a href="{DATECALC[lang]}">며칠 계산기</a>를 쓰세요.</p></section>
 <section class="sec wrap"><h2>월 달력</h2><p class="sub">음력·24절기·손 없는 날이 든 큰 달이에요.</p>{month_pills(lang)}</section>'''
         crumbs = [('달력 만들기', U(lang)), (f'{y}년 달력', U(lang, path))]
@@ -494,7 +540,7 @@ def month_page(lang, y, m):
         note = (f'<p class="note">일하는 날은 평일에서 공휴일을 뺀 수예요. 기간을 정해 세려면 <a href="{DATECALC[lang]}">며칠 계산기</a>를 쓰세요.</p>'
                 f'<p class="note">손 없는 날은 전해 오는 풍습이에요. 달별 날짜는 <a href="{p}son-eomneun-nal/">손 없는 날 표</a>에 있어요.</p>')
         more = (f'<section class="sec wrap"><h2>다른 달</h2>{month_pills(lang, (y, m))}'
-                f'<p class="note"><a href="{p}{y}/">{y}년 달력 한 장 받기</a> · <a href="{p}">내 설정으로 달력 만들기</a></p></section>')
+                f'<p class="note"><a href="{p}{y}/">{y}년 달력 한 장 받기</a> · <a href="{p}?k=month&amp;y={y}&amp;m={m}">주 시작·용지를 바꿔 이 달 만들기</a></p></section>')
         crumbs = [('달력 만들기', U(lang)), (f'{y}년 달력', U(lang, f'{y}/')), (f'{m}월', U(lang, path))]
         basis = basis_line(lang, y).split(' <a')[0]
     else:
@@ -513,7 +559,7 @@ def month_page(lang, y, m):
         note = (f'<p class="note">Working days are Monday to Friday minus federal holidays. Count any range with the <a href="{DATECALC[lang]}">Daycount business day calculator</a>.</p>'
                 f'<p class="note">The two week-number systems are explained in <a href="{p}guide/week-numbers-iso-vs-us/">ISO 8601 vs US week numbering</a>.</p>')
         more = (f'<section class="sec wrap"><h2>Other months</h2>{month_pills(lang, (y, m))}'
-                f'<p class="note"><a href="{p}{y}/">Get the whole {y} calendar on one page</a> · <a href="{p}">Make a calendar with your settings</a></p></section>')
+                f'<p class="note"><a href="{p}{y}/">Get the whole {y} calendar on one page</a> · <a href="{p}?k=month&amp;y={y}&amp;m={m}">Change the week start or paper for this month</a></p></section>')
         crumbs = [('Calendar maker', U(lang)), (f'{y} calendar', U(lang, f'{y}/')), (EN_M[m - 1], U(lang, path))]
         basis = basis_line(lang, y).split(' <a')[0]
     fx = ''.join(f'<div{" class=\"wide\"" if w else ""}><dt>{k}</dt><dd>{v}</dd></div>' for k, v, w in facts)
@@ -527,6 +573,7 @@ def month_page(lang, y, m):
       <button type="button" class="btn" data-png>{u['png']}</button>
     </div>
   </div>
+  <p class="hint" data-note role="status" hidden></p>
   <div class="m-body">
     <div><div class="wm-box">{md_['web']}</div><p class="basis">{basis}</p></div>
     <aside class="m-side">
@@ -552,15 +599,17 @@ def holidays_page(lang, y):
     subs = [it for it in yd['list'] if it['kind'] == 'substitute']
     if lang == 'ko':
         title = f'{y}년 공휴일·대체공휴일·연휴 정리 | 한장달력'
-        desc = (f'{y}년 공휴일은 일요일을 빼고 {f["holidayDates"]}일, 대체공휴일은 {len(subs)}일, 3일 이상 연휴는 {len(yd["breaks"])}번이에요. '
-                f'2026년 4월 개정(노동절·제헌절)을 반영한 날짜와 요일, 연차 하루로 이어지는 날까지 표로 정리했어요.')
-        lead = (f'{y}년 공휴일은 일요일을 빼고 {f["holidayDates"]}일이에요. 일요일까지 치면 {f["publicHolidays"]}일, 토요일까지 쉬면 {f["daysOff"]}일을 쉬어요.'
-                + (' 우주항공청 2027년 월력요항의 숫자와 같아요.' if y == 2027 else ' 2026년 4월 개정으로 더해진 노동절과 제헌절을 넣어 센 값이에요.'))
+        desc = (f'{y}년 공휴일은 대체공휴일 {len(subs)}일을 넣어 {f["holidayDates"]}일, 3일 이상 연휴는 {len(yd["breaks"])}번이에요. '
+                f'2026년 4월 개정(노동절·제헌절)을 반영한 날짜와 요일, 연차 하루로 이어지는 날을 표로 볼 수 있어요.')
+        lead = (count_note(y) + (f' {f["publicHolidays"]}일과 {f["daysOff"]}일은 우주항공청 2027년 월력요항에 나온 숫자예요.' if y == 2027
+                                 else ' 2026년 4월 개정으로 더해진 노동절과 제헌절을 넣어 계산하면 이렇게 돼요.'))
         sub_txt = ', '.join(f'{it["m"]}월 {it["d"]}일({WD_KO[it["wd"]]})' for it in subs)
         changed = (f'''<section class="sec wrap narrow-sec"><h2>2026년 개정으로 바뀐 것</h2><div class="prose narrow">
 <p>2026년 4월 30일 개정으로 노동절(5월 1일)과 제헌절(7월 17일)이 공휴일이 됐고, 두 날 모두 대체공휴일 대상이에요. '''
-                   + ('2027년에는 두 날이 토요일이라 5월 3일(월)과 7월 19일(월)이 대체공휴일이에요.' if y == 2027 else '2026년에는 두 날이 모두 금요일이라 대체공휴일 없이 그대로 사흘 연휴가 돼요.')
-                   + f''' 자세한 내용은 <a href="{p}guide/2026-nodongjeol-jeheonjeol/">2026년부터 노동절·제헌절이 공휴일</a>에 있어요.</p></div></section>''')
+                   + ('2027년에는 두 날이 토요일이라 5월 3일(월)과 7월 19일(월)이 대체공휴일이에요.' if y == 2027 else '2026년에는 두 날이 모두 금요일이라 대체공휴일 없이 그대로 사흘 연휴였어요.')
+                   + f''' 5월 1일이 그전과 무엇이 다른지는 <a href="{p}guide/2026-nodongjeol-jeheonjeol/">노동절·제헌절, 2026년부터 공휴일이 됐어요</a>에 있어요.</p>
+<h2>회사도 쉬나요</h2>
+<p>이 페이지는 관공서 공휴일 기준이에요. 상시 근로자가 5명 이상인 사업장에서는 일요일을 뺀 공휴일과 대체공휴일이 유급휴일이에요(<a href="{C.LAW55}">근로기준법 제55조 제2항</a>, <a href="{C.LAW30}">시행령 제30조 제2항</a>). 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있고, 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="{C.LAW11}">근로기준법 제11조</a>와 시행령 별표 1).</p></div></section>''')
         br = bridge_rows(lang, c, y)
         body = f'''<section class="doc wrap">{crumb(lang, [('달력 만들기', p), (f'{y}년 달력', f'{p}{y}/')])}
 <h1>{y}년 공휴일과 연휴</h1><p class="lead">{lead}</p>
@@ -568,12 +617,13 @@ def holidays_page(lang, y):
 <section class="sec wrap"><h2>{y}년 공휴일 {f["holidayDates"]}일</h2>{hol_table(lang, c, y)}
 <p class="note">선거일과 임시공휴일은 확정된 날만 들어 있어요.</p></section>
 <section class="sec wrap"><h2>대체공휴일 {len(subs)}일</h2><p class="sub">{sub_txt}</p>
-<p class="note">공휴일이 토·일요일이나 다른 공휴일과 겹치면 그다음 첫 평일이 쉬는 날이 돼요. 1월 1일과 현충일은 해당하지 않아요. 규칙은 <a href="{p}guide/daeche-gonghyuil/">대체공휴일은 언제 생기나</a>에 정리했어요.</p></section>
+<p class="note">공휴일이 토·일요일이나 다른 공휴일과 겹치면 그다음 첫 평일이 쉬는 날이 돼요. 1월 1일과 현충일은 해당하지 않아요. 규칙은 <a href="{p}guide/daeche-gonghyuil/">대체공휴일이 생기는 세 가지 경우</a>에서 볼 수 있어요.</p></section>
 {ad_slot(lang, 'mid')}
 <section class="sec wrap"><h2>3일 이상 연휴 {len(yd["breaks"])}번</h2>{break_rows(lang, c, y)}</section>
 ''' + (f'<section class="sec wrap"><h2>연차 하루로 이어지는 날</h2><p class="sub">쉬는 날 사이에 평일이 하루 끼어 있는 곳이에요.</p>{br}</section>' if br else '') + changed + f'''
-<section class="sec wrap"><div class="src"><h2>출처</h2><ul><li><a href="{C.LAW}">관공서의 공휴일에 관한 규정 (국가법령정보센터, 시행 2026. 5. 11.)</a></li>
-<li><a href="{C.KASA}">우주항공청 「2027년 월력요항」 발표 (2026. 6. 29.)</a></li><li><a href="{C.KASI}">한국천문연구원 달력자료</a></li></ul></div></section>
+<section class="sec wrap"><div class="src"><h2>출처</h2><ul><li><a href="{C.LAW}">관공서의 공휴일에 관한 규정 (국가법령정보센터, 시행 2026. 5. 11.)</a> <small>{C.SEEN9['ko']}</small></li>
+<li><a href="{C.KASA}">우주항공청 「2027년 월력요항」 발표 (2026. 6. 29.)</a> <small>{C.SEEN9['ko']}</small></li><li><a href="{C.KASI}">한국천문연구원 달력자료</a></li>
+<li><a href="{C.LAW55}">근로기준법 제55조</a>, <a href="{C.LAW30}">시행령 제30조</a>, <a href="{C.LAW11}">제11조</a> <small>{C.SEEN10['ko']}</small></li></ul></div></section>
 {ad_slot(lang, 'bottom')}'''
         crumbs = [('달력 만들기', U(lang)), (f'{y}년 달력', U(lang, f'{y}/')), ('공휴일·연휴', U(lang, path))]
     else:
@@ -590,8 +640,8 @@ def holidays_page(lang, y):
 <section class="sec wrap"><h2>{len(yd["breaks"])} long weekends</h2>{break_rows(lang, c, y)}</section>
 ''' + (f'<section class="sec wrap"><h2>One day off that makes a longer break</h2><p class="sub">A single working day sits between a holiday and the weekend.</p>{br}</section>' if br else '') + f'''
 <section class="sec wrap"><div class="src"><h2>Sources</h2><ul><li>The holidays and the Saturday and Sunday rule are set by 5 U.S.C. 6103. Dates on this page are computed from that rule.</li>
-<li><a href="{C.OPM}">U.S. Office of Personnel Management: Federal Holidays</a> publishes the official schedule.</li></ul>
-<p>This page covers federal holidays. Your employer, school or state may follow a different schedule.</p></div></section>
+<li><a href="{C.OPM}">U.S. Office of Personnel Management: Federal Holidays</a> publishes the official schedule. The {y} days off on this page match it <small>({C.SEEN10['en']})</small>. Holiday names in the table follow OPM, and the calendar itself uses the common name Martin Luther King Jr. Day.</li></ul>
+<p>This page covers federal holidays, which apply to federal employees. Your employer, school or state may follow a different schedule.</p></div></section>
 {ad_slot(lang, 'bottom')}'''
         crumbs = [('Calendar maker', U(lang)), (f'{y} calendar', U(lang, f'{y}/')), ('Federal holidays', U(lang, path))]
     ld = [crumbs_ld(lang, crumbs), {'@context': 'https://schema.org', '@type': 'WebPage', 'name': title.split(' | ')[0], 'url': U(lang, path), 'inLanguage': lang, 'description': desc}]
@@ -627,7 +677,7 @@ def lunar_page():
 <ul><li>음력 한 달은 29일(작은달)이거나 30일(큰달)이에요. 작은달의 30일은 없는 날이라 변환기가 알려 줘요.</li>
 <li>윤달은 같은 번호의 평달 바로 뒤에 와요. 2025년에는 윤6월, 2028년에는 윤5월이 있어요.</li>
 <li>24절기와 손 없는 날은 <a href="{p}{mpath(lang, y, m)}">월 달력</a>에 같이 나와요. 달별 표는 <a href="{p}son-eomneun-nal/">손 없는 날</a>에 있어요.</li></ul>
-<p>윤달이 왜 생기는지는 <a href="{p}guide/eumnyeok-yundal/">음력과 윤달</a>에 정리했어요.</p></div>
+<p>윤달이 왜 생기는지는 <a href="{p}guide/eumnyeok-yundal/">2025년 윤6월, 2028년 윤5월로 보는 음력과 윤달</a>에서 읽을 수 있어요.</p></div>
 <div class="src"><h2>출처</h2><ul><li><a href="{C.KASI}">한국천문연구원 천문우주지식정보 달력자료</a></li></ul></div></section>
 {ad_slot(lang, 'bottom')}'''
     ld = [crumbs_ld(lang, [('달력 만들기', U(lang)), ('양력·음력 변환', U(lang, 'lunar/'))]),
@@ -639,7 +689,7 @@ def lunar_page():
 def son_page():
     lang, p = 'ko', '/ko/'
     title = '손 없는 날 2026·2027년 달별 표 | 한장달력'
-    desc = '2026년 10월부터 2027년 12월까지 손 없는 날을 달별로 정리했어요. 요일과 음력 날짜, 주말·공휴일과 겹치는 날을 같이 표시했어요.'
+    desc = '2026년 10월부터 2027년 12월까지 손 없는 날을 달별 표로 볼 수 있어요. 요일과 음력 날짜, 주말·공휴일과 겹치는 날을 같이 표시했어요.'
     secs = []
     for y, m in MONTHS:
         rows = []
@@ -670,7 +720,7 @@ def kr2027_table():
     rows = []
     for it in D['years']['KR']['2027']['list']:
         rows.append(f'<tr><td>{EN_M[it["m"] - 1][:3]} {it["d"]}</td><td>{WD_EN[it["wd"]][:3]}</td><td>{esc(it["en"])}</td><td><span lang="ko">{esc(kr_name(it))}</span></td></tr>')
-    return '<table><thead><tr><th>Date</th><th>Day</th><th>Holiday</th><th>Korean name</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table>'
+    return '<table class="wide"><thead><tr><th>Date</th><th>Day</th><th>Holiday</th><th>Korean name</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table>'
 
 
 def article_body(lang, a):
@@ -682,26 +732,28 @@ def article_page(lang, a):
     path = f'guide/{a["slug"]}/'
     pair = a.get('pair')
     alt = f'guide/{pair}/' if pair else None
-    body_html = article_body(lang, a)
-    parts = re.split(r'(?=<h2>)', body_html)
-    cut = 3 if len(parts) > 3 else len(parts)
-    first, rest = ''.join(parts[:cut]), ''.join(parts[cut:])
+    # 글 속 광고 자리는 초록 받기 단추(cta) 바로 아래. 단추는 본문 가운데에 하나만 둔다(끝에 두면 광고 둘이 붙는다).
+    body_html = tables(article_body(lang, a))
+    cta = re.search(r'<p><a class="btn btn-main cta".*?</p>', body_html, flags=re.S)
+    assert cta and len(re.findall('class="btn btn-main cta"', body_html)) == 1 and '<h2>' in body_html[cta.end():], f'{a["slug"]}: 받기 단추는 본문 가운데에 하나'
+    first, rest = body_html[:cta.end()], body_html[cta.end():]
     src = ''
     if a.get('sources'):
-        src = f'<div class="src"><h2>{u["sources"]}</h2><ul>' + ''.join(f'<li><a href="{esc(h)}">{esc(n)}</a></li>' for n, h in a['sources']) + '</ul></div>'
+        src = f'<div class="src"><h2>{u["sources"]}</h2><ul>' + ''.join(
+            f'<li><a href="{esc(h)}">{esc(n)}</a>' + (f' <small>{seen[lang]}</small>' if seen else '') + '</li>' for n, h, seen in a['sources']) + '</ul></div>'
     others = [x for x in C.ARTICLES[lang] if x['slug'] != a['slug']]
-    more = ('<section class="sec wrap"><h2>' + ('다른 가이드' if lang == 'ko' else 'More guides') + '</h2><ul class="glist">'
+    more = ('<section class="sec wrap narrow"><h2>' + ('다른 가이드' if lang == 'ko' else 'More guides') + '</h2><ul class="glist">'
             + ''.join(f'<li><a href="{p}guide/{x["slug"]}/"><b>{esc(x["title"])}</b><span>{esc(x["desc"])}</span></a></li>' for x in others) + '</ul></section>')
-    date_txt = ('2026년 10월 9일' if lang == 'ko' else 'October 9, 2026')
+    date_txt = C.CHECKED[lang]
     body = f'''<article class="doc wrap narrow">{crumb(lang, [(u['crumb_home'], p), (u['guide'], p + 'guide/')])}
 <h1>{esc(a['title'])}</h1><p class="lead">{esc(a['lead'])}</p><p class="meta">{u['updated']} {date_txt} · {u['brand']}</p>
 <div class="prose">{first}</div></article>
-{ad_slot(lang, 'mid')}
+{ad_slot(lang, 'mid', True)}
 <article class="wrap narrow"><div class="prose">{rest}</div>{src}</article>
 {more}
-{ad_slot(lang, 'bottom')}'''
+{ad_slot(lang, 'bottom', True)}'''
     ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['title'], 'description': a['desc'], 'inLanguage': lang, 'datePublished': TODAY,
-           'dateModified': UPDATED.get(P(lang) + path, TODAY), 'mainEntityOfPage': U(lang, path), 'image': f'{SITE}/{"og-ko.png" if lang == "ko" else "og.png"}',
+           'dateModified': lastmod(P(lang) + path), 'mainEntityOfPage': U(lang, path), 'image': f'{SITE}/{"og-ko.png" if lang == "ko" else "og.png"}',
            'author': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': LUMEN[lang]}, 'publisher': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': LUMEN[lang]}},
           crumbs_ld(lang, [(u['crumb_home'], U(lang)), (u['guide'], U(lang, 'guide/')), (a['title'], U(lang, path))])]
     put(lang, path, page(lang, head(lang, a['title'] + ' | ' + u['brand'], a['desc'], path, alt=alt, jsonld=ld, og_type='article'), body, cur='guide/', alt_path=alt, scripts=False))
@@ -710,10 +762,10 @@ def article_page(lang, a):
 def guide_index(lang):
     u, p = C.UI[lang], P(lang)
     if lang == 'ko':
-        title, desc, h1, lead = '가이드: 공휴일·인쇄·음력 | 한장달력', '2026년 공휴일 개정, 대체공휴일 규칙, 달력을 한 장에 인쇄하는 법, 음력과 윤달을 정리한 글이에요.', '가이드', '달력을 뽑다가 궁금해지는 것들을 글 한 편씩으로 정리했어요.'
+        title, desc, h1, lead = '가이드: 공휴일·인쇄·음력 | 한장달력', '2026년 공휴일 개정, 대체공휴일 규칙, 달력을 한 장에 인쇄하는 법, 음력과 윤달을 다룬 글이에요.', '가이드', '달력을 뽑다가 궁금해지는 것들을 한 편씩 풀었어요.'
     else:
         title, desc, h1, lead = 'Guides: Printing, Week Numbers, Holidays | Onesheet', 'How to print a calendar on one page, 2027 long weekends, ISO and US week numbers, and South Korea’s 2027 public holidays.', 'Guides', 'Short answers to the questions that come up when you print a calendar.'
-    body = f'<section class="doc wrap narrow">{crumb(lang, [(u["crumb_home"], p)])}<h1>{h1}</h1><p class="lead">{lead}</p>{guide_list(lang)}</section>\n{ad_slot(lang, "bottom")}'
+    body = f'<section class="doc wrap narrow">{crumb(lang, [(u["crumb_home"], p)])}<h1>{h1}</h1><p class="lead">{lead}</p>{guide_list(lang)}</section>\n{ad_slot(lang, "bottom", True)}'
     ld = [crumbs_ld(lang, [(u['crumb_home'], U(lang)), (u['guide'], U(lang, 'guide/'))])]
     put(lang, 'guide/', page(lang, head(lang, title, desc, 'guide/', jsonld=ld), body, cur='guide/', scripts=False))
 
@@ -737,7 +789,7 @@ def licenses_page(lang):
         title, desc, h1 = 'Open-source licenses | Onesheet', 'The typeface Onesheet uses and the open-source tools used to prepare its tables and files, with their licenses.', 'Open-source licenses'
         intro = 'The code that runs on this site was written without third-party libraries. Listed below are the typeface and the tools used ahead of time to build the lunar and holiday tables and the spreadsheet files. The tools themselves are not shipped with the site.'
         th = '<th>Name</th><th>Author</th><th>License</th>'
-    body = f'<article class="doc wrap narrow"><h1>{h1}</h1><p class="lead">{intro}</p><div class="prose"><table><thead><tr>{th}</tr></thead><tbody>{rows}</tbody></table></div></article>'
+    body = f'<article class="doc wrap narrow"><h1>{h1}</h1><p class="lead">{intro}</p><div class="prose">' + tables(f'<table class="stack"><thead><tr>{th}</tr></thead><tbody>{rows}</tbody></table>') + '</div></article>'
     put(lang, 'licenses/', page(lang, head(lang, title, desc, 'licenses/', alt='licenses/', ads=False), body, alt_path='licenses/', scripts=False))
 
 
@@ -779,7 +831,7 @@ def main():
     items = []
     for a in C.ARTICLES['ko']:
         link = U('ko', f'guide/{a["slug"]}/')
-        full = re.sub(r'href="/', f'href="{SITE}/', article_body('ko', a))
+        full = re.sub(r'href="/', f'href="{SITE}/', article_body('ko', a)).replace(' class="stack"', '')
         items.append(f'<item><title>{esc(a["title"])}</title><link>{link}</link><guid isPermaLink="true">{link}</guid><pubDate>Fri, 09 Oct 2026 00:00:00 +0900</pubDate>'
                      f'<description><![CDATA[<p>{a["lead"]}</p>{full}]]></description></item>')
     rss = (f'<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>한장달력 가이드</title><link>{SITE}/ko/guide/</link>'

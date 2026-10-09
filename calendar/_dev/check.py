@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """만든 HTML을 검사한다(check.sh 가 부른다): python3 calendar/_dev/check.py
 제목·설명 겹침, canonical·sitemap·내부 링크, hreflang 짝, <html lang>, 영어 페이지의 한글, JSON-LD = 화면 글자,
-방침 문구, 광고 없는 페이지, 첫 HTML의 제목·본문·링크, 받는 파일이 실제로 있는지."""
+방침 문구(방문 통계 = Cloudflare Web Analytics, '분석 도구 없음' 문장 금지), 광고 없는 페이지, 첫 HTML의 제목·본문·링크,
+받는 파일·PDF 글꼴이 실제로 있는지, 표가 가로로 밀리는 칸 안에 있는지, 글 속 광고 자리가 받기 단추 아래인지, 종이 그림에 말줄임이 없는지."""
 import sys
 sys.dont_write_bytecode = True
 import json
@@ -141,6 +142,7 @@ def main():
                 check(not h.startswith(SITE), f'{url} 내부 링크는 경로로: {h}')
                 continue
             path, _, frag = h.partition('#')
+            path = path.partition('?')[0]
             if h.startswith('#'):
                 check(frag in d.ids, f'{url} 없는 #해시 {h}')
                 continue
@@ -174,6 +176,17 @@ def main():
         body_text = ' '.join(''.join(d.text).split())
         check(len(body_text) > 300 and sum(1 for h in d.links if h.startswith('/')) >= 5, f'{url} 첫 HTML에 본문·내부 링크')
         check('—' not in body_text, f'{url} 줄표(—)')
+        # 3단계에서 바꾼 말: '고친 날' → '마지막 확인', '관측일' → '대신 쉬는 날'
+        check(not re.search(r'고친 날|관측일|>Updated ', d.raw), f'{url} 옛 표현(고친 날·관측일·Updated)')
+        # 표는 모두 가로로 밀 수 있는 칸(.tbl-wrap) 안에(큰 달 표 .wm 은 빼고)
+        check(len(re.findall(r'<table(?! class="wm")', d.raw)) == len(re.findall(r'<div class="tbl-wrap"[^>]*><table', d.raw)), f'{url} 표가 .tbl-wrap 안에')
+        # 첫 HTML에 든 종이 그림: 말줄임·'+N more'·'외 N일' 없음
+        for svg in re.findall(r'<svg[^>]*class="sheet-svg".*?</svg>', d.raw, flags=re.S):
+            check(not re.search(r'…|\+\d+ more|외 \d+일', svg), f'{url} 종이 그림에 말줄임')
+        # 글: 글 속 광고 자리(mid)는 받기 단추(cta) 아래
+        if '/guide/' in url and url.rstrip('/').split('/')[-1] != 'guide':
+            check(0 < d.raw.find('btn btn-main cta') < d.raw.find('data-ad="mid"'), f'{url} 글 속 광고 자리는 받기 단추 아래')
+            check(('마지막 확인 2026년' in d.raw) if ko else ('Last checked ' in d.raw), f'{url} 마지막 확인 날짜')
     for t, us in titles.items():
         check(len(us) == 1, f'제목 겹침: {t} {us}')
     for t, us in descs.items():
@@ -184,6 +197,12 @@ def main():
         check('https://policies.google.com/technologies/partner-sites' in raw, f'{u} partner-sites 링크')
         check(('web beacons' in raw) if u == '/privacy/' else ('웹 비콘' in raw), f'{u} 웹 비콘 문장')
         check('cal.lang' in raw, f'{u} 저장 항목 이름(cal.lang)')
+        # 방문 통계: 실제 주소에서는 Cloudflare Web Analytics 가 돈다 → 방침에 적혀 있어야 하고, '분석 도구를 안 쓴다'는 말은 없어야 한다
+        check('Cloudflare Web Analytics' in raw and 'https://www.cloudflare.com/web-analytics/' in raw, f'{u} 방문 통계(Cloudflare Web Analytics)와 링크')
+        check(not re.search(r'분석 도구[^.]{0,20}(쓰지 않|없)|통계[^.]{0,12}(모으지 않|수집하지 않)|do(es)? not use[^.]{0,30}analytics|no analytics', raw, flags=re.I), f'{u} "분석 도구 없음" 뜻의 문장이 없어야 함')
+    for u in ('/about/', '/ko/about/', '/', '/ko/'):
+        raw = pages[u].raw
+        check(not re.search(r'어디에도 (보내|전송)|아무것도 (보내|전송)|설정은 이 기기 밖으로|settings never leave|not sent anywhere\. See|sends nothing', raw.replace('The files you make are not sent anywhere', '')), f'{u} 넓게 쓴 "아무것도 보내지 않아요" 문장')
     app = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
     keys = set(re.findall(r"localStorage\.(?:setItem|getItem)\('([^']+)'", app))
     check(keys == {'cal.lang'}, f'app.js 가 쓰는 localStorage 항목 = 방침에 적은 것: {keys}')
@@ -198,7 +217,17 @@ def main():
     check(f'Sitemap: {SITE}/sitemap.xml' in (ROOT / 'robots.txt').read_text(), 'robots.txt Sitemap 줄')
     rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
     check(rss.count('<item>') == sum(1 for u in pages if u.startswith('/ko/guide/') and u != '/ko/guide/'), 'rss = 한국어 글 수')
-    check(len(list((ROOT / 'files').glob('*.pdf'))) == 27 and len(list((ROOT / 'files').glob('*.xlsx'))) == 3, '받는 파일 PDF 27 + 엑셀 3')
+    pdfs = sorted((ROOT / 'files').glob('*.pdf'))
+    check(len(pdfs) == 27 and len(list((ROOT / 'files').glob('*.xlsx'))) == 3, '받는 파일 PDF 27 + 엑셀 3')
+    for f in pdfs:   # 문서 정보에 만든 프로그램 이름(HeadlessChrome·Skia)이 남지 않고 사이트 이름과 제목이 들어 있다
+        data = f.read_bytes()
+        check(b'HeadlessChrome' not in data and b'Skia/PDF' not in data and b'/Title' in data and b'/Producer' in data, f'{f.name} 문서 정보(제목·만든 곳)')
+    # 내 설정 PDF에 담는 글꼴과 글자 폭 표
+    m = json.loads((ROOT / 'assets' / 'fonts' / 'metrics.json').read_text(encoding='utf-8'))
+    for w in ('500', '600', '700', '800'):
+        f = ROOT / 'assets' / 'fonts' / f'onesheet-{w}.ttf'
+        check(f.exists() and f.stat().st_size == m['bytes'][w] and len(m['adv'][w]) == m['n'], f'PDF 글꼴 onesheet-{w}.ttf = metrics.json')
+    check((ROOT / 'assets' / 'pdf.js').exists(), 'assets/pdf.js')
     junk = [str(p) for p in ROOT.rglob('*') if p.name in ('__pycache__', 'node_modules', '.wrangler')]
     check(not junk, f'남으면 안 되는 폴더: {junk}')
     print(f'HTML 검사: 통과 {passes}, 실패 {len(fails)}')

@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
-<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){h.classList.add('anim');setTimeout(function(){if(!window.__kkAnim)h.classList.remove('anim')},3000)}})(document)</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How X counts characters: emoji, links and the 280 limit", "description": "X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "mainEntityOfPage": "https://count.lumenlab.page/guide/how-x-counts-characters/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How X counts characters: emoji, links and the 280 limit", "description": "X counts a weighted length, not characters: Latin letters count 1, Korean, Chinese and Japanese characters 2, every link 23 and each emoji 2. A table of examples counted with our tool and checked against twitter-text.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://count.lumenlab.page/guide/how-x-counts-characters/", "image": "https://count.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://count.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "How X counts characters: emoji, links and the 280 limit", "item": "https://count.lumenlab.page/guide/how-x-counts-characters/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
 <script src="/assets/ads-config.js"></script>
@@ -42,10 +42,19 @@
 <article class="art wrap narrow">
   <p class="crumb"><a href="/guide/">Guides</a></p>
   <h1>How X counts characters: emoji, links and the 280 limit</h1>
-  <p class="meta">Updated <time datetime="2026-10-09">2026-10-09</time> · Lumen Lab</p>
-  <p class="answer">X counts a weighted length, not characters. In twitter-text, the open-source library X published for this, Latin letters and common punctuation count 1, most other characters count 2, every link counts 23, each emoji counts 2, and the total may not go over 280.</p>
+  <p class="meta">Last checked <time datetime="2026-10-10">2026-10-10</time> · Lumen Lab</p>
+  <p class="answer">X counts a weighted length, not characters. Its documentation says most characters count as 1, emoji and Chinese, Japanese and Korean characters count as 2, and every link counts as 23. A post can hold up to 280.</p>
   <div class="prose"><h2>The weights</h2>
-<p>These values come from the version 3 configuration of twitter-text 3.1.0. We counted each example with our own implementation and with the library; they agree.</p>
+<p>X's developer documentation gives the rule as a short table (checked 2026-10-10):</p>
+<div class="tbl fit"><table>
+<tr><th>Character type</th><th class="r">Weight</th><th class="r">Fits in one post</th></tr>
+<tr><td>Latin, punctuation, common symbols</td><td class="r">1</td><td class="r">280</td></tr>
+<tr><td>Emoji</td><td class="r">2</td><td class="r">140</td></tr>
+<tr><td>Chinese, Japanese, Korean</td><td class="r">2</td><td class="r">140</td></tr>
+<tr><td>Other Unicode</td><td class="r">2 (the default)</td><td class="r">varies</td></tr>
+</table></div>
+<p>The exact boundary is in the configuration file of twitter-text, the open-source library X published, which the documentation points to. Version 3 of that file sets the limit to 280, the scale to 100 and the default weight to 200, and gives a weight of 100 to four ranges of code points: U+0000 to U+10FF, U+2000 to U+200D, U+2010 to U+201F and U+2032 to U+2037. A weight of 100 on a scale of 100 counts as 1, and the default of 200 counts as 2.</p>
+<p>The first range covers Latin, Greek, Cyrillic, Arabic, Hebrew and Thai among others. Worked out from those ranges and counted with our tool:</p>
 <div class="tbl"><table>
 <tr><th>What you type</th><th class="r">Counts as</th></tr>
 <tr><td>a, é, Ж (Latin, accented Latin, Cyrillic)</td><td class="r">1 each</td></tr>
@@ -56,17 +65,16 @@
 <tr><td>👍🏽 or 👨‍👩‍👧 (one emoji built from several pieces)</td><td class="r">2</td></tr>
 <tr><td>https://example.com</td><td class="r">23</td></tr>
 </table></div>
-<p>The rule behind the table is a set of code point ranges. Characters up to U+10FF, which covers Latin, Greek, Cyrillic, Arabic, Hebrew and Thai among others, weigh 1, together with a few ranges of general punctuation. Everything else weighs 2.</p>
 <h2>Links are always 23</h2>
-<p>Every link counts as 23, whether it is 19 characters or 83. That includes a bare domain: <code>example.com</code> with no <code>https://</code> in front still counts as 23, so “see example.com now” is 31, not 19.</p>
+<p>The documentation puts it this way: “All URLs are wrapped with t.co shortener and count as 23 characters, regardless of the original length”. A link of 19 characters and one of 83 both count as 23. That includes a bare domain: <code>example.com</code> with no <code>https://</code> in front still counts as 23, so “see example.com now” is 31, not 19.</p>
 <p>Not everything with a dot is a link. The library only treats a word as one when it ends in a real domain ending, so <code>file.txt</code> counts as 8 ordinary characters.</p>
 </div>
 </article>
-<div class="ad-wrap wrap" data-slot="mid"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<div class="ad-wrap wrap narrow" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <div class="wrap narrow"><div class="prose">
-<h2>Emoji are 2, with a catch</h2>
-<p>An emoji counts as 2 no matter how many code points it is made of. 👨‍👩‍👧 is five code points and still 2.</p>
-<p>The catch is which emoji the library knows. Release 3.1.0 carries an older emoji list, and it counts sequences it does not recognise piece by piece. 🧑‍🚀 and ❤️‍🔥 each come out as 5 there. We ran all 3,773 emoji in Emoji 15.1 through both: 2,963 agree at 2, and 810 newer ones get a larger number from the library. Our counter gives every one of them 2, the same as the emoji the library does know. We could not test X's own composer, so if a brand-new emoji decides whether your post fits, check it there.</p>
+<h2>Emoji are 2, however they are built</h2>
+<p>“All emojis count as 2 characters, regardless of complexity”, the documentation says, and the joiners that combine emoji do not add to the count. 👨‍👩‍👧 is five code points and still 2. Our counter gives 2 to every emoji sequence the browser recognises.</p>
+<p>One thing to know if you use the library yourself: the npm package we tested against, twitter-text 3.1.0, carries an older emoji list and counts sequences it does not recognise piece by piece. 🧑‍🚀 and ❤️‍🔥 each come out as 5 there. We ran all 3,773 emoji in Emoji 15.1 through both: 2,963 agree at 2, and 810 newer ones get a larger number from the package. We follow the documentation and count them as 2. We could not test X's own composer, so if a brand-new emoji decides whether your post fits, check it there.</p>
 <h2>What 280 holds</h2>
 <ul>
 <li>280 Latin letters.</li>
@@ -74,11 +82,14 @@
 <li>140 emoji.</li>
 <li>A link plus 257 Latin characters, spaces included.</li>
 </ul>
-<p>Text is normalised first, so an é typed as one character and an é typed as e plus a combining accent both count as 1.</p>
+<p>The documentation also says length is calculated on text in Unicode Normalization Form C, so an é typed as one character and an é typed as e plus a combining accent both count as 1.</p>
+<h2>What a text box cannot know</h2>
+<p>Two rules depend on how a post is sent, not on its text. Names that X adds automatically at the start of a reply do not count, and media attached through the official apps counts as 0. A mention you type yourself counts like any other text, and so do hashtags. Our counter sees only the text, so it counts everything you paste.</p>
+<p>Subscribers to X Premium can write longer posts of up to 25,000 characters. The 280 rule above is for ordinary posts.</p>
 <h2>How we checked</h2>
-<p>The regular expression our counter uses to find links is identical, character for character, to the one in twitter-text 3.1.0, and a test compares the two. On top of that, 1,655 sample texts mixing links, emoji and several scripts get the same weighted length and the same link positions from both.</p><div class="try"><p>See the weighted length of your own text as you type.</p><a class="btn go" href="/character-counter/">Open the character counter</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://github.com/twitter/twitter-text">twitter-text, X&#x27;s open-source text library (version 3.1.0, checked 2026-10-09)</a></li><li><a href="https://unicode.org/reports/tr51/">Unicode Technical Standard #51: Unicode Emoji</a></li></ul></div></div></div>
-<section class="sec wrap narrow"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/why-161-characters-is-two-sms/"><b>Why a 161-character text costs two messages</b><span>One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
-<div class="ad-wrap wrap" data-slot="bottom"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+<p>The rules above were read from X's documentation and the version 3 configuration file on 2026-10-10. The regular expression our counter uses to find links is identical, character for character, to the one in the npm package twitter-text 3.1.0, and a test compares the two. On top of that, 1,655 sample texts mixing links, emoji and several scripts get the same weighted length and the same link positions from both.</p><div class="try"><p>See the weighted length of your own text as you type.</p><a class="btn go" href="/character-counter/">Open the character counter</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://docs.x.com/fundamentals/counting-characters">X developer documentation: Counting characters (checked 2026-10-10)</a></li><li><a href="https://raw.githubusercontent.com/twitter/twitter-text/master/config/v3.json">twitter-text configuration file, v3.json (checked 2026-10-10)</a></li><li><a href="https://github.com/twitter/twitter-text">twitter-text, the open-source library X published (we tested against npm version 3.1.0)</a></li><li><a href="https://help.x.com/en/using-x/x-premium">X Help Center: About X Premium (checked 2026-10-10)</a></li><li><a href="https://unicode.org/reports/tr51/">Unicode Technical Standard #51: Unicode Emoji</a></li></ul></div></div></div>
+<section class="sec wrap narrow col"><h2>Keep reading</h2><ul class="jump jump-g"><li><a href="/guide/why-161-characters-is-two-sms/"><b>Why a 161-character text costs two messages</b><span>One SMS holds 160 GSM-7 characters, but split messages hold only 153 each, and a single emoji or curly quote drops the limit to 70. Tables of where the breaks fall, counted with our SMS tool.</span></a></li><li><a href="/guide/characters-code-points-bytes/"><b>Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</b><span>One emoji can be 1 character, 5 code points, 8 UTF-16 units or 18 bytes. What each number measures, a table of common cases counted four ways, and which one a length limit is likely to use.</span></a></li></ul></section>
+<div class="ad-wrap wrap narrow" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>
 <footer class="foot"><div class="wrap">
   <a class="lumen" href="https://lumenlab.page/en/"><span class="lumen-cells" aria-hidden="true"><i style="--i:0"><span>L</span></i><i style="--i:1"><span>U</span></i><i style="--i:2"><span>M</span></i><i style="--i:3"><span>E</span></i><i style="--i:4"><span>N</span></i><i style="--i:5"><span>L</span></i><i style="--i:6"><span>A</span></i><i style="--i:7"><span>B</span></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
