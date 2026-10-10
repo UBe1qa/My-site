@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../assets/pretendard.css">
+<style>
+/* 공유 그림(1200×630). 사이트 CSS 와 따로다(og- 이름만 쓴다). 숫자는 og.py 가 계산값(calc.mjs)에서 넣는다. */
+html,body{margin:0}
+body{width:1200px;height:630px;background:#f3f3f0;color:#1d1c20;font-family:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;overflow:hidden;position:relative;word-break:keep-all}
+.og-l{position:absolute;left:72px;top:76px;width:520px}
+.og-brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:800;letter-spacing:-.01em}
+.og-h{margin:58px 0 0;font-size:66px;line-height:1.16;font-weight:800;letter-spacing:-.03em}
+.og-s{margin:26px 0 0;font-size:27px;line-height:1.45;color:#46444b;font-weight:500}
+.og-u{position:absolute;left:72px;bottom:64px;font-size:23px;color:#6c6a72;font-weight:600}
+.og-slip{position:absolute;right:76px;top:100px;width:438px;background:#fff;border-radius:10px;box-shadow:0 2px 2px rgba(30,24,28,.05),0 30px 60px -30px rgba(40,20,28,.35);padding:34px 36px 36px;font-variant-numeric:tabular-nums}
+.og-slip::before{content:"";position:absolute;left:0;right:0;top:0;height:9px;background:#9b2743;border-radius:10px 10px 0 0}
+.og-sh{display:flex;justify-content:space-between;align-items:center;font-size:21px;font-weight:800;padding-bottom:16px;border-bottom:2.5px solid #1d1c20}
+.og-sh span{font-size:17px;font-weight:600;color:#46444b}
+.og-k{margin-top:22px;font-size:20px;font-weight:700}
+.og-n{display:inline-block;margin-top:6px;font-size:66px;line-height:1;font-weight:800;letter-spacing:-.03em;color:#9b2743;padding-bottom:16px;position:relative}
+.og-n small{font-size:30px;margin-left:3px;letter-spacing:0}
+.og-n::before,.og-n::after{content:"";position:absolute;left:0;right:0;height:3px;background:#9b2743}
+.og-n::before{bottom:7px}.og-n::after{bottom:0}
+.og-ln{display:flex;justify-content:space-between;font-size:21px;color:#46444b;padding:8px 0 8px 16px;border-left:3px solid #e2e1dd}
+.og-ln b{color:#1d1c20;font-weight:650}
+.og-rows{margin-top:24px}
+</style>
+</head>
+<body>
+<div class="og-l">
+  <div class="og-brand"><svg width="40" height="40" viewBox="0 0 22 22"><rect x="3" y="1.5" width="16" height="19" rx="2.5" fill="#fff" stroke="#1d1c20" stroke-width="1.6"/><path d="M6.8 6.5h8.4M6.8 10h8.4" stroke="#cfcdc8" stroke-width="1.6" stroke-linecap="round"/><path d="M6.8 14h8.4M6.8 17h8.4" stroke="#9b2743" stroke-width="1.6" stroke-linecap="round"/></svg><span id="brand"></span></div>
+  <h1 class="og-h" id="h"></h1>
+  <p class="og-s" id="s"></p>
+</div>
+<p class="og-u">salary.lumenlab.page</p>
+<div class="og-slip">
+  <div class="og-sh"><b id="slip"></b><span id="asof"></span></div>
+  <p class="og-k" id="k"></p>
+  <div class="og-n"><span id="n"></span><small id="unit"></small></div>
+  <div class="og-rows" id="rows"></div>
+</div>
+<script>
+window.fill = function (d) {
+  document.documentElement.lang = d.lang;
+  ['brand', 'h', 's', 'slip', 'asof', 'k', 'n', 'unit'].forEach(function (k) { document.getElementById(k).innerHTML = d[k]; });
+  document.getElementById('rows').innerHTML = d.rows.map(function (r) { return '<div class="og-ln"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
+};
+</script>
+</body>
+</html>

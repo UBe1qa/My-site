@@ -2,7 +2,8 @@
 """만든 HTML을 검사한다(check.sh 가 부른다): python3 calendar/_dev/check.py
 제목·설명 겹침, canonical·sitemap·내부 링크, hreflang 짝, <html lang>, 영어 페이지의 한글, JSON-LD = 화면 글자,
 방침 문구(방문 통계 = Cloudflare Web Analytics, '분석 도구 없음' 문장 금지), 광고 없는 페이지, 첫 HTML의 제목·본문·링크,
-받는 파일·PDF 글꼴이 실제로 있는지, 표가 가로로 밀리는 칸 안에 있는지, 글 속 광고 자리가 받기 단추 아래인지, 종이 그림에 말줄임이 없는지."""
+받는 파일·PDF 글꼴이 실제로 있는지, 표가 가로로 밀리는 칸 안에 있는지, 글 속 광고 자리가 받기 단추 아래인지, 종이 그림에 말줄임이 없는지,
+'4명 이하' 문장마다 노동절 예외가 붙었는지, 대신 쉬는 날을 부르는 말, 공휴일 표의 chips 표시, FAQ의 그림 PDF 예외."""
 import sys
 sys.dont_write_bytecode = True
 import json
@@ -187,6 +188,24 @@ def main():
         if '/guide/' in url and url.rstrip('/').split('/')[-1] != 'guide':
             check(0 < d.raw.find('btn btn-main cta') < d.raw.find('data-ad="mid"'), f'{url} 글 속 광고 자리는 받기 단추 아래')
             check(('마지막 확인 2026년' in d.raw) if ko else ('Last checked ' in d.raw), f'{url} 마지막 확인 날짜')
+        # 노동절 예외: '4명 이하 사업장에는 (근로기준법 제55조 제2항이) 적용되지 않는다'는 문장이 나오는 곳마다 바로 뒤에
+        # "다만 노동절(5월 1일)은 … 따로 유급휴일로 정한 날 … 이 법에는 사업장 크기 조건이 없어요"와 그 법 링크가 따라온다. 수당 이야기는 싣지 않는다(확인된 원문이 없다).
+        small = len(re.findall(r'4명 이하|four or fewer', d.raw))
+        if small:
+            may1 = re.findall(r'(?:4명 이하|four or fewer)[^<]*(?:<a [^>]*>[^<]*</a>[^<]*){0,4}?(?:다만 노동절\(5월 1일\)은 <a href="https://www\.law\.go\.kr/법령/노동절제정에관한법률">「노동절 제정에 관한 법률」</a>이 따로 유급휴일로 정한 날이에요\. 이 법에는 사업장 크기 조건이 없어요\.'
+                              r'|Labor Day \(May 1\) is different: a <a href="https://www\.law\.go\.kr/법령/노동절제정에관한법률">separate act</a> makes it a paid holiday, and that act has no workplace-size condition\.)', d.raw)
+            n_ld = sum(json.dumps(j, ensure_ascii=False).count('4명 이하') for j in d.ld)   # 구조화 데이터(FAQ)에 한 번 더 실린 것은 화면 글자와 같은지 따로 본다
+            check(len(may1) == small - n_ld, f'{url} 4명 이하 문장 {small - n_ld}곳 가운데 노동절 예외가 붙은 곳 {len(may1)}')
+            check(all('노동절(5월 1일)은 「노동절 제정에 관한 법률」이 따로 유급휴일로 정한 날이에요. 이 법에는 사업장 크기 조건이 없어요.' in json.dumps(j, ensure_ascii=False) for j in d.ld if '4명 이하' in json.dumps(j, ensure_ascii=False)), f'{url} 구조화 데이터의 답에도 노동절 예외')
+        check(not re.search(r'가산수당|가산 수당|premium pay|overtime premium', d.raw), f'{url} 수당 이야기는 싣지 않는다')
+        # 대신 쉬는 날을 부르는 말: '대체 휴일'·'대신 쉼' 없음, 월 달력 칸의 대체공휴일은 무엇의 대체인지까지
+        check(not re.search(r'대체 휴일|대신 쉼', d.raw), f"{url} '대체 휴일'·'대신 쉼'")
+        for em in re.findall(r'<em>(.*?)</em>', ''.join(re.findall(r'<table class="wm">.*?</table>', d.raw, flags=re.S))):
+            check('공휴일' not in em or '(' in em, f'{url} 달력 칸의 대체공휴일에 까닭이 없다: {em}')
+        # 구분 칩이 있는 공휴일 표는 좁은 화면에서 칩을 아래 줄로 내리는 표(table.chips)
+        for t in re.findall(r'<table class="tbl[^"]*"[^>]*>.*?</table>', d.raw, flags=re.S):
+            if '<th>구분</th>' in t or '<th>Type</th>' in t:
+                check(t.startswith('<table class="tbl chips"'), f'{url} 공휴일 표에 chips 표시')
     for t, us in titles.items():
         check(len(us) == 1, f'제목 겹침: {t} {us}')
     for t, us in descs.items():
@@ -203,6 +222,11 @@ def main():
     for u in ('/about/', '/ko/about/', '/', '/ko/'):
         raw = pages[u].raw
         check(not re.search(r'어디에도 (보내|전송)|아무것도 (보내|전송)|설정은 이 기기 밖으로|settings never leave|not sent anywhere\. See|sends nothing', raw.replace('The files you make are not sent anywhere', '')), f'{u} 넓게 쓴 "아무것도 보내지 않아요" 문장')
+    # 노동절 예외가 실려야 하는 쪽(4명 이하 문장이 있는 쪽) 목록이 줄지 않았는지
+    need = ['/ko/', '/ko/2026/holidays/', '/ko/2027/holidays/', '/ko/guide/2026-nodongjeol-jeheonjeol/', '/ko/guide/daeche-gonghyuil/', '/guide/south-korea-public-holidays-2027/']
+    check(sorted(u for u, d in pages.items() if re.search(r'4명 이하|four or fewer', d.raw)) == sorted(need), "'4명 이하' 문장이 있는 쪽 = 노동절 예외를 실은 여섯 쪽")
+    # 자주 묻는 질문: '어떤 설정으로 받아도 글자 PDF'에는 글꼴을 못 받았을 때의 예외가 같이 있다
+    check('300ppi 그림 PDF로 대신 저장' in pages['/ko/'].raw and 'saved as a 300 ppi image instead' in pages['/'].raw, '첫 화면 FAQ: 글꼴을 못 받으면 그림 PDF가 된다는 예외')
     app = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
     keys = set(re.findall(r"localStorage\.(?:setItem|getItem)\('([^']+)'", app))
     check(keys == {'cal.lang'}, f'app.js 가 쓰는 localStorage 항목 = 방침에 적은 것: {keys}')

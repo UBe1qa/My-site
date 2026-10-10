@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """만든 페이지의 정적 확인(브라우저 없이): python3 -B pick/_dev/check.py
 빌드가 최신인지, 제목·설명, canonical·sitemap·내부 링크, hreflang 짝, <html lang>, 영어 페이지의 한글,
-JSON-LD가 화면 글자와 같은지, 방침 문구, 광고 코드가 있어야 할 곳·없어야 할 곳, 글 길이와 빈 숫자 자리."""
+JSON-LD가 화면 글자와 같은지, 방침 문구(방문 통계 포함), 광고 코드가 있어야 할 곳·없어야 할 곳, 글 길이와 빈 숫자 자리,
+"제한 없음"·옛 이름 같은 틀린 말이 남지 않았는지, 조각 글꼴이 화면 글자를 다 담고 있는지."""
 import json
 import re
 import subprocess
@@ -10,7 +11,14 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / '_dev'))
 SITE = 'https://pick.lumenlab.page'
+# 사실과 다른 말(3단계에서 고친 것). 다시 들어오면 실패한다.
+NO_LIMIT = re.compile(r'인원 제한 없|몇 명이든|제한 없이 뽑|no entry limit|no limit on entries|any number of names|of any length|unlimited', re.I)
+NO_ANALYTICS = re.compile(r'분석 도구[는를]? ?(?:없|쓰지 않)|통계를? ?(?:모으지|수집하지) 않|do(?:es)? not use (?:any |separate )?analytics|no analytics', re.I)
+SEND_NOTHING = re.compile(r'어디로도 보내지 않|아무것도 보내지 않|기기 밖으로 나가지 않|nothing is sent|never leaves (?:this|your) device', re.I)
+OLD_DICE = re.compile(r'd4 to d100|4 to 100 sides|4면부터 100면')
+OLD_NAME = 'Fair' + 'draw'  # 영어 이름은 Pickboard로 바뀌었다
 HANGUL = re.compile(r'[ᄀ-ᇿ㄰-㆏가-힣]')
 VOID = {'meta', 'link', 'br', 'img', 'input', 'hr', 'source', 'area', 'base', 'col', 'embed', 'track', 'wbr'}
 results = []
@@ -34,7 +42,8 @@ class Page(HTMLParser):
         self.h1 = ''
         self.text = []       # (보이는 글자, 한국어 표시 안인가)
         self.attr_text = []  # (속성 글자, 한국어 표시 안인가)
-        self.faq = []        # (질문, 답)
+        self.faq = []        # (질문, 답) — class="faq" 칸 안의 것만
+        self.faq_depth = None
         self.stack = []      # (tag, lang)
         self._cap = None
         self._buf = []
@@ -55,6 +64,8 @@ class Page(HTMLParser):
             self.lang = a.get('lang')
         if tag not in VOID:
             self.stack.append((tag, a.get('lang')))
+            if self.faq_depth is None and 'faq' in (a.get('class') or '').split():
+                self.faq_depth = len(self.stack)
         if 'id' in a:
             self.ids.add(a['id'])
         lang_here = a.get('lang') or self.cur_lang()
@@ -85,7 +96,7 @@ class Page(HTMLParser):
             if 'adsbygoogle' in (a.get('src') or ''):
                 self.has_ads = True
             self._buf = []
-        if tag in ('title', 'h1', 'summary') or (tag == 'p' and self.stack and len(self.stack) >= 2 and self.stack[-2][0] == 'details'):
+        if tag in ('title', 'h1') or (self.faq_depth is not None and (tag == 'summary' or (tag == 'p' and len(self.stack) >= 2 and self.stack[-2][0] == 'details'))):
             self._cap = tag
             self._buf = []
         if a.get('data-ad'):
@@ -116,6 +127,8 @@ class Page(HTMLParser):
             if self.stack[i][0] == tag:
                 del self.stack[i:]
                 break
+        if self.faq_depth is not None and len(self.stack) < self.faq_depth:
+            self.faq_depth = None
 
     def handle_data(self, data):
         if self._script:
@@ -171,6 +184,14 @@ def main():
         ok(p.h1 and p.h1 != '', f'H1이 있음: {path}')
         ok('noindex' not in p.robots and 'nosnippet' not in p.raw and 'max-snippet' not in p.raw, f'noindex·nosnippet 없음: {path}')
         ok('—' not in ''.join(t for t, _ in p.text) and '{{' not in p.raw, f'줄표·빈 숫자 자리 없음: {path}')
+        seen = ' '.join(t for t, _ in p.text) + ' ' + p.title + ' ' + d
+        bad_words = [m.group(0) for rx in (NO_LIMIT, NO_ANALYTICS, SEND_NOTHING, OLD_DICE) for m in [rx.search(seen)] if m]
+        ok(not bad_words and OLD_NAME.lower() not in p.raw.lower(), f'틀린 말 없음(제한 없음·분석 도구 없음·아무것도 안 보냄·옛 주사위 설명·옛 이름): {path}', ', '.join(bad_words))
+        if not ko:
+            ok(len(p.title) <= 62, f'영어 제목 60자 안팎({len(p.title)}자): {path}', p.title)
+        # 바깥 출처 링크에는 확인한 날을 같이 적는다
+        if any(h.startswith(('https://developer.mozilla.org/', 'https://prng.di.unimi.it', 'https://raw.githubusercontent.com/')) for h in p.anchors):
+            ok('2026-10-10' in seen, f'바깥 출처 링크 곁에 확인한 날: {path}')
         # hreflang
         alts = {hl: h for rel, hl, h in p.links if rel == 'alternate' and hl}
         if alts:
@@ -223,6 +244,9 @@ def main():
             ok(crumb and crumb['itemListElement'][-1]['name'] == p.h1 and crumb['itemListElement'][-1]['item'] == SITE + path, f'BreadcrumbList = 화면: {path}')
             body = re.sub(r'<[^>]+>', '', p.raw[p.raw.index('<article'):p.raw.index('</article>')])
             ok(len(body) >= (1300 if ko else 2200), f'글 길이: {path}', str(len(body)))
+            ok(('마지막 확인' if ko else 'Last checked') in body and '고친 날' not in body and re.search(r'<time datetime="(\d{4}-\d\d-\d\d)">\1</time>', p.raw) and art.get('dateModified') == re.search(r'<time datetime="([^"]+)"', p.raw).group(1),
+               f"글 머리에 '마지막 확인' 날짜 = Article의 dateModified: {path}")
+            ok(p.raw.count('<table>') == len(re.findall(r'<div class="tbl-wrap(?: wide)?"><div class="tbl(?: fit)?"><table>', p.raw)), f'표는 전부 옆으로 밀리는 칸 안에: {path}')
         elif not is_doc:
             app = next((j for j in p.jsonld if j.get('@type') == 'WebApplication'), {})
             ok(app.get('url') == SITE + path and app.get('description') == d and app.get('name', '').startswith(p.h1) and app.get('inLanguage') == p.lang, f'WebApplication = 화면 제목·설명: {path}')
@@ -245,9 +269,38 @@ def main():
     nf = load('404.html')
     ok('noindex' in nf.robots and 'adsbygoogle' not in nf.raw and '/ko/' in nf.anchors and '/' in nf.anchors, '404: noindex, 광고 없음, 두 언어 첫 화면 링크')
     ok(not [t for t, lang in nf.text if lang != 'ko' and HANGUL.search(t)], '404: 한글은 lang="ko" 안에만')
+    tool_paths = [x for x in paths if x.count('/') <= (3 if x.startswith('/ko/') else 2) and not any(k in x for k in ('guide', 'about', 'privacy'))]
+    ok(len(tool_paths) == 14 and all(x in nf.anchors for x in tool_paths), '404: 두 언어의 도구 7개씩으로 가는 링크', str([x for x in tool_paths if x not in nf.anchors]))
+    ok('공평뽑기' in nf.raw and 'Pickboard' in nf.raw and "indexOf('/ko/')" in nf.raw, '404: 주소가 /ko/ 로 시작하면 한국어 상표·문구만 남긴다')
     for path, need in (('/privacy/', ('web beacons', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'woxocoso@gmail.com')),
                        ('/ko/privacy/', ('웹 비콘', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'woxocoso@gmail.com'))):
         ok(all(n in pages[path].raw for n in need), f'방침: 웹 비콘 문장, partner-sites 링크, 저장 항목 4개, 문의 메일: {path}')
+        # 실제 주소에서는 Cloudflare가 방문 통계 스크립트를 끼워 넣는다 → 방침에 적혀 있어야 하고 "분석 도구 없음" 꼴의 말이 없어야 한다
+        ok('Cloudflare Web Analytics' in pages[path].raw and 'https://www.cloudflare.com/web-analytics/' in pages[path].anchors and not NO_ANALYTICS.search(pages[path].raw),
+           f'방침: 방문 통계(Cloudflare Web Analytics)와 링크가 있고, 분석 도구가 없다는 말이 없음: {path}')
+    # 옛 이름이 어느 파일에도 남아 있지 않다(이 검사 파일은 빼고)
+    left = [str(f.relative_to(ROOT)) for f in ROOT.rglob('*') if f.is_file() and f.suffix in ('.html', '.js', '.mjs', '.json', '.css', '.md', '.py', '.xml', '.txt', '.jsonc', '.svg')
+            and f.name != 'check.py' and OLD_NAME.lower() in f.read_text(encoding='utf-8', errors='ignore').lower()]
+    ok(not left, f'옛 영어 이름({OLD_NAME})이 남은 파일 없음', ', '.join(left))
+    # 조각 글꼴: 파일이 있고, 페이지마다 자기 언어의 조각을 preload하고, 화면 글자를 전부 담고 있다
+    import build as B
+    fonts = json.loads((ROOT / '_dev' / 'fonts.json').read_text(encoding='utf-8')) if (ROOT / '_dev' / 'fonts.json').exists() else {}
+    ok(all(l in fonts and (ROOT / 'assets' / 'fonts' / fonts[l]['file']).exists() and (ROOT / 'assets' / 'fonts' / fonts[l]['file']).stat().st_size == fonts[l]['bytes'] for l in ('en', 'ko')), '조각 글꼴 파일이 있고 크기가 fonts.json과 같음')
+    if fonts:
+        ok(all(f'<link rel="preload" href="/assets/fonts/{fonts["ko" if path.startswith("/ko/") else "en"]["file"]}" as="font" type="font/woff2" crossorigin>' in p.raw and 'font-family:"PK Sans"' in p.raw for path, p in pages.items()),
+           '모든 페이지가 자기 언어의 조각 글꼴을 preload하고 @font-face(PK Sans)를 갖고 있음')
+        need_chars = B.screen_chars()
+        for l in ('en', 'ko'):
+            miss = ''.join(c for c in need_chars[l] if c not in fonts[l]['chars'] and c not in fonts[l].get('not_in_source', ''))
+            ok(not miss, f'조각 글꼴({l})이 화면 글자를 전부 담고 있음(아니면 python3 -B _dev/font.py 를 다시 돌린다. 안 돌려도 그 글자는 CDN에서 받아 보인다)', f'{len(miss)}자: {miss[:40]}')
+        junk_fonts = [f.name for f in (ROOT / 'assets' / 'fonts').glob('pk-*.woff2') if f.name not in (fonts['en']['file'], fonts['ko']['file'])]
+        ok(not junk_fonts, '쓰지 않는 옛 조각 글꼴 파일 없음', ', '.join(junk_fonts))
+    ofl = (ROOT / 'assets' / 'fonts' / 'OFL.txt')
+    ok(ofl.exists() and 'SIL OPEN FONT LICENSE' in ofl.read_text(encoding='utf-8') and 'PK Sans' in ofl.read_text(encoding='utf-8'), '글꼴 라이선스 전문(assets/fonts/OFL.txt)과 이름을 바꿨다는 설명')
+    ok((ROOT / '_headers').exists() and '/assets/fonts/*' in (ROOT / '_headers').read_text() and 'immutable' in (ROOT / '_headers').read_text(), '_headers: 글꼴 조각은 오래 저장')
+    ok('"PK Sans", "Pretendard Variable"' in (ROOT / 'assets' / 'style.css').read_text(encoding='utf-8'), 'style.css: 글꼴 이름표 순서(조각 → CDN → 대체)')
+    lastmods = set(re.findall(r'<lastmod>(.*?)</lastmod>', sm))
+    ok(lastmods <= {B.MODIFIED, *B.UPDATED.values()} and all(re.fullmatch(r'\d{4}-\d\d-\d\d', x) for x in lastmods), f'sitemap lastmod는 실제로 고친 날뿐: {sorted(lastmods)}')
     js = ''.join((ROOT / 'assets' / f).read_text(encoding='utf-8') for f in ['app.js'] + [f'tools/{t}.js' for t in ('wheel', 'ladder', 'draw', 'teams', 'number', 'coin', 'dice')])
     keys = set(re.findall(r"['\"](pick\.[a-z]+)['\"]", js) + re.findall(r"getItem\('(pick\.[a-z]+)'\)", (ROOT / 'index.html').read_text(encoding='utf-8')))
     ok(keys == {'pick.list', 'pick.history', 'pick.sound', 'pick.lang'}, '코드가 쓰는 저장 키 = 방침에 적은 4개', str(sorted(keys)))

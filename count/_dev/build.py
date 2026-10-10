@@ -115,6 +115,25 @@ LIM_ORDER = {'ko': ['igc', 'igb', 'x', 'xp', 'th', 'ytt', 'ytd', 'tt', 'bs', 'li
 LOGO = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-b" x="1" y="1" width="20" height="20" rx="3"/><path class="lg-l" d="M11 1v20M1 11h20"/><rect class="lg-f" x="1" y="1" width="10" height="10" rx="2"/></svg>'
 LOCK = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 6V4.3a2.5 2.5 0 0 1 5 0V6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
 ANIM = "<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>"
+# 다른 언어판 안내 띠를 띄울지 첫 그림 전에 정한다(html.lb). 띠는 화면 아래에 겹쳐 뜨고, 꼬리말 아래에 띠만큼 자리를 둔다.
+# 저장 키는 app.js 의 LOCAL.lang 과 같다.
+LANGBAR = "<script>(function(h){try{var n=(navigator.language||'').slice(0,2).toLowerCase();if(!localStorage.getItem('kk.lang')&&(h.lang==='ko'?n!=='ko':n==='ko'))h.classList.add('lb')}catch(e){}})(document.documentElement)</script>"
+# 같은 탭에서 쓰던 목표(sessionStorage kk.set)를 첫 그림 전에 목표 칸에 넣어 둔다(나중에 넣으면 숫자 기둥이 밀린다). {key} = 언어:도구
+GOAL_BOOT = ("<script>(function(d){{try{{var s=JSON.parse(sessionStorage.getItem('kk.set')||'null'),g=s&&s.goal&&s.goal['{key}'],i=d.getElementById('goal'),b=d.getElementById('goalBasis');"
+             "if(!g||!(g[0]>0)||!i)return;i.value=g[0];b.value=g[1];if(b.selectedIndex<0)b.selectedIndex=0;i.parentNode.hidden=false;"
+             "d.querySelector('[data-act=goal-open]').hidden=true;d.querySelector('.goal .cells').hidden=false;d.getElementById('goalMsg').textContent='\\u00a0'}}catch(e){{}}}})(document)</script>")
+# 자소서: 저장해 둔 글(이 기기에 저장을 켠 사람만) 또는 같은 탭에서 쓰던 문항별 목표로 문항 칸을 첫 그림 전에 만들어 둔다(화면 밀림 방지).
+# app.js 가 같은 값을 다시 확인해 넣고 잇는다. 저장 키는 app.js 의 LOCAL·SESSION 과 같다.
+JS_BOOT = ("<script>(function(d){try{var L=d.getElementById('qList'),T=d.getElementById('qT'),a=null,s,i,q,x,t;"
+           "if(localStorage.getItem('kk.jasoseo.on')==='1'){s=JSON.parse(localStorage.getItem('kk.jasoseo')||'null');a=s&&s.items}"
+           "if(!a||!a.length){s=JSON.parse(sessionStorage.getItem('kk.set')||'null');a=s&&s.jq&&s.jq.map(function(v){return{goal:v&&v[0]>0?v[0]:'',basis:v&&v[1]}})}"
+           "if(!a||!a.length)return;"
+           "for(i=0;i<a.length;i++){x=a[i]||{};q=i?T.content.firstElementChild.cloneNode(true):L.firstElementChild;if(i)L.appendChild(q);"
+           "q.querySelector('.q-no').textContent=i+1;q.querySelector('.q-del').hidden=a.length<2;"
+           "q.querySelector('.q-title').value=x.title||'';q.querySelector('.q-goal').value=x.goal||'';t=q.querySelector('.q-basis');t.value=x.basis||'chars';if(t.selectedIndex<0)t.selectedIndex=0;"
+           "t=q.querySelector('textarea');t.value=x.text||'';if(x.goal)q.querySelector('.cells').hidden=false;"
+           "if(x.text){t.style.height='auto';t.style.height=Math.max(150,t.scrollHeight+2)+'px'}}"
+           "}catch(e){}})(document)</script>")
 
 
 def prefix(lang):
@@ -154,7 +173,7 @@ def alt_of(lang, path):
     return None
 
 
-def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, ads=True, scripts=()):
+def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, ads=True, scripts=(), langbar=True):
     canon = url(lang, path)
     alt = alt_of(lang, path)
     links = [] if noindex else [f'<link rel="canonical" href="{canon}">']
@@ -193,7 +212,7 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
-{ANIM}
+{ANIM}{LANGBAR if langbar else ''}
 {ld}{ad}{''.join(f'<script defer src="/assets/{s}.js"></script>{chr(10)}' for s in scripts)}</head>'''
 
 
@@ -368,7 +387,7 @@ def pad_html(lang, rows_attr='', top=''):
       <div class="bar">
         <button class="btn go if-empty" data-act="sample" type="button">{u['sample_btn']}</button>
         <button class="btn if-text" data-act="copy" type="button">{u['copy']}</button>
-        <span class="undo" hidden>{u['undo_msg']} <button class="linkbtn" data-act="undo" type="button">{u['undo']}</button></span>
+        <span class="undo" hidden><span class="undo-msg">{u['undo_msg']}</span> <button class="linkbtn" data-act="undo" type="button">{u['undo']}</button></span>
         <span class="sp"></span>
         <button class="btn quiet if-text" data-act="clear" type="button">{u['clear']}</button>
       </div>
@@ -382,11 +401,16 @@ def limits_html(lang, c, two=False):
     out = ''
     for i in LIM_ORDER[lang]:
         r = rows[i]
-        note = c['units'][r['unit'] + ('u' if r.get('undoc') else '')]
-        out += (f'<li data-unit="{r["unit"]}" data-limit="{r["limit"]}" data-id="{r["id"]}">'
+        note = esc(c['units'][r['unit'] + ('u' if r.get('undoc') else '')])
+        more = ''
+        if r.get('unit2'):   # 한도가 둘인 서비스(블루스카이: 300 글자소 + UTF-8 3,000바이트): 둘째 숫자도 보여 주고 하나라도 넘으면 넘음
+            a, b = c['unit2'][r['unit2']]
+            note += f' · {esc(a)}<b data-lim-n2>0</b> / {num(r["limit2"])}{esc(b)}'
+            more = f' data-unit2="{r["unit2"]}" data-limit2="{r["limit2"]}"'
+        out += (f'<li data-unit="{r["unit"]}" data-limit="{r["limit"]}" data-id="{r["id"]}"{more}>'
                 f'<p class="lim-h"><b>{esc(r[lang])}</b><span class="lim-n"><b data-lim-n>0</b> / {num(r["limit"])}</span></p>'
                 f'<div class="lim-bar" aria-hidden="true"><i></i></div>'
-                f'<p class="lim-s"><span>{esc(note)} · <a href="{esc(r["src"])}" aria-label="{esc(r[lang])} {UI[lang]["src_label"]}">{UI[lang]["src_label"]}</a></span><em data-lim-left></em></p></li>')
+                f'<p class="lim-s"><span>{note} · <a href="{esc(r["src"])}" aria-label="{esc(r[lang])} {UI[lang]["src_label"]}">{UI[lang]["src_label"]}</a></span><em data-lim-left></em></p></li>')
     return f'<ul class="lims{" two" if two else ""}" aria-label="{esc(c["list_label"])}">{out}</ul>'
 
 
@@ -431,10 +455,11 @@ def jobsites_measured():
     rows = ''
     for r in j['rows']:
         rows += f'<tr><td>{link(r["url"], r["short"])}</td><td>{site(r["A"])}</td><td>{site(r["B"])}</td><td>{site(r["C"])}</td></tr>'
-    n1, n2 = o['nl1'], o['nl2']
+    # 둘째 줄 = 자소서 화면의 인크루트 맞추기(글자는 1자, 바이트만 2byte): 인크루트와 글자 수·바이트가 모두 같다
+    n1, n2 = o['nl1'], o['nl12']
     miss = ' · 😀는 바이트에서 뺌'
-    rows += f'<tr class="us"><td>칸칸<br><small>줄바꿈 1</small></td><td>{ours(n1["A"])}</td><td>{ours(n1["B"])}</td><td>{ours(n1["C"], miss)}</td></tr>'
-    rows += f'<tr class="us"><td>칸칸<br><small>줄바꿈 2</small></td><td>{ours(n1["A"])}</td><td>{ours(n2["B"])}</td><td>{ours(n1["C"], miss)}</td></tr>'
+    rows += f'<tr class="us"><td>칸칸<br><small>줄바꿈 1자·1byte</small></td><td>{ours(n1["A"])}</td><td>{ours(n1["B"])}</td><td>{ours(n1["C"], miss)}</td></tr>'
+    rows += f'<tr class="us"><td>칸칸<br><small>줄바꿈 1자·2byte</small></td><td>{ours(n1["A"])}</td><td>{ours(n2["B"])}</td><td>{ours(n1["C"], miss)}</td></tr>'
     return tbl('<table><tr><th>도구</th><th>예시 A</th><th>예시 B</th><th>예시 C</th></tr>' + rows + '</table>', wide=True)
 
 
@@ -473,7 +498,7 @@ def nums_html(lang, key, tool, c):
         {cells_html(attrs=' hidden')}
         <div class="goal-line">
           <button class="linkbtn" data-act="goal-open" type="button">{u['goal_open']}</button>
-          <span class="goal-form" hidden><label for="goal">{u['goal']}</label><input class="fld n" id="goal" type="text" inputmode="numeric" autocomplete="off"><select class="fld" id="goalBasis" aria-label="{u['goal_basis']}">{opts}</select><button class="goal-x" data-act="goal-close" type="button" aria-label="{u['goal_clear']}">×</button></span>
+          <span class="goal-form" hidden><label for="goal">{u['goal']}</label><input class="fld n" id="goal" type="text" inputmode="numeric" autocomplete="off" aria-describedby="goalMsg"><select class="fld" id="goalBasis" aria-label="{u['goal_basis']}">{opts}</select><button class="goal-x" data-act="goal-close" type="button" aria-label="{u['goal_clear']}">×</button></span>
           <span class="goal-msg" id="goalMsg" aria-live="polite"></span>
         </div>
       </div>'''
@@ -509,7 +534,7 @@ def nums_html(lang, key, tool, c):
         srcs = ', '.join(link(h, n) for n, h in k['sources'][:2])
         box = f'''<div class="xbox smsbox">
       <h2>{esc(c['sms_title'])}</h2>
-      <p class="pick"><label for="smsBase">{c['sms_pick']}</label><select class="fld" id="smsBase">{opts}</select><span id="smsCustomWrap" hidden><input class="fld n" id="smsCustom" type="text" inputmode="numeric" autocomplete="off" aria-label="{esc(c['sms_custom'])}"> byte</span></p>
+      <p class="pick"><label for="smsBase">{c['sms_pick']}</label><select class="fld" id="smsBase">{opts}</select><span id="smsCustomWrap" hidden><input class="fld n" id="smsCustom" type="text" inputmode="numeric" autocomplete="off" aria-label="{esc(c['sms_custom'])}" aria-describedby="smsMsg"> byte</span></p>
       {cells_html(attrs=' id="smsCells"')}
       <p class="sms-msg" id="smsMsg" aria-live="polite"></p>
       <p class="srcline">{esc(c['sms_src'])} {UI[lang]['src_label']}: {srcs} · {checked(lang)}</p>
@@ -519,8 +544,9 @@ def nums_html(lang, key, tool, c):
     wpm = ''
     if tool.get('wpm'):
         w = c['wpm']
-        wpm = (f'<p><label>{w[0]} <input class="fld n" id="wpmRead" type="text" inputmode="numeric" value="{WPM["read"]}"> {w[2]}</label>'
-               f'<label>{w[1]} <input class="fld n" id="wpmSpeak" type="text" inputmode="numeric" value="{WPM["speak"]}"> {w[2]}</label></p>'
+        wpm = (f'<p><label>{w[0]} <input class="fld n" id="wpmRead" type="text" inputmode="numeric" autocomplete="off" value="{WPM["read"]}" placeholder="{WPM["read"]}" aria-describedby="wpmNote"> {w[2]}</label>'
+               f'<label>{w[1]} <input class="fld n" id="wpmSpeak" type="text" inputmode="numeric" autocomplete="off" value="{WPM["speak"]}" placeholder="{WPM["speak"]}" aria-describedby="wpmNote"> {w[2]}</label></p>'
+               f'<p class="fld-note" id="wpmNote" aria-live="polite"></p>'
                f'<p class="srcline">{w[3]}{link(L["reading"]["source"], w[4])}{w[5]} ({checked(lang)})</p>')
     basis = '' if tool.get('sms') or tool.get('sheet') or tool.get('limits') == 'side' else basis_details(lang, tool, wpm)
     proof = esc(c['proof']) + (f' {checked(lang)}' if tool.get('limits') == 'side' else '')
@@ -541,7 +567,7 @@ def neis_pick(c):
       <div class="pad-top">
         <p class="yr">{n['school_year']}학년도 {n['level']} 기준</p>
         <p class="pick"><label for="neisItem">{c['item']}</label><select class="fld" id="neisItem">{opts}</select></p>
-        <p class="pick" id="neisCustomRow" hidden><label for="neisCustom">{c['custom_label']}</label><input class="fld n" id="neisCustom" type="text" inputmode="numeric" autocomplete="off"><span>{c['custom_unit']}</span></p>
+        <p class="pick" id="neisCustomRow" hidden><label for="neisCustom">{c['custom_label']}</label><input class="fld n" id="neisCustom" type="text" inputmode="numeric" autocomplete="off" aria-describedby="neisEq"><span>{c['custom_unit']}</span></p>
       </div>'''
 
 
@@ -576,6 +602,8 @@ def tool_cfg(lang, key, tool):
         cfg['inspect'] = INSPECT[lang]
     if tool.get('wpm'):
         cfg['wpm'] = WPM
+    if tool.get('inspect'):
+        cfg['approxHide'] = True   # 근거 줄이 '사람이 보는 한 글자씩'인 화면: Intl.Segmenter 가 없으면 그 줄을 숨기고 알림을 띄운다
     return cfg
 
 
@@ -585,12 +613,14 @@ def inspect_html(c):
 </section>'''
 
 
-def phead(lang, c):
+def phead(lang, c, tool=True):
+    """쪽 머리. tool=True(도구 화면)면 자바스크립트가 꺼져 있을 때 보이는 한 줄을 붙인다(숫자가 0인 채로 조용히 있지 않게)."""
+    nojs = f'\n<noscript><p class="nojs wrap">{esc(UI[lang]["nojs"])}</p></noscript>' if tool else ''
     return f'''<div class="phead wrap">
   <h1>{esc(c['h1'])}</h1>
   <p class="lead">{esc(c['lead'])}</p>
   <p class="safe">{LOCK}{UI[lang]['safe']}</p>
-</div>'''
+</div>{nojs}'''
 
 
 def extra_sections(lang, key, tool, c):
@@ -629,18 +659,21 @@ def tool_page(lang, key):
     {left}
     <section class="sheet" aria-label="{esc(c['sheet_title'])}">
       <div class="sheet-head"><p>{esc(c['sheet_title'])}<b data-n="laid">0</b>장</p><p class="pager"><button type="button" id="prev" aria-label="{c['prev']}" disabled>‹</button><span class="num" id="pageNo">1 / 1</span><button type="button" id="next" aria-label="{c['next']}" disabled>›</button></p></div>
-      <p class="wg-mode"><span id="wgModeLabel">{esc(c['mode_label'])}</span><span class="seg" role="group" aria-labelledby="wgModeLabel">{seg}</span></p>
+      <p class="wg-mode"><span id="wgModeLabel">{esc(c['mode_label'])}</span><span class="seg" role="group" aria-labelledby="wgModeLabel">{seg}</span><span class="sp"></span><button class="btn if-text" data-act="print" type="button">{esc(c['print'])}</button></p>
       <svg id="sheet" viewBox="0 0 724 446" role="img" aria-label="{esc(c['sheet_title'])}"></svg>
       <div class="sheet-foot"><span>20 × 10</span><span class="num" id="sheetNo">No. 1</span></div>
       <p class="sheet-note"><span id="wgNote">{esc(T[lang]['wgPlain'])}</span> {esc(c['sheet_rule'])} {link(w['source'], c['rule_links'][0])} · {link(w['custom_source'], c['rule_links'][1])} · {checked(lang)}</p>
     </section>
-  </div>'''
+  </div>
+<div class="print-sheets" id="printSheets" aria-hidden="true"></div>'''
     else:
         work = f'''<div class="tool wrap" data-tool="{key}">
     {pad_html(lang, top=neis_pick(c) if tool.get('neis') else '')}
     {nums_html(lang, key, tool, c)}
   </div>'''
     body = phead(lang, c) + '\n' + strip_html(lang, tool) + '\n' + work
+    if tool['goal']:
+        body += '\n' + GOAL_BOOT.format(key=f'{lang}:{key}')
     extra = extra_sections(lang, key, tool, c)
     if extra:
         body += '\n' + extra
@@ -662,37 +695,53 @@ def jasoseo_page():
     lang, key, path = 'ko', 'jasoseo', 'jasoseo/'
     c, u = PAGES['ko']['jasoseo'], UI['ko']
     opts = ''.join(f'<option value="{k}">{esc(v)}</option>' for k, v in c['bases'])
+    # 문항 아래 네 기준 한 줄은 첫 HTML에 0으로 넣어 둔다(나중에 채우면 그 줄만큼 아래가 밀린다)
+    sub0 = esc(re.sub(r'\{\w\}', '0', T['ko']['qSub']))
     q = f'''<article class="q">
         <div class="q-head"><span class="q-no" aria-hidden="true">1</span><input class="q-title" type="text" placeholder="{esc(c['q_title'])}" aria-label="{esc(c['q_title'])}" autocomplete="off">
           <label>{c['q_goal']} <input class="fld n q-goal" type="text" inputmode="numeric" autocomplete="off"></label>
           <label><span class="sr">{c['q_basis']}</span><select class="fld q-basis">{opts}</select></label></div>
         <textarea placeholder="{esc(c['q_text'])}" spellcheck="false" aria-label="{esc(c['q_text'])}"></textarea>
         <div class="q-foot">{cells_html(attrs=' hidden')}
-          <p class="cnt"><b class="q-n num">0</b><span class="q-u">자</span><span class="left" aria-live="polite"></span><br><small class="q-sub"></small><small class="q-miss" hidden></small></p>
+          <p class="cnt"><b class="q-n num">0</b><span class="q-u">자</span><span class="left" aria-live="polite"></span><br><small class="q-sub">{sub0}</small><small class="q-miss" hidden></small></p>
           <button class="btn quiet q-del" type="button" hidden>{c['q_del']}</button></div>
       </article>'''
-    seg = ''.join(f'<button type="button" data-nl="{i}" aria-pressed="{"true" if i == 1 else "false"}">{o}</button>' for i, o in enumerate(u['nl_opts']))
+    # 줄바꿈은 글자 수와 바이트에서 따로 고른다(인크루트는 글자 1자·바이트 2byte)
+    segs = ''
+    for (label, opts), attr, lid in zip(c['nl_rows'], ('data-nl', 'data-nlb'), ('nlCLab', 'nlBLab')):
+        btns = ''.join(f'<button type="button" {attr}="{i}" aria-pressed="{"true" if i == 1 else "false"}">{esc(o)}</button>' for i, o in enumerate(opts))
+        segs += f'<p class="nl-row"><span id="{lid}">{esc(label)}</span><span class="seg" role="group" aria-labelledby="{lid}">{btns}</span></p>'
     presets = ''.join(f'<button class="btn" type="button" data-preset="{v}">{esc(t)}</button>' for v, t in c['presets'])
     how = ''.join(f'<li>{esc(x)}</li>' for x in c['sites_how'])
     more = c['sites_more']
     guide = f'/ko/guide/{A["ko"][0]["slug"]}/'
+    t0 = T['ko']
+    # 휴대폰 숫자 띠: 지금 쓰는 문항의 글자 수 · 남은 글자 · 목표(다른 도구처럼 화면 위에 붙어 다닌다)
+    strip = (f'<div class="strip js-strip" aria-hidden="true"><p><span id="sLab">{t0["stripQ"].replace("{n}", "1").replace("{b}", t0["stripBasis"]["chars"])}</span><b id="sN" class="num">0</b></p>'
+             f'<p id="sLeftP"><span id="sLeftLab">{t0["stripLeft"]}</span><b id="sLeft" class="num">-</b></p>'
+             f'<p><span>{c["strip_goal"]}</span><b id="sGoal" class="num">-</b></p></div>')
     body = f'''{phead(lang, c)}
+{strip}
 <div class="wrap js-wrap" data-tool="jasoseo">
   <div class="js-top">
     <p class="tot">{c['tot'][0]} <b id="qCount" class="num">1</b>{c['tot'][1]} <b id="qTotal" class="num">0</b>{c['tot'][2]}</p>
     <span class="sp"></span>
     <label class="switch"><input type="checkbox" id="save"> {c['save']}</label>
     <button class="btn quiet" id="wipe" type="button" hidden>{c['wipe']}</button>
+    <span class="undo" id="wipeUndo" hidden>{esc(c['wipe_done'])} <button class="linkbtn" type="button">{u['undo']}</button></span>
   </div>
   <div class="js-list" id="qList">
       {q}
   </div>
   <template id="qT">{q}</template>
+  {JS_BOOT}
   <div class="js-add"><button class="btn go" id="qAdd" type="button">{c['q_add']}</button></div>
   <details class="basis js-basis">
-    <summary><span id="nlNow">{c['nl_now'].replace('{n}', '1')}</span><em>{u['basis_change']}</em></summary>
-    <div class="in"><p>{esc(u['nl_why'])}</p><span class="seg" role="group" aria-label="{esc(u['nl_group'])}">{seg}</span>
-      <p class="preset"><span>{esc(c['preset_label'])}</span>{presets}</p><p class="preset-msg" id="presetMsg" aria-live="polite"></p></div>
+    <summary><span id="nlNow">{c['nl_now'].replace('{n}', '1').replace('{b}', '1')}</span><em>{u['basis_change']}</em></summary>
+    <div class="in"><p>{esc(c['nl_why'])}</p>{segs}
+      <p class="preset"><span>{esc(c['preset_label'])}</span>{presets}</p>
+      <p class="preset-hint">{esc(c['preset_hint'])}</p>
+      <p class="preset-msg" id="presetMsg" aria-live="polite"><span></span> <button class="linkbtn" id="presetUndo" type="button" hidden>{u['undo']}</button></p></div>
   </details>
 </div>
 <section class="sec wrap narrow"><h2>{esc(c['how_h'])}</h2><ol class="steps">{''.join(f'<li>{esc(x)}</li>' for x in c['how'])}</ol></section>
@@ -780,7 +829,7 @@ def not_found():
   <h1>{UI['en']['nf_title']} · <span lang="ko">{UI['ko']['nf_title']}</span></h1>
   <p><a class="btn go" href="/">{UI['en']['home']}</a> <a class="btn" href="/ko/" lang="ko">{UI['ko']['home']}</a></p>
 </div>'''
-    h = head('en', 'Page not found | Kankan', 'This page does not exist.', '', noindex=True, ads=False)
+    h = head('en', 'Page not found | Kankan', 'This page does not exist.', '', noindex=True, ads=False, langbar=False)
     return f'{h}\n<body>\n{header("en", "")}\n<main id="main">\n{body}\n</main>\n{footer("en")}\n{cfg_script({"lang": "en", "t": {"close": "Close"}})}\n<script src="/assets/app.js"></script>\n</body>\n</html>\n'
 
 

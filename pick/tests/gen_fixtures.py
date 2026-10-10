@@ -7,6 +7,8 @@
 - 카이제곱 임계값: scipy.stats.chi2.ppf(0.999, df).
 - 공유 링크: 파이썬 json + base64 로 만든 문자열(자바스크립트가 읽어야 함)과 그 원문.
 - 사다리: 한 사람의 자리 이동을 '높이마다 독립인 게으른 막대 위 걷기'로 직접 계산한 정확한 분포(행렬 거듭제곱).
+- 명단의 '정해진 자리'(코드 포인트 순): 파이썬 sorted()(글자열을 코드 포인트로 견준다)로 구한 순서.
+  그리고 tests/golden.json의 자리 번호를 그 순서에 대어, 예시 명단에서 누가 뽑혀야 하는지를 이름으로 적어 둔다.
 """
 import base64, hashlib, json
 from pathlib import Path
@@ -152,6 +154,31 @@ def ladder_need():
     return out
 
 
+def order_cases():
+    """정해진 자리: 이름을 코드 포인트 순으로 놓는다(같은 이름끼리는 넣은 순서). order[k] = k번째 자리에 오는 이름의 원래 번호."""
+    lists = {
+        'korean sample': ['김민준', '이서연', '박지호', '최유나', '정도윤', '강하린', '윤서준', '임채원'],
+        'mixed scripts': ['Zoë', 'zoe', 'Zoe', 'Łukasz', '田中さん', 'محمد', 'Ἀθηνᾶ', 'é', 'e\u0301', '😀', '\uffe5', '\ue000',
+                          '👍🏽', '10', '9', '１０', 'a b', 'a', 'A', '가', '각', '힣', '\U0001F1F0\U0001F1F7', '\ufffd', '𠀀', '가나'],
+        'dupes': ['나', '가', '나', '다', '가', '가'],
+        'same start': ['3학년 1반 김민준', '3학년 1반 김민', '3학년 10반 김', '3학년 2반 이서연', '3학년 1반 김민준'],
+        'one': ['혼자'],
+    }
+    out = []
+    for name, items in lists.items():
+        order = sorted(range(len(items)), key=lambda i: (items[i], i))
+        out.append({'name': name, 'items': items, 'order': order, 'sorted': [items[i] for i in order]})
+    return out
+
+
+def order_golden():
+    """예시 명단 8명 + 씨앗(상태 1,2,3,4)에서 누가 뽑혀야 하는지: golden.json의 자리 번호 → 코드 포인트 순 이름."""
+    gold = json.loads((Path(__file__).resolve().parent / 'golden.json').read_text(encoding='utf-8'))
+    names = sorted(['김민준', '이서연', '박지호', '최유나', '정도윤', '강하린', '윤서준', '임채원'])
+    return {'sorted': names, 'wheel': names[gold['wheel']['index']], 'order': [names[k] for k in gold['order']],
+            'teams': [[names[k] for k in team] for team in gold['teams']]}
+
+
 def main():
     dfs = sorted(set(list(range(1, 130)) + [199, 255, 299, 499, 719, 899, 999]))
     data = {
@@ -163,6 +190,8 @@ def main():
         'ladder': ladder_cases(),
         'ladder_table': ladder_table(),
         'ladder_need': ladder_need(),
+        'order': order_cases(),
+        'order_golden': order_golden(),
     }
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=0) + '\n', encoding='utf-8')
     print('wrote', OUT, OUT.stat().st_size, 'bytes')

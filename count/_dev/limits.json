@@ -177,6 +177,8 @@
     "en": "Bluesky post",
     "limit": 300,
     "unit": "grapheme",
+    "limit2": 3000,
+    "unit2": "utf8",
     "src": "https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json"
    },
    {
@@ -380,7 +382,7 @@
    }
   ],
   "ours": {
-   "_note": "칸칸으로 같은 예시를 센 값 [공백 포함 자, 한글 2byte 기준 byte, 공백 제외 자]. tests/run.mjs 가 로직과 대조한다.",
+   "_note": "칸칸으로 같은 예시를 센 값 [공백 포함 자, 한글 2byte 기준 byte, 공백 제외 자]. tests/run.mjs 가 로직과 대조한다. nl1 = 줄바꿈 1자·1byte, nl2 = 줄바꿈 2자·2byte, nl12 = 글자는 1자·바이트만 2byte(자소서 화면의 인크루트 맞추기). 글의 표에는 nl1 과 nl12 를 싣는다.",
    "nl1": {
     "A": [
      11,
@@ -401,6 +403,13 @@
    "nl2": {
     "B": [
      10,
+     16,
+     6
+    ]
+   },
+   "nl12": {
+    "B": [
+     9,
      16,
      6
     ]

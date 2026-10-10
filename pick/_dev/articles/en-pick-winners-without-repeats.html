@@ -1,21 +1,28 @@
-<p>Put the list in the <a href="{{u_draw}}">name picker</a>, set how many winners you need and draw once. No line of the list can be drawn twice, and the result can be sent as a link that replays the same draw for anyone. The details below keep the draw clean and easy to check.</p>
+<p>Put the list in the <a href="{{u_draw}}">name picker</a>, set how many winners you need and draw once. No line of the list can be drawn twice, and the result can be sent as a link that recalculates the same draw for anyone. The details below keep the draw clean and easy to check.</p>
 
-<h2>1. Clean the list first</h2>
+<h2>1. Clean the list first, and post it</h2>
 <p>The picker treats every line as one entry. If the same person appears on two lines, they have two entries and could even be drawn twice as two separate lines. The list panel tells you how many duplicate names it sees. Press Remove duplicates if each person should have a single entry, or leave them in if extra entries are part of your rules.</p>
-<p>You can paste up to 5,000 lines in one go, for example a column copied from a spreadsheet. Blank lines and stray spaces are removed for you.</p>
+<p>You can paste up to 5,000 lines in one go, for example a column copied from a spreadsheet. Blank lines and stray spaces are removed for you. If several columns come along, each whole row is read as one name and the panel offers to keep the first column only.</p>
+<p>Then share the final list with everyone before you draw. A result can only be checked against a list people have already seen.</p>
 
 <h2>2. Decide the number of winners and alternates</h2>
 <p>Names come out in the order they are drawn, numbered from 1. That makes alternates easy: if you need three winners and two reserves, draw five and treat numbers 4 and 5 as the reserves, in that order. Drawing them all at once is better than drawing again later, because nobody can then wonder whether the second draw was repeated.</p>
 
 <h2>3. Draw once</h2>
-<p>Each draw uses a new seed taken from your browser’s cryptographic random numbers and a Fisher–Yates shuffle, so every possible set of winners, in every order, is equally likely. Our automated tests draw 3 names from 30 a hundred thousand times with fixed seeds and check that every name is picked equally often and is equally likely to come first.</p>
+<p>Each draw takes a fresh value from your browser, the seed, and uses it for a Fisher–Yates shuffle, so every possible set of winners, in every order, is equally likely. Our automated tests draw 3 names from 30 a hundred thousand times with fixed seeds and check that every name is picked equally often and is equally likely to come first.</p>
 
 <h2>4. Share the result link</h2>
-<p>Copy result link creates an address containing the list, the number drawn and the seed. Whoever opens it sees the same winners in the same order, marked as the same result as the link. If someone edits the list inside the link, it becomes a different draw and the changed list is plain to see.</p>
-<p>Keep in mind that the link contains the names, so send it only where those names may be seen.</p>
+<p>Copy result link creates an address containing the list, the number drawn and the seed. Whoever opens it gets the same winners in the same order, marked as the same result as the link.</p>
+<p>The order of the list does not matter. The draw works from the names placed in a fixed order, sorted by character code, so the same seed with the same people gives the same winners however the list was typed. Rearranging the names inside a link cannot move the win to someone else.</p>
+<p>Keep in mind that the link contains the names, so send it only where those names may be seen. A list too long to fit in a link (more than 400,000 characters) gets a message instead of a link.</p>
 
-<h2>What a link cannot prove</h2>
-<p>The link shows that the result was not changed after the draw. It cannot show whether the draw was run several times before one link was chosen. Two habits close that gap:</p>
+<h2>What a link guarantees, and what it does not</h2>
+<p>It guarantees one thing: with the same seed and the same people, anyone can recalculate the same result. Two things are outside its reach:</p>
+<ul>
+<li><strong>How many times you drew.</strong> A link cannot show whether the draw was run several times before one link was chosen. This site cannot prevent that by itself.</li>
+<li><strong>Whether the list was changed.</strong> Leaving one person off or altering a name makes it a different draw. People can read the list in the link, but they can only spot a change if they saw the real list first.</li>
+</ul>
+<p>Two habits close those gaps:</p>
 <ul>
 <li>Post the final list and the rules (how many winners, one draw only) before drawing.</li>
 <li>Draw where others can watch, such as a shared screen, or ask someone with no stake in the outcome to press the button.</li>

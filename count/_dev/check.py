@@ -6,6 +6,8 @@ hreflang 짝·자기 자신·x-default / <html lang> / 영어 페이지의 lang=
 방침의 웹 비콘 문장과 partner-sites 링크·방문 통계(Cloudflare Web Analytics) 문장 / 광고 없는 페이지에 adsbygoogle 없음, 도구·글 페이지엔 있음 / 첫 HTML에 제목·본문·내부 링크 /
 공개 페이지에 noindex 없음 / .html 링크 없음 / 화면 글에 줄표(—) 없음 /
 확인된 사실(_dev/limits.json): 출처 링크와 확인한 날이 화면에 있음, 나이스·SNS 숫자가 그 파일과 같음, 확인 못 한 것(페이스북·SKT 한도 등)이 없음.
+제3자 평가(2026-10-10) 뒤: 저장 키(localStorage 셋 + sessionStorage 하나) = 방침, 도구 화면의 <noscript> 한 줄,
+자주 묻는 질문이 없는 이름('세는 기준'·How this counts)을 가리키지 않음, 자소서 숫자 띠·원고지 인쇄 단추·블루스카이 둘째 한도가 있음.
 """
 import json
 import re
@@ -191,11 +193,23 @@ def main():
     for p, word in (('/privacy/', 'web beacons'), ('/ko/privacy/', '웹 비콘')):
         t = (ROOT / p.lstrip('/') / 'index.html').read_text(encoding='utf-8')
         ok(word in t and 'https://policies.google.com/technologies/partner-sites' in t, f'{p}: 웹 비콘 문장·partner-sites 링크')
-        for key in ('kk.lang', 'kk.jasoseo.on', 'kk.jasoseo'):
-            ok(key in t, f'{p}: 저장 항목 {key}가 방침에 없음')
-    # app.js가 쓰는 localStorage 키 = 방침에 적은 키
-    keys = set(re.findall(r"'(kk\.[a-z.]+)'", (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')))
-    ok(keys == {'kk.lang', 'kk.jasoseo', 'kk.jasoseo.on'}, f'app.js의 저장 키가 방침과 다름: {sorted(keys)}')
+        for key in ('kk.lang', 'kk.jasoseo.on', 'kk.jasoseo', 'kk.set'):
+            ok(f'<code>{key}</code>' in t, f'{p}: 저장 항목 {key}가 방침에 없음')
+        ok('localStorage' in t and 'sessionStorage' in t, f'{p}: 어느 저장소에 남는지(localStorage·sessionStorage)를 적어야 함')
+        ok(('이 사이트가 직접 남기는 것은' in t) if p.startswith('/ko/') else ('this site itself stores' in t), f'{p}: "이 사이트가 직접 남기는 것은"으로 적는다(광고가 두는 쿠키는 따로)')
+        ok('아래 항목만 남겨요' not in t and 'Only the following items are kept' not in t and 'Nothing else is stored' not in t, f'{p}: 광고 쪽 저장까지 없다고 읽히는 옛 문장이 남아 있음')
+    # app.js가 쓰는 저장 키 = 방침에 적은 키: localStorage 셋(kk.lang·kk.jasoseo.on·kk.jasoseo) + sessionStorage 하나(kk.set)
+    appjs = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
+    keys = set(re.findall(r"'(kk\.[a-z.]+)'", appjs))
+    ok(keys == {'kk.lang', 'kk.jasoseo', 'kk.jasoseo.on', 'kk.set'}, f'app.js의 저장 키가 방침과 다름: {sorted(keys)}')
+    ok("SESSION = 'kk.set'" in appjs and appjs.count('sessionStorage.') == 2 and appjs.count('localStorage.') == 3 and 'document.cookie' not in appjs and 'indexedDB' not in appjs,
+       'app.js: 저장은 store()(localStorage)와 sget()/sset()(sessionStorage의 kk.set 하나)로만 한다')
+    # 페이지에 넣은 짧은 스크립트(언어 띠·목표·자소서 문항을 첫 그림 전에 정함)도 같은 키만 읽는다
+    for rel in ROOT.rglob('index.html'):
+        if '_dev' in rel.parts:
+            continue
+        inline = set(re.findall(r"'(kk\.[a-z.]+)'", rel.read_text(encoding='utf-8')))
+        ok(inline <= {'kk.lang', 'kk.jasoseo', 'kk.jasoseo.on', 'kk.set'}, f'{rel.relative_to(ROOT)}: 방침에 없는 저장 키 {sorted(inline)}')
     # 404
     nf = (ROOT / '404.html').read_text(encoding='utf-8')
     ok('adsbygoogle' not in nf and 'noindex' in nf, '404: 광고 코드가 없고 noindex여야 함')
@@ -280,6 +294,33 @@ def main():
     ok('고친 날' not in allvis and 'Updated ' not in allvis, "'고친 날'/'Updated' 가 남아 있음")
     # 표는 한 겹만 감싼다(두 겹이면 넓은 표가 옆으로 밀리지 않는다)
     ok(not any(re.search(r'<div class="tbl[^>]*>\s*<div class="tbl', r) for r in raw.values()) and all(r.count('<table') == r.count('<div class="tbl') for r in raw.values()), '표를 감싼 칸(.tbl)이 표 수와 다르거나 두 겹')
+    # ── 제3자 평가(2026-10-10) 뒤에 더한 것 ──
+    tools = [p for p in docs if p not in NO_ADS and '/guide/' not in p]
+    ok(len(tools) == 9, f'도구 화면 9쪽: {tools}')
+    for p in tools:
+        ko = p.startswith('/ko/')
+        ok('<noscript><p class="nojs wrap">' in raw[p] and (('자바스크립트' if ko else 'JavaScript') in raw[p]), f'{p}: 자바스크립트가 꺼져 있을 때의 안내(<noscript>)가 없음')
+        ok('class="strip' in raw[p], f'{p}: 휴대폰 숫자 띠가 없음')
+        ok(raw[p].count("localStorage.getItem('kk.lang')") == 1, f'{p}: 언어 안내 띠를 첫 그림 전에 정하는 스크립트')
+    ok('js-strip' in raw['/ko/jasoseo/'] and 'id="sLeft"' in raw['/ko/jasoseo/'] and 'id="sGoal"' in raw['/ko/jasoseo/'], '/ko/jasoseo/: 지금 문항의 글자 수·남은 글자·목표 띠')
+    ok('data-nlb="2"' in raw['/ko/jasoseo/'] and 'id="presetUndo"' in raw['/ko/jasoseo/'] and 'id="wipeUndo"' in raw['/ko/jasoseo/'], '/ko/jasoseo/: 바이트 줄바꿈 따로 고르기, 맞추기·지우기 되돌리기')
+    ok('data-act="print"' in raw['/ko/wongoji/'] and 'id="printSheets"' in raw['/ko/wongoji/'], '/ko/wongoji/: 원고지 인쇄 단추와 인쇄용 칸')
+    ok("localStorage.getItem('kk.lang')" not in (ROOT / '404.html').read_text(encoding='utf-8'), '404: 언어 안내 띠 스크립트를 넣지 않는다')
+    bs = [r for r in lim['sns']['rows'] if r['id'] == 'bs'][0]
+    for p in ('/ko/sns/', '/character-counter/'):
+        ok(f'data-id="bs" data-unit2="{bs["unit2"]}" data-limit2="{bs["limit2"]}"' in raw[p] and 'data-lim-n2' in raw[p] and f'{bs["limit2"]:,}' in vis[p], f'{p}: 블루스카이 둘째 한도(UTF-8 3,000바이트)')
+    # 자주 묻는 질문·설명이 가리키는 이름은 화면에 실제로 있는 이름이어야 한다
+    for p in tools:
+        ok("'세는 기준'에서" not in vis[p] and 'under “How this counts”' not in vis[p] and 'Open “How this counts”' not in vis[p], f'{p}: 화면에 없는 이름(세는 기준·How this counts)을 가리킴')
+    ok("'줄바꿈은 1자로 셈' 줄의 '바꾸기'" in vis['/ko/'] and '줄바꿈은 1자로 셈' in raw['/ko/'] and '<em>바꾸기</em>' in raw['/ko/'], "/ko/: FAQ가 가리키는 '줄바꿈은 1자로 셈 · 바꾸기'가 화면에 있음")
+    ok('“change” in the “Line breaks count as 1” row' in vis['/'] and 'Line breaks count as 1' in raw['/'] and '<em>change</em>' in raw['/'], '/: FAQ가 가리키는 “Line breaks count as 1 · change”가 화면에 있음')
+    ok("'줄바꿈은 1자·1byte로 셈' 줄의 '바꾸기'" in vis['/ko/jasoseo/'] and '줄바꿈은 1자·1byte로 셈' in raw['/ko/jasoseo/'], "/ko/jasoseo/: FAQ가 가리키는 '줄바꿈은 1자·1byte로 셈 · 바꾸기'가 화면에 있음")
+    ok('differ slightly from one browser to another' in vis['/'], '/: Words(Unicode rules)는 브라우저마다 조금 다를 수 있다는 한 줄')
+    # 화면이 쓰는 문구(#kk JSON)에도 헷갈리는 "세요"(세다)가 없어야 한다
+    content = json.loads((ROOT / '_dev' / 'content.json').read_text(encoding='utf-8'))
+    tko = json.dumps(content['t']['ko'], ensure_ascii=False)
+    m = re.search(r'(로|씩|따로|나란히|바이트를|글자를|수를|이렇게) 세요', tko)
+    ok(not m, f'content.json t.ko: 헷갈리는 "세요" → "세어요": {m.group(0) if m else ""}')
     # 광고 자리: 안쪽 틀(.ad-in)이 있어 글 기둥 폭에 맞는다
     ok(all(r.count('class="ad-in"') == r.count('data-ad=') for r in raw.values()), '광고 자리에 .ad-in 틀이 없음')
 

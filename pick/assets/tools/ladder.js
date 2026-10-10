@@ -1,8 +1,10 @@
 // 사다리타기 화면. 사다리와 결과는 core/ladder.js가 만든다(아래 칸을 먼저 섞고 사다리를 만든다).
 // 여기서는 SVG로 그리고, 이름을 누르면 그 사람의 길을 따라간다. 가로줄은 누가 타기 전까지 가려 둔다.
-import { T, $, $$, fmt, reduced, el, list, recent, shareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt } from '../app.js';
+// 한 판(game)은 만든 순간의 명단·아래 칸·씨앗을 잡아 둔 것이다. 그림·결과·링크는 전부 이 묶음에서 나오고,
+// 명단이나 설정이 바뀌면 그 판은 통째로 지운다(길을 따라가는 도중이어도). 사다리는 줄 순서가 결과의 일부라서 순서까지 링크에 담긴다.
+import { T, $, $$, fmt, reduced, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt, plural } from '../app.js';
 import { newSeed, makeRng } from '../core/rng.js';
-import { LIMITS } from '../core/pick.js';
+import { LIMITS, fitLabel, commonPrefixLength } from '../core/pick.js';
 import { playLadder, tracePath } from '../core/ladder.js';
 import { parseList } from '../core/share.js';
 
@@ -21,19 +23,18 @@ const measure = document.createElement('canvas').getContext('2d');
 
 let game = null; // { seed, items, labels, rows, g(playLadder 결과), open:Set, svg parts }
 
-function fit(text, maxPx) {
+// 이름표에 맞추기: 넘치면 자른다. 앞이 같은 이름들은 앞을 줄이고 뒤쪽을 살린다(글자 크기는 그대로 13px)
+function fit(text, maxPx, prefix) {
   measure.font = `700 13px ${getComputedStyle(document.documentElement).getPropertyValue('--font')}`;
-  if (measure.measureText(text).width <= maxPx) return text;
-  const ch = Array.from(text);
-  while (ch.length > 1 && measure.measureText(ch.join('') + '…').width > maxPx) ch.pop();
-  return ch.join('') + '…';
+  return fitLabel(text, maxPx, (t) => measure.measureText(t).width, { prefix, minScale: 1 }).text;
 }
 
 function labelsFor(n) {
-  const given = parseList(bottomEl.value, { max: LIMITS.ladderMax }).items.slice(0, n);
+  const all = parseList(bottomEl.value, { max: LIMITS.ladderMax });
+  const given = all.items.slice(0, n);
   const labels = given.slice();
   while (labels.length < n) labels.push(T.blank);
-  return { labels, given };
+  return { labels, given, extra: all.items.length + all.over - given.length }; // extra = 사람 수보다 많이 적어 쓰이지 않은 아래 칸
 }
 
 function reset() {
@@ -42,6 +43,7 @@ function reset() {
   holder.style.display = 'grid';
   out.textContent = '';
   $('#tip').textContent = '';
+  $('#labwarn').textContent = '';
   showAllBtn.hidden = true;
   go.textContent = goLabel;
   setAfter(false);
@@ -55,11 +57,13 @@ function make(seed, replay, given) {
   setMsg('');
   if (!replay) clearHash();
   const rows = Number(rowsSeg.value);
-  const lab = given ? { labels: given.concat(Array(Math.max(0, n - given.length)).fill(T.blank)).slice(0, n), given: given.slice(0, n) } : labelsFor(n);
+  const lab = given ? { labels: given.concat(Array(Math.max(0, n - given.length)).fill(T.blank)).slice(0, n), given: given.slice(0, n), extra: Math.max(0, given.length - n) } : labelsFor(n);
   seed = seed || newSeed();
   const g = playLadder(n, { rows }, makeRng(seed));
-  game = { seed, items, labels: lab.labels, given: lab.given, rows, g, open: new Set(), replay };
+  game = { seed, items, labels: lab.labels, given: lab.given, rows, g, open: new Set(), replay, pre: commonPrefixLength(items), preB: commonPrefixLength(lab.given) };
   render();
+  // 아래 칸을 사람 수보다 많이 적었으면 말없이 버리지 않고 알린다
+  $('#labwarn').textContent = lab.extra > 0 ? plural('ladderExtra', lab.extra, { m: nfmt(n) }) : '';
   go.textContent = go.dataset.again;
   showAllBtn.hidden = false;
   setAfter(true);
@@ -67,7 +71,7 @@ function make(seed, replay, given) {
   if (replay) showAll();
   else {
     const hits = items.map((name, i) => [name, game.labels[g.result[i]]]).filter((p) => p[1] !== T.blank).slice(0, 3).map((p) => `${p[0]} ${p[1]}`);
-    recent.add('ladder', hits.length ? hits.join(', ') : fmt(T.count, { n }), shareUrl('ladder', seed, items, { rows, labels: lab.given }));
+    recent.add('ladder', hits.length ? hits.join(', ') : plural('count', n), safeShareUrl('ladder', seed, items, { rows, labels: lab.given }));
   }
 }
 
@@ -103,8 +107,9 @@ function render() {
     const t = svgEl('g', { tabindex: 0, role: 'button', 'aria-label': items[c] }, 'lad-top');
     const tt = svgEl('title'); tt.textContent = items[c];
     const tx = svgEl('text', { x: x(c), y: 19 });
-    tx.textContent = fit(items[c], colW - 16);
-    t.append(tt, svgEl('rect', { x: x(c) - colW / 2 + 3, y: 3, width: colW - 6, height: 32, rx: 9 }), tx);
+    tx.textContent = fit(items[c], colW - 16, game.pre);
+    // 누르는 넓이는 세로줄 폭 × 46px(보이는 이름표보다 넓게)
+    t.append(tt, svgEl('rect', { x: x(c) - colW / 2, y: 0, width: colW, height: top, fill: 'transparent' }, 'lad-hit'), svgEl('rect', { x: x(c) - colW / 2 + 3, y: 3, width: colW - 6, height: 32, rx: 9 }), tx);
     t.addEventListener('click', () => walk(c));
     t.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); walk(c); } });
     svg.append(t);
@@ -127,7 +132,7 @@ function render() {
 }
 
 function openBottom(pos, hit) {
-  const { bots, labels, g, colW } = game;
+  const { bots, labels, g, colW, preB } = game;
   const b = bots[pos];
   b.classList.add('open');
   $$('.hit', game.svg).forEach((e) => e.classList.remove('hit'));
@@ -135,12 +140,13 @@ function openBottom(pos, hit) {
   const tx = $('text', b);
   tx.removeAttribute('class');
   const full = labels[g.bottom[pos]];
-  tx.textContent = fit(full, colW - 16);
+  tx.textContent = fit(full, colW - 16, preB);
   if (!$('title', b)) { const tt = svgEl('title'); tt.textContent = full; b.prepend(tt); }
 }
 
 function walk(start) {
   if (!game) return;
+  const mine = game; // 길을 따라가는 도중에 판이 지워지거나 새로 만들어지면 이 길의 끝 처리는 하지 않는다
   const { g, paths, tops, x, y } = game;
   const pts = tracePath(g.ladder, start);
   const d = pts.map(([c, r], i) => `${i ? 'L' : 'M'}${x(c)} ${i === 0 ? y(0) - 8 : i === pts.length - 1 ? y(r) + 8 : y(r)}`).join(' ');
@@ -149,7 +155,7 @@ function walk(start) {
   const path = svgEl('path', { d, pathLength: 1 }, 'lad-path');
   paths.append(path);
   const end = pts[pts.length - 1][0];
-  const finish = () => { game.open.add(start); openBottom(end, true); renderOut(); };
+  const finish = () => { if (game !== mine) return; game.open.add(start); openBottom(end, true); renderOut(); };
   if (reduced() || !path.animate) { finish(); return; }
   path.style.strokeDasharray = '1 1';
   const dur = Math.min(2400, 700 + pts.length * 90);
@@ -186,7 +192,7 @@ function renderOut() {
 go.dataset.again = go.dataset.again || '';
 go.addEventListener('click', () => make());
 showAllBtn.addEventListener('click', showAll);
-$('#copy').addEventListener('click', () => { if (game) copyLink(shareUrl('ladder', game.seed, game.items, { rows: game.rows, labels: game.given })); });
+$('#copy').addEventListener('click', () => { if (game) copyLink('ladder', game.seed, game.items, { rows: game.rows, labels: game.given }); });
 list.onChange(() => { if (game) reset(); setMsg(''); });
 bottomEl.addEventListener('input', () => { if (game) reset(); });
 $('#rows').addEventListener('click', () => { if (game) reset(); });
@@ -202,4 +208,4 @@ if (shared && shared.items.length) {
   if ([8, 14, 24].includes(shared.opts.rows)) rowsSeg.set(shared.opts.rows);
   make(shared.seed, true, labels);
 }
-window.__pick = { get state() { return game ? { items: game.items, labels: game.labels, result: game.g.result, ends: game.g.ends, bottom: game.g.bottom, open: [...game.open] } : null; } };
+window.__pick = { get state() { return game ? { items: game.items, labels: game.labels, given: game.given, result: game.g.result, ends: game.g.ends, bottom: game.g.bottom, open: [...game.open] } : null; } };

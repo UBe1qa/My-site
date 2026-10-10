@@ -1,12 +1,14 @@
 <p>A ladder lottery is fair in one sense and unfair in another. It always hands every person exactly one result. But with the number of rungs people normally draw, you are much more likely to land near the place you started. That is why the Pickboard <a href="{{u_ladder}}">ladder game</a> shuffles the bottom row before it builds the ladder. The numbers below are the reason.</p>
 
 <h2>How a ladder lottery works</h2>
-<p>The game goes by several names: Ghost Leg in English, Amidakuji (<span lang="ja">あみだくじ</span>) in Japan and sadaritagi (<span lang="ko">사다리타기</span>) in Korea. Draw one vertical line per person, write the names along the top and the results along the bottom, then add horizontal rungs between neighbouring lines. Each person travels down their line and must cross every rung they meet. Where they come out is their result.</p>
-<p>As long as no two rungs touch the same line at the same height, each path is unambiguous and no two people can end at the same place. Our tests check this on thousands of generated ladders by comparing the traced paths with a second method that simply swaps neighbouring lines rung by rung.</p>
+{{ladder_fig}}
+<p>The game goes by several names: Ghost Leg in English, Amidakuji (<span lang="ja">あみだくじ</span>) in Japan and sadaritagi (<span lang="ko">사다리타기</span>) in Korea. Draw one vertical line per person, write the names along the top and the results along the bottom, then add horizontal rungs between neighbouring lines. Each person travels down their line and must cross every rung they meet. Where they come out is their result. In the picture, four people share a ladder with six levels, and the red path belongs to the person who started on the second line.</p>
+<p>This guide uses four words. A <strong>line</strong> is one person’s vertical line. A <strong>rung</strong> joins two neighbouring lines. A <strong>level</strong> is one height at which rungs can be placed. A <strong>place</strong> is a position along the bottom, where a result is written.</p>
+<p>As long as no two rungs touch the same line on the same level, each path is unambiguous and no two people can end at the same place. Our tests check this on thousands of generated ladders by comparing the traced paths with a second method that simply swaps neighbouring lines rung by rung.</p>
 
 <h2>Where does the person on the end land?</h2>
-<p>We built {{trials8_14}} ladders for 8 people with a medium number of rungs (about {{rungs8_14}} per gap) and recorded where the person starting on the far left came out. A fair draw would give 12.5% for each of the eight places.</p>
-<div class="bars" role="img" aria-label="Share of ladders in which the person starting at place 1 finished at places 1 to 8: {{d8_1}}, {{d8_2}}, {{d8_3}}, {{d8_4}}, {{d8_5}}, {{d8_6}}, {{d8_7}}, {{d8_8}}">
+<p>We built {{trials8_14}} ladders for 8 people with a medium number of rungs (14 levels, about {{rungs8_14}} rungs between each pair of lines) and recorded where the person starting on the far left came out. A fair draw would give 12.5% for each of the eight places.</p>
+<div class="bars" role="img" aria-label="Share of ladders in which the person starting on line 1 finished at places 1 to 8: {{d8_1}}, {{d8_2}}, {{d8_3}}, {{d8_4}}, {{d8_5}}, {{d8_6}}, {{d8_7}}, {{d8_8}}">
 <div class="a"><span>Place 1</span><i style="--v:{{d8v_1}}*3"></i><b>{{d8_1}}</b></div>
 <div><span>Place 2</span><i style="--v:{{d8v_2}}*3"></i><b>{{d8_2}}</b></div>
 <div><span>Place 3</span><i style="--v:{{d8v_3}}*3"></i><b>{{d8_3}}</b></div>
@@ -16,31 +18,32 @@
 <div><span>Place 7</span><i style="--v:{{d8v_7}}*3"></i><b>{{d8_7}}</b></div>
 <div><span>Place 8</span><i style="--v:{{d8v_8}}*3"></i><b>{{d8_8}}</b></div>
 </div>
-<p class="tbl-note">Plain ladder, bottom row not shuffled. Start at place 1, medium rungs.</p>
+<p class="tbl-note">Plain ladder, bottom row not shuffled. Start on line 1, medium rungs (14 levels). The red bar is the place straight below the start.</p>
 <p>Landing straight below the start happened {{d8_1}} of the time, and reaching the far end only {{d8_8}}. That is about {{ratio8}} times less likely. If the forfeit sits at the far right, the person on the far left is almost safe.</p>
 
-<h2>More rungs help, until the group gets large</h2>
-<p>This table shows how often the person on the end lands directly below their start. Height is the number of levels where rungs can go; the Few, Medium and Many settings in the tool are 8, 14 and 24.</p>
+<h2>More levels help, until the group gets large</h2>
+<p>This table shows how often the person on the end line lands straight below their start. The Few, Medium and Many settings in the tool are 8, 14 and 24 levels.</p>
 <table>
-<thead><tr><th>People</th><th>If fair</th><th>Height 8</th><th>Height 14</th><th>Height 24</th><th>Height 48</th><th>Height 100</th><th>Height 400</th></tr></thead>
+<thead><tr><th>People</th><th>If fair</th><th>8 levels</th><th>14 levels</th><th>24 levels</th><th>48 levels</th><th>100 levels</th><th>400 levels</th></tr></thead>
 <tbody>
-<tr><td>4</td><td>{{fair4}}</td><td>{{stay4_8}}</td><td>{{stay4_14}}</td><td>{{stay4_24}}</td><td>{{stay4_48}}</td><td>{{stay4_100}}</td><td>{{stay4_400}}</td></tr>
-<tr><td>8</td><td>{{fair8}}</td><td class="hot">{{stay8_8}}</td><td class="hot">{{stay8_14}}</td><td class="hot">{{stay8_24}}</td><td>{{stay8_48}}</td><td>{{stay8_100}}</td><td>{{stay8_400}}</td></tr>
-<tr><td>15</td><td>{{fair15}}</td><td class="hot">{{stay15_8}}</td><td class="hot">{{stay15_14}}</td><td class="hot">{{stay15_24}}</td><td class="hot">{{stay15_48}}</td><td>{{stay15_100}}</td><td>{{stay15_400}}</td></tr>
-<tr><td>30</td><td>{{fair30}}</td><td class="hot">{{stay30_8}}</td><td class="hot">{{stay30_14}}</td><td class="hot">{{stay30_24}}</td><td class="hot">{{stay30_48}}</td><td class="hot">{{stay30_100}}</td><td>{{stay30_400}}</td></tr>
+{{stay_rows}}
 </tbody>
 </table>
-<p>Four people mix well with only a few rungs. The cost grows quickly with the size of the group. To bring one person’s spread of finishing places within 5% of an even spread, a ladder for 4 needs a height of {{need4}}, for 8 it needs {{need8}}, for 15 it needs {{need15}}, and for 30 it needs {{need30}}, which is roughly {{needrungs30}} rungs in total. Nobody can draw or follow that.</p>
-<p>The cause is simple. A rung only swaps two neighbouring lines, so each level moves you one place sideways at most. Getting from one edge to the other takes many lucky rungs in a row, with rungs pulling you back along the way.</p>
+<p class="tbl-note">Red numbers are more than 1.5 times the fair share.</p>
+<p>Four people mix well with only a few levels. The cost grows quickly with the size of the group. Take this as the test for “close to even”: whichever line a person starts on, add up how far each place’s chance sits above the even chance (12.5% per place for 8 people), and the total must stay within 5 percentage points. To pass it, a ladder for 4 needs {{need4}} levels, for 8 it needs {{need8}}, for 15 it needs {{need15}}, and for 30 it needs {{need30}}, which is roughly {{needrungs30}} rungs in total. Nobody can draw or follow that.</p>
+<p>The cause is simple. A rung only swaps two neighbouring lines, so each level moves you one line sideways at most. Getting from one edge to the other takes many lucky rungs in a row, with rungs pulling you back along the way.</p>
 
 <h2>What shuffling the bottom row does</h2>
-<p>With the same 8-person, medium ladder but the bottom row shuffled first, the person at place 1 received each of the eight results between {{mixmin8}} and {{mixmax8}} of the time, which is the size of difference chance alone produces. A row that is already in a uniformly random order stays uniformly random whatever ladder you put on top of it, so the number of rungs no longer matters.</p>
-<p>The same idea works on paper. Write the bottom row out of sight, and let people choose their line at random or draw lots for it. If the starting places are random, the result is fair even when the ladder mixes poorly.</p>
+<p>With the same 8-person, 14-level ladder but the bottom row shuffled first, the person on line 1 received each of the eight results between {{mixmin8}} and {{mixmax8}} of the time, which is the size of difference chance alone produces. A row that is already in a uniformly random order stays uniformly random whatever ladder you put on top of it, so the number of levels no longer matters.</p>
+<p>The same idea works on paper. Write the bottom row out of sight, and let people choose their line at random or draw lots for it. If the starting lines are random, the result is fair even when the ladder mixes poorly.</p>
 
 <h2>How these numbers were produced</h2>
 <ul>
-<li>We generated between 20,000 and 400,000 ladders for each group size and height using the same code the site runs, with fixed seeds, so rerunning gives the same numbers.</li>
-<li>Ladder rule: on each level, working from the left, every gap gets a rung with probability one third, and two neighbouring gaps never both get one on the same level. A gap that ends up with no rung at all gets one added.</li>
-<li>For heights of 24 and above, where that last rule is rarely used, the measured values agree with an exact calculation to within 0.5 percentage points.</li>
-<li>Hand-drawn ladders follow looser rules, so their numbers will differ a little. The direction is the same: fewer rungs and more people favour nearby places.</li>
+<li>We generated between 20,000 and 400,000 ladders for each group size and number of levels using the same code the site runs, with fixed seeds, so rerunning gives the same numbers.</li>
+<li>Ladder rule: call the space between two neighbouring lines a gap. On any level, each gap has the same one-in-three chance of holding a rung. Two gaps side by side never both get a rung on the same level, because two rungs would then touch one line at the same height and the path would fork. A gap that ends up with no rung at all gets one added.</li>
+<li>For 24 levels and above, where that last rule is rarely used, the measured values agree with an exact calculation to within 0.5 percentage points.</li>
+<li>Hand-drawn ladders follow looser rules, so their numbers will differ a little. The direction is the same: fewer levels and more people favour nearby places.</li>
 </ul>
+
+<h2>Result links and the order of the lines</h2>
+<p>A ladder result link holds the names in their order, the bottom row and the value the ladder was built from. In a ladder, who stands on which line is part of the result, so the same ladder with the lines in a different order gives different results. When you check a ladder link, compare the order of the names as well as the names themselves with what was agreed. If you would rather draw in a way that does not depend on order, use the slips in the <a href="{{u_draw}}">name picker</a>: there the same people get the same slips whatever order the list is in.</p>

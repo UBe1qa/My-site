@@ -6,7 +6,11 @@
 - 만드는 것: 영어 / , 한국어 /ko/ 의 도구 7개·가이드 목록·글·소개·방침, 404.html, sitemap.xml, rss.xml(한국어 글).
   만든 파일은 손으로 고치지 않는다.
 - 글 속 숫자는 {{이름}} 자리에 _dev/sim_ladder.json(시뮬레이션)과 tests/fixtures.json(정확한 계산)에서 넣는다(손으로 적지 않는다).
-- lastmod는 UPDATED에 실제로 고친 날만 적는다.
+- 소개·방침 본문 = _dev/pages/<언어>-<about|privacy>.html.
+- 글꼴: _dev/fonts.json(= _dev/font.py가 만든 조각 글꼴의 파일 이름과 글자 범위)이 있으면 <head>에 preload와 @font-face를 넣는다.
+  화면 글자를 고쳐 조각에 없는 글자가 생기면 check.py가 알려 준다 → font.py를 다시 돌린다(안 돌려도 그 글자는 CDN에서 받아 보인다).
+- lastmod(sitemap)와 글의 '마지막 확인'은 MODIFIED·UPDATED에 실제로 본문·구조화 데이터·링크를 고친(확인한) 날만 적는다.
+  배치·CSS만 바꾼 날은 적지 않는다.
 """
 import html
 import json
@@ -18,8 +22,9 @@ ROOT = Path(__file__).resolve().parent.parent
 DEV = ROOT / '_dev'
 SITE = 'https://pick.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
-TODAY = '2026-10-09'
-UPDATED = {}  # 주소: 'YYYY-MM-DD' (처음 판은 TODAY)
+PUBLISHED = '2026-10-09'  # 처음 올린 날
+MODIFIED = '2026-10-10'   # 2026-10-10(3단계): 27쪽 모두 제목·본문·FAQ·링크가 바뀌었고, 글·소개·방침의 사실을 다시 확인했다
+UPDATED = {}  # 그 뒤에 고친 페이지만: 주소: 'YYYY-MM-DD'
 FONT_CSS = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
 
 C = json.loads((DEV / 'content.json').read_text(encoding='utf-8'))
@@ -27,6 +32,7 @@ PAGES = json.loads((DEV / 'pages.json').read_text(encoding='utf-8'))
 ARTICLES = json.loads((DEV / 'articles.json').read_text(encoding='utf-8'))
 SIM = json.loads((DEV / 'sim_ladder.json').read_text(encoding='utf-8'))
 FX = json.loads((ROOT / 'tests' / 'fixtures.json').read_text(encoding='utf-8'))
+FONTS = json.loads((DEV / 'fonts.json').read_text(encoding='utf-8')) if (DEV / 'fonts.json').exists() else {}
 TOOL_ORDER = ['wheel', 'ladder', 'draw', 'teams', 'number', 'coin', 'dice']
 LIST_TOOLS = ['wheel', 'ladder', 'draw', 'teams']
 LANGS = ('en', 'ko')
@@ -63,6 +69,9 @@ LOGO = ('<svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true"><cir
         '<path d="M18.55 7.58A8.5 8.5 0 0 1 18.55 18.42" fill="none" stroke="var(--s1)" stroke-width="5.5"/><path d="M28 13l-9.4-4.6v9.2z" fill="var(--pick)"/></svg>')
 NEEDLE = ('<span class="needle" aria-hidden="true"><svg viewBox="0 0 50 40"><path d="M3 20 44 4.4Q49 2.6 49 8v24q0 5.4-5 3.6z" fill="var(--pick)"/>'
           '<circle cx="40.5" cy="20" r="4.2" fill="#fff" fill-opacity=".92"/></svg></span>')
+# 글 속 사다리 그림: 4명, 6층. rungs[층] = 가로줄이 놓인 틈(왼쪽 세로줄 번호) 목록. 길은 아래 ladder_figure()가 따라가서 그린다(손으로 긋지 않는다).
+FIG_RUNGS = [[0], [2], [1], [0], [2], [1]]
+FIG_START = 1
 ICON_LINK = ('<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.7 9.3a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.7.7M9.3 6.7a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.7-.7" '
              'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>')
 LUMEN_WHEEL = ('<span class="lumen-wheel" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48"><g class="lw-disc">'
@@ -86,6 +95,10 @@ def head(lang, title, desc, path, alt=None, jsonld=(), og_type='website', noinde
           '<script src="/assets/ads-config.js"></script>\n') if ads else ''
     og_img = f'{SITE}/og-ko.png' if lang == 'ko' else f'{SITE}/og.png'
     robots = '<meta name="robots" content="noindex">\n' if noindex else ''
+    # 조각 글꼴(이 언어판 화면 글자만 담은 파일): 같은 주소에서 먼저 받고, 여기 없는 글자만 아래 CDN 글꼴에서 받는다
+    fnt = FONTS.get(lang)
+    font = (f'<link rel="preload" href="/assets/fonts/{fnt["file"]}" as="font" type="font/woff2" crossorigin>\n'
+            f'<style>@font-face{{font-family:"PK Sans";src:url(/assets/fonts/{fnt["file"]}) format("woff2");font-weight:400 800;font-style:normal;font-display:swap;unicode-range:{fnt["range"]}}}</style>\n') if fnt else ''
     return f'''<!doctype html>
 <html lang="{lang}">
 <head>
@@ -109,8 +122,7 @@ def head(lang, title, desc, path, alt=None, jsonld=(), og_type='website', noinde
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{FONT_CSS}" media="print" onload="this.media='all'">
+{font}<link rel="stylesheet" href="{FONT_CSS}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/assets/style.css">
 {ld}{ad}</head>'''
 
@@ -141,8 +153,8 @@ def footer(lang):
     lumen = 'https://lumenlab.page/' + ('en/' if lang == 'en' else '')
     return f'''<footer class="foot">
   <div class="wrap foot-in">
-    <a class="lumen" href="{lumen}" data-lumen>{LUMEN_WHEEL}<span class="lumen-t"><b>{u['made']}</b><small>{u['moreFrom']}</small></span></a>
-    <p class="foot-links"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
+    <nav class="foot-links" aria-label="{u['footNav']}"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></nav>
+    <p class="made"><span class="made-k">{u['madeBy']}</span><a class="lumen" href="{lumen}" data-lumen>{LUMEN_WHEEL}<b>{u['made']}</b><span class="lumen-go">{u['moreFrom']}</span></a></p>
     <small>© 2026 Lumen Lab</small>
   </div>
 </footer>'''
@@ -180,34 +192,40 @@ def page(lang, head_html, body, current=None, alt_path=None, script='/assets/app
 
 
 # ---------------- 도구 화면 ----------------
-def list_panel(lang):
+def list_panel(lang, wheel=False):
+    """wheel=True면 돌림판의 '판에서 뺀 사람' 칸을 더한다."""
     u = U(lang)
     sample = u['sample']
     n = len(sample.split('\n'))
     count = C['js'][lang]['count'].replace('{n}', str(n))
     restore = ("<script>(function(){try{var v=localStorage.getItem('pick.list');if(v!==null){var t=document.getElementById('names');t.value=v;t.dataset.own='1';"
                "var n=document.getElementById('listnote');n.firstElementChild.textContent=n.dataset.saved;n.lastElementChild.textContent=n.dataset.clearall}}catch(e){}})()</script>")
+    outbox = (f'<div class="outbox" id="outbox" hidden><p id="outtext" role="status"></p><div class="outbox-btns"><button type="button" class="btn btn-sm" id="outlast">{u["outLast"]}</button>'
+              f'<button type="button" class="btn btn-sm" id="outall">{u["outAll"]}</button></div></div>\n    ') if wheel else ''
     return f'''<aside class="list" id="list">
     <div class="list-head"><h2><label for="names">{u['list']}</label></h2><span class="count num" id="count">{count}</span></div>
     <p class="list-note" id="listnote" data-saved="{esc(u['listSaved'])}" data-clear="{esc(u['listClear'])}" data-clearall="{esc(u['listClearAll'])}"><span>{u['listSample']}</span><button type="button" class="btn btn-sm" id="listclear">{u['listClear']}</button></p>
+    <p class="list-left" id="histleft" hidden><span>{u['histLeft']}</span><button type="button" class="btn btn-sm">{u['histLeftBtn']}</button></p>
     <textarea class="names" id="names" rows="8" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="{u['listAria']}" data-sample="{esc(sample)}">{esc(sample)}</textarea>
     {restore}
-    <div class="list-tools"><button type="button" class="btn btn-sm" id="shuffle">{u['shuffle']}</button><button type="button" class="btn btn-sm" id="sortaz">{u['sort']}</button><button type="button" class="btn btn-sm" id="dedupe">{u['dedupe']}</button></div>
+    {outbox}<div class="list-tools"><button type="button" class="btn btn-sm" id="shuffle">{u['shuffle']}</button><button type="button" class="btn btn-sm" id="sortaz">{u['sort']}</button><button type="button" class="btn btn-sm" id="dedupe">{u['dedupe']}</button></div>
     <p class="list-warn" id="listwarn" role="status"></p>
     <p class="note">{u['listHint']}</p>
   </aside>'''
 
 
-def trust(lang):
+def trust(lang, solo=False):
+    """결과 곁의 근거 한 줄(쉬운 말) + 접어 둔 '자세히'(용어는 여기에)."""
     u = U(lang)
-    return f'<p class="trust"><b>{u["trustQ"]}</b> {u["trustA"]} <a href="{prefix(lang)}about/">{u["trustLink"]}</a></p>'
+    line = TU(lang)['trustSolo'] if solo else u['trustA']
+    return (f'<div class="trust"><p><b>{u["trustQ"]}</b> {line}</p><details class="more trust-more"><summary>{u["trustMoreH"]}</summary>'
+            f'<p>{u["trustMore"]} <a href="{prefix(lang)}about/">{u["trustLink"]}</a></p></details></div>')
 
 
-def after_block(lang, with_list=True, extra=''):
+def after_block(lang, note='copyNote', extra=''):
     tu = TU(lang)
-    note = tu['copyNote'] if with_list else tu['copyNoteNoList']
     return (f'<div class="after" id="after" data-off>{extra}<button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{tu["copy"]}</button>'
-            f'<span class="note" id="copynote" style="align-self:center">{note}</span></div><p class="toast" id="toast" role="status"></p>')
+            f'<span class="note" id="copynote">{tu[note]}</span></div><p class="toast" id="toast" role="status"></p>')
 
 
 def stage_wheel(lang):
@@ -217,11 +235,13 @@ def stage_wheel(lang):
   <div class="stage-wheel"><div class="wheel" id="wheel"><div class="disc"><canvas width="16" height="16" role="img" aria-label="{esc(tool('wheel', lang)['nav'])}"></canvas></div>{NEEDLE}<button type="button" class="hub" id="go">{u['spin']}</button></div></div>
   <div class="result result-wheel" id="result">
     <div class="result-top">{trust(lang)}<div class="opts"><button type="button" class="btn btn-sm" id="sound" aria-pressed="true">{j['soundOn']}</button><button type="button" class="btn btn-sm" id="present" hidden>{j['present']}</button></div></div>
+    <div class="result-main">
     <div class="result-mid" aria-live="polite"><p class="result-label"><span id="rlabel">{u['resultLabel']}</span><span class="stamp" id="stamp" hidden></span></p><p class="result-name wait" id="rname">{j['wait']}</p></div>
-    <div class="result-bot"><div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="again">{u['again']}</button><button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{u['copy']}</button><span class="note" style="flex-basis:100%">{u['copyNote']}</span></div><p class="toast" id="toast" role="status"></p>
+    <div class="result-bot"><div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="again">{u['again']}</button><button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{u['copy']}</button><span class="note">{u['copyNote']}</span></div><p class="toast" id="toast" role="status"></p>
     <div class="history" id="history" data-off><h2>{u['historyH']}</h2><ol></ol></div></div>
+    </div>
   </div>
-  {list_panel(lang)}
+  {list_panel(lang, wheel=True)}
 </div>'''
 
 
@@ -241,10 +261,11 @@ def stage_ladder(lang):
       </div>
     </details>
     <p class="msg" id="msg" role="alert"></p>
+    <p class="list-warn warn" id="labwarn" role="status"></p>
     <div class="ladder-box" id="ladderbox"><div class="ladder-scroll" id="ladder" style="min-height:300px;display:grid;place-items:center"><p class="out-empty" style="padding:24px;text-align:center">{tu['ladderEmpty']}</p></div></div>
     <p class="note" id="tip" style="min-height:20px"></p>
     <div class="out" id="out" style="min-height:120px" aria-live="polite"></div>
-    {after_block(lang)}
+    {after_block(lang, note='copyNoteLadder')}
     {trust(lang)}
   </div>
   {list_panel(lang)}
@@ -293,10 +314,6 @@ def stage_teams(lang):
 </div>'''
 
 
-def trust_solo(lang):
-    return f'<p class="trust">{TU(lang)["trustSolo"]} <a href="{prefix(lang)}about/">{U(lang)["trustLink"]}</a></p>'
-
-
 def stage_number(lang):
     tu = TU(lang)
     if lang == 'ko':
@@ -317,8 +334,8 @@ def stage_number(lang):
     <button type="button" class="btn btn-go" id="go">{tu['numGo']}</button>
     <p class="msg" id="msg" role="alert"></p>
     <div class="out" id="out" style="width:100%" aria-live="polite"><p class="out-empty">{tu['numEmpty']}</p></div>
-    {after_block(lang, with_list=False)}
-    {trust_solo(lang)}
+    {after_block(lang, note='copyNoteNoList')}
+    {trust(lang, solo=True)}
   </div>
 </div>'''
 
@@ -335,8 +352,8 @@ def stage_coin(lang):
     </div>
     <p class="msg" id="msg" role="alert"></p>
     <div class="out" id="out" style="width:100%;min-height:110px" aria-live="polite"><p class="sum" id="sum"></p><div class="tally" id="tally" style="margin:8px auto 0"></div></div>
-    {after_block(lang, with_list=False)}
-    {trust_solo(lang)}
+    {after_block(lang, note='copyNoteNoList')}
+    {trust(lang, solo=True)}
   </div>
 </div>'''
 
@@ -353,8 +370,8 @@ def stage_dice(lang):
     </div>
     <p class="msg" id="msg" role="alert"></p>
     <div class="out" id="out" style="width:100%;min-height:190px" aria-live="polite"><p class="out-empty">{tu['diceEmpty']}</p></div>
-    {after_block(lang, with_list=False)}
-    {trust_solo(lang)}
+    {after_block(lang, note='copyNoteNoList')}
+    {trust(lang, solo=True)}
   </div>
 </div>'''
 
@@ -382,7 +399,7 @@ def tool_page(tid, lang):
     others = [x for x in (LIST_TOOLS if tid in LIST_TOOLS else TOOL_ORDER) if x != tid]
     if tid not in LIST_TOOLS:
         others = [x for x in TOOL_ORDER if x != tid]
-    ways_h = u['waysH'] if tid in LIST_TOOLS else {'en': 'Other ways to pick', 'ko': '다른 방식으로 뽑기'}[lang]
+    ways_h = u['waysH'] if tid in LIST_TOOLS else u['waysSoloH']
     ways = ''.join(f'<a href="{tool_href(x, lang)}"><b>{esc(tool(x, lang)["nav"])}</b><span>{esc(tool(x, lang)["way"])}</span></a>' for x in others)
     ld = [{
         '@context': 'https://schema.org', '@type': 'WebApplication', 'name': f'{t["h1"]} | {C["brand"][lang]}', 'url': url(lang, path),
@@ -441,11 +458,56 @@ def tokens(lang):
         t[f'needrungs{n}'] = f'{need[n]["total_rungs_tv5"]:,}'
     t['mixmin8'] = pct(min(c['mixedDist']))
     t['mixmax8'] = pct(max(c['mixedDist']))
+    # 표: 맨 끝 줄에서 출발해 바로 아래 칸에 도착한 비율. 공평할 때의 1.5배가 넘는 칸은 빨간 숫자(.hot)
+    rows_html = []
+    for n in (4, 8, 15, 30):
+        cells = ''
+        for rows in (8, 14, 24, 48, 100, 400):
+            v = sim_cell(n, rows)['edge']['stay']
+            cells += f'<td{" class=hot" if v > 1.5 / n else ""}>{pct(v)}</td>'.replace('class=hot', 'class="hot"')
+        who = f'{n}명' if lang == 'ko' else str(n)
+        rows_html.append(f'<tr><td>{who}</td><td>{pct(1 / n)}</td>{cells}</tr>')
+    t['stay_rows'] = '\n'.join(rows_html)
+    t['ladder_fig'] = ladder_figure(lang)
     t['site'] = SITE
     t['p'] = prefix(lang)
     for tid in TOOL_ORDER:
         t[f'u_{tid}'] = tool_href(tid, lang)
     return t
+
+
+def ladder_figure(lang):
+    """글 속 사다리 그림 한 장(SVG). 길은 FIG_RUNGS를 위에서부터 따라가서 그린다."""
+    n, levels = 4, len(FIG_RUNGS)
+    names = ['가', '나', '다', '라'] if lang == 'ko' else ['A', 'B', 'C', 'D']
+    bottoms = ['꽝', '꽝', '당첨', '꽝'] if lang == 'ko' else ['No luck', 'No luck', 'Winner', 'No luck']
+    W, top, H, colw, pad = 360, 44, 180, 80, 60
+    x = lambda c: pad + colw * c
+    y = lambda r: top + H * (r + 1) / (levels + 1)
+    parts = [f'<line class="fig-line" x1="{x(c)}" y1="{top}" x2="{x(c)}" y2="{top + H}"/>' for c in range(n)]
+    for r, gaps in enumerate(FIG_RUNGS):
+        for g in gaps:
+            parts.append(f'<line class="fig-line" x1="{x(g)}" y1="{y(r):.1f}" x2="{x(g + 1)}" y2="{y(r):.1f}"/>')
+    col = FIG_START
+    d = f'M{x(col)} {top}'
+    for r, gaps in enumerate(FIG_RUNGS):
+        nxt = col + 1 if col in gaps else col - 1 if col - 1 in gaps else col
+        if nxt != col:
+            d += f' L{x(col)} {y(r):.1f} L{x(nxt)} {y(r):.1f}'
+            col = nxt
+    d += f' L{x(col)} {top + H}'
+    parts.append(f'<path class="fig-path" d="{d}"/>')
+    for c in range(n):
+        parts.append(f'<text class="fig-t{" on" if c == FIG_START else ""}" x="{x(c)}" y="26">{names[c]}</text>')
+        parts.append(f'<text class="fig-t{" on" if c == col else ""}" x="{x(c)}" y="{top + H + 26}">{bottoms[c]}</text>')
+    if lang == 'ko':
+        label = f'4명이 타는 6층 사다리 그림. 둘째 줄의 {names[FIG_START]}가 가로줄을 만날 때마다 건너서 {col + 1}번 칸({bottoms[col]})에 도착한다.'
+        cap = f'가로줄을 만나면 반드시 건너요. {names[FIG_START]}는 {col + 1}번 칸에 도착했어요.'
+    else:
+        label = f'A ladder for four people with six levels. {names[FIG_START]}, on the second line, crosses every rung on the way down and ends at place {col + 1} ({bottoms[col]}).'
+        cap = f'Every rung you meet must be crossed. {names[FIG_START]} ends at place {col + 1}.'
+    return (f'<figure class="fig"><svg viewBox="0 0 {W} {top + H + 44}" role="img" aria-label="{esc(label)}">{"".join(parts)}</svg>'
+            f'<figcaption>{cap}</figcaption></figure>')
 
 
 def fill(body, lang):
@@ -462,7 +524,15 @@ def fill(body, lang):
 def article_body(a, lang):
     raw = (DEV / 'articles' / f'{lang}-{a["slug"]}.html').read_text(encoding='utf-8')
     body = fill(raw, lang)
-    return body.replace('<table>', '<div class="tbl"><table>').replace('</table>', '</table></div>')
+
+    def wrap(m):
+        table = m.group(0)
+        cols = len(re.findall(r'<th[ >]', table.split('</tr>')[0]))
+        # 칸이 많은 표는 휴대폰에서 옆으로 밀고(밀 수 있다는 한 줄을 붙인다), 적은 표는 마지막 칸의 줄을 바꿔 폭 안에 넣는다
+        if cols >= 5:
+            return f'<div class="tbl-wrap wide"><div class="tbl">{table}</div><p class="tbl-hint">{U(lang)["tblHint"]}</p></div>'
+        return f'<div class="tbl-wrap"><div class="tbl fit">{table}</div></div>'
+    return re.sub(r'<table>.*?</table>', wrap, body, flags=re.S)
 
 
 def pair_of(a, lang):
@@ -478,9 +548,9 @@ def article_page(a, lang):
     path = f'guide/{a["slug"]}/'
     b = pair_of(a, lang)
     alt = f'guide/{b["slug"]}/' if b else None
-    day = UPDATED.get(prefix(lang) + path, TODAY)
+    day = UPDATED.get(prefix(lang) + path, MODIFIED)
     ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['h1'], 'description': a['desc'], 'inLanguage': lang,
-           'datePublished': a.get('published', TODAY), 'dateModified': day, 'mainEntityOfPage': url(lang, path),
+           'datePublished': a.get('published', PUBLISHED), 'dateModified': day, 'mainEntityOfPage': url(lang, path),
            'author': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': 'https://lumenlab.page/'},
            'publisher': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': 'https://lumenlab.page/'}},
           {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
@@ -509,18 +579,62 @@ def guide_index(lang):
 
 def doc_page(kind, lang):
     d = PAGES[kind][lang]
-    inner = fill(d['html'], lang)
-    body = f'<article class="doc wrap narrow"><div class="prose" style="padding-top:0"><h1>{esc(d["h1"])}</h1>{inner}</div></article>'
+    inner = fill((DEV / 'pages' / f'{lang}-{kind}.html').read_text(encoding='utf-8'), lang)
+    day = UPDATED.get(f'{prefix(lang)}{kind}/', MODIFIED)
+    meta = f'<p class="meta">{U(lang)["updated"]} <time datetime="{day}">{day}</time></p>' if kind == 'about' else ''
+    body = f'<article class="doc wrap narrow"><div class="prose" style="padding-top:0"><h1>{esc(d["h1"])}</h1>{meta}{inner}</div></article>'
     return page(lang, head(lang, d['title'], d['desc'], f'{kind}/', alt=f'{kind}/', ads=False), body, alt_path=f'{kind}/')
 
 
 def not_found():
-    body = ('<section class="nf wrap narrow">' + LUMEN_WHEEL.replace('lumen-wheel', 'lumen-wheel nf-wheel')
-            + '<h1>Page not found <span lang="ko">페이지가 없어요</span></h1>'
-            '<p><a class="btn" href="/">Spin the Wheel</a> <a class="btn" href="/ko/" lang="ko">돌림판 돌리기</a></p></section>')
+    """없는 주소. 파일은 하나라서 두 언어를 다 담고, 주소가 /ko/ 로 시작하면 한국어 칸만(아니면 영어 칸만) 남긴다.
+    스크립트가 안 돌면 둘 다 보인다. 광고 코드 없음, noindex."""
+    def block(lang):
+        u = U(lang)
+        links = ''.join(f'<a class="btn" href="{tool_href(t, lang)}">{esc(tool(t, lang)["nav"])}</a>' for t in TOOL_ORDER)
+        return (f'<div class="nf-lang" lang="{lang}" data-nf="{lang}"><h1>{u["nfTitle"]}</h1><p>{u["nfText"]}</p>'
+                f'<p class="nf-tools">{links}</p></div>')
+    pick = ("<script>(function(){var ko=location.pathname.indexOf('/ko/')===0||location.pathname==='/ko';document.documentElement.lang=ko?'ko':'en';"
+            "var n=document.querySelectorAll('[data-nf]');for(var i=0;i<n.length;i++)if((n[i].getAttribute('data-nf')==='ko')!==ko)n[i].hidden=true})()</script>")
+    body = ('<section class="nf wrap narrow">' + LUMEN_WHEEL.replace('lumen-wheel', 'lumen-wheel nf-wheel') + block('en') + block('ko') + '</section>')
+    logo = (f'<a class="logo" href="/" data-nf="en">{LOGO}<span>{C["brand"]["en"]}</span></a>'
+            f'<a class="logo" href="/ko/" data-nf="ko" lang="ko">{LOGO}<span>{C["brand"]["ko"]}</span></a>')
     h_ = head('en', 'Page not found | Pickboard', 'This page doesn’t exist.', '', noindex=True, ads=False)
-    return (f'{h_}\n<body>\n<header class="top"><a class="logo" href="/">{LOGO}<span>Pickboard</span></a></header>\n'
-            f'<main id="main">{body}</main>\n</body>\n</html>\n')
+    return (f'{h_}\n<body>\n<header class="top">{logo}</header>\n'
+            f'<main id="main">{body}</main>\n{pick}\n</body>\n</html>\n')
+
+
+# ---------------- 화면에 나오는 글자(조각 글꼴에 담을 것) ----------------
+ALWAYS = ''.join(chr(c) for c in range(0x20, 0x7f)) + '×…·–−’‘“”→'   # 아스키 전부 + 화면 코드가 넣는 기호
+ALWAYS_KO = '오전오후'                                               # 최근 결과의 시각(ko-KR 날짜 꼴)
+
+
+def screen_chars(files=None):
+    """언어판마다 화면에 나올 수 있는 글자 모음: 만든 HTML의 글자·속성 글자 + 화면 코드가 넣는 글자(i18n). {'en': '…', 'ko': '…'}"""
+    if files is None:
+        files, _ = build()
+    out = {'en': set(ALWAYS), 'ko': set(ALWAYS + ALWAYS_KO)}
+
+    def walk(v):
+        if isinstance(v, str):
+            return v
+        if isinstance(v, dict):
+            return ' '.join(walk(x) for x in v.values())
+        if isinstance(v, list):
+            return ' '.join(walk(x) for x in v)
+        return ''
+    for rel, raw in files:
+        if not rel.endswith('.html') or rel == '404.html':
+            continue
+        lang = 'ko' if rel.startswith('ko/') else 'en'
+        m = re.search(r'<script type="application/json" id="i18n">(.*?)</script>', raw, flags=re.S)
+        text = walk(json.loads(m.group(1).replace('<\\/', '</'))) if m else ''
+        body = raw[raw.index('<body'):]
+        body = re.sub(r'<script.*?</script>|<style.*?</style>', ' ', body, flags=re.S)
+        text += ' ' + ' '.join(re.findall(r'(?:data-[a-z]+|value|aria-label|placeholder|title)="([^"]*)"', body))
+        text += ' ' + re.sub(r'<[^>]+>', ' ', body)
+        out[lang] |= set(html.unescape(text))
+    return {k: ''.join(sorted(c for c in v if c >= ' ')) for k, v in out.items()}
 
 
 # ---------------- 쓰기 ----------------
@@ -535,7 +649,7 @@ def write(rel, text):
 def sitemap(paths):
     out = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for path in paths:
-        out.append(f'  <url><loc>{SITE}{path}</loc><lastmod>{UPDATED.get(path, TODAY)}</lastmod></url>')
+        out.append(f'  <url><loc>{SITE}{path}</loc><lastmod>{UPDATED.get(path, MODIFIED)}</lastmod></url>')
     out.append('</urlset>')
     return '\n'.join(out) + '\n'
 

@@ -1,5 +1,6 @@
 /* 화면 연결. 계산은 core.js(CAL), 종이 배치는 sheet.js(SHEET), 글자 PDF는 pdf.js(PDFDOC).
    만든 파일과 음력 변환에 넣은 날짜는 이 기기 밖으로 나가지 않는다. 달력 설정은 주소(?w=mon&p=a4 …)에 담는다(저장은 하지 않는다).
+   주소는 설정을 바꾼 뒤 1.5초 가만히 있을 때 한 번만 고친다(바꿀 때마다 고치면 방문 통계가 그때마다 쪽 보기로 센다).
    기기에 저장하는 것: localStorage 'cal.lang' 하나(다른 언어 안내 띠를 닫았는지). */
 (function () {
   'use strict';
@@ -17,6 +18,7 @@
     fail: '파일을 만들지 못했어요. 인쇄 단추를 눌러 PDF로 저장해 보세요.', close: '닫기', zoom: '크게 보기',
     pngOne: '이 달만 이미지로', monthsTitle: function (y) { return y + '년 월별 달력'; }, site: '한장달력',
     imgNote: '글꼴을 불러오지 못해 300ppi 그림으로 저장했어요. 글자 그대로 받으려면 인쇄에서 ‘PDF로 저장’을 고르세요.',
+    badUrl: '주소의 설정 가운데 쓸 수 없는 값이 있어 기본값으로 열었어요.',
     today: '오늘', inDays: function (n) { return n + '일 뒤'; },
     date: function (h) { return h.m + '월 ' + h.d + '일 ' + WD[h.wd]; }
   } : {
@@ -25,11 +27,14 @@
     fail: 'Could not create the file. Use Print and choose “Save as PDF” instead.', close: 'Close', zoom: 'Enlarge',
     pngOne: 'This month as image', monthsTitle: function (y) { return y + ' monthly calendar'; }, site: 'Onesheet',
     imgNote: 'The font could not be loaded, so this PDF was saved as a 300 ppi image. For real text, use Print and choose “Save as PDF”.',
+    badUrl: 'Some settings in this link could not be used, so the defaults are shown.',
     today: 'today', inDays: function (n) { return 'in ' + n + (n === 1 ? ' day' : ' days'); },
     date: function (h) { return WD[h.wd] + ', ' + EN_M[h.m - 1].slice(0, 3) + ' ' + h.d; }
   };
 
-  // ---------- 다른 언어 안내 띠(화면 아래에 작게 띄움. 메뉴를 가리지 않고 내용을 밀지 않는다. 자동으로 넘기지 않음) ----------
+  // ---------- 다른 언어 안내 띠(자동으로 넘기지 않는다. 닫을 수 있고 내용을 밀지 않는다) ----------
+  // 컴퓨터 폭에서 머리 줄의 메뉴와 언어 링크 사이가 비어 있으면 그 빈자리에 둔다(.is-docked): 누를 수 있는 것을 하나도 덮지 않고, 화면을 내려도 따라오지 않는다.
+  // 자리가 모자라면(휴대폰, 좁은 창) 화면 아래에 띄우고, 내 설정이 열려 있는 동안은 숨긴다(style.css 의 body.has-opts).
   (function () {
     var saved = null; try { saved = localStorage.getItem('cal.lang'); } catch (e) {}
     var userKo = /^ko\b/i.test(navigator.language || '');
@@ -44,6 +49,20 @@
     a.addEventListener('click', function () { try { localStorage.setItem('cal.lang', KO ? 'en' : 'ko'); } catch (e) {} });
     x.addEventListener('click', function () { try { localStorage.setItem('cal.lang', LANG); } catch (e) {} bar.remove(); });
     bar.appendChild(a); bar.appendChild(x); doc.body.appendChild(bar);
+    var last = $('header.top .nav a:last-child'), link = $('header.top a.lang'), wide = window.matchMedia('(min-width: 901px)'), raf = 0;
+    function place() {
+      raf = 0;
+      if (!bar.parentNode) return;
+      bar.classList.remove('is-docked'); bar.style.right = '';
+      if (!last || !link || !wide.matches) return;
+      var l = link.getBoundingClientRect(), n = last.getBoundingClientRect();
+      if (l.left - n.right < bar.offsetWidth + 48) return;        // 메뉴와 띠 사이에 틈이 없으면 아래에 띄운다
+      bar.style.right = Math.round(html.clientWidth - l.left + 14) + 'px';
+      bar.classList.add('is-docked');
+    }
+    place();
+    window.addEventListener('resize', function () { if (!raf) raf = requestAnimationFrame(place); });
+    if (doc.fonts && doc.fonts.addEventListener) doc.fonts.addEventListener('loadingdone', function () { if (!raf) raf = requestAnimationFrame(place); });   // 글꼴이 늦게 오면 메뉴 폭이 달라진다
   })();
 
   if (window.CAL_ADS) window.CAL_ADS.mount();
@@ -208,40 +227,44 @@
 
   // ---------- 달력 만들기(첫 화면·연간 페이지) ----------
   $$('[data-tool]').forEach(function (el) {
-    var t = today(), ds = el.dataset, MIN = 2025, MAX = 2030, fixed = ds.fixed === '1', Q = new URLSearchParams(location.search);
+    var t = today(), ds = el.dataset, MIN = 2025, MAX = 2030, fixed = ds.fixed === '1';
     // 기본 연도: 연간 페이지는 그 해. 첫 화면은 기기 날짜를 따른다(10~12월이면 다음 해 달력을 찾는 때라 다음 해).
     var year0 = fixed ? +ds.year : Math.max(MIN, Math.min(MAX, t[1] >= 10 ? t[0] + 1 : t[0]));
+    var BASE = { year: year0, paper: ds.paper, country: ds.country, fixed: fixed, min: MIN, max: MAX };
     var S = { lang: LANG, country: ds.country, year: year0, paper: ds.paper, kind: 'year', orient: 'landscape', month: 1,
       weekStart: 0, mono: false, names: true, week: false, lunar: true, terms: true, son: false };
-    // 주소에 담긴 설정(?y=2028&k=monthly&m=5&w=mon&p=a4&c=kr&names=0&wk=1&lunar=0&terms=0&son=1&ink=bw). 모르는 값은 버린다.
-    (function () {
-      var y = +Q.get('y'), k = Q.get('k'), m = +Q.get('m'), c = (Q.get('c') || '').toUpperCase(), pp = Q.get('p');
-      if (!fixed && y >= MIN && y <= MAX && y === Math.floor(y)) S.year = y;
-      if (k === 'portrait') S.orient = 'portrait'; else if (k === 'monthly') S.kind = 'months'; else if (k === 'month') S.kind = 'month';
-      S.month = m >= 1 && m <= 12 && m === Math.floor(m) ? m : (S.year === t[0] ? t[1] : 1);
-      if (Q.get('w') === 'mon') S.weekStart = 1;
-      if (pp === 'a4' || pp === 'letter') S.paper = pp;
-      if (c === 'KR' || c === 'US' || c === 'NONE') S.country = c;
-      if (Q.get('names') === '0') S.names = false;
-      if (Q.get('wk') === '1') S.week = true;
-      if (Q.get('lunar') === '0') S.lunar = false;
-      if (Q.get('terms') === '0') S.terms = false;
-      if (Q.get('son') === '1') S.son = true;
-      if (Q.get('ink') === 'bw') S.mono = true;
+    // 주소에 담긴 설정(?y=2028&k=monthly&m=5&w=mon&p=a4&c=kr&names=0&wk=1&lunar=0&terms=0&son=1&ink=bw). 읽고 쓰는 규칙은 sheet.js urlRead·urlQuery.
+    // 쓸 수 없는 값(범위 밖 연도, 모르는 용지 등)은 버리고 기본값으로 연다. 조용히 넘기지 않고 종이 위에 한 줄로 알린다(badUrl).
+    var badUrl = (function () {
+      var have = Object.create(null);
+      new URLSearchParams(location.search).forEach(function (v, k) { k = k.toLowerCase(); if (!(k in have)) have[k] = v; });
+      var r = SHEET.urlRead(function (k) { return k in have ? have[k] : null; }, BASE);
+      for (var k in r.set) S[k] = r.set[k];
+      if (!('month' in r.set)) S.month = S.year === t[0] ? t[1] : 1;
+      return r.bad.length > 0;
     })();
+    var urlTimer = 0;
     function writeUrl() {   // 기본값과 다른 것만, 늘 같은 순서로. 우리 것이 아닌 값(?adpreview 등)은 그대로 둔다.
-      var q = new URLSearchParams(location.search);
-      ['y', 'k', 'm', 'w', 'p', 'c', 'names', 'wk', 'lunar', 'terms', 'son', 'ink'].forEach(function (k) { q.delete(k); });
-      function put(k, v, on) { if (on) q.set(k, v); }
-      put('y', S.year, !fixed && S.year !== +ds.year);
-      put('k', S.kind === 'months' ? 'monthly' : S.kind === 'month' ? 'month' : 'portrait', !(S.kind === 'year' && S.orient === 'landscape'));
-      put('m', S.month, S.kind !== 'year');
-      put('w', 'mon', S.weekStart === 1);
-      put('p', S.paper, S.paper !== ds.paper);
-      put('c', S.country.toLowerCase(), S.country !== ds.country);
-      put('names', 0, !S.names); put('wk', 1, S.week); put('lunar', 0, !S.lunar); put('terms', 0, !S.terms); put('son', 1, S.son); put('ink', 'bw', S.mono);
-      var s = q.toString();
+      urlTimer = 0;
+      var q = new URLSearchParams(location.search), mine = [];
+      q.forEach(function (v, k) { if (SHEET.URL_KEYS.indexOf(k.toLowerCase()) >= 0) mine.push(k); });
+      mine.forEach(function (k) { q.delete(k); });
+      var s = [q.toString(), SHEET.urlQuery(S, BASE)].filter(Boolean).join('&');
       try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) {}
+    }
+    // 주소는 설정을 바꾼 뒤 1.5초 가만히 있을 때 한 번만 고친다. 그 전에 페이지를 떠나면 떠나기 직전에 적는다(뒤로 왔을 때 같은 달력이 열리게).
+    function writeUrlSoon() { clearTimeout(urlTimer); urlTimer = setTimeout(writeUrl, 1500); }
+    window.addEventListener('pagehide', function () { if (urlTimer) { clearTimeout(urlTimer); writeUrl(); } });
+    // 언어를 바꿔도 같은 달력이 열리게, 머리의 언어 링크와 안내 띠 링크에 지금 설정을 싣는다. 아무것도 안 바꿨으면 그 언어판의 기본 달력 그대로.
+    var langA = $('a.lang'), alt0 = langA ? langA.getAttribute('href').split('?')[0] : '';
+    function syncLang() {
+      if (!langA) return;
+      var other = KO ? 'en' : 'ko', ed = SHEET.EDITION[other], h = alt0;
+      if (SHEET.urlQuery(S, BASE)) {
+        var q = SHEET.urlQuery(SHEET.urlCarry(S, other), { year: year0, paper: ed.paper, country: ed.country, fixed: fixed });
+        if (q) h += '?' + q;
+      }
+      $$('a.lang, .lang-bar a').forEach(function (a) { a.setAttribute('href', h); });
     }
     var paper = $('.paper', el), crop = $('.crop', el), pdfBtn = $('[data-pdf]', el), pngBtn = $('[data-png]', el), first = true;
     var title0 = doc.title, pngLabel = pngBtn.textContent, upList = $('[data-up]');
@@ -266,6 +289,7 @@
           : b === 'rule' ? y + '년은 규정으로 계산한 예상이에요. 선거일·임시공휴일·절기는 정해지면 더해요.'
           : '공휴일 기준: ' + y + '년에 확정된 공휴일(임시공휴일·선거일 포함).';
         else s = b === 'rule' ? y + ' is projected from South Korea’s holiday rules. Election days and one-off holidays are added once they are announced.'
+          : b === 'table' ? 'Holidays: South Korea’s confirmed public holidays for ' + y + ', including the one-off holiday and the election day.'
           : 'Holidays: South Korea’s public holiday rules as amended in April 2026' + (b === 'provisional' ? ' (the official ' + y + ' almanac notice is not out yet).' : '.');
         if (KO && (y === 2026 || y === 2027)) link = a('/ko/' + y + '/holidays/', y + '년 공휴일 보기');
         else if (!KO && y === 2027) link = a('/guide/south-korea-public-holidays-2027/', 'See South Korea’s 2027 holidays');
@@ -317,7 +341,20 @@
       note('');
       first = false;
     }
-    function changed(country) { render(); writeUrl(); if (country && upList) fillUp(upList, S.country === 'NONE' ? ds.country : S.country); }
+    // 주소에 쓸 수 없는 값이 있었으면 종이 위에 한 줄(겹쳐 띄워서 화면을 밀지 않는다. 닫을 수 있고, 설정을 바꾸면 사라진다)
+    var urlNote = null;
+    if (badUrl) {
+      urlNote = doc.createElement('p'); urlNote.className = 'url-note'; urlNote.setAttribute('role', 'status');
+      var un = doc.createElement('span'), ux = doc.createElement('button');
+      un.textContent = TX.badUrl; ux.type = 'button'; ux.textContent = '×'; ux.setAttribute('aria-label', TX.close);
+      ux.addEventListener('click', function () { if (urlNote) { urlNote.remove(); urlNote = null; } });
+      urlNote.appendChild(un); urlNote.appendChild(ux); $('.paper-box', el).appendChild(urlNote);
+    }
+    function changed(country) {
+      if (urlNote) { urlNote.remove(); urlNote = null; }
+      render(); writeUrlSoon(); syncLang();
+      if (country && upList) fillUp(upList, S.country === 'NONE' ? ds.country : S.country);
+    }
     el.addEventListener('click', function (e) {
       var b = e.target.closest('button,a'); if (!b || !el.contains(b)) return;
       if (b.dataset.step && !fixed) { S.year = Math.max(MIN, Math.min(MAX, S.year + (+b.dataset.step))); changed(); }
@@ -350,6 +387,7 @@
       var mobile = window.matchMedia('(max-width: 900px)').matches;
       el.classList.toggle('is-opts', open && mobile);
       doc.body.classList.toggle('has-sheet', open && mobile);
+      doc.body.classList.toggle('has-opts', open);
       if (open && mobile) {
         el.style.setProperty('--ph0', crop.offsetHeight + 'px');
         requestAnimationFrame(function () {
@@ -360,14 +398,16 @@
     }
     printSource = sheets;
     render();
+    syncLang();
     if (upList && S.country !== ds.country && S.country !== 'NONE') fillUp(upList, S.country);
   });
 
   // ---------- 월 페이지 ----------
   $$('[data-month-page]').forEach(function (el) {
     var ds = el.dataset, y = +ds.year, m = +ds.month, t = today();
-    function sheet() { return SHEET.build({ kind: 'month', year: y, month: m, lang: LANG, country: ds.country, paper: ds.paper, show: { names: true, lunar: true, terms: true, son: true } }); }
-    function base() { return SHEET.fileBase({ kind: 'month', year: y, month: m, lang: LANG, country: ds.country, paper: ds.paper }); }
+    function mopts() { return { kind: 'month', year: y, month: m, lang: LANG, country: ds.country, paper: ds.paper, show: { names: true, lunar: true, terms: true, son: true } }; }
+    function sheet() { return SHEET.build(mopts()); }
+    function base() { return SHEET.fileBase(mopts()); }
     function note(text) { var n = $('[data-note]', el); if (n) { n.textContent = text || ''; n.hidden = !text; } }
     printSource = function () { return [sheet()]; };
     var box = $('.wm-box', el);

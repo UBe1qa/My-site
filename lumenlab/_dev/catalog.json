@@ -102,6 +102,15 @@
       "name": {"ko": "토독", "en": "Todok"},
       "sub": "Todok",
       "line": {"ko": "한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.", "en": "Typing test and practice in English and Korean that shows which keys you missed and where you slowed down."}
+    },
+    {
+      "id": "takehome",
+      "url": "https://salary.lumenlab.page/",
+      "url_en": "https://salary.lumenlab.page/en/",
+      "icon": "/img/salary.svg",
+      "name": {"ko": "떼고얼마", "en": "Takehome Korea"},
+      "sub": "Takehome Korea",
+      "line": {"ko": "연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요.", "en": "Korea net salary calculator laid out like a payslip, plus severance pay, hourly wage and weekly holiday allowance, with the rates and sources shown."}
     }
   ]
 }

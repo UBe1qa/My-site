@@ -3,8 +3,9 @@
   python3 calendar/_dev/e2e.py
 보는 것: 콘솔 오류·깨진 그림·가로 넘침(320·360·390·1366), 휴대폰에서 표 잘림·단추 글자 넘침·누르는 곳 크기(44px),
 도구의 모든 단추, 받는 파일(PDF 쪽 수·크기·글꼴이 담겼는지, PNG 크기), 글꼴을 못 받았을 때의 그림 PDF, 인쇄 화면 쪽 수,
-주소에 담긴 설정, 나라를 바꾸면 따라오는 링크·목록, 기기 날짜가 달라졌을 때, 음력 변환, 다가오는 쉬는 날, 언어 띠, 휴대폰 설정 판,
-화면 밀림(CLS, 달 고르는 줄), 동작 줄이기, 광고 자리(폭 = 글 기둥, 누르는 것과의 거리)."""
+주소에 담긴 설정(1.5초 뒤 한 번만 고침, 쓸 수 없는 값 안내), 언어를 바꿀 때 따라가는 설정, 나라를 바꾸면 따라오는 링크·목록, 기기 날짜가 달라졌을 때,
+음력 변환, 다가오는 쉬는 날, 언어 띠(누를 수 있는 것과 겹치지 않음), 휴대폰 설정 판, 구분 칩(낱말 중간에서 안 끊김), 화면 밀림(CLS, 달 고르는 줄),
+동작 줄이기, 광고 자리(폭 = 글 기둥, 누르는 것과의 거리)."""
 import sys
 sys.dont_write_bytecode = True
 import os
@@ -58,6 +59,17 @@ PROBE = r"""() => {
     if (el.closest('.prose p, .prose li, .faq p, .lead, .prose td, .src, .notice')) return;
     if (r.height < 43.5 || r.width < 24) out.small.push((el.className || el.tagName) + ':' + el.textContent.trim().slice(0, 16) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height)); });
   return out; }"""
+
+
+URL_WAIT = 2300   # 주소는 설정을 바꾼 뒤 1.5초 가만히 있을 때 한 번 고친다
+
+# 언어 안내 띠의 자리와, 띠와 겹치는 '누를 수 있는 것'(띠 안의 것은 뺀다)
+OVERLAP = r"""() => { const bar = document.querySelector('.lang-bar'); if (!bar || getComputedStyle(bar).display === 'none') return { bar: null, docked: false, hits: [] };
+  const b = bar.getBoundingClientRect(), hits = [];
+  document.querySelectorAll('a, button, select, input, summary, label, [role="button"], [tabindex]').forEach(el => { if (bar.contains(el)) return; const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
+    const s = getComputedStyle(el); if (s.visibility === 'hidden' || s.display === 'none') return;
+    if (r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top) hits.push((el.className || el.tagName) + ':' + (el.textContent || '').trim().slice(0, 16)); });
+  return { bar: [Math.round(b.left), Math.round(b.top), Math.round(b.right), Math.round(b.bottom)], docked: bar.classList.contains('is-docked'), hits }; }"""
 
 
 def ctx_of(b, w=1366, h=768, mobile=False, locale='ko-KR', **kw):
@@ -133,6 +145,7 @@ with sync_playwright() as p:
     ok('2029년 달력' in info and '한장달력' in info, '내 설정 PDF에 제목·만든 곳')
     ok(pg.is_hidden(T + '[data-note]'), '글자 PDF면 그림 안내 줄은 안 보인다')
     ok('2029' in pg.title(), f'탭 제목이 연도를 따라간다: {pg.title()}')
+    pg.wait_for_timeout(URL_WAIT)
     ok('y=2029' in pg.evaluate('location.search') and pg.get_attribute('link[rel=canonical]', 'href').endswith('/ko/'), '연도가 주소에 담기고 canonical 은 그대로')
     ok(pg.is_disabled(T + '[data-opt="terms"]') or pg.is_hidden(T + '[data-opt="terms"]'), '2029년: 24절기 칸은 꺼짐(자료 없음)')
     pg.click(T + '[data-step="1"]')
@@ -166,6 +179,8 @@ with sync_playwright() as p:
     ok(pg.is_hidden(T + '[data-opt="lunar"]'), '1년 한 장에서는 음력·절기 칸 숨김')
     pg.click(T + '[data-seg="weekStart"][data-v="1"]')
     ok('월요일 시작' in pg.inner_html(T + '.paper') and pg.get_attribute(T + '[data-pdf]', 'download') is None, '월요일 시작 → 기기에서 만들기')
+    ok('w=mon' not in pg.evaluate('location.search'), '설정을 바꾼 바로 뒤에는 주소를 고치지 않는다(1.5초 뒤 한 번)')
+    pg.wait_for_timeout(URL_WAIT)
     ok('w=mon' in pg.evaluate('location.search'), '주 시작이 주소에 담긴다')
     pg.click(T + '[data-opt="week"]')
     ok('>53<' in pg.inner_html(T + '.paper'), '주 번호(ISO, 2027-01-01 = 53주)')
@@ -178,17 +193,22 @@ with sync_playwright() as p:
     ok(pg.get_attribute(T + '[data-basis] a', 'href') == '/2027/holidays/' and '대신 쉬는 날' in pg.inner_text(T + '[data-basis]'), "나라를 바꾸면 '공휴일 보기' 링크도 미국 쪽으로")
     up = pg.inner_text('.up')
     ok(re.search('콜럼버스|재향군인|추수감사|크리스마스|새해', up) and '한글날' not in up, f'다가오는 쉬는 날도 미국 것으로: {up[:40]!r}')
+    pg.wait_for_timeout(URL_WAIT)
     ok(pg.evaluate('location.search') == '?w=mon&p=letter&c=us&wk=1&lunar=0&son=1&ink=bw', f"주소에 담긴 설정: {pg.evaluate('location.search')}")
+    ok(pg.get_attribute('a.lang', 'href') == '/?w=mon&wk=1&ink=bw', f"언어 링크에 지금 설정이 실린다(영어판 기본인 미국·Letter 는 빠짐): {pg.get_attribute('a.lang', 'href')}")
     pg.click(T + '[data-opt="names"]')
     ok('마틴 루서 킹' not in pg.inner_html(T + '.paper'), '공휴일 이름 끄기')
     pg.click(T + '[data-opt="names"]')
     name, path = download(pg, T + '[data-png]')
     from PIL import Image
     im = Image.open(path)
-    ok(name == '2027-calendar-us-letter-landscape.png' and im.size == (2200, 1700), f'이미지로 저장: {name} {im.size}')
+    ok(name == '2027-calendar-us-letter-landscape-mon-wk-bw.png' and im.size == (2200, 1700), f'이미지로 저장(이름에 월요일 시작·주 번호·흑백): {name} {im.size}')
     pg.click(T + '.shape[data-kind="months"]')
     name, path = download(pg, T + '[data-pdf]')
-    ok(pdfinfo(path) == (12, 792, 612) and is_text_pdf(path) and os.path.getsize(path) < 300000, f'내 설정 월별 12장 PDF: {pdfinfo(path)} {os.path.getsize(path)}바이트 (글자)')
+    ok(name == '2027-calendar-us-monthly-letter-mon-wk-bw.pdf' and pdfinfo(path) == (12, 792, 612) and is_text_pdf(path) and os.path.getsize(path) < 300000, f'내 설정 월별 12장 PDF: {name} {pdfinfo(path)} {os.path.getsize(path)}바이트 (글자)')
+    t = text_of(path)
+    ok('크리스마스(대신 쉬는 날)' in t.replace('\n', '') or ('크리스마스' in t and '(대신 쉬는 날)' in t), "한국어 + 미국 월별 PDF: '크리스마스(대신 쉬는 날)'")
+    ok('대체 휴일' not in t and '대신 쉼' not in t, "한국어 + 미국 PDF에 '대체 휴일'·'대신 쉼'이 없다")
     pg.click(T + '[data-print]')
     ok(pg.evaluate('window.__printed') == 1 and pg.evaluate("document.querySelectorAll('#print-root svg').length") == 12, '인쇄 단추: 인쇄 창 호출, 종이 12장 준비')
     pg.emulate_media(media='print')
@@ -213,8 +233,9 @@ with sync_playwright() as p:
     pg.select_option('#o-country', 'NONE')
     ok('표시하지 않은' in pg.inner_text(T + '[data-basis]') and pg.is_hidden(T + '[data-opt="names"]') and '공휴일' not in pg.inner_html(T + '.paper'), '공휴일 표시 안 함: 안내 줄·이름 칸·종이')
     name, path = download(pg, T + '[data-pdf]')
-    ok(name == '2027-calendar-no-holidays-letter-portrait.pdf' and is_text_pdf(path), f'공휴일 없는 달력 PDF: {name}')
+    ok(name == '2027-calendar-no-holidays-letter-portrait-mon-wk-bw.pdf' and is_text_pdf(path), f'공휴일 없는 달력 PDF: {name}')
     # 주소를 다시 열면 같은 설정
+    pg.wait_for_timeout(URL_WAIT)
     url = pg.evaluate('location.href')
     pg.goto(url, wait_until='load'); pg.wait_for_timeout(500)
     ok(pg.input_value('#o-country') == 'NONE' and pg.input_value('#o-paper') == 'letter' and pg.is_checked(T + '[data-opt="week"]') and pg.is_checked(T + '[data-opt="mono"]')
@@ -255,7 +276,8 @@ with sync_playwright() as p:
     c = ctx_of(b)
     pg, errs = open_page(c, '/ko/2026/10/')
     name, path = download(pg, '[data-month-page] [data-pdf]')
-    ok(name == '2026-10-calendar-korea-a4.pdf' and pdfinfo(path) == (1, 842, 595) and is_text_pdf(path, '한글날'), f'이 달 PDF {name} (글자)')
+    ok(name == '2026-10-calendar-korea-a4-son.pdf' and pdfinfo(path) == (1, 842, 595) and is_text_pdf(path, '한글날') and '대체공휴일(개천절)' in text_of(path), f'이 달 PDF {name} (글자, 손 없는 날이 든 판이라 이름에 -son)')
+    ok('대체공휴일(개천절)' in pg.inner_text('.wm-box td[data-d="5"]').replace('\n', ''), f"월 달력 칸에도 무엇의 대체공휴일인지: {pg.inner_text('.wm-box td[data-d=\"5\"]')!r}")
     name, path = download(pg, '[data-month-page] [data-png]')
     ok(name.endswith('.png') and Image.open(path).size == (2339, 1654), '이 달 이미지 A4 200dpi')
     pg.click('[data-month-page] [data-print]')
@@ -306,19 +328,55 @@ with sync_playwright() as p:
     ok(not errs, f'음력 콘솔 오류 {errs[:3]}')
     pg.close(); c.close()
 
-    # 6) 언어 안내 띠: 브라우저 언어가 다를 때만, 닫으면 기억
+    # 6) 언어 안내 띠: 브라우저 언어가 다를 때만, 닫으면 기억. 컴퓨터에서는 머리 줄의 빈자리에 있고 누를 수 있는 것 어느 것과도 겹치지 않는다
     c = ctx_of(b, locale='en-US')
     pg, errs = open_page(c, '/ko/')
     g = pg.evaluate("""(() => { const b = document.querySelector('.lang-bar'), r = b.getBoundingClientRect(), h = document.querySelector('header.top').getBoundingClientRect(), x = b.querySelector('button').getBoundingClientRect();
-      return { pos: getComputedStyle(b).position, top: r.top, bottom: r.bottom, vh: innerHeight, header: h.bottom, x: [x.width, x.height] }; })()""")
-    ok(pg.is_visible('.lang-bar') and g['pos'] == 'fixed' and g['top'] > g['header'] + 200 and g['bottom'] <= g['vh'] and min(g['x']) >= 44, f'영어 브라우저 → 한국어판에 띠: 메뉴를 가리지 않고 ×는 44px 이상 {g}')
-    ok(pg.evaluate("(() => { const e = document.elementFromPoint(200, 28); return !!e && !!e.closest('header.top'); })()"), '띠가 떠 있어도 머리 메뉴를 누를 수 있다')
+      return { pos: getComputedStyle(b).position, docked: b.classList.contains('is-docked'), top: r.top, bottom: r.bottom, vh: innerHeight, header: h.bottom, x: [x.width, x.height] }; })()""")
+    ok(pg.is_visible('.lang-bar') and g['docked'] and g['pos'] == 'absolute' and g['top'] >= 0 and g['bottom'] <= g['header'] and min(g['x']) >= 44, f'영어 브라우저 → 한국어판에 띠: 머리 줄 안에 있고(내용을 덮지 않음) ×는 44px 이상 {g}')
+    ok(pg.evaluate("(() => { const e = document.elementFromPoint(200, 28); return !!e && !!e.closest('header.top .nav'); })()") and not pg.evaluate(OVERLAP)['hits'], '띠가 떠 있어도 머리 메뉴를 누를 수 있다(메뉴·로고·언어 링크와 겹치지 않음)')
     pg.click('.lang-bar button')
     pg.reload(); pg.wait_for_timeout(300)
     ok(pg.locator('.lang-bar').count() == 0 and pg.evaluate("localStorage.getItem('cal.lang')") == 'ko', '띠를 닫으면 기억(cal.lang)')
     pg.close(); c.close()
+    # 노트북 폭 세 가지 × 두 언어판 × 쪽 종류: 띠가 누를 수 있는 것과 겹치지 않는다(내 설정을 닫았을 때·열었을 때·열고 240px 내렸을 때)
+    for w, h in ((1280, 720), (1366, 768), (1440, 900)):
+        for loc, paths in (('en-US', ('/ko/', '/ko/2027/', '/ko/2027/5/', '/ko/2027/holidays/', '/ko/guide/daeche-gonghyuil/')), ('ko-KR', ('/', '/2027/', '/2027/may/', '/2027/holidays/'))):
+            c = ctx_of(b, w, h, locale=loc)
+            for path in paths:
+                pg, errs = open_page(c, path)
+                r = [pg.evaluate(OVERLAP)]
+                if pg.locator('.opt-toggle').count():
+                    pg.click('.opt-toggle'); pg.wait_for_timeout(150)
+                    r.append(pg.evaluate(OVERLAP))
+                    ok(pg.is_visible('#opts'), f'내 설정 펼침 {path} @{w}×{h}')
+                    pg.evaluate('window.scrollTo(0, 240)'); pg.wait_for_timeout(100)
+                    r.append(pg.evaluate(OVERLAP))
+                ok(r[0]['bar'] and all(not x['hits'] for x in r), f'언어 띠가 누를 수 있는 것과 겹치지 않는다 {path} @{w}×{h}: ' + ' / '.join(f"{x['bar']} {x['hits'][:3]}" for x in r))
+                pg.close()
+            c.close()
+    # 머리 줄에 자리가 없는 폭(좁은 창): 화면 아래에 뜨고, 내 설정을 열면 숨는다. 창을 넓히면 머리 줄로 간다
+    c = ctx_of(b, 940, 700, locale='en-US')
+    pg, errs = open_page(c, '/ko/')
+    g0 = pg.evaluate(OVERLAP)
+    pg.click('.opt-toggle'); pg.wait_for_timeout(150)
+    hid = pg.is_hidden('.lang-bar')
+    pg.click('.opt-toggle'); pg.wait_for_timeout(150)
+    back = pg.is_visible('.lang-bar')
+    pg.set_viewport_size({'width': 1366, 'height': 768}); pg.wait_for_timeout(400)
+    g1 = pg.evaluate(OVERLAP)
+    ok(g0['bar'] and not g0['docked'] and g0['bar'][1] > 500 and hid and back and g1['docked'] and not g1['hits'], f'좁은 창: 아래에 뜨고 내 설정을 열면 숨는다, 넓히면 머리 줄로 {g0} → {g1}')
+    pg.close(); c.close()
 
     # 7) 휴대폰: 설정 판과 미리보기가 같이 보인다
+    c = ctx_of(b, 390, 844, True, locale='en-US')
+    pg, errs = open_page(c, '/ko/')
+    g = pg.evaluate(OVERLAP)
+    pg.tap('.opt-toggle'); pg.wait_for_timeout(500)
+    ok(g['bar'] and not g['docked'] and g['bar'][3] <= 844 and g['bar'][1] > 700 and pg.is_hidden('.lang-bar'), f'휴대폰: 띠는 화면 아래에, 설정 판을 열면 숨는다 {g}')
+    pg.tap('[data-opt-close]'); pg.wait_for_timeout(300)
+    ok(pg.is_visible('.lang-bar'), '휴대폰: 설정 판을 닫으면 띠가 돌아온다')
+    pg.close(); c.close()
     c = ctx_of(b, 390, 844, True)
     pg, errs = open_page(c, '/ko/')
     r = pg.evaluate("(() => { const b = document.querySelector('[data-pdf]').getBoundingClientRect(); return [b.top, b.bottom]; })()")
@@ -346,15 +404,79 @@ with sync_playwright() as p:
     pg.close()
     pg, errs = open_page(c, '/ko/?y=1999&k=zzz&m=44&c=jp&p=b5')
     ok(pg.inner_text(T + 'output') == '2027' and pg.get_attribute(T + '[data-pdf]', 'href') == '/files/2027-calendar-korea-a4-landscape.pdf' and not errs, '주소에 모르는 값이 있어도 기본 달력')
+    g = pg.evaluate("""(() => { const n = document.querySelector('.url-note'); if (!n) return null; const r = n.getBoundingClientRect(), p = document.querySelector('.paper').getBoundingClientRect();
+      return { text: n.querySelector('span').textContent, pos: getComputedStyle(n).position, inPaper: r.left >= p.left && r.right <= p.right && r.top >= p.top && r.bottom <= p.bottom, role: n.getAttribute('role') }; })()""")
+    ok(g and '쓸 수 없는 값' in g['text'] and g['pos'] == 'absolute' and g['inPaper'] and g['role'] == 'status', f'쓸 수 없는 값이 있으면 종이 위에 한 줄로 알린다(겹쳐 띄움) {g}')
+    pg.click('.url-note button')
+    ok(pg.locator('.url-note').count() == 0, '안내 줄은 닫을 수 있다')
+    pg.close()
+    pg, errs = open_page(c, '/ko/?y=2031&k=month&m=1')
+    ok(pg.locator('.url-note').count() == 1 and pg.inner_text(T + 'output') == '2027' and pg.inner_text(T + '[data-what]') == '한 달' and pg.inner_text(T + '.mstep b') == '1월', '범위 밖 연도(2031): 알리고 기본 연도로, 쓸 수 있는 값(한 달·1월)은 그대로')
+    pg.click(T + '[data-mstep="1"]')
+    ok(pg.locator('.url-note').count() == 0, '설정을 바꾸면 안내 줄이 사라진다')
+    pg.wait_for_timeout(URL_WAIT)
+    ok(pg.evaluate('location.search') == '?k=month&m=2', f"그 뒤 주소는 쓸 수 있는 값만: {pg.evaluate('location.search')}")
+    pg.close()
+    pg, errs = open_page(c, '/ko/?W=MON&P=Letter')
+    ok(pg.locator('.url-note').count() == 0 and '월요일 시작' in pg.inner_html(T + '.paper') and 'Letter' in pg.inner_text(T + '[data-meta]'), '주소의 대소문자는 가리지 않는다(?W=MON&P=Letter)')
+    pg.close()
+    pg, errs = open_page(c, '/ko/?w=mon&adpreview')
+    ok(pg.locator('.url-note').count() == 0, '쓸 수 있는 값뿐이면 안내 줄 없음')
     pg.close()
     pg, errs = open_page(c, '/ko/2027/?y=2029&w=mon')
     ok(pg.locator('.years a[aria-current]').inner_text() == '2027' and '월요일 시작' in pg.inner_html(T + '.paper') and '2027' in pg.inner_html(T + '.paper'), '연간 페이지: 주소의 연도는 무시, 다른 설정은 받는다')
+    ok(pg.locator('.url-note').count() == 1 and pg.get_attribute('a.lang', 'href') == '/2027/?w=mon&p=a4&c=kr', f"연간 페이지: 다른 해의 y 는 알린다, 언어 링크에 설정이 실린다 {pg.get_attribute('a.lang', 'href')}")
     pg.close()
     pg, errs = open_page(c, '/ko/2027/5/')
     href = pg.get_attribute('a[href*="k=month"]', 'href')
     pg.goto(BASE + href, wait_until='load'); pg.wait_for_timeout(500)
     ok(href == '/ko/?k=month&y=2027&m=5' and pg.inner_text(T + '[data-what]') == '한 달' and pg.inner_text(T + '.mstep b') == '5월' and '부처님오신날' in pg.inner_html(T + '.paper'), f'월 페이지 → 내 설정으로 이 달 만들기: {href}')
     pg.close(); c.close()
+
+    # 7-2b) 주소는 설정을 여러 번 바꿔도 한 번만 고친다. 언어를 바꾸면 같은 달력이 열린다
+    c = ctx_of(b, locale='en-US')
+    pg, errs = open_page(c, '/ko/')
+    ok(pg.get_attribute('a.lang', 'href') == '/' and pg.get_attribute('.lang-bar a', 'href') == '/', '아무것도 안 바꿨으면 언어 링크는 그대로(/)')
+    pg.evaluate("(() => { window.__rs = 0; const o = history.replaceState; history.replaceState = function () { window.__rs++; return o.apply(this, arguments); }; })()")
+    pg.click(T + '.opt-toggle')
+    pg.click(T + '[data-seg="weekStart"][data-v="1"]'); pg.click(T + '[data-opt="week"]'); pg.click(T + '[data-opt="mono"]'); pg.click(T + '.shape[data-kind="months"]'); pg.click(T + '[data-mstep="1"]')
+    n0 = pg.evaluate('window.__rs')
+    pg.wait_for_timeout(URL_WAIT)
+    ok(n0 == 0 and pg.evaluate('window.__rs') == 1 and pg.evaluate('location.search') == '?k=monthly&m=2&w=mon&wk=1&ink=bw', f"설정을 다섯 번 바꿔도 주소는 한 번만 고친다: 바로 뒤 {n0}번, 뒤에 {pg.evaluate('window.__rs')}번 {pg.evaluate('location.search')}")
+    href = pg.get_attribute('a.lang', 'href')
+    ok(href == '/?k=monthly&m=2&w=mon&p=a4&c=kr&wk=1&ink=bw' and pg.get_attribute('.lang-bar a', 'href') == href, f'머리의 언어 링크와 안내 띠 링크에 지금 설정이 실린다: {href}')
+    pg.click('a.lang'); pg.wait_for_load_state('load'); pg.wait_for_timeout(600)
+    ok(pg.evaluate('location.pathname') == '/' and pg.inner_text(T + '[data-what]') == '12 monthly pages' and pg.inner_text(T + '.mstep b') == 'Feb' and 'A4' in pg.inner_text(T + '[data-meta]') and pg.input_value('#o-country') == 'KR'
+       and pg.get_attribute(T + '[data-seg="weekStart"][data-v="1"]', 'aria-pressed') == 'true' and pg.is_checked(T + '[data-opt="week"]') and pg.is_checked(T + '[data-opt="mono"]') and 'Seollal' in pg.inner_html(T + '.paper') and not errs,
+       f"영어판에서도 같은 달력(한국 공휴일·A4·월요일 시작·주 번호·흑백·2월): {pg.inner_text(T + '[data-what]')} / {pg.inner_text(T + '[data-meta]')} / {pg.input_value('#o-country')}")
+    ok(pg.get_attribute('a.lang', 'href') == '/ko/?k=monthly&m=2&w=mon&wk=1&ink=bw', f"돌아가는 링크(한국어판 기본인 한국·A4 는 빠짐): {pg.get_attribute('a.lang', 'href')}")
+    pg.close()
+    # 설정을 바꾸고 1.5초 안에 다른 쪽으로 갔다가 뒤로 와도 같은 달력
+    pg, errs = open_page(c, '/ko/')
+    pg.click(T + '.shape[data-orient="portrait"]')
+    pg.click('a[href="/ko/2027/holidays/"] >> nth=0'); pg.wait_for_load_state('load'); pg.wait_for_timeout(300)
+    pg.go_back(); pg.wait_for_load_state('load'); pg.wait_for_timeout(600)
+    ok(pg.evaluate('location.search') == '?k=portrait' and pg.get_attribute(T + '.shape[data-orient="portrait"]', 'aria-pressed') == 'true', f"바로 떠났다가 뒤로 와도 설정이 남는다: {pg.evaluate('location.search')}")
+    pg.close(); c.close()
+    # 영어판 + 한국 공휴일: 근거 줄이 연도에 맞다(2025년은 2026년 개정 전)
+    c = ctx_of(b, locale='en-US')
+    for q, want, never in (('?y=2025&c=kr', 'confirmed public holidays for 2025', 'April 2026'), ('?y=2027&c=kr', 'as amended in April 2026', 'confirmed'), ('?y=2028&c=kr', 'not out yet', 'confirmed'), ('?y=2029&c=kr', 'projected', 'April 2026')):
+        pg, errs = open_page(c, '/' + q)
+        t = pg.inner_text(T + '[data-basis]')
+        ok(want in t and never not in t and not re.search('[가-힣]', t) and not errs, f'영어 + 한국 근거 줄 {q}: {t[:80]!r}')
+        pg.close()
+    c.close()
+    # 구분 칩: 낱말 중간에서 줄이 바뀌지 않는다(좁으면 칩이 통째로 이름 아래 줄로)
+    for w in (320, 360, 390, 1366):
+        c = ctx_of(b, w, 800, w < 900)
+        for path in ('/2027/holidays/', '/2026/holidays/', '/ko/2027/holidays/', '/ko/2026/holidays/', '/2027/', '/ko/2027/', '/ko/2028/', '/ko/son-eomneun-nal/'):
+            pg, errs = open_page(c, path)
+            g = pg.evaluate("""(() => { const bad = []; let n = 0; document.querySelectorAll('.tag').forEach(t => { n++; const r = t.getBoundingClientRect(), wr = t.closest('.tbl-wrap').getBoundingClientRect();
+              if (t.getClientRects().length > 1 || r.height > 28 || r.right > wr.right + 0.5 || r.left < wr.left - 0.5) bad.push(t.textContent + ' ' + Math.round(r.width) + 'x' + Math.round(r.height)); });
+              return { n, bad: bad.slice(0, 4), sw: document.documentElement.scrollWidth }; })()""")
+            ok(g['n'] >= 6 and not g['bad'] and g['sw'] <= w, f'구분 칩이 한 줄로, 표 안에 {path} @{w}: {g}')
+            pg.close()
+        c.close()
 
     # 7-3) 휴대폰: 모양을 바꿔 달 고르는 줄이 나와도 아래가 밀리지 않는다
     for path, loc in (('/ko/', 'ko-KR'), ('/', 'en-US')):

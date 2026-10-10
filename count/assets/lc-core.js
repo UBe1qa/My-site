@@ -146,6 +146,8 @@
 
   /* ── 한 번에 세기 ───────────────────────────────── */
   /* opts.newline: 줄바꿈 하나를 몇 글자(몇 단위)로 볼지 0·1·2 (기본 1)
+     opts.newlineBytes: 바이트에서는 줄바꿈을 몇 바이트로 볼지(안 주면 newline과 같다).
+       글자는 1자, 바이트만 2byte로 세는 곳(인크루트)에 맞출 때 쓴다.
      opts.locale : 단어·문장 나누기에 쓸 언어('ko'·'en')
      opts.segment: false면 단어(유니코드 규칙)·문장을 세지 않는다(아주 긴 글에서 화면이 먼저 답하게)
      opts.noSegmenter: true면 Intl.Segmenter 없는 브라우저처럼 센다(시험용) */
@@ -153,6 +155,7 @@
     opts = opts || {};
     text = text == null ? '' : String(text);
     var nl = opts.newline == null ? 1 : +opts.newline;
+    var nlb = opts.newlineBytes == null ? nl : +opts.newlineBytes;
     var info = table(), n = text.length, i, c, d, f;
 
     /* 1) 단위·코드 포인트·바이트·공백·줄·어절 (글자 묶음과 무관한 것) */
@@ -201,13 +204,19 @@
 
     /* 2) 글자 묶음(사람이 보는 글자)과 종류 */
     var seg = opts.noSegmenter ? null : segmenter('grapheme');
-    var cls = [0, 0, 0, 0, 0, 0, 0, 0, 0], g = 0, segs = null, part, k, it;
+    var cls = [0, 0, 0, 0, 0, 0, 0, 0, 0], g = 0, segs = null, part, k, it, j;
+    /* EUC-KR로 못 담는 '사람이 보는 글자'(조각이 하나라도 표에 없으면 그 글자 전체를 하나로 센다) */
+    var badG = 0, badGs = [], badGSeen = {};
+    function noteBadG(ch) {
+      badG++;
+      if (badGs.length < 8 && !badGSeen['$' + ch]) { badGSeen['$' + ch] = 1; badGs.push(ch); }
+    }
     i = 0;
     while (i < n) {
       c = text.charCodeAt(i); f = info[c];
       /* 빠른 길: 단순 글자 둘이 나란히 있으면 그 사이는 반드시 글자 경계다 */
       if ((f & F_SIMPLE) && (i + 1 >= n || (info[text.charCodeAt(i + 1)] & F_SIMPLE))) {
-        if (c !== 10) { g++; cls[f & F_CLASS]++; }
+        if (c !== 10) { g++; cls[f & F_CLASS]++; if (cp && c >= 0x80 && !cp[c]) noteBadG(text.charAt(i)); }
         i++;
         continue;
       }
@@ -219,14 +228,15 @@
         c = k.charCodeAt(0);
         if (c === 10 || c === 13) continue;
         g++; cls[classOfCluster(k, info)]++;
+        if (cp) for (j = 0; j < k.length; j++) { c = k.charCodeAt(j); if (c >= 0x80 && !cp[c]) { noteBadG(k); break; } }
         continue;
       }
       /* Segmenter 없음: 코드 포인트 하나를 한 글자로(결합 글자·이모지 묶음은 더 많이 세진다) */
       if (c === 10) { i++; continue; }
       if (c === 13) { i += (i + 1 < n && text.charCodeAt(i + 1) === 10) ? 2 : 1; continue; }
       if (c >= 0xD800 && c <= 0xDBFF && i + 1 < n && (text.charCodeAt(i + 1) & 0xFC00) === 0xDC00) {
-        g++; cls[classOfCluster(text.substr(i, 2), info)]++; i += 2;
-      } else { g++; cls[classOfCluster(text.charAt(i), info)]++; i++; }
+        g++; cls[classOfCluster(text.substr(i, 2), info)]++; if (cp) noteBadG(text.substr(i, 2)); i += 2;
+      } else { g++; cls[classOfCluster(text.charAt(i), info)]++; if (cp && c >= 0x80 && !cp[c]) noteBadG(text.charAt(i)); i++; }
     }
 
     /* 3) 단어(유니코드 규칙)·문장 */
@@ -249,9 +259,12 @@
     var out = {
       empty: n === 0,
       newline: nl,
+      newlineBytes: nlb,
       /* 줄바꿈을 nl자로 본 값 */
       chars: g + nl * lineBreaks,
       charsNoSpace: g - cls[SPACE],
+      /* 코드 포인트도 줄바꿈 옵션을 따른 값(줄바꿈 하나 = nl). 날것은 raw.codePoints */
+      codePoints: codePoints - brUnits + nl * lineBreaks,
       /* 날것 그대로(줄바꿈 처리 옵션과 무관) */
       raw: { graphemes: g + lineBreaks, codePoints: codePoints, units: n },
       spaces: { space: space, tab: tab, other: otherWs, lineBreaks: lineBreaks, total: cls[SPACE] + lineBreaks },
@@ -261,9 +274,10 @@
       wordsSeg: wordsSeg,
       sentences: sentences,
       bytes: {
-        utf8: utf8 + nl * lineBreaks,
-        utf16: 2 * (n - brUnits) + 2 * nl * lineBreaks,
-        euckr: cp ? { bytes: cpBytes + nl * lineBreaks, unencodable: cpBad, samples: bad, outsideKsx1001: ksBad } : null
+        utf8: utf8 + nlb * lineBreaks,
+        utf16: 2 * (n - brUnits) + 2 * nlb * lineBreaks,
+        /* unencodable·samples = 표에 없는 코드 포인트(조각) 수와 예. unencodableChars·sampleChars = 그런 조각이 든 '사람이 보는 글자' 수와 예(화면은 이쪽을 보여 준다) */
+        euckr: cp ? { bytes: cpBytes + nlb * lineBreaks, unencodable: cpBad, samples: bad, outsideKsx1001: ksBad, unencodableChars: badG, sampleChars: badGs } : null
       },
       classes: {},
       loneSurrogates: lone,
@@ -303,6 +317,32 @@
       else out.push(text.charAt(i));
     }
     return out;
+  };
+
+  /* hit(UTF-16 단위)에 걸리는 조각이 든 '사람이 보는 글자'를 앞에서부터 겹치지 않게 훑는다.
+     { count: 그런 글자 수, samples: 서로 다른 것 앞 max개 }. stop=true면 max개를 모으는 대로 멈춘다(count는 그때까지).
+     줄바꿈 묶음(CR·LF)도 hit에 걸리면 센다. Segmenter가 없으면 코드 포인트 단위로 본다. */
+  LC.clustersWith = function (text, hit, max, stop) {
+    text = text == null ? '' : String(text);
+    max = max == null ? 8 : max;
+    var info = table(), seg = segmenter('grapheme'), segs = null, n = text.length, i = 0, count = 0, out = [], seen = {}, c, k, j, bad;
+    while (i < n) {
+      c = text.charCodeAt(i);
+      if ((info[c] & F_SIMPLE) && (i + 1 >= n || (info[text.charCodeAt(i + 1)] & F_SIMPLE))) { k = null; bad = hit(c); i++; if (bad) k = text.charAt(i - 1); }
+      else {
+        if (seg) { if (!segs) segs = seg.segment(text); k = segs.containing(i).segment; }
+        else if (c === 13 && i + 1 < n && text.charCodeAt(i + 1) === 10) k = '\r\n';
+        else if (c >= 0xD800 && c <= 0xDBFF && i + 1 < n && (text.charCodeAt(i + 1) & 0xFC00) === 0xDC00) k = text.substr(i, 2);
+        else k = text.charAt(i);
+        bad = false;
+        for (j = 0; j < k.length; j++) if (hit(k.charCodeAt(j))) { bad = true; break; }
+        i += k.length;
+      }
+      if (!bad) continue;
+      count++;
+      if (out.length < max && !seen['$' + k]) { seen['$' + k] = 1; out.push(k); if (stop && out.length >= max) break; }
+    }
+    return { count: count, samples: out };
   };
 
   /* 한 글자(글자 묶음)를 뜯어보기: 코드 포인트·UTF-16 단위·UTF-8 바이트 */
@@ -349,6 +389,27 @@
   LC.seconds = function (count, perMinute) {
     if (!(perMinute > 0) || !(count > 0)) return 0;
     return count / perMinute * 60;
+  };
+  /* 시간을 화면에 적을 조각으로: { h, m, s, under }.
+     1시간 미만은 초까지(반올림), 1시간부터는 분까지(반올림)만 적는다. 0초보다 길지만 반올림하면 0초인 값은 under=true('1초 미만'). */
+  LC.duration = function (seconds) {
+    var sec = +seconds;
+    if (!(sec > 0) || !isFinite(sec)) return { h: 0, m: 0, s: 0, under: false };
+    var r = Math.round(sec), min;
+    if (r === 0) return { h: 0, m: 0, s: 0, under: true };
+    if (r < 3600) return { h: 0, m: Math.floor(r / 60), s: r % 60, under: false };
+    min = Math.round(sec / 60);
+    return { h: Math.floor(min / 60), m: min % 60, s: 0, under: false };
+  };
+
+  /* 숫자 입력칸(목표 글자 수·최대 글자 수·기준 바이트·읽는 속도)을 읽는다. 조용히 바꿔 읽지 않는다.
+     받는 것: 0 이상의 정수(반각·전각 숫자, 앞뒤 공백, 세 자리마다 쉼표). 빈칸 = null, 그 밖(소수·음수·지수·글자) = NaN. */
+  LC.parseCount = function (value) {
+    var s = String(value == null ? '' : value).replace(/[\uFF10-\uFF19]/g, function (d) { return String.fromCharCode(d.charCodeAt(0) - 0xFEE0); }).replace(/\uFF0C/g, ',').replace(/^[\s\u3000]+|[\s\u3000]+$/g, '');
+    if (!s) return null;
+    if (/^[0-9]{1,3}(,[0-9]{3})+$/.test(s)) s = s.replace(/,/g, '');
+    if (!/^[0-9]{1,9}$/.test(s)) return NaN;
+    return parseInt(s, 10);
   };
 
   LC.CLASS_NAMES = CLASS_NAMES;

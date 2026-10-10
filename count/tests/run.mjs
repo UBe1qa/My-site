@@ -1,7 +1,7 @@
 // 글자수 세기 로직 시험: node count/tests/run.mjs  (추가 설치 없이 돈다)
 // 기준값은 다른 방법으로 구한 것: cases.json(파이썬 regex·grapheme·uniseg·표준 코덱), cases-x.json(npm twitter-text),
 // cases-sms.json(파이썬 smsutil·npm sms-segments-calculator·split-sms), cases-units.json(파이썬으로 규칙대로 더한 나이스 바이트·세는 단위),
-// 손으로 놓아 본 원고지 예시, _dev/limits.json(공식 출처에서 확인한 값).
+// cases-miss.json(파이썬 regex \\X + cp949 코덱으로 구한 '못 담는 글자'), 손으로 놓아 본 원고지 예시, _dev/limits.json(공식 출처에서 확인한 값).
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -371,6 +371,77 @@ if (want(group)) {
   for (const [k, v] of Object.entries(LIM)) if (v && typeof v === 'object') eq([v.verified, v.checked], [true, '2026-10-10'], `limits.json ${k}: 확인됨·확인한 날`);
 }
 
+/* ───────────── 8-4. 제3자 평가(2026-10-10) 뒤에 더한 것 ───────────── */
+// 못 담는 글자를 '사람이 보는 글자' 단위로: 파이썬 regex \X + cp949 코덱·smsutil 문자표로 따로 구한 값(tests/gen_miss.py)
+group = 'miss';
+if (want(group) && has('cases-miss.json')) {
+  const ms = load('cases-miss.json');
+  eq(ms.cp949.length, data.cases.length, 'cases-miss.json 은 cases.json 과 같은 순서·같은 개수');
+  data.cases.forEach((c, i) => {
+    const e = LC.analyze(c.text).bytes.euckr;
+    eq([e.unencodableChars, e.sampleChars], ms.cp949[i], `${c.name} ${show(c.text)} EUC-KR로 못 담는 글자(사람이 보는 글자 단위) 수와 예`);
+  });
+  for (const c of ms.cp949_extra) { const e = LC.analyze(c.text).bytes.euckr; eq([e.unencodableChars, e.sampleChars], c.expect, `${show(c.text)} 못 담는 글자(글자 단위)`); }
+  let bad = [];
+  for (const c of data.cases) { const e = LC.analyze(c.text).bytes.euckr; if (e.unencodableChars > e.unencodable || (e.unencodable === 0) !== (e.unencodableChars === 0)) bad.push(c.name); }
+  eq(bad.slice(0, 10), [], '글자 단위 수 ≤ 조각(코드 포인트) 수이고, 한쪽이 0이면 다른 쪽도 0');
+  const ev = LC.analyze('가족 👨‍👩‍👧 국기 🇰🇷 엄지 👍🏽 끝').bytes.euckr;
+  eq([ev.unencodableChars, ev.sampleChars, ev.unencodable, ev.bytes], [3, ['👨‍👩‍👧', '🇰🇷', '👍🏽'], 9, 20], '평가 L2 예시: 이모지 3개 = 못 담는 글자 3개(조각으로는 9개), 바이트는 그대로 20');
+  if (LC.sms && has('cases-sms.json')) {
+    const ss = load('cases-sms.json');
+    eq(ms.sms.length, ss.cases.length, 'cases-miss.json 의 sms 는 cases-sms.json 과 같은 순서·같은 개수');
+    ss.cases.forEach((c, i) => eq(LC.sms.count(c.text).nonGsmChars, ms.sms[i], `${show(c.text)} GSM-7 밖 글자(사람이 보는 글자 단위)`));
+    for (const c of ms.sms_extra) eq(LC.sms.count(c.text).nonGsmChars, c.expect, `${show(c.text)} GSM-7 밖 글자(글자 단위)`);
+    eq(LC.sms.count('a\t👨‍👩‍👧').nonGsmChars, ['\t', '👨‍👩‍👧'], '평가 L2 예시(SMS): 탭과 가족 이모지 = 글자 둘(조각 다섯이 아니라)');
+  }
+  const cw = LC.clustersWith('가\u200D나 a\u200B', (u) => u === 0x200D || u === 0x200B, 8);
+  eq([cw.count, cw.samples], [2, ['가\u200D', '\u200B']], 'clustersWith: 이음 글자(ZWJ)는 앞 글자와 한 묶음, 폭 없는 공백(ZWSP)은 따로');
+} else if (want(group)) skipped.push('못 담는 글자 시험: cases-miss.json 없음');
+
+// 줄바꿈을 글자와 바이트에서 따로(인크루트: 글자 1자·바이트 2byte), 코드 포인트도 줄바꿈 옵션을 따름
+group = 'nlsplit';
+if (want(group)) {
+  for (const c of data.cases) {
+    const e = c.expect, t = c.text, tag = `${c.name} ${show(t)}`;
+    const noBreaks = [...t.replace(/\r\n|\r|\n/g, '')].length;   // 문자열 반복자(코드 포인트 단위)로 따로 센다
+    for (const a of [0, 1, 2]) {
+      eq(LC.analyze(t, { newline: a }).codePoints, noBreaks + a * e.lineBreaks, `${tag} 코드 포인트(줄바꿈 ${a})`);
+      for (const b of [0, 1, 2]) {
+        const r = LC.analyze(t, { newline: a, newlineBytes: b });
+        eq([r.chars, r.bytes.utf8, r.bytes.utf16, r.bytes.euckr.bytes, r.charsNoSpace], [e.chars[a], e.utf8[b], e.utf16[b], e.cp949[b], e.charsNoSpace], `${tag} 글자는 줄바꿈 ${a}자, 바이트는 ${b}byte`);
+      }
+    }
+  }
+  const cpn = (t, nl) => LC.analyze(t, { newline: nl }).codePoints;
+  eq([cpn('one\ntwo\n\nthree', 0), cpn('one\ntwo\n\nthree', 1), cpn('one\ntwo\n\nthree', 2), cpn('\n\n\n', 0), cpn('a\r\nb', 1), LC.analyze('a\r\nb').raw.codePoints], [11, 14, 17, 0, 3, 4], '평가 L1 예시: one⏎two⏎⏎three 는 줄바꿈 0이면 코드 포인트 11, 엔터 세 번은 0. 날것(raw)은 CRLF를 2로 둔다');
+  // 취업 사이트 측정값(limits.json): 인크루트는 글자 1자·바이트 2byte
+  const J = LIM.jobsites, inc = J.rows.find((r) => r.newline === 2);
+  const split = (t) => { const r = LC.analyze(t, { newline: 1, newlineBytes: 2 }); return [r.chars, r.bytes.euckr.bytes, r.charsNoSpace]; };
+  eq([split(J.samples.B), split(J.samples.A)], [inc.B.slice(0, 3), inc.A.slice(0, 3)], '인크루트 맞추기(글자 1자·바이트 2byte): 예시 B = 9자·16byte·공백 제외 6자, 예시 A = 11자·14byte·9자 (직접 넣어 본 값과 같다)');
+  eq(split(J.samples.B), J.ours.nl12.B, '글의 표에 싣는 칸칸 값(nl12) = 로직');
+  // 제3자 평가가 네 곳에 직접 넣어 본 예시 글(289자, 줄바꿈 4번): 사람인·잡코리아·네이버 289자·488byte, 인크루트 289자·492byte, 공백 제외 214자
+  const sk = CONTENT.sample.ko, one = LC.analyze(sk, { newline: 1 }), two = LC.analyze(sk, { newline: 1, newlineBytes: 2 });
+  eq([one.chars, one.bytes.euckr.bytes, one.charsNoSpace, one.spaces.lineBreaks, two.chars, two.bytes.euckr.bytes], [289, 488, 214, 4, 289, 492], '한국어 예시 글: 289자·488byte(줄바꿈 1byte), 인크루트 맞추기 289자·492byte, 공백 제외 214자');
+}
+
+// 숫자 입력칸 읽기, 읽는 시간 적는 법, 블루스카이 둘째 한도
+group = 'input';
+if (want(group)) {
+  const pc = (v) => { const n = LC.parseCount(v); return n === null ? 'empty' : Number.isNaN(n) ? 'bad' : n; };
+  eq(['500', ' 500 ', '1,000', '１００', '１，０００', '0', '007', '1234567'].map(pc), [500, 500, 1000, 100, 1000, 0, 7, 1234567], '숫자 칸: 정수·앞뒤 공백·세 자리 쉼표·전각 숫자는 받는다');
+  eq(['', '   ', null, undefined].map(pc), ['empty', 'empty', 'empty', 'empty'], '숫자 칸: 빈칸은 빈칸으로');
+  eq(['12.5', '3.5', '1e3', '-50', '-200', '2.5', 'abc', '12,5', '1,00', '+5', '5자', '1 000', '1234567890'].map(pc), Array(13).fill('bad'), '숫자 칸: 소수·음수·지수·글자·어긋난 쉼표는 조용히 바꿔 읽지 않고 못 받는 값으로');
+  const d = (s) => { const x = LC.duration(s); return x.under ? 'under' : [x.h, x.m, x.s]; };
+  eq([d(0), d(LC.seconds(0, 238)), d(LC.seconds(1, 238)), d(LC.seconds(1, 183)), d(LC.seconds(2, 238))], [[0, 0, 0], [0, 0, 0], 'under', 'under', [0, 0, 1]], '읽는 시간: 빈 글 0초, 단어 하나는 1초 미만, 두 단어는 1초');
+  eq([d(59.4), d(59.6), d(3599.4), d(3599.6), d(761 * 60 + 33), d(7200), d(-5), d(NaN)], [[0, 0, 59], [0, 1, 0], [0, 59, 59], [1, 0, 0], [12, 42, 0], [2, 0, 0], [0, 0, 0], [0, 0, 0]], '읽는 시간: 1시간 미만은 분·초, 1시간부터는 시간·분(761분 33초 = 12시간 42분)');
+  eq(Math.round(LC.seconds(87, 238)), 22, '읽는 시간: 영어 예시 글 87단어는 22초(바뀌지 않음)');
+  const fam = '👨‍👩‍👧‍👦'.repeat(300), bs = LIM.sns.rows.find((r) => r.id === 'bs');
+  let g = 0; for (const _ of new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(fam)) g++;
+  eq([bs.limit, bs.unit, bs.limit2, bs.unit2], [300, 'grapheme', 3000, 'utf8'], '블루스카이: 300 글자소, 그리고 UTF-8 3,000바이트');
+  eq([LC.measure(fam, bs.unit), LC.measure(fam, bs.unit2), g, new TextEncoder().encode(fam).length], [300, 7500, 300, 7500], '평가 L9 예시: 👨‍👩‍👧‍👦 300개 = 300 글자소지만 7,500바이트(3,000바이트를 넘는다)');
+  eq([LC.measure('가'.repeat(300), 'utf8'), LC.measure('a'.repeat(300), 'utf8')], [900, 300], '한글·영문 300자는 3,000바이트 안');
+}
+
 /* ───────────── 9. 속도(100만 자) ───────────── */
 group = 'speed';
 if (want(group)) {
@@ -393,6 +464,14 @@ if (want(group)) {
   rows.push(`5,000자(자소서 한 편): 전부 세기 ${t5.toFixed(2)}ms`);
   eq(t5 < 8, true, `5,000자 전부 세기 ${t5.toFixed(2)}ms < 8ms (입력할 때마다 세도 한 프레임 안)`);
   console.log('속도\n  ' + rows.join('\n  '));
+}
+
+/* ───────────── 소개에 적은 '자동 테스트 N천여 개' = 지금 테스트 수(전부 돌릴 때만 본다) ───────────── */
+if (!ONLY.length) {
+  group = 'about';
+  const k = Math.floor((pass + fail + 1) / 1000);   // 이 줄까지 센 수의 천 단위
+  const ko = CONTENT.pages.ko.about.body, en = CONTENT.pages.en.about.body;
+  eq([ko.includes(`자동 테스트 ${Math.floor(k / 10)}만 ${k % 10}천여 개`), en.includes(`about ${k},000 automated tests`)], [true, true], `소개 페이지에 적은 테스트 수가 지금 수(${k}천여 개)와 같다`);
 }
 
 /* ───────────── 결과 ───────────── */

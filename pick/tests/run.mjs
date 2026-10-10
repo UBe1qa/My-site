@@ -4,9 +4,11 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { makeRng, below, newSeed, cryptoSource, seedToText, seedFromText, bytesToB64u, b64uToBytes, SEED_BYTES } from '../assets/core/rng.js';
-import { LIMITS, WHEEL, shuffledIndices, shuffle, pickSome, dealSlips, teamSizes, splitTeams, randomNumbers, flipCoins, rollDice, wheelPick, wheelRotation, wheelIndexAt, sliceColorCount, labelFlipped, labelSize } from '../assets/core/pick.js';
+import { LIMITS, WHEEL, shuffledIndices, shuffle, pickSome, dealSlips, teamSizes, splitTeams, randomNumbers, flipCoins, rollDice, wheelPick, wheelRotation, wheelIndexAt, sliceColorCount, labelFlipped, labelSize,
+  compareCodePoints, canonicalOrder, wheelDraw, drawSome, drawOrder, drawSlips, drawTeams, commonPrefixLength, fitLabel } from '../assets/core/pick.js';
 import { LADDER, makeLadder, isValidLadder, tracePath, ladderEnds, playLadder } from '../assets/core/ladder.js';
-import { parseList, cleanName, uniqueItems, encodeShare, decodeShare, TOOLS } from '../assets/core/share.js';
+import { parseList, cleanName, uniqueItems, firstColumn, encodeShare, decodeShare, shareLength, TOOLS, MAX_HASH, SHARE_VERSION } from '../assets/core/share.js';
+import { readInteger } from '../assets/core/input.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FX = JSON.parse(fs.readFileSync(path.join(HERE, 'fixtures.json'), 'utf8'));
@@ -72,6 +74,20 @@ for (const v of FX.xoshiro) {
   }
   eq(got, v.first, `${v.name}: 처음 ${v.first.length}개`);
   eq(at, v.at, `${v.name}: 1000·65536·100000번째`);
+}
+{
+  // 공개 기준 벡터를 BigInt로 직접 대조(값이 2^53을 넘어 Number로는 견줄 수 없다).
+  // 출처: rust-random/rngs 의 rand_xoshiro/src/xoshiro256starstar.rs, 테스트 reference() (참조 C 구현으로 만든 값이라고 적혀 있다).
+  // 씨앗 32바이트 = 1,0,0,0,0,0,0,0, 2,0,…, 3,0,…, 4,0,… (낮은 자리 먼저라 상태 s = [1, 2, 3, 4])
+  const REFERENCE = [11520n, 0n, 1509978240n, 1215971899390074240n, 1216172134540287360n, 607988272756665600n,
+    16172922978634559625n, 8476171486693032832n, 10595114339597558777n, 2904607092377533576n];
+  const seed = new Uint8Array(32);
+  seed[0] = 1; seed[8] = 2; seed[16] = 3; seed[24] = 4;
+  const r = makeRng(seed);
+  const got = REFERENCE.map(() => u64(r.u64()));
+  ok(got.every((v, i) => v === REFERENCE[i]), `공개 기준 벡터 10개(BigInt): ${got.join(', ')}`);
+  ok(REFERENCE[6] > BigInt(Number.MAX_SAFE_INTEGER), '기준 벡터에는 2^53을 넘는 값이 있다(그래서 BigInt로 견준다)');
+  ok(11520n === ((2n * 5n) << 7n) * 9n, '손계산: 상태 [1,2,3,4]의 첫 출력 = rotl(2×5, 7)×9 = 11520');
 }
 {
   // u32는 64비트 출력의 위쪽 절반이다
@@ -612,6 +628,157 @@ section('같은 씨앗 = 같은 결과');
   eq({ bottom: g2.bottom, ends: g2.ends, result: g2.result, rungs: g2.ladder.rungs.map((r) => [...r].join('')) }, GOLD.b.ladder, '고정값 2: 6명 사다리(모양까지)');
 }
 
+// ---------------------------------------------------------------- 명단의 순서에 기대지 않는 뽑기
+section('순서에 기대지 않는 뽑기');
+{
+  // ① 정해진 자리(코드 포인트 순)는 파이썬 sorted()와 같다
+  for (const c of FX.order) {
+    eq(canonicalOrder(c.items), c.order, `정해진 자리 = 파이썬 sorted(): ${c.name}`);
+    eq(canonicalOrder(c.items).map((i) => c.items[i]), c.sorted, `정해진 자리의 이름들: ${c.name}`);
+  }
+  ok(compareCodePoints('￥', '😀') < 0 && '￥' > '😀', '코드 포인트 순: U+FFE5가 U+1F600보다 앞(자바스크립트 기본 정렬은 반대)');
+  ok(compareCodePoints('가', '가나') < 0 && compareCodePoints('가나', '가') > 0 && compareCodePoints('가', '가') === 0, '앞이 같으면 짧은 쪽이 앞, 같으면 0');
+  // ② 예시 명단 8명 + 씨앗(상태 1,2,3,4): 뽑힌 사람 = golden.json의 자리 번호를 파이썬이 코드 포인트 순 이름에 댄 것
+  const fixed = seedFromText('AQAAAAAAAAACAAAAAAAAAAMAAAAAAAAABAAAAAAAAAA');
+  const sample = FX.order[0].items; // 넣은 순서(정렬되지 않음)
+  const G = FX.order_golden;
+  const names = (idx, list = sample) => idx.map((i) => list[i]);
+  eq(sample[wheelDraw(sample, makeRng(fixed)).index], G.wheel, '고정값: 돌림판에서 뽑힌 이름');
+  eq(names(drawOrder(sample, makeRng(fixed))), G.order, '고정값: 순서 정하기');
+  eq(drawTeams(sample, { teams: 3 }, makeRng(fixed)).map((t) => names(t)), G.teams, '고정값: 3팀');
+  eq(names(drawSome(sample, 3, makeRng(fixed))), names(pickSome(8, 3, makeRng(fixed)), G.sorted), '고정값: 3명 뽑기 = 자리 번호를 코드 포인트 순 이름에 댄 것');
+  // 옛 방식(형식 1 링크): 넣은 순서가 그대로 자리다 → 예전과 똑같은 결과
+  eq(wheelDraw(sample, makeRng(fixed), true), GOLD.wheel, '옛 방식: 돌림판은 넣은 순서의 자리 번호 그대로');
+  eq(drawOrder(sample, makeRng(fixed), true), GOLD.order, '옛 방식: 순서 정하기');
+  eq(drawTeams(sample, { teams: 3 }, makeRng(fixed), true), GOLD.teams, '옛 방식: 3팀');
+  eq(drawSome(sample, 3, makeRng(fixed), true), pickSome(8, 3, makeRng(fixed)), '옛 방식: 3명 뽑기');
+  eq(drawSlips(sample, [{ label: 'a', count: 2 }, { label: 'b', count: 6 }], makeRng(fixed), true), dealSlips(8, [{ label: 'a', count: 2 }, { label: 'b', count: 6 }], makeRng(fixed)), '옛 방식: 쪽지');
+
+  // ③ 명단을 아무렇게나 뒤섞어도 같은 씨앗이면 같은 사람이 같은 결과를 받는다(4,000가지 명단 × 뒤섞기)
+  const r = makeRng(seedOf('order-free'));
+  const pool = ['김민준', '이서연', '박지호', '최유나', '정도윤', '강하린', '윤서준', '임채원', 'Zoë', 'zoe', '田中さん', '😀', '👍🏽', '￥', '10', '9', 'a b', 'A', '가', '각', '3학년 1반 김민준', '3학년 1반 김민', 'محمد', ''];
+  const seedFrom = (rng) => { const s = new Uint8Array(32); for (let b = 0; b < 32; b += 4) { const v = rng.u32(); s[b] = v & 255; s[b + 1] = (v >>> 8) & 255; s[b + 2] = (v >>> 16) & 255; s[b + 3] = v >>> 24; } s[0] |= 1; return s; };
+  const slipKey = (list, dealt) => { const m = new Map(); list.forEach((nm, i) => { const a = m.get(nm) || []; a.push(dealt[i]); m.set(nm, a); }); return JSON.stringify([...m].map(([k, v]) => [k, v.sort()]).sort()); };
+  let same = { wheel: 0, some: 0, order: 0, slips: 0, teams: 0 };
+  let moved = 0;      // 뒤섞어서 실제로 순서가 달라진 경우 수
+  let oldDiffers = 0; // 옛 방식이었다면 결과가 달라졌을 경우 수(이 시험이 실제로 무는지)
+  const TRIALS = 4000;
+  for (let t = 0; t < TRIALS; t++) {
+    const n = 1 + r.below(40);
+    const dup = r.below(3) === 0; // 셋 중 하나는 같은 이름이 섞인 명단
+    const a = Array.from({ length: n }, (_, i) => (dup ? pool[r.below(Math.min(pool.length, 6))] : pool[i % pool.length] + (i >= pool.length ? ' ' + Math.floor(i / pool.length) : '')));
+    const b = shuffle(a, r);
+    if (a.join('\n') !== b.join('\n')) moved++;
+    const seed = seedFrom(r);
+    const m = 1 + r.below(n);
+    const k = 1 + r.below(n);
+    const slips = [{ label: 'w', count: m }, { label: 'l', count: n - m }];
+    const wa = wheelDraw(a, makeRng(seed));
+    const wb = wheelDraw(b, makeRng(seed));
+    if (a[wa.index] === b[wb.index] && wa.frac === wb.frac && wa.turns === wb.turns) same.wheel++;
+    if (JSON.stringify(names(drawSome(a, m, makeRng(seed)), a)) === JSON.stringify(names(drawSome(b, m, makeRng(seed)), b))) same.some++;
+    if (JSON.stringify(names(drawOrder(a, makeRng(seed)), a)) === JSON.stringify(names(drawOrder(b, makeRng(seed)), b))) same.order++;
+    if (slipKey(a, drawSlips(a, slips, makeRng(seed))) === slipKey(b, drawSlips(b, slips, makeRng(seed)))) same.slips++;
+    if (JSON.stringify(drawTeams(a, { teams: k }, makeRng(seed)).map((x) => names(x, a))) === JSON.stringify(drawTeams(b, { teams: k }, makeRng(seed)).map((x) => names(x, b)))) same.teams++;
+    if (a[wheelDraw(a, makeRng(seed), true).index] !== b[wheelDraw(b, makeRng(seed), true).index]) oldDiffers++;
+  }
+  eq(same, { wheel: TRIALS, some: TRIALS, order: TRIALS, slips: TRIALS, teams: TRIALS }, `명단을 뒤섞어도 결과가 같다(${TRIALS.toLocaleString('en')}건씩: 돌림판·여러 명·순서·쪽지·팀)`);
+  ok(moved > TRIALS * 0.9, `뒤섞어서 실제로 순서가 달라진 명단 ${moved.toLocaleString('en')}건`);
+  ok(oldDiffers > TRIALS * 0.5, `같은 시험에서 옛 방식(넣은 순서 = 자리)은 ${oldDiffers.toLocaleString('en')}건이 다른 사람을 뽑는다(시험이 실제로 문다)`);
+
+  // ④ 결과 링크로 해 보기: 링크 속 명단의 순서만 바꿔도 같은 사람이 뽑힌다(평가에서 나온 조작 시나리오)
+  let forged = 0;
+  let forgedOld = 0;
+  for (let t = 0; t < 300; t++) {
+    const seed = seedFrom(r);
+    const pickName = (hash, legacy) => { const d = decodeShare('#' + hash); return d.items[wheelDraw(d.items, makeRng(d.seed), legacy).index]; };
+    const real = pickName(encodeShare({ tool: 'wheel', seed, items: sample }), false);
+    const swapped = shuffle(sample, r);
+    if (pickName(encodeShare({ tool: 'wheel', seed, items: swapped }), false) !== real) forged++;
+    if (pickName(encodeShare({ tool: 'wheel', seed, items: swapped, version: 1 }), true) !== pickName(encodeShare({ tool: 'wheel', seed, items: sample, version: 1 }), true)) forgedOld++;
+  }
+  eq(forged, 0, '링크 속 명단의 순서를 바꿔도 뽑힌 사람이 바뀌지 않는다(300건)');
+  ok(forgedOld > 150, `옛 형식(1) 링크는 순서를 바꾸면 ${forgedOld}건이 바뀐다(그래서 옛 링크에는 "순서까지 같아야"라고 알린다)`);
+
+  // ⑤ 공평성: 정해진 자리로 뽑아도 이름마다 같은 확률(명단을 매번 다른 순서로 넣어도)
+  const rf = makeRng(seedOf('order-fair'));
+  const idOf = new Map(sample.map((nm, i) => [nm, i]));
+  const wheelC = new Array(8).fill(0);
+  const someC = new Array(8).fill(0);
+  const firstC = new Array(8).fill(0);
+  const slipC = new Array(8).fill(0);
+  const bigC = new Array(8).fill(0);
+  const posC = Array.from({ length: 64 }, () => 0);
+  for (let t = 0; t < N; t++) {
+    const list = shuffle(sample, rf);
+    wheelC[idOf.get(list[wheelDraw(list, rf).index])]++;
+    const some = drawSome(list, 3, rf);
+    some.forEach((i) => someC[idOf.get(list[i])]++);
+    firstC[idOf.get(list[some[0]])]++;
+    drawSlips(list, [{ label: 'w', count: 2 }, { label: 'l', count: 6 }], rf).forEach((kind, i) => { if (kind === 0) slipC[idOf.get(list[i])]++; });
+    drawTeams(list, { teams: 3 }, rf)[0].forEach((i) => bigC[idOf.get(list[i])]++);
+    drawOrder(list, rf).forEach((i, at) => posC[idOf.get(list[i]) * 8 + at]++);
+  }
+  uniformOk(wheelC, '돌림판(정해진 자리): 이름마다 뽑힌 횟수');
+  uniformOk(someC, '8명 중 3명(정해진 자리): 이름마다 뽑힌 횟수');
+  uniformOk(firstC, '8명 중 3명(정해진 자리): 첫 번째로 뽑힌 횟수');
+  uniformOk(slipC, '쪽지(정해진 자리): 이름마다 당첨 횟수');
+  uniformOk(bigC, '팀(정해진 자리): 3명 팀에 들어간 횟수');
+  for (let v = 0; v < 8; v++) uniformOk(posC.slice(v * 8, v * 8 + 8), `순서 정하기(정해진 자리): ${sample[v]}의 차례`);
+  // 코드 포인트 순으로 맨 앞·맨 뒤인 이름이 유리하지도 불리하지도 않다(실제 쓰임대로 씨앗마다 한 번씩)
+  const edge = new Array(8).fill(0);
+  const master = makeRng(seedOf('order-edge'));
+  for (let t = 0; t < N; t++) edge[idOf.get(sample[wheelDraw(sample, makeRng(seedFrom(master))).index])]++;
+  uniformOk(edge, '돌림판(정해진 자리, 씨앗마다 한 번)');
+  // 같은 이름을 두 번 넣으면 여전히 두 배
+  const dupC = [0, 0];
+  for (let t = 0; t < 60000; t++) { const l = shuffle(['A', 'B', 'A'], rf); dupC[l[wheelDraw(l, rf).index] === 'A' ? 0 : 1]++; }
+  const [dst] = chi2(dupC, [40000, 20000]);
+  ok(dst < CRIT['1'], `같은 이름 두 줄은 두 칸(A ${dupC[0]} : B ${dupC[1]}, 기대 2:1)`);
+  throws(() => wheelDraw([], makeRng(fixed)), '빈 명단');
+}
+
+// ---------------------------------------------------------------- 좁은 칸에 이름 맞추기
+section('이름 맞추기');
+{
+  const w10 = (t) => Array.from(t).length * 10; // 글자마다 폭 10인 가짜 글꼴
+  eq(fitLabel('김민준', 50, w10), { text: '김민준', scale: 1 }, '들어가면 그대로');
+  eq(fitLabel('김민준이', 36, w10), { text: '김민준이', scale: 0.9 }, '조금 넘치면 글자를 줄인다');
+  eq(fitLabel('Supercalifragilistic', 60, w10), { text: 'Superca…', scale: 0.72 }, '많이 넘치면 줄이고 뒤를 자른다');
+  const cls = ['3학년 1반 김민준', '3학년 1반 이서연', '3학년 1반 박지호'];
+  eq(commonPrefixLength(cls), 7, '앞이 같은 글자 수("3학년 1반 " = 3·학·년·빈칸·1·반·빈칸)');
+  eq(cls.map((c) => fitLabel(c, 40, w10, { prefix: commonPrefixLength(cls) }).text), ['…김민준', '…이서연', '…박지호'], '앞이 같은 명단은 앞을 줄이고 서로 다른 뒤쪽을 살린다');
+  ok(new Set(cls.map((c) => fitLabel(c, 40, w10, { prefix: 7 }).text)).size === 3 && new Set(cls.map((c) => fitLabel(c, 40, w10).text)).size === 1, '그러지 않으면 셋이 같은 글자("3학년…")로 보인다');
+  // 손으로 따진 값: 폭 40, 72%까지 줄이면 기준 크기로 55.5까지 들어간다 = 다섯 글자('…' 포함)
+  eq(fitLabel('3학년 1반 남궁민수현', 40, w10, { prefix: 7 }).text, '…궁민수현', '뒤쪽도 넘치면 들어가는 만큼의 끝부분');
+  eq([commonPrefixLength(['가']), commonPrefixLength([]), commonPrefixLength(['가나', '가나']), commonPrefixLength(['김민준', '김서연']), commonPrefixLength(['가나다', '가나']), commonPrefixLength(['👍🏽a', '👍🏽b'])], [0, 0, 0, 1, 2, 2], '앞이 같은 글자 수: 하나뿐·전부 같은 이름은 0, 이모지는 쪼개지 않는다');
+  // 손으로 따진 값: 폭 30, 72%까지 줄이면 41.6까지 = 네 글자('…' 포함)
+  eq(fitLabel('김민준 선생님', 30, w10, { prefix: 1 }).text, '김민준…', '같은 앞부분이 한 글자뿐이면(성이 같은 정도) 평소대로 뒤를 자른다');
+  eq(fitLabel('가나다라마바사', 30, w10, { minScale: 1 }), { text: '가나…', scale: 1 }, '줄이지 않기로 하면(사다리 이름표) 자르기만');
+  let fits = true;
+  const rr = makeRng(seedOf('fit'));
+  for (let t = 0; t < 3000; t++) {
+    const len = 1 + rr.below(30);
+    const text = Array.from({ length: len }, () => 'ab가나😀 '[rr.below(6)]).join('').trim() || 'a';
+    const max = 20 + rr.below(200);
+    const pre = rr.below(8);
+    const f = fitLabel(text, max, w10, { prefix: pre });
+    if (!(w10(f.text) * f.scale <= max + 1e-9 || Array.from(f.text).length <= 2) || f.scale > 1 || f.scale < 0.72 - 1e-9 || f.text === '') fits = false;
+  }
+  ok(fits, '3,000가지 이름·폭: 맞춘 글자는 폭 안에 들어가고(두 글자 이하로 줄인 것은 빼고), 크기는 72%~100%');
+}
+
+// ---------------------------------------------------------------- 숫자 읽기
+section('숫자 읽기');
+{
+  const v = (t) => { const r = readInteger(t); return r.ok ? r.value : r.reason; };
+  eq([v('10'), v(' 12 '), v('1,000'), v('-5'), v('+5'), v('007'), v('-0')], [10, 12, 1000, -5, 5, 7, 0], '보통 정수, 띄어쓰기, 자릿수 쉼표, 부호');
+  eq([v('１０'), v('－５'), v('１，０００'), v('−5'), v('–5'), v('１　０')], [10, -5, 1000, -5, -5, 10], '전각 숫자·전각 쉼표·여러 가지 빼기표는 반각으로 받는다');
+  eq([v(''), v('   '), v('1.5'), v('abc'), v('1e3'), v('5-'), v('--5'), v('0x10')], ['empty', 'empty', 'not-integer', 'not-integer', 'not-integer', 'not-integer', 'not-integer', 'not-integer'], '빈칸과 정수가 아닌 것');
+  eq([v('999999999999999'), v('-999999999999999'), v('1000000000000000'), v('9999999999999999'), v('000000000000000001')], [999999999999999, -999999999999999, 'too-long', 'too-long', 1], '15자리까지, 16자리부터는 너무 길다고(정수가 아니라고 하지 않는다)');
+  ok(999999999999999 - -999999999999999 + 1 < 2 ** 53, '15자리 범위는 어떤 두 수든 정확히 계산된다(범위 크기 < 2^53)');
+}
+
 // ---------------------------------------------------------------- 명단 읽기
 section('명단 읽기');
 {
@@ -620,6 +787,16 @@ section('명단 읽기');
   eq(parseList('짜장면, 짬뽕 ,볶음밥').items, ['짜장면', '짬뽕', '볶음밥'], '한 줄이면 쉼표로');
   eq(parseList('짜장면，짬뽕、볶음밥').items, ['짜장면', '짬뽕', '볶음밥'], '전각 쉼표·모점');
   eq(parseList('가\t나\t다').items, ['가', '나', '다'], '엑셀 한 행(탭)');
+  // 한 줄뿐일 때 쉼표로 나눴는지 알려 준다(화면이 "한 줄을 쉼표로 나눴어요"라고 밝힌다)
+  eq([parseList('Smith, John').items, parseList('Smith, John').split], [['Smith', 'John'], true], '한 줄 "Smith, John"은 둘로 나누고 나눴다고 알린다');
+  eq(parseList('Smith, John\nDoe, Jane').split, false, '여러 줄이면 쉼표로 나누지 않는다');
+  eq(parseList('혼자').split, false, '나눌 것이 없으면 나눴다고 하지 않는다');
+  // 엑셀에서 여러 칸을 같이 붙여 넣은 것: 줄마다 탭이 있다 → 몇 줄인지 알려 주고, 첫 칸만 남길 수 있다
+  const sheet = '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남';
+  eq([parseList(sheet).items, parseList(sheet).tabs], [['1 김민준 남', '2 이서연 여', '3 박지호 남'], 3], '여러 칸 붙여 넣기: 한 줄이 한 칸으로, 탭이 든 줄 수');
+  eq(parseList(firstColumn(sheet)).items, ['1', '2', '3'], '첫 칸만 쓰기');
+  eq(parseList(firstColumn('김민준\t1반\n이서연\t2반\n\n\t박지호\t3반')).items, ['김민준', '이서연', '박지호'], '첫 칸만 쓰기: 빈 줄은 빼고, 첫 칸이 비면 그 줄의 첫 내용');
+  eq(parseList('김민준\n이서연').tabs, 0, '탭이 없으면 0');
   eq(parseList('김민준, 1반\n이서연, 2반').items, ['김민준, 1반', '이서연, 2반'], '여러 줄이면 쉼표는 이름의 일부');
   eq(parseList('혼자').items, ['혼자'], '하나');
   eq(parseList('').items, [], '빈 글');
@@ -652,13 +829,16 @@ section('링크 왕복');
       const d = decodeShare('#' + h);
       ok(d.ok && d.tool === tool && JSON.stringify(d.items) === JSON.stringify(c.i) && JSON.stringify(d.opts) === JSON.stringify(c.o) && seedToText(d.seed) === seedToText(seed),
         `왕복: ${c.name} / ${tool}`);
-      ok(/^r=1\.[a-z]\.[A-Za-z0-9_-]{43}\.[A-Za-z0-9_-]+$/.test(h), `주소에 그대로 쓸 수 있는 글자만: ${c.name} / ${tool}`);
+      ok(/^r=2\.[a-z]\.[A-Za-z0-9_-]{43}\.[A-Za-z0-9_-]+$/.test(h), `주소에 그대로 쓸 수 있는 글자만(형식 2): ${c.name} / ${tool}`);
+      ok(d.version === 2 && h.length === shareLength(c.i, c.o), `형식 번호 2, 길이 계산 = 실제 길이: ${c.name} / ${tool}`);
     }
     // 파이썬이 만든 문자열과 글자 하나까지 같고, 파이썬이 만든 것도 읽힌다
     const h = encodeShare({ tool: 'wheel', seed, items: c.i, opts: c.o });
     ok(h.split('.')[3] === c.body, `파이썬 json+base64와 같은 문자열: ${c.name}`);
-    const d = decodeShare(`r=1.w.${seedToText(seed)}.${c.body}`);
-    ok(d.ok && JSON.stringify(d.items) === JSON.stringify(c.i), `파이썬이 만든 링크 읽기: ${c.name}`);
+    for (const ver of [1, 2]) {
+      const d = decodeShare(`r=${ver}.w.${seedToText(seed)}.${c.body}`);
+      ok(d.ok && d.version === ver && JSON.stringify(d.items) === JSON.stringify(c.i), `파이썬이 만든 링크 읽기(형식 ${ver}): ${c.name}`);
+    }
     // 브라우저 주소 처리(URL)를 지나도 그대로
     const u = new URL('https://pick.lumenlab.page/ko/#' + h);
     ok(decodeShare(u.hash).ok && u.hash === '#' + h && u.href.endsWith('#' + h), `URL을 지나도 그대로: ${c.name}`);
@@ -682,8 +862,13 @@ section('링크 왕복');
   bad(null, 'none', 'null');
   bad('#r=', 'format', '내용 없음');
   bad('#' + good + '.x', 'format', '칸이 더 많음');
-  bad('#' + good.replace('r=1.', 'r=2.'), 'version', '모르는 형식 번호');
-  bad('#' + good.replace('r=1.', 'r=x.'), 'format', '형식 번호가 숫자가 아님');
+  bad('#' + good.replace('r=2.', 'r=3.'), 'version', '모르는 형식 번호(3)');
+  bad('#' + good.replace('r=2.', 'r=0.'), 'version', '모르는 형식 번호(0)');
+  bad('#' + good.replace('r=2.', 'r=x.'), 'format', '형식 번호가 숫자가 아님');
+  ok(decodeShare('#' + good.replace('r=2.', 'r=1.')).version === 1, '옛 형식 번호 1은 계속 읽는다');
+  eq(SHARE_VERSION, 2, '새로 만드는 링크의 형식 번호');
+  eq(decodeShare(encodeShare({ tool: 'wheel', seed, items: ['가', '나'], version: 1 })).version, 1, '옛 형식으로 받은 결과는 옛 형식으로 다시 만들 수 있다');
+  throws(() => encodeShare({ tool: 'wheel', seed, items: ['가'], version: 3 }), '없는 형식 번호로 만들기');
   bad('#' + good.replace('.w.', '.q.'), 'tool', '모르는 도구');
   bad('#' + [parts[0], parts[1], 'A'.repeat(43), parts[3]].join('.'), 'seed', '전부 0인 씨앗');
   bad('#' + [parts[0], parts[1], parts[2].slice(1), parts[3]].join('.'), 'seed', '짧은 씨앗');
@@ -710,7 +895,24 @@ section('링크 왕복');
   bad(withBody({ o: { 'bad-key': 1 }, i: [] }), 'data', '설정 키에 이상한 글자');
   bad(withBody('{"o":{"__proto__":{"x":1}},"i":[]}'), 'data', '__proto__ 키');
   bad(withBody('{"o":{},"i":["\\ud83d"]}'), 'data', '깨진 이모지 반쪽');
-  bad('#r=1.w.' + parts[2] + '.' + 'A'.repeat(400001), 'too-long', '너무 긴 링크');
+  bad('#r=2.w.' + parts[2] + '.' + 'A'.repeat(400001), 'too-long', '너무 긴 링크');
+  { // 링크 길이 한도: 만들 수 있는 링크는 전부 읽을 수 있고, 한도를 넘는 링크는 만들지 않는다(복사했다고 해 놓고 안 열리는 일이 없게)
+    const name = (i) => 'ㄱ'.repeat(26) + String(i).padStart(4, '0'); // 30자 이름
+    const fits = Array.from({ length: 3400 }, (_, i) => name(i));
+    const h = encodeShare({ tool: 'wheel', seed, items: fits });
+    ok(h.length <= MAX_HASH && h.length > MAX_HASH * 0.95 && decodeShare('#' + h).ok, `한도 바로 아래 링크(${h.length.toLocaleString('en')}자)는 만들어지고 읽힌다`);
+    const big = Array.from({ length: 5000 }, (_, i) => name(i));
+    ok(shareLength(big, {}) > MAX_HASH, `5,000명 × 30자 명단은 한도를 넘는다(${shareLength(big, {}).toLocaleString('en')}자)`);
+    let err = '';
+    try { encodeShare({ tool: 'wheel', seed, items: big }); } catch (e) { err = e.message; }
+    eq(err, 'share-too-long', '한도를 넘는 링크는 만들지 않고 알린다');
+    const eight = Array.from({ length: 5000 }, (_, i) => '가나다라' + String(i).padStart(4, '0')); // 5,000명 × 8자
+    ok(decodeShare('#' + encodeShare({ tool: 'wheel', seed, items: eight })).ok, `5,000명 × 8자 명단(${shareLength(eight, {}).toLocaleString('en')}자)은 링크가 된다`);
+    // 한도 경계: 길이가 딱 한도인 것은 읽고, 한 글자 넘으면 읽지 않는다
+    const pad = (len) => 'r=2.w.' + parts[2] + '.' + bytesToB64u(new TextEncoder().encode(JSON.stringify({ o: {}, i: [] }))).padEnd(len - 6 - 43 - 1, 'A');
+    ok(pad(MAX_HASH).length === MAX_HASH && decodeShare(pad(MAX_HASH)).reason !== 'too-long', '길이가 딱 한도인 링크는 길이로 거절하지 않는다');
+    eq(decodeShare(pad(MAX_HASH + 1)).reason, 'too-long', '한도를 한 글자 넘으면 읽지 않는다');
+  }
   ok(decodeShare(withBody({})).ok, '명단·설정이 없으면 빈 값으로');
   throws(() => encodeShare({ tool: 'nope', seed, items: [] }), '모르는 도구로 만들기');
   throws(() => encodeShare({ tool: 'wheel', seed: new Uint8Array(32), items: [] }), '0 씨앗으로 만들기');
@@ -786,6 +988,21 @@ section('글 속 숫자');
   eq(runs, 846, '10번 던지기 1,024가지 중 같은 면이 3번 이상 이어지는 경우 846가지(82.6%)');
   ok(runs / 1024 > 0.5, '절반보다 많다');
   eq(2 ** 5, 32, '다섯 번 모두 앞일 확률 1/32');
+  // 동전 FAQ: 어느 다섯 번이 모두 같은 면일 확률은 16분의 1(앞만 다섯 번이면 32분의 1)
+  let allSame = 0;
+  for (let m = 0; m < 32; m++) if (m === 0 || m === 31) allSame++;
+  eq([allSame, 32 / allSame], [2, 16], '다섯 번이 모두 같은 면인 경우는 32가지 중 2가지 = 1/16');
+  // 화면 글에 적은 한도 = 코드의 한도
+  const CONTENT = JSON.parse(fs.readFileSync(path.join(HERE, '..', '_dev', 'content.json'), 'utf8'));
+  const textOf = (tid, lang) => JSON.stringify(CONTENT.tools[tid][lang]);
+  const said = (text, n) => text.includes(n.toLocaleString('en'));
+  ok(said(textOf('coin', 'ko'), LIMITS.coinList) && said(textOf('coin', 'en'), LIMITS.coinList) && said(textOf('coin', 'ko'), LIMITS.coinCount) && said(textOf('coin', 'en'), LIMITS.coinCount), `동전 글: 던진 순서는 ${LIMITS.coinList}번까지, 한 번에 ${LIMITS.coinCount.toLocaleString('en')}번까지`);
+  ok(said(textOf('dice', 'ko'), LIMITS.diceSides) && said(textOf('dice', 'en'), LIMITS.diceSides) && said(textOf('dice', 'ko'), LIMITS.diceCount) && said(textOf('dice', 'en'), LIMITS.diceCount), `주사위 글: 면 수 2~${LIMITS.diceSides.toLocaleString('en')}, 한 번에 ${LIMITS.diceCount}개`);
+  for (const tid of ['wheel', 'draw', 'teams']) ok(said(textOf(tid, 'ko'), LIMITS.items) && said(textOf(tid, 'en'), LIMITS.items), `${tid} 글: 명단 한도 ${LIMITS.items.toLocaleString('en')}`);
+  ok(said(textOf('number', 'ko'), LIMITS.numbersCount) && said(textOf('number', 'en'), LIMITS.numbersCount), '숫자 글: 한 번에 10,000개');
+  ok(said(textOf('ladder', 'ko'), LIMITS.ladderMax) && said(textOf('ladder', 'en'), LIMITS.ladderMax), '사다리 글: 30명까지');
+  const allText = JSON.stringify(CONTENT);
+  ok(!/인원 제한 없|몇 명이든|No Entry Limit|no limit on entries|any number of names|of any length/i.test(allText), '화면 글에 "제한 없음" 꼴의 말이 없다(한도는 5,000줄)');
   // 돌림판 그리기 계산: 이웃한 칸(맨 끝과 첫 칸 포함)은 색이 다르다, 왼쪽 절반만 뒤집는다
   let colorsOk = true;
   for (let n = 2; n <= 600; n++) { const m = sliceColorCount(n); if (m < 3 && n > 2) colorsOk = false; for (let i = 0; i < n; i++) if (n > 2 && i % m === ((i + 1) % n) % m) colorsOk = false; }

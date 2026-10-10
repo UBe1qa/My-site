@@ -49,12 +49,19 @@ h1,h2,h3,p{margin:0}
 .aux{display:flex;gap:18px;font-size:14px;flex:none}
 .aux a{color:var(--muted);text-decoration:none}
 .aux a:hover{color:var(--ink)}
-/* 다른 언어판 안내: 끼워 넣지 않고 위에 겹쳐 띄운다(화면 밀림 0) */
-.langbar{position:absolute;left:0;right:0;top:100%;z-index:15;display:flex;justify-content:center;pointer-events:none}
-.langbar div{pointer-events:auto;margin-top:8px;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:999px;padding:6px 8px 6px 16px;font-size:14px;box-shadow:0 8px 24px -10px rgba(0,0,0,.5)}
-.langbar a{color:var(--paper);font-weight:700}
-.langbar button{border:0;background:transparent;color:var(--paper);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+/* 다른 언어판 안내: 화면 아래 작은 띠. 끼워 넣지 않고 겹쳐 띄운다(화면 밀림 0). 제목·설정·단추를 덮지 않는다:
+   app.js가 가운데·오른쪽(.at-r)·왼쪽(.at-l) 가운데 누르는 것을 덮지 않는 자리에 놓고, 덮게 되면 비켜 둔다(.away).
+   글 칸·설정 칸을 쓰는 동안에도 비켜 준다(.busy). 띄울지는 머리의 짧은 스크립트가 첫 그림 전에 정하고(html.lb),
+   꼬리말 아래에 띠만큼 자리를 둬서 맨 아래 링크를 덮지 않는다. 누르는 곳은 44px. */
+.langbar{position:fixed;left:0;right:0;bottom:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:15;display:flex;justify-content:center;padding:0 12px;pointer-events:none}
+.langbar div{pointer-events:auto;display:flex;align-items:center;gap:2px;background:var(--ink);color:var(--paper);border-radius:999px;padding:0 0 0 18px;font-size:14px;box-shadow:0 8px 24px -10px rgba(0,0,0,.5)}
+.langbar a{display:inline-flex;align-items:center;min-height:44px;color:var(--paper);font-weight:700}
+.langbar button{border:0;background:transparent;color:var(--paper);width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1}
 .langbar button:hover{background:rgba(255,255,255,.18)}
+.langbar.at-r{justify-content:flex-end}
+.langbar.at-l{justify-content:flex-start}
+.langbar.away,.langbar.busy{visibility:hidden}
+html.lb .foot{padding-bottom:92px}
 
 /* ── 단추 ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:0 15px;border:1px solid var(--line2);background:var(--paper);border-radius:var(--r-sm);font-size:14.5px;font-weight:600;line-height:1;color:var(--ink2);cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),color var(--t) var(--ease),transform .1s var(--ease)}
@@ -74,6 +81,14 @@ a.btn{color:var(--ink2)}
 .fld{height:34px;border:1px solid var(--line2);border-radius:var(--r-sm);padding:0 9px;background:var(--paper);font-size:15px}
 .fld:focus{outline:0;border-color:var(--main);box-shadow:0 0 0 3px var(--main-soft)}
 input.fld.n{width:86px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+/* 못 받는 값(소수·음수·글자)이 든 숫자 칸: 조용히 바꿔 읽지 않고 표시한다 */
+.fld[aria-invalid="true"]{border-color:var(--over);box-shadow:0 0 0 3px var(--over-soft)}
+.fld-note{font-size:13px;color:var(--ink2);line-height:1.5}
+.fld-note.is-bad{color:var(--over)}
+.fld-note:empty{display:none}
+/* 자바스크립트가 꺼져 있을 때, Intl.Segmenter 가 없는 브라우저일 때의 한 줄 */
+.nojs,.approx{margin-bottom:12px;font-size:14.5px;line-height:1.5;color:var(--over)}
+.nojs::before,.approx::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--over);border-radius:2px}
 
 /* ── 쪽 머리 ── */
 .phead{padding-top:22px;padding-bottom:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 20px;align-items:end}
@@ -89,7 +104,7 @@ input.fld.n{width:86px;text-align:right;font-weight:700;font-variant-numeric:tab
 .pad:focus-within{border-color:var(--main);box-shadow:0 0 0 3px var(--main-soft)}
 .pad textarea{display:block;width:100%;border:0;outline:0;resize:none;background:transparent;padding:20px 22px;font-size:17px;line-height:1.75;height:clamp(300px,calc(100vh - 331px),560px);border-radius:var(--r) var(--r) 0 0}
 .pad textarea::placeholder{color:var(--muted);opacity:.75}
-.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid var(--line);min-height:59px}
+.bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;border-top:1px solid var(--line);min-height:59px}
 .bar .sp{flex:1}
 .if-text{display:none}
 .has-text .if-text{display:inline-flex}
@@ -123,7 +138,7 @@ input.fld.n{width:86px;text-align:right;font-weight:700;font-variant-numeric:tab
 .goal-x{border:0;background:transparent;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
 .goal-x:hover{background:var(--main-soft);color:var(--ink)}
 .goal-msg{font-weight:700;color:var(--main);width:100%}
-.goal-msg.is-over{color:var(--over)}
+.goal-msg.is-over,.goal-msg.is-bad{color:var(--over)}
 .goal-msg:empty{display:none}
 
 .rows{margin:0;padding:0 20px;border-top:1px solid var(--line)}
@@ -176,6 +191,7 @@ input.fld.n{width:86px;text-align:right;font-weight:700;font-variant-numeric:tab
 .lim-bar i{display:block;height:100%;width:0;background:var(--main)}
 .lim-s{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:4px;font-size:12.5px;color:var(--muted);line-height:1.45}
 .lim-s em{font-style:normal;font-weight:600;color:var(--ink2);white-space:nowrap}
+.lim-s span b{font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
 .lims li.is-over .lim-n b,.lims li.is-over .lim-s em{color:var(--over)}
 .lims li.is-over .lim-bar i{background:var(--over)}
 .lims.two{display:grid;grid-template-columns:1fr 1fr;gap:0 32px;margin-top:14px;border-top:1px solid var(--line2)}
@@ -184,6 +200,7 @@ input.fld.n{width:86px;text-align:right;font-weight:700;font-variant-numeric:tab
 .smsbox .cells{margin-top:10px}
 .xbox p.sms-msg{font-size:14px;font-weight:700;color:var(--main);margin-top:7px}
 .xbox p.sms-msg.is-long{color:var(--ink)}
+.xbox p.sms-msg.is-bad{color:var(--over)}
 
 /* 휴대폰 숫자 띠(글 칸 위에 붙어 다닌다). 컴퓨터에서는 숨김 */
 .strip{display:none}
@@ -326,14 +343,18 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
 .q-foot .cnt{font-size:14.5px;color:var(--ink2)}
 .q-foot .cnt b{font-size:19px;color:var(--main);font-weight:800}
 .q-foot .cnt .left{font-weight:700;color:var(--main);margin-left:8px}
-.q-foot .cnt .left.is-over{color:var(--over)}
+.q-foot .cnt .left.is-over,.q-foot .cnt .left.is-bad{color:var(--over)}
 .q-foot .cnt .q-miss{display:block;color:var(--over)}
+.nl-row{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
+.basis .in p.nl-row{margin-bottom:8px}
+.nl-row>span:first-child{min-width:5.2em;font-weight:600;font-size:13.5px}
 .preset{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.basis .in p.preset-hint{margin:8px 0 0;font-size:13px;color:var(--muted)}
 .basis .in p.preset{margin-bottom:0}
 .preset span{font-weight:600;font-size:13.5px}
 .preset .btn{min-height:32px;font-size:13.5px;padding:0 11px}
 .preset-msg{font-size:13.5px;color:var(--main);font-weight:600;margin-top:8px}
-.preset-msg:empty{display:none}
+.basis .in p.preset-msg{margin-bottom:0}
 .js-add{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .js-add .sp{flex:1}
 
@@ -346,7 +367,6 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
 .pager button{width:34px;height:34px;border:0;background:transparent;border-radius:var(--r-sm);font-size:20px;line-height:1;cursor:pointer;color:var(--ink2)}
 .pager button:hover:not(:disabled){background:var(--main-soft);color:var(--main)}
 .pager button:disabled{opacity:.3;cursor:default}
-.sheet svg{display:block;width:100%;height:auto;aspect-ratio:724/446}
 .sheet svg .c{fill:var(--paper);stroke:var(--grid);stroke-width:1}
 .sheet svg .rule{stroke:var(--grid);stroke-width:2}
 .sheet svg text{fill:var(--ink);font-family:var(--font);font-size:20px;font-weight:500;text-anchor:middle;dominant-baseline:central}
@@ -354,6 +374,8 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
 .sheet svg text.t2{font-size:15px;letter-spacing:-.4px}
 .sheet svg text.t3{font-size:12px;letter-spacing:-.4px}
 .wg-mode{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;margin-bottom:10px;font-size:14px;font-weight:600;color:var(--ink2)}
+.wg-mode .sp{flex:1}
+.print-sheets{display:none}
 .sheet-note a{color:var(--muted)}
 .sheet svg .last{fill:var(--main)}
 .sheet-foot{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:13px;color:var(--muted)}
@@ -370,6 +392,7 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
 .segbar i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);background:var(--main)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .chips i{font-style:normal;min-width:30px;height:30px;padding:0 5px;display:grid;place-items:center;border:1px solid var(--over);color:var(--over);border-radius:3px;background:var(--paper);font-size:16px}
+.chips i.nm{font-size:13px;padding:0 8px}
 .xbox{border-top:1px solid var(--line);padding:12px 20px 14px}
 .xbox h2{font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .xbox h2 span{font-size:26px;font-weight:800;color:var(--main);font-variant-numeric:tabular-nums}
@@ -434,6 +457,7 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
   .strip b{display:block;font-size:22px;line-height:1.25;font-weight:800;color:var(--ink)}
   .strip p:first-child b{color:var(--main)}
   .strip p.is-over b{color:var(--over)}
+  .js-strip{margin-bottom:12px}
   .pad textarea{font-size:16px;padding:14px 16px;height:auto;min-height:210px;overflow:hidden}
   /* 큰 숫자 둘은 숫자 띠에 늘 보이므로 여기서는 목표 칸부터 */
   .nums .bigrow{display:none}
@@ -467,11 +491,55 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
 @media (max-width:640px){
   .lims.two{grid-template-columns:minmax(0,1fr)}
 }
+/* 손가락으로 누르는 화면: 누르는 곳은 44px 이상(제3자 평가). 글 속 링크처럼 문장 안에 있는 것은 그대로 둔다 */
+@media (max-width:800px),(pointer:coarse){
+  .btn{min-height:44px}
+  .preset .btn{min-height:44px}
+  .bar{min-height:65px}
+  .seg button{min-height:44px;min-width:48px}
+  .fld,.basis .in input.fld.n{height:44px}
+  .linkbtn{min-height:44px;min-width:44px}
+  .skip{min-height:44px;display:inline-flex;align-items:center}
+  .goal-line{min-height:44px}
+  .goal-x{width:44px;height:44px}
+  .switch{min-height:44px}
+  .q-head input.q-title{height:44px}
+  .pager button{width:44px;height:44px}
+  .insp-pick button{min-width:44px;height:44px}
+  .aux a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+  .crumb a{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
+  .crumb{padding-top:10px}
+  .foot-links{gap:0 20px;margin-top:14px}
+  .foot-links a{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
+  .lumen{min-height:44px}
+  .glist a{display:block;padding:9px 0 5px}
+  .glist li{padding:6px 2px 15px}
+  .prose .src li{margin:0}
+  .prose .src li a{display:inline-block;padding:10px 0}
+  .lim-s a{display:inline-block;padding:13px 11px;margin:-13px -11px}
+  .tbl td a{display:inline-block;min-width:44px;padding:10px 0;margin:-10px 0}
+  .doc a[href^="mailto:"]{display:inline-block;padding:12px 0;margin:-12px 0}
+}
 @media (max-width:560px){
   /* 넓은 표: 옆으로 밀어 본다. 표 위에 밀어 보라는 한 줄 */
   .tbl.wide table{min-width:560px}
   .tbl.wide::before{content:attr(data-hint);display:block;position:sticky;left:0;font-size:13px;color:var(--muted);margin-bottom:6px}
   .tbl th,.tbl td{padding:7px 9px}
+}
+@media (max-width:520px){
+  /* 원고지: 인쇄 단추는 원고지 아래로(위에 두면 한 줄을 더 써서 원고지가 밀려 내려간다) */
+  .sheet{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px}
+  .sheet>*{grid-column:1/-1}
+  .wg-mode{display:contents}
+  .wg-mode>span:first-child{grid-column:1;align-self:center;margin-bottom:10px;font-size:14px;font-weight:600;color:var(--ink2)}
+  .wg-mode>.seg{grid-column:2;justify-self:start;margin-bottom:10px}
+  .wg-mode>.sp{display:none}
+  .wg-mode>.btn{order:10;grid-column:1/-1;justify-self:start;margin-top:12px}
+  .sheet-note{order:11}
+}
+@media (max-width:480px){
+  /* 단추 줄: 되돌리기 문구는 단추 아래 한 줄로(글 복사와 지우기 사이에 끼면 지우기가 밀려 내려간다) */
+  .bar .undo{order:9;flex-basis:100%;min-height:44px}
 }
 @media (max-width:360px){
   .nav{font-size:14px}
@@ -479,12 +547,30 @@ html.anim .lumen.in .lumen-cells i span{animation:cell-in .28s var(--ease) backw
   .strip b{font-size:20px}
 }
 
+/* 인쇄용 원고지 한 장(화면의 원고지와 같은 모양). 인쇄할 때 app.js가 모든 장을 그려 넣는다 */
+.sheet svg,.psheet svg{display:block;width:100%;height:auto;aspect-ratio:724/446}
+.psheet svg .c{fill:#fff;stroke:#8793ad;stroke-width:1}
+.psheet svg .rule{stroke:#8793ad;stroke-width:2}
+.psheet svg text{fill:#141925;font-family:var(--font);font-size:20px;font-weight:500;text-anchor:middle;dominant-baseline:central}
+.psheet svg text.t2{font-size:15px;letter-spacing:-.4px}
+.psheet svg text.t3{font-size:12px;letter-spacing:-.4px}
 @media print{
+  /* 어두운 화면을 쓰는 사람도 종이에는 밝은 색으로 */
+  :root{--bg:#fff;--paper:#fff;--ink:#141925;--ink2:#373f52;--muted:#5f6779;--line:#dcdfe6;--line2:#c2c7d2;--main:#1e3a6e;--main-d:#152a52;--main-soft:#e9edf5;--main-ink:#fff;--grid:#9fb0cf;--grid-soft:#d7deea;--over:#c93f26;--over-soft:#fdece8;--ok:#1e3a6e;color-scheme:light}
   .top,.foot,.ad-wrap,.bar,.strip,.basis,.langbar,.skip,.jump,.safe,.wg-mode,.sec:has(>.jump){display:none!important}
   body{background:#fff}
   .tool{display:block}
   .pad,.nums,.sheet,.q{border-color:#999;box-shadow:none;break-inside:avoid;margin-bottom:12px}
   .pad textarea{height:auto;overflow:visible}
+  /* 원고지: 글 칸·숫자·설명·자주 묻는 질문은 빼고 원고지만, 모든 장을 한 쪽에 한 장씩 */
+  html.wg-print main>*:not(.print-sheets){display:none!important}
+  html.wg-print .print-sheets{display:block}
+  /* 가로 종이(@page size:landscape)는 app.js가 원고지를 인쇄할 때만 넣는다(이름 붙인 쪽은 장마다 두 쪽으로 갈렸다) */
+  .psheet{break-after:page;break-inside:avoid;max-width:250mm;margin:0 auto;color:#373f52}
+  .psheet:last-child{break-after:auto}
+  .psheet-h{font-size:11pt;font-weight:700;margin-bottom:3mm}
+  .psheet-f{display:flex;justify-content:space-between;font-size:9pt;margin-top:2mm}
+  .psheet-note{font-size:9pt;margin-top:3mm}
 }
 .steps{margin:10px 0 0;padding-left:22px;color:var(--ink2)}
 .steps li{margin:6px 0}

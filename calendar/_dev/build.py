@@ -395,7 +395,7 @@ def hol_table(lang, c, y):
             name = (f'{US_OFFICIAL[base]} ({base})' if base in US_OFFICIAL else base) + (' (observed)' if it['en'].endswith(' (observed)') else '') if c == 'US' else it['en']
             rows.append(f'<tr><td class="d">{EN_M[it["m"] - 1][:3]} {it["d"]}</td><td>{WD_EN[it["wd"]][:3]}</td><td>{esc(name)}</td><td><span class="tag">{kind}</span></td></tr>')
     th = '<th>날짜</th><th>요일</th><th>이름</th><th>구분</th>' if lang == 'ko' else '<th>Date</th><th>Day</th><th>Holiday</th><th>Type</th>'
-    return f'<div class="tbl-wrap"><table class="tbl"><thead><tr>{th}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
+    return f'<div class="tbl-wrap"><table class="tbl chips"><thead><tr>{th}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 
 def break_rows(lang, c, y):
@@ -609,7 +609,7 @@ def holidays_page(lang, y):
                    + ('2027년에는 두 날이 토요일이라 5월 3일(월)과 7월 19일(월)이 대체공휴일이에요.' if y == 2027 else '2026년에는 두 날이 모두 금요일이라 대체공휴일 없이 그대로 사흘 연휴였어요.')
                    + f''' 5월 1일이 그전과 무엇이 다른지는 <a href="{p}guide/2026-nodongjeol-jeheonjeol/">노동절·제헌절, 2026년부터 공휴일이 됐어요</a>에 있어요.</p>
 <h2>회사도 쉬나요</h2>
-<p>이 페이지는 관공서 공휴일 기준이에요. 상시 근로자가 5명 이상인 사업장에서는 일요일을 뺀 공휴일과 대체공휴일이 유급휴일이에요(<a href="{C.LAW55}">근로기준법 제55조 제2항</a>, <a href="{C.LAW30}">시행령 제30조 제2항</a>). 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있고, 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="{C.LAW11}">근로기준법 제11조</a>와 시행령 별표 1).</p></div></section>''')
+<p>이 페이지는 관공서 공휴일 기준이에요. 상시 근로자가 5명 이상인 사업장에서는 일요일을 뺀 공휴일과 대체공휴일이 유급휴일이에요(<a href="{C.LAW55}">근로기준법 제55조 제2항</a>, <a href="{C.LAW30}">시행령 제30조 제2항</a>). 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있고, 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="{C.LAW11}">근로기준법 제11조</a>와 시행령 별표 1). {C.MAY1['ko']}</p></div></section>''')
         br = bridge_rows(lang, c, y)
         body = f'''<section class="doc wrap">{crumb(lang, [('달력 만들기', p), (f'{y}년 달력', f'{p}{y}/')])}
 <h1>{y}년 공휴일과 연휴</h1><p class="lead">{lead}</p>
@@ -623,7 +623,7 @@ def holidays_page(lang, y):
 ''' + (f'<section class="sec wrap"><h2>연차 하루로 이어지는 날</h2><p class="sub">쉬는 날 사이에 평일이 하루 끼어 있는 곳이에요.</p>{br}</section>' if br else '') + changed + f'''
 <section class="sec wrap"><div class="src"><h2>출처</h2><ul><li><a href="{C.LAW}">관공서의 공휴일에 관한 규정 (국가법령정보센터, 시행 2026. 5. 11.)</a> <small>{C.SEEN9['ko']}</small></li>
 <li><a href="{C.KASA}">우주항공청 「2027년 월력요항」 발표 (2026. 6. 29.)</a> <small>{C.SEEN9['ko']}</small></li><li><a href="{C.KASI}">한국천문연구원 달력자료</a></li>
-<li><a href="{C.LAW55}">근로기준법 제55조</a>, <a href="{C.LAW30}">시행령 제30조</a>, <a href="{C.LAW11}">제11조</a> <small>{C.SEEN10['ko']}</small></li></ul></div></section>
+<li><a href="{C.LAW55}">근로기준법 제55조</a>, <a href="{C.LAW30}">시행령 제30조</a>, <a href="{C.LAW11}">제11조</a>, <a href="{C.NODONG}">노동절 제정에 관한 법률</a> <small>{C.SEEN10['ko']}</small></li></ul></div></section>
 {ad_slot(lang, 'bottom')}'''
         crumbs = [('달력 만들기', U(lang)), (f'{y}년 달력', U(lang, f'{y}/')), ('공휴일·연휴', U(lang, path))]
     else:

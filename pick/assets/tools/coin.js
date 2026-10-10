@@ -1,5 +1,5 @@
-// 동전 던지기 화면. 한 번 = 무작위 비트 하나(core/pick.js flipCoins: 0 = 앞, 1 = 뒤).
-import { T, $, fmt, el, recent, shareUrl, copyLink, readShare, clearHash, setAfter, setMsg, nfmt, reduced, showStamp } from '../app.js';
+// 동전 던지기 화면. 한 번 = 무작위 비트 하나(core/pick.js flipCoins: 0 = 앞, 1 = 뒤). 틀린 입력이면 앞 결과를 지우고 안내만 보여 준다.
+import { T, $, fmt, el, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, nfmt, reduced } from '../app.js';
 import { newSeed, makeRng } from '../core/rng.js';
 import { flipCoins, LIMITS } from '../core/pick.js';
 
@@ -10,7 +10,16 @@ let last = null;
 
 function run(seed, replay, o) {
   const count = Number(o ? o.count : $('#count').value);
-  if (!Number.isInteger(count) || count < 1 || count > LIMITS.coinCount) { last = null; setAfter(false); setMsg(T.coinCount); return; }
+  if (!Number.isInteger(count) || count < 1 || count > LIMITS.coinCount) {
+    last = null;
+    coin.className = 'coin wait';
+    coin.textContent = T.coinWait;
+    sum.textContent = '';
+    tally.textContent = '';
+    setAfter(false);
+    setMsg(T.coinCount);
+    return;
+  }
   setMsg('');
   if (!replay) clearHash();
   seed = seed || newSeed();
@@ -24,13 +33,14 @@ function run(seed, replay, o) {
   sum.textContent = count > 1 ? fmt(T.coinTally, { a: nfmt(heads), b: nfmt(count - heads) }) : '';
   if (replay) { const s = el('span', 'stamp' + (reduced() ? '' : ' in'), T.stamp); s.setAttribute('aria-label', T.stampSr); sum.append(s); }
   tally.textContent = '';
-  if (count > 1 && count <= 300) flips.forEach((v) => tally.append(el('i', v ? 't' : 'h', (v ? T.tails : T.heads).slice(0, 1))));
+  // 던진 순서는 LIMITS.coinList(300)번까지만 하나하나 보여 준다. 그보다 많으면 합계만
+  if (count > 1 && count <= LIMITS.coinList) flips.forEach((v) => tally.append(el('i', v ? 't' : 'h', (v ? T.tails : T.heads).slice(0, 1))));
   setAfter(true);
-  if (!replay) recent.add('coin', count > 1 ? fmt(T.coinTally, { a: heads, b: count - heads }) : (final ? T.tails : T.heads), shareUrl('coin', seed, [], { count }));
+  if (!replay) recent.add('coin', count > 1 ? fmt(T.coinTally, { a: heads, b: count - heads }) : (final ? T.tails : T.heads), safeShareUrl('coin', seed, [], { count }));
 }
 
 $('#go').addEventListener('click', () => run());
-$('#copy').addEventListener('click', () => { if (last) copyLink(shareUrl('coin', last.seed, [], last.opts)); });
+$('#copy').addEventListener('click', () => { if (last) copyLink('coin', last.seed, [], last.opts); });
 const shared = readShare('coin');
 if (shared) {
   if (Number.isInteger(shared.opts.count)) $('#count').value = shared.opts.count;

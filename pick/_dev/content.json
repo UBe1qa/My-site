@@ -1,297 +1,957 @@
 {
-  "brand": { "en": "Pickboard", "ko": "공평뽑기" },
-  "ui": {
-    "en": {
-      "skip": "Skip to content", "navLabel": "Ways to pick", "guides": "Guides", "about": "About", "privacy": "Privacy", "contact": "Contact", "langOther": "한국어",
-      "list": "Your list", "listAria": "Names, one per line", "listSample": "This is a sample list. Clear it and add your own.", "listClear": "Clear", "listSaved": "Saved on this device only.", "listClearAll": "Clear list",
-      "shuffle": "Shuffle", "sort": "Sort A–Z", "dedupe": "Remove duplicates", "listHint": "One per line. You can paste a column from a spreadsheet.",
-      "spin": "Spin", "resultLabel": "Result", "again": "Remove and spin again", "copy": "Copy result link", "copyNote": "The link includes your list.", "historyH": "Picked so far",
-      "trustQ": "How does it pick?", "trustA": "It uses your browser’s cryptographic random numbers, and your list never leaves this device.", "trustLink": "See how picks are made",
-      "sound": "Sound", "ad": "Ad", "faq": "Questions", "waysH": "Same list, another way", "guidesH": "Guides", "recentH": "Recent results on this device", "recentClear": "Clear results",
-      "made": "Made by Lumen Lab", "moreFrom": "More apps and tools", "updated": "Updated", "crumbHome": "Pickboard", "tryIt": "Try it with your own list",
-      "sample": "Olivia\nNoah\nEmma\nLiam\nAva\nMason\nSophia\nLucas",
-      "sampleBottom": "Winner"
-    },
-    "ko": {
-      "skip": "본문으로 건너뛰기", "navLabel": "뽑는 방식", "guides": "가이드", "about": "소개", "privacy": "개인정보 처리방침", "contact": "문의", "langOther": "English",
-      "list": "내 명단 넣기", "listAria": "이름 목록, 한 줄에 한 명", "listSample": "예시 명단이에요. 지우고 내 명단을 넣어요.", "listClear": "지우기", "listSaved": "이 기기에만 저장돼요.", "listClearAll": "명단 지우기",
-      "shuffle": "섞기", "sort": "가나다순", "dedupe": "겹친 이름 지우기", "listHint": "한 줄에 한 명. 엑셀 칸을 복사해 붙여도 돼요.",
-      "spin": "돌리기", "resultLabel": "결과", "again": "이 사람 빼고 다시", "copy": "결과 링크 복사", "copyNote": "링크에는 명단이 들어 있어요.", "historyH": "지금까지 뽑힌 순서",
-      "trustQ": "어떻게 뽑나요?", "trustA": "브라우저의 암호용 난수로 뽑고, 명단은 이 기기 밖으로 나가지 않아요.", "trustLink": "뽑는 방식 보기",
-      "sound": "소리", "ad": "광고", "faq": "자주 묻는 질문", "waysH": "같은 명단으로 다른 방식도", "guidesH": "가이드", "recentH": "이 기기에서 뽑은 최근 결과", "recentClear": "기록 지우기",
-      "made": "만든 곳 루멘랩", "moreFrom": "다른 앱과 도구 보기", "updated": "고친 날", "crumbHome": "공평뽑기", "tryIt": "내 명단으로 해 보기",
-      "sample": "김민준\n이서연\n박지호\n최유나\n정도윤\n강하린\n윤서준\n임채원",
-      "sampleBottom": "당첨"
-    }
+ "brand": {
+  "en": "Pickboard",
+  "ko": "공평뽑기"
+ },
+ "ui": {
+  "en": {
+   "skip": "Skip to content",
+   "navLabel": "Ways to pick",
+   "guides": "Guides",
+   "about": "About",
+   "privacy": "Privacy",
+   "contact": "Contact",
+   "langOther": "한국어",
+   "footNav": "About this site",
+   "list": "Your list",
+   "listAria": "Names, one per line",
+   "listSample": "This is a sample list. Clear it and add your own.",
+   "listClear": "Clear",
+   "listSaved": "Saved on this device only.",
+   "listClearAll": "Clear list",
+   "shuffle": "Shuffle",
+   "sort": "Sort A–Z",
+   "dedupe": "Remove duplicates",
+   "listHint": "One per line. A single line is split at commas. You can paste a column from a spreadsheet.",
+   "histLeft": "Recent results on this device still hold links that contain this list.",
+   "histLeftBtn": "Clear results too",
+   "outLast": "Bring back the last one",
+   "outAll": "Bring everyone back",
+   "spin": "Spin",
+   "resultLabel": "Result",
+   "again": "Remove and spin again",
+   "copy": "Copy result link",
+   "copyNote": "The link contains your list.",
+   "historyH": "Picked so far",
+   "trustQ": "How does it pick?",
+   "trustA": "Each press uses fresh random numbers from your browser. Your list is not sent to a server; it only travels inside a result link if you make one and send it.",
+   "trustMoreH": "Details",
+   "trustMore": "Each press asks your browser for a new 32-byte value, the seed, with crypto.getRandomValues(). A fixed calculation called xoshiro256** then turns that seed into the numbers the pick needs. That is why the same seed and the same names give the same result on anyone’s device.",
+   "trustLink": "See exactly how picks are made",
+   "ad": "Ad",
+   "faq": "Questions",
+   "waysH": "Same list, another way",
+   "waysSoloH": "Other ways to pick",
+   "guidesH": "Guides",
+   "recentH": "Recent results on this device",
+   "recentClear": "Clear results",
+   "made": "Lumen Lab",
+   "madeBy": "Made by",
+   "moreFrom": "See its other apps and tools",
+   "updated": "Last checked",
+   "tryIt": "Try it with your own list",
+   "tblHint": "Swipe the table sideways to see the rest.",
+   "sample": "Olivia\nNoah\nEmma\nLiam\nAva\nMason\nSophia\nLucas",
+   "sampleBottom": "Winner",
+   "nfTitle": "Page not found",
+   "nfText": "This address doesn’t exist. Pick a tool to carry on."
   },
-  "js": {
-    "en": {
-      "count": "{n} names", "count1": "1 name", "picked": "Picked", "wait": "Spin the wheel and the name shows up here.", "copied": "Link copied. Anyone who opens it sees this same result.", "copyFail": "Couldn’t copy. Select the address below and copy it.",
-      "stamp": "Same result as the link", "stampSr": "The result stored in this link was replayed as it was.",
-      "badLink": "This link is cut off or damaged. Check that the whole link was copied.", "badVersion": "This link uses a newer format that this page can’t open.", "otherTool": "This link is a {tool} result.", "openThere": "Open it there",
-      "emptyList": "The list is empty. Add one name per line.", "listSample": "This is a sample list. Clear it and add your own.", "listSaved": "Saved on this device only.", "listShared": "This list came from the link. It isn’t saved unless you edit it.",
-      "warnCut": "{n} long names were cut at 100 characters.", "warnOver": "{n} lines over the 5,000 limit were left out.", "warnDupes": "{n} duplicate names (each still gets its own slot).",
-      "soundOn": "Sound on", "soundOff": "Sound off", "present": "Full screen", "presentExit": "Exit full screen",
-      "recentEmpty": "Nothing yet. Results you draw on this device are listed here.", "replay": "Replay", "toolNames": { "wheel": "Wheel", "ladder": "Ladder game", "draw": "Name picker", "teams": "Team generator", "number": "Random number", "coin": "Coin flip", "dice": "Dice" },
-      "ladderRange": "The ladder works for 2 to 30 people. Your list has {n}.", "ladderTip": "Tap a name to follow that person’s path.", "ladderAll": "Results", "blank": "—", "win": "Winner", "lose": "No luck",
-      "needMore": "Add at least {n} names first.", "pickTooMany": "You can’t pick more than the {n} on the list.", "order": "Order", "pickedN": "Picked {m} of {n}", "slipsHead": "Slips for {n} people: tap one to open it", "openAll": "Open all", "slipClosed": "Tap to open",
-      "team": "Team {n}", "people": "{n}", "teamsHead": "{n} people in {k} teams", "teamsBad": "Teams must be between 1 and {n}.", "sizeBad": "Team size must be between 1 and {n}.", "copyText": "Copy as text", "copiedText": "Copied.",
-      "numInt": "Use whole numbers only.", "numOrder": "The first number is larger than the second.", "numCount": "Count must be between 1 and 10,000.", "numUnique": "Not enough numbers in that range: asked for {m}, only {n} available.", "numWide": "That range is too wide.", "numHead": "{m} from {a} to {b}",
-      "heads": "Heads", "tails": "Tails", "coinWait": "Flip", "coinTally": "Heads {a}, tails {b}", "coinCount": "Flips must be between 1 and 1,000.",
-      "diceSum": "Total {n}", "diceCount": "Dice must be between 1 and 100.", "diceSides": "Sides must be between 2 and 1,000."
-    },
-    "ko": {
-      "count": "{n}명", "count1": "1명", "picked": "뽑혔어요", "wait": "판을 돌리면 여기에 이름이 나와요.", "copied": "링크를 복사했어요. 누가 열어도 같은 결과가 다시 나와요.", "copyFail": "복사하지 못했어요. 아래 주소를 직접 복사해 주세요.",
-      "stamp": "링크의 결과 그대로", "stampSr": "이 링크에 담긴 결과가 그대로 재생됐어요.",
-      "badLink": "링크가 잘렸거나 잘못됐어요. 받은 링크를 끝까지 복사했는지 확인해 주세요.", "badVersion": "이 링크는 새 형식이라 이 페이지에서 열 수 없어요.", "otherTool": "이 링크는 {tool} 결과예요.", "openThere": "거기서 열기",
-      "emptyList": "명단이 비어 있어요. 이름을 한 줄에 하나씩 넣어 주세요.", "listSample": "예시 명단이에요. 지우고 내 명단을 넣어요.", "listSaved": "이 기기에만 저장돼요.", "listShared": "링크에 들어 있던 명단이에요. 고치기 전에는 저장하지 않아요.",
-      "warnCut": "긴 이름 {n}개는 100자에서 잘랐어요.", "warnOver": "한도 5,000줄을 넘은 {n}줄은 뺐어요.", "warnDupes": "겹치는 이름 {n}개(각각 한 칸씩 들어가요).",
-      "soundOn": "소리 켬", "soundOff": "소리 끔", "present": "전체 화면", "presentExit": "전체 화면 끝내기",
-      "recentEmpty": "아직 없어요. 이 기기에서 뽑은 결과가 여기에 쌓여요.", "replay": "다시 보기", "toolNames": { "wheel": "돌림판", "ladder": "사다리타기", "draw": "제비뽑기", "teams": "팀 나누기", "number": "랜덤 숫자", "coin": "동전 던지기", "dice": "주사위" },
-      "ladderRange": "사다리는 2명부터 30명까지 돼요. 지금 명단은 {n}명이에요.", "ladderTip": "이름을 누르면 그 사람의 길을 따라가요.", "ladderAll": "결과", "blank": "꽝", "win": "당첨", "lose": "꽝",
-      "needMore": "먼저 이름을 {n}명 이상 넣어 주세요.", "pickTooMany": "명단({n}명)보다 많이 뽑을 수는 없어요.", "order": "순서", "pickedN": "{n}명 중 {m}명", "slipsHead": "쪽지 {n}장: 눌러서 펼쳐요", "openAll": "모두 펼치기", "slipClosed": "눌러서 펼치기",
-      "team": "{n}팀", "people": "{n}명", "teamsHead": "{n}명을 {k}팀으로", "teamsBad": "팀 수는 1부터 {n}까지 돼요.", "sizeBad": "한 팀 인원은 1부터 {n}까지 돼요.", "copyText": "글자로 복사", "copiedText": "복사했어요.",
-      "numInt": "정수만 넣어 주세요.", "numOrder": "앞의 수가 뒤의 수보다 커요.", "numCount": "개수는 1부터 10,000까지 돼요.", "numUnique": "그 범위에는 숫자가 모자라요: {m}개를 뽑으려는데 {n}개뿐이에요.", "numWide": "범위가 너무 넓어요.", "numHead": "{a}부터 {b}까지에서 {m}개",
-      "heads": "앞", "tails": "뒤", "coinWait": "던지기", "coinTally": "앞 {a}번, 뒤 {b}번", "coinCount": "횟수는 1부터 1,000까지 돼요.",
-      "diceSum": "합계 {n}", "diceCount": "주사위는 1개부터 100개까지 돼요.", "diceSides": "면 수는 2부터 1,000까지 돼요."
-    }
-  },
-  "tools": {
-    "wheel": {
-      "en": {
-        "path": "", "nav": "Wheel", "short": "Wheel", "h1": "Spin the Wheel", "aka": "A name picker wheel with no limit on entries.",
-        "title": "Spin the Wheel: Random Name Picker Wheel With No Entry Limit | Pickboard",
-        "desc": "Paste any number of names and spin. Remove the winner and spin again, and share a link that replays the exact same result for everyone.",
-        "way": "Spin a wheel of the names",
-        "about": [
-          { "h": "How to use it", "p": ["Type one name per line in the list, or paste a whole column from a spreadsheet. A single line separated by commas is split for you. Press Spin in the middle of the wheel and the name under the pointer appears large on the right.", "Remove and spin again takes the name that was just picked off the list and spins straight away. If you enter a name twice it gets two slots and twice the chance. That is the only kind of weighting here, and it is always visible on the wheel."] },
-          { "h": "How many entries can it take?", "p": ["The list accepts up to 5,000 lines. The wheel has been checked to spin smoothly with 500 slots. When there are too many slots to read the names, the result still appears large beside the wheel."] },
-          { "h": "How the pick is made", "p": ["Each spin creates a fresh seed from your browser’s cryptographic random numbers (crypto.getRandomValues). The winning slot is decided from that seed first, and then the wheel is turned so that it stops on that slot. The result is never read from where the wheel happened to stop, so the screen and the result cannot disagree. There is no setting that makes a chosen name come up."] },
-          { "h": "The result link", "p": ["Copy result link builds an address that holds your list and the seed. Anyone who opens it sees the wheel stop on the same slot again. The data sits after the # in the address, so it is not sent to a server, but whoever gets the link can read the list."] }
-        ],
-        "faq": [
-          { "q": "Can I make a certain name win?", "a": "No. That feature does not exist here. The only way to change the odds is one everybody can see, such as entering a name more than once." },
-          { "q": "Is my list uploaded anywhere?", "a": "No. The list and your recent results are kept in this browser only. Use the Clear button above the list to remove them." },
-          { "q": "Can I use it as a yes or no wheel?", "a": "Yes. Put Yes and No on two lines and spin. Any short list works the same way, such as lunch options or numbers." }
-        ]
-      },
-      "ko": {
-        "path": "", "nav": "돌림판", "short": "돌림판", "h1": "돌림판 돌리기", "aka": "룰렛 돌리기라고도 해요. 이름은 몇 명이든 넣을 수 있어요.",
-        "title": "돌림판 돌리기(룰렛 돌리기): 인원 제한 없는 이름 뽑기 | 공평뽑기",
-        "desc": "이름을 몇 명이든 붙여 넣고 돌리는 돌림판이에요. 뽑힌 사람을 빼고 다시 돌릴 수 있고, 같은 결과를 그대로 다시 보여 주는 링크를 만들 수 있어요.",
-        "way": "이름이 적힌 판을 돌려요",
-        "about": [
-          { "h": "쓰는 법", "p": ["명단 칸에 이름을 한 줄에 하나씩 넣거나, 엑셀이나 메모장에서 복사해 한 번에 붙여 넣어요. 쉼표로 이어 쓴 한 줄도 알아서 나눠요. 판 가운데 ‘돌리기’를 누르면 바늘이 가리킨 이름이 오른쪽에 크게 나와요.", "‘이 사람 빼고 다시’를 누르면 방금 뽑힌 이름을 명단에서 빼고 바로 다시 돌려요. 같은 이름을 두 번 넣으면 칸이 두 개가 돼서 그만큼 잘 뽑혀요. 뽑힐 확률을 바꾸는 방법은 이렇게 판에 그대로 보이는 것뿐이에요."] },
-          { "h": "몇 명까지 되나요", "p": ["명단은 5,000줄까지 넣을 수 있어요. 500칸까지는 판이 끊김 없이 도는 것을 확인했어요. 칸이 많아 이름이 안 보일 때도 결과는 판 옆에 크게 나와요."] },
-          { "h": "뽑는 방식", "p": ["돌릴 때마다 브라우저의 암호용 난수(crypto.getRandomValues)로 씨앗을 새로 만들어요. 그 씨앗으로 뽑힐 칸을 먼저 정하고, 그 칸에 멈추도록 판을 돌려요. 판이 멈춘 자리를 읽어서 결과를 정하는 게 아니라서 화면과 결과가 어긋나지 않아요. 특정 이름이 나오게 하는 기능은 없어요."] },
-          { "h": "결과 링크", "p": ["‘결과 링크 복사’로 만든 주소에는 명단과 그 씨앗이 들어 있어요. 누가 열어도 같은 칸에 멈추는 모습이 다시 나와요. 주소의 # 뒤에 담겨서 서버로는 전송되지 않지만, 링크를 받은 사람은 명단을 볼 수 있어요."] }
-        ],
-        "faq": [
-          { "q": "룰렛 돌리기와 같은 건가요?", "a": "네. 이름이나 선택지를 적은 판을 돌려 하나를 뽑는 것을 돌림판, 원판 돌리기, 룰렛 돌리기라고 섞어 불러요. 여기서는 돌림판이라고 써요." },
-          { "q": "원하는 이름이 나오게 할 수 있나요?", "a": "없어요. 그런 기능은 만들지 않았어요. 같은 이름을 여러 번 넣어 칸을 늘리는 것처럼 모두에게 보이는 방법만 있어요." },
-          { "q": "명단이 어딘가에 올라가나요?", "a": "아니요. 명단과 최근 결과는 이 브라우저에만 저장돼요. 명단 칸 위의 지우기 단추로 지울 수 있어요." }
-        ]
-      }
-    },
-    "ladder": {
-      "en": {
-        "path": "ladder/", "nav": "Ladder game", "short": "Ladder", "h1": "Ladder game", "aka": "Also called Ghost Leg or Amidakuji. For 2 to 30 people.",
-        "title": "Ladder Game (Ghost Leg): Online Ladder Lottery for up to 30 | Pickboard",
-        "desc": "Draw a ladder lottery for 2 to 30 people, follow each path one by one, and share a link that shows the same ladder and results again.",
-        "way": "Follow a hidden ladder down to a result",
-        "about": [
-          { "h": "How to use it", "p": ["Names from your list sit along the top. Type what goes along the bottom, one item per line, for example Winner or a chore. If you give fewer items than people, the rest are left blank. Press Make ladder, then tap a name to follow that person’s path down, or press Show all results."] },
-          { "h": "Why the bottom row is shuffled", "p": ["A plain ladder is not as random as it looks. With the usual number of rungs, a person tends to end up close to where they started. In our own runs with 8 people and a medium ladder, the person on the far left landed directly below their start 24.8% of the time, when a fair draw would give 12.5%.", "So this tool shuffles the bottom row first and then builds the ladder. With that step every person is equally likely to get every result, however few rungs there are. The guide has the numbers."] },
-          { "h": "What the ladder guarantees", "p": ["Every ladder gives each person exactly one result and each result to exactly one person. Two rungs never meet the same upright at the same height, so each path is unambiguous. These rules are checked by automated tests on thousands of generated ladders."] }
-        ],
-        "faq": [
-          { "q": "Why is the limit 30 people?", "a": "Beyond 30 uprights the ladder is too narrow to follow on a screen. For bigger groups, the name picker draws winners or an order from a list of any length." },
-          { "q": "Can other people check the result later?", "a": "Yes. Copy result link stores the names, the bottom row and the seed in the address. Opening it rebuilds the same ladder with the same results." }
-        ]
-      },
-      "ko": {
-        "path": "ladder/", "nav": "사다리타기", "short": "사다리", "h1": "사다리타기", "aka": "2명부터 30명까지. 결과를 링크로 다시 볼 수 있는 사다리 게임이에요.",
-        "title": "사다리타기: 30명까지, 결과를 링크로 다시 보는 사다리 게임 | 공평뽑기",
-        "desc": "2명부터 30명까지 사다리를 타요. 한 명씩 길을 따라가거나 전체 결과를 한 번에 보고, 같은 사다리와 결과를 다시 보여 주는 링크를 만들 수 있어요.",
-        "way": "가려진 사다리를 타고 내려가요",
-        "about": [
-          { "h": "쓰는 법", "p": ["명단의 이름이 사다리 위에 올라가요. 아래 칸에 들어갈 말을 한 줄에 하나씩 적어요. 당첨, 청소 당번처럼요. 사람 수보다 적게 적으면 나머지는 꽝이 돼요. ‘사다리 만들기’를 누른 다음 이름을 누르면 그 사람의 길을 따라 내려가고, ‘전체 결과 보기’를 누르면 한 번에 다 보여요."] },
-          { "h": "아래 칸을 먼저 섞는 이유", "p": ["사다리는 보기보다 덜 섞여요. 보통 그리는 가로줄 수로는 출발한 자리 근처에 도착하기 쉬워요. 직접 돌려 보니 8명이 보통 사다리를 탈 때 맨 왼쪽 사람이 바로 아래 칸에 도착한 비율이 24.8%였어요. 공평하다면 12.5%여야 해요.", "그래서 이 도구는 아래 칸을 먼저 무작위로 섞은 다음 사다리를 만들어요. 이렇게 하면 가로줄이 적어도 누가 어떤 결과를 받을지는 모든 경우가 같은 확률이에요. 숫자는 가이드 글에 있어요."] },
-          { "h": "사다리가 지키는 규칙", "p": ["어떤 사다리든 한 사람은 결과 하나만 받고, 결과 하나는 한 사람에게만 가요. 같은 높이에서 한 세로줄에 가로줄 두 개가 닿지 않아서 길이 헷갈리지 않아요. 이 규칙은 사다리 수천 개를 만들어 보는 자동 테스트로 확인해요."] }
-        ],
-        "faq": [
-          { "q": "왜 30명까지인가요?", "a": "세로줄이 30개를 넘으면 화면에서 길을 따라가기 어려워요. 더 많은 인원은 제비뽑기에서 인원 제한 없이 당첨자나 순서를 뽑을 수 있어요." },
-          { "q": "나중에 다른 사람이 결과를 확인할 수 있나요?", "a": "네. ‘결과 링크 복사’로 만든 주소에 이름, 아래 칸, 씨앗이 들어 있어요. 열면 같은 사다리와 같은 결과가 다시 만들어져요." }
-        ]
-      }
-    },
-    "draw": {
-      "en": {
-        "path": "name-picker/", "nav": "Name picker", "short": "Picker", "h1": "Random name picker", "aka": "Draw winners from a list with no repeats, deal slips, or set an order.",
-        "title": "Random Name Picker: Draw Winners From a List Without Repeats | Pickboard",
-        "desc": "Pick one or many names from a list of any length with no repeats, deal winner slips, or put everyone in a random order. Share a link that replays the draw.",
-        "way": "Draw several names, deal slips or set an order",
-        "about": [
-          { "h": "Three ways to draw", "p": ["Pick names draws as many names as you ask for, in the order they came out, and never the same line twice. Slips gives everyone a folded slip, with as many winning slips as you set; tap a slip to open it. Order puts the whole list in a random sequence, for presentations or turns."] },
-          { "h": "How the draw is made", "p": ["All three use the same shuffle, Fisher–Yates, driven by a seed made from your browser’s cryptographic random numbers. Every possible order is equally likely. Automated tests draw 100,000 times with fixed seeds and check that no name comes up more often than chance allows."] },
-          { "h": "Duplicate lines", "p": ["No repeats means no line is drawn twice. If the same name is on two lines, it counts as two entries and both can be drawn. Use Remove duplicates above the list if you want one entry per name."] }
-        ],
-        "faq": [
-          { "q": "How many names can the list hold?", "a": "Up to 5,000 lines. You can paste them in one go." },
-          { "q": "Can I prove the draw to others?", "a": "Copy result link stores the list and the seed, and opening it replays the same result. It shows the result was not changed afterwards. It cannot show how many times you drew before sharing, so agree on a single draw in advance or draw where everyone can watch." }
-        ]
-      },
-      "ko": {
-        "path": "draw/", "nav": "제비뽑기", "short": "제비뽑기", "h1": "제비뽑기", "aka": "명단에서 여러 명 뽑기, 당첨 쪽지 나눠 주기, 순서 정하기.",
-        "title": "제비뽑기·추첨: 명단에서 여러 명 뽑기, 당첨 쪽지, 순서 정하기 | 공평뽑기",
-        "desc": "인원 제한 없는 명단에서 한 명이든 여러 명이든 겹치지 않게 뽑고, 당첨 쪽지를 나눠 주고, 발표 순서를 정해요. 같은 결과를 다시 보여 주는 링크도 만들 수 있어요.",
-        "way": "여러 명 뽑기, 당첨 쪽지, 순서 정하기",
-        "about": [
-          { "h": "세 가지 방식", "p": ["‘몇 명 뽑기’는 정한 수만큼 뽑힌 순서대로 보여 줘요. 같은 줄이 두 번 뽑히지 않아요. ‘쪽지’는 모두에게 접힌 쪽지를 한 장씩 주고, 정한 수만큼만 당첨이에요. 쪽지를 누르면 펼쳐져요. ‘순서 정하기’는 명단 전체를 무작위 순서로 세워요. 발표 순서나 차례를 정할 때 써요."] },
-          { "h": "뽑는 방식", "p": ["세 가지 모두 같은 섞기(Fisher–Yates)를 쓰고, 브라우저의 암호용 난수로 만든 씨앗으로 돌려요. 가능한 모든 순서가 같은 확률이에요. 자동 테스트가 씨앗을 고정해 10만 번씩 뽑아 보고, 어느 이름도 우연보다 자주 나오지 않는지 확인해요."] },
-          { "h": "겹치는 이름", "p": ["같은 줄이 두 번 뽑히지는 않아요. 다만 같은 이름이 두 줄에 있으면 두 사람으로 세서 둘 다 뽑힐 수 있어요. 이름마다 한 번만 넣으려면 명단 위의 ‘겹친 이름 지우기’를 눌러요."] }
-        ],
-        "faq": [
-          { "q": "몇 명까지 넣을 수 있나요?", "a": "5,000줄까지 넣을 수 있어요. 한 번에 붙여 넣어도 돼요." },
-          { "q": "뽑은 결과를 다른 사람이 믿게 하려면요?", "a": "‘결과 링크 복사’로 만든 주소에는 명단과 씨앗이 들어 있어서, 열면 같은 결과가 다시 나와요. 뽑은 뒤에 결과를 바꾸지 않았다는 건 보여 줄 수 있어요. 하지만 보내기 전에 몇 번 뽑았는지는 알 수 없으니, 한 번만 뽑는다고 미리 정하거나 모두가 보는 화면에서 뽑아요." }
-        ]
-      }
-    },
-    "teams": {
-      "en": {
-        "path": "team-generator/", "nav": "Team generator", "short": "Teams", "h1": "Random team generator", "aka": "Split a list into even groups by number of teams or team size.",
-        "title": "Random Team Generator: Split a List Into Even Groups | Pickboard",
-        "desc": "Split any list into random teams by number of teams or by maximum team size. Team sizes never differ by more than one. Copy the teams as text or share a replay link.",
-        "way": "Split the list into even teams",
-        "about": [
-          { "h": "How to use it", "p": ["Choose Number of teams or Max per team, set the number and press Make teams. The list is shuffled and dealt out, so the first teams get any extra person and no team is more than one person larger than another.", "With Max per team, the number of teams is the list size divided by that maximum, rounded up. Thirteen people with a maximum of four gives four teams of 4, 3, 3 and 3."] },
-          { "h": "What it does not do", "p": ["Teams are random. The tool does not balance skill, keep certain people together or keep them apart. There are no hidden rules that place a particular person in a particular team."] }
-        ],
-        "faq": [
-          { "q": "What happens when the list does not divide evenly?", "a": "The extra people are spread one each over the first teams, so sizes differ by one at most." },
-          { "q": "Can I send the teams to a group chat?", "a": "Use Copy as text to paste the teams as plain text, or Copy result link to send an address that shows the same teams again." }
-        ]
-      },
-      "ko": {
-        "path": "teams/", "nav": "팀 나누기", "short": "팀 나누기", "h1": "팀 나누기", "aka": "팀 수나 한 팀 인원을 정하면 무작위로 고르게 나눠요.",
-        "title": "팀 나누기·조 편성: 팀 수나 한 팀 인원으로 랜덤 팀 짜기 | 공평뽑기",
-        "desc": "명단을 팀 수나 한 팀 최대 인원으로 무작위로 나눠요. 팀 인원은 한 명 넘게 차이 나지 않아요. 결과를 글자로 복사하거나 다시 보는 링크로 보낼 수 있어요.",
-        "way": "팀 수나 한 팀 인원으로 나눠요",
-        "about": [
-          { "h": "쓰는 법", "p": ["‘팀 수’나 ‘한 팀 최대 인원’을 고르고 숫자를 정한 다음 ‘팀 나누기’를 눌러요. 명단을 섞어서 차례로 나눠 담기 때문에 남는 사람은 앞 팀부터 한 명씩 들어가고, 어느 팀도 다른 팀보다 한 명 넘게 많지 않아요.", "‘한 팀 최대 인원’을 고르면 팀 수는 전체 인원을 그 수로 나눠 올림한 값이에요. 13명에 최대 4명이면 4팀이 되고 인원은 4, 3, 3, 3명이에요."] },
-          { "h": "하지 않는 것", "p": ["팀은 무작위예요. 실력을 맞추거나, 특정 사람끼리 붙이거나 떼어 놓지 않아요. 누군가를 정해진 팀에 넣는 숨은 규칙도 없어요."] }
-        ],
-        "faq": [
-          { "q": "인원이 딱 나눠떨어지지 않으면요?", "a": "남는 사람이 앞 팀부터 한 명씩 들어가서 팀 인원 차이는 많아야 한 명이에요." },
-          { "q": "단톡방에 결과를 보내려면요?", "a": "‘글자로 복사’로 팀 목록을 글로 붙여 넣거나, ‘결과 링크 복사’로 같은 팀을 다시 보여 주는 주소를 보내요." }
-        ]
-      }
-    },
-    "number": {
-      "en": {
-        "path": "random-number/", "nav": "Random number", "short": "Number", "h1": "Random number generator", "aka": "Any range, any count, with or without repeats.",
-        "title": "Random Number Generator: Any Range, No Repeats | Pickboard",
-        "desc": "Generate random whole numbers in any range: one number from 1 to 100, six without repeats, or thousands at once. Sort them and share a link that shows the same numbers.",
-        "way": "Numbers in a range",
-        "about": [
-          { "h": "How to use it", "p": ["Set the lowest and highest number, both included, and how many you want. Tick No repeats to get different numbers every time; the range must then hold at least that many numbers. Results can stay in the order drawn or be sorted."] },
-          { "h": "How the numbers are made", "p": ["Each press makes a new seed from your browser’s cryptographic random numbers. Whole numbers are taken by drawing only as many random bits as the range needs and throwing away any value that falls outside it. That avoids the small bias of dividing and taking the remainder, so every number in the range is equally likely."] },
-          { "h": "Limits", "p": ["Whole numbers only, up to 15 digits (from −999,999,999,999,999 to 999,999,999,999,999), and up to 10,000 numbers at a time. Inputs outside those limits show a message instead of a wrong answer."] }
-        ],
-        "faq": [
-          { "q": "Can I get 1 to 100 with no repeats?", "a": "Yes. Set 1 and 100, choose how many, and tick No repeats. You can ask for at most 100 in that range." },
-          { "q": "Is it suitable for passwords or keys?", "a": "No. It is made for draws, games and choosing at random. Use a password manager to create passwords and keys." }
-        ]
-      },
-      "ko": {
-        "path": "number/", "nav": "랜덤 숫자", "short": "숫자", "h1": "랜덤 숫자 뽑기", "aka": "범위와 개수를 정해요. 중복 없이도 뽑을 수 있어요.",
-        "title": "랜덤 숫자 뽑기: 범위·개수·중복 없이 | 공평뽑기",
-        "desc": "원하는 범위에서 무작위 정수를 뽑아요. 1부터 100까지에서 하나, 중복 없이 여섯 개, 한 번에 수천 개도 돼요. 정렬하고, 같은 숫자를 다시 보여 주는 링크로 보낼 수 있어요.",
-        "way": "범위 안의 숫자를 뽑아요",
-        "about": [
-          { "h": "쓰는 법", "p": ["가장 작은 수와 가장 큰 수(둘 다 포함)를 넣고 몇 개 뽑을지 정해요. ‘중복 없이’를 켜면 서로 다른 수만 나와요. 이때는 범위 안의 수가 뽑을 개수보다 적으면 안 돼요. 결과는 뽑힌 순서대로 두거나 정렬할 수 있어요."] },
-          { "h": "뽑는 방식", "p": ["누를 때마다 브라우저의 암호용 난수로 씨앗을 새로 만들어요. 정수는 범위에 필요한 만큼의 비트만 뽑고, 범위를 벗어난 값은 버리고 다시 뽑아요. 나눈 나머지를 쓰는 방식에서 생기는 작은 치우침이 없어서, 범위 안의 모든 수가 같은 확률로 나와요."] },
-          { "h": "한도", "p": ["정수만 돼요. 15자리까지(−999,999,999,999,999부터 999,999,999,999,999까지), 한 번에 10,000개까지 뽑아요. 한도를 넘으면 틀린 답 대신 안내 문구가 나와요."] }
-        ],
-        "faq": [
-          { "q": "1부터 100까지 중복 없이 뽑을 수 있나요?", "a": "네. 1과 100을 넣고 개수를 정한 뒤 ‘중복 없이’를 켜요. 이 범위에서는 100개까지 뽑을 수 있어요." },
-          { "q": "비밀번호를 만드는 데 써도 되나요?", "a": "아니요. 추첨, 놀이, 무작위로 고르기에 쓰려고 만든 도구예요. 비밀번호와 키는 비밀번호 관리 앱으로 만드세요." }
-        ]
-      }
-    },
-    "coin": {
-      "en": {
-        "path": "coin-flip/", "nav": "Coin flip", "short": "Coin", "h1": "Flip a coin", "aka": "Heads or tails, once or many times.",
-        "title": "Flip a Coin: Heads or Tails | Pickboard",
-        "desc": "Flip a coin online for heads or tails. Flip once or up to 1,000 times and see the count of each side. Share a link that shows the same flips.",
-        "way": "Heads or tails",
-        "about": [
-          { "h": "How to use it", "p": ["Press Flip. For several flips at once, set the number first; the last flip is shown on the coin and the count of heads and tails appears below, with every flip in order."] },
-          { "h": "Is it 50/50?", "p": ["Each flip is one random bit from a generator seeded by your browser’s cryptographic random numbers, so heads and tails are equally likely and one flip does not affect the next. Streaks still happen. In 10 fair flips, a run of three or more of the same side is more likely than not."] }
-        ],
-        "faq": [
-          { "q": "Why did I get the same side five times in a row?", "a": "With fair flips, five in a row of a given side has a 1 in 32 chance for any five flips, so it turns up regularly over many flips. Each new flip is still 50/50." }
-        ]
-      },
-      "ko": {
-        "path": "coin/", "nav": "동전 던지기", "short": "동전", "h1": "동전 던지기", "aka": "앞이냐 뒤냐. 한 번도, 여러 번도 돼요.",
-        "title": "동전 던지기: 앞면·뒷면 바로 정하기 | 공평뽑기",
-        "desc": "동전을 던져 앞면과 뒷면을 정해요. 한 번이든 1,000번이든 던지고 앞뒤가 몇 번씩 나왔는지 볼 수 있어요. 같은 결과를 다시 보여 주는 링크도 만들 수 있어요.",
-        "way": "앞 아니면 뒤",
-        "about": [
-          { "h": "쓰는 법", "p": ["‘던지기’를 눌러요. 여러 번 던지려면 횟수를 먼저 정해요. 마지막 결과가 동전에 보이고, 아래에 앞과 뒤가 몇 번씩 나왔는지와 던진 순서가 나와요."] },
-          { "h": "정말 반반인가요", "p": ["한 번 던질 때마다 무작위 비트 하나를 써요. 그 비트는 브라우저의 암호용 난수로 씨앗을 만든 난수기에서 나와서 앞과 뒤가 같은 확률이고, 앞 결과가 다음 결과에 영향을 주지 않아요. 그래도 같은 면이 이어서 나오는 일은 흔해요. 공평한 동전을 10번 던지면 같은 면이 세 번 이상 이어지는 일이 안 일어나는 경우보다 더 많아요."] }
-        ],
-        "faq": [
-          { "q": "같은 면이 다섯 번 연달아 나왔어요. 이상한 거 아닌가요?", "a": "공평한 동전에서 어느 다섯 번이 모두 앞일 확률은 32분의 1이에요. 여러 번 던지다 보면 자주 보게 돼요. 다음 한 번은 여전히 반반이에요." }
-        ]
-      }
-    },
-    "dice": {
-      "en": {
-        "path": "dice/", "nav": "Dice", "short": "Dice", "h1": "Dice roller", "aka": "Roll one or several dice, from d4 to d100.",
-        "title": "Dice Roller: Roll Several Dice, d4 to d100 | Pickboard",
-        "desc": "Roll dice online: one six-sided die or many at once, with 4, 6, 8, 10, 12, 20 or 100 sides. See each die and the total, and share a link that shows the same roll.",
-        "way": "One die or many, 4 to 100 sides",
-        "about": [
-          { "h": "How to use it", "p": ["Choose how many dice and how many sides, then press Roll. Each die is shown with its value and the total appears below. Six-sided dice are drawn with pips; other dice show the number."] },
-          { "h": "How the roll is made", "p": ["Every die is an independent pick from 1 to the number of sides, each value equally likely, using a seed made from your browser’s cryptographic random numbers. Automated tests roll 100,000 six-sided and twenty-sided dice with fixed seeds and check that the faces come up evenly."] }
-        ],
-        "faq": [
-          { "q": "Can I roll dice with an unusual number of sides?", "a": "Yes. Type any number of sides from 2 to 1,000 instead of choosing from the usual ones." }
-        ]
-      },
-      "ko": {
-        "path": "dice/", "nav": "주사위", "short": "주사위", "h1": "주사위 굴리기", "aka": "한 개도, 여러 개도. 4면부터 100면까지.",
-        "title": "주사위 굴리기: 여러 개, 여러 면 | 공평뽑기",
-        "desc": "주사위를 굴려요. 6면 주사위 한 개부터 여러 개까지, 4·6·8·10·12·20·100면을 고를 수 있어요. 눈과 합계를 보여 주고, 같은 결과를 다시 보여 주는 링크도 만들어요.",
-        "way": "한 개든 여러 개든, 4면부터 100면까지",
-        "about": [
-          { "h": "쓰는 법", "p": ["주사위 개수와 면 수를 고르고 ‘굴리기’를 눌러요. 주사위마다 나온 눈이 보이고 아래에 합계가 나와요. 6면 주사위는 점으로, 다른 주사위는 숫자로 보여 줘요."] },
-          { "h": "굴리는 방식", "p": ["주사위마다 1부터 면 수까지에서 따로 하나씩 뽑아요. 모든 눈이 같은 확률이고, 브라우저의 암호용 난수로 만든 씨앗을 써요. 자동 테스트가 씨앗을 고정해 6면과 20면 주사위를 10만 번씩 굴려 눈이 고르게 나오는지 확인해요."] }
-        ],
-        "faq": [
-          { "q": "면 수가 특이한 주사위도 되나요?", "a": "네. 고르는 대신 면 수를 2부터 1,000까지 직접 넣을 수 있어요." }
-        ]
-      }
-    }
-  },
-  "toolUi": {
-    "en": {
-      "ladderBottom": "Bottom row", "ladderBottomAria": "Bottom row, one item per line", "ladderBottomHint": "One per line. Fewer items than people leaves the rest blank.", "ladderMake": "Make ladder", "ladderNew": "New ladder", "ladderShow": "Show all results", "ladderRows": "Rungs", "rowsFew": "Few", "rowsNormal": "Medium", "rowsMany": "Many", "ladderEmpty": "Press Make ladder. The rungs stay hidden until someone goes down.", "moreSettings": "Ladder settings",
-      "modePick": "Pick names", "modeSlips": "Slips", "modeOrder": "Order", "howMany": "How many", "winSlips": "Winning slips", "winLabel": "Winner slip says", "loseLabel": "Other slips say", "drawGo": "Draw", "drawEmpty": "Set how many and press Draw.", "slipLabels": "Slip wording",
-      "byTeams": "Number of teams", "bySize": "Max per team", "teamsGo": "Make teams", "teamsEmpty": "Choose how to split and press Make teams.",
-      "from": "From", "to": "to", "count": "How many", "unique": "No repeats", "sortLabel": "Order", "sortNone": "As drawn", "sortAsc": "Low to high", "sortDesc": "High to low", "numGo": "Generate", "numEmpty": "Set a range and press Generate.",
-      "flips": "Flips", "coinGo": "Flip", "diceCount": "Dice", "diceSides": "Sides", "diceGo": "Roll", "diceEmpty": "Choose your dice and press Roll.",
-      "copy": "Copy result link", "copyNote": "The link includes your list.", "copyNoteNoList": "The link holds the settings and the seed.", "trustSolo": "Each press uses a new seed from your browser’s cryptographic random numbers. Nothing is sent anywhere."
-    },
-    "ko": {
-      "ladderBottom": "아래 칸", "ladderBottomAria": "아래 칸에 들어갈 말, 한 줄에 하나", "ladderBottomHint": "한 줄에 하나. 사람 수보다 적으면 나머지는 꽝이에요.", "ladderMake": "사다리 만들기", "ladderNew": "새 사다리", "ladderShow": "전체 결과 보기", "ladderRows": "가로줄", "rowsFew": "적게", "rowsNormal": "보통", "rowsMany": "많이", "ladderEmpty": "‘사다리 만들기’를 눌러요. 누가 타기 전까지 가로줄은 가려져 있어요.", "moreSettings": "사다리 설정",
-      "modePick": "몇 명 뽑기", "modeSlips": "쪽지", "modeOrder": "순서 정하기", "howMany": "뽑을 인원", "winSlips": "당첨 쪽지 수", "winLabel": "당첨 쪽지에 쓸 말", "loseLabel": "나머지 쪽지에 쓸 말", "drawGo": "뽑기", "drawEmpty": "인원을 정하고 ‘뽑기’를 눌러요.", "slipLabels": "쪽지에 쓸 말 바꾸기",
-      "byTeams": "팀 수", "bySize": "한 팀 최대 인원", "teamsGo": "팀 나누기", "teamsEmpty": "나누는 기준을 정하고 ‘팀 나누기’를 눌러요.",
-      "from": "", "to": "부터", "toAfter": "까지", "count": "개수", "unique": "중복 없이", "sortLabel": "순서", "sortNone": "뽑힌 순서", "sortAsc": "작은 수부터", "sortDesc": "큰 수부터", "numGo": "뽑기", "numEmpty": "범위를 정하고 ‘뽑기’를 눌러요.",
-      "flips": "던질 횟수", "coinGo": "던지기", "diceCount": "주사위 수", "diceSides": "면 수", "diceGo": "굴리기", "diceEmpty": "주사위를 고르고 ‘굴리기’를 눌러요.",
-      "copy": "결과 링크 복사", "copyNote": "링크에는 명단이 들어 있어요.", "copyNoteNoList": "링크에는 설정과 씨앗이 들어 있어요.", "trustSolo": "누를 때마다 브라우저의 암호용 난수로 씨앗을 새로 만들어요. 어디로도 보내지 않아요."
-    }
+  "ko": {
+   "skip": "본문으로 건너뛰기",
+   "navLabel": "뽑는 방식",
+   "guides": "가이드",
+   "about": "소개",
+   "privacy": "개인정보 처리방침",
+   "contact": "문의",
+   "langOther": "English",
+   "footNav": "사이트 안내",
+   "list": "내 명단 넣기",
+   "listAria": "이름 목록, 한 줄에 한 명",
+   "listSample": "예시 명단이에요. 지우고 내 명단을 넣어요.",
+   "listClear": "지우기",
+   "listSaved": "이 기기에만 저장돼요.",
+   "listClearAll": "명단 지우기",
+   "shuffle": "섞기",
+   "sort": "가나다순",
+   "dedupe": "겹친 이름 지우기",
+   "listHint": "한 줄에 한 명. 한 줄만 쓰면 쉼표로 나눠 읽어요. 엑셀의 이름 칸을 복사해 붙여도 돼요.",
+   "histLeft": "이 기기의 최근 결과 기록에는 이 명단이 든 링크가 아직 남아 있어요.",
+   "histLeftBtn": "기록도 지우기",
+   "outLast": "마지막 한 명 되돌리기",
+   "outAll": "모두 되돌리기",
+   "spin": "돌리기",
+   "resultLabel": "결과",
+   "again": "이 사람 빼고 다시",
+   "copy": "결과 링크 복사",
+   "copyNote": "링크 안에 명단이 들어가요.",
+   "historyH": "지금까지 뽑힌 순서",
+   "trustQ": "어떻게 뽑나요?",
+   "trustA": "누를 때마다 브라우저가 새로 만든 난수로 뽑아요. 명단은 서버로 보내지 않고, 결과 링크를 만들어 남에게 보낼 때만 그 링크 안에 들어가요.",
+   "trustMoreH": "자세히",
+   "trustMore": "누를 때마다 브라우저의 crypto.getRandomValues()로 32바이트짜리 새 값을 받아요. 이 값을 ‘씨앗’이라고 불러요. 그다음 xoshiro256**라는 정해진 계산으로 씨앗에서 필요한 숫자를 만들어요. 그래서 씨앗과 사람들이 같으면 누구의 기기에서 다시 계산해도 같은 결과가 나와요.",
+   "trustLink": "뽑는 방식 전부 보기",
+   "ad": "광고",
+   "faq": "자주 묻는 질문",
+   "waysH": "같은 명단으로 다른 방식도",
+   "waysSoloH": "다른 방식으로 뽑기",
+   "guidesH": "가이드",
+   "recentH": "이 기기에서 뽑은 최근 결과",
+   "recentClear": "기록 지우기",
+   "made": "루멘랩",
+   "madeBy": "만든 곳",
+   "moreFrom": "다른 앱과 도구 보러 가기",
+   "updated": "마지막 확인",
+   "tryIt": "내 명단으로 해 보기",
+   "tblHint": "표를 옆으로 밀면 나머지가 보여요.",
+   "sample": "김민준\n이서연\n박지호\n최유나\n정도윤\n강하린\n윤서준\n임채원",
+   "sampleBottom": "당첨",
+   "nfTitle": "페이지가 없어요",
+   "nfText": "없는 주소예요. 아래에서 쓸 도구를 골라 주세요."
   }
+ },
+ "js": {
+  "en": {
+   "count": "{n} names",
+   "count1": "1 name",
+   "picked": "Picked",
+   "spinning": "Spinning…",
+   "wait": "Spin the wheel and the name shows up here.",
+   "spin": "Spin",
+   "spinAgain": "Spin again",
+   "allOut": "Everyone has been picked. Bring people back or edit the list.",
+   "outList": "Taken off the wheel ({n}): {names}",
+   "copied": "Link copied. Anyone who opens it gets the same result recalculated.",
+   "copiedLong": "It is a long link (about {n} characters). Some apps cut long links, so ask the receiver to check that it opens.",
+   "linkTooLong": "The list is too long to fit in a link (about {n} characters; the limit is {max}). No link was made. Shorten the list or show the result on screen instead.",
+   "copyFail": "Couldn’t copy. Select the address below and copy it.",
+   "stamp": "Same result as the link",
+   "stampOld": "Same result (old-format link)",
+   "stampSr": "The result stored in this link was recalculated as it was.",
+   "badLink": "This link can’t be opened. It is cut off or damaged. Check that the whole link was copied.",
+   "badTooLong": "This link can’t be opened. It is longer than the 400,000-character limit.",
+   "badVersion": "This link can’t be opened. It uses a newer format than this page knows.",
+   "legacyLink": "This link was made with the earlier method, where the order of the list was part of the result. Links made now give the same result in any order.",
+   "otherTool": "This link is a {tool} result.",
+   "openThere": "Open it there",
+   "close": "Close",
+   "emptyList": "The list is empty. Add one name per line.",
+   "listSample": "This is a sample list. Clear it and add your own.",
+   "listSaved": "Saved on this device only.",
+   "listClear": "Clear",
+   "listClearAll": "Clear list",
+   "listShared": "This list came from the link. It isn’t saved unless you edit it.",
+   "listBack": "Back to my list",
+   "listLocked": "The list is locked until the result is in.",
+   "listCleared": "Your list is cleared. This is the sample list.",
+   "listUndo": "Undo",
+   "warnCut": "{n} long names were cut at 100 characters.",
+   "warnCut1": "1 long name was cut at 100 characters.",
+   "warnOver": "{n} lines over the 5,000 limit were left out.",
+   "warnOver1": "1 line over the 5,000 limit was left out.",
+   "warnDupes": "{n} duplicate names (each still gets its own slot).",
+   "warnDupes1": "1 duplicate name (it still gets its own slot).",
+   "warnSplit": "This was a single line, so it was split at the commas into {n} names. If a comma is part of a name, put each name on its own line.",
+   "warnTabs": "This looks like several spreadsheet columns pasted together. Each whole row is read as one name.",
+   "firstColumn": "Keep first column only",
+   "soundOn": "Sound on",
+   "soundOff": "Sound off",
+   "present": "Full screen",
+   "presentExit": "Exit full screen",
+   "recentEmpty": "Nothing yet. Results you draw on this device are listed here.",
+   "replay": "Replay",
+   "toolNames": {
+    "wheel": "Wheel",
+    "ladder": "Ladder game",
+    "draw": "Name picker",
+    "teams": "Team generator",
+    "number": "Random number",
+    "coin": "Coin flip",
+    "dice": "Dice"
+   },
+   "ladderRange": "The ladder works for 2 to 30 people. Your list has {n}.",
+   "ladderTip": "Tap a name to follow that person’s path.",
+   "ladderAll": "Results",
+   "ladderExtra": "{n} bottom-row items were not used: with {m} people, only the first {m} are used.",
+   "ladderExtra1": "1 bottom-row item was not used: with {m} people, only the first {m} are used.",
+   "blank": "Blank",
+   "win": "Winner",
+   "lose": "No luck",
+   "needMore": "Add at least {n} names first.",
+   "pickBad": "Enter how many to pick as a whole number, 1 or more.",
+   "pickTooMany": "You can’t pick more than the {n} on the list.",
+   "slipsBad": "Enter the number of winning slips as a whole number, 1 or more.",
+   "slipsTooMany": "There can’t be more winning slips than the {n} people on the list.",
+   "order": "Order",
+   "pickedN": "Picked {m} of {n}",
+   "slipsHead": "Slips for {n} people: tap one to open it",
+   "openAll": "Open all",
+   "slipClosed": "Tap to open",
+   "team": "Team {n}",
+   "people": "{n}",
+   "teamsHead": "{n} people in {k} teams",
+   "teamsBad": "Teams must be between 1 and {n}.",
+   "sizeBad": "Team size must be between 1 and {n}.",
+   "copyText": "Copy as text",
+   "copiedText": "Copied.",
+   "numInt": "Enter a whole number in both boxes. Decimals and letters don’t work.",
+   "numOrder": "The first number is larger than the second.",
+   "numCount": "Count must be between 1 and 10,000.",
+   "numUnique": "Not enough numbers in that range: asked for {m}, only {n} available.",
+   "numWide": "Numbers can have up to 15 digits. Use a smaller range.",
+   "numHead": "{m} from {a} to {b}",
+   "heads": "Heads",
+   "tails": "Tails",
+   "coinWait": "Flip",
+   "coinTally": "Heads {a}, tails {b}",
+   "coinCount": "Flips must be between 1 and 1,000.",
+   "diceSum": "Total {n}",
+   "diceCount": "Dice must be between 1 and 100.",
+   "diceSides": "Sides must be between 2 and 1,000."
+  },
+  "ko": {
+   "count": "{n}명",
+   "count1": "1명",
+   "picked": "뽑혔어요",
+   "spinning": "돌아가는 중이에요",
+   "wait": "판을 돌리면 여기에 이름이 나와요.",
+   "spin": "돌리기",
+   "spinAgain": "다시 돌리기",
+   "allOut": "남은 사람이 없어요. 뺀 사람을 되돌리거나 명단을 고쳐 주세요.",
+   "outList": "판에서 뺀 사람 {n}명: {names}",
+   "copied": "링크를 복사했어요. 누가 열어도 같은 결과가 다시 계산돼요.",
+   "copiedLong": "링크가 길어요(약 {n}자). 보내는 곳에 따라 잘릴 수 있으니, 받은 사람이 열리는지 확인해 주세요.",
+   "linkTooLong": "링크로 담기엔 명단이 너무 길어요(약 {n}자, 한도 {max}자). 링크는 만들지 않았어요. 명단을 줄이거나 결과를 화면으로 보여 주세요.",
+   "copyFail": "복사하지 못했어요. 아래 주소를 직접 복사해 주세요.",
+   "stamp": "링크의 결과 그대로",
+   "stampOld": "옛 방식 링크의 결과 그대로",
+   "stampSr": "이 링크에 담긴 결과가 그대로 다시 계산됐어요.",
+   "badLink": "이 링크는 열 수 없어요. 링크가 잘렸거나 잘못됐어요. 받은 링크를 끝까지 복사했는지 확인해 주세요.",
+   "badTooLong": "이 링크는 열 수 없어요. 한도인 400,000자보다 길어요.",
+   "badVersion": "이 링크는 열 수 없어요. 이 페이지가 아는 것보다 새 형식이에요.",
+   "legacyLink": "옛 방식으로 만든 링크예요. 이 링크는 명단의 순서까지 같아야 같은 결과가 나와요. 지금 만드는 링크는 순서가 달라도 같은 결과가 나와요.",
+   "otherTool": "이 링크는 {tool} 결과예요.",
+   "openThere": "거기서 열기",
+   "close": "닫기",
+   "emptyList": "명단이 비어 있어요. 이름을 한 줄에 하나씩 넣어 주세요.",
+   "listSample": "예시 명단이에요. 지우고 내 명단을 넣어요.",
+   "listSaved": "이 기기에만 저장돼요.",
+   "listClear": "지우기",
+   "listClearAll": "명단 지우기",
+   "listShared": "링크에 들어 있던 명단이에요. 고치기 전에는 저장하지 않아요.",
+   "listBack": "내 명단으로",
+   "listLocked": "결과가 나올 때까지 명단을 잠가 뒀어요.",
+   "listCleared": "내 명단을 지웠어요. 지금 보이는 것은 예시 명단이에요.",
+   "listUndo": "되돌리기",
+   "warnCut": "긴 이름 {n}개는 100자에서 잘랐어요.",
+   "warnOver": "한도 5,000줄을 넘은 {n}줄은 뺐어요.",
+   "warnDupes": "겹치는 이름 {n}개(각각 한 칸씩 들어가요).",
+   "warnSplit": "한 줄이라 쉼표로 나눠 {n}명으로 읽었어요. 쉼표가 이름의 일부라면 한 줄에 한 명씩 적어 주세요.",
+   "warnTabs": "엑셀의 여러 칸을 같이 붙여 넣은 것 같아요. 지금은 한 줄 전체를 한 명으로 읽어요.",
+   "firstColumn": "첫 칸만 쓰기",
+   "soundOn": "소리 켬",
+   "soundOff": "소리 끔",
+   "present": "전체 화면",
+   "presentExit": "전체 화면 끝내기",
+   "recentEmpty": "아직 없어요. 이 기기에서 뽑은 결과가 여기에 쌓여요.",
+   "replay": "다시 보기",
+   "toolNames": {
+    "wheel": "돌림판",
+    "ladder": "사다리타기",
+    "draw": "제비뽑기",
+    "teams": "팀 나누기",
+    "number": "랜덤 숫자",
+    "coin": "동전 던지기",
+    "dice": "주사위"
+   },
+   "ladderRange": "사다리는 2명부터 30명까지 돼요. 지금 명단은 {n}명이에요.",
+   "ladderTip": "이름을 누르면 그 사람의 길을 따라가요.",
+   "ladderAll": "결과",
+   "ladderExtra": "아래 칸에 적은 것 중 {n}개는 쓰지 않았어요. 사람이 {m}명이라 앞에서부터 {m}개만 썼어요.",
+   "blank": "꽝",
+   "win": "당첨",
+   "lose": "꽝",
+   "needMore": "먼저 이름을 {n}명 이상 넣어 주세요.",
+   "pickBad": "뽑을 인원은 1 이상의 정수로 넣어 주세요.",
+   "pickTooMany": "명단({n}명)보다 많이 뽑을 수는 없어요.",
+   "slipsBad": "당첨 쪽지 수는 1 이상의 정수로 넣어 주세요.",
+   "slipsTooMany": "당첨 쪽지는 사람 수({n}명)보다 많을 수 없어요.",
+   "order": "순서",
+   "pickedN": "{n}명 중 {m}명",
+   "slipsHead": "쪽지 {n}장: 눌러서 펼쳐요",
+   "openAll": "모두 펼치기",
+   "slipClosed": "눌러서 펼치기",
+   "team": "{n}팀",
+   "people": "{n}명",
+   "teamsHead": "{n}명을 {k}팀으로",
+   "teamsBad": "팀 수는 1부터 {n}까지 돼요.",
+   "sizeBad": "한 팀 인원은 1부터 {n}까지 돼요.",
+   "copyText": "글자로 복사",
+   "copiedText": "복사했어요.",
+   "numInt": "두 칸 모두 정수를 넣어 주세요. 소수나 글자는 안 돼요.",
+   "numOrder": "앞의 수가 뒤의 수보다 커요.",
+   "numCount": "개수는 1부터 10,000까지 돼요.",
+   "numUnique": "그 범위에는 숫자가 모자라요: {m}개를 뽑으려는데 {n}개뿐이에요.",
+   "numWide": "15자리까지만 돼요. 범위를 줄여 주세요.",
+   "numHead": "{a}부터 {b}까지에서 {m}개",
+   "heads": "앞",
+   "tails": "뒤",
+   "coinWait": "던지기",
+   "coinTally": "앞 {a}번, 뒤 {b}번",
+   "coinCount": "횟수는 1부터 1,000까지 돼요.",
+   "diceSum": "합계 {n}",
+   "diceCount": "주사위는 1개부터 100개까지 돼요.",
+   "diceSides": "면 수는 2부터 1,000까지 돼요."
+  }
+ },
+ "tools": {
+  "wheel": {
+   "en": {
+    "path": "",
+    "nav": "Wheel",
+    "short": "Wheel",
+    "h1": "Spin the Wheel",
+    "aka": "One list for the wheel, the ladder and the name picker. Every result can be rechecked from a link.",
+    "title": "Spin the Wheel: Name Picker for Up to 5,000 Names | Pickboard",
+    "desc": "Paste up to 5,000 names and spin. Remove the winner and spin again, and share a link that recalculates the exact same result for anyone who opens it.",
+    "way": "Spin a wheel of the names",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Type one name per line in the list, or paste a whole column from a spreadsheet. If you type a single line, it is split at the commas. Press Spin in the middle of the wheel and the name under the pointer appears in large type.",
+       "Remove and spin again takes the name that was just picked off the wheel only, and spins straight away. The text in your list and the saved list stay as they were. The people taken off are shown under the list, and Bring everyone back puts them on the wheel again. If you enter a name twice it gets two slots and twice the chance. That is the only kind of weighting here, and it is always visible on the wheel."
+      ]
+     },
+     {
+      "h": "How many entries can it take?",
+      "p": [
+       "The list accepts up to 5,000 lines, and each name up to 100 characters. Anything beyond that is left out, and a note under the list says how much. The wheel has been checked to spin smoothly with 500 slots. When there are too many slots to read the names, the result still appears in large type and the winning slot is widened so that its name shows on the wheel."
+      ]
+     },
+     {
+      "h": "How the pick is made",
+      "p": [
+       "Each spin asks your browser for a fresh value, the seed, with crypto.getRandomValues(). The winner is decided from that seed first, and then the wheel is turned so that it stops on that slot. The result is never read from where the wheel happened to stop. The spin runs to the end with the list as it was when you pressed Spin, and the list is locked while the wheel turns. So the highlighted slot, the name in large type and the result link always point to the same person. There is no setting that makes a chosen name come up."
+      ]
+     },
+     {
+      "h": "The result link",
+      "p": [
+       "Copy result link builds an address that holds the names on the wheel and the seed. Anyone who opens it gets the same winner recalculated. The pick works from the names placed in a fixed order (sorted by character code), so changing only the order of the names inside a link cannot make someone else the winner. The list sits after the # in the address, so it is not sent to a server, but whoever gets the link can read the list. A link cannot show whether someone spun several times and sent only the result they liked."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I make a certain name win?",
+      "a": "No. That feature does not exist here. The only way to change the odds is one everybody can see, such as entering a name more than once."
+     },
+     {
+      "q": "Is my list uploaded anywhere?",
+      "a": "No. The list is not sent to a server and is saved in this browser only. It travels inside a result link only if you make one and send it. Clear list removes the saved list, and the Clear results too button that follows removes the recent results, whose links contain the list. The privacy policy explains how ads and visit statistics work."
+     },
+     {
+      "q": "Can I use it as a yes or no wheel?",
+      "a": "Yes. Put Yes and No on two lines and spin. Any short list works the same way, such as lunch options or numbers."
+     }
+    ]
+   },
+   "ko": {
+    "path": "",
+    "nav": "돌림판",
+    "short": "돌림판",
+    "h1": "돌림판 돌리기",
+    "aka": "명단 하나로 돌림판, 사다리, 제비뽑기까지. 결과는 링크로 다시 확인할 수 있어요.",
+    "title": "돌림판 돌리기(룰렛 돌리기): 5,000명까지 넣는 이름 뽑기 | 공평뽑기",
+    "desc": "이름을 5,000명까지 붙여 넣고 돌리는 돌림판이에요. 뽑힌 사람을 빼고 다시 돌릴 수 있고, 누가 열어도 같은 결과가 다시 계산되는 링크를 만들 수 있어요.",
+    "way": "이름이 적힌 판을 돌려요",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "명단 칸에 이름을 한 줄에 하나씩 넣거나, 엑셀이나 메모장에서 복사해 한 번에 붙여 넣어요. 한 줄만 쓰면 쉼표마다 나눠서 읽어요. 판 가운데 ‘돌리기’를 누르면 바늘이 가리킨 이름이 크게 나와요.",
+       "‘이 사람 빼고 다시’를 누르면 방금 뽑힌 사람을 판에서만 빼고 바로 다시 돌려요. 명단 칸의 글과 저장된 명단은 그대로예요. 뺀 사람은 명단 아래에 따로 적히고, ‘모두 되돌리기’를 누르면 다시 판에 올라와요. 같은 이름을 두 번 넣으면 칸이 두 개가 돼서 그만큼 잘 뽑혀요. 뽑힐 확률을 바꾸는 방법은 이렇게 판에 그대로 보이는 것뿐이에요."
+      ]
+     },
+     {
+      "h": "몇 명까지 되나요",
+      "p": [
+       "명단은 5,000줄까지, 이름 하나는 100자까지 넣을 수 있어요. 넘는 부분은 빼고, 얼마나 뺐는지 명단 아래에 알려 줘요. 500칸까지는 판이 끊김 없이 도는 것을 확인했어요. 칸이 많아 이름이 안 보일 때도 결과는 크게 나오고, 판에서는 뽑힌 칸을 넓혀서 이름과 함께 보여 줘요."
+      ]
+     },
+     {
+      "h": "뽑는 방식",
+      "p": [
+       "돌릴 때마다 브라우저의 crypto.getRandomValues()로 새 값을 받아요. 이 값을 씨앗이라고 불러요. 그 씨앗으로 뽑힐 사람을 먼저 정하고, 그 칸에 멈추도록 판을 돌려요. 판이 멈춘 자리를 읽어서 결과를 정하는 게 아니에요. 돌리기를 누른 순간의 명단으로 끝까지 가고, 도는 동안에는 명단을 바꿀 수 없게 잠가요. 그래서 판에서 강조된 칸, 크게 나온 이름, 결과 링크가 늘 같은 사람을 가리켜요. 특정 이름이 나오게 하는 기능은 없어요."
+      ]
+     },
+     {
+      "h": "결과 링크",
+      "p": [
+       "‘결과 링크 복사’로 만든 주소에는 판에 있던 명단과 그 씨앗이 들어 있어요. 누가 열어도 같은 사람이 뽑히는 모습이 다시 계산돼요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 링크 속 명단의 순서만 바꿔서는 다른 사람이 뽑힌 것처럼 꾸밀 수 없어요. 명단은 주소의 # 뒤에 담겨서 서버로는 전송되지 않지만, 링크를 받은 사람은 명단을 볼 수 있어요. 여러 번 돌려 보고 마음에 드는 결과만 보냈는지는 링크로 알 수 없어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "룰렛 돌리기와 같은 건가요?",
+      "a": "네. 이름이나 선택지를 적은 판을 돌려 하나를 뽑는 것을 돌림판, 원판 돌리기, 룰렛 돌리기라고 섞어 불러요. 여기서는 돌림판이라고 써요."
+     },
+     {
+      "q": "원하는 이름이 나오게 할 수 있나요?",
+      "a": "없어요. 그런 기능은 만들지 않았어요. 같은 이름을 여러 번 넣어 칸을 늘리는 것처럼 모두에게 보이는 방법만 있어요."
+     },
+     {
+      "q": "명단이 어딘가에 올라가나요?",
+      "a": "아니요. 명단은 서버로 보내지 않고 이 브라우저에만 저장돼요. 결과 링크를 만들어 남에게 보낼 때만 그 링크 안에 명단이 들어가요. ‘명단 지우기’를 누르면 저장된 명단이 지워지고, 이어서 나오는 ‘기록도 지우기’를 누르면 명단이 든 링크가 남아 있는 최근 결과 기록까지 지워져요. 광고와 방문 통계가 어떻게 동작하는지는 개인정보 처리방침에 적었어요."
+     }
+    ]
+   }
+  },
+  "ladder": {
+   "en": {
+    "path": "ladder/",
+    "nav": "Ladder game",
+    "short": "Ladder",
+    "h1": "Ladder game",
+    "aka": "Also called Ghost Leg or Amidakuji. For 2 to 30 people.",
+    "title": "Ladder Game (Ghost Leg) for 2 to 30 Players | Pickboard",
+    "desc": "Draw a ladder lottery for 2 to 30 people, follow each path one by one, and share a link that shows the same ladder and results again.",
+    "way": "Follow a hidden ladder down to a result",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Names from your list sit along the top. Type what goes along the bottom, one item per line, for example Winner or a chore. If you give fewer items than people, the rest are left blank. If you give more, only as many as there are people are used and a note says how many were left out. Press Make ladder, then tap a name to follow that person’s path down, or press Show all results."
+      ]
+     },
+     {
+      "h": "Why the bottom row is shuffled",
+      "p": [
+       "A plain ladder is not as random as it looks. With the usual number of rungs, a person tends to end up close to where they started. In our own runs with 8 people and a medium ladder, the person on the far left landed directly below their start 24.8% of the time, when a fair draw would give 12.5%.",
+       "So this tool shuffles the bottom row first and then builds the ladder. With that step every person is equally likely to get every result, however few rungs there are. The guide has the numbers."
+      ]
+     },
+     {
+      "h": "What the ladder guarantees",
+      "p": [
+       "Every ladder gives each person exactly one result and each result to exactly one person. Two rungs never meet the same upright on the same level, so each path is unambiguous. These rules are checked by automated tests on thousands of generated ladders."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why is the limit 30 people?",
+      "a": "Beyond 30 uprights the ladder is too narrow to follow on a screen. For bigger groups, the name picker draws winners or an order from a list of up to 5,000 names."
+     },
+     {
+      "q": "Can other people check the result later?",
+      "a": "Yes. Copy result link stores the names in their order, the bottom row and the value the ladder was built from (the seed) in the address. Opening it rebuilds the same ladder with the same results. In a ladder, who stands on which line is part of the result, so the order of the names has to be the same as well."
+     }
+    ]
+   },
+   "ko": {
+    "path": "ladder/",
+    "nav": "사다리타기",
+    "short": "사다리",
+    "h1": "사다리타기",
+    "aka": "2명부터 30명까지. 결과를 링크로 다시 볼 수 있는 사다리 게임이에요.",
+    "title": "사다리타기: 30명까지, 결과를 링크로 다시 보는 사다리 게임 | 공평뽑기",
+    "desc": "2명부터 30명까지 사다리를 타요. 한 명씩 길을 따라가거나 전체 결과를 한 번에 보고, 같은 사다리와 결과를 다시 보여 주는 링크를 만들 수 있어요.",
+    "way": "가려진 사다리를 타고 내려가요",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "명단의 이름이 사다리 위에 올라가요. 아래 칸에 들어갈 말을 한 줄에 하나씩 적어요. 당첨, 청소 당번처럼요. 사람 수보다 적게 적으면 나머지는 꽝이 돼요. 사람 수보다 많이 적으면 앞에서부터 사람 수만큼만 쓰고, 몇 개를 안 썼는지 알려 줘요. ‘사다리 만들기’를 누른 다음 이름을 누르면 그 사람의 길을 따라 내려가고, ‘전체 결과 보기’를 누르면 한 번에 다 보여요."
+      ]
+     },
+     {
+      "h": "아래 칸을 먼저 섞는 이유",
+      "p": [
+       "사다리는 보기보다 덜 섞여요. 보통 그리는 가로줄 수로는 출발한 자리 근처에 도착하기 쉬워요. 직접 돌려 보니 8명이 보통 사다리를 탈 때 맨 왼쪽 사람이 바로 아래 칸에 도착한 비율이 24.8%였어요. 공평하다면 12.5%여야 해요.",
+       "그래서 이 도구는 아래 칸을 먼저 무작위로 섞은 다음 사다리를 만들어요. 이렇게 하면 가로줄이 적어도 누가 어떤 결과를 받을지는 모든 경우가 같은 확률이에요. 숫자는 가이드 글에 있어요."
+      ]
+     },
+     {
+      "h": "사다리가 지키는 규칙",
+      "p": [
+       "어떤 사다리든 한 사람은 결과 하나만 받고, 결과 하나는 한 사람에게만 가요. 같은 층에서 한 세로줄에 가로줄 두 개가 닿지 않아서 길이 헷갈리지 않아요. 이 규칙은 사다리 수천 개를 만들어 보는 자동 테스트로 확인해요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "왜 30명까지인가요?",
+      "a": "세로줄이 30개를 넘으면 화면에서 길을 따라가기 어려워요. 더 많은 인원은 제비뽑기에서 5,000명까지 당첨자나 순서를 뽑을 수 있어요."
+     },
+     {
+      "q": "나중에 다른 사람이 결과를 확인할 수 있나요?",
+      "a": "네. ‘결과 링크 복사’로 만든 주소에 이름과 줄 순서, 아래 칸, 사다리를 만들 때 쓴 값(씨앗)이 들어 있어요. 열면 같은 사다리와 같은 결과가 다시 만들어져요. 사다리는 누가 몇 번째 줄에 서는지가 결과의 일부라서, 줄 순서까지 같아야 같은 결과예요."
+     }
+    ]
+   }
+  },
+  "draw": {
+   "en": {
+    "path": "name-picker/",
+    "nav": "Name picker",
+    "short": "Picker",
+    "h1": "Random name picker",
+    "aka": "Draw winners from a list with no repeats, deal slips, or set an order.",
+    "title": "Random Name Picker: Draw Winners Without Repeats | Pickboard",
+    "desc": "Pick one or many names from a list of up to 5,000 with no repeats, deal winner slips, or put everyone in a random order. Share a link that recalculates the same draw.",
+    "way": "Draw several names, deal slips or set an order",
+    "about": [
+     {
+      "h": "Three ways to draw",
+      "p": [
+       "Pick names draws as many names as you ask for, in the order they came out, and never the same line twice. Slips gives everyone a folded slip, with as many winning slips as you set; tap a slip to open it. Order puts the whole list in a random sequence, for presentations or turns."
+      ]
+     },
+     {
+      "h": "How the draw is made",
+      "p": [
+       "All three use the same shuffle, Fisher–Yates. Each press takes a fresh value from your browser, the seed, and shuffles with it. Every possible order is equally likely. The draw works from the names placed in a fixed order (sorted by character code), so however you typed the list, the same seed and the same people give the same winners. Automated tests draw 100,000 times with fixed seeds and check that no name comes up more often than chance allows."
+      ]
+     },
+     {
+      "h": "Duplicate lines",
+      "p": [
+       "No repeats means no line is drawn twice. If the same name is on two lines, it counts as two entries and both can be drawn. Use Remove duplicates under the list if you want one entry per name."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "How many names can the list hold?",
+      "a": "Up to 5,000 lines. You can paste them in one go."
+     },
+     {
+      "q": "Can I prove the draw to others?",
+      "a": "Copy result link stores the list and the value the draw was made from (the seed), so anyone who opens it gets the same result recalculated. With the same seed and the same people, the result is the same even if the list is in a different order. There are things a link cannot show: whether you drew several times and sent only the link you liked, or whether someone was added to or left off the list before the draw. So post the list before you draw, and agree on a single draw or draw where everyone can watch."
+     }
+    ]
+   },
+   "ko": {
+    "path": "draw/",
+    "nav": "제비뽑기",
+    "short": "제비뽑기",
+    "h1": "제비뽑기",
+    "aka": "명단에서 여러 명 뽑기, 당첨 쪽지 나눠 주기, 순서 정하기.",
+    "title": "제비뽑기·추첨: 명단에서 여러 명 뽑기, 당첨 쪽지, 순서 정하기 | 공평뽑기",
+    "desc": "5,000명까지 넣은 명단에서 한 명이든 여러 명이든 겹치지 않게 뽑고, 당첨 쪽지를 나눠 주고, 발표 순서를 정해요. 같은 결과를 다시 계산해 보여 주는 링크도 만들 수 있어요.",
+    "way": "여러 명 뽑기, 당첨 쪽지, 순서 정하기",
+    "about": [
+     {
+      "h": "세 가지 방식",
+      "p": [
+       "‘몇 명 뽑기’는 정한 수만큼 뽑힌 순서대로 보여 줘요. 같은 줄이 두 번 뽑히지 않아요. ‘쪽지’는 모두에게 접힌 쪽지를 한 장씩 주고, 정한 수만큼만 당첨이에요. 쪽지를 누르면 펼쳐져요. ‘순서 정하기’는 명단 전체를 무작위 순서로 세워요. 발표 순서나 차례를 정할 때 써요."
+      ]
+     },
+     {
+      "h": "뽑는 방식",
+      "p": [
+       "세 가지 모두 같은 섞기(Fisher–Yates)를 써요. 누를 때마다 브라우저에서 새 값(씨앗)을 받아 그 값으로 섞어요. 가능한 모든 순서가 같은 확률이에요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 명단을 어떤 순서로 적었든 씨앗과 사람들이 같으면 같은 사람이 뽑혀요. 자동 테스트가 씨앗을 고정해 10만 번씩 뽑아 보고, 어느 이름도 우연보다 자주 나오지 않는지 확인해요."
+      ]
+     },
+     {
+      "h": "겹치는 이름",
+      "p": [
+       "같은 줄이 두 번 뽑히지는 않아요. 다만 같은 이름이 두 줄에 있으면 두 사람으로 세서 둘 다 뽑힐 수 있어요. 이름마다 한 번만 넣으려면 명단 아래의 ‘겹친 이름 지우기’를 눌러요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "몇 명까지 넣을 수 있나요?",
+      "a": "5,000줄까지 넣을 수 있어요. 한 번에 붙여 넣어도 돼요."
+     },
+     {
+      "q": "뽑은 결과를 다른 사람이 믿게 하려면요?",
+      "a": "‘결과 링크 복사’로 만든 주소에는 명단과 뽑을 때 쓴 값(씨앗)이 들어 있어서, 누가 열어도 같은 결과가 다시 계산돼요. 씨앗과 사람들이 같으면 명단의 순서가 달라도 결과는 같아요. 링크가 보여 주지 못하는 것도 있어요. 여러 번 뽑아 보고 마음에 드는 링크만 보냈는지, 뽑기 전에 명단에서 누구를 빼거나 더했는지는 링크만으로 알 수 없어요. 그래서 뽑기 전에 명단을 먼저 올려 두고, 한 번만 뽑는다고 정하거나 모두가 보는 화면에서 뽑아요."
+     }
+    ]
+   }
+  },
+  "teams": {
+   "en": {
+    "path": "team-generator/",
+    "nav": "Team generator",
+    "short": "Teams",
+    "h1": "Random team generator",
+    "aka": "Split a list into even groups by number of teams or team size.",
+    "title": "Random Team Generator: Even Groups From a List | Pickboard",
+    "desc": "Split a list of up to 5,000 names into random teams by number of teams or by maximum team size. Sizes never differ by more than one. Copy the teams as text or share a link.",
+    "way": "Split the list into even teams",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Choose Number of teams or Max per team, set the number and press Make teams. The list is shuffled and dealt out, so the first teams get any extra person and no team is more than one person larger than another. The list can hold up to 5,000 names.",
+       "With Max per team, the number of teams is the list size divided by that maximum, rounded up. Thirteen people with a maximum of four gives four teams of 4, 3, 3 and 3."
+      ]
+     },
+     {
+      "h": "What it does not do",
+      "p": [
+       "Teams are random. The tool does not balance skill, keep certain people together or keep them apart. There are no hidden rules that place a particular person in a particular team."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "What happens when the list does not divide evenly?",
+      "a": "The extra people are spread one each over the first teams, so sizes differ by one at most."
+     },
+     {
+      "q": "Can I send the teams to a group chat?",
+      "a": "Use Copy as text to paste the teams as plain text, or Copy result link to send an address that shows the same teams again. The link contains the list."
+     }
+    ]
+   },
+   "ko": {
+    "path": "teams/",
+    "nav": "팀 나누기",
+    "short": "팀 나누기",
+    "h1": "팀 나누기",
+    "aka": "팀 수나 한 팀 인원을 정하면 무작위로 고르게 나눠요.",
+    "title": "팀 나누기·조 편성: 팀 수나 한 팀 인원으로 랜덤 팀 짜기 | 공평뽑기",
+    "desc": "5,000명까지 넣은 명단을 팀 수나 한 팀 최대 인원으로 무작위로 나눠요. 팀 인원은 한 명 넘게 차이 나지 않아요. 결과를 글자로 복사하거나 다시 보는 링크로 보낼 수 있어요.",
+    "way": "팀 수나 한 팀 인원으로 나눠요",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "‘팀 수’나 ‘한 팀 최대 인원’을 고르고 숫자를 정한 다음 ‘팀 나누기’를 눌러요. 명단을 섞어서 차례로 나눠 담기 때문에 남는 사람은 앞 팀부터 한 명씩 들어가고, 어느 팀도 다른 팀보다 한 명 넘게 많지 않아요. 명단은 5,000명까지 넣을 수 있어요.",
+       "‘한 팀 최대 인원’을 고르면 팀 수는 전체 인원을 그 수로 나눠 올림한 값이에요. 13명에 최대 4명이면 4팀이 되고 인원은 4, 3, 3, 3명이에요."
+      ]
+     },
+     {
+      "h": "하지 않는 것",
+      "p": [
+       "팀은 무작위예요. 실력을 맞추거나, 특정 사람끼리 붙이거나 떼어 놓지 않아요. 누군가를 정해진 팀에 넣는 숨은 규칙도 없어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "인원이 딱 나눠떨어지지 않으면요?",
+      "a": "남는 사람이 앞 팀부터 한 명씩 들어가서 팀 인원 차이는 많아야 한 명이에요."
+     },
+     {
+      "q": "단톡방에 결과를 보내려면요?",
+      "a": "‘글자로 복사’로 팀 목록을 글로 붙여 넣거나, ‘결과 링크 복사’로 같은 팀을 다시 보여 주는 주소를 보내요. 링크 안에는 명단이 들어가요."
+     }
+    ]
+   }
+  },
+  "number": {
+   "en": {
+    "path": "random-number/",
+    "nav": "Random number",
+    "short": "Number",
+    "h1": "Random number generator",
+    "aka": "Set a range and a count, with or without repeats.",
+    "title": "Random Number Generator: Any Range, No Repeats | Pickboard",
+    "desc": "Generate random whole numbers in a range you set: one from 1 to 100, six without repeats, or up to 10,000 at once. Sort them and share a link that shows the same numbers.",
+    "way": "Numbers in a range",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Set the lowest and highest number, both included, and how many you want. Tick No repeats to get different numbers every time; the range must then hold at least that many numbers. Results can stay in the order drawn or be sorted."
+      ]
+     },
+     {
+      "h": "How the numbers are made",
+      "p": [
+       "Each press takes a fresh value from your browser with crypto.getRandomValues() and uses it as the seed. Whole numbers are taken by drawing only as many random bits as the range needs and throwing away any value that falls outside it. That avoids the small bias of dividing and taking the remainder, so every number in the range is equally likely."
+      ]
+     },
+     {
+      "h": "Limits",
+      "p": [
+       "Whole numbers only, up to 15 digits (from −999,999,999,999,999 to 999,999,999,999,999), and up to 10,000 numbers at a time. Full-width digits such as １２３ are read as well. Inputs outside those limits show a message instead of a wrong answer, and the previous result is cleared."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I get 1 to 100 with no repeats?",
+      "a": "Yes. Set 1 and 100, choose how many, and tick No repeats. You can ask for at most 100 in that range."
+     },
+     {
+      "q": "Is it suitable for passwords or keys?",
+      "a": "No. It is made for draws, games and choosing at random. The calculation that turns the seed into numbers (xoshiro256**) is not a cryptographic one. Use a password manager to create passwords and keys."
+     }
+    ]
+   },
+   "ko": {
+    "path": "number/",
+    "nav": "랜덤 숫자",
+    "short": "숫자",
+    "h1": "랜덤 숫자 뽑기",
+    "aka": "범위와 개수를 정해요. 중복 없이도 뽑을 수 있어요.",
+    "title": "랜덤 숫자 뽑기: 범위·개수·중복 없이 | 공평뽑기",
+    "desc": "정한 범위에서 무작위 정수를 뽑아요. 1부터 100까지에서 하나, 중복 없이 여섯 개, 한 번에 10,000개까지 돼요. 정렬하고, 같은 숫자를 다시 보여 주는 링크로 보낼 수 있어요.",
+    "way": "범위 안의 숫자를 뽑아요",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "가장 작은 수와 가장 큰 수(둘 다 포함)를 넣고 몇 개 뽑을지 정해요. ‘중복 없이’를 켜면 서로 다른 수만 나와요. 이때는 범위 안의 수가 뽑을 개수보다 적으면 안 돼요. 결과는 뽑힌 순서대로 두거나 정렬할 수 있어요."
+      ]
+     },
+     {
+      "h": "뽑는 방식",
+      "p": [
+       "누를 때마다 브라우저의 crypto.getRandomValues()로 새 값을 받아 씨앗으로 써요. 정수는 범위에 필요한 만큼의 비트만 뽑고, 범위를 벗어난 값은 버리고 다시 뽑아요. 나눈 나머지를 쓰는 방식에서 생기는 작은 치우침이 없어서, 범위 안의 모든 수가 같은 확률로 나와요."
+      ]
+     },
+     {
+      "h": "한도",
+      "p": [
+       "정수만 돼요. 15자리까지(−999,999,999,999,999부터 999,999,999,999,999까지), 한 번에 10,000개까지 뽑아요. １２３ 같은 전각 숫자로 쳐도 읽어요. 한도를 넘으면 틀린 답 대신 안내 문구가 나오고, 앞에 나온 결과는 지워져요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "1부터 100까지 중복 없이 뽑을 수 있나요?",
+      "a": "네. 1과 100을 넣고 개수를 정한 뒤 ‘중복 없이’를 켜요. 이 범위에서는 100개까지 뽑을 수 있어요."
+     },
+     {
+      "q": "비밀번호를 만드는 데 써도 되나요?",
+      "a": "아니요. 추첨, 놀이, 무작위로 고르기에 쓰려고 만든 도구예요. 씨앗에서 숫자를 만드는 계산(xoshiro256**)은 암호용이 아니에요. 비밀번호와 키는 비밀번호 관리 앱으로 만드세요."
+     }
+    ]
+   }
+  },
+  "coin": {
+   "en": {
+    "path": "coin-flip/",
+    "nav": "Coin flip",
+    "short": "Coin",
+    "h1": "Flip a coin",
+    "aka": "Heads or tails, once or many times.",
+    "title": "Flip a Coin: Heads or Tails | Pickboard",
+    "desc": "Flip a coin online for heads or tails. Flip once or up to 1,000 times and see the count of each side. Share a link that shows the same flips.",
+    "way": "Heads or tails",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Press Flip. For several flips at once, set the number first, up to 1,000. The last flip is shown on the coin and the count of heads and tails appears below. Up to 300 flips, every flip is also listed in order."
+      ]
+     },
+     {
+      "h": "Is it 50/50?",
+      "p": [
+       "Each flip is one random bit. The bits come from a fresh value your browser gives on every press, so heads and tails are equally likely and one flip does not affect the next. Streaks still happen. In 10 fair flips, a run of three or more of the same side is more likely than not."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why did I get the same side five times in a row?",
+      "a": "That is normal. For any five fair flips, the chance that all five land on the same side is 1 in 16 (1 in 32 for all heads plus 1 in 32 for all tails), so it turns up regularly over many flips. Each new flip is still 50/50."
+     }
+    ]
+   },
+   "ko": {
+    "path": "coin/",
+    "nav": "동전 던지기",
+    "short": "동전",
+    "h1": "동전 던지기",
+    "aka": "앞이냐 뒤냐. 한 번도, 여러 번도 돼요.",
+    "title": "동전 던지기: 앞면·뒷면 바로 정하기 | 공평뽑기",
+    "desc": "동전을 던져 앞면과 뒷면을 정해요. 한 번이든 1,000번이든 던지고 앞뒤가 몇 번씩 나왔는지 볼 수 있어요. 같은 결과를 다시 보여 주는 링크도 만들 수 있어요.",
+    "way": "앞 아니면 뒤",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "‘던지기’를 눌러요. 여러 번 던지려면 횟수를 먼저 정해요. 1,000번까지 돼요. 마지막 결과가 동전에 보이고, 아래에 앞과 뒤가 몇 번씩 나왔는지 나와요. 300번까지는 던진 순서도 하나하나 보여 줘요."
+      ]
+     },
+     {
+      "h": "정말 반반인가요",
+      "p": [
+       "한 번 던질 때마다 무작위 비트 하나를 써요. 누를 때마다 브라우저에서 새 값을 받아 거기서 비트를 만들기 때문에 앞과 뒤가 같은 확률이고, 앞 결과가 다음 결과에 영향을 주지 않아요. 그래도 같은 면이 이어서 나오는 일은 흔해요. 공평한 동전을 10번 던지면 같은 면이 세 번 이상 이어지는 일이 안 일어나는 경우보다 더 많아요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "같은 면이 다섯 번 연달아 나왔어요. 이상한 거 아닌가요?",
+      "a": "이상하지 않아요. 공평한 동전에서 어느 다섯 번이 모두 같은 면일 확률은 16분의 1이에요(모두 앞일 확률 32분의 1에 모두 뒤일 확률 32분의 1을 더한 값). 여러 번 던지다 보면 자주 보게 돼요. 다음 한 번은 여전히 반반이에요."
+     }
+    ]
+   }
+  },
+  "dice": {
+   "en": {
+    "path": "dice/",
+    "nav": "Dice",
+    "short": "Dice",
+    "h1": "Dice roller",
+    "aka": "Roll one die or up to 100, with 2 to 1,000 sides.",
+    "title": "Dice Roller: Up to 100 Dice, 2 to 1,000 Sides | Pickboard",
+    "desc": "Roll dice online: one die or up to 100 at once, with any number of sides from 2 to 1,000. See each die and the total, and share a link that shows the same roll.",
+    "way": "One die or many, 2 to 1,000 sides",
+    "about": [
+     {
+      "h": "How to use it",
+      "p": [
+       "Choose how many dice (up to 100) and how many sides (from 2 to 1,000), then press Roll. Each die is shown with its value and the total appears above them. Six-sided dice are drawn with pips; other dice show the number."
+      ]
+     },
+     {
+      "h": "How the roll is made",
+      "p": [
+       "Every die is an independent pick from 1 to the number of sides, each value equally likely, starting from a fresh value your browser gives on every press. Automated tests roll 100,000 six-sided and twenty-sided dice with fixed seeds and check that the faces come up evenly."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I roll dice with an unusual number of sides?",
+      "a": "Yes. Type any number of sides from 2 to 1,000 instead of choosing from the usual ones."
+     }
+    ]
+   },
+   "ko": {
+    "path": "dice/",
+    "nav": "주사위",
+    "short": "주사위",
+    "h1": "주사위 굴리기",
+    "aka": "한 개도, 여러 개도. 면 수는 2부터 1,000까지 정할 수 있어요.",
+    "title": "주사위 굴리기: 여러 개, 여러 면 | 공평뽑기",
+    "desc": "주사위를 굴려요. 6면 주사위 한 개부터 100개까지 한 번에 굴릴 수 있고, 면 수는 4·6·8·10·12·20·100면에서 고르거나 2부터 1,000까지 직접 넣어요. 눈과 합계를 보여 주고, 같은 결과를 다시 보여 주는 링크도 만들어요.",
+    "way": "한 개든 여러 개든, 2면부터 1,000면까지",
+    "about": [
+     {
+      "h": "쓰는 법",
+      "p": [
+       "주사위 개수(100개까지)와 면 수(2부터 1,000까지)를 정하고 ‘굴리기’를 눌러요. 주사위마다 나온 눈이 보이고 그 위에 합계가 나와요. 6면 주사위는 점으로, 다른 주사위는 숫자로 보여 줘요."
+      ]
+     },
+     {
+      "h": "굴리는 방식",
+      "p": [
+       "주사위마다 1부터 면 수까지에서 따로 하나씩 뽑아요. 모든 눈이 같은 확률이에요. 누를 때마다 브라우저에서 새 값을 받아 거기서 시작해요. 자동 테스트가 씨앗을 고정해 6면과 20면 주사위를 10만 번씩 굴려 눈이 고르게 나오는지 확인해요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "면 수가 특이한 주사위도 되나요?",
+      "a": "네. 고르는 대신 면 수를 2부터 1,000까지 직접 넣을 수 있어요."
+     }
+    ]
+   }
+  }
+ },
+ "toolUi": {
+  "en": {
+   "ladderBottom": "Bottom row",
+   "ladderBottomAria": "Bottom row, one item per line",
+   "ladderBottomHint": "One per line. Fewer items than people leaves the rest blank; extra items are not used.",
+   "ladderMake": "Make ladder",
+   "ladderNew": "New ladder",
+   "ladderShow": "Show all results",
+   "ladderRows": "Rungs",
+   "rowsFew": "Few",
+   "rowsNormal": "Medium",
+   "rowsMany": "Many",
+   "ladderEmpty": "Press Make ladder. The rungs stay hidden until someone goes down.",
+   "moreSettings": "Set the bottom row (prizes, chores) and the rungs",
+   "modePick": "Pick names",
+   "modeSlips": "Slips",
+   "modeOrder": "Order",
+   "howMany": "How many",
+   "winSlips": "Winning slips",
+   "winLabel": "Winner slip says",
+   "loseLabel": "Other slips say",
+   "drawGo": "Draw",
+   "drawEmpty": "Set how many and press Draw.",
+   "slipLabels": "Slip wording",
+   "byTeams": "Number of teams",
+   "bySize": "Max per team",
+   "teamsGo": "Make teams",
+   "teamsEmpty": "Choose how to split and press Make teams.",
+   "from": "From",
+   "to": "to",
+   "count": "How many",
+   "unique": "No repeats",
+   "sortLabel": "Order",
+   "sortNone": "As drawn",
+   "sortAsc": "Low to high",
+   "sortDesc": "High to low",
+   "numGo": "Generate",
+   "numEmpty": "Set a range and press Generate.",
+   "flips": "Flips",
+   "coinGo": "Flip",
+   "diceCount": "Dice",
+   "diceSides": "Sides",
+   "diceGo": "Roll",
+   "diceEmpty": "Choose your dice and press Roll.",
+   "copy": "Copy result link",
+   "copyNote": "The link contains your list.",
+   "copyNoteLadder": "The link holds the names in their order. For a ladder, a different order means a different result.",
+   "copyNoteNoList": "The link holds your settings and the value this result was made from.",
+   "trustSolo": "Each press uses fresh random numbers from your browser. What you enter is not sent to a server."
+  },
+  "ko": {
+   "ladderBottom": "아래 칸",
+   "ladderBottomAria": "아래 칸에 들어갈 말, 한 줄에 하나",
+   "ladderBottomHint": "한 줄에 하나. 사람 수보다 적으면 나머지는 꽝이고, 많으면 남는 것은 쓰지 않아요.",
+   "ladderMake": "사다리 만들기",
+   "ladderNew": "새 사다리",
+   "ladderShow": "전체 결과 보기",
+   "ladderRows": "가로줄",
+   "rowsFew": "적게",
+   "rowsNormal": "보통",
+   "rowsMany": "많이",
+   "ladderEmpty": "‘사다리 만들기’를 눌러요. 누가 타기 전까지 가로줄은 가려져 있어요.",
+   "moreSettings": "아래 칸(당첨·벌칙)과 가로줄 수 정하기",
+   "modePick": "몇 명 뽑기",
+   "modeSlips": "쪽지",
+   "modeOrder": "순서 정하기",
+   "howMany": "뽑을 인원",
+   "winSlips": "당첨 쪽지 수",
+   "winLabel": "당첨 쪽지에 쓸 말",
+   "loseLabel": "나머지 쪽지에 쓸 말",
+   "drawGo": "뽑기",
+   "drawEmpty": "인원을 정하고 ‘뽑기’를 눌러요.",
+   "slipLabels": "쪽지에 쓸 말 바꾸기",
+   "byTeams": "팀 수",
+   "bySize": "한 팀 최대 인원",
+   "teamsGo": "팀 나누기",
+   "teamsEmpty": "나누는 기준을 정하고 ‘팀 나누기’를 눌러요.",
+   "from": "",
+   "to": "부터",
+   "toAfter": "까지",
+   "count": "개수",
+   "unique": "중복 없이",
+   "sortLabel": "순서",
+   "sortNone": "뽑힌 순서",
+   "sortAsc": "작은 수부터",
+   "sortDesc": "큰 수부터",
+   "numGo": "뽑기",
+   "numEmpty": "범위를 정하고 ‘뽑기’를 눌러요.",
+   "flips": "던질 횟수",
+   "coinGo": "던지기",
+   "diceCount": "주사위 수",
+   "diceSides": "면 수",
+   "diceGo": "굴리기",
+   "diceEmpty": "주사위를 고르고 ‘굴리기’를 눌러요.",
+   "copy": "결과 링크 복사",
+   "copyNote": "링크 안에 명단이 들어가요.",
+   "copyNoteLadder": "링크 안에 이름과 줄 순서가 들어가요. 사다리는 줄 순서가 달라지면 결과도 달라져요.",
+   "copyNoteNoList": "링크에는 설정과 이번 결과를 만든 값이 들어가요.",
+   "trustSolo": "누를 때마다 브라우저가 새로 만든 난수로 뽑아요. 넣은 값은 서버로 보내지 않아요."
+  }
+ }
 }

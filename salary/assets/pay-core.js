@@ -208,7 +208,9 @@
         capped: hRaw < hi.employeeMin ? 'min' : hRaw > hi.employeeMax ? 'max' : null, status: hi.status, limitStatus: hi.limitStatus });
 
       lines.push({ id: 'care', amount: floorTo(mulDiv(hAmt, care.num, care.den), u('care')), base: hAmt, ratePct: care.ratePct, healthPct: care.healthPct, status: care.status });
-      lines.push({ id: 'employment', amount: floorTo(mulDiv(taxable, emp.rateNum, emp.rateDen), u('employment')), base: taxable, ratePct: emp.ratePct, status: emp.status });
+      /* 65세 이후에 새로 고용된 사람은 고용보험료(실업급여분)를 떼지 않는다 */
+      var empAmt = inp.noEmployment ? 0 : floorTo(mulDiv(taxable, emp.rateNum, emp.rateDen), u('employment'));
+      lines.push({ id: 'employment', amount: empAmt, base: taxable, ratePct: emp.ratePct, exempt: !!inp.noEmployment, status: emp.status });
 
       var w = withholding(taxable, family, children, ratio, u('incomeTax'));
       lines.push({ id: 'incomeTax', amount: w.amount, base: taxable, tableTax: w.tableTax, childCredit: w.childCredit, afterCredit: w.afterCredit,
@@ -224,7 +226,8 @@
       lines: lines, line: by, insurance: insurance, tax: tax, deductions: deductions, net: net, netAnnual: net * 12,
       family: family, children: children, ratio: ratio, notes: notes,
       carried: lines.filter(function (l) { return l.status === 'carried' || l.limitStatus === 'carried'; }).map(function (l) { return l.id; }),
-      rounding: { pension: u('pension'), health: u('health'), care: u('care'), employment: u('employment'), incomeTax: u('incomeTax'), localTax: u('localTax'), verified: !!ROUND.verified }
+      noEmployment: !!inp.noEmployment,
+      rounding: { pension: u('pension'), health: u('health'), care: u('care'), employment: u('employment'), incomeTax: u('incomeTax'), localTax: u('localTax'), verified: ROUND.verified || false }
     };
   }
 
@@ -235,6 +238,24 @@
     if (!b.ok) return b;
     return { ok: true, now: a, next: b, netDiff: b.net - a.net,
       lines: a.lines.map(function (l, i) { return { id: l.id, now: l.amount, next: b.lines[i].amount, diff: b.lines[i].amount - l.amount, status: b.lines[i].status, limitStatus: b.lines[i].limitStatus }; }) };
+  }
+
+  /* 기준 기간이 지났는지: 그 기준 시기의 값 가운데 유효 기간(until)이 today(YYYY-MM-DD)보다 앞선 것을 돌려준다.
+     화면은 stale 이면 결과 위에 '이 값은 ○○년 기준이에요'를 띄운다(자료를 제때 못 고쳤을 때 조용히 틀리지 않게). */
+  function validity(periodId, today) {
+    var P = period(periodId), t = parseDate(today);
+    if (!P) return err('period');
+    if (t === null) return err('date');
+    var items = [];
+    function chk(id, until) { if (until && t > parseDate(until)) items.push({ id: id, until: until }); }
+    chk('pensionRate', P.pension.until); chk('pensionLimit', P.pension.limitUntil); chk('minWage', P.minWage.until);
+    return { ok: true, stale: items.length > 0, items: items, year: P.year };
+  }
+  /* 구직급여 표(상·하한)의 유효 기간이 지났는지 */
+  function unemploymentValidity(today) {
+    var t = parseDate(today), U = DATA.unemployment;
+    if (t === null) return err('date');
+    return { ok: true, stale: t > parseDate(U.until), until: U.until };
   }
 
   /* 연봉 실수령액 표: 연봉 목록 → 줄마다 netPay 결과(가정은 opts 그대로) */
@@ -403,7 +424,7 @@
     data: DATA, gani: GANI,
     fmt: fmt, readKo: readKo, readEn: readEn, parseMoney: parseMoney,
     parseDate: parseDate, iso: iso, addMonths: addMonths,
-    netPay: netPay, compare: compare, salaryTable: salaryTable, withholding: withholding, tableTax: tableTax, childCredit: childCredit,
+    netPay: netPay, compare: compare, salaryTable: salaryTable, validity: validity, unemploymentValidity: unemploymentValidity, withholding: withholding, tableTax: tableTax, childCredit: childCredit,
     severance: severance, lastThreeMonths: function (s) { var d = parseDate(s); if (d === null) return err('date'); var p = lastThreeMonths(d); return { ok: true, start: iso(p.start), end: iso(p.end), days: p.days }; }, splitJeon: splitJeon,
     weeklyHoliday: weeklyHoliday, monthlyHours: monthlyHours, hourlyToPay: hourlyToPay, monthlyToHourly: monthlyToHourly,
     unemployment: unemployment, tenureBand: tenureBand,

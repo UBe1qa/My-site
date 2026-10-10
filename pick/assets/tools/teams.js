@@ -1,16 +1,16 @@
-// 팀 나누기 화면. 나누기는 core/pick.js의 splitTeams(인원 차이 최대 1). 실력 맞추기 같은 숨은 규칙은 없다.
-import { T, $, fmt, el, list, recent, shareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt } from '../app.js';
+// 팀 나누기 화면. 나누기는 core/pick.js의 drawTeams(인원 차이 최대 1, 명단의 순서와 상관없이 같은 팀). 실력 맞추기 같은 숨은 규칙은 없다.
+import { T, $, fmt, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt } from '../app.js';
 import { newSeed, makeRng } from '../core/rng.js';
-import { splitTeams } from '../core/pick.js';
+import { drawTeams } from '../core/pick.js';
 
 const out = $('#out');
 const kEl = $('#k');
 const emptyHtml = out.innerHTML;
-let last = null;
+let last = null; // { seed, items, opts, teams, legacy }
 const modeSeg = seg($('#mode'), (v) => { $('#lk').textContent = $(`#mode [data-v="${v}"]`).textContent; reset(); });
 function reset() { last = null; out.innerHTML = emptyHtml; setAfter(false); setMsg(''); }
 
-function run(seed, replay, o) {
+function run(seed, replay, o, legacy) {
   const items = list.items.slice();
   const n = items.length;
   const mode = o ? o.mode : modeSeg.value;
@@ -20,10 +20,10 @@ function run(seed, replay, o) {
   setMsg('');
   if (!replay) clearHash();
   seed = seed || newSeed();
-  const teams = splitTeams(n, mode === 'size' ? { size: k } : { teams: k }, makeRng(seed));
-  last = { seed, items, opts: { mode, k }, teams };
+  const teams = drawTeams(items, mode === 'size' ? { size: k } : { teams: k }, makeRng(seed), !!legacy);
+  last = { seed, items, opts: { mode, k }, teams, legacy: !!legacy };
   out.textContent = '';
-  out.append(outHead(fmt(T.teamsHead, { n: nfmt(n), k: nfmt(teams.length) }), replay));
+  out.append(outHead(fmt(T.teamsHead, { n: nfmt(n), k: nfmt(teams.length) }), replay ? (legacy ? 'legacy' : true) : false));
   const grid = el('div', 'teams');
   teams.forEach((members, i) => {
     const card = el('section', replay ? 'team' : 'team in');
@@ -38,14 +38,14 @@ function run(seed, replay, o) {
   });
   out.append(grid);
   setAfter(true);
-  if (!replay) recent.add('teams', fmt(T.teamsHead, { n: nfmt(n), k: nfmt(teams.length) }), shareUrl('teams', seed, items, last.opts));
+  if (!replay) recent.add('teams', fmt(T.teamsHead, { n: nfmt(n), k: nfmt(teams.length) }), safeShareUrl('teams', seed, items, last.opts));
 }
 function asText() {
   return last.teams.map((members, i) => `${fmt(T.team, { n: i + 1 })}: ${members.map((m) => last.items[m]).join(', ')}`).join('\n');
 }
 
 $('#go').addEventListener('click', () => run());
-$('#copy').addEventListener('click', () => { if (last) copyLink(shareUrl('teams', last.seed, last.items, last.opts)); });
+$('#copy').addEventListener('click', () => { if (last) copyLink('teams', last.seed, last.items, last.opts, last.legacy ? 1 : undefined); });
 $('#copytext').addEventListener('click', async () => {
   if (!last) return;
   try { await navigator.clipboard.writeText(asText()); $('#toast').textContent = T.copiedText; } catch (e) { $('#toast').textContent = asText(); }
@@ -59,6 +59,6 @@ if (shared && shared.items.length) {
   modeSeg.set(mode);
   $('#lk').textContent = $(`#mode [data-v="${mode}"]`).textContent;
   if (Number.isInteger(shared.opts.k)) kEl.value = shared.opts.k;
-  run(shared.seed, true, { mode, k: shared.opts.k });
+  run(shared.seed, true, { mode, k: shared.opts.k }, shared.legacy);
 }
 window.__pick = { get state() { return last; }, asText };

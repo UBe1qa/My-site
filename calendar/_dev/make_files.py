@@ -97,7 +97,7 @@ def make_xlsx():
         for it in data['list']:   # 이름: 규정의 이름, 괄호 안에 흔히 쓰는 이름
             ws0.append([f'{it["m"]}월 {it["d"]}일', '일월화수목금토'[it['wd']], '; '.join(n + (f'({BOTH[n]})' if n in BOTH else '') for n in it['names'])])
         ws0.append([])
-        for note in ('이름은 규정의 이름이고, 괄호 안은 흔히 쓰는 이름이에요. 달력 시트의 칸에는 흔히 쓰는 이름을 적었어요.',
+        for note in ('이름은 규정의 이름이고, 괄호 안은 흔히 쓰는 이름이에요. 달력 시트의 칸에는 흔히 쓰는 이름을 적었어요(대체공휴일은 무엇의 대체인지 같이).',
                      '공휴일 기준: 관공서의 공휴일에 관한 규정(2026년 4월 개정 반영). 선거일·임시공휴일은 확정된 날만 들어 있어요.',
                      '일요일 시작 기본판이에요. 주 시작 요일이나 용지를 바꾼 달력은 calendar.lumenlab.page 에서 PDF로 받을 수 있어요.'):
             ws0.append([note])
@@ -128,8 +128,15 @@ def make_xlsx():
                 c.alignment = Alignment(horizontal='center')
                 c.border = Border(top=thin, bottom=thin, left=thin, right=thin)
             days = {d['d']: d for d in mo['days']}
+            for info in days.values():   # '대체공휴일(광복절)'은 칸 폭을 넘는다 → 괄호 앞에서 줄을 나눈다(낱말 중간에서 끊기지 않게)
+                if info['hol'].startswith('대체공휴일('):
+                    info['hol'] = info['hol'].replace('(', '\n(', 1)
+
+            def lines(d):   # 칸에 들어갈 줄 수 어림(한글은 두 칸으로 세고 한 줄에 14칸)
+                info = days[d]
+                return 1 + sum(-(-sum(2 if ord(ch) > 0x2e7f else 1 for ch in part) // 14) for x in (info['hol'], info['term'], info['lunar']) if x for part in x.split('\n'))
             for r, row in enumerate(mo['grid']):
-                ws.row_dimensions[3 + r].height = 66
+                ws.row_dimensions[3 + r].height = max(66, 17 * max((lines(d) for d in row if d), default=1) + 6)   # 글자가 칸 아래로 잘리지 않게
                 for i, d in enumerate(row):
                     c = ws.cell(row=3 + r, column=i + 1)
                     c.border = Border(top=thin, bottom=thin, left=thin, right=thin)

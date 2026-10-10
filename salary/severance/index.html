@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>퇴직금 계산기: 입사일·퇴직일로 세전 퇴직금 계산 | 떼고얼마</title>
+<meta name="description" content="입사일과 퇴직일, 퇴직 전 3개월 임금을 넣으면 1일 평균임금과 세전 퇴직금을 계산해요. 고용노동부 계산식 그대로, 줄마다 식을 보여 줘요.">
+<meta name="theme-color" content="#f3f3f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161518" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://salary.lumenlab.page/severance/">
+<link rel="alternate" hreflang="ko" href="https://salary.lumenlab.page/severance/">
+<link rel="alternate" hreflang="en" href="https://salary.lumenlab.page/en/severance/">
+<link rel="alternate" hreflang="x-default" href="https://salary.lumenlab.page/en/severance/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="퇴직금 계산기: 입사일·퇴직일로 세전 퇴직금 계산 | 떼고얼마">
+<meta property="og:description" content="입사일과 퇴직일, 퇴직 전 3개월 임금을 넣으면 1일 평균임금과 세전 퇴직금을 계산해요. 고용노동부 계산식 그대로, 줄마다 식을 보여 줘요.">
+<meta property="og:url" content="https://salary.lumenlab.page/severance/">
+<meta property="og:site_name" content="떼고얼마">
+<meta property="og:image" content="https://salary.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "퇴직금 계산기", "url": "https://salary.lumenlab.page/severance/", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "inLanguage": "ko", "isAccessibleForFree": true, "description": "입사일과 퇴직일, 퇴직 전 3개월 임금을 넣으면 1일 평균임금과 세전 퇴직금을 계산해요. 고용노동부 계산식 그대로, 줄마다 식을 보여 줘요.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "연봉 실수령액 계산기", "item": "https://salary.lumenlab.page/"}, {"@type": "ListItem", "position": 2, "name": "퇴직금 계산기", "item": "https://salary.lumenlab.page/severance/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+<script defer src="/assets/pay-data.js"></script>
+<script defer src="/assets/pay-core.js"></script>
+<script defer src="/assets/pay-view.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect class="lg-p" x="3" y="1.5" width="16" height="19" rx="2.5"/><path class="lg-l" d="M6.8 6.5h8.4M6.8 10h8.4"/><path class="lg-m" d="M6.8 14h8.4M6.8 17h8.4"/></svg>떼고얼마</a>
+  <nav class="tools" aria-label="계산기"><a href="/">실수령액</a><a href="/table/">연봉 표</a><a href="/severance/" aria-current="page">퇴직금</a><a href="/hourly/">시급·주휴<span class="long">수당</span></a><a href="/unemployment/">실업급여</a><a href="/annual-leave/">연차</a></nav><script>(function(n){function f(){var m=n.scrollWidth-n.clientWidth,x=n.scrollLeft;n.classList.toggle('of',m>1);n.classList.toggle('mid',m>1&&x>2&&x<m-2);n.classList.toggle('end',m>1&&x>=m-2)}var c=n.querySelector('[aria-current]');if(c&&n.scrollWidth>n.clientWidth+1)n.scrollLeft=Math.max(0,c.offsetLeft-n.clientWidth/2+c.offsetWidth/2);f();n.addEventListener('scroll',f,{passive:true});window.addEventListener('resize',f)})(document.currentScript.previousElementSibling)</script>
+  <div class="side"><a href="/guide/">가이드</a><a href="/en/severance/" lang="en" hreflang="en" data-lang-link>English</a></div>
+</div></header>
+<main id="main">
+<div class="wrap" data-page="sev">
+<div class="tool-grid">
+<section class="t-in">
+  <h1>퇴직금 계산기</h1>
+  <p class="t-sub">입사일, 퇴직일, 퇴직 전 3개월 임금으로 세전 퇴직금을 계산해요.</p>
+  <div class="form" id="form">
+    <div class="fld2">
+      <div class="fld"><label for="f-join">입사일</label><input type="date" id="f-join" min="1950-01-01" max="2100-12-31"></div>
+      <div class="fld"><label for="f-leave">퇴직일</label><input type="date" id="f-leave" min="1950-01-01" max="2100-12-31" aria-describedby="h-leave"></div>
+    </div>
+    <p class="hint" id="h-leave">퇴직일은 마지막으로 일한 날의 다음 날이에요.</p>
+    <div class="fld"><label for="f-wages">퇴직 전 3개월 동안 받은 임금(세전)</label><input type="text" id="f-wages" inputmode="numeric" autocomplete="off" placeholder="예: 7,080,000" aria-describedby="h-wages"><span class="hint" id="h-wages">기본급과 수당을 더한 3개월치 합계예요. 708만처럼 써도 돼요.</span></div>
+    <details class="more-in" id="more"><summary><span>상여금, 연차수당, 통상임금</span><span class="go" data-open="넣기" data-close="접기"></span></summary>
+      <div class="form">
+        <div class="fld"><label for="f-bonus">연간 상여금</label><input type="text" id="f-bonus" inputmode="numeric" autocomplete="off" placeholder="예: 4,000,000"></div>
+        <div class="fld"><label for="f-lpay">연차수당(1년치)</label><input type="text" id="f-lpay" inputmode="numeric" autocomplete="off" placeholder="예: 300,000" aria-describedby="h-lpay"><span class="hint" id="h-lpay">상여금과 연차수당은 3개월치(3/12)만 더해요.</span></div>
+        <div class="fld"><label for="f-ord">1일 통상임금</label><input type="text" id="f-ord" inputmode="numeric" autocomplete="off" aria-describedby="h-ord"><span class="hint" id="h-ord">평균임금보다 크면 통상임금으로 계산해요.</span></div>
+        <label class="chk"><input type="checkbox" id="f-u15"><span>4주 평균 주 15시간 미만으로 일했어요</span></label>
+      </div>
+    </details>
+    <div class="acts"><button type="button" class="btn ghost" id="b-ex">고용노동부 예제 넣어 보기</button><button type="button" class="btn ghost" id="b-clear" hidden>지우기</button></div>
+  </div>
+</section>
+<section class="t-out" aria-label="계산 결과">
+  <div class="slip is-ex" id="slip"><div class="slip-h"><b>퇴직금 계산서</b><span class="asof">세전</span></div><div class="sum"><p class="sum-l"><span>퇴직금(세전)</span><span class="tag-ex">예시 · 고용노동부 퇴직금 계산 예제</span></p><p class="sum-n"><span class="dbl"><b class="num" data-net>7,868,434</b><small>원</small></span></p><p class="sum-y">1일 평균임금 88,641원 31전 × 30일 × 재직 1,080일 ÷ 365</p></div><div class="ln"><span>재직 기간<small class="sub2">2014년 10월 2일 ~ 2017년 9월 15일 (마지막 근무일)</small></span><span class="num">1,080일</span></div><div class="ln"><span>퇴직 전 3개월<small class="sub2">2017년 6월 16일 ~ 2017년 9월 15일</small></span><span class="num">92일</span></div><ul class="ded plus"><li><span class="nm">A. 3개월 동안 받은 임금</span><span class="am num">7,080,000원</span></li><li><span class="nm">B. 상여금 가산(연간 4,000,000원 × 3/12)</span><span class="am num">1,000,000원</span></li><li><span class="nm">C. 연차수당 가산(300,000원 × 3/12)</span><span class="am num">75,000원</span></li></ul><div class="ln"><span>1일 평균임금, (A + B + C) ÷ 92일</span><span class="num">88,641원 31전</span></div><div class="ln tot"><span>퇴직금(세전)</span><span class="num">7,868,434원</span></div></div>
+  <p class="sr" id="live" aria-live="polite"></p>
+  <p class="fine">세전 금액이에요. 퇴직소득세는 계산하지 않아요. 회사 내규에 따라 실제 지급액과 다를 수 있어요. 입력한 값은 이 기기 밖으로 나가지 않아요. <a href="#basis">계산 기준과 출처</a></p>
+</section>
+<section class="t-more kf"><h2>법에 적힌 기준</h2><dl><div><dt>대상</dt><dd>1년 이상 일했고 4주 평균 주 15시간 이상</dd></div><div><dt>금액</dt><dd>계속근로기간 1년에 30일분 이상의 평균임금</dd></div><div><dt>기한</dt><dd>퇴직한 날부터 14일 안</dd></div></dl><p class="cmp-more"><a href="#basis">근거 조문 보기</a></p></section>
+</div>
+</div>
+<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">광고</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
+<div class="wrap below">
+<section class="sec " id="basis"><h2>계산 기준과 출처</h2><p class="lead">아래 법령·공단 자료를 2026년 10월 10일에 직접 열어 확인했어요. 전체 표는 <a href="/about/#basis">소개와 계산 기준</a>에 있어요.</p><div class="tbl rows"><table><thead><tr><th scope="col">항목</th><th scope="col">기준</th><th scope="col">출처</th></tr></thead><tbody><tr><th scope="row">퇴직금</th><td data-l="기준">계속근로기간 1년에 30일분 이상의 평균임금</td><td data-l="출처"><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C8%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제8조</a><br><a href="https://www.moel.go.kr/retirementpayCal.do" rel="noopener">고용노동부 「퇴직금 계산」</a></td></tr><tr><th scope="row">대상</th><td data-l="기준">1년 이상 일했고 4주 평균 주 15시간 이상</td><td data-l="출처"><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C4%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제4조</a></td></tr><tr><th scope="row">평균임금</th><td data-l="기준">퇴직 전 3개월 임금 ÷ 그 기간의 날짜 수. 통상임금보다 적으면 통상임금</td><td data-l="출처"><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C2%EC%A1%B0" rel="noopener">근로기준법 제2조</a></td></tr><tr><th scope="row">지급 기한</th><td data-l="기준">퇴직한 날부터 14일 안(합의하면 연장)</td><td data-l="출처"><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C9%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제9조</a></td></tr></tbody></table></div></section><section class="sec narrow"><h2>이렇게 계산해요</h2><div class="prose">
+<p>고용노동부 계산식 그대로예요. “퇴직금 = 1일 평균임금 × 30(일) × (재직일수/365)”, “1일 평균임금 = 퇴직일 이전 3개월간에 지급받은 임금 총액 (A+B+C)/퇴직일 이전 3개월간의 총 일수”.</p>
+<ul>
+<li>A는 퇴직 전 3개월 동안 받은 임금, B는 연간 상여금의 3/12, C는 연차수당의 3/12예요.</li>
+<li>퇴직일은 마지막으로 일한 날의 다음 날이에요. 재직일수는 입사일부터 마지막 근무일까지의 날짜 수예요.</li>
+<li>1일 통상임금이 1일 평균임금보다 크면 통상임금으로 계산해요.</li>
+<li>세전 금액이에요. 퇴직소득세는 계산하지 않아요.</li>
+</ul>
+<h3>이 계산기의 방식</h3>
+<ul>
+<li>퇴직 전 3개월은 달력으로 3개월 전 같은 날부터 세어요. 그 날짜가 없는 달은 말일부터예요(2026년 5월 31일에 퇴직하면 2026년 2월 28일부터 92일). 회사·고용센터 계산과 하루 차이가 날 수 있어요.</li>
+<li>1일 평균임금은 전(소수 둘째 자리)에서 올려요. 고용노동부 예제의 88,641원 31전과 같은 값이 나오는 방식이에요. 퇴직금은 원 미만을 버려요.</li>
+<li>1년을 채웠는지는 달력의 같은 날짜로 따져요.</li>
+</ul>
+<h3>받을 수 있는지는 판정하지 않아요</h3>
+<p>법에 적힌 요건은 이래요. “다만, 계속근로기간이 1년 미만인 근로자, 4주간을 평균하여 1주간의 소정근로시간이 15시간 미만인 근로자에 대하여는 그러하지 아니하다.” (<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C4%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제4조</a>) 내 경우가 어디에 드는지는 회사나 고용노동부 1350 상담에서 확인하세요.</p>
+</div></section><section class="sec narrow"><h2>예시는 고용노동부 예제예요</h2><div class="prose"><p>처음에 보이는 값은 <a href="https://www.moel.go.kr/retirementpayCal.do" rel="noopener">고용노동부 「퇴직금 계산」</a> 화면의 예제 조건이에요. 입사 2014년 10월 2일, 퇴사 2017년 9월 16일, 재직 1,080일, 월 기본급 2,000,000원, 월 기타수당 360,000원, 연간 상여금 4,000,000원, 연차수당 60,000원 × 5일.</p>
+<p class="calc">A 7,080,000원 + B 1,000,000원 + C 75,000원 = 8,155,000원<br>8,155,000원 ÷ 92일 = 1일 평균임금 <b>88,641원 31전</b><br>88,641원 31전 × 30일 × 1,080일 ÷ 365 = <b>7,868,434원</b></p>
+<p>고용노동부 화면에 적힌 값은 1일 평균임금 88,641원 31전까지예요. 퇴직금 7,868,434원은 그 예제 조건을 이 계산기에 넣은 값이에요.</p></div></section><section class="sec links"><h2>다른 계산기</h2><div class="cards"><a href="/"><b>연봉 실수령액 계산기</b><span>2026년 10월 기준, 줄마다 식</span></a><a href="/table/"><b>연봉 실수령액 표</b><span>2,000만~2억 원</span></a><a href="/hourly/"><b>시급·주휴수당 계산기</b><span>2026년 최저임금 10,320원</span></a><a href="/unemployment/"><b>실업급여 계산기</b><span>하루 금액과 받는 날 수</span></a><a href="/annual-leave/"><b>연차 계산기</b><span>입사일 기준으로 해마다 며칠</span></a></div></section><section class="sec narrow links"><h2>같이 읽을 글</h2><ul class="glist"><li><a href="/guide/toejikgeum-gyesan-yeje/"><b>퇴직금 계산을 고용노동부 예제로 따라가 보기</b><span>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365. 고용노동부 예제(재직 1,080일)를 한 단계씩 계산해 1일 평균임금 88,641원 31전까지 맞춰 봤어요.</span></a></li><li><a href="/guide/sileopgeupyeo-haru-geumaek/"><b>2026년 실업급여 하루 금액이 66,048~68,100원에 모이는 이유</b><span>2026년 구직급여는 평균임금의 60%지만 하루 8시간 근로자는 하한 66,048원과 상한 68,100원 사이에서 정해져요. 상·하한이 나오는 식과 받는 날 수 표를 정리했어요.</span></a></li></ul></section>
+</div>
+<div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <div class="foot-grid">
+    <div><p class="foot-h">계산기</p><ul><li><a href="/">연봉 실수령액 계산기</a></li><li><a href="/table/">연봉 실수령액 표</a></li><li><a href="/severance/">퇴직금 계산기</a></li><li><a href="/hourly/">시급·주휴수당 계산기</a></li><li><a href="/unemployment/">실업급여 계산기</a></li><li><a href="/annual-leave/">연차 계산기</a></li></ul></div>
+    <div><p class="foot-h">가이드</p><ul><li><a href="/guide/myeongseseo-dareun-iyu/">명세서와 계산기 금액이 다른 이유</a></li><li><a href="/guide/2026-4dae-boheom-yoyul/">2026년 4대 보험 요율과 2027년 변화</a></li><li><a href="/guide/juhyu-sudang-gyesan/">주휴수당 계산법과 계산 예</a></li><li><a href="/guide/toejikgeum-gyesan-yeje/">퇴직금 계산, 고용노동부 예제로 따라가기</a></li><li><a href="/guide/choejeoimgeum-209sigan/">최저임금 월급의 209시간은 어디서 나오나</a></li><li><a href="/guide/sileopgeupyeo-haru-geumaek/">2026년 실업급여 하루 금액</a></li></ul></div>
+    <div><p class="foot-h">안내</p><ul><li><a href="/about/">소개와 계산 기준</a></li><li><a href="/privacy/">개인정보 처리방침</a></li><li><a href="mailto:woxocoso@gmail.com">문의</a></li></ul></div>
+    <a class="lumen" href="https://lumenlab.page/" data-lumen><svg width="56" height="50" viewBox="0 0 56 50" aria-hidden="true"><rect class="lm-env" x="5" y="19" width="46" height="27" rx="3"/><g class="lm-paper"><rect class="lm-pp" x="14" y="3" width="28" height="34" rx="2.5"/><path class="lm-ln" d="M19 10h18M19 15h18"/><path class="lm-mn" d="M19 21h18M19 25h18"/></g><path class="lm-env" d="M5 24l23 14 23-14v19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/></svg><span class="lm-t"><b>만든 곳 루멘랩</b><small>루멘랩의 다른 앱과 도구 보기</small></span></a>
+  </div>
+  <p class="safe">입력한 금액과 날짜는 이 기기 밖으로 나가지 않아요. © 2026 Lumen Lab</p>
+</div></footer>
+<script id="tk" type="application/json">{"lang": "ko", "other": "/en/severance/", "page": "sev"}</script>
+<script defer src="/assets/app.js"></script>
+</body>
+</html>

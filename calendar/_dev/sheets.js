@@ -23,7 +23,7 @@ process.stdin.on('data', (d) => (input += d)).on('end', () => {
         const days = [];
         for (let d = 1; d <= C.dim(y, m); d++) {
           const l = C.lunar.fromSolar(y, m, d), it = h.byDate[C.iso(y, m, d)];
-          days.push({ d, wd: C.wd(y, m, d), hol: it ? it.label : '', lunar: l && (l.d === 1 || l.d === 15 || d === 1) ? '음 ' + (l.leap ? '윤' : '') + l.m + '.' + l.d : '', term: C.termOn(y, m, d) || '' });
+          days.push({ d, wd: C.wd(y, m, d), hol: it ? S.label(it, { lang: 'ko', country: 'KR' }) : '', lunar: l && (l.d === 1 || l.d === 15 || d === 1) ? '음 ' + (l.leap ? '윤' : '') + l.m + '.' + l.d : '', term: C.termOn(y, m, d) || '' });
         }
         months.push({ m, grid: C.monthGrid(y, m, 0), days });
       }

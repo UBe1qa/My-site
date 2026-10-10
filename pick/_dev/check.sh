@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 공평뽑기 확인을 한 번에: pick/_dev/check.sh [quick|sim]
-#   (아무것도 안 적으면) 로직 테스트 → 빌드 → 정적 확인 → 로컬 서버를 띄워 브라우저 확인 전부
+#   (아무것도 안 적으면) 로직 테스트 → 빌드 → 정적 확인 → 로컬 서버를 띄워 브라우저 확인 전부(약 10분)
 #   quick = 브라우저 확인 없이(로직 테스트 + 빌드 + 정적 확인)   sim = 사다리 시뮬레이션을 다시 돌려 저장된 숫자와 같은지(약 6분)
 # 브라우저 확인에는 Playwright가 필요하다. 환경 변수: PW_CHROME(크롬 실행 파일), PICK_FONT(Pretendard .woff2), PICK_SHOTS(스크린샷 폴더), PICK_PORT(기본 8442)
 set -u

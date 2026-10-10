@@ -67,7 +67,9 @@
       perSegment: r.per,
       parts: r.parts,
       remaining: r.per - last,         /* 지금 통에 더 쓸 수 있는 칸. 빈 글이면 160 */
-      nonGsm: bad,                     /* GSM-7 표에 없는 글자(처음 몇 개) */
+      nonGsm: bad,                     /* GSM-7 표에 없는 글자(처음 몇 개, 코드 포인트 단위) */
+      /* 같은 것을 '사람이 보는 글자' 단위로(👨‍👩‍👧 는 조각 넷이 아니라 하나). 화면은 이쪽을 보여 준다. lc-core.js가 있어야 한다 */
+      nonGsmChars: gsm ? [] : (LC.clustersWith ? LC.clustersWith(text, function (u) { return !m[u]; }, 8, true).samples : bad),
       extended: gsm ? sizes.filter(function (s) { return s === 2; }).length : 0
     };
   }

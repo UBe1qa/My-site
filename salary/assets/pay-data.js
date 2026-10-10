@@ -12,8 +12,8 @@
     npsGuide: { name: '국민연금공단 「보험료 금액 및 보험료율」', url: 'https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do', viewed: V },
     nhisRate: { name: '국민건강보험공단 「2026년도 보험료율 인상 안내」', url: 'https://edi.nhis.or.kr/portal/images/popup/20251204_pop01longdesc.html', viewed: V },
     nhisLimit: { name: '월별 건강보험료액의 상한과 하한에 관한 고시(보건복지부고시 제2025-222호)', url: 'https://www.law.go.kr/행정규칙/월별건강보험료액의상한과하한에관한고시', viewed: V },
-    mohw2027: { name: '보건복지부 보도자료(2026-09-08) 2027년도 건강보험료율', url: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824', viewed: V },
-    mohwCare2027: { name: '보건복지부 보도자료(2026-08-14) 2027년 장기요양보험료율 결정 일정', url: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491601', viewed: V },
+    mohw2027: { date: '2026-09-08', name: '보건복지부 보도자료(2026-09-08) 2027년도 건강보험료율', url: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824', viewed: V },
+    mohwCare2027: { date: '2026-08-14', name: '보건복지부 보도자료(2026-08-14) 2027년 장기요양보험료율 결정 일정', url: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491601', viewed: V },
     eiRateDecree: { name: '고용산재보험료징수법 시행령 제12조', url: 'https://www.law.go.kr/법령/고용보험및산업재해보상보험의보험료징수등에관한법률시행령/제12조', viewed: V },
     eiRateLaw: { name: '고용산재보험료징수법 제13조', url: 'https://www.law.go.kr/법령/고용보험및산업재해보상보험의보험료징수등에관한법률/제13조', viewed: V },
     gani: { name: '소득세법 시행령 별표 2 근로소득 간이세액표', url: 'https://www.law.go.kr/법령별표서식/(소득세법시행령,별표2)', viewed: V },
@@ -37,13 +37,19 @@
     eiLaw: { name: '고용보험법 제40조·제45조·제46조·제49조', url: 'https://www.law.go.kr/법령/고용보험법', viewed: V },
     eiDecree68: { name: '고용보험법 시행령 제68조', url: 'https://www.law.go.kr/법령/고용보험법시행령/제68조', viewed: V },
     eiTable1: { name: '고용보험법 별표 1 구직급여의 소정급여일수', url: 'https://www.law.go.kr/법령별표서식/(고용보험법,별표1)', viewed: V },
-    moel1350Ub: { name: '고용노동부 1350 상담 답변(구직급여 상·하한액)', url: 'https://1350.moel.go.kr/rtmview.do?id=1000324861', viewed: V }
+    moel1350Ub: { name: '고용노동부 1350 상담 답변(구직급여 상·하한액)', url: 'https://1350.moel.go.kr/rtmview.do?id=1000324861', viewed: V },
+    treasury47: { name: '국고금관리법 제47조(국고금의 끝수 계산)', url: 'https://www.law.go.kr/법령/국고금관리법/제47조', viewed: V },
+    nhisDecree33: { name: '국민건강보험법 시행령 제33조(보수에 포함되는 금품 등)', url: 'https://www.law.go.kr/법령/국민건강보험법시행령/제33조', viewed: V },
+    npsDecree3: { name: '국민연금법 시행령 제3조', url: 'https://www.law.go.kr/법령/국민연금법시행령/제3조', viewed: V },
+    eiLaw2: { name: '고용산재보험료징수법 제2조', url: 'https://www.law.go.kr/법령/고용보험및산업재해보상보험의보험료징수등에관한법률/제2조', viewed: V },
+    lsaDecree30: { name: '근로기준법 시행령 제30조', url: 'https://www.law.go.kr/법령/근로기준법시행령/제30조', viewed: V }
   };
 
-  /* 원 단위 처리(버림 단위). 근거 조문을 아직 확인하지 못해 설정값으로 둔다: 1 = 원 미만만 버림, 10 = 10원 미만 버림.
-     확인되면 verified를 true로 바꾸고 출처를 적는다. 항목마다 다르면 항목별로 바꿀 수 있다. */
+  /* 원 단위 처리(버림 단위): 1 = 원 미만만 버림, 10 = 10원 미만 버림.
+     2026-10-10 결정: 보험료 4종·소득세·지방소득세를 각각 10원 미만 버림으로 계산한다. 국고금관리법 제47조의 끝수 계산 방식을 따른
+     '이 계산기의 방식'이다(verified: 'own'). 공단·회사가 이렇게 계산한다는 문장을 확인한 것은 아니므로 화면에도 우리 방식이라고 밝힌다. */
   var ROUNDING = {
-    verified: false,
+    verified: 'own', src: ['treasury47'], decided: V,
     pension: 10, health: 10, care: 10, employment: 10, incomeTax: 10, localTax: 10
   };
 
@@ -87,8 +93,15 @@
     }
   };
 
+  /* 국민연금 근로자 몫 요율: 부칙(법률 제20903호) 제4조와 제88조 제3항에 이미 정해져 있다 */
+  var PENSION_SCHEDULE = { src: ['npsLaw'], rows: [
+    { year: 2026, pct: '4.75' }, { year: 2027, pct: '5.0' }, { year: 2028, pct: '5.25' }, { year: 2029, pct: '5.5' },
+    { year: 2030, pct: '5.75' }, { year: 2031, pct: '6.0' }, { year: 2032, pct: '6.25' }, { year: 2033, pct: '6.5' }
+  ] };
+
   return {
     checked: V,
+    pensionSchedule: PENSION_SCHEDULE,
     now: '2026-10',
     next: '2027-01',
     sources: SOURCES,
@@ -98,6 +111,12 @@
     /* 실수령액 계산의 기본값과 지원 범위 */
     net: {
       nontaxMeal: 200000, nontaxSrc: ['meal'],
+      /* 간이세액표 주석 3: 공제대상가족 가운데 8세 이상 20세 이하 자녀 */
+      childAgeFrom: 8, childAgeTo: 20,
+      /* 보험료를 매기는 소득에서 비과세 근로소득을 빼는 근거. 고용보험은 법 문장(제2조 제3호)까지만 확인했다. */
+      baseSrc: { pension: ['npsDecree3'], health: ['nhisDecree33'], employment: ['eiLaw2'] },
+      /* 65세 이후에 새로 고용된 사람은 고용보험료(실업급여분)를 떼지 않는다(징수법 제13조 제3항) */
+      employmentExemptAge: 65, employmentExemptSrc: ['eiRateLaw'],
       ratios: [80, 100, 120], ratioSrc: ['ganiRatio'],
       maxMonthly: 1000000000,
       maxFamily: 30
@@ -114,7 +133,16 @@
     /* 퇴직금 */
     severance: {
       daysPerYear: 365, payDays: 30, minWeekHours: 15, payWithinDays: 14,
-      src: { amount: ['sevLaw8', 'moelSev'], eligible: ['sevLaw4'], avgWage: ['lsa2'], payBy: ['sevLaw9'] }
+      /* 퇴직 전 3개월의 달력 날짜 수는 달에 따라 89~92일 */
+      periodDaysMin: 89, periodDaysMax: 92,
+      src: { amount: ['sevLaw8', 'moelSev'], eligible: ['sevLaw4'], avgWage: ['lsa2'], payBy: ['sevLaw9'] },
+      /* 고용노동부 예제. 공식 값은 1일 평균임금 88,641원 31전까지다(최종 퇴직금은 그 화면에 없다). */
+      example: {
+        src: ['moelSev'], join: '2014-10-02', leave: '2017-09-16', serviceDays: 1080, periodDays: 92,
+        monthlyBase: 2000000, monthlyAllowance: 360000, wages3m: 7080000,
+        annualBonus: 4000000, bonusPart: 1000000, leaveUnit: 60000, leaveDays: 5, leavePay: 300000, leavePart: 75000,
+        avgWon: 88641, avgJeon: 31
+      }
     },
 
     /* 실업급여(구직급여). 상·하한은 이직일 기준. 이 표는 2026-01-01 이후 이직자용. */
@@ -125,7 +153,7 @@
       lowerByHours: { 1: 8256, 2: 16512, 3: 24768, 4: 33024, 5: 41280, 6: 49536, 7: 57792, 8: 66048 },
       /* 소정급여일수: [피보험기간 1년 미만, 1~3년, 3~5년, 5~10년, 10년 이상] */
       days: { under50: [120, 150, 180, 210, 240], over50: [120, 180, 210, 240, 270] },
-      tenureBands: [1, 3, 5, 10],
+      tenureBands: [1, 3, 5, 10], ageSplit: 50,
       waitDays: 7, baseMonths: 18, needDays: 180,
       src: { rate: ['eiLaw'], upper: ['eiDecree68', 'moel1350Ub'], lower: ['moel1350Ub'], days: ['eiTable1'], need: ['eiLaw'] },
       next: { year: 2027, upperStatus: 'undecided', minWageHourly: 10700 },
@@ -134,7 +162,7 @@
 
     /* 연차 유급휴가 */
     leave: {
-      firstYearMax: 11, base: 15, cap: 25, addEveryYears: 2, minWeekHours: 15, minWorkers: 5,
+      firstYearMax: 11, base: 15, cap: 25, addEveryYears: 2, minWeekHours: 15, minWorkers: 5, attendPct: 80, addFromYears: 3,
       src: { main: ['lsa60'], exclude: ['lsa18', 'lsa11'] }
     }
   };

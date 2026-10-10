@@ -1,17 +1,21 @@
 // 명단 읽기와 공유 링크 (DOM을 모르는 파일)
 //
 // 공유 링크는 주소의 # 뒤에만 담는다(# 뒤는 서버로 가지 않는다):
-//   #r=1.<도구 한 글자>.<씨앗 43자>.<base64url(UTF-8(JSON {"o":설정,"i":명단}))>
-// 맨 앞 1은 형식 번호. 뽑는 방식이 바뀌면 번호를 올리고, 옛 번호 링크는 옛 방식으로 계속 열리게 둔다.
+//   #r=2.<도구 한 글자>.<씨앗 43자>.<base64url(UTF-8(JSON {"o":설정,"i":명단}))>
+// 맨 앞 숫자는 형식 번호. 뽑는 방식이 바뀌면 번호를 올리고, 옛 번호 링크는 옛 방식으로 계속 열리게 둔다.
+//   1 = 처음 형식(2026-10-09): 돌림판·제비뽑기·팀 나누기가 명단에 '넣은 순서'를 자리로 썼다.
+//   2 = 지금(2026-10-10): 그 셋이 '코드 포인트 순으로 놓은 자리'를 쓴다(pick.js). 순서만 바꾼 링크도 같은 결과.
+//       사다리·숫자·동전·주사위는 1과 2가 같은 방식이다.
 // 받은 링크는 믿지 않는다: 형식·크기·글자 종류를 전부 확인하고, 화면에는 글자(textContent)로만 넣는다.
 
 import { LIMITS } from './pick.js';
 import { bytesToB64u, b64uToBytes, seedToText, seedFromText } from './rng.js';
 
-export const SHARE_VERSION = 1;
+export const SHARE_VERSION = 2;
+export const SHARE_VERSIONS = [1, 2]; // 읽을 수 있는 형식 번호
 export const TOOLS = { wheel: 'w', ladder: 'l', draw: 'd', teams: 't', number: 'n', coin: 'c', dice: 'x' };
 const TOOL_BY_CODE = Object.fromEntries(Object.entries(TOOLS).map(([k, v]) => [v, k]));
-const MAX_HASH = 400000; // 글자 수 한도(이보다 긴 링크는 읽지 않는다)
+export const MAX_HASH = 400000; // 글자 수 한도('r='부터 센다). 이보다 긴 링크는 만들지도 읽지도 않는다
 const MAX_OPT_KEYS = 16;
 
 // ---------- 명단 읽기 ----------
@@ -19,15 +23,20 @@ const MAX_OPT_KEYS = 16;
 /**
  * 붙여 넣은 글을 명단으로. 줄바꿈이 있으면 줄마다, 없으면 쉼표(, ， 、)나 탭으로 나눈다.
  * 앞뒤 공백을 지우고 빈 줄은 뺀다. 같은 이름은 지우지 않는다(두 번 넣으면 두 칸).
- * @returns {{items:string[], cut:number, over:number, dupes:number}}
- *   cut = 너무 길어 잘린 이름 수, over = 한도를 넘어 빠진 이름 수, dupes = 겹치는 이름 수
+ * @returns {{items:string[], cut:number, over:number, dupes:number, tabs:number, split:boolean}}
+ *   cut = 너무 길어 잘린 이름 수, over = 한도를 넘어 빠진 이름 수, dupes = 겹치는 이름 수,
+ *   tabs = 여러 줄일 때 탭(엑셀의 칸 나눔)이 든 줄 수, split = 한 줄을 쉼표·탭으로 나눴는지
  */
 export function parseList(text, opt = {}) {
   const max = opt.max == null ? LIMITS.items : opt.max;
   const src = String(text == null ? '' : text).replace(/\r\n?/g, '\n').replace(/[\u2028\u2029\u0085\v\f]/g, '\n');
   let parts;
-  if (/\n/.test(src.trim())) parts = src.split('\n');
-  else if (/[,，、\t]/.test(src)) parts = src.split(/[,，、\t]/);
+  let tabs = 0;      // 여러 줄인데 탭이 든 줄 수(엑셀에서 여러 칸을 같이 붙여 넣은 표시)
+  let split = false; // 한 줄뿐이라 쉼표·탭으로 나눴는지
+  if (/\n/.test(src.trim())) {
+    parts = src.split('\n');
+    for (const p of parts) if (/\S\t+\S/.test(p)) tabs++;
+  } else if (/[,，、\t]/.test(src)) { parts = src.split(/[,，、\t]/); split = true; }
   else parts = [src];
   const items = [];
   let cut = 0;
@@ -44,7 +53,14 @@ export function parseList(text, opt = {}) {
   const seen = new Set();
   let dupes = 0;
   for (const it of items) { if (seen.has(it)) dupes++; else seen.add(it); }
-  return { items, cut, over, dupes };
+  return { items, cut, over, dupes, tabs, split: split && items.length > 1 };
+}
+
+/** 여러 칸을 같이 붙여 넣은 글에서 줄마다 첫 칸(탭 앞)만 남긴다. 첫 칸이 빈 줄은 그 줄에서 처음 나오는 내용 있는 칸. */
+export function firstColumn(text) {
+  return String(text == null ? '' : text).replace(/\r\n?/g, '\n').split('\n')
+    .map((line) => { const cells = line.split('\t'); return cells.find((c) => c.trim() !== '') || ''; })
+    .join('\n');
 }
 
 /** 이름 한 줄 다듬기: 제어 문자를 공백으로, 이어진 공백은 하나로, 앞뒤 공백 없이. */
@@ -65,16 +81,27 @@ export function uniqueItems(items) {
 
 /**
  * @param {{tool:string, seed:Uint8Array, items?:string[], opts?:Object}} data
- * @returns {string} '#'를 뺀 해시 문자열 ('r=1.w.…')
+ * @returns {string} '#'를 뺀 해시 문자열 ('r=2.w.…'). 한도(MAX_HASH)를 넘으면 'share-too-long' 오류(열 수 없는 링크를 만들지 않는다).
+ *   data.version: 옛 형식(1)으로 받은 결과를 다시 링크로 만들 때만 1을 준다(옛 방식의 결과가 옛 방식으로 다시 열리게).
  */
 export function encodeShare(data) {
   const code = TOOLS[data.tool];
   if (!code) throw new Error('share-tool');
+  const version = data.version == null ? SHARE_VERSION : data.version;
+  if (!SHARE_VERSIONS.includes(version)) throw new Error('share-version');
   const items = checkItems(data.items || []);
   const opts = checkOpts(data.opts || {});
   const json = JSON.stringify({ o: opts, i: items });
   const body = bytesToB64u(new TextEncoder().encode(json));
-  return `r=${SHARE_VERSION}.${code}.${seedToText(data.seed)}.${body}`;
+  const out = `r=${version}.${code}.${seedToText(data.seed)}.${body}`;
+  if (out.length > MAX_HASH) throw new Error('share-too-long');
+  return out;
+}
+
+/** 이 명단·설정으로 링크를 만들면 몇 글자인지('r='부터). 만들지 않고 길이만 잰다. */
+export function shareLength(items, opts) {
+  const bytes = new TextEncoder().encode(JSON.stringify({ o: opts || {}, i: items || [] })).length;
+  return 2 + String(SHARE_VERSION).length + 1 + 1 + 1 + 43 + 1 + Math.ceil((bytes * 4) / 3);
 }
 
 /**
@@ -92,7 +119,7 @@ export function decodeShare(hash) {
   if (parts.length !== 4) return fail('format');
   if (!/^[0-9]{1,3}$/.test(parts[0])) return fail('format');
   const version = Number(parts[0]);
-  if (version !== SHARE_VERSION) return fail('version');
+  if (!SHARE_VERSIONS.includes(version)) return fail('version');
   const tool = TOOL_BY_CODE[parts[1]];
   if (!tool) return fail('tool');
   let seed;

@@ -517,6 +517,50 @@ G('날짜 읽기', () => {
   eq(P.lastThreeMonths('2017-09-16'), { ok: true, start: '2017-06-16', end: '2017-09-15', days: 92 }, '퇴직 전 3개월');
 });
 
+/* ───────── 2단계에서 더한 것 ───────── */
+G('65세 이후 새로 고용: 고용보험료를 떼지 않음', () => {
+  // [공식] 징수법 제13조 제3항: 65세 이후에 고용된 자는 실업급여의 보험료를 징수하지 아니한다
+  const a = net(P10, { amount: 3000000 }), b = net(P10, { amount: 3000000, noEmployment: true });
+  eq([a.line.employment.amount, b.line.employment.amount, b.line.employment.exempt], [27000, 0, true], '[손] 3,000,000 × 0.9% = 27,000 → 0');
+  eq(b.net - a.net, 27000, '실수령액이 그만큼 늘어남');
+  eq(['pension', 'health', 'care', 'incomeTax', 'localTax'].map((k) => b.line[k].amount), ['pension', 'health', 'care', 'incomeTax', 'localTax'].map((k) => a.line[k].amount), '다른 줄은 그대로');
+  eq([a.noEmployment, b.noEmployment], [false, true], '결과에 표시');
+  eq(DATA.net.employmentExemptAge, 65, '[공식] 65세');
+});
+
+G('기준 기간이 지났는지', () => {
+  // [공식] 국민연금 요율은 해마다 1월, 기준소득월액 상·하한은 7월부터 1년, 최저임금은 1월~12월
+  eq(P.validity('2026-10', '2026-10-10'), { ok: true, stale: false, items: [], year: 2026 }, '오늘(2026-10-10)');
+  eq(P.validity('2026-10', '2026-12-31').stale, false, '2026-12-31까지는 그대로');
+  eq(P.validity('2026-10', '2027-01-01').items.map((x) => x.id), ['pensionRate', 'minWage'], '2027-01-01: 요율·최저임금 기간이 지남');
+  eq(P.validity('2026-10', '2027-07-01').items.map((x) => x.id), ['pensionRate', 'pensionLimit', 'minWage'], '2027-07-01: 상·하한 기간도 지남');
+  eq(P.validity('2027-01', '2027-06-30').stale, false, '2027년 1월 기준은 2027-06-30까지');
+  eq(P.validity('2027-01', '2027-07-01').items, [{ id: 'pensionLimit', until: '2027-06-30' }], '2027-07-01: 상·하한만 지남');
+  eq(P.validity('2027-01', '2028-01-01').items.length, 3, '2028년');
+  eq([P.validity('x', '2026-10-10').code, P.validity('2026-10', 'x').code], ['period', 'date'], '잘못된 입력');
+  eq([P.unemploymentValidity('2026-12-31').stale, P.unemploymentValidity('2027-01-01').stale], [false, true], '구직급여 표는 2026-12-31까지');
+});
+
+G('자료: 2단계에서 더한 값 [공식]', () => {
+  // 국민연금법 부칙 제4조: 2026년 1만분의 475 … 2032년 1만분의 625, 제88조 제3항 1천분의 65
+  eq(DATA.pensionSchedule.rows.map((r) => [r.year, r.pct]), [[2026, '4.75'], [2027, '5.0'], [2028, '5.25'], [2029, '5.5'], [2030, '5.75'], [2031, '6.0'], [2032, '6.25'], [2033, '6.5']], '국민연금 요율 일정');
+  eq([DATA.periods['2026-10'].pension.ratePct, DATA.periods['2027-01'].pension.ratePct], [DATA.pensionSchedule.rows[0].pct, DATA.pensionSchedule.rows[1].pct], '기준 시기의 요율 = 일정표');
+  // 고용노동부 퇴직금 예제: 2014-10-02 ~ 2017-09-16, 1,080일, 월 기본급 2,000,000 + 기타수당 360,000, 상여금 4,000,000, 연차수당 60,000 × 5일, 88,641원 31전
+  const e = DATA.severance.example;
+  eq([e.join, e.leave, e.serviceDays, e.periodDays, e.monthlyBase, e.monthlyAllowance, e.annualBonus, e.leaveUnit, e.leaveDays, e.avgWon, e.avgJeon], ['2014-10-02', '2017-09-16', 1080, 92, 2000000, 360000, 4000000, 60000, 5, 88641, 31], '예제 조건과 공식 값');
+  eq([e.wages3m, e.leavePay, e.bonusPart, e.leavePart], [7080000, 300000, 1000000, 75000], '[공식] A 7,080,000 · B 1,000,000 · C 75,000');
+  eq([(e.monthlyBase + e.monthlyAllowance) * 3, e.leaveUnit * e.leaveDays], [e.wages3m, e.leavePay], '예제 값끼리 맞음');
+  const r = P.severance({ join: e.join, leave: e.leave, wages3m: e.wages3m, annualBonus: e.annualBonus, leavePay: e.leavePay });
+  eq([r.serviceDays, r.period.days, r.bonusPart, r.leavePart, r.avgDailyJeon], [e.serviceDays, e.periodDays, e.bonusPart, e.leavePart, e.avgWon * 100 + e.avgJeon], '로직이 예제의 공식 값을 그대로 냄');
+  eq(r.amount, 7868434, '[손] 88,641.31 × 30 × 1,080 ÷ 365 = 7,868,434.09 → 7,868,434');
+  // [날짜] 파이썬 기준값(ref/dates.json)의 3개월 날짜 수는 89~92일 사이
+  const spans = new Set(ref('dates.json').service.map((x) => x.pdays));
+  eq([Math.min(...spans), Math.max(...spans)], [DATA.severance.periodDaysMin, DATA.severance.periodDaysMax], '퇴직 전 3개월 날짜 수 범위 = 자료');
+  eq([DATA.leave.attendPct, DATA.leave.addFromYears], [80, 3], '[공식] 근로기준법 제60조: 80퍼센트, 3년 이상');
+  eq([DATA.rounding.verified, DATA.rounding.src], ['own', ['treasury47']], '끝수는 우리 방식(국고금관리법 제47조의 방식)');
+  ok(['treasury47', 'nhisDecree33', 'npsDecree3', 'eiLaw2'].every((k) => /^https:\/\/www\.law\.go\.kr\//.test(DATA.sources[k].url)), '끝수·비과세 근거 출처');
+});
+
 console.log(fails.join('\n'));
 console.log(`${fail ? '실패' : '통과'}: ${pass}개 통과, ${fail}개 실패`);
 process.exit(fail ? 1 : 0);

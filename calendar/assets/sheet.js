@@ -25,7 +25,7 @@
       ws: ['일요일 시작', '월요일 시작'], prov: '공식 발표 전 자료', rule: '규정으로 계산한 예상(선거일·임시공휴일 제외)',
       wk: '주', lunar: '음 ', leap: '윤', son: '손 없는 날',
       seol: '설 연휴', chuseok: '추석 연휴', sub: '대체공휴일',
-      obs: function (name, wd) { return name + '(' + T.ko.wd[wd] + '요일에 대신 쉼)'; },
+      obs: function (name, wd) { return name + '(' + T.ko.wd[wd] + '요일이 대신 쉬는 날)'; }, obsDay: '(대신 쉬는 날)',
       legend: { lunar: '음 = 음력 날짜', son: '손 없는 날 = 음력 끝자리 9·0인 날(전해 오는 풍습)', terms: '24절기: 한국천문연구원' }
     },
     en: {
@@ -66,13 +66,14 @@
       show: { names: sh.names !== false, week: !!sh.week, lunar: !!sh.lunar, terms: !!sh.terms, son: !!sh.son } };
   }
   function holidaysOf(o) { return o.country === 'NONE' ? null : CAL.holidays(o.country, o.year); }
-  // 공휴일 이름. short = 좁은 칸용(화면의 큰 달 표), 아니면 무엇의 대체공휴일인지까지.
+  // 공휴일 이름. 대신 쉬는 날은 어디서나 같은 말로: 한국은 무엇의 대체공휴일인지까지('대체공휴일(노동절)'), 미국은 한국어로 '크리스마스(대신 쉬는 날)'.
+  // short = 문장 속에 날짜와 같이 쓸 때의 짧은 이름('대체공휴일(3일)'. build.py 의 월 페이지 설명).
   function label(it, o, short) {
     if (o.country === 'KR') {
       if (o.lang === 'ko') return it.kind === 'substitute' && !short && it.of ? T.ko.sub + '(' + it.of.map(CAL.krLabel).join('·') + ')' : it.label;
       return it.kind === 'substitute' ? (short ? T.en.sub : it.en) : it.en.replace(' (Lunar New Year)', '');
     }
-    if (o.lang === 'ko') return it.names.join('·');
+    if (o.lang === 'ko') return it.names.map(function (n) { return n.replace(/ 대체 휴일$/, T.ko.obsDay); }).join('·');   // 표(data.js)의 '○○ 대체 휴일' → '○○(대신 쉬는 날)'
     var obs = / \(observed\)$/.test(it.en), b = it.en.replace(/ \(observed\)$/, '');
     return (US_SHORT[b] || b) + (obs ? ' (observed)' : '');
   }
@@ -320,8 +321,8 @@
     });
   }
 
-  // 화면용 큰 달(표). 첫 HTML에 글자로 들어간다. 좁은 칸이라 이름은 짧게 쓰고, 긴 한글 이름은 나눌 자리(<wbr>)를 준다.
-  var WBR = [['부처님오신날', '부처님<wbr>오신날'], ['대체공휴일', '대체<wbr>공휴일'], ['임시공휴일', '임시<wbr>공휴일'], ['·', '·<wbr>']];
+  // 화면용 큰 달(표). 첫 HTML에 글자로 들어간다. 이름은 종이와 같은 말로 쓰고('대체공휴일(노동절)'), 좁은 칸에서 나눌 자리(<wbr>)를 준다.
+  var WBR = [['부처님오신날', '부처님<wbr>오신날'], ['대체공휴일', '대체<wbr>공휴일'], ['임시공휴일', '임시<wbr>공휴일'], ['·', '·<wbr>'], ['(', '<wbr>(']];
   function webMonth(opts) {
     var o = norm(opts), L = T[o.lang], y = o.year, m = o.month, ws = o.weekStart, hol = holidaysOf(o), kr = o.kr;
     var cls = function (k) { return kr ? (k === 0 ? 'sun' : k === 6 ? 'sat' : '') : (k === 0 || k === 6 ? 'we' : ''); };
@@ -335,7 +336,7 @@
         var k = (i + ws) % 7, h = hol && hol.byDate[CAL.iso(y, m, d)], c = [cls(k), h ? 'hol' : ''].filter(Boolean).join(' ');
         var l = kr ? CAL.lunar.fromSolar(y, m, d) : null, term = kr ? termName(CAL.termOn(y, m, d), o.lang) : '';
         out.push('<td' + (c ? ' class="' + c + '"' : '') + ' data-d="' + d + '"><b>' + d + '</b>');
-        if (h) { var lab = esc(label(h, o, true)); if (o.lang === 'ko') WBR.forEach(function (w) { lab = lab.split(w[0]).join(w[1]); }); out.push('<em>' + lab + '</em>'); }
+        if (h) { var lab = esc(label(h, o)); if (o.lang === 'ko') WBR.forEach(function (w) { lab = lab.split(w[0]).join(w[1]); }); out.push('<em>' + lab + '</em>'); }
         if (term) out.push('<i class="term">' + term + '</i>');
         if (l && CAL.sonDay(l.d)) out.push('<i class="son">' + L.son + '</i>');
         if (l) out.push('<small' + (l.d === 1 ? ' class="l1"' : '') + '>' + L.lunar + (l.leap ? L.leap : '') + l.m + '.' + l.d + '</small>');
@@ -348,11 +349,26 @@
   }
 
   // 받는 파일 이름과, 미리 만들어 둔 파일이 있으면 그 주소(없으면 null → 기기에서 만든다)
+  // 이름 = 연도(·달)·나라·용지·방향 + 기본과 다른 설정(늘 같은 순서): -mon 월요일 시작, -wk 주 번호, -nonames 공휴일 이름 끔,
+  //   -nolunar 음력 끔, -noterms 24절기 끔, -son 손 없는 날, -bw 흑백. 종이에 찍히지 않는 설정은 붙이지 않는다(1년 한 장의 음력, 절기 자료가 없는 해의 절기 등).
+  function fileTags(opts) {
+    var o = norm(opts), s = o.show, monthly = opts.kind === 'months' || o.kind === 'month', t = '';
+    if (o.weekStart) t += '-mon';
+    if (s.week) t += '-wk';
+    if (o.country !== 'NONE' && !s.names) t += '-nonames';
+    if (monthly && o.kr) {
+      if (!s.lunar) t += '-nolunar';
+      if (!s.terms && CAL.terms(o.year)) t += '-noterms';
+      if (s.son) t += '-son';
+    }
+    if (o.mono) t += '-bw';
+    return t;
+  }
   function fileBase(opts) {
-    var o = norm(opts), c = o.country === 'KR' ? 'korea' : o.country === 'US' ? 'us' : 'no-holidays';
-    if (opts.kind === 'months') return o.year + '-calendar-' + c + '-monthly-' + o.paper;
-    if (o.kind === 'month') return o.year + '-' + (o.month < 10 ? '0' : '') + o.month + '-calendar-' + c + '-' + o.paper;
-    return o.year + '-calendar-' + c + '-' + o.paper + '-' + o.orient;
+    var o = norm(opts), c = o.country === 'KR' ? 'korea' : o.country === 'US' ? 'us' : 'no-holidays', t = fileTags(opts);
+    if (opts.kind === 'months') return o.year + '-calendar-' + c + '-monthly-' + o.paper + t;
+    if (o.kind === 'month') return o.year + '-' + (o.month < 10 ? '0' : '') + o.month + '-calendar-' + c + '-' + o.paper + t;
+    return o.year + '-calendar-' + c + '-' + o.paper + '-' + o.orient + t;
   }
   function staticFile(opts) {
     var o = norm(opts), s = o.show, months = opts.kind === 'months';
@@ -363,6 +379,58 @@
     return '/files/' + fileBase(opts) + '.pdf';
   }
 
+  // ---------- 주소에 담는 설정 ----------
+  // 설정 st = { year, kind: 'year'|'months'|'month', orient, month, weekStart, paper, country, names, week, lunar, terms, son, mono }
+  // 그 페이지의 기본값 base = { year, paper, country, fixed(연간 페이지면 true), min, max(고를 수 있는 연도) }
+  var URL_KEYS = ['y', 'k', 'm', 'w', 'p', 'c', 'names', 'wk', 'lunar', 'terms', 'son', 'ink'];
+  var EDITION = { ko: { country: 'KR', paper: 'a4' }, en: { country: 'US', paper: 'letter' } };   // 언어판의 기본 나라·용지(build.py tool() 과 같다)
+  // 설정 → [[이름, 값], …]. 기본값과 다른 것만, 늘 같은 순서.
+  function urlPairs(st, base) {
+    var q = [];
+    function put(k, v, on) { if (on) q.push([k, String(v)]); }
+    put('y', st.year, !base.fixed && st.year !== base.year);
+    put('k', st.kind === 'months' ? 'monthly' : st.kind === 'month' ? 'month' : 'portrait', !(st.kind === 'year' && st.orient === 'landscape'));
+    put('m', st.month, st.kind !== 'year');
+    put('w', 'mon', st.weekStart === 1);
+    put('p', st.paper, st.paper !== base.paper);
+    put('c', st.country.toLowerCase(), st.country !== base.country);
+    put('names', 0, !st.names); put('wk', 1, st.week); put('lunar', 0, !st.lunar); put('terms', 0, !st.terms); put('son', 1, st.son); put('ink', 'bw', st.mono);
+    return q;
+  }
+  function urlQuery(st, base) { return urlPairs(st, base).map(function (a) { return a[0] + '=' + a[1]; }).join('&'); }
+  // 주소의 값 → 설정에 덮어쓸 것(set)과, 우리 이름인데 쓸 수 없는 값이 든 이름 목록(bad). get(이름) 은 값(없으면 null). 이름·값의 대소문자는 가리지 않는다.
+  // 쓸 수 없는 값은 버리고 기본값을 쓴다(조용히 넘기지 않게 bad 로 알린다). 연간 페이지에서는 그 해가 아닌 y 도 쓸 수 없는 값이다.
+  function urlRead(get, base) {
+    var set = {}, bad = [];
+    function val(k) { var v = get(k); return v === null || v === undefined ? null : String(v).trim().toLowerCase(); }
+    function pick(k, map, to) { var v = val(k); if (v === null) return; if (Object.prototype.hasOwnProperty.call(map, v)) to(map[v]); else bad.push(k); }
+    var y = val('y'), m = val('m');
+    if (y !== null) {
+      if (/^\d{4}$/.test(y) && +y >= base.min && +y <= base.max && (!base.fixed || +y === base.year)) { if (!base.fixed) set.year = +y; } else bad.push('y');
+    }
+    pick('k', { landscape: ['year', 'landscape'], portrait: ['year', 'portrait'], monthly: ['months', 'landscape'], month: ['month', 'landscape'] }, function (v) { set.kind = v[0]; set.orient = v[1]; });
+    if (m !== null) { if (/^\d{1,2}$/.test(m) && +m >= 1 && +m <= 12) set.month = +m; else bad.push('m'); }
+    pick('w', { sun: 0, mon: 1 }, function (v) { set.weekStart = v; });
+    pick('p', { a4: 'a4', letter: 'letter' }, function (v) { set.paper = v; });
+    pick('c', { kr: 'KR', us: 'US', none: 'NONE' }, function (v) { set.country = v; });
+    pick('names', { 0: false, 1: true }, function (v) { set.names = v; });
+    pick('wk', { 0: false, 1: true }, function (v) { set.week = v; });
+    pick('lunar', { 0: false, 1: true }, function (v) { set.lunar = v; });
+    pick('terms', { 0: false, 1: true }, function (v) { set.terms = v; });
+    pick('son', { 0: false, 1: true }, function (v) { set.son = v; });
+    pick('ink', { bw: true, color: false }, function (v) { set.mono = v; });
+    return { set: set, bad: bad };
+  }
+  // 다른 언어판으로 가져갈 설정. 나라·용지 같은 값은 그대로 가져가고(언어판마다 기본값이 달라도 같은 달력이 열리게),
+  // 그 언어판에 없는 값은 버린다(음력·절기·손 없는 날은 한국식 달력에만 있다: 한국 공휴일이거나, 한국어판의 '표시 안 함').
+  function urlCarry(st, toLang) {
+    var o = {}; for (var k in st) o[k] = st[k];
+    if (!(o.country === 'KR' || (o.country === 'NONE' && toLang === 'ko'))) { o.lunar = true; o.terms = true; o.son = false; }
+    if (o.country === 'NONE') o.names = true;
+    return o;
+  }
+
   return { build: build, svg: svg, draw: draw, webMonth: webMonth, fileBase: fileBase, staticFile: staticFile, estW: estW, color: color, SIZES: SIZES, FONT: FONT, T: T, SITE: SITE,
+    URL_KEYS: URL_KEYS, EDITION: EDITION, urlQuery: urlQuery, urlRead: urlRead, urlCarry: urlCarry,
     label: function (it, o, short) { return label(it, norm(o), short); } };
 });

@@ -508,18 +508,120 @@ group("종이 글자: 말줄임(…)·'+N more'·'외 N일' 0, 이름이 제 칸
   const us27 = pairs({ kind: 'year', year: 2027, lang: 'en', country: 'US', paper: 'letter' });
   ok(['18–19 Juneteenth (observed Fri)', '4–5 Independence Day (observed Mon)', '24–25 Christmas Day (observed Fri)', "31 New Year's Day (observed)"].every((x) => us27.includes(x)), '미국 2027: ' + us27.filter((x) => /observed/.test(x)).join(' / '));
   ok(pairs({ kind: 'year', year: 2026, lang: 'en', country: 'US', paper: 'letter' }).includes('3–4 Independence Day (observed Fri)'), '미국 2026: 3–4 Independence Day (observed Fri)');
-  ok(pairs({ kind: 'year', year: 2027, lang: 'ko', country: 'US', paper: 'a4' }).includes('24–25 크리스마스(금요일에 대신 쉼)'), '한국어 화면 + 미국: 24–25 크리스마스(금요일에 대신 쉼)');
+  const koUs27 = pairs({ kind: 'year', year: 2027, lang: 'ko', country: 'US', paper: 'a4' });
+  ok(['24–25 크리스마스(금요일이 대신 쉬는 날)', '18–19 준틴스(금요일이 대신 쉬는 날)', '31 새해 첫날(대신 쉬는 날)'].every((x) => koUs27.includes(x)), "한국어 화면 + 미국: '대신 쉬는 날' 한 가지로 (" + koUs27.filter((x) => /대신/.test(x)).join(' / ') + ')');
   const kr27 = pairs({ kind: 'year', year: 2027, lang: 'ko', country: 'KR', paper: 'a4' });
   ok(['3 대체공휴일(노동절)', '19 대체공휴일(제헌절)', '27 대체공휴일(성탄절)', '6–9 설 연휴'].every((x) => kr27.includes(x)), '한국 2027: ' + kr27.filter((x) => /대체/.test(x)).join(' / '));
   eq(S.label(C.holidays('KR', 2025).byDate['2025-03-03'], { lang: 'ko', country: 'KR' }), '대체공휴일(삼일절)', '2025년 표의 대체공휴일도 무엇의 대체인지');
-  eq(S.label(C.holidays('KR', 2027).byDate['2027-05-03'], { lang: 'ko', country: 'KR' }, true), '대체공휴일', '좁은 칸(화면의 큰 달)에서는 짧은 이름');
+  eq(S.label(C.holidays('KR', 2027).byDate['2027-05-03'], { lang: 'ko', country: 'KR' }, true), '대체공휴일', "문장 속 짧은 이름(월 페이지 설명의 '대체공휴일(3일)')");
   eq(S.label(C.holidays('KR', 2027).byDate['2027-05-03'], { lang: 'en', country: 'KR' }), 'Substitute holiday (Labor Day)', '영어: Substitute holiday (Labor Day)');
   // 공휴일 표시 안 함
   const none = S.build({ kind: 'year', year: 2027, lang: 'ko', country: 'NONE', paper: 'a4' });
   ok(!none.items.some((i) => i.t && i.w === 800 && i.z === 3.8) && !none.items.some((i) => i.t && /공휴일/.test(i.s)), '공휴일 표시 안 함: 굵은 빨간 날짜·이름·안내 줄 없음');
   ok(none.items.some((i) => i.t && i.c === 'sun' && i.z === 3.8), '공휴일 표시 안 함(한국어): 일요일은 그대로 빨강');
   eq(S.fileBase({ kind: 'year', year: 2027, lang: 'ko', country: 'NONE', paper: 'a4' }), '2027-calendar-no-holidays-a4-landscape', '공휴일 없는 달력의 파일 이름');
-  ok(S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>부처님<wbr>오신날</em>') && S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>대체<wbr>공휴일</em>'), '큰 달 표: 긴 한글 이름에 나눌 자리');
+  ok(S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>부처님<wbr>오신날</em>') && S.webMonth({ year: 2027, month: 5, lang: 'ko' }).includes('<em>대체<wbr>공휴일<wbr>(노동절)</em>'), '큰 달 표: 무엇의 대체공휴일인지, 긴 한글 이름에 나눌 자리');
+  // 대신 쉬는 날을 부르는 말은 한 가지: 한국은 늘 '대체공휴일(○○)', 미국을 한국어로 쓸 때는 '대신 쉬는 날'('대체 휴일'·'대신 쉼'은 쓰지 않는다)
+  {
+    let bare = [], old = [], n = 0;
+    const strip = (h) => h.replace(/<wbr>/g, '');
+    for (let year = 2025; year <= 2030; year++) {
+      for (const it of C.holidays('KR', year).list) if (it.kind === 'substitute') { n++; if (!/^대체공휴일\(.+\)$/.test(S.label(it, { lang: 'ko', country: 'KR' }))) bare.push(it.date); }
+      for (const it of C.holidays('US', year).list) if (it.kind === 'substitute') { n++; if (!/.\(대신 쉬는 날\)$/.test(S.label(it, { lang: 'ko', country: 'US' }))) bare.push(it.date); }
+      for (let month = 1; month <= 12; month++) {
+        const cells = [strip(S.webMonth({ year, month, lang: 'ko', country: 'KR' })), strip(S.webMonth({ year, month, lang: 'ko', country: 'US' }))]
+          .concat(['KR', 'US'].map((country) => S.build({ kind: 'month', year, month, lang: 'ko', country, paper: 'a4', show: { names: true } }).items.filter((i) => i.t && i.c === 'sun').map((i) => i.s).join('|')));   // 빨간 글자 = 날짜와 공휴일 이름
+        if (/대체공휴일(?!\()/.test(cells[0]) || /대체공휴일(?!\()/.test(cells[2])) bare.push(year + '-' + month);
+        if (cells.some((x) => /대체 휴일|대신 쉼/.test(x))) old.push(year + '-' + month);
+      }
+      for (const orient of ['landscape', 'portrait']) if (/대체 휴일|대신 쉼/.test(S.build({ kind: 'year', year, lang: 'ko', country: 'US', paper: 'a4', orient }).items.filter((i) => i.t).map((i) => i.s).join('|'))) old.push(year + orient);
+    }
+    eq(bare, [], "대신 쉬는 날 " + n + "일: 달력 칸·종이·목록 모두 '대체공휴일(○○)' / '○○(대신 쉬는 날)' 꼴");
+    eq(old, [], "'대체 휴일'·'대신 쉼' 같은 다른 말이 남아 있지 않다");
+  }
+}
+
+// ───────── 10-3. 받는 파일 이름, 주소에 담는 설정, 언어를 바꿀 때 가져가는 설정 ─────────
+group('파일 이름·주소의 설정: 기본과 다른 설정이 이름에 보이고, 주소 ↔ 설정이 그대로 돌아오며, 쓸 수 없는 값은 알린다');
+{
+  // 파일 이름
+  const KR = { lang: 'ko', country: 'KR', paper: 'a4' }, US = { lang: 'en', country: 'US', paper: 'letter' };
+  const ON = { names: true, week: false, lunar: true, terms: true, son: false };
+  eq(S.fileBase({ kind: 'year', year: 2027, ...KR, show: ON }), '2027-calendar-korea-a4-landscape', '기본 설정은 이름에 붙는 것이 없다(1년 한 장)');
+  eq(S.fileBase({ kind: 'months', year: 2027, ...KR, show: ON }), '2027-calendar-korea-monthly-a4', '기본 설정(월별 12장)');
+  eq(S.fileBase({ kind: 'month', year: 2027, month: 5, ...KR, show: ON }), '2027-05-calendar-korea-a4', '기본 설정(한 달)');
+  eq(S.fileBase({ kind: 'year', year: 2027, ...KR, weekStart: 1, show: ON }), '2027-calendar-korea-a4-landscape-mon', '월요일 시작 → -mon');
+  eq(S.fileBase({ kind: 'year', year: 2027, ...KR, mono: true, show: ON }), '2027-calendar-korea-a4-landscape-bw', '흑백 → -bw');
+  eq(S.fileBase({ kind: 'year', year: 2027, ...KR, show: { ...ON, week: true } }), '2027-calendar-korea-a4-landscape-wk', '주 번호 → -wk');
+  eq(S.fileBase({ kind: 'year', year: 2027, ...KR, orient: 'portrait', weekStart: 1, mono: true, show: { ...ON, week: true, names: false, lunar: false, son: true } }), '2027-calendar-korea-a4-portrait-mon-wk-nonames-bw', '1년 한 장: 종이에 없는 음력·손 없는 날은 붙이지 않는다');
+  eq(S.fileBase({ kind: 'months', year: 2027, ...KR, weekStart: 1, mono: true, show: { names: false, week: true, lunar: false, terms: false, son: true } }), '2027-calendar-korea-monthly-a4-mon-wk-nonames-nolunar-noterms-son-bw', '전부 바꾼 월별 12장(늘 같은 순서)');
+  eq(S.fileBase({ kind: 'month', year: 2029, month: 5, ...KR, show: { ...ON, terms: false } }), '2029-05-calendar-korea-a4', '절기 자료가 없는 해에는 -noterms 를 붙이지 않는다');
+  eq(S.fileBase({ kind: 'month', year: 2027, month: 5, ...US, show: { names: true, lunar: false, terms: false, son: true } }), '2027-05-calendar-us-letter', '미국 달력에는 음력·손 없는 날이 없다');
+  eq(S.fileBase({ kind: 'month', year: 2027, month: 5, lang: 'ko', country: 'NONE', paper: 'a4', show: { names: false, lunar: true, terms: true, son: true } }), '2027-05-calendar-no-holidays-a4-son', "'표시 안 함'에는 -nonames 를 붙이지 않는다");
+  eq(S.fileBase({ kind: 'month', year: 2026, month: 10, ...KR, show: { names: true, lunar: true, terms: true, son: true } }), '2026-10-calendar-korea-a4-son', '월 페이지(손 없는 날이 든 달) 파일 이름');
+  // 설정이 다르면 이름도 다르다: 한 해의 모든 조합에서 (종이 내용이 다르면 이름도 다름)
+  {
+    const seen = new Map(); let clash = [], n = 0;
+    for (const [lang, country] of [['ko', 'KR'], ['ko', 'US'], ['ko', 'NONE'], ['en', 'US'], ['en', 'KR'], ['en', 'NONE']]) for (const paper of ['a4', 'letter']) for (const weekStart of [0, 1]) for (const mono of [false, true])
+      for (const names of [true, false]) for (const week of [false, true]) for (const lunar of [true, false]) for (const terms of [true, false]) for (const son of [false, true])
+        for (const [kind, orient] of [['year', 'landscape'], ['year', 'portrait'], ['month', 'landscape']]) {
+          const o = { kind, orient, year: 2027, month: 5, lang, country, paper, weekStart, mono, show: { names, week, lunar, terms, son } };
+          const name = lang + '/' + S.fileBase(o), body = JSON.stringify(S.build(o).items) + mono;
+          n++;
+          if (seen.has(name) && seen.get(name) !== body) clash.push(name);
+          seen.set(name, body);
+        }
+    eq([...new Set(clash)].slice(0, 5), [], '같은 이름인데 종이 내용이 다른 파일 (' + n + '가지 설정, 이름 ' + seen.size + '개)');
+  }
+  // 미리 만든 파일이 있는 설정은 이름에 붙는 것이 없다(그 파일 주소 = 이름)
+  for (const y of [2026, 2027, 2028]) for (const [ed, kinds] of [[KR, ['year', 'months']], [US, ['year', 'months']]]) for (const kind of kinds) {
+    const o = { kind, year: y, ...ed, show: ON };
+    eq(S.staticFile(o), '/files/' + S.fileBase(o) + '.pdf', '미리 만든 파일 주소 = 파일 이름 ' + S.fileBase(o));
+    ok(fs.existsSync(path.join(__dirname, '..', 'files', S.fileBase(o) + '.pdf')), '미리 만든 파일이 실제로 있다 ' + S.fileBase(o));
+  }
+
+  // 주소 ↔ 설정
+  const D0 = { year: 2027, kind: 'year', orient: 'landscape', month: 1, weekStart: 0, paper: 'a4', country: 'KR', names: true, week: false, lunar: true, terms: true, son: false, mono: false };
+  const base = (ed, more) => ({ year: 2027, paper: ed.paper, country: ed.country, fixed: false, min: 2025, max: 2030, ...more });
+  const read = (query, b) => { const q = new URLSearchParams(query), have = {}; q.forEach((v, k) => { k = k.toLowerCase(); if (!(k in have)) have[k] = v; }); return S.urlRead((k) => (k in have ? have[k] : null), b); };
+  eq(S.urlQuery(D0, base(KR)), '', '기본 설정은 주소에 아무것도 싣지 않는다');
+  eq(S.urlQuery({ ...D0, year: 2028, kind: 'months', month: 5, weekStart: 1, paper: 'letter', country: 'US', week: true, mono: true }, base(KR)), 'y=2028&k=monthly&m=5&w=mon&p=letter&c=us&wk=1&ink=bw', '늘 같은 순서');
+  eq(S.urlQuery({ ...D0, weekStart: 1, paper: 'letter', country: 'US', week: true, lunar: false, son: true, mono: true }, base(KR)), 'w=mon&p=letter&c=us&wk=1&lunar=0&son=1&ink=bw', '화면 확인(e2e)이 보는 주소와 같다');
+  {
+    // 모든 조합: 설정 → 주소 → 설정이 그대로 돌아온다
+    let bad = [], n = 0;
+    for (const ed of [KR, US]) for (const fixed of [false, true]) for (const year of fixed ? [2027] : [2025, 2027, 2030]) for (const [kind, orient] of [['year', 'landscape'], ['year', 'portrait'], ['months', 'landscape'], ['month', 'landscape']])
+      for (const month of kind === 'year' ? [1] : [1, 12]) for (const weekStart of [0, 1]) for (const paper of ['a4', 'letter']) for (const country of ['KR', 'US', 'NONE'])
+        for (const bits of [0, 1, 2, 4, 8, 16, 32, 63, 21, 42]) {
+          const st = { year, kind, orient, month, weekStart, paper, country, names: !(bits & 1), week: !!(bits & 2), lunar: !(bits & 4), terms: !(bits & 8), son: !!(bits & 16), mono: !!(bits & 32) };
+          const b = base(ed, { fixed }), r = read(S.urlQuery(st, b), b), back = { ...D0, ...ed, year: 2027, ...r.set };
+          delete back.lang;
+          n++;
+          if (r.bad.length || JSON.stringify(Object.keys(st).sort().map((k) => back[k])) !== JSON.stringify(Object.keys(st).sort().map((k) => st[k]))) bad.push(S.urlQuery(st, b));
+        }
+    eq(bad.slice(0, 5), [], '설정 → 주소 → 설정 (' + n + '가지)');
+  }
+  eq(read('?y=2028&k=monthly&m=5&w=mon&p=letter&c=us&wk=1&ink=bw&zzz=1&p2=x', base(KR)), { set: { year: 2028, kind: 'months', orient: 'landscape', month: 5, weekStart: 1, paper: 'letter', country: 'US', week: true, mono: true }, bad: [] }, '남이 보낸 주소: 모르는 이름(zzz·p2)은 그냥 둔다');
+  eq(read('?W=MON&P=Letter&C=Us&K=Portrait&INK=BW', base(KR)), { set: { kind: 'year', orient: 'portrait', weekStart: 1, paper: 'letter', country: 'US', mono: true }, bad: [] }, '이름·값의 대소문자는 가리지 않는다');
+  eq(read('?y=2031&k=month&m=1', base(KR)), { set: { kind: 'month', orient: 'landscape', month: 1 }, bad: ['y'] }, '범위 밖 연도(2031)는 쓸 수 없는 값으로 알린다');
+  eq(read('?y=1999&k=zzz&m=44&c=jp&p=b5', base(KR)).bad, ['y', 'k', 'm', 'p', 'c'], '쓸 수 없는 값 다섯');
+  eq(read('?y=1999&k=zzz&m=44&c=jp&p=b5', base(KR)).set, {}, '쓸 수 없는 값은 하나도 쓰지 않는다');
+  eq([read('?m=13', base(KR)).bad, read('?m=0', base(KR)).bad, read('?m=5.5', base(KR)).bad, read('?y=20270', base(KR)).bad, read('?y=', base(KR)).bad, read('?w=tue', base(KR)).bad, read('?names=no', base(KR)).bad, read('?ink=red', base(KR)).bad],
+    [['m'], ['m'], ['m'], ['y'], ['y'], ['w'], ['names'], ['ink']], '13월·0월·소수·다섯 자리 연도·빈 값·모르는 요일·모르는 표시 값');
+  eq(read('?y=' + 'x'.repeat(6000) + '&c=%3Cscript%3E', base(KR)).bad, ['y', 'c'], '아주 긴 값·태그가 든 값');
+  eq(read('?y=2029&w=mon', base(KR, { fixed: true })), { set: { weekStart: 1 }, bad: ['y'] }, '연간 페이지: 다른 해의 y 는 쓸 수 없는 값, 다른 설정은 받는다');
+  eq(read('?y=2027&w=mon', base(KR, { fixed: true })), { set: { weekStart: 1 }, bad: [] }, '연간 페이지: 그 해의 y 는 괜찮다');
+  eq(read('?adpreview&utm_source=x', base(KR)), { set: {}, bad: [] }, '우리 것이 아닌 이름은 건드리지 않는다');
+
+  // 언어를 바꿀 때: 나라·용지는 그대로(언어판 기본값이 달라도 같은 달력), 그 언어판에 없는 값은 버린다
+  const carry = (st, from, to) => S.urlQuery(S.urlCarry(st, to), base(S.EDITION[to]));
+  eq(S.EDITION, { ko: { country: 'KR', paper: 'a4' }, en: { country: 'US', paper: 'letter' } }, '언어판 기본값');
+  eq(carry({ ...D0, weekStart: 1, country: 'US' }, 'ko', 'en'), 'w=mon&p=a4', '한국어판 ?w=mon&c=us → 영어판 ?w=mon&p=a4 (미국은 영어판 기본, A4는 그대로)');
+  eq(carry({ ...D0, weekStart: 1 }, 'ko', 'en'), 'w=mon&p=a4&c=kr', '한국어판 ?w=mon → 영어판에서도 한국 공휴일·A4');
+  eq(carry({ ...D0, paper: 'letter', country: 'US' }, 'ko', 'en'), '', '영어판 기본과 같아지면 아무것도 싣지 않는다');
+  eq(carry({ ...D0, kind: 'month', month: 5, country: 'NONE', lunar: false, son: true, names: false }, 'ko', 'en'), 'k=month&m=5&p=a4&c=none', "영어판의 '표시 안 함'에는 음력·손 없는 날이 없다 → 버린다");
+  eq(carry({ ...D0, kind: 'month', month: 5, country: 'NONE', lunar: false, son: true, paper: 'letter' }, 'en', 'ko'), 'k=month&m=5&p=letter&c=none&lunar=0&son=1', "한국어판의 '표시 안 함'에는 음력·손 없는 날이 있다 → 가져간다");
+  eq(carry({ ...D0, kind: 'months', month: 3, country: 'KR', paper: 'letter', son: true, mono: true }, 'en', 'ko'), 'k=monthly&m=3&p=letter&son=1&ink=bw', '영어판에서 한국 공휴일 → 한국어판(나라는 기본이라 빠진다)');
 }
 
 group('글자 PDF(pdf.js): 구조가 맞고 글꼴·제목이 들어 있다');

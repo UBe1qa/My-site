@@ -13,6 +13,12 @@ LAW30 = 'https://www.law.go.kr/법령/근로기준법시행령/제30조'
 LAW11 = 'https://www.law.go.kr/법령/근로기준법/제11조'
 NODONG = 'https://www.law.go.kr/법령/노동절제정에관한법률'
 CFWA = 'https://www.cloudflare.com/web-analytics/'
+# 노동절은 근로기준법 제55조 제2항과 별개로, 따로 있는 법이 유급휴일로 정한 날이다. '4명 이하 사업장에는 이 조항이 적용되지 않아요'가 나오는 곳마다 바로 뒤에 붙인다
+# (check.py 가 지킨다). 확인된 원문 범위 안에서만 쓴다: 조문은 "5월 1일을 노동절로 하고, 이 날을 「근로기준법」에 따른 유급휴일로 한다." 한 문장뿐이다. 수당 이야기는 쓰지 않는다.
+MAY1 = {
+    'ko': '다만 노동절(5월 1일)은 <a href="' + NODONG + '">「노동절 제정에 관한 법률」</a>이 따로 유급휴일로 정한 날이에요. 이 법에는 사업장 크기 조건이 없어요.',
+    'en': 'Labor Day (May 1) is different: a <a href="' + NODONG + '">separate act</a> makes it a paid holiday, and that act has no workplace-size condition.',
+}
 # 출처를 실제로 열어 확인한 날(화면에 같이 싣는다). 사실 확인 기록: 지휘자 쪽 verified-facts 문서.
 SEEN9 = {'ko': '2026. 10. 9. 확인', 'en': 'checked Oct 9, 2026'}
 SEEN10 = {'ko': '2026. 10. 10. 확인', 'en': 'checked Oct 10, 2026'}
@@ -66,8 +72,8 @@ FAQ = {
         ('2027년 5월 3일과 7월 19일은 왜 빨간 날인가요?', '2026년 4월에 관공서의 공휴일에 관한 규정이 바뀌어 노동절(5월 1일)과 제헌절(7월 17일)이 공휴일이 됐어요. 2027년에는 두 날이 모두 토요일이라 다음 월요일인 5월 3일과 7월 19일이 대체공휴일이에요.'),
         ('선거일이나 임시공휴일도 들어 있나요?', '확정된 날만 들어 있어요. 2026년 6월 3일 전국동시지방선거와 2028년 4월 12일 국회의원선거일이 그래요. 임시공휴일과 그 뒤 선거일은 정해지면 더해요.'),
         ('음력과 손 없는 날은 어디에 나오나요?', '월별 12장과 한 달 모양에 넣을 수 있어요. ‘내 설정으로 바꾸기’에서 음력, 24절기, 손 없는 날을 켜고 꺼요. 1년 한 장에는 자리가 없어 넣지 않아요.'),
-        ('빨간 날이면 회사도 쉬나요?', '상시 근로자가 5명 이상인 사업장에서는 일요일을 뺀 관공서 공휴일과 대체공휴일이 유급휴일이에요. 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있어요. 4명 이하 사업장에는 이 조항이 적용되지 않아요. 근거는 <a href="' + LAW55 + '">근로기준법 제55조 제2항</a>, <a href="' + LAW30 + '">시행령 제30조 제2항</a>, <a href="' + LAW11 + '">제11조</a>예요(2026. 10. 10. 확인).'),
-        ('설정을 바꿔도 PDF가 선명한가요?', '네. 어떤 설정으로 받아도 PDF에 글자가 그대로 들어가요. 크게 인쇄해도 선명하고 글자를 검색할 수 있어요.'),
+        ('빨간 날이면 회사도 쉬나요?', '상시 근로자가 5명 이상인 사업장에서는 일요일을 뺀 관공서 공휴일과 대체공휴일이 유급휴일이에요. 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있어요. 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="' + LAW55 + '">근로기준법 제55조 제2항</a>, <a href="' + LAW30 + '">시행령 제30조 제2항</a>, <a href="' + LAW11 + '">제11조</a>). ' + MAY1['ko'] + ' 법령은 2026년 10월 10일에 확인했어요.'),
+        ('설정을 바꿔도 PDF가 선명한가요?', '네. 어떤 설정으로 받아도 PDF에 글자가 그대로 들어가요. 크게 인쇄해도 선명하고 글자를 검색할 수 있어요. 다만 글꼴 파일을 내려받지 못하면(오프라인일 때 등) 300ppi 그림 PDF로 대신 저장하고, 그때는 받기 단추 아래에 그렇게 알려 드려요.'),
         ('휴대폰에서도 받을 수 있나요?', '네. PDF 받기를 누르면 파일이 바로 저장돼요. 미리보기를 누르면 크게 볼 수 있어요.'),
     ],
     'en': [
@@ -75,7 +81,7 @@ FAQ = {
         ('Why is December 31, 2027 marked as a holiday?', 'New Year’s Day 2028 falls on a Saturday, so the federal holiday is observed on Friday, December 31, 2027. The calendar shows observed days because those are the days offices actually close.'),
         ('Can I print on A4 instead of Letter?', 'Yes. Open “Change settings” and pick A4. The preview changes shape and the PDF and print layout follow it.'),
         ('Can weeks start on Monday?', 'Yes. Choose Monday under “Change settings”. With week numbers on, Monday-start calendars use ISO 8601 week numbers and Sunday-start calendars count from the week that contains January 1.'),
-        ('Is the PDF real text or a picture?', 'Real text. Every PDF, whatever settings you pick, keeps its letters as letters, so it prints sharply at any size and the text can be searched.'),
+        ('Is the PDF real text or a picture?', 'Real text. Every PDF, whatever settings you pick, keeps its letters as letters, so it prints sharply at any size and the text can be searched. One exception: if the font files cannot be downloaded (for example, when you are offline), the PDF is saved as a 300 ppi image instead, and a note under the buttons says so.'),
         ('Does it work on a phone?', 'Yes. “Download PDF” saves the file directly. Tap the preview to enlarge it.'),
     ],
 }
@@ -104,7 +110,7 @@ ARTICLES = {
 <p><a class="btn btn-main cta" href="{P}2027/">2027년 달력 한 장 받기</a></p>
 <h2>회사도 쉬나요</h2>
 <p>상시 근로자가 5명 이상인 사업장에서는 유급휴일이에요. <a href="''' + LAW55 + '''">근로기준법 제55조 제2항</a>은 사용자가 “대통령령으로 정하는 휴일”을 유급으로 보장하도록 정하고, <a href="''' + LAW30 + '''">시행령 제30조 제2항</a>은 그 휴일을 관공서의 공휴일(일요일은 제외)과 대체공휴일로 정해요. 근로자대표와 서면으로 합의하면 그날 대신 다른 근로일에 쉴 수 있어요.</p>
-<p>상시 근로자가 4명 이하인 사업장에는 이 조항이 적용되지 않아요(<a href="''' + LAW11 + '''">근로기준법 제11조</a>와 시행령 별표 1). 학교와 그 밖의 기관은 그곳의 규정을 따로 확인하세요.</p>
+<p>상시 근로자가 4명 이하인 사업장에는 이 조항이 적용되지 않아요(<a href="''' + LAW11 + '''">근로기준법 제11조</a>와 시행령 별표 1). ''' + MAY1['ko'] + ''' 학교와 그 밖의 기관은 그곳의 규정을 따로 확인하세요.</p>
 <h2>오래된 달력을 쓰고 있다면</h2>
 <p>2026년 4월 전에 만든 달력과 일정 앱에는 이 날들이 빠져 있을 수 있어요. 5월 1일, 7월 17일, 그리고 2027년 5월 3일과 7월 19일이 빨간 날로 나오는지 보면 바로 알 수 있어요.</p>''',
              sources=[('관공서의 공휴일에 관한 규정 (국가법령정보센터, 시행 2026. 5. 11.)', LAW, SEEN9), ('우주항공청 「2027년 월력요항」 발표 (2026. 6. 29.)', KASA, SEEN9),
@@ -135,11 +141,11 @@ ARTICLES = {
 <p>2026·2027년은 공식 발표와 맞춰 본 날짜예요. 2028년은 한국천문연구원 달력자료 기준(월력요항 발표 전), 2029·2030년은 지금 규정으로 계산한 예상이에요. 선거일과 임시공휴일은 정해지면 달라질 수 있어요.</p>
 <p><a class="btn btn-main cta" href="{P}2027/holidays/">2027년 공휴일과 연휴 한눈에 보기</a></p>
 <h2>회사에도 적용되나요</h2>
-<p>상시 근로자가 5명 이상인 사업장에서는 대체공휴일도 유급휴일이에요. <a href="''' + LAW30 + '''">근로기준법 시행령 제30조 제2항</a>이 유급으로 보장할 휴일에 관공서의 공휴일(일요일은 제외)과 함께 대체공휴일을 넣어 두었어요. 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있고, 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="''' + LAW11 + '''">근로기준법 제11조</a>와 시행령 별표 1).</p>
+<p>상시 근로자가 5명 이상인 사업장에서는 대체공휴일도 유급휴일이에요. <a href="''' + LAW30 + '''">근로기준법 시행령 제30조 제2항</a>이 유급으로 보장할 휴일에 관공서의 공휴일(일요일은 제외)과 함께 대체공휴일을 넣어 두었어요. 근로자대표와 서면으로 합의하면 다른 근로일로 바꿀 수 있고, 4명 이하 사업장에는 이 조항이 적용되지 않아요(<a href="''' + LAW11 + '''">근로기준법 제11조</a>와 시행령 별표 1). ''' + MAY1['ko'] + '''</p>
 <h2>2028년처럼 평일에 두 공휴일이 겹치면</h2>
 <p>2028년 10월 3일은 추석이면서 개천절이에요. 하루에 공휴일이 둘이라 대체공휴일이 하루 생기는데, 10월 4일이 추석 다음 날이라 그다음 평일인 10월 5일(목)이 대체공휴일이 돼요. 그래서 9월 30일(토)부터 10월 5일(목)까지 6일이 이어져요.</p>''',
              sources=[('관공서의 공휴일에 관한 규정 제3조 (국가법령정보센터)', LAW, SEEN9), ('우주항공청 「2027년 월력요항」 발표', KASA, SEEN9), ('한국천문연구원 달력자료', KASI, None),
-                      ('근로기준법 제55조', LAW55, SEEN10), ('근로기준법 시행령 제30조', LAW30, SEEN10), ('근로기준법 제11조', LAW11, SEEN10)]),
+                      ('근로기준법 제55조', LAW55, SEEN10), ('근로기준법 시행령 제30조', LAW30, SEEN10), ('근로기준법 제11조', LAW11, SEEN10), ('노동절 제정에 관한 법률 (시행 2025. 11. 11.)', NODONG, SEEN10)]),
         dict(slug='a4-han-jang-inswae', pair='print-calendar-on-one-page', title='달력을 A4 한 장에 맞게 인쇄하는 법',
              desc='달력이 두 장으로 나뉘거나 한쪽이 잘릴 때 볼 인쇄 설정이에요. 용지 크기, 배율, 여백, 머리글과 바닥글, 가로세로를 차례로 짚어요.',
              lead='가장 확실한 방법은 PDF로 받아서 인쇄하는 거예요. 브라우저에서 바로 인쇄할 때는 용지 크기와 배율 두 가지만 보면 대부분 해결돼요.',
@@ -271,13 +277,14 @@ ARTICLES = {
 <h2>How many days off is that</h2>
 <p>According to the 2027 almanac notice from the Korea AeroSpace Administration, the 24 dates plus 52 Sundays, minus the 4 holidays that fall on a Sunday, give 72 public holidays. Counting Saturdays as well, a five-day work week has 119 days off in 2027.</p>
 <h2>Do private companies close too</h2>
-<p>These are holidays for government offices. Under <a href="''' + LAW55 + '''">Article 55(2) of the Labor Standards Act</a> and Article 30 of its Enforcement Decree, workplaces with five or more regular employees must give the same days (Sundays aside) and the substitute holidays as paid days off, unless a written agreement with the employee representative swaps a day for another working day. The rule does not apply to workplaces with four or fewer employees.</p>
+<p>These are holidays for government offices. Under <a href="''' + LAW55 + '''">Article 55(2) of the Labor Standards Act</a> and Article 30 of its Enforcement Decree, workplaces with five or more regular employees must give the same days (Sundays aside) and the substitute holidays as paid days off, unless a written agreement with the employee representative swaps a day for another working day. The rule does not apply to workplaces with four or fewer employees. ''' + MAY1['en'] + '''</p>
 <h2>Long weekends</h2>
 <p>There are ten breaks of three days or more: Jan 1 to 3, Feb 6 to 9 (Seollal), Feb 27 to Mar 1, May 1 to 3, Jul 17 to 19, Aug 14 to 16, Sep 14 to 16 (Chuseok), Oct 2 to 4, Oct 9 to 11 and Dec 25 to 27. Chuseok runs Tuesday to Thursday, so taking Monday, September 13 or Friday, September 17 off gives six days in a row.</p>
 <h2>Print it</h2>
 <p>The calendar maker can print a 2027 calendar with these holidays in English. Open “Change settings” and choose South Korea under Holidays.</p>''',
              sources=[('Regulations on Holidays of Government Offices (Korean, National Law Information Center)', LAW, SEEN9), ('Korea AeroSpace Administration: 2027 almanac notice (Korean)', KASA, SEEN9),
-                      ('Labor Standards Act, Article 55 (Korean)', LAW55, SEEN10), ('Enforcement Decree of the Labor Standards Act, Article 30 (Korean)', LAW30, SEEN10), ('Labor Standards Act, Article 11 (Korean)', LAW11, SEEN10)]),
+                      ('Labor Standards Act, Article 55 (Korean)', LAW55, SEEN10), ('Enforcement Decree of the Labor Standards Act, Article 30 (Korean)', LAW30, SEEN10), ('Labor Standards Act, Article 11 (Korean)', LAW11, SEEN10),
+                      ('The act that establishes Labor Day (Korean)', NODONG, SEEN10)]),
     ],
 }
 

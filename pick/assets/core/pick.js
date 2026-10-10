@@ -12,6 +12,7 @@ export const LIMITS = {
   diceCount: 100,
   diceSides: 1000,
   coinCount: 1000,
+  coinList: 300,      // 동전: 이 횟수까지는 던진 순서를 하나하나 보여 준다(넘으면 합계만)
 };
 
 function int(v, lo, hi, name) {
@@ -148,6 +149,75 @@ export function rollDice(count, sides, rng) {
   return out;
 }
 
+// ---------- 명단의 순서에 기대지 않는 뽑기 ----------
+// 돌림판·제비뽑기·팀 나누기는 '넣은 순서'가 아니라 '정해진 자리'를 기준으로 뽑는다:
+// 명단을 유니코드 코드 포인트 순으로 놓았을 때의 자리(같은 이름끼리는 넣은 순서). 씨앗이 고르는 것은 이 자리 번호다.
+// 그래서 씨앗과 사람들이 같으면, 명단을 어떤 순서로 적었든 같은 사람이 같은 결과를 받는다
+// (결과 링크 속 명단의 순서만 바꿔서 다른 사람이 뽑힌 것처럼 꾸밀 수 없다).
+// 사다리는 '누가 몇 번째 줄에 서는가'가 결과의 일부라서 여기에 들지 않는다(순서까지 같아야 같은 결과).
+// legacy = 옛 링크(형식 1): 넣은 순서를 그대로 자리로 썼다. 옛 링크를 옛 방식 그대로 다시 보여 줄 때만 쓴다.
+
+/** 두 글자열을 유니코드 코드 포인트 순으로 견준다(음수·0·양수). 파이썬 sorted()와 같은 순서. */
+export function compareCodePoints(a, b) {
+  const n = Math.min(a.length, b.length);
+  for (let i = 0; i < n; i++) {
+    let x = a.charCodeAt(i);
+    let y = b.charCodeAt(i);
+    if (x === y) continue;
+    // UTF-16에서는 U+10000 이상의 글자(대리 문자 U+D800~DFFF 두 개)가 U+E000~FFFF보다 앞에 온다. 코드 포인트 순이 되게 자리를 바꿔 견준다.
+    if (x >= 0xd800) x += x >= 0xe000 ? -0x800 : 0x2000;
+    if (y >= 0xd800) y += y >= 0xe000 ? -0x800 : 0x2000;
+    return x - y;
+  }
+  return a.length - b.length;
+}
+
+/** 정해진 자리: order[k] = 코드 포인트 순으로 k번째인 이름의 원래 번호. 같은 이름끼리는 넣은 순서대로(안정 정렬). */
+export function canonicalOrder(items) {
+  const order = items.map((_, i) => i);
+  order.sort((i, j) => compareCodePoints(items[i], items[j]) || i - j);
+  return order;
+}
+
+function seats(items, legacy) {
+  int(items.length, 1, LIMITS.items, 'n');
+  return legacy ? items.map((_, i) => i) : canonicalOrder(items);
+}
+
+/** 돌림판 한 번: { index = 뽑힌 이름의 원래 번호(판에서 그 칸), frac, turns }. 명단의 순서를 바꿔도 같은 이름이 뽑힌다. */
+export function wheelDraw(items, rng, legacy = false) {
+  const seat = seats(items, legacy);
+  const p = wheelPick(items.length, rng);
+  return { index: seat[p.index], frac: p.frac, turns: p.turns };
+}
+
+/** 명단에서 m명(중복 없이). 뽑힌 순서대로 원래 번호. */
+export function drawSome(items, m, rng, legacy = false) {
+  const seat = seats(items, legacy);
+  return pickSome(items.length, m, rng).map((k) => seat[k]);
+}
+
+/** 명단 전체의 순서 정하기. 차례대로 원래 번호. */
+export function drawOrder(items, rng, legacy = false) {
+  const seat = seats(items, legacy);
+  return shuffledIndices(items.length, rng).map((k) => seat[k]);
+}
+
+/** 쪽지 나눠 주기. 원래 번호마다 받은 쪽지 종류(slips의 자리). */
+export function drawSlips(items, slips, rng, legacy = false) {
+  const seat = seats(items, legacy);
+  const dealt = dealSlips(items.length, slips, rng);
+  const out = new Array(items.length);
+  seat.forEach((orig, k) => { out[orig] = dealt[k]; });
+  return out;
+}
+
+/** 팀 나누기. 팀마다 원래 번호 배열. */
+export function drawTeams(items, opt, rng, legacy = false) {
+  const seat = seats(items, legacy);
+  return splitTeams(items.length, opt, rng).map((team) => team.map((k) => seat[k]));
+}
+
 // ---------- 돌림판 ----------
 // 결과를 먼저 정하고, 그 칸에 멈추는 각도를 계산한다. 멈춘 위치로 결과를 읽지 않는다.
 // 약속: 칸 i는 판 위에서 시계 방향으로 [i, i+1) × (한 바퀴 / n) 를 차지한다(판의 0도 = 3시 방향, 캔버스와 같다).
@@ -205,4 +275,48 @@ export function labelFlipped(screenAngle) {
 export function labelSize(r, n) {
   const chord = 2 * r * 0.66 * Math.sin(Math.PI / n);
   return Math.min(r * 0.1, chord * 0.56);
+}
+
+// ---------- 좁은 칸에 이름 맞추기(돌림판 칸, 사다리 이름표) ----------
+
+/** 명단의 이름들이 앞에서부터 몇 글자(코드 포인트)까지 같은지. 이름이 하나뿐이거나 전부 같은 이름이면 0. */
+export function commonPrefixLength(items) {
+  if (!items || items.length < 2) return 0;
+  const first = Array.from(items[0]);
+  let len = first.length;
+  let differ = false;
+  for (let i = 1; i < items.length && len > 0; i++) {
+    const cur = Array.from(items[i]);
+    let k = 0;
+    while (k < len && k < cur.length && cur[k] === first[k]) k++;
+    if (k < len || cur.length !== first.length) differ = true;
+    len = k;
+  }
+  return differ ? len : 0;
+}
+
+/**
+ * 이름을 폭 maxWidth 안에 맞춘다. measure(글자열) = 기준 글자 크기에서의 폭.
+ * ① 들어가면 그대로 ② 글자 크기를 minScale배까지 줄여서 들어가면 줄여서
+ * ③ 그래도 넘치면 자른다. 명단의 이름들이 앞부분(prefix글자, 2글자 이상)이 같으면 그 앞을 '…'로 줄이고
+ *    서로 다른 뒤쪽을 살린다("3학년 1반 김민준" → "…김민준"). 아니면 뒤를 자른다("Supercalifr…").
+ * @returns {{text:string, scale:number}}
+ */
+export function fitLabel(text, maxWidth, measure, opt = {}) {
+  const minScale = opt.minScale == null ? 0.72 : opt.minScale;
+  const prefix = opt.prefix || 0;
+  const w = measure(text);
+  if (w <= maxWidth) return { text, scale: 1 };
+  if (w * minScale <= maxWidth) return { text, scale: maxWidth / w };
+  const room = maxWidth / minScale;
+  const ch = Array.from(text);
+  if (prefix >= 2 && prefix < ch.length) {
+    // 앞을 줄인다: 같은 앞부분을 뺀 나머지가 들어가면 그대로, 아니면 들어가는 만큼의 끝부분
+    let from = prefix;
+    while (from < ch.length - 1 && measure('…' + ch.slice(from).join('')) > room) from++;
+    return { text: '…' + ch.slice(from).join('').replace(/^\s+/, ''), scale: minScale };
+  }
+  let keep = ch.length - 1;
+  while (keep > 1 && measure(ch.slice(0, keep).join('') + '…') > room) keep--;
+  return { text: ch.slice(0, keep).join('').replace(/\s+$/, '') + '…', scale: minScale };
 }

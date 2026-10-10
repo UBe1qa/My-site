@@ -54,7 +54,8 @@
       "src": "출처",
       "tbl_hint": "표를 옆으로 밀어 보세요",
       "checked": "2026-10-10 확인",
-      "src_label": "출처"
+      "src_label": "출처",
+      "nojs": "이 도구는 자바스크립트가 켜져 있어야 숫자를 세어요. 브라우저 설정에서 자바스크립트를 켜 주세요."
     },
     "en": {
       "brand": "Kankan",
@@ -115,7 +116,8 @@
       "src": "source",
       "tbl_hint": "Swipe the table sideways",
       "checked": "checked 2026-10-10",
-      "src_label": "source"
+      "src_label": "source",
+      "nojs": "This tool needs JavaScript to count. Please turn it on in your browser settings."
     }
   },
   "t": {
@@ -155,8 +157,46 @@
       "wgPlain": "한 칸에 한 글자씩 놓은 모습이에요.",
       "wgCustom": "문단 첫 칸 비우기, 숫자 두 자 한 칸, 줄 끝 문장부호 같이 쓰기를 적용한 모습이에요.",
       "neisNone": "최대 글자 수를 적어 주세요.",
-      "presetDone": "모든 문항의 기준을 '바이트(한글 2byte)'로, 줄바꿈을 {n}byte로 바꿨어요.",
-      "qMiss": "이 기준(EUC-KR)에 없는 글자 {n}개는 바이트에서 뺐어요: {ex}"
+      "presetDone": "문항 {q}개의 기준을 '바이트(한글 2byte)'로, 줄바꿈을 글자 1자·바이트 {n}byte로 바꿨어요.",
+      "qMiss": "이 기준(EUC-KR)에 없는 글자 {n}개는 바이트에서 뺐어요: {ex}",
+      "undoCleared": "지웠어요.",
+      "undoSample": "예시 글을 넣었어요.",
+      "numBad": "숫자만 적어 주세요(예: 500).",
+      "goalBad": "목표는 숫자만 적어 주세요(예: 500).",
+      "approx": "이 브라우저는 글자를 코드 포인트로 세어요. 이모지나 결합 글자는 사람이 보는 글자 수보다 많이 나와요.",
+      "inspSumApprox": "코드 포인트 {cp}개 · UTF-16 {u16}단위 · UTF-8 {u8}바이트",
+      "nameU": "보이지 않는 글자(U+{h})",
+      "names": {
+        "9": "탭",
+        "b": "세로 탭",
+        "c": "쪽 넘김 글자",
+        "a0": "줄 바꿈 없는 공백(NBSP)",
+        "ad": "소프트 하이픈(SHY)",
+        "200b": "폭 없는 공백(ZWSP)",
+        "200c": "폭 없는 비이음 글자(ZWNJ)",
+        "200d": "폭 없는 이음 글자(ZWJ)",
+        "2028": "줄 구분 글자",
+        "2029": "문단 구분 글자",
+        "202f": "좁은 줄 바꿈 없는 공백",
+        "2060": "낱말 이음 글자(WJ)",
+        "3000": "전각 공백",
+        "fe0e": "글자꼴 선택 글자(VS15)",
+        "fe0f": "그림꼴 선택 글자(VS16)",
+        "feff": "BOM(바이트 순서 표시)"
+      },
+      "limOver2": "바이트 {n} 넘음",
+      "printHead": "200자 원고지 {a} / {b}",
+      "printAsk": "원고지 {n}장을 인쇄해요. 종이도 {n}장이 들어요. 계속할까요?",
+      "printAskCap": "원고지가 {n}장이에요. 한 번에 앞 {c}장까지만 인쇄해요. 계속할까요?",
+      "printCap": "원고지 {n}장 가운데 앞 {c}장만 인쇄했어요.",
+      "presetUndone": "맞추기 전으로 되돌렸어요.",
+      "stripQ": "{n}번 · {b}",
+      "stripBasis": {
+        "chars": "공백 포함",
+        "nospace": "공백 제외",
+        "euckr": "바이트(2byte)",
+        "utf8": "바이트(3byte)"
+      }
     },
     "en": {
       "minsec": "{m} min {s} sec",
@@ -185,7 +225,39 @@
       "xLeft": "{n} left.",
       "xOver": "{n} over the limit.",
       "limLeft": "{n} left",
-      "limOver": "{n} over"
+      "limOver": "{n} over",
+      "undoCleared": "Cleared.",
+      "undoSample": "Sample added.",
+      "numBad": "Enter a whole number, for example 500.",
+      "goalBad": "Enter the goal as a whole number, for example 500.",
+      "approx": "This browser cannot split text into characters as people see them, so characters are counted by code point. Emoji and combined letters come out higher than what you see.",
+      "inspSumApprox": "{cp} code points · {u16} UTF-16 units · {u8} UTF-8 bytes",
+      "nameU": "invisible character (U+{h})",
+      "names": {
+        "9": "tab",
+        "b": "vertical tab",
+        "c": "form feed",
+        "a0": "no-break space (NBSP)",
+        "ad": "soft hyphen (SHY)",
+        "200b": "zero-width space (ZWSP)",
+        "200c": "zero-width non-joiner (ZWNJ)",
+        "200d": "zero-width joiner (ZWJ)",
+        "2028": "line separator",
+        "2029": "paragraph separator",
+        "202f": "narrow no-break space",
+        "2060": "word joiner (WJ)",
+        "3000": "ideographic space",
+        "fe0e": "variation selector-15",
+        "fe0f": "variation selector-16",
+        "feff": "byte order mark (BOM)"
+      },
+      "limOver2": "{n} bytes over",
+      "hrmin": "{h} hr {m} min",
+      "under": "under 1 sec",
+      "wpmRead": "Silent reading",
+      "wpmSpeak": "Reading aloud",
+      "wpmDef": "{l}: empty or 0, so the starting value {d} is used.",
+      "wpmBad": "{l}: not a whole number, so the starting value {d} is used."
     }
   },
   "sample": {
@@ -252,11 +324,11 @@
           ],
           [
             "같은 글인데 다른 곳과 숫자가 달라요.",
-            "주로 줄바꿈과 이모지 때문이에요. 줄바꿈을 0자, 1자, 2자로 세는 곳이 따로 있고, 이모지를 한 글자가 아니라 조각 수대로 세는 곳도 있어요. '세는 기준'에서 줄바꿈을 바꿔 가며 맞춰 볼 수 있어요."
+            "주로 줄바꿈과 이모지 때문이에요. 줄바꿈을 0자, 1자, 2자로 세는 곳이 따로 있고, 이모지를 한 글자가 아니라 조각 수대로 세는 곳도 있어요. 숫자 아래 '줄바꿈은 1자로 셈' 줄의 '바꾸기'를 누르면 줄바꿈을 0자, 1자, 2자로 바꿔 가며 맞춰 볼 수 있어요."
           ],
           [
             "붙여 넣은 글이 어딘가에 저장되나요?",
-            "아니요. 글은 브라우저 안에서만 세고, 이 사이트가 서버로 보내거나 저장하지 않아요. 페이지를 닫으면 사라져요. 광고와 방문 통계 요청은 나가지만 거기에 글은 실리지 않아요."
+            "아니요. 글은 브라우저 안에서만 세고, 이 사이트가 서버로 보내거나 저장하지 않아요. 페이지를 닫으면 사라져요. 줄바꿈 기준과 목표 숫자 같은 설정만 탭을 닫을 때까지 기억해요. 광고와 방문 통계 요청은 나가지만 거기에 글은 실리지 않아요."
           ],
           [
             "한글 한 글자는 몇 바이트인가요?",
@@ -386,7 +458,7 @@
           "지원하는 곳의 입력창과 숫자가 다르면 아래 표를 보고 바이트 기준과 줄바꿈을 맞춰 봐요."
         ],
         "save_h": "저장은 켰을 때만",
-        "save_p": "처음에는 아무것도 저장하지 않아요. '이 기기에 저장'을 켜면 문항과 글이 이 브라우저에만 남고, 끄거나 '저장한 글 지우기'를 누르면 바로 지워져요. 여럿이 쓰는 컴퓨터에서는 켜지 않는 게 좋아요.",
+        "save_p": "처음에는 글을 어디에도 저장하지 않아요. 그래서 글이 있는 채로 페이지를 떠나려고 하면 브라우저가 한 번 물어봐요. '이 기기에 저장'을 켜면 문항과 글이 이 브라우저에만 남고, 끄거나 '저장한 글 지우기'를 누르면 바로 지워져요. 문항별 목표 숫자와 줄바꿈 기준은 탭을 닫을 때까지만 기억해요. 여럿이 쓰는 컴퓨터에서는 저장을 켜지 않는 게 좋아요.",
         "faq": [
           [
             "글자 수 제한은 공백 포함인가요, 제외인가요?",
@@ -394,7 +466,7 @@
           ],
           [
             "지원 사이트 입력창과 글자 수가 달라요.",
-            "줄바꿈과 바이트를 세는 방식이 다를 수 있어요. 2026년 10월에 직접 넣어 보니 사람인, 잡코리아, 네이버 검색 칸은 줄바꿈을 1byte로, 인크루트는 2byte로 세었어요. '세는 기준'에서 줄바꿈을 바꿔 가며 맞춰 봐요. 그래도 다르면 글에 이모지가 있는지 확인해요."
+            "줄바꿈과 바이트를 세는 방식이 다를 수 있어요. 2026년 10월에 직접 넣어 보니 사람인, 잡코리아, 네이버 검색 칸은 줄바꿈을 1byte로, 인크루트는 2byte로 세었어요. 글자 수로는 네 곳 모두 1자였어요. 문항 아래 '줄바꿈은 1자·1byte로 셈' 줄의 '바꾸기'를 열면 글자와 바이트의 줄바꿈을 따로 맞출 수 있어요. 그래도 다르면 글에 이모지가 있는지 확인해요."
           ],
           [
             "쓴 글이 서버에 저장되나요?",
@@ -405,7 +477,7 @@
         "sites_p": "2026년 10월 10일에 로그인 없이 직접 넣어 본 결과예요. 사이트가 바꾸면 달라져요.",
         "sites_how": [
           "사람인, 잡코리아, 네이버 검색 칸과 같은 바이트를 보려면 기준을 '바이트(한글 2byte)'로 고르고 줄바꿈은 1로 두세요.",
-          "인크루트는 줄바꿈을 2byte로 세어요. 줄바꿈을 2로 바꾸면 같은 바이트가 나와요.",
+          "인크루트는 줄바꿈을 글자로는 1자, 바이트로는 2byte로 세어요. '바이트에서'만 2byte로 바꾸면 글자 수와 바이트가 모두 같아져요.",
           "문항 아래 '바꾸기'를 열면 이 두 가지를 한 번에 맞추는 단추가 있어요.",
           "글자 수는 네 곳 모두 줄바꿈을 1자로, 공백 제외에서는 줄바꿈을 빼고 세어요. 칸칸의 처음 설정과 같아요.",
           "이모지 😀는 세 곳이 2자·4byte로 세어요. 칸칸은 사람이 보는 대로 1자로 세고, 한글 2byte 기준(EUC-KR)에는 이모지가 없어서 바이트에 넣지 않아요. 이모지가 든 글은 그만큼 숫자가 달라요."
@@ -430,7 +502,7 @@
         "sites_us": [
           "칸칸",
           "1자 · 2byte 또는 3byte(고르기)",
-          "0, 1, 2 가운데 고르기",
+          "글자와 바이트를 따로 0, 1, 2 가운데 고르기",
           "1자 · 2byte 기준에는 못 담음"
         ],
         "sites_more": [
@@ -438,7 +510,29 @@
           "같은 글인데 글자 수가 다르게 나오는 이유",
           "에 있어요."
         ],
-        "nl_now": "줄바꿈은 {n}자·{n}byte로 셈"
+        "nl_now": "줄바꿈은 {n}자·{b}byte로 셈",
+        "nl_why": "엔터 한 번을 0으로 세는 곳, 1로 세는 곳, 2로 세는 곳이 따로 있어요. 글자 수와 바이트에서 다르게 세는 곳도 있어서(인크루트는 1자·2byte) 따로 고를 수 있어요.",
+        "nl_rows": [
+          [
+            "글자 수에서",
+            [
+              "0자",
+              "1자",
+              "2자"
+            ]
+          ],
+          [
+            "바이트에서",
+            [
+              "0byte",
+              "1byte",
+              "2byte"
+            ]
+          ]
+        ],
+        "preset_hint": "누르면 모든 문항의 기준이 '바이트(한글 2byte)'로 바뀌어요. 목표 숫자는 그대로 두니, 글자 수로 정한 목표가 있으면 바이트 숫자로 고쳐 주세요. 누른 뒤에 되돌릴 수 있어요.",
+        "wipe_done": "저장한 글을 지웠어요.",
+        "strip_goal": "목표"
       },
       "wongoji": {
         "nav": "원고지",
@@ -469,6 +563,10 @@
           [
             "규정이 아니에요",
             "국립국어원은 원고지 사용법이 어문 규정에 없으니 관행을 따르라고 답했어요. 제목과 이름을 쓰는 줄, 알파벳을 쓰는 법처럼 여기에 넣지 않은 관행도 있어요. 글을 낼 곳이 정한 방법이 있으면 그쪽을 따르세요."
+          ],
+          [
+            "인쇄",
+            "글을 넣으면 나오는 '원고지 인쇄'를 누르면 글 칸과 설명은 빼고 원고지만, 모든 장을 한 쪽에 한 장씩 인쇄해요. 50장이 넘으면 인쇄하기 전에 장수를 알려 드려요."
           ]
         ],
         "faq": [
@@ -494,7 +592,8 @@
         "rule_links": [
           "국립국어원 온라인가나다 답변",
           "관행을 적은 자료(EBS미디어 독서력진단센터)"
-        ]
+        ],
+        "print": "원고지 인쇄"
       },
       "guide": {
         "title": "가이드 - 글자 수와 바이트 | 칸칸",
@@ -505,12 +604,12 @@
       "about": {
         "title": "칸칸 소개 - 세는 기준과 출처 | 칸칸",
         "desc": "칸칸이 글자, 공백, 바이트, 원고지를 어떤 기준으로 세는지, 그 기준의 출처와 확인 방법, 만든 곳을 적었어요.",
-        "body": "<h1>칸칸 소개</h1>\n<p>칸칸은 글자 수를 세는 도구예요. 같은 글도 공백을 넣느냐, 줄바꿈을 몇 자로 보느냐, 글자로 세느냐 바이트로 세느냐에 따라 숫자가 달라져요. 칸칸은 그 기준들을 한 화면에 나란히 놓고 보여 줘요.</p>\n<p>이름은 원고지의 칸에서 왔어요. 한 칸에 한 글자.</p>\n<h2>세는 기준과 출처</h2>\n<ul>\n<li><b>글자</b>: 유니코드 표준 부속서 <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>의 글자 묶음을 따라요(브라우저의 Intl.Segmenter). 이모지는 <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>의 이모지 묶음이에요.</li>\n<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세어요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>\n<li><b>X 가중 글자 수</b>: X의 공식 문서 <a href=\"https://docs.x.com/fundamentals/counting-characters\">Counting characters</a>와, X가 공개한 <a href=\"https://github.com/twitter/twitter-text\">twitter-text 라이브러리</a>의 설정(v3.json)을 따라요. 테스트는 npm twitter-text 3.1.0과 견줬어요(2026-10-10 확인).</li>\n<li><b>나이스 생기부</b>: 「2026학년도 학교생활기록부 기재요령(고등학교)」 [참고자료 8]의 바이트 규칙과 항목별 최대 글자 수예요(<a href=\"https://star.moe.go.kr/web/contents/m21100.do\">학교생활기록부 종합지원포털 자료실</a>, 2026-10-10 확인).</li>\n<li><b>SNS 한도, 문자 한 통 기준</b>: 각 서비스와 통신사의 공식 문서에서 2026-10-10에 확인한 값이고, 화면마다 출처 링크를 달았어요.</li>\n<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 3GPP TS 23.040의 이어 붙이기 규칙이에요.</li>\n<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 놓아요. 원고지 쓰는 법은 어문 규정에 없고 관행이라서(<a href=\"https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&amp;qna_seq=322356\">국립국어원 온라인가나다 답변</a>), '한 칸에 한 글자'와 '관행대로' 두 가지로 놓아 볼 수 있게 했어요.</li>\n</ul>\n<h2>어떻게 확인했나요</h2>\n<p>세는 로직은 화면과 따로 두고 자동 테스트 2만 4천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. 나이스 바이트는 기재요령의 규칙대로 한 글자씩 더한 값과 견줘요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>\n<h2>글은 어디로 가나요</h2>\n<p>쓰거나 붙여 넣은 글은 이 기기 밖으로 나가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를, 방문 통계는 Cloudflare Web Analytics를 써요. 이 요청들에 글은 실리지 않아요. 자세한 내용은 <a href=\"/ko/privacy/\">개인정보 처리방침</a>에 있어요.</p>\n<h2>만든 곳과 문의</h2>\n<p><a href=\"https://lumenlab.page/\">루멘랩(Lumen Lab)</a>이 만들었어요. 틀린 숫자를 발견하면 <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>으로 알려 주세요.</p>"
+        "body": "<h1>칸칸 소개</h1>\n<p>칸칸은 글자 수를 세는 도구예요. 같은 글도 공백을 넣느냐, 줄바꿈을 몇 자로 보느냐, 글자로 세느냐 바이트로 세느냐에 따라 숫자가 달라져요. 칸칸은 그 기준들을 한 화면에 나란히 놓고 보여 줘요.</p>\n<p>이름은 원고지의 칸에서 왔어요. 한 칸에 한 글자.</p>\n<h2>세는 기준과 출처</h2>\n<ul>\n<li><b>글자</b>: 유니코드 표준 부속서 <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>의 글자 묶음을 따라요(브라우저의 Intl.Segmenter). 이모지는 <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>의 이모지 묶음이에요.</li>\n<li><b>바이트</b>: UTF-8과 UTF-16은 유니코드 표준대로 세어요. EUC-KR은 윈도우 코드 페이지 949(확장 완성형) 표를 써요. 2바이트 글자는 17,048자이고, 그 가운데 한글이 11,172자, 한자가 4,888자예요. 옛 완성형(KS X 1001)의 한글은 2,350자예요.</li>\n<li><b>X 가중 글자 수</b>: X의 공식 문서 <a href=\"https://docs.x.com/fundamentals/counting-characters\">Counting characters</a>와, X가 공개한 <a href=\"https://github.com/twitter/twitter-text\">twitter-text 라이브러리</a>의 설정(v3.json)을 따라요. 테스트는 npm twitter-text 3.1.0과 견줬어요(2026-10-10 확인).</li>\n<li><b>나이스 생기부</b>: 「2026학년도 학교생활기록부 기재요령(고등학교)」 [참고자료 8]의 바이트 규칙과 항목별 최대 글자 수예요(<a href=\"https://star.moe.go.kr/web/contents/m21100.do\">학교생활기록부 종합지원포털 자료실</a>, 2026-10-10 확인).</li>\n<li><b>SNS 한도, 문자 한 통 기준</b>: 각 서비스와 통신사의 공식 문서에서 2026-10-10에 확인한 값이고, 화면마다 출처 링크를 달았어요.</li>\n<li><b>문자(SMS)</b>(영어판): 3GPP TS 23.038의 문자표와 3GPP TS 23.040의 이어 붙이기 규칙이에요.</li>\n<li><b>원고지</b>: 한 줄 20칸, 한 장 10줄에 놓아요. 원고지 쓰는 법은 어문 규정에 없고 관행이라서(<a href=\"https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&amp;qna_seq=322356\">국립국어원 온라인가나다 답변</a>), '한 칸에 한 글자'와 '관행대로' 두 가지로 놓아 볼 수 있게 했어요.</li>\n</ul>\n<h2>어떻게 확인했나요</h2>\n<p>세는 로직은 화면과 따로 두고 자동 테스트 3만 5천여 개로 확인해요. 기준값은 같은 로직을 한 번 더 짠 것이 아니라 파이썬의 표준 코덱과 유니코드 라이브러리, npm twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. 나이스 바이트는 기재요령의 규칙대로 한 글자씩 더한 값과 견줘요. EUC-KR 표는 브라우저가 가진 표와 한 글자씩 견줘 차이가 없는 것을 확인했어요.</p>\n<h2>글은 어디로 가나요</h2>\n<p>쓰거나 붙여 넣은 글은 이 기기 밖으로 나가지 않아요. 글은 브라우저 안에서만 세고, 이 사이트에는 글을 받는 서버가 없어요. 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 이 브라우저의 저장소에 남아요. 광고는 Google 애드센스를, 방문 통계는 Cloudflare Web Analytics를 써요. 이 요청들에 글은 실리지 않아요. 자세한 내용은 <a href=\"/ko/privacy/\">개인정보 처리방침</a>에 있어요.</p>\n<h2>만든 곳과 문의</h2>\n<p><a href=\"https://lumenlab.page/\">루멘랩(Lumen Lab)</a>이 만들었어요. 틀린 숫자를 발견하면 <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>으로 알려 주세요.</p>"
       },
       "privacy": {
         "title": "개인정보 처리방침 | 칸칸",
         "desc": "칸칸은 글을 브라우저 안에서만 세고 서버로 보내지 않아요. 기기에 남는 것, 광고 쿠키, 방문 통계에 대해 적었어요.",
-        "body": "<h1>개인정보 처리방침</h1>\n<p>시행일: 2026년 10월 10일 · 운영: 루멘랩(Lumen Lab)</p>\n<h2>쓰거나 붙여 넣은 글</h2>\n<p>칸칸은 글을 이용자의 브라우저 안에서 세어요. 쓰거나 붙여 넣은 글을 이 사이트가 서버로 보내거나 모으지 않아요. 페이지를 닫거나 새로 고치면 글은 사라져요. 회원 가입은 없어요.</p>\n<h2>기기에 저장하는 정보</h2>\n<p>브라우저 저장소(localStorage)에 아래 항목만 남겨요. 브라우저의 사이트 데이터 지우기로 언제든 지울 수 있어요.</p>\n<ul>\n<li><code>kk.lang</code>: 다른 언어판 안내 띠를 닫았거나 눌렀다는 표시예요. 띠를 다시 띄우지 않으려고 기억해요.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 생겨요. 문항 이름, 목표 글자 수, 쓴 글, 줄바꿈 기준이 들어 있어요. 스위치를 끄거나 '저장한 글 지우기'를 누르면 바로 지워요.</li>\n</ul>\n<p>그 밖에는 저장하지 않아요.</p>\n<h2>광고</h2>\n<p>이 사이트는 Google 애드센스로 광고를 보여 줘요. Google을 비롯한 광고 회사는 쿠키를 써서 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 고를 수 있어요. 광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요. Google이 이 정보를 어떻게 쓰는지는 <a href=\"https://policies.google.com/technologies/partner-sites?hl=ko\">Google 파트너 사이트에서 Google이 데이터를 사용하는 방식</a>에 있어요. 맞춤 광고는 <a href=\"https://www.google.com/settings/ads\">Google 광고 설정</a>에서 끌 수 있어요. </p>\n<h2>방문 통계</h2>\n<p>방문 통계는 <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>로 봐요. 어느 페이지를 몇 번 봤는지, 페이지가 얼마나 빨리 떴는지 같은 숫자예요. Cloudflare 설명으로는 쿠키나 기기 저장소를 쓰지 않아요. 이 사이트에 쓰거나 붙여 넣은 글과 설정은 여기에 실리지 않아요.</p>\n<h2>글꼴과 서버 기록</h2>\n<p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 쓴 글은 받지 않아요.</p>\n<h2>문의</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+        "body": "<h1>개인정보 처리방침</h1>\n<p>시행일: 2026년 10월 10일 · 운영: 루멘랩(Lumen Lab)</p>\n<h2>쓰거나 붙여 넣은 글</h2>\n<p>칸칸은 글을 이용자의 브라우저 안에서 세어요. 쓰거나 붙여 넣은 글을 이 사이트가 서버로 보내거나 모으지 않고, 저장하지도 않아요. 페이지를 닫으면 글은 사라져요. 다만 뒤로 가기나 탭 복원처럼 브라우저가 입력칸의 글을 스스로 되살리는 경우가 있어요. 그때도 글은 이 기기 안에만 있어요. 회원 가입은 없어요.</p>\n<h2>기기에 저장하는 정보</h2>\n<p>이 사이트가 직접 남기는 것은 아래 항목뿐이에요. 브라우저의 사이트 데이터 지우기로 언제든 지울 수 있어요. 광고 때문에 제3자가 두는 쿠키는 아래 '광고'에 따로 적었어요.</p>\n<p>브라우저 저장소(localStorage)에 남는 것:</p>\n<ul>\n<li><code>kk.lang</code>: 다른 언어판 안내 띠를 닫았거나 눌렀다는 표시예요. 띠를 다시 띄우지 않으려고 기억해요.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: 자소서 화면에서 '이 기기에 저장'을 켠 경우에만 생겨요. 문항 이름, 목표 글자 수, 쓴 글, 줄바꿈 기준이 들어 있어요. 스위치를 끄거나 '저장한 글 지우기'를 누르면 바로 지워요.</li>\n</ul>\n<p>탭을 닫으면 지워지는 저장소(sessionStorage)에 남는 것:</p>\n<ul>\n<li><code>kk.set</code>: 같은 탭 안에서 도구를 옮기거나 새로 고쳐도 설정이 그대로 있도록 줄바꿈 기준, 목표 숫자와 그 기준, 읽는 속도, 자소서 문항별 목표 숫자와 기준을 기억해요. 쓴 글과 문항 이름은 여기에 넣지 않아요.</li>\n</ul>\n<p>이 사이트가 직접 남기는 것은 이것뿐이에요.</p>\n<h2>광고</h2>\n<p>이 사이트는 Google 애드센스로 광고를 보여 줘요. Google을 비롯한 광고 회사는 쿠키를 써서 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 고를 수 있어요. 광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요. Google이 이 정보를 어떻게 쓰는지는 <a href=\"https://policies.google.com/technologies/partner-sites?hl=ko\">Google 파트너 사이트에서 Google이 데이터를 사용하는 방식</a>에 있어요. 맞춤 광고는 <a href=\"https://www.google.com/settings/ads\">Google 광고 설정</a>에서 끌 수 있어요. </p>\n<h2>방문 통계</h2>\n<p>방문 통계는 <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>로 봐요. 어느 페이지를 몇 번 봤는지, 페이지가 얼마나 빨리 떴는지 같은 숫자예요. Cloudflare 설명으로는 쿠키나 기기 저장소를 쓰지 않아요. 이 사이트에 쓰거나 붙여 넣은 글과 설정은 여기에 실리지 않아요.</p>\n<h2>글꼴과 서버 기록</h2>\n<p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 쓴 글은 받지 않아요.</p>\n<h2>문의</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
       },
       "licenses": {
         "title": "오픈소스 고지 | 칸칸",
@@ -620,7 +719,7 @@
           ],
           [
             "블루스카이",
-            "300 글자소이고, UTF-8로 3,000바이트 안이어야 해요. 글자소는 사람이 보는 한 글자라서 이모지 하나도 1이에요."
+            "300 글자소이고, UTF-8로 3,000바이트 안이어야 해요. 글자소는 사람이 보는 한 글자라서 이모지 하나도 1이에요. 목록에는 두 숫자를 같이 보여 주고, 하나라도 넘으면 넘음으로 표시해요."
           ],
           [
             "틱톡",
@@ -644,7 +743,13 @@
             "유튜브 설명은 몇 자까지 되나요?",
             "유튜브 문서에는 5,000바이트라고 적혀 있어요. 한글은 UTF-8로 한 자에 3바이트라서, 계산하면 한글만으로는 1,666자쯤이에요. 영문과 숫자는 1바이트예요."
           ]
-        ]
+        ],
+        "unit2": {
+          "utf8": [
+            "UTF-8 ",
+            "바이트"
+          ]
+        }
       }
     },
     "en": {
@@ -660,7 +765,7 @@
         "defs": [
           [
             "Words",
-            "Runs of text separated by spaces or line breaks, so “well-known” and “don't” are one word each. The Unicode-rules figure splits at hyphens and also works for scripts written without spaces."
+            "Runs of text separated by spaces or line breaks, so “well-known” and “don't” are one word each. The Unicode-rules figure splits at hyphens and also works for scripts written without spaces. It uses the word rules built into your browser, so this second figure can differ slightly from one browser to another."
           ],
           [
             "Characters",
@@ -684,7 +789,7 @@
           ],
           [
             "Reading time",
-            "Words divided by a reading speed. The starting values are averages for adults reading English from Brysbaert's 2019 review of 190 studies: 238 words per minute for silent reading of non-fiction and 183 for reading aloud. Most adults fall between 175 and 300 for silent reading, so set your own pace under “How this counts”."
+            "Words divided by a reading speed. The starting values are averages for adults reading English from Brysbaert's 2019 review of 190 studies: 238 words per minute for silent reading of non-fiction and 183 for reading aloud. Most adults fall between 175 and 300 for silent reading, so set your own pace: the two speed boxes open with “change” in the “Line breaks count as 1” row under the counts. Under an hour the time is shown to the second; from an hour up it is rounded to the minute."
           ]
         ],
         "faq": [
@@ -694,15 +799,15 @@
           ],
           [
             "Why does another counter show a different number?",
-            "Usually because of line breaks, hyphenated words or emoji. Some tools count a line break as two characters, some split “well-known” into two words, and some count an emoji by its internal pieces instead of as one character. Open “How this counts” to switch the line-break rule."
+            "Usually because of line breaks, hyphenated words or emoji. Some tools count a line break as two characters, some split “well-known” into two words, and some count an emoji by its internal pieces instead of as one character. To switch the line-break rule, use “change” in the “Line breaks count as 1” row under the counts."
           ],
           [
             "Is my text uploaded or saved?",
-            "No. Counting happens in your browser. This site does not send your text to a server or store it, and it is gone when you close the page. Ad and visit-statistics requests do go out, but your text is not part of them."
+            "No. Counting happens in your browser. This site does not send your text to a server or store it, and it is gone when you close the page. Only settings such as the line-break rule and your goal are remembered, until you close the tab. Ad and visit-statistics requests do go out, but your text is not part of them."
           ],
           [
             "How is reading time worked out?",
-            "It is the word count divided by a reading speed. The starting value of 238 words per minute is the average for adults silently reading English non-fiction in a 2019 review of 190 studies (Brysbaert), and 183 is the average for reading aloud. They are averages, not a measurement of you, so set your own pace under “How this counts”."
+            "It is the word count divided by a reading speed. The starting value of 238 words per minute is the average for adults silently reading English non-fiction in a 2019 review of 190 studies (Brysbaert), and 183 is the average for reading aloud. They are averages, not a measurement of you, so set your own pace: the two speed boxes open with “change” in the “Line breaks count as 1” row under the counts."
           ]
         ],
         "proof": "Characters are counted as people see them (Unicode UAX #29).",
@@ -743,7 +848,7 @@
           ],
           [
             "Code points",
-            "The number of Unicode code points. One visible character can be several: 👍🏽 is 2 and 👨‍👩‍👧 is 5."
+            "The number of Unicode code points. One visible character can be several: 👍🏽 is 2 and 👨‍👩‍👧 is 5. A line break follows the same 0, 1 or 2 setting as the other counts."
           ],
           [
             "X weighted length",
@@ -751,7 +856,7 @@
           ],
           [
             "Social limits",
-            "X 280 (weighted) and 25,000 for X Premium longer posts, Instagram caption 2,200 and bio 150, Threads 500, Bluesky 300 graphemes (and 3,000 UTF-8 bytes), YouTube title 100 characters and description 5,000 bytes, TikTok caption 2,200 UTF-16 units, LinkedIn post 3,000. Each was checked in the service's own documentation on 2026-10-10. YouTube tags (500 characters in total) have their own rules for commas and quotes, so they are not in the list."
+            "X 280 (weighted) and 25,000 for X Premium longer posts, Instagram caption 2,200 and bio 150, Threads 500, Bluesky 300 graphemes (and 3,000 UTF-8 bytes), YouTube title 100 characters and description 5,000 bytes, TikTok caption 2,200 UTF-16 units, LinkedIn post 3,000. Each was checked in the service's own documentation on 2026-10-10. The Bluesky row shows both of its numbers and is marked over if either one is. YouTube tags (500 characters in total) have their own rules for commas and quotes, so they are not in the list."
           ]
         ],
         "faq": [
@@ -784,7 +889,13 @@
           "X documentation",
           "v3.json"
         ],
-        "sns_chk": "Each limit links to the page we read it from. All were checked on 2026-10-10."
+        "sns_chk": "Each limit links to the page we read it from. All were checked on 2026-10-10.",
+        "unit2": {
+          "utf8": [
+            "UTF-8 ",
+            " bytes"
+          ]
+        }
       },
       "sms": {
         "nav": "SMS Counter",
@@ -842,12 +953,12 @@
       "about": {
         "title": "About Kankan - what it counts and where the rules come from | Kankan",
         "desc": "What Kankan counts, the standards behind each rule, how the results are tested, and who makes it.",
-        "body": "<h1>About Kankan</h1>\n<p>Kankan counts text. The same text gives different numbers depending on whether spaces are included, how a line break is counted, and whether you count characters or bytes. Kankan puts those rules side by side.</p>\n<p>The name comes from <span lang=\"ko\">칸</span> (kan), one square on Korean manuscript paper: one square, one character.</p>\n<h2>The rules and where they come from</h2>\n<ul>\n<li><b>Characters</b>: grapheme clusters as defined in Unicode Standard Annex <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>, through the browser's Intl.Segmenter. Emoji sequences follow <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>.</li>\n<li><b>Words and sentences</b>: words are runs of text between spaces, with a second figure that uses the UAX #29 word rules. Sentences use the UAX #29 sentence rules.</li>\n<li><b>Bytes</b>: UTF-8 and UTF-16 as defined by the Unicode Standard. The Korean pages also count EUC-KR using the Windows code page 949 table.</li>\n<li><b>X weighted length</b>: X's documentation on <a href=\"https://docs.x.com/fundamentals/counting-characters\">counting characters</a> and the v3 configuration of <a href=\"https://github.com/twitter/twitter-text\">twitter-text</a>, the library X published. Our tests compare against npm twitter-text 3.1.0 (checked 2026-10-10).</li>\n<li><b>Social limits</b>: each limit was checked in the service's own documentation on 2026-10-10 and is linked next to the number.</li>\n<li><b>Reading time</b>: average reading rates from <a href=\"https://www.sciencedirect.com/science/article/abs/pii/S0749596X19300786\">Brysbaert (2019)</a>, a review of 190 studies.</li>\n<li><b>SMS</b>: the GSM 7-bit alphabet in 3GPP TS 23.038 and the concatenation rules in TS 23.040.</li>\n</ul>\n<h2>How the results are checked</h2>\n<p>The counting code is kept apart from the page and is covered by about 24,000 automated tests. The expected values were not produced by writing the same logic twice. They come from Python's standard codecs and Unicode libraries, from the twitter-text package, and from three independent SMS calculators.</p>\n<h2>Where your text goes</h2>\n<p>The text you type or paste stays on your device. It is counted inside your browser, and this site has no server that receives it. Ads are served by Google AdSense and visit statistics come from Cloudflare Web Analytics; your text is not part of either. The details are in the <a href=\"/privacy/\">privacy policy</a>.</p>\n<h2>Who makes it</h2>\n<p>Kankan is made by <a href=\"https://lumenlab.page/en/\">Lumen Lab</a>. If you find a wrong number, write to <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>.</p>"
+        "body": "<h1>About Kankan</h1>\n<p>Kankan counts text. The same text gives different numbers depending on whether spaces are included, how a line break is counted, and whether you count characters or bytes. Kankan puts those rules side by side.</p>\n<p>The name comes from <span lang=\"ko\">칸</span> (kan), one square on Korean manuscript paper: one square, one character.</p>\n<h2>The rules and where they come from</h2>\n<ul>\n<li><b>Characters</b>: grapheme clusters as defined in Unicode Standard Annex <a href=\"https://unicode.org/reports/tr29/\">UAX #29</a>, through the browser's Intl.Segmenter. Emoji sequences follow <a href=\"https://unicode.org/reports/tr51/\">UTS #51</a>.</li>\n<li><b>Words and sentences</b>: words are runs of text between spaces, with a second figure that uses the UAX #29 word rules. Sentences use the UAX #29 sentence rules.</li>\n<li><b>Bytes</b>: UTF-8 and UTF-16 as defined by the Unicode Standard. The Korean pages also count EUC-KR using the Windows code page 949 table.</li>\n<li><b>X weighted length</b>: X's documentation on <a href=\"https://docs.x.com/fundamentals/counting-characters\">counting characters</a> and the v3 configuration of <a href=\"https://github.com/twitter/twitter-text\">twitter-text</a>, the library X published. Our tests compare against npm twitter-text 3.1.0 (checked 2026-10-10).</li>\n<li><b>Social limits</b>: each limit was checked in the service's own documentation on 2026-10-10 and is linked next to the number.</li>\n<li><b>Reading time</b>: average reading rates from <a href=\"https://www.sciencedirect.com/science/article/abs/pii/S0749596X19300786\">Brysbaert (2019)</a>, a review of 190 studies.</li>\n<li><b>SMS</b>: the GSM 7-bit alphabet in 3GPP TS 23.038 and the concatenation rules in TS 23.040.</li>\n</ul>\n<h2>How the results are checked</h2>\n<p>The counting code is kept apart from the page and is covered by about 35,000 automated tests. The expected values were not produced by writing the same logic twice. They come from Python's standard codecs and Unicode libraries, from the twitter-text package, and from three independent SMS calculators.</p>\n<h2>Where your text goes</h2>\n<p>The text you type or paste stays on your device. It is counted inside your browser, and this site has no server that receives it. Ads are served by Google AdSense and visit statistics come from Cloudflare Web Analytics; your text is not part of either. The details are in the <a href=\"/privacy/\">privacy policy</a>.</p>\n<h2>Who makes it</h2>\n<p>Kankan is made by <a href=\"https://lumenlab.page/en/\">Lumen Lab</a>. If you find a wrong number, write to <a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a>.</p>"
       },
       "privacy": {
         "title": "Privacy policy | Kankan",
         "desc": "Kankan counts your text inside the browser and never sends it to a server. What is stored on your device, how ads use cookies, and visit statistics.",
-        "body": "<h1>Privacy policy</h1>\n<p>Effective October 10, 2026 · Operated by Lumen Lab</p>\n<h2>The text you type or paste</h2>\n<p>Kankan counts text inside your browser. This site does not send the text you type or paste to a server and does not collect it. It is gone when you close or reload the page. There are no accounts.</p>\n<h2>What is stored on your device</h2>\n<p>Only the following items are kept in your browser's localStorage. Clearing site data removes them.</p>\n<ul>\n<li><code>kk.lang</code>: a note that you closed or followed the language suggestion bar, so that it does not come back.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: created only if you turn on “save on this device” on the Korean cover-letter counter. They hold the question names, goals, your text and the line-break setting, and are deleted as soon as you turn the switch off or press the delete button there.</li>\n</ul>\n<p>Nothing else is stored.</p>\n<h2>Ads</h2>\n<p>This site shows ads through Google AdSense. Google and other ad vendors use cookies to serve ads based on your visits to this and other websites. Because of these ads, third parties such as Google may place or read cookies in your browser and collect information through web beacons (tiny invisible images). See <a href=\"https://policies.google.com/technologies/partner-sites\">how Google uses information from sites or apps that use its services</a>. You can turn off personalized ads in <a href=\"https://www.google.com/settings/ads\">Google Ad Settings</a>.</p>\n<h2>Visit statistics</h2>\n<p>We look at visit statistics through <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>: which pages were viewed and how fast they loaded. According to Cloudflare, it does not use cookies or local storage. Nothing you type or paste into the tools is included.</p>\n<h2>Fonts and server logs</h2>\n<p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives your text.</p>\n<h2>Contact</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+        "body": "<h1>Privacy policy</h1>\n<p>Effective October 10, 2026 · Operated by Lumen Lab</p>\n<h2>The text you type or paste</h2>\n<p>Kankan counts text inside your browser. This site does not send the text you type or paste to a server, does not collect it and does not store it. It is gone when you close the page. Your browser may bring the text in a box back by itself when you go back or restore a tab; even then it stays on your device. There are no accounts.</p>\n<h2>What is stored on your device</h2>\n<p>The only things this site itself stores are listed below. Clearing site data removes them. Cookies that third parties set because of ads are described under “Ads” below.</p>\n<p>In your browser's localStorage:</p>\n<ul>\n<li><code>kk.lang</code>: a note that you closed or followed the language suggestion bar, so that it does not come back.</li>\n<li><code>kk.jasoseo.on</code>, <code>kk.jasoseo</code>: created only if you turn on “save on this device” on the Korean cover-letter counter. They hold the question names, goals, your text and the line-break setting, and are deleted as soon as you turn the switch off or press the delete button there.</li>\n</ul>\n<p>In sessionStorage, which is erased when you close the tab:</p>\n<ul>\n<li><code>kk.set</code>: keeps your settings while you move between tools or reload in the same tab: the line-break setting, your goal number and what it counts, the reading speeds, and the goal and counting basis of each question on the Korean cover-letter counter. Your text and the question names are never put there.</li>\n</ul>\n<p>This site itself stores nothing else.</p>\n<h2>Ads</h2>\n<p>This site shows ads through Google AdSense. Google and other ad vendors use cookies to serve ads based on your visits to this and other websites. Because of these ads, third parties such as Google may place or read cookies in your browser and collect information through web beacons (tiny invisible images). See <a href=\"https://policies.google.com/technologies/partner-sites\">how Google uses information from sites or apps that use its services</a>. You can turn off personalized ads in <a href=\"https://www.google.com/settings/ads\">Google Ad Settings</a>.</p>\n<h2>Visit statistics</h2>\n<p>We look at visit statistics through <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>: which pages were viewed and how fast they loaded. According to Cloudflare, it does not use cookies or local storage. Nothing you type or paste into the tools is included.</p>\n<h2>Fonts and server logs</h2>\n<p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives your text.</p>\n<h2>Contact</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
       },
       "licenses": {
         "title": "Open-source licenses | Kankan",
