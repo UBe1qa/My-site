@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<link rel="stylesheet" href="../assets/pretendard.css">
+<style>
+  /* 공유 그림(1200×630). 사이트 CSS와 따로 둔다: 이름에 og- 를 붙인다 */
+  html, body { margin: 0; }
+  body { width: 1200px; height: 630px; background: #f2f4f5; font-family: "Pretendard Variable", Pretendard, "Noto Sans CJK KR", "Noto Sans KR", sans-serif; color: #15212b; position: relative; overflow: hidden; }
+  .og-top { position: absolute; left: 72px; top: 64px; display: flex; align-items: center; gap: 16px; font-size: 34px; font-weight: 720; }
+  .og-h { position: absolute; left: 72px; top: 150px; width: 1056px; font-size: 76px; line-height: 1.12; font-weight: 760; letter-spacing: -.02em; }
+  .og-s { position: absolute; left: 72px; top: 336px; font-size: 32px; color: #384651; }
+  .og-row { position: absolute; left: 72px; right: 72px; bottom: 64px; display: flex; gap: 14px; }
+  .og-chip { display: flex; align-items: center; gap: 12px; background: #fff; border: 2px solid #dde3e7; border-radius: 18px; padding: 16px 20px; font-size: 26px; font-weight: 650; white-space: nowrap; }
+  .og-lamp { width: 26px; height: 26px; border-radius: 50%; background: #0d98a8; position: relative; flex: none; }
+  .og-lamp::after { content: ""; position: absolute; left: 7px; top: 8px; width: 11px; height: 6px; border-left: 3.5px solid #fff; border-bottom: 3.5px solid #fff; transform: rotate(-45deg); }
+  .og-off { background: none; box-shadow: inset 0 0 0 9px #f2f4f5, inset 0 0 0 13px #c4cdd3; }
+  .og-off::after { display: none; }
+</style>
+</head>
+<body>
+<div class="og-top"><svg width="56" height="56" viewBox="0 0 26 26"><rect width="26" height="26" rx="7" fill="#15212b"/><circle cx="13" cy="13" r="7.2" fill="none" stroke="#3b4a56" stroke-width="1.6"/><circle cx="13" cy="13" r="4.2" fill="#17b3c4"/></svg><span id="brand"></span></div>
+<div class="og-h" id="h"></div>
+<div class="og-s" id="s"></div>
+<div class="og-row" id="row"></div>
+<script>
+  var ko = /lang=ko/.test(location.search);
+  var t = ko ? { brand: '체크벤치', h: '기기 테스트를 한 곳에서', s: '설치 없이 브라우저에서. 마이크와 카메라는 기기 밖으로 안 나가요.', chips: ['키보드', '마우스', '마이크', '웹캠', '스피커', '모니터'] }
+             : { brand: 'Checkbench', h: 'Test your devices in one place', s: 'Nothing to install. Mic and camera stay on your device.', chips: ['Keyboard', 'Mouse', 'Mic', 'Webcam', 'Speakers', 'Screen'] };
+  document.documentElement.lang = ko ? 'ko' : 'en';
+  document.getElementById('brand').textContent = t.brand;
+  document.getElementById('h').textContent = t.h;
+  document.getElementById('s').textContent = t.s;
+  document.getElementById('row').innerHTML = t.chips.map(function (c, i) { return '<span class="og-chip"><i class="og-lamp' + (i > 3 ? ' og-off' : '') + '"></i>' + c + '</span>'; }).join('');
+</script>
+</body>
+</html>

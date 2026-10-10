@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+/* 공유 그림(1200×630). 이 파일의 클래스 이름에는 og- 를 붙인다(사이트 CSS 와 겹치지 않게). python3 _dev/og.py 가 ?lang=en|ko 로 찍는다. */
+html,body{width:1200px;height:630px;min-height:0;overflow:hidden;color-scheme:light}
+body{display:block;background:#f4f4f6}
+.og-sheet{position:absolute;left:60px;top:56px;right:60px;bottom:56px;background:#fff;border:2px solid #c9c9d3;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(20,20,40,.4)}
+.og-bar{height:8px;background:#ececf1}
+.og-bar i{display:block;width:38%;height:100%;background:#5b3fa6}
+.og-in{padding:38px 56px 0}
+.og-brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:700;color:#1a1a22}
+.og-brand svg{width:40px;height:40px}
+.og-title{font-size:66px;font-weight:800;letter-spacing:-.03em;line-height:1.15;color:#1a1a22;margin-top:26px}
+.og-line{font-size:40px;font-weight:500;margin-top:30px;color:#757587;white-space:nowrap}
+.og-line b{font-weight:500;color:#1a1a22}
+.og-line u{text-decoration:none;position:relative}
+.og-line u::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:6px;border-radius:3px;background:#5b3fa6}
+.og-line em{font-style:normal;color:#c9391f;background:#fdeeea;border-radius:5px}
+.og-foot{position:absolute;left:56px;right:56px;bottom:40px;display:flex;align-items:flex-end;justify-content:space-between}
+.og-num{display:flex;align-items:baseline;gap:12px}
+.og-num b{font-size:84px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#5b3fa6;font-variant-numeric:tabular-nums}
+.og-num span{font-size:26px;font-weight:600;color:#3d3d4a}
+.og-keys{display:flex;gap:8px}
+.og-keys span{display:grid;place-items:center;width:62px;height:62px;border-radius:12px;background:#ececf1;font-size:27px;font-weight:600;color:#62626f}
+.og-keys .og-miss{background:#c9391f;color:#fff}
+.og-keys .og-slow{background:#fbefd6;color:#8f5b00;box-shadow:inset 0 0 0 3px #8f5b00}
+</style>
+</head>
+<body>
+<div class="og-sheet">
+  <div class="og-bar"><i></i></div>
+  <div class="og-in">
+    <div class="og-brand"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5" fill="none" stroke="#1a1a22" stroke-width="2"/><rect x="2" y="2" width="22" height="20" rx="5" fill="#fff" stroke="#1a1a22" stroke-width="2"/><rect x="8" y="14" width="10" height="3" rx="1.5" fill="#5b3fa6"/></svg><span id="og-brand"></span></div>
+    <p class="og-title" id="og-title"></p>
+    <p class="og-line" id="og-line"></p>
+  </div>
+  <div class="og-foot">
+    <div class="og-num"><b id="og-n"></b><span id="og-u"></span></div>
+    <div class="og-keys" id="og-keys"></div>
+  </div>
+</div>
+<script>
+var ko = /lang=ko/.test(location.search), $ = function (id) { return document.getElementById(id); };
+document.documentElement.lang = ko ? 'ko' : 'en';
+$('og-brand').textContent = ko ? '토독' : 'Todok';
+$('og-title').textContent = ko ? '타자 속도 측정·타자 연습' : 'Typing Test (WPM)';
+$('og-line').innerHTML = ko ? '<b>들어오자마자 치고, 틀</b><em>린</em><b> 키를 </b><u>알</u>려 줘요.' : '<b>Start typing, then see the k</b><em>e</em><b>ys you </b><u>m</u>issed.';
+$('og-n').textContent = ko ? '368' : '74';
+$('og-u').textContent = ko ? '타/분' : 'WPM';
+(ko ? [['ㅁ'], ['ㄴ', 'og-miss'], ['ㅇ'], ['ㄹ'], ['ㅎ', 'og-slow'], ['ㅗ'], ['ㅓ', 'og-miss'], ['ㅏ']] : [['A'], ['S', 'og-miss'], ['D'], ['F'], ['G', 'og-slow'], ['H'], ['J', 'og-miss'], ['K']]).forEach(function (k) {
+  var s = document.createElement('span'); s.textContent = k[0]; if (k[1]) s.className = k[1]; $('og-keys').appendChild(s);
+});
+</script>
+</body>
+</html>

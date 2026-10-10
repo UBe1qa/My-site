@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How WPM Is Calculated: Gross vs Net, and Why Sites Disagree</title>
+<meta name="description" content="WPM is characters divided by five, divided by minutes. See worked examples of net and gross WPM and accuracy, the rounding we use, and the choices that make typing sites report different numbers.">
+<meta name="theme-color" content="#f4f4f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121218" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://typing.lumenlab.page/guide/how-wpm-is-calculated/">
+<link rel="alternate" hreflang="en" href="https://typing.lumenlab.page/guide/how-wpm-is-calculated/">
+<link rel="alternate" hreflang="ko" href="https://typing.lumenlab.page/ko/guide/tasu-gyesan/">
+<link rel="alternate" hreflang="x-default" href="https://typing.lumenlab.page/guide/how-wpm-is-calculated/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How WPM Is Calculated: Gross vs Net, and Why Sites Disagree">
+<meta property="og:description" content="WPM is characters divided by five, divided by minutes. See worked examples of net and gross WPM and accuracy, the rounding we use, and the choices that make typing sites report different numbers.">
+<meta property="og:url" content="https://typing.lumenlab.page/guide/how-wpm-is-calculated/">
+<meta property="og:site_name" content="Todok">
+<meta property="og:image" content="https://typing.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How WPM is calculated", "description": "WPM is characters divided by five, divided by minutes. See worked examples of net and gross WPM and accuracy, the rounding we use, and the choices that make typing sites report different numbers.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://typing.lumenlab.page/guide/how-wpm-is-calculated/", "image": "https://typing.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Todok", "item": "https://typing.lumenlab.page/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://typing.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 3, "name": "How WPM is calculated", "item": "https://typing.lumenlab.page/guide/how-wpm-is-calculated/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+</head>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path class="lg-e" d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5"/><rect class="lg-k" x="2" y="2" width="22" height="20" rx="5"/><rect class="lg-u" x="8" y="14" width="10" height="3" rx="1.5"/></svg><span>Todok</span></a>
+  <nav class="nav n3" aria-label="Site menu"><a href="/">Typing Test</a><a href="/practice/">Practice</a><a href="/guide/" aria-current="page">Guides</a></nav>
+  <a class="lang" href="/ko/guide/tasu-gyesan/" lang="ko" hreflang="ko">한국어</a>
+</header>
+<main id="main">
+<article class="wrap narrow prose">
+  <nav class="crumbs" aria-label="breadcrumb"><a href="/">Todok</a><span aria-hidden="true">›</span><a href="/guide/">Guides</a><span aria-hidden="true">›</span><span>How WPM is calculated</span></nav>
+  <h1>How WPM is calculated</h1>
+  <p class="meta">Last checked <time datetime="2026-10-10">October 10, 2026</time></p>
+  <p class="lead">WPM is <b>characters ÷ 5 ÷ minutes</b>. A "word" is any five characters, so a long word and a short one are treated the same. <b>Net</b> WPM counts only the characters you got right. <b>Gross</b> (or raw) WPM counts every key you pressed. Every number below was recalculated with the same code the test runs.</p>
+  <h2>Why five characters?</h2>
+<p>Real words vary in length, so counting actual words would reward text full of short ones. Typing research uses the same convention. A 2018 study of 136 million keystrokes defines WPM as the length of the typed text "in words, where one word consists of any five characters", divided by the time in minutes (<a href="https://userinterfaces.aalto.fi/136Mkeystrokes/resources/chi-18-analysis.pdf" rel="noopener">Dhakal et al., CHI 2018</a>, checked 2026-10-10).</p>
+<h2>A clean run</h2>
+<div class="calc"><p>You type <code>the cat sat on the mat</code> with no mistakes in 12 seconds. That is 22 characters, spaces included.</p>
+<p>22 ÷ 5 ÷ 12 s × 60 = <b class="num" data-wpm="22,12000">22</b> WPM. Net and gross are the same, and accuracy is 100%.</p></div>
+<h2>One mistake, left alone</h2>
+<div class="calc"><p>The text is <code>hello world</code>. You type <code>hellp world</code> in 6 seconds and do not fix it.</p>
+<p>Net: 10 correct characters ÷ 5 ÷ 6 s × 60 = <b class="num" data-wpm="10,6000">20</b> WPM</p>
+<p>Gross: 11 key presses ÷ 5 ÷ 6 s × 60 = <b class="num" data-wpm="11,6000">22</b> WPM</p>
+<p>Accuracy: 10 of 11 key presses were right, so <b class="num" data-acc="10,11">91</b>%</p></div>
+<h2>The same mistake, fixed</h2>
+<div class="calc"><p>This time you notice the <code>p</code>, press Backspace, and type <code>o</code>. Still 6 seconds.</p>
+<p>Net: 11 correct characters ÷ 5 ÷ 6 s × 60 = <b class="num" data-wpm="11,6000">22</b> WPM</p>
+<p>Gross: 12 key presses ÷ 5 ÷ 6 s × 60 = <b class="num" data-wpm="12,6000">24</b> WPM</p>
+<p>Accuracy: 11 of 12 key presses were right, so <b class="num" data-acc="11,12">92</b>%</p></div>
+<p>Fixing the error brought net WPM back up, but accuracy still remembers it. On Todok a key is judged at the moment you press it, and Backspace is not counted as a key press.</p>
+<div class="ad-wrap in-prose" data-slot="mid"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div>
+<h2>Where typing sites differ</h2>
+<p>There is no single rulebook, which is why the same person can get different scores on different sites. These are the choices that move the number:</p>
+<div class="tbl"><table>
+<tr><th>Choice</th><th>What Todok does</th></tr>
+<tr><td>Headline number</td><td>Net WPM. Raw speed is calculated too, but the big number is net.</td></tr>
+<tr><td>Uncorrected errors</td><td>The wrong characters are simply not counted. No extra penalty is subtracted.</td></tr>
+<tr><td>Corrected errors</td><td>Count once toward WPM after the fix, and still count against accuracy.</td></tr>
+<tr><td>Spaces</td><td>Counted as characters.</td></tr>
+<tr><td>When the clock starts</td><td>On your first key, not when the page loads. It pauses if the tab is hidden.</td></tr>
+<tr><td>Rounding</td><td>Time is rounded to 0.1 s first, then WPM is calculated and rounded.</td></tr>
+</table></div>
+<p>A site that subtracts a penalty for each error, or that starts the clock earlier, will show a lower number for the same typing. We do not claim our score matches any other site. Compare today's result with your own earlier results from the same tool.</p>
+<h2>The rounding, in one example</h2>
+<p>Tests that end when you finish the text rarely take a whole number of seconds. If you type 80 correct characters in 23.449 seconds, Todok shows 23.4 s and calculates 80 ÷ 5 ÷ 23.4 × 60 = <b class="num" data-wpm="80,23449">41</b> WPM. The formula appears on the result screen, so you can redo it on a calculator and get the same number.</p>
+<h2>A reference point, with caveats</h2>
+<p>In the study mentioned above, 168,960 volunteers took an online English typing test and averaged 51.56 WPM, with a standard deviation of 20.2. The fastest tenth typed above roughly 78 WPM and the slowest tenth below roughly 26 WPM (<a href="https://userinterfaces.aalto.fi/136Mkeystrokes/resources/chi-18-analysis.pdf" rel="noopener">Dhakal et al., CHI 2018</a>, checked 2026-10-10). These people chose to take part and were copying English sentences, so this is not a world average, and that study's scoring is not identical to ours.</p>
+<h2>Keystrokes per minute</h2>
+<p>Some countries measure typing in keystrokes per minute instead. Todok's <a href="/ko/" lang="ko" hreflang="ko">Korean edition</a> does, because one Korean syllable takes two to five key presses. For lowercase English with no Shift, one key is one character, so keystrokes per minute is simply WPM × 5: 60 WPM is <b class="num" data-pm="150,30000">300</b> keystrokes per minute.</p>
+  <p class="cta"><a class="btn pri" href="/">Take the typing test</a></p>
+</article>
+<div class="wrap narrow">
+<section class="sec" aria-labelledby="guides-h"><h2 id="guides-h">Typing guides</h2><ul class="guides"><li><a href="/guide/touch-typing-home-row/"><b>Touch typing basics: the home row and finger chart</b><span>Home row and finger chart</span></a></li><li><a href="/guide/accuracy-before-speed/"><b>Why accuracy first makes you faster</b><span>The arithmetic of a typo</span></a></li></ul><p class="more-link"><a href="/guide/">All guides</a></p></section>
+<div class="ad-wrap" data-slot="bottom"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div>
+</div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" id="lumen" href="https://lumenlab.page/en/"><span class="caps" aria-hidden="true"><span class="cap" style="--i:0">L</span><span class="cap" style="--i:1">U</span><span class="cap" style="--i:2">M</span><span class="cap" style="--i:3">E</span><span class="cap" style="--i:4">N</span></span><span class="lumen-t"><b>Made by Lumen Lab</b><span>See our other apps and tools</span></span></a>
+  <p class="foot-links"><a href="/">Typing Test</a><a href="/practice/">Practice</a><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="tj-site">{"lang": "en", "other": "/ko/guide/tasu-gyesan/", "otherLang": "ko", "offer": "한국어판 보기", "bar": "이 페이지는 영어판이에요.", "close": "Close"}</script>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>키보드 채터링 확인하는 법: 한 번 눌렀는데 두 번 눌릴 때 | 체크벤치</title>
+<meta name="description" content="한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://check.lumenlab.page/ko/guide/keyboard-chattering/">
+<link rel="alternate" hreflang="en" href="https://check.lumenlab.page/guide/keyboard-double-typing/">
+<link rel="alternate" hreflang="ko" href="https://check.lumenlab.page/ko/guide/keyboard-chattering/">
+<link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/guide/keyboard-double-typing/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="키보드 채터링 확인하는 법: 한 번 눌렀는데 두 번 눌릴 때 | 체크벤치">
+<meta property="og:description" content="한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.">
+<meta property="og:url" content="https://check.lumenlab.page/ko/guide/keyboard-chattering/">
+<meta property="og:site_name" content="체크벤치">
+<meta property="og:image" content="https://check.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "키보드 채터링 확인하는 법", "description": "한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.", "inLanguage": "ko", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/ko/guide/keyboard-chattering/", "image": "https://check.lumenlab.page/og-ko.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://check.lumenlab.page/ko/guide/"}, {"@type": "ListItem", "position": 2, "name": "키보드 채터링 확인하는 법", "item": "https://check.lumenlab.page/ko/guide/keyboard-chattering/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+<script defer src="/assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top"><div class="wrap top-in">
+  <a class="logo" href="/ko/"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect class="lg-b" width="26" height="26" rx="7"/><circle class="lg-r" cx="13" cy="13" r="7.2"/><circle class="lg-d" cx="13" cy="13" r="4.2"/></svg><span>체크벤치</span></a>
+  <nav class="top-nav" aria-label="사이트 메뉴"><a class="nav-home" href="/ko/">모든 테스트</a><a href="/ko/guide/" aria-current="page">가이드</a><a class="wide" href="/ko/about/">소개</a><a href="/guide/keyboard-double-typing/" lang="en" hreflang="en">English</a></nav>
+</div></header>
+
+<main id="main">
+<article class="wrap narrow doc article">
+  <p class="crumb"><a href="/ko/guide/">가이드</a></p>
+  <h1>키보드 채터링 확인하는 법</h1>
+  <p class="byline">마지막 확인 <time datetime="2026-10-10">2026-10-10</time> · Lumen Lab</p>
+  <p>키를 한 번 눌렀는데 글자가 두 번 찍힌다면 1분이면 확인할 수 있어요. <a href="/ko/keyboard-test/">키보드 테스트</a>를 열고 의심되는 키를 천천히 서른 번 눌러 본 뒤 '채터링' 칸을 보세요. '없음'이면 그 키는 멀쩡했던 거예요. 키 이름이 나오면, 사람이 누르기에는 너무 빨리 두 번째 눌림이 들어온 거예요.</p>
+<h2>무엇을 채터링으로 세나요</h2>
+<p>테스트는 키를 뗀 순간부터 같은 키가 다시 눌릴 때까지의 간격을 재요. 그 간격이 30ms(0.03초)보다 짧으면 채터링 의심 1번으로 세요. 30ms는 이 사이트가 정한 기준이고 공식 표준이 아니에요. '자세히 보기와 설정'에서 바꿀 수 있어요.</p>
+<p>누름과 누름 사이가 아니라 뗌과 다음 누름 사이를 재는 이유가 있어요. 고장 난 키는 손을 떼는 바로 그 순간에 한 번 더 눌릴 수 있어요. 내가 누른 두 번 사이가 멀어도요.</p>
+<div class="tbl tbl--tight"><table><thead><tr><th>한 키에서 일어난 일</th><th>간격</th><th>기준 30ms</th><th>기준 10ms</th></tr></thead><tbody>
+<tr><td data-th="한 키에서 일어난 일">눌렀다가 60ms에 떼고 72ms에 다시 눌림</td><td data-th="간격">12ms</td><td data-th="기준 30ms">의심</td><td data-th="기준 10ms">정상</td></tr>
+<tr><td data-th="한 키에서 일어난 일">150ms 동안 누르다 떼고 155ms에 다시 눌림</td><td data-th="간격">5ms</td><td data-th="기준 30ms">의심</td><td data-th="기준 10ms">의심</td></tr>
+<tr><td data-th="한 키에서 일어난 일">60ms에 떼고 90ms에 다시 눌림</td><td data-th="간격">30ms</td><td data-th="기준 30ms">정상</td><td data-th="기준 10ms">정상</td></tr>
+<tr><td data-th="한 키에서 일어난 일">일부러 두 번 누름(뗀 뒤 120ms에 다시 누름)</td><td data-th="간격">120ms</td><td data-th="기준 30ms">정상</td><td data-th="기준 10ms">정상</td></tr>
+</tbody></table></div>
+<p>둘째 줄은 두 눌림 사이가 155ms라 평범한 타자처럼 보여요. 뗀 뒤 5ms 만에 다시 눌렸다는 점에서만 드러나요. 이 표의 네 가지는 저희 자동 테스트가 그대로 돌려 보는 사례예요.</p>
+<h2>1분 확인 순서</h2>
+<ol>
+<li>키보드 테스트를 열고 내 키보드와 닮은 배열을 골라요.</li>
+<li>의심되는 키를 1초에 한 번쯤, 서른 번 눌러요. 서두르지 마세요. 두 번 눌림이 전부 키보드 탓이어야 하니까요.</li>
+<li>'채터링' 칸을 봐요. '1개 의심'이라고 나오고 그 키가 주황색이면 한 번 이상 두 번 눌린 거예요.</li>
+<li>'자세히 보기와 설정'의 최근 누름에서 누름마다 뗀 뒤 몇 ms 만에 들어왔는지 볼 수 있어요.</li>
+<li>멀쩡한 키로도 똑같이 해 봐요. 그 키가 깨끗하면 내 타자 습관이 아니라 그 키의 문제예요.</li>
+</ol>
+<h2>채터링처럼 보이지만 아닌 것</h2>
+<ul>
+<li><b>키를 누르고 있을 때.</b> 누르고 있으면 글자가 계속 찍히는 것은 운영체제의 반복 입력이에요. 테스트는 이 반복을 세지 않아요.</li>
+<li><b>입력 보조 프로그램.</b> 매크로, 상용구, 키 바꾸기 프로그램이 키를 더 보낼 수 있어요. 끄고 테스트해 보세요.</li>
+<li><b>한 프로그램에서만.</b> 테스트에서는 깨끗한데 특정 프로그램에서만 두 번 찍히면 그 프로그램 설정부터 보세요.</li>
+</ul>
+<h2>채터링이 맞다면</h2>
+<p>키보드를 다른 컴퓨터나 다른 USB 단자에 꽂고 같은 테스트를 해 보세요. 거기서도 같은 키가 두 번 눌리면 키보드 쪽 문제예요. 어느 키가 서른 번 중 몇 번 그랬는지 적어 두세요. 판매처나 제조사에 문의할 때 쓸 수 있어요.</p>
+<p>기준 시간을 바꾼다고 키보드가 고쳐지지는 않아요. 이 화면이 무엇을 셀지만 달라져요.</p>
+<p class="cta"><a class="btn" href="/ko/keyboard-test/">키보드 테스트 열기</a></p>
+</article>
+<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">광고</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
+<section class="wrap narrow sec"><h2>다른 테스트</h2><ul class="tool-list"><li><a href="/ko/keyboard-test/">키보드 테스트</a><span>모든 키, 동시 입력, 채터링</span></li><li><a href="/ko/mouse-test/">마우스 테스트</a><span>단추, 휠, 더블클릭 의심, 보고 수</span></li><li><a href="/ko/mic-test/">마이크 테스트</a><span>소리 크기, 녹음해서 듣기</span></li><li><a href="/ko/webcam-test/">웹캠 테스트</a><span>실제 화면, 해상도, 초당 장 수, 사진</span></li><li><a href="/ko/speaker-test/">스피커 테스트 (왼쪽·오른쪽)</a><span>왼쪽, 오른쪽, 양쪽, 올라가는 소리</span></li><li><a href="/ko/dead-pixel-test/">불량화소 테스트</a><span>전체 화면 검정·흰색·빨강·초록·파랑</span></li><li><a href="/ko/refresh-rate-test/">주사율 테스트</a><span>화면 Hz, 움직이는 막대</span></li><li><a href="/ko/gamepad-tester/">게임패드 테스트</a><span>단추, 스틱, 트리거, 쏠림, 진동</span></li></ul></section>
+<div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">광고</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/" data-lumen><span class="lumen-lamps" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/keyboard-test/">키보드 테스트</a><a href="/ko/mouse-test/">마우스 테스트</a><a href="/ko/mic-test/">마이크 테스트</a><a href="/ko/webcam-test/">웹캠 테스트</a><a href="/ko/speaker-test/">스피커 테스트 (왼쪽·오른쪽)</a><a href="/ko/dead-pixel-test/">불량화소 테스트</a><a href="/ko/refresh-rate-test/">주사율 테스트</a><a href="/ko/gamepad-tester/">게임패드 테스트</a></p>
+  <p class="foot-links"><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="ck">{"lang": "ko", "page": "doc", "t": {"close": "닫기"}, "other": "/guide/keyboard-double-typing/", "otherLabel": "English version"}</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About Checkbench: What It Tests and How It Judges</title>
+<meta name="description" content="Who makes Checkbench, what each device test does in your browser, and the rules it uses to judge double-typing, drift and refresh rate.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://check.lumenlab.page/about/">
+<link rel="alternate" hreflang="en" href="https://check.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://check.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About Checkbench: What It Tests and How It Judges">
+<meta property="og:description" content="Who makes Checkbench, what each device test does in your browser, and the rules it uses to judge double-typing, drift and refresh rate.">
+<meta property="og:url" content="https://check.lumenlab.page/about/">
+<meta property="og:site_name" content="Checkbench">
+<meta property="og:image" content="https://check.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
+<script defer src="/assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap top-in">
+  <a class="logo" href="/"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect class="lg-b" width="26" height="26" rx="7"/><circle class="lg-r" cx="13" cy="13" r="7.2"/><circle class="lg-d" cx="13" cy="13" r="4.2"/></svg><span>Checkbench</span></a>
+  <nav class="top-nav" aria-label="Site"><a class="nav-home" href="/">All tests</a><a href="/guide/">Guides</a><a class="wide" href="/about/" aria-current="page">About</a><a href="/ko/about/" lang="ko" hreflang="ko">한국어</a></nav>
+</div></header>
+
+<main id="main">
+<article class="wrap narrow doc"><h1>About Checkbench</h1><h2>What this is</h2><p>Checkbench is a set of free device tests that run in your browser: keyboard, mouse, microphone, webcam, speakers, dead pixels, refresh rate and gamepad. There is nothing to install and no account.</p><h2>Who makes it</h2><p>Checkbench is made by Lumen Lab, a small studio in Korea that makes apps and web tools. You can reach us at woxocoso@gmail.com.</p><h2>How results are judged</h2><p>Each verdict comes from a rule you can read next to it. None of these rules is an official standard, and the ones marked adjustable can be changed on the test page.</p><ul><li>Double-typing on a keyboard: a second press within 30 ms of releasing the same key (adjustable).</li><li>Double-click fault on a mouse: a second press within 50 ms of releasing the same button (adjustable).</li><li>Mouse updates per second: counted from pointer updates the browser received while the mouse moved fast. An estimate.</li><li>Refresh rate: the median gap between 120 frames. Shown as “about” a common rate when within 1% of it.</li><li>Mic level: loudness on the digital scale where the loudest storable value is 0 dBFS. “Picks up sound” means the level passed −45 dBFS.</li><li>Speaker tone: starts at one tenth of full scale and cannot go above half.</li><li>Stick drift: average resting position. Under 5% centered, 5% to 15% slightly off, 15% or more drifting.</li></ul><h2>What it cannot tell you</h2><p>A web page only sees what the browser passes on. Keys the system keeps for itself, a mouse’s true USB polling rate and the real sound in your room are outside its view. The tests say so where it matters.</p><h2>Your sound and video</h2><p>Mic audio, recordings, camera video and photos are processed in the tab and never uploaded. Details are in the privacy policy.</p><h2>Credits</h2><p>Text is set in Pretendard by Kil Hyung-jin (SIL Open Font License 1.1), loaded from jsDelivr.</p><p><a href="/privacy/">Privacy</a> · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p><h2>Other tests</h2><ul class="tool-list"><li><a href="/keyboard-test/">Keyboard Tester</a><span>Every key, keys held at once, double-typing</span></li><li><a href="/mouse-test/">Mouse Test</a><span>Buttons, wheel, double-click fault, report rate</span></li><li><a href="/mic-test/">Mic Test</a><span>Level, recording and playback</span></li><li><a href="/webcam-test/">Webcam Test</a><span>Live picture, size, frames per second, photo</span></li><li><a href="/speaker-test/">Speaker Test (Left / Right)</a><span>Left, right, both, rising tone</span></li><li><a href="/dead-pixel-test/">Dead Pixel Test</a><span>Full-screen black, white, red, green, blue</span></li><li><a href="/refresh-rate-test/">Refresh Rate Test</a><span>Screen Hz and a moving bar</span></li><li><a href="/gamepad-tester/">Gamepad Tester</a><span>Buttons, sticks, triggers, drift, vibration</span></li></ul></article>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/" data-lumen><span class="lumen-lamps" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More small apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/keyboard-test/">Keyboard Tester</a><a href="/mouse-test/">Mouse Test</a><a href="/mic-test/">Mic Test</a><a href="/webcam-test/">Webcam Test</a><a href="/speaker-test/">Speaker Test (Left / Right)</a><a href="/dead-pixel-test/">Dead Pixel Test</a><a href="/refresh-rate-test/">Refresh Rate Test</a><a href="/gamepad-tester/">Gamepad Tester</a></p>
+  <p class="foot-links"><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="ck">{"lang": "en", "page": "doc", "t": {"close": "Close"}, "other": "/ko/about/", "otherLabel": "한국어로 보기"}</script>
+</body>
+</html>

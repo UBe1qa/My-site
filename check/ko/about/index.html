@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>체크벤치 소개: 무엇을 테스트하고 어떻게 판정하나</title>
+<meta name="description" content="체크벤치를 누가 만들었는지, 기기 테스트가 브라우저에서 무엇을 하는지, 채터링·쏠림·주사율을 어떤 기준으로 판정하는지 적었어요.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://check.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="en" href="https://check.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://check.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="체크벤치 소개: 무엇을 테스트하고 어떻게 판정하나">
+<meta property="og:description" content="체크벤치를 누가 만들었는지, 기기 테스트가 브라우저에서 무엇을 하는지, 채터링·쏠림·주사율을 어떤 기준으로 판정하는지 적었어요.">
+<meta property="og:url" content="https://check.lumenlab.page/ko/about/">
+<meta property="og:site_name" content="체크벤치">
+<meta property="og:image" content="https://check.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
+<script defer src="/assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top"><div class="wrap top-in">
+  <a class="logo" href="/ko/"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect class="lg-b" width="26" height="26" rx="7"/><circle class="lg-r" cx="13" cy="13" r="7.2"/><circle class="lg-d" cx="13" cy="13" r="4.2"/></svg><span>체크벤치</span></a>
+  <nav class="top-nav" aria-label="사이트 메뉴"><a class="nav-home" href="/ko/">모든 테스트</a><a href="/ko/guide/">가이드</a><a class="wide" href="/ko/about/" aria-current="page">소개</a><a href="/about/" lang="en" hreflang="en">English</a></nav>
+</div></header>
+
+<main id="main">
+<article class="wrap narrow doc"><h1>체크벤치 소개</h1><h2>무엇을 하는 곳인가요</h2><p>체크벤치는 브라우저에서 바로 하는 무료 기기 테스트 모음이에요. 키보드, 마우스, 마이크, 웹캠, 스피커, 불량화소, 주사율, 게임패드를 테스트해요. 설치도 가입도 없어요.</p><h2>누가 만들었나요</h2><p>앱과 웹 도구를 만드는 루멘랩(Lumen Lab)이 만들었어요. 문의는 woxocoso@gmail.com 으로 보내 주세요.</p><h2>결과는 이렇게 판정해요</h2><p>판정마다 기준을 결과 옆에 적어 뒀어요. 아래 기준은 모두 공식 표준이 아니라 이 사이트가 정한 것이고, &#x27;바꿀 수 있음&#x27;이라고 적힌 것은 테스트 화면에서 바꿀 수 있어요.</p><ul><li>키보드 채터링: 같은 키를 뗀 뒤 30ms 안에 다시 눌림(바꿀 수 있음).</li><li>마우스 더블클릭 의심: 같은 단추를 뗀 뒤 50ms 안에 다시 눌림(바꿀 수 있음).</li><li>마우스가 1초에 알려 주는 횟수: 빠르게 움직이는 동안 브라우저가 받은 위치 알림을 센 값. 추정이에요.</li><li>주사율: 화면 120장 간격의 중앙값. 흔한 값과 1% 안이면 &#x27;약&#x27;을 붙여요.</li><li>마이크 소리 크기: 담을 수 있는 가장 큰 값을 0 dBFS로 보는 디지털 눈금. -45 dBFS를 넘으면 &#x27;소리를 잡아요&#x27;라고 해요.</li><li>스피커 테스트 소리: 가장 큰 값의 10분의 1로 시작하고 절반을 넘지 못해요.</li><li>스틱 쏠림: 가만히 둔 위치의 평균. 5% 미만 가운데, 5% 이상 15% 미만 조금 쏠림, 15% 이상 쏠림.</li></ul><h2>알려 줄 수 없는 것</h2><p>웹페이지는 브라우저가 넘겨준 것만 볼 수 있어요. 운영체제가 먼저 받는 키, 마우스의 실제 USB 폴링레이트, 방 안에서 실제로 나는 소리는 볼 수 없어요. 그런 곳에는 화면에 그렇다고 적어 뒀어요.</p><h2>소리와 영상</h2><p>마이크 소리, 녹음, 카메라 영상, 사진은 탭 안에서만 처리하고 어디에도 올리지 않아요. 자세한 내용은 개인정보 처리방침에 있어요.</p><h2>쓴 글꼴</h2><p>글꼴은 길형진 님의 Pretendard(SIL Open Font License 1.1)이고 jsDelivr에서 받아요.</p><p><a href="/ko/privacy/">개인정보 처리방침</a> · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p><h2>다른 테스트</h2><ul class="tool-list"><li><a href="/ko/keyboard-test/">키보드 테스트</a><span>모든 키, 동시 입력, 채터링</span></li><li><a href="/ko/mouse-test/">마우스 테스트</a><span>단추, 휠, 더블클릭 의심, 보고 수</span></li><li><a href="/ko/mic-test/">마이크 테스트</a><span>소리 크기, 녹음해서 듣기</span></li><li><a href="/ko/webcam-test/">웹캠 테스트</a><span>실제 화면, 해상도, 초당 장 수, 사진</span></li><li><a href="/ko/speaker-test/">스피커 테스트 (왼쪽·오른쪽)</a><span>왼쪽, 오른쪽, 양쪽, 올라가는 소리</span></li><li><a href="/ko/dead-pixel-test/">불량화소 테스트</a><span>전체 화면 검정·흰색·빨강·초록·파랑</span></li><li><a href="/ko/refresh-rate-test/">주사율 테스트</a><span>화면 Hz, 움직이는 막대</span></li><li><a href="/ko/gamepad-tester/">게임패드 테스트</a><span>단추, 스틱, 트리거, 쏠림, 진동</span></li></ul></article>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/" data-lumen><span class="lumen-lamps" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span><span class="lumen-t"><b>만든 곳 루멘랩</b><small>다른 앱과 도구 보기</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/keyboard-test/">키보드 테스트</a><a href="/ko/mouse-test/">마우스 테스트</a><a href="/ko/mic-test/">마이크 테스트</a><a href="/ko/webcam-test/">웹캠 테스트</a><a href="/ko/speaker-test/">스피커 테스트 (왼쪽·오른쪽)</a><a href="/ko/dead-pixel-test/">불량화소 테스트</a><a href="/ko/refresh-rate-test/">주사율 테스트</a><a href="/ko/gamepad-tester/">게임패드 테스트</a></p>
+  <p class="foot-links"><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="ck">{"lang": "ko", "page": "doc", "t": {"close": "닫기"}, "other": "/about/", "otherLabel": "English version"}</script>
+</body>
+</html>

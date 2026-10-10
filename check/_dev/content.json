@@ -1,0 +1,1691 @@
+{
+ "ui": {
+  "en": {
+   "brand": "Checkbench",
+   "skip": "Skip to content",
+   "nav_label": "Site",
+   "strip_label": "All tests",
+   "home": "All tests",
+   "guides": "Guides",
+   "about": "About",
+   "privacy": "Privacy",
+   "contact": "Contact",
+   "lang_other": "한국어",
+   "lang_offer": "한국어로 보기",
+   "close": "Close",
+   "ad": "Ad",
+   "lumen_b": "Made by Lumen Lab",
+   "lumen_s": "More small apps and tools",
+   "checked": "Last checked",
+   "source": "Source",
+   "source_checked": "checked %1",
+   "faq": "Questions",
+   "how": "How to test",
+   "more_tests": "Other tests",
+   "guides_h": "Guides",
+   "not_found_t": "Page not found | Checkbench",
+   "not_found_d": "This page does not exist.",
+   "details": "Details and settings",
+   "legend_note": "Key legends follow the US layout. Positions are what count.",
+   "kb_layout": "Keyboard layout",
+   "layouts": {
+    "full": "ANSI 104 (wide Enter)",
+    "iso": "ISO 105 (tall Enter)",
+    "tkl": "Tenkeyless 87 (no number pad)",
+    "mac": "Mac"
+   },
+   "kb_label": "Keyboard diagram. Keys light up as you press them.",
+   "mouse_label": "Mouse diagram. Buttons light up as you press them.",
+   "stays_pill": "Mic and camera stay on this device",
+   "stays_on": "Nothing is uploaded. It stays in this tab.",
+   "asks": "Your browser will ask first.",
+   "off_note": "It is off now. Nothing was uploaded.",
+   "desk_note": "Keyboard and mouse tests work best on a computer.",
+   "auto": "measured automatically"
+  },
+  "ko": {
+   "brand": "체크벤치",
+   "skip": "본문으로 건너뛰기",
+   "nav_label": "사이트 메뉴",
+   "strip_label": "모든 테스트",
+   "home": "모든 테스트",
+   "guides": "가이드",
+   "about": "소개",
+   "privacy": "개인정보 처리방침",
+   "contact": "문의",
+   "lang_other": "English",
+   "lang_offer": "English version",
+   "close": "닫기",
+   "ad": "광고",
+   "lumen_b": "만든 곳 루멘랩",
+   "lumen_s": "다른 앱과 도구 보기",
+   "checked": "마지막 확인",
+   "source": "출처",
+   "source_checked": "%1 확인",
+   "faq": "자주 묻는 질문",
+   "how": "테스트하는 법",
+   "more_tests": "다른 테스트",
+   "guides_h": "가이드",
+   "not_found_t": "페이지가 없어요 | 체크벤치",
+   "not_found_d": "찾는 페이지가 없어요.",
+   "details": "자세히 보기와 설정",
+   "legend_note": "키에 적힌 글자는 미국 자판 기준이에요. 테스트하는 것은 키의 자리예요.",
+   "kb_layout": "자판 배열",
+   "layouts": {
+    "full": "풀 배열 104키 (가로로 긴 엔터)",
+    "iso": "ISO 105키 (세로로 긴 엔터)",
+    "tkl": "텐키리스 87키 (숫자판 없음)",
+    "mac": "맥"
+   },
+   "kb_label": "키보드 그림. 누른 키에 불이 켜져요.",
+   "mouse_label": "마우스 그림. 누른 단추에 불이 켜져요.",
+   "stays_pill": "마이크와 카메라는 이 기기 밖으로 안 나가요",
+   "stays_on": "어디에도 올라가지 않아요. 이 탭 안에만 있어요.",
+   "asks": "누르면 브라우저가 먼저 물어봐요.",
+   "off_note": "지금은 꺼져 있어요. 아무것도 올라가지 않았어요.",
+   "desk_note": "키보드와 마우스 테스트는 컴퓨터에서 해 보세요.",
+   "auto": "스스로 잰 값"
+  }
+ },
+ "t": {
+  "en": {
+   "tally": "%1 of 7 devices checked",
+   "earlier": "Checked earlier in this tab",
+   "kb_idle": "Press any key",
+   "kb_idle_s": "Each key lights up when your browser receives it.",
+   "kb_ok1": "1 key pressed, and it registered.",
+   "kb_ok": "%1 keys pressed, and all of them registered.",
+   "kb_left": "%1 keys on this layout not pressed yet.",
+   "kb_all": "Every key on this layout has registered.",
+   "kb_all_s": "%1 of %1 keys. Nothing left to press.",
+   "kb_sus": "Possible double-typing on %1.",
+   "kb_sus_s": "A second press arrived within %1 ms of release. Press that key a few more times to confirm.",
+   "kb_held": "%1 has been held for %2 seconds. If you are not holding it, it may be stuck.",
+   "kb_home_ok": "Keys respond",
+   "kb_home_sus": "Possible double-typing",
+   "kb_count": "%1 of %2",
+   "kb_none": "none seen",
+   "kb_n_sus": "%1 key suspected",
+   "kb_max0": "press several together",
+   "kb_max": "%1 worked",
+   "kb_heldnone": "none",
+   "kb_cap_on": "Keys are captured while you test. Press Esc twice to release Tab and shortcuts.",
+   "kb_cap_off": "Released. Click the keyboard to capture keys again.",
+   "kb_extra_none": "none",
+   "kb_log_gap": "%1 ms after release",
+   "kb_log_first": "first press",
+   "kb_log_repeat": "held (repeat)",
+   "kb_numpad": "That key is on the number pad. Switch the layout to see it.",
+   "m_idle": "Move the mouse or click here",
+   "m_idle_s": "Buttons and the wheel light up when your browser sees them.",
+   "m_ok": "The mouse responds.",
+   "m_seen": "Buttons seen: %1.",
+   "m_notyet": "Not pressed yet: %1.",
+   "m_allbtn": "All five buttons seen.",
+   "m_sus": "Possible double-click fault on %1.",
+   "m_sus_s": "A second click arrived within %1 ms of release. Click that button slowly a few more times to confirm.",
+   "m_home_ok": "Mouse responds",
+   "m_rate": "about %1",
+   "m_rate_raw": "near %1",
+   "m_rate_idle": "move it quickly",
+   "m_dbl_idle": "click to check",
+   "m_dbl_none": "none seen",
+   "m_dbl_n": "%1 suspected",
+   "m_btn": [
+    "Left",
+    "Wheel click",
+    "Right",
+    "Back",
+    "Forward"
+   ],
+   "m_framecap": "This browser may pass on only one update per screen frame. If so, the number stays near the screen's refresh rate.",
+   "mic_idle": "Check that your mic picks up sound",
+   "mic_idle_s": "Your browser will ask for permission. Nothing is recorded until you press Record.",
+   "ask_home": "Allow in the prompt",
+   "ask_long": "Still waiting for an answer. If you can’t see the prompt, press the button again.",
+   "mic_ask": "Waiting for your permission",
+   "mic_ask_s": "Choose Allow in the browser prompt.",
+   "mic_on": "The mic is on. Say something.",
+   "mic_on_s": "The bar should move with your voice.",
+   "mic_heard": "Your mic picks up sound.",
+   "mic_heard_s": "Record a few seconds below to hear how it sounds.",
+   "mic_quiet": "The mic is on, but we hear almost nothing.",
+   "mic_quiet_s": "Unmute it, move closer, or raise the input level in your system sound settings.",
+   "mic_stopped": "Mic turned off.",
+   "mic_stopped_s": "Press the button to test again.",
+   "mic_home_on": "Mic is on",
+   "mic_home_heard": "Mic picks up sound",
+   "mic_home_idle": "Not checked yet",
+   "mic_rec": "Recording… %1",
+   "mic_rec_done": "Recorded %1 seconds. Press play to listen.",
+   "mic_rec_fail": "This browser could not record. The level test above still works.",
+   "mic_noise": "Background noise: %1 dBFS",
+   "mic_noise_run": "Stay quiet for 3 seconds…",
+   "mic_info": "%1 Hz, %2",
+   "mic_ch1": "1 channel (mono)",
+   "mic_ch2": "2 channels (stereo)",
+   "mic_default": "Default microphone",
+   "cam_idle": "Check that your camera works",
+   "cam_idle_s": "Your browser will ask for permission. Nothing is recorded.",
+   "cam_ask": "Waiting for your permission",
+   "cam_ask_s": "Choose Allow in the browser prompt.",
+   "cam_on": "Your camera works.",
+   "cam_on_s": "%1 × %2%3, about %4 frames per second.",
+   "cam_on_s0": "%1 × %2%3.",
+   "cam_home_on": "Camera works",
+   "cam_stopped": "Camera turned off.",
+   "cam_stopped_s": "Press the button to test again.",
+   "cam_default": "Default camera",
+   "cam_photo": "Photo taken. It is only in this tab until you save it.",
+   "spk_idle": "Pick a side to play a short tone",
+   "spk_idle_s": "It starts quiet. Turn your volume down first.",
+   "spk_left": "Playing on the left only.",
+   "spk_right": "Playing on the right only.",
+   "spk_both": "Playing on both sides.",
+   "spk_sweep": "Rising tone: %1 Hz",
+   "spk_done_left": "Played on the left. Did it come from the left?",
+   "spk_done_right": "Played on the right. Did it come from the right?",
+   "spk_done_both": "Played on both sides.",
+   "spk_done_sweep": "Rising tone finished.",
+   "spk_done_s": "Wrong side or no sound? See the checklist below.",
+   "spk_home_done": "Tone played",
+   "spk_fail": "This browser could not play sound.",
+   "hz_wait": "Measuring…",
+   "hz_main": "This screen updates about %1 times per second (%1 Hz).",
+   "hz_main_raw": "This screen updates %1 times per second (%1 Hz).",
+   "hz_sub": "Measured from %1 frames in this browser. Power saving or a system setting can lower it.",
+   "hz_hidden": "Could not measure while the tab was in the background. Press Measure again.",
+   "hz_home": "about %1 Hz",
+   "hz_home_raw": "%1 Hz",
+   "hz_stable": "%1% of frames arrived on time",
+   "hz_ms": "%1 ms per frame",
+   "px_idle": "Fill the screen with one color and look for dots that don't match",
+   "px_idle_s": "Colors change only when you click, tap or press the right arrow. Press Esc to leave.",
+   "px_done": "You looked at %1 of 5 colors.",
+   "px_done_s": "A dot that showed on every color, even after wiping the screen, is on the panel and not dust.",
+   "px_names": [
+    "Black",
+    "White",
+    "Red",
+    "Green",
+    "Blue"
+   ],
+   "pad_idle": "Press any button on your controller",
+   "pad_idle_s": "Connect it by USB or Bluetooth first.",
+   "pad_on": "Controller connected.",
+   "pad_on_s": "%1. Press each button and move each stick.",
+   "pad_home_on": "Controller connected",
+   "pad_gone": "Controller disconnected.",
+   "pad_nostd": "This browser does not know this controller's layout, so buttons are shown by number.",
+   "pad_btn": [
+    "A / Cross",
+    "B / Circle",
+    "X / Square",
+    "Y / Triangle",
+    "LB / L1",
+    "RB / R1",
+    "LT / L2",
+    "RT / R2",
+    "Back / Share",
+    "Start / Options",
+    "Left stick press",
+    "Right stick press",
+    "D-pad up",
+    "D-pad down",
+    "D-pad left",
+    "D-pad right",
+    "Home"
+   ],
+   "pad_btn_n": "Button %1",
+   "pad_sticks": [
+    "Left stick",
+    "Right stick"
+   ],
+   "pad_drift_run": "Hands off the sticks…",
+   "pad_drift": "%1 rests %2% off center: %3.",
+   "pad_centered": "centered",
+   "pad_slight": "slightly off",
+   "pad_drifting": "drifting",
+   "pad_rumble_ok": "Vibration sent.",
+   "pad_rumble_no": "This browser did not offer vibration for this controller.",
+   "err": {
+    "denied": [
+     "Blocked for this site.",
+     "Use the lock or settings icon in the address bar to allow it, then press the button again."
+    ],
+    "denied-system": [
+     "Blocked by your system settings.",
+     "Allow your browser in the system privacy settings, then press the button again."
+    ],
+    "dismissed": [
+     "The permission prompt was closed.",
+     "Press the button again and choose Allow."
+    ],
+    "no-device": [
+     "No device was found.",
+     "Plug it in or switch it on, then press the button again."
+    ],
+    "in-use": [
+     "The device could not be opened.",
+     "Another app may be using it. Close that app and press the button again."
+    ],
+    "insecure": [
+     "This needs a secure (https) page.",
+     "Open the https address of this site."
+    ],
+    "unsupported": [
+     "This browser does not support this test.",
+     "Try a current version of Chrome, Edge, Firefox or Safari."
+    ],
+    "constraint": [
+     "That device could not be opened.",
+     "Pick another device from the list, or press the button again."
+    ],
+    "aborted": [
+     "The device could not be used.",
+     "Something kept it from starting. Press the button again."
+    ],
+    "policy": [
+     "This page is not allowed to use the device.",
+     "Open this site directly in a browser tab."
+    ],
+    "unknown": [
+     "The device could not be opened.",
+     "Press the button again."
+    ]
+   },
+   "kb_chat0": "tap one key many times",
+   "m_home_sus": "Possible double-click"
+  },
+  "ko": {
+   "tally": "기기 7개 중 %1개 확인",
+   "earlier": "이 탭에서 아까 확인했어요",
+   "kb_idle": "아무 키나 눌러 보세요",
+   "kb_idle_s": "브라우저가 받은 키에 불이 켜져요.",
+   "kb_ok1": "키 1개를 눌렀고 잘 들어왔어요.",
+   "kb_ok": "키 %1개를 눌렀고 전부 잘 들어왔어요.",
+   "kb_left": "이 배열에서 아직 안 누른 키가 %1개 있어요.",
+   "kb_all": "이 배열의 모든 키가 들어왔어요.",
+   "kb_all_s": "%1개 중 %1개. 더 누를 키가 없어요.",
+   "kb_sus": "%1 키가 두 번 눌린 것 같아요(채터링 의심).",
+   "kb_sus_s": "키를 뗀 뒤 %1ms 안에 다시 눌림이 들어왔어요. 그 키를 몇 번 더 눌러 확인해 보세요.",
+   "kb_held": "%1 키가 %2초째 눌려 있어요. 누르고 있지 않다면 키가 걸렸을 수 있어요.",
+   "kb_home_ok": "키가 들어와요",
+   "kb_home_sus": "채터링 의심",
+   "kb_count": "%2개 중 %1개",
+   "kb_none": "없음",
+   "kb_n_sus": "%1개 의심",
+   "kb_max0": "여러 개를 같이 눌러 보세요",
+   "kb_max": "%1개까지 됐어요",
+   "kb_heldnone": "없음",
+   "kb_cap_on": "테스트하는 동안 키를 이 화면이 받아요. Tab과 단축키를 돌려받으려면 Esc를 두 번 누르세요.",
+   "kb_cap_off": "키를 돌려드렸어요. 자판을 누르면 다시 받아요.",
+   "kb_extra_none": "없음",
+   "kb_log_gap": "뗀 뒤 %1ms",
+   "kb_log_first": "첫 누름",
+   "kb_log_repeat": "누르고 있음(반복)",
+   "kb_numpad": "그 키는 숫자판에 있어요. 배열을 바꾸면 보여요.",
+   "m_idle": "여기서 마우스를 움직이거나 눌러 보세요",
+   "m_idle_s": "브라우저가 받은 단추와 휠에 불이 켜져요.",
+   "m_ok": "마우스가 잘 들어와요.",
+   "m_seen": "눌린 단추: %1.",
+   "m_notyet": "아직 안 누른 단추: %1.",
+   "m_allbtn": "단추 다섯 개가 모두 들어왔어요.",
+   "m_sus": "%1 단추가 두 번 눌린 것 같아요(더블클릭 의심).",
+   "m_sus_s": "단추를 뗀 뒤 %1ms 안에 다시 눌림이 들어왔어요. 그 단추를 천천히 몇 번 더 눌러 확인해 보세요.",
+   "m_home_ok": "마우스가 들어와요",
+   "m_rate": "약 %1번",
+   "m_rate_raw": "%1번쯤",
+   "m_rate_idle": "빠르게 움직여 보세요",
+   "m_dbl_idle": "눌러 보면 알아요",
+   "m_dbl_none": "없음",
+   "m_dbl_n": "%1개 의심",
+   "m_btn": [
+    "왼쪽",
+    "휠 누름",
+    "오른쪽",
+    "뒤로",
+    "앞으로"
+   ],
+   "m_framecap": "이 브라우저는 화면 한 장에 한 번만 알려 줄 수 있어요. 그러면 숫자가 화면 주사율 근처에 머물러요.",
+   "mic_idle": "마이크가 소리를 잡는지 확인해요",
+   "mic_idle_s": "브라우저가 먼저 권한을 물어봐요. 녹음 단추를 누르기 전에는 아무것도 녹음하지 않아요.",
+   "ask_home": "허용을 눌러 주세요",
+   "ask_long": "아직 답을 기다리고 있어요. 권한 창이 안 보이면 단추를 다시 눌러 주세요.",
+   "mic_ask": "허용을 기다리는 중이에요",
+   "mic_ask_s": "브라우저 창에서 허용을 눌러 주세요.",
+   "mic_on": "마이크가 켜졌어요. 말해 보세요.",
+   "mic_on_s": "목소리에 맞춰 막대가 움직여야 해요.",
+   "mic_heard": "마이크가 소리를 잡아요.",
+   "mic_heard_s": "아래에서 몇 초 녹음해 어떻게 들리는지 들어 보세요.",
+   "mic_quiet": "마이크는 켜졌는데 소리가 거의 안 들려요.",
+   "mic_quiet_s": "음소거를 풀거나, 가까이 대거나, 운영체제 소리 설정에서 입력 크기를 올려 보세요.",
+   "mic_stopped": "마이크를 껐어요.",
+   "mic_stopped_s": "다시 하려면 단추를 누르세요.",
+   "mic_home_on": "마이크가 켜졌어요",
+   "mic_home_heard": "소리를 잡아요",
+   "mic_home_idle": "아직 안 했어요",
+   "mic_rec": "녹음 중… %1",
+   "mic_rec_done": "%1초 녹음했어요. 재생을 눌러 들어 보세요.",
+   "mic_rec_fail": "이 브라우저에서는 녹음이 안 돼요. 위의 소리 크기 확인은 그대로 돼요.",
+   "mic_noise": "바탕 소음: %1 dBFS",
+   "mic_noise_run": "3초 동안 조용히 있어 주세요…",
+   "mic_info": "%1Hz, %2",
+   "mic_ch1": "1채널(모노)",
+   "mic_ch2": "2채널(스테레오)",
+   "mic_default": "기본 마이크",
+   "cam_idle": "카메라가 되는지 확인해요",
+   "cam_idle_s": "브라우저가 먼저 권한을 물어봐요. 녹화하지 않아요.",
+   "cam_ask": "허용을 기다리는 중이에요",
+   "cam_ask_s": "브라우저 창에서 허용을 눌러 주세요.",
+   "cam_on": "카메라가 잘 돼요.",
+   "cam_on_s": "%1 × %2%3, 1초에 약 %4장.",
+   "cam_on_s0": "%1 × %2%3.",
+   "cam_home_on": "카메라가 돼요",
+   "cam_stopped": "카메라를 껐어요.",
+   "cam_stopped_s": "다시 하려면 단추를 누르세요.",
+   "cam_default": "기본 카메라",
+   "cam_photo": "사진을 찍었어요. 저장하기 전에는 이 탭 안에만 있어요.",
+   "spk_idle": "한쪽을 골라 짧은 소리를 내 보세요",
+   "spk_idle_s": "처음엔 작게 나와요. 먼저 음량을 낮춰 두세요.",
+   "spk_left": "왼쪽에서만 소리가 나는 중이에요.",
+   "spk_right": "오른쪽에서만 소리가 나는 중이에요.",
+   "spk_both": "양쪽에서 소리가 나는 중이에요.",
+   "spk_sweep": "올라가는 소리: %1Hz",
+   "spk_done_left": "왼쪽으로 소리를 냈어요. 왼쪽에서 들렸나요?",
+   "spk_done_right": "오른쪽으로 소리를 냈어요. 오른쪽에서 들렸나요?",
+   "spk_done_both": "양쪽으로 소리를 냈어요.",
+   "spk_done_sweep": "올라가는 소리가 끝났어요.",
+   "spk_done_s": "반대쪽에서 들리거나 안 들렸다면 아래 확인 목록을 보세요.",
+   "spk_home_done": "소리를 냈어요",
+   "spk_fail": "이 브라우저에서 소리를 내지 못했어요.",
+   "hz_wait": "재는 중…",
+   "hz_main": "이 화면은 1초에 약 %1번 바뀌어요(%1Hz).",
+   "hz_main_raw": "이 화면은 1초에 %1번 바뀌어요(%1Hz).",
+   "hz_sub": "이 브라우저에서 화면 %1장으로 쟀어요. 절전 모드나 운영체제 설정 때문에 낮게 나올 수 있어요.",
+   "hz_hidden": "탭이 뒤에 있는 동안에는 잴 수 없었어요. 다시 재기를 눌러 주세요.",
+   "hz_home": "약 %1Hz",
+   "hz_home_raw": "%1Hz",
+   "hz_stable": "화면의 %1%가 제때 왔어요",
+   "hz_ms": "화면 한 장에 %1ms",
+   "px_idle": "화면을 한 색으로 채우고 색이 다른 점을 찾아요",
+   "px_idle_s": "색은 누르거나 오른쪽 화살표를 눌렀을 때만 바뀌어요. 나가려면 Esc를 누르세요.",
+   "px_done": "다섯 색 중 %1색을 봤어요.",
+   "px_done_s": "화면을 닦은 뒤에도 모든 색에서 보인 점은 먼지가 아니라 화면에 있는 점이에요.",
+   "px_names": [
+    "검정",
+    "흰색",
+    "빨강",
+    "초록",
+    "파랑"
+   ],
+   "pad_idle": "컨트롤러의 아무 단추나 눌러 보세요",
+   "pad_idle_s": "먼저 USB나 블루투스로 연결하세요.",
+   "pad_on": "컨트롤러가 연결됐어요.",
+   "pad_on_s": "%1. 단추를 하나씩 누르고 스틱을 끝까지 움직여 보세요.",
+   "pad_home_on": "컨트롤러 연결됨",
+   "pad_gone": "컨트롤러 연결이 끊겼어요.",
+   "pad_nostd": "브라우저가 이 컨트롤러의 단추 배치를 몰라서 단추를 번호로 보여 줘요.",
+   "pad_btn": [
+    "A / ✕",
+    "B / ○",
+    "X / □",
+    "Y / △",
+    "LB / L1",
+    "RB / R1",
+    "LT / L2",
+    "RT / R2",
+    "뒤로 / 공유",
+    "시작 / 옵션",
+    "왼쪽 스틱 누름",
+    "오른쪽 스틱 누름",
+    "방향키 위",
+    "방향키 아래",
+    "방향키 왼쪽",
+    "방향키 오른쪽",
+    "홈"
+   ],
+   "pad_btn_n": "단추 %1",
+   "pad_sticks": [
+    "왼쪽 스틱",
+    "오른쪽 스틱"
+   ],
+   "pad_drift_run": "스틱에서 손을 떼고 기다려 주세요…",
+   "pad_drift": "%1: 가운데에서 %2% 벗어나 있어요(%3).",
+   "pad_centered": "가운데",
+   "pad_slight": "조금 쏠림",
+   "pad_drifting": "쏠림",
+   "pad_rumble_ok": "진동을 보냈어요.",
+   "pad_rumble_no": "이 브라우저에서는 이 컨트롤러의 진동을 쓸 수 없어요.",
+   "err": {
+    "denied": [
+     "이 사이트의 권한이 막혀 있어요.",
+     "주소창의 자물쇠(설정) 아이콘에서 허용한 뒤 단추를 다시 눌러 주세요."
+    ],
+    "denied-system": [
+     "운영체제 설정에서 막혀 있어요.",
+     "운영체제의 개인정보 설정에서 브라우저를 허용한 뒤 단추를 다시 눌러 주세요."
+    ],
+    "dismissed": [
+     "권한을 묻는 창을 닫았어요.",
+     "단추를 다시 누르고 허용을 골라 주세요."
+    ],
+    "no-device": [
+     "연결된 장치를 찾지 못했어요.",
+     "장치를 꽂거나 켠 뒤 단추를 다시 눌러 주세요."
+    ],
+    "in-use": [
+     "장치를 열지 못했어요.",
+     "다른 앱이 쓰는 중일 수 있어요. 그 앱을 닫고 단추를 다시 눌러 주세요."
+    ],
+    "insecure": [
+     "보안 연결(https)에서만 돼요.",
+     "이 사이트의 https 주소로 열어 주세요."
+    ],
+    "unsupported": [
+     "이 브라우저는 이 테스트를 지원하지 않아요.",
+     "크롬, 엣지, 파이어폭스, 사파리의 최신 버전에서 해 보세요."
+    ],
+    "constraint": [
+     "고른 장치를 열지 못했어요.",
+     "목록에서 다른 장치를 고르거나 단추를 다시 눌러 주세요."
+    ],
+    "aborted": [
+     "장치를 쓸 수 없었어요.",
+     "켜지는 도중에 문제가 생겼어요. 단추를 다시 눌러 주세요."
+    ],
+    "policy": [
+     "이 페이지에서는 장치를 쓸 수 없게 돼 있어요.",
+     "이 사이트를 브라우저 탭에서 바로 열어 주세요."
+    ],
+    "unknown": [
+     "장치를 열지 못했어요.",
+     "단추를 다시 눌러 주세요."
+    ]
+   },
+   "kb_chat0": "한 키를 여러 번 눌러 보세요",
+   "m_home_sus": "더블클릭 의심"
+  }
+ },
+ "home": {
+  "en": {
+   "title": "Device Test: Keyboard, Mouse, Mic, Webcam, Speakers and Screen | Checkbench",
+   "desc": "Test your keyboard, mouse, microphone, webcam, speakers, screen and gamepad on one page. Nothing to install. Mic and camera never leave your device.",
+   "h1": "Test your devices in one place",
+   "lead_desk": "Keyboard, mouse, mic, camera, speakers, screen and gamepad. Press any key to start.",
+   "lead_touch": "Mic, camera, speakers and screen. Tap a button to start.",
+   "panel": {
+    "kb": "Keyboard",
+    "mouse": "Mouse",
+    "mic": "Microphone",
+    "cam": "Camera",
+    "spk": "Speakers",
+    "screen": "Screen",
+    "pad": "Gamepad"
+   },
+   "idle": {
+    "kb": "Press any key",
+    "mouse": "Move or click",
+    "mic": "Not checked yet",
+    "cam": "Not checked yet",
+    "spk": "Not checked yet",
+    "screen": "Measuring…",
+    "pad": "Press a button on the controller"
+   },
+   "kb_hint": "Keys you press light up and stay tinted.",
+   "m_rows": {
+    "wheel": "Scroll wheel",
+    "rate": "Updates per second (estimate)",
+    "dbl": "Double-click check"
+   },
+   "mic_btn": "Check mic",
+   "cam_btn": "Check camera",
+   "stop": "Stop",
+   "larger": "Larger view",
+   "left": "Left",
+   "right": "Right",
+   "quiet": "Starts quiet.",
+   "go": {
+    "kb": "Keyboard tester",
+    "mouse": "Mouse test",
+    "mic": "Mic test with playback",
+    "cam": "Webcam test",
+    "spk": "Speaker test",
+    "hz": "Refresh rate test",
+    "px": "Dead pixel test",
+    "pad": "Gamepad tester"
+   },
+   "all_h": "All tests",
+   "all_p": "Each test has its own page with more detail: layouts and double-typing for keyboards, recording and playback for mics, full-screen colors for monitors.",
+   "why_h": "What happens to your sound and video",
+   "why": [
+    "The mic level, recordings, camera preview and photos are processed inside this tab. They are not uploaded, and they are gone when you close the tab.",
+    "The page asks for the mic or camera only after you press a button, and a Stop button stays visible while either is on.",
+    "Results are judged by rules shown next to them, for example what counts as double-typing. Where a number is an estimate, it says so."
+   ]
+  },
+  "ko": {
+   "title": "기기 테스트: 키보드·마우스·마이크·웹캠·스피커·모니터 | 체크벤치",
+   "desc": "키보드, 마우스, 마이크, 웹캠, 스피커, 모니터, 게임패드를 한 화면에서 테스트해요. 설치가 없고, 마이크와 카메라는 기기 밖으로 나가지 않아요.",
+   "h1": "기기 테스트를 한 곳에서",
+   "lead_desk": "키보드, 마우스, 마이크, 카메라, 스피커, 화면, 게임패드. 아무 키나 눌러 시작해요.",
+   "lead_touch": "마이크, 카메라, 스피커, 화면. 단추를 눌러 시작해요.",
+   "panel": {
+    "kb": "키보드",
+    "mouse": "마우스",
+    "mic": "마이크",
+    "cam": "카메라",
+    "spk": "스피커",
+    "screen": "화면",
+    "pad": "게임패드"
+   },
+   "idle": {
+    "kb": "아무 키나 눌러 보세요",
+    "mouse": "움직이거나 눌러 보세요",
+    "mic": "아직 안 했어요",
+    "cam": "아직 안 했어요",
+    "spk": "아직 안 했어요",
+    "screen": "재는 중…",
+    "pad": "컨트롤러 단추를 눌러 보세요"
+   },
+   "kb_hint": "누른 키에 불이 켜지고 옅게 남아요.",
+   "m_rows": {
+    "wheel": "휠 돌리기",
+    "rate": "1초에 알려 주는 횟수(추정)",
+    "dbl": "더블클릭 의심"
+   },
+   "mic_btn": "마이크 확인하기",
+   "cam_btn": "카메라 확인하기",
+   "stop": "끄기",
+   "larger": "크게 보기",
+   "left": "왼쪽",
+   "right": "오른쪽",
+   "quiet": "처음엔 작게 나와요.",
+   "go": {
+    "kb": "키보드 테스트",
+    "mouse": "마우스 테스트",
+    "mic": "마이크 테스트(녹음해서 듣기)",
+    "cam": "웹캠 테스트",
+    "spk": "스피커 테스트",
+    "hz": "주사율 테스트",
+    "px": "불량화소 테스트",
+    "pad": "게임패드 테스트"
+   },
+   "all_h": "모든 테스트",
+   "all_p": "테스트마다 따로 된 화면이 있어요. 키보드는 배열 고르기와 채터링, 마이크는 녹음해서 듣기, 모니터는 전체 화면 단색까지 볼 수 있어요.",
+   "why_h": "소리와 영상은 어떻게 되나요",
+   "why": [
+    "마이크 소리 크기, 녹음, 카메라 미리보기, 사진은 이 탭 안에서만 처리해요. 어디에도 올라가지 않고, 탭을 닫으면 사라져요.",
+    "마이크와 카메라는 단추를 눌렀을 때만 권한을 물어요. 켜져 있는 동안에는 끄기 단추가 계속 보여요.",
+    "결과는 화면에 적어 둔 기준으로 판정해요. 예를 들어 무엇을 채터링으로 보는지가 적혀 있어요. 추정한 숫자는 추정이라고 적어요."
+   ]
+  }
+ },
+ "tools": {
+  "kb": {
+   "slug": "keyboard-test",
+   "en": {
+    "name": "Keyboard",
+    "title": "Keyboard Tester: Check Every Key Online | Checkbench",
+    "desc": "Press each key and watch it light up. This keyboard tester shows keys that never register, how many keys work at once, and possible double-typing (chattering).",
+    "h1": "Keyboard Tester",
+    "lead": "Press every key. Keys that reach your browser light up, so a dead key is easy to spot.",
+    "short": "Every key, keys held at once, double-typing",
+    "labels": {
+     "seen": "Keys seen",
+     "max": "Most keys held at once",
+     "chatter": "Double-typing",
+     "held": "Held down now",
+     "reset": "Start over",
+     "last": "Last key",
+     "key": "Character or name (key)",
+     "code": "Position name (code)",
+     "extra": "Keys not on this layout",
+     "thr": "Count a second press as double-typing when it comes within",
+     "ms": "ms of release",
+     "log": "Recent presses"
+    },
+    "how": [
+     "Pick the layout that looks like your keyboard.",
+     "Press each key once. Pressed keys stay tinted.",
+     "Hold several keys together to see how many register at once.",
+     "Tap one key many times to look for double-typing."
+    ],
+    "sections": [
+     {
+      "h": "What the results mean",
+      "p": [
+       "A key that never lights up did not reach the browser. Try it in another app before you blame the keyboard, because some keys (for example some Fn combinations and system shortcuts) are handled by the system and may never arrive on a web page."
+      ]
+     },
+     {
+      "h": "How double-typing is judged",
+      "p": [
+       "If the same key is pressed again within 30 ms of being released, this site counts it as possible double-typing (often called chattering). 30 ms is this site’s own rule, not an official standard. You can change it under Details and settings."
+      ]
+     },
+     {
+      "h": "Keys held at once",
+      "p": [
+       "Hold keys down together and the tester shows the largest number it saw at the same moment. If a key stops registering once others are held, your keyboard limits that combination."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Why does a key not light up?",
+      "a": "Either the keyboard did not send it, or the system kept it. Media keys, the Fn key on many laptops and some system shortcuts may not reach a web page. Test the key in a text editor as well."
+     },
+     {
+      "q": "Does this keyboard tester record what I type?",
+      "a": "No. Key presses are counted inside this page and are gone when you close or reload it. The only things saved on your device are the layout you picked and the double-typing setting."
+     },
+     {
+      "q": "Which layout should I choose?",
+      "a": "ANSI 104 is the common full-size layout with a wide Enter key. ISO 105 has a tall Enter key and one extra key next to the left Shift. Tenkeyless 87 has no number pad. Mac matches Apple keyboards."
+     }
+    ],
+    "touch_note": "This test needs a physical keyboard connected to this device."
+   },
+   "ko": {
+    "name": "키보드",
+    "title": "키보드 테스트: 모든 키와 채터링 확인 | 체크벤치",
+    "desc": "키를 하나씩 누르면 불이 켜져요. 안 눌리는 키, 동시에 눌리는 키 수, 두 번 눌리는 채터링 의심까지 이 키보드 테스트에서 볼 수 있어요.",
+    "h1": "키보드 테스트",
+    "lead": "키를 전부 눌러 보세요. 브라우저가 받은 키에 불이 켜져서 안 눌리는 키가 바로 보여요.",
+    "short": "모든 키, 동시 입력, 채터링",
+    "labels": {
+     "seen": "눌러 본 키",
+     "max": "동시에 눌린 키",
+     "chatter": "채터링",
+     "held": "지금 눌린 키",
+     "reset": "처음부터",
+     "last": "마지막 키",
+     "key": "글자나 이름(key)",
+     "code": "자리 이름(code)",
+     "extra": "이 배열에 없는 키",
+     "thr": "키를 뗀 뒤 이 시간 안에 다시 눌리면 채터링으로 봐요:",
+     "ms": "ms",
+     "log": "최근 누름"
+    },
+    "how": [
+     "내 키보드와 닮은 배열을 골라요.",
+     "키를 하나씩 눌러요. 누른 키는 옅게 남아요.",
+     "여러 키를 같이 눌러 몇 개까지 들어오는지 봐요.",
+     "한 키를 여러 번 눌러 두 번씩 들어오는지 봐요."
+    ],
+    "sections": [
+     {
+      "h": "결과는 이렇게 읽어요",
+      "p": [
+       "불이 안 켜지는 키는 브라우저까지 오지 않은 키예요. 키보드 고장이라고 단정하기 전에 다른 프로그램에서도 눌러 보세요. 일부 Fn 조합이나 운영체제 단축키처럼 운영체제가 먼저 받아서 웹페이지에 오지 않는 키도 있어요."
+      ]
+     },
+     {
+      "h": "채터링은 이렇게 판정해요",
+      "p": [
+       "같은 키를 뗀 뒤 30ms(0.03초) 안에 다시 눌림이 들어오면 채터링 의심으로 세요. 30ms는 이 사이트가 정한 기준이고 공식 표준이 아니에요. '자세히 보기와 설정'에서 바꿀 수 있어요."
+      ]
+     },
+     {
+      "h": "동시에 눌리는 키",
+      "p": [
+       "키를 여러 개 같이 누르고 있으면 한순간에 가장 많이 들어온 수를 보여 줘요. 다른 키를 누른 채로는 안 들어오는 키가 있다면 그 조합은 키보드가 받지 못하는 거예요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "왜 불이 안 켜지는 키가 있나요?",
+      "a": "키보드가 그 키를 보내지 않았거나 운영체제가 먼저 받은 경우예요. 미디어 키, 노트북의 Fn 키, 일부 단축키는 웹페이지에 오지 않을 수 있어요. 메모장 같은 곳에서도 눌러 보세요."
+     },
+     {
+      "q": "누른 키가 어딘가에 기록되나요?",
+      "a": "아니요. 누른 키는 이 화면 안에서만 세고, 닫거나 새로 고치면 사라져요. 기기에 남는 것은 고른 배열과 채터링 기준뿐이에요."
+     },
+     {
+      "q": "한/영 키와 한자 키는 어디에 켜지나요?",
+      "a": "풀 배열과 텐키리스 그림에서는 스페이스 오른쪽의 '한/영', '한자' 자리에 켜져요. 웹 표준 문서(W3C)에는 한/영 키와 한자 키의 자리 이름이 따로 있지만(Lang1, Lang2) 브라우저가 꼭 그 이름으로 알려 줘야 하는 것은 아니에요. MDN의 표에는 윈도우에서 브라우저에 따라 이 이름이 비어 있는 경우도 적혀 있어요. 또 윈도우 한국어 입력기는 오른쪽 Alt로 한/영을, 오른쪽 Ctrl로 한자를 바꿀 수 있어서 이 키들이 오른쪽 Alt, 오른쪽 Ctrl로 잡힐 수도 있어요. 이 테스트는 어느 쪽으로 와도 같은 자리에 켜요. 실제로 들어온 이름은 '자세히 보기와 설정'에서 볼 수 있어요."
+     }
+    ],
+    "touch_note": "이 테스트는 기기에 연결한 키보드가 있어야 해요.",
+    "sources": [
+     {
+      "label": "W3C 문서: 키의 자리 이름(code) 표. 한/영은 Lang1, 한자는 Lang2",
+      "url": "https://www.w3.org/TR/uievents-code/",
+      "checked": "2026-10-10"
+     },
+     {
+      "label": "MDN: 운영체제와 브라우저별 code 값 표(영어)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values",
+      "checked": "2026-10-10"
+     },
+     {
+      "label": "마이크로소프트: 한국어 입력기 설명(영어). 오른쪽 Alt로 한/영, 오른쪽 Ctrl로 한자",
+      "url": "https://learn.microsoft.com/en-us/globalization/input/korean-ime",
+      "checked": "2026-10-10"
+     }
+    ]
+   }
+  },
+  "mouse": {
+   "slug": "mouse-test",
+   "en": {
+    "name": "Mouse",
+    "title": "Mouse Test: Buttons, Scroll Wheel and Double-Click Check | Checkbench",
+    "desc": "Click each mouse button, roll the wheel and move the pointer. This mouse test shows which buttons respond, flags possible double-click faults and estimates the report rate.",
+    "h1": "Mouse Test",
+    "lead": "Click every button and roll the wheel. Each part lights up when your browser sees it.",
+    "short": "Buttons, wheel, double-click fault, report rate",
+    "labels": {
+     "buttons": "Buttons",
+     "wheel": "Scroll wheel",
+     "up": "up",
+     "down": "down",
+     "rate": "Updates per second (estimate)",
+     "dbl": "Double-click check",
+     "reset": "Start over",
+     "thr": "Count a second click as a fault when it comes within",
+     "ms": "ms of release"
+    },
+    "how": [
+     "Click the left, right and wheel buttons over the test area.",
+     "Press the side buttons if your mouse has them.",
+     "Roll the wheel up and down.",
+     "Move the mouse quickly in circles for a second to estimate how often it reports."
+    ],
+    "sections": [
+     {
+      "h": "How a double-click fault is judged",
+      "p": [
+       "If the same button is pressed again within 50 ms of being released, this site counts it as a possible double-click fault. A press that quick is unlikely to be on purpose. 50 ms is this site’s own rule, and you can change it under Details and settings."
+      ]
+     },
+     {
+      "h": "About the updates per second",
+      "p": [
+       "The number is an estimate. It counts pointer updates your browser received while the mouse was moving fast. When a browser passes on only one update per screen frame, the number stays near the screen’s refresh rate and the true rate of the mouse can be higher."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "My side buttons do nothing here. Why?",
+      "a": "A mouse’s own software can turn the side buttons into keys or macros. Then the browser does not receive them as mouse buttons. Check the mouse software, or test without it running."
+     },
+     {
+      "q": "Can a web page measure the real polling rate?",
+      "a": "Only roughly. A page sees the updates the browser hands over, not the USB traffic itself. Treat the number as the least your mouse is doing."
+     },
+     {
+      "q": "Does the right-click menu still work?",
+      "a": "Inside the test area the menu is turned off so you can test the right button. It works as usual everywhere else on the page."
+     }
+    ],
+    "touch_note": "This test needs a mouse connected to this device."
+   },
+   "ko": {
+    "name": "마우스",
+    "title": "마우스 테스트: 단추·휠·더블클릭 확인 | 체크벤치",
+    "desc": "마우스 단추를 하나씩 누르고 휠을 돌려 보세요. 어느 단추가 들어오는지, 한 번 눌렀는데 두 번 눌리는 더블클릭 의심, 1초에 알려 주는 횟수(추정)를 보여 줘요.",
+    "h1": "마우스 테스트",
+    "lead": "단추를 전부 누르고 휠을 돌려 보세요. 브라우저가 받은 곳에 불이 켜져요.",
+    "short": "단추, 휠, 더블클릭 의심, 보고 수",
+    "labels": {
+     "buttons": "단추",
+     "wheel": "휠 돌리기",
+     "up": "위",
+     "down": "아래",
+     "rate": "1초에 알려 주는 횟수(추정)",
+     "dbl": "더블클릭 의심",
+     "reset": "처음부터",
+     "thr": "단추를 뗀 뒤 이 시간 안에 다시 눌리면 의심으로 봐요:",
+     "ms": "ms"
+    },
+    "how": [
+     "테스트 칸 위에서 왼쪽, 오른쪽, 휠 단추를 눌러요.",
+     "옆 단추가 있으면 그것도 눌러요.",
+     "휠을 위아래로 돌려요.",
+     "마우스를 1초쯤 빠르게 빙빙 돌리면 1초에 몇 번 알려 주는지 추정해요."
+    ],
+    "sections": [
+     {
+      "h": "더블클릭 의심은 이렇게 판정해요",
+      "p": [
+       "같은 단추를 뗀 뒤 50ms(0.05초) 안에 다시 눌림이 들어오면 더블클릭 의심으로 세요. 일부러 누르기에는 너무 짧은 간격이에요. 50ms는 이 사이트가 정한 기준이고 '자세히 보기와 설정'에서 바꿀 수 있어요."
+      ]
+     },
+     {
+      "h": "1초에 알려 주는 횟수",
+      "p": [
+       "이 숫자는 추정이에요. 마우스를 빠르게 움직이는 동안 브라우저가 받은 위치 알림을 센 값이에요. 브라우저가 화면 한 장에 한 번만 알려 주면 숫자가 화면 주사율 근처에 머물고, 실제 마우스는 그보다 자주 알릴 수 있어요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "옆 단추를 눌러도 반응이 없어요.",
+      "a": "마우스 전용 프로그램이 옆 단추를 키나 매크로로 바꿔 보낼 수 있어요. 그러면 브라우저에는 마우스 단추로 오지 않아요. 그 프로그램 설정을 보거나 끄고 해 보세요."
+     },
+     {
+      "q": "웹페이지로 진짜 폴링레이트를 잴 수 있나요?",
+      "a": "대략만 알 수 있어요. 웹페이지는 브라우저가 넘겨준 알림만 보고, USB로 오가는 신호를 직접 보지 못해요. 적어도 이만큼은 알린다는 뜻으로 보세요."
+     },
+     {
+      "q": "오른쪽 단추 메뉴가 안 떠요.",
+      "a": "테스트 칸 안에서는 오른쪽 단추를 테스트할 수 있게 메뉴를 꺼 뒀어요. 칸 밖에서는 평소처럼 떠요."
+     }
+    ],
+    "touch_note": "이 테스트는 기기에 연결한 마우스가 있어야 해요."
+   }
+  },
+  "mic": {
+   "slug": "mic-test",
+   "en": {
+    "name": "Mic",
+    "title": "Mic Test: Check Your Microphone and Hear Yourself | Checkbench",
+    "desc": "Test your microphone in the browser. Watch the level move as you speak, record a few seconds and play it back. Sound stays on your device and is never uploaded.",
+    "h1": "Mic Test",
+    "lead": "See if your microphone picks up your voice, then record a few seconds and listen.",
+    "short": "Level, recording and playback",
+    "labels": {
+     "start": "Test my mic",
+     "stop": "Stop",
+     "device": "Microphone",
+     "quiet": "Quiet",
+     "loud": "Loud",
+     "clip": "Too loud",
+     "rec": "Record 5 seconds",
+     "rec_again": "Record again",
+     "del": "Delete recording",
+     "rec_h": "Hear yourself",
+     "level": "Level now",
+     "peak": "Loudest so far",
+     "format": "Signal",
+     "noise": "Measure background noise"
+    },
+    "how": [
+     "Press Test my mic and allow the microphone when your browser asks.",
+     "Speak. The bar should move with your voice.",
+     "Press Record 5 seconds, then play it back to hear how you sound.",
+     "Press Stop when you are done. Leaving the page also turns the mic off."
+    ],
+    "sections": [
+     {
+      "h": "If the browser says the mic is blocked",
+      "p": [
+       "The message under the button tells you where the block is. If this site is blocked, use the lock or settings icon in the address bar to allow the microphone, then press the button again.",
+       "If the system is blocking it, open Windows 11 Settings → Privacy & security → Microphone, or on a Mac System Settings → Privacy & Security → Microphone, and allow your browser. Names vary a little between versions."
+      ]
+     },
+     {
+      "h": "Where the sound goes",
+      "p": [
+       "The level meter and the recording are made inside this tab. A recording stays in memory until you record again, press Delete recording or close the tab. It is not sent to us."
+      ]
+     },
+     {
+      "h": "How the level is shown",
+      "p": [
+       "The bar shows loudness on the scale digital audio uses, from silence up to the loudest value it can store (0 dBFS). We say the mic picks up sound once the level passes −45 dBFS. That line is this site’s own rule."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Can I hear myself live?",
+      "a": "Use Record and then play it back. Playing the mic straight to the speakers would loop back into the mic on most laptops, so this test plays a recording instead."
+     },
+     {
+      "q": "The bar moves but people on my call can’t hear me. What now?",
+      "a": "The mic works in this browser. Check that the meeting app is using the same microphone, and that you are not muted there."
+     },
+     {
+      "q": "Is my voice uploaded?",
+      "a": "No. There is no upload step and no server that receives audio."
+     }
+    ]
+   },
+   "ko": {
+    "name": "마이크",
+    "title": "마이크 테스트: 소리 확인하고 녹음해서 듣기 | 체크벤치",
+    "desc": "브라우저에서 마이크를 테스트해요. 말하면 막대가 움직이고, 몇 초 녹음해서 바로 들어 볼 수 있어요. 소리는 기기 안에만 있고 어디에도 올라가지 않아요.",
+    "h1": "마이크 테스트",
+    "lead": "마이크가 내 목소리를 잡는지 보고, 몇 초 녹음해서 들어 보세요.",
+    "short": "소리 크기, 녹음해서 듣기",
+    "labels": {
+     "start": "마이크 테스트 시작",
+     "stop": "끄기",
+     "device": "마이크",
+     "quiet": "작음",
+     "loud": "큼",
+     "clip": "너무 큼",
+     "rec": "5초 녹음하기",
+     "rec_again": "다시 녹음",
+     "del": "녹음 지우기",
+     "rec_h": "내 목소리 들어 보기",
+     "level": "지금 크기",
+     "peak": "가장 컸을 때",
+     "format": "신호",
+     "noise": "바탕 소음 재기"
+    },
+    "how": [
+     "마이크 테스트 시작을 누르고, 브라우저가 물으면 마이크를 허용해요.",
+     "말해 보세요. 목소리에 맞춰 막대가 움직여야 해요.",
+     "5초 녹음하기를 누른 뒤 재생해서 어떻게 들리는지 확인해요.",
+     "다 했으면 끄기를 눌러요. 페이지를 떠나도 마이크는 꺼져요."
+    ],
+    "sections": [
+     {
+      "h": "마이크가 막혀 있다고 나올 때",
+      "p": [
+       "단추 아래 안내가 어디에서 막혔는지 알려 줘요. 이 사이트의 권한이 막혀 있으면 주소창의 자물쇠(설정) 아이콘에서 마이크를 허용한 뒤 단추를 다시 누르세요.",
+       "운영체제가 막고 있으면 윈도우 11은 설정 → 개인 정보 및 보안 → 마이크, 맥은 시스템 설정 → 개인정보 보호 및 보안 → 마이크에서 브라우저를 허용하세요. 버전에 따라 이름이 조금 달라요."
+      ]
+     },
+     {
+      "h": "소리는 어디로 가나요",
+      "p": [
+       "소리 크기 막대와 녹음은 이 탭 안에서 만들어요. 녹음은 다시 녹음하거나, 녹음 지우기를 누르거나, 탭을 닫을 때까지 기기 메모리에만 있어요. 저희에게 오지 않아요."
+      ]
+     },
+     {
+      "h": "소리 크기는 이렇게 보여 줘요",
+      "p": [
+       "막대는 디지털 소리의 크기 눈금으로 그려요. 무음에서 시작해 담을 수 있는 가장 큰 값(0 dBFS)까지예요. 크기가 -45 dBFS를 넘으면 '소리를 잡아요'라고 알려요. 이 선은 이 사이트가 정한 기준이에요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "내 목소리를 바로 들을 수는 없나요?",
+      "a": "녹음한 뒤 재생해서 들어 보세요. 마이크 소리를 스피커로 바로 내보내면 그 소리가 다시 마이크로 들어가 울리기 쉬워서, 녹음을 들려주는 방식으로 했어요."
+     },
+     {
+      "q": "막대는 움직이는데 회의에서 제 소리가 안 들린대요.",
+      "a": "이 브라우저에서는 마이크가 되는 거예요. 회의 프로그램이 같은 마이크를 쓰고 있는지, 거기서 음소거가 아닌지 확인해 보세요."
+     },
+     {
+      "q": "제 목소리가 어딘가에 올라가나요?",
+      "a": "아니요. 올리는 단계가 없고, 소리를 받는 서버도 없어요."
+     }
+    ]
+   }
+  },
+  "cam": {
+   "slug": "webcam-test",
+   "en": {
+    "name": "Webcam",
+    "title": "Webcam Test: Check Your Camera Online | Checkbench",
+    "desc": "Check that your webcam works before a call. See the live picture, its real resolution and frame rate, flip it like a mirror and take a test photo. Video never leaves your device.",
+    "h1": "Webcam Test",
+    "lead": "See what your camera sees, with its actual size and frames per second.",
+    "short": "Live picture, size, frames per second, photo",
+    "labels": {
+     "start": "Test my camera",
+     "stop": "Stop",
+     "device": "Camera",
+     "mirror": "Mirror",
+     "photo": "Take a photo",
+     "save": "Save photo",
+     "setting": "Camera setting",
+     "measured": "Measured here"
+    },
+    "how": [
+     "Press Test my camera and allow the camera when your browser asks.",
+     "Check the picture. Its size and frames per second appear above it.",
+     "Use Mirror to flip the picture left to right.",
+     "Take a photo if you want to look closely. Press Stop when you are done."
+    ],
+    "sections": [
+     {
+      "h": "What the numbers mean",
+      "p": [
+       "Size is the picture your browser is actually receiving, which can be smaller than the camera’s rated resolution. Frames per second is measured from the frames that arrive, so it can be lower than the rated number."
+      ]
+     },
+     {
+      "h": "Where the picture goes",
+      "p": [
+       "The preview and any photo stay in this tab. A photo is saved only if you press Save photo, and then it goes to your own downloads folder."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "The picture is black. Why?",
+      "a": "Check for a lens cover or a privacy switch first. If another app is using the camera, close it and press the button again."
+     },
+     {
+      "q": "Why do I look flipped compared with meeting apps?",
+      "a": "Many apps show you a mirrored preview. The Mirror button here only changes what you see on this page."
+     },
+     {
+      "q": "Is the video uploaded?",
+      "a": "No. There is no upload step and no server that receives video."
+     }
+    ]
+   },
+   "ko": {
+    "name": "웹캠",
+    "title": "웹캠 테스트: 카메라가 되는지 바로 확인 | 체크벤치",
+    "desc": "화상회의 전에 웹캠이 되는지 확인해요. 실제 화면, 실제 해상도와 초당 장 수를 보여 주고, 좌우 뒤집기와 사진 찍기도 돼요. 영상은 기기 밖으로 나가지 않아요.",
+    "h1": "웹캠 테스트",
+    "lead": "카메라에 무엇이 보이는지, 실제 크기와 1초에 몇 장인지 확인해요.",
+    "short": "실제 화면, 해상도, 초당 장 수, 사진",
+    "labels": {
+     "start": "카메라 테스트 시작",
+     "stop": "끄기",
+     "device": "카메라",
+     "mirror": "좌우 뒤집기",
+     "photo": "사진 찍기",
+     "save": "사진 저장",
+     "setting": "카메라 설정값",
+     "measured": "여기서 잰 값"
+    },
+    "how": [
+     "카메라 테스트 시작을 누르고, 브라우저가 물으면 카메라를 허용해요.",
+     "화면을 확인해요. 크기와 1초에 몇 장인지가 화면 위에 나와요.",
+     "좌우 뒤집기로 거울처럼 볼 수 있어요.",
+     "자세히 보려면 사진을 찍어요. 다 했으면 끄기를 눌러요."
+    ],
+    "sections": [
+     {
+      "h": "숫자는 이렇게 읽어요",
+      "p": [
+       "크기는 브라우저가 실제로 받고 있는 화면 크기예요. 카메라에 적힌 해상도보다 작을 수 있어요. 1초에 몇 장인지는 실제로 도착한 화면을 세서 재기 때문에 적힌 숫자보다 낮을 수 있어요."
+      ]
+     },
+     {
+      "h": "영상은 어디로 가나요",
+      "p": [
+       "미리보기와 사진은 이 탭 안에만 있어요. 사진은 사진 저장을 눌렀을 때만 내 기기의 다운로드 폴더에 저장돼요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "화면이 까맣게 나와요.",
+      "a": "렌즈 덮개나 카메라 끄기 스위치부터 확인해 보세요. 다른 프로그램이 카메라를 쓰고 있다면 그 프로그램을 닫고 단추를 다시 누르세요."
+     },
+     {
+      "q": "회의 프로그램과 좌우가 반대로 보여요.",
+      "a": "많은 프로그램이 나에게는 거울처럼 뒤집힌 화면을 보여 줘요. 여기의 좌우 뒤집기는 이 화면에서 보이는 모습만 바꿔요."
+     },
+     {
+      "q": "영상이 어딘가에 올라가나요?",
+      "a": "아니요. 올리는 단계가 없고, 영상을 받는 서버도 없어요."
+     }
+    ]
+   }
+  },
+  "spk": {
+   "slug": "speaker-test",
+   "en": {
+    "name": "Speakers",
+    "title": "Speaker Test: Left and Right Sound Check | Checkbench",
+    "desc": "Play a short tone on the left speaker, the right speaker or both. Check that your speakers or headphones are the right way round. The test starts quiet.",
+    "h1": "Speaker Test (Left / Right)",
+    "lead": "Play a tone on one side at a time to check your speakers or headphones.",
+    "short": "Left, right, both, rising tone",
+    "labels": {
+     "left": "Left",
+     "right": "Right",
+     "both": "Both",
+     "volume": "Test volume",
+     "low": "low",
+     "high": "half",
+     "sweep": "Play a rising tone",
+     "sweep_note": "Goes from a low hum to a very high pitch over 8 seconds. Keep the volume low.",
+     "stop": "Stop"
+    },
+    "how": [
+     "Turn your volume down first. The tone starts quiet.",
+     "Press Left. The tone should come from the left side only.",
+     "Press Right, then Both.",
+     "Raise the test volume slowly if you can’t hear it."
+    ],
+    "sections": [
+     {
+      "h": "If the sound comes from the wrong side",
+      "p": [
+       "Headphones may be on backwards, or the speakers may be plugged in or placed the other way round. If both sides play when you press Left, look for a mono audio setting in your system’s sound or accessibility settings."
+      ]
+     },
+     {
+      "h": "About the rising tone",
+      "p": [
+       "The rising tone sweeps from 40 Hz to 16,000 Hz. Small speakers get quiet at the lowest part, and the very top can be faint or unpleasant, so a quiet start or end is not a fault by itself. Keep the volume low."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "I hear nothing. Is the speaker broken?",
+      "a": "Check the system volume and which output device is selected first. Then raise the test volume slider a little and press the button again."
+     },
+     {
+      "q": "How loud is the test tone?",
+      "a": "It starts at one tenth of full scale, and the slider stops at half of full scale, so the page itself never plays at maximum level."
+     },
+     {
+      "q": "Why can’t I hear the highest part of the rising tone?",
+      "a": "Small speakers and many headphones get quiet at the very top, and not everyone hears the highest pitches. That alone does not mean a fault."
+     }
+    ]
+   },
+   "ko": {
+    "name": "스피커",
+    "title": "스피커 테스트: 왼쪽·오른쪽 소리 확인 | 체크벤치",
+    "desc": "왼쪽, 오른쪽, 양쪽으로 짧은 소리를 내 스피커와 헤드폰의 좌우가 맞는지 확인해요. 처음엔 작은 소리로 시작해요.",
+    "h1": "스피커 테스트 (왼쪽·오른쪽)",
+    "lead": "한쪽씩 소리를 내 스피커나 헤드폰을 확인해요.",
+    "short": "왼쪽, 오른쪽, 양쪽, 올라가는 소리",
+    "labels": {
+     "left": "왼쪽",
+     "right": "오른쪽",
+     "both": "양쪽",
+     "volume": "테스트 음량",
+     "low": "작게",
+     "high": "절반",
+     "sweep": "올라가는 소리 내기",
+     "sweep_note": "낮은 소리에서 아주 높은 소리까지 8초 동안 올라가요. 음량을 낮게 두세요.",
+     "stop": "멈추기"
+    },
+    "how": [
+     "먼저 음량을 낮춰요. 소리는 작게 시작해요.",
+     "왼쪽을 눌러요. 왼쪽에서만 소리가 나야 해요.",
+     "오른쪽, 양쪽도 눌러요.",
+     "안 들리면 테스트 음량을 조금씩 올려요."
+    ],
+    "sections": [
+     {
+      "h": "반대쪽에서 소리가 날 때",
+      "p": [
+       "헤드폰을 반대로 썼거나, 스피커를 반대로 꽂았거나 놓았을 수 있어요. 왼쪽을 눌렀는데 양쪽에서 다 들리면 운영체제의 소리 설정이나 접근성 설정에 모노 오디오가 켜져 있는지 보세요."
+      ]
+     },
+     {
+      "h": "올라가는 소리",
+      "p": [
+       "40Hz에서 16,000Hz까지 올라가요. 작은 스피커는 가장 낮은 부분이 작게 들리고, 가장 높은 부분은 희미하거나 거슬릴 수 있어요. 처음이나 끝이 조용한 것만으로는 고장이 아니에요. 음량을 낮게 두세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "아무 소리도 안 나요. 고장인가요?",
+      "a": "운영체제 음량과 어떤 출력 장치가 골라져 있는지부터 보세요. 그다음 테스트 음량을 조금 올리고 단추를 다시 눌러 보세요."
+     },
+     {
+      "q": "테스트 소리는 얼마나 큰가요?",
+      "a": "가장 큰 값의 10분의 1로 시작하고, 음량 막대는 절반까지만 올라가요. 이 페이지가 최대 크기로 소리를 내는 일은 없어요."
+     },
+     {
+      "q": "올라가는 소리의 끝부분이 안 들려요.",
+      "a": "작은 스피커와 여러 헤드폰은 가장 높은 소리를 작게 내고, 가장 높은 소리는 사람마다 듣는 정도가 달라요. 그것만으로는 고장이 아니에요."
+     }
+    ]
+   }
+  },
+  "px": {
+   "slug": "dead-pixel-test",
+   "en": {
+    "name": "Dead pixels",
+    "title": "Dead Pixel Test: Full-Screen Colors for Monitors and Phones | Checkbench",
+    "desc": "Fill your whole screen with black, white, red, green and blue to look for dots that don’t match. A simple screen test for a new monitor, laptop or phone.",
+    "h1": "Dead Pixel Test",
+    "lead": "Fill the screen with one color at a time and look for dots that don’t match.",
+    "short": "Full-screen black, white, red, green, blue",
+    "labels": {
+     "start": "Start full screen",
+     "from": "Start with",
+     "next": "Click, tap or press → for the next color. After the last color the test closes by itself."
+    },
+    "how": [
+     "Wipe the screen so dust doesn’t fool you.",
+     "Press Start full screen.",
+     "Click, tap or press the right arrow to go to the next color.",
+     "Look closely on each color. Press Esc to leave early."
+    ],
+    "sections": [
+     {
+      "h": "What to look for",
+      "p": [
+       "On each color, look for a dot that is a different color from everything around it. A dot that shows on every color, even after you wipe the screen, is on the panel and not dust."
+      ]
+     },
+     {
+      "h": "A screen test for a new monitor",
+      "p": [
+       "The same solid colors make uneven lighting easy to see. On black in a dark room, look for bright patches near the edges. On white, look for areas that look darker or tinted."
+      ]
+     },
+     {
+      "h": "Nothing flashes",
+      "p": [
+       "Colors change only when you click, tap or press a key. The test never cycles on its own, and nothing else is drawn on the full-screen color."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Does it work on a phone?",
+      "a": "Yes. Where the browser allows full screen, the color fills the display. Where it does not, the color fills the browser window instead."
+     },
+     {
+      "q": "How many bad pixels are acceptable?",
+      "a": "That depends on the maker’s warranty policy for your model. We don’t list numbers here because they differ by brand and change over time. Check the warranty page for your screen."
+     },
+     {
+      "q": "Can this fix a stuck pixel?",
+      "a": "No. This page only shows solid colors so you can find them."
+     }
+    ]
+   },
+   "ko": {
+    "name": "불량화소",
+    "title": "불량화소 테스트: 전체 화면 단색으로 모니터 확인 | 체크벤치",
+    "desc": "화면 전체를 검정, 흰색, 빨강, 초록, 파랑으로 채워 색이 다른 점을 찾아요. 새 모니터·노트북·휴대폰 화면 테스트에 쓰세요.",
+    "h1": "불량화소 테스트",
+    "lead": "화면을 한 색씩 채우고 색이 다른 점을 찾아요.",
+    "short": "전체 화면 검정·흰색·빨강·초록·파랑",
+    "labels": {
+     "start": "전체 화면으로 시작",
+     "from": "시작할 색",
+     "next": "누르거나 → 키를 누르면 다음 색으로 넘어가요. 마지막 색 다음에는 스스로 닫혀요."
+    },
+    "how": [
+     "먼지에 속지 않게 화면을 먼저 닦아요.",
+     "전체 화면으로 시작을 눌러요.",
+     "누르거나 오른쪽 화살표를 눌러 다음 색으로 넘겨요.",
+     "색마다 가까이에서 살펴봐요. 중간에 나가려면 Esc를 눌러요."
+    ],
+    "sections": [
+     {
+      "h": "무엇을 찾나요",
+      "p": [
+       "색마다 둘레와 색이 다른 점을 찾아요. 화면을 닦은 뒤에도 모든 색에서 보이는 점은 먼지가 아니라 화면에 있는 점이에요."
+      ]
+     },
+     {
+      "h": "새 모니터 화면 테스트",
+      "p": [
+       "같은 단색 화면으로 밝기가 고르지 않은 곳도 볼 수 있어요. 어두운 방에서 검정을 띄우고 가장자리에 밝게 뜨는 곳이 있는지, 흰색에서는 어둡거나 색이 도는 곳이 있는지 보세요."
+      ]
+     },
+     {
+      "h": "번쩍이지 않아요",
+      "p": [
+       "색은 누르거나 키를 눌렀을 때만 바뀌어요. 스스로 넘어가지 않고, 전체 화면 색 위에는 아무것도 그리지 않아요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "휴대폰에서도 되나요?",
+      "a": "돼요. 브라우저가 전체 화면을 허용하면 화면 전체를 채우고, 허용하지 않으면 브라우저 창을 채워요."
+     },
+     {
+      "q": "불량화소가 몇 개까지 정상인가요?",
+      "a": "제품을 만든 회사의 보증 정책에 따라 달라요. 회사마다 다르고 바뀌기도 해서 여기에는 숫자를 적지 않았어요. 내 제품의 보증 안내를 확인하세요."
+     },
+     {
+      "q": "이걸로 고칠 수 있나요?",
+      "a": "아니요. 이 화면은 점을 찾을 수 있게 단색만 보여 줘요."
+     }
+    ]
+   }
+  },
+  "hz": {
+   "slug": "refresh-rate-test",
+   "en": {
+    "name": "Refresh rate",
+    "title": "Refresh Rate Test: See Your Screen’s Hz | Checkbench",
+    "desc": "Measure how many times per second your screen updates in this browser. See the result in Hz, compare it with 60, 120 or 144 Hz, and watch a moving bar for stutter.",
+    "h1": "Refresh Rate Test",
+    "lead": "Measures how often this browser draws a new frame on your screen.",
+    "short": "Screen Hz and a moving bar",
+    "labels": {
+     "again": "Measure again",
+     "bar": "Show moving bar",
+     "bar_stop": "Stop the bar",
+     "bar_note": "The bar should glide. Jumps mean frames are being skipped.",
+     "frame": "Time per frame",
+     "samples": "Frames timed",
+     "stable": "Steadiness",
+     "size": "Screen size"
+    },
+    "how": [
+     "Wait two seconds. The number appears by itself.",
+     "Compare it with the rate your monitor should run at.",
+     "Press Show moving bar and watch for jumps.",
+     "Press Measure again after changing a setting."
+    ],
+    "sections": [
+     {
+      "h": "How it is measured",
+      "p": [
+       "The page asks the browser to call it once per frame and times 120 frames in a row. The middle value (the median) of the gaps gives the rate. If it lands within 1% of a common rate such as 60, 120 or 144, we show that rate with the word “about”."
+      ]
+     },
+     {
+      "h": "Why it can be lower than your monitor’s rating",
+      "p": [
+       "The number is what this browser is drawing, not what the panel can do. A system display setting left at 60 Hz, a power-saving mode or a busy computer can all lower it."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "My 144 Hz monitor shows 60. Why?",
+      "a": "Check the refresh rate in your system display settings first. It may still be set to 60 Hz. Then press Measure again."
+     },
+     {
+      "q": "Is this the same as a UFO test?",
+      "a": "It answers the same first question: the refresh rate the browser sees. The moving bar here is a simple stutter check, not a motion blur test."
+     },
+     {
+      "q": "Why does the number change a little each time?",
+      "a": "Frame timing wobbles by a fraction of a millisecond. That is why a result close to a common rate is shown as “about”."
+     }
+    ]
+   },
+   "ko": {
+    "name": "주사율",
+    "title": "주사율 테스트: 내 모니터 Hz 확인 | 체크벤치",
+    "desc": "이 브라우저에서 화면이 1초에 몇 번 바뀌는지 재요. 결과를 Hz로 보여 주고, 60·120·144Hz와 견줘 볼 수 있어요. 움직이는 막대로 끊김도 확인해요.",
+    "h1": "주사율 테스트",
+    "lead": "이 브라우저가 화면을 1초에 몇 번 새로 그리는지 재요.",
+    "short": "화면 Hz, 움직이는 막대",
+    "labels": {
+     "again": "다시 재기",
+     "bar": "움직이는 막대 보기",
+     "bar_stop": "막대 멈추기",
+     "bar_note": "막대가 미끄러지듯 움직여야 해요. 뚝뚝 끊기면 화면이 빠지고 있는 거예요.",
+     "frame": "화면 한 장의 시간",
+     "samples": "잰 화면 수",
+     "stable": "고른 정도",
+     "size": "화면 크기"
+    },
+    "how": [
+     "2초쯤 기다리면 숫자가 스스로 나와요.",
+     "모니터가 나와야 할 주사율과 견줘 봐요.",
+     "움직이는 막대 보기를 눌러 끊김이 있는지 봐요.",
+     "설정을 바꾼 뒤에는 다시 재기를 눌러요."
+    ],
+    "sections": [
+     {
+      "h": "이렇게 재요",
+      "p": [
+       "브라우저에게 화면을 그릴 때마다 알려 달라고 하고, 이어진 120장의 간격을 재요. 그 간격의 가운데 값(중앙값)으로 주사율을 구해요. 60, 120, 144처럼 흔한 값과 1% 안으로 가까우면 그 값에 '약'을 붙여 보여 줘요."
+      ]
+     },
+     {
+      "h": "모니터 사양보다 낮게 나올 때",
+      "p": [
+       "이 숫자는 모니터가 낼 수 있는 값이 아니라 이 브라우저가 실제로 그리는 값이에요. 운영체제 디스플레이 설정이 60Hz로 돼 있거나, 절전 모드이거나, 컴퓨터가 바쁘면 낮게 나와요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "144Hz 모니터인데 60이 나와요.",
+      "a": "운영체제 디스플레이 설정의 주사율부터 확인해 보세요. 60Hz로 돼 있을 수 있어요. 바꾼 뒤 다시 재기를 누르세요."
+     },
+     {
+      "q": "UFO 테스트와 같은 건가요?",
+      "a": "브라우저에서 보이는 주사율을 알려 준다는 점은 같아요. 여기의 움직이는 막대는 끊김만 보는 간단한 확인이고, 잔상 테스트는 아니에요."
+     },
+     {
+      "q": "잴 때마다 숫자가 조금씩 달라요.",
+      "a": "화면을 그리는 간격이 아주 조금씩 흔들려서 그래요. 그래서 흔한 값에 가까운 결과는 '약'을 붙여 보여 줘요."
+     }
+    ]
+   }
+  },
+  "pad": {
+   "slug": "gamepad-tester",
+   "en": {
+    "name": "Gamepad",
+    "title": "Gamepad Tester: Buttons, Sticks, Triggers and Drift | Checkbench",
+    "desc": "Connect a controller and press any button. This gamepad tester shows every button, stick and trigger live, measures stick drift at rest and tries vibration when the browser supports it.",
+    "h1": "Gamepad Tester",
+    "lead": "Press any button on your controller. Buttons, sticks and triggers show up live.",
+    "short": "Buttons, sticks, triggers, drift, vibration",
+    "labels": {
+     "buttons": "Buttons",
+     "sticks": "Sticks",
+     "drift": "Measure resting position",
+     "drift_h": "Stick drift",
+     "drift_idle": "Let go of both sticks, then press the button.",
+     "rumble": "Test vibration",
+     "rule": "This site’s rule: under 5% from center is centered, 5% to 15% is slightly off, 15% or more is drifting."
+    },
+    "how": [
+     "Connect the controller by USB or Bluetooth.",
+     "Press any button so the page can see it.",
+     "Press each button and move each stick to its edges.",
+     "Let go of the sticks and press Measure resting position to check for drift."
+    ],
+    "sections": [
+     {
+      "h": "How drift is judged",
+      "p": [
+       "With your hands off the sticks, the tester averages each stick’s position for about a second. Under 5% from center counts as centered, 5% to 15% as slightly off, and 15% or more as drifting. These lines are this site’s own rule, not an official standard."
+      ]
+     },
+     {
+      "h": "If nothing shows up",
+      "p": [
+       "Press any button on the controller once. A page may not see a controller until you do. If it still does not appear, reconnect it and try another browser."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "Which controllers work?",
+      "a": "Any controller your browser reports. When the browser knows the standard layout, buttons are named by position (for example A / Cross). Otherwise they are shown as numbered buttons."
+     },
+     {
+      "q": "Vibration does nothing.",
+      "a": "Vibration only runs when the browser and the controller both support it. If the button is missing, your browser did not offer it for this controller."
+     },
+     {
+      "q": "Is drift here the same as drift in games?",
+      "a": "The test shows raw values with nothing filtered out. Games often ignore small offsets near the center, so slight drift here may not show in play."
+     }
+    ]
+   },
+   "ko": {
+    "name": "게임패드",
+    "title": "게임패드 테스트: 단추·스틱·트리거·쏠림 확인 | 체크벤치",
+    "desc": "컨트롤러를 연결하고 아무 단추나 눌러 보세요. 모든 단추, 스틱, 트리거 값을 바로 보여 주고, 가만히 둔 스틱의 쏠림을 재요. 브라우저가 지원하면 진동도 테스트해요.",
+    "h1": "게임패드 테스트",
+    "lead": "컨트롤러의 아무 단추나 누르면 단추, 스틱, 트리거가 바로 보여요.",
+    "short": "단추, 스틱, 트리거, 쏠림, 진동",
+    "labels": {
+     "buttons": "단추",
+     "sticks": "스틱",
+     "drift": "가만히 둔 위치 재기",
+     "drift_h": "스틱 쏠림",
+     "drift_idle": "두 스틱에서 손을 뗀 뒤 단추를 누르세요.",
+     "rumble": "진동 테스트",
+     "rule": "이 사이트의 기준: 가운데에서 5% 미만이면 가운데, 5% 이상 15% 미만이면 조금 쏠림, 15% 이상이면 쏠림."
+    },
+    "how": [
+     "컨트롤러를 USB나 블루투스로 연결해요.",
+     "아무 단추나 눌러 페이지가 컨트롤러를 볼 수 있게 해요.",
+     "단추를 하나씩 누르고 스틱을 끝까지 움직여요.",
+     "스틱에서 손을 떼고 가만히 둔 위치 재기를 눌러 쏠림을 확인해요."
+    ],
+    "sections": [
+     {
+      "h": "쏠림은 이렇게 판정해요",
+      "p": [
+       "스틱에서 손을 뗀 채로 1초쯤 위치의 평균을 내요. 가운데에서 5% 미만이면 가운데, 5% 이상 15% 미만이면 조금 쏠림, 15% 이상이면 쏠림으로 봐요. 이 선은 이 사이트가 정한 기준이고 공식 표준이 아니에요."
+      ]
+     },
+     {
+      "h": "아무것도 안 보일 때",
+      "p": [
+       "컨트롤러의 아무 단추나 한 번 눌러 보세요. 단추를 누르기 전에는 페이지에 컨트롤러가 안 보일 수 있어요. 그래도 안 보이면 다시 연결하거나 다른 브라우저에서 해 보세요."
+      ]
+     }
+    ],
+    "faq": [
+     {
+      "q": "어떤 컨트롤러가 되나요?",
+      "a": "브라우저가 알려 주는 컨트롤러면 돼요. 브라우저가 표준 배치를 알면 단추를 자리 이름(예: A / ✕)으로 보여 주고, 모르면 번호로 보여 줘요."
+     },
+     {
+      "q": "진동이 안 돼요.",
+      "a": "브라우저와 컨트롤러가 둘 다 지원할 때만 진동이 돼요. 진동 단추가 안 보이면 브라우저가 이 컨트롤러의 진동을 내주지 않은 거예요."
+     },
+     {
+      "q": "여기서 나온 쏠림이 게임에서도 똑같나요?",
+      "a": "여기서는 아무것도 거르지 않은 값을 보여 줘요. 게임은 가운데 근처의 작은 쏠림을 무시하는 경우가 많아서, 여기서 조금 쏠려도 게임에서는 안 느껴질 수 있어요."
+     }
+    ]
+   }
+  }
+ },
+ "about": {
+  "en": {
+   "title": "About Checkbench: What It Tests and How It Judges",
+   "desc": "Who makes Checkbench, what each device test does in your browser, and the rules it uses to judge double-typing, drift and refresh rate.",
+   "h1": "About Checkbench",
+   "body": [
+    {
+     "h": "What this is",
+     "p": [
+      "Checkbench is a set of free device tests that run in your browser: keyboard, mouse, microphone, webcam, speakers, dead pixels, refresh rate and gamepad. There is nothing to install and no account."
+     ]
+    },
+    {
+     "h": "Who makes it",
+     "p": [
+      "Checkbench is made by Lumen Lab, a small studio in Korea that makes apps and web tools. You can reach us at woxocoso@gmail.com."
+     ]
+    },
+    {
+     "h": "How results are judged",
+     "p": [
+      "Each verdict comes from a rule you can read next to it. None of these rules is an official standard, and the ones marked adjustable can be changed on the test page."
+     ],
+     "list": [
+      "Double-typing on a keyboard: a second press within 30 ms of releasing the same key (adjustable).",
+      "Double-click fault on a mouse: a second press within 50 ms of releasing the same button (adjustable).",
+      "Mouse updates per second: counted from pointer updates the browser received while the mouse moved fast. An estimate.",
+      "Refresh rate: the median gap between 120 frames. Shown as “about” a common rate when within 1% of it.",
+      "Mic level: loudness on the digital scale where the loudest storable value is 0 dBFS. “Picks up sound” means the level passed −45 dBFS.",
+      "Speaker tone: starts at one tenth of full scale and cannot go above half.",
+      "Stick drift: average resting position. Under 5% centered, 5% to 15% slightly off, 15% or more drifting."
+     ]
+    },
+    {
+     "h": "What it cannot tell you",
+     "p": [
+      "A web page only sees what the browser passes on. Keys the system keeps for itself, a mouse’s true USB polling rate and the real sound in your room are outside its view. The tests say so where it matters."
+     ]
+    },
+    {
+     "h": "Your sound and video",
+     "p": [
+      "Mic audio, recordings, camera video and photos are processed in the tab and never uploaded. Details are in the privacy policy."
+     ]
+    },
+    {
+     "h": "Credits",
+     "p": [
+      "Text is set in Pretendard by Kil Hyung-jin (SIL Open Font License 1.1), loaded from jsDelivr."
+     ]
+    }
+   ]
+  },
+  "ko": {
+   "title": "체크벤치 소개: 무엇을 테스트하고 어떻게 판정하나",
+   "desc": "체크벤치를 누가 만들었는지, 기기 테스트가 브라우저에서 무엇을 하는지, 채터링·쏠림·주사율을 어떤 기준으로 판정하는지 적었어요.",
+   "h1": "체크벤치 소개",
+   "body": [
+    {
+     "h": "무엇을 하는 곳인가요",
+     "p": [
+      "체크벤치는 브라우저에서 바로 하는 무료 기기 테스트 모음이에요. 키보드, 마우스, 마이크, 웹캠, 스피커, 불량화소, 주사율, 게임패드를 테스트해요. 설치도 가입도 없어요."
+     ]
+    },
+    {
+     "h": "누가 만들었나요",
+     "p": [
+      "앱과 웹 도구를 만드는 루멘랩(Lumen Lab)이 만들었어요. 문의는 woxocoso@gmail.com 으로 보내 주세요."
+     ]
+    },
+    {
+     "h": "결과는 이렇게 판정해요",
+     "p": [
+      "판정마다 기준을 결과 옆에 적어 뒀어요. 아래 기준은 모두 공식 표준이 아니라 이 사이트가 정한 것이고, '바꿀 수 있음'이라고 적힌 것은 테스트 화면에서 바꿀 수 있어요."
+     ],
+     "list": [
+      "키보드 채터링: 같은 키를 뗀 뒤 30ms 안에 다시 눌림(바꿀 수 있음).",
+      "마우스 더블클릭 의심: 같은 단추를 뗀 뒤 50ms 안에 다시 눌림(바꿀 수 있음).",
+      "마우스가 1초에 알려 주는 횟수: 빠르게 움직이는 동안 브라우저가 받은 위치 알림을 센 값. 추정이에요.",
+      "주사율: 화면 120장 간격의 중앙값. 흔한 값과 1% 안이면 '약'을 붙여요.",
+      "마이크 소리 크기: 담을 수 있는 가장 큰 값을 0 dBFS로 보는 디지털 눈금. -45 dBFS를 넘으면 '소리를 잡아요'라고 해요.",
+      "스피커 테스트 소리: 가장 큰 값의 10분의 1로 시작하고 절반을 넘지 못해요.",
+      "스틱 쏠림: 가만히 둔 위치의 평균. 5% 미만 가운데, 5% 이상 15% 미만 조금 쏠림, 15% 이상 쏠림."
+     ]
+    },
+    {
+     "h": "알려 줄 수 없는 것",
+     "p": [
+      "웹페이지는 브라우저가 넘겨준 것만 볼 수 있어요. 운영체제가 먼저 받는 키, 마우스의 실제 USB 폴링레이트, 방 안에서 실제로 나는 소리는 볼 수 없어요. 그런 곳에는 화면에 그렇다고 적어 뒀어요."
+     ]
+    },
+    {
+     "h": "소리와 영상",
+     "p": [
+      "마이크 소리, 녹음, 카메라 영상, 사진은 탭 안에서만 처리하고 어디에도 올리지 않아요. 자세한 내용은 개인정보 처리방침에 있어요."
+     ]
+    },
+    {
+     "h": "쓴 글꼴",
+     "p": [
+      "글꼴은 길형진 님의 Pretendard(SIL Open Font License 1.1)이고 jsDelivr에서 받아요."
+     ]
+    }
+   ]
+  }
+ },
+ "privacy": {
+  "en": {
+   "title": "Privacy Policy | Checkbench",
+   "desc": "Checkbench tests your mic, camera and other devices inside the browser and uploads none of it. What is stored on your device, visit statistics and how ads use cookies.",
+   "html": "<h1>Privacy policy</h1>\n<p>Effective October 10, 2026 · Operated by Lumen Lab</p>\n<h2>Your microphone, camera and other devices</h2>\n<p>Microphone audio, recordings, camera video and photos are processed inside your browser tab. They are never uploaded to us or anyone else. A recording or photo stays in the tab’s memory until you delete it, replace it or close the tab. The microphone and camera are requested only after you press a button, and they are turned off when you press Stop, leave the page or hide the tab.</p>\n<p>Key presses, mouse movement and controller input are counted on the page to show the result. They are not saved and not sent anywhere.</p>\n<h2>What is stored on your device</h2>\n<p>A few settings are kept in your browser so the page looks the same next time. Clearing site data removes them.</p>\n<ul>\n<li><code>ck.layout</code>: the keyboard layout you picked.</li>\n<li><code>ck.chatter</code>: your double-typing setting, in milliseconds.</li>\n<li><code>ck.dblclick</code>: your double-click setting, in milliseconds.</li>\n<li><code>ck.lang</code>: that you closed or followed the language suggestion bar, so it is not shown again.</li>\n<li><code>ck.done</code> (session storage, removed when the tab closes): which tests you have already run in this tab, so the lights stay on as you move between pages.</li>\n</ul>\n<h2>Visit statistics</h2>\n<p>We look at visit statistics through Cloudflare Web Analytics: which pages were viewed and how fast they loaded. According to Cloudflare, it does not use cookies or local storage. Nothing from your devices and no setting you choose in the tests is included. See <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>.</p>\n<h2>Ads</h2>\n<p>This site shows ads through Google AdSense. Google and other ad vendors use cookies to serve ads based on your visits to this and other websites. Because of these ads, third parties such as Google may place or read cookies in your browser and collect information through web beacons (tiny invisible images). See <a href=\"https://policies.google.com/technologies/partner-sites\">how Google uses information from sites or apps that use its services</a>. You can turn off personalized ads in <a href=\"https://www.google.com/settings/ads\">Google Ad Settings</a>.</p>\n<h2>Fonts and server logs</h2>\n<p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither receives your audio, video or input.</p>\n<h2>Contact</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+  },
+  "ko": {
+   "title": "개인정보 처리방침 | 체크벤치",
+   "desc": "체크벤치는 마이크·카메라와 그 밖의 기기를 브라우저 안에서 테스트하고 아무것도 올리지 않아요. 기기에 남는 것, 방문 통계, 광고 쿠키를 적었어요.",
+   "html": "<h1>개인정보 처리방침</h1>\n<p>시행일: 2026년 10월 10일 · 운영: 루멘랩(Lumen Lab)</p>\n<h2>마이크, 카메라와 그 밖의 기기</h2>\n<p>마이크 소리, 녹음, 카메라 영상, 사진은 이용자의 브라우저 탭 안에서만 처리해요. 저희를 포함해 어디에도 전송하지 않아요. 녹음과 사진은 지우거나, 새로 만들거나, 탭을 닫을 때까지 탭의 메모리에만 있어요. 마이크와 카메라 권한은 단추를 눌렀을 때만 요청하고, 끄기를 누르거나 페이지를 떠나거나 탭을 가리면 꺼요.</p>\n<p>누른 키, 마우스 움직임, 컨트롤러 입력은 결과를 보여 주려고 화면 안에서만 세요. 저장하지 않고 어디에도 보내지 않아요.</p>\n<h2>기기에 저장하는 정보</h2>\n<p>다음에도 같은 모습으로 보이게 설정 몇 가지를 브라우저에 남겨요. 브라우저의 사이트 데이터 지우기로 언제든 지울 수 있어요.</p>\n<ul>\n<li><code>ck.layout</code>: 고른 자판 배열.</li>\n<li><code>ck.chatter</code>: 채터링 기준(ms).</li>\n<li><code>ck.dblclick</code>: 더블클릭 의심 기준(ms).</li>\n<li><code>ck.lang</code>: 다른 언어판 안내 띠를 닫았거나 눌렀다는 것. 띠를 다시 띄우지 않으려고 써요.</li>\n<li><code>ck.done</code>(세션 저장소, 탭을 닫으면 사라져요): 이 탭에서 이미 해 본 테스트. 페이지를 옮겨 다녀도 불이 켜진 채로 남게 하려고 써요.</li>\n</ul>\n<h2>방문 통계</h2>\n<p>방문 통계는 Cloudflare Web Analytics로 봐요. 어느 페이지를 몇 번 봤는지, 페이지가 얼마나 빨리 떴는지 같은 숫자예요. Cloudflare 설명으로는 쿠키나 기기 저장소를 쓰지 않아요. 기기에서 나온 소리·영상·입력과 테스트에서 고른 설정은 여기에 실리지 않아요. <a href=\"https://www.cloudflare.com/web-analytics/\">Cloudflare Web Analytics</a>에서 볼 수 있어요.</p>\n<h2>광고</h2>\n<p>이 사이트는 Google 애드센스로 광고를 보여 줘요. Google을 비롯한 광고 회사는 쿠키를 써서 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 고를 수 있어요. 광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요. Google이 이 정보를 어떻게 쓰는지는 <a href=\"https://policies.google.com/technologies/partner-sites?hl=ko\">Google 파트너 사이트에서 Google이 데이터를 사용하는 방식</a>에 있어요. 맞춤 광고는 <a href=\"https://www.google.com/settings/ads\">Google 광고 설정</a>에서 끌 수 있어요.</p>\n<h2>글꼴과 서버 기록</h2>\n<p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 소리, 영상, 입력은 받지 않아요.</p>\n<h2>문의</h2>\n<p><a href=\"mailto:woxocoso@gmail.com\">woxocoso@gmail.com</a></p>"
+  }
+ },
+ "guide_index": {
+  "en": {
+   "title": "Guides: Keyboards, Mics and Monitors | Checkbench",
+   "desc": "Short guides that go with the Checkbench tests: confirming double-typing, key rollover, a blocked microphone and checking a new monitor.",
+   "h1": "Guides",
+   "lead": "Short answers to what people ask after a test."
+  },
+  "ko": {
+   "title": "가이드: 키보드·마이크·모니터 | 체크벤치",
+   "desc": "체크벤치 테스트와 같이 보는 짧은 가이드예요. 채터링 확인, 동시 입력, 마이크가 안 잡힐 때, 새 모니터 확인을 다뤄요.",
+   "h1": "가이드",
+   "lead": "테스트한 뒤에 궁금해지는 것들을 짧게 적었어요."
+  }
+ },
+ "notfound": {
+  "en": "Page not found",
+  "ko": "페이지가 없어요",
+  "en_go": "Go to all tests",
+  "ko_go": "모든 테스트 보기"
+ }
+}

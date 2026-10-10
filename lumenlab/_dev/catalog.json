@@ -84,6 +84,24 @@
       "name": {"ko": "칸칸", "en": "Kankan"},
       "sub": "Kankan",
       "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, SNS 한도, 원고지까지.", "en": "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits."}
+    },
+    {
+      "id": "checkbench",
+      "url": "https://check.lumenlab.page/ko/",
+      "url_en": "https://check.lumenlab.page/",
+      "icon": "/img/check.svg",
+      "name": {"ko": "체크벤치", "en": "Checkbench"},
+      "sub": "Checkbench",
+      "line": {"ko": "키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요.", "en": "Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded."}
+    },
+    {
+      "id": "todok",
+      "url": "https://typing.lumenlab.page/ko/",
+      "url_en": "https://typing.lumenlab.page/",
+      "icon": "/img/typing.svg",
+      "name": {"ko": "토독", "en": "Todok"},
+      "sub": "Todok",
+      "line": {"ko": "한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.", "en": "Typing test and practice in English and Korean that shows which keys you missed and where you slowed down."}
     }
   ]
 }

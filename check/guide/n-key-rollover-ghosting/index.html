@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Key Rollover and Ghosting: How Many Keys at Once? | Checkbench</title>
+<meta name="description" content="Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://check.lumenlab.page/guide/n-key-rollover-ghosting/">
+<link rel="alternate" hreflang="en" href="https://check.lumenlab.page/guide/n-key-rollover-ghosting/">
+<link rel="alternate" hreflang="ko" href="https://check.lumenlab.page/ko/guide/dongsi-ipryeok-rollover/">
+<link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/guide/n-key-rollover-ghosting/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Key Rollover and Ghosting: How Many Keys at Once? | Checkbench">
+<meta property="og:description" content="Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.">
+<meta property="og:url" content="https://check.lumenlab.page/guide/n-key-rollover-ghosting/">
+<meta property="og:site_name" content="Checkbench">
+<meta property="og:image" content="https://check.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Key rollover and ghosting: test how many keys register at once", "description": "Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/n-key-rollover-ghosting/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://check.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Key rollover and ghosting: test how many keys register at once", "item": "https://check.lumenlab.page/guide/n-key-rollover-ghosting/"}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+<script src="/assets/ads-config.js"></script>
+<script defer src="/assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap top-in">
+  <a class="logo" href="/"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect class="lg-b" width="26" height="26" rx="7"/><circle class="lg-r" cx="13" cy="13" r="7.2"/><circle class="lg-d" cx="13" cy="13" r="4.2"/></svg><span>Checkbench</span></a>
+  <nav class="top-nav" aria-label="Site"><a class="nav-home" href="/">All tests</a><a href="/guide/" aria-current="page">Guides</a><a class="wide" href="/about/">About</a><a href="/ko/guide/dongsi-ipryeok-rollover/" lang="ko" hreflang="ko">한국어</a></nav>
+</div></header>
+
+<main id="main">
+<article class="wrap narrow doc article">
+  <p class="crumb"><a href="/guide/">Guides</a></p>
+  <h1>Key rollover and ghosting: test how many keys register at once</h1>
+  <p class="byline">Last checked <time datetime="2026-10-10">2026-10-10</time> · Lumen Lab</p>
+  <p>Rollover is how many keys a keyboard can report while they are all held down. You do not need a spec sheet to find out. Hold keys in the <a href="/keyboard-test/">keyboard tester</a> and read “Most keys held at once”: that number is what your keyboard, cable and browser actually delivered.</p>
+<h2>How the tester counts</h2>
+<p>Every key that is down at the same moment counts, including Shift, Ctrl and the other modifiers. The tester remembers the largest number it has seen and which keys they were. A key you let go before pressing the next one does not count.</p>
+<div class="tbl tbl--tight"><table><thead><tr><th>What you do</th><th>Held at that moment</th><th>Most keys held at once</th></tr></thead><tbody>
+<tr><td data-th="What you do">Hold A, S, D, F one after another</td><td data-th="Held at that moment">A S D F</td><td data-th="Most keys held at once">4</td></tr>
+<tr><td data-th="What you do">Let go of A, then also hold G</td><td data-th="Held at that moment">S D F G</td><td data-th="Most keys held at once">still 4</td></tr>
+<tr><td data-th="What you do">Hold A and S, release A, then hold D, F, J</td><td data-th="Held at that moment">S D F J</td><td data-th="Most keys held at once">4</td></tr>
+</tbody></table></div>
+<h2>Test the combinations you actually use</h2>
+<ol>
+<li>Press Start over so old presses do not count.</li>
+<li>Hold the keys you use together, for example W, A, Shift and Space for a game, or a chord from your editor.</li>
+<li>Check that every held key is drawn dark on the diagram and that “Held down now” lists them all.</li>
+<li>Add one more key at a time until a new key no longer shows. The number before that is your limit for that group of keys.</li>
+</ol>
+<p>Try several groups. A keyboard can handle one combination and not another, so the result for one group of keys does not tell you about the next.</p>
+<h2>What ghosting and blocking look like</h2>
+<ul>
+<li><b>A key you pressed does not light up</b> while others are held. That combination did not arrive, so for now treat it as one your keyboard cannot report.</li>
+<li><b>A key you did not press lights up.</b> People call this ghosting. Let go of everything and try the same combination again to be sure it was not a stray finger.</li>
+</ul>
+<p>Either way the tester is only the messenger: it shows what arrived. It cannot add keys the keyboard never sent.</p>
+<h2>Limits of testing in a browser</h2>
+<p>Some combinations belong to the system or the browser and may never reach a web page, for example shortcuts that switch windows. If a combination fails here, try a different group of keys before you conclude the keyboard is the limit. While the tester is capturing keys it holds on to Tab and most shortcuts so the page does not jump around. Press Esc twice to release them.</p>
+<p class="cta"><a class="btn" href="/keyboard-test/">Open the keyboard tester</a></p>
+</article>
+<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
+<section class="wrap narrow sec"><h2>Other tests</h2><ul class="tool-list"><li><a href="/keyboard-test/">Keyboard Tester</a><span>Every key, keys held at once, double-typing</span></li><li><a href="/mouse-test/">Mouse Test</a><span>Buttons, wheel, double-click fault, report rate</span></li><li><a href="/mic-test/">Mic Test</a><span>Level, recording and playback</span></li><li><a href="/webcam-test/">Webcam Test</a><span>Live picture, size, frames per second, photo</span></li><li><a href="/speaker-test/">Speaker Test (Left / Right)</a><span>Left, right, both, rising tone</span></li><li><a href="/dead-pixel-test/">Dead Pixel Test</a><span>Full-screen black, white, red, green, blue</span></li><li><a href="/refresh-rate-test/">Refresh Rate Test</a><span>Screen Hz and a moving bar</span></li><li><a href="/gamepad-tester/">Gamepad Tester</a><span>Buttons, sticks, triggers, drift, vibration</span></li></ul></section>
+<div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/" data-lumen><span class="lumen-lamps" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More small apps and tools</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/keyboard-test/">Keyboard Tester</a><a href="/mouse-test/">Mouse Test</a><a href="/mic-test/">Mic Test</a><a href="/webcam-test/">Webcam Test</a><a href="/speaker-test/">Speaker Test (Left / Right)</a><a href="/dead-pixel-test/">Dead Pixel Test</a><a href="/refresh-rate-test/">Refresh Rate Test</a><a href="/gamepad-tester/">Gamepad Tester</a></p>
+  <p class="foot-links"><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:woxocoso@gmail.com">Contact</a></p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="ck">{"lang": "en", "page": "doc", "t": {"close": "Close"}, "other": "/ko/guide/dongsi-ipryeok-rollover/", "otherLabel": "한국어로 보기"}</script>
+</body>
+</html>
