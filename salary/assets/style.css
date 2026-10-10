@@ -12,7 +12,7 @@ img{max-width:100%;height:auto}
   --focus:#1d4ed8; --err:#b3261e; --ph:#8f8c95;
   --r:14px; --r-sm:9px; --t:.16s; --ease:cubic-bezier(.2,.7,.2,1);
   --shadow:0 1px 1px rgba(30,24,28,.05),0 14px 34px -18px rgba(40,20,28,.28);
-  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+  --font:"TK Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Segoe UI",system-ui,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -444,4 +444,65 @@ html.anim .lumen.in:hover .lm-paper,html.anim .lumen.in:focus-visible .lm-paper{
   .pay-t th,.pay-t td{padding:3pt 5pt;font-size:8.5pt}
   .pay-t thead th{position:static}
   a{text-decoration:none}
+}
+
+/* ── 3단계(제3자 평가 반영)에서 더한 것 ── */
+/* 금액 칸 옆 단위: 칸 안 오른쪽에 겹쳐 놓는다(자리를 차지하지 않는다). 단위를 붙여 쓰면 app.js 가 비운다 */
+.unit{position:absolute;right:13px;top:0;bottom:0;display:flex;align-items:center;font-size:15px;font-weight:650;color:var(--muted);pointer-events:none;white-space:nowrap}
+.unit:empty{display:none}
+.money .unit{right:16px;font-size:18px}
+.money input{padding-right:74px}
+html[lang="en"] .money input{padding-right:62px}
+.inp-u{position:relative;display:block;min-width:0}
+.fld .inp-u input{padding-right:62px}
+.row .inp-u{display:inline-block}
+.row > .inp-u{justify-self:end}   /* 칸 폭만큼만 차지해야 단위가 칸 안에 놓인다 */
+.row .inp-u .mini{padding-right:50px}
+.pay-find .inp-u{display:inline-block}
+.pay-find .inp-u input{padding-right:58px}
+.read.warn{color:var(--hold)}
+.fld > .read{margin:0 2px}
+.row > .read{grid-column:1/-1;margin:-4px 0 0;min-height:0;text-align:right}
+.row > .read:empty{display:none}
+@media (max-width:340px){.row > .inp-u{justify-self:start}.row > .read{text-align:left}}   /* 아주 좁으면 칸이 이름표 아래 왼쪽으로 내려온다. 읽은 값 줄도 같이 왼쪽으로 */
+/* 못 읽은 칸: 초점이 있어도 붉은 테두리(초점 표시는 바깥 그림자로 남는다) */
+input[aria-invalid="true"],select[aria-invalid="true"],.money input[aria-invalid="true"]:focus,.fld input[aria-invalid="true"]:focus,.fld select[aria-invalid="true"]:focus,.mini[aria-invalid="true"]:focus,.pay-find input[aria-invalid="true"]:focus{border-color:var(--err)}
+/* 연봉 표: 줄 전체가 눌린다. 항목별로 볼 때(옆으로 밀림) 연봉 칸은 왼쪽에 붙어 있다 */
+.pay-t tbody tr{cursor:pointer}
+.pay-t tbody tr:hover th,.pay-t tbody tr:hover td{background:var(--well)}
+.pay-t tbody tr.me:hover th,.pay-t tbody tr.me:hover td{background:var(--main-soft)}
+.tbl.pay.all .pay-t th:first-child{position:sticky;left:0;z-index:1;background:var(--paper);box-shadow:1px 0 0 var(--line)}
+.tbl.pay.all .pay-t thead th:first-child{background:var(--well);z-index:3}
+.tbl.pay.all .pay-t tr.me th:first-child{background:var(--main-soft);box-shadow:inset 3px 0 0 var(--main),1px 0 0 var(--line)}
+/* 좁은 화면: 바로 넣기 단추 넷이 한 줄에 들어가게(44px 높이로 두 줄이 되면 답이 밀려 내려간다) */
+@media (max-width:380px){.quick button{padding:0 9px}}
+@media (max-width:340px){.quick{gap:5px}.quick button{padding:0 7px}}
+/* 출처 칸: 링크마다 한 줄 */
+.srcs{display:block}
+.srcs a{display:block;width:fit-content}
+.srcs a + a{margin-top:3px}
+/* 누르는 곳은 손가락으로 쓰는 화면에서 44px 이상 */
+@media (max-width:960px),(pointer:coarse){
+  .seg button,.quick button,.cmp-step button{min-height:44px;min-width:44px}
+  .step button{width:44px;height:44px}
+  .mini{height:44px}
+  .chk{min-height:44px;padding:5px 0}
+  .cmp-t tbody th button{min-height:44px;min-width:44px}
+  .cmp-t tbody th,.cmp-t tbody td{height:45px}
+  .tools a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;flex:none}   /* flex:none: 최소 폭을 주면 글자보다 좁게 줄어들 수 있어서 막는다 */
+  .top .side a{min-height:44px;display:inline-flex;align-items:center}
+  .brand{min-height:44px}
+  .foot li a{padding:12px 0}
+  .langbar button{width:44px;height:44px}
+  .langbar div{padding-top:0;padding-bottom:0}
+  .langbar a{display:inline-flex;align-items:center;min-height:44px}
+  .crumb a{min-width:44px}
+  .nf .ln a{display:inline-block;padding:13px 0;margin:-13px 0}
+  .pay-t tbody th,.pay-t tbody td{padding-top:13px;padding-bottom:13px}
+  .pay-t tbody th a{display:inline-block;min-height:24px;line-height:24px}
+  .fine a,.crumb a,.cmp-more a,.kf .cmp-more a{display:inline-block;padding:13px 0;margin:-13px 0}
+  .foot li a{min-width:44px}
+  .srcs a{padding:11px 0;min-height:44px}
+  .src-list li a{display:inline-block;padding:11px 0}
+  .src-list li{margin:0}
 }

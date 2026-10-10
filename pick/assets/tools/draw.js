@@ -1,9 +1,9 @@
 // 제비뽑기 화면: 몇 명 뽑기 / 당첨·꽝 쪽지 / 순서 정하기. 뽑기는 core/pick.js가 한다(명단의 순서와 상관없이 같은 사람이 뽑힌다).
 // 결과(last)는 뽑은 순간의 명단을 잡아 둔 것이고, 명단이 바뀌면 그 결과는 지운다.
-import { T, $, $$, fmt, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt } from '../app.js';
+import { T, $, $$, fmt, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, setCode, nameEl, seg, outHead, nfmt } from '../app.js';
 import { newSeed, makeRng } from '../core/rng.js';
 import { drawSome, drawSlips, drawOrder } from '../core/pick.js';
-import { cleanName } from '../core/share.js';
+import { cleanName, listCode } from '../core/name.js';
 
 const out = $('#out');
 const mEl = $('#m');
@@ -19,7 +19,10 @@ function paintMode(v) {
 }
 function reset() { last = null; out.innerHTML = emptyHtml; setAfter(false); setMsg(''); }
 
-function run(seed, replay, o, legacy) {
+/** mark: 링크로 연 결과면 표시 종류('ok' | 'legacy' | 'cleaned'), 내가 뽑으면 없음 */
+function run(seed, mark, o) {
+  const replay = !!mark;
+  const legacy = mark === 'legacy';
   const items = list.items.slice();
   const n = items.length;
   const mode = o ? o.mode : modeSeg.value;
@@ -35,12 +38,12 @@ function run(seed, replay, o, legacy) {
   seed = seed || newSeed();
   const rng = makeRng(seed);
   const opts = mode === 'slips' ? { mode, m, win, lose } : mode === 'pick' ? { mode, m } : { mode };
-  last = { seed, items, opts, legacy: !!legacy };
-  const stamp = replay ? (legacy ? 'legacy' : true) : false;
+  last = { seed, items, opts, legacy };
+  const stamp = mark || false;
   out.textContent = '';
   let summary = '';
   if (mode === 'slips') {
-    const dealt = drawSlips(items, [{ label: win, count: m }, { label: lose, count: n - m }], rng, !!legacy);
+    const dealt = drawSlips(items, [{ label: win, count: m }, { label: lose, count: n - m }], rng, legacy);
     const openAll = el('button', 'btn btn-sm', T.openAll);
     openAll.type = 'button';
     out.append(outHead(fmt(T.slipsHead, { n: nfmt(n) }), stamp, openAll));
@@ -51,7 +54,7 @@ function run(seed, replay, o, legacy) {
       const b = el('button', 'slip');
       b.type = 'button';
       b.setAttribute('aria-expanded', 'false');
-      b.append(el('b', null, items[i]), el('span', null, T.slipClosed));
+      b.append(nameEl('b', items[i]), el('span', null, T.slipClosed));
       b.addEventListener('click', () => open(b, k));
       li.append(b);
       ul.append(li);
@@ -61,14 +64,15 @@ function run(seed, replay, o, legacy) {
     out.append(ul);
     summary = `${win}: ` + dealt.map((k, i) => (k === 0 ? items[i] : null)).filter(Boolean).slice(0, 5).join(', ');
   } else {
-    const idx = mode === 'order' ? drawOrder(items, rng, !!legacy) : drawSome(items, m, rng, !!legacy);
+    const idx = mode === 'order' ? drawOrder(items, rng, legacy) : drawSome(items, m, rng, legacy);
     out.append(outHead(mode === 'order' ? T.order : fmt(T.pickedN, { n: nfmt(n), m: nfmt(m) }), stamp));
     const ol = el('ol', mode === 'order' || m > 12 ? 'picked order' : 'picked');
-    idx.forEach((v, i) => { const li = el('li'); li.append(el('i', null, i + 1), el('span', null, items[v])); ol.append(li); });
+    idx.forEach((v, i) => { const li = el('li'); li.append(el('i', null, i + 1), nameEl('span', items[v])); ol.append(li); });
     out.append(ol);
     summary = idx.slice(0, 5).map((v) => items[v]).join(', ') + (idx.length > 5 ? ' …' : '');
   }
   setAfter(true);
+  setCode(n, listCode(items));
   if (!replay) recent.add('draw', summary, safeShareUrl('draw', seed, items, opts));
 }
 
@@ -87,6 +91,6 @@ if (shared && shared.items.length) {
   if (Number.isInteger(o.m)) mEl.value = o.m;
   if (typeof o.win === 'string') $('#winlabel').value = o.win;
   if (typeof o.lose === 'string') $('#loselabel').value = o.lose;
-  run(shared.seed, true, { mode, m: o.m, win: o.win, lose: o.lose }, shared.legacy);
+  run(shared.seed, shared.mark, { mode, m: o.m, win: o.win, lose: o.lose });
 }
 window.__pick = { get state() { return last; } };

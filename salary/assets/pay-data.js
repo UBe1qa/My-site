@@ -9,6 +9,7 @@
   var V = '2026-10-10';
   var SOURCES = {
     npsLaw: { name: '국민연금법 제88조, 부칙(법률 제20903호) 제4조', url: 'https://www.law.go.kr/법령/국민연금법', viewed: V },
+    npsLaw6: { name: '국민연금법 제6조·제8조(가입 대상)', url: 'https://www.law.go.kr/법령/국민연금법', viewed: V },
     npsGuide: { name: '국민연금공단 「보험료 금액 및 보험료율」', url: 'https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do', viewed: V },
     nhisRate: { name: '국민건강보험공단 「2026년도 보험료율 인상 안내」', url: 'https://edi.nhis.or.kr/portal/images/popup/20251204_pop01longdesc.html', viewed: V },
     nhisLimit: { name: '월별 건강보험료액의 상한과 하한에 관한 고시(보건복지부고시 제2025-222호)', url: 'https://www.law.go.kr/행정규칙/월별건강보험료액의상한과하한에관한고시', viewed: V },
@@ -57,7 +58,7 @@
   var PERIODS = {
     '2026-10': {
       label: { ko: '2026년 10월', en: 'October 2026' },
-      year: 2026,
+      year: 2026, starts: '2026-10-01',
       pension: {
         rateNum: 475, rateDen: 10000, ratePct: '4.75', status: 'fixed', src: ['npsLaw', 'npsGuide'], from: '2026-01-01', until: '2026-12-31',
         baseMin: 410000, baseMax: 6590000, baseUnit: 1000, limitStatus: 'fixed', limitSrc: ['npsGuide'], limitFrom: '2026-07-01', limitUntil: '2027-06-30'
@@ -76,7 +77,8 @@
     },
     '2027-01': {
       label: { ko: '2027년 1월(예정)', en: 'January 2027 (planned)' },
-      year: 2027,
+      /* starts: 이 기준이 시행되는 날. 기기 날짜가 이날부터면 화면이 이 기준을 기본으로 계산한다(미정 값은 줄마다 표시) */
+      year: 2027, starts: '2027-01-01',
       pension: {
         rateNum: 500, rateDen: 10000, ratePct: '5.0', status: 'fixed', src: ['npsLaw'], from: '2027-01-01', until: '2027-12-31',
         baseMin: 410000, baseMax: 6590000, baseUnit: 1000, limitStatus: 'fixed', limitSrc: ['npsGuide'], limitFrom: '2026-07-01', limitUntil: '2027-06-30'
@@ -115,6 +117,8 @@
       childAgeFrom: 8, childAgeTo: 20,
       /* 보험료를 매기는 소득에서 비과세 근로소득을 빼는 근거. 고용보험은 법 문장(제2조 제3호)까지만 확인했다. */
       baseSrc: { pension: ['npsDecree3'], health: ['nhisDecree33'], employment: ['eiLaw2'] },
+      /* 국민연금 가입 대상은 18세 이상 60세 미만(국민연금법 제6조·제8조). 만 60세 이상은 임의계속가입을 신청한 사람만 낸다 */
+      pensionExemptAge: 60, pensionExemptSrc: ['npsLaw6'],
       /* 65세 이후에 새로 고용된 사람은 고용보험료(실업급여분)를 떼지 않는다(징수법 제13조 제3항) */
       employmentExemptAge: 65, employmentExemptSrc: ['eiRateLaw'],
       ratios: [80, 100, 120], ratioSrc: ['ganiRatio'],
@@ -122,9 +126,20 @@
       maxFamily: 30
     },
 
+    /* 금액 칸 읽기(모든 칸이 같은 규칙).
+       단위 없는 숫자는 그 칸의 단위로 읽는다: 한국어판의 큰 금액 칸은 만 원, 시급·1일 통상임금 칸은 원, 영어판은 전부 원.
+       만 원 칸에서도 manBelow 이상인 숫자는 원으로 읽고 화면이 그렇게 알린다(만 원으로 읽으면 그 칸에 있을 수 없는 큰돈이 되는 수).
+       smallBelow 보다 작은 금액은 계산은 하되 '작은 금액이에요. 맞는지 보세요'라고 알린다(4k, 영어판 40,000 같은 입력). */
+    input: {
+      manBelow: { annual: 1000000, monthly: 100000, wages3m: 100000, bonus: 100000, nontax: 10000, leavePay: 10000 },
+      smallBelow: { annual: 1000000, monthly: 100000, wages3m: 100000, hourly: 1000, dailyOrdinary: 1000 },
+      /* 단위 없이 쓴 수를 만 원으로 읽었는데 이 금액부터면 "원 단위로 쓴 금액이면 끝에 '원'을 붙여 주세요"라고 묻는다(그 칸에 드문 큰 금액) */
+      askAbove: { annual: 1000000000, monthly: 100000000, wages3m: 300000000, nontax: 10000000, leavePay: 10000000 }
+    },
+
     /* 시급·주휴수당 */
     hourly: {
-      fullWeekHours: 40, fullDayHours: 8, minWeekHours: 15,
+      fullWeekHours: 40, fullDayHours: 8, minWeekHours: 15, maxHourly: 10000000,
       /* 주 40시간 + 유급 주휴 8시간의 월 환산 기준시간(고시 원문 값) */
       monthlyHours40: 209,
       src: { weekly: ['lsa55', 'lsa18', 'lsaDecreeT2', 'moel1350Weekly'], monthly: ['minWageNotice2027', 'minWageDecree5'], minWage: ['minWage'] }
@@ -135,6 +150,10 @@
       daysPerYear: 365, payDays: 30, minWeekHours: 15, payWithinDays: 14,
       /* 퇴직 전 3개월의 달력 날짜 수는 달에 따라 89~92일 */
       periodDaysMin: 89, periodDaysMax: 92,
+      /* 퇴직 전 3개월을 세는 법은 고용노동부 '퇴직금 계산' 화면과 같다(2026-10-10 평가자가 실물과 대조):
+         3개월 전 같은 날부터, 그 날이 없으면 그 달 말일부터. 다만 3개월 전이 2월이라 그 날이 없으면(5월 29일(평년)·30일·31일 퇴직) 3월 1일부터.
+         퇴직금 끝수도 그 화면처럼 원 미만 반올림. */
+      periodRuleSrc: ['moelSev'], febSkipMonth: 5, maxWages: 100000000000, maxDailyOrdinary: 1000000000,
       src: { amount: ['sevLaw8', 'moelSev'], eligible: ['sevLaw4'], avgWage: ['lsa2'], payBy: ['sevLaw9'] },
       /* 고용노동부 예제. 공식 값은 1일 평균임금 88,641원 31전까지다(최종 퇴직금은 그 화면에 없다). */
       example: {
@@ -156,7 +175,10 @@
       tenureBands: [1, 3, 5, 10], ageSplit: 50,
       waitDays: 7, baseMonths: 18, needDays: 180,
       src: { rate: ['eiLaw'], upper: ['eiDecree68', 'moel1350Ub'], lower: ['moel1350Ub'], days: ['eiTable1'], need: ['eiLaw'] },
-      next: { year: 2027, upperStatus: 'undecided', minWageHourly: 10700 },
+      /* 2027년 이직: 하한은 확정(고용보험법 제45조 제4항 '이직일 당시 적용되던 최저임금' × 2027년 최저임금 10,700원, 제46조 제2항).
+         상한(기초일액 상한)은 아직 발표가 없어 2026년 값을 그대로 쓰고 화면에 '상한 미정 · 최소 금액'이라고 알린다. */
+      next: { year: 2027, from: '2027-01-01', until: '2027-12-31', upperStatus: 'undecided', minWageHourly: 10700, lowerStatus: 'fixed', lowerSrc: ['eiLaw', 'minWageNotice2027'] },
+      maxWages3m: 100000000000,
       change2028: '2028-01-01'
     },
 

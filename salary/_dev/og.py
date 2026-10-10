@@ -26,11 +26,11 @@ args = ['--allow-file-access-from-files']
 if proxy:
     args.append('--proxy-server=https=' + proxy.replace('http://', ''))
 exe = sorted(Path('/opt/pw-browsers').glob('chromium-*/chrome-linux/chrome'))
-FONT = (ROOT / 'assets' / 'pretendard.css').read_text(encoding='utf-8').replace('font-display:optional', 'font-display:swap')
+FONT = (ROOT / '_dev' / 'pretendard.css').read_text(encoding='utf-8').replace('font-display:optional', 'font-display:swap')
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=str(exe[0]) if exe else None, args=args)
     ctx = b.new_context(viewport={'width': 1200, 'height': 630}, ignore_https_errors=True)
-    ctx.route('**/assets/pretendard.css', lambda r: r.fulfill(body=FONT, content_type='text/css'))
+    ctx.route('**/pretendard.css', lambda r: r.fulfill(body=FONT, content_type='text/css'))
     pg = ctx.new_page()
     for lang, name in (('en', 'og.png'), ('ko', 'og-ko.png')):
         pg.goto((ROOT / '_dev' / 'og.html').as_uri(), wait_until='load')

@@ -35,7 +35,9 @@ const makeView = require(A('pay-view.js'));
 export const VIEW = { ko: makeView(P, 'ko'), en: makeView(P, 'en') };
 /* 첫 화면 예시와 '앞뒤 연봉' 간격은 화면 코드(pay-view.js)에 있는 값을 그대로 쓴다 */
 export const EXAMPLE = VIEW.ko.EXAMPLE, STEP = VIEW.ko.STEP;
-export const NET_STATE = { text: '', basis: 'annual', nontax: DATA.net.nontaxMeal, family: 1, children: 0, ratio: 100, sev: false, age65: false, period: NOW, showEx: false };
+export const NET_STATE = { text: '', basis: 'annual', nontax: DATA.net.nontaxMeal, nontaxText: null, family: 1, children: 0, ratio: 100, sev: false, age60: false, age65: false, period: NOW, planned: true, showEx: false };
+/* 해가 바뀐 뒤(기기 날짜가 다음 기준의 시행일부터)에 처음 보일 모습: 다음 기준으로 계산한 예시. 첫 그림 전에 인라인 스크립트가 바꿔 끼운다 */
+export const NET_STATE_NEXT = { ...NET_STATE, period: NEXT, planned: false };
 
 export function build() {
   const mwNow = DATA.periods[NOW].minWage, mwNext = DATA.periods[NEXT].minWage, U = DATA.unemployment, S = DATA.severance, ex = S.example;
@@ -43,12 +45,12 @@ export function build() {
   const cmp = (o) => { const c = P.compare(o); return { netDiff: c.netDiff, lines: c.lines, next: slim(c.next) }; };
   const wh = (h, wage) => { const r = P.hourlyToPay({ hourly: wage, weeklyHours: h, period: NOW }); return { hours: h, eligible: r.weekly.eligible, paidHours: r.weekly.paidHours, pay: r.weekly.pay, weeklyBase: r.weeklyBase, weeklyTotal: r.weeklyTotal, monthlyHours: r.monthlyHours.hours, monthly: r.monthly }; };
   const sev = P.severance({ join: ex.join, leave: ex.leave, wages3m: ex.wages3m, annualBonus: ex.annualBonus, leavePay: ex.leavePay });
-  const ub = (wages3m, hours) => {
-    const leave = '2026-09-30', days = P.lastThreeMonths(P.iso(P.parseDate(leave) + 1)).days;
-    const avg = Math.floor(wages3m * 100 / days) / 100;
-    const r = P.unemployment({ avgDaily: avg, dayHours: hours, leave, tenureYears: 3, over50: false });
-    return { wages3m, days, avgDaily: Math.floor(avg), daily: r.daily, byRate: r.byRate, lower: r.lower, kind: r.kind, total: r.total, payDays: r.days, monthly30: r.monthly30 };
+  const ub = (wages3m, hours, leave = '2026-09-30') => {
+    const r = P.unemployment({ wages3m, dayHours: hours, leave, tenureYears: 3, over50: false });
+    if (!r.ok) throw new Error('unemployment ' + r.code);
+    return { wages3m, leave, days: r.periodDays, avgDaily: r.avgFloor, daily: r.daily, byRate: r.byRate, lower: r.lower, kind: r.kind, total: r.total, payDays: r.days, monthly30: r.monthly30, year: r.year, minWageHourly: r.minWageHourly, atLeast: r.atLeast };
   };
+  const sevAt = (leave, join = '2020-03-02', wages3m = 9000000) => { const r = P.severance({ join, leave, wages3m }); return { join, leave, wages3m, start: r.period.start, end: r.period.end, days: r.period.days, rule: r.period.rule, serviceDays: r.serviceDays, avg: P.splitJeon(r.avgDailyJeon), amount: r.amount }; };
   const leaveEx = P.annualLeave({ join: '2026-01-15', years: 25 });
   const m300 = net({ amount: 3000000, basis: 'monthly' }), m300nt0 = net({ amount: 3000000, basis: 'monthly', nontax: 0 });
   const m700 = net({ amount: 7000000, basis: 'monthly' });
@@ -59,7 +61,7 @@ export function build() {
     /* 과세 대상 월급 400만 원(월급 420만 원 − 비과세 20만 원)일 때 가족 수별 */
     fam, famKid: net({ amount: 4200000, basis: 'monthly', family: 4, children: 2 }),
     ratio80: net({ amount: 4200000, basis: 'monthly', ratio: 80 }), ratio120: net({ amount: 4200000, basis: 'monthly', ratio: 120 }),
-    age65: net({ ...exA, noEmployment: true }),
+    age65: net({ ...exA, noEmployment: true }), age60: net({ ...exA, noPension: true }), ageBoth: net({ ...exA, noPension: true, noEmployment: true }),
     weekly: [14, 15, 20, 30, 40, 45].map((h) => wh(h, mwNow.hourly)),
     monthlyHours: [15, 20, 30, 40].map((h) => { const m = P.monthlyHours(h); return { hours: h, paid: Math.min(h, 40) / 5, value: m.hours, official: m.official }; }),
     weeksPerYearNum: 365, raw209: (DATA.hourly.fullWeekHours + DATA.hourly.fullDayHours) * 365 / 7 / 12,
@@ -67,12 +69,19 @@ export function build() {
     sev: { serviceDays: sev.serviceDays, periodStart: sev.period.start, periodEnd: sev.period.end, periodDays: sev.period.days, total: sev.total,
       bonusPart: sev.bonusPart, leavePart: sev.leavePart, avg: P.splitJeon(sev.avgDailyJeon), amount: sev.amount },
     ub: { low: ub(6000000, 8), mid: ub(9000000, 8), high: ub(15000000, 8), half: ub(3600000, 4),
-      width: U.upper - U.lowerByHours[8], lowerNext8: Math.floor(U.next.minWageHourly * 8 * U.lowerNum / U.lowerDen) },
+      width: U.upper - U.lowerByHours[8],
+      /* 2027년 이직: 하한은 2027년 최저임금으로(확정), 상한은 미정. 평가자가 1원 오차를 찾았던 보기(90일 구간)도 글에 쓴다 */
+      next: ub(9000000, 8, '2027-01-15'), next4: ub(9000000, 4, '2027-01-15'), lowerNext8: ub(0, 8, U.next.from).lower, overUpper: ub(0, 8, U.next.from).lower - U.upper,
+      d90: ub(6000000, 4, '2026-03-31') },
     leave: { rows: leaveEx.rows.map((r) => ({ n: r.yearsDone, days: r.days })), firstMonthly: leaveEx.monthly.length,
       capYear: leaveEx.rows.find((r) => r.days === DATA.leave.cap).yearsDone },
     mw: { now: mwNow, next: mwNext, diff: mwNext.hourly - mwNow.hourly },
-    /* '그 날짜가 없는 달은 말일부터'의 보기: 5월 31일에 퇴직하면 */
-    threeMonthsEx: { leave: '2026-05-31', ...P.lastThreeMonths('2026-05-31') },
+    /* 퇴직 전 3개월을 세는 보기: 5월 31일 퇴직(3개월 전이 2월이라 3월 1일부터), 12월 31일 퇴직(9월 31일이 없어 9월 30일부터), 보통 날(같은 날부터) */
+    threeMonthsEx: sevAt('2026-05-31'), threeMonthsLast: sevAt('2026-12-31'), threeMonthsSame: sevAt('2026-10-01'),
+    /* 시급 → 월급 → 시급 왕복: 최저임금·주 15시간 */
+    round15: (() => { const a = P.hourlyToPay({ hourly: mwNow.hourly, weeklyHours: 15, period: NOW }), b = P.monthlyToHourly({ monthly: a.monthly, weeklyHours: 15, period: NOW }); return { hours: 15, hourly: mwNow.hourly, monthly: a.monthly, back: b.hourly, need: b.minWage.monthly }; })(),
+    /* 1,000만 원 초과 + 80%: 끝수 순서의 보기(평가 보고서 L2) */
+    over10m: (() => { const r = P.netPay({ amount: 12134265, basis: 'monthly', nontax: 0, family: 4, children: 2, ratio: 80 }).line.incomeTax; return { gross: 12134265, family: 4, children: 2, ratio: 80, piece: r.lookup.piece, tableTax: r.tableTax, credit: r.childCredit, afterCredit: r.afterCredit, amount: r.amount }; })(),
     /* 연차: 1월 31일 입사자의 첫 연차 */
     leaveJan31: P.annualLeave({ join: '2026-01-31' }).monthly[0].date,
     ubLower: Object.entries(U.lowerByHours).map(([h, v]) => ({ hours: +h, amount: v })),
@@ -86,11 +95,15 @@ export function build() {
   /* 첫 HTML에 미리 넣는 결과(예시 상태). 브라우저의 app.js 가 같은 함수로 다시 그린다. */
   const pre = {};
   for (const lang of ['ko', 'en']) {
-    const V = VIEW[lang], n = V.net(NET_STATE);
+    const V = VIEW[lang], n = V.net(NET_STATE), nn = V.net(NET_STATE_NEXT);
     pre[lang] = {
       net: { read: n.read, summary: n.summary, slip: n.slip, compare: n.compare, stick: n.stick },
+      netNext: { summary: nn.summary, slip: nn.slip, compare: nn.compare, stick: nn.stick },
       sev: { slip: V.sev({}).slip },
       hourly: { slip: V.hourly({ mode: 'hourly', text: '', hours: '', period: NOW }).slip, read: V.hourly({ mode: 'hourly', text: '', hours: '', period: NOW }).read },
+      hourlyNext: { slip: V.hourly({ mode: 'hourly', text: '', hours: '', period: NEXT }).slip },
+      stale: { now: V.staleText(DATA.periods[NOW].year, false), next: V.staleText(DATA.periods[NEXT].year, false), ub: lang === 'ko' ? V.ubStaleText(true) : '', ubAfter: lang === 'ko' ? V.ubStaleText(false) : '' },
+      unit: V.UNIT,
     };
     if (lang === 'ko') { pre.ko.ub = { slip: V.ub({}).slip }; pre.ko.leave = { slip: V.leave({}).slip }; }
   }

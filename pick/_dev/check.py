@@ -2,7 +2,8 @@
 """만든 페이지의 정적 확인(브라우저 없이): python3 -B pick/_dev/check.py
 빌드가 최신인지, 제목·설명, canonical·sitemap·내부 링크, hreflang 짝, <html lang>, 영어 페이지의 한글,
 JSON-LD가 화면 글자와 같은지, 방침 문구(방문 통계 포함), 광고 코드가 있어야 할 곳·없어야 할 곳, 글 길이와 빈 숫자 자리,
-"제한 없음"·옛 이름 같은 틀린 말이 남지 않았는지, 조각 글꼴이 화면 글자를 다 담고 있는지."""
+"제한 없음"·옛 이름 같은 틀린 말이 남지 않았는지, 조각 글꼴이 화면 글자를 다 담고 있는지,
+방침의 글꼴 설명이 실제와 같은지, 첫 HTML의 확인 코드가 맞는지, 화면 코드에 보이지 않는 글자가 박혀 있지 않은지."""
 import json
 import re
 import subprocess
@@ -299,6 +300,48 @@ def main():
     ok(ofl.exists() and 'SIL OPEN FONT LICENSE' in ofl.read_text(encoding='utf-8') and 'PK Sans' in ofl.read_text(encoding='utf-8'), '글꼴 라이선스 전문(assets/fonts/OFL.txt)과 이름을 바꿨다는 설명')
     ok((ROOT / '_headers').exists() and '/assets/fonts/*' in (ROOT / '_headers').read_text() and 'immutable' in (ROOT / '_headers').read_text(), '_headers: 글꼴 조각은 오래 저장')
     ok('"PK Sans", "Pretendard Variable"' in (ROOT / 'assets' / 'style.css').read_text(encoding='utf-8'), 'style.css: 글꼴 이름표 순서(조각 → CDN → 대체)')
+    # ---- 3단계-2(재평가 반영): 방침의 글꼴 설명 = 실제, 확인 코드, 새 화면 글자, 소스에 박힌 보이지 않는 글자
+    # 모든 페이지가 jsDelivr의 글꼴 목록(CSS)을 받는다 → 방침이 "없는 글자만 받는다"가 아니라 목록 파일도 받는다고 적어야 한다
+    ok(all('href="' + B.FONT_CSS + '"' in p.raw for p in pages.values()) and '목록 파일(CSS)' in pages['/ko/privacy/'].raw and 'stylesheet that lists' in pages['/privacy/'].raw
+       and '페이지를 열 때마다' in pages['/ko/privacy/'].raw and 'every page of this site' in pages['/privacy/'].raw,
+       '방침의 글꼴 설명 = 실제: 모든 페이지가 jsDelivr에서 글꼴 목록(CSS)을 받고, 방침이 그렇게 적는다')
+    import hashlib
+    fx = json.loads((ROOT / 'tests' / 'fixtures.json').read_text(encoding='utf-8'))
+    for l in ('en', 'ko'):
+        names = B.C['ui'][l]['sample'].split('\n')
+        code = hashlib.sha256('\n'.join(sorted(names)).encode('utf-8')).hexdigest()[:8]
+        lad = hashlib.sha256(('\n'.join(names) + '\n\n' + B.C['ui'][l]['sampleBottom']).encode('utf-8')).hexdigest()[:8]
+        pre = '/ko/' if l == 'ko' else '/'
+        tp = {t: pre + B.tool(t, l)['path'] for t in B.LIST_TOOLS}
+        ok(code == fx['codes']['sample'][l] and all(f'id="listcode">{B.C["js"][l]["count"].replace("{n}", "8")} · {code if t != "ladder" else lad}</b>' in pages[tp[t]].raw for t in B.LIST_TOOLS)
+           and all(pages[tp[t]].raw.count('id="fp"') == 1 and (code if t != 'ladder' else lad) in pages[tp[t]].raw for t in B.LIST_TOOLS) and code != lad,
+           f'확인 코드({l}): 명단 도구 4개의 첫 HTML에 예시 명단의 코드가 미리 적혀 있고(파이썬 hashlib = 기준값 파일), 사다리는 줄 순서·아래 칸까지 넣은 다른 코드')
+        ok(all('id="fp"' not in pages[pre + B.tool(t, l)['path']].raw and 'id="listcode"' not in pages[pre + B.tool(t, l)['path']].raw for t in ('number', 'coin', 'dice')), f'확인 코드({l}): 명단이 없는 도구(숫자·동전·주사위)에는 없다')
+        j = B.C['js'][l]
+        need = ('stamp', 'stampOld', 'stampCleaned', 'legacyLink', 'cleanedLink', 'blockedHint', 'listShared', 'listEdit', 'listAsk', 'listAskNew', 'listAskYes', 'listAskNo', 'listImported', 'listRestore', 'warnHidden', 'warnTabs', 'colPick', 'fp')
+        ok(all(j.get(k) for k in need) and '{count}' in j['fp'] and '{code}' in j['fp'] and '{k}' in j['colPick'] and '{sample}' in j['colPick'] and j['stampOld'] != j['stamp'] and j['stampCleaned'] != j['stamp'],
+           f'화면 글자({l}): 정리한 링크·옛 링크·링크의 명단·칸 고르기·확인 코드 문구가 있다', str([k for k in need if not j.get(k)]))
+    ok('보이지 않는 글자가 들어 있어 정리했어요' in B.C['js']['ko']['cleanedLink'] and B.C['js']['ko']['stampCleaned'] == '정리한 명단으로 다시 계산한 결과' and '확인할 수 없어요' in B.C['js']['ko']['legacyLink'] and '확인 표시 없음' in B.C['js']['ko']['stampOld'],
+       '화면 글자(ko): 정리한 링크 알림·표시와 옛 방식 링크 알림의 문구')
+    ok('아래 칸' in B.C['toolUi']['ko']['copyNoteLadder'] and '줄 순서' in B.C['toolUi']['ko']['copyNoteLadder'] and 'bottom' in B.C['toolUi']['en']['copyNoteLadder'].lower() and 'order' in B.C['toolUi']['en']['copyNoteLadder'],
+       '사다리 링크 안내: 줄 순서와 아래 칸 순서가 둘 다 결과의 일부라고 적는다')
+    ok(all('확인 코드' in pages[x].raw for x in ('/ko/', '/ko/draw/', '/ko/ladder/', '/ko/guide/share-draw-result/', '/ko/about/')) and all('check code' in pages[x].raw.lower() for x in ('/', '/name-picker/', '/ladder/', '/guide/pick-winners-without-repeats/', '/about/'))
+       and fx['codes']['sample']['ko'] in pages['/ko/guide/share-draw-result/'].raw and fx['codes']['sample']['en'] in pages['/guide/pick-winners-without-repeats/'].raw,
+       '확인 코드 설명: 도구 설명·가이드의 확인 절차·소개에 있고, 가이드의 예시 코드 = 예시 명단의 코드')
+    ok(16 ** 8 == 4294967296 and '43억 분의 1' in pages['/ko/about/'].raw and '4.3 billion' in pages['/about/'].raw, '글 속 숫자: 여덟 글자 코드의 가짓수 16^8 = 4,294,967,296(약 43억)')
+    # 소스 코드에 보이지 않는 글자(폭 없는 공백 등)가 글자 그대로 박혀 있으면 안 된다(주석은 빼고 본다): \uXXXX 꼴로 적는다
+    import unicodedata
+    hidden_src = []
+    for f in sorted((ROOT / 'assets').rglob('*.js')):
+        for n, line in enumerate(f.read_text(encoding='utf-8').split('\n'), 1):
+            code_part = line if line.lstrip().startswith(('//', '*', '/*')) is False else ''
+            cut = code_part.find(' // ')
+            if cut >= 0:
+                code_part = code_part[:cut]
+            bad = [c for c in code_part if unicodedata.category(c) in ('Cf', 'Zl', 'Zp', 'Co', 'Cn') or (unicodedata.category(c) == 'Zs' and c != ' ') or ord(c) in (0x115F, 0x1160, 0x2800, 0x3164, 0xFFA0)]
+            if bad:
+                hidden_src.append(f'{f.relative_to(ROOT)}:{n} U+{ord(bad[0]):04X}')
+    ok(not hidden_src, '화면 코드(assets/*.js)에 보이지 않는 글자가 글자 그대로 들어 있지 않다(이스케이프로 적는다)', ', '.join(hidden_src[:4]))
     lastmods = set(re.findall(r'<lastmod>(.*?)</lastmod>', sm))
     ok(lastmods <= {B.MODIFIED, *B.UPDATED.values()} and all(re.fullmatch(r'\d{4}-\d\d-\d\d', x) for x in lastmods), f'sitemap lastmod는 실제로 고친 날뿐: {sorted(lastmods)}')
     js = ''.join((ROOT / 'assets' / f).read_text(encoding='utf-8') for f in ['app.js'] + [f'tools/{t}.js' for t in ('wheel', 'ladder', 'draw', 'teams', 'number', 'coin', 'dice')])

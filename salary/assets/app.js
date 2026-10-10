@@ -1,12 +1,25 @@
 /* 화면 연결. 계산은 pay-core.js(PAY), 결과 그리기는 pay-view.js(PayView)가 하고 여기서는 입력을 읽어 넘기고 받은 HTML을 끼운다.
    페이지 언어는 <html lang> 이 정한다(브라우저 언어로 화면을 바꾸거나 넘기지 않는다. 다른 언어판 안내 띠만 띄운다).
-   기기에 저장하는 것은 tk.lang 하나뿐이다(안내 띠를 닫았거나 언어 링크를 눌렀다는 표시). 입력한 금액·날짜는 저장하지도 보내지도 않는다. */
+   기기에 두는 것은 둘뿐이다(개인정보 처리방침과 같아야 한다. _dev/check.py 가 대조한다).
+     localStorage  tk.lang : 다른 언어 안내 띠를 닫았거나 언어 링크를 눌렀다는 표시
+     sessionStorage tk.in  : 계산기에 넣은 값. 다른 페이지에 갔다 돌아와도 이어서 보이게 이 탭에만 둔다(탭을 닫으면 사라진다)
+   입력한 금액·날짜는 어디로도 보내지 않는다. */
 (function () {
   'use strict';
   var CFG = JSON.parse(document.getElementById('tk').textContent), LANG = CFG.lang, EN = LANG === 'en';
   var $ = function (id) { return document.getElementById(id); };
   var ANIM = document.documentElement.classList.contains('anim');
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var SKEY = 'tk.in';
+  function sessAll() { try { return JSON.parse(sessionStorage.getItem(SKEY) || '{}') || {}; } catch (e) { return {}; } }
+  /* 이 페이지의 입력을 탭 저장소에 둔다. o 가 없으면(예시 상태) 지운다 */
+  function sess(page, o) {
+    try {
+      var all = sessAll();
+      if (o) all[page] = o; else delete all[page];
+      if (Object.keys(all).length) sessionStorage.setItem(SKEY, JSON.stringify(all)); else sessionStorage.removeItem(SKEY);
+    } catch (e) { /* 저장소를 못 쓰는 브라우저에서는 그냥 넘어간다 */ }
+  }
   function today() { var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()); }
 
   /* ── 다른 언어판 안내 띠: 머리 아래에 겹쳐 띄운다(끼워 넣지 않는다) ── */
@@ -44,9 +57,12 @@
   var page = CFG.page;
   if (!window.PayCore || !window.PAY_DATA) return;
   var P = window.PAY || window.PayCore(window.PAY_DATA, window.PAY_GANI || null), D = P.data;
+  function invalid(input, on) { if (on) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid'); }
   if (page === 'table') { tablePage(); return; }
   if (!window.PayView) return;
   var V = window.PayView(P, LANG), slip = $('slip'), live = $('live');
+  /* 기기 날짜로 정하는 것: 기본 기준 시기(해가 바뀌면 다음 기준), 다음 기준이 아직 '예정'인지 */
+  var T0 = today(), DEF = P.defaultPeriod(T0), PLANNED = !!(D.periods[D.next] && T0 < D.periods[D.next].starts);
 
   /* ── 연출 1: 이중 밑줄 긋기. 값을 넣고 멈췄을 때, 결과가 바뀌었으면 한 번 ── */
   var drawn = null, settleT = 0, liveText = '', pending = null;
@@ -57,7 +73,8 @@
     void el.offsetWidth;
     el.classList.add('draw');
   }
-  /* typing: 글자를 치는 중이면 0.6초 멈춘 뒤에. 단추·고르기는 바로. 예시 상태·값이 그대로면 안 그린다 */
+  /* typing: 글자를 치는 중이면 0.6초 멈춘 뒤에. 단추·고르기는 바로. 예시 상태·값이 그대로면 안 그린다.
+     text 는 화면 낭독기에 읽어 줄 한 줄(결과, 또는 입력을 못 읽었다는 안내) */
   function settle(value, example, typing, text, quiet) {
     clearTimeout(settleT); pending = null;
     liveText = text || '';
@@ -73,18 +90,29 @@
   }
   /* 칸을 떠나거나 Enter 를 누르면 기다리지 않고 바로. 명세서를 다시 그리지는 않는다(다시 그리면 누르던 단추가 사라져 눌림이 씹힌다) */
   function flush() { if (pending) { clearTimeout(settleT); pending(); } }
+  /* 기준 기간이 지났으면 결과 위에 알린다. 더 새 기준이 이미 있고(기본으로 쓰고 있고) 옛 기준을 골라 보는 중이면 '지난 기준'이라고만 한다 */
   function setStale(pid) {
     var el = $('stale');
     if (!el) return;
-    var v = pid ? P.validity(pid, today()) : P.unemploymentValidity(today()), y = pid ? D.periods[pid].year : D.periods[D.now].year;
-    el.hidden = !(v.ok && v.stale);
-    el.textContent = EN ? 'These figures are the ' + y + ' rules. We are checking the new ones.' : '이 값은 ' + y + '년 기준이에요. 새 기준을 확인 중이에요.';
+    var v = P.validity(pid, T0), stale = v.ok && v.stale;
+    var newer = stale && pid === D.now && DEF === D.next && !P.validity(D.next, T0).stale;
+    el.hidden = !stale;
+    el.textContent = V.staleText(D.periods[pid].year, newer);
   }
   function pressed(group, value) {
     group.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === String(value))); });
   }
-  /* 칸에 넣어 줄 글자: 만 원으로 떨어지면 '4,100만', 아니면 '3,333,333' */
-  function amountText(n) { return EN || n % 10000 ? P.fmt(n) : P.readKo(n).replace(/ ?원$/, ''); }
+  /* 금액 칸 하나의 곁 표시: 칸 옆 단위(u-<id>), 칸 아래 읽은 값 한 줄, 오류 표시(aria-invalid). info 는 pay-view.js 의 field() 가 준 것 */
+  var hints = {};
+  function mark(input, info, readEl) {
+    var u = $('u-' + input.id);
+    if (u) u.textContent = info.unit || '';
+    invalid(input, info.invalid);
+    if (!readEl) return;
+    if (!(readEl.id in hints)) hints[readEl.id] = readEl.innerHTML;
+    var blank = info.read.cls === 'hint' && !info.read.html;
+    readEl.className = 'read ' + (blank ? 'hint' : info.read.cls); readEl.innerHTML = blank ? hints[readEl.id] : info.read.html;
+  }
 
   if (page === 'net') netPage();
   else if (page === 'sev') sevPage();
@@ -94,32 +122,43 @@
 
   /* ───────── 실수령액 ───────── */
   function netPage() {
-    var st = { text: '', basis: 'annual', nontax: D.net.nontaxMeal, family: 1, children: 0, ratio: 100, sev: false, age65: false, period: D.now, showEx: false, open: false };
-    var amt = $('amt'), read = $('read'), quick = $('quick'), cmp = $('cmp'), stick = $('stick'), body = $('optsBody'), btn = $('optsBtn');
+    var st = { text: '', basis: 'annual', nontax: D.net.nontaxMeal, nontaxText: null, family: 1, children: 0, ratio: 100, sev: false, age60: false, age65: false, period: DEF, planned: PLANNED, showEx: false, open: false };
+    var amt = $('amt'), read = $('read'), quick = $('quick'), cmp = $('cmp'), stick = $('stick'), body = $('optsBody'), btn = $('optsBtn'), nt = $('o-nontax');
     var memo = null, last = null, chgT = 0, sumSeen = true;
 
     function render(why) {
       var v = V.net(st);
       last = v;
-      read.className = 'read ' + v.read.cls; read.innerHTML = v.read.html;
+      mark(amt, v, read);
+      if (!v.nontax.invalid) st.nontax = v.nontax.value;
+      mark(nt, v.nontax, $('r-o-nontax'));
       $('optsSum').textContent = v.summary;
       slip.innerHTML = v.slip; slip.classList.toggle('is-ex', v.example);
       cmp.innerHTML = v.compare;
       stick.innerHTML = v.stick;
       settle(v.value + '|' + st.period, v.example, why === 'type', v.live, why === 'quiet');
+      keep();
       return v;
     }
+    /* 다른 페이지에 갔다 와도 이어서 보이게 이 탭에만 둔다. 예시 상태(아무것도 안 바꿈)면 지운다 */
+    function keep() {
+      var changed = st.text.trim() || st.basis !== 'annual' || st.nontax !== D.net.nontaxMeal || st.family !== 1 || st.children || st.ratio !== 100 || st.sev || st.age60 || st.age65 || st.period !== DEF;
+      sess('net', changed ? { text: st.text, basis: st.basis, nontax: st.nontax, family: st.family, children: st.children, ratio: st.ratio, sev: st.sev, age60: st.age60, age65: st.age65, period: st.period } : null);
+    }
+    function ntText() { nt.value = st.nontax % 10000 === 0 && !EN ? P.fmt(st.nontax / 10000) : EN ? P.fmt(st.nontax) : P.fmt(st.nontax) + '원'; st.nontaxText = st.nontax === D.net.nontaxMeal ? null : nt.value; }
     function setText(t, why) { st.text = t; amt.value = t; memo = null; render(why); }
     function controls() {
       var i = st.basis === 'annual' ? 0 : 1;
-      pressed($('basis'), st.basis);
+      pressed($('kind'), st.basis);
       amt.placeholder = CFG.ph[i]; $('amt-l').textContent = CFG.amtL[i];
       quick.querySelectorAll('button').forEach(function (b, k) { var q = CFG.quick[st.basis][k]; b.dataset.v = q[0]; b.textContent = q[1]; });
       body.querySelector('[data-k="family"] output').textContent = st.family;
       body.querySelector('[data-k="children"] output').textContent = st.children;
       pressed(body.querySelector('[data-k="ratio"]'), st.ratio);
       pressed(body.querySelector('[data-k="period"]'), st.period);
+      body.querySelector('[data-k="period"] [data-v="' + D.next + '"]').textContent = CFG.pNext[PLANNED ? 0 : 1];
       body.querySelector('[data-sev]').hidden = st.basis !== 'annual';
+      $('o-sev').checked = st.sev; $('o-age60').checked = st.age60; $('o-age').checked = st.age65;
       btn.setAttribute('aria-expanded', String(st.open)); body.hidden = !st.open; $('optsGo').textContent = st.open ? CFG.close : CFG.change;
       setStale(st.period);
       sticky();
@@ -130,15 +169,15 @@
     amt.addEventListener('keydown', function (e) { if (e.key === 'Enter') { flush(); amt.blur(); } });
     amt.addEventListener('blur', flush);
     quick.addEventListener('click', function (e) { var b = e.target.closest('button[data-v]'); if (b) setText(b.dataset.v); });
-    /* 연봉 ↔ 월급: 같은 사람의 돈으로 바꿔 준다(연봉 4,000만 → 월급 3,333,333). 고치지 않고 되돌아오면 처음 쓴 글자를 되살린다 */
-    $('basis').addEventListener('click', function (e) {
+    /* 연봉 ↔ 월급: 같은 사람의 돈으로 바꿔 준다(연봉 4,000만 → 월급 3,333,333원). 고치지 않고 되돌아오면 처음 쓴 글자를 되살린다 */
+    $('kind').addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || b.dataset.v === st.basis) return;
       var to = b.dataset.v, c = last.calc;
       if (!c.example) {
         if (memo && memo.to === st.basis && memo.text === st.text) { st.text = memo.fromText; memo = null; }
         else {
           var from = st.text, val = to === 'monthly' ? c.res.gross : c.res.gross * 12;
-          st.text = amountText(val); memo = { to: to, text: st.text, fromText: from };
+          st.text = V.amountText(val); memo = { to: to, text: st.text, fromText: from };
         }
         amt.value = st.text;
       } else { st.text = ''; amt.value = ''; memo = null; }
@@ -152,8 +191,8 @@
     cmp.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]'); if (!b) return;
       var base = last.calc.input.amount;
-      if (b.dataset.act === 'step') { var n = base + (+b.dataset.v) * V.STEP[st.basis]; if (n > 0) setText(amountText(n)); var again = cmp.querySelector('[data-act="step"][data-v="' + b.dataset.v + '"]'); if (again) again.focus(); }
-      if (b.dataset.act === 'set') { setText(amountText(+b.dataset.v)); var me = cmp.querySelector('.cmp-step button'); if (me) me.focus(); }
+      if (b.dataset.act === 'step') { var n = base + (+b.dataset.v) * V.STEP[st.basis]; if (n > 0) setText(V.amountText(n)); var again = cmp.querySelector('[data-act="step"][data-v="' + b.dataset.v + '"]'); if (again) again.focus(); }
+      if (b.dataset.act === 'set') { setText(V.amountText(+b.dataset.v)); var me = cmp.querySelector('.cmp-step button'); if (me) me.focus(); }
     });
     btn.addEventListener('click', function () { st.open = !st.open; controls(); });
     body.querySelectorAll('.step').forEach(function (s) {
@@ -163,11 +202,13 @@
     });
     body.querySelector('[data-k="ratio"]').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { st.ratio = +b.dataset.v; controls(); render(); } });
     body.querySelector('[data-k="period"]').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) setPeriod(b.dataset.v, false); });
-    var nt = $('o-nontax');
-    nt.addEventListener('input', function () { var r = P.parseMoney(nt.value, 'won'); if (r.ok) st.nontax = r.value; else if (!nt.value.trim()) st.nontax = 0; else return; render('type'); });
-    nt.addEventListener('blur', function () { nt.value = P.fmt(st.nontax); flush(); });
+    /* 비과세: 못 읽는 글자면 앞서 넣은 금액으로 계산한 채 칸 아래에 알린다. 칸을 떠날 때 읽은 값으로 글자를 정리한다 */
+    nt.addEventListener('input', function () { st.nontaxText = nt.value; render('type'); });
+    nt.addEventListener('blur', function () { if (last && !last.nontax.invalid) { ntText(); mark(nt, V.net(st).nontax, $('r-o-nontax')); } flush(); });
     $('o-sev').addEventListener('change', function (e) { st.sev = e.target.checked; render(); });
-    $('o-age').addEventListener('change', function (e) { st.age65 = e.target.checked; render(); });
+    /* 만 60세 이상 = 국민연금 없음. 65세 이후 입사 = 고용보험료도 없음(켜면 60세 이상도 같이 켠다. 임의계속가입으로 계속 내는 사람은 60세 쪽을 끄면 된다) */
+    $('o-age60').addEventListener('change', function (e) { st.age60 = e.target.checked; render(); });
+    $('o-age').addEventListener('change', function (e) { st.age65 = e.target.checked; if (st.age65 && !st.age60) { st.age60 = true; $('o-age60').checked = true; } render(); });
 
     /* 연출 2: 기준 시기를 바꿨을 때 달라진 줄만 짚는다(옅은 바탕 + 차액 꼬리표, 2초) */
     function clash(b, row) {
@@ -210,15 +251,31 @@
     }
     stick.addEventListener('click', function () { slip.scrollIntoView({ block: 'start', behavior: ANIM ? 'smooth' : 'auto' }); });
 
-    /* 표에서 넘어온 연봉(#a=40000000) */
-    var m = /[#&]a=(\d{6,12})\b/.exec(location.hash);
+    /* 처음 열 때: ① 표에서 넘어온 연봉(#a=40000000)은 표의 조건(기본값)으로 계산하고, 읽은 뒤 주소에서 지운다(금액을 바꿔도 옛 금액이 주소에 남지 않게)
+                  ② 아니면 이 탭에 두었던 입력을 되살린다 */
+    var m = /[#&]a=(\d{6,12})\b/.exec(location.hash), saved = sessAll().net;
+    if (m) {
+      st.text = V.amountText(+m[1]); amt.value = st.text;
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* 주소를 못 바꾸는 환경이면 그대로 둔다 */ }
+    } else if (saved && typeof saved === 'object') {
+      if (typeof saved.text === 'string') st.text = saved.text;
+      if (saved.basis === 'monthly') st.basis = 'monthly';
+      if (P.netPay({ amount: 1000000, basis: 'monthly', nontax: saved.nontax, family: saved.family, children: saved.children, ratio: saved.ratio, period: saved.period }).ok) {
+        st.nontax = saved.nontax; st.family = saved.family; st.children = saved.children; st.ratio = saved.ratio;
+        if (D.periods[saved.period]) st.period = saved.period;
+      }
+      st.sev = !!saved.sev; st.age60 = !!saved.age60; st.age65 = !!saved.age65;
+      amt.value = st.text;
+      if (st.nontax !== D.net.nontaxMeal) ntText();
+    }
     controls();
-    if (m) { st.text = amountText(+m[1]); amt.value = st.text; render('quiet'); }
+    if (m || saved || st.period !== D.now) render('quiet');
   }
 
   /* ───────── 퇴직금 ───────── */
   function sevPage() {
     var ids = { join: 'f-join', leave: 'f-leave', wages: 'f-wages', bonus: 'f-bonus', leavePay: 'f-lpay', ordinary: 'f-ord' }, E = D.severance.example;
+    var money = ['wages', 'bonus', 'leavePay', 'ordinary'];
     function state() {
       var s = { under15: $('f-u15').checked }, any = s.under15;
       Object.keys(ids).forEach(function (k) { s[k] = $(ids[k]).value; if (s[k].trim()) any = true; });
@@ -229,7 +286,10 @@
       var s = state(), v = V.sev(s);
       slip.innerHTML = v.slip; slip.classList.toggle('is-ex', v.example);
       $('b-clear').hidden = !s.touched;
+      money.forEach(function (k) { var el = $(ids[k]); mark(el, v.fields[k], $('r-' + el.id)); if (v.bad && v.bad[k]) invalid(el, true); });
+      invalid($(ids.join), !!(v.bad && v.bad.join)); invalid($(ids.leave), !!(v.bad && v.bad.leave));
       settle(v.ok && v.res.eligible ? v.res.amount : 'x', v.example || !v.ok, typing, v.example ? '' : v.live);
+      sess('sev', s.touched ? { join: s.join, leave: s.leave, wages: s.wages, bonus: s.bonus, leavePay: s.leavePay, ordinary: s.ordinary, under15: s.under15 } : null);
     }
     Object.keys(ids).forEach(function (k) {
       var el = $(ids[k]);
@@ -246,17 +306,27 @@
       Object.keys(ids).forEach(function (k) { $(ids[k]).value = ''; }); $('f-u15').checked = false;
       render(false); $('f-join').focus();
     });
+    var saved = sessAll().sev;
+    if (saved && typeof saved === 'object') {
+      Object.keys(ids).forEach(function (k) { if (typeof saved[k] === 'string') $(ids[k]).value = saved[k]; });
+      $('f-u15').checked = !!saved.under15;
+      if ($('f-bonus').value || $('f-lpay').value || $('f-ord').value || saved.under15) $('more').open = true;
+      render(false);
+    }
   }
 
   /* ───────── 시급·주휴수당 ───────── */
   function hourlyPage() {
-    var st = { mode: 'hourly', text: '', hours: String(D.hourly.fullWeekHours), period: D.now }, texts = { hourly: '', monthly: '' };
+    var st = { mode: 'hourly', text: '', hours: String(D.hourly.fullWeekHours), period: DEF }, texts = { hourly: '', monthly: '' };
     var amt = $('amt'), read = $('read'), hours = $('f-hours');
     function render(typing) {
       var v = V.hourly(st);
-      read.className = 'read ' + v.read.cls; read.innerHTML = v.read.html;
+      mark(amt, v, read);
+      invalid(hours, v.hoursBad);
       slip.innerHTML = v.slip; slip.classList.toggle('is-ex', v.example);
-      settle(v.value + '|' + st.mode + st.period + st.hours, v.example, typing, v.example ? '' : v.live);
+      settle(v.value + '|' + st.mode + st.period + st.hours, v.example || !v.ok, typing, v.example && !v.invalid ? '' : v.live);
+      var changed = texts.hourly.trim() || texts.monthly.trim() || st.mode !== 'hourly' || st.hours !== String(D.hourly.fullWeekHours) || st.period !== DEF;
+      sess('hourly', changed ? { mode: st.mode, hourly: texts.hourly, monthly: texts.monthly, hours: st.hours, period: st.period } : null);
     }
     function controls() {
       var i = st.mode === 'hourly' ? 0 : 1;
@@ -271,38 +341,67 @@
     hours.addEventListener('blur', flush);
     $('mode').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.dataset.v === st.mode) return; st.mode = b.dataset.v; st.text = texts[st.mode]; amt.value = st.text; controls(); render(false); });
     $('period').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st.period = b.dataset.v; controls(); render(false); });
+    var saved = sessAll().hourly;
+    if (saved && typeof saved === 'object') {
+      if (typeof saved.hourly === 'string') texts.hourly = saved.hourly;
+      if (typeof saved.monthly === 'string') texts.monthly = saved.monthly;
+      if (saved.mode === 'monthly') st.mode = 'monthly';
+      if (typeof saved.hours === 'string') { st.hours = saved.hours; hours.value = saved.hours; }
+      if (D.periods[saved.period]) st.period = saved.period;
+      st.text = texts[st.mode]; amt.value = st.text;
+    }
     controls();
+    if (saved || st.period !== D.now) { var v0 = V.hourly(st); mark(amt, v0, read); invalid(hours, v0.hoursBad); slip.innerHTML = v0.slip; slip.classList.toggle('is-ex', v0.example); settle(v0.value + '|' + st.mode + st.period + st.hours, v0.example || !v0.ok, false, '', true); }
   }
 
   /* ───────── 실업급여 ───────── */
   function ubPage() {
-    var over50 = false;
+    var over50 = false, wages = $('f-wages');
     function render(typing) {
-      var s = { leave: $('f-leave').value, wages: $('f-wages').value, hours: $('f-hours').value, band: $('f-band').value, over50: over50 };
+      var s = { leave: $('f-leave').value, wages: wages.value, hours: $('f-hours').value, band: $('f-band').value, over50: over50 };
       s.touched = !!(s.leave || s.wages.trim());
       var v = V.ub(s);
       slip.innerHTML = v.slip; slip.classList.toggle('is-ex', v.example);
+      mark(wages, v.field.read ? v.field : { unit: V.UNIT.man, invalid: false, read: { cls: 'hint', html: '' } }, $('r-f-wages'));
+      if (v.bad.wages) invalid(wages, true);
+      invalid($('f-leave'), !!v.bad.leave && !v.example);
       settle(v.ok ? v.value + '|' + s.band + over50 + s.hours : 'x', v.example || !v.ok, typing, v.example ? '' : v.live);
+      sess('ub', s.touched ? { leave: s.leave, wages: s.wages, hours: s.hours, band: s.band, over50: over50 } : null);
     }
     ['f-leave', 'f-hours', 'f-band'].forEach(function (id) { $(id).addEventListener('change', function () { render(false); }); $(id).addEventListener('input', function () { render(false); }); });
-    $('f-wages').addEventListener('input', function () { render(true); });
-    $('f-wages').addEventListener('blur', flush);
+    wages.addEventListener('input', function () { render(true); });
+    wages.addEventListener('blur', flush);
     $('age').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; over50 = b.dataset.v === '1'; pressed($('age'), b.dataset.v); render(false); });
-    setStale(null);
+    /* 기준 기간: 다음 해로 넘어가면 '상한액은 아직 반영하지 못했다'고, 그 해도 지나면 '새 기준을 확인 중'이라고 알린다 */
+    var el = $('stale'), val = P.unemploymentValidity(T0);
+    if (el) { el.hidden = !(val.ok && val.stale); el.textContent = V.ubStaleText(val.nextYear); }
+    var saved = sessAll().ub;
+    if (saved && typeof saved === 'object') {
+      if (typeof saved.leave === 'string') $('f-leave').value = saved.leave;
+      if (typeof saved.wages === 'string') wages.value = saved.wages;
+      if ($('f-hours').querySelector('option[value="' + saved.hours + '"]')) $('f-hours').value = saved.hours;
+      if ($('f-band').querySelector('option[value="' + saved.band + '"]')) $('f-band').value = saved.band;
+      over50 = !!saved.over50; pressed($('age'), over50 ? '1' : '0');
+      render(false);
+    }
   }
 
   /* ───────── 연차 ───────── */
   function leavePage() {
     var join = $('f-join');
     function render() {
-      var v = V.leave({ join: join.value, asOf: today() });
+      var v = V.leave({ join: join.value, asOf: T0 });
       slip.innerHTML = v.slip; slip.classList.toggle('is-ex', !join.value);
+      invalid(join, !!join.value && P.parseDate(join.value) === null);
       settle(join.value, !join.value, false, v.live);
+      sess('leave', join.value ? { join: join.value } : null);
     }
     join.addEventListener('change', render); join.addEventListener('input', render);
+    var saved = sessAll().leave;
+    if (saved && typeof saved.join === 'string') { join.value = saved.join; render(); }
   }
 
-  /* ───────── 연봉 표: 내 줄 찾기, 항목별로 보기 ───────── */
+  /* ───────── 연봉 표: 내 줄 찾기, 항목별로 보기, 줄 전체가 계산기로 가는 링크 ───────── */
   function tablePage() {
     var find = $('find'), read = $('read'), tbl = $('tbl'), all = $('b-all'), hint = $('hint');
     if (!tbl) return;
@@ -312,21 +411,31 @@
       tbl.classList.toggle('all', on); all.setAttribute('aria-pressed', String(on)); all.textContent = on ? all.dataset.on : all.dataset.off;
       hint.hidden = !(on && tbl.scrollWidth > tbl.clientWidth + 1);
     });
-    var t = 0;
-    function mark(scroll) {
+    /* 줄 어디를 눌러도 그 연봉으로 계산기가 열린다(글자를 긁어 고르는 중이면 넘어가지 않는다) */
+    tbl.querySelector('tbody').addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      var tr = e.target.closest('tr'), a = tr && tr.querySelector('th a');
+      if (!a || String(window.getSelection && window.getSelection()).length) return;
+      location.href = a.href;
+    });
+    /* 내 연봉 칸도 다른 금액 칸과 같은 규칙으로 읽는다: 한국어판은 숫자만 쓰면 만 원(큰 수는 원), 영어판은 원 */
+    var mb = D.input.manBelow.annual, rule = EN ? { unit: 'won' } : { unit: 'man', manBelow: mb }, unit = $('u-find'), t = 0;
+    function mark2(scroll) {
       rows.forEach(function (r) { r.classList.remove('me'); });
-      var r = P.parseMoney(find.value, 'man');
-      if (!find.value.trim()) { read.textContent = ''; read.className = 'read'; return; }
+      var empty = !find.value.trim(), r = empty ? { ok: false } : P.parseMoney(find.value, rule);
+      if (unit) unit.textContent = EN ? 'won' : !r.ok || !r.bare ? (empty || !r.ok ? '만 원' : '') : r.read === 'man' ? '만 원' : '원';
+      invalid(find, !empty && (!r.ok || !r.value));
+      if (empty) { read.textContent = ''; read.className = 'read'; return; }
       if (!r.ok || !r.value) { read.textContent = EN ? 'Could not read that amount.' : '금액을 읽지 못했어요.'; read.className = 'read err'; return; }
       var lo = +rows[0].dataset.a, hi = +rows[rows.length - 1].dataset.a;
-      if (r.value < lo * 0.9 || r.value > hi * 1.05) { read.textContent = CFG.none; read.className = 'read'; return; }
+      if (r.value < lo * 0.9 || r.value > hi * 1.05) { read.textContent = CFG.none.replace('{}', EN ? '₩' + P.fmt(r.value) : P.readKo(r.value)); read.className = 'read'; return; }
       var best = rows[0];
       rows.forEach(function (x) { if (Math.abs(+x.dataset.a - r.value) < Math.abs(+best.dataset.a - r.value)) best = x; });
       best.classList.add('me');
       read.textContent = CFG.readAs.replace('{}', EN ? '₩' + P.fmt(r.value) : P.readKo(r.value)); read.className = 'read';
       if (scroll) best.scrollIntoView({ block: 'center' });
     }
-    find.addEventListener('input', function () { clearTimeout(t); mark(false); t = setTimeout(function () { mark(true); }, 700); });
-    find.addEventListener('keydown', function (e) { if (e.key === 'Enter') { clearTimeout(t); mark(true); } });
+    find.addEventListener('input', function () { clearTimeout(t); mark2(false); t = setTimeout(function () { mark2(true); }, 700); });
+    find.addEventListener('keydown', function (e) { if (e.key === 'Enter') { clearTimeout(t); mark2(true); } });
   }
 })();

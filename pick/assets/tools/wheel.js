@@ -5,7 +5,8 @@
 // 돌리기를 누른 순간의 명단·씨앗·결과를 한 묶음으로 잡아 두고(spinning), 판의 강조 칸·발표 이름·'빼고 다시'·결과 링크·
 // 최근 결과를 전부 그 묶음으로 만든다. 도는 동안에는 명단 칸과 그 단추들을 잠근다. 그래서 화면과 결과가 어긋날 길이 없다.
 // '이 사람 빼고 다시'는 명단 칸의 글(= 저장되는 원래 명단)을 고치지 않는다. 뺀 사람은 out에만 적어 두고 판에서만 뺀다.
-import { T, $, fmt, nfmt, reduced, list, sound, recent, safeShareUrl, copyLink, readShare, link, clearHash, showStamp, setAfter, confetti, stopConfetti, presenting, el } from '../app.js';
+import { T, $, fmt, nfmt, reduced, list, sound, recent, safeShareUrl, copyLink, readShare, link, clearHash, showStamp, setAfter, setCode, fitName, nudgeBanner, confetti, stopConfetti, presenting, el } from '../app.js';
+import { listCode } from '../core/name.js';
 import { newSeed, makeRng } from '../core/rng.js';
 import { wheelDraw, wheelRotation, wheelIndexAt, sliceColorCount, labelFlipped, labelSize, fitLabel, commonPrefixLength } from '../core/pick.js';
 
@@ -19,6 +20,7 @@ const needle = $('.needle', wheelEl);
 const go = $('#go');
 const resultEl = $('#result');
 const rname = $('#rname');
+const rfull = $('#rfull'); // 큰 글자로 다 못 보여 준 아주 긴 이름을 작은 글자로 한 번 더
 const rlabel = $('#rlabel');
 const historyEl = $('#history');
 const outBox = $('#outbox');
@@ -28,7 +30,7 @@ let out = [];          // 이번 판에서 뺀 이름(뺀 순서대로). 저장�
 let items = live;      // 판에 올라가 있는 명단 = 원래 명단에서 뺀 사람을 뺀 것. 도는 중과 결과가 떠 있는 동안에는 그때 잡아 둔 명단
 let prefix = 0;        // 판의 이름들이 앞에서 몇 글자까지 같은지(긴 이름을 줄일 때 뒤쪽을 살리려고)
 let rot = 0;           // 지금 판의 각도(라디안)
-let spinning = null;   // 도는 중이면 { items, seed, pick, name, replay, legacy }
+let spinning = null;   // 도는 중이면 { items, seed, pick, name, replay, mark, legacy }  mark = 링크로 연 결과의 표시 종류('ok' | 'legacy' | 'cleaned')
 let last = null;       // 마지막 결과 { items, index, name, seed, legacy }
 let shown = -1;        // 짚어 둔 칸
 let hist = [];         // 지금까지 뽑힌 순서 { no, name } (새것이 앞)
@@ -122,7 +124,11 @@ function draw(hi = -1) {
 function setWait(text, label) {
   rlabel.textContent = label || rlabel.dataset.idle;
   rname.textContent = text;
+  rname.removeAttribute('title');
+  rname.removeAttribute('data-fit');
+  rname.classList.remove('clip');
   rname.classList.add('wait');
+  if (rfull) { rfull.hidden = true; rfull.textContent = ''; }
 }
 
 function paintOut() {
@@ -139,6 +145,7 @@ function paintHist() {
   for (const h of hist) {
     const li = el('li');
     li.append(el('b', 'num', h.no), el('span', null, h.name));
+    li.title = h.name; // 칸이 좁아 줄여 보이는 이름도 올려 보면 다 보인다
     ol.append(li);
   }
   if (hist.length) historyEl.removeAttribute('data-off'); else historyEl.setAttribute('data-off', '');
@@ -176,13 +183,14 @@ function finish(s, quiet) {
   draw(s.pick.index);
   resultEl.dataset.state = 'done';
   rlabel.textContent = T.picked;
-  rname.textContent = s.name;
   rname.classList.remove('wait');
+  fitName(rname, s.name, rfull); // 긴 이름은 글자를 줄이고 줄을 바꿔 끝까지 보여 준다
+  setCode(s.items.length, listCode(s.items));
   resultEl.classList.remove('fresh');
   if (!quiet && !reduced()) { void resultEl.offsetWidth; resultEl.classList.add('fresh'); }
   go.textContent = T.spinAgain;
   setAfter(true);
-  showStamp(s.replay, s.legacy);
+  showStamp(s.mark);
   hist.unshift({ no: ++turnNo, name: s.name });
   if (hist.length > HISTORY_MAX) hist.length = HISTORY_MAX;
   paintHist();
@@ -193,8 +201,11 @@ function finish(s, quiet) {
   }
 }
 
-function spin(seed, replay, legacy) {
+/** mark: 링크로 연 결과면 표시 종류('ok' | 'legacy' | 'cleaned'), 내가 돌리면 없음 */
+function spin(seed, mark) {
   if (spinning || blocked) return;
+  const replay = !!mark;
+  const legacy = mark === 'legacy';
   const board = active(); // 돌리기를 누른 순간의 명단. 이 뒤로는 이것만 쓴다
   if (!board.length) { setWait(live.length ? T.allOut : T.emptyList); if (!live.length) list.el.focus(); return; }
   items = board;
@@ -203,9 +214,9 @@ function spin(seed, replay, legacy) {
   stopConfetti();
   seed = seed || newSeed();
   const n = items.length;
-  const pick = wheelDraw(items, makeRng(seed), !!legacy);   // 결과를 먼저 정하고(명단의 순서와 상관없이 같은 이름)
+  const pick = wheelDraw(items, makeRng(seed), legacy);   // 결과를 먼저 정하고(명단의 순서와 상관없이 같은 이름)
   const to = wheelRotation({ n, index: pick.index, frac: pick.frac, from: rot, turns: pick.turns, pointer: POINTER }); // 그 칸에 멈추는 각도를 구한다
-  const s = { items, seed, pick, name: items[pick.index], replay: !!replay, legacy: !!legacy };
+  const s = { items, seed, pick, name: items[pick.index], replay, mark: mark || false, legacy };
   last = null;
   setAfter(false);
   showStamp(false);
@@ -248,7 +259,15 @@ list.onChange((next) => {
 });
 
 rlabel.dataset.idle = rlabel.textContent;
-go.addEventListener('click', () => { sound.arm(); spin(); });
+go.addEventListener('click', () => {
+  if (blocked) { // 열 수 없는 링크 알림이 떠 있는 동안: 왜 안 도는지 알리고 닫기 단추를 가리킨다
+    setWait(T.blockedHint);
+    nudgeBanner();
+    return;
+  }
+  sound.arm();
+  spin();
+});
 $('#again').addEventListener('click', () => {
   if (!last || spinning) return;
   out.push(last.name); // 명단 칸의 글은 그대로 두고 판에서만 뺀다
@@ -264,10 +283,11 @@ if (outBox) {
 }
 
 let rz = 0;
-addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (!spinning) draw(shown); }, 60); });
+addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (spinning) return; draw(shown); if (last) fitName(rname, last.name, rfull); }, 60); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!spinning) draw(shown); });
-document.fonts.ready.then(() => { if (!spinning) draw(shown); });
-if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => { if (!spinning) draw(shown); });
+const refresh = () => { if (spinning) return; draw(shown); if (last) fitName(rname, last.name, rfull); }; // 글꼴이 늦게 오면 글자 폭이 달라진다: 판과 결과 이름을 다시 맞춘다
+document.fonts.ready.then(refresh);
+if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', refresh);
 
 const shared = readShare('wheel');
 blocked = link.bad;
@@ -275,6 +295,6 @@ link.onClose(() => { blocked = false; sync(); });
 sync();
 if (shared && shared.items.length) {
   list.setShared(shared.items);
-  spin(shared.seed, true, shared.legacy); // 같은 씨앗 + 같은 사람들 → 같은 이름에 멈춘다
+  spin(shared.seed, shared.mark); // 같은 씨앗 + 같은 사람들 → 같은 이름에 멈춘다
 }
 window.__pick = { get state() { return { items, live, out, hist, last, rot, spinning: !!spinning, drawn, blocked, presenting: presenting() }; }, spin };

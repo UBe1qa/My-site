@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""assets/pretendard.css 만들기: python3 salary/_dev/font_css.py  (네트워크 필요, curl 사용)
+"""_dev/pretendard.css 만들기: python3 salary/_dev/font_css.py  (네트워크 필요, curl 사용)
+
+이 CSS 는 사이트에 올리지 않는다(3단계부터 화면 글꼴은 font.py 가 만든 조각 assets/fonts/tk-*.woff2 하나다).
+공유 그림(og.py)을 찍을 때만 쓴다.
 
 Pretendard 1.3.9 '나눠 받기' CSS(jsDelivr)를 받아 두 가지만 바꾼다.
   1) font-display: swap → optional  : 글꼴이 늦게 와도 이미 그린 글자를 바꾸지 않는다(화면 밀림 0).
@@ -14,7 +17,7 @@ from pathlib import Path
 VER = 'v1.3.9'
 SRC = f'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@{VER}/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
 BASE = f'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@{VER}/packages/pretendard/dist/web/variable/woff2-dynamic-subset/'
-OUT = Path(__file__).resolve().parent.parent / 'assets' / 'pretendard.css'
+OUT = Path(__file__).resolve().parent / 'pretendard.css'
 
 css = subprocess.run(['curl', '-sS', '-m', '30', SRC], check=True, capture_output=True, text=True).stdout
 css = re.sub(r'/\*.*?\*/', '', css, flags=re.S).strip()

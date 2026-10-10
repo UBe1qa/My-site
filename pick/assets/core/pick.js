@@ -2,6 +2,10 @@
 // 같은 씨앗의 난수기를 넣으면 같은 결과가 나온다. 난수를 쓰는 순서는 바꾸지 않는다(공유 링크가 같은 결과를 다시 보여 줘야 한다).
 // 결과를 한쪽으로 기울이는 인자(특정 항목이 나오게 하기)는 없다. 앞으로도 넣지 않는다.
 
+import { cleanName, compareCodePoints } from './name.js';
+
+export { compareCodePoints };
+
 export const LIMITS = {
   wheelSmooth: 500,   // 돌림판: 이 수까지는 버벅임 없이 그린다(테스트·화면 확인 기준)
   items: 5000,        // 명단 한도
@@ -152,27 +156,14 @@ export function rollDice(count, sides, rng) {
 // ---------- 명단의 순서에 기대지 않는 뽑기 ----------
 // 돌림판·제비뽑기·팀 나누기는 '넣은 순서'가 아니라 '정해진 자리'를 기준으로 뽑는다:
 // 명단을 유니코드 코드 포인트 순으로 놓았을 때의 자리(같은 이름끼리는 넣은 순서). 씨앗이 고르는 것은 이 자리 번호다.
+// 이름은 '고른 꼴'(name.js의 cleanName: NFC, 보이지 않는 글자 없음)로 견준다. 화면에 똑같이 보이는 이름이 글자열만 달라서
+// 다른 자리에 놓이는 일이 없게 하려는 것이다. 명단은 들어올 때 이미 골라 두지만(share.js), 여기서도 한 번 더 고른 꼴로 견준다.
 // 그래서 씨앗과 사람들이 같으면, 명단을 어떤 순서로 적었든 같은 사람이 같은 결과를 받는다
 // (결과 링크 속 명단의 순서만 바꿔서 다른 사람이 뽑힌 것처럼 꾸밀 수 없다).
 // 사다리는 '누가 몇 번째 줄에 서는가'가 결과의 일부라서 여기에 들지 않는다(순서까지 같아야 같은 결과).
 // legacy = 옛 링크(형식 1): 넣은 순서를 그대로 자리로 썼다. 옛 링크를 옛 방식 그대로 다시 보여 줄 때만 쓴다.
 
-/** 두 글자열을 유니코드 코드 포인트 순으로 견준다(음수·0·양수). 파이썬 sorted()와 같은 순서. */
-export function compareCodePoints(a, b) {
-  const n = Math.min(a.length, b.length);
-  for (let i = 0; i < n; i++) {
-    let x = a.charCodeAt(i);
-    let y = b.charCodeAt(i);
-    if (x === y) continue;
-    // UTF-16에서는 U+10000 이상의 글자(대리 문자 U+D800~DFFF 두 개)가 U+E000~FFFF보다 앞에 온다. 코드 포인트 순이 되게 자리를 바꿔 견준다.
-    if (x >= 0xd800) x += x >= 0xe000 ? -0x800 : 0x2000;
-    if (y >= 0xd800) y += y >= 0xe000 ? -0x800 : 0x2000;
-    return x - y;
-  }
-  return a.length - b.length;
-}
-
-/** 정해진 자리: order[k] = 코드 포인트 순으로 k번째인 이름의 원래 번호. 같은 이름끼리는 넣은 순서대로(안정 정렬). */
+/** 정해진 자리: order[k] = 코드 포인트 순으로 k번째인 이름의 원래 번호. 같은 이름끼리는 넣은 순서대로(안정 정렬). 글자열을 있는 그대로 견준다. */
 export function canonicalOrder(items) {
   const order = items.map((_, i) => i);
   order.sort((i, j) => compareCodePoints(items[i], items[j]) || i - j);
@@ -181,7 +172,7 @@ export function canonicalOrder(items) {
 
 function seats(items, legacy) {
   int(items.length, 1, LIMITS.items, 'n');
-  return legacy ? items.map((_, i) => i) : canonicalOrder(items);
+  return legacy ? items.map((_, i) => i) : canonicalOrder(items.map(cleanName));
 }
 
 /** 돌림판 한 번: { index = 뽑힌 이름의 원래 번호(판에서 그 칸), frac, turns }. 명단의 순서를 바꿔도 같은 이름이 뽑힌다. */

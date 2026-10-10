@@ -34,7 +34,7 @@ function run(seed, replay, o) {
   const total = vals.reduce((a, b) => a + b, 0);
   last = { seed, opts: { count, sides }, vals, total };
   out.textContent = '';
-  out.append(outHead(fmt(T.diceSum, { n: nfmt(total) }), replay));
+  out.append(outHead(fmt(T.diceSum, { n: nfmt(total) }), replay ? 'ok' : false));
   const box = el('div', 'dice' + (count > 6 ? ' many' : ''));
   vals.forEach((v) => { const d = face(v, sides); if (!replay && !reduced()) d.classList.add('in'); box.append(d); });
   out.append(box);

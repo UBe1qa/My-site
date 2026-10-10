@@ -12,6 +12,7 @@
 - lastmod(sitemap)와 글의 '마지막 확인'은 MODIFIED·UPDATED에 실제로 본문·구조화 데이터·링크를 고친(확인한) 날만 적는다.
   배치·CSS만 바꾼 날은 적지 않는다.
 """
+import hashlib
 import html
 import json
 import re
@@ -38,6 +39,24 @@ LIST_TOOLS = ['wheel', 'ladder', 'draw', 'teams']
 LANGS = ('en', 'ko')
 
 esc = lambda s: html.escape(str(s), quote=True)
+
+
+# ---------------- 확인 코드(첫 HTML에 미리 적어 두는 예시 명단의 값) ----------------
+# 화면 코드(assets/core/name.js의 listCode·ladderCode)와 같은 규칙을 파이썬 hashlib으로 따로 계산한다.
+# 브라우저 확인(e2e.py)이 "첫 HTML에 적힌 코드 = 화면 코드가 계산한 코드"를 본다. 예시 명단의 이름은 이미 고른 꼴이다.
+def list_code(names):
+    return hashlib.sha256('\n'.join(sorted(names)).encode('utf-8')).hexdigest()[:8]
+
+
+def ladder_code(names, labels):
+    return hashlib.sha256(('\n'.join(names) + '\n\n' + '\n'.join(labels)).encode('utf-8')).hexdigest()[:8]
+
+
+def sample_code(lang, ladder=False):
+    names = C['ui'][lang]['sample'].split('\n')
+    count = C['js'][lang]['count'].replace('{n}', str(len(names)))
+    code = ladder_code(names, C['ui'][lang]['sampleBottom'].split('\n')) if ladder else list_code(names)
+    return count, code
 
 
 def prefix(lang):
@@ -192,21 +211,25 @@ def page(lang, head_html, body, current=None, alt_path=None, script='/assets/app
 
 
 # ---------------- 도구 화면 ----------------
-def list_panel(lang, wheel=False):
-    """wheel=True면 돌림판의 '판에서 뺀 사람' 칸을 더한다."""
+def list_panel(lang, wheel=False, ladder=False):
+    """wheel=True면 돌림판의 '판에서 뺀 사람' 칸을 더한다. ladder=True면 확인 코드가 '사다리 확인 코드'(줄 순서·아래 칸 포함)다."""
     u = U(lang)
     sample = u['sample']
-    n = len(sample.split('\n'))
-    count = C['js'][lang]['count'].replace('{n}', str(n))
+    count, code = sample_code(lang, ladder)
+    # 저장된 명단은 첫 그림 전에 넣는다. 그 명단의 확인 코드는 화면 코드가 채우므로, 예시 명단의 코드는 비워 둔다(자리는 그대로)
     restore = ("<script>(function(){try{var v=localStorage.getItem('pick.list');if(v!==null){var t=document.getElementById('names');t.value=v;t.dataset.own='1';"
-               "var n=document.getElementById('listnote');n.firstElementChild.textContent=n.dataset.saved;n.lastElementChild.textContent=n.dataset.clearall}}catch(e){}})()</script>")
+               "var n=document.getElementById('listnote');n.firstElementChild.textContent=n.dataset.saved;n.lastElementChild.textContent=n.dataset.clearall;"
+               "document.getElementById('listcode').textContent=''}}catch(e){}})()</script>")
+    fp = (f'<p class="list-fp" id="listfp" title="{esc(u["fpLadderTitle" if ladder else "fpListTitle"])}"><span>{u["fpLadder" if ladder else "fpList"]}</span> '
+          f'<b class="num" id="listcode">{count} · {code}</b></p>')
     outbox = (f'<div class="outbox" id="outbox" hidden><p id="outtext" role="status"></p><div class="outbox-btns"><button type="button" class="btn btn-sm" id="outlast">{u["outLast"]}</button>'
               f'<button type="button" class="btn btn-sm" id="outall">{u["outAll"]}</button></div></div>\n    ') if wheel else ''
     return f'''<aside class="list" id="list">
     <div class="list-head"><h2><label for="names">{u['list']}</label></h2><span class="count num" id="count">{count}</span></div>
-    <p class="list-note" id="listnote" data-saved="{esc(u['listSaved'])}" data-clear="{esc(u['listClear'])}" data-clearall="{esc(u['listClearAll'])}"><span>{u['listSample']}</span><button type="button" class="btn btn-sm" id="listclear">{u['listClear']}</button></p>
+    <p class="list-note" id="listnote" data-saved="{esc(u['listSaved'])}" data-clear="{esc(u['listClear'])}" data-clearall="{esc(u['listClearAll'])}"><span>{u['listSample']}</span><button type="button" class="btn btn-sm" id="listalt" hidden></button><button type="button" class="btn btn-sm" id="listclear">{u['listClear']}</button></p>
     <p class="list-left" id="histleft" hidden><span>{u['histLeft']}</span><button type="button" class="btn btn-sm">{u['histLeftBtn']}</button></p>
     <textarea class="names" id="names" rows="8" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="{u['listAria']}" data-sample="{esc(sample)}">{esc(sample)}</textarea>
+    {fp}
     {restore}
     {outbox}<div class="list-tools"><button type="button" class="btn btn-sm" id="shuffle">{u['shuffle']}</button><button type="button" class="btn btn-sm" id="sortaz">{u['sort']}</button><button type="button" class="btn btn-sm" id="dedupe">{u['dedupe']}</button></div>
     <p class="list-warn" id="listwarn" role="status"></p>
@@ -214,18 +237,26 @@ def list_panel(lang, wheel=False):
   </aside>'''
 
 
-def trust(lang, solo=False):
-    """결과 곁의 근거 한 줄(쉬운 말) + 접어 둔 '자세히'(용어는 여기에)."""
+def trust(lang, solo=False, ladder=False):
+    """결과 곁의 근거 한 줄(쉬운 말) + 접어 둔 '자세히'(용어는 여기에). 명단을 쓰는 도구는 확인 코드가 무엇인지도 여기에 적는다."""
     u = U(lang)
     line = TU(lang)['trustSolo'] if solo else u['trustA']
+    code = '' if solo else f'<p>{u["trustCodeLadder" if ladder else "trustCode"]}</p>'
     return (f'<div class="trust"><p><b>{u["trustQ"]}</b> {line}</p><details class="more trust-more"><summary>{u["trustMoreH"]}</summary>'
-            f'<p>{u["trustMore"]} <a href="{prefix(lang)}about/">{u["trustLink"]}</a></p></details></div>')
+            f'<p>{u["trustMore"]} <a href="{prefix(lang)}about/">{u["trustLink"]}</a></p>{code}</details></div>')
 
 
-def after_block(lang, note='copyNote', extra=''):
+def code_note(lang, ladder=False):
+    """결과 곁의 확인 코드 자리. 결과가 나오면 화면 코드가 그 결과를 만든 명단의 코드로 바꾼다(자리가 미리 있어 화면이 밀리지 않는다)."""
+    count, code = sample_code(lang, ladder)
+    return f'<span class="note fp num" id="fp">{C["js"][lang]["fp"].replace("{count}", count).replace("{code}", code)}</span>'
+
+
+def after_block(lang, note='copyNote', extra='', ladder=False):
     tu = TU(lang)
+    fp = '' if note == 'copyNoteNoList' else code_note(lang, ladder)
     return (f'<div class="after" id="after" data-off>{extra}<button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{tu["copy"]}</button>'
-            f'<span class="note" id="copynote">{tu[note]}</span></div><p class="toast" id="toast" role="status"></p>')
+            f'<span class="note" id="copynote">{tu[note]}</span>{fp}</div><p class="toast" id="toast" role="status"></p>')
 
 
 def stage_wheel(lang):
@@ -236,8 +267,8 @@ def stage_wheel(lang):
   <div class="result result-wheel" id="result">
     <div class="result-top">{trust(lang)}<div class="opts"><button type="button" class="btn btn-sm" id="sound" aria-pressed="true">{j['soundOn']}</button><button type="button" class="btn btn-sm" id="present" hidden>{j['present']}</button></div></div>
     <div class="result-main">
-    <div class="result-mid" aria-live="polite"><p class="result-label"><span id="rlabel">{u['resultLabel']}</span><span class="stamp" id="stamp" hidden></span></p><p class="result-name wait" id="rname">{j['wait']}</p></div>
-    <div class="result-bot"><div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="again">{u['again']}</button><button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{u['copy']}</button><span class="note">{u['copyNote']}</span></div><p class="toast" id="toast" role="status"></p>
+    <div class="result-mid" aria-live="polite"><p class="result-label"><span id="rlabel">{u['resultLabel']}</span><span class="stamp" id="stamp" hidden></span></p><p class="result-name wait" id="rname">{j['wait']}</p><p class="result-full" id="rfull" hidden></p></div>
+    <div class="result-bot"><div class="after" id="after" data-off><button type="button" class="btn btn-sm" id="again">{u['again']}</button><button type="button" class="btn btn-sm" id="copy">{ICON_LINK}{u['copy']}</button><span class="notes"><span class="note">{u['copyNote']}</span>{code_note(lang)}</span></div><p class="toast" id="toast" role="status"></p>
     <div class="history" id="history" data-off><h2>{u['historyH']}</h2><ol></ol></div></div>
     </div>
   </div>
@@ -265,10 +296,10 @@ def stage_ladder(lang):
     <div class="ladder-box" id="ladderbox"><div class="ladder-scroll" id="ladder" style="min-height:300px;display:grid;place-items:center"><p class="out-empty" style="padding:24px;text-align:center">{tu['ladderEmpty']}</p></div></div>
     <p class="note" id="tip" style="min-height:20px"></p>
     <div class="out" id="out" style="min-height:120px" aria-live="polite"></div>
-    {after_block(lang, note='copyNoteLadder')}
-    {trust(lang)}
+    {after_block(lang, note='copyNoteLadder', ladder=True)}
+    {trust(lang, ladder=True)}
   </div>
-  {list_panel(lang)}
+  {list_panel(lang, ladder=True)}
 </div>'''
 
 
@@ -469,6 +500,11 @@ def tokens(lang):
         rows_html.append(f'<tr><td>{who}</td><td>{pct(1 / n)}</td>{cells}</tr>')
     t['stay_rows'] = '\n'.join(rows_html)
     t['ladder_fig'] = ladder_figure(lang)
+    # 글에 예로 드는 확인 코드 = 예시 명단의 코드(첫 화면에 보이는 것과 같다). tests/fixtures.json의 파이썬 값과도 같아야 한다
+    count, code = sample_code(lang)
+    assert code == FX['codes']['sample'][lang], (code, FX['codes']['sample'][lang])
+    t['code_sample'] = f'{count} · {code}'
+    t['code_ladder'] = '{} · {}'.format(*sample_code(lang, ladder=True))
     t['site'] = SITE
     t['p'] = prefix(lang)
     for tid in TOOL_ORDER:

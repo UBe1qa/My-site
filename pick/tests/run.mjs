@@ -7,7 +7,9 @@ import { makeRng, below, newSeed, cryptoSource, seedToText, seedFromText, bytesT
 import { LIMITS, WHEEL, shuffledIndices, shuffle, pickSome, dealSlips, teamSizes, splitTeams, randomNumbers, flipCoins, rollDice, wheelPick, wheelRotation, wheelIndexAt, sliceColorCount, labelFlipped, labelSize,
   compareCodePoints, canonicalOrder, wheelDraw, drawSome, drawOrder, drawSlips, drawTeams, commonPrefixLength, fitLabel } from '../assets/core/pick.js';
 import { LADDER, makeLadder, isValidLadder, tracePath, ladderEnds, playLadder } from '../assets/core/ladder.js';
-import { parseList, cleanName, uniqueItems, firstColumn, encodeShare, decodeShare, shareLength, TOOLS, MAX_HASH, SHARE_VERSION } from '../assets/core/share.js';
+import { parseList, cleanName, uniqueItems, firstColumn, columns, pickColumn, historyHolds, encodeShare, decodeShare, shareLength, TOOLS, MAX_HASH, SHARE_VERSION } from '../assets/core/share.js';
+import { cleanName as cleanNameCore, hadHidden, plainName, sha256Hex, listCode, ladderCode, CODE_LENGTH } from '../assets/core/name.js';
+import { createHash } from 'node:crypto';
 import { readInteger } from '../assets/core/input.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -812,7 +814,8 @@ section('명단 읽기');
   const pl = parseList(long + '\n가');
   ok(pl.cut === 1 && Array.from(pl.items[0]).length === LIMITS.nameLength, '너무 긴 이름은 100자로 자르고 알림');
   const emojiLong = parseList('👨‍👩‍👧‍👦'.repeat(40));
-  ok(Array.from(emojiLong.items[0]).length === LIMITS.nameLength && emojiLong.items[0].isWellFormed(), '이모지를 반으로 자르지 않는다');
+  // 가족 이모지(7글자)를 40번 이은 글을 100자에서 자르면 14개 + '👨'과 잇는 표시(U+200D)가 남는다. 뒤에 붙을 것이 없는 잇는 표시는 지우므로 99자.
+  eq([Array.from(emojiLong.items[0]).length, emojiLong.items[0].isWellFormed(), emojiLong.items[0] === cleanName(emojiLong.items[0]), emojiLong.cut], [LIMITS.nameLength - 1, true, true, 1], '이모지를 반으로 자르지 않고, 자른 자리에 남은 잇는 표시도 정리한다');
   const many = parseList(Array.from({ length: LIMITS.items + 7 }, (_, i) => 'p' + i).join('\n'));
   ok(many.items.length === LIMITS.items && many.over === 7, '한도 넘는 이름은 빼고 몇 개인지 알림');
   eq(cleanName('a\u0000b\tc'), 'a b c', '제어 문자는 공백으로');
@@ -831,6 +834,7 @@ section('링크 왕복');
         `왕복: ${c.name} / ${tool}`);
       ok(/^r=2\.[a-z]\.[A-Za-z0-9_-]{43}\.[A-Za-z0-9_-]+$/.test(h), `주소에 그대로 쓸 수 있는 글자만(형식 2): ${c.name} / ${tool}`);
       ok(d.version === 2 && h.length === shareLength(c.i, c.o), `형식 번호 2, 길이 계산 = 실제 길이: ${c.name} / ${tool}`);
+      ok(d.cleaned === false, `이 사이트가 만든 링크는 고쳐 읽을 것이 없다: ${c.name} / ${tool}`);
     }
     // 파이썬이 만든 문자열과 글자 하나까지 같고, 파이썬이 만든 것도 읽힌다
     const h = encodeShare({ tool: 'wheel', seed, items: c.i, opts: c.o });
@@ -1010,6 +1014,301 @@ section('글 속 숫자');
   eq([labelFlipped(0), labelFlipped(Math.PI / 2 - 0.01), labelFlipped(Math.PI / 2 + 0.01), labelFlipped(Math.PI), labelFlipped(-Math.PI / 2 + 0.01), labelFlipped(-Math.PI / 2 - 0.01), labelFlipped(7 * Math.PI)],
     [false, false, true, true, false, true, true], '이름 뒤집기: 판의 왼쪽 절반에서만');
   ok(labelSize(250, 8) > 20 && labelSize(250, 30) >= 14 && labelSize(250, 200) < 8, '이름 크기: 8칸 크게, 30칸 읽을 만하게, 200칸은 쓰지 않음');
+}
+
+// ---------------------------------------------------------------- 이름 고르기 (3단계-2: 보이지 않는 글자·정규화가 다른 이름)
+section('이름 고르기');
+{
+  const cps = (t) => Array.from(t, (ch) => ch.codePointAt(0).toString(16)).join(' ');
+  ok(cleanName === cleanNameCore, 'share.js의 cleanName = name.js의 cleanName(한 곳에만 있다)');
+  // ① 파이썬(unicodedata + regex 모듈의 유니코드 속성)으로 따로 짠 참조 구현과 587가지가 글자 하나까지 같다
+  let same = 0;
+  let again = 0;
+  const diffs = [];
+  for (const c of FX.names) {
+    const got = cleanName(c.s);
+    if (got === c.c) same++; else diffs.push(`${cps(c.s)} → ${cps(got)} (want ${cps(c.c)})`);
+    if (cleanName(got) === got) again++;
+  }
+  ok(same === FX.names.length && FX.names.length >= 580, `고른 꼴 = 파이썬 참조 구현(${same}/${FX.names.length})  ${diffs.slice(0, 3).join(' | ')}`);
+  eq(again, FX.names.length, '고른 꼴을 한 번 더 고르면 그대로');
+  // ② 손으로 따진 값
+  const Z = '\u200b';
+  const fam = '\u{1f468}\u200d\u{1f469}\u200d\u{1f467}\u200d\u{1f466}';
+  const scot = '\u{1f3f4}\u{e0067}\u{e0062}\u{e0073}\u{e0063}\u{e0074}\u{e007f}';
+  eq([cleanName(Z + '김민준'), cleanName('김' + Z + '민준'), cleanName('김민준\ufeff'), cleanName('김민준'.normalize('NFD')), cleanName('  김  민준 ')], ['김민준', '김민준', '김민준', '김민준', '김 민준'], '폭 없는 공백·BOM·풀어쓴 자모·공백: 전부 같은 "김민준"(공백은 하나로)');
+  eq([cleanName('A\u200elice'), cleanName('\u202eAlice\u202c'), cleanName('\u2066bob\u2069'), cleanName('Bob\u00ad'), cleanName('a\u2060b\u2061c')], ['Alice', 'Alice', 'bob', 'Bob', 'abc'], '방향 표시·소프트 하이픈·낱말 잇는 표시는 지운다');
+  eq([cleanName('\u3164'), cleanName('가\u3164나'), cleanName('\u115f\u1160'), cleanName('\u2800빈칸\u2800')], ['', '가 나', '', '빈칸'], '빈칸처럼 보이는 글자(한글 채움 글자·점자 빈칸)는 공백으로');
+  eq([cleanName(fam), cleanName(fam + ' 가족'), cleanName('\u{1f1f0}\u{1f1f7}'), cleanName('\u{1f44d}\u{1f3fd}'), cleanName('1\ufe0f\u20e3'), cleanName('❤\ufe0f'), cleanName(scot), cleanName('\u{1f3f3}\ufe0f\u200d\u{1f308}')],
+    [fam, fam + ' 가족', '\u{1f1f0}\u{1f1f7}', '\u{1f44d}\u{1f3fd}', '1\ufe0f\u20e3', '❤\ufe0f', scot, '\u{1f3f3}\ufe0f\u200d\u{1f308}'], '이모지는 그대로: 가족(잇는 표시 3개)·국기·피부색·숫자 단추·하트·스코틀랜드 깃발·무지개 깃발');
+  eq([cleanName('가\u200d나'), cleanName('\u{1f468}\u200d'), cleanName('\u200d\u{1f468}'), cleanName('가\ufe0f'), cleanName('1\ufe0f'), cleanName('\u{1f600}\ufe0f'), cleanName('\u{1f3f4}\u{e0067}\u{e0062}'), cleanName('가\u{e0067}\u{e007f}')],
+    ['가나', '\u{1f468}', '\u{1f468}', '가', '1', '\u{1f600}', '\u{1f3f4}', '가'], '이모지 밖의 잇는 표시·변형 선택자·꼬리표는 지운다(뜻 없이 붙은 것도)');
+  eq([cleanName('e' + Z + '\u0301'), cleanName('Zoe\u0308') === 'Zoë', cleanName('한'), cleanName('ﬁ'), cleanName('１０')], ['é', true, '한', 'ﬁ', '１０'], 'NFC: 지운 뒤에 합친다(e + 폭 없는 공백 + ´ → é). 모양이 다른 글자(ﬁ, 전각 숫자)는 바꾸지 않는다');
+  eq([cleanName('a\u0000b\tc'), cleanName('반쪽\ud83d')], ['a b c', '반쪽�'], '제어 문자는 공백으로, 깨진 이모지 반쪽은 대체 문자로(전과 같다)');
+  eq([hadHidden(Z + '김민준'), hadHidden('김민준'.normalize('NFD')), hadHidden('  김  민준 '), hadHidden('김민준'), hadHidden('가\u3164나'), hadHidden(fam), hadHidden('김민준\ufeff')], [true, false, false, false, true, false, true], '보이지 않는 글자를 지웠는지: 정규화·공백 정리만 한 것은 세지 않는다');
+
+  // ③ 모든 코드 포인트(111만 개): 지우는 글자·공백으로 바꾸는 글자의 범위를 노드의 유니코드 표와 전수 대조한다
+  //    지움 = Default_Ignorable_Code_Point(빈칸 글자 넷은 빼고) + 줄 사이 주석 표시 + 이집트 글자 배치 표시
+  //    공백 = 공백 글자(\s, BOM은 지움) + 제어 문자 + 빈칸처럼 보이는 글자 다섯
+  const DI = /\p{Default_Ignorable_Code_Point}/u;
+  const CC = /\p{Cc}/u;
+  const BLANKS = new Set([0x115f, 0x1160, 0x2800, 0x3164, 0xffa0]);
+  let wrong = [];
+  let nRemoved = 0;
+  let nSpace = 0;
+  for (let cp = 0; cp <= 0x10ffff; cp++) {
+    if (cp >= 0xd800 && cp <= 0xdfff) continue;
+    const ch = String.fromCodePoint(cp);
+    const got = cleanName('a' + ch + 'b');
+    const removed = (DI.test(ch) && !BLANKS.has(cp)) || (cp >= 0xfff9 && cp <= 0xfffb) || (cp >= 0x13430 && cp <= 0x1343f);
+    const space = !removed && (/\s/.test(ch) || CC.test(ch) || BLANKS.has(cp));
+    const want = removed ? 'ab' : space ? 'a b' : ('a' + ch + 'b').normalize('NFC');
+    if (removed) nRemoved++;
+    if (space) nSpace++;
+    if (got !== want && wrong.length < 5) wrong.push('U+' + cp.toString(16).toUpperCase());
+  }
+  ok(wrong.length === 0, `모든 코드 포인트: 지우는 글자 ${nRemoved.toLocaleString('en')}개, 공백으로 바꾸는 글자 ${nSpace}개, 나머지는 NFC만(어긋난 것: ${wrong.join(' ') || '없음'})`);
+  eq([nRemoved > 4000, nSpace], [true, 89], '지우는 글자는 4천 개 남짓(대부분 꼬리표·변형 선택자 자리), 공백으로 바꾸는 글자는 89개(제어 65 + 공백 17 + 줄·문단 나눔 2 + 빈칸 글자 5)');
+
+  // ④ 이모지 보존: 유니코드가 권하는 이모지 꼴(RGI_Emoji)은 전부 그대로여야 한다.
+  //    한 글자 이모지, U+FE0F가 붙는 꼴, 피부색 5가지, 국기(지역 표시 두 글자), 숫자 단추, 그리고 손으로 고른 이어 붙인 이모지
+  const RGI = /^\p{RGI_Emoji}$/v;
+  const PICT = /\p{Extended_Pictographic}/u;
+  const MODBASE = /\p{Emoji_Modifier_Base}/u;
+  const emoji = [];
+  for (let cp = 0x23; cp <= 0x1faff; cp++) {
+    if (cp >= 0xd800 && cp <= 0xdfff) continue;
+    const ch = String.fromCodePoint(cp);
+    if (RGI.test(ch)) emoji.push(ch);
+    if (RGI.test(ch + '\ufe0f')) emoji.push(ch + '\ufe0f');
+    if (RGI.test(ch + '\ufe0f\u20e3')) emoji.push(ch + '\ufe0f\u20e3');
+    if (MODBASE.test(ch)) for (let m = 0x1f3fb; m <= 0x1f3ff; m++) if (RGI.test(ch + String.fromCodePoint(m))) emoji.push(ch + String.fromCodePoint(m));
+  }
+  for (let a = 0x1f1e6; a <= 0x1f1ff; a++) for (let b = 0x1f1e6; b <= 0x1f1ff; b++) { const f = String.fromCodePoint(a, b); if (RGI.test(f)) emoji.push(f); }
+  const joined = ['👨\u200d👩\u200d👧\u200d👦', '👩\u200d👩\u200d👦', '👨\u200d👧', '🧑\u200d🤝\u200d🧑', '👩🏽\u200d🤝\u200d👨🏻', '🫱🏻\u200d🫲🏽', '👩\u200d❤\ufe0f\u200d👨', '👨🏿\u200d❤\ufe0f\u200d💋\u200d👨🏻', '🧑🏻\u200d❤\ufe0f\u200d🧑🏽', '👩🏽\u200d💻', '🧑\u200d🚀', '👨\u200d⚕\ufe0f', '👩🏾\u200d⚖\ufe0f', '🕵\ufe0f\u200d♀\ufe0f', '🏃🏽\u200d♂\ufe0f', '🏋\ufe0f\u200d♀\ufe0f', '🧔\u200d♂\ufe0f', '👱🏻\u200d♀\ufe0f', '🧑\u200d🦰', '👩🏼\u200d🦽', '🧑\u200d🦯\u200d➡\ufe0f',
+    '🏳\ufe0f\u200d🌈', '🏳\ufe0f\u200d⚧\ufe0f', '🏴\u200d☠\ufe0f', '👁\ufe0f\u200d🗨\ufe0f', '😮\u200d💨', '😵\u200d💫', '😶\u200d🌫\ufe0f', '❤\ufe0f\u200d🔥', '❤\ufe0f\u200d🩹', '🐕\u200d🦺', '🐻\u200d❄\ufe0f', '🐈\u200d⬛', '🐦\u200d⬛', '🧑\u200d🎄', '🧜🏽\u200d♀\ufe0f', '⛹🏿\u200d♂\ufe0f', '🙂\u200d↔\ufe0f', '🍋\u200d🟩', '⛓\ufe0f\u200d💥', '🏴\u{e0067}\u{e0062}\u{e0065}\u{e006e}\u{e0067}\u{e007f}', '🏴\u{e0067}\u{e0062}\u{e0073}\u{e0063}\u{e0074}\u{e007f}', '🏴\u{e0067}\u{e0062}\u{e0077}\u{e006c}\u{e0073}\u{e007f}'];
+  const notRgi = joined.filter((e) => !RGI.test(e));
+  ok(notRgi.length === 0, `손으로 고른 이어 붙인 이모지 ${joined.length}개가 전부 유니코드가 권하는 꼴이다  ${notRgi.join(' ')}`);
+  emoji.push(...joined);
+  const broken = emoji.filter((e) => cleanName(e) !== e || cleanName('가 ' + e + ' 나') !== '가 ' + e + ' 나' || cleanName(e + e) !== e + e);
+  ok(broken.length === 0 && emoji.length > 2300, `이모지 ${emoji.length.toLocaleString('en')}가지(한 글자·U+FE0F 꼴·피부색·국기·숫자 단추·이어 붙인 것)가 이름 안에서 그대로 남는다  ${broken.slice(0, 5).map(cps).join(' | ')}`);
+  // 이모지 사이사이에 보이지 않는 글자를 끼워도 원래 이모지로 돌아온다(가족·국기가 깨지지 않는다)
+  const rr = makeRng(seedOf('emoji-noise'));
+  const noise = ['\u200b', '\u200c', '\u2060', '\ufeff', '\u200e', '\u200f', '\u00ad', '\u202a', '\u2069', '\ufe00'];
+  let healed = 0;
+  const pickE = () => emoji[rr.below(emoji.length)];
+  const TRY = 3000;
+  for (let t = 0; t < TRY; t++) {
+    const e = t < joined.length ? joined[t] : pickE();
+    const a = Array.from(e);
+    const at = rr.below(a.length + 1);
+    a.splice(at, 0, noise[rr.below(noise.length)]);
+    if (cleanName(a.join('')) === e) healed++;
+  }
+  eq(healed, TRY, `이모지 안팎 아무 데나 보이지 않는 글자 하나를 끼운 ${TRY.toLocaleString('en')}건이 원래 이모지로 돌아온다`);
+
+  // ⑤ 명단 칸(붙여 넣기): 같은 사람은 한 사람으로 읽고, 겹친 이름으로 세고, 지울 수 있다
+  const pasted = parseList('김민준\n' + Z + '김민준\n' + '이서연'.normalize('NFD') + '\n이서연\n박지호\u200e\n\u3164\n' + Z + '\n' + fam);
+  eq([pasted.items, pasted.dupes, pasted.hidden], [['김민준', '김민준', '이서연', '이서연', '박지호', fam], 2, 4], '명단 칸: 보이지 않는 글자·풀어쓴 자모가 섞여도 같은 이름으로 읽고 겹침을 센다(보이지 않는 글자를 지운 줄 4개)');
+  eq(uniqueItems(pasted.items), ['김민준', '이서연', '박지호', fam], '겹친 이름 지우기도 고른 꼴로 한다');
+  eq(parseList('가\u00a0나, 다\u200b\u200b, \u200b').items, ['가 나', '다'], '한 줄 쉼표 나누기에서도 고른다(보이지 않는 글자뿐인 칸은 뺀다)');
+  eq(parseList('a\nb\nc').hidden, 0, '보이지 않는 글자가 없으면 0');
+  eq([plainName('  가\u00a0\u3000나\t'), plainName('\ufeff가'), plainName('a\u0000b'), plainName('가' + Z)], ['가 나', '\ufeff가', 'a b', '가' + Z], '옛 다듬기(공백·제어 문자만): 보이지 않는 글자는 건드리지 않는다');
+  // ⑥ 뽑는 쪽에서도 한 번 더: 고르지 않은 이름을 그대로 넣어도 고른 명단과 같은 사람이 뽑힌다
+  const fixed = seedFromText('AQAAAAAAAAACAAAAAAAAAAMAAAAAAAAABAAAAAAAAAA');
+  const clean8 = FX.order[0].items;
+  let seatsSame = 0;
+  let rawDiffers = 0;
+  const rs = makeRng(seedOf('seats'));
+  for (let t = 0; t < 2000; t++) {
+    const raw = clean8.map((nm) => { const k = rs.below(4); return k === 0 ? nm : k === 1 ? Z + nm : k === 2 ? nm.normalize('NFD') : nm + '\u2060'; });
+    const seed = Uint8Array.from(fixed); seed[5] = t & 255; seed[6] = t >> 8;
+    const a = wheelDraw(clean8, makeRng(seed));
+    const b = wheelDraw(raw, makeRng(seed));
+    if (a.index === b.index && JSON.stringify(drawOrder(clean8, makeRng(seed))) === JSON.stringify(drawOrder(raw, makeRng(seed))) && JSON.stringify(drawTeams(clean8, { teams: 3 }, makeRng(seed))) === JSON.stringify(drawTeams(raw, { teams: 3 }, makeRng(seed)))) seatsSame++;
+    if (canonicalOrder(raw)[wheelPick(8, makeRng(seed)).index] !== a.index) rawDiffers++;
+  }
+  eq(seatsSame, 2000, '고르지 않은 이름이 섞인 명단 2,000건: 돌림판·순서·팀이 고른 명단과 같은 자리(사람)를 뽑는다');
+  ok(rawDiffers > 800, `글자열을 있는 그대로 줄 세웠다면 ${rawDiffers.toLocaleString('en')}건이 다른 사람을 뽑았다(시험이 실제로 문다)`);
+}
+
+// ---------------------------------------------------------------- 꾸민 링크 (보이지 않는 글자·NFD·공백 변형)
+section('꾸민 링크');
+{
+  const seedFrom = (rng) => { const s = new Uint8Array(32); for (let b = 0; b < 32; b += 4) { const v = rng.u32(); s[b] = v & 255; s[b + 1] = (v >>> 8) & 255; s[b + 2] = (v >>> 16) & 255; s[b + 3] = v >>> 24; } s[0] |= 1; return s; };
+  const body = (o, i) => bytesToB64u(new TextEncoder().encode(JSON.stringify({ o, i })));
+  const link = (tool, seed, o, i) => `r=2.${TOOLS[tool]}.${seedToText(seed)}.${body(o, i)}`;
+  const names = (idx, list) => idx.map((k) => list[k]);
+  const slipKey = (list, dealt) => { const m = new Map(); list.forEach((nm, i) => { const a = m.get(nm) || []; a.push(dealt[i]); m.set(nm, a); }); return JSON.stringify([...m].map(([k, v]) => [k, v.sort()]).sort()); };
+  /** 링크의 결과(이름으로): 화면 코드가 하는 것과 같은 순서로 계산한다 */
+  const outcome = (d) => {
+    const o = d.opts;
+    if (d.tool === 'wheel') return d.items[wheelDraw(d.items, makeRng(d.seed)).index];
+    if (d.tool === 'teams') return JSON.stringify(drawTeams(d.items, { teams: o.k }, makeRng(d.seed)).map((t) => names(t, d.items)));
+    if (o.mode === 'order') return JSON.stringify(names(drawOrder(d.items, makeRng(d.seed)), d.items));
+    if (o.mode === 'slips') return slipKey(d.items, drawSlips(d.items, [{ label: 'w', count: o.m }, { label: 'l', count: d.items.length - o.m }], makeRng(d.seed)));
+    return JSON.stringify(names(drawSome(d.items, o.m, makeRng(d.seed)), d.items));
+  };
+  // 평가에서 나온 명단(이모지·영문 대소문자·한글·숫자·한자) + 가족 이모지·국기·풀어쓰면 달라지는 글자
+  const pool = ['김민준', '이서연', 'Alice', 'bob', 'Bob', '田中さん', '7번', '😀웃음', 'Zoë', '가나다', '👨\u200d👩\u200d👧\u200d👦 가족', '🇰🇷 한국', '1\ufe0f\u20e3번', '❤\ufe0f', '박지호', '최유나', 'Ἀθηνᾶ', 'Ngô Thị', 'é', '3학년 1반 김민준', '3학년 1반 이서연', '🏴\u{e0067}\u{e0062}\u{e0073}\u{e0063}\u{e0074}\u{e007f}', '👍🏽', '정도윤'];
+  ok(pool.every((n) => n === cleanName(n)), '시험 명단의 이름은 전부 고른 꼴이다');
+  const HID = ['\u200b', '\u200c', '\u200d', '\u2060', '\u2061', '\u2062', '\u2063', '\u2064', '\u206a', '\u206b', '\ufeff', '\u200e', '\u200f', '\u202a', '\u202b', '\u202c', '\u202d', '\u202e', '\u2066', '\u2067', '\u2068', '\u2069', '\u00ad', '\u034f', '\u061c', '\u180e', '\ufe00', '\u{e0100}', '\u{e0001}', '\ufffa'];
+  const r = makeRng(seedOf('forge'));
+  // 이름을 눈에 같아 보이게 바꾸는 법: 보이지 않는 글자를 앞·뒤·가운데에(이모지 한가운데는 피한다: 거기는 따로 본다), 풀어쓴 자모로, 둘 다
+  const disguise = (nm) => {
+    const kind = r.below(6);
+    const h = () => HID[r.below(HID.length)];
+    if (kind === 0) return h() + nm;
+    if (kind === 1) return nm + h();
+    if (kind === 2) return nm.normalize('NFD');
+    if (kind === 3) return h() + nm.normalize('NFD') + h() + h();
+    if (kind === 4) { const a = Array.from(nm); const at = 1 + r.below(a.length); const before = a[at - 1]; const hid = h(); return /\p{Extended_Pictographic}|[\u{1f1e6}-\u{1f1ff}\u{1f3fb}-\u{1f3ff}\ufe0f\u200d0-9#*]|[\u{e0000}-\u{e007f}]/u.test(before) || (hid === '\u200d') ? hid.replace('\u200d', '\u200b') + nm : a.slice(0, at).join('') + hid + a.slice(at).join(''); }
+    return nm;
+  };
+  const TRIALS = 5000;
+  let opened = 0;      // 열렸고, 고쳐 읽었다고 알렸고, 명단이 원래와 같고, 결과가 원래 링크와 같다
+  let changed = 0;     // 실제로 글자열이 달라진 링크 수
+  let rawDiffers = 0;  // 고치지 않고 글자열 그대로 줄 세웠다면 다른 결과가 됐을 링크 수(시험이 무는지)
+  let honest = 0;      // 안 바꾼 링크는 cleaned가 아니다
+  const tools = [['wheel', {}], ['draw', { mode: 'pick', m: 2 }], ['draw', { mode: 'order' }], ['draw', { mode: 'slips', m: 2 }], ['teams', { mode: 'teams', k: 3 }]];
+  for (let t = 0; t < TRIALS; t++) {
+    const n = 3 + r.below(18);
+    const base = shuffle(pool, r).slice(0, n);
+    const seed = seedFrom(r);
+    const [tool, o] = tools[t % tools.length];
+    const real = decodeShare(link(tool, seed, o, base));
+    const fake = base.map((nm) => (r.below(3) === 0 ? nm : disguise(nm)));
+    const moved = shuffle(fake, r); // 순서까지 바꿔 본다
+    const d = decodeShare(link(tool, seed, o, moved));
+    const differs = moved.some((nm) => nm !== cleanName(nm));
+    if (differs) changed++;
+    const sameList = d.ok && JSON.stringify(d.items.slice().sort()) === JSON.stringify(base.slice().sort());
+    if (real.ok && !real.cleaned && sameList && d.cleaned === differs && outcome(d) === outcome(real)) opened++;
+    if (!differs && d.ok && !d.cleaned) honest++;
+    if (differs && tool === 'wheel' && moved[canonicalOrder(moved)[wheelPick(n, makeRng(seed)).index]].normalize('NFC').replace(/[^\p{L}\p{N}\p{Extended_Pictographic} ]/gu, '') !== outcome(real).replace(/[^\p{L}\p{N}\p{Extended_Pictographic} ]/gu, '')) rawDiffers++;
+  }
+  eq(opened, TRIALS, `보이지 않는 글자·풀어쓴 자모를 섞고 순서까지 바꾼 링크 ${TRIALS.toLocaleString('en')}개: 전부 원래 링크와 같은 결과, 고쳐 읽은 링크는 그렇다고 알림`);
+  ok(changed > TRIALS * 0.9, `그 가운데 실제로 글자열이 달라진 링크 ${changed.toLocaleString('en')}개`);
+  ok(honest === TRIALS - changed, `글자열이 그대로인 링크 ${(TRIALS - changed).toLocaleString('en')}개는 '고쳐 읽음'으로 표시하지 않는다`);
+  ok(rawDiffers > 300, `글자열을 있는 그대로 줄 세우던 방식이었다면 돌림판 링크 ${rawDiffers.toLocaleString('en')}개가 다른 사람을 뽑았다(시험이 실제로 문다)`);
+  // 평가의 재현 순서 그대로: 김민준 앞에 폭 없는 공백 → 전에는 김민준이 맨 뒤 자리로 가서 다른 결과가 '링크의 결과 그대로'로 나왔다
+  const ten = pool.slice(0, 10);
+  let forged = 0;
+  let wouldForge = 0;
+  for (let t = 0; t < 1000; t++) {
+    const seed = seedFrom(r);
+    const who = r.below(10);
+    const fake = ten.map((nm, i) => (i === who ? '\u200b' + nm : nm));
+    const a = decodeShare(link('wheel', seed, {}, ten));
+    const b = decodeShare(link('wheel', seed, {}, fake));
+    if (!(b.ok && b.cleaned && outcome(a) === outcome(b))) forged++;
+    if (fake[canonicalOrder(fake)[wheelPick(10, makeRng(seed)).index]].replace('\u200b', '') !== outcome(a)) wouldForge++;
+  }
+  eq(forged, 0, '이름 하나에 폭 없는 공백을 붙인 링크 1,000개: 결과가 바뀌지 않고 고쳐 읽었다고 알린다');
+  ok(wouldForge > 200, `고르기 전 방식이었다면 그중 ${wouldForge}개가 다른 사람을 뽑았다`);
+  // 파이썬이 만든 '고른 꼴이 아닌 링크 본문': 고친 명단·설정으로 읽고 알린다
+  for (const c of FX.share_raw) {
+    for (const ver of [1, 2]) {
+      const d = decodeShare(`r=${ver}.d.${seedToText(seedOf('raw'))}.${c.body}`);
+      ok(d.ok && d.cleaned === true && JSON.stringify(d.items) === JSON.stringify(c.i) && JSON.stringify(d.opts) === JSON.stringify(c.o), `파이썬이 만든 고르지 않은 링크(형식 ${ver}): ${c.name} → 고친 명단·설정으로 읽고 알림`);
+    }
+  }
+  // 공백 변형(끝 공백·겹친 공백·다른 공백 글자)은 이 사이트가 만든 적 없는 꼴 → 열지 않는다(다른 결과로 열리는 일은 없다)
+  let spaceOpened = 0;
+  let spaceRead = 0;
+  const noSpace = (list) => list.map((x) => x.replace(/ /g, ''));
+  for (let t = 0; t < 600; t++) {
+    const seed = seedFrom(r);
+    const who = r.below(10);
+    const sp = [' ', '\u00a0', '\u3000', '\u2003', '\t', '\n'][r.below(6)];
+    const cut = Array.from(ten[who]);
+    const fake = ten.map((nm, i) => (i !== who ? nm : [sp + nm, nm + sp, nm + ' ' + sp, cut.slice(0, 1).join('') + sp + sp + cut.slice(1).join('')][r.below(4)]));
+    if (decodeShare(link('wheel', seed, {}, fake)).ok) spaceOpened++;
+    // 명단 칸에 붙여 넣는 길: 줄바꿈은 줄을 나누는 글자라서 빼고 본다(공백만 정리되고 이름은 그대로)
+    const typed = fake.map((nm) => nm.replace(/\n/g, ' ')).join('\n');
+    if (JSON.stringify(noSpace(parseList(typed).items)) === JSON.stringify(noSpace(ten))) spaceRead++;
+  }
+  eq(spaceRead, 600, '공백을 바꾼 명단 600건: 명단 칸에 붙여 넣으면 같은 이름으로 읽는다(공백만 정리)');
+  eq(spaceOpened, 0, '공백을 바꾼 이름이 든 링크 600개: 이 사이트가 만들 수 없는 꼴이라 열지 않는다');
+  // 링크를 만들 때는 고른 꼴만
+  throws(() => encodeShare({ tool: 'wheel', seed: seedOf('x'), items: ['\u200b김민준'] }), '보이지 않는 글자가 든 이름으로 링크 만들기');
+  throws(() => encodeShare({ tool: 'wheel', seed: seedOf('x'), items: ['김민준'.normalize('NFD')] }), '풀어쓴 자모 이름으로 링크 만들기');
+  throws(() => encodeShare({ tool: 'ladder', seed: seedOf('x'), items: ['가', '나'], opts: { labels: ['당첨\u200b'] } }), '보이지 않는 글자가 든 아래 칸으로 링크 만들기');
+  const viaList = decodeShare(encodeShare({ tool: 'wheel', seed: seedOf('x'), items: parseList('\u200b김민준\n' + '이서연'.normalize('NFD')).items }));
+  ok(viaList.ok && !viaList.cleaned && JSON.stringify(viaList.items) === JSON.stringify(['김민준', '이서연']), '명단 칸을 거친 이름으로 만든 링크는 고른 꼴이다');
+}
+
+// ---------------------------------------------------------------- 확인 코드
+section('확인 코드');
+{
+  // SHA-256: 파이썬 hashlib 값 + 노드의 crypto(다른 구현)와 대조
+  for (const c of FX.codes.sha) {
+    const t = c.t === null ? 'x'.repeat(c.n) : c.t;
+    ok(sha256Hex(t) === c.h, `SHA-256 = 파이썬 hashlib: ${c.n}자`);
+  }
+  eq(sha256Hex('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad', 'SHA-256 공개 시험 벡터 "abc"(FIPS 180-4)');
+  eq(sha256Hex(''), 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'SHA-256 공개 시험 벡터 빈 글');
+  const r = makeRng(seedOf('sha'));
+  let same = 0;
+  const alphabet = Array.from('abc가나다😀\n é田');
+  for (let t = 0; t < 600; t++) {
+    const len = t < 200 ? t : r.below(900);
+    const text = Array.from({ length: len }, () => alphabet[r.below(alphabet.length)]).join('');
+    if (sha256Hex(text) === createHash('sha256').update(text, 'utf8').digest('hex')) same++;
+  }
+  eq(same, 600, 'SHA-256 = 노드 crypto: 길이 0~199자 전부 + 아무 길이 400건(64바이트 경계 포함)');
+  // 명단 확인 코드 = 파이썬 값
+  for (const c of FX.codes.list) {
+    const l = c.i === null ? Array.from({ length: c.n }, (_, i) => 'p' + i) : c.i;
+    eq(listCode(l), c.code, `명단 확인 코드 = 파이썬 hashlib: ${c.n}명`);
+  }
+  for (const c of FX.codes.ladder) eq(ladderCode(c.i, c.labels), c.code, `사다리 확인 코드 = 파이썬 hashlib: ${c.i.join(',')} / ${c.labels.join(',')}`);
+  const sample = FX.order[0].items;
+  eq([listCode(sample).length, CODE_LENGTH, /^[0-9a-f]{8}$/.test(listCode(sample))], [8, 8, true], '확인 코드는 16진수 8자리');
+  // 사람들이 같으면 같은 코드(순서·보이지 않는 글자·풀어쓴 자모와 상관없이), 한 명이라도 다르면 다른 코드
+  let orderFree = 0;
+  let changed = 0;
+  for (let t = 0; t < 1000; t++) {
+    const mixed = shuffle(sample, r).map((nm) => (r.below(3) === 0 ? '\u200b' + nm.normalize('NFD') : nm));
+    if (listCode(mixed) === listCode(sample)) orderFree++;
+    const other = sample.slice();
+    const k = r.below(8);
+    other[k] = [other[k] + '1', other[k].slice(0, -1), 'x' + other[k], other[(k + 1) % 8]][r.below(4)];
+    if (listCode(other) !== listCode(sample)) changed++;
+  }
+  eq([orderFree, changed], [1000, 1000], '명단 확인 코드: 순서를 바꾸고 보이지 않는 글자를 섞은 1,000건은 같은 코드, 이름 하나를 바꾼 1,000건은 다른 코드');
+  ok(listCode(sample) !== listCode(sample.slice(0, 7)) && listCode(sample) !== listCode(sample.concat(sample[0])), '한 명을 빼거나 같은 이름을 한 번 더 넣으면 다른 코드');
+  ok(ladderCode(['가', '나', '다'], ['당첨', '벌칙']) !== ladderCode(['나', '가', '다'], ['당첨', '벌칙']) && ladderCode(['가', '나', '다'], ['당첨', '벌칙']) !== ladderCode(['가', '나', '다'], ['벌칙', '당첨']), '사다리 확인 코드: 줄 순서나 아래 칸 순서가 바뀌면 다른 코드');
+  ok(ladderCode(['가', '나'], ['다']) !== ladderCode(['가'], ['나', '다']) && ladderCode(['가', '나'], []) !== ladderCode(['가'], ['나']), '사다리 확인 코드: 이름과 아래 칸의 경계가 섞이지 않는다');
+  eq(ladderCode(['\u200b가', '나'], ['당첨\u200b']), ladderCode(['가', '나'], ['당첨']), '사다리 확인 코드도 고른 꼴로 계산한다');
+}
+
+// ---------------------------------------------------------------- 여러 칸 붙여 넣기·기록에 남은 이름
+section('칸 고르기·기록');
+{
+  const sheet = '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남';
+  eq(columns(sheet), [{ index: 0, count: 3, sample: ['1', '2'], numeric: true }, { index: 1, count: 3, sample: ['김민준', '이서연'], numeric: false }, { index: 2, count: 3, sample: ['남', '여'], numeric: false }], '칸 나누기: 번호 칸·이름 칸·성별 칸(번호뿐인 칸을 알아본다)');
+  eq(parseList(pickColumn(sheet, 1)).items, ['김민준', '이서연', '박지호'], '둘째 칸만 쓰기 = 이름');
+  eq(parseList(pickColumn(sheet, 0)).items, ['1', '2', '3'], '첫 칸만 쓰기 = 번호');
+  eq(parseList(pickColumn('번호\t이름\n1.\t김민준\n\n2)\t\n3\t박지호\t비고', 1)).items, ['이름', '김민준', '박지호'], '고른 칸이 빈 줄은 뺀다(빈 줄·칸이 모자란 줄)');
+  eq(columns('1.\t가\n2)\t나\n10 \t다').map((c) => c.numeric), [true, false], '번호 칸: 1. 2) 10 꼴도 번호로 본다');
+  eq(columns('1반\t가\n2반\t나').map((c) => c.numeric), [false, false], '숫자로 시작해도 글자가 섞이면 번호 칸이 아니다(1반)');
+  eq(columns('김민준\n이서연').length, 1, '탭이 없으면 한 칸');
+  eq(columns('\t\t가\n\t\t나').map((c) => c.index), [2], '내용이 없는 칸은 빼고 원래 칸 번호를 돌려준다');
+  eq(columns('').length, 0, '빈 글');
+  const many = Array.from({ length: 120000 }, (_, i) => `${i}\tn${i}`).join('\n');
+  eq([columns(many).length, columns(many)[1].count], [2, 120000], '12만 줄도 한 번에 읽는다');
+  // 기록에 남은 이름: 지운 명단의 이름이 든 링크가 기록에 있을 때만 '기록도 지우기'를 묻는다
+  const seed = seedOf('hist');
+  const h = (tool, items, opts) => '#' + encodeShare({ tool, seed, items, opts });
+  const mine = ['해', '달', '별'];
+  eq(historyHolds([{ t: 'coin', s: '앞', h: h('coin', [], { count: 1 }) }], mine), false, '동전 기록뿐이면 명단이 남아 있지 않다');
+  eq(historyHolds([{ t: 'coin', s: '앞', h: h('coin', [], { count: 1 }) }, { t: 'wheel', s: '달', h: h('wheel', mine) }], mine), true, '그 명단으로 돌린 돌림판 기록이 있으면 남아 있다');
+  eq(historyHolds([{ t: 'wheel', s: '별', h: h('wheel', ['해', '별']) }], mine), true, "'빼고 다시'로 일부만 든 링크도 남아 있는 것으로 본다");
+  eq(historyHolds([{ t: 'draw', s: '가, 나', h: h('draw', ['가', '나', '다'], { mode: 'pick', m: 2 }) }], mine), false, '다른 명단의 기록은 세지 않는다');
+  eq(historyHolds([{ t: 'draw', s: '달, 해 …', h: '' }], mine), true, '링크를 남기지 않은 긴 명단의 기록: 결과 요약에 이름이 있으면 남아 있다');
+  eq(historyHolds([{ t: 'number', s: '3, 7', h: '' }, { t: 'dice', s: '해', h: '' }], mine), false, '명단을 쓰지 않는 도구의 요약은 보지 않는다');
+  eq([historyHolds([], mine), historyHolds(null, mine), historyHolds([null, 3, { h: '#r=2.w.AAAA' }], mine), historyHolds([{ t: 'wheel', s: '달', h: h('wheel', mine) }], [])], [false, false, false, false], '빈 기록·깨진 기록·빈 명단');
 }
 
 // ---------------------------------------------------------------- 끝

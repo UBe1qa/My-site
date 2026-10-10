@@ -82,6 +82,7 @@ def href(u):
 
 SRC_EN = {
     'npsLaw': 'National Pension Act, Article 88 and Addenda (Act No. 20903) Article 4',
+    'npsLaw6': 'National Pension Act, Articles 6 and 8 (who is covered)',
     'npsGuide': 'National Pension Service: contribution amounts and rates',
     'nhisRate': 'National Health Insurance Service: notice of the 2026 contribution rates',
     'nhisLimit': 'Notice on the monthly ceiling and floor of health insurance premiums (Ministry of Health and Welfare Notice 2025-222)',
@@ -121,19 +122,21 @@ assert set(SRC_EN) == set(S), sorted(set(S) ^ set(SRC_EN))
 
 
 def src(key, lang='ko', text=None):
+    """출처 링크. 새 탭으로 연다(계산기에 넣은 값을 둔 채 원문을 볼 수 있게)."""
     s = S[key]
     if lang == 'ko':
-        return f'<a href="{href(s["url"])}" rel="noopener">{esc(text or s["name"])}</a>'
-    return f'<a href="{href(s["url"])}" rel="noopener" hreflang="ko">{esc(text or SRC_EN[key])}</a>'
+        return f'<a href="{href(s["url"])}" target="_blank" rel="noopener">{esc(text or s["name"])}</a>'
+    return f'<a href="{href(s["url"])}" target="_blank" rel="noopener" hreflang="ko">{esc(text or SRC_EN[key])}</a>'
 
 
-def srcs(keys, lang='ko', sep='<br>'):
+def srcs(keys, lang='ko'):
+    """출처 링크 묶음(표의 출처 칸). 링크마다 한 줄이고, 휴대폰에서는 줄마다 44px 높이로 눌린다(style.css .srcs)."""
     seen, out = set(), []
     for k in keys:
         if k not in seen:
             seen.add(k)
             out.append(src(k, lang))
-    return sep.join(out)
+    return '<span class="srcs">' + ''.join(out) + '</span>'
 
 
 # 원문 인용(글자 그대로). 키: (출처 키, 인용문)
@@ -180,6 +183,7 @@ Q = {
     'lsa60_1': ('lsa60', '사용자는 1년간 80퍼센트 이상 출근한 근로자에게 15일의 유급휴가를 주어야 한다.'),
     'lsa60_2': ('lsa60', '사용자는 계속하여 근로한 기간이 1년 미만인 근로자 또는 1년간 80퍼센트 미만 출근한 근로자에게 1개월 개근 시 1일의 유급휴가를 주어야 한다.'),
     'lsa60_4': ('lsa60', '사용자는 3년 이상 계속하여 근로한 근로자에게는 제1항에 따른 휴가에 최초 1년을 초과하는 계속 근로 연수 매 2년에 대하여 1일을 가산한 유급휴가를 주어야 한다. 이 경우 가산휴가를 포함한 총 휴가 일수는 25일을 한도로 한다.'),
+    'nps6': ('npsLaw6', '국내에 거주하는 국민으로서 18세 이상 60세 미만인 자는 국민연금 가입 대상이 된다.'),
     'ei13_65': ('eiRateLaw', '65세 이후에 고용(65세 전부터 피보험자격을 유지하던 사람이 65세 이후에 계속하여 고용된 경우는 제외한다)되거나 자영업을 개시한 자에 대하여는 고용보험료 중 실업급여의 보험료를 징수하지 아니한다.'),
 }
 

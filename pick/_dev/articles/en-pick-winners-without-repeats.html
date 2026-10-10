@@ -2,8 +2,8 @@
 
 <h2>1. Clean the list first, and post it</h2>
 <p>The picker treats every line as one entry. If the same person appears on two lines, they have two entries and could even be drawn twice as two separate lines. The list panel tells you how many duplicate names it sees. Press Remove duplicates if each person should have a single entry, or leave them in if extra entries are part of your rules.</p>
-<p>You can paste up to 5,000 lines in one go, for example a column copied from a spreadsheet. Blank lines and stray spaces are removed for you. If several columns come along, each whole row is read as one name and the panel offers to keep the first column only.</p>
-<p>Then share the final list with everyone before you draw. A result can only be checked against a list people have already seen.</p>
+<p>You can paste up to 5,000 lines in one go, for example a column copied from a spreadsheet. Blank lines, stray spaces and invisible characters are removed for you. If several columns come along, each whole row is read as one name and the panel asks which column to use.</p>
+<p>Then share the final list with everyone before you draw, together with the list check code shown under the list. For the sample list it reads <span class="nw">{{code_sample}}</span>: the number of names and eight characters. A result can only be checked against a list people have already seen.</p>
 
 <h2>2. Decide the number of winners and alternates</h2>
 <p>Names come out in the order they are drawn, numbered from 1. That makes alternates easy: if you need three winners and two reserves, draw five and treat numbers 4 and 5 as the reserves, in that order. Drawing them all at once is better than drawing again later, because nobody can then wonder whether the second draw was repeated.</p>
@@ -14,6 +14,8 @@
 <h2>4. Share the result link</h2>
 <p>Copy result link creates an address containing the list, the number drawn and the seed. Whoever opens it gets the same winners in the same order, marked as the same result as the link.</p>
 <p>The order of the list does not matter. The draw works from the names placed in a fixed order, sorted by character code, so the same seed with the same people gives the same winners however the list was typed. Rearranging the names inside a link cannot move the win to someone else.</p>
+<p>Names are compared as they look. Invisible characters such as zero-width spaces are removed and decomposed letters are joined before the order is fixed, so slipping an invisible character into a name does not move it either. If a link arrives with such characters in its list, they are removed, the result is recalculated, and it is marked as recalculated from the cleaned-up list instead of as the same result as the link.</p>
+<p>Under the result the page shows the check code of the list inside the link. If it matches the code posted before the draw, the people are the same, in whatever order. The code is a short summary of the list: one missing person or one changed letter gives a different code. With eight characters, two different lists share a code by chance about once in 4.3 billion. It is not cryptographic proof, though, and would not stop someone who deliberately computed a fake list to match.</p>
 <p>Keep in mind that the link contains the names, so send it only where those names may be seen. A list too long to fit in a link (more than 400,000 characters) gets a message instead of a link.</p>
 
 <h2>What a link guarantees, and what it does not</h2>
@@ -24,7 +26,7 @@
 </ul>
 <p>Two habits close those gaps:</p>
 <ul>
-<li>Post the final list and the rules (how many winners, one draw only) before drawing.</li>
+<li>Post the final list, its check code and the rules (how many winners, one draw only) before drawing.</li>
 <li>Draw where others can watch, such as a shared screen, or ask someone with no stake in the outcome to press the button.</li>
 </ul>
 

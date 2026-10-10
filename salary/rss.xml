@@ -4,13 +4,13 @@
 <item><title>급여명세서 금액이 실수령액 계산기와 다른 이유</title><link>https://salary.lumenlab.page/guide/myeongseseo-dareun-iyu/</link><guid>https://salary.lumenlab.page/guide/myeongseseo-dareun-iyu/</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate><description>국민연금은 1년에 한 번 정한 소득으로 매기고, 비과세·부양가족 수·세금 떼는 비율은 회사에 등록된 값을 써요. 차이가 나는 다섯 군데를 계산 예로 짚었어요.</description><content:encoded><![CDATA[<p class="lede">계산기는 이번 달 월급에 올해 요율을 그대로 곱해요. 실제 급여명세서는 회사와 공단에 등록된 값으로 계산돼서 아래 다섯 군데에서 차이가 나요. 위에서부터 차례로 맞춰 보면 대부분 어디서 달라졌는지 찾을 수 있어요.</p>
 <h2>국민연금은 1년에 한 번 정한 소득으로 매겨요</h2>
 <p>국민연금공단의 식은 “연금보험료 = 가입자의 기준소득월액 × 연금보험료율”이에요. 그런데 이 기준소득월액은 이번 달 월급이 아니에요.</p>
-<blockquote>“기준소득월액은 1년에 한번 산정하므로 실제 보수와는 맞지 않을 수 있습니다.”<cite><a href="https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do" rel="noopener">국민연금공단 「보험료 금액 및 보험료율」</a></cite></blockquote>
+<blockquote>“기준소득월액은 1년에 한번 산정하므로 실제 보수와는 맞지 않을 수 있습니다.”<cite><a href="https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do" target="_blank" rel="noopener">국민연금공단 「보험료 금액 및 보험료율」</a></cite></blockquote>
 <p>계산기는 이번 달 과세 대상 월급에서 천 원 미만을 버린 금액으로 계산해요. 월급이 오르거나 내린 해에는 명세서의 국민연금과 다를 수 있어요.</p>
 <p>상한과 하한도 있어요. 국민연금을 매기는 월 소득은 <span class="nw">41만~659만 원</span> 사이예요(2026년 7월 1일~2027년 6월 30일). 월급이 700만 원이어도 국민연금은 659만 원 × 4.75%인 313,020원에서 멈춰요.</p>
 <h2>비과세: 회사가 어떤 항목을 비과세로 넣었는지</h2>
 <p>식사를 따로 제공받지 않는 사람이 받는 식대는 월 20만 원까지 세금을 매기지 않아요.</p>
-<blockquote>“근로자가 사내급식이나 이와 유사한 방법으로 제공받는 식사 기타 음식물 또는 근로자(식사 기타 음식물을 제공받지 아니하는 자에 한정한다)가 받는 월 20만원 이하의 식사대”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95/%EC%A0%9C12%EC%A1%B0" rel="noopener">소득세법 제12조 제3호 러목</a></cite></blockquote>
-<p>보험료를 매기는 소득에서도 비과세 근로소득을 빼요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EB%AF%BC%EC%97%B0%EA%B8%88%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C3%EC%A1%B0" rel="noopener">국민연금법 시행령 제3조</a>, <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EB%AF%BC%EA%B1%B4%EA%B0%95%EB%B3%B4%ED%97%98%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C33%EC%A1%B0" rel="noopener">국민건강보험법 시행령 제33조(보수에 포함되는 금품 등)</a>). 그래서 같은 월급이어도 비과세가 있는 사람은 떼는 돈이 적어요. 다만 일부 비과세 항목은 건강보험에서는 보수에 들어가요.</p>
+<blockquote>“근로자가 사내급식이나 이와 유사한 방법으로 제공받는 식사 기타 음식물 또는 근로자(식사 기타 음식물을 제공받지 아니하는 자에 한정한다)가 받는 월 20만원 이하의 식사대”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95/%EC%A0%9C12%EC%A1%B0" target="_blank" rel="noopener">소득세법 제12조 제3호 러목</a></cite></blockquote>
+<p>보험료를 매기는 소득에서도 비과세 근로소득을 빼요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EB%AF%BC%EC%97%B0%EA%B8%88%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C3%EC%A1%B0" target="_blank" rel="noopener">국민연금법 시행령 제3조</a>, <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EB%AF%BC%EA%B1%B4%EA%B0%95%EB%B3%B4%ED%97%98%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C33%EC%A1%B0" target="_blank" rel="noopener">국민건강보험법 시행령 제33조(보수에 포함되는 금품 등)</a>). 그래서 같은 월급이어도 비과세가 있는 사람은 떼는 돈이 적어요. 다만 일부 비과세 항목은 건강보험에서는 보수에 들어가요.</p>
 <p class="calc">월급 300만 원, 비과세 20만 원 → 실수령액 <b>2,665,440원</b><br>월급 300만 원, 비과세 없음 → 실수령액 <b>2,626,700원</b> (38,740원 차이)</p>
 <p>명세서에 식대 말고 다른 비과세 항목이 있으면 계산기의 비과세 금액을 그 합계로 바꿔 보세요.</p>
 <h2>부양가족 수와 자녀</h2>
@@ -20,31 +20,34 @@
 <p>회사에 낸 부양가족 수가 계산기에 넣은 수와 다르면 소득세와 지방소득세가 이만큼 달라져요.</p>
 <h2>세금 떼는 비율 80%·100%·120%</h2>
 <p>회사에 신청하면 표 금액보다 덜 또는 더 뗄 수 있어요.</p>
-<blockquote>“근로자가 별표 2의 근로소득 간이세액표 해당란 세액의 100분의 120 또는 100분의 80의 비율에 해당하는 금액의 원천징수를 신청하는 경우에는 그에 따라 원천징수할 수 있다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9" rel="noopener">소득세법 시행령 제194조</a></cite></blockquote>
+<blockquote>“근로자가 별표 2의 근로소득 간이세액표 해당란 세액의 100분의 120 또는 100분의 80의 비율에 해당하는 금액의 원천징수를 신청하는 경우에는 그에 따라 원천징수할 수 있다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9" target="_blank" rel="noopener">소득세법 시행령 제194조</a></cite></blockquote>
 <p>같은 조건(과세 대상 월급 400만 원, 부양가족 1명)에서 100%면 195,960원, 80%면 156,760원, 120%면 235,150원이에요. 매달 미리 떼는 금액이 달라지는 것이고, 연말정산에서 정산돼요.</p>
 <h2>끝수: 몇십 원 차이</h2>
-<p>이 계산기는 보험료와 세금의 10원 미만을 버려요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EA%B3%A0%EA%B8%88%EA%B4%80%EB%A6%AC%EB%B2%95/%EC%A0%9C47%EC%A1%B0" rel="noopener">국고금관리법 제47조</a>의 끝수 계산 방식). 회사·공단의 계산과 몇십 원 다를 수 있어요.</p>
+<p>이 계산기는 보험료와 세금의 10원 미만을 버려요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EA%B3%A0%EA%B8%88%EA%B4%80%EB%A6%AC%EB%B2%95/%EC%A0%9C47%EC%A1%B0" target="_blank" rel="noopener">국고금관리법 제47조</a>의 끝수 계산 방식). 회사·공단의 계산과 몇십 원 다를 수 있어요.</p>
 <h2>그래도 다르면 확인할 곳</h2>
 <ul><li>급여명세서의 비과세 금액과 과세 대상 금액</li><li>국민연금공단에 정해져 있는 내 기준소득월액</li><li>회사에 낸 부양가족 수, 세금 떼는 비율</li></ul>
 <p>소득세는 매달 미리 떼는 금액이에요. 1년 치 세금은 연말정산에서 다시 계산돼요. 이 계산기는 연말정산 결과를 계산하지 않아요.</p>]]></content:encoded></item>
 <item><title>2026년 4대 보험 요율과 2027년에 바뀌는 것</title><link>https://salary.lumenlab.page/guide/2026-4dae-boheom-yoyul/</link><guid>https://salary.lumenlab.page/guide/2026-4dae-boheom-yoyul/</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate><description>2026년 근로자 몫은 국민연금 4.75%, 건강보험 3.595%, 고용보험 0.9%예요. 2027년에는 국민연금이 5.0%로 오르고 장기요양보험료율은 아직 정해지지 않았어요.</description><content:encoded><![CDATA[<p class="lede">2026년에 월급에서 떼는 근로자 몫은 국민연금 4.75%, 건강보험 3.595%, 고용보험 0.9%이고, 장기요양보험료는 건강보험료에 0.9448% ÷ 7.19%를 곱해요. 2027년 1월에는 국민연금이 5.0%로 올라요. 건강보험료율은 그대로 두기로 의결됐고, 장기요양보험료율은 아직 정해지지 않았어요.</p>
 <p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">항목</th><th scope="col">2026년(근로자 몫)</th><th scope="col">2027년 1월</th><th scope="col">상태</th></tr></thead><tbody><tr><th scope="row">국민연금</th><td>4.75%</td><td>5.0%</td><td>확정(법 부칙)</td></tr><tr><th scope="row">건강보험</th><td>3.595%</td><td>3.595%</td><td>의결(2026년 9월 8일)</td></tr><tr><th scope="row">장기요양보험</th><td>건강보험료 × 0.9448% ÷ 7.19%</td><td><span class="tag-hold">미정</span></td><td>2026년 값으로 계산</td></tr><tr><th scope="row">고용보험</th><td>0.9%</td><td>0.9%</td><td>현행 시행령 요율</td></tr></tbody></table></div>
 <h2>국민연금: 2033년까지 해마다 올라요</h2>
-<blockquote>“1998년 이후부터 2025년까지는 9%의 보험료율이 적용되었으며, 2026년부터는 매년 0.5%p씩 보험료율을 8년간 인상하여 2033년부터는 13%의 보험료율이 적용됩니다.”<cite><a href="https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do" rel="noopener">국민연금공단 「보험료 금액 및 보험료율」</a></cite></blockquote>
+<blockquote>“1998년 이후부터 2025년까지는 9%의 보험료율이 적용되었으며, 2026년부터는 매년 0.5%p씩 보험료율을 8년간 인상하여 2033년부터는 13%의 보험료율이 적용됩니다.”<cite><a href="https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do" target="_blank" rel="noopener">국민연금공단 「보험료 금액 및 보험료율」</a></cite></blockquote>
 <p>회사와 근로자가 절반씩 내니까 근로자 몫은 2026년 4.75%, 2027년 5.0%예요. 그 뒤 요율도 법에 이미 적혀 있어요.</p>
 <p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">연도</th><th scope="col">2026</th><th scope="col">2027</th><th scope="col">2028</th><th scope="col">2029</th><th scope="col">2030</th><th scope="col">2031</th><th scope="col">2032</th><th scope="col">2033</th></tr></thead><tbody><tr><th scope="row">근로자 몫</th><td>4.75%</td><td>5.0%</td><td>5.25%</td><td>5.5%</td><td>5.75%</td><td>6.0%</td><td>6.25%</td><td>6.5%</td></tr></tbody></table></div>
 <p>국민연금을 매기는 월 소득에는 상한과 하한이 있어요. 2026년 7월 1일부터 2027년 6월 30일까지는 <span class="nw">41만~659만 원</span>이에요. 이 범위는 해마다 7월에 바뀌어요.</p>
+<p>나이도 봐요. 가입 대상은 법에 이렇게 적혀 있어요.</p>
+<blockquote>“국내에 거주하는 국민으로서 18세 이상 60세 미만인 자는 국민연금 가입 대상이 된다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EB%AF%BC%EC%97%B0%EA%B8%88%EB%B2%95" target="_blank" rel="noopener">국민연금법 제6조·제8조(가입 대상)</a></cite></blockquote>
+<p>그래서 만 60세 이상인 근로자는 임의계속가입을 신청한 경우가 아니면 국민연금을 떼지 않아요. 계산기에서는 조건의 '만 60세 이상이에요'를 켜면 돼요.</p>
 <h2>건강보험: 7.19% 그대로</h2>
 <p>2026년 건강보험료율은 7.19%이고 근로자는 그 절반인 3.595%를 내요. 공단의 식은 “보수월액보험료(월) = 보수월액 × 보험료율(7.19%) ※ 가입자 및 사용자 각각 50%씩 부담”이에요.</p>
-<blockquote>“2027년도 건강보험료율을 동결하여 올해와 동일한 7.19%로 결정하였다.”<cite><a href="https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824" rel="noopener">보건복지부 보도자료(2026-09-08) 2027년도 건강보험료율</a></cite></blockquote>
+<blockquote>“2027년도 건강보험료율을 동결하여 올해와 동일한 7.19%로 결정하였다.”<cite><a href="https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824" target="_blank" rel="noopener">보건복지부 보도자료(2026-09-08) 2027년도 건강보험료율</a></cite></blockquote>
 <p>한 달 보험료에는 상한과 하한이 있어요. 2026년 근로자 몫은 <span class="nw">10,080원~</span><span class="nw">4,591,740원</span>이에요(고시에 적힌 20,160원~9,183,480원은 회사 몫을 합친 금액). 2027년 상·하한은 아직 확인된 값이 없어요.</p>
 <h2>장기요양보험: 2027년 요율은 미정</h2>
 <p>공단의 식은 “장기요양보험료 = 건강보험료 × 장기요양보험료율(0.9448%)/건강보험료율(7.19%)”이에요. 2027년 요율에 대해 보건복지부는 2026년 8월 14일 보도자료에서 이렇게 밝혔어요.</p>
-<blockquote>“2027년 수가 및 장기요양보험료율은 … 향후 장기요양 실무위원회 및 위원회 논의를 거쳐 10월 이후 결정할 예정이다.”<cite><a href="https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491601" rel="noopener">보건복지부 보도자료(2026-08-14) 2027년 장기요양보험료율 결정 일정</a></cite></blockquote>
+<blockquote>“2027년 수가 및 장기요양보험료율은 … 향후 장기요양 실무위원회 및 위원회 논의를 거쳐 10월 이후 결정할 예정이다.”<cite><a href="https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491601" target="_blank" rel="noopener">보건복지부 보도자료(2026-08-14) 2027년 장기요양보험료율 결정 일정</a></cite></blockquote>
 <p>2026년 10월 10일까지 결정 발표를 확인하지 못했어요. 그래서 계산기는 2027년 기준에서도 2026년 값으로 계산하고 '미정'이라고 표시해요.</p>
 <h2>고용보험: 근로자 몫 0.9%</h2>
-<blockquote>“고용보험 가입자인 근로자가 부담하여야 하는 고용보험료는 자기의 보수총액에 제14조제1항에 따른 실업급여의 보험료율의 2분의 1을 곱한 금액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0/%EC%A0%9C13%EC%A1%B0" rel="noopener">고용산재보험료징수법 제13조</a></cite></blockquote>
-<p>65세 이후에 새로 고용된 사람은 이 보험료를 떼지 않아요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0/%EC%A0%9C13%EC%A1%B0" rel="noopener">고용산재보험료징수법 제13조</a>). 2027년에 요율이 바뀐다는 법령은 확인하지 못했어요. 계산기는 현행 시행령 요율로 계산해요.</p>
+<blockquote>“고용보험 가입자인 근로자가 부담하여야 하는 고용보험료는 자기의 보수총액에 제14조제1항에 따른 실업급여의 보험료율의 2분의 1을 곱한 금액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0/%EC%A0%9C13%EC%A1%B0" target="_blank" rel="noopener">고용산재보험료징수법 제13조</a></cite></blockquote>
+<p>65세 이후에 새로 고용된 사람은 이 보험료를 떼지 않아요(<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0/%EC%A0%9C13%EC%A1%B0" target="_blank" rel="noopener">고용산재보험료징수법 제13조</a>). 2027년에 요율이 바뀐다는 법령은 확인하지 못했어요. 계산기는 현행 시행령 요율로 계산해요.</p>
 <h2>2027년 1월에 내 실수령액은 얼마나 줄어드나</h2>
 <p>확정된 변화는 국민연금 하나예요. 부양가족 1명, 비과세 20만 원 조건으로 계산하면 이래요.</p>
 <p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">연봉</th><th scope="col">국민연금(2026년)</th><th scope="col">국민연금(2027년)</th><th scope="col">한 달에 줄어드는 금액</th></tr></thead><tbody><tr><th scope="row">3,000만 원</th><td>109,250원</td><td>115,000원</td><td>5,750원</td></tr><tr><th scope="row">4,000만 원</th><td>148,810원</td><td>156,650원</td><td>7,840원</td></tr><tr><th scope="row">5,000만 원</th><td>188,380원</td><td>198,300원</td><td>9,920원</td></tr><tr><th scope="row">7,000만 원</th><td>267,560원</td><td>281,650원</td><td>14,090원</td></tr><tr><th scope="row">1억 원</th><td>313,020원</td><td>329,500원</td><td>16,480원</td></tr></tbody></table></div>
@@ -54,36 +57,38 @@
 <item><title>주휴수당 계산법: 주 15시간 기준과 시간별 계산 예</title><link>https://salary.lumenlab.page/guide/juhyu-sudang-gyesan/</link><guid>https://salary.lumenlab.page/guide/juhyu-sudang-gyesan/</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate><description>주휴수당은 1일 소정근로시간 × 시급이에요. 주 15시간 이상 일하고 그 주를 개근하면 생겨요. 2026년 최저임금으로 주 15시간부터 40시간까지의 금액을 계산했어요.</description><content:encoded><![CDATA[<p class="lede">주휴수당은 하루치 임금이에요. 1일 소정근로시간에 시급을 곱해요. 4주 평균 주 15시간 이상 일하기로 했고 그 주의 소정근로일을 개근하면 생겨요. 2026년 최저임금 10,320원으로 주 40시간 일하면 한 주에 82,560원이에요.</p>
 <h2>누가 받나요</h2>
 <p>근거는 근로기준법 제55조와 시행령 제30조예요.</p>
-<blockquote>“사용자는 근로자에게 1주에 평균 1회 이상의 유급휴일을 보장하여야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C55%EC%A1%B0" rel="noopener">근로기준법 제55조, 시행령 제30조</a></cite></blockquote><blockquote>“법 제55조제1항에 따른 유급휴일은 1주 동안의 소정근로일을 개근한 자에게 주어야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C30%EC%A1%B0" rel="noopener">근로기준법 시행령 제30조</a></cite></blockquote>
+<blockquote>“사용자는 근로자에게 1주에 평균 1회 이상의 유급휴일을 보장하여야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C55%EC%A1%B0" target="_blank" rel="noopener">근로기준법 제55조, 시행령 제30조</a></cite></blockquote><blockquote>“법 제55조제1항에 따른 유급휴일은 1주 동안의 소정근로일을 개근한 자에게 주어야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C30%EC%A1%B0" target="_blank" rel="noopener">근로기준법 시행령 제30조</a></cite></blockquote>
 <p>일하기로 정한 시간이 짧으면 적용되지 않아요.</p>
-<blockquote>“4주 동안(4주 미만으로 근로하는 경우에는 그 기간)을 평균하여 1주 동안의 소정근로시간이 15시간 미만인 근로자에 대하여는 제55조와 제60조를 적용하지 아니한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C18%EC%A1%B0" rel="noopener">근로기준법 제18조</a></cite></blockquote>
+<blockquote>“4주 동안(4주 미만으로 근로하는 경우에는 그 기간)을 평균하여 1주 동안의 소정근로시간이 15시간 미만인 근로자에 대하여는 제55조와 제60조를 적용하지 아니한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C18%EC%A1%B0" target="_blank" rel="noopener">근로기준법 제18조</a></cite></blockquote>
 <p>고용노동부 상담 답변은 조건을 이렇게 정리해요. “주휴수당은, ①근로기준법상 근로자로서, ②4주 평균하여 1주 소정근로시간(…)이 15시간 이상이고, ③1주간의 소정근로일(…)을 개근하였을 때 발생하게 됩니다.” 지각이나 조퇴는 결근으로 치지 않아요.</p>
-<blockquote>“우리부 행정해석에 따르면 소정근로일 중의 지각, 조퇴, 휴일, 휴가, 휴업 등은 결근으로 처리할 수 없다는 입장이므로, 지각한다고 해서 주휴수당이 발생하지 않거나 금액이 달라지지 않습니다.”<cite><a href="https://1350.moel.go.kr/rtmview.do?id=1000059852" rel="noopener">고용노동부 1350 상담 답변(주휴수당)</a></cite></blockquote>
+<blockquote>“우리부 행정해석에 따르면 소정근로일 중의 지각, 조퇴, 휴일, 휴가, 휴업 등은 결근으로 처리할 수 없다는 입장이므로, 지각한다고 해서 주휴수당이 발생하지 않거나 금액이 달라지지 않습니다.”<cite><a href="https://1350.moel.go.kr/rtmview.do?id=1000059852" target="_blank" rel="noopener">고용노동부 1350 상담 답변(주휴수당)</a></cite></blockquote>
 <h2>얼마를 받나요</h2>
 <p>근로기준법 시행령 별표 2는 단시간근로자의 하루 소정근로시간을 이렇게 정해요.</p>
-<blockquote>“단시간근로자의 1일 소정근로시간 수는 4주 동안의 소정근로시간을 그 기간의 통상 근로자의 총 소정근로일 수로 나눈 시간 수로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9%EB%B3%84%ED%91%9C%EC%84%9C%EC%8B%9D/(%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9,%EB%B3%84%ED%91%9C2)" rel="noopener">근로기준법 시행령 별표 2</a></cite></blockquote>
+<blockquote>“단시간근로자의 1일 소정근로시간 수는 4주 동안의 소정근로시간을 그 기간의 통상 근로자의 총 소정근로일 수로 나눈 시간 수로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9%EB%B3%84%ED%91%9C%EC%84%9C%EC%8B%9D/(%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9,%EB%B3%84%ED%91%9C2)" target="_blank" rel="noopener">근로기준법 시행령 별표 2</a></cite></blockquote>
 <p>통상 근로자가 주 5일, 40시간 일하는 사업장이라면 4주 소정근로일은 20일이에요. 이 방식으로 풀면 유급 주휴 시간 = 주 소정근로시간 × 4 ÷ 20 = 주 소정근로시간 ÷ 40 × 8이 돼요.</p>
 <p class="calc">주휴수당 = 주 소정근로시간 ÷ 40 × 8 × 시급<br>주 20시간, 시급 10,320원 → 4시간 × 10,320원 = <b>41,280원</b></p>
 <p>2026년 최저임금(10,320원)으로 계산한 표예요.</p>
-<p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">주 소정근로시간</th><th scope="col">유급 주휴 시간</th><th scope="col">주휴수당(한 주)</th><th scope="col">주급(주휴수당 포함)</th></tr></thead><tbody><tr><th scope="row">주 14시간</th><td>없음</td><td>0원</td><td>144,480원</td></tr><tr><th scope="row">주 15시간</th><td>3시간</td><td>30,960원</td><td>185,760원</td></tr><tr><th scope="row">주 20시간</th><td>4시간</td><td>41,280원</td><td>247,680원</td></tr><tr><th scope="row">주 30시간</th><td>6시간</td><td>61,920원</td><td>371,520원</td></tr><tr><th scope="row">주 40시간</th><td>8시간</td><td>82,560원</td><td>495,360원</td></tr><tr><th scope="row">주 45시간</th><td>8시간</td><td>82,560원</td><td>495,360원</td></tr></tbody></table></div>
+<p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">주 소정근로시간</th><th scope="col">유급 주휴 시간</th><th scope="col">주휴수당(한 주)</th><th scope="col">주급(주휴수당 포함)</th></tr></thead><tbody><tr><th scope="row">주 14시간</th><td>없음</td><td>0원</td><td>144,480원</td></tr><tr><th scope="row">주 15시간</th><td>3시간</td><td>30,960원</td><td>185,760원</td></tr><tr><th scope="row">주 20시간</th><td>4시간</td><td>41,280원</td><td>247,680원</td></tr><tr><th scope="row">주 30시간</th><td>6시간</td><td>61,920원</td><td>371,520원</td></tr><tr><th scope="row">주 40시간</th><td>8시간</td><td>82,560원</td><td>495,360원</td></tr><tr><th scope="row">주 45시간</th><td>8시간</td><td>82,560원</td><td>495,360원 (40시간분까지)</td></tr></tbody></table></div>
+<p class="note">주 45시간 줄의 주급은 소정근로 40시간까지만 넣은 값이에요.</p>
 <h2>주 40시간을 넘게 일해도 8시간분까지예요</h2>
-<blockquote>“주휴수당은 1일 소정근로시간을 기준으로 산정하는 것이며, 이때 ‘소정근로시간’은 근로기준법 제2조제1항제8호에 따라 법정 근로시간인 1일 8시간, 1주 40시간을 초과하지 않는 범위내에서 노사가 근로하기로 정한 시간을 말합니다.”<cite><a href="https://1350.moel.go.kr/rtmview.do?id=1000059852" rel="noopener">고용노동부 1350 상담 답변(주휴수당)</a></cite></blockquote>
+<blockquote>“주휴수당은 1일 소정근로시간을 기준으로 산정하는 것이며, 이때 ‘소정근로시간’은 근로기준법 제2조제1항제8호에 따라 법정 근로시간인 1일 8시간, 1주 40시간을 초과하지 않는 범위내에서 노사가 근로하기로 정한 시간을 말합니다.”<cite><a href="https://1350.moel.go.kr/rtmview.do?id=1000059852" target="_blank" rel="noopener">고용노동부 1350 상담 답변(주휴수당)</a></cite></blockquote>
 <p>소정근로시간은 주 40시간, 하루 8시간 안에서 정하는 시간이라 주휴수당도 8시간분이 끝이에요. 표에서 주 45시간과 주 40시간의 주휴수당이 같은 이유예요.</p>
+<p>표의 주 45시간 줄에 적힌 주급 495,360원은 소정근로 40시간까지만 넣은 값이에요(40시간분 임금 412,800원 + 주휴수당 82,560원). 40시간을 넘겨 일한 시간의 임금은 이 표에 들어 있지 않아요.</p>
 <h2>작은 사업장도 주휴일은 적용돼요</h2>
 <p>상시 4명 이하 사업장에도 근로기준법 제55조 제1항(주휴일)은 적용돼요. 근로기준법 시행령 별표 1의 적용 조항에 들어 있어요.</p>
 <h2>월급제는 이미 들어 있어요</h2>
 <p>주 40시간 일하는 월급제의 월 환산 시간 209시간에는 유급 주휴 8시간이 들어 있어요. 어떻게 나온 숫자인지는 <a href="/guide/choejeoimgeum-209sigan/">최저임금 월급 환산의 209시간</a>에 풀어 놨어요.</p>]]></content:encoded></item>
 <item><title>퇴직금 계산을 고용노동부 예제로 따라가 보기</title><link>https://salary.lumenlab.page/guide/toejikgeum-gyesan-yeje/</link><guid>https://salary.lumenlab.page/guide/toejikgeum-gyesan-yeje/</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate><description>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365. 고용노동부 예제(재직 1,080일)를 한 단계씩 계산해 1일 평균임금 88,641원 31전까지 맞춰 봤어요.</description><content:encoded><![CDATA[<p class="lede">퇴직금은 1일 평균임금 × 30일 × 재직일수 ÷ 365예요. 고용노동부 '퇴직금 계산' 화면의 예제를 그대로 따라가면 1일 평균임금은 88,641원 31전이 나와요. 같은 조건을 이 사이트 계산기에 넣으면 퇴직금은 7,868,434원이에요.</p>
 <h2>먼저, 누가 받나요</h2>
-<blockquote>“퇴직금제도를 설정하려는 사용자는 계속근로기간 1년에 대하여 30일분 이상의 평균임금을 퇴직금으로 퇴직 근로자에게 지급할 수 있는 제도를 설정하여야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C8%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제8조</a></cite></blockquote>
-<p>빠지는 경우는 같은 법 제4조에 있어요. “다만, 계속근로기간이 1년 미만인 근로자, 4주간을 평균하여 1주간의 소정근로시간이 15시간 미만인 근로자에 대하여는 그러하지 아니하다.” (<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C4%EC%A1%B0" rel="noopener">근로자퇴직급여 보장법 제4조</a>)</p>
+<blockquote>“퇴직금제도를 설정하려는 사용자는 계속근로기간 1년에 대하여 30일분 이상의 평균임금을 퇴직금으로 퇴직 근로자에게 지급할 수 있는 제도를 설정하여야 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C8%EC%A1%B0" target="_blank" rel="noopener">근로자퇴직급여 보장법 제8조</a></cite></blockquote>
+<p>빠지는 경우는 같은 법 제4조에 있어요. “다만, 계속근로기간이 1년 미만인 근로자, 4주간을 평균하여 1주간의 소정근로시간이 15시간 미만인 근로자에 대하여는 그러하지 아니하다.” (<a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EC%9E%90%ED%87%B4%EC%A7%81%EA%B8%89%EC%97%AC%EB%B3%B4%EC%9E%A5%EB%B2%95/%EC%A0%9C4%EC%A1%B0" target="_blank" rel="noopener">근로자퇴직급여 보장법 제4조</a>)</p>
 <h2>예제 조건</h2>
-<p><a href="https://www.moel.go.kr/retirementpayCal.do" rel="noopener">고용노동부 「퇴직금 계산」</a> 화면의 예제예요.</p>
+<p><a href="https://www.moel.go.kr/retirementpayCal.do" target="_blank" rel="noopener">고용노동부 「퇴직금 계산」</a> 화면의 예제예요.</p>
 <div class="tbl "><table><thead><tr><th scope="col">항목</th><th scope="col">값</th></tr></thead><tbody><tr><th scope="row">입사일</th><td>2014년 10월 2일</td></tr><tr><th scope="row">퇴사일</th><td>2017년 9월 16일</td></tr><tr><th scope="row">재직일수</th><td>1,080일</td></tr><tr><th scope="row">월 기본급</th><td>2,000,000원</td></tr><tr><th scope="row">월 기타수당</th><td>360,000원</td></tr><tr><th scope="row">연간 상여금</th><td>4,000,000원</td></tr><tr><th scope="row">연차수당</th><td>60,000원 × 5일</td></tr></tbody></table></div>
 <p>퇴사일은 마지막으로 일한 날의 다음 날이에요. 고용노동부 화면도 “퇴직일자는 마지막으로 근무한 날의 1일 후 날짜를 기재”하라고 안내해요.</p>
 <h2>1단계: 퇴직 전 3개월의 날짜 수</h2>
 <p>평균임금의 뜻은 근로기준법에 있어요.</p>
-<blockquote>““평균임금”이란 이를 산정하여야 할 사유가 발생한 날 이전 3개월 동안에 그 근로자에게 지급된 임금의 총액을 그 기간의 총일수로 나눈 금액을 말한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C2%EC%A1%B0" rel="noopener">근로기준법 제2조</a></cite></blockquote>
+<blockquote>““평균임금”이란 이를 산정하여야 할 사유가 발생한 날 이전 3개월 동안에 그 근로자에게 지급된 임금의 총액을 그 기간의 총일수로 나눈 금액을 말한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C2%EC%A1%B0" target="_blank" rel="noopener">근로기준법 제2조</a></cite></blockquote>
 <p>2017년 9월 16일에 퇴직하면 그 전 3개월은 2017년 6월 16일부터 2017년 9월 15일까지 <b>92일</b>이에요. 달에 따라 89일에서 92일 사이로 달라져요.</p>
 <h2>2단계: 3개월 임금 A + B + C</h2>
 <p class="calc">A. 3개월 임금: (2,000,000원 + 360,000원) × 3 = 7,080,000원<br>B. 상여금 가산: 4,000,000원 × 3/12 = 1,000,000원<br>C. 연차수당 가산: 60,000원 × 5일 × 3/12 = 75,000원<br>합계 8,155,000원</p>
@@ -91,18 +96,18 @@
 <h2>3단계: 1일 평균임금</h2>
 <p class="calc">8,155,000원 ÷ 92일 = <b>88,641원 31전</b></p>
 <p>여기까지가 고용노동부 화면에 적힌 값이에요. 통상임금이 더 크면 그쪽을 써요.</p>
-<blockquote>“제1항제6호에 따라 산출된 금액이 그 근로자의 통상임금보다 적으면 그 통상임금액을 평균임금으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C2%EC%A1%B0" rel="noopener">근로기준법 제2조</a></cite></blockquote>
+<blockquote>“제1항제6호에 따라 산출된 금액이 그 근로자의 통상임금보다 적으면 그 통상임금액을 평균임금으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C2%EC%A1%B0" target="_blank" rel="noopener">근로기준법 제2조</a></cite></blockquote>
 <h2>4단계: 퇴직금</h2>
 <p class="calc">88,641원 31전 × 30일 × 1,080일 ÷ 365 = <b>7,868,434원</b></p>
-<p>이 금액은 고용노동부 예제 조건을 이 사이트 계산기에 넣은 값이에요. 고용노동부 화면에는 예제의 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 버렸어요.</p>
+<p>이 금액은 고용노동부 예제 조건을 이 사이트 계산기에 넣은 값이에요. 고용노동부 화면의 예제 설명에는 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 고용노동부 계산기처럼 반올림했어요.</p>
 <h2>알아 둘 것</h2>
-<ul><li>세전 금액이에요. 퇴직소득세는 따로 계산돼요.</li><li>퇴직금은 퇴직한 날부터 14일 안에 줘야 해요. 당사자끼리 합의하면 늦출 수 있어요(근로자퇴직급여 보장법 제9조).</li><li>회사 내규에 따라 실제 지급액과 다를 수 있어요.</li><li>이 계산기는 퇴직 전 3개월을 달력으로 3개월 전 같은 날부터 세어요. 그 날짜가 없는 달은 말일부터라서 회사·고용센터 계산과 하루 차이가 날 수 있어요.</li></ul>]]></content:encoded></item>
+<ul><li>세전 금액이에요. 퇴직소득세는 따로 계산돼요.</li><li>퇴직금은 퇴직한 날부터 14일 안에 줘야 해요. 당사자끼리 합의하면 늦출 수 있어요(근로자퇴직급여 보장법 제9조).</li><li>회사 내규에 따라 실제 지급액과 다를 수 있어요.</li><li>퇴직 전 3개월은 3개월 전 같은 날부터 세어요. 그 날짜가 없으면 그 달 말일부터, 3개월 전이 2월이면 3월 1일부터 세어요(2026년 5월 31일에 퇴직하면 2026년 3월 1일부터 91일). 고용노동부 계산기와 같은 방식이에요.</li></ul>]]></content:encoded></item>
 <item><title>최저임금 월급 환산의 209시간은 어디서 나오나</title><link>https://salary.lumenlab.page/guide/choejeoimgeum-209sigan/</link><guid>https://salary.lumenlab.page/guide/choejeoimgeum-209sigan/</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate><description>209시간은 주 40시간에 유급 주휴 8시간을 더해 한 달로 환산한 값이에요. 고시 문장과 시행령의 계산 방법, 2026·2027년 최저임금 월급을 정리했어요.</description><content:encoded><![CDATA[<p class="lede">209시간은 주 40시간 일하는 사람의 한 달 유급 시간이에요. 일한 40시간에 유급 주휴 8시간을 더한 48시간을 한 달로 환산한 값이에요. 그래서 2026년 최저임금 월급은 10,320원 × 209시간 = 2,156,880원이에요.</p>
 <h2>고시에 적힌 문장</h2>
 <p>고용노동부의 2027년 적용 최저임금 고시는 월 환산액 옆에 기준을 적어 놨어요.</p>
-<blockquote>“월 환산액 2,236,300원: 주 소정근로 40시간을 근무할 경우, 월 환산 기준시간 수 209시간(주당 유급주휴 8시간 포함) 기준”<cite><a href="https://www.moel.go.kr/common/downloadFile.do?file_seq=20260800249&bbs_seq=20260800150&bbs_id=19&file_ext=pdf" rel="noopener">2027년 적용 최저임금 고시(고용노동부고시 제2026-60호)</a></cite></blockquote>
+<blockquote>“월 환산액 2,236,300원: 주 소정근로 40시간을 근무할 경우, 월 환산 기준시간 수 209시간(주당 유급주휴 8시간 포함) 기준”<cite><a href="https://www.moel.go.kr/common/downloadFile.do?file_seq=20260800249&bbs_seq=20260800150&bbs_id=19&file_ext=pdf" target="_blank" rel="noopener">2027년 적용 최저임금 고시(고용노동부고시 제2026-60호)</a></cite></blockquote>
 <h2>계산 방법은 시행령에 있어요</h2>
-<blockquote>“월(月) 단위로 정해진 임금: 그 금액을 1개월의 최저임금 적용기준 시간 수(제2호에 따른 1주의 최저임금 적용기준 시간 수에 1년 동안의 평균의 주의 수를 곱한 시간을 12로 나눈 시간 수를 말한다)로 나눈 금액”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%B5%9C%EC%A0%80%EC%9E%84%EA%B8%88%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C5%EC%A1%B0" rel="noopener">최저임금법 시행령 제5조</a></cite></blockquote>
+<blockquote>“월(月) 단위로 정해진 임금: 그 금액을 1개월의 최저임금 적용기준 시간 수(제2호에 따른 1주의 최저임금 적용기준 시간 수에 1년 동안의 평균의 주의 수를 곱한 시간을 12로 나눈 시간 수를 말한다)로 나눈 금액”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%B5%9C%EC%A0%80%EC%9E%84%EA%B8%88%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C5%EC%A1%B0" target="_blank" rel="noopener">최저임금법 시행령 제5조</a></cite></blockquote>
 <p>이 문장대로 계산하면 이래요.</p>
 <p class="calc">(40시간 + 8시간) × 365 ÷ 7 ÷ 12 = 208.57…시간</p>
 <p>고시는 이 값을 209시간이라고 적어요. 올림했다는 문장이 고시에 있는 것은 아니에요.</p>
@@ -120,10 +125,10 @@
 <h2>하루 금액은 평균임금의 60%</h2>
 <p>구직급여일액은 기초일액(이직 당시 평균임금)에 60%를 곱해요. 고용보험법 제46조의 문장은 “제45조제1항부터 제3항까지 및 제5항의 경우에는 그 수급자격자의 기초일액에 100분의 60을 곱한 금액”이에요.</p>
 <h2>상한: 하루 68,100원</h2>
-<blockquote>“법 제45조제5항에 따라 구직급여의 산정 기초가 되는 임금일액이 11만3500원을 초과하는 경우에는 11만3500원을 해당 임금일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C68%EC%A1%B0" rel="noopener">고용보험법 시행령 제68조</a></cite></blockquote>
+<blockquote>“법 제45조제5항에 따라 구직급여의 산정 기초가 되는 임금일액이 11만3500원을 초과하는 경우에는 11만3500원을 해당 임금일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C68%EC%A1%B0" target="_blank" rel="noopener">고용보험법 시행령 제68조</a></cite></blockquote>
 <p>평균임금이 아무리 높아도 113,500원으로 봐요. 계산하면 113,500원 × 60% = 68,100원이에요. 2026년 1월 1일 이후에 이직한 사람부터 적용돼요.</p>
 <h2>하한: 하루 8시간이면 66,048원</h2>
-<blockquote>“기초일액이 그 수급자격자의 이직 전 1일 소정근로시간에 이직일 당시 적용되던 「최저임금법」에 따른 시간 단위에 해당하는 최저임금액을 곱한 금액(이하 “최저기초일액”이라 한다)보다 낮은 경우에는 최저기초일액을 기초일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95" rel="noopener">고용보험법 제40조·제45조·제46조·제49조</a></cite></blockquote><blockquote>“제1항제1호에 따라 산정된 구직급여일액이 최저구직급여일액보다 낮은 경우에는 최저구직급여일액을 그 수급자격자의 구직급여일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95" rel="noopener">고용보험법 제40조·제45조·제46조·제49조</a></cite></blockquote>
+<blockquote>“기초일액이 그 수급자격자의 이직 전 1일 소정근로시간에 이직일 당시 적용되던 「최저임금법」에 따른 시간 단위에 해당하는 최저임금액을 곱한 금액(이하 “최저기초일액”이라 한다)보다 낮은 경우에는 최저기초일액을 기초일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95" target="_blank" rel="noopener">고용보험법 제40조·제45조·제46조·제49조</a></cite></blockquote><blockquote>“제1항제1호에 따라 산정된 구직급여일액이 최저구직급여일액보다 낮은 경우에는 최저구직급여일액을 그 수급자격자의 구직급여일액으로 한다.”<cite><a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B2%95" target="_blank" rel="noopener">고용보험법 제40조·제45조·제46조·제49조</a></cite></blockquote>
 <p>하한은 하루 소정근로시간 × 최저임금 × 80%예요. 계산하면 8시간 × 10,320원 × 80% = 66,048원이에요. 고용노동부 상담 답변에 적힌 시간별 하한액과 같아요.</p>
 <p class="tbl-hint">표를 옆으로 밀어 보세요.</p><div class="tbl wide"><table><thead><tr><th scope="col">하루 소정근로시간</th><th scope="col">1시간</th><th scope="col">2시간</th><th scope="col">3시간</th><th scope="col">4시간</th><th scope="col">5시간</th><th scope="col">6시간</th><th scope="col">7시간</th><th scope="col">8시간</th></tr></thead><tbody><tr><th scope="row">하한액</th><td>8,256원</td><td>16,512원</td><td>24,768원</td><td>33,024원</td><td>41,280원</td><td>49,536원</td><td>57,792원</td><td>66,048원</td></tr></tbody></table></div>
 <h2>그래서 금액이 한곳에 모여요</h2>
@@ -136,6 +141,7 @@
 <p>“「장애인고용촉진 및 직업재활법」 제2조제1호에 따른 장애인은 50세 이상인 것으로 보아 위 표를 적용한다.” 실업을 신고한 날부터 7일은 대기기간이라 지급되지 않아요.</p>
 <h2>받을 수 있는지는 따로 봐요</h2>
 <p>고용보험법 제40조의 요건은 네 가지예요. 이직 전 18개월 동안 피보험 단위기간이 합쳐서 180일 이상일 것, 일할 의사와 능력이 있는데도 취업하지 못한 상태일 것, 이직 사유가 수급자격 제한 사유에 해당하지 않을 것, 재취업을 위해 적극적으로 노력할 것. 내 경우가 맞는지는 거주지 고용센터에서 확인하세요. 이 글과 계산기는 금액만 다뤄요.</p>
-<h2>2027년에는</h2>
-<p>2027년 최저임금은 10,700원이에요. 지금 식대로 계산하면 8시간 하한은 68,480원으로 지금 상한 68,100원보다 커져요. 2027년 상한이 어떻게 정해질지는 확인된 발표가 없어요. 2028년 1월 1일부터는 계산 기준이 평균임금에서 보수(이직 전 1년 동안 신고된 보수)로 바뀔 예정이에요.</p>]]></content:encoded></item>
+<h2>2027년에 이직하면</h2>
+<p>하한은 이직일의 최저임금으로 계산해요. 2027년 최저임금은 10,700원이라서, 계산하면 하루 8시간 하한은 68,480원이에요. 지금 상한 68,100원보다 380원 많아요. 평균임금의 60%가 하한보다 적으면 하한액을 받으니까(“제1항제1호에 따라 산정된 구직급여일액이 최저구직급여일액보다 낮은 경우에는 최저구직급여일액을 그 수급자격자의 구직급여일액으로 한다.”), 2027년에 이직한 하루 8시간 근로자는 하루에 적어도 68,480원을 받아요.</p>
+<p>2027년 상한이 어떻게 정해질지는 확인된 발표가 없어요. 평균임금의 60%가 하한보다 적은 사람은 상한과 상관없이 하한액을 받아요. 평균임금이 지금 상한의 기준인 113,500원을 넘는 사람은 새 상한에 따라 더 받을 수도 있어서, 계산기는 그런 경우에만 하루 금액과 합계를 '최소'라고 표시해요. 2028년 1월 1일부터는 계산 기준이 평균임금에서 보수(이직 전 1년 동안 신고된 보수)로 바뀔 예정이에요.</p>]]></content:encoded></item>
 </channel></rss>

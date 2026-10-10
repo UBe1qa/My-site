@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """브라우저로 하는 확인(Playwright): 먼저 `node pick/_dev/serve.mjs` 를 띄우고  python3 -B pick/_dev/e2e.py [묶음…]
 묶음: tools(도구를 실제로 눌러 결과 확인) guard(도는 중 명단 바꾸기·순서만 바꾼 링크·옛 링크·열 수 없는 링크·긴 링크·지우기와 되돌리기)
+      names(보이지 않는 글자·풀어쓴 자모로 꾸민 링크, 이모지 이름, 확인 코드, 긴 결과 이름, 링크의 명단 가져오기, 칸 고르기, 기록에 남은 이름)
       pages(모든 페이지 320px·콘솔·깨진 그림·휴대폰 누름 영역 44px) cls(화면 밀림) ads(광고 미리보기 거리)
       misc(저장 키·바깥 요청·404·어두운 화면·동작 줄이기·발표 화면·루멘랩 칸·500칸) shots(최종 스크린샷). 안 적으면 전부.
 환경 변수: PW_CHROME(크롬 실행 파일), PICK_FONT(Pretendard .woff2. CDN을 못 받는 곳에서 대신 줌), PICK_SHOTS(스크린샷 폴더), PICK_SHOT_PREFIX(기본 final), PICK_BASE.
@@ -30,7 +31,7 @@ PATHS = {
 }
 ALL = [u[len('https://pick.lumenlab.page'):] for u in re.findall(r'<loc>(.*?)</loc>', (ROOT / 'sitemap.xml').read_text())]
 results = []
-want = set(sys.argv[1:]) or {'tools', 'guard', 'pages', 'cls', 'ads', 'misc', 'shots'}
+want = set(sys.argv[1:]) or {'tools', 'guard', 'names', 'pages', 'cls', 'ads', 'misc', 'shots'}
 
 
 def ok(cond, name, detail=''):
@@ -193,9 +194,14 @@ def tools(b):
         page.fill('#names', 'Smith, John')
         ok(state(page)['items'] == ['Smith', 'John'] and T['warnSplit'].split('{n}')[0][:12] in page.inner_text('#listwarn'), f'{lang} 명단: 한 줄을 쉼표로 나눴다고 알림', page.inner_text('#listwarn'))
         page.fill('#names', '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남')
-        ok(len(state(page)['items']) == 3 and page.locator('#listwarn button').count() == 1, f'{lang} 명단: 여러 칸을 같이 붙이면 알리고 ‘첫 칸만 쓰기’ 단추')
-        page.click('#listwarn button')
-        ok(state(page)['items'] == ['1', '2', '3'] and page.locator('#listwarn button').count() == 0, f'{lang} 명단: 첫 칸만 쓰기', state(page)['items'])
+        cols = page.locator('#listwarn .cols button').all_inner_texts()
+        ok(len(state(page)['items']) == 3 and len(cols) == 3 and '김민준' in cols[0] and cols[0].startswith(T['colPick'].split('{k}')[0] + '2') and cols[-1].startswith(T['colPick'].split('{k}')[0] + '1'),
+           f'{lang} 명단: 여러 칸을 같이 붙이면 어느 칸을 쓸지 묻는다(칸마다 단추, 번호뿐인 칸은 맨 뒤)', cols)
+        page.locator('#listwarn .cols button').first.click()
+        ok(state(page)['items'] == ['김민준', '이서연', '박지호'] and page.locator('#listwarn button').count() == 0, f'{lang} 명단: 이름이 든 칸을 고르면 이름만 남는다(번호 칸이 앞에 있어도)', state(page)['items'])
+        page.fill('#names', '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남')
+        page.locator('#listwarn .cols button').last.click()
+        ok(state(page)['items'] == ['1', '2', '3'], f'{lang} 명단: 번호 칸을 고르면 번호만(고른 대로 한다)', state(page)['items'])
         page.fill('#names', '')
         page.wait_for_timeout(100)
         page.click('#go')
@@ -411,7 +417,7 @@ TAP_JS = r"""() => { const out = [];
 
 FORGE_JS = r"""async ([url, how]) => { const { decodeShare, encodeShare } = await import('/assets/core/share.js'); const d = decodeShare(url.slice(url.indexOf('#')));
   const items = d.items.slice();
-  if (how === 'reverse') items.reverse(); else if (how === 'rotate') items.push(items.shift()); else if (how === 'swap') { const t = items[0]; items[0] = items[items.length - 1]; items[items.length - 1] = t; }
+  if (how.endsWith('reverse')) items.reverse(); else if (how === 'rotate') items.push(items.shift()); else if (how === 'swap') { const t = items[0]; items[0] = items[items.length - 1]; items[items.length - 1] = t; }
   return url.slice(0, url.indexOf('#') + 1) + encodeShare({ tool: d.tool, seed: d.seed, items, opts: d.opts, version: how.startsWith('v1') ? 1 : undefined }); }"""
 
 
@@ -539,7 +545,9 @@ def guard(b):
         p3 = c.ctx.new_page()
         p3.goto(v1, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(200)
         old = p3.evaluate("async () => { const { wheelDraw } = await import('/assets/core/pick.js'); const { makeRng } = await import('/assets/core/rng.js'); const { decodeShare } = await import('/assets/core/share.js'); const d = decodeShare(location.hash); return d.items[wheelDraw(d.items, makeRng(d.seed), true).index]; }")
-        ok('#r=1.' in v1 and p3.inner_text('#rname') == old and p3.inner_text('#stamp') == T['stampOld'] and p3.locator('.linkmsg.info').count() == 1 and T['legacyLink'] in p3.inner_text('.linkmsg'), f'{lang} 옛 형식(1) 링크: 옛 방식의 결과로 열리고 “옛 방식 링크”라고 알림', p3.inner_text('#rname'))
+        ok('#r=1.' in v1 and p3.inner_text('#rname') == old and p3.inner_text('#stamp') == T['stampOld'] and p3.locator('#stamp.plain').count() == 1 and p3.locator('.stamp:not(.plain):visible').count() == 0
+           and p3.locator('.linkmsg.warn[role="status"]').count() == 1 and T['legacyLink'] in p3.inner_text('.linkmsg') and not state(p3)['blocked'],
+           f'{lang} 옛 형식(1) 링크: 옛 방식의 결과를 보여 주되 확인 도장은 없고(‘{T["stampOld"]}’), 지금 방식으로는 확인할 수 없다고 알림', p3.inner_text('#rname'))
         u2 = copied(p3)
         ok('#r=1.' in u2, f'{lang} 옛 형식 링크의 결과를 다시 복사하면 옛 형식 그대로(같은 결과로 열리게)')
         p3.locator('.linkmsg button').click()
@@ -548,7 +556,11 @@ def guard(b):
         v1d = page.evaluate(FORGE_JS, [draw_url, 'v1'])
         p3 = c.ctx.new_page()
         p3.goto(v1d, wait_until='load'); p3.wait_for_function('window.__pick && window.__pick.state', timeout=10000)
-        ok(p3.locator('.stamp:visible').inner_text() == T['stampOld'] and p3.locator('.linkmsg.info').count() == 1 and p3.locator('.picked li').count() == 3, f'{lang} 옛 형식(1) 제비뽑기 링크도 열림')
+        ok(p3.locator('.stamp:visible').inner_text() == T['stampOld'] and p3.locator('.stamp.plain:visible').count() == 1 and p3.locator('.linkmsg.warn').count() == 1 and p3.locator('.picked li').count() == 3, f'{lang} 옛 형식(1) 제비뽑기 링크도 열림(확인 도장 없음)')
+        # 형식 번호만 1로 낮추고 순서를 바꾼 링크(평가의 N-L1): 결과는 달라질 수 있지만 '링크의 결과 그대로' 도장은 어디에도 붙지 않는다
+        down = page.evaluate(FORGE_JS, [wheel_url, 'v1reverse'])
+        p3.goto('about:blank'); p3.goto(down, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(200)
+        ok('#r=1.' in down and down != v1 and p3.locator('.stamp:not(.plain):visible').count() == 0 and p3.inner_text('#stamp') == T['stampOld'] and p3.locator('.linkmsg.warn').count() == 1, f'{lang} 형식 번호를 1로 낮추고 순서를 바꾼 링크: 확인 도장이 붙지 않는다')
         p3.close()
 
         # ---- 열 수 없는 링크: 눈에 띄게 알리고, 그동안 내 명단을 판에 올리지 않는다
@@ -562,6 +574,8 @@ def guard(b):
                f'{lang} 열 수 없는 링크({key}): 큰 알림, 판에는 내 명단을 올리지 않음', p3.inner_text('.linkmsg p')[:40])
             p3.click('#go')
             ok(not state(p3)['spinning'] and state(p3)['last'] is None, f'{lang} 열 수 없는 링크({key}): 닫기 전에는 돌지 않음')
+            ok(p3.inner_text('#rname') == T['blockedHint'] and p3.evaluate("document.activeElement === document.querySelector('.linkmsg button')") and p3.locator('.linkmsg.nudge').count() == 1,
+               f'{lang} 열 수 없는 링크({key}): 돌리기를 누르면 왜 안 도는지 알리고 닫기 단추를 가리킨다', p3.inner_text('#rname'))
             p3.locator('.linkmsg button').click()
             ok(p3.locator('.linkmsg').count() == 0 and len(state(p3)['drawn']['items']) == 8 and '#' not in p3.url, f'{lang} 열 수 없는 링크({key}): 닫으면 내 명단이 판에 올라오고 주소의 링크가 지워짐')
             p3.close()
@@ -598,7 +612,8 @@ def guard(b):
         page.wait_for_timeout(350)
         p3 = c.ctx.new_page()
         p3.goto(wheel_url, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(200)
-        ok(p3.inner_text('#listclear') == T['listBack'], f'{lang} 링크로 연 명단: 단추는 ‘{T["listBack"]}’')
+        ok(p3.inner_text('#listclear') == T['listBack'] and p3.inner_text('#listalt') == T['listEdit'] and p3.inner_text('#listnote span') == T['listShared'] and p3.evaluate("document.getElementById('names').readOnly"),
+           f'{lang} 링크로 연 명단: 읽기만 되는 ‘링크의 명단’이고 단추는 ‘{T["listEdit"]}’·‘{T["listBack"]}’')
         p3.click('#listclear'); p3.wait_for_timeout(350)
         ok(p3.input_value('#names') == '가\n나' and p3.evaluate("localStorage.getItem('pick.list')") == '가\n나' and '#' not in p3.url, f'{lang} 링크로 연 명단: 내 명단으로 돌아가고 저장해 둔 명단은 지우지 않음')
         p3.close()
@@ -665,6 +680,402 @@ def guard(b):
         ok(hs == {'n': 60, 'top': '65', 'kept': 60}, f'{lang} 돌림판: 65번 뽑아도 뽑힌 순서는 최근 60개만 남음(맨 앞 번호 65)', hs)
         ok(not c.errors, f'{lang} 휴대폰 guard: 콘솔 오류 0', c.errors[:3])
         c.close()
+
+
+# ---------------- 3단계-2: 이름 고르기·확인 코드·긴 결과 이름·링크의 명단 ----------------
+ZW, ZWNJ, ZWJ, WJ, BOM, LRM, RLO, PDF_, SHY = '\N{ZERO WIDTH SPACE}', '\N{ZERO WIDTH NON-JOINER}', '\N{ZERO WIDTH JOINER}', '\N{WORD JOINER}', '\N{ZERO WIDTH NO-BREAK SPACE}', '\N{LEFT-TO-RIGHT MARK}', '\N{RIGHT-TO-LEFT OVERRIDE}', '\N{POP DIRECTIONAL FORMATTING}', '\N{SOFT HYPHEN}'
+FAMILY = '\N{MAN}' + ZWJ + '\N{WOMAN}' + ZWJ + '\N{GIRL}' + ZWJ + '\N{BOY}'
+FLAG_KR = '\N{REGIONAL INDICATOR SYMBOL LETTER K}\N{REGIONAL INDICATOR SYMBOL LETTER R}'
+HEART = '\N{HEAVY BLACK HEART}\N{VARIATION SELECTOR-16}'
+KEYCAP1 = '1\N{VARIATION SELECTOR-16}\N{COMBINING ENCLOSING KEYCAP}'
+THUMB = '\N{THUMBS UP SIGN}\N{EMOJI MODIFIER FITZPATRICK TYPE-4}'
+EVAL10 = ['김민준', '이서연', 'Alice', 'bob', 'Bob', '田中さん', '7번', '\N{GRINNING FACE}웃음', 'Zo\N{LATIN SMALL LETTER E WITH DIAERESIS}', '가나다']  # 재평가가 쓴 명단
+LONG_NAMES = ['3학년 1반 김민준 선생님', '3학년 1반 이서연', 'Supercalifragilisticexpialidocious', '떡볶이 먹으러 가기 좋은 날이니까 다 같이 가요', 'Christopher', '박지호']
+# 링크 속 명단을 고르지 않은 이름으로 바꿔 넣는다(이 사이트의 encodeShare는 그런 링크를 만들지 않으므로 직접 묶는다)
+RAW_LINK_JS = r"""async ([url, items, ver, opts]) => { const { decodeShare } = await import('/assets/core/share.js'); const { bytesToB64u, seedToText } = await import('/assets/core/rng.js');
+  const h = url.slice(url.indexOf('#') + 1); const d = decodeShare('#' + h);
+  const body = bytesToB64u(new TextEncoder().encode(JSON.stringify({ o: opts || d.opts, i: items })));
+  return url.slice(0, url.indexOf('#') + 1) + 'r=' + (ver || 2) + '.' + h.split('.')[1] + '.' + seedToText(d.seed) + '.' + body; }"""
+# cut의 높이 여유: 줄 높이가 글꼴의 위아래 높이(Pretendard 1.19em)보다 낮으면 글자 칸이 줄 밖으로 1~3px 나간다(전체 화면의 큰 글자). 잘린 것이 아니라서 글자 크기의 5%까지는 봐준다(진짜 잘림은 한 줄 = 100% 넘게 넘친다)
+SHOWN_JS = r"""(sel) => [...document.querySelectorAll(sel)].map((e) => { const cs = getComputedStyle(e); const box = e.getBoundingClientRect(); const r = document.createRange(); r.selectNodeContents(e);
+  const rects = [...r.getClientRects()]; const inside = rects.every((q) => q.left >= box.left - 1 && q.right <= box.right + 1 && q.top >= box.top - 2 && q.bottom <= box.bottom + 2);
+  return { text: e.textContent, cut: e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + Math.max(1, parseFloat(cs.fontSize) * 0.05), ellipsis: cs.textOverflow === 'ellipsis' && cs.whiteSpace === 'nowrap', inside, right: Math.round(box.right), vw: innerWidth, size: parseFloat(cs.fontSize), lines: Math.round(box.height / parseFloat(cs.lineHeight)) }; })"""
+
+
+def py_code(names, labels=None):
+    """확인 코드를 파이썬 hashlib으로 따로 계산한다(이름은 이미 고른 꼴이어야 한다)."""
+    import hashlib
+    text = '\n'.join(sorted(names)) if labels is None else '\n'.join(names) + '\n\n' + '\n'.join(labels)
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()[:8]
+
+
+def names(b):
+    """재평가(2026-10-10)의 중간 2건과 낮음 7건을 못 박는다."""
+    import unicodedata
+    nfd = lambda t: unicodedata.normalize('NFD', t)
+    for lang in ('ko', 'en'):
+        c = Ctx(b, lang=lang, reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+        page = c.page
+        P = PATHS[lang]
+        c.open(P['wheel'])
+        T = page.evaluate("JSON.parse(document.getElementById('i18n').textContent)")
+        count_of = lambda n: (T['count1'] if n == 1 and 'count1' in T else T['count']).replace('{n}', f'{n:,}')
+        code_line = lambda n, code: f'{count_of(n)} · {code}'
+        fp_line = lambda n, code: T['fp'].replace('{count}', count_of(n)).replace('{code}', code)
+        sample = page.get_attribute('#names', 'data-sample').split('\n')
+
+        # ---- 확인 코드: 첫 HTML에 적힌 값 = 화면 코드가 계산한 값 = 파이썬 hashlib
+        first_html = re.search(r'id="listcode">([^<]*)<', c.ctx.request.get(BASE + P['wheel']).text()).group(1)
+        ok(first_html == page.inner_text('#listcode') == code_line(8, py_code(sample)), f'{lang} 확인 코드: 첫 HTML = 화면 코드 = 파이썬 hashlib(예시 명단)', f'{first_html} / {page.inner_text("#listcode")} / {py_code(sample)}')
+        mine = ['다람쥐', '가오리', '나비', '가오리 2']
+        page.fill('#names', '\n'.join(mine)); page.wait_for_timeout(350)
+        code = py_code(mine)
+        ok(page.inner_text('#listcode') == code_line(4, code), f'{lang} 확인 코드: 내 명단의 코드 = 파이썬 hashlib', page.inner_text('#listcode'))
+        page.click('#shuffle'); page.click('#sortaz')
+        ok(page.inner_text('#listcode') == code_line(4, code) and state(page)['items'] != mine, f'{lang} 확인 코드: 순서를 바꿔도 같은 코드', page.inner_text('#listcode'))
+        page.click('#go'); page.wait_for_timeout(200)
+        ok(page.inner_text('#fp') == fp_line(4, code) and page.locator('#fp').is_visible(), f'{lang} 확인 코드: 결과 곁에도 그 명단의 코드가 나온다', page.inner_text('#fp'))
+        page.click('#again'); page.wait_for_timeout(200)
+        left = state(page)['items']
+        ok(page.inner_text('#fp') == fp_line(3, py_code(left)) and page.inner_text('#listcode') == code_line(4, code), f'{lang} 확인 코드: 한 명을 빼고 돌리면 결과의 코드는 판에 남은 3명의 것(링크에 드는 명단), 명단 칸의 코드는 그대로')
+        page.fill('#names', '\n'.join(mine[:3] + ['가오리 3'])); page.wait_for_timeout(100)
+        ok(page.inner_text('#listcode') != code_line(4, code) and page.inner_text('#listcode').endswith(py_code(mine[:3] + ['가오리 3'])), f'{lang} 확인 코드: 이름 한 글자가 달라지면 다른 코드')
+        page.fill('#names', ''); page.wait_for_timeout(100)
+        ok(page.inner_text('#listcode') == '' and page.locator('#listfp').bounding_box()['height'] >= 20, f'{lang} 확인 코드: 빈 명단이면 코드가 없고 줄 자리는 그대로')
+
+        # ---- 명단 칸: 보이지 않는 글자·풀어쓴 자모가 섞여도 같은 사람으로 읽는다
+        page.fill('#names', '\n'.join([ZW + '김민준', '김민준', nfd('이서연'), '박지호' + LRM, '이서연'])); page.wait_for_timeout(150)
+        warn = page.inner_text('#listwarn')
+        want_hidden = T['warnHidden'].replace('{n}', '2')
+        ok(state(page)['items'] == ['김민준', '김민준', '이서연', '박지호', '이서연'] and T['warnDupes'].replace('{n}', '2') in warn and want_hidden in warn,
+           f'{lang} 명단 칸: 폭 없는 공백·풀어쓴 자모·방향 표시가 섞여도 같은 이름으로 읽고, 겹친 이름 2개와 보이지 않는 글자 2줄을 알린다', warn)
+        ok(page.inner_text('#listcode') == code_line(5, py_code(['김민준', '김민준', '이서연', '박지호', '이서연'])), f'{lang} 명단 칸: 확인 코드도 고른 이름으로 계산')
+        page.click('#dedupe')
+        ok(state(page)['items'] == ['김민준', '이서연', '박지호'] and page.input_value('#names') == '김민준\n이서연\n박지호', f'{lang} 명단 칸: ‘겹친 이름 지우기’가 보이지 않는 글자만 다른 이름도 지운다', page.input_value('#names'))
+
+        # ---- 이모지 이름: 가족(잇는 글자)·국기·하트·숫자 단추·피부색이 명단 → 결과 → 링크를 지나도 그대로
+        emoji = [FAMILY + ' 가족', FLAG_KR, HEART, KEYCAP1 + '번', THUMB, '\N{GRINNING FACE}웃음']
+        page.fill('#names', '\n'.join(emoji)); page.wait_for_timeout(150)
+        ok(state(page)['items'] == emoji and page.inner_text('#listwarn') == '', f'{lang} 이모지 이름: 명단 칸에서 그대로(알림 없음)', state(page)['items'])
+        page.click('#go'); page.wait_for_timeout(200)
+        won = state(page)['last']['name']
+        url = copied(page)
+        p2 = c.ctx.new_page()
+        p2.goto(url, wait_until='load'); wheel_done(p2); p2.wait_for_timeout(150)
+        ok(won in emoji and p2.inner_text('#rname') == won and state(p2)['items'] == emoji and p2.inner_text('#stamp') == T['stamp'] and p2.locator('#stamp.plain').count() == 0 and p2.locator('.linkmsg').count() == 0 and p2.inner_text('#fp') == page.inner_text('#fp'),
+           f'{lang} 이모지 이름: 링크로 열어도 그대로(같은 결과, 확인 도장, 같은 확인 코드, 알림 없음)', p2.inner_text('#rname'))
+        p2.close()
+
+        # ---- 꾸민 링크: 화면에는 같은 명단인데 글자열만 다른 링크 → 원래 링크와 같은 결과 + '정리했어요' 알림 + 도장 대신 '정리한 명단으로 다시 계산한 결과'
+        def forged(tool, read, label, make):
+            url = copied(page)
+            want = read(page)
+            base = state(page)['items']  # 그 결과를 만든 명단(고른 꼴)
+            code = page.inner_text('#fp')
+            hid = [ZW, ZWNJ, ZWJ, WJ, BOM, LRM, '\N{RIGHT-TO-LEFT MARK}', SHY, '\N{INVISIBLE SEPARATOR}', '\N{INVISIBLE TIMES}']
+            variants = {
+                '첫 이름 앞에 폭 없는 공백': [ZW + base[0]] + base[1:],
+                '둘째 이름을 풀어쓴 자모로': [base[0], nfd(base[1])] + base[2:],
+                '이름마다 다른 보이지 않는 글자': [nm + hid[i % len(hid)] for i, nm in enumerate(base)],
+                '방향 뒤집기 표시로 감싸고 순서도 거꾸로': [RLO + nm + PDF_ for nm in reversed(base)],
+                'BOM·소프트 하이픈을 이름 가운데에': [nm[:1] + BOM + SHY + nm[1:] if not (0xD800 <= ord(nm[0]) <= 0xDBFF or ord(nm[0]) > 0xFFFF) else BOM + nm for nm in base],
+            }
+            for how, items in variants.items():
+                f = page.evaluate(RAW_LINK_JS, [url, items, 2, None])
+                p3 = c.ctx.new_page()
+                p3.goto(f, wait_until='load')
+                if tool == 'wheel':
+                    wheel_done(p3)
+                else:
+                    p3.wait_for_function('window.__pick && window.__pick.state', timeout=10000)
+                p3.wait_for_timeout(150)
+                got = read(p3)
+                st = p3.locator('.stamp:visible')
+                ok(f != url and got == want and sorted(state(p3)['items']) == sorted(base) and sorted(p3.input_value('#names').split('\n')) == sorted(base),
+                   f'{lang} {label}: 꾸민 링크({how})도 원래 링크와 같은 결과, 명단은 정리된 원래 이름', f'{str(got)[:60]} / {str(want)[:60]}')
+                ok(p3.locator('.linkmsg.warn[role="status"]').count() == 1 and T['cleanedLink'] in p3.inner_text('.linkmsg') and st.count() == 1 and st.inner_text() == T['stampCleaned'] and p3.locator('.stamp.plain:visible').count() == 1
+                   and p3.locator('.stamp:not(.plain):visible').count() == 0 and p3.inner_text('#fp') == code,
+                   f'{lang} {label}: 꾸민 링크({how})는 “정리했어요” 알림 + ‘{T["stampCleaned"]}’ 표시(확인 도장 아님) + 원래와 같은 확인 코드', p3.inner_text('.linkmsg p')[:40] if p3.locator('.linkmsg').count() else '알림 없음')
+                p3.close()
+            return url
+        page.fill('#names', '\n'.join(EVAL10)); page.wait_for_timeout(150)
+        page.click('#go'); page.wait_for_timeout(200)
+        wheel_url = forged('wheel', lambda q: q.inner_text('#rname'), '돌림판', None)
+        c.open(P['draw'])
+        page.fill('#m', '3'); page.click('#go')
+        forged('draw', lambda q: q.locator('.picked li span').all_inner_texts(), '3명 뽑기', None)
+        page.click('#mode [data-v="order"]'); page.click('#go')
+        forged('draw', lambda q: q.locator('.picked li span').all_inner_texts(), '순서 정하기', None)
+        page.click('#mode [data-v="slips"]'); page.fill('#m', '2'); page.click('#go'); page.locator('.out-head .btn').click()
+        forged('draw', lambda q: sorted(q.locator('.slip.win b').all_inner_texts()), '당첨 쪽지', None)
+        c.open(P['teams'])
+        page.fill('#k', '3'); page.click('#go')
+        forged('teams', lambda q: [t.locator('li').all_inner_texts() for t in q.locator('.team').all()], '팀 나누기', None)
+        # 공백을 바꾼 이름이 든 링크는 이 사이트가 만들 수 없는 꼴: 다른 결과로 열리지 않고 열 수 없는 링크로 알린다
+        sp = page.evaluate(RAW_LINK_JS, [wheel_url, [' ' + EVAL10[0]] + EVAL10[1:], 2, None])
+        p3 = c.ctx.new_page()
+        p3.goto(sp, wait_until='load'); p3.wait_for_timeout(300)
+        ok(p3.locator('.linkmsg[role="alert"]').count() == 1 and p3.inner_text('.linkmsg p') == T['badLink'] and state(p3)['last'] is None, f'{lang} 이름 앞에 공백을 붙인 링크: 열지 않는다(다른 결과로 열리지 않는다)')
+        p3.close()
+        # 옛 형식(1)이면서 보이지 않는 글자까지 든 링크: 두 가지를 다 알리고 확인 도장은 없다
+        both = page.evaluate(RAW_LINK_JS, [wheel_url, [ZW + EVAL10[0]] + EVAL10[1:], 1, None])
+        p3 = c.ctx.new_page()
+        p3.goto(both, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(150)
+        msg = p3.inner_text('.linkmsg p')
+        ok(T['legacyLink'] in msg and T['cleanedLink'] in msg and p3.locator('.linkmsg').count() == 1 and p3.inner_text('#stamp') == T['stampOld'] and p3.locator('.stamp:not(.plain):visible').count() == 0, f'{lang} 옛 형식이면서 보이지 않는 글자가 든 링크: 두 가지를 한 알림에 적고 확인 도장은 없다')
+        p3.close()
+
+        # ---- 사다리: 줄 순서와 아래 칸 순서가 결과의 일부라고 알리고(N-L2), 확인 코드가 둘 다 담는다
+        c.open(P['ladder'])
+        note = page.evaluate("document.getElementById('copynote').textContent")
+        ok(('아래 칸' in note and '줄 순서' in note) if lang == 'ko' else ('bottom' in note.lower() and 'order' in note), f'{lang} 사다리: 링크 안내에 줄 순서와 아래 칸 순서가 둘 다 있다', note)
+        ok(page.inner_text('#listcode') == code_line(10, py_code(EVAL10, [page.input_value('#bottom')])) and page.inner_text('#listcode') != code_line(10, py_code(EVAL10)),
+           f'{lang} 사다리 확인 코드: 줄 순서 + 아래 칸까지 넣은 값(파이썬 hashlib과 같고, 명단 확인 코드와는 다르다)', page.inner_text('#listcode'))
+        page.fill('#names', 'a\nb\nc'); page.locator('details.more summary').first.click(); page.fill('#bottom', 'W1\nW2')
+        page.wait_for_timeout(100)
+        lc = page.inner_text('#listcode')
+        ok(lc == code_line(3, py_code(['a', 'b', 'c'], ['W1', 'W2'])), f'{lang} 사다리 확인 코드: 아래 칸을 고치면 바로 바뀐다', lc)
+        page.click('#go'); page.wait_for_timeout(150)
+        st = state(page)
+        url = copied(page)
+        ok(page.inner_text('#fp') == fp_line(3, py_code(['a', 'b', 'c'], ['W1', 'W2'])), f'{lang} 사다리: 결과 곁의 확인 코드 = 명단 칸의 코드')
+        swapped = page.evaluate(RAW_LINK_JS, [url, ['a', 'b', 'c'], 2, {'rows': 14, 'labels': ['W2', 'W1']}])
+        p3 = c.ctx.new_page()
+        p3.goto(swapped, wait_until='load'); p3.wait_for_function('window.__pick && window.__pick.state', timeout=10000); p3.wait_for_timeout(150)
+        st3 = state(p3)
+        ok(st3['result'] == st['result'] and [st3['labels'][k] for k in st3['result']] != [st['labels'][k] for k in st['result']] and p3.inner_text('#fp') != page.inner_text('#fp') and p3.inner_text('#fp') == fp_line(3, py_code(['a', 'b', 'c'], ['W2', 'W1'])),
+           f'{lang} 사다리: 아래 칸 순서만 바꾼 링크는 받는 결과가 바뀌고, 확인 코드도 달라져서 드러난다', p3.inner_text('#fp'))
+        p3.goto('about:blank')
+        order = page.evaluate(RAW_LINK_JS, [url, ['b', 'a', 'c'], 2, None])
+        p3.goto(order, wait_until='load'); p3.wait_for_function('window.__pick && window.__pick.state', timeout=10000); p3.wait_for_timeout(150)
+        ok(p3.inner_text('#fp') != page.inner_text('#fp') and p3.inner_text('#listcode') == code_line(3, py_code(['b', 'a', 'c'], ['W1', 'W2'])), f'{lang} 사다리: 줄 순서만 바꾼 링크도 확인 코드가 달라진다')
+        p3.close()
+        page.evaluate('localStorage.clear()')
+
+        # ---- 기록도 지우기(N-L3): 기록에 그 명단의 이름이 있을 때만 묻는다
+        c.open(P['coin'])
+        page.click('#go'); page.wait_for_timeout(100)
+        c.open(P['wheel'])
+        page.fill('#names', '해\n달\n별'); page.wait_for_timeout(350)
+        page.click('#listclear'); page.wait_for_timeout(150)
+        ok(page.inner_text('#listclear') == T['listUndo'] and page.locator('#histleft').is_hidden() and page.evaluate("JSON.parse(localStorage.getItem('pick.history')).length") == 1,
+           f'{lang} 기록도 지우기: 기록에 동전 결과뿐이면 묻지 않는다')
+        page.click('#listclear'); page.wait_for_timeout(350)
+        page.click('#go'); page.wait_for_timeout(150)
+        page.click('#listclear'); page.wait_for_timeout(150)
+        ok(page.locator('#histleft').is_visible(), f'{lang} 기록도 지우기: 그 명단으로 뽑은 기록이 있으면 묻는다')
+        page.click('#listclear'); page.wait_for_timeout(350)
+        page.fill('#names', '구름\n바람'); page.wait_for_timeout(350)
+        page.click('#listclear'); page.wait_for_timeout(150)
+        ok(page.locator('#histleft').is_hidden(), f'{lang} 기록도 지우기: 다른 명단을 지울 때는 묻지 않는다(기록에 그 이름이 없다)')
+        page.evaluate('localStorage.clear()')
+
+        # ---- 링크의 명단(N-L5): 내 명단과 따로 둔다. 고치려 하면 가져올지 묻고, 가져온 뒤에는 전 명단을 되돌릴 수 있다
+        c.open(P['wheel'])
+        MINE = '내 것 1\n내 것 2'
+        page.fill('#names', MINE); page.wait_for_timeout(400)
+        p3 = c.ctx.new_page()
+        p3.goto(wheel_url, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(150)
+        shared_text = '\n'.join(EVAL10)
+        p3.locator('#names').click()
+        p3.keyboard.type('X')
+        ok(p3.input_value('#names') == shared_text and p3.evaluate("localStorage.getItem('pick.list')") == MINE and p3.inner_text('#listnote span') == T['listAsk'] and p3.inner_text('#listalt') == T['listAskYes'] and p3.inner_text('#listclear') == T['listAskNo'],
+           f'{lang} 링크의 명단: 글자를 치려 하면 바뀌지 않고 “내 명단으로 가져올까요”를 묻는다(저장해 둔 내 명단은 그대로)', p3.inner_text('#listnote span'))
+        p3.click('#listclear')
+        ok(p3.inner_text('#listnote span') == T['listShared'] and p3.input_value('#names') == shared_text and p3.evaluate("document.getElementById('names').readOnly"), f'{lang} 링크의 명단: ‘{T["listAskNo"]}’를 누르면 그대로 둔다')
+        p3.click('#shuffle')
+        ok(p3.input_value('#names') == shared_text and p3.inner_text('#listnote span') == T['listAsk'], f'{lang} 링크의 명단: 섞기를 눌러도 먼저 묻는다(바꾸지 않는다)')
+        shown = p3.inner_text('#rname')
+        p3.click('#listalt'); p3.wait_for_timeout(100)
+        ok(p3.evaluate("localStorage.getItem('pick.list')") == shared_text and not p3.evaluate("document.getElementById('names').readOnly") and p3.inner_text('#listnote span') == T['listImported'] and p3.inner_text('#listalt') == T['listRestore']
+           and p3.inner_text('#rname') == shown and '#' not in p3.url, f'{lang} 링크의 명단: ‘{T["listAskYes"]}’ → 내 명단으로 저장되고 고칠 수 있다(화면의 결과는 그대로, 전 명단을 되돌리는 단추가 생긴다)')
+        p3.locator('#names').click(); p3.keyboard.press('Control+End'); p3.keyboard.type('\n새 이름'); p3.wait_for_timeout(400)
+        ok(p3.evaluate("localStorage.getItem('pick.list')") == shared_text + '\n새 이름' and p3.inner_text('#listalt') == T['listRestore'], f'{lang} 링크의 명단: 가져온 뒤 고쳐도 전 명단을 되돌리는 단추는 남는다')
+        p3.click('#listalt'); p3.wait_for_timeout(400)
+        ok(p3.input_value('#names') == MINE and p3.evaluate("localStorage.getItem('pick.list')") == MINE and p3.locator('#listalt').is_hidden() and p3.inner_text('#listnote span') == T['listSaved'], f'{lang} 링크의 명단: ‘{T["listRestore"]}’ → 전에 저장한 내 명단이 돌아온다')
+        p3.close()
+        page.evaluate('localStorage.clear()')
+        p3 = c.ctx.new_page()
+        p3.goto(wheel_url, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(150)
+        p3.click('#listalt')
+        asked = p3.inner_text('#listnote span')
+        p3.click('#listalt'); p3.wait_for_timeout(100)
+        ok(asked == T['listAskNew'] and p3.evaluate("localStorage.getItem('pick.list')") == shared_text and p3.locator('#listalt').is_hidden() and p3.inner_text('#listnote span') == T['listSaved'], f'{lang} 링크의 명단: 저장해 둔 명단이 없으면 가져온 뒤 되돌릴 것이 없다')
+        p3.close()
+        ok(not c.errors, f'{lang} names: 콘솔 오류 0', c.errors[:3])
+        c.close()
+
+    # ---- 긴 결과 이름(N-M2): 큰 결과 글자가 잘리지 않고 끝까지 보인다. 결과가 바뀌어도 아래가 밀리지 않는다
+    for lang, w, h, mob in (('ko', 1366, 768, False), ('ko', 1100, 768, False), ('ko', 390, 844, True), ('ko', 320, 640, True), ('en', 1366, 768, False), ('en', 390, 844, True), ('en', 320, 640, True)):
+        c = Ctx(b, w, h, mobile=mob, lang=lang, reduced_motion='reduce')
+        page = c.open(PATHS[lang]['wheel'])
+        tap = page.tap if mob else page.click
+        pos = lambda: page.evaluate("[document.getElementById('list').getBoundingClientRect().top + scrollY, document.querySelector('.result-mid').getBoundingClientRect().top + scrollY, document.getElementById('after').getBoundingClientRect().top + scrollY, document.getElementById('recent').getBoundingClientRect().top + scrollY].map(Math.round)")
+        tap('#go'); page.wait_for_timeout(150)
+        short_pos = pos()
+        page.fill('#names', '\n'.join(LONG_NAMES)); page.wait_for_timeout(250)
+        seen, bad, moved = {}, [], []
+        for _ in range(60):
+            tap('#go'); page.wait_for_timeout(40)
+            nm = state(page)['last']['name']
+            if nm in seen:
+                continue
+            m = page.evaluate(SHOWN_JS, '#rname')[0]
+            seen[nm] = m
+            if not (m['text'] == nm and not m['cut'] and not m['ellipsis'] and m['inside'] and m['right'] <= m['vw'] and m['lines'] <= 3 and m['size'] >= 19 and page.locator('#rfull').is_hidden() and page.get_attribute('#rname', 'title') == nm):
+                bad.append((nm[:10], m))
+            now = pos()
+            if now[:3] != short_pos[:3] or abs(now[3] - short_pos[3]) > 36:
+                moved.append((nm[:10], now, short_pos))
+            if len(seen) == len(LONG_NAMES):
+                break
+        ok(len(seen) == len(LONG_NAMES) and not bad, f'{lang} {w}px 긴 결과 이름: {len(seen)}가지 모두 큰 결과 글자에 끝까지 보인다(잘림·말줄임 없음, 3줄 이하, 19px 이상)', bad[:2])
+        ok(not moved, f'{lang} {w}px 긴 결과 이름: 이름이 한 줄이든 세 줄이든 결과 자리·단추·명단 칸의 위치가 그대로다', moved[:2])
+        sw = page.evaluate('[document.documentElement.scrollWidth, innerWidth]')
+        ok(sw[0] <= sw[1], f'{lang} {w}px 긴 결과 이름: 가로 스크롤 0', sw)
+        if (lang, w) in (('ko', 1366), ('ko', 390), ('ko', 320)) and SHOTS:
+            for nm in (LONG_NAMES[0], LONG_NAMES[2]):
+                for _ in range(80):
+                    if state(page)['last']['name'] == nm:
+                        break
+                    tap('#go'); page.wait_for_timeout(30)
+                page.screenshot(path=f'{SHOTS}/{PREFIX}-ko-longname-{"teacher" if nm == LONG_NAMES[0] else "oneword"}-{w}.png')
+        # 아주 긴 이름(100자): 3줄에서 줄이고 바로 아래에 전체 이름을 작은 글자로 한 번 더
+        huge = '가나다라마바사아자차' * 10
+        page.fill('#names', huge + '\n' + huge); page.wait_for_timeout(200)
+        tap('#go'); page.wait_for_timeout(120)
+        m = page.evaluate(SHOWN_JS, '#rfull')[0]
+        ok(page.locator('#rname.clip').count() == 1 and page.locator('#rfull').is_visible() and m['text'] == huge and not m['cut'] and m['inside'] and page.get_attribute('#rname', 'title') == huge,
+           f'{lang} {w}px 아주 긴 이름(100자): 큰 글자는 3줄에서 줄이고 아래에 전체 이름을 작은 글자로 다 보여 준다', m)
+        if (lang, w) in (('ko', 390),) and SHOTS:
+            page.screenshot(path=f'{SHOTS}/{PREFIX}-ko-longname-100-{w}.png')
+        tap('#listclear'); page.wait_for_timeout(200)
+        tap('#go'); page.wait_for_timeout(120)
+        ok(page.locator('#rname.clip').count() == 0 and page.locator('#rfull').is_hidden() and page.get_attribute('#rname', 'data-fit') == '0', f'{lang} {w}px 긴 이름 뒤에 짧은 이름: 큰 글자 한 줄로 돌아온다')
+        # 제비뽑기·쪽지·팀·사다리 결과도 같은 원칙: 줄을 바꿔 다 보여 준다
+        P = PATHS[lang]
+        page.fill('#names', '\n'.join(LONG_NAMES)); page.wait_for_timeout(350)
+        for tool, prep, sel in (('draw', "document.querySelector('#mode [data-v=order]').click()", '.picked li span'), ('draw', "document.querySelector('#mode [data-v=slips]').click()", '.slip b'), ('teams', '0', '.team li'), ('ladder', '0', '.pairs li b')):
+            c.open(P[tool], wait=120)
+            page.evaluate(prep)
+            tap('#go'); page.wait_for_timeout(120)
+            if tool == 'ladder':
+                tap('#showall'); page.wait_for_timeout(120)
+            got = page.evaluate(SHOWN_JS, sel)
+            badn = [(g['text'][:10], g) for g in got if g['cut'] or g['ellipsis'] or not g['inside'] or g['right'] > g['vw']]
+            ok(sorted(g['text'] for g in got) == sorted(LONG_NAMES) and not badn, f'{lang} {w}px {tool} {sel}: 긴 이름 {len(got)}개가 결과에 끝까지 보인다(잘림·말줄임 없음)', badn[:2])
+            sw = page.evaluate('[document.documentElement.scrollWidth, innerWidth]')
+            ok(sw[0] <= sw[1], f'{lang} {w}px {tool} {sel}: 가로 스크롤 0', sw)
+            if (lang, w) in (('ko', 390), ('ko', 320)) and SHOTS:
+                page.locator('#out').scroll_into_view_if_needed()
+                page.screenshot(path=f'{SHOTS}/{PREFIX}-ko-longname-{tool}-{sel.split(" ")[0].strip(".")}-{w}.png')
+        if mob:
+            c.open(P['wheel'], wait=120)
+            tap('#go'); page.wait_for_timeout(120)
+            small = page.evaluate(TAP_JS)
+            ok(not small, f'{lang} {w}px 긴 이름 결과 화면: 44px보다 작은 누름 영역 0', small[:4])
+            for _ in range(16):
+                tap('#go'); page.wait_for_timeout(70)
+            squeezed = page.evaluate("[...document.querySelectorAll('#history li b')].filter((b) => b.scrollHeight > b.clientHeight + 1 || b.scrollWidth > b.clientWidth + 1).map((b) => b.textContent)")
+            two = page.evaluate("[...document.querySelectorAll('#history li b')].filter((b) => b.textContent.length >= 2).length")
+            ok(two >= 3 and not squeezed, f'{lang} {w}px 뽑힌 순서 이름표: 두 자리 번호도 한 줄로 보인다(긴 이름 옆에서 번호가 눌려 두 줄로 갈리지 않는다)', [two] + squeezed[:4])
+        ok(not c.errors, f'{lang} {w}px 긴 결과 이름: 콘솔 오류 0', c.errors[:3])
+        page.evaluate('localStorage.clear()')
+        c.close()
+
+    # ---- 전체 화면에서도 긴 이름이 끝까지 보인다(더 큰 글자로, 줄을 바꿔)
+    c = Ctx(b, lang='ko', reduced_motion='reduce')
+    page = c.open('/ko/')
+    if page.evaluate('document.fullscreenEnabled') and page.locator('#present').is_visible():
+        huge = '가나다라마바사아자차' * 10
+        page.fill('#names', '\n'.join(LONG_NAMES + [huge])); page.wait_for_timeout(300)
+        page.click('#present'); page.wait_for_timeout(600)
+        if page.evaluate('!!document.fullscreenElement'):
+            seen, bad = set(), []
+            for _ in range(80):
+                page.click('#go'); page.wait_for_timeout(60)
+                nm = state(page)['last']['name']
+                if nm in seen:
+                    continue
+                seen.add(nm)
+                m = page.evaluate(SHOWN_JS, '#rname')[0]
+                vh = page.evaluate('innerHeight')
+                if not (m['text'] == nm and not m['cut'] and m['inside'] and m['right'] <= m['vw'] and m['size'] >= 26 and page.locator('#rname.clip').count() == 0 and page.locator('#rfull').is_hidden() and page.evaluate("document.getElementById('rname').getBoundingClientRect().bottom") <= vh):
+                    bad.append((nm[:10], m))
+                if nm == LONG_NAMES[2] and SHOTS:
+                    page.screenshot(path=f'{SHOTS}/{PREFIX}-ko-longname-present.png')
+                if len(seen) == len(LONG_NAMES) + 1:
+                    break
+            ok(len(seen) == len(LONG_NAMES) + 1 and not bad, f'전체 화면 긴 결과 이름: {len(seen)}가지(100자 이름 포함) 모두 끝까지 보인다(잘림 없음, 26px 이상)', bad[:2])
+            page.evaluate('document.exitFullscreen()'); page.wait_for_timeout(400)
+            m = page.evaluate(SHOWN_JS, '#rname')[0]
+            last = state(page)['last']['name']
+            if last == huge:  # 마지막에 나온 것이 100자 이름이면: 큰 글자는 3줄에서 줄이고 아래에 전체 이름
+                ok(m['lines'] <= 3 and page.locator('#rname.clip').count() == 1 and page.inner_text('#rfull') == huge, '전체 화면을 끝내면 보통 화면의 크기로 다시 맞춘다(100자 이름: 3줄 + 아래 전체 이름)', m)
+            else:
+                ok(not m['cut'] and m['inside'] and m['lines'] <= 3 and page.locator('#rname.clip').count() == 0, '전체 화면을 끝내면 보통 화면의 크기로 다시 맞춘다', m)
+        else:
+            skip('전체 화면 긴 결과 이름', '머리 없는 브라우저에서 전체 화면이 안 됨')
+    else:
+        skip('전체 화면 긴 결과 이름', '이 브라우저는 전체 화면을 지원하지 않음')
+    c.close()
+
+    # ---- 휴대폰: 알리기만 하는 알림(옛 링크·정리한 링크)은 판을 조금만 가리고, 새 단추들도 44px 이상
+    for lang in ('ko', 'en'):
+        c = Ctx(b, 390, 844, mobile=True, lang=lang, reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+        page = c.open(PATHS[lang]['wheel'])
+        page.fill('#names', '\n'.join(EVAL10)); page.wait_for_timeout(350)
+        page.tap('#go'); page.wait_for_timeout(150)
+        url = copied(page)
+        for label, f in (('정리한 링크', page.evaluate(RAW_LINK_JS, [url, [ZW + EVAL10[0]] + EVAL10[1:], 2, None])), ('옛 형식 링크', page.evaluate(RAW_LINK_JS, [url, EVAL10, 1, None]))):
+            p3 = c.ctx.new_page()
+            p3.goto(f, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(200)
+            m = p3.evaluate("(() => { const b = document.querySelector('.linkmsg').getBoundingClientRect(); const w = document.getElementById('wheel').getBoundingClientRect(); const g = document.getElementById('go').getBoundingClientRect(); return { cover: Math.round(b.bottom - w.top), wheel: Math.round(w.height), hitsGo: b.bottom > g.top, close: [...document.querySelectorAll('.linkmsg button')].map((x) => [x.offsetWidth, x.offsetHeight])[0] }; })()")
+            ok(m['cover'] <= m['wheel'] * 0.16 and not m['hitsGo'] and min(m['close']) >= 44, f'{lang} 휴대폰 {label}: 알림이 판을 위쪽 {m["cover"]}px만 가리고(판 {m["wheel"]}px의 16% 이하) 돌리기 단추는 가리지 않는다, 닫기 44px', m)
+            small = p3.evaluate(TAP_JS)
+            ok(not small, f'{lang} 휴대폰 {label}(링크의 명단 상태): 44px보다 작은 누름 영역 0', small[:4])
+            p3.tap('#listalt'); p3.wait_for_timeout(100)
+            small = p3.evaluate(TAP_JS)
+            sw = p3.evaluate('[document.documentElement.scrollWidth, innerWidth]')
+            ok(not small and sw[0] <= sw[1] and p3.locator('#listalt').is_visible(), f'{lang} 휴대폰 {label}(가져올지 묻는 상태): 44px보다 작은 누름 영역 0, 가로 스크롤 0', small[:4])
+            if SHOTS and lang == 'ko':
+                p3.screenshot(path=f'{SHOTS}/{PREFIX}-ko-{"cleaned" if label == "정리한 링크" else "legacy"}-link-mobile.png')
+                p3.evaluate("document.getElementById('list').scrollIntoView({ block: 'center' })"); p3.wait_for_timeout(150)
+                p3.screenshot(path=f'{SHOTS}/{PREFIX}-ko-{"cleaned" if label == "정리한 링크" else "legacy"}-list-ask-mobile.png')
+            p3.close()
+        page.fill('#names', '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남'); page.wait_for_timeout(200)
+        small = page.evaluate(TAP_JS)
+        sw = page.evaluate('[document.documentElement.scrollWidth, innerWidth]')
+        ok(not small and sw[0] <= sw[1] and page.locator('#listwarn .cols button').count() == 3, f'{lang} 휴대폰 칸 고르기: 단추 3개가 44px 이상, 가로 스크롤 0', small[:4])
+        ok(not c.errors, f'{lang} 휴대폰 names: 콘솔 오류 0', c.errors[:3])
+        c.close()
+
+    # ---- 링크로 연 결과의 표시(확인 도장·정리한 결과·옛 방식)가 붙어도 머리 줄 높이와 단추 줄 자리가 내가 돌렸을 때와 같다
+    #      (표시가 줄보다 크면 이름이 두 줄일 때 아래가 5px쯤 밀렸다. 영어 320px에서는 표시가 다음 줄로 넘어가 25px)
+    #      자리는 문서 좌표로 잰다(누르면서 화면이 조금 움직일 수 있다). 표시가 줄 안에 있는지는 기울이기 전의 상자(offset)로 본다(확인 도장은 4도 기울어 있다)
+    ROW_JS = """() => { const q = (s) => document.querySelector(s); const r = (e) => e.getBoundingClientRect(); const st = q('#stamp'); const lab = q('.result-label');
+      return { label: Math.round(r(lab).height * 10) / 10, bot: Math.round(r(q('.result-bot')).top + scrollY), name: Math.round(r(q('#rname')).height), stamp: st.hidden ? '' : st.textContent,
+        inRow: st.hidden || (st.offsetTop >= lab.offsetTop - 1 && st.offsetTop + st.offsetHeight <= lab.offsetTop + lab.offsetHeight + 1 && st.offsetLeft + st.offsetWidth <= lab.offsetLeft + lab.offsetWidth + 1) }; }"""
+    for lang in ('ko', 'en'):
+        for w, h in ((390, 844), (320, 640)):
+            c = Ctx(b, w, h, mobile=True, lang=lang, reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+            page = c.open(PATHS[lang]['wheel'])
+            T = page.evaluate("JSON.parse(document.getElementById('i18n').textContent)")
+            two = [LONG_NAMES[0], LONG_NAMES[0]]  # 누가 뽑혀도 가장 큰 글자 두 줄(이름 자리를 꽉 채운다)
+            page.fill('#names', '\n'.join(two)); page.wait_for_timeout(350)
+            page.tap('#go'); wheel_done(page); page.wait_for_timeout(150)
+            own = page.evaluate(ROW_JS)
+            url = copied(page)
+            links = (('ok', url, T['stamp']), ('cleaned', page.evaluate(RAW_LINK_JS, [url, [ZW + two[0], two[1]], 2, None]), T['stampCleaned']), ('legacy', page.evaluate(RAW_LINK_JS, [url, two, 1, None]), T['stampOld']))
+            got = []
+            for mark, u, text in links:
+                p3 = c.ctx.new_page()
+                p3.goto(u, wait_until='load'); wheel_done(p3); p3.wait_for_timeout(250)
+                m = p3.evaluate(ROW_JS)
+                got.append((mark, m, m['stamp'] == text and m['inRow'] and abs(m['label'] - own['label']) <= 0.6 and m['bot'] == own['bot'] and m['name'] == own['name']))
+                p3.close()
+            ok(own['stamp'] == '' and own['name'] >= 90 and all(g[2] for g in got), f'{lang} {w}px 표시 세 가지(확인 도장·정리한 결과·옛 방식): 머리 줄 한 줄에 들어가고 단추 줄 자리가 내가 돌렸을 때와 같다', [own] + [g[:2] for g in got if not g[2]])
+            c.close()
 
 
 def pages(b):
@@ -757,6 +1168,33 @@ def cls(b):
         page.wait_for_timeout(600)
         v = page.evaluate('window.__shift')
         ok(v <= 0.02, f'CLS {lang} {w}px: 돌려서 결과가 뜨는 순간 화면 밀림 {round(v, 4)}')
+        c.close()
+    # 3단계-2: 긴 이름(두세 줄로 나오는 결과)·영어판에서도, 그리고 링크로 열어 결과가 뜰 때도 밀리지 않는다
+    SHIFT = "() => { window.__shift = 0; new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__shift += e.value; }).observe({ type: 'layout-shift' }); }"
+    for lang, w, h, mob in (('ko', 390, 844, True), ('ko', 1366, 768, False), ('en', 390, 844, True), ('en', 1366, 768, False), ('ko', 320, 640, True)):
+        c = Ctx(b, w, h, mobile=mob, lang=lang, permissions=['clipboard-read', 'clipboard-write'])
+        page = c.open(PATHS[lang]['wheel'])
+        page.fill('#names', '\n'.join(LONG_NAMES[:4])); page.wait_for_timeout(400)
+        page.evaluate(SHIFT)
+        worst, lines, tall = 0, set(), (0, None)
+        for _ in range(4):
+            before = page.evaluate('window.__shift')
+            page.click('#go'); spin_start(page); wheel_done(page); page.wait_for_timeout(500)
+            worst = max(worst, page.evaluate('window.__shift') - before)
+            lines.add(page.evaluate("Math.round(document.getElementById('rname').getBoundingClientRect().height / parseFloat(getComputedStyle(document.getElementById('rname')).lineHeight))"))
+            hgt = page.evaluate("document.getElementById('rname').getBoundingClientRect().height")
+            if hgt > tall[0]:
+                tall = (hgt, copied(page))  # 이름 자리를 가장 많이 채운 결과의 링크: 표시가 붙을 때 아래가 밀리기 가장 쉬운 경우
+        ok(worst <= 0.02, f'CLS {lang} {w}px 긴 이름: 결과가 뜨는 순간 화면 밀림 {round(worst, 4)} (결과 이름 {sorted(lines)}줄)')
+        url = tall[1]
+        f = page.evaluate(RAW_LINK_JS, [url, [ZW + LONG_NAMES[0]] + LONG_NAMES[1:4], 2, None])
+        for label, u in (('링크', url), ('정리한 링크', f)):
+            p2 = c.ctx.new_page()
+            p2.add_init_script("window.__shift = 0; new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__shift += e.value; }).observe({ type: 'layout-shift', buffered: true });")
+            p2.goto(u, wait_until='load'); wheel_done(p2); p2.wait_for_timeout(600)
+            v = p2.evaluate('window.__shift')
+            ok(v <= 0.02, f'CLS {lang} {w}px {label}로 열기: 처음부터 결과가 뜰 때까지 화면 밀림 {round(v, 4)} (이름 높이 {round(tall[0])}px)')
+            p2.close()
         c.close()
 
 
@@ -1028,13 +1466,85 @@ def shots(b):
         page.goto(BASE + '/__no-such-page/'); page.wait_for_timeout(200)
         snap(c, f'404-en-{label}')
         c.close()
+    # ---- 3단계-2: 확인 코드, 정리한 링크, 옛 링크, 링크의 명단, 칸 고르기, 열 수 없는 링크에서 돌리기
+    for label, w, h, mob in (('desktop', 1366, 768, False), ('mobile', 390, 844, True), ('320', 320, 640, True)):
+        c = Ctx(b, w, h, mobile=mob, lang='ko', reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+        tap = (lambda sel: c.page.tap(sel)) if mob else (lambda sel: c.page.click(sel))
+        page = c.open('/ko/')
+        page.fill('#names', '\n'.join(EVAL10)); page.wait_for_timeout(350)
+        tap('#go'); page.wait_for_timeout(200)
+        snap(c, f'ko-code-result-{label}')
+        if mob:
+            page.evaluate("document.getElementById('list').scrollIntoView({ block: 'center' })"); page.wait_for_timeout(150)
+            snap(c, f'ko-code-list-{label}')
+        url = copied(page)
+        cleaned = page.evaluate(RAW_LINK_JS, [url, [ZW + EVAL10[0]] + EVAL10[1:], 2, None])
+        legacy = page.evaluate(RAW_LINK_JS, [url, EVAL10, 1, None])
+        page.goto('about:blank'); page.goto(cleaned, wait_until='load'); wheel_done(page); page.wait_for_timeout(250)
+        snap(c, f'ko-cleaned-link-{label}')
+        page.locator('#names').click(force=True); page.wait_for_timeout(120)
+        if mob:
+            page.evaluate("document.getElementById('list').scrollIntoView({ block: 'center' })"); page.wait_for_timeout(150)
+        snap(c, f'ko-shared-ask-{label}')
+        tap('#listalt'); page.wait_for_timeout(150)
+        snap(c, f'ko-shared-imported-{label}')
+        page.evaluate('localStorage.clear()')
+        page.goto('about:blank'); page.goto(legacy, wait_until='load'); wheel_done(page); page.wait_for_timeout(250)
+        snap(c, f'ko-legacy-link3b-{label}')
+        page.goto('about:blank'); page.goto(BASE + '/ko/#r=2.w.AAAA', wait_until='load'); page.wait_for_timeout(300)
+        tap('#go'); page.wait_for_timeout(250)
+        snap(c, f'ko-badlink-go-{label}')
+        page.goto('about:blank'); page.goto(BASE + '/ko/', wait_until='load'); page.wait_for_timeout(250)
+        page.fill('#names', '1\t김민준\t남\n2\t이서연\t여\n3\t박지호\t남'); page.wait_for_timeout(200)
+        if mob:
+            page.evaluate("document.getElementById('listwarn').scrollIntoView({ block: 'center' })"); page.wait_for_timeout(150)
+        snap(c, f'ko-columns-{label}')
+        page.evaluate('localStorage.clear()')
+        page = c.open('/ko/ladder/')
+        page.fill('#names', '가\n나\n다'); page.locator('details.more summary').first.click(); page.fill('#bottom', '당첨\n벌칙')
+        tap('#go'); page.wait_for_timeout(150); tap('#showall'); page.wait_for_timeout(150)
+        snap(c, f'ko-ladder-code-{label}')
+        page = c.open('/ko/draw/')
+        page.fill('#names', '\n'.join(LONG_NAMES)); page.wait_for_timeout(300)
+        page.fill('#m', '4'); tap('#go'); page.wait_for_timeout(150)
+        snap(c, f'ko-draw-long-{label}')
+        page.evaluate('localStorage.clear()')
+        if label != '320':
+            page = c.open('/ko/guide/share-draw-result/')
+            page.evaluate("document.querySelectorAll('.prose h2')[3].scrollIntoView({ block: 'start' })"); page.wait_for_timeout(150)
+            snap(c, f'ko-article-code-{label}')
+            page = c.open('/ko/privacy/')
+            page.evaluate("document.querySelectorAll('.prose h2')[5].scrollIntoView({ block: 'center' })"); page.wait_for_timeout(150)
+            snap(c, f'ko-privacy-fonts-{label}')
+        c.close()
+    c = Ctx(b, 390, 844, mobile=True, lang='en', reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+    page = c.open('/')
+    page.fill('#names', 'Christopher Alexander Montgomery\nOlivia\nNoah'); page.wait_for_timeout(300)
+    for _ in range(40):
+        page.tap('#go'); page.wait_for_timeout(40)
+        if state(page)['last']['name'].startswith('Christopher'):
+            break
+    snap(c, 'en-longname-mobile')
+    url = copied(page)
+    cleaned = page.evaluate(RAW_LINK_JS, [url, [ZW + 'Olivia', 'Noah', 'Christopher Alexander Montgomery'], 2, None])
+    page.goto('about:blank'); page.goto(cleaned, wait_until='load'); wheel_done(page); page.wait_for_timeout(250)
+    snap(c, 'en-cleaned-link-mobile')
+    c.close()
+    c = Ctx(b, 1366, 768, lang='ko', color_scheme='dark', reduced_motion='reduce', permissions=['clipboard-read', 'clipboard-write'])
+    page = c.open('/ko/')
+    page.fill('#names', '\n'.join(EVAL10)); page.wait_for_timeout(350)
+    page.click('#go'); page.wait_for_timeout(200)
+    cleaned = page.evaluate(RAW_LINK_JS, [copied(page), [ZW + EVAL10[0]] + EVAL10[1:], 2, None])
+    page.goto('about:blank'); page.goto(cleaned, wait_until='load'); wheel_done(page); page.wait_for_timeout(250)
+    snap(c, 'ko-cleaned-link-dark')
+    c.close()
     ok(True, f'최종 스크린샷을 {SHOTS} 에 저장')
 
 
 def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=EXE, args=['--no-proxy-server'])
-        for name, f in (('tools', tools), ('guard', guard), ('pages', pages), ('cls', cls), ('ads', ads), ('misc', misc), ('shots', shots)):
+        for name, f in (('tools', tools), ('guard', guard), ('names', names), ('pages', pages), ('cls', cls), ('ads', ads), ('misc', misc), ('shots', shots)):
             if name in want:
                 print(f'[{name}]', flush=True)
                 try:

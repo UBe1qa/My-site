@@ -1,8 +1,9 @@
-// 공평뽑기 공통 화면 코드: 명단(저장·섞기·정리·지우기와 되돌리기·잠금), 공유 링크, 최근 결과, 소리, 다른 언어 안내 띠, 루멘랩 칸, 발표 화면.
+// 공평뽑기 공통 화면 코드: 명단(저장·섞기·정리·지우기와 되돌리기·잠금·확인 코드·링크의 명단), 공유 링크, 결과 이름 맞추기, 최근 결과, 소리, 다른 언어 안내 띠, 루멘랩 칸, 발표 화면.
 // 화면 글자는 전부 페이지의 <script id="i18n">(= _dev/content.json)에서 온다. 페이지 언어는 <html lang>이 정한다.
 // 이 기기에 저장하는 것(개인정보 처리방침과 같아야 한다): pick.list(명단), pick.history(최근 결과), pick.sound(소리), pick.lang(언어 안내 띠).
 import { newSeed, makeRng } from './core/rng.js';
-import { parseList, uniqueItems, firstColumn, encodeShare, decodeShare, shareLength, MAX_HASH } from './core/share.js';
+import { parseList, uniqueItems, columns, pickColumn, historyHolds, encodeShare, decodeShare, shareLength, MAX_HASH } from './core/share.js';
+import { listCode } from './core/name.js';
 
 export const T = JSON.parse(document.getElementById('i18n').textContent);
 export const $ = (s, r = document) => r.querySelector(s);
@@ -30,25 +31,82 @@ const store = {
   del(k) { try { localStorage.removeItem(k); } catch (e) { /* 위와 같음 */ } },
 };
 const LONG_LINK = 4000; // 이보다 긴 링크는 최근 결과에 저장하지 않고, 복사할 때 길다고 알린다
+const short = (t, n) => { const a = Array.from(t); return a.length > n ? a.slice(0, n).join('') + '…' : t; };
+
+/** 확인 코드 한 줄: "확인 코드 8명 · 9cfbab72" */
+export const codeText = (n, code) => `${plural('count', n)} · ${code}`;
+/** 결과 곁의 확인 코드(그 결과를 만든 명단의 것). 명단 칸의 코드와 견줄 수 있다. */
+export function setCode(n, code) {
+  const e = $('#fp');
+  if (e) e.textContent = n ? fmt(T.fp, { count: plural('count', n), code }) : '';
+}
+
+/**
+ * 큰 결과 이름을 칸에 맞춘다(잘라서 '…'로 끝내지 않는다).
+ * 큰 글자부터 한 단계씩 줄여 보며 그 단계의 줄 수 한도 안에 들어가는 첫 단계를 쓴다. 단계마다의 글자 크기와 줄 수는 CSS가 정한다
+ * (.result-name[data-fit="k"]의 --lines, 단계 수는 --fits). 마지막 단계에서도 넘치면 3줄에서 줄이고, 아래(full)에 전체 이름을 작은 글자로 한 번 더 보여 준다.
+ */
+export function fitName(e, text, full) {
+  e.textContent = text;
+  e.title = text;
+  e.classList.remove('clip');
+  if (full) { full.hidden = true; full.textContent = ''; }
+  const steps = Number(getComputedStyle(e).getPropertyValue('--fits')) || 1;
+  for (let k = 0; k < steps; k++) {
+    e.dataset.fit = k;
+    const cs = getComputedStyle(e);
+    const lines = Math.round(e.scrollHeight / parseFloat(cs.lineHeight));
+    if (lines <= (Number(cs.getPropertyValue('--lines')) || 1)) return k;
+  }
+  e.dataset.fit = steps;
+  e.classList.add('clip');
+  if (full) { full.textContent = text; full.hidden = false; }
+  return steps;
+}
+/** 목록 속 이름(제비뽑기·팀·쪽지·사다리 결과): 줄을 바꿔 다 보여 주고, 길면 글자를 한 단계씩 줄인다. */
+export function nameEl(tag, text) {
+  const e = el(tag, null, text);
+  const n = Array.from(text).length;
+  if (n > 24) e.classList.add('xl'); else if (n > 12) e.classList.add('lg');
+  return e;
+}
 
 // ---------- 명단 ----------
 // 명단 칸의 글 = 원래 명단. 저장되는 것도 이것이다(돌림판에서 '빼고 다시'를 눌러도 줄지 않는다).
+// 이름은 읽을 때 한 가지 꼴로 고른다(core/name.js: 보이지 않는 글자를 지우고 NFC로). 명단 아래의 '확인 코드'는 그 고른 명단을 짧게 줄인 값이다.
+// 링크로 연 명단은 '링크의 명단'으로 따로 둔다: 읽기만 되고 저장하지 않는다. 고치려 하면 내 명단으로 가져올지 묻고,
+// 가져오면 그 전에 저장돼 있던 내 명단은 이 화면을 닫기 전까지 되돌릴 수 있다.
 export const list = {
   el: $('#names'),
   items: [],
-  shared: false,   // 결과 링크에 들어 있던 명단을 보여 주는 중(고치기 전에는 저장하지 않는다)
+  shared: false,   // 결과 링크에 들어 있던 명단을 보여 주는 중
+  asking: false,   // 링크의 명단을 내 명단으로 가져올지 묻는 중
+  backup: null,    // 가져오기 전에 저장돼 있던 내 명단 { text }
   locked: false,   // 결과가 나오는 중이라 잠근 상태
   undo: null,      // 방금 지운 명단(다음 변경 전까지 되돌릴 수 있다)
+  held: false,     // 방금 지운 명단의 이름이 최근 결과 기록에 남아 있는지
   handlers: [],
+  /** 명단 아래에 보여 줄 확인 코드. 사다리는 줄 순서·아래 칸까지 넣은 코드로 바꿔 끼운다 */
+  codeOf: (items) => listCode(items),
   init() {
     if (!this.el) return;
     this.box = $('#list');
     this.sample = this.el.dataset.sample || '';
     this.note = $('#listnote');
+    this.alt = $('#listalt');
     this.left = $('#histleft');
     this.read();
-    this.el.addEventListener('input', () => { this.shared = false; this.undo = null; this.read(true); });
+    this.el.addEventListener('input', () => {
+      if (this.shared) { this.el.value = this.sharedText; this.ask(); return; } // 링크의 명단은 가져오기 전에는 바뀌지 않는다
+      this.undo = null;
+      this.read(true);
+    });
+    // 링크의 명단을 고치려 할 때(누르기, 글자 치기, 붙여 넣기): 내 명단으로 가져올지 묻는다
+    const wantEdit = (e) => { if (this.shared && !this.locked) { if (e.type !== 'click') e.preventDefault(); this.ask(); } };
+    ['click', 'paste', 'cut', 'drop'].forEach((t) => this.el.addEventListener(t, wantEdit));
+    this.el.addEventListener('keydown', (e) => { if (this.shared && !this.locked && !e.ctrlKey && !e.metaKey && !e.altKey && (e.key.length === 1 || ['Backspace', 'Delete', 'Enter'].includes(e.key))) this.ask(); });
     $('#listclear').addEventListener('click', () => this.clear());
+    if (this.alt) this.alt.addEventListener('click', () => this.other());
     $('#shuffle').addEventListener('click', () => {
       const r = makeRng(newSeed()); // 화면에 보이는 순서만 바꾼다(뽑기 결과와는 따로)
       const a = this.items.slice();
@@ -57,7 +115,7 @@ export const list = {
     });
     $('#sortaz').addEventListener('click', () => this.edit(this.items.slice().sort((a, b) => a.localeCompare(b, T.lang, { numeric: true })).join('\n')));
     $('#dedupe').addEventListener('click', () => this.edit(uniqueItems(this.items).join('\n')));
-    if (this.left) $('button', this.left).addEventListener('click', () => { recent.clear(); this.paint(); });
+    if (this.left) $('button', this.left).addEventListener('click', () => { recent.clear(); this.held = false; this.paint(); });
   },
   /** 명단 칸의 글을 읽어 명단으로. save면 조금 뒤 이 기기에 저장한다. */
   read(save) {
@@ -72,12 +130,14 @@ export const list = {
     this.paint();
     this.handlers.forEach((f) => f(this.items));
   },
-  /** 명단 칸 둘레의 글자(인원, 알림, 안내 줄)를 지금 상태에 맞게 */
+  /** 명단 칸 둘레의 글자(인원, 확인 코드, 알림, 안내 줄)를 지금 상태에 맞게 */
   paint() {
     const p = this.parsed;
     const text = this.el.value;
     const c = $('#count');
     if (c) c.textContent = plural('count', p.items.length);
+    const code = $('#listcode');
+    if (code) code.textContent = p.items.length ? codeText(p.items.length, this.codeOf(p.items)) : '';
     const w = $('#listwarn');
     if (w) {
       w.textContent = '';
@@ -85,38 +145,89 @@ export const list = {
       if (p.cut) say(plural('warnCut', p.cut), true);
       if (p.over) say(plural('warnOver', p.over), true);
       if (p.dupes) say(plural('warnDupes', p.dupes));
+      if (p.hidden) say(plural('warnHidden', p.hidden));
       if (p.split) say(plural('warnSplit', p.items.length));
-      if (p.tabs >= 2 && p.tabs * 2 >= p.items.length) { // 엑셀에서 여러 칸을 같이 붙여 넣은 것으로 보일 때
+      if (p.tabs >= 2 && p.tabs * 2 >= p.items.length) { // 엑셀에서 여러 칸을 같이 붙여 넣은 것으로 보일 때: 어느 칸을 쓸지 고르게 한다
         say(T.warnTabs);
-        const b = button('btn btn-sm', T.firstColumn, () => this.edit(firstColumn(this.el.value)));
-        b.disabled = this.locked;
-        w.append(' ', b);
+        const cols = columns(text);
+        const box = el('span', 'cols');
+        // 번호뿐인 칸(1, 2, 3 …)은 뒤로 보낸다: 이름이 든 칸이 먼저 보이게
+        for (const col of cols.filter((x) => !x.numeric).concat(cols.filter((x) => x.numeric)).slice(0, 6)) {
+          const b = button('btn btn-sm', fmt(T.colPick, { k: col.index + 1, sample: col.sample.map((v) => short(v, 8)).join(', ') + (col.count > col.sample.length ? ' …' : '') }), () => this.edit(pickColumn(this.el.value, col.index)));
+          b.disabled = this.locked;
+          box.append(b);
+        }
+        w.append(box);
       }
     }
-    const mode = this.locked ? 'locked' : this.undo ? 'cleared' : this.shared ? 'shared' : text === this.sample ? 'sample' : 'own';
+    const mode = this.locked ? 'locked' : this.undo ? 'cleared' : this.asking ? 'ask' : this.shared ? 'shared' : this.backup ? 'imported' : text === this.sample ? 'sample' : 'own';
     this.note.dataset.mode = mode;
-    this.note.firstElementChild.textContent = { locked: T.listLocked, cleared: T.listCleared, shared: T.listShared, sample: T.listSample, own: T.listSaved }[mode];
+    this.box.classList.toggle('shared', this.shared);
+    const hasMine = store.get('pick.list') !== null;
+    this.note.firstElementChild.textContent = { locked: T.listLocked, cleared: T.listCleared, ask: hasMine ? T.listAsk : T.listAskNew, shared: T.listShared, imported: T.listImported, sample: T.listSample, own: T.listSaved }[mode];
     const b = this.note.lastElementChild;
-    b.textContent = { locked: T.listClearAll, cleared: T.listUndo, shared: T.listBack, sample: T.listClear, own: T.listClearAll }[mode];
+    b.textContent = { locked: T.listClearAll, cleared: T.listUndo, ask: T.listAskNo, shared: T.listBack, imported: T.listClearAll, sample: T.listClear, own: T.listClearAll }[mode];
     b.disabled = this.locked;
-    // 명단을 지운 직후: 최근 결과 기록 속 링크에 그 명단이 남아 있으면 같이 지울지 묻는다
-    if (this.left) this.left.hidden = !(mode === 'cleared' && recent.count() > 0);
+    if (this.alt) {
+      const label = { ask: T.listAskYes, shared: T.listEdit, imported: T.listRestore }[mode];
+      this.alt.hidden = !label;
+      this.alt.textContent = label || '';
+      this.alt.disabled = this.locked;
+    }
+    // 명단을 지운 직후: 최근 결과 기록에 그 명단의 이름이 남아 있을 때만 같이 지울지 묻는다
+    if (this.left) this.left.hidden = !(mode === 'cleared' && this.held);
   },
   set(text, save) { this.el.value = text; this.read(save); },
-  /** 단추로 명단을 고칠 때: 내 명단이 되고(저장), 되돌리기는 사라진다 */
+  /** 단추로 명단을 고칠 때: 내 명단이 되고(저장), 되돌리기는 사라진다. 링크의 명단이면 먼저 가져올지 묻는다 */
   edit(text) {
     if (this.locked) return;
-    this.shared = false;
+    if (this.shared) { this.ask(); return; }
     this.undo = null;
     this.set(text, true);
   },
-  setShared(items) { this.shared = true; this.undo = null; this.el.value = items.join('\n'); this.read(false); },
-  /** 지우기 단추. 상태에 따라: 되돌리기 / 내 명단으로 돌아가기 / 예시 지우기 / 내 명단 지우기(되돌릴 수 있다) */
+  setShared(items) {
+    this.shared = true;
+    this.asking = false;
+    this.undo = null;
+    this.sharedText = items.join('\n');
+    this.el.value = this.sharedText;
+    this.el.readOnly = true;
+    this.read(false);
+  },
+  /** 링크의 명단을 내 명단으로 가져올지 묻는다(안내 줄이 물음으로 바뀐다) */
+  ask() {
+    if (!this.shared || this.locked || this.asking) return;
+    this.asking = true;
+    this.paint();
+  },
+  /** 링크의 명단을 내 명단으로 가져온다. 명단 자체는 그대로라서 화면의 결과는 지우지 않는다 */
+  take() {
+    const mine = store.get('pick.list');
+    this.backup = mine === null ? null : { text: mine }; // 저장해 둔 것이 없었으면 되돌릴 것도 없다
+    this.shared = false;
+    this.asking = false;
+    this.el.readOnly = this.locked;
+    clearHash();
+    clearTimeout(this.timer);
+    store.set('pick.list', this.el.value);
+    this.paint();
+    this.el.focus();
+  },
+  /** 안내 줄의 둘째 단추: 고치기(→ 물음) / 가져오기 / 전 명단으로 되돌리기 */
+  other() {
+    if (this.locked) return;
+    if (this.asking) { this.take(); return; }
+    if (this.shared) { this.ask(); return; }
+    if (this.backup) { const b = this.backup; this.backup = null; this.undo = null; this.set(b.text, true); }
+  },
+  /** 지우기 단추. 상태에 따라: 되돌리기 / 그만두기 / 내 명단으로 돌아가기 / 예시 지우기 / 내 명단 지우기(되돌릴 수 있다) */
   clear() {
     if (this.locked) return;
     if (this.undo) { const u = this.undo; this.undo = null; this.set(u.text, true); return; }
+    if (this.asking) { this.asking = false; this.paint(); return; }
     if (this.shared) { // 링크로 받은 명단을 치우고 내 명단(없으면 예시)으로. 저장해 둔 내 명단은 건드리지 않는다
       this.shared = false;
+      this.el.readOnly = false;
       clearHash();
       const mine = store.get('pick.list');
       this.set(mine !== null ? mine : this.sample, false);
@@ -124,7 +235,9 @@ export const list = {
     }
     const text = this.el.value;
     if (text === this.sample) { this.set('', true); this.el.focus(); return; }
-    if (text.trim() !== '') this.undo = { text };
+    this.backup = null;
+    this.held = false;
+    if (text.trim() !== '') { this.undo = { text }; this.held = recent.holds(this.items); }
     clearTimeout(this.timer);
     store.del('pick.list');
     this.set(this.sample, false);
@@ -133,7 +246,7 @@ export const list = {
   lock(on) {
     if (!this.el || this.locked === on) return;
     this.locked = on;
-    this.el.readOnly = on;
+    this.el.readOnly = on || this.shared;
     this.box.classList.toggle('locked', on);
     $$('button', this.box).forEach((b) => { b.disabled = on; });
     this.paint();
@@ -168,28 +281,43 @@ export async function copyLink(tool, seed, items, opts, version) {
 }
 /** 열 수 없는 링크로 들어왔는지(닫기를 누르면 풀린다). 돌림판은 그동안 내 명단을 판에 올리지 않는다. */
 export const link = { bad: false, handlers: [], onClose(f) { this.handlers.push(f); } };
-/** 도구 위에 겹쳐 띄우는 알림(끼워 넣지 않아 화면이 밀리지 않는다). kind: 'info'면 알림만, 아니면 열 수 없는 링크. */
+/** 도구 위에 겹쳐 띄우는 알림(끼워 넣지 않아 화면이 밀리지 않는다). kind: 'warn'이면 알리기만(결과는 보여 준다), 없으면 열 수 없는 링크. */
 function banner(parts, kind) {
   const host = $('#tool') || document.body;
   const b = el('div', 'linkmsg' + (kind ? ' ' + kind : ''));
-  b.setAttribute('role', kind === 'info' ? 'status' : 'alert');
+  b.setAttribute('role', kind ? 'status' : 'alert');
   const p = el('p');
   p.append(...parts);
   b.append(p, button('btn btn-sm', T.close, () => {
     b.remove();
-    if (kind !== 'info') { clearHash(); link.bad = false; link.handlers.forEach((f) => f()); }
+    if (!kind) { clearHash(); link.bad = false; link.handlers.forEach((f) => f()); }
   }));
   host.append(b);
 }
+/** 열 수 없는 링크 알림이 떠 있는 동안 실행 단추를 눌렀을 때: 알림을 한 번 흔들고 닫기 단추로 초점을 옮긴다 */
+export function nudgeBanner() {
+  const b = $('.linkmsg:not(.warn)');
+  if (!b) return;
+  b.classList.remove('nudge');
+  if (!reduced()) { void b.offsetWidth; b.classList.add('nudge'); }
+  $('button', b).focus();
+}
 /**
- * 주소에 공유 링크가 있으면 읽는다. 이 도구의 링크면 내용을 돌려준다(legacy = 옛 형식 1: 명단의 순서까지 결과에 들어가던 방식).
+ * 주소에 공유 링크가 있으면 읽는다. 이 도구의 링크면 내용을 돌려준다. 돌려주는 것의 mark = 결과 곁에 붙일 표시의 종류:
+ *   'ok'      링크의 결과 그대로(같은 씨앗 + 같은 명단으로 다시 계산했다)
+ *   'legacy'  옛 형식 1(명단의 순서까지 결과에 들어가던 방식). 옛 방식 그대로 보여 주되 확인 표시는 붙이지 않는다
+ *   'cleaned' 링크 속 이름에 보이지 않는 글자 등이 있어 고쳐 읽었다. 정리한 명단으로 다시 계산한 결과라고 밝힌다
  * 다른 도구의 링크면 그 도구로 가는 안내를, 잘못된 링크면 이유를 눈에 띄게 알리고 null을 돌려준다.
  */
 export function readShare(tool) {
   const d = decodeShare(location.hash);
   if (d.ok && d.tool === tool) {
     d.legacy = d.version === 1 && ['wheel', 'draw', 'teams'].includes(tool);
-    if (d.legacy) banner([T.legacyLink], 'info');
+    d.mark = d.legacy ? 'legacy' : d.cleaned ? 'cleaned' : 'ok';
+    const say = [];
+    if (d.legacy) say.push(T.legacyLink);
+    if (d.cleaned) say.push(T.cleanedLink);
+    if (say.length) banner([say.join(' ')], 'warn');
     return d;
   }
   if (!d.ok && d.reason === 'none') return null;
@@ -206,26 +334,30 @@ export function readShare(tool) {
 export function clearHash() {
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 }
-export function showStamp(on, legacy) {
+/** 결과 곁의 표시를 종류에 맞게 채운다. 'ok'만 확인 도장(빨간 테두리)이고, 나머지는 도장이 아닌 수수한 표시다 */
+function paintStamp(s, mark) {
+  const plain = mark !== 'ok';
+  s.textContent = mark === 'legacy' ? T.stampOld : mark === 'cleaned' ? T.stampCleaned : T.stamp;
+  s.classList.toggle('plain', plain);
+  if (plain) s.removeAttribute('aria-label'); else s.setAttribute('aria-label', T.stampSr);
+  s.classList.remove('in');
+  if (!plain && !reduced()) { void s.offsetWidth; s.classList.add('in'); }
+  return s;
+}
+/** 새 표시 하나(동전처럼 제목 줄이 없는 곳에서 쓴다) */
+export const stampEl = (mark) => paintStamp(el('span', 'stamp'), mark);
+/** 돌림판의 결과 표시. mark: false(내가 돌린 결과) | 'ok' | 'legacy' | 'cleaned' */
+export function showStamp(mark) {
   const s = $('#stamp');
   if (!s) return;
-  s.hidden = !on;
-  if (!on) return;
-  s.textContent = legacy ? T.stampOld : T.stamp;
-  s.setAttribute('aria-label', T.stampSr);
-  s.classList.remove('in');
-  if (!reduced()) { void s.offsetWidth; s.classList.add('in'); }
+  s.hidden = !mark;
+  if (mark) paintStamp(s, mark);
 }
-/** 결과 머리 줄: 제목 + (링크로 연 결과면) 확인 도장 + 단추들. replay: true | 'legacy' */
-export function outHead(text, replay, ...buttons) {
+/** 결과 머리 줄: 제목 + (링크로 연 결과면) 표시 + 단추들. mark: false | 'ok' | 'legacy' | 'cleaned' */
+export function outHead(text, mark, ...buttons) {
   const h = el('div', 'out-head');
   const h2 = el('h2', null, text);
-  if (replay) {
-    const s = el('span', 'stamp', replay === 'legacy' ? T.stampOld : T.stamp);
-    s.setAttribute('aria-label', T.stampSr);
-    if (!reduced()) s.classList.add('in');
-    h2.append(s);
-  }
+  if (mark) h2.append(stampEl(mark));
   h.append(h2, ...buttons.filter(Boolean));
   return h;
 }
@@ -250,6 +382,8 @@ export const recent = {
   box: $('#recent'),
   load() { try { const a = JSON.parse(store.get('pick.history') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } },
   count() { return this.load().length; },
+  /** 이 명단의 이름이 기록(다시 보기 링크나 결과 요약)에 남아 있는지 */
+  holds(names) { return historyHolds(this.load(), names); },
   add(tool, text, url) {
     const a = this.load();
     const hash = url ? url.slice(url.indexOf('#')) : '';
@@ -269,7 +403,9 @@ export const recent = {
       const li = el('li');
       const time = el('time', null, df.format(new Date(r.d)));
       time.dateTime = new Date(r.d).toISOString();
-      li.append(time, el('i', null, T.toolNames[r.t] || ''), el('b', null, r.s));
+      const sum = el('b', null, r.s);
+      sum.title = r.s;
+      li.append(time, el('i', null, T.toolNames[r.t] || ''), sum);
       if (r.h && T.paths[r.t]) { const a2 = el('a', null, T.replay); a2.href = T.paths[r.t] + r.h; li.append(a2); }
       ul.append(li);
     }
@@ -277,7 +413,7 @@ export const recent = {
   init() {
     if (!this.box) return;
     this.box.addEventListener('toggle', () => { if (this.box.open) this.render(); });
-    $('#recentclear').addEventListener('click', () => { this.clear(); list.paint && list.el && list.paint(); });
+    $('#recentclear').addEventListener('click', () => { this.clear(); if (list.el) { list.held = false; list.paint(); } });
     addEventListener('hashchange', () => { if (location.hash.startsWith('#r=')) location.reload(); }); // '다시 보기'가 같은 페이지의 다른 결과 링크면 새로 연다
   },
 };

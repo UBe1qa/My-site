@@ -15,7 +15,7 @@ const A = (f) => path.join(ROOT, 'assets', f);
 const DATA = require(A('pay-data.js')), GANI = require(A('gani-2026.js'));
 const P = require(A('pay-core.js'))(DATA, GANI);
 const makeView = require(A('pay-view.js'));
-const { build, tableAnnuals, TABLE_OPTS, NET_STATE } = await import(path.join(ROOT, '_dev', 'calc.mjs'));
+const { build, tableAnnuals, TABLE_OPTS, NET_STATE, NET_STATE_NEXT } = await import(path.join(ROOT, '_dev', 'calc.mjs'));
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const text = (html) => html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/\s+/g, ' ');
 const f = (n) => P.fmt(n);
@@ -43,6 +43,8 @@ for (const [rel, lang] of [['table/index.html', 'ko'], ['en/table/index.html', '
 
 /* ───────── 2. 미리 넣은 결과 = 화면 코드가 그리는 것 ───────── */
 const slipOf = (html) => { const m = /<div class="slip is-ex" id="slip">([\s\S]*?)<\/div>\n  <p class="sr" id="live"/.exec(html); return m ? m[1] : null; };
+// 해가 바뀐 뒤에 끼울 '다음 기준' 결과(JSON). 인라인 스크립트가 JSON.parse 로 읽으므로 여기서도 그대로 읽는다
+const preNext = (html) => { const m = /<script type="application\/json" id="pre-next" data-id="([^"]+)" data-starts="([^"]+)">([\s\S]*?)<\/script>/.exec(html); return m ? { id: m[1], starts: m[2], parts: JSON.parse(m[3]), raw: m[3] } : null; };
 for (const lang of ['ko', 'en']) {
   const V = makeView(P, lang), pre = lang === 'ko' ? '' : 'en/';
   const n = V.net(NET_STATE), home = read(pre + 'index.html');
@@ -51,6 +53,13 @@ for (const lang of ['ko', 'en']) {
   ok(home.includes(`id="optsSum">${n.summary}</span>`) && home.includes(`id="read">${n.read.html}</p>`), `${pre}: 조건 한 줄·읽기 줄`);
   ok(slipOf(read(pre + 'severance/index.html')) === V.sev({}).slip, `${pre}severance/: 명세서`);
   ok(slipOf(read(pre + 'hourly/index.html')) === V.hourly({ mode: 'hourly', text: '', hours: '', period: DATA.now }).slip, `${pre}hourly/: 명세서`);
+  // 해가 바뀌면 보일 모습(다음 기준으로 그린 예시)도 화면 코드와 같아야 한다. 시행일은 자료 파일의 값
+  const nn = V.net(NET_STATE_NEXT), pn = preNext(home), ph = preNext(read(pre + 'hourly/index.html'));
+  ok(!!pn && pn.id === DATA.next && pn.starts === DATA.periods[DATA.next].starts && pn.starts === '2027-01-01', `${pre}: 다음 기준의 시행일 ${pn && pn.starts}`);
+  ok(!!pn && JSON.stringify(pn.parts) === JSON.stringify({ slip: nn.slip, cmp: nn.compare, optsSum: nn.summary, stick: nn.stick }), `${pre}: 해가 바뀐 뒤의 명세서·앞뒤 금액·조건 한 줄이 화면 코드와 같음`);
+  ok(!!pn && !/<\/(?!\/)/.test(pn.raw.replace(/<\\\//g, '')), `${pre}: pre-next 안에 닫는 태그가 그대로 들어 있지 않음`);
+  ok(!!ph && JSON.stringify(ph.parts) === JSON.stringify({ slip: V.hourly({ mode: 'hourly', text: '', hours: '', period: DATA.next }).slip }), `${pre}hourly/: 해가 바뀐 뒤의 명세서`);
+  ok(nn.slip !== n.slip && P.defaultPeriod('2027-01-01') === DATA.next && P.defaultPeriod('2026-12-31') === DATA.now, `${pre}: 기본 기준은 시행일부터 다음 기준`);
   if (lang === 'ko') {
     ok(slipOf(read('unemployment/index.html')) === V.ub({}).slip, 'unemployment/: 명세서');
     ok(slipOf(read('annual-leave/index.html')) === V.leave({}).slip, 'annual-leave/: 명세서');
@@ -66,6 +75,14 @@ for (const lang of ['ko', 'en']) {
   // [손] 2027년: 3,133,000 × 5.0% = 156,650 → 차이 7,840
   ok(P.compare({ amount: 40000000, basis: 'annual' }).netDiff === -7840, '[손] 2027년 1월 차이 −7,840');
   has(h, '2027년 1월부터는 국민연금이 5.0%로 올라 한 달에 7,840원 덜 받아요.', '첫 화면 2027 문장');
+  // [손] 해가 바뀐 뒤의 예시: 국민연금 3,133,000 × 5.0% = 156,650 → 실수령액 2,935,813 − 7,840 = 2,927,973
+  const nx = preNext(read('index.html'));
+  ok(nx.parts.slip.includes('2,927,973') && nx.parts.slip.includes('156,650') && !nx.parts.slip.includes('148,810'), '[손] 2027년 기준 예시 2,927,973 · 국민연금 156,650');
+  // [평가 H1] 연봉 4,000만 원: 65세만 켜면 2,964,003(고용보험 0), 60세도 같이면 3,112,813. [손] 60세만: 2,935,813 + 148,810 = 3,084,623
+  const a60 = P.netPay({ amount: 40000000, basis: 'annual', noPension: true }), a65 = P.netPay({ amount: 40000000, basis: 'annual', noPension: true, noEmployment: true });
+  ok(a60.net === 3084623 && a60.line.pension.amount === 0 && a65.net === 3112813 && a65.line.employment.amount === 0, '[평가·손] 만 60세 이상 3,084,623 · 65세 이후 입사 3,112,813');
+  for (const s of ['만 60세 이상이에요', '임의계속가입으로 계속 내고 있으면 끄세요', '65세 이후에 새로 입사했어요', '국민연금법 제6조·제8조']) has(h, s, '첫 화면 나이 조건');
+  for (const s of ['I am 60 or older', 'I was hired after turning 65', 'National Pension Act, Articles 6 and 8']) has(text(read('en/index.html')), s, 'en 나이 조건');
 }
 
 /* ───────── 3. 가이드 글의 예시 숫자 ───────── */
@@ -108,6 +125,9 @@ const net = (o) => P.netPay(o);
     has(g, f(P.hourlyToPay({ hourly: 10320, weeklyHours: h }).weeklyTotal) + '원', `주 ${h}시간 주급`);
   }
   has(g, '4시간 × 10,320원 = 41,280원', '계산 예');
+  // [손] 주 45시간: 소정근로는 40시간까지만 → 40 × 10,320 + 82,560 = 495,360 (45시간을 다 일한 주급이 아니다)
+  ok(P.hourlyToPay({ hourly: 10320, weeklyHours: 45 }).weeklyTotal === 495360, '[손] 주 45시간 줄은 40시간분 495,360');
+  has(g, '495,360원', '45시간 줄'); has(g, '40시간분까지', '45시간 줄 설명');
 }
 { // 퇴직금
   const g = G('toejikgeum-gyesan-yeje'), e = G('severance-pay-korea', true);
@@ -115,7 +135,14 @@ const net = (o) => P.netPay(o);
   for (const s of ['7,080,000원', '1,000,000원', '75,000원', '8,155,000원', '92일', '88,641원 31전', '1,080일', '7,868,434원']) has(g, s, '[공식] 퇴직금 글');
   for (const s of ['₩7,080,000', '₩1,000,000', '₩75,000', '₩8,155,000', '92 days', '₩88,641.31', '1,080', '₩7,868,434']) has(e, s, '[공식] severance guide');
   const r = P.severance({ join: '2014-10-02', leave: '2017-09-16', wages3m: 7080000, annualBonus: 4000000, leavePay: 300000 });
-  ok(r.amount === 7868434 && r.avgDailyJeon === 8864131, '[공식] 88,641원 31전 → [손] 7,868,434원');
+  ok(r.amount === 7868434 && r.avgDailyJeon === 8864131, '[공식] 88,641원 31전 → [실물] 7,868,434원');
+  // [실물] 고용노동부 화면: 2026-05-31 퇴직 → 3.1부터 91일 · 2026-12-31 → 9.30부터 92일 · 2026-10-01 → 7.1부터 92일 (tests/ref/moel-live.json)
+  const s = text(read('severance/index.html')), se = text(read('en/severance/index.html'));
+  for (const x of ['2026년 5월 31일에 퇴직하면 2026년 3월 1일부터 91일', '2026년 12월 31일에 퇴직하면 2026년 9월 30일부터 92일', '2026년 10월 1일에 퇴직하면 2026년 7월 1일부터 92일', '퇴직금은 원 미만을 반올림해요']) has(s, x, '[실물] 퇴직금 계산 기준');
+  for (const x of ['leaving on 31 May 2026 gives 91 days from 1 March 2026', 'leaving on 31 December 2026 gives 92 days from 30 September 2026', 'rounded to the nearest won']) has(se, x, '[실물] severance rules');
+  // [실물] 2020-03-02 입사 · 3개월 임금 900만 · 2026-12-31 퇴직 → 20,061,049원(버림이면 20,061,048)
+  ok(P.severance({ join: '2020-03-02', leave: '2026-12-31', wages3m: 9000000 }).amount === 20061049, '[실물] 반올림 20,061,049');
+  for (const x of ['반올림', '3월 1일부터']) has(g, x, '퇴직금 글: 날짜·끝수');
 }
 { // 209시간
   const g = G('choejeoimgeum-209sigan'), e = G('minimum-wage-weekly-holiday-allowance', true);
@@ -125,18 +152,30 @@ const net = (o) => P.netPay(o);
   // [손] 2,500,000 ÷ 209 = 11,961.7 → 11,961
   ok(P.monthlyToHourly({ monthly: 2500000 }).hourly === 11961, '[손] 월급 250만 → 시급'); has(g, '11,961원', '월급 → 시급'); has(e, '₩11,961', 'monthly to hourly');
   for (const s of ['₩10,320', '₩10,700', '₩2,156,880', '₩2,236,300', '₩380', '209', '208.57', '₩41,280', '₩30,960', '₩82,560']) has(e, s, 'minimum wage guide');
+  // [평가 L3] 시급 10,320 · 주 15시간: 최저임금 월 환산액 807,172(올림). [손] 18 × 365 ÷ 84 = 78.2142… × 10,320 = 807,171.4 → 807,172 → ÷ 78.2142… = 10,320.007 → 10,320
+  const a = P.hourlyToPay({ hourly: 10320, weeklyHours: 15 }), b = P.monthlyToHourly({ monthly: a.monthly, weeklyHours: 15 });
+  ok(a.monthly === 807172 && b.hourly === 10320 && b.minWage.ok === true, '[평가·손] 시급 → 월급 807,172 → 시급 10,320(최저임금보다 적지 않다)');
+  has(text(read('hourly/index.html')), '시급 10,320원·주 15시간 → 월급 807,172원 → 시급 10,320원', '시급 왕복 보기');
+  has(text(read('en/hourly/index.html')), '₩10,320 at 15 hours a week → ₩807,172 a month → ₩10,320 an hour', 'hourly round trip');
 }
 { // 실업급여
   const g = G('sileopgeupyeo-haru-geumaek');
   // [공식] 상한 68,100, 기초일액 113,500, 하한 표 8칸, 소정급여일수 표
   for (const s of ['68,100원', '113,500원', '66,048원', '8,256원', '16,512원', '24,768원', '33,024원', '41,280원', '49,536원', '57,792원', '2,052원', '120일', '150일', '180일', '210일', '240일', '270일']) has(g, s, '[공식] 실업급여 글');
   // [손] 9,000,000 ÷ 92 = 97,826.08 → × 60% = 58,695.6 → 58,695 (하한 66,048) / 6,000,000 ÷ 92 = 65,217.39 → 39,130 / 15,000,000 ÷ 92 = 163,043 → 상한
-  const u = (w) => P.unemployment({ avgDaily: Math.floor(w * 100 / 92) / 100, dayHours: 8, leave: '2026-09-30', tenureYears: 3 });
+  const u = (w, h = 8, leave = '2026-09-30') => P.unemployment({ wages3m: w, dayHours: h, leave, tenureYears: 3 });
   ok(P.lastThreeMonths('2026-10-01').days === 92, '[날짜] 2026-07-01 ~ 2026-09-30 = 92일');
   ok(u(9000000).byRate === 58695 && u(9000000).daily === 66048 && u(6000000).byRate === 39130 && u(15000000).daily === 68100, '[손] 구직급여 계산 예');
   for (const s of ['58,695원', '39,130원']) has(g, s, '실업급여 글 예');
-  // [풀이] 2027년 최저임금 10,700 × 8 × 80% = 68,480
+  // [풀이] 2027년 최저임금 10,700 × 8 × 80% = 68,480 (2026년 상한 68,100보다 380 많다)
   has(g, '68,480원', '2027 하한 계산');
+  const pg = text(read('unemployment/index.html')), n27 = u(9000000, 8, '2027-01-15');
+  ok(n27.daily === 68480 && n27.lower === 68480 && n27.atLeast === false && n27.upperStatus === 'undecided', '[풀이] 2027년 이직 하루 68,480(하한) · 상한 미정');
+  for (const x of ['68,480원', '380원 많아요', '상한은 미정', '공식 하한액 표가 1~8시간 정수라서']) has(pg, x, '실업급여 계산기 설명');
+  // [평가 M2] 이직일 2026-03-31 · 3개월 임금 600만 · 4시간: 6,000,000 × 60% ÷ 90 = 정확히 40,000(전에는 39,999)
+  const m2 = u(6000000, 4, '2026-03-31');
+  ok(m2.periodDays === 90 && m2.byRate === 40000 && m2.daily === 40000 && m2.total === 7200000, '[평가] 90일 구간 40,000원 · 합계 7,200,000');
+  has(pg, '3개월 임금 600만 원, 90일이면 40,000원', 'M2 보기');
 }
 { // 영어: 급여 공제
   const e = G('payroll-deductions-korea', true), r = net({ amount: 40000000, basis: 'annual' });

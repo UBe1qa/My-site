@@ -19,6 +19,13 @@
   /* floor(a × num ÷ den). a, num, den 은 0 이상의 정수, a × num 은 2^53 미만 */
   function mulDiv(a, num, den) { var p = a * num; return (p - (p % den)) / den; }
   function ceilDiv(a, den) { var r = a % den; return (a - r) / den + (r ? 1 : 0); }
+  /* 반올림(반은 올림) 나눗셈. a, den 은 0 이상의 정수 */
+  function roundDiv(a, den) { var r = a % den; return (a - r) / den + (r * 2 >= den ? 1 : 0); }
+  /* 정수 n ÷ scale 을 글자로(끝의 0은 뗀다): fmtDec(1499, 100) → '14.99', fmtDec(4500, 1000) → '4.5', fmtDec(1500, 100) → '15' */
+  function fmtDec(n, scale) {
+    var i = Math.floor(n / scale), f = String(n % scale + scale).slice(1).replace(/0+$/, '');
+    return String(i) + (f ? '.' + f : '');
+  }
   function floorTo(x, unit) { return unit > 1 ? x - (x % unit) : x; }
   function clamp(x, lo, hi) { return x < lo ? lo : x > hi ? hi : x; }
   function err(code, extra) { var o = { ok: false, code: code }; if (extra) for (var k in extra) o[k] = extra[k]; return o; }
@@ -43,9 +50,9 @@
   /* 영어판 읽기 도움: 3,130,000 → '3.13 million won' */
   function readEn(n) {
     n = Math.trunc(n);
-    function cut(x) { return String(Math.floor(x * 100 + 1e-7) / 100); }
-    if (n >= 1000000000) return cut(n / 1000000000) + ' billion won';
-    if (n >= 1000000) return cut(n / 1000000) + ' million won';
+    function cut(unit) { return fmtDec(Math.floor(n / (unit / 100)), 100); }   /* 소수 둘째 자리 아래는 버린다 */
+    if (n >= 1000000000) return cut(1000000000) + ' billion won';
+    if (n >= 1000000) return cut(1000000) + ' million won';
     return fmt(n) + ' won';
   }
 
@@ -66,20 +73,30 @@
     if (tail) { if (!/^\d+$/.test(tail)) return NaN; sum += Number(tail); }
     return sum;
   }
-  /* 금액 글자를 원으로. ctx 'man': 단위 없는 작은 숫자(10만 미만)와 '4천' 같은 말을 만 원으로 읽는다(연봉·월급 칸).
-     ctx 'won': 단위 없는 숫자는 원(시급 칸). 돌려주는 assumed 가 'man' 이면 화면이 "300만 원으로 읽었어요"라고 보여 준다. */
+  /* 금액 글자를 원으로. 모든 금액 칸이 이 함수 하나로 읽는다.
+     ctx: 'man' | 'won' | { unit: 'man' | 'won', manBelow: 숫자 }
+       unit 'man' = 단위 없는 숫자를 만 원으로 읽는 칸(연봉·월급·비과세·3개월 임금 …). 다만 manBelow 이상인 숫자는 원으로 읽는다
+                    (만 원으로 읽으면 그 칸에 있을 수 없는 큰돈이 되는 수. 기본 10만). '4천' 같은 말도 만 원(4,000만).
+       unit 'won' = 단위 없는 숫자를 원으로 읽는 칸(시급·1일 통상임금, 영어판의 모든 칸). '9천' → 9,000원.
+     글자에 '원'·₩·won 이 붙어 있으면 어느 칸이든 원으로 쓴 것으로 본다('300원' → 300원, '4천원' → 4,000원).
+     돌려주는 값: value(원), assumed('man' = 단위 없는 수·말을 만 원으로 읽음. 화면이 "300만 원으로 읽었어요"라고 보여 준다),
+       read('man' | 'won'), bare(숫자만 썼는지), big(만 원 칸인데 숫자가 커서 원으로 읽었는지: 화면이 그렇게 알린다). */
   function parseMoney(text, ctx) {
-    ctx = ctx || 'man';
-    var s = String(text == null ? '' : text).replace(/[０-９]/g, function (c) { return String(FULL.indexOf(c)); })
-      .replace(/[\s,_]/g, '').replace(/원|₩|krw|won/gi, '').toLowerCase();
+    var unit = 'man', manBelow = BARE_MAN_BELOW;
+    if (ctx && typeof ctx === 'object') { unit = ctx.unit === 'won' ? 'won' : 'man'; if (ctx.manBelow) manBelow = ctx.manBelow; }
+    else if (ctx === 'won') unit = 'won';
+    var raw = String(text == null ? '' : text).replace(/[０-９]/g, function (c) { return String(FULL.indexOf(c)); })
+      .replace(/[\s,_]/g, '').toLowerCase();
+    var s = raw.replace(/원|₩|￦|krw|won/g, ''), wonMark = s !== raw;
     if (s === '') return err('empty');
     if (/^[-−–]/.test(s)) return err('negative');
     s = s.replace(/^\+/, '');
-    var value, assumed = null, m;
+    var value, assumed = null, bare = false, big = false, m;
     if (/^\d+(\.\d+)?$/.test(s)) {
       var n = Number(s);
-      if (ctx === 'man' && n < BARE_MAN_BELOW) { value = n * 10000; assumed = 'man'; }
-      else { if (s.indexOf('.') >= 0) return err('format'); value = n; }
+      bare = !wonMark;
+      if (unit === 'man' && !wonMark && n < manBelow) { value = n * 10000; assumed = 'man'; }
+      else { if (s.indexOf('.') >= 0) return err('format'); value = n; big = unit === 'man' && !wonMark; }
     } else if ((m = /^(\d+(?:\.\d+)?)(k|thousand|m|mil|mn|million|b|bn|billion)$/.exec(s))) {
       value = Number(m[1]) * (m[2][0] === 'k' || m[2][0] === 't' ? 1e3 : m[2][0] === 'm' ? 1e6 : 1e9);
     } else if (/^[\d.억만천백십]+$/.test(s)) {
@@ -93,15 +110,17 @@
       } else if (rest) {
         var g = group(rest);
         if (isNaN(g)) return err('format');
-        /* '1억 2천' → 1억 2,000만, 연봉 칸의 '4천' → 4,000만. 시급 칸의 '9천' → 9,000원 */
-        if (i >= 0 || ctx === 'man') { man = g; assumed = 'man'; } else won = g;
+        /* '1억 2천' → 1억 2,000만, 연봉 칸의 '4천' → 4,000만. 시급 칸의 '9천'·'원'을 붙인 '4천원' → 원 */
+        if (!wonMark && (i >= 0 || unit === 'man')) { man = g; assumed = 'man'; } else won = g;
       }
       value = eok * 100000000 + man * 10000 + won;
     } else return err('format');
-    value = Math.round(value);
     if (!isFinite(value)) return err('format');
+    /* 원 미만이 남는 글자('1.23456만', '2.5원')는 조용히 깎지 않고 못 읽었다고 알린다. 소수 곱셈의 오차(1e-6 미만)만 반올림으로 지운다 */
+    if (Math.abs(value - Math.round(value)) > 1e-6) return err('format');
+    value = Math.round(value);
     if (value > PARSE_MAX) return err('too-large');
-    return { ok: true, value: value, assumed: assumed };
+    return { ok: true, value: value, assumed: assumed, read: assumed === 'man' ? 'man' : 'won', bare: bare, big: big };
   }
 
   /* ───────── 날짜(하루 번호: 1970-01-01 = 0, UTC) ───────── */
@@ -200,7 +219,9 @@
       ['pension', 'health', 'care', 'employment', 'incomeTax', 'localTax'].forEach(function (id) { lines.push({ id: id, amount: 0, base: 0, status: P[id].status }); });
     } else {
       var pBase0 = floorTo(taxable, pen.baseUnit), pBase = clamp(pBase0, pen.baseMin, pen.baseMax);
-      lines.push({ id: 'pension', amount: floorTo(mulDiv(pBase, pen.rateNum, pen.rateDen), u('pension')), base: pBase, ratePct: pen.ratePct,
+      /* 만 60세 이상은 국민연금 가입 대상이 아니다(국민연금법 제6조·제8조). 임의계속가입으로 계속 내는 사람은 noPension 을 끈다 */
+      var penAmt = inp.noPension ? 0 : floorTo(mulDiv(pBase, pen.rateNum, pen.rateDen), u('pension'));
+      lines.push({ id: 'pension', amount: penAmt, base: pBase, ratePct: pen.ratePct, exempt: !!inp.noPension,
         capped: pBase0 < pen.baseMin ? 'min' : pBase0 > pen.baseMax ? 'max' : null, status: pen.status });
 
       var hRaw = floorTo(mulDiv(taxable, hi.rateNum, hi.rateDen), u('health')), hAmt = clamp(hRaw, hi.employeeMin, hi.employeeMax);
@@ -226,7 +247,7 @@
       lines: lines, line: by, insurance: insurance, tax: tax, deductions: deductions, net: net, netAnnual: net * 12,
       family: family, children: children, ratio: ratio, notes: notes,
       carried: lines.filter(function (l) { return l.status === 'carried' || l.limitStatus === 'carried'; }).map(function (l) { return l.id; }),
-      noEmployment: !!inp.noEmployment,
+      noPension: !!inp.noPension, noEmployment: !!inp.noEmployment,
       rounding: { pension: u('pension'), health: u('health'), care: u('care'), employment: u('employment'), incomeTax: u('incomeTax'), localTax: u('localTax'), verified: ROUND.verified || false }
     };
   }
@@ -251,11 +272,19 @@
     chk('pensionRate', P.pension.until); chk('pensionLimit', P.pension.limitUntil); chk('minWage', P.minWage.until);
     return { ok: true, stale: items.length > 0, items: items, year: P.year };
   }
-  /* 구직급여 표(상·하한)의 유효 기간이 지났는지 */
+  /* 구직급여 표(상·하한)의 유효 기간이 지났는지. nextYear: 다음 해(하한만 확정, 상한 미정)의 값으로 계산하는 기간 안인지 */
   function unemploymentValidity(today) {
-    var t = parseDate(today), U = DATA.unemployment;
+    var t = parseDate(today), U = DATA.unemployment, NX = U.next;
     if (t === null) return err('date');
-    return { ok: true, stale: t > parseDate(U.until), until: U.until };
+    return { ok: true, stale: t > parseDate(U.until), until: U.until,
+      nextYear: !!(NX && NX.from && t >= parseDate(NX.from) && t <= parseDate(NX.until)) };
+  }
+  /* 화면이 기본으로 쓸 기준 시기: 기기 날짜가 다음 기준의 시행일(starts)부터면 다음 기준(확정된 값은 새 값, 미정은 줄마다 표시).
+     해가 바뀌었는데 자료를 아직 못 넘겼을 때 옛 요율로 계산해 보여 주지 않으려는 것이다. */
+  function defaultPeriod(today) {
+    var t = parseDate(today), nx = DATA.periods[DATA.next];
+    if (t === null || !nx || !nx.starts) return DATA.now;
+    return t >= parseDate(nx.starts) ? DATA.next : DATA.now;
   }
 
   /* 연봉 실수령액 표: 연봉 목록 → 줄마다 netPay 결과(가정은 opts 그대로) */
@@ -264,10 +293,15 @@
   }
 
   /* ───────── 3. 퇴직금 ───────── */
-  /* 퇴직일(마지막 근무일 다음 날) 이전 3개월: [3개월 전 같은 날, 퇴직일 전날]. 그 달에 같은 날이 없으면 말일부터. */
+  /* 퇴직일(마지막 근무일 다음 날) 이전 3개월: [시작일, 퇴직일 전날]. 고용노동부 '퇴직금 계산' 화면과 같은 방식으로 센다.
+     시작일 = 3개월 전 같은 날. 그 달에 그 날이 없으면 그 달 말일(7월 31일 퇴직 → 4월 30일, 12월 31일 → 9월 30일).
+     다만 3개월 전이 2월이라 그 날이 없으면(5월 29일(평년)·30일·31일 퇴직) 3월 1일부터 센다. */
   function lastThreeMonths(leave) {
-    var start = addMonths(leave, -3, 'clamp');
-    return { start: start, end: leave - 1, days: leave - start };
+    var p = ymd(leave), idx = p.y * 12 + (p.m - 1) - 3, y = Math.floor(idx / 12), m = idx % 12 + 1, len = monthLen(y, m), start, rule;
+    if (p.d <= len) { start = dn(y, m, p.d); rule = 'same'; }
+    else if (m === 2) { start = dn(y, 3, 1); rule = 'feb'; }
+    else { start = dn(y, m, len); rule = 'last'; }
+    return { start: start, end: leave - 1, days: leave - start, rule: rule };
   }
   function severance(inp) {
     inp = inp || {};
@@ -278,9 +312,10 @@
     if (typeof wages !== 'number' || isNaN(wages)) return err('nan');
     if (wages < 0 || bonus < 0 || leavePay < 0) return err('negative');
     if (!isInt(wages) || !isInt(bonus) || !isInt(leavePay)) return err('not-integer');
-    if (wages > 100000000000 || bonus > 100000000000 || leavePay > 100000000000) return err('too-large');
+    if (wages > S.maxWages || bonus > S.maxWages || leavePay > S.maxWages) return err('too-large');
     var ordinary = inp.dailyOrdinary;
     if (ordinary !== undefined && ordinary !== null && (!isInt(ordinary) || ordinary < 0)) return err('ordinary');
+    if (ordinary > S.maxDailyOrdinary) return err('too-large');
     var per = lastThreeMonths(leave), days = per.days;
     if (inp.periodDays !== undefined && inp.periodDays !== null) {
       if (!isInt(inp.periodDays) || inp.periodDays < 1 || inp.periodDays > 92) return err('period-days');
@@ -291,10 +326,13 @@
     /* 1일 평균임금 = (3개월 임금 + 상여금 × 3/12 + 연차수당 × 3/12) ÷ 3개월 날짜 수. 전(0.01원) 단위에서 올림: 고용노동부 예제(88,641원 31전)와 같은 꼴 */
     var num = (wages * 12 + (bonus + leavePay) * 3) * 100, avgJeon = ceilDiv(num, 12 * days);
     var ordJeon = ordinary ? ordinary * 100 : 0, usedJeon = Math.max(avgJeon, ordJeon);
-    var amount = mulDiv(usedJeon * S.payDays, serviceDays, S.daysPerYear * 100);
+    /* 퇴직금 = 1일 평균임금 × 30 × 재직일수 ÷ 365, 원 미만 반올림(고용노동부 계산기와 같은 끝수).
+       큰 수끼리 곱해 정밀도를 잃지 않게 (평균임금 × 30)을 36,500으로 먼저 나눈 몫·나머지로 계산한다. */
+    var a = usedJeon * S.payDays, d = S.daysPerYear * 100, q = (a - a % d) / d;
+    var amount = q * serviceDays + roundDiv((a % d) * serviceDays, d);
     return {
       ok: true, eligible: !reason, reason: reason, serviceDays: serviceDays, oneYearDate: iso(oneYear),
-      period: { start: iso(per.start), end: iso(per.end), days: days, calendarDays: per.days },
+      period: { start: iso(per.start), end: iso(per.end), days: days, calendarDays: per.days, rule: per.rule },
       wages3m: wages, bonusPart: mulDiv(bonus, 3, 12), leavePart: mulDiv(leavePay, 3, 12), total: mulDiv(num, 1, 1200),
       avgDailyJeon: avgJeon, ordinaryJeon: ordJeon, usedJeon: usedJeon, basis: ordJeon > avgJeon ? 'ordinary' : 'average',
       amount: reason ? null : amount, amountIfEligible: amount
@@ -304,48 +342,55 @@
   function splitJeon(j) { return { won: Math.floor(j / 100), jeon: j % 100 }; }
 
   /* ───────── 4. 시급·주휴수당 ───────── */
+  /* 시간은 0.01시간 단위의 정수(h100)로 바꿔 계산한다. 소수 셋째 자리가 있는 값(14.999)은 받지 않는다(반올림돼 15시간이 되지 않게) */
   function h100(h) { return Math.round(h * 100); }
+  function hoursPrecise(h) { return Math.abs(h * 100 - Math.round(h * 100)) < 1e-6; }
   function checkHours(h) { return typeof h === 'number' && isFinite(h) && h > 0 && h <= 168; }
   /* 주휴수당 = min(주 소정근로시간, 40) ÷ 40 × 8 × 시급. 주 15시간 미만은 0 */
   function weeklyHoliday(inp) {
     inp = inp || {};
     var H = DATA.hourly, wage = inp.hourly, h = inp.weeklyHours;
     if (typeof wage !== 'number' || isNaN(wage) || !checkHours(h)) return err('nan');
+    if (!hoursPrecise(h)) return err('hours');
     if (wage < 0) return err('negative');
     if (!isInt(wage)) return err('not-integer');
-    if (wage > 10000000) return err('too-large');
+    if (wage > H.maxHourly) return err('too-large');
     var hh = h100(h), eligible = hh >= H.minWeekHours * 100, counted = Math.min(hh, H.fullWeekHours * 100);
-    /* 유급 주휴 시간 × 100 = counted ÷ 40 × 8 = counted ÷ 5 */
-    var paid100 = eligible ? counted / 5 : 0;
-    return { ok: true, eligible: eligible, weeklyHours: h, countedHours: counted / 100, paidHours: paid100 / 100,
+    /* 유급 주휴 시간 = counted ÷ 40 × 8 = counted ÷ 5. 0.001시간 단위의 정수로는 counted × 2 */
+    var paid1000 = eligible ? counted * 2 : 0;
+    return { ok: true, eligible: eligible, weeklyHours: h, hours100: hh, countedHours: counted / 100, counted100: counted, paidHours: paid1000 / 1000, paid1000: paid1000,
       pay: eligible ? mulDiv(wage * counted, 1, 500) : 0, over40: hh > H.fullWeekHours * 100 };
   }
-  /* 월 환산 시간: (주 소정 + 주휴) × 365 ÷ 7 ÷ 12. 주 40시간은 고시 값 209시간 */
+  /* 월 환산 시간: (주 소정 + 주휴) × 365 ÷ 7 ÷ 12 = num ÷ den(정수). 주 40시간은 고시 값 209시간. tenths: 화면에 보여 줄 0.1시간 단위 반올림 값 */
   function monthlyHours(weeklyHours) {
     var H = DATA.hourly, hh = Math.min(h100(weeklyHours), H.fullWeekHours * 100);
-    if (hh >= H.fullWeekHours * 100) return { hours: H.monthlyHours40, official: true, num: H.monthlyHours40, den: 1 };
-    var paid = hh >= H.minWeekHours * 100 ? hh / 5 : 0, num = Math.round((hh + paid) * 5) * 365, den = 100 * 5 * 7 * 12;
-    return { hours: num / den, official: false, num: num, den: den };
+    if (hh >= H.fullWeekHours * 100) return { hours: H.monthlyHours40, official: true, num: H.monthlyHours40, den: 1, tenths: H.monthlyHours40 * 10 };
+    /* (hh + hh ÷ 5) × 365 ÷ (100 × 7 × 12): 분자·분모에 5를 곱해 정수로 */
+    var num = (hh >= H.minWeekHours * 100 ? hh * 6 : hh * 5) * 365, den = 100 * 5 * 7 * 12;
+    return { hours: num / den, official: false, num: num, den: den, tenths: roundDiv(num * 10, den) };
   }
   function minWageOf(periodId) { var P = period(periodId); return P ? P.minWage : null; }
-  /* 시급 → 주급·월급(주휴 포함), 최저임금 비교 */
+  /* 시급 → 주급·월급(주휴 포함), 최저임금 비교.
+     월급 = 시급 × 월 환산 시간, 원 미만 올림: 최저임금 월 환산액과 같은 끝수라 이 월급을 다시 시급으로 바꾸면 처음 시급이 나온다 */
   function hourlyToPay(inp) {
     inp = inp || {};
     var w = weeklyHoliday(inp);
     if (!w.ok) return w;
     var mw = minWageOf(inp.period);
     if (!mw) return err('period');
-    var counted100 = h100(w.countedHours), mh = monthlyHours(inp.weeklyHours);
-    var weeklyBase = mulDiv(inp.hourly * counted100, 1, 100);
+    var mh = monthlyHours(inp.weeklyHours);
+    var weeklyBase = mulDiv(inp.hourly * w.counted100, 1, 100);
     return { ok: true, hourly: inp.hourly, weekly: w, weeklyBase: weeklyBase, weeklyTotal: weeklyBase + w.pay,
-      monthlyHours: mh, monthly: mulDiv(inp.hourly * mh.num, 1, mh.den),
+      monthlyHours: mh, monthly: ceilDiv(inp.hourly * mh.num, mh.den),
       minWage: { hourly: mw.hourly, ok: inp.hourly >= mw.hourly, diff: inp.hourly - mw.hourly, status: mw.status }, period: inp.period || DATA.now };
   }
-  /* 월급 → 시급(주 소정근로시간 기준. 기본 40시간 = 209시간), 최저임금 비교 */
+  /* 월급 → 시급(주 소정근로시간 기준. 기본 40시간 = 209시간, 원 미만 버림). 최저임금과는 시급끼리 견준다.
+     minWage.monthly = 이 근로시간의 최저임금 월 환산액(원 미만 올림). 시급이 최저임금 이상인 것과 월급이 이 금액 이상인 것은 같은 말이다 */
   function monthlyToHourly(inp) {
     inp = inp || {};
     var monthly = inp.monthly, h = inp.weeklyHours === undefined ? DATA.hourly.fullWeekHours : inp.weeklyHours;
     if (typeof monthly !== 'number' || isNaN(monthly) || !checkHours(h)) return err('nan');
+    if (!hoursPrecise(h)) return err('hours');
     if (monthly < 0) return err('negative');
     if (!isInt(monthly)) return err('not-integer');
     if (monthly > DATA.net.maxMonthly) return err('too-large');
@@ -353,34 +398,63 @@
     if (!mw) return err('period');
     var mh = monthlyHours(h), hourly = mulDiv(monthly * mh.den, 1, mh.num), need = ceilDiv(mw.hourly * mh.num, mh.den);
     return { ok: true, monthly: monthly, monthlyHours: mh, hourly: hourly,
-      minWage: { hourly: mw.hourly, monthly: need, ok: monthly >= need, diff: monthly - need, status: mw.status }, period: inp.period || DATA.now };
+      minWage: { hourly: mw.hourly, monthly: need, ok: hourly >= mw.hourly, diff: hourly - mw.hourly, diffMonthly: monthly - need, status: mw.status }, period: inp.period || DATA.now };
   }
 
   /* ───────── 5. 실업급여(구직급여) ───────── */
   function tenureBand(years) { var b = DATA.unemployment.tenureBands, i = 0; while (i < b.length && years >= b[i]) i++; return i; }
+  /* 이직일(마지막으로 일한 날) 이전 3개월의 날짜 수: 그 다음 날을 퇴직일로 보고 퇴직금과 같은 방식으로 센다 */
+  function ubPeriod(leave) { return lastThreeMonths(leave + 1); }
+  /* 금액은 정수로만 계산한다.
+     wages3m(3개월 임금, 원)을 넣으면 1일 평균임금 = wages3m ÷ 날짜 수 를 버리지 않은 채 60%를 곱하고 원 미만을 한 번만 버린다:
+       floor(wages3m × 60 ÷ (날짜 수 × 100)).  평균임금을 먼저 버리고 60%를 곱하면 1원이 모자랄 수 있다(6,000,000 ÷ 90 × 60% = 40,000).
+     avgDaily(1일 평균임금, 원. 전 단위까지)를 직접 넣을 수도 있다.
+     이직일이 다음 해(U.next)면 하한은 그 해 최저임금으로 계산하고(확정), 상한은 아직 없어 올해 값을 쓴 채 atLeast(최소 금액)로 알린다. */
   function unemployment(inp) {
     inp = inp || {};
-    var U = DATA.unemployment, avg = inp.avgDaily, h = inp.dayHours === undefined ? U.maxDayHours : inp.dayHours;
-    if (typeof avg !== 'number' || isNaN(avg) || typeof h !== 'number' || isNaN(h)) return err('nan');
-    if (avg < 0) return err('negative');
-    if (avg > 100000000) return err('too-large');
+    var U = DATA.unemployment, NX = U.next, h = inp.dayHours === undefined ? U.maxDayHours : inp.dayHours;
+    var byWages = inp.wages3m !== undefined && inp.wages3m !== null, avg = inp.avgDaily, wages = inp.wages3m;
+    if (byWages ? (typeof wages !== 'number' || isNaN(wages)) : (typeof avg !== 'number' || isNaN(avg))) return err('nan');
+    if (typeof h !== 'number' || isNaN(h)) return err('nan');
+    if ((byWages ? wages : avg) < 0) return err('negative');
+    if (byWages ? wages > U.maxWages3m : avg > 100000000) return err('too-large');
+    if (byWages && !isInt(wages)) return err('not-integer');
     if (h <= 0 || h > 24) return err('hours');
     var leave = parseDate(inp.leave);
     if (leave === null) return err('date');
     if (leave < parseDate(U.from)) return err('before-range', { from: U.from });
+    var next = leave > parseDate(U.until);
+    if (next && !(NX && NX.from && leave >= parseDate(NX.from) && leave <= parseDate(NX.until))) return err('after-range', { until: NX && NX.until ? NX.until : U.until });
     var years = inp.tenureYears;
     if (typeof years !== 'number' || isNaN(years) || years < 0 || years > 80) return err('tenure');
     var over50 = !!(inp.over50 || inp.disabled), band = tenureBand(years);
     var hh = Math.min(h100(h), U.maxDayHours * 100);
-    /* 기초일액은 상한(113,500원)까지. 구직급여 = 기초일액 × 60%. 하한 = 1일 소정근로시간 × 시간급 최저임금 × 80% */
-    var avgJeon = Math.round(avg * 100), baseJeon = Math.min(avgJeon, U.baseMax * 100);
-    var byRate = mulDiv(baseJeon, U.rateNum, U.rateDen * 100);
-    var lower = mulDiv(hh * U.minWageHourly, U.lowerNum, U.lowerDen * 100);
+    /* 1일 평균임금 = n ÷ d (원) */
+    var n, d, per = null;
+    if (byWages) {
+      per = ubPeriod(leave); d = per.days;
+      if (inp.periodDays !== undefined && inp.periodDays !== null) {
+        if (!isInt(inp.periodDays) || inp.periodDays < 1 || inp.periodDays > 92) return err('period-days');
+        d = inp.periodDays;
+      }
+      n = wages;
+    } else { n = Math.round(avg * 100); d = 100; }
+    /* 기초일액은 상한(113,500원)까지. 구직급여 = 기초일액 × 60%. 하한 = 1일 소정근로시간 × 이직일의 시간급 최저임금 × 80% */
+    var capped = n > U.baseMax * d;
+    var byRate = capped ? mulDiv(U.baseMax, U.rateNum, U.rateDen) : mulDiv(n * U.rateNum, 1, d * U.rateDen);
+    var minWage = next ? NX.minWageHourly : U.minWageHourly;
+    var lower = mulDiv(hh * minWage, U.lowerNum, U.lowerDen * 100);
     var daily = Math.max(byRate, lower), days = (over50 ? U.days.over50 : U.days.under50)[band];
+    /* 다음 해 이직(상한 미정): 새 상한이 금액을 바꿀 수 있는 사람은 '평균임금이 지금 상한(기초일액)을 넘고, 상한이 없다고 칠 때의 60%가 하한보다 큰' 사람뿐이다.
+       그 사람만 '최소 금액'으로 보여 준다. 그 밖의 사람(60%가 하한보다 적거나, 지금 상한 아래)은 상한이 어떻게 정해져도 같은 금액이다 */
+    var atLeast = next && capped && mulDiv(n * U.rateNum, 1, d * U.rateDen) > lower;
     return { ok: true, daily: daily, byRate: byRate, lower: lower, upper: U.upper,
-      kind: lower >= byRate ? 'lower' : avgJeon > U.baseMax * 100 ? 'upper' : 'rate',
-      days: days, total: daily * days, monthly30: daily * 30, band: band, over50: over50, dayHours: hh / 100,
-      provisional: leave > parseDate(U.until) ? 'next-year-undecided' : null, waitDays: U.waitDays };
+      kind: lower >= byRate ? 'lower' : capped ? 'upper' : 'rate',
+      days: days, total: daily * days, monthly30: daily * 30, band: band, over50: over50, dayHours: hh / 100, hours100: hh,
+      wages3m: byWages ? wages : null, periodDays: byWages ? d : null, period: per ? { start: iso(per.start), end: iso(per.end), days: per.days, rule: per.rule } : null,
+      avgFloor: mulDiv(n, 1, d), capped: capped, minWageHourly: minWage, year: next ? NX.year : period(DATA.now).year,
+      upperStatus: next ? NX.upperStatus : 'fixed', atLeast: atLeast, lowerOverUpper: lower > U.upper,
+      provisional: next ? 'next-year-undecided' : null, waitDays: U.waitDays };
   }
 
   /* ───────── 6. 연차 ───────── */
@@ -422,12 +496,12 @@
 
   return {
     data: DATA, gani: GANI,
-    fmt: fmt, readKo: readKo, readEn: readEn, parseMoney: parseMoney,
+    fmt: fmt, fmtDec: fmtDec, readKo: readKo, readEn: readEn, parseMoney: parseMoney,
     parseDate: parseDate, iso: iso, addMonths: addMonths,
-    netPay: netPay, compare: compare, salaryTable: salaryTable, validity: validity, unemploymentValidity: unemploymentValidity, withholding: withholding, tableTax: tableTax, childCredit: childCredit,
+    netPay: netPay, compare: compare, salaryTable: salaryTable, validity: validity, unemploymentValidity: unemploymentValidity, defaultPeriod: defaultPeriod, withholding: withholding, tableTax: tableTax, childCredit: childCredit,
     severance: severance, lastThreeMonths: function (s) { var d = parseDate(s); if (d === null) return err('date'); var p = lastThreeMonths(d); return { ok: true, start: iso(p.start), end: iso(p.end), days: p.days }; }, splitJeon: splitJeon,
     weeklyHoliday: weeklyHoliday, monthlyHours: monthlyHours, hourlyToPay: hourlyToPay, monthlyToHourly: monthlyToHourly,
-    unemployment: unemployment, tenureBand: tenureBand,
+    unemployment: unemployment, unemploymentPeriod: function (s) { var d = parseDate(s); if (d === null) return err('date'); var p = ubPeriod(d); return { ok: true, start: iso(p.start), end: iso(p.end), days: p.days, rule: p.rule }; }, tenureBand: tenureBand,
     annualLeave: annualLeave, leaveDaysAfterYears: leaveDaysAfterYears
   };
 });

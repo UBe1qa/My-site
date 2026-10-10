@@ -4,11 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.xml': 'application/xml', '.txt': 'text/plain', '.json': 'application/json', '.wasm': 'application/wasm' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8', '.json': 'application/json', '.wasm': 'application/wasm', '.woff2': 'font/woff2' };
 const port = +process.argv[2] || 8446;
 http.createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  if (p.split('/').some((s) => s === '_dev' || s === 'tests' || s === '..')) p = '/__nope';
+  if (p.split('/').some((s) => s === '_dev' || s === 'tests' || s === '..') || p === '/_headers') p = '/__nope';   // _headers 는 Cloudflare 가 읽는 설정이라 주소로 열리지 않는다
   let f = path.join(ROOT, p);
   if (p.endsWith('/')) f = path.join(f, 'index.html');
   else if (fs.existsSync(f) && fs.statSync(f).isDirectory()) { res.writeHead(307, { Location: p + '/' }); return res.end(); }

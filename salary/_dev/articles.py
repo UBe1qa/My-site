@@ -5,7 +5,7 @@
 - 확인하지 못한 사실(외국인 단일세율, 수급 제한 사유, 2027년 미정 값 등)은 쓰지 않는다.
 """
 from ctx import *  # noqa: F401,F403
-from texts import table, kospan, mw_table, days_table, lower_table, N, R, H, SV, U, L, pen, hi, care, emp, mw0, mw1, CH, E, n4, P0_KO, P1_KO, P0_EN, P1_EN, EFF_KO, EFF_EN, HOLD_KO, HOLD_EN
+from texts import table, kospan, mw_table, days_table, lower_table, N, R, H, SV, U, L, pen, hi, care, emp, mw0, mw1, CH, E, n4, P0_KO, P1_KO, P0_EN, P1_EN, EFF_KO, EFF_EN, HOLD_KO, HOLD_EN, NY
 
 m300, m300nt0, m700 = F['m300'], F['m300nt0'], F['m700']
 fam, famKid, r80, r120 = F['fam'], F['famKid'], F['ratio80'], F['ratio120']
@@ -73,6 +73,9 @@ def ko_rates():
 <p>회사와 근로자가 절반씩 내니까 근로자 몫은 {SCHED[0]['year']}년 {SCHED[0]['pct']}%, {SCHED[1]['year']}년 {SCHED[1]['pct']}%예요. 그 뒤 요율도 법에 이미 적혀 있어요.</p>
 {table(['연도'] + [str(r['year']) for r in SCHED], [('근로자 몫', *[r['pct'] + '%' for r in SCHED])], cls='wide')}
 <p>국민연금을 매기는 월 소득에는 상한과 하한이 있어요. {LIMIT_FROM}부터 {LIMIT_UNTIL}까지는 <span class="nw">{man0(pen['baseMin'])}~{man(pen['baseMax'])}</span>이에요. 이 범위는 해마다 7월에 바뀌어요.</p>
+<p>나이도 봐요. 가입 대상은 법에 이렇게 적혀 있어요.</p>
+{quote('nps6')}
+<p>그래서 만 {N['pensionExemptAge']}세 이상인 근로자는 임의계속가입을 신청한 경우가 아니면 국민연금을 떼지 않아요. 계산기에서는 조건의 '만 {N['pensionExemptAge']}세 이상이에요'를 켜면 돼요.</p>
 <h2>건강보험: {NXT['health']['totalPct']}% 그대로</h2>
 <p>{Y0}년 건강보험료율은 {hi['totalPct']}%이고 근로자는 그 절반인 {hi['ratePct']}%를 내요. 공단의 식은 {q('nhis_rate')}이에요.</p>
 {quote('mohw2027')}
@@ -93,12 +96,12 @@ def ko_rates():
     return dict(slug='2026-4dae-boheom-yoyul', short=f'{Y0}년 4대 보험 요율과 {Y1}년 변화', h1=f'{Y0}년 4대 보험 요율과 {Y1}년에 바뀌는 것',
                 title=f'{Y0}년 4대 보험 요율과 {Y1}년에 바뀌는 것: 확정·의결·미정 | 떼고얼마',
                 desc=f'{Y0}년 근로자 몫은 국민연금 {pen["ratePct"]}%, 건강보험 {hi["ratePct"]}%, 고용보험 {emp["ratePct"]}%예요. {Y1}년에는 국민연금이 {NXT["pension"]["ratePct"]}%로 오르고 장기요양보험료율은 아직 정해지지 않았어요.',
-                body=body, sources=['npsLaw', 'npsGuide', 'nhisRate', 'nhisLimit', 'mohw2027', 'mohwCare2027', 'eiRateDecree', 'eiRateLaw', 'minWage'],
+                body=body, sources=['npsLaw', 'npsLaw6', 'npsGuide', 'nhisRate', 'nhisLimit', 'mohw2027', 'mohwCare2027', 'eiRateDecree', 'eiRateLaw', 'minWage'],
                 try_=(f'{Y1}년 기준으로 바꿔 보면 달라지는 줄이 표시돼요.', '연봉 실수령액 계산기', ''), pair=None)
 
 
 def ko_weekly():
-    rows = [(f'주 {h}시간', f'{hrs(wk[h]["paidHours"])}시간' if wk[h]['eligible'] else '없음', f'{c(wk[h]["pay"])}원', f'{c(wk[h]["weeklyTotal"])}원') for h in (14, 15, 20, 30, 40, 45)]
+    rows = [(f'주 {h}시간', f'{hrs(wk[h]["paidHours"])}시간' if wk[h]['eligible'] else '없음', f'{c(wk[h]["pay"])}원', f'{c(wk[h]["weeklyTotal"])}원' + (f' ({FULL}시간분까지)' if h > FULL else '')) for h in (14, 15, 20, 30, 40, 45)]
     body = f'''<p class="lede">주휴수당은 하루치 임금이에요. 1일 소정근로시간에 시급을 곱해요. 4주 평균 주 {MINW}시간 이상 일하기로 했고 그 주의 소정근로일을 개근하면 생겨요. {Y0}년 최저임금 {c(mw0['hourly'])}원으로 주 {FULL}시간 일하면 한 주에 {c(wk[40]['pay'])}원이에요.</p>
 <h2>누가 받나요</h2>
 <p>근거는 근로기준법 제55조와 시행령 제30조예요.</p>
@@ -114,9 +117,11 @@ def ko_weekly():
 <p class="calc">주휴수당 = 주 소정근로시간 ÷ {FULL} × {DAYH} × 시급<br>주 {wk[20]['hours']}시간, 시급 {c(mw0['hourly'])}원 → {hrs(wk[20]['paidHours'])}시간 × {c(mw0['hourly'])}원 = <b>{c(wk[20]['pay'])}원</b></p>
 <p>{Y0}년 최저임금({c(mw0['hourly'])}원)으로 계산한 표예요.</p>
 {table(['주 소정근로시간', '유급 주휴 시간', '주휴수당(한 주)', '주급(주휴수당 포함)'], rows, cls='wide')}
+<p class="note">주 {wk[45]['hours']}시간 줄의 주급은 소정근로 {FULL}시간까지만 넣은 값이에요.</p>
 <h2>주 {FULL}시간을 넘게 일해도 {DAYH}시간분까지예요</h2>
 {quote('moel1350_base')}
 <p>소정근로시간은 주 {FULL}시간, 하루 {DAYH}시간 안에서 정하는 시간이라 주휴수당도 {DAYH}시간분이 끝이에요. 표에서 주 {wk[45]['hours']}시간과 주 {FULL}시간의 주휴수당이 같은 이유예요.</p>
+<p>표의 주 {wk[45]['hours']}시간 줄에 적힌 주급 {c(wk[45]['weeklyTotal'])}원은 소정근로 {FULL}시간까지만 넣은 값이에요({FULL}시간분 임금 {c(wk[45]['weeklyBase'])}원 + 주휴수당 {c(wk[45]['pay'])}원). {FULL}시간을 넘겨 일한 시간의 임금은 이 표에 들어 있지 않아요.</p>
 <h2>작은 사업장도 주휴일은 적용돼요</h2>
 <p>상시 {L['minWorkers'] - 1}명 이하 사업장에도 근로기준법 제55조 제1항(주휴일)은 적용돼요. 근로기준법 시행령 별표 1의 적용 조항에 들어 있어요.</p>
 <h2>월급제는 이미 들어 있어요</h2>
@@ -150,9 +155,9 @@ def ko_severance():
 {quote('avg_ordinary')}
 <h2>4단계: 퇴직금</h2>
 <p class="calc">{c(sv['avg']['won'])}원 {sv['avg']['jeon']}전 × {SV['payDays']}일 × {c(sv['serviceDays'])}일 ÷ {SV['daysPerYear']} = <b>{c(sv['amount'])}원</b></p>
-<p>이 금액은 고용노동부 예제 조건을 이 사이트 계산기에 넣은 값이에요. 고용노동부 화면에는 예제의 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 버렸어요.</p>
+<p>이 금액은 고용노동부 예제 조건을 이 사이트 계산기에 넣은 값이에요. 고용노동부 화면의 예제 설명에는 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 고용노동부 계산기처럼 반올림했어요.</p>
 <h2>알아 둘 것</h2>
-{li('세전 금액이에요. 퇴직소득세는 따로 계산돼요.', f'퇴직금은 퇴직한 날부터 {SV["payWithinDays"]}일 안에 줘야 해요. 당사자끼리 합의하면 늦출 수 있어요(근로자퇴직급여 보장법 제9조).', '회사 내규에 따라 실제 지급액과 다를 수 있어요.', '이 계산기는 퇴직 전 3개월을 달력으로 3개월 전 같은 날부터 세어요. 그 날짜가 없는 달은 말일부터라서 회사·고용센터 계산과 하루 차이가 날 수 있어요.')}'''
+{li('세전 금액이에요. 퇴직소득세는 따로 계산돼요.', f'퇴직금은 퇴직한 날부터 {SV["payWithinDays"]}일 안에 줘야 해요. 당사자끼리 합의하면 늦출 수 있어요(근로자퇴직급여 보장법 제9조).', '회사 내규에 따라 실제 지급액과 다를 수 있어요.', f'퇴직 전 3개월은 3개월 전 같은 날부터 세어요. 그 날짜가 없으면 그 달 말일부터, 3개월 전이 2월이면 3월 1일부터 세어요({date_ko(F["threeMonthsEx"]["leave"])}에 퇴직하면 {date_ko(F["threeMonthsEx"]["start"])}부터 {F["threeMonthsEx"]["days"]}일). 고용노동부 계산기와 같은 방식이에요.')}'''
     return dict(slug='toejikgeum-gyesan-yeje', short='퇴직금 계산, 고용노동부 예제로 따라가기', h1='퇴직금 계산을 고용노동부 예제로 따라가 보기',
                 title='퇴직금 계산 방법: 고용노동부 예제로 4단계 따라가기 | 떼고얼마',
                 desc=f'퇴직금 = 1일 평균임금 × {SV["payDays"]}일 × 재직일수 ÷ {SV["daysPerYear"]}. 고용노동부 예제(재직 {c(E["serviceDays"])}일)를 한 단계씩 계산해 1일 평균임금 {c(E["avgWon"])}원 {E["avgJeon"]}전까지 맞춰 봤어요.',
@@ -211,12 +216,13 @@ def ko_ub():
 <p>{q('ei_table_note')} 실업을 신고한 날부터 {U['waitDays']}일은 대기기간이라 지급되지 않아요.</p>
 <h2>받을 수 있는지는 따로 봐요</h2>
 <p>고용보험법 제40조의 요건은 네 가지예요. 이직 전 {U['baseMonths']}개월 동안 피보험 단위기간이 합쳐서 {U['needDays']}일 이상일 것, 일할 의사와 능력이 있는데도 취업하지 못한 상태일 것, 이직 사유가 수급자격 제한 사유에 해당하지 않을 것, 재취업을 위해 적극적으로 노력할 것. 내 경우가 맞는지는 거주지 고용센터에서 확인하세요. 이 글과 계산기는 금액만 다뤄요.</p>
-<h2>{U['next']['year']}년에는</h2>
-<p>{U['next']['year']}년 최저임금은 {c(U['next']['minWageHourly'])}원이에요. 지금 식대로 계산하면 {U['maxDayHours']}시간 하한은 {c(ub['lowerNext8'])}원으로 지금 상한 {c(U['upper'])}원보다 커져요. {U['next']['year']}년 상한이 어떻게 정해질지는 확인된 발표가 없어요. {date_ko(U['change2028'])}부터는 계산 기준이 평균임금에서 보수(이직 전 1년 동안 신고된 보수)로 바뀔 예정이에요.</p>'''
+<h2>{NY}년에 이직하면</h2>
+<p>하한은 이직일의 최저임금으로 계산해요. {NY}년 최저임금은 {c(U['next']['minWageHourly'])}원이라서, 계산하면 하루 {U['maxDayHours']}시간 하한은 {c(ub['lowerNext8'])}원이에요. 지금 상한 {c(U['upper'])}원보다 {c(ub['overUpper'])}원 많아요. 평균임금의 {U['rateNum']}%가 하한보다 적으면 하한액을 받으니까({q('ei46_2')}), {NY}년에 이직한 하루 {U['maxDayHours']}시간 근로자는 하루에 적어도 {c(ub['lowerNext8'])}원을 받아요.</p>
+<p>{NY}년 상한이 어떻게 정해질지는 확인된 발표가 없어요. 평균임금의 {U['rateNum']}%가 하한보다 적은 사람은 상한과 상관없이 하한액을 받아요. 평균임금이 지금 상한의 기준인 {c(U['baseMax'])}원을 넘는 사람은 새 상한에 따라 더 받을 수도 있어서, 계산기는 그런 경우에만 하루 금액과 합계를 '최소'라고 표시해요. {date_ko(U['change2028'])}부터는 계산 기준이 평균임금에서 보수(이직 전 1년 동안 신고된 보수)로 바뀔 예정이에요.</p>'''
     return dict(slug='sileopgeupyeo-haru-geumaek', short=f'{Y0}년 실업급여 하루 금액', h1=f'{Y0}년 실업급여 하루 금액이 {c(UB8)}~{c(U["upper"])}원에 모이는 이유',
                 title=f'{Y0}년 실업급여 하루 금액: 하한 {c(UB8)}원, 상한 {c(U["upper"])}원 | 떼고얼마',
                 desc=f'{Y0}년 구직급여는 평균임금의 {U["rateNum"]}%지만 하루 {U["maxDayHours"]}시간 근로자는 하한 {c(UB8)}원과 상한 {c(U["upper"])}원 사이에서 정해져요. 상·하한이 나오는 식과 받는 날 수 표를 정리했어요.',
-                body=body, sources=['eiLaw', 'eiDecree68', 'moel1350Ub', 'eiTable1', 'minWage'],
+                body=body, sources=['eiLaw', 'eiDecree68', 'moel1350Ub', 'eiTable1', 'minWage', 'minWageNotice2027'],
                 try_=('3개월 임금과 가입 기간을 넣어 계산해 보세요.', '실업급여 계산기', 'unemployment/'), pair=None)
 
 
@@ -241,10 +247,10 @@ def en_deductions():
 <p class="calc">{wn(n4['annual'])} ÷ 12 = {wn(n4['gross'])} gross<br>{wn(n4['gross'])} − {wn(n4['nontax'])} = {wn(n4['taxable'])} taxable</p>
 <h2>The four insurances</h2>
 <ul>
-<li><b>National Pension.</b> {pen['ratePct']}% in {Y0}, rising to {NXT['pension']['ratePct']}% in {Y1} under the National Pension Act. It is charged on an income figure that drops anything under {wn(pen['baseUnit'])} and is kept between {wn(pen['baseMin'])} and {wn(pen['baseMax'])} a month, so the premium stops growing above that ceiling.</li>
+<li><b>National Pension.</b> {pen['ratePct']}% in {Y0}, rising to {NXT['pension']['ratePct']}% in {Y1} under the National Pension Act. It is charged on an income figure that drops anything under {wn(pen['baseUnit'])} and is kept between {wn(pen['baseMin'])} and {wn(pen['baseMax'])} a month, so the premium stops growing above that ceiling. By law only workers under {N['pensionExemptAge']} are compulsory members, so it is not collected from people aged {N['pensionExemptAge']} or older unless they chose to stay in voluntarily ({src('npsLaw6', 'en')}).</li>
 <li><b>National Health Insurance.</b> {hi['ratePct']}%, the employee half of the {hi['totalPct']}% rate. The monthly premium has a floor of {wn(hi['employeeMin'])} and a ceiling of {wn(hi['employeeMax'])} for the employee share.</li>
 <li><b>Long-term Care Insurance.</b> Not a share of pay but of the health premium: health premium × {care['ratePct']}% ÷ {care['healthPct']}%.</li>
-<li><b>Employment Insurance.</b> {emp['ratePct']}%, with no ceiling in the law we read. It is not collected from people hired after turning {N['employmentExemptAge']}.</li>
+<li><b>Employment Insurance.</b> {emp['ratePct']}%, with no ceiling in the law we read. It is not collected from people hired after turning {N['employmentExemptAge']} ({src('eiRateLaw', 'en')}).</li>
 </ul>
 <p>Employers pay their own share on top of each of these. Only the employee share appears as a deduction.</p>
 <h2>The two taxes</h2>
@@ -265,7 +271,7 @@ def en_deductions():
     return dict(slug='payroll-deductions-korea', short='How payroll deductions work in Korea', h1='How payroll deductions work in Korea: the four insurances and withholding tax',
                 title='Payroll deductions in Korea: the four insurances and tax | Takehome Korea',
                 desc=f'What comes out of a Korean payslip each month: National Pension {pen["ratePct"]}%, health insurance {hi["ratePct"]}%, long-term care, employment insurance {emp["ratePct"]}% and withheld income tax, with a worked example.',
-                body=body, sources=['npsLaw', 'npsGuide', 'nhisRate', 'nhisLimit', 'eiRateDecree', 'eiRateLaw', 'gani', 'ganiRatio', 'localTax', 'meal', 'npsDecree3', 'nhisDecree33', 'treasury47', 'mohw2027', 'mohwCare2027'],
+                body=body, sources=['npsLaw', 'npsLaw6', 'npsGuide', 'nhisRate', 'nhisLimit', 'eiRateDecree', 'eiRateLaw', 'gani', 'ganiRatio', 'localTax', 'meal', 'npsDecree3', 'nhisDecree33', 'treasury47', 'mohw2027', 'mohwCare2027'],
                 try_=('Put in your own salary and see every line.', 'Net salary calculator', ''), pair=None)
 
 
@@ -290,13 +296,13 @@ def en_severance():
 {table(['Input', 'Value'], [('Start date', date_en(E['join'])), ('Leaving date', date_en(E['leave'])), ('Days of service', c(E['serviceDays'])), ('Base pay a month', wn(E['monthlyBase'])), ('Other allowances a month', wn(E['monthlyAllowance'])), ('Bonus for the year', wn(E['annualBonus'])), ('Unused-leave pay', f'{wn(E["leaveUnit"])} × {E["leaveDays"]} days')], cls='')}
 <p>The leaving date is the day after the last working day. The three months before {date_en(E['leave'])} run from {date_en(sv['periodStart'])} to {date_en(sv['periodEnd'])}, which is {sv['periodDays']} days. Depending on the months involved it is between {SV['periodDaysMin']} and {SV['periodDaysMax']}.</p>
 <p class="calc">A: ({wn(E['monthlyBase'])} + {wn(E['monthlyAllowance'])}) × 3 = {wn(E['wages3m'])}<br>B: {wn(E['annualBonus'])} × 3/12 = {wn(E['bonusPart'])}<br>C: {wn(E['leaveUnit'])} × {E['leaveDays']} × 3/12 = {wn(E['leavePart'])}<br>A + B + C = {wn(sv['total'])}<br>{wn(sv['total'])} ÷ {sv['periodDays']} = <b>{wn(sv['avg']['won'])}.{sv['avg']['jeon']}</b> a day<br>{wn(sv['avg']['won'])}.{sv['avg']['jeon']} × {SV['payDays']} × {c(sv['serviceDays'])} ÷ {SV['daysPerYear']} = <b>{wn(sv['amount'])}</b></p>
-<p>The ministry’s page states the average daily wage and stops there. The final {wn(sv['amount'])} is what this site’s calculator returns for the same inputs, with won fractions dropped.</p>
+<p>The ministry’s worked example states the average daily wage and stops there. The final {wn(sv['amount'])} is what this site’s calculator returns for the same inputs, rounded to the nearest won as the ministry’s calculator does.</p>
 <h2>Things to know</h2>
 <ul>
 <li>The result is before tax. Retirement income tax is calculated separately and is not covered here.</li>
 <li>Severance pay must be paid within {SV['payWithinDays']} days of leaving, unless both sides agree to extend ({src('sevLaw9', 'en')}).</li>
 <li>Company rules can make the actual amount differ, as the ministry’s calculator itself notes.</li>
-<li>This site counts the last three months from the same calendar day three months earlier, or from the last day of that month if that day does not exist. An employer or labor office may count one day differently.</li>
+<li>This site counts the last three months the way the ministry’s calculator does: from the same calendar day three months earlier, from the last day of that month if that day does not exist, and from 1 March when that month is February (leaving on {date_en(F['threeMonthsEx']['leave'])} gives {F['threeMonthsEx']['days']} days from {date_en(F['threeMonthsEx']['start'])}).</li>
 </ul>'''
     return dict(slug='severance-pay-korea', short='Severance pay in Korea', h1='Severance pay in Korea: who qualifies and how it is calculated',
                 title='Severance pay in Korea: who qualifies and the formula | Takehome Korea',

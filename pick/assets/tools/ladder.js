@@ -1,8 +1,10 @@
 // 사다리타기 화면. 사다리와 결과는 core/ladder.js가 만든다(아래 칸을 먼저 섞고 사다리를 만든다).
 // 여기서는 SVG로 그리고, 이름을 누르면 그 사람의 길을 따라간다. 가로줄은 누가 타기 전까지 가려 둔다.
 // 한 판(game)은 만든 순간의 명단·아래 칸·씨앗을 잡아 둔 것이다. 그림·결과·링크는 전부 이 묶음에서 나오고,
-// 명단이나 설정이 바뀌면 그 판은 통째로 지운다(길을 따라가는 도중이어도). 사다리는 줄 순서가 결과의 일부라서 순서까지 링크에 담긴다.
-import { T, $, $$, fmt, reduced, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, seg, outHead, nfmt, plural } from '../app.js';
+// 명단이나 설정이 바뀌면 그 판은 통째로 지운다(길을 따라가는 도중이어도). 사다리는 줄 순서와 아래 칸을 적은 순서가 결과의 일부라서 순서까지 링크에 담긴다.
+// 그래서 여기의 확인 코드는 '사다리 확인 코드'(줄 순서 + 아래 칸까지 넣은 값, core/name.js의 ladderCode)다.
+import { T, $, $$, fmt, reduced, el, list, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, setCode, nameEl, seg, outHead, nfmt, plural } from '../app.js';
+import { ladderCode } from '../core/name.js';
 import { newSeed, makeRng } from '../core/rng.js';
 import { LIMITS, fitLabel, commonPrefixLength } from '../core/pick.js';
 import { playLadder, tracePath } from '../core/ladder.js';
@@ -50,7 +52,9 @@ function reset() {
   box.classList.remove('more');
 }
 
-function make(seed, replay, given) {
+/** mark: 링크로 연 결과면 표시 종류('ok' | 'cleaned'), 내가 만들면 없음 */
+function make(seed, mark, given) {
+  const replay = !!mark;
   const items = list.items.slice();
   const n = items.length;
   if (n < LIMITS.ladderMin || n > LIMITS.ladderMax) { reset(); setMsg(fmt(T.ladderRange, { n: nfmt(n) })); return; }
@@ -60,13 +64,14 @@ function make(seed, replay, given) {
   const lab = given ? { labels: given.concat(Array(Math.max(0, n - given.length)).fill(T.blank)).slice(0, n), given: given.slice(0, n), extra: Math.max(0, given.length - n) } : labelsFor(n);
   seed = seed || newSeed();
   const g = playLadder(n, { rows }, makeRng(seed));
-  game = { seed, items, labels: lab.labels, given: lab.given, rows, g, open: new Set(), replay, pre: commonPrefixLength(items), preB: commonPrefixLength(lab.given) };
+  game = { seed, items, labels: lab.labels, given: lab.given, rows, g, open: new Set(), replay, mark: mark || false, pre: commonPrefixLength(items), preB: commonPrefixLength(lab.given) };
   render();
   // 아래 칸을 사람 수보다 많이 적었으면 말없이 버리지 않고 알린다
   $('#labwarn').textContent = lab.extra > 0 ? plural('ladderExtra', lab.extra, { m: nfmt(n) }) : '';
   go.textContent = go.dataset.again;
   showAllBtn.hidden = false;
   setAfter(true);
+  setCode(n, ladderCode(items, lab.given));
   $('#tip').textContent = T.ladderTip;
   if (replay) showAll();
   else {
@@ -174,16 +179,16 @@ function showAll() {
 }
 
 function renderOut() {
-  const { items, labels, g, open, replay } = game;
+  const { items, labels, g, open, mark } = game;
   out.textContent = '';
   if (!open.size) return;
-  out.append(outHead(T.ladderAll, replay && open.size === items.length));
+  out.append(outHead(T.ladderAll, open.size === items.length ? mark : false));
   const ul = el('ul', 'pairs');
   items.forEach((name, i) => {
     if (!open.has(i)) return;
     const label = labels[g.result[i]];
     const li = el('li', label !== T.blank ? 'win' : '');
-    li.append(el('i', null, i + 1), el('b', null, name), el('span', null, label));
+    li.append(el('i', null, i + 1), nameEl('b', name), nameEl('span', label));
     ul.append(li);
   });
   out.append(ul);
@@ -194,18 +199,22 @@ go.addEventListener('click', () => make());
 showAllBtn.addEventListener('click', showAll);
 $('#copy').addEventListener('click', () => { if (game) copyLink('ladder', game.seed, game.items, { rows: game.rows, labels: game.given }); });
 list.onChange(() => { if (game) reset(); setMsg(''); });
-bottomEl.addEventListener('input', () => { if (game) reset(); });
+bottomEl.addEventListener('input', () => { if (game) reset(); list.paint(); }); // 아래 칸이 바뀌면 사다리 확인 코드도 바뀐다
 $('#rows').addEventListener('click', () => { if (game) reset(); });
 let rz = 0;
 let lastW = holder.clientWidth;
 addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (game && holder.clientWidth !== lastW) { lastW = holder.clientWidth; const opened = new Set(game.open); const all = !game.cover.isConnected; render(); if (all) showAll(); else opened.forEach((i) => { game.open.add(i); openBottom(game.g.ends[i], false); }); renderOut(); } }, 120); });
 
+// 명단 아래의 확인 코드: 줄 순서와 지금 적힌 아래 칸(사람 수만큼)까지 넣은 값
+list.codeOf = (items) => ladderCode(items, labelsFor(items.length).given);
+list.paint();
 const shared = readShare('ladder');
 if (shared && shared.items.length) {
   list.setShared(shared.items);
   const labels = Array.isArray(shared.opts.labels) ? shared.opts.labels : [];
   bottomEl.value = labels.join('\n');
   if ([8, 14, 24].includes(shared.opts.rows)) rowsSeg.set(shared.opts.rows);
-  make(shared.seed, true, labels);
+  make(shared.seed, shared.mark, labels);
+  list.paint();
 }
 window.__pick = { get state() { return game ? { items: game.items, labels: game.labels, given: game.given, result: game.g.result, ends: game.g.ends, bottom: game.g.bottom, open: [...game.open] } : null; } };

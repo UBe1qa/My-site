@@ -2,7 +2,10 @@
 // 기준값은 우리 코드와 다른 데서 온다.
 //  [공식] 공단·고용노동부·법령 원문에 적힌 예시와 표(출처는 assets/pay-data.js 의 SOURCES, 값은 이 파일에 따로 옮겨 적음)
 //  [표본] tests/ref/gani-samples.json: 간이세액표에서 따로 옮겨 적은 17줄
-//  [날짜] tests/ref/dates.json: 파이썬 datetime·dateutil 로 구한 값(gen_dates.py)
+//  [날짜] tests/ref/dates.json: 파이썬 datetime·calendar 로 구한 값(gen_dates.py). 퇴직 전 3개월은 고용노동부 계산기 스크립트의 가지 구조를 옮겨 셌다
+//  [실물] tests/ref/moel-live.json: 고용노동부 「퇴직금 계산」 화면에 직접 넣어 받은 값(제3자 평가, 2026-10-10)
+//  [평가] tests/ref/eval-sev.json: 제3자 평가자가 고용노동부 스크립트를 분수 계산으로 옮겨 구한 252건 / 평가 보고서에 적힌 값
+//  [분수] tests/ref/ub.json: 파이썬 분수(Fraction)로 구한 구직급여(gen_ub.py)
 //  [손]   경계 사례를 손으로 따진 값(식을 주석에 적음)
 // 일부러 틀리게 바꾼 로직을 잡는지는 tests/mutate.mjs 가 본다(환경 변수 PAY_CORE·PAY_DATA·PAY_GANI 로 파일을 바꿔 끼움).
 import { createRequire } from 'node:module';
@@ -397,12 +400,13 @@ G('주휴수당·월 환산 [공식+손]', () => {
   eq(P.monthlyHours(40).hours, 209, '주 40시간 = 209시간');
   eq(P.hourlyToPay({ hourly: 10320, weeklyHours: 40 }).monthly, 2156880, '2026 최저임금 월 환산액');
   eq(P.hourlyToPay({ hourly: 10700, weeklyHours: 40, period: '2027-01' }).monthly, 2236300, '2027 최저임금 월 환산액');
-  // [손] (20 + 4) × 365 ÷ 7 ÷ 12 = 104.2857…, × 10,320 = 1,076,228.57
+  // [손] (20 + 4) × 365 ÷ 7 ÷ 12 = 104.2857…, × 10,320 = 1,076,228.57 → 원 미만 올림 1,076,229
+  //      (3단계에서 바꿈: 전에는 버림 1,076,228. 올려야 이 월급을 다시 시급으로 바꿨을 때 10,320원이 나오고, 아래 '주 20시간의 최저 월급 1,076,229'와 같아진다)
   ok(Math.abs(P.monthlyHours(20).hours - 24 * 365 / 84) < 1e-9, '주 20시간 = 104.29시간');
   ok(Math.abs(P.monthlyHours(15).hours - 18 * 365 / 84) < 1e-9, '주 15시간 = 78.21시간');
   ok(Math.abs(P.monthlyHours(14).hours - 14 * 365 / 84) < 1e-9, '주 14시간 = 주휴 없이 60.83시간');
   let r = P.hourlyToPay({ hourly: 10320, weeklyHours: 20 });
-  eq([r.weeklyBase, r.weekly.pay, r.weeklyTotal, r.monthly], [206400, 41280, 247680, 1076228], '시급 10,320 · 주 20시간');
+  eq([r.weeklyBase, r.weekly.pay, r.weeklyTotal, r.monthly], [206400, 41280, 247680, 1076229], '시급 10,320 · 주 20시간');
   eq([r.minWage.ok, r.minWage.diff], [true, 0], '최저임금과 같음');
   r = P.hourlyToPay({ hourly: 10319, weeklyHours: 40 });
   eq([r.minWage.ok, r.minWage.diff], [false, -1], '10,319원은 2026년 최저임금 미달');
@@ -460,12 +464,13 @@ G('실업급여 [공식+손]', () => {
   r = u({ avgDaily: 200000, over50: true, tenureYears: 12 });
   eq([r.total, r.monthly30, r.days], [18387000, 2043000, 270], '68,100 × 270일');
   eq(u({ avgDaily: 100000 }).waitDays, 7, '대기기간 7일');
-  // 이직일: 2025년은 범위 밖, 2027년은 2026년 값으로 계산하고 미정 표시
+  // 이직일: 2025년은 범위 밖. 2027년은 하한을 2027년 최저임금으로(8시간 68,480원 = 10,700 × 8 × 80%), 상한은 미정이라 2026년 값
+  //   (3단계에서 바꿈: 전에는 하한도 2026년 값이라 68,100원이 나왔다. 고용보험법 제45조 제4항 '이직일 당시 적용되던 최저임금', 제46조 제2항)
   eq(u({ avgDaily: 100000, leave: '2025-12-31' }).code, 'before-range', '2025년 이직은 지원 안 함');
   eq(u({ avgDaily: 100000, leave: '2026-01-01' }).provisional, null, '2026-01-01');
   eq(u({ avgDaily: 100000, leave: '2026-12-31' }).provisional, null, '2026-12-31');
   r = u({ avgDaily: 200000, leave: '2027-01-01' });
-  eq([r.provisional, r.daily], ['next-year-undecided', 68100], '2027년 이직: 상한 미정, 2026년 기준으로만');
+  eq([r.provisional, r.daily, r.lower, r.atLeast], ['next-year-undecided', 68480, 68480, true], '2027년 이직: 하한 68,480원이 바닥, 상한 미정(평균임금 20만 원이면 새 상한에 따라 더 받을 수 있다 = 최소)');
   eq(u({ avgDaily: -1 }).code, 'negative', '음수');
   eq(u({ avgDaily: 100000, dayHours: 0 }).code, 'hours', '0시간');
   eq(u({ avgDaily: 100000, tenureYears: -1 }).code, 'tenure', '피보험기간 음수');
@@ -559,6 +564,247 @@ G('자료: 2단계에서 더한 값 [공식]', () => {
   eq([DATA.leave.attendPct, DATA.leave.addFromYears], [80, 3], '[공식] 근로기준법 제60조: 80퍼센트, 3년 이상');
   eq([DATA.rounding.verified, DATA.rounding.src], ['own', ['treasury47']], '끝수는 우리 방식(국고금관리법 제47조의 방식)');
   ok(['treasury47', 'nhisDecree33', 'npsDecree3', 'eiLaw2'].every((k) => /^https:\/\/www\.law\.go\.kr\//.test(DATA.sources[k].url)), '끝수·비과세 근거 출처');
+});
+
+/* ───────── 3단계(제3자 평가 반영)에서 더한 것 ───────── */
+G('H1 만 60세 이상(국민연금 없음) · 65세 이후 입사(고용보험료 없음) [평가+손]', () => {
+  // [공식] 국민연금법 제6조·제8조: 가입 대상은 18세 이상 60세 미만. 징수법 제13조 제3항: 65세 이후에 고용된 자는 실업급여 보험료를 징수하지 않는다
+  eq([DATA.net.pensionExemptAge, DATA.net.employmentExemptAge], [60, 65], '[공식] 60세 · 65세');
+  ok(/^https:\/\/www\.law\.go\.kr\//.test(DATA.sources[DATA.net.pensionExemptSrc[0]].url) && /제6조·제8조/.test(DATA.sources.npsLaw6.name), '근거: 국민연금법 제6조·제8조');
+  // 두 선택의 조합 4가지 × 연봉·월급 4가지. 기대값은 손으로: 실수령액 = 기본 실수령액 + 안 떼는 줄
+  //  A 연봉 4,000만(비과세 20만): 줄 [148,810 · 112,640 · 14,800 · 28,190 · 84,620 · 8,460], 실수령 2,935,813
+  //    [평가] 65세만 켠 값 2,964,003(고용보험만 0원), 둘 다 켠 값 3,112,813(평가 보고서 H1의 '실제'·'기대')
+  //  B 월급 300만(비과세 0): 줄 [142,500 · 107,850 · 14,170 · 27,000 · 74,350 · 7,430], 실수령 2,626,700
+  //  C 월급 720만(비과세 20만): 줄 [313,020 · 251,650 · 33,060 · 63,000 · 732,700 · 73,270], 실수령 5,733,300 (국민연금 상한)
+  //  D 월급 30만(비과세 0): 국민연금 하한 410,000 × 4.75% = 19,475 → 19,470, 고용보험 2,700
+  const cases = [
+    [{ basis: 'annual', amount: 40000000 }, 2935813, 148810, 28190],
+    [{ basis: 'monthly', amount: 3000000, nontax: 0 }, 2626700, 142500, 27000],
+    [{ basis: 'monthly', amount: 7200000, nontax: 200000 }, 5733300, 313020, 63000],
+    [{ basis: 'monthly', amount: 300000, nontax: 0 }, null, 19470, 2700],
+  ];
+  for (const [inp, base, pen, emp] of cases) {
+    const r0 = P10.netPay(inp), tag = `${inp.basis} ${inp.amount}`;
+    if (base !== null) eq(r0.net, base, `${tag}: 둘 다 끔 = 기본 실수령액`);
+    eq([r0.line.pension.amount, r0.line.employment.amount], [pen, emp], `${tag}: 기본 국민연금·고용보험`);
+    for (const [np, ne] of [[false, false], [true, false], [false, true], [true, true]]) {
+      const r = P10.netPay({ ...inp, noPension: np, noEmployment: ne });
+      eq([r.line.pension.amount, r.line.employment.amount], [np ? 0 : pen, ne ? 0 : emp], `${tag} 60세 ${np} · 65세 ${ne}: 국민연금·고용보험`);
+      eq(r.net, r0.net + (np ? pen : 0) + (ne ? emp : 0), `${tag} 60세 ${np} · 65세 ${ne}: 실수령액은 안 떼는 만큼만 늘어난다`);
+      eq(['health', 'care', 'incomeTax', 'localTax'].map((k) => r.line[k].amount), ['health', 'care', 'incomeTax', 'localTax'].map((k) => r0.line[k].amount), `${tag} 60세 ${np} · 65세 ${ne}: 다른 줄은 그대로`);
+      eq([r.noPension, r.noEmployment, r.line.pension.exempt, r.line.employment.exempt], [np, ne, np, ne], `${tag}: 결과에 표시`);
+      eq(r.net, r.gross - r.lines.reduce((a, l) => a + l.amount, 0), `${tag}: 실수령 = 월급 − 줄 합계`);
+    }
+  }
+  eq([P10.netPay({ basis: 'annual', amount: 40000000, noEmployment: true }).net, P10.netPay({ basis: 'annual', amount: 40000000, noPension: true, noEmployment: true }).net, P10.netPay({ basis: 'annual', amount: 40000000, noPension: true }).net],
+    [2964003, 3112813, 3084623], '[평가] 연봉 4,000만: 65세만 2,964,003 / 둘 다 3,112,813 / [손] 60세만 3,084,623');
+  // 2027년 비교: 국민연금을 안 내면 2027년에 달라지는 줄이 없다
+  let c = P10.compare({ basis: 'annual', amount: 40000000, noPension: true });
+  eq([c.netDiff, c.lines.filter((l) => l.diff !== 0).length, c.next.line.pension.amount], [0, 0, 0], '2027년 비교: 국민연금 없음 → 차이 0');
+  c = P10.compare({ basis: 'annual', amount: 40000000, noEmployment: true });
+  eq([c.netDiff, c.next.line.employment.amount], [-7840, 0], '2027년 비교: 65세만 켜면 국민연금 차이 그대로(−7,840), 고용보험은 두 해 모두 0');
+  eq(P10.salaryTable([40000000], { noPension: true })[0].line.pension.amount, 0, '연봉 표 계산에도 같은 조건이 먹는다');
+});
+
+G('M4·L1 퇴직금 = 고용노동부 계산기 [실물·평가]', () => {
+  // [실물] 고용노동부 화면에 직접 넣은 10건: 3개월 날짜 수·시작일·1일 평균임금·퇴직금
+  const live = ref('moel-live.json').rows, z = (n) => String(n).padStart(2, '0'), d = (a) => `${a[0]}-${z(a[1])}-${z(a[2])}`;
+  let n = 0;
+  for (const x of live) {
+    const [j, l, w, b, lp] = x.case, r = P.severance({ join: d(j), leave: d(l), wages3m: w, annualBonus: b, leavePay: lp });
+    if (x.dialogs.length) { eq(r.reason, 'under-1y', `[실물] ${d(j)} ~ ${d(l)}: 고용노동부 화면도 1년 미만이라고 알린다`); continue; }
+    const start = x.periods[0][0].split('.').map(Number);
+    eq([r.serviceDays, r.period.days, r.period.start], [x.termDays, x.sumday, d(start)], `[실물] ${d(l)} 퇴직: 재직 ${x.termDays}일, 3개월 ${x.sumday}일(${x.periods[0][0]}부터)`);
+    eq(r.avgDailyJeon, Math.round(Number(x.avrPay.replace(/,/g, '')) * 100), `[실물] ${d(l)} 퇴직: 1일 평균임금 ${x.avrPay}`);
+    eq(r.amountIfEligible, x.retirePay, `[실물] ${d(l)} 퇴직: 퇴직금 ${x.retirePay}`);
+    n++;
+  }
+  eq(n, 9, '[실물] 금액까지 견준 것 9건');
+  // [평가] 252건: 평가자가 고용노동부 스크립트를 분수 계산으로 옮겨 구한 퇴직금·날짜 수
+  const ev = ref('eval-sev.json').rows; let bad = 0, cnt = 0;
+  for (const x of ev) {
+    const r = P.severance({ join: x.join, leave: x.leave, wages3m: x.w, annualBonus: x.b, leavePay: x.lp, dailyOrdinary: x.o || undefined });
+    if (!r.ok) continue;   // 입사일 = 퇴직일 같은 범위 밖 1건
+    cnt++;
+    if (r.amountIfEligible !== x.moel.sev || r.period.days !== x.moel.d3) { bad++; if (bad < 4) fails.push(`[평가 퇴직금] ${JSON.stringify(x)} / ${r.amountIfEligible} ${r.period.days}`); }
+  }
+  eq(bad, 0, `[평가] ${cnt}건 전부 고용노동부 계산과 같음(날짜 수·원 미만 반올림)`);
+  ok(cnt >= 250, '[평가] 250건 넘게 대조');
+  // [평가 보고서 M4] 2020-03-02 입사, 3개월 임금 900만: 5/31 퇴직 91일 18,541,924 · 5/30 90일 18,739,726 · 5/29 89일 18,941,974
+  const s = (leave) => { const r = P.severance({ join: '2020-03-02', leave, wages3m: 9000000 }); return [r.period.start, r.period.days, r.amount]; };
+  eq([s('2026-05-31'), s('2026-05-30'), s('2026-05-29')], [['2026-03-01', 91, 18541924], ['2026-03-01', 90, 18739726], ['2026-03-01', 89, 18941974]], '[평가] 5월 29·30·31일 퇴직(평년): 3월 1일부터');
+  // 윤년(2028): 5/29는 2월 29일이 있으니 그날부터, 5/30·5/31은 3월 1일부터
+  eq([s('2028-05-29').slice(0, 2), s('2028-05-30').slice(0, 2), s('2028-05-31').slice(0, 2)], [['2028-02-29', 90], ['2028-03-01', 90], ['2028-03-01', 91]], '[손] 윤년의 5월 29·30·31일');
+  // 4월·9월·11월·6월이 걸려 날짜가 없으면 그 달 말일부터(고용노동부 화면: 7/31 → 4.30, 12/31 → 9.30)
+  eq([s('2026-07-31').slice(0, 2), s('2026-12-31').slice(0, 2), s('2027-02-28').slice(0, 2), s('2026-05-28').slice(0, 2), s('2026-06-01').slice(0, 2)],
+    [['2026-04-30', 92], ['2026-09-30', 92], ['2026-11-28', 92], ['2026-02-28', 89], ['2026-03-01', 92]], '[손] 그 밖의 말일·경계');
+  // [평가 보고서 L1] 반올림: 2026-12-31 퇴직 20,061,049(버리면 20,061,048), 8/31 19,080,108, 10/1 19,329,363
+  eq([s('2026-12-31')[2], s('2026-08-31')[2], s('2026-10-01')[2]], [20061049, 19080108, 19329363], '[평가] 원 미만 반올림');
+  // [손] 반올림 경계: 1일 통상임금 100,000원 × 30 × 재직일수 ÷ 365. 73일이면 600,000 딱, 1일 8,219.18 → 8,219, 2일 16,438.36 → 16,438, 5일 41,095.89 → 41,096
+  const o = (days) => P.severance({ join: '2020-01-01', leave: P.iso(P.parseDate('2020-01-01') + days), wages3m: 0, dailyOrdinary: 100000 }).amountIfEligible;
+  eq([o(73), o(1), o(2), o(5), o(4)], [600000, 8219, 16438, 41096, 32877], '[손] 반올림 경계(…18 → 내림, …89 → 올림, …71 → 올림)');
+  // 큰 금액에서도 정밀도를 잃지 않는다: BigInt 로 다시 계산
+  let lost = 0;
+  for (const [w, j, l] of [[99999999999, '1950-01-01', '2100-12-31'], [100000000000, '1960-02-29', '2099-12-31'], [87654321987, '1970-01-01', '2100-12-30'], [3000000000, '1990-05-05', '2026-05-31']]) {
+    const r = P.severance({ join: j, leave: l, wages3m: w, annualBonus: w, leavePay: w });
+    const want = Number((BigInt(r.usedJeon) * 30n * BigInt(r.serviceDays) * 2n + 36500n) / 73000n);
+    if (r.amount !== want) lost++;
+  }
+  eq(lost, 0, '큰 금액(3개월 임금 1,000억 원, 재직 150년)도 BigInt 계산과 같다');
+  // 한꺼번에 곱하면(평균임금 × 30 × 재직일수가 2^53을 넘음) 1원이 틀리는 값. 기대값은 BigInt 로 따로 구했다: 7,284,406,956,006(실수 계산은 …007)
+  eq(P.severance({ join: '1950-01-01', leave: '2098-10-29', wages3m: 99999748819, annualBonus: 99999748818, leavePay: 99999748816 }).amount, 7284406956006, '[손] 큰 수의 정밀도');
+  // 딱 반(…0.5원)이면 올린다: 고용노동부 스크립트의 Math.round 와 같다. 18.25원 × 30 × 1일 ÷ 365 = 1.5 → 2, 97,826.05원 × 30 × 365일 ÷ 365 = 2,934,781.5 → 2,934,782
+  eq([P.severance({ join: '2026-01-01', leave: '2026-01-02', wages3m: 73, periodDays: 4 }).amountIfEligible, P.severance({ join: '2025-01-01', leave: '2026-01-01', wages3m: 1956521, periodDays: 20 }).amount], [2, 2934782], '[손] 딱 반은 올림');
+  eq(P.severance({ join: '2020-01-01', leave: '2026-01-01', wages3m: 100000000001 }).code, 'too-large', '한도를 넘으면 알린다');
+  eq(P.severance({ join: '2020-01-01', leave: '2026-01-01', wages3m: 9000000, dailyOrdinary: 1000000001 }).code, 'too-large', '통상임금 한도');
+});
+
+G('M2·M3 구직급여: 정수 계산과 2027년 하한 [분수·평가]', () => {
+  const U = DATA.unemployment, R = ref('ub.json');
+  // [공식] 자료끼리 맞는지: 상한 = 113,500 × 60%, 하한 표 = 시간 × 10,320 × 80%, 2027년 최저임금 = 기준 시기의 값
+  eq(U.upper, U.baseMax * U.rateNum / U.rateDen, '상한 68,100 = 113,500 × 60%');
+  eq([1, 2, 3, 4, 5, 6, 7, 8].map((h) => h * U.minWageHourly * U.lowerNum / U.lowerDen), [1, 2, 3, 4, 5, 6, 7, 8].map((h) => U.lowerByHours[h]), '하한 표 = 시간 × 10,320 × 80%');
+  eq([U.next.minWageHourly, U.next.year, U.next.upperStatus, U.next.from, U.next.until], [DATA.periods['2027-01'].minWage.hourly, 2027, 'undecided', '2027-01-01', '2027-12-31'], '2027년 값');
+  // [분수] 평가자가 1원 오차를 찾은 조건 그대로 + 92일·91일 구간
+  let bad = 0;
+  for (const [leave, hours, w, days, byRate, lower, daily] of R.float) {
+    const r = P.unemployment({ wages3m: w, leave, dayHours: hours, tenureYears: 3 });
+    if (!r.ok || r.periodDays !== days || r.byRate !== byRate || r.lower !== lower || r.daily !== daily) { bad++; if (bad < 4) fails.push(`[구직급여 분수] ${leave} ${hours}h ${w}: 기대 ${[days, byRate, lower, daily]} / 실제 ${r.ok ? [r.periodDays, r.byRate, r.lower, r.daily] : r.code}`); }
+  }
+  eq(bad, 0, `[분수] ${R.float.length}건(90일 구간 526건 포함)`);
+  eq(R.float.filter((x) => x[0] === '2026-03-31' && x[1] === 4).length, 526, '평가자의 526건 조건이 들어 있다');
+  // [평가 보고서 M2] 이직일 2026-03-31 · 4시간 · 600만 → 40,000원(전에는 39,999), 180일이면 7,200,000원. 이직일 2026-02-28 · 8시간 · 10,127,100 → 67,514원
+  let r = P.unemployment({ wages3m: 6000000, leave: '2026-03-31', dayHours: 4, tenureYears: 3 });
+  eq([r.periodDays, r.byRate, r.daily, r.days, r.total], [90, 40000, 40000, 180, 7200000], '[평가] 6,000,000 ÷ 90 × 60% = 40,000');
+  eq(P.unemployment({ wages3m: 10127100, leave: '2026-02-28', dayHours: 8, tenureYears: 3 }).daily, 67514, '[평가] 10,127,100 ÷ 90 × 60% = 67,514');
+  // 화면에 보이는 숫자끼리 다시 계산해도 맞는다: 평균임금의 60% = floor(임금 × 60 ÷ (날짜 수 × 100)), 1일 평균임금(원 미만 버림) = floor(임금 ÷ 날짜 수)
+  bad = 0;
+  for (let w = 5000000; w <= 10300000; w += 7919) for (const leave of ['2026-03-31', '2026-06-30', '2026-09-30', '2026-05-29']) {
+    const x = P.unemployment({ wages3m: w, leave, dayHours: 8, tenureYears: 1 }), d = x.periodDays;
+    const want = w > 113500 * d ? 68100 : Number(BigInt(w) * 60n / (BigInt(d) * 100n));
+    if (x.byRate !== want || x.avgFloor !== Math.floor(w / d) || x.capped !== (w > 113500 * d)) bad++;
+  }
+  eq(bad, 0, '[손] 임금 × 60 ÷ (날짜 수 × 100)을 한 번만 버린다');
+  // 3개월 날짜 수는 퇴직금과 같은 방식(이직일 다음 날이 퇴직일): 이직일 5월 30일 → 3월 1일부터 91일, 5월 28일(평년) → 89일
+  eq([P.unemploymentPeriod('2026-05-30'), P.unemploymentPeriod('2026-05-28').days, P.unemploymentPeriod('2026-09-30').days, P.unemploymentPeriod('2026-03-31').days],
+    [{ ok: true, start: '2026-03-01', end: '2026-05-30', days: 91, rule: 'feb' }, 89, 92, 90], '[손] 이직일 이전 3개월');
+  // 상한: 평균임금이 113,500원을 넘으면 68,100원. 딱 113,500원(10,215,000 ÷ 90)이면 60% = 68,100이고 '상한'이 아니라 '60%'
+  eq([P.unemployment({ wages3m: 10215000, leave: '2026-03-31', tenureYears: 1 }).kind, P.unemployment({ wages3m: 10215001, leave: '2026-03-31', tenureYears: 1 }).kind, P.unemployment({ wages3m: 10215001, leave: '2026-03-31', tenureYears: 1 }).daily], ['rate', 'upper', 68100], '상한 경계');
+  // 1일 평균임금을 직접 넣는 길(전 단위까지)도 같은 값
+  eq(P.unemployment({ avgDaily: 66666.67, leave: '2026-03-31', dayHours: 4, tenureYears: 3 }).byRate, 40000, 'avgDaily 66,666.67 × 60% = 40,000.002');
+  eq(P.unemployment({ avgDaily: 66666.66, leave: '2026-03-31', dayHours: 4, tenureYears: 3 }).byRate, 39999, 'avgDaily 66,666.66 × 60% = 39,999.996(평균임금을 먼저 버리면 생기는 값)');
+  // [분수] 2027년 이직: 하한은 2027년 최저임금 10,700원으로, 상한은 2026년 값 그대로
+  bad = 0;
+  for (const [leave, hours, w, days, byRate, lower, daily] of R.next) {
+    const x = P.unemployment({ wages3m: w, leave, dayHours: hours, tenureYears: 3 });
+    if (!x.ok || x.periodDays !== days || x.byRate !== byRate || x.lower !== lower || x.daily !== daily || x.minWageHourly !== 10700 || x.upperStatus !== 'undecided' || x.year !== 2027) bad++;
+  }
+  eq(bad, 0, `[분수] 2027년 이직 ${R.next.length}건`);
+  // [공식 풀이] 10,700 × 8 × 80% = 68,480 > 2026년 상한 68,100
+  r = P.unemployment({ wages3m: 9000000, leave: '2027-01-15', tenureYears: 3 });
+  eq([r.lower, r.daily, r.kind, r.lowerOverUpper, r.upper, r.total], [68480, 68480, 'lower', true, 68100, 68480 * 180], '[평가 M3] 2027-01-15 · 900만: 하루 68,480원(2027년 하한)');
+  // '최소'는 새 상한이 금액을 바꿀 수 있는 사람에게만: 평균임금이 지금 상한(113,500원)을 넘고, 상한이 없다고 칠 때의 60%가 하한보다 클 때
+  //   [손] 900만 ÷ 92일 = 97,826 → 60% 58,695 < 하한 68,480: 상한이 얼마로 정해져도 하한액 그대로(제46조 제2항) → 최소 아님
+  eq(r.atLeast, false, '2027년 · 900만 · 8시간: 60%가 하한보다 적어 상한과 상관없이 하한액(최소 표시 없음)');
+  //   [손] 1,500만 ÷ 92일 = 163,043 → 60% 97,826 > 68,480, 지금 상한으로는 68,100 → 하한 68,480이 바닥이고 새 상한에 따라 더 받을 수 있다 → 최소
+  r = P.unemployment({ wages3m: 15000000, leave: '2027-01-15', tenureYears: 3 });
+  eq([r.daily, r.kind, r.capped, r.atLeast], [68480, 'lower', true, true], '2027년 · 1,500만 · 8시간: 최소 68,480');
+  //   [손] 4시간 · 1,500만: 지금 상한 68,100 > 하한 34,240 → 68,100, 새 상한에 따라 더 받을 수 있다 → 최소
+  r = P.unemployment({ wages3m: 15000000, leave: '2027-01-15', dayHours: 4, tenureYears: 3 });
+  eq([r.daily, r.kind, r.atLeast], [68100, 'upper', true], '2027년 · 1,500만 · 4시간: 최소 68,100(2026년 상한액)');
+  //   [손] 경계: 평균임금 113,600원(10,451,200 ÷ 92)은 상한을 넘지만 60% = 68,160 < 하한 68,480 → 상한이 올라도 하한액 → 최소 아님
+  r = P.unemployment({ wages3m: 10451200, leave: '2027-01-15', tenureYears: 3 });
+  eq([r.avgFloor, r.capped, r.daily, r.atLeast], [113600, true, 68480, false], '2027년 경계: 평균임금 113,600원은 상한을 넘어도 60%가 하한보다 적다');
+  //   [손] 경계: 60%가 하한과 같을 때(68,480 ÷ 0.6 = 114,133.33… → 10,500,267 ÷ 92 × 0.6 = 68,480.002 → 68,480)는 더 받을 수 없다, 1원 넘으면(10,500,421 → 68,481) 최소
+  eq([P.unemployment({ wages3m: 10500267, leave: '2027-01-15', tenureYears: 3 }).atLeast, P.unemployment({ wages3m: 10500421, leave: '2027-01-15', tenureYears: 3 }).atLeast], [false, true], '2027년 경계: 60%가 하한을 1원이라도 넘어야 최소');
+  eq([1, 4, 8].map((h) => P.unemployment({ wages3m: 3000000, leave: '2027-06-30', dayHours: h, tenureYears: 1 }).lower), [8560, 34240, 68480], '[공식 풀이] 2027년 하한: 시간 × 10,700 × 80%');
+  r = P.unemployment({ wages3m: 9000000, leave: '2026-12-31', tenureYears: 3 });
+  eq([r.lower, r.atLeast, r.upperStatus, r.year, r.minWageHourly, r.lowerOverUpper], [66048, false, 'fixed', 2026, 10320, false], '2026-12-31 이직은 2026년 값');
+  r = P.unemployment({ wages3m: 7000000, leave: '2027-03-31', dayHours: 4, tenureYears: 3 });
+  eq([r.byRate, r.lower, r.daily, r.kind, r.atLeast], [46666, 34240, 46666, 'rate', false], '[손] 2027년 4시간: 7,000,000 ÷ 90 × 60% = 46,666.67(지금 상한 아래라 최소 표시 없음)');
+  // 2028년부터는 계산 기준이 바뀔 예정이라 계산하지 않는다
+  eq([P.unemployment({ wages3m: 9000000, leave: '2028-01-01', tenureYears: 3 }).code, P.unemployment({ wages3m: 9000000, leave: '2027-12-31', tenureYears: 3 }).ok], ['after-range', true], '2028년 이직은 범위 밖');
+  eq([P.unemployment({ wages3m: 1.5, leave: '2026-03-31', tenureYears: 1 }).code, P.unemployment({ wages3m: -1, leave: '2026-03-31', tenureYears: 1 }).code, P.unemployment({ leave: '2026-03-31', tenureYears: 1 }).code], ['not-integer', 'negative', 'nan'], '범위 밖 입력');
+  eq([P.unemploymentValidity('2026-12-31').nextYear, P.unemploymentValidity('2027-01-01').nextYear, P.unemploymentValidity('2028-01-01').nextYear], [false, true, false], '2027년은 하한만 확정인 기간');
+});
+
+G('L3·L13 시급 ↔ 월급 왕복, 시간 표시 [평가+손]', () => {
+  // [평가 보고서 L3] 시급 10,320 · 주 15시간 → 807,171.43 → 올림 807,172. 그 월급을 다시 넣으면 시급 10,320, 최저임금과 같다(전에는 807,171 → '1원 적어요')
+  let r = P.hourlyToPay({ hourly: 10320, weeklyHours: 15 });
+  eq(r.monthly, 807172, '[평가] 10,320 · 주 15시간 → 807,172');
+  let b = P.monthlyToHourly({ monthly: r.monthly, weeklyHours: 15 });
+  eq([b.hourly, b.minWage.ok, b.minWage.diff, b.minWage.monthly, b.minWage.diffMonthly], [10320, true, 0, 807172, 0], '[평가] 807,172 · 15시간 → 시급 10,320, 최저임금과 같다');
+  eq(P.hourlyToPay({ hourly: 10320, weeklyHours: 20 }).monthly, 1076229, '[평가] 주 20시간 1,076,229');
+  // 자기 결과를 '적다'고 하지 않는다: 시급 → 월급 → 시급이 처음 값으로 돌아온다
+  let bad = 0, n = 0;
+  for (const wage of [10320, 10700, 9860, 12000, 12345, 15000, 33333]) for (let h = 1; h <= 60; h += 0.25) for (const period of ['2026-10', '2027-01']) {
+    const a = P.hourlyToPay({ hourly: wage, weeklyHours: h, period }), c = P.monthlyToHourly({ monthly: a.monthly, weeklyHours: h, period });
+    n++;
+    if (c.hourly !== wage || c.minWage.ok !== a.minWage.ok || c.minWage.diff !== a.minWage.diff) bad++;
+    // 월급은 시급 × 시간보다 모자라지 않고 1원 넘게 많지도 않다
+    if (a.monthly * a.monthlyHours.den < wage * a.monthlyHours.num || (a.monthly - 1) * a.monthlyHours.den >= wage * a.monthlyHours.num) bad++;
+  }
+  eq(bad, 0, `[손] 왕복 ${n}건: 시급이 그대로 돌아오고 최저임금 판정이 같다`);
+  // 월급 쪽 판정: '월급이 최저임금 월 환산액 이상' = '시급이 최저임금 이상'
+  bad = 0;
+  for (let h = 1; h <= 40; h += 0.5) { const need = P.monthlyToHourly({ monthly: 1, weeklyHours: h }).minWage.monthly; for (const m of [need - 1, need, need + 1]) { const x = P.monthlyToHourly({ monthly: m, weeklyHours: h }); if (x.minWage.ok !== (m >= need)) bad++; } }
+  eq(bad, 0, '[손] 월 환산액 경계에서 두 판정이 같다');
+  // [공식] 주 40시간은 고시의 209시간이라 끝수가 없다
+  eq([P.hourlyToPay({ hourly: 10320, weeklyHours: 40 }).monthly, P.hourlyToPay({ hourly: 10700, weeklyHours: 40, period: '2027-01' }).monthly], [2156880, 2236300], '[공식] 최저임금 월 환산액은 그대로');
+  // 월 환산 시간: 화면에 보여 줄 0.1시간 단위 값
+  eq([P.monthlyHours(20).tenths, P.monthlyHours(15).tenths, P.monthlyHours(30).tenths, P.monthlyHours(40).tenths, P.monthlyHours(14).tenths], [1043, 782, 1564, 2090, 608], '[손] 104.29 → 104.3, 78.21 → 78.2, 156.43 → 156.4, 209, 60.83 → 60.8');
+  ok(Math.abs(P.monthlyHours(22.5).hours - 27 * 365 / 84) < 1e-9 && P.monthlyHours(22.5).num * 84 === 27 * 365 * P.monthlyHours(22.5).den, '주 22.5시간 = (22.5 + 4.5) × 365 ÷ 84');
+  // [평가 보고서 L13] 14.99시간은 15시간이 아니다: 주휴 0, 표시는 14.99
+  const w = P.weeklyHoliday({ hourly: 10320, weeklyHours: 14.99 });
+  eq([w.eligible, w.pay, w.hours100, P.fmtDec(w.hours100, 100)], [false, 0, 1499, '14.99'], '[평가] 14.99시간');
+  eq([P.fmtDec(1500, 100), P.fmtDec(2250, 100), P.fmtDec(4000, 100), P.fmtDec(4500, 1000), P.fmtDec(3002, 1000), P.fmtDec(5, 100)], ['15', '22.5', '40', '4.5', '3.002', '0.05'], '시간 글자');
+  eq([P.weeklyHoliday({ hourly: 10320, weeklyHours: 15.01 }).paid1000, P.weeklyHoliday({ hourly: 10320, weeklyHours: 22.5 }).paid1000], [3002, 4500], '유급 주휴 시간(0.001시간 단위)');
+  // 소수 셋째 자리가 있는 시간은 반올림해 받지 않는다(14.999 → 15.00이 되면 주휴가 생겨 버린다)
+  eq([P.weeklyHoliday({ hourly: 10320, weeklyHours: 14.999 }).code, P.hourlyToPay({ hourly: 10320, weeklyHours: 14.999 }).code, P.monthlyToHourly({ monthly: 1000000, weeklyHours: 14.999 }).code], ['hours', 'hours', 'hours'], '14.999시간은 받지 않는다');
+});
+
+G('L2 1,000만 원 초과 + 80·120%: 끝수 순서 [손]', () => {
+  // 이 계산기의 순서: 계산식 금액(원 미만 버림) → 자녀 공제 → 비율 → 10원 미만 버림.
+  // [평가 보고서 L2] 월급 12,134,265 · 부양 4 · 자녀 2 · 80%: 1,170,840 + 25,000 + floor(2,134,265 × 0.98 × 0.35 = 732,052.895) = 1,927,892 − 45,830 = 1,882,062 × 80% = 1,505,649.6 → 1,505,640
+  //   (계산식 금액의 원 미만을 끝까지 들고 가면 1,505,650. 어느 쪽이 국세청 방식인지는 확인하지 못했다)
+  const r = P10.netPay({ basis: 'monthly', amount: 12134265, nontax: 0, family: 4, children: 2, ratio: 80 }).line.incomeTax;
+  eq([r.lookup.piece, r.tableTax, r.afterCredit, r.amount], [732052, 1927892, 1882062, 1505640], '식 금액 원 미만 버림 → 공제 → 80% → 10원 미만 버림');
+});
+
+G('L4~L6 금액 읽기: 모든 칸이 같은 규칙 [손]', () => {
+  const I = DATA.input.manBelow, m = (s, ctx) => { const r = P.parseMoney(s, ctx); return r.ok ? [r.value, r.read, r.big] : r.code; };
+  const A = { unit: 'man', manBelow: I.annual }, M = { unit: 'man', manBelow: I.monthly }, N = { unit: 'man', manBelow: I.nontax }, W = { unit: 'won' };
+  eq([I.annual, I.monthly, I.wages3m, I.bonus, I.nontax, I.leavePay], [1000000, 100000, 100000, 100000, 10000, 10000], '칸마다 원으로 읽기 시작하는 수');
+  // 연봉 칸: 99999 → 9억 9,999만, 100000 → 10억(뒤집히지 않는다). 100만부터는 원
+  eq([m('99999', A), m('100000', A), m('999999', A), m('1000000', A), m('40000000', A)], [[999990000, 'man', false], [1000000000, 'man', false], [9999990000, 'man', false], [1000000, 'won', true], [40000000, 'won', true]], '[평가 L5] 연봉 칸: 99999 ↔ 100000 사이에서 뒤집히지 않는다');
+  // 월급 칸: 250 → 250만, 2500000 → 250만 원(원으로)
+  eq([m('250', M), m('2500000', M), m('99999', M), m('100000', M), m('1', M)], [[2500000, 'man', false], [2500000, 'won', true], [999990000, 'man', false], [100000, 'won', true], [10000, 'man', false]], '월급 칸');
+  // 비과세 칸: 20 → 20만 원(전에는 20원), 200000 → 20만 원, 13.75 → 137,500원
+  eq([m('20', N), m('200000', N), m('13.75', N), m('500', N), m('9999', N), m('10000', N), m('0', N)], [[200000, 'man', false], [200000, 'won', true], [137500, 'man', false], [5000000, 'man', false], [99990000, 'man', false], [10000, 'won', true], [0, 'man', false]], '[평가 L4] 비과세 칸');
+  // 3개월 임금 칸: 900 → 900만(퇴직금·실업급여·홈이 같다), 7080000 → 원
+  eq([m('900', { unit: 'man', manBelow: I.wages3m }), m('7080000', { unit: 'man', manBelow: I.wages3m }), m('708만', { unit: 'man', manBelow: I.wages3m })], [[9000000, 'man', false], [7080000, 'won', true], [7080000, 'won', false]], '[평가 L6] 3개월 임금 칸');
+  // '원'·₩·won 을 붙이면 어느 칸이든 원
+  eq([m('300원', A), m('4천원', A), m('₩40,000', A), m('40000000원', A), m('1억 2천원', A), m('20원', N)], [[300, 'won', false], [4000, 'won', false], [40000, 'won', false], [40000000, 'won', false], [100002000, 'won', false], [20, 'won', false]], "'원'을 붙이면 원");
+  // 말로 쓴 것은 그대로
+  eq([m('4천', A), m('1억 2천', A), m('4,000만 원', A), m('3.5억', A), m('40m', A), m('4k', A)], [[40000000, 'man', false], [120000000, 'man', false], [40000000, 'won', false], [350000000, 'won', false], [40000000, 'won', false], [4000, 'won', false]], '말·단위가 붙은 글자');
+  // 원 칸(시급·1일 통상임금, 영어판): 숫자는 원 그대로
+  eq([m('10320', W), m('40,000', W), m('900', W), m('40000000', W), m('9천', W), m('40m', W), m('2.5m', W)], [[10320, 'won', false], [40000, 'won', false], [900, 'won', false], [40000000, 'won', false], [9000, 'won', false], [40000000, 'won', false], [2500000, 'won', false]], '원 칸');
+  // 원 미만이 남는 글자는 조용히 깎지 않는다
+  eq([m('1.23456만', A), m('0.5원', W), m('3.33333', N), m('1.2345', N), m('1.15m', W), m('1.15억', A)], ['format', 'format', 'format', [12345, 'man', false], [1150000, 'won', false], [115000000, 'won', false]], '원 미만이 남으면 못 읽었다고 알린다');
+  eq([m('', A), m('-5', N), m('abc', N), m('1e5', N), m('99999억', A)], ['empty', 'negative', 'format', 'format', 'too-large'], '[평가 L4] 못 읽는 글자는 알린다');
+  // 옛 꼴(글자 하나로 준 칸 종류)도 그대로 돈다
+  eq([P.parseMoney('300', 'man').value, P.parseMoney('300', 'won').value, P.parseMoney('300').value], [3000000, 300, 3000000], "ctx 'man'·'won'·없음");
+  eq([P.readEn(3130000), P.readEn(40000000), P.readEn(1050000), P.readEn(1999999), P.readEn(2500000000), P.readEn(999999)], ['3.13 million won', '40 million won', '1.05 million won', '1.99 million won', '2.5 billion won', '999,999 won'], '영어 읽기(정수 계산)');
+});
+
+G('L11 해가 바뀌면 기본 기준 [손]', () => {
+  // [공식] 2027년 1월 1일부터 국민연금 5.0%, 최저임금 10,700원
+  eq([DATA.periods['2027-01'].starts, DATA.periods['2027-01'].pension.from, DATA.periods['2027-01'].minWage.from], ['2027-01-01', '2027-01-01', '2027-01-01'], '2027년 1월 기준의 시행일');
+  eq([P.defaultPeriod('2026-10-10'), P.defaultPeriod('2026-12-31'), P.defaultPeriod('2027-01-01'), P.defaultPeriod('2027-01-05'), P.defaultPeriod('2028-03-01'), P.defaultPeriod('x')], ['2026-10', '2026-10', '2027-01', '2027-01', '2027-01', '2026-10'], '기기 날짜가 2027년이면 2027년 1월 기준');
+  // 그 기준으로 계산하면 확정된 값은 새 값, 미정은 carried 로 표시된다
+  const r = P10.netPay({ basis: 'annual', amount: 40000000, period: P.defaultPeriod('2027-01-05') });
+  eq([r.line.pension.amount, r.net, r.carried], [156650, 2927973, ['health', 'care', 'employment', 'incomeTax']], '[손] 3,133,000 × 5.0% = 156,650. 실수령 2,935,813 − 7,840');
+  eq(P.validity(P.defaultPeriod('2027-01-05'), '2027-01-05').stale, false, '그 기준은 아직 기간 안');
 });
 
 console.log(fails.join('\n'));

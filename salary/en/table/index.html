@@ -24,8 +24,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="preload" href="/assets/fonts/tk-en-aa05c057.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"TK Sans";src:url(/assets/fonts/tk-en-aa05c057.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional;unicode-range:U+20-7E,U+A9,U+B7,U+D7,U+F7,U+2013,U+2019,U+201C-201D,U+2026,U+20A9,U+2192,U+2194,U+2212,U+2460-2461,U+25CB,U+AC00,U+AC04,U+AC15,U+AC74,U+ACC4,U+ACE0,U+ACF5,U+AD6D,U+ADE0,U+ADFC,U+AE08-AE09,U+AE30,U+B2F9,U+B4DD,U+B85C,U+BBFC,U+BC29,U+BCF4,U+C0C1,U+C138,U+C18C-C18D,U+C218,U+C561,U+C591,U+C5B4,U+C5F0,U+C694,U+C6A9,U+C6D4,U+C758,U+C774,U+C77C,U+C784-C785,U+C7A5,U+C800,U+C81C,U+C8FC,U+C900,U+C9C0-C9C1,U+CD5C,U+D1B5,U+D1F4,U+D3C9,U+D45C,U+D55C,U+D5D8,U+D734,U+FF10-FF19,U+FFE6}</style>
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Korea Net Salary Table, 2026", "url": "https://salary.lumenlab.page/en/table/", "inLanguage": "en", "description": "Monthly take-home pay in Korea for annual salaries from ₩20,000,000 to ₩200,000,000, with each insurance premium and tax. Rules as of October 2026, one dependent, ₩200,000 non-taxable.", "dateModified": "2026-10-10", "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
@@ -47,8 +47,8 @@
 <div class="doc" style="max-width:none">
   <p class="crumb"><a href="/en/">Korea Net Salary Calculator</a></p>
   <h1>Korea Net Salary Table, 2026</h1>
-  <p class="meta">Rules as of October 2026 · one dependent (you) · ₩200,000 a month non-taxable meal allowance · withholding at 100% · salary ÷ 12 · amounts in won</p>
-  <div class="pay-find"><label for="find">My annual salary</label><input id="find" type="text" inputmode="text" autocomplete="off" placeholder="e.g. 55,000,000" aria-describedby="read"><p class="read" id="read"></p>
+  <p class="meta">Rules as of October 2026 · one dependent (you) · ₩200,000 a month non-taxable meal allowance · withholding at 100% · under 60, paying the pension and employment insurance · salary ÷ 12 · amounts in won</p>
+  <div class="pay-find"><label for="find">My annual salary</label><span class="inp-u"><input id="find" type="text" inputmode="text" autocomplete="off" placeholder="e.g. 55,000,000" aria-describedby="u-find read"><span class="unit" id="u-find" aria-hidden="true">won</span></span><p class="read" id="read"></p>
     <button type="button" class="btn ghost" id="b-all" aria-pressed="false" data-on="Show fewer columns" data-off="Show every deduction">Show every deduction</button></div>
   <p class="tbl-hint" id="hint" hidden>Swipe the table sideways.</p>
   <div class="tbl pay" id="tbl"><table class="pay-t"><caption class="sr">Monthly take-home pay by annual salary, rules as of October 2026</caption><thead><tr><th scope="col">Annual salary</th><th scope="col" class="g">Monthly gross</th><th scope="col" class="d">National Pension</th><th scope="col" class="d">Health</th><th scope="col" class="d">Long-term care</th><th scope="col" class="d">Employment</th><th scope="col" class="d">Income tax</th><th scope="col" class="d">Local income tax</th><th scope="col">Deductions</th><th scope="col">Take-home a month</th></tr></thead><tbody>
@@ -144,7 +144,7 @@
 <tr id="a19000" data-a="190000000"><th scope="row"><a href="/en/#a=190000000" title="Open ₩190,000,000 in the calculator">₩190M</a></th><td class="g">15,833,333</td><td class="d">313,020</td><td class="d">562,010</td><td class="d">73,850</td><td class="d">140,690</td><td class="d">3,512,650</td><td class="d">351,260</td><td>4,953,480</td><td class="net">10,879,853</td></tr>
 <tr id="a20000" data-a="200000000"><th scope="row"><a href="/en/#a=200000000" title="Open ₩200,000,000 in the calculator">₩200M</a></th><td class="g">16,666,666</td><td class="d">313,020</td><td class="d">591,970</td><td class="d">77,780</td><td class="d">148,190</td><td class="d">3,822,980</td><td class="d">382,290</td><td>5,336,230</td><td class="net">11,330,436</td></tr>
 </tbody></table></div>
-  <p class="fine">Estimates. If your conditions differ (dependents, non-taxable pay, withholding rate), click a row to change them in the calculator. Each premium and tax is rounded down to ₩10.</p>
+  <p class="fine">Estimates. If your conditions differ (dependents, non-taxable pay, withholding rate, aged 60 or older), click a row to change them in the calculator. Each premium and tax is rounded down to ₩10.</p>
 </div>
 </div>
 <div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
@@ -152,7 +152,7 @@
 <section class="sec narrow"><h2>How this table was made</h2><div class="prose">
 <p>Every cell is calculated the same way as the <a href="/en/">net salary calculator</a>. A salary of ₩30,000,000 leaves ₩2,244,440 a month, ₩40,000,000 leaves ₩2,935,813, ₩50,000,000 leaves ₩3,571,586 and ₩70,000,000 leaves ₩4,821,303.</p>
 <ul>
-<li>Assumptions: one dependent (you), a ₩200,000 monthly non-taxable meal allowance, withholding at 100%, monthly pay = salary ÷ 12.</li>
+<li>Assumptions: one dependent (you), a ₩200,000 monthly non-taxable meal allowance, withholding at 100%, monthly pay = salary ÷ 12, and a worker under 60 who pays the National Pension and Employment Insurance.</li>
 <li>Rules as of October 2026: National Pension 4.75%, National Health Insurance 3.595%, Long-term Care Insurance at the health premium × 0.9448% ÷ 7.19%, Employment Insurance 0.9%, and the withholding table in force since 1 March 2026.</li>
 <li>The income used for the National Pension stops at ₩6,590,000 a month, so the pension column stays the same above that.</li>
 <li>More dependents, or children aged 8 to 20, lower the income tax. Click a row to open that salary in the calculator. It uses the standard monthly withholding table that applies to residents.</li>

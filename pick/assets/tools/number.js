@@ -46,7 +46,7 @@ function run(seed, replay, o) {
   try { nums = randomNumbers(opts, makeRng(seed)); } catch (e) { return fail(T.numWide); }
   last = { seed, opts, nums };
   out.textContent = '';
-  out.append(outHead(fmt(T.numHead, { a: nfmt(min), b: nfmt(max), m: nfmt(count) }), replay));
+  out.append(outHead(fmt(T.numHead, { a: nfmt(min), b: nfmt(max), m: nfmt(count) }), replay ? 'ok' : false));
   const box = el('div', 'bignums' + (count > 30 ? ' lots' : count > 4 ? ' many' : ''));
   if (count > 300) box.textContent = nums.map(nfmt).join('   ');
   else nums.forEach((v) => box.append(el('span', replay || reduced() ? '' : 'in', nfmt(v))));

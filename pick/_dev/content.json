@@ -23,7 +23,11 @@
    "sort": "Sort A–Z",
    "dedupe": "Remove duplicates",
    "listHint": "One per line. A single line is split at commas. You can paste a column from a spreadsheet.",
-   "histLeft": "Recent results on this device still hold links that contain this list.",
+   "fpList": "List check code",
+   "fpLadder": "Ladder check code",
+   "fpListTitle": "A short summary of the list. The same people give the same code in any order.",
+   "fpLadderTitle": "A short summary of the names in their order plus the bottom row. A different order gives a different code.",
+   "histLeft": "Recent results on this device still hold names from this list.",
    "histLeftBtn": "Clear results too",
    "outLast": "Bring back the last one",
    "outAll": "Bring everyone back",
@@ -37,6 +41,8 @@
    "trustA": "Each press uses fresh random numbers from your browser. Your list is not sent to a server; it only travels inside a result link if you make one and send it.",
    "trustMoreH": "Details",
    "trustMore": "Each press asks your browser for a new 32-byte value, the seed, with crypto.getRandomValues(). A fixed calculation called xoshiro256** then turns that seed into the numbers the pick needs. That is why the same seed and the same names give the same result on anyone’s device.",
+   "trustCode": "The check code under the list is a short summary of the list. The same people always give the same code. Post it with the list before you draw, and anyone who opens the result link can compare codes to see that the list is the same.",
+   "trustCodeLadder": "The ladder check code under the list is a short summary of the names in their order plus the bottom row. Post it before you draw, and anyone who opens the result link can compare codes to see that the order and the bottom row are unchanged.",
    "trustLink": "See exactly how picks are made",
    "ad": "Ad",
    "faq": "Questions",
@@ -75,7 +81,11 @@
    "sort": "가나다순",
    "dedupe": "겹친 이름 지우기",
    "listHint": "한 줄에 한 명. 한 줄만 쓰면 쉼표로 나눠 읽어요. 엑셀의 이름 칸을 복사해 붙여도 돼요.",
-   "histLeft": "이 기기의 최근 결과 기록에는 이 명단이 든 링크가 아직 남아 있어요.",
+   "fpList": "명단 확인 코드",
+   "fpLadder": "사다리 확인 코드",
+   "fpListTitle": "명단을 짧게 줄인 값이에요. 사람들이 같으면 순서가 달라도 같은 코드가 나와요.",
+   "fpLadderTitle": "이름의 줄 순서와 아래 칸까지 넣어 줄인 값이에요. 순서가 달라지면 코드도 달라져요.",
+   "histLeft": "이 기기의 최근 결과 기록에 이 명단의 이름이 아직 남아 있어요.",
    "histLeftBtn": "기록도 지우기",
    "outLast": "마지막 한 명 되돌리기",
    "outAll": "모두 되돌리기",
@@ -89,6 +99,8 @@
    "trustA": "누를 때마다 브라우저가 새로 만든 난수로 뽑아요. 명단은 서버로 보내지 않고, 결과 링크를 만들어 남에게 보낼 때만 그 링크 안에 들어가요.",
    "trustMoreH": "자세히",
    "trustMore": "누를 때마다 브라우저의 crypto.getRandomValues()로 32바이트짜리 새 값을 받아요. 이 값을 ‘씨앗’이라고 불러요. 그다음 xoshiro256**라는 정해진 계산으로 씨앗에서 필요한 숫자를 만들어요. 그래서 씨앗과 사람들이 같으면 누구의 기기에서 다시 계산해도 같은 결과가 나와요.",
+   "trustCode": "명단 아래의 확인 코드는 명단을 짧게 줄인 값이에요. 사람들이 같으면 누가 계산해도 같은 코드가 나와요. 뽑기 전에 명단과 함께 올려 두면, 결과 링크를 연 사람이 코드만 견줘서 같은 명단인지 알 수 있어요.",
+   "trustCodeLadder": "명단 아래의 사다리 확인 코드는 이름의 줄 순서와 아래 칸까지 넣어 짧게 줄인 값이에요. 뽑기 전에 함께 올려 두면, 결과 링크를 연 사람이 코드만 견줘서 줄 순서와 아래 칸이 그대로인지 알 수 있어요.",
    "trustLink": "뽑는 방식 전부 보기",
    "ad": "광고",
    "faq": "자주 묻는 질문",
@@ -125,12 +137,15 @@
    "linkTooLong": "The list is too long to fit in a link (about {n} characters; the limit is {max}). No link was made. Shorten the list or show the result on screen instead.",
    "copyFail": "Couldn’t copy. Select the address below and copy it.",
    "stamp": "Same result as the link",
-   "stampOld": "Same result (old-format link)",
+   "stampOld": "Old-format link · not verified",
+   "stampCleaned": "Recalculated from cleaned list",
    "stampSr": "The result stored in this link was recalculated as it was.",
    "badLink": "This link can’t be opened. It is cut off or damaged. Check that the whole link was copied.",
    "badTooLong": "This link can’t be opened. It is longer than the 400,000-character limit.",
    "badVersion": "This link can’t be opened. It uses a newer format than this page knows.",
-   "legacyLink": "This link was made with the earlier method, where the order of the list was part of the result. Links made now give the same result in any order.",
+   "legacyLink": "This is an old-format link, which can’t be verified the way current links can. Reordering the names inside it changes the result, so no verification mark is shown.",
+   "cleanedLink": "The list in this link contained invisible characters, so it was cleaned up. The result below was recalculated from the cleaned-up list and may differ from what the sender saw.",
+   "blockedHint": "The wheel is paused because the link could not be opened. Close the notice above to spin with your own list.",
    "otherTool": "This link is a {tool} result.",
    "openThere": "Open it there",
    "close": "Close",
@@ -139,8 +154,15 @@
    "listSaved": "Saved on this device only.",
    "listClear": "Clear",
    "listClearAll": "Clear list",
-   "listShared": "This list came from the link. It isn’t saved unless you edit it.",
+   "listShared": "This list came from the link. Your own list is still saved.",
    "listBack": "Back to my list",
+   "listEdit": "Edit",
+   "listAsk": "Copy this list into your own list? It will be saved in place of the list you had.",
+   "listAskNew": "Copy this list into your own list?",
+   "listAskYes": "Copy it",
+   "listAskNo": "Cancel",
+   "listImported": "The list from the link is now your list. Your earlier list can be brought back until you leave this page.",
+   "listRestore": "Bring back my earlier list",
    "listLocked": "The list is locked until the result is in.",
    "listCleared": "Your list is cleared. This is the sample list.",
    "listUndo": "Undo",
@@ -151,8 +173,11 @@
    "warnDupes": "{n} duplicate names (each still gets its own slot).",
    "warnDupes1": "1 duplicate name (it still gets its own slot).",
    "warnSplit": "This was a single line, so it was split at the commas into {n} names. If a comma is part of a name, put each name on its own line.",
-   "warnTabs": "This looks like several spreadsheet columns pasted together. Each whole row is read as one name.",
-   "firstColumn": "Keep first column only",
+   "warnTabs": "This looks like several spreadsheet columns pasted together. For now each whole row is read as one name. Which column should be used?",
+   "warnHidden": "{n} lines had invisible characters, which were left out.",
+   "warnHidden1": "1 line had invisible characters, which were left out.",
+   "colPick": "Column {k}: {sample}",
+   "fp": "Check code: {count} · {code}",
    "soundOn": "Sound on",
    "soundOff": "Sound off",
    "present": "Full screen",
@@ -223,12 +248,15 @@
    "linkTooLong": "링크로 담기엔 명단이 너무 길어요(약 {n}자, 한도 {max}자). 링크는 만들지 않았어요. 명단을 줄이거나 결과를 화면으로 보여 주세요.",
    "copyFail": "복사하지 못했어요. 아래 주소를 직접 복사해 주세요.",
    "stamp": "링크의 결과 그대로",
-   "stampOld": "옛 방식 링크의 결과 그대로",
+   "stampOld": "옛 방식 링크 · 확인 표시 없음",
+   "stampCleaned": "정리한 명단으로 다시 계산한 결과",
    "stampSr": "이 링크에 담긴 결과가 그대로 다시 계산됐어요.",
    "badLink": "이 링크는 열 수 없어요. 링크가 잘렸거나 잘못됐어요. 받은 링크를 끝까지 복사했는지 확인해 주세요.",
    "badTooLong": "이 링크는 열 수 없어요. 한도인 400,000자보다 길어요.",
    "badVersion": "이 링크는 열 수 없어요. 이 페이지가 아는 것보다 새 형식이에요.",
-   "legacyLink": "옛 방식으로 만든 링크예요. 이 링크는 명단의 순서까지 같아야 같은 결과가 나와요. 지금 만드는 링크는 순서가 달라도 같은 결과가 나와요.",
+   "legacyLink": "옛 방식의 링크예요. 지금 방식으로는 확인할 수 없어요. 옛 방식은 링크 속 명단의 순서를 바꾸면 결과도 바뀌어서, 결과는 보여 주지만 확인 표시는 붙이지 않아요.",
+   "cleanedLink": "이 링크의 명단에 보이지 않는 글자가 들어 있어 정리했어요. 아래는 정리한 명단으로 다시 계산한 결과라서, 링크를 만든 화면의 결과와 다를 수 있어요.",
+   "blockedHint": "링크를 열 수 없어 멈춰 있어요. 위의 안내를 닫으면 내 명단으로 돌릴 수 있어요.",
    "otherTool": "이 링크는 {tool} 결과예요.",
    "openThere": "거기서 열기",
    "close": "닫기",
@@ -237,8 +265,15 @@
    "listSaved": "이 기기에만 저장돼요.",
    "listClear": "지우기",
    "listClearAll": "명단 지우기",
-   "listShared": "링크에 들어 있던 명단이에요. 고치기 전에는 저장하지 않아요.",
+   "listShared": "링크에 들어 있던 명단이에요. 내 명단은 그대로 저장돼 있어요.",
    "listBack": "내 명단으로",
+   "listEdit": "고치기",
+   "listAsk": "이 명단을 내 명단으로 가져올까요? 저장해 둔 내 명단 자리에 이 명단이 저장돼요.",
+   "listAskNew": "이 명단을 내 명단으로 가져올까요?",
+   "listAskYes": "가져오기",
+   "listAskNo": "그만두기",
+   "listImported": "링크의 명단을 내 명단으로 가져왔어요. 전에 저장한 명단은 이 화면을 닫기 전까지 되돌릴 수 있어요.",
+   "listRestore": "전 명단으로 되돌리기",
    "listLocked": "결과가 나올 때까지 명단을 잠가 뒀어요.",
    "listCleared": "내 명단을 지웠어요. 지금 보이는 것은 예시 명단이에요.",
    "listUndo": "되돌리기",
@@ -246,8 +281,10 @@
    "warnOver": "한도 5,000줄을 넘은 {n}줄은 뺐어요.",
    "warnDupes": "겹치는 이름 {n}개(각각 한 칸씩 들어가요).",
    "warnSplit": "한 줄이라 쉼표로 나눠 {n}명으로 읽었어요. 쉼표가 이름의 일부라면 한 줄에 한 명씩 적어 주세요.",
-   "warnTabs": "엑셀의 여러 칸을 같이 붙여 넣은 것 같아요. 지금은 한 줄 전체를 한 명으로 읽어요.",
-   "firstColumn": "첫 칸만 쓰기",
+   "warnTabs": "엑셀의 여러 칸을 같이 붙여 넣은 것 같아요. 지금은 한 줄 전체를 한 명으로 읽어요. 어느 칸을 쓸까요?",
+   "warnHidden": "보이지 않는 글자가 섞인 줄 {n}개는 그 글자를 빼고 읽었어요.",
+   "colPick": "{k}번째 칸: {sample}",
+   "fp": "확인 코드 {count} · {code}",
    "soundOn": "소리 켬",
    "soundOff": "소리 끔",
    "present": "전체 화면",
@@ -337,7 +374,7 @@
      {
       "h": "The result link",
       "p": [
-       "Copy result link builds an address that holds the names on the wheel and the seed. Anyone who opens it gets the same winner recalculated. The pick works from the names placed in a fixed order (sorted by character code), so changing only the order of the names inside a link cannot make someone else the winner. The list sits after the # in the address, so it is not sent to a server, but whoever gets the link can read the list. A link cannot show whether someone spun several times and sent only the result they liked."
+       "Copy result link builds an address that holds the names on the wheel and the seed. Anyone who opens it gets the same winner recalculated. The pick works from the names placed in a fixed order (sorted by character code), so changing only the order of the names inside a link cannot make someone else the winner. Invisible characters in names, such as zero-width spaces, are removed when a list is read, and a link that contained them is flagged. The check code under the result is a short summary of the list: if it matches the code posted before the draw, the list is the same. The list sits after the # in the address, so it is not sent to a server, but whoever gets the link can read the list. A link cannot show whether someone spun several times and sent only the result they liked."
       ]
      }
     ],
@@ -388,7 +425,7 @@
      {
       "h": "결과 링크",
       "p": [
-       "‘결과 링크 복사’로 만든 주소에는 판에 있던 명단과 그 씨앗이 들어 있어요. 누가 열어도 같은 사람이 뽑히는 모습이 다시 계산돼요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 링크 속 명단의 순서만 바꿔서는 다른 사람이 뽑힌 것처럼 꾸밀 수 없어요. 명단은 주소의 # 뒤에 담겨서 서버로는 전송되지 않지만, 링크를 받은 사람은 명단을 볼 수 있어요. 여러 번 돌려 보고 마음에 드는 결과만 보냈는지는 링크로 알 수 없어요."
+       "‘결과 링크 복사’로 만든 주소에는 판에 있던 명단과 그 씨앗이 들어 있어요. 누가 열어도 같은 사람이 뽑히는 모습이 다시 계산돼요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 링크 속 명단의 순서만 바꿔서는 다른 사람이 뽑힌 것처럼 꾸밀 수 없어요. 이름에 낀 보이지 않는 글자(폭 없는 공백 등)는 지우고 읽고, 링크에 그런 글자가 있었으면 그렇다고 알려요. 결과 아래의 확인 코드는 명단을 짧게 줄인 값이에요. 뽑기 전에 올려 둔 코드와 같으면 같은 명단이에요. 명단은 주소의 # 뒤에 담겨서 서버로는 전송되지 않지만, 링크를 받은 사람은 명단을 볼 수 있어요. 여러 번 돌려 보고 마음에 드는 결과만 보냈는지는 링크로 알 수 없어요."
       ]
      }
     ],
@@ -446,7 +483,7 @@
      },
      {
       "q": "Can other people check the result later?",
-      "a": "Yes. Copy result link stores the names in their order, the bottom row and the value the ladder was built from (the seed) in the address. Opening it rebuilds the same ladder with the same results. In a ladder, who stands on which line is part of the result, so the order of the names has to be the same as well."
+      "a": "Yes. Copy result link stores the names in their order, the bottom row and the value the ladder was built from (the seed) in the address. Opening it rebuilds the same ladder with the same results. In a ladder, who stands on which line and the order of the bottom-row items are part of the result, so both orders have to be the same as well. The ladder check code under the list covers both, so if you post it beforehand people only need to compare codes."
      }
     ]
    },
@@ -487,7 +524,7 @@
      },
      {
       "q": "나중에 다른 사람이 결과를 확인할 수 있나요?",
-      "a": "네. ‘결과 링크 복사’로 만든 주소에 이름과 줄 순서, 아래 칸, 사다리를 만들 때 쓴 값(씨앗)이 들어 있어요. 열면 같은 사다리와 같은 결과가 다시 만들어져요. 사다리는 누가 몇 번째 줄에 서는지가 결과의 일부라서, 줄 순서까지 같아야 같은 결과예요."
+      "a": "네. ‘결과 링크 복사’로 만든 주소에 이름과 줄 순서, 아래 칸, 사다리를 만들 때 쓴 값(씨앗)이 들어 있어요. 열면 같은 사다리와 같은 결과가 다시 만들어져요. 사다리는 누가 몇 번째 줄에 서는지와 아래 칸을 적은 순서가 결과의 일부라서, 줄 순서와 아래 칸 순서까지 같아야 같은 결과예요. 명단 아래의 사다리 확인 코드는 이 순서까지 넣어 만든 값이라, 미리 올려 두면 코드만 견줘 볼 수 있어요."
      }
     ]
    }
@@ -512,7 +549,7 @@
      {
       "h": "How the draw is made",
       "p": [
-       "All three use the same shuffle, Fisher–Yates. Each press takes a fresh value from your browser, the seed, and shuffles with it. Every possible order is equally likely. The draw works from the names placed in a fixed order (sorted by character code), so however you typed the list, the same seed and the same people give the same winners. Automated tests draw 100,000 times with fixed seeds and check that no name comes up more often than chance allows."
+       "All three use the same shuffle, Fisher–Yates. Each press takes a fresh value from your browser, the seed, and shuffles with it. Every possible order is equally likely. The draw works from the names placed in a fixed order (sorted by character code), so however you typed the list, the same seed and the same people give the same winners. Names are compared as they look: invisible characters such as zero-width spaces are removed when the list is read. Automated tests draw 100,000 times with fixed seeds and check that no name comes up more often than chance allows."
       ]
      },
      {
@@ -529,7 +566,7 @@
      },
      {
       "q": "Can I prove the draw to others?",
-      "a": "Copy result link stores the list and the value the draw was made from (the seed), so anyone who opens it gets the same result recalculated. With the same seed and the same people, the result is the same even if the list is in a different order. There are things a link cannot show: whether you drew several times and sent only the link you liked, or whether someone was added to or left off the list before the draw. So post the list before you draw, and agree on a single draw or draw where everyone can watch."
+      "a": "Copy result link stores the list and the value the draw was made from (the seed), so anyone who opens it gets the same result recalculated. With the same seed and the same people, the result is the same even if the list is in a different order. There are things a link cannot show: whether you drew several times and sent only the link you liked, or whether someone was added to or left off the list before the draw. So post the list and the check code shown under it before you draw, and agree on a single draw or draw where everyone can watch. Whoever opens the link can then compare the check code under the result with the one you posted."
      }
     ]
    },
@@ -552,7 +589,7 @@
      {
       "h": "뽑는 방식",
       "p": [
-       "세 가지 모두 같은 섞기(Fisher–Yates)를 써요. 누를 때마다 브라우저에서 새 값(씨앗)을 받아 그 값으로 섞어요. 가능한 모든 순서가 같은 확률이에요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 명단을 어떤 순서로 적었든 씨앗과 사람들이 같으면 같은 사람이 뽑혀요. 자동 테스트가 씨앗을 고정해 10만 번씩 뽑아 보고, 어느 이름도 우연보다 자주 나오지 않는지 확인해요."
+       "세 가지 모두 같은 섞기(Fisher–Yates)를 써요. 누를 때마다 브라우저에서 새 값(씨앗)을 받아 그 값으로 섞어요. 가능한 모든 순서가 같은 확률이에요. 뽑을 때는 명단을 정해진 순서(글자 코드 순)로 놓은 자리를 쓰기 때문에, 명단을 어떤 순서로 적었든 씨앗과 사람들이 같으면 같은 사람이 뽑혀요. 이름은 눈에 보이는 대로 견줘요. 폭 없는 공백처럼 보이지 않는 글자는 지우고 읽어요. 자동 테스트가 씨앗을 고정해 10만 번씩 뽑아 보고, 어느 이름도 우연보다 자주 나오지 않는지 확인해요."
       ]
      },
      {
@@ -569,7 +606,7 @@
      },
      {
       "q": "뽑은 결과를 다른 사람이 믿게 하려면요?",
-      "a": "‘결과 링크 복사’로 만든 주소에는 명단과 뽑을 때 쓴 값(씨앗)이 들어 있어서, 누가 열어도 같은 결과가 다시 계산돼요. 씨앗과 사람들이 같으면 명단의 순서가 달라도 결과는 같아요. 링크가 보여 주지 못하는 것도 있어요. 여러 번 뽑아 보고 마음에 드는 링크만 보냈는지, 뽑기 전에 명단에서 누구를 빼거나 더했는지는 링크만으로 알 수 없어요. 그래서 뽑기 전에 명단을 먼저 올려 두고, 한 번만 뽑는다고 정하거나 모두가 보는 화면에서 뽑아요."
+      "a": "‘결과 링크 복사’로 만든 주소에는 명단과 뽑을 때 쓴 값(씨앗)이 들어 있어서, 누가 열어도 같은 결과가 다시 계산돼요. 씨앗과 사람들이 같으면 명단의 순서가 달라도 결과는 같아요. 링크가 보여 주지 못하는 것도 있어요. 여러 번 뽑아 보고 마음에 드는 링크만 보냈는지, 뽑기 전에 명단에서 누구를 빼거나 더했는지는 링크만으로 알 수 없어요. 그래서 뽑기 전에 명단과 명단 아래의 확인 코드를 먼저 올려 두고, 한 번만 뽑는다고 정하거나 모두가 보는 화면에서 뽑아요. 링크를 연 사람은 결과 아래의 확인 코드가 미리 올린 코드와 같은지 보면 돼요."
      }
     ]
    }
@@ -899,7 +936,7 @@
    "diceEmpty": "Choose your dice and press Roll.",
    "copy": "Copy result link",
    "copyNote": "The link contains your list.",
-   "copyNoteLadder": "The link holds the names in their order. For a ladder, a different order means a different result.",
+   "copyNoteLadder": "The link holds the names in their order and the bottom row. For a ladder, a different order of names or of bottom-row items means a different result.",
    "copyNoteNoList": "The link holds your settings and the value this result was made from.",
    "trustSolo": "Each press uses fresh random numbers from your browser. What you enter is not sent to a server."
   },
@@ -949,7 +986,7 @@
    "diceEmpty": "주사위를 고르고 ‘굴리기’를 눌러요.",
    "copy": "결과 링크 복사",
    "copyNote": "링크 안에 명단이 들어가요.",
-   "copyNoteLadder": "링크 안에 이름과 줄 순서가 들어가요. 사다리는 줄 순서가 달라지면 결과도 달라져요.",
+   "copyNoteLadder": "링크 안에 이름과 줄 순서, 아래 칸이 들어가요. 사다리는 줄 순서나 아래 칸 순서가 달라지면 결과도 달라져요.",
    "copyNoteNoList": "링크에는 설정과 이번 결과를 만든 값이 들어가요.",
    "trustSolo": "누를 때마다 브라우저가 새로 만든 난수로 뽑아요. 넣은 값은 서버로 보내지 않아요."
   }

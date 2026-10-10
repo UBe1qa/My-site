@@ -1,5 +1,5 @@
 // 동전 던지기 화면. 한 번 = 무작위 비트 하나(core/pick.js flipCoins: 0 = 앞, 1 = 뒤). 틀린 입력이면 앞 결과를 지우고 안내만 보여 준다.
-import { T, $, fmt, el, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, nfmt, reduced } from '../app.js';
+import { T, $, fmt, el, recent, safeShareUrl, copyLink, readShare, clearHash, setAfter, setMsg, stampEl, nfmt, reduced } from '../app.js';
 import { newSeed, makeRng } from '../core/rng.js';
 import { flipCoins, LIMITS } from '../core/pick.js';
 
@@ -31,7 +31,7 @@ function run(seed, replay, o) {
   if (!replay && !reduced()) { void coin.offsetWidth; coin.classList.add('flip'); }
   const heads = flips.filter((v) => v === 0).length;
   sum.textContent = count > 1 ? fmt(T.coinTally, { a: nfmt(heads), b: nfmt(count - heads) }) : '';
-  if (replay) { const s = el('span', 'stamp' + (reduced() ? '' : ' in'), T.stamp); s.setAttribute('aria-label', T.stampSr); sum.append(s); }
+  if (replay) sum.append(stampEl('ok'));
   tally.textContent = '';
   // 던진 순서는 LIMITS.coinList(300)번까지만 하나하나 보여 준다. 그보다 많으면 합계만
   if (count > 1 && count <= LIMITS.coinList) flips.forEach((v) => tally.append(el('i', v ? 't' : 'h', (v ? T.tails : T.heads).slice(0, 1))));
