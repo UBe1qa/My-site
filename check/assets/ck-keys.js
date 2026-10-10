@@ -4,7 +4,9 @@
    - CK.defaultLayout(platform): 처음 보일 배열(맥·아이폰·아이패드면 mac, 그 밖은 full).
    - CK.resolveKey(id, code, key): 들어온 키가 그 배열의 어느 칸인지. 배열에 없는 키는 조용히 버리지 않고 extra로 돌려준다.
    - CK.createTracker(): 누름·뗌을 받아 한 번도 안 눌린 키, 동시에 눌린 최대 수, 채터링 의심, 눌린 채 있는 키를 계산한다.
-   채터링 기준: 같은 키를 뗀 뒤 chatterMs(기본 30ms) 안에 다시 눌림이 들어오면 의심 1회로 센다. 이 값은 화면에 밝히고 바꿀 수 있다.
+   채터링 기준: 같은 키를 뗀 뒤 chatterMs(기본 30ms)보다 빨리 다시 눌림이 들어오면 의심 1회로 센다(딱 그 값이면 세지 않는다). 이 값은 화면에 밝히고 바꿀 수 있다.
+   한쪽 신호만 오는 키: 누름 없이 뗌만 온 키(운영체제가 누름을 가져간 키)는 '한 번 눌렸다 떼어진 것'으로 센다(눌려 있음·동시 입력 수에는 넣지 않는다).
+     Caps Lock과 한/영·한자 키(CK.isMomentary)는 운영체제에 따라 누름만 오거나 뗌만 올 수 있어서, 어느 쪽이 오든 한 번 눌린 것으로만 세고 눌려 있는 키로 두지 않는다.
    시험: tests/run.mjs (기준값은 손으로 따진 예시와 tests/gen_cases.py) */
 (function (root) {
   'use strict';
@@ -141,6 +143,13 @@
     return { slot: null, via: null, extra: key && key !== 'Unidentified' ? 'key:' + key : 'Unidentified' };
   };
 
+  /* 한쪽 신호만 올 수 있는 키: Caps Lock, 한/영·한자(code Lang1·Lang2 또는 key HangulMode·HanjaMode).
+     이런 키는 눌린 채로 두지 않는다(뗌이 안 오면 '걸린 키'로 잘못 알리게 된다). */
+  var MOMENTARY = { CapsLock: 1 };
+  CK.isMomentary = function (code, key) {
+    return !!(MOMENTARY[code] || PC_LANG[code] || PC_KEY_LANG[key]);
+  };
+
   /* 이 code를 가진 배열들(숫자판 키를 눌렀는데 텐키리스를 골랐을 때 '풀 배열로 바꿀까요'를 묻는 데 쓴다) */
   CK.layoutsWith = function (code) {
     return CK.LAYOUT_IDS.filter(function (id) { return !!CK.layout(id).index[code]; });
@@ -176,18 +185,22 @@
     var metaClears = opts.metaClearsHeld !== false;
     var held = {}, heldN = 0, lastUp = {}, stats = {}, seen = {}, seenN = 0;
     var maxHeld = 0, maxHeldIds = [], presses = 0;
+    var open = {};      // 눌려 있는 키로 두지 않는 키(Caps Lock 등)의 누름: 짝이 되는 뗌을 기다린다
+    var dropped = {};   // 창을 벗어나거나 Command를 떼서 비운 키: 늦게 오는 뗌을 새 누름으로 세지 않는다
 
     function st(id) { return stats[id] || (stats[id] = { presses: 0, chatter: 0, minGap: null, gaps: [] }); }
     function heldIds() { return Object.keys(held); }
 
     var T = {
-      /* 눌림. 돌려주는 값: { counted, first, chatter, gap, held } */
-      down: function (id, t, repeat) {
+      /* 눌림. 돌려주는 값: { counted, first, chatter, gap, held }
+         momentary가 참이거나 Caps Lock이면 누름만 세고 눌려 있는 키로 두지 않는다(동시 입력 수에도 안 들어간다). */
+      down: function (id, t, repeat, momentary) {
         if (repeat) return { counted: false, first: false, chatter: false, gap: null, held: heldN };
         var s = st(id), gap = null, chatter = false, first = !seen[id];
         if (first) { seen[id] = 1; seenN++; }
+        delete dropped[id];
         if (held[id] == null) {
-          held[id] = t; heldN++;
+          if (momentary || MOMENTARY[id]) open[id] = t; else { held[id] = t; heldN++; }
           if (lastUp[id] != null && isNum(t) && t >= lastUp[id]) {
             gap = t - lastUp[id];
             if (s.minGap == null || gap < s.minGap) s.minGap = gap;
@@ -200,16 +213,25 @@
         if (heldN > maxHeld) { maxHeld = heldN; maxHeldIds = heldIds(); }
         return { counted: true, first: first, chatter: chatter, gap: gap, held: heldN };
       },
-      /* 뗌. 맥은 Command를 누른 동안 다른 키의 뗌이 안 온다 → Command를 떼면 눌린 것으로 남은 키를 지운다 */
+      /* 뗌. 돌려주는 값: { held }. 누름 없이 뗌만 온 키면 { held, tap: true, first }(한 번 눌렸다 떼어진 것으로 센다).
+         맥은 Command를 누른 동안 다른 키의 뗌이 안 온다 → Command를 떼면 눌린 것으로 남은 키를 지운다 */
       up: function (id, t) {
+        var tap = false, first = false;
         if (held[id] != null) { delete held[id]; heldN--; lastUp[id] = t; }
-        if (metaClears && MODS[id]) {
-          heldIds().forEach(function (h) { if (!MODS[h]) { delete held[h]; heldN--; } });
+        else if (open[id] != null) { delete open[id]; lastUp[id] = t; }   // 눌려 있는 키로 두지 않은 키의 짝이 되는 뗌
+        else if (dropped[id]) delete dropped[id];                         // 이미 비운 키의 늦은 뗌
+        else {                                                            // 누름 없이 뗌만 온 키
+          tap = true; first = !seen[id];
+          if (first) { seen[id] = 1; seenN++; }
+          st(id).presses++; presses++; lastUp[id] = t;
         }
-        return { held: heldN };
+        if (metaClears && MODS[id]) {
+          heldIds().forEach(function (h) { if (!MODS[h]) { delete held[h]; heldN--; dropped[h] = 1; } });
+        }
+        return tap ? { held: heldN, tap: true, first: first } : { held: heldN };
       },
       /* 창이 초점을 잃음: 뗌을 못 받으니 눌린 키를 비운다(채터링 간격에도 쓰지 않는다) */
-      blur: function () { held = {}; heldN = 0; lastUp = {}; },
+      blur: function () { heldIds().concat(Object.keys(open)).forEach(function (h) { dropped[h] = 1; }); held = {}; heldN = 0; open = {}; lastUp = {}; },
       setChatterMs: function (ms) { chatterMs = clampChatter(ms); return chatterMs; },
       chatterMs: function () { return chatterMs; },
       /* 지금 눌린 채인 키와 눌린 시간. minMs를 주면 그보다 오래 눌린 것만 */
@@ -233,7 +255,7 @@
           .map(function (id) { var s = stats[id]; return { id: id, count: s.chatter, presses: s.presses, minGap: Math.min.apply(null, s.gaps) }; })
           .sort(function (a, b) { return b.count - a.count || a.minGap - b.minGap || (a.id < b.id ? -1 : 1); });
       },
-      reset: function () { held = {}; heldN = 0; lastUp = {}; stats = {}; seen = {}; seenN = 0; maxHeld = 0; maxHeldIds = []; presses = 0; }
+      reset: function () { held = {}; heldN = 0; lastUp = {}; stats = {}; seen = {}; seenN = 0; maxHeld = 0; maxHeldIds = []; presses = 0; open = {}; dropped = {}; }
     };
     return T;
   };
@@ -245,11 +267,11 @@
   }
   CK.clampChatterMs = clampChatter;
 
-  /* 이벤트 목록을 한 번에: [{ id, type: 'down'|'up'|'blur', t, repeat }] → 요약 */
+  /* 이벤트 목록을 한 번에: [{ id, type: 'down'|'up'|'blur', t, repeat, momentary }] → 요약 */
   CK.analyzeKeyEvents = function (events, opts) {
     var T = CK.createTracker(opts);
     (events || []).forEach(function (e) {
-      if (e.type === 'down') T.down(e.id, e.t, !!e.repeat);
+      if (e.type === 'down') T.down(e.id, e.t, !!e.repeat, !!e.momentary);
       else if (e.type === 'up') T.up(e.id, e.t);
       else if (e.type === 'blur') T.blur();
     });

@@ -24,7 +24,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" href="/assets/fonts/td-ko-308ffc73.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"Todok Sans";src:url(/assets/fonts/td-ko-308ffc73.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional}</style>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
@@ -75,6 +76,7 @@
 <h2>틀린 키는 어떻게 되나요</h2>
 <p>타수에는 <b>끝났을 때 맞게 남아 있는 키</b>만 들어가요. '한글 타자'를 '핫글 타자'로 치고 고치지 않았다면, 틀린 ㅅ 하나를 뺀 <b class="num" data-ok="한글 타자|핫글 타자">10</b>타만 세어요. 틀렸다가 지우고 다시 쳤다면 11타가 다 들어가요. 고친 키는 한 번만 세니까요.</p>
 <p>정확도는 따로 세어요. 맞게 누른 키 ÷ 누른 키인데, 키가 눌린 그 순간 맞았는지로 따져요. '한글'을 치다가 ㄴ 자리에 ㅅ을 눌렀다가 지우고 다시 쳤다면, 누른 키 7개 가운데 6개가 맞았으니 정확도는 <b class="num" data-acc="6,7">86</b>%예요. 지우기 키는 누른 키에 넣지 않아요. 그래서 고쳐 치면 타수는 지켜지지만 정확도에는 흔적이 남아요.</p>
+<p>틀린 글자를 고치지 않고 그대로 두면 그 글자만 타수에서 빠지고, 정확도에는 틀린 키로 남아요. 틀린 글자가 든 단어 전체를 빼는 프로그램과는 숫자가 달라요. 결과 화면의 정확도 아래에는 틀렸거나 지운 것까지 누른 키 전부로 계산한 '총 타수'도 작게 나와요.</p>
 <h2>다른 프로그램과 숫자가 다를 수 있는 이유</h2>
 <p>타수를 세는 방법은 하나로 정해져 있지 않아요. 프로그램마다 아래 같은 곳에서 기준이 갈릴 수 있어요.</p>
 <ul>
@@ -85,9 +87,9 @@
 </ul>
 <p>그래서 토독의 숫자를 다른 프로그램의 숫자와 그대로 견주기는 어려워요. 같은 도구로 잰 어제의 내 기록과 견주는 쪽이 정확해요. 토독의 기준 전체는 <a href="/ko/#basis">계산 기준</a>에 있어요.</p>
 <h2>영어의 WPM과는 다른 단위예요</h2>
-<p>영어권에서는 분당 단어 수(WPM)를 써요. 다섯 글자를 한 단어로 치고 맞게 친 글자 수 ÷ 5 ÷ 분으로 계산해요. 이 정의는 타자 연구에서도 그대로 써요(<a href="https://userinterfaces.aalto.fi/136Mkeystrokes/resources/chi-18-analysis.pdf" rel="noopener">Dhakal 외, CHI 2018</a>, 2026-10-10 확인). 한글 타수는 글자가 아니라 키를 세니까, 타수를 5로 나눈다고 WPM이 되지는 않아요. 영어를 칠 때의 두 숫자는 <a href="/ko/english/">영타 연습</a>에서 같이 볼 수 있어요.</p>
+<p>영어권에서는 분당 단어 수(WPM)를 써요. 토독은 다섯 글자를 한 단어로 치고 맞게 친 글자 수 ÷ 5 ÷ 분으로 계산해요. 다섯 글자를 한 단어로 치는 것은 타자 연구에서도 같아요(<a href="https://userinterfaces.aalto.fi/136Mkeystrokes/resources/chi-18-analysis.pdf" rel="noopener">Dhakal 외, CHI 2018</a>, 2026-10-10 확인). 다만 그 연구는 맞게 친 글자만이 아니라 친 글 전체의 길이를 세고, 문장의 첫 키부터 마지막 키까지의 시간으로 나눠요. 토독의 채점과는 달라요. 한글 타수는 글자가 아니라 키를 세니까, 타수를 5로 나눈다고 WPM이 되지는 않아요. 영어를 칠 때의 두 숫자는 <a href="/ko/english/">영타 연습</a>에서 같이 볼 수 있어요.</p>
 <h2>휴대폰에서 잴 때</h2>
-<p>천지인 같은 터치 자판은 어떤 키를 눌렀는지 브라우저가 알 수 없어요. 그래서 토독은 완성된 글자를 두벌식 키 수로 바꿔서 세어요. '한'을 어떤 방식으로 입력했든 3타로 쳐요. 컴퓨터 자판으로 잰 타수와는 조건이 달라요.</p>
+<p>터치 자판은 어떤 키를 눌렀는지 브라우저가 알 수 없어요. 그래서 토독은 완성된 글자를 두벌식 키 수로 바꿔서 세어요. '한'을 어떤 방식으로 입력했든 3타로 쳐요. 컴퓨터 자판으로 잰 타수와는 조건이 다르고, 자판 앱에 따라 다르게 보일 수 있어요.</p>
   <p class="cta"><a class="btn pri" href="/ko/">타자 속도 재 보기</a></p>
 </article>
 <div class="wrap narrow">

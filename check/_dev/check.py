@@ -7,6 +7,8 @@ hreflang 짝·자기 자신·x-default / <html lang> / 영어 페이지의 lang=
 광고 없는 페이지에 adsbygoogle 없음, 첫 화면·도구·글에는 있음 / 첫 HTML에 제목·본문·내부 링크 / 공개 페이지에 noindex 없음 / .html 링크 없음 / 화면 글에 줄표(—) 없음 /
 이 사이트의 기준 숫자(채터링 30ms, 더블클릭 50ms, 쏠림 5%·15%, -45 dBFS, 테스트 음 크기, 주사율 1%·120장)가 로직 파일의 값과 같고 '공식 표준이 아니다'를 같이 적었는지 /
 글 속 사실: _dev/articles.json 의 sources 에 적은 출처 링크와 확인한 날이 화면에 있는지, 확인 못 한 것으로 표시한 낱말이 화면에 없는지.
+3단계(제3자 평가 뒤)에 더한 것: 영어 제목·설명 길이 / 조각 글꼴이 화면 글자를 전부 담고 있는지, 바깥 글꼴 주소가 없는지 / _headers /
+화면 코드가 쓰는 문장(T.이름)이 두 언어 데이터에 다 있는지 / 클래스 이름 sweep 이 다시 겹치지 않는지 / 글의 광고 자리가 '테스트 열기' 단추 앞(글 가운데)에 있는지.
 """
 import json
 import re
@@ -152,6 +154,9 @@ def main():
         is_article = '/guide/' in p and not p.endswith('/guide/')
         ok(d.lang == ('ko' if ko else 'en'), f'{p}: <html lang>={d.lang}')
         ok(bool(d.title) and bool(d.desc) and bool(d.h1), f'{p}: title·description·h1 가운데 빈 것')
+        if not ko:      # 검색 결과에서 잘리지 않게(제3자 평가 L23): 영어 제목 60자 안팎, 설명 155자 안팎
+            ok(len(d.title) <= 65, f'{p}: 영어 제목이 {len(d.title)}자(65자 이하로)')
+            ok(len(d.desc or '') <= 160, f'{p}: 영어 설명이 {len(d.desc or "")}자(160자 이하로)')
         ok(d.title not in titles, f'{p}: title이 {titles.get(d.title)}와 같음'); titles[d.title] = p
         ok(d.desc not in descs, f'{p}: description이 {descs.get(d.desc)}와 같음'); descs[d.desc] = p
         ok(d.canon == SITE + p, f'{p}: canonical={d.canon}')
@@ -192,6 +197,7 @@ def main():
         if d.faq or faq_ld:
             got = [(q['name'], q['acceptedAnswer']['text']) for q in (faq_ld[0]['mainEntity'] if faq_ld else [])]
             ok(got == d.faq, f'{p}: FAQPage와 화면 FAQ가 다름')
+            ok(len({q for q, _ in d.faq}) == len(d.faq), f'{p}: 같은 질문이 FAQ에 두 번 있음')
         if is_article:
             art = [j for j in d.ld if j.get('@type') == 'Article']
             ok(bool(art) and art[0]['headline'] == d.h1 and art[0]['description'] == d.desc and art[0]['mainEntityOfPage'] == SITE + p, f'{p}: Article JSON-LD가 화면과 다름')
@@ -223,6 +229,8 @@ def main():
             ok(key in vis[p], f'{p}: 저장 항목 {key}가 방침에 없음')
         ok('Cloudflare Web Analytics' in vis[p] and 'https://www.cloudflare.com/web-analytics/' in hrefs[p], f'{p}: Cloudflare Web Analytics 문장·링크')
         ok('woxocoso@gmail.com' in vis[p], f'{p}: 문의 메일')
+        ok(('type of browser' in vis[p]) or ('브라우저 종류' in vis[p]), f'{p}: 방문 통계에 실리는 것(브라우저 종류·성능 정보) 문장')
+        ok('jsDelivr' not in vis[p], f'{p}: 글꼴을 이 사이트에서 보내는데 방침에 글꼴 CDN 문장이 남아 있음')
     for p in ('/privacy/', '/ko/privacy/', '/about/', '/ko/about/', '/', '/ko/'):
         bad = re.search(r"분석 도구[를는은]? ?(쓰지|사용하지|없)|통계[를는은]? ?(모으지|수집하지) 않|추적하지 않|no analytics|(do not|don't|never) (use|run) (any )?analytics|no tracking|(do not|don't) track|아무것도 (보내지|전송하지) 않|nothing (is|gets) sent", vis[p], re.I)
         ok(not bad, f'{p}: 방문 통계가 없다는 뜻의 문장 "{bad.group(0) if bad else ""}"')
@@ -235,14 +243,16 @@ def main():
     ok(const('DRIFT_SLIGHT', meas_js) == 0.05 and const('DRIFT_CLEAR', meas_js) == 0.15, '로직의 쏠림 기준이 5%·15%가 아님')
     ok(const('MIC_HEARD_DB', meas_js) == -45 and const('DEFAULT_GAIN', meas_js) == 0.1 and const('MAX_GAIN', meas_js) == 0.5 and const('REFRESH_TOL', meas_js) == 0.01, '로직의 -45 dBFS·음 크기·주사율 허용 오차가 화면 글과 다름')
     ok('++n < 121' in app_js, '주사율은 화면 120장 간격으로 잰다(화면 글의 120과 같아야 함)')
+    ok(const('REFRESH_STEADY', meas_js) == 0.75 and const('DRIFT_WOBBLE', meas_js) == 0.05 and const('MIC_CLIP_SHARE', meas_js) == 0.005, '로직의 고른 프레임 75%·떨림 5%·잘림 0.5%가 화면 글과 다름')
     need = {
         '/keyboard-test/': ['30 ms', 'not an official standard'], '/ko/keyboard-test/': ['30ms', '공식 표준이 아니'],
         '/mouse-test/': ['50 ms', 'own rule'], '/ko/mouse-test/': ['50ms', '이 사이트가 정한 기준'],
         '/mic-test/': ['−45 dBFS', 'own rule'], '/ko/mic-test/': ['-45 dBFS', '이 사이트가 정한 기준'],
-        '/gamepad-tester/': ['5%', '15%', 'not an official standard'], '/ko/gamepad-tester/': ['5%', '15%', '공식 표준이 아니'],
-        '/refresh-rate-test/': ['120 frames', '1%'], '/ko/refresh-rate-test/': ['120장', '1%'],
+        '/gamepad-tester/': ['5%', '15%', 'not an official standard', 'jittery'], '/ko/gamepad-tester/': ['5%', '15%', '공식 표준이 아니', '떨림'],
+        '/refresh-rate-test/': ['120 frames', '1%', '75%', 'own rule'], '/ko/refresh-rate-test/': ['120장', '1%', '75%', '이 사이트가 정한 기준'],
+        '/webcam-test/': ['largest picture'], '/ko/webcam-test/': ['가장 큰 화면을 요청'],
         '/speaker-test/': ['one tenth', 'half'], '/ko/speaker-test/': ['10분의 1', '절반'],
-        '/about/': ['30 ms', '50 ms', '−45 dBFS', '5%', '15%', '1%', 'official standard'], '/ko/about/': ['30ms', '50ms', '-45 dBFS', '5%', '15%', '1%', '공식 표준이 아니'],
+        '/about/': ['30 ms', '50 ms', '−45 dBFS', '5%', '15%', '1%', '75%', 'official standard'], '/ko/about/': ['30ms', '50ms', '-45 dBFS', '5%', '15%', '1%', '75%', '공식 표준이 아니'],
     }
     for p, words in need.items():
         for w in words:
@@ -287,6 +297,76 @@ def main():
     ok('고친 날' not in allvis and 'Updated ' not in allvis, "'고친 날'/'Updated' 가 남아 있음")
     for p, r in raw.items():
         ok(not re.search(r'<div class="tbl[^>]*>\s*<div class="tbl', r) and r.count('<table') == r.count('<div class="tbl'), f'{p}: 표를 감싼 칸(.tbl)이 표 수와 다르거나 두 겹')
+
+    # ── 3단계에 더한 검사 ──
+    # 화면 코드가 쓰는 문장이 두 언어 데이터에 다 있다(빠지면 화면에 undefined 가 뜬다)
+    tt = content['t']
+    extra = {'close', 'asks', 'stays_on', 'off_note'}
+    used_t = set(re.findall(r'\bT\.([a-z][a-z0-9_]*)', js)) - {'err'}
+    for lang in ('en', 'ko'):
+        miss = sorted(k for k in used_t if k not in tt[lang] and k not in extra)
+        ok(not miss, f'화면 코드가 쓰는 문장이 content.json t.{lang} 에 없음: {miss}')
+    ok(set(tt['en']) == set(tt['ko']) and set(tt['en']['err']) == set(tt['ko']['err']), f't.en 과 t.ko 의 항목이 다름: {sorted(set(tt["en"]) ^ set(tt["ko"]))} {sorted(set(tt["en"]["err"]) ^ set(tt["ko"]["err"]))}')
+    kinds = set(re.findall(r"out\('([a-z-]+)'", meas_js))
+    ok(kinds <= set(tt['en']['err']), f'장치 오류 종류에 안내 문장이 없음: {sorted(kinds - set(tt["en"]["err"]))}')
+    ok(set(content['ui']['en']) == set(content['ui']['ko']), f'ui.en 과 ui.ko 의 항목이 다름: {sorted(set(content["ui"]["en"]) ^ set(content["ui"]["ko"]))}')
+    # 클래스 이름 겹침(자판 연출이 스피커 칸의 .sweep 모양을 물려받아 자판이 밀렸던 일): 같은 이름을 두 뜻으로 쓰지 않는다
+    css = (ROOT / 'assets' / 'style.css').read_text(encoding='utf-8')
+    ok(not re.search(r'\.sweep(?![\w-])', css) and "'sweep'" not in app_js and not any(re.search(r'class="(?:[^"]* )?sweep[ "]', r) for r in raw.values()), "클래스 이름 'sweep'을 다시 쓰고 있음(자판 연출은 is-sweeping, 스피커 칸은 spk-sweep)")
+    # 화면 코드가 붙이는 상태 클래스와 같은 이름의 '칸 모양 규칙'(.이름 { display·여백… })이 있으면 안 된다
+    plain = {}
+    for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', re.sub(r'/\*.*?\*/', '', css, flags=re.S)):
+        for one in sel.split(','):
+            m = re.fullmatch(r'\s*\.([a-z][\w-]*)\s*', one)
+            if m and re.search(r'(?<![\w-])(display|margin(-top|-bottom)?|padding(-top|-bottom)?|border-top|height|width|flex)\s*:', body):
+                plain[m.group(1)] = True
+    for name in sorted(set(re.findall(r"classList\.(?:add|toggle|remove)\('([a-z-]+)'", js))):
+        ok(name not in plain, f'화면 코드가 붙이는 상태 클래스 .{name} 과 같은 이름의 칸 모양 규칙이 style.css 에 있음(이름을 나눌 것)')
+    # 키보드 쪽: 키를 잡는다는 안내가 자판 위에 있다. 첫 화면: 키 받기 단추와 안내가 있다
+    for p in ('/keyboard-test/', '/ko/keyboard-test/'):
+        ok(0 < raw[p].find('data-kb-cap') < raw[p].find('class="kb-well"'), f'{p}: 키 잡기 안내가 자판 위에 있어야 함')
+        ok('data-kb-maxkeys' in raw[p] and 'class="note kb-na"' in raw[p], f'{p}: 가장 많이 눌렸을 때의 키 칸·맥 배열 안내')
+    for p in ('/', '/ko/'):
+        ok('data-act="kb-capture"' in raw[p] and 'data-kb-cap' in raw[p] and raw[p].count('data-mouse-area') == 1, f'{p}: 첫 화면의 키 받기 단추·안내·마우스 칸')
+    # 웹캠·마이크: 받은 값이 무엇인지 밝히는 줄의 자리
+    for p in ('/webcam-test/', '/ko/webcam-test/'):
+        ok('data-cam-got' in raw[p] and 'data-cam-cap' in raw[p], f'{p}: 받은 크기 안내·카메라가 밝힌 최대 칸')
+    for p in ('/mic-test/', '/ko/mic-test/'):
+        ok('data-mic-proc' in raw[p], f'{p}: 브라우저가 소리를 다듬는지 알리는 줄')
+    media_js = (ROOT / 'assets' / 'media.js').read_text(encoding='utf-8')
+    ok('width: { ideal: 4096 }, height: { ideal: 2160 }' in media_js and "request('video', CAM_WANT" in media_js and 'exact: 4096' not in media_js, '카메라는 가장 큰 크기를 ideal 조건으로 요청한다')
+    ok(all(f'{k}: {{ ideal: false }}' in media_js for k in ('echoCancellation', 'noiseSuppression', 'autoGainControl')) and "request('audio', MIC_WANT" in media_js, '마이크는 소리 다듬기를 끄고(ideal) 요청한다')
+    # 글: 광고 자리(mid)는 글 가운데, '테스트 열기' 단추보다 앞
+    for p in docs:
+        if '/guide/' in p and not p.endswith('/guide/'):
+            i, j, k2 = raw[p].find('data-slot="mid"'), raw[p].find('class="cta"'), raw[p].find('data-slot="bottom"')
+            ok(0 < i < j < k2 and 'ad-wrap--in' in raw[p], f'{p}: 가운데 광고 자리가 글 안, 테스트 열기 단추 앞에 있어야 함')
+    # 조각 글꼴: 파일이 있고, 모든 쪽이 자기 언어 조각을 preload 하고, 화면에 나오는 글자를 전부 담고 있다. 바깥 글꼴 주소는 없다
+    fonts = json.loads((ROOT / '_dev' / 'fonts.json').read_text(encoding='utf-8')) if (ROOT / '_dev' / 'fonts.json').exists() else {}
+    ok(all(l in fonts and (ROOT / 'assets' / 'fonts' / fonts[l]['file']).exists() and (ROOT / 'assets' / 'fonts' / fonts[l]['file']).stat().st_size == fonts[l]['bytes'] for l in ('en', 'ko')), '조각 글꼴 파일이 있고 크기가 fonts.json 과 같음(python3 -B _dev/font.py)')
+    if fonts.get('en') and fonts.get('ko'):
+        need_chars = {'en': set(), 'ko': set()}
+        for p, r in raw.items():
+            lang = 'ko' if p.startswith('/ko/') else 'en'
+            ok(f'<link rel="preload" href="/assets/fonts/{fonts[lang]["file"]}" as="font" type="font/woff2" crossorigin>' in r and 'font-family:"CK Sans"' in r, f'{p}: 자기 언어의 조각 글꼴 preload·@font-face')
+            ok('cdn.jsdelivr.net' not in r and 'fonts.googleapis' not in r, f'{p}: 바깥 글꼴 주소가 남아 있음')
+            body = re.sub(r'<script type="application/ld\+json">.*?</script>', ' ', r, flags=re.S)
+            body = re.sub(r'<script(?! type="application/json")[^>]*>.*?</script>|<style>.*?</style>', ' ', body, flags=re.S)
+            import html as _html
+            need_chars[lang] |= set(_html.unescape(re.sub(r'<[^>]+>', ' ', body)))
+        for l in ('en', 'ko'):
+            miss = ''.join(sorted(c for c in need_chars[l] if c > ' ' and c != '\xa0' and c not in fonts[l]['chars'] and c not in fonts[l].get('not_in_source', '')))
+            ok(not miss, f'조각 글꼴({l})에 화면 글자가 빠짐({len(miss)}자: {miss[:40]}). python3 -B _dev/font.py 를 다시 돌릴 것')
+        junk = [f.name for f in (ROOT / 'assets' / 'fonts').glob('ck-*.woff2') if f.name not in (fonts['en']['file'], fonts['ko']['file'])]
+        ok(not junk, f'쓰지 않는 옛 조각 글꼴 파일: {junk}')
+    ofl = ROOT / 'assets' / 'fonts' / 'OFL.txt'
+    ok(ofl.exists() and 'SIL OPEN FONT LICENSE' in ofl.read_text(encoding='utf-8') and 'CK Sans' in ofl.read_text(encoding='utf-8'), '글꼴 라이선스 전문(assets/fonts/OFL.txt)과 이름을 바꿨다는 설명')
+    ok('"CK Sans"' in css and not (ROOT / 'assets' / 'pretendard.css').exists(), 'style.css 의 글꼴 이름표 맨 앞이 CK Sans, 옛 CDN 글꼴 CSS는 없음')
+    # 응답 머리말
+    hd = (ROOT / '_headers').read_text(encoding='utf-8') if (ROOT / '_headers').exists() else ''
+    ok('X-Content-Type-Options: nosniff' in hd and 'Referrer-Policy: strict-origin-when-cross-origin' in hd and '/assets/fonts/*' in hd and 'immutable' in hd, '_headers: nosniff·Referrer-Policy·글꼴 오래 저장')
+    ok('Content-Security-Policy' not in hd and 'Permissions-Policy' not in hd, '_headers 에 CSP·Permissions-Policy 를 넣지 않는다(광고·마이크·카메라를 막을 수 있다)')
+    ok('_headers' not in (ROOT / '.assetsignore').read_text().split(), '.assetsignore 에 _headers 를 넣으면 머리말이 적용되지 않는다')
 
     # ── 그 밖의 파일 ──
     nf = (ROOT / '404.html').read_text(encoding='utf-8')

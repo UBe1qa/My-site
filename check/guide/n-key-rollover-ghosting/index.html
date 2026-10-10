@@ -24,8 +24,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="preload" href="/assets/fonts/ck-en-ad53f1c8.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"CK Sans";src:url(/assets/fonts/ck-en-ad53f1c8.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional;unicode-range:U+20-7E,U+A9,U+B7,U+D7,U+2013,U+2019,U+201C-201D,U+2026,U+2190-2193,U+2212,U+2303,U+2318,U+2325,U+AC00,U+AD6D,U+AE30,U+B4E0,U+B85C,U+BAA8,U+BCF4,U+C2A4,U+C5B4,U+C5C6,U+C694,U+C774,U+C9C0,U+D14C,U+D2B8,U+D398,U+D55C}</style>
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Key rollover and ghosting: test how many keys register at once", "description": "Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/n-key-rollover-ghosting/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
@@ -48,7 +48,7 @@
   <p class="byline">Last checked <time datetime="2026-10-10">2026-10-10</time> · Lumen Lab</p>
   <p>Rollover is how many keys a keyboard can report while they are all held down. You do not need a spec sheet to find out. Hold keys in the <a href="/keyboard-test/">keyboard tester</a> and read “Most keys held at once”: that number is what your keyboard, cable and browser actually delivered.</p>
 <h2>How the tester counts</h2>
-<p>Every key that is down at the same moment counts, including Shift, Ctrl and the other modifiers. The tester remembers the largest number it has seen and which keys they were. A key you let go before pressing the next one does not count.</p>
+<p>Every key that is down at the same moment counts, including Shift, Ctrl and the other modifiers. The tester remembers the largest number it has seen, and lists the keys in that group under Details and settings. A key you let go before pressing the next one does not count. Caps Lock is the one exception: it counts as a press but never as held, because some systems send only half of its signal.</p>
 <div class="tbl tbl--tight"><table><thead><tr><th>What you do</th><th>Held at that moment</th><th>Most keys held at once</th></tr></thead><tbody>
 <tr><td data-th="What you do">Hold A, S, D, F one after another</td><td data-th="Held at that moment">A S D F</td><td data-th="Most keys held at once">4</td></tr>
 <tr><td data-th="What you do">Let go of A, then also hold G</td><td data-th="Held at that moment">S D F G</td><td data-th="Most keys held at once">still 4</td></tr>
@@ -62,17 +62,20 @@
 <li>Add one more key at a time until a new key no longer shows. The number before that is your limit for that group of keys.</li>
 </ol>
 <p>Try several groups. A keyboard can handle one combination and not another, so the result for one group of keys does not tell you about the next.</p>
+<div class="ad-wrap ad-wrap--in" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <h2>What ghosting and blocking look like</h2>
 <ul>
 <li><b>A key you pressed does not light up</b> while others are held. That combination did not arrive, so for now treat it as one your keyboard cannot report.</li>
 <li><b>A key you did not press lights up.</b> People call this ghosting. Let go of everything and try the same combination again to be sure it was not a stray finger.</li>
 </ul>
 <p>Either way the tester is only the messenger: it shows what arrived. It cannot add keys the keyboard never sent.</p>
+<h2>Where a limit of six keys comes from</h2>
+<p>If your keyboard stops at six ordinary keys while Shift, Ctrl or Alt still add on top, that number has a likely source. The USB specification for keyboards defines a basic report, the one a computer’s BIOS reads at start-up: one byte for the eight modifier keys (left and right Ctrl, Shift, Alt and GUI) and room for six other keys. The specification puts the limit at six non-modifier keys when a keyboard uses that report layout, and has the keyboard report a rollover error when more are held. It says this about that layout, not about every USB keyboard.</p>
+<p class="src">Source: <a href="https://www.usb.org/sites/default/files/hid1_11.pdf" rel="noopener">USB-IF, Device Class Definition for Human Interface Devices (HID) 1.11</a>, Appendix B and Appendix C (PDF, checked 2026-10-10).</p>
 <h2>Limits of testing in a browser</h2>
 <p>Some combinations belong to the system or the browser and may never reach a web page, for example shortcuts that switch windows. If a combination fails here, try a different group of keys before you conclude the keyboard is the limit. While the tester is capturing keys it holds on to Tab and most shortcuts so the page does not jump around. Press Esc twice to release them.</p>
 <p class="cta"><a class="btn" href="/keyboard-test/">Open the keyboard tester</a></p>
 </article>
-<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <section class="wrap narrow sec"><h2>Other tests</h2><ul class="tool-list"><li><a href="/keyboard-test/">Keyboard Tester</a><span>Every key, keys held at once, double-typing</span></li><li><a href="/mouse-test/">Mouse Test</a><span>Buttons, wheel, double-click fault, report rate</span></li><li><a href="/mic-test/">Mic Test</a><span>Level, recording and playback</span></li><li><a href="/webcam-test/">Webcam Test</a><span>Live picture, size, frames per second, photo</span></li><li><a href="/speaker-test/">Speaker Test (Left / Right)</a><span>Left, right, both, rising tone</span></li><li><a href="/dead-pixel-test/">Dead Pixel Test</a><span>Full-screen black, white, red, green, blue</span></li><li><a href="/refresh-rate-test/">Refresh Rate Test</a><span>Screen Hz and a moving bar</span></li><li><a href="/gamepad-tester/">Gamepad Tester</a><span>Buttons, sticks, triggers, drift, vibration</span></li></ul></section>
 <div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>

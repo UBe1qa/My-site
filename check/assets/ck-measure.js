@@ -45,6 +45,12 @@
     return { hz: hz, medianMs: med, samples: a.length, nearest: CK.nearestCommon(hz, CK.REFRESH_COMMON, CK.REFRESH_TOL),
       stable: inBand / a.length, enough: a.length >= minSamples };
   };
+  /* 프레임이 고른가: 중앙값의 ±15% 안에 든 프레임이 REFRESH_STEADY(75%) 이상일 때만 값을 말한다(이 사이트의 기준).
+     프레임이 한 장 걸러 빠지면 간격이 두 무리로 갈리고 중앙값은 그 사이 어딘가가 된다. 그런 값은 실제 주사율이 아니다. */
+  CK.REFRESH_STEADY = 0.75;
+  CK.refreshSteady = function (est) {
+    return !!est && est.enough === true && est.stable >= CK.REFRESH_STEADY;
+  };
   /* 시각 목록 → 간격 목록 */
   CK.intervals = function (times) {
     var t = nums(times), out = [];
@@ -141,6 +147,10 @@
     return c / n;
   };
 
+  /* 한 화면(표본 묶음)이 '잘렸다'고 보는 선: 꼭대기에 닿은 표본이 MIC_CLIP_SHARE(0.5%) 이상. 이 사이트의 기준 */
+  CK.MIC_CLIP_SHARE = 0.005;
+  CK.isClipped = function (samples) { return CK.clipRatio(samples) >= CK.MIC_CLIP_SHARE; };
+
   /* ── 테스트 음 만들기 ────────────────────────────────────
      channel: 'left' | 'right' | 'both'. 반대쪽 채널은 전부 0.
      gain은 MAX_GAIN(0.5)을 넘지 못한다. 처음 값은 DEFAULT_GAIN(0.1 = 약 -20 dBFS 꼭대기).
@@ -200,12 +210,36 @@
     var off = Math.min(1, Math.hypot(mx, my));
     return { x: mx, y: my, offset: off, percent: off * 100, wobble: wob, samples: n };
   };
-  /* 판정: 'centered'(5% 미만) | 'slight'(5% 이상 15% 미만) | 'drift'(15% 이상). 기준은 화면에 밝힌다. */
+  /* 판정: 'centered'(5% 미만) | 'slight'(5% 이상 15% 미만) | 'drift'(15% 이상). 기준은 화면에 밝힌다.
+     화면에 보여 주는 자리(0.1%)로 맞춘 뒤에 견준다: 평균을 내다 생긴 끝자리 오차 때문에 '5.0%'라고 보여 주면서 '가운데'라고 하지 않게. */
+  CK.roundTenth = function (frac) { return Math.round(frac * 1000) / 1000; };
   CK.driftVerdict = function (offset, slight, clear) {
     if (!isNum(offset)) return null;
     slight = slight == null ? CK.DRIFT_SLIGHT : slight;
     clear = clear == null ? CK.DRIFT_CLEAR : clear;
+    offset = CK.roundTenth(offset);
     return offset >= clear ? 'drift' : offset >= slight ? 'slight' : 'centered';
+  };
+  /* 떨림: 가만히 둔 동안 평균 위치에서 가장 멀리 튄 거리(wobble)가 DRIFT_WOBBLE(5%) 이상이면 '떨려요'.
+     평균만 보면 좌우로 튀는 스틱이 '가운데'로 나온다(서로 지워진다). 이 사이트의 기준이고 화면에 밝힌다. */
+  CK.DRIFT_WOBBLE = 0.05;
+  CK.wobbleVerdict = function (wobble, limit) {
+    if (!isNum(wobble)) return null;
+    return CK.roundTenth(wobble) >= (limit == null ? CK.DRIFT_WOBBLE : limit);
+  };
+  /* 스틱 하나의 판정을 한 번에: { verdict, jitter, percent, wobblePercent } (표본이 없으면 null) */
+  CK.stickVerdict = function (rest) {
+    if (!rest || !isNum(rest.offset)) return null;
+    return { verdict: CK.driftVerdict(rest.offset), jitter: CK.wobbleVerdict(rest.wobble) === true,
+      percent: CK.roundTenth(rest.offset) * 100, wobblePercent: CK.roundTenth(rest.wobble) * 100 };
+  };
+  /* 축 하나의 가만히 둔 값(브라우저가 배치를 모르는 컨트롤러: 어느 축이 스틱인지 몰라 판정하지 않고 값만 보여 준다) */
+  CK.axisRest = function (values) {
+    var a = nums(values);
+    if (!a.length) return { mean: null, min: null, max: null, range: null, samples: 0 };
+    var sum = 0, lo = a[0], hi = a[0];
+    for (var i = 0; i < a.length; i++) { sum += a[i]; if (a[i] < lo) lo = a[i]; if (a[i] > hi) hi = a[i]; }
+    return { mean: sum / a.length, min: lo, max: hi, range: hi - lo, samples: a.length };
   };
 
   /* ── 해상도 ─────────────────────────────────────────── */
@@ -224,6 +258,7 @@
      ctx: { secure: 보안 연결(https·localhost)인가, hasApi: navigator.mediaDevices.getUserMedia가 있나 }
      종류: 'insecure' 보안 연결이 아님 / 'unsupported' 이 브라우저가 지원 안 함 / 'denied' 이 사이트 권한이 막힘
           'denied-system' 운영체제 설정이 막음 / 'dismissed' 묻는 창을 그냥 닫음 / 'policy' 문서 정책이 막음
+          'denied-maybe' 허용되지 않았는데 막힌 것인지 창을 닫은 것인지 알 수 없음(파이어폭스·사파리는 두 경우에 같은 문장을 준다)
           'no-device' 장치 없음 / 'in-use' 다른 앱이 쓰는 중이거나 장치를 못 엶 / 'constraint' 고른 장치·설정을 못 맞춤
           'aborted' 알 수 없는 이유로 중단 / 'unknown' 그 밖
      retry: 같은 단추를 다시 눌러 볼 만한가. settings: 'browser' | 'os' | null (어디 설정을 봐야 하나) */
@@ -239,7 +274,8 @@
         if (!secure) return out('insecure', false);
         if (/dismiss/i.test(msg)) return out('dismissed', true);
         if (/system/i.test(msg)) return out('denied-system', false, 'os');
-        return out('denied', false, 'browser');
+        if (/^permission denied( by user)?\.?$/i.test(msg)) return out('denied', false, 'browser');   // 크롬 계열의 문장
+        return out('denied-maybe', true, 'browser');
       case 'SecurityError':
         return secure ? out('policy', false) : out('insecure', false);
       case 'NotFoundError':

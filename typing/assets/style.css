@@ -3,6 +3,8 @@
    상징은 '키 하나'(.cap, .k): 로고, 다음 키, 결과의 틀린 키 지도, 자리 연습 자판, 루멘랩 줄, 404.
    치는 중에는 색만 바뀐다(움직임 없음). 기본 반응은 --t 하나로. */
 [hidden]{display:none!important}
+/* 두 언어 틀을 같이 담은 장(404): <html lang> 과 다른 쪽은 숨긴다 */
+html[lang="en"] [data-l="ko"],html[lang="ko"] [data-l="en"]{display:none!important}
 img{max-width:100%;height:auto}
 .nw{white-space:nowrap}
 :root{
@@ -12,7 +14,9 @@ img{max-width:100%;height:auto}
   --todo:#757587; /* 아직 안 친 글자 */
   --key:#ffffff; --key-edge:#c9c9d3; --key-ink:#2a2a35;
   --r:12px; --r-sm:8px; --t:.14s; --ease:cubic-bezier(.2,.7,.2,1);
-  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic","Segoe UI",Roboto,system-ui,sans-serif;
+  /* "Todok Sans" = 이 사이트 화면과 연습 글에 나오는 글자만 담은 조각(같은 주소에서 받는다. @font-face 는 페이지 <head> 에: _dev/font.py).
+     조각에 없는 드문 글자는 그다음 이름(Pretendard Variable, jsDelivr 의 나눠 받기 조각)에서 그 글자만 받는다 */
+  --font:"Todok Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic","Segoe UI",Roboto,system-ui,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -90,6 +94,9 @@ kbd{font:inherit}
 .txt .ok{color:var(--ink)}
 .txt .bad{color:var(--bad);background:var(--bad-soft)}
 .txt .sp.bad{background:none;box-shadow:inset 0 -3px 0 var(--bad)}
+/* 속담과 속담 사이: 띄어쓰기 칸에 옅은 가운뎃점을 찍어 어디서 끊기는지 보여 준다(치는 글자는 띄어쓰기 그대로) */
+.txt .sp.brk{width:1.2em;text-align:center}
+.txt .sp.brk::before{content:"·";position:absolute;left:0;right:0;top:0;text-align:center;color:var(--faint);font-weight:700}
 /* 조합 중인 글자: 목표 글자는 그대로 두고 친 만큼 왼쪽부터 가지색이 찬다(--f) */
 .txt .c.pend{background-image:linear-gradient(90deg,var(--main) var(--f,50%),var(--todo) var(--f,50%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 /* 지금 칠 자리: 글자 아래 굵은 가지색 줄. 처음에 다섯 번만 깜빡이고 멈춘다(동작 줄이기면 고정) */
@@ -105,6 +112,12 @@ kbd{font:inherit}
 .start{font-size:14.5px;color:var(--ink-2);pointer-events:none}
 .start .pc::before{content:"";display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--main);margin-right:9px;vertical-align:3px}
 .mo{display:none}
+.start .off,.ph .off{display:none}
+@media (min-width:721px){
+  /* 치는 칸에서 나와 있을 때(Esc·다른 곳을 누른 뒤): 다시 시작하는 법을 알려 준다 */
+  .t-blur .start .on,.t-blur .ph .on{display:none}
+  .t-blur .start .off,.t-blur .ph .off{display:inline}
+}
 .running .start,.finished .start{visibility:hidden}
 .stage{position:relative}
 .burst{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
@@ -145,6 +158,7 @@ kbd{font:inherit}
 .r-cmp.best{color:var(--main-d);font-weight:700}
 .r-acc{font-size:14.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .r-acc b{color:var(--ink);font-size:16px}
+.r-raw{font-size:12.5px;line-height:1.5;color:var(--muted);margin-top:3px}
 .r-skip{font-size:13px;color:var(--muted);margin-top:4px}
 .r-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 .r-act2{display:flex;gap:4px 18px;flex-wrap:wrap;margin-top:8px}
@@ -177,6 +191,7 @@ kbd{font:inherit}
 .basis{margin-top:12px;font-size:13.5px;color:var(--muted)}
 .basis a{color:var(--ink-2)}
 .basis .safe{white-space:nowrap}
+.basis kbd{border:1px solid var(--line-2);border-radius:5px;padding:0 5px;font-size:12px}
 .basis .safe::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--main);margin:0 7px 2px 5px;vertical-align:middle}
 
 /* ---------- 화면 A: 종이 한 장 ---------- */
@@ -335,9 +350,12 @@ kbd{font:inherit}
 .rec-head h2{font-size:18px;letter-spacing:-.01em}
 .rec-note{font-size:13px;color:var(--muted)}
 .rec-best{font-size:13.5px;color:var(--main-d);font-weight:600}
-.rec-head .lnk{margin-left:auto;font-size:13.5px}
-.rec-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px}
+.rec-head .lnk{font-size:13.5px}
+.rec-btns{margin-left:auto;display:flex;gap:4px 18px;flex-wrap:wrap;justify-content:flex-end}
+.rec-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
 .rec-col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px;height:206px;overflow:hidden}
+/* '더 보기'를 누르면 저장된 기록을 전부 펼친다 */
+.rec-col.open{height:auto;min-height:206px}
 .rec-col h3{font-size:13.5px;font-weight:600;color:var(--muted);margin-bottom:10px}
 .rec-list{list-style:none;margin:0;padding:0}
 .rec-list li{display:flex;align-items:baseline;gap:8px;height:36px;line-height:36px;border-bottom:1px solid var(--line);font-size:14.5px;white-space:nowrap;overflow:hidden}
@@ -489,16 +507,30 @@ kbd{font:inherit}
   .nav{order:3;width:100%;display:grid;gap:0;border-top:1px solid var(--line)}
   .nav.n5{grid-template-columns:repeat(5,auto);justify-content:space-between}
   .nav.n3{grid-template-columns:repeat(3,1fr)}
-  .nav a{text-align:center;padding:9px 2px;font-size:13.5px;border-radius:0}
+  .nav a{text-align:center;padding:12px 2px;font-size:13.5px;border-radius:0}
   .nav a[aria-current]{border-radius:0}
-  .langbar{left:0;right:0;top:0;height:48px;border-radius:0;justify-content:space-between;padding:0 8px 0 16px}
+  .langbar{left:0;right:0;top:0;height:48px;border-radius:0;justify-content:space-between;padding:0 2px 0 16px}
+  .langbar button{width:44px;height:44px}
+  .langbar a{padding:12px 0}
+  /* 손가락으로 누르는 곳은 44px 이상 */
+  .btn,.btn.sm{height:44px}
+  .lnk{padding:12px 0}
+  .seg{flex-wrap:wrap}
+  .opt{flex-wrap:wrap}
+  .more summary,.opt.sel select{height:44px}
+  .more-row label{min-height:44px}
+  .more-row.checks{gap:0}
+  .foot-links{gap:0 18px}
+  .foot-links a{display:inline-block;padding:11px 0}
+  .crumbs a{display:inline-block;padding:11px 0}
+  .crumbs{align-items:center;margin-bottom:4px}
   .pc{display:none}.mo{display:inline}
   .btn kbd{display:none}
   .main-a,.main-b,.main-c{padding-top:14px}
   .a-head,.b-head,.c-head{margin-bottom:10px}
   .a-head h1,.b-head h1,.c-head h1{font-size:19px;width:100%}
   .opts{gap:6px 10px;width:100%}
-  .seg button{padding:5px 9px}
+  .seg button{padding:12px 9px;min-width:44px}
   .opt.len .opt-l{text-align:left}
   .more{margin-left:auto}
   .basis .safe{white-space:normal}
@@ -506,7 +538,7 @@ kbd{font:inherit}
   .sheet{height:auto;border-radius:14px}
   .playbox{flex:none}
   .meter{order:-1;gap:6px 13px;padding:10px 16px;border-top:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .meter .btn{padding:0 10px;height:30px}
+  .meter .btn{padding:0 12px}
   .meter .btn.quit{margin-left:0}
   .m b{font-size:24px}
   .m span{font-size:11.5px}
@@ -527,11 +559,11 @@ kbd{font:inherit}
   .r-chart figcaption{padding-left:0}
   /* C */
   .steps{gap:5px}
-  .steps button{height:32px;padding:0 9px 0 5px;font-size:13px;gap:5px}
+  .steps button{height:44px;padding:0 10px 0 7px;font-size:13px;gap:5px}
   .step-say{font-size:13.5px;min-height:64px}
   .rig{border-radius:14px}
   .strip{flex-wrap:wrap;gap:6px 12px;padding:10px 16px;align-items:flex-end}
-  .strip .btn{padding:0 10px;height:30px;align-self:center}
+  .strip .btn{padding:0 12px;align-self:center}
   .strip #fresh{margin-left:auto}
   .strip .m{display:block}
   .strip .m.main{min-width:48px}
@@ -582,18 +614,20 @@ kbd{font:inherit}
   .m-tall .top,.m-tall .a-head,.m-tall .b-head,.m-tall .c-head,.m-tall .step-say,.m-tall .langbar{display:none}
   .m-tall .main-a,.m-tall .main-b,.m-tall .main-c{padding-top:8px}
   .m-tall .stage{min-height:calc(100vh - 16px);min-height:calc(100svh - 16px)}
-  .m-tall .quit{display:inline-flex;font-size:0;width:30px;padding:0;gap:0}
+  .m-tall .quit{display:inline-flex;font-size:0;width:44px;padding:0;gap:0}
   .m-tall .quit::before{content:"×";font-size:19px;line-height:1}
   .r-right{justify-items:stretch}
   .m-tall .quit2{display:inline}
+  /* 글을 눌러 자판이 열린 뒤에는 '글을 누르면 자판이 열려요'를 감춘다(자리는 그대로) */
+  .m-tall.typing-focus .start,.m-tall.typing-focus .ph{visibility:hidden}
   .m-tall .b-grid .gauge{position:static}
 }
 @media (max-width:359px){
   .nav a{font-size:12.5px}
   .meter{gap:6px 12px}
   .sheet .txt,.rig .txt{font-size:21px}
-  .seg button{padding:5px 7px;font-size:13.5px}
-  .steps button{font-size:12.5px;padding:0 7px 0 4px}
+  .seg button{padding:12px 7px;font-size:13.5px}
+  .steps button{font-size:12.5px;padding:0 8px 0 5px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}

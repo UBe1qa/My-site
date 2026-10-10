@@ -273,6 +273,80 @@ group = 'tracker';
   eq(r.suspects, [], '사람이 한 더블클릭(120ms)은 의심 아님');
 }
 
+/* ───────────── 3-1. 한쪽 신호만 오는 키(제3자 평가 H2·H3) ───────────── */
+group = 'tracker-quirk';
+{
+  const run = (ev, opts) => CK.analyzeKeyEvents(ev.map(([type, id, t, repeat, momentary]) => ({ type, id, t, repeat, momentary })), opts);
+  // H2: 누름 없이 뗌만 오는 키(윈도우의 PrtSc 꼴). 한 번 눌렸다 떼어진 것으로 센다. 눌려 있음·동시 입력 수에는 안 들어간다
+  let r = run([['up', 'PrintScreen', 100]]);
+  eq([r.presses, r.seen, r.maxHeld, r.held, r.suspects], [1, ['PrintScreen'], 0, [], []], '뗌만 온 키: 누름 1번, 눌린 적 있음, 동시 0, 눌려 있지 않음');
+  r = run([['up', 'PrintScreen', 100], ['up', 'PrintScreen', 900]]);
+  eq([r.presses, r.seen.length, r.maxHeld], [2, 1, 0], '뗌만 두 번: 누름 2번');
+  r = run([['down', 'KeyA', 0], ['up', 'PrintScreen', 50], ['up', 'KeyA', 100]]);
+  eq([r.presses, r.maxHeld, r.maxHeldIds, r.seen], [2, 1, ['KeyA'], ['KeyA', 'PrintScreen']], '다른 키를 누른 채 뗌만 와도 동시 입력 수는 1');
+  let T = CK.createTracker();
+  eq(T.up('PrintScreen', 5), { held: 0, tap: true, first: true }, '뗌만 온 키의 첫 번째: tap·first');
+  eq(T.up('PrintScreen', 900), { held: 0, tap: true, first: false }, '뗌만 온 키의 두 번째: tap, first 아님');
+  eq([T.hasSeen('PrintScreen'), T.isHeld('PrintScreen'), T.heldCount(), T.presses(), T.stat('PrintScreen').presses], [true, false, 0, 2, 2], '뗌만 온 키의 상태');
+  T.down('KeyA', 1000, false);
+  eq(T.up('KeyA', 1080), { held: 0 }, '보통 키의 뗌은 예전 그대로({ held })');
+  // 창을 벗어나며 비운 키의 뗌이 나중에 와도 새 누름으로 세지 않는다
+  r = run([['down', 'KeyA', 0], ['blur', '', 10], ['up', 'KeyA', 400]]);
+  eq([r.presses, r.held], [1, []], 'blur로 비운 키의 늦은 뗌은 누름이 아님');
+  r = run([['down', 'KeyA', 0], ['blur', '', 10], ['up', 'KeyA', 400], ['up', 'KeyA', 900]]);
+  eq(r.presses, 2, '그 뒤에 또 뗌만 오면 그건 새로 센다');
+  // 맥: Command를 떼며 비운 키의 뗌이 늦게 와도 새 누름이 아니다
+  r = run([['down', 'MetaLeft', 0], ['down', 'KeyC', 50], ['up', 'MetaLeft', 200], ['up', 'KeyC', 230]]);
+  eq([r.presses, r.held], [2, []], 'Command로 비운 키의 늦은 뗌');
+  // 뗌만 온 키도 뗀 시각은 기억한다: 그 뒤 10ms 만의 눌림은 의심
+  r = run([['up', 'KeyQ', 100], ['down', 'KeyQ', 110], ['up', 'KeyQ', 170]]);
+  eq(r.suspects, [{ id: 'KeyQ', count: 1, presses: 2, minGap: 10 }], '뗌만 온 뒤 10ms 만의 눌림');
+
+  // H3: Caps Lock. 맥은 켤 때 누름만, 끌 때 뗌만 준다 → 눌려 있는 키로 두지 않는다
+  r = run([['down', 'CapsLock', 0]]);
+  eq([r.presses, r.seen, r.maxHeld, r.held], [1, ['CapsLock'], 0, []], 'Caps Lock 누름만: 누름 1번, 눌려 있지 않음');
+  T = CK.createTracker();
+  eq(T.down('CapsLock', 0, false), { counted: true, first: true, chatter: false, gap: null, held: 0 }, 'Caps Lock 누름: held 0');
+  eq([T.isHeld('CapsLock'), T.heldKeys(60000, 10000), T.heldKeys(60000)], [false, [], []], '1분이 지나도 눌린 채 있는 키가 아니다(걸렸다는 경고 없음)');
+  T.down('KeyA', 3000, false);
+  eq([T.maxHeld(), T.maxHeldIds(), T.heldCount()], [1, ['KeyA'], 1], 'Caps Lock 뒤에 A만 눌렀으면 동시 입력 1(A)');
+  T.up('KeyA', 3080);
+  eq(T.up('CapsLock', 9000), { held: 0 }, '끌 때의 뗌은 앞 누름의 짝(새 누름 아님)');
+  eq([T.presses(), T.stat('CapsLock').presses], [2, 1], '누름 수: A 1 + Caps Lock 1');
+  eq(T.up('CapsLock', 12000), { held: 0, tap: true, first: false }, '짝 없는 뗌(켜진 채 연 페이지에서 끄기)은 누름으로');
+  // 윈도우처럼 누름·뗌이 둘 다 와도 눌린 채로 두지 않고, 채터링 간격은 그대로 잰다
+  r = run([['down', 'CapsLock', 0], ['down', 'KeyA', 10], ['up', 'CapsLock', 60], ['down', 'CapsLock', 72], ['up', 'KeyA', 90], ['up', 'CapsLock', 130]]);
+  eq([r.presses, r.maxHeld, r.suspects], [3, 1, [{ id: 'CapsLock', count: 1, presses: 2, minGap: 12 }]], 'Caps Lock: 동시 입력에서 빠지고 12ms 재입력은 의심');
+  // 한/영·한자: 화면 코드가 momentary로 넘긴다(자리 이름은 오른쪽 Alt·Ctrl과 같다)
+  T = CK.createTracker();
+  eq(T.down('AltRight', 0, false, true).held, 0, '한/영으로 온 오른쪽 Alt 자리: 눌린 채로 두지 않는다');
+  eq([T.isHeld('AltRight'), T.hasSeen('AltRight')], [false, true], '한/영: 눌린 적은 있음');
+  eq(T.up('AltRight', 50), { held: 0 }, '한/영의 뗌');
+  eq(T.down('AltRight', 500, false).held, 1, '진짜 오른쪽 Alt(momentary 아님)는 눌린 채로 둔다');
+  T.reset();
+  eq(T.up('CapsLock', 5), { held: 0, tap: true, first: true }, 'reset 뒤에는 처음부터');
+  eq([['CapsLock', 'CapsLock'], ['Lang1', 'HangulMode'], ['Lang2', 'HanjaMode'], ['AltRight', 'HangulMode'], ['ControlRight', 'HanjaMode'], ['', 'HangulMode'], ['AltRight', 'Alt'], ['ControlRight', 'Control'], ['KeyA', 'a'], ['PrintScreen', 'PrintScreen'], ['', '']].map(([c, k]) => CK.isMomentary(c, k)),
+    [true, true, true, true, true, true, false, false, false, false, false], '눌린 채로 두지 않는 키: Caps Lock, 한/영, 한자');
+}
+
+/* ───────────── 3-2. 한쪽 신호만 오는 키: 파이썬이 구간에서 센 정답 ───────────── */
+group = 'quirk-ref';
+C.keyStreamsQuirk.forEach((s, i) => {
+  const r = CK.analyzeKeyEvents(s.events, { chatterMs: s.chatterMs });
+  eq(r.presses, s.presses, `흐름 ${i}: 누름 수(보통 키 구간 + 뗌만 온 횟수 + Caps Lock 횟수)`);
+  eq(r.maxHeld, s.maxHeld, `흐름 ${i}: 동시에 눌린 최대 수(보통 키 구간만)`);
+  eq(r.seen, s.seen, `흐름 ${i}: 눌린 적 있는 키`);
+  ok(!r.maxHeldIds.includes('CapsLock') && !r.maxHeldIds.includes('PrintScreen'), `흐름 ${i}: 최대일 때의 키 목록에 Caps Lock·PrtSc 없음`);
+  ok(r.held.every((h) => h.id !== 'CapsLock' && h.id !== 'PrintScreen'), `흐름 ${i}: 눌린 채 있는 키에 Caps Lock·PrtSc 없음`);
+  const got = {};
+  r.suspects.forEach((x) => { got[x.id] = { count: x.count, minGap: x.minGap }; });
+  eq(Object.keys(got).sort(), Object.keys(s.suspects).sort(), `흐름 ${i}: 의심 키 목록(기준 ${s.chatterMs}ms)`);
+  for (const id of Object.keys(s.suspects)) {
+    eq(got[id] && got[id].count, s.suspects[id].count, `흐름 ${i}: ${id} 의심 횟수`);
+    near(got[id] ? got[id].minGap : NaN, s.suspects[id].minGap, 1e-9, `흐름 ${i}: ${id} 가장 짧은 간격`);
+  }
+});
+
 /* ───────────── 4. 키 기록: 파이썬이 구간에서 센 정답 ───────────── */
 group = 'tracker-ref';
 C.keyStreams.forEach((s, i) => {
@@ -316,6 +390,17 @@ group = 'refresh';
   eq(CK.refreshEstimate(Array(29).fill(16.7)).enough, false, '29개는 아직 부족');
   eq(CK.intervals([100, 116.7, 133.3, 150]).map((v) => +v.toFixed(4)), [16.7, 16.6, 16.7], '시각 → 간격');
   eq([CK.nearestCommon(0, [60], 0.5), CK.nearestCommon(-3, [60], 0.5), CK.nearestCommon(NaN, [60], 0.5)], [null, null, null], '0·음수·NaN에는 흔한 값을 붙이지 않는다');
+  // 프레임이 고르지 않으면 값을 말하지 않는다(제3자 평가 L3). 손으로: 120Hz에서 한 장 걸러 빠지면 간격이 8.33·16.67 번갈아 → 중앙값 12.5ms = 80Hz(없는 값), 고른 프레임 0%
+  const alt = CK.refreshEstimate(Array.from({ length: 120 }, (_, i) => (i % 2 ? 1000 / 60 : 1000 / 120)));
+  near(alt.hz, 80, 1e-9, '한 장 걸러 빠진 120Hz: 중앙값으로는 80Hz'); eq([alt.stable, alt.nearest, CK.refreshSteady(alt)], [0, null, false], '고른 프레임 0% → 고르지 않음');
+  const alt144 = CK.refreshEstimate(Array.from({ length: 120 }, (_, i) => (i % 2 ? 2000 / 144 : 1000 / 144)));
+  near(alt144.hz, 96, 1e-9, '한 장 걸러 빠진 144Hz: 중앙값으로는 96Hz'); eq(CK.refreshSteady(alt144), false, '144Hz도 고르지 않음');
+  eq(CK.REFRESH_STEADY, 0.75, '고르다고 보는 선 75%(화면 글에 적은 값)');
+  // 경계: 100장 중 75장이 제때면 고름, 74장이면 고르지 않음
+  const mix = (good) => CK.refreshEstimate(Array(good).fill(16.67).concat(Array(100 - good).fill(33.3)));
+  eq([mix(75).stable, CK.refreshSteady(mix(75)), mix(74).stable, CK.refreshSteady(mix(74)), CK.refreshSteady(mix(100))], [0.75, true, 0.74, false, true], '고른 프레임 75%가 경계');
+  eq([CK.refreshSteady(CK.refreshEstimate(Array(29).fill(16.67))), CK.refreshSteady(CK.refreshEstimate([])), CK.refreshSteady(null)], [false, false, false], '표본이 모자라거나 없으면 고르다고 하지 않는다');
+  C.refresh.forEach((c, i) => eq(CK.refreshSteady(CK.refreshEstimate(c.intervals)), c.samples >= 30 && c.stable >= 0.75, `주사율 ${i}: 고른가(파이썬이 센 비율 ${c.stable.toFixed(3)})`));
 }
 
 /* ───────────── 6. 폴링 ───────────── */
@@ -391,6 +476,11 @@ group = 'level';
   eq(CK.noiseFloorDb([NaN, undefined]), null, '숫자가 없으면 null');
   // 잘림: 표본 8개 중 절댓값 0.999 이상이 2개 → 0.25
   eq(CK.clipRatio([0, 0.5, 1, -1, 0.99, -0.5, 0.2, 0.998]), 0.25, '잘린 비율');
+  C.waves.forEach((w) => near(CK.clipRatio(w.samples), w.clip, 1e-12, `${w.name}: 꼭대기에 닿은 표본 비율(파이썬이 센 값)`));
+  // '너무 큼'(제3자 평가 L18): 한 화면(표본 2048개)에서 꼭대기에 닿은 표본이 0.5% 이상. 손으로: 10개 = 0.488% → 아님, 11개 = 0.537% → 잘림
+  const frame = (n) => { const a = new Float32Array(2048); for (let i = 0; i < n; i++) a[i * 7] = i % 2 ? -1 : 1; return a; };
+  eq([CK.MIC_CLIP_SHARE, CK.isClipped(frame(10)), CK.isClipped(frame(11)), CK.isClipped(frame(0)), CK.isClipped([])], [0.005, false, true, false, false], '잘림 판정 경계 0.5%');
+  eq([CK.isClipped(C.waves.find((w) => w.name.startsWith('꽉 찬 사인')).samples), CK.isClipped(C.waves.find((w) => w.name.startsWith('절반 크기 사인')).samples)], [true, false], '꽉 찬 사인은 잘림, 절반 크기는 아님');
   eq(CK.MIC_HEARD_DB, -45, "'소리를 잡았다'고 말하는 선 -45 dBFS(화면·소개에 적은 값)");
   // 진폭 0.0056(= 10^(-45/20))보다 큰 사인은 선을 넘고, 0.004는 못 넘는다
   ok(CK.dbfs(CK.rms(Array.from({ length: 480 }, (_, i) => 0.012 * Math.sin(2 * Math.PI * i / 48))) ) >= CK.MIC_HEARD_DB && CK.dbfs(CK.rms(Array.from({ length: 480 }, (_, i) => 0.004 * Math.sin(2 * Math.PI * i / 48)))) < CK.MIC_HEARD_DB, '선을 넘는 소리와 못 넘는 소리');
@@ -456,6 +546,30 @@ group = 'stick';
   eq([CK.DRIFT_SLIGHT, CK.DRIFT_CLEAR], [0.05, 0.15], '화면에 밝히는 기준');
   eq(CK.stickRest([]), { x: null, y: null, offset: null, percent: null, wobble: null, samples: 0 }, '표본 없음');
   eq(CK.stickRest([[NaN, 0], null, [0.2, 0]]).samples, 1, '잘못된 표본은 뺀다');
+  // 화면에 보이는 자리(0.1%)로 맞춰 판정한다(제3자 평가 L4): 평균을 내다 생긴 끝자리 오차로 '5.0%'가 '가운데'로 나오면 안 된다
+  eq([CK.driftVerdict(0.04999999999999999), CK.driftVerdict(0.0496), CK.driftVerdict(0.0494), CK.driftVerdict(0.14999999999999997), CK.driftVerdict(0.1496), CK.driftVerdict(0.1494)],
+    ['slight', 'slight', 'centered', 'drift', 'drift', 'slight'], '5.0%로 보이는 값은 조금 쏠림, 15.0%로 보이는 값은 쏠림');
+  eq(CK.stickVerdict(CK.stickRest(Array(70).fill([0.05, 0]))).verdict, 'slight', '(0.05, 0)을 70번 평균 낸 값 → 5.0% → 조금 쏠림');
+  eq(CK.stickVerdict(CK.stickRest(Array(70).fill([0.15, 0]))).verdict, 'drift', '(0.15, 0)을 70번 평균 낸 값 → 15.0% → 쏠림');
+  eq([CK.roundTenth(0.0496), CK.roundTenth(0.0494), CK.roundTenth(0.1), CK.roundTenth(0)], [0.05, 0.049, 0.1, 0], '0.1% 자리로 반올림');
+  // 떨림(제3자 평가 M6). 손으로: 좌우로 0.1씩 번갈아 튀면 평균은 가운데(0), 가장 멀리 튄 거리 0.1 = 10% → 가운데지만 떨림
+  eq(CK.stickVerdict(w), { verdict: 'centered', jitter: true, percent: 0, wobblePercent: 10 }, '가운데지만 떨리는 스틱');
+  eq(CK.stickVerdict(S(0.03, 0.04)), { verdict: 'slight', jitter: false, percent: 5, wobblePercent: 0 }, '조금 쏠렸고 안 떨리는 스틱');
+  eq(CK.stickVerdict(CK.stickRest([[0.02, 0], [-0.02, 0]])).jitter, false, '2% 떨림은 떨림으로 보지 않는다');
+  eq([CK.DRIFT_WOBBLE, CK.wobbleVerdict(0.0494), CK.wobbleVerdict(0.0496), CK.wobbleVerdict(0.05), CK.wobbleVerdict(0.2), CK.wobbleVerdict(0), CK.wobbleVerdict(null), CK.wobbleVerdict(0.08, 0.1)],
+    [0.05, false, true, true, true, false, null, false], '떨림 경계 5%(화면에 보이는 자리로 맞춰서)');
+  eq([CK.stickVerdict(CK.stickRest([])), CK.stickVerdict(null)], [null, null], '표본이 없으면 판정 없음');
+  C.stickJitter.forEach((c, i) => {
+    const v = CK.stickVerdict(CK.stickRest(c.samples));
+    eq([v.verdict, v.jitter], [c.verdict, c.jitter], `떨림 ${i}: 판정(쏠림 ${c.verdict}, 떨림 ${c.jitter})`);
+    near(v.percent, c.percent, 1e-9, `떨림 ${i}: 보여 주는 쏠림 %`); near(v.wobblePercent, c.wobblePercent, 1e-9, `떨림 ${i}: 보여 주는 떨림 %`);
+  });
+  // 축 하나의 가만히 둔 값(배치를 모르는 컨트롤러). 손으로: [0.1, -0.1, 0.3] → 평균 0.1, 폭 0.4. 트리거가 축으로 오는 기기는 -1에 가만히 있다
+  const ar = CK.axisRest([0.1, -0.1, 0.3]);
+  near(ar.mean, 0.1, 1e-12, '축 평균 0.1'); near(ar.range, 0.4, 1e-12, '축이 움직인 폭 0.4'); eq([ar.min, ar.max, ar.samples], [-0.1, 0.3, 3], '축 최소·최대·표본 수');
+  eq(CK.axisRest([-1, -1, -1]), { mean: -1, min: -1, max: -1, range: 0, samples: 3 }, '가만히 -1에 있는 축');
+  eq([CK.axisRest([]), CK.axisRest([NaN, 'x']).samples], [{ mean: null, min: null, max: null, range: null, samples: 0 }, 0], '표본이 없는 축');
+  C.axes.forEach((c, i) => { const a = CK.axisRest(c.values); near(a.mean, c.mean, 1e-12, `축 ${i}: 평균(statistics.fmean)`); near(a.range, c.range, 1e-12, `축 ${i}: 폭`); eq([a.min, a.max], [c.min, c.max], `축 ${i}: 최소·최대`); });
   C.sticks.forEach((c, i) => {
     const r = CK.stickRest(c.samples);
     near(r.x, c.x, 1e-12, `스틱 ${i}: 평균 x(statistics.fmean)`); near(r.y, c.y, 1e-12, `스틱 ${i}: 평균 y`);
@@ -482,9 +596,15 @@ group = 'errors';
   eq(E('NotAllowedError', 'Permission denied'), ['denied', false, 'browser'], '권한 거절 → 브라우저의 사이트 권한');
   eq(E('NotAllowedError', 'Permission dismissed'), ['dismissed', true, null], '묻는 창을 닫음 → 다시 누르면 됨');
   eq(E('NotAllowedError', 'Permission denied by system'), ['denied-system', false, 'os'], '운영체제가 막음 → 운영체제 설정');
-  eq(E('NotAllowedError', ''), ['denied', false, 'browser'], '메시지가 없어도 거절');
-  eq(E('NotAllowedError', 'The request is not allowed by the user agent or the platform in the current context.'), ['denied', false, 'browser'], '파이어폭스·사파리식 문장');
-  eq(E('PermissionDeniedError', ''), ['denied', false, 'browser'], '옛 이름');
+  // 3단계(제3자 평가 L6): 크롬 계열의 문장('Permission denied')일 때만 '이 사이트의 권한이 막힘'으로 단정한다.
+  // 파이어폭스·사파리는 막았을 때와 창을 닫았을 때 같은 문장을 주므로 '막혀 있거나 창을 닫았을 수 있음'(denied-maybe, 다시 눌러 볼 만함)으로 알린다
+  eq(E('NotAllowedError', 'Permission denied by user'), ['denied', false, 'browser'], '크롬 계열: 사용자가 막음');
+  eq(E('NotAllowedError', 'permission denied.'), ['denied', false, 'browser'], '대소문자·마침표가 달라도 같은 문장');
+  eq(E('NotAllowedError', ''), ['denied-maybe', true, 'browser'], '메시지가 없으면 단정하지 않는다');
+  eq(E('NotAllowedError', 'The request is not allowed by the user agent or the platform in the current context.'), ['denied-maybe', true, 'browser'], '파이어폭스식 문장: 단정하지 않는다');
+  eq(E('NotAllowedError', 'The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.'), ['denied-maybe', true, 'browser'], '사파리식 문장: 단정하지 않는다');
+  eq(E('PermissionDeniedError', ''), ['denied-maybe', true, 'browser'], '옛 이름(문장 없음)');
+  eq(E('PermissionDeniedError', 'Permission denied'), ['denied', false, 'browser'], '옛 이름 + 크롬 문장');
   eq(E('NotFoundError', 'Requested device not found'), ['no-device', true, null], '장치 없음');
   eq(E('DevicesNotFoundError', ''), ['no-device', true, null], '장치 없음(옛 이름)');
   eq(E('NotReadableError', 'Could not start audio source'), ['in-use', true, null], '다른 앱이 쓰는 중이거나 못 엶');

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Keyboard Typing Double Letters? Confirm Chattering | Checkbench</title>
-<meta name="description" content="One press, two letters? Confirm double-typing (chattering) on a single key with the keyboard tester, see how the 30 ms rule decides, and rule out other causes.">
+<meta name="description" content="One press, two letters? Confirm double-typing (chattering) with the keyboard tester, see how the 30 ms rule decides and rule out other causes.">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://check.lumenlab.page/guide/keyboard-double-typing/">
@@ -13,7 +13,7 @@
 <link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/guide/keyboard-double-typing/">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Keyboard Typing Double Letters? Confirm Chattering | Checkbench">
-<meta property="og:description" content="One press, two letters? Confirm double-typing (chattering) on a single key with the keyboard tester, see how the 30 ms rule decides, and rule out other causes.">
+<meta property="og:description" content="One press, two letters? Confirm double-typing (chattering) with the keyboard tester, see how the 30 ms rule decides and rule out other causes.">
 <meta property="og:url" content="https://check.lumenlab.page/guide/keyboard-double-typing/">
 <meta property="og:site_name" content="Checkbench">
 <meta property="og:image" content="https://check.lumenlab.page/og.png">
@@ -24,11 +24,11 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="preload" href="/assets/fonts/ck-en-ad53f1c8.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"CK Sans";src:url(/assets/fonts/ck-en-ad53f1c8.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional;unicode-range:U+20-7E,U+A9,U+B7,U+D7,U+2013,U+2019,U+201C-201D,U+2026,U+2190-2193,U+2212,U+2303,U+2318,U+2325,U+AC00,U+AD6D,U+AE30,U+B4E0,U+B85C,U+BAA8,U+BCF4,U+C2A4,U+C5B4,U+C5C6,U+C694,U+C774,U+C9C0,U+D14C,U+D2B8,U+D398,U+D55C}</style>
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Keyboard typing double letters: how to confirm chattering", "description": "One press, two letters? Confirm double-typing (chattering) on a single key with the keyboard tester, see how the 30 ms rule decides, and rule out other causes.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/keyboard-double-typing/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Keyboard typing double letters: how to confirm chattering", "description": "One press, two letters? Confirm double-typing (chattering) with the keyboard tester, see how the 30 ms rule decides and rule out other causes.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/keyboard-double-typing/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://check.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Keyboard typing double letters: how to confirm chattering", "item": "https://check.lumenlab.page/guide/keyboard-double-typing/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
 <script src="/assets/ads-config.js"></script>
@@ -57,6 +57,7 @@
 <tr><td data-th="What happened on one key">A deliberate double tap, pressed again 120 ms after release</td><td data-th="Gap">120 ms</td><td data-th="At 30 ms">not counted</td><td data-th="At 10 ms">not counted</td></tr>
 </tbody></table></div>
 <p>In the second row the two presses are 155 ms apart, which looks like normal typing. Only the 5 ms between release and re-press gives it away. These rows are the same cases our automated tests run against the tester.</p>
+<div class="ad-wrap ad-wrap--in" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <h2>A test that takes one minute</h2>
 <ol>
 <li>Open the keyboard tester and pick your layout.</li>
@@ -76,7 +77,6 @@
 <p>Changing the limit in the tester does not fix anything. It only changes what this page counts.</p>
 <p class="cta"><a class="btn" href="/keyboard-test/">Open the keyboard tester</a></p>
 </article>
-<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <section class="wrap narrow sec"><h2>Other tests</h2><ul class="tool-list"><li><a href="/keyboard-test/">Keyboard Tester</a><span>Every key, keys held at once, double-typing</span></li><li><a href="/mouse-test/">Mouse Test</a><span>Buttons, wheel, double-click fault, report rate</span></li><li><a href="/mic-test/">Mic Test</a><span>Level, recording and playback</span></li><li><a href="/webcam-test/">Webcam Test</a><span>Live picture, size, frames per second, photo</span></li><li><a href="/speaker-test/">Speaker Test (Left / Right)</a><span>Left, right, both, rising tone</span></li><li><a href="/dead-pixel-test/">Dead Pixel Test</a><span>Full-screen black, white, red, green, blue</span></li><li><a href="/refresh-rate-test/">Refresh Rate Test</a><span>Screen Hz and a moving bar</span></li><li><a href="/gamepad-tester/">Gamepad Tester</a><span>Buttons, sticks, triggers, drift, vibration</span></li></ul></section>
 <div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>

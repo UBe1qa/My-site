@@ -4,7 +4,8 @@
 보는 것: 페이지마다 title·description 다름 / canonical = sitemap = 내부 링크(끝 / 까지), 깨진 내부 링크·#해시 0, .html 링크 0 /
 hreflang 짝·자기 자신·x-default / <html lang> / 영어 페이지의 lang="ko" 밖 한글 0 / JSON-LD 가 화면 글자와 같음 /
 방침: 웹 비콘 문장·partner-sites 링크·Cloudflare Web Analytics·저장 키 이름이 코드와 같음 / 광고 코드가 있어야 할 곳·없어야 할 곳 /
-첫 HTML 에 제목·본문·내부 링크 / 확인된 사실(연구 값)에는 출처 링크와 확인한 날 / 화면 말('글쇠'·'낱말' 대신 '키'·'단어') / 배포 파일.
+첫 HTML 에 제목·본문·내부 링크 / 확인된 사실(연구 값)에는 출처 링크와 확인한 날 / 화면 말('글쇠'·'낱말' 대신 '키'·'단어') / 배포 파일 /
+3단계에 더한 것: 조각 글꼴이 화면 글자·연습 글을 전부 담는지, 404 가 두 언어 틀을 담는지, 결과의 총 속도 줄·화면 읽기용 문단, 통과 기준·터치 자판 문구.
 """
 import sys
 sys.dont_write_bytecode = True
@@ -15,6 +16,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / '_dev'))
+import build as B  # noqa: E402  (조각 글꼴에 담을 글자 모으기)
 SITE = 'https://typing.lumenlab.page'
 fails = []
 count = 0
@@ -106,6 +109,7 @@ def load_pages():
 
 def main():
     pages = load_pages()
+    ign = (ROOT / '.assetsignore').read_text().split()
     sm = (ROOT / 'sitemap.xml').read_text(encoding='utf-8')
     sm_paths = re.findall(r'<loc>' + re.escape(SITE) + r'([^<]*)</loc>', sm)
     ok(sorted(sm_paths) == sorted(pages), f'sitemap 주소와 만든 페이지가 다르다: {sorted(set(sm_paths) ^ set(pages))}')
@@ -146,6 +150,9 @@ def main():
                 continue
             ok(h.startswith('/') or h.startswith('#'), f'{path} 상대 링크 {h}')
             target, _, frag = h.partition('#')
+            if target.startswith('/assets/'):   # 파일로 가는 링크(글꼴 라이선스 전문)
+                ok((ROOT / target.lstrip('/')).is_file(), f'{path} 없는 파일 링크 {h}')
+                continue
             if target:
                 ok('.html' not in target, f'{path} .html 링크 {h}')
                 ok(target in pages, f'{path} 깨진 내부 링크 {h}')
@@ -206,6 +213,16 @@ def main():
                 ok(j['itemListElement'][-1]['item'] == SITE + path, f'{path} BreadcrumbList 마지막 주소')
         if 'id="tj-cfg"' in src:
             ok('WebApplication' in types, f'{path} 도구 페이지에 WebApplication 없음')
+            # 결과의 총 속도 줄, 화면 읽기 프로그램용 '칠 글' 문단과 빠져나오는 법, 초점이 나가 있을 때의 시작 안내
+            ok('id="r-raw"' in src and (('총 타수' in src) if lang == 'ko' else ('Raw speed' in src and 'small print' in src)), f'{path} 총 속도(결과 줄 + 계산 기준)')
+            ok('id="txt-sr"' in src and 'aria-describedby="trap-help"' in src and re.search(r'<p class="sr" id="trap-help">[^<]*Esc[^<]*</p>', src), f'{path} 화면 읽기용 문단·치는 칸에서 나오는 법')
+            ok(re.search(r'<p class="sr" id="txt-sr"></p>\s*<textarea', src) and not re.search(r'id="txt-sr"[^>]*aria-hidden', src), f'{path} 칠 글 문단은 숨기지 않고 치는 칸 바로 앞에')
+            ok('class="pc off"' in src and 'id="rec-more"' in src, f'{path} 시작 안내(초점이 나가 있을 때)·기록 더 보기')
+            cfgj = json.loads(re.search(r'<script type="application/json" id="tj-cfg">(.*?)</script>', src, re.S).group(1).replace('<\\/', '</'))
+            ok(all(k in cfgj['S'] for k in ('rawKo', 'rawEn', 'rawAlso', 'withPunct', 'withNums', 'recMore', 'recLess')), f'{path} 화면 문구(총 속도·기록 조건)')
+            if cfgj['tool'] == 'practice':
+                ok(('95% 이상' in src and '95%를 넘' not in src) if lang == 'ko' else ('95% accuracy or higher' in src), f'{path} 통과 기준의 말은 "95% 이상"')
+        ok('천지인' not in src, f'{path} 확인하지 못한 자판(천지인)을 된다고 단정하지 않는다')
         if re.fullmatch(r'/(ko/)?guide/[^/]+/', path):
             ok('Article' in types and 'BreadcrumbList' in types, f'{path} 글에 Article·BreadcrumbList 없음')
             ok(('마지막 확인' if lang == 'ko' else 'Last checked') in vis_all, f'{path} "마지막 확인" 날짜')
@@ -253,6 +270,12 @@ def main():
     ok('href="/"' in nf and 'href="/ko/"' in nf, '404 에 두 언어 첫 화면 링크')
     pn = Text(); pn.feed(nf)
     ok(not HANGUL.search(''.join(pn.text)), '404(영어)에 lang="ko" 밖 한글')
+    # 한 장에 두 언어 틀: 주소가 /ko/ 로 시작하면 한국어 틀만 보인다(첫 그림 전의 스크립트 + CSS)
+    ok(nf.count('data-l="en"') == 3 and nf.count('data-l="ko" lang="ko"') == 3, '404: 머리·본문·꼬리마다 두 언어 틀')
+    ok("location.pathname" in nf.split('</head>')[0] and "h.lang='ko'" in nf.split('</head>')[0], '404: 주소를 보고 언어를 고르는 스크립트가 <head> 에 있다')
+    ok(nf.count('id="lumen"') == 1 and nf.count('<main') == 1 and len(re.findall(r'<nav class="nav', nf)) == 2, '404: id 가 겹치지 않고 메뉴는 언어마다 하나씩')
+    for navlink in ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/', '/practice/', '/guide/'):
+        ok(f'href="{navlink}"' in nf, f'404 메뉴에 {navlink}')
 
     # 방침: 웹 비콘 문장, partner-sites 링크, 방문 통계, 저장 키
     js_keys = set()
@@ -269,6 +292,7 @@ def main():
         ok('https://www.cloudflare.com/web-analytics/' in src and 'adssettings.google.com' in src, f'{path} 방문 통계·광고 설정 링크')
         for w in words:
             ok(w in src, f'{path} "{w}" 문장')
+        ok(('성능 정보' in src and '브라우저 종류' in src) if path.startswith('/ko/') else ('performance details' in src and 'kind of browser' in src), f'{path} 방문 통계에 브라우저 종류·성능 정보를 밝힌다')
         ok(set(re.findall(r'<code>(todok\.[a-z]+)</code>', src)) == js_keys, f'{path} 저장 키 이름이 코드와 다르다')
         ok(not re.search(r'분석 도구를 쓰지 않|통계를 모으지 않|아무것도 보내지 않|no analytics|do not use analytics|nothing is sent', src, re.I), f'{path} "분석 도구 없음" 뜻의 문장')
         ok('woxocoso@gmail.com' in src and 'jsDelivr' in src, f'{path} 문의·글꼴 안내')
@@ -287,7 +311,6 @@ def main():
     ok(f'Sitemap: {SITE}/sitemap.xml' in robots and 'Disallow' not in robots, 'robots.txt')
     wr = (ROOT / 'wrangler.jsonc').read_text(encoding='utf-8')
     ok('"name": "typing"' in wr and '"workers_dev": false' in wr and '"pattern": "typing.lumenlab.page", "custom_domain": true' in wr and '"not_found_handling": "404-page"' in wr, 'wrangler.jsonc')
-    ign = (ROOT / '.assetsignore').read_text().split()
     ok(all(x in ign for x in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions')), '.assetsignore')
     ok((ROOT / '.deploy-actions').exists() and (ROOT / '.deploy-actions').stat().st_size == 0, '.deploy-actions(빈 파일)')
     for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png'):
@@ -301,6 +324,40 @@ def main():
     ok(not re.search(r'transition:\s*all', css), 'transition: all 금지')
     ok('prefers-color-scheme:dark' in css and 'prefers-reduced-motion:reduce' in css and '@media print' in css, 'CSS 어두운 화면·동작 줄이기·인쇄')
     ok('font-display:optional' in (ROOT / 'assets' / 'pretendard.css').read_text(encoding='utf-8'), '글꼴 CSS 는 font-display: optional')
+    ok('.seg button{padding:12px' in css and '.btn,.btn.sm{height:44px}' in css, 'CSS 휴대폰에서 누르는 곳 44px')
+    ok('html[lang="en"] [data-l="ko"],html[lang="ko"] [data-l="en"]{display:none!important}' in css, 'CSS 두 언어 틀 가운데 하나만 보이기(404)')
+
+    # 조각 글꼴: 화면 글자와 연습 글을 전부 담는다. 모든 페이지가 자기 언어의 조각을 미리 받는다
+    fj = ROOT / '_dev' / 'fonts.json'
+    ok(fj.exists(), '_dev/fonts.json 없음(python3 -B _dev/font.py)')
+    if fj.exists():
+        fonts = json.loads(fj.read_text(encoding='utf-8'))
+        fdir = ROOT / 'assets' / 'fonts'
+        ok(all((fdir / fonts[l]['file']).exists() and (fdir / fonts[l]['file']).stat().st_size == fonts[l]['bytes'] for l in ('en', 'ko')), '조각 글꼴 파일이 있고 크기가 fonts.json 과 같다')
+        ok(fonts['ko']['bytes'] < 260_000 and fonts['en']['bytes'] < 60_000, f'조각 글꼴 크기(한국어 {fonts["ko"]["bytes"]:,}, 영어 {fonts["en"]["bytes"]:,} 바이트)')
+        for path, src in list(pages.items()) + [('404', nf)]:
+            f = fonts['ko' if path.startswith('/ko/') else 'en']['file']
+            ok(f'<link rel="preload" href="/assets/fonts/{f}" as="font" type="font/woff2" crossorigin>' in src and f'@font-face{{font-family:"Todok Sans";src:url(/assets/fonts/{f}) format("woff2");font-weight:400 800;font-style:normal;font-display:optional}}' in src,
+               f'{path} 자기 언어의 조각 글꼴을 미리 받고 @font-face(Todok Sans, optional)를 갖고 있다')
+        need = B.screen_chars()
+        for l in ('en', 'ko'):
+            have = set(fonts[l]['chars']) | set(fonts[l].get('not_in_source', ''))
+            miss = ''.join(sorted(c for c in need[l] if c not in have))
+            ok(not miss, f'조각 글꼴({l})이 화면 글자를 전부 담지 못한다 → python3 -B _dev/font.py (안 돌려도 그 글자는 jsDelivr 에서 받아 보인다): {len(miss)}자 {miss[:40]}')
+        # 연습 글의 글자는 따로 한 번 더 본다(원본 글꼴에 없는 글자가 연습 글에 있으면 안 된다)
+        practice = set(B.js_strings('tj-text-ko.js')) | set(B.js_strings('tj-text-en.js')) | set(B.js_strings('tj-lessons.js'))
+        gone = ''.join(sorted(c for c in practice if c >= ' ' and c not in set(fonts['ko']['chars'])))
+        ok(not gone, f'연습 글의 글자가 한국어 조각 글꼴에 전부 있어야 한다: {gone[:40]}')
+        gone_en = ''.join(sorted(c for c in set(B.js_strings('tj-text-en.js')) if c >= ' ' and c not in set(fonts['en']['chars'])))
+        ok(not gone_en, f'영어 연습 글의 글자가 영어 조각 글꼴에 전부 있어야 한다: {gone_en[:40]}')
+        junk = [f.name for f in fdir.glob('td-*.woff2') if f.name not in (fonts['en']['file'], fonts['ko']['file'])]
+        ok(not junk, f'쓰지 않는 옛 조각 글꼴 파일: {junk}')
+        ofl = fdir / 'OFL.txt'
+        ok(ofl.exists() and 'SIL OPEN FONT LICENSE' in ofl.read_text(encoding='utf-8') and 'Todok Sans' in ofl.read_text(encoding='utf-8'), '글꼴 라이선스 전문(assets/fonts/OFL.txt)과 이름을 바꿨다는 설명')
+        hd = ROOT / '_headers'
+        ok(hd.exists() and '/assets/fonts/*' in hd.read_text(encoding='utf-8') and 'immutable' in hd.read_text(encoding='utf-8'), '_headers: 글꼴 조각은 오래 저장')
+        ok('"Todok Sans","Pretendard Variable"' in css, 'CSS 글꼴 이름 순서: 조각 → 나눠 받기')
+        ok('_headers' not in ign, '.assetsignore 가 _headers 를 빼면 안 된다')
     for f in (ROOT / 'assets').glob('*.js'):
         ok('https://' not in re.sub(r'//.*', '', f.read_text(encoding='utf-8')) or f.name == 'ads-config.js', f'{f.name} 밖 주소를 부른다')
 

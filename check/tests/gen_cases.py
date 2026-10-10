@@ -7,7 +7,10 @@
 - 폴링: 답이 정해진 흐름(정확히 1ms 간격 = 1000Hz 등)이 중심. 흔들림을 넣은 흐름의 최대값은 정의를 그대로 따라 천천히 훑은 값
 - 동시에 눌린 수·채터링: 먼저 '누른 구간' 목록(정답)을 만들고 그걸 이벤트로 풀어 준다.
   기준값은 구간 목록에서 직접 센다(화면 코드는 이벤트를 하나씩 받아 센다).
-난수는 씨앗을 고정해 다시 돌려도 같은 파일이 나온다.
+- 한쪽 신호만 오는 키(3단계에 더함): 뗌만 오는 키(PrtSc 꼴)와 눌린 채로 두지 않는 키(Caps Lock)를 섞은 흐름.
+  정답은 '보통 키의 구간'에서만 겹침을 세고(그 두 가지는 동시 입력 수에 안 들어간다), 누름 수는 사건 수를 그대로 더한다.
+- 스틱 떨림(3단계에 더함): 판정은 화면에 보이는 자리(0.1%)로 반올림한 값으로 한다 → 파이썬에서 따로 반올림해 견준다.
+난수는 씨앗을 고정해 다시 돌려도 같은 파일이 나온다. 3단계에 더한 것은 전부 맨 뒤에서 난수를 뽑는다(앞의 기준값이 바뀌지 않게).
 """
 import json, math, random, statistics
 from pathlib import Path
@@ -110,7 +113,7 @@ waves = []
 def add_wave(name, samples):
     r = math.sqrt(math.fsum(v * v for v in samples) / len(samples))
     p = max(abs(v) for v in samples)
-    waves.append({'name': name, 'samples': samples, 'rms': r, 'peak': p,
+    waves.append({'name': name, 'samples': samples, 'rms': r, 'peak': p, 'clip': sum(1 for v in samples if abs(v) >= 0.999) / len(samples),
                   'rmsDb': num(20 * math.log10(r) if r > 0 else float('-inf')),
                   'peakDb': num(20 * math.log10(p) if p > 0 else float('-inf'))})
 
@@ -205,6 +208,61 @@ for case in range(14):
                     'presses': len(intervals), 'maxHeld': best, 'suspects': suspects,
                     'seen': sorted(set(k for k, _, _ in intervals))})
 out['keyStreams'] = streams
+
+# ── 8. 한쪽 신호만 오는 키가 섞인 흐름(3단계) ─────────────────
+quirk = []
+for case in range(8):
+    thr = rnd.choice([20, 30, 30, 50])
+    intervals = []                                   # 보통 키 (key, down, up)
+    for key in rnd.sample(KEYS, rnd.randint(2, 6)):
+        t = rnd.uniform(0, 300)
+        for _ in range(rnd.randint(1, 12)):
+            hold = rnd.uniform(20, 400)
+            intervals.append((key, round(t, 3), round(t + hold, 3)))
+            t = round(t + hold, 3) + round(rnd.uniform(60, 500), 3)
+    ups = sorted(round(rnd.uniform(0, 4000), 3) for _ in range(rnd.randint(1, 6)))          # 뗌만 오는 키(PrintScreen)
+    caps, t = [], rnd.uniform(0, 500)                # Caps Lock: 누름·뗌이 둘 다 오지만 눌린 채로 두지 않는다
+    for _ in range(rnd.randint(1, 8)):
+        hold = rnd.uniform(40, 1500)
+        caps.append((round(t, 3), round(t + hold, 3)))
+        t = round(t + hold, 3) + round(rnd.choice([rnd.uniform(1, thr * 1.5), rnd.uniform(80, 600)]), 3)
+    points = sorted([(d, 1) for _, d, u in intervals] + [(u, 0) for _, d, u in intervals])
+    cur = best = 0
+    for _, kind in points:
+        cur += 1 if kind == 1 else -1
+        best = max(best, cur)
+    suspects = {}
+    gaps = [caps[i + 1][0] - caps[i][1] for i in range(len(caps) - 1)]
+    hits = [g for g in gaps if g < thr]
+    if hits:
+        suspects['CapsLock'] = {'count': len(hits), 'minGap': min(hits)}
+    events = sorted([(d, 1, k) for k, d, u in intervals] + [(u, 0, k) for k, d, u in intervals]
+                    + [(u, 0, 'PrintScreen') for u in ups] + [(d, 1, 'CapsLock') for d, u in caps] + [(u, 0, 'CapsLock') for d, u in caps])
+    quirk.append({'chatterMs': thr,
+                  'events': [{'id': k, 'type': 'down' if kind == 1 else 'up', 't': t} for t, kind, k in events],
+                  'presses': len(intervals) + len(ups) + len(caps), 'maxHeld': best, 'suspects': suspects,
+                  'seen': sorted(set(k for k, _, _ in intervals) | {'PrintScreen', 'CapsLock'})})
+out['keyStreamsQuirk'] = quirk
+
+# ── 9. 스틱 떨림·축의 가만히 둔 값(3단계) ────────────────────
+def tenth(x):
+    """화면에 보이는 자리(0.1%)로 반올림. 0.5는 올림."""
+    return math.floor(x * 1000 + 0.5) / 1000
+
+jit = []
+for cx, cy, noise, n in [(0, 0, 0.02, 72), (0, 0, 0.10, 72), (0.012, 0, 0.10, 72), (0.2, 0, 0.004, 72), (0.08, 0.02, 0.06, 72), (0, 0, 0.049, 400), (0, 0, 0.0, 30), (0.05, 0, 0.0, 70)]:
+    pts = [[cx + rnd.uniform(-noise, noise), cy + rnd.uniform(-noise, noise)] for _ in range(n)]
+    mx, my = statistics.fmean(p[0] for p in pts), statistics.fmean(p[1] for p in pts)
+    off = min(1.0, math.hypot(mx, my))
+    wob = max(math.dist(p, (mx, my)) for p in pts)
+    r = tenth(off)
+    jit.append({'samples': pts, 'offset': off, 'wobble': wob, 'verdict': 'drift' if r >= 0.15 else 'slight' if r >= 0.05 else 'centered',
+                'jitter': tenth(wob) >= 0.05, 'percent': r * 100, 'wobblePercent': tenth(wob) * 100})
+out['stickJitter'] = jit
+axes = []
+for lst in [[-1.0] * 40, [rnd.uniform(-0.02, 0.02) for _ in range(60)], [0.3 + rnd.uniform(-0.1, 0.1) for _ in range(25)], [0.5]]:
+    axes.append({'values': lst, 'mean': statistics.fmean(lst), 'min': min(lst), 'max': max(lst), 'range': max(lst) - min(lst)})
+out['axes'] = axes
 
 (HERE / 'cases.json').write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
 print('cases.json:', {k: len(v) for k, v in out.items()})

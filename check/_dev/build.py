@@ -4,6 +4,8 @@
 - 화면 글자 = _dev/content.json(공통·첫 화면·도구 8개·소개·방침), 글 = _dev/articles.json.
 - 자판 그림은 assets/ck-keys.js 의 배열 표를 node로 읽어 SVG로 그려 첫 HTML에 넣는다(배포 때는 빌드 없음. 이 스크립트는 만들 때만 돈다).
 - 만드는 것: 영어 / , 한국어 /ko/ 의 첫 화면·도구 8개·가이드 목록·글·소개·방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 글꼴: _dev/fonts.json(= _dev/font.py 가 만든 조각 글꼴의 파일 이름과 글자 범위)이 있으면 <head>에 preload 와 @font-face('CK Sans')를 넣는다.
+  화면 글자를 고쳤으면 python3 check/_dev/font.py 를 다시 돌린다(끝에 이 스크립트도 돌린다). 빠진 글자는 check.py 가 알려 준다.
 - 만든 파일은 손으로 고치지 않는다. lastmod 는 UPDATED 에 실제로 고친 날만 적는다.
 """
 import html
@@ -22,6 +24,7 @@ UPDATED = {}                  # 주소: 'YYYY-MM-DD' (본문·구조화 데이�
 
 C = json.loads((DEV / 'content.json').read_text(encoding='utf-8'))
 A = json.loads((DEV / 'articles.json').read_text(encoding='utf-8')) if (DEV / 'articles.json').exists() else {'en': [], 'ko': []}
+FONTS = json.loads((DEV / 'fonts.json').read_text(encoding='utf-8')) if (DEV / 'fonts.json').exists() else {}
 UI, T = C['ui'], C['t']
 TOOLS = ['kb', 'mouse', 'mic', 'cam', 'spk', 'px', 'hz', 'pad']
 SLUG = {k: C['tools'][k]['slug'] for k in TOOLS}
@@ -156,6 +159,10 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
     ad = (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADS_CLIENT}" crossorigin="anonymous"></script>\n'
           '<script src="/assets/ads-config.js"></script>\n') if ads else ''
     og = 'og-ko.png' if lang == 'ko' else 'og.png'
+    fnt = FONTS.get(lang)
+    # 조각 글꼴: 같은 주소에서 한 파일. font-display: optional 이라 늦게 와도 이미 그린 글자를 바꾸지 않는다(화면 밀림 0)
+    font = (f'<link rel="preload" href="/assets/fonts/{fnt["file"]}" as="font" type="font/woff2" crossorigin>\n'
+            f'<style>@font-face{{font-family:"CK Sans";src:url(/assets/fonts/{fnt["file"]}) format("woff2");font-weight:400 800;font-style:normal;font-display:optional;unicode-range:{fnt["range"]}}}</style>\n') if fnt else ''
     return f'''<!doctype html>
 <html lang="{lang}">
 <head>
@@ -179,9 +186,7 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/pretendard.css">
-<link rel="stylesheet" href="/assets/style.css">
+{font}<link rel="stylesheet" href="/assets/style.css">
 {PRE}
 {ld}{ad}{''.join(f'<script defer src="/assets/{s}.js"></script>{chr(10)}' for s in scripts)}</head>'''
 
@@ -217,9 +222,10 @@ def footer(lang):
 </div></footer>'''
 
 
-def ad_slot(lang, name):
-    """광고 자리. 폭은 본문 글 기둥과 같다. 높이는 ads-config.js 가 첫 그림 전에 잡는다."""
-    return f'<div class="ad-wrap wrap" data-slot="{name}"><div class="ad-in"><p class="ad-label">{UI[lang]["ad"]}</p><div class="ad-slot" data-ad="{name}" hidden></div></div></div>'
+def ad_slot(lang, name, inside=False):
+    """광고 자리. 폭은 본문 글 기둥과 같다. 높이는 ads-config.js 가 첫 그림 전에 잡는다. inside=True 는 글 안(문단 사이)에 넣는 자리."""
+    cls = 'ad-wrap ad-wrap--in' if inside else 'ad-wrap wrap'
+    return f'<div class="{cls}" data-slot="{name}"><div class="ad-in"><p class="ad-label">{UI[lang]["ad"]}</p><div class="ad-slot" data-ad="{name}" hidden></div></div></div>'
 
 
 def page(lang, head_html, body, path, current=None, cfg=None, strip_cur=None, cls=''):
@@ -301,9 +307,9 @@ def home_page(lang):
 </div>
 <div class="wrap bench">
   <section class="panel p-kb" data-dev="kb">
-    <div class="p-head">{LAMP}<h2>{h['panel']['kb']}</h2><label class="kb-pick"><span class="vh">{u['kb_layout']}</span><select data-kb-layout>{''.join(f'<option value="{k}">{esc(u["layouts"][k])}</option>' for k in ('full', 'iso', 'tkl', 'mac'))}</select></label><p class="p-state p-state--do" data-state="kb">{h['idle']['kb']}</p></div>
-    <div class="kb-well">{''.join(kb_svg(k, lang, 'kb--home') for k in ('full', 'iso', 'tkl', 'mac'))}</div>
-    <div class="p-foot"><div class="swap"><p class="note" data-kb-empty>{h['kb_hint']}</p><p class="said" data-v="kb" data-kb-live></p></div>{go('kb', 'kb')}</div>
+    <div class="p-head">{LAMP}<h2>{h['panel']['kb']}</h2><label class="kb-pick"><span class="vh">{u['kb_layout']}</span><select data-kb-layout>{''.join(f'<option value="{k}">{esc(u["layouts"][k])}</option>' for k in ('full', 'iso', 'tkl', 'mac'))}</select></label><button type="button" class="kb-capbtn" data-act="kb-capture" aria-pressed="false" title="{esc(t['kb_cap_on'])}">{u['kb_cap_all']}</button><p class="p-state p-state--do" data-state="kb" aria-live="polite">{h['idle']['kb']}</p></div>
+    <div class="kb-well" data-kb-area>{''.join(kb_svg(k, lang, 'kb--home') for k in ('full', 'iso', 'tkl', 'mac'))}</div>
+    <div class="p-foot"><div class="swap"><p class="note" data-kb-empty data-kb-cap>{t['kb_cap_home']}</p><p class="said" data-v="kb" data-kb-live></p></div>{go('kb', 'kb')}</div>
   </section>
   <section class="panel p-mouse" data-dev="mouse" data-mouse-area>
     {ph('mouse', True)}
@@ -312,7 +318,7 @@ def home_page(lang):
       <dl class="m-dl"><div><dt>{h['m_rows']['wheel']}</dt><dd><span class="chip" data-m-wheel="up">↑</span> <span class="chip" data-m-wheel="down">↓</span></dd></div>
       <div><dt>{h['m_rows']['rate']}</dt><dd><b class="num is-idle" data-m-rate>{t['m_rate_idle']}</b></dd></div>
       <div><dt>{h['m_rows']['dbl']}</dt><dd><b class="is-idle" data-m-dbl>{t['m_dbl_idle']}</b></dd></div></dl></div></div>
-    <div class="p-foot">{go('mouse', 'mouse')}</div>
+    <div class="p-foot"><span class="note">{h['m_side']}</span>{go('mouse', 'mouse')}</div>
   </section>
   <section class="panel p-pad" data-dev="pad">
     <div class="p-head">{LAMP}<h2>{h['panel']['pad']}</h2>{go('pad', 'pad')}</div>
@@ -360,14 +366,15 @@ def stage_kb(lang, c):
     return f'''<section class="stage stage--kb" data-dev="kb" id="tool">
   <div class="stage-top">{verdict('kb', t['kb_idle'], t['kb_idle_s'])}
     <div class="stage-ctl"><label class="sel"><span>{u['kb_layout']}</span><select data-kb-layout>{opts}</select></label><button type="button" class="btn btn--line btn--sm" data-act="kb-reset">{lb['reset']}</button></div></div>
+  <p class="cap cap--top"><span data-kb-cap aria-live="polite">{t['kb_cap_ready']}</span> <button type="button" class="txt-btn" data-act="kb-capture" data-when-off aria-pressed="false" hidden>{u['kb_cap_btn']}</button></p>
   <div class="kb-well" data-kb-area>{svgs}</div>
-  <p class="cap" data-kb-cap>{t['kb_cap_on']}</p>
+  <p class="note kb-na">{u['kb_na']}</p>
   <dl class="facts"><div><dt>{lb['seen']}</dt><dd class="num" data-kb-count>&nbsp;</dd></div><div><dt>{lb['max']}</dt><dd data-kb-max>{t['kb_max0']}</dd></div>
     <div><dt>{lb['chatter']}</dt><dd data-kb-chatter>{t['kb_chat0']}</dd></div><div><dt>{lb['held']}</dt><dd data-kb-held>{t['kb_heldnone']}</dd></div></dl>
   <details class="more"><summary>{u['details']}</summary><div class="more-in">
-    <dl class="kv"><div><dt>{lb['key']}</dt><dd data-kb-key>·</dd></div><div><dt>{lb['code']}</dt><dd data-kb-code>·</dd></div><div><dt>{lb['extra']}</dt><dd class="chips" data-kb-extra>{t['kb_extra_none']}</dd></div></dl>
+    <dl class="kv"><div><dt>{lb['key']}</dt><dd data-kb-key>·</dd></div><div><dt>{lb['code']}</dt><dd data-kb-code>·</dd></div><div><dt>{lb['extra']}</dt><dd class="chips" data-kb-extra>{t['kb_extra_none']}</dd></div><div><dt>{lb['maxkeys']}</dt><dd data-kb-maxkeys>·</dd></div></dl>
     <p class="thr"><label>{lb['thr']} <input type="number" min="5" max="200" step="1" value="30" inputmode="numeric" data-kb-thr> {lb['ms']}</label></p>
-    <p class="note">{u['legend_note']}</p>
+    <p class="note">{u['legend_note']} {u['kb_browser_keys']}</p>
     <h3>{lb['log']}</h3><ol class="log" data-kb-log></ol>
   </div></details>
 </section>'''
@@ -378,6 +385,7 @@ def stage_mouse(lang, c):
     chips = ''.join(f'<span class="chip chip--n" data-m="{i}">{b}<b class="num" data-m-n="{i}"></b></span>' for i, b in enumerate(t['m_btn']))
     return f'''<section class="stage stage--mouse" data-dev="mouse" data-mouse-area id="tool">
   <div class="stage-top">{verdict('mouse', t['m_idle'], t['m_idle_s'])}<div class="stage-ctl"><button type="button" class="btn btn--line btn--sm" data-act="mouse-reset">{lb['reset']}</button></div></div>
+  <p class="cap cap--top">{lb['area_note']}</p>
   <div class="m-wrap"><div class="m-pic">{mouse_svg(lang)}</div><div class="m-read">
     <p class="m-h">{lb['buttons']}</p><div class="chips">{chips}</div>
     <dl class="m-dl"><div><dt>{lb['wheel']}</dt><dd><span class="chip chip--n" data-m-wheel="up">↑ {lb['up']}<b class="num" data-m-wn="up"></b></span> <span class="chip chip--n" data-m-wheel="down">↓ {lb['down']}<b class="num" data-m-wn="down"></b></span></dd></div>
@@ -397,6 +405,7 @@ def stage_mic(lang, c):
   <div class="act-row"><button type="button" class="btn btn--big" data-act="mic">{lb['start']}</button><button type="button" class="btn btn--line btn--big" data-act="mic-stop" hidden>{lb['stop']}</button><span class="stays" data-on-note="mic" hidden>{LOCK}<span>{u['stays_on']}</span></span></div>
   {meter(lb)}
   <div class="mic-more" data-mic-more hidden>
+    <p class="note mic-proc" data-mic-proc>&nbsp;</p>
     <label class="sel"><span>{lb['device']}</span><select data-mic-device disabled><option>{t['mic_default']}</option></select></label>
     <div class="rec"><h2>{lb['rec_h']}</h2><div class="rec-row"><button type="button" class="btn btn--line" data-act="mic-rec" disabled>{lb['rec']}</button><audio controls data-mic-audio hidden></audio><button type="button" class="btn btn--line btn--sm" data-act="mic-del" hidden>{lb['del']}</button></div><p class="note" data-mic-rec-state>&nbsp;</p></div>
   </div>
@@ -413,10 +422,11 @@ def stage_cam(lang, c):
   <div class="stage-top">{verdict('cam', t['cam_idle'], t['cam_idle_s'])}</div>
   {finder(lb['start'])}
   <div class="act-row" data-cam-tools hidden><button type="button" class="btn btn--line" data-act="cam-stop" data-keep disabled>{lb['stop']}</button><button type="button" class="btn btn--line" data-act="cam-mirror" aria-pressed="false" disabled>{lb['mirror']}</button><button type="button" class="btn btn--line" data-act="cam-photo" disabled>{lb['photo']}</button>
-    <label class="sel"><span>{lb['device']}</span><select data-cam-device disabled><option>{t['cam_default']}</option></select></label><span class="stays" data-on-note="cam">{LOCK}<span>{u['stays_on']}</span></span></div>
+    <label class="sel"><span>{lb['device']}</span><select data-cam-device disabled><option>{t['cam_default']}</option></select></label><span class="stays" data-on-note="cam">{LOCK}<span>{u['stays_on']}</span></span>
+    <p class="note cam-got" data-cam-got>&nbsp;</p></div>
   <div class="shot" data-cam-shot hidden><img alt="" data-cam-img><div><p class="note">{t['cam_photo']}</p><a class="btn btn--line btn--sm" data-cam-save download="checkbench-photo.png" href="#tool">{lb['save']}</a></div></div>
   <details class="more"><summary>{u['details']}</summary><div class="more-in">
-    <dl class="kv"><div><dt>{lb['setting']}</dt><dd class="num" data-cam-set>·</dd></div><div><dt>{lb['measured']}</dt><dd class="num" data-cam-meas>·</dd></div></dl>
+    <dl class="kv"><div><dt>{lb['setting']}</dt><dd class="num" data-cam-set>·</dd></div><div><dt>{lb['measured']}</dt><dd class="num" data-cam-meas>·</dd></div><div><dt>{lb['cap']}</dt><dd class="num" data-cam-cap>·</dd></div></dl>
   </div></details>
 </section>'''
 
@@ -427,7 +437,7 @@ def stage_spk(lang, c):
   <div class="stage-top">{verdict('spk', t['spk_idle'], t['spk_idle_s'])}</div>
   <div class="spk spk--big"><button type="button" class="btn btn--line" data-act="spk-left">{SPK}{lb['left']}</button><button type="button" class="btn btn--line" data-act="spk-both">{lb['both']}</button><button type="button" class="btn btn--line" data-act="spk-right">{lb['right']}{SPK.replace('<svg ', '<svg class="flip" ')}</button></div>
   <label class="vol"><span>{lb['volume']}</span><span class="vol-in"><small>{lb['low']}</small><input type="range" min="0.02" max="0.5" step="0.01" value="0.1" data-spk-vol><small>{lb['high']}</small></span></label>
-  <div class="sweep"><button type="button" class="btn btn--line" data-act="spk-sweep">{lb['sweep']}</button><button type="button" class="btn btn--line" data-act="spk-stop" hidden>{lb['stop']}</button><p class="note">{lb['sweep_note']}</p></div>
+  <div class="spk-sweep"><button type="button" class="btn btn--line" data-act="spk-sweep">{lb['sweep']}</button><button type="button" class="btn btn--line" data-act="spk-stop" hidden>{lb['stop']}</button><p class="note">{lb['sweep_note']}</p></div>
 </section>'''
 
 
@@ -462,9 +472,9 @@ def stage_pad(lang, c):
     stick = lambda i: (f'<div class="stick"><p>{t["pad_sticks"][i]}</p><div class="dial"><i data-stick="{i}"></i></div><p class="num note" data-stick-v="{i}">0.00, 0.00</p></div>')
     return f'''<section class="stage stage--pad" data-dev="pad" id="tool">
   <div class="stage-top">{verdict('pad', t['pad_idle'], t['pad_idle_s'])}</div>
-  <div class="pad-grid"><div><p class="m-h">{lb['buttons']}</p><ul class="pbs" data-pbs>{btns}</ul></div><div><p class="m-h">{lb['sticks']}</p><div class="sticks">{stick(0)}{stick(1)}</div></div></div>
+  <div class="pad-grid"><div><p class="m-h">{lb['buttons']}</p><ul class="pbs" data-pbs>{btns}</ul></div><div><p class="m-h" data-axes-h>{t['pad_sticks_h']}</p><div class="sticks" data-sticks>{stick(0)}{stick(1)}</div><ul class="axes" data-axes hidden></ul></div></div>
   <div class="drift"><h2>{lb['drift_h']}</h2><div class="act-row"><button type="button" class="btn btn--line" data-act="pad-drift" disabled>{lb['drift']}</button><button type="button" class="btn btn--line" data-act="pad-rumble" hidden>{lb['rumble']}</button></div>
-    <p class="said" data-pad-drift>{lb['drift_idle']}</p><p class="note">{lb['rule']}</p></div>
+    <p class="said" data-pad-drift>{t['pad_drift_idle']}</p><p class="note">{lb['rule']}</p></div>
 </section>'''
 
 
@@ -477,7 +487,9 @@ def tool_page(lang, key):
     u, t, c, p = UI[lang], T[lang], C['tools'][key][lang], prefix(lang)
     path = SLUG[key] + '/'
     how = ''.join(f'<li>{esc(x)}</li>' for x in c['how'])
-    secs = ''.join(f'<h2>{esc(s["h"])}</h2>' + ''.join(f'<p>{esc(x)}</p>' for x in s['p']) for s in c['sections'])
+    # 설명 글의 {thr:kb}·{thr:mouse} 는 지금 기준 값(설정을 바꾸면 화면 코드가 따라 바꾼다)
+    live = lambda x: re.sub(r'\{thr:(kb|mouse)\}', lambda m: f'<span class="num" data-thr="{m.group(1)}">{30 if m.group(1) == "kb" else 50}</span>', esc(x))
+    secs = ''.join(f'<h2>{esc(s["h"])}</h2>' + ''.join(f'<p>{live(x)}</p>' for x in s['p']) for s in c['sections'])
     ld = [app_ld(lang, c['h1'], c['desc'], path),
           {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
               {'@type': 'ListItem', 'position': 1, 'name': u['home'], 'item': url(lang)}, {'@type': 'ListItem', 'position': 2, 'name': c['h1'], 'item': url(lang, path)}]},
@@ -547,13 +559,17 @@ def article_page(lang, a):
           {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
               {'@type': 'ListItem', 'position': 1, 'name': u['guides'], 'item': url(lang, 'guide/')}, {'@type': 'ListItem', 'position': 2, 'name': a['h1'], 'item': url(lang, path)}]}]
     inner = wrap_tables(a['body_html'])
+    # 광고 자리(mid)는 글 한가운데에 가장 가까운 소제목 앞에 둔다. 맨 끝의 '테스트 열기' 단추와는 멀리 떨어진다
+    cuts = [m.start() for m in re.finditer(r'<h2>', inner)][1:]
+    assert cuts, f'{a["slug"]}: 소제목이 둘 이상 있어야 광고 자리를 글 가운데에 둘 수 있다'
+    cut = min(cuts, key=lambda i: abs(i - len(inner) / 2))
+    inner = inner[:cut] + ad_slot(lang, 'mid', inside=True) + '\n' + inner[cut:]
     body = f'''<article class="wrap narrow doc article">
   <p class="crumb"><a href="{p}guide/">{u['guides']}</a></p>
   <h1>{esc(a['h1'])}</h1>
   <p class="byline">{u['checked']} <time datetime="{day}">{day}</time> · Lumen Lab</p>
   {inner}
 </article>
-{ad_slot(lang, 'mid')}
 <section class="wrap narrow sec"><h2>{u['more_tests']}</h2>{tools_block(lang)}</section>
 {ad_slot(lang, 'bottom')}'''
     return page(lang, head(lang, a['title'], a['desc'], path, jsonld=ld, og_type='article', scripts=SCRIPTS['doc']), body, path, current='guide')
@@ -604,6 +620,24 @@ def rss():
 <channel><title>체크벤치 가이드</title><link>{SITE}/ko/</link><description>키보드·마이크·모니터 테스트 가이드</description><language>ko</language>
 {items}</channel></rss>
 '''
+
+
+def screen_chars(files=None):
+    """언어판마다 화면에 나올 수 있는 글자: 만든 페이지의 모든 글자(#ck JSON의 화면 코드용 문장 포함) + 화면 코드가 직접 넣는 글자."""
+    files = files or build()[0]
+    extra = ' 0123456789.,:;%+−-–×·…→←↑↓()[]/\\\'"!?@#&*=<>_|~`^${}©' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    out = {'en': set(extra), 'ko': set(extra)}
+    for name, text in files.items():
+        if not name.endswith('.html'):
+            continue
+        lang = 'ko' if name.startswith('ko/') else 'en'
+        text = re.sub(r'<script type="application/ld\+json">.*?</script>', ' ', text, flags=re.S)
+        text = re.sub(r'<script(?! type="application/json")[^>]*>.*?</script>|<style>.*?</style>', ' ', text, flags=re.S)
+        text = html.unescape(re.sub(r'<[^>]+>', ' ', text))
+        out[lang] |= set(text)
+        if name == '404.html':
+            out['ko'] |= set(text)
+    return {k: ''.join(sorted(c for c in v if c >= ' ' and c != '\xa0')) for k, v in out.items()}
 
 
 def build():

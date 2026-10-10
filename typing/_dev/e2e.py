@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """토독 화면 확인(Playwright): python3 typing/_dev/e2e.py [스크린샷 폴더]     서버: node typing/_dev/serve.mjs (8445)
 SEC=3 처럼 주면 그 묶음만: 1 모든 페이지(오류·깨진 그림·가로 스크롤·어두운 화면·동작 줄이기) · 2 화면 밀림(CLS) ·
-3 한국어 속도 측정(조합 입력·결과·기록·한/영 안내) · 4 영어 속도 측정·영타 · 5 자리 연습·문장 연습 · 6 휴대폰(터치 자판) · 7 광고 자리·연출·언어 띠 · 8 스크린샷
+3 한국어 속도 측정(조합 입력·결과·기록·한/영 안내) · 4 영어 속도 측정·영타 · 5 자리 연습·문장 연습 · 6 휴대폰(터치 자판) · 7 광고 자리·연출·언어 띠 · 8 스크린샷 ·
+9 제3자 평가에서 나온 것(누른 키 수, 천지인 중간 모양, 낱말 단위 한/영 안내, 팬그램·문장 되풀이, 휴대폰 옵션·누르는 크기, 초점, 통과 기준, 기록 목록, 404 언어 틀)
 
 한글은 CDP Input.imeSetComposition / Input.insertText 로 조합 입력을 흉내 낸다(컴퓨터는 글쇠 이벤트 key=Process, code=KeyX 도 같이).
 실제 한글 입력기(윈도우·맥·아이폰·안드로이드)는 이 작업 공간에서 확인할 수 없다.
@@ -13,6 +14,7 @@ import datetime
 import json
 import os
 import re
+import unicodedata
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -95,8 +97,12 @@ class Typist:
         if k == '\b':
             if r['back']:
                 self.pg.keyboard.press('Backspace')
-            else:
+            else:   # 조합 중인 글자에서 낱자 하나를 지운다. 자판이면 지우기 키가 눌린 것도 같이 보인다(key 는 Process, code 는 Backspace)
+                if self.phys:
+                    self.cdp.send('Input.dispatchKeyEvent', {'type': 'rawKeyDown', 'key': 'Process', 'code': 'Backspace', 'windowsVirtualKeyCode': 229, 'nativeVirtualKeyCode': 229})
                 self.cdp.send('Input.imeSetComposition', {'text': r['comp'], 'selectionStart': len(r['comp']), 'selectionEnd': len(r['comp'])})
+                if self.phys:
+                    self.cdp.send('Input.dispatchKeyEvent', {'type': 'keyUp', 'key': 'Backspace', 'code': 'Backspace', 'windowsVirtualKeyCode': 8})
         elif r['plain']:
             if self.phys:
                 self.pg.keyboard.press('Space' if k == ' ' else ('Enter' if k == '\n' else k))
@@ -159,6 +165,7 @@ class Env:
                 r = route.fetch()
                 route.fulfill(response=r, body=r.text().replace('font-display:optional', 'font-display:swap'))
             pg.route('**/assets/pretendard.css', font)
+            pg.route(re.compile(r'localhost:8445/(?!assets/)[^.]*$'), font)   # 페이지 <head> 의 조각 글꼴(@font-face, optional)도 같이
         if clock:
             pg.clock.install(time=T0)
         pg.goto(BASE + path, wait_until='load')
@@ -250,7 +257,7 @@ def all_pages(env):
         c = env.ctx(w, h, mobile)
         for path in paths + ['/no-such-page/']:
             pg = env.page(c, path, clock=False)
-            r = pg.evaluate('''() => ({ hs: document.documentElement.scrollWidth - innerWidth, h1: document.querySelectorAll('h1').length,
+            r = pg.evaluate('''() => ({ hs: document.documentElement.scrollWidth - innerWidth, h1: [...document.querySelectorAll('h1')].filter((h) => h.getClientRects().length).length,
               broken: [...document.images].filter((i) => i.complete && i.naturalWidth === 0).length,
               wide: [...document.querySelectorAll('body *')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.right > innerWidth + 1 && !e.closest('.tbl,.view,.txt,.more-pop,.sr,.ln,.mine,.rec-col,.burst,.skip') && getComputedStyle(e).position !== 'fixed'; }).slice(0, 3).map((e) => e.tagName + '.' + e.className) })''')
             ok(r['hs'] <= 0, f'{path} {w}px 가로 스크롤 0', r['hs'])
@@ -975,6 +982,491 @@ def shots(env):
             c.close()
 
 
+# ---------- 9. 제3자 평가에서 나온 것 ----------
+C19 = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
+V21 = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ'
+F28 = ' ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ'
+FIRST_OF = {'ㄳ': 'ㄱ', 'ㄵ': 'ㄴ', 'ㄶ': 'ㄴ', 'ㄺ': 'ㄹ', 'ㄻ': 'ㄹ', 'ㄼ': 'ㄹ', 'ㄽ': 'ㄹ', 'ㄾ': 'ㄹ', 'ㄿ': 'ㄹ', 'ㅀ': 'ㄹ', 'ㅄ': 'ㅂ'}
+# 천지인으로 모음을 만들 때 조합 칸에 차례로 보이는 모양(평가자의 흉내와 같은 규칙). 아래아가 먼저 오면 'ㅇㆍ'처럼 글자 둘이 된다
+CJI = {'ㅏ': ['ㅣ', 'ㅏ'], 'ㅓ': ['ㆍ', 'ㅓ'], 'ㅗ': ['ㆍ', 'ㅗ'], 'ㅜ': ['ㅡ', 'ㅜ'], 'ㅑ': ['ㅣ', 'ㅏ', 'ㅑ'], 'ㅕ': ['ㆍ', 'ᆢ', 'ㅕ'], 'ㅛ': ['ㆍ', 'ᆢ', 'ㅛ'], 'ㅠ': ['ㅡ', 'ㅜ', 'ㅠ'],
+       'ㅐ': ['ㅣ', 'ㅏ', 'ㅐ'], 'ㅔ': ['ㆍ', 'ㅓ', 'ㅔ'], 'ㅡ': ['ㅡ'], 'ㅣ': ['ㅣ'], 'ㅘ': ['ㆍ', 'ㅗ', 'ㅚ', 'ㅘ'], 'ㅝ': ['ㅡ', 'ㅜ', 'ㅝ'], 'ㅢ': ['ㅡ', 'ㅢ'], 'ㅚ': ['ㆍ', 'ㅗ', 'ㅚ'], 'ㅟ': ['ㅡ', 'ㅜ', 'ㅟ'],
+       'ㅙ': ['ㆍ', 'ㅗ', 'ㅚ', 'ㅘ', 'ㅙ'], 'ㅞ': ['ㅡ', 'ㅜ', 'ㅝ', 'ㅞ'], 'ㅒ': ['ㅣ', 'ㅏ', 'ㅑ', 'ㅒ'], 'ㅖ': ['ㆍ', 'ᆢ', 'ㅕ', 'ㅖ']}
+
+
+def cji_steps(ch):
+    c = ord(ch) - 0xAC00
+    if c < 0 or c > 11171:
+        return None
+    cho, vi, fi = C19[c // 588], (c // 28) % 21, c % 28
+    syl = lambda v, f: chr(0xAC00 + (C19.index(cho) * 21 + V21.index(v)) * 28 + f)
+    out = [cho]
+    for m in CJI[V21[vi]]:
+        out.append(syl(m, 0) if m in V21 else cho + m)
+    if fi:
+        if F28[fi] in FIRST_OF:
+            out.append(syl(V21[vi], F28.index(FIRST_OF[F28[fi]])))
+        out.append(ch)
+    return out
+
+
+def py_keys(text):
+    """실제로 누르는 키 수. 파이썬 unicodedata 로 따로 센다(tests/gen_keys.py 와 같은 방법, 우리 코드와 다른 길)."""
+    n = 0
+    for ch in text:
+        if '가' <= ch <= '힣':
+            names = [unicodedata.name(x) for x in unicodedata.normalize('NFD', ch)]
+            n += 1 + (2 if names[1].replace('HANGUL JUNGSEONG ', '') in ('WA', 'WAE', 'OE', 'WEO', 'WE', 'WI', 'YI') else 1)
+            if len(names) > 2:
+                n += 2 if '-' in names[2] else 1
+        else:
+            n += 1
+    return n
+
+
+def hint_text(pg):
+    return pg.evaluate('document.getElementById("hint").hidden ? "" : document.getElementById("hint").textContent')
+
+
+def active(pg):
+    return pg.evaluate('document.activeElement.id || document.activeElement.tagName')
+
+
+def count_mode(pg, tap=False):
+    (pg.tap if tap else pg.click)('#more summary')
+    (pg.tap if tap else pg.click)('#mode [data-v="count"]')
+    pg.wait_for_timeout(80)
+
+
+def mobile_count(env, c):
+    """휴대폰: 분량으로 재는 판을 열고 글을 눌러 치는 화면으로"""
+    pg = env.page(c, '/ko/')
+    pg.add_script_tag(content=SIM)
+    cdp = c.new_cdp_session(pg)
+    count_mode(pg, tap=True)
+    pg.tap('#trap', position={'x': 60, 'y': 30})
+    pg.clock.pause_at(T0 + datetime.timedelta(seconds=5))
+    pg.wait_for_timeout(100)
+    return pg, Typist(pg, cdp, phys=False)
+
+
+SET_JS = "([v, type, data]) => { const t = document.getElementById('trap'); t.value = v; t.setSelectionRange(v.length, v.length); t.dispatchEvent(new InputEvent('input', { inputType: type, data: data, bubbles: true, isComposing: false })); }"
+SMALL_JS = """() => [...document.querySelectorAll('button, summary, select, .nav a, .top .lang, .logo, .foot-links a, a.btn, .more-row label, .guides a, .langbar a')].filter((e) => e.getClientRects().length && getComputedStyle(e).visibility !== 'hidden' && !e.closest('[data-off]'))
+  .map((e) => { const b = e.getBoundingClientRect(); return [e.id || e.className || e.textContent.trim().slice(0, 10), Math.round(b.width), Math.round(b.height), e.tagName]; })
+  .filter((x) => x[2] < 44 || ((x[3] === 'BUTTON' || x[3] === 'SUMMARY' || x[3] === 'SELECT') && x[1] < 44)).map((x) => x.slice(0, 3))"""
+NF_JS = """() => { const vis = (sel) => [...document.querySelectorAll(sel)].filter((e) => e.getClientRects().length);
+  return { lang: document.documentElement.lang, title: document.title, h1: vis('h1').map((e) => e.textContent), nav: vis('.nav a').map((e) => e.textContent), home: vis('.logo').map((e) => e.getAttribute('href')),
+    lumen: vis('.lumen').map((e) => e.href), btn: vis('.nf a.btn').map((e) => e.getAttribute('href')), ids: document.querySelectorAll('#lumen').length, skip: vis('.skip').length }; }"""
+OPEN_POS_JS = """() => { const T = __E.T, H = TJ.hangul, out = []; let base = 0;
+  for (const w of T.words) { for (let x = 1; x < w.ci.length; x++) { const pp = H.parts(T.chars[w.ci[x - 1]]), cp = H.parts(T.chars[w.ci[x]]);
+      if (pp && cp && pp.c.length === 1 && pp.v.length && !pp.f.length && cp.c.length === 1 && cp.v.length && 'ㄸㅃㅉㅁㄴ'.indexOf(cp.c[0]) < 0) out.push(base + w.ka[x]); }
+    base += w.tk.length + 1; }
+  return out; }"""
+OUTSIDE_JS = '(() => { const s = document.querySelector(".stage").getBoundingClientRect(); return [...document.querySelectorAll("#result *")].filter((e) => { const b = e.getBoundingClientRect(); return b.height > 0 && b.bottom > s.bottom + 1; }).map((e) => e.id || e.className).slice(0, 4); })()'
+
+
+def tp_keys(env):
+    """H1. 누른 키 = 실제로 누른 키(받침이 넘어갈 때 값이 두 번 바뀌어도 한 번)"""
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    count_mode(pg); pg.click('#trap'); pg.wait_for_timeout(80)
+    text = pg.evaluate('__E.T.text'); n = py_keys(text)
+    ok(n == len(ty.keys()), 'H1 기준: 파이썬으로 센 키 수 = 글의 키 수', (n, len(ty.keys())))
+    ty.run(slow='')
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    ok(r['done'] and r['rep']['typed'] == n and r['rep']['ok'] == n and r['rep']['accuracy'] == 100, f'H1 전부 맞게 친 판: 누른 키 = 실제 키 수 {n}', r['rep'])
+    ok(r['accd'] == f'누른 키 {n}개 중 {n}개 맞음' and r['missed'] == [], 'H1 화면 문구도 실제 키 수', r['accd'])
+    check_formula('H1 결과', r)
+    raw = pg.evaluate('document.getElementById("r-raw").textContent'); f = nums(raw)
+    ok(raw.startswith('총 타수') and len(f) == 4 and f[3] == 60 and int(f[1] * 60 / f[2] + 0.5) == int(f[0]) and f[1] == r['rep']['strokes'] and f[0] == r['rep']['speed'], 'M6 총 타수 줄: 식을 다시 계산하면 같은 수(다 맞으면 타수와 같다)', raw)
+    ok(pg.evaluate('Object.values(__E.session.byKey).reduce((a, b) => a + b.n, 0)') == n - 1, 'H1 넘어간 키도 앞 키와의 간격을 잰다(첫 키만 빼고 전부)')
+    ok(not pg.evaluate(OUTSIDE_JS), 'M6 한국어 결과: 한 줄을 더해도 종이 안에 다 들어간다', pg.evaluate(OUTSIDE_JS))
+    shot(pg, 'e2e-ko-count-result')
+    # 받침 없는 글자 뒤 첫소리를 세 번 틀리게(고치지 않음): 틀린 키 3번, 누른 키는 그대로
+    pg.clock.run_for(900); pg.click('#again'); pg.wait_for_timeout(120); pg.evaluate('__sim.reset()')
+    text = pg.evaluate('__E.T.text'); n = py_keys(text); ks = ty.keys()
+    pos = pg.evaluate(OPEN_POS_JS)
+    pick = [pos[0], pos[len(pos) // 2], pos[-1]] if len(pos) >= 3 else pos
+    ty.run(wrong_at=set(pick), slow='')
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    miss = dict(map(tuple, pg.evaluate('__E.result.missed.map((m) => [m.key, m.miss])')))
+    want = {}
+    for i in pick:
+        want[ks[i]] = want.get(ks[i], 0) + 1
+    ok(len(pick) == 3 and miss == want, 'H1 받침으로 붙었다 넘어간 틀린 자음: 틀린 키는 그 횟수만큼만(세 번)', (miss, want))
+    ok(r['rep']['typed'] == n and r['rep']['ok'] == n - 3 and r['accd'] == f'누른 키 {n}개 중 {n - 3}개 맞음', 'H1 세 번 틀린 판: 누른 키·맞은 키', (r['rep'], n))
+    em = pg.evaluate('[...document.querySelectorAll("#kb .k.miss em")].map((e) => +e.textContent).reduce((a, b) => a + b, 0)')
+    ok(em == 3, 'H1 틀린 키 지도의 횟수 합 3', em)
+    store_miss = sum(v[0] for v in ls(pg, 'todok.keys')['ko'].values())
+    ok(store_miss == 3, 'H1 "자주 틀린 키" 누적도 세 번', store_miss)
+    shot(pg, 'e2e-ko-count-3wrong')
+    # 정말 지우고 같은 키를 다시 치면 두 번 누른 것으로 센다(지우기 키를 본다)
+    pg.clock.run_for(900)
+    pg.evaluate("__E.text = '벗고 버스를 타요'; __E.same = true; __E.reset(); document.getElementById('trap').focus(); __sim.reset()")
+    for k in ['ㅂ', 'ㅓ', 'ㅅ', '\b', 'ㅅ', 'ㄱ', 'ㅗ', ' ', 'ㅂ', 'ㅓ', 'ㅅ', 'ㅡ', 'ㄹ', 'ㅡ', 'ㄹ', ' ', 'ㅌ', 'ㅏ', 'ㅇ', 'ㅛ']:
+        ty.key(k)
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    ok(py_keys('벗고 버스를 타요') == 18 and r['done'] and r['rep']['typed'] == 19 and r['rep']['ok'] == 19 and r['rep']['strokes'] == 18, 'H1 지우고 다시 친 같은 키: 누른 키 19(글은 18키), 타수는 18', r['rep'])
+    ok(not pg._errs, 'H1 콘솔 오류 0', pg._errs[:3])
+    c.close()
+    # 아이폰식(조합 이벤트 없이 앞 글자를 지우고 합친 글자를 다시 넣음): 평가에서 168 → 324 로 나오던 사례
+    for variant in ('지우고 넣기', '세 단계', '바꿔 넣기'):
+        c = env.ctx(390, 844, True, dpr=2)
+        pg, ty = mobile_count(env, c)
+        text = pg.evaluate('__E.T.text'); n = py_keys(text); ks = ty.keys()
+        done, comp, bad = '', '', 0
+        for k in ks:
+            pg.clock.run_for(200)
+            prev = done + comp
+            r0 = pg.evaluate('k => __sim.key(k)', k)
+            if r0['plain']:
+                done += r0['commit'] + r0['plain']; comp = ''
+                pg.evaluate(SET_JS, [done, 'insertText', k])
+            else:
+                mid = done + r0['commit']
+                done, new = mid, mid + r0['comp']
+                if comp and variant != '바꿔 넣기':
+                    pg.evaluate(SET_JS, [prev[:-1], 'deleteContentBackward', None])
+                    if variant == '세 단계' and mid != prev[:-1] and mid != new:
+                        pg.evaluate(SET_JS, [mid, 'insertText', mid[len(prev) - 1:]])
+                    pg.evaluate(SET_JS, [new, 'insertText', new[len(prev) - 1:]])
+                else:
+                    pg.evaluate(SET_JS, [new, 'insertReplacementText' if comp else 'insertText', new[max(0, len(prev) - 1):]])
+                comp = r0['comp']
+            if pg.evaluate('document.querySelectorAll("#txt .bad").length'):
+                bad += 1
+        pg.clock.run_for(900); pg.wait_for_timeout(200)
+        r = read_result(pg)
+        ok(r['done'] and r['mode'] == 'char' and bad == 0, f'H1 아이폰식({variant}): 끝까지 가고 틀림 표시 없음', (r['done'], r['mode'], bad))
+        ok(r['rep'] and r['rep']['typed'] == n and r['rep']['ok'] == n and r['rep']['accuracy'] == 100 and r['accd'] == f'누른 키 {n}개 중 {n}개 맞음', f'H1 아이폰식({variant}): 누른 키 = 두벌식으로 환산한 키 수 {n}', r['rep'])
+        check_formula(f'H1 아이폰식({variant})', r)
+        c.close()
+
+
+def tp_cji(env):
+    """H2. 천지인 중간 모양('ㅇㆍ' 등): 조합이 끝나기 전에는 판정하지 않는다"""
+    c = env.ctx(390, 844, True, dpr=2)
+    pg, ty = mobile_count(env, c)
+    text = pg.evaluate('__E.T.text'); n = py_keys(text)
+    cdp = ty.cdp; bad = []; steps = 0; mids = 0
+    for ch in text:
+        st = cji_steps(ch)
+        if st is None:
+            pg.clock.run_for(200); cdp.send('Input.insertText', {'text': ch}); steps += 1
+        else:
+            for m in st:
+                pg.clock.run_for(200); cdp.send('Input.imeSetComposition', {'text': m, 'selectionStart': len(m), 'selectionEnd': len(m)}); steps += 1
+                mids += 1 if len(m) > 1 else 0
+                if pg.evaluate('document.querySelectorAll("#txt .bad").length'):
+                    bad.append((ch, m))
+                if mids == 3 and len(m) > 1:
+                    shot(pg, 'e2e-ko-mobile-cji-typing')
+            cdp.send('Input.insertText', {'text': ch})
+        if pg.evaluate('__E.done'):
+            break
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    ok(mids >= 5, 'H2 흉내가 아래아 중간 모양을 실제로 냈다', mids)
+    ok(not bad, f'H2 천지인 흉내 {steps}단계: 맞게 치는 동안 틀림 표시 없음', bad[:5])
+    ok(r['done'] and r['mode'] == 'char' and r['rep']['accuracy'] == 100 and r['rep']['typed'] == n and r['rep']['ok'] == n and r['missed'] == [], f'H2 천지인 흉내: 정확도 100%, 누른 키 {n}, 틀린 키 없음', (r['rep'], r['missed']))
+    ok(pg.evaluate('document.getElementById("map-cap").textContent').startswith('틀린 키가 없어요'), 'H2 틀린 키 지도 글', pg.evaluate('document.getElementById("map-cap").textContent'))
+    check_formula('H2 결과', r)
+    shot(pg, 'e2e-ko-mobile-cji-result')
+    ok(not pg._errs, 'H2 콘솔 오류 0', pg._errs[:3])
+    c.close()
+
+
+def tp_hint(env):
+    """M1. 한/영 반대 안내는 띄어쓰기를 넘어서도 이어진다"""
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/')
+    words = pg.evaluate('__E.T.text').split(' ')[:5]
+    seq = list(' '.join(words) + ' ')
+    lost = []
+    for ch in seq:
+        ty.key(pg.evaluate('k => TJ.hangul.Q2K[k] || k', ch))
+        if 'English' not in hint_text(pg):
+            lost.append(ch)
+    st = pg.evaluate('[__E.session.typedKeys, __E.session.okKeys, __E.session.skippedKeys]')
+    ok(not lost, f'M1 영어 글을 한글 자판으로 {len(seq)}키(다섯 단어): 안내가 끝까지 떠 있다', lost)
+    ok(st == [0, 0, len(seq)] and pg.evaluate('document.getElementById("acc").textContent') == '–', 'M1 그동안 친 키는 정확도·틀린 키에 넣지 않는다', st)
+    ok(not visible_hangul_outside_ko(pg), 'M1 안내가 뜬 영어 화면에 lang 밖 한글 없음', visible_hangul_outside_ko(pg)[:4])
+    shot(pg, 'e2e-en-hint-words')
+    pg.keyboard.press('Tab'); pg.wait_for_timeout(100); pg.evaluate('__sim.reset()')
+    w = pg.evaluate('__E.T.text').split(' ')[:3]
+    typed = w[0].upper() + ' ' + w[1].upper() + ' ' + w[2].upper()[:1]
+    hints = []
+    for ch in typed:
+        pg.clock.run_for(120); pg.keyboard.type(ch); hints.append('Caps Lock' in hint_text(pg))
+    st = pg.evaluate('[__E.session.typedKeys, __E.session.skippedKeys]')
+    ok(hints[0] is False and all(hints[1:]), 'M1 Caps Lock: 둘째 키부터 끝까지 안내(다음 단어는 첫 키부터)', hints)
+    ok(st == [0, len(typed)], 'M1 Caps Lock 구간은 세지 않는다(처음에 센 한 키도 되돌린다)', st)
+    # 진짜 오타는 안내로 잡지 않는다
+    pg.keyboard.press('Tab'); pg.wait_for_timeout(100)
+    w = pg.evaluate('__E.T.text').split(' ')[:2]
+    junk = ''.join(' ' if ch == ' ' else ('z' if ch == 'q' else 'q') for ch in ' '.join(w))
+    for ch in junk:
+        pg.clock.run_for(120); pg.keyboard.type(ch)
+    st = pg.evaluate('[__E.session.typedKeys, __E.session.skippedKeys]')
+    ok(hint_text(pg) == '' and st == [len(junk), 0], 'M1 그냥 틀린 키는 안내 없이 전부 센다', (hint_text(pg), st))
+    ok(not pg._errs, 'M1 영어 콘솔 오류 0', pg._errs[:3])
+    c.close()
+
+
+def tp_focus(env):
+    """M1(한국어 쪽)·M4·L8·L1·L10·L5. 초점과 안내"""
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    w = pg.evaluate('__E.T.text').split(' ')[:3]
+    qw = pg.evaluate('ws => ws.map((x) => TJ.hangul.toQwerty(x)).join(" ")', w).lower()
+    lost = []
+    for ch in qw:
+        pg.clock.run_for(120); pg.keyboard.type(ch)
+        if '한/영' not in hint_text(pg):
+            lost.append(ch)
+    st = pg.evaluate('[__E.session.typedKeys, __E.session.skippedKeys]')
+    ok(not lost and st == [0, len(qw)], f'M1 한글 글을 영문 자판으로 {len(qw)}키(세 단어): 안내가 이어지고 세지 않는다', (lost, st))
+    shot(pg, 'e2e-ko-hint-words')
+    # Esc 뒤: 안내, 띄어쓰기, 한글 입력기가 켜진 키
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(100); pg.evaluate('__sim.reset()')
+    st = pg.evaluate('({ on: getComputedStyle(document.querySelector(".start .on")).display, off: getComputedStyle(document.querySelector(".start .off")).display, text: document.querySelector(".start .off").textContent })')
+    ok(active(pg) != 'trap' and st['on'] == 'none' and st['off'] != 'none' and st['text'] == '글을 누르거나 아무 키나 치면 시작해요', 'M4 Esc 뒤: 다시 시작하는 법 안내', st)
+    shot(pg, 'e2e-ko-after-esc')
+    pg.keyboard.press('Space'); pg.wait_for_timeout(120)
+    ok(pg.evaluate('scrollY') == 0 and active(pg) == 'trap' and not pg.evaluate('__E.started'), 'L8 Esc 뒤 띄어쓰기: 쪽이 굴러가지 않고 치는 칸으로', (pg.evaluate('scrollY'), active(pg)))
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(80)
+    for typ in ('rawKeyDown', 'keyUp'):
+        ty.cdp.send('Input.dispatchKeyEvent', {'type': typ, 'key': 'Process', 'code': 'KeyG', 'windowsVirtualKeyCode': 229, 'nativeVirtualKeyCode': 229})
+    pg.wait_for_timeout(80)
+    ok(active(pg) == 'trap' and pg.evaluate('getComputedStyle(document.querySelector(".start .on")).display') != 'none', 'M4 Esc 뒤 한글 입력기가 켜진 키(key=Process, 229)를 누르면 치는 칸으로', active(pg))
+    ks = ty.keys(); n1 = ks.index(' ') + 1   # 첫 단어와 띄어쓰기까지(조합이 끝난 자리에서 누른다. 실제 입력기도 누르면 조합을 끝낸다)
+    for k in ks[:n1]:
+        ty.key(k)
+    ok(pg.evaluate('__E.started') and pg.evaluate('__E.session.okKeys') == n1, 'M4 이어서 치면 시작된다')
+    pg.mouse.click(6, 420); pg.wait_for_timeout(80)
+    a1 = active(pg)
+    pg.mouse.click(450, 100); pg.wait_for_timeout(80)   # 제목과 고르기 단추 사이의 빈 곳
+    ok(a1 == 'trap' and active(pg) == 'trap', 'M4 여백·제목 줄의 빈 곳을 눌러도 치는 칸 초점이 그대로', (a1, active(pg)))
+    for k in ks[n1:n1 + 4]:
+        ty.key(k)
+    ok(pg.evaluate('__E.session.okKeys') == n1 + 4 and pg.evaluate('__E.session.typedKeys') == n1 + 4, 'M4 여백을 누른 뒤에도 그대로 이어 쳐진다', pg.evaluate('[__E.session.okKeys, __E.session.typedKeys]'))
+    pg.evaluate('document.getElementById("faq-h").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(80)
+    pg.click('#faq-h'); pg.wait_for_timeout(80)
+    ok(active(pg) != 'trap', 'M4 읽는 글을 누르면 초점을 붙잡지 않는다(글자를 골라 복사할 수 있게)', active(pg))
+    pg.evaluate('scrollTo(0, 0)'); pg.evaluate('document.getElementById("trap").focus()')
+    ok(pg.evaluate('''(() => { const hit = (sel) => { const e = document.querySelector(sel); const ev = new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0, clientX: 300, clientY: 300 }); e.dispatchEvent(ev); return ev.defaultPrevented; };
+      return [hit('.meter'), hit('main'), hit('#result'), hit('#fresh'), hit('.basis a'), hit('.rec-note')]; })()''') == [True, True, False, False, False, False], 'M4 초점을 지키는 곳은 빈 곳뿐(결과 글·단추·링크·아래 글은 그대로)')
+    # 설정을 바꾼 뒤 바로 치기
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(80); pg.evaluate('__sim.reset()')
+    pg.click('#more summary'); pg.click('#mode [data-v="count"]'); pg.wait_for_timeout(80)
+    ok(pg.evaluate('document.getElementById("more").open') and active(pg) != 'trap', 'L1 설정을 바꾼 직후: 팝업이 열려 있고 초점은 단추')
+    ty.cdp.send('Input.dispatchKeyEvent', {'type': 'rawKeyDown', 'key': 'Process', 'code': ty.code(ty.keys()[0]), 'windowsVirtualKeyCode': 229, 'nativeVirtualKeyCode': 229})
+    pg.wait_for_timeout(60)
+    ok(not pg.evaluate('document.getElementById("more").open') and active(pg) == 'trap', 'L1 그대로 치기 시작하면 팝업이 닫히고 치는 칸으로(한글 입력기)', active(pg))
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(60)
+    pg.click('#kind [data-v="words"]'); pg.wait_for_timeout(80)
+    pg.click('#more summary'); pg.check('#punct'); pg.wait_for_timeout(80)
+    ok(pg.evaluate('document.getElementById("more").open') and active(pg) == 'punct', 'L1 체크 칸을 누른 직후: 팝업이 열려 있다', active(pg))
+    pg.keyboard.press('g'); pg.wait_for_timeout(80)
+    ok(not pg.evaluate('document.getElementById("more").open') and active(pg) == 'trap' and pg.evaluate('document.getElementById("trap").value') == 'g', 'L1 체크 칸에서 글자를 치면 팝업이 닫히고 그 글자가 치는 칸에 들어간다', (active(pg), pg.evaluate('document.getElementById("trap").value')))
+    pg.keyboard.press('Backspace')
+    pg.click('#more summary'); pg.uncheck('#punct'); pg.wait_for_timeout(60); pg.click('h1'); pg.click('#kind [data-v="sentences"]'); pg.wait_for_timeout(80)
+    # 화면 읽기 프로그램이 읽을 글과 빠져나오는 법
+    a11y = pg.evaluate("""() => { const sr = document.getElementById('txt-sr'), t = document.getElementById('trap'), h = document.getElementById(t.getAttribute('aria-describedby') || '');
+      return { same: sr.textContent === __E.T.text.replace(/\\n/g, ' '), hidden: sr.closest('[aria-hidden="true"]') !== null || getComputedStyle(sr).display === 'none' || getComputedStyle(sr).visibility === 'hidden', help: h ? h.textContent : '', label: t.getAttribute('aria-label') }; }""")
+    ok(a11y['same'] and not a11y['hidden'] and 'Esc' in a11y['help'] and a11y['label'], 'L10 칠 글을 읽을 수 있는 문단이 있고, 치는 칸에 빠져나오는 법 설명이 붙어 있다', a11y)
+    ok('Esc' in pg.evaluate('document.querySelector(".basis").textContent'), 'L10 화면에도 Esc 로 나오는 법 한 줄')
+    # 속담 사이 구분(화면에만)
+    pg.click('#more summary'); pg.click('#mode [data-v="time"]'); pg.click('h1'); pg.click('#kind [data-v="proverbs"]'); pg.wait_for_timeout(100)
+    br = pg.evaluate("""() => { const b = [...document.querySelectorAll('#txt .sp.brk')]; return { n: b.length, parts: __E.parts.length, dot: b.length ? getComputedStyle(b[0], '::before').content : '', text: b.map((x) => x.textContent).join(''), inText: __E.T.text.includes('·'), first: __E.parts[0] }; }""")
+    ok(br['n'] == br['parts'] - 1 and br['n'] >= 3 and '·' in br['dot'] and br['text'].strip() == '' and not br['inText'], 'L5 속담 사이마다 가운뎃점이 보이고, 치는 글에는 들어 있지 않다', br)
+    pg.evaluate('__sim.reset()')
+    for k in pg.evaluate('p => TJ.hangul.keyStream(p + " ")', br['first']):
+        ty.key(k)
+    cls_ = pg.evaluate('document.querySelector("#txt .sp.brk").className')
+    ok('brk' in cls_ and 'ok' in cls_ and pg.evaluate('__E.session.typedKeys === __E.session.okKeys'), 'L5 그 자리는 띄어쓰기로 치고, 친 뒤에도 표시가 남는다', cls_)
+    shot(pg, 'e2e-ko-proverbs')
+    ok(not pg._errs, '초점·속담 콘솔 오류 0', pg._errs[:3])
+    c.close()
+
+
+def tp_texts(env):
+    """M2·M5·M6. 팬그램은 팬그램만, 영어 문장은 되풀이되지 않게, Raw WPM"""
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/english/')
+    pg.click('#kind [data-v="pangrams"]'); pg.wait_for_timeout(100)
+    pans = set(pg.evaluate('TJ_TEXT.en.pangrams'))
+    ok(len(pans) >= 20, 'M2 팬그램 20개 이상', len(pans))
+    shot(pg, 'e2e-ko-english-pangrams')
+    wrongs = 0
+    for i in range(8):
+        parts = pg.evaluate('__E.parts')
+        if not parts or any(x not in pans or len(set(x.lower()) & set('abcdefghijklmnopqrstuvwxyz')) != 26 for x in parts) or pg.evaluate('__E.T.text') != ' '.join(parts) or len(set(parts)) != len(parts):
+            wrongs += 1
+        pg.keyboard.press('Tab'); pg.wait_for_timeout(60)
+    ok(wrongs == 0, 'M2 팬그램 모드 여덟 판: 26자가 다 든 문장만, 한 판 안에서 되풀이 없음', wrongs)
+    count_mode(pg); pg.click('#trap'); pg.wait_for_timeout(80)
+    parts = pg.evaluate('__E.parts')
+    ok(parts and all(x in pans for x in parts), 'M2 팬그램 분량 모드도 팬그램만', parts)
+    pg.click('#more summary'); pg.click('#mode [data-v="time"]'); pg.click('#trap'); pg.wait_for_timeout(80); pg.evaluate('__sim.reset()')
+    len0 = pg.evaluate('__E.T.chars.length'); i = 0
+    while not pg.evaluate('__E.done') and i < len0 - 40:   # 남은 글이 90자 아래로 내려가면 이어 붙는다
+        ty.key(ty.keys()[i], 20); i += 1
+    parts = pg.evaluate('__E.parts')
+    ok(pg.evaluate('__E.T.chars.length') > len0 and all(x in pans for x in parts) and pg.evaluate('__E.T.text') == ' '.join(parts), 'M2 빨리 쳐서 글을 이어 붙여도 팬그램만 이어진다', (len0, pg.evaluate('__E.T.chars.length')))
+    ok(pg.evaluate('__E.session.typedKeys === __E.session.okKeys && document.querySelectorAll("#txt .bad").length === 0'), 'M2 이어 붙인 뒤에도 틀림 표시 없음')
+    pg.clock.run_for(31000); pg.wait_for_timeout(300)
+    raw = pg.evaluate('document.getElementById("r-raw").textContent')
+    ok('총 타수' in raw and '총 WPM' in raw and not pg.evaluate(OUTSIDE_JS), 'M6 영타 결과: 총 타수와 총 WPM, 종이 안에 다 들어간다', (raw, pg.evaluate(OUTSIDE_JS)))
+    shot(pg, 'e2e-ko-english-raw')
+    c.close()
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/')
+    pg.click('#kind [data-v="sentences"]'); pg.wait_for_timeout(100)
+    seen, again, inner = [], 0, 0
+    for i in range(25):
+        parts = pg.evaluate('__E.parts')
+        inner += len(parts) - len(set(parts)); again += sum(1 for x in parts if x in seen); seen += parts
+        pg.keyboard.press('Tab'); pg.wait_for_timeout(50)
+    ok(pg.evaluate('TJ_TEXT.en.sentences.length') >= 200 and inner == 0 and again == 0, f'M5 "다른 글" 25번(문장 {len(seen)}개): 같은 문장이 한 번도 다시 나오지 않는다', (inner, again))
+    count_mode(pg); pg.click('#trap'); pg.wait_for_timeout(80); pg.evaluate('__sim.reset()')
+    ty.run(wrong_at={7}, fix_at={15, 30}, slow='')
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    raw = pg.evaluate('document.getElementById("r-raw").textContent'); f = nums(raw)
+    ok(raw.startswith('Raw ') and len(f) == 5 and f[2] == 5 and f[4] == 60 and int(f[1] / 5 / f[3] * 60 + 0.5) == int(f[0]) and f[1] == r['rep']['typed'] and f[0] == r['rep']['grossWpm'] and f[0] >= r['rep']['wpm'], 'M6 영어 결과에 Raw WPM 과 식(다시 계산하면 같은 수, 누른 키 = 정확도 줄의 누른 키)', (raw, r['rep']))
+    ok(not pg.evaluate(OUTSIDE_JS), 'M6 한 줄을 더해도 결과가 종이 안에 다 들어간다', pg.evaluate(OUTSIDE_JS))
+    basis = pg.evaluate('document.getElementById("basis").textContent')
+    ok('Raw speed' in basis and 'small print' in basis, 'M6 계산 기준의 Raw speed 설명이 화면과 맞다')
+    shot(pg, 'e2e-en-raw')
+    ok(not visible_hangul_outside_ko(pg) and not pg._errs, 'M5·M6 영어 화면: 한글 없음, 콘솔 오류 0', (visible_hangul_outside_ko(pg)[:3], pg._errs[:3]))
+    c.close()
+
+
+def tp_mobile(env):
+    """M3·L3. 휴대폰: 옵션만 눌러서는 치는 화면으로 가지 않는다, 누르는 곳 44px"""
+    for w, h in ((390, 844), (320, 568)):
+        c = env.ctx(w, h, True, dpr=2)
+        pg = env.page(c, '/ko/', clock=False)
+        ok(pg.evaluate(SMALL_JS) == [], f'L3 {w}px 첫 화면: 누르는 곳이 모두 44px 이상', pg.evaluate(SMALL_JS)[:6])
+        ok(first_line_visible(pg), f'L3 {w}px 단추를 키워도 첫 화면에 치는 글이 보인다')
+        pg.tap('#kind [data-v="words"]'); pg.wait_for_timeout(150)
+        st = pg.evaluate('({ tall: document.documentElement.classList.contains("m-tall"), act: document.activeElement.id, kind: __E.kind, opts: document.querySelector(".opts").getClientRects().length > 0 })')
+        ok(not st['tall'] and st['act'] != 'trap' and st['kind'] == 'words' and st['opts'], f'M3 {w}px 글 종류를 눌러도 치는 화면으로 넘어가지 않는다', st)
+        pg.tap('#len-t [data-v="t60"]'); pg.wait_for_timeout(150)
+        st = pg.evaluate('({ tall: document.documentElement.classList.contains("m-tall"), act: document.activeElement.id, kind: __E.kind, secs: __E.secs, left: document.getElementById("left").textContent })')
+        ok(not st['tall'] and st['act'] != 'trap' and st['kind'] == 'words' and st['secs'] == 60 and st['left'] == '60', f'M3 {w}px 이어서 시간을 고를 수 있다(둘 다 적용)', st)
+        if w == 390:
+            shot(pg, 'e2e-ko-mobile-options')
+        pg.tap('#more summary'); pg.wait_for_timeout(100)
+        ok(pg.evaluate(SMALL_JS) == [], f'L3 {w}px 설정 팝업: 44px 이상', pg.evaluate(SMALL_JS)[:6])
+        pg.tap('#punct'); pg.wait_for_timeout(100)
+        ok(pg.evaluate('__E.punct && !document.documentElement.classList.contains("m-tall")'), f'M3 {w}px 설정 안의 옵션도 이어서')
+        ok(pg.evaluate('document.documentElement.scrollWidth - innerWidth') <= 0, f'{w}px 옵션을 고른 뒤 가로 스크롤 0')
+        pg.tap('h1'); pg.wait_for_timeout(100)   # 팝업 밖을 눌러 닫는다
+        ok(not pg.evaluate('document.getElementById("more").open') and not pg.evaluate('document.documentElement.classList.contains("m-tall")'), f'M3 {w}px 팝업 밖을 누르면 닫힌다(치는 화면으로 가지 않는다)')
+        pg.tap('#trap', position={'x': 60, 'y': 30}); pg.wait_for_timeout(150)
+        ok(pg.evaluate('document.documentElement.classList.contains("m-tall")') and pg.evaluate('document.activeElement.id') == 'trap', f'M3 {w}px 글을 누르면 치는 화면')
+        ok(pg.evaluate(SMALL_JS) == [], f'L3 {w}px 치는 화면(다른 글·닫기): 44px 이상', pg.evaluate(SMALL_JS)[:6])
+        rc = pg.evaluate('(() => { const t = document.getElementById("txt").getBoundingClientRect(); return [t.top, innerHeight]; })()')
+        ok(rc[0] < rc[1] * 0.45, f'L3 {w}px 치는 화면: 글이 화면 위쪽에 있다(자판에 안 가린다)', rc)
+        shot(pg, f'e2e-ko-mobile-typing-{w}')
+        pg.tap('#quit'); pg.wait_for_timeout(120)
+        ok(not pg.evaluate('document.documentElement.classList.contains("m-tall")') and pg.evaluate('__E.kind') == 'words' and pg.evaluate('__E.secs') == 60, f'M3 {w}px 닫기(×): 고른 옵션은 그대로')
+        ok(not pg._errs, f'{w}px 휴대폰 옵션 콘솔 오류 0', pg._errs[:3])
+        c.close()
+    for lang, paths in (('en', ('/', '/practice/', '/guide/how-wpm-is-calculated/', '/about/')), ('ko', ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/tasu-gyesan/', '/ko/privacy/'))):
+        c = env.ctx(390, 844, True, lang=lang, dpr=2)
+        for path in paths:
+            pg = env.page(c, path, clock=False)
+            ok(pg.evaluate(SMALL_JS) == [], f'L3 {path} 390px: 누르는 곳이 모두 44px 이상', pg.evaluate(SMALL_JS)[:6])
+            pg.close()
+        c.close()
+    c = env.ctx(390, 844, True, dpr=2)
+    pg, ty = mobile_count(env, c)
+    ty.run(wrong_at={9})
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    ok(pg.evaluate('__E.done') and pg.evaluate(SMALL_JS) == [], 'L3 휴대폰 결과 화면: 단추가 모두 44px 이상', pg.evaluate(SMALL_JS)[:6])
+    ok('총 타수' in pg.evaluate('document.getElementById("r-raw").textContent'), 'M6 휴대폰 결과에도 총 타수')
+    shot(pg, 'e2e-ko-mobile-result-44')
+    c.close()
+
+
+def tp_rest(env):
+    """L2·L4·L6. 통과 기준, 기록 목록, 없는 주소"""
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/practice/')
+
+    def lesson(wrongs, fixes):
+        pg.evaluate("__E.text = 'asdf jkl; asdf jkl; asdf jkl; asdf jkl;'; __E.same = true; __E.reset(); document.getElementById('trap').focus(); __sim.reset()")
+        ty.run(wrong_at=wrongs, fix_at=fixes, slow='')
+        pg.clock.run_for(900); pg.wait_for_timeout(200)
+        return read_result(pg), pg.evaluate('[document.getElementById("r-pass").textContent, document.getElementById("again").textContent, document.getElementById("acc").textContent]')
+    r, t = lesson({1, 6}, set())
+    ok(r['rep']['typed'] == 39 and r['rep']['ok'] == 37 and not pg.evaluate('__E.result.pass'), 'L2 37/39 = 94.87%: 통과가 아니다', r['rep'])
+    ok(r['acc'] == '94.8%' and t[2] == '94.8' and '95% accuracy or higher' in t[0] and 'Next step' not in t[1], 'L2 그때는 95%로 반올림해 보여 주지 않는다(94.8%)', (r['acc'], t))
+    ok(not pg.evaluate(OUTSIDE_JS), 'M6 자리 연습 결과: 종이 안에 다 들어간다', pg.evaluate(OUTSIDE_JS))
+    shot(pg, 'e2e-en-practice-9487')
+    r, t = lesson({1}, {6})
+    ok(r['rep']['typed'] == 40 and r['rep']['ok'] == 38 and pg.evaluate('__E.result.pass') and r['acc'] == '95%' and 'Step 1 passed' in t[0] and 'Next step' in t[1], 'L2 38/40 = 95.0%: 통과', (r['rep'], t))
+    r, t = lesson({1, 6, 11}, set())
+    ok(not pg.evaluate('__E.result.pass') and r['acc'] == '92%', 'L2 36/39 = 92.3%: 통과가 아니다', r['acc'])
+    ok('95% accuracy or higher' in pg.evaluate('document.querySelector(".basis").textContent'), 'L2 화면의 말도 "95% 이상"')
+    ok(not pg._errs, 'L2 콘솔 오류 0', pg._errs[:3])
+    c.close()
+    # 내 기록: 문장부호·숫자 조건 표시, 더 보기
+    c = env.ctx()
+    pg = c.new_page()
+    pg.goto(BASE + '/ko/', wait_until='load')
+    pg.evaluate("""() => { const conds = ['p', '-', 'pn', 'n', '-', 'p', '-', '-'], runs = [];
+      conds.forEach((f, i) => runs.push({ cond: 'test|ko|words|t30|' + f, v: 300 + i, unit: 'ko', acc: 97, secs: 30, at: Date.now() - i * 60000, tool: 'test', lang: 'ko', kind: 'words', len: 't30' }));
+      localStorage.setItem('todok.runs', JSON.stringify(runs)); }""")
+    pg.reload(wait_until='load'); pg.wait_for_timeout(300)
+    rows = pg.evaluate('[...document.querySelectorAll("#rec-list li .rc-cond")].map((e) => e.textContent)')
+    ok(rows == ['단어 · 30초 · 문장부호', '단어 · 30초', '단어 · 30초 · 문장부호 · 숫자', '단어 · 30초 · 숫자', '단어 · 30초'], 'L4 기록 목록에 문장부호·숫자 조건이 보인다', rows)
+    more = pg.evaluate('(() => { const b = document.getElementById("rec-more"); return [b.hidden, b.textContent]; })()')
+    ok(more == [False, '더 보기(8개)'], 'L4 다섯 개가 넘으면 "더 보기"', more)
+    h0 = pg.evaluate('document.querySelector(".rec-col").getBoundingClientRect().height')
+    pg.click('#rec-more'); pg.wait_for_timeout(100)
+    ok(pg.evaluate('document.querySelectorAll("#rec-list li").length') == 8 and pg.evaluate('document.getElementById("rec-more").textContent') == '접기' and pg.evaluate('document.querySelector(".rec-col").getBoundingClientRect().height') > h0, 'L4 누르면 전부 펼쳐진다')
+    pg.evaluate('document.querySelector(".records").scrollIntoView()'); pg.wait_for_timeout(100)
+    shot(pg, 'e2e-ko-records-more')
+    pg.click('#rec-more'); pg.wait_for_timeout(100)
+    ok(pg.evaluate('document.querySelectorAll("#rec-list li").length') == 5 and abs(pg.evaluate('document.querySelector(".rec-col").getBoundingClientRect().height') - h0) < 1, 'L4 접으면 다섯 줄, 칸 높이도 그대로')
+    c.close()
+    # 없는 주소: 주소에 맞는 언어 틀
+    c = env.ctx()
+    for path, want in (('/ko/eobtneun-juso/', 'ko'), ('/ko/guide/none/', 'ko'), ('/nope/', 'en'), ('/kotlin/', 'en')):
+        pg = env.page(c, path, clock=False)
+        r = pg.evaluate(NF_JS)
+        if want == 'ko':
+            ok(r['lang'] == 'ko' and r['title'] == '없는 페이지예요 | 토독' and r['h1'] == ['없는 페이지예요'] and r['nav'] == ['속도 측정', '자리 연습', '문장 연습', '영타 연습', '가이드'] and r['home'] == ['/ko/'] and r['lumen'] == ['https://lumenlab.page/'] and r['btn'] == ['/ko/', '/'], f'L6 {path}: 한국어 틀(메뉴·제목·루멘랩 링크)', r)
+        else:
+            ok(r['lang'] == 'en' and r['title'].startswith('Page not found') and r['h1'] == ['Page not found'] and r['nav'] == ['Typing Test', 'Practice', 'Guides'] and r['home'] == ['/'] and r['lumen'] == ['https://lumenlab.page/en/'] and r['btn'] == ['/', '/ko/'], f'L6 {path}: 영어 틀', r)
+            ok(not visible_hangul_outside_ko(pg), f'L6 {path}: lang 밖 한글 없음', visible_hangul_outside_ko(pg)[:3])
+        ok(r['ids'] == 1 and r['skip'] == 1, f'L6 {path}: 겹치는 id 없음, 건너뛰기 링크 하나', (r['ids'], r['skip']))
+        if path in ('/ko/eobtneun-juso/', '/nope/'):
+            shot(pg, 'e2e-404-' + want)
+        pg.close()
+    c.close()
+
+
+def third_party(env):
+    print('9. 제3자 평가에서 나온 것')
+    part = os.environ.get('PART', '')
+    for name, fn in (('keys', tp_keys), ('cji', tp_cji), ('hint', tp_hint), ('focus', tp_focus), ('texts', tp_texts), ('mobile', tp_mobile), ('rest', tp_rest)):
+        if part and name not in part.split(','):
+            continue
+        try:
+            fn(env)
+        except Exception as e:  # 한 갈래가 죽어도 나머지는 돌린다
+            import traceback
+            traceback.print_exc()
+            fails.append(f'{fn.__name__} 가 도중에 멈췄다: {e!r}'[:300])
+
+
 def main():
     proxy = os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy') or ''
     args = ['--proxy-bypass-list=localhost;127.0.0.1']
@@ -984,7 +1476,7 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=str(exe[0]) if exe else None, args=args)
         env = Env(b)
-        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (8, shots)):
+        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (8, shots)):
             if sec(n):
                 try:
                     fn(env)

@@ -1,6 +1,9 @@
 /* 토독 도구 화면(속도 측정·자리 연습·문장 연습·영타). 로직은 tj-core.js·tj-store.js·tj-lessons.js 에 있고 여기는 화면 연결만 한다.
    화면 글자는 빌드가 페이지에 넣어 둔 #tj-cfg JSON 에서 읽는다(이 파일에는 언어별 문구를 두지 않는다).
    - 입력: 보이지 않는 입력칸(#trap) + composition 이벤트. 붙여 넣기는 막는다. 자판 글쇠 이벤트가 한 번도 안 보이면 터치 자판으로 보고 글자 단위로 잰다.
+     자판에서는 지우기 키가 눌렸는지를, 터치 자판에서는 조합 중인 문자열의 길이를 로직(Session.update)에 같이 넘긴다.
+   - 초점: 컴퓨터는 열자마자 치는 칸. 여백을 눌러도 초점을 지키고, 다른 곳에 있다가 치기 시작하면(한글 입력기가 켜진 키 포함) 치는 칸으로 온다.
+     휴대폰은 글을 눌렀을 때만 치는 화면으로 간다(옵션을 고르는 것만으로는 가지 않는다).
    - 치는 중에는 색만 바뀐다(움직임 없음). 결과 칸은 자리를 미리 잡아 둬서 화면이 밀리지 않는다.
    - 연출: 틀린 키 지도 켜짐(결과가 뜬 순간), 최고 기록 키 튀기(같은 조건의 앞 최고를 넘었을 때). 동작 줄이기면 둘 다 안 움직인다. */
 (function () {
@@ -39,38 +42,62 @@
     this.passed = Array.isArray(st.passed) ? st.passed : [];
     this.round = 0; this.drill = null; this.same = false;
     this.timer = new TJ.Timer(function () { return performance.now(); });
-    this.phys = false; this.composing = false; this.iv = 0; this.started = false; this.done = false; this.doneAt = 0;
+    this.phys = false; this.composing = false; this.comp = ''; this.delKey = false; this.vlen = 0;
+    this.iv = 0; this.started = false; this.done = false; this.doneAt = 0;
+    this.recent = [];   /* 이 방문에서 이미 나온 문장(오래된 것부터). 저장하지 않는다. 다음 글을 고를 때 뒤로 미룬다 */
+    this.parts = null;  /* 지금 글을 이루는 문장들(단어로 된 글이면 null) */
     var trap = this.trap;
     trap.addEventListener('keydown', function (e) {
       if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); if (!self.done || performance.now() - self.doneAt > 700) self.next(); return; }
       if (e.key === 'Escape') { e.preventDefault(); self.quit(); return; }
       if (self.done && e.key === 'Enter') { e.preventDefault(); if (performance.now() - self.doneAt > 700) self.primary(); return; }
       if (e.code && PHYS.test(e.code)) self.phys = true;
+      /* 지우기 키가 눌렸는지 적어 둔다(조합 중에는 key 가 'Process' 라 code 도 본다). 다른 키가 눌리면 지워진다 */
+      self.delKey = e.key === 'Backspace' || e.key === 'Delete' || e.code === 'Backspace' || e.code === 'Delete';
       if (/^(Arrow|Home|End|Page)/.test(e.key)) e.preventDefault();
       if (e.key === 'Enter' && !CFG.lines && !e.isComposing) e.preventDefault();
     });
     ['paste', 'drop', 'cut'].forEach(function (t) { trap.addEventListener(t, function (e) { e.preventDefault(); }); });
     trap.addEventListener('beforeinput', function (e) { if (/^(insertFromPaste|insertFromDrop|historyUndo|historyRedo)$/.test(e.inputType)) e.preventDefault(); });
-    trap.addEventListener('compositionstart', function () { self.composing = true; });
-    trap.addEventListener('compositionend', function () { self.composing = false; self.onInput(); });
-    trap.addEventListener('input', function (e) { self.composing = !!e.isComposing; self.onInput(); });
+    trap.addEventListener('compositionstart', function () { self.composing = true; self.comp = ''; });
+    trap.addEventListener('compositionupdate', function (e) { self.comp = e.data || ''; });
+    trap.addEventListener('compositionend', function () { self.composing = false; self.comp = ''; self.onInput(); });
+    trap.addEventListener('input', function (e) { self.composing = !!e.isComposing; if (!self.composing) self.comp = ''; self.onInput(); });
     trap.addEventListener('focus', function () {
-      root.classList.add('typing-focus');
+      root.classList.add('typing-focus'); root.classList.remove('t-blur');
       /* 휴대폰: 치는 동안에는 머리(메뉴)를 접어 글과 숫자만 남긴다. 누른 직후라 화면이 바뀌어도 '밀림'이 아니다 */
       if (TOUCH && !root.classList.contains('m-tall')) { root.classList.add('m-tall'); window.scrollTo(0, 0); }
     });
-    trap.addEventListener('blur', function () { root.classList.remove('typing-focus'); });
+    trap.addEventListener('blur', function () { root.classList.remove('typing-focus'); root.classList.add('t-blur'); });
     D.addEventListener('visibilitychange', function () {
       if (!self.started || self.done) return;
       if (D.hidden) self.timer.pause(); else { self.timer.resume(); self.session.breakTiming(); }
     });
     D.addEventListener('keydown', function (e) {
       if (e.target === trap || e.ctrlKey || e.metaKey || e.altKey) return;
-      var tag = e.target && e.target.tagName;
-      if (/^(BUTTON|A|INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(tag || '')) return;
+      var t = e.target, tag = (t && t.tagName) || '';
+      /* 치기 시작한 키: 글자 키, 또는 한글 입력기가 켜진 채 누른 키(key 가 'Process', keyCode 229 로 온다) */
+      var typing = e.key === 'Process' || e.keyCode === 229 || e.isComposing || (!!e.key && e.key.length === 1 && e.key !== ' ');
+      if (/^(BUTTON|A|INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(tag)) {
+        /* 설정을 바꾼 뒤 바로 치기 시작하면(고르기 단추·체크 칸에 초점이 남아 있다) 팝업을 닫고 치는 칸으로 */
+        var pick = tag === 'BUTTON' || tag === 'SUMMARY' || (tag === 'INPUT' && t.type === 'checkbox');
+        if (typing && pick && !self.done && t.closest('.opts, .steps')) { closeMore(); trap.focus({ preventScroll: true }); }
+        return;
+      }
       if (self.done && (e.key === 'Enter' || e.key === 'Tab')) { e.preventDefault(); if (performance.now() - self.doneAt > 700) { if (e.key === 'Enter') self.primary(); else self.next(); } return; }
-      /* 다른 곳을 누른 뒤 그냥 치기 시작해도 치는 칸으로 간다 */
-      if (!self.done && e.key && e.key.length === 1 && e.key !== ' ') trap.focus({ preventScroll: true });
+      if (self.done) return;
+      /* 다른 곳을 누른 뒤(Esc 로 나온 뒤) 그냥 치기 시작해도 치는 칸으로 간다 */
+      if (typing) { trap.focus({ preventScroll: true }); return; }
+      /* 치는 칸 밖에서 누른 띄어쓰기가 쪽을 한 화면 굴리지 않게(치는 판이 보이는 동안만) */
+      if (e.key === ' ' && stageInView()) { e.preventDefault(); trap.focus({ preventScroll: true }); }
+    });
+    /* 컴퓨터: 여백이나 판의 빈 곳을 눌러도 치는 칸의 초점을 지킨다. 누르는 것과 읽는 글(글자를 골라 복사할 수 있게)은 그대로 둔다 */
+    if (!TOUCH) D.addEventListener('mousedown', function (e) {
+      var t = e.target;
+      if (e.button !== 0 || D.activeElement !== trap || t === trap || !t.closest) return;
+      if (e.clientX >= root.clientWidth || e.clientY >= root.clientHeight) return;   /* 쪽의 스크롤 막대는 건드리지 않는다 */
+      if (t.closest('a, button, input, select, textarea, summary, label, .result, .prose, .sec, .records, .foot')) return;
+      e.preventDefault();
     });
     this.reset();
     if (!TOUCH) trap.focus({ preventScroll: true });
@@ -82,27 +109,44 @@
     var kind = CFG.tool === 'practice' ? 'lesson' : CFG.tool === 'sentences' ? this.topic : this.kind;
     return { tool: CFG.tool, lang: CFG.text, kind: kind, len: len, punct: this.kind === 'words' && this.punct, nums: this.kind === 'words' && this.nums };
   };
+  /* 문장으로 된 글의 재료 */
+  Engine.prototype.pool = function () {
+    if (CFG.tool === 'sentences') return this.topic === 'all' ? allSentences() : this.topic === 'proverbs' ? TEXT.proverbs : TEXT.sentences[this.topic];
+    return this.kind === 'proverbs' ? TEXT.proverbs : this.kind === 'pangrams' ? TEXT.pangrams : allSentences();
+  };
+  /* 방금 낸 문장을 '최근에 나온 문장'에 적는다(다음 글에서 뒤로 미룬다) */
+  Engine.prototype.note = function (parts) {
+    var rc = this.recent;
+    parts.forEach(function (x) { var i = rc.indexOf(x); if (i >= 0) rc.splice(i, 1); rc.push(x); });
+    if (rc.length > 400) rc.splice(0, rc.length - 400);
+    return parts;
+  };
+  /* 속담 사이의 띄어쓰기 자리. 화면에만 가운뎃점을 찍어 어디서 끊기는지 보여 준다(치는 글에는 넣지 않는다) */
+  Engine.prototype.breaks = function () {
+    var out = {}, at = 0, ps = this.parts;
+    if (!ps || this.kind !== 'proverbs' || CFG.tool !== 'test') return out;
+    for (var i = 0; i < ps.length - 1; i++) { at += H.toChars(ps[i]).length; out[at] = 1; at++; }
+    return out;
+  };
   Engine.prototype.seed = function () { return (P.crc32(CFG.text + ':' + CFG.tool + ':' + today()) + (this.round ? this.round * 7919 + SALT : 0)) >>> 0; };
   Engine.prototype.makeText = function () {
     var rand = P.rng(this.seed()), words = TEXT.words;
+    this.parts = null;
     if (this.drill) {
       var pool = P.withKeys(words, this.drill).slice(0, 40);
       if (pool.length < 8) pool = pool.concat(P.shuffle(words, rand).slice(0, 12));
       return P.shuffle(pool, rand).slice(0, 14).join(' ');
     }
     if (CFG.tool === 'practice') return TJ.lessons.text(CFG.text, this.lesson, rand, TEXT);
-    if (CFG.tool === 'sentences') {
-      var list = this.topic === 'all' ? allSentences() : this.topic === 'proverbs' ? TEXT.proverbs : TEXT.sentences[this.topic];
-      return P.shuffle(list, rand).slice(0, this.count).join('\n');
-    }
+    if (CFG.tool === 'sentences') return (this.parts = this.note(P.some(this.pool(), this.count, rand, this.recent))).join('\n');
     var need = Math.max(200, this.secs * 11), timed = this.mode === 'time';
     if (this.kind === 'words') {
       var n = timed ? Math.ceil(need / (KO ? 3.4 : 5.5)) : this.count;
       return P.words(words, n, rand, { lang: CFG.text, punct: this.punct, numbers: this.nums }).join(' ');
     }
-    var src = this.kind === 'proverbs' ? TEXT.proverbs : this.kind === 'pangrams' ? TEXT.pangrams.concat(TEXT.sentences) : allSentences();
-    if (!timed) return P.shuffle(src, rand).slice(0, Math.max(2, Math.round(this.count / 8))).join(' ');
-    return P.sentences(src, need, rand).join(' ');
+    /* 한 판 안에서 같은 문장이 되풀이되지 않고, 최근 판에 나온 문장은 뒤로 밀린다 */
+    this.parts = this.note(timed ? P.sentences(this.pool(), need, rand, this.recent) : P.some(this.pool(), Math.max(2, Math.round(this.count / 8)), rand, this.recent));
+    return this.parts.join(' ');
   };
   Engine.prototype.limit = function () { return (this.drill || CFG.tool === 'practice' || CFG.tool === 'sentences' || this.mode === 'count') ? 0 : this.secs * 1000; };
   Engine.prototype.reset = function () {
@@ -112,9 +156,10 @@
     this.same = false;
     this.session = new TJ.Session(this.text, { soft: !!CFG.lines });
     this.T = this.session.T;
-    this.trap.value = '';
+    this.trap.value = ''; this.vlen = 0; this.delKey = false; this.comp = '';
     root.classList.add('idle'); root.classList.remove('running', 'finished');
     stopBurst();
+    readable(this);
     this.view.onReset(this);
     this.view.render(this.session.cmp, this.live(), this);
   };
@@ -128,7 +173,8 @@
     ['kind', 'mode', 'secs', 'count', 'punct', 'nums', 'topic', 'lesson'].forEach(function (k) { if (opt[k] != null) this[k] = opt[k]; }, this);
     if (opt.save !== false) this.save();
     this.reset();
-    if (opt.focus !== false) this.trap.focus({ preventScroll: true });
+    /* 휴대폰: 옵션을 고르는 것만으로는 치는 화면으로 넘어가지 않는다(이어서 다른 옵션을 고를 수 있게). 이미 치는 화면이면 그대로 이어 친다 */
+    if (opt.focus !== false && (!TOUCH || root.classList.contains('m-tall'))) this.trap.focus({ preventScroll: true });
   };
   /* 결과 화면의 주 단추(Enter): 자리 연습에서 통과했으면 다음 단계 */
   Engine.prototype.primary = function () {
@@ -161,19 +207,24 @@
       if (!this.phys) { this.session = new TJ.Session(this.text, { mode: 'char', soft: !!CFG.lines }); this.T = this.session.T; }
       this.start();
     }
-    var r = this.session.update(v, performance.now());
+    /* 자판: 이 변화가 지우기 키 때문인지 알려 준다(값이 길어졌으면 지우기가 아니다). 터치 자판: 조합 중인 문자열의 글자 수를 알려 준다 */
+    var touch = this.session.mode === 'char', del = this.delKey && v.length <= this.vlen;
+    var r = this.session.update(v, performance.now(), touch ? { hold: this.composing ? Array.from(this.comp).length : 0 } : { del: del });
     if (!this.composing && r.value !== v) trap.value = r.value;
+    this.vlen = trap.value.length;
     /* 시간으로 재는 판에서 글이 모자라면 잇는다 */
     if (this.limit() && this.T.chars.length - r.cursor < 90) {
-      var more = (this.kind === 'words') ? P.words(TEXT.words, 40, P.rng(this.seed() + this.T.chars.length), { lang: CFG.text, punct: this.punct, numbers: this.nums }).join(' ')
-        : P.sentences(this.kind === 'proverbs' ? TEXT.proverbs : allSentences(), 200, P.rng(this.seed() + this.T.chars.length)).join(' ');
+      var rnd = P.rng(this.seed() + this.T.chars.length), more;
+      if (this.kind === 'words') more = P.words(TEXT.words, 40, rnd, { lang: CFG.text, punct: this.punct, numbers: this.nums }).join(' ');
+      else { var mp = this.note(P.sentences(this.pool(), 200, rnd, this.recent)); this.parts = (this.parts || []).concat(mp); more = mp.join(' '); }
       this.session.extend(more); this.T = this.session.T; r = this.session.cmp;
+      readable(this);
       this.view.onExtend(this);
     }
     showHint(r.hint);
     this.view.render(r, this.live(), this);
     /* 터치 자판은 마지막 글자 판정을 미루므로 '지금 끝난 것으로 보면 다 쳤나'로 본다(마지막 글자를 조합하는 중이어도 다 쳤으면 끝) */
-    if (r.complete || (this.session.mode === 'char' && TJ.compare(this.T, r.value, { lenient: true, final: true, soft: !!CFG.lines }).complete)) this.finish();
+    if (r.complete || (touch && this.session.wouldComplete())) this.finish();
   };
   Engine.prototype.start = function () {
     var self = this;
@@ -197,7 +248,10 @@
     res.rep = rep;
     res.unit = KO || CFG.ui === 'ko' ? 'ko' : 'en';          /* 큰 숫자: 한국어 화면은 타/분, 영어 화면은 WPM */
     res.v = res.unit === 'ko' ? rep.speed : rep.wpm;
-    res.pass = CFG.tool === 'practice' && rep.accuracy != null && rep.accuracy >= TJ.lessons.PASS_ACC && this.session.cmp.complete;
+    /* 자리 연습 통과: 정확도 95% 이상(반올림하기 전 값으로). 기준 바로 아래 값(94.87%)이 95%로 보이지 않게 그때만 소수 한 자리로 적는다 */
+    var okAcc = CFG.tool === 'practice' && TJ.lessons.pass(rep.ok, rep.typed);
+    res.pass = okAcc && this.session.cmp.complete;
+    rep.accText = rep.accuracy == null ? '–' : (CFG.tool === 'practice' && !okAcc && rep.accuracy >= TJ.lessons.PASS_ACC) ? rep.accuracy1.toFixed(1) : String(rep.accuracy);
     showHint(null);
     this.trap.value = '';
     /* 기록: 이 기기에만. '틀린 키만 연습'은 최근·최고 기록에 넣지 않는다 */
@@ -218,25 +272,31 @@
 
   /* ================= 그리기 도우미 ================= */
   /* 글자마다 span. 단어는 줄 끝에서 갈라지지 않게 묶는다. brk = 줄바꿈 글자 뒤에서 실제로 줄을 바꾼다(문장 연습) */
-  function buildText(box, chars, from, to, brk) {
-    var spans = [], w = null, frag = D.createDocumentFragment();
+  function buildText(box, chars, from, to, brk, marks) {
+    var spans = [], base = [], w = null, frag = D.createDocumentFragment();
     from = from || 0; to = to == null ? chars.length : to;
     for (var i = from; i < to; i++) {
       var ch = chars[i], s = D.createElement('span');
-      if (ch === ' ' || ch === '\n') { s.className = 'sp'; s.textContent = ' '; frag.appendChild(s); w = null; if (brk && ch === '\n') frag.appendChild(D.createElement('br')); }
-      else { if (!w) { w = D.createElement('span'); w.className = 'w'; frag.appendChild(w); } s.className = 'c'; s.textContent = ch; w.appendChild(s); }
+      /* 띄어쓰기 칸은 앞 단어 묶음의 끝에 붙인다(줄이 띄어쓰기로 시작하지 않게) */
+      if (ch === ' ' || ch === '\n') { base[i] = marks && marks[i] ? 'sp brk' : 'sp'; s.textContent = ' '; (w || frag).appendChild(s); w = null; if (brk && ch === '\n') frag.appendChild(D.createElement('br')); }
+      else { if (!w) { w = D.createElement('span'); w.className = 'w'; frag.appendChild(w); } base[i] = 'c'; s.textContent = ch; w.appendChild(s); }
+      s.className = base[i];
       spans[i] = s;
     }
     box.textContent = ''; box.appendChild(frag);
-    return { spans: spans, chars: chars, prev: [], pend: -1, cur: -1 };
+    return { spans: spans, base: base, chars: chars, prev: [], pend: -1, cur: -1 };
   }
+  /* 화면 읽기 프로그램이 읽을 '칠 글'(그림으로 그린 글자 줄은 숨겨 두고 이 문단을 읽게 한다) */
+  function readable(e) { var x = $('txt-sr'); if (x) x.textContent = e.T.text.replace(/\n/g, ' '); }
+  function closeMore() { var m = $('more'); if (m) m.open = false; }
+  function stageInView() { var st = D.querySelector('.stage'); if (!st) return false; var b = st.getBoundingClientRect(); return b.bottom > 80 && b.top < window.innerHeight - 80; }
   var CLS = ['', 'ok', 'bad', 'pend'];
   /* 조합 중인 글자: 목표 글자는 그대로 두고, 친 만큼만 왼쪽부터 색을 채운다(다른 글자로 바꿔 그리면 틀린 것처럼 보인다) */
   function paint(view, r, lenient) {
     var sp = view.spans, i;
     for (i = 0; i < r.st.length; i++) {
       if (!sp[i]) continue;
-      if (view.prev[i] !== r.st[i]) { sp[i].className = (sp[i].classList.contains('sp') ? 'sp ' : 'c ') + CLS[r.st[i]] + (view.cur === i ? ' cur' : ''); view.prev[i] = r.st[i]; }
+      if (view.prev[i] !== r.st[i]) { sp[i].className = view.base[i] + ' ' + CLS[r.st[i]] + (view.cur === i ? ' cur' : ''); view.prev[i] = r.st[i]; }
     }
     if (r.pendingAt >= 0 && sp[r.pendingAt]) {
       var total = H.keysOf(view.chars[r.pendingAt]).length, done = lenient ? 0 : H.keyStream(r.pendingText || '').length;
@@ -345,8 +405,10 @@
     set('r-wpm', CFG.both ? fmt(S.alsoWpm, { w: rep.wpm }) : '');
     set('r-formula', ko ? fmt(S.formulaKo, { n: num(rep.strokes), t: rep.secsText, s: num(rep.speed) }) : fmt(S.formulaEn, { n: num(rep.chars), t: rep.secsText, s: num(rep.wpm) }));
     if (CFG.both) set('r-formula2', fmt(S.formulaEn, { n: num(rep.chars), t: rep.secsText, s: num(rep.wpm) }));
-    set('r-acc', rep.accuracy == null ? '–' : rep.accuracy + '%');
+    set('r-acc', rep.accuracy == null ? '–' : rep.accText + '%');
     set('r-accd', rep.typed ? fmt(S.accDetail, { typed: num(rep.typed), ok: num(rep.ok), wrong: num(rep.wrong) }) : '');
+    /* 총 속도(틀렸거나 지운 것까지 누른 키 전부)를 작게, 식과 함께 */
+    set('r-raw', !rep.typed ? '' : ko ? fmt(S.rawKo, { s: num(rep.grossSpeed), n: num(rep.typedStrokes), t: rep.secsText }) + (CFG.both ? ' · ' + fmt(S.rawAlso, { w: num(rep.grossWpm) }) : '') : fmt(S.rawEn, { w: num(rep.grossWpm), n: num(rep.typed), t: rep.secsText }));
     var skip = $('r-skip'); if (skip) { skip.textContent = rep.skipped ? fmt(S.skipped, { n: rep.skipped }) : ''; skip.hidden = !rep.skipped; }
     /* 이 점수가 어느 정도인지: 이 기기의 지난 기록·최고 기록과 견준다 */
     var c = res.cmp, cmp = $('r-cmp'), best = false, line = '';
@@ -404,18 +466,30 @@
   function rounded(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 
   /* ================= 내 기록 칸 ================= */
+  /* 문장부호·숫자를 넣은 판인지(조건이 다르면 따로 견주므로 목록에서도 구분해 보여 준다) */
+  function condFlags(r) {
+    var f = typeof r.cond === 'string' ? (r.cond.split('|')[4] || '') : (r.punct ? 'p' : '') + (r.nums ? 'n' : '');
+    return (f.indexOf('p') >= 0 ? ' · ' + S.withPunct : '') + (f.indexOf('n') >= 0 ? ' · ' + S.withNums : '');
+  }
   function condLabel(r) {
     var k = S.kinds[r.kind] || r.kind, len = /^t/.test(r.len) ? fmt(S.lenSecs, { n: r.len.slice(1) }) : /^L/.test(r.len) ? '' : /^c/.test(r.len) ? (r.tool === 'sentences' ? fmt(S.lenSent, { n: r.len.slice(1) }) : (S.sizes[r.len.slice(1)] || r.len.slice(1))) : '';
     if (r.tool === 'practice') { var les = S.lessons[+r.len.slice(1) - 1]; return fmt(S.lessonN, { n: r.len.slice(1), name: les || '' }); }
-    return k + (len ? ' · ' + len : '');
+    return k + (len ? ' · ' + len : '') + condFlags(r);
   }
   function when(at) {
     var d = new Date(at), now = new Date(), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     return d.toDateString() === now.toDateString() ? fmt(S.todayAt, { t: hm }) : fmt(S.dateFmt, { m: d.getMonth() + 1, d: d.getDate() });
   }
+  var REC_FEW = 5, recOpen = false;
   function renderRecords(e) {
     var box = $('rec-list'); if (!box) return;
-    var runs = store.runs().filter(function (r) { return r.tool === CFG.tool && r.lang === CFG.text; }).slice(0, 5), has = runs.length > 0;
+    var all = store.runs().filter(function (r) { return r.tool === CFG.tool && r.lang === CFG.text; });
+    if (all.length <= REC_FEW) recOpen = false;
+    var runs = all.slice(0, recOpen ? all.length : REC_FEW), has = runs.length > 0;
+    /* '더 보기': 저장된 기록(50개까지)을 전부 펼친다. 누른 뒤에만 칸이 길어진다 */
+    var more = $('rec-more');
+    if (more) { more.hidden = all.length <= REC_FEW; more.textContent = recOpen ? S.recLess : fmt(S.recMore, { n: all.length }); more.setAttribute('aria-expanded', recOpen ? 'true' : 'false'); }
+    box.parentNode.classList.toggle('open', recOpen);
     box.textContent = '';
     runs.forEach(function (r) {
       var li = el('li'), b = store.best(r.cond);
@@ -482,7 +556,7 @@
     this.txt = $('txt'); this.v = null; this.keys = board($('kb'));
   }
   ViewA.prototype.onReset = function (e) {
-    this.v = buildText(this.txt, e.T.chars); this.txt.style.transform = ''; this.txt._y = 0;
+    this.v = buildText(this.txt, e.T.chars, 0, null, false, e.breaks()); this.txt.style.transform = ''; this.txt._y = 0;
     $('result').hidden = true; $('playbox').hidden = false;
     var d = new Date(), daily = $('daily');
     daily.textContent = e.drill ? S.drillLabel : e.round === 0 ? fmt(S.daily, { m: d.getMonth() + 1, d: d.getDate(), mon: S.months ? S.months[d.getMonth()] : '' }) : '';
@@ -491,7 +565,7 @@
   };
   ViewA.prototype.onExtend = function (e) {
     var y = this.txt._y, tr = this.txt.style.transform;
-    this.v = buildText(this.txt, e.T.chars); this.txt.style.transform = tr; this.txt._y = y;
+    this.v = buildText(this.txt, e.T.chars, 0, null, false, e.breaks()); this.txt.style.transform = tr; this.txt._y = y;
   };
   ViewA.prototype.render = function (r, live, e) {
     paint(this.v, r, e.session.mode === 'char'); scrollLines(this.txt, this.v, 1);
@@ -549,7 +623,7 @@
   ViewC.prototype.onFinish = function (res, rep, e) {
     fillResult(res, rep, e);
     /* 숫자 띠도 결과 값으로 맞춘다(치는 중의 어림값과 결과의 식이 어긋나 보이지 않게) */
-    $('speed').textContent = num(res.v); $('acc').textContent = rep.accuracy == null ? '–' : rep.accuracy; $('left').textContent = rep.secsText;
+    $('speed').textContent = num(res.v); $('acc').textContent = rep.accText; $('left').textContent = rep.secsText;
     this.lit = [];
     litMap(this.keys, res, true);
     var pass = $('r-pass'), again = $('again');
@@ -622,7 +696,7 @@
   ViewB.prototype.onFinish = function (res, rep, e) {
     fillResult(res, rep, e);
     $('speed').textContent = num(rep.speed); $('g-label').textContent = S.thisRun;
-    $('acc').textContent = rep.accuracy == null ? '–' : rep.accuracy;
+    $('acc').textContent = rep.accText;
     litMap(this.keys, res, true);
     $('playbox').hidden = true; $('result').hidden = false;
   };
@@ -665,6 +739,7 @@
   click('drill', function () { var k = drillKeys(E.result ? E.result.missed : []); if (k.length) E.next({ drill: k, save: false }); });
   click('rec-drill', function () { var k = drillKeys(store.missed(CFG.text, 6)); if (k.length) { E.next({ drill: k, save: false }); var st = D.querySelector('.stage'); if (st && st.scrollIntoView) st.scrollIntoView({ block: 'start' }); } });
   click('share', function () { shareImage(E); });
+  click('rec-more', function () { recOpen = !recOpen; renderRecords(E); });
   click('rec-clear', function () {
     var b = $('rec-clear');
     if (b.getAttribute('data-sure') !== '1') { b.setAttribute('data-sure', '1'); b.textContent = S.clearSure; setTimeout(function () { b.removeAttribute('data-sure'); b.textContent = S.clearBtn; }, 4000); return; }

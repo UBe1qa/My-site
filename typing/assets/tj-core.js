@@ -25,6 +25,12 @@
   function isLoneJamo(ch) { var c = code(ch); return c >= 0x3131 && c <= 0x3163; }
   function isHangul(ch) { return isSyllable(ch) || isLoneJamo(ch); }
   function isLatin(ch) { return /^[A-Za-z]$/.test(ch); }
+  /* 천지인 같은 터치 자판이 조합 중에 보여 주는 중간 글자: 아래아(ㆍ U+318D, ᆞ U+119E), 쌍아래아(ᆢ U+11A2), 그 자리에 쓰이기도 하는 가운뎃점(· ‥).
+     자판으로 칠 수 있는 글자가 아니라서 목표 글에는 나오지 않는다 */
+  var MID = '\u318D\u119E\u11A2\u00B7\u2025';
+  function isMid(ch) { return MID.indexOf(ch) >= 0; }
+  /* 자판을 바꿔도 같은 글자(숫자·문장부호) */
+  function isPlain(ch) { var c = code(ch); return c > 0x20 && c < 0x7F && !isLatin(ch); }
 
   /* 글자 하나를 초성·중성·종성 글쇠 묶음으로. 한글이 아니면 null */
   function parts(ch) {
@@ -163,8 +169,21 @@
     JONG.forEach(function (x, idx) { if (x.join('') === fs) fi = idx; });
     return String.fromCharCode(0xAC00 + (CHO.indexOf(p.c[0]) * 21 + vi) * 28 + fi);
   }
+  /* 터치 자판에서 판정을 미룰 꼬리 글자 수. 조합이 끝나기 전의 글자는 어느 것도 판정하지 않는다.
+     - 마지막 한글 글자 하나(다음 글자가 와야 끝난 줄 안다)
+     - 아래아 같은 중간 글자가 보이면 그것과, 그것이 붙은 한글 글자까지('ㅇㆍ' = '어'를 만드는 중)
+     - 입력기가 알려 준 조합 중인 문자열(hold 글자)이 한글이면 통째로 */
+  function heldTail(chars, hold) {
+    var n = chars.length, k = 0, h = 0;
+    while (k < n && isMid(chars[n - 1 - k])) k++;
+    if (k) { if (k < n && isHangul(chars[n - 1 - k])) k++; }
+    else if (n && isHangul(chars[n - 1])) k = 1;
+    while (h < hold && h < n && (isHangul(chars[n - 1 - h]) || isMid(chars[n - 1 - h]))) h++;
+    return h > k ? h : k;
+  }
   /* compare(준비한 목표, 친 글, 옵션) → 화면이 그릴 상태
-     옵션 lenient: 터치 자판처럼 글쇠를 알 수 없을 때. 마지막 한글 글자는 다음 글자가 올 때까지 판정을 미룬다(천지인의 중간 모양을 틀렸다고 하지 않게).
+     옵션 lenient: 터치 자판처럼 글쇠를 알 수 없을 때. 조합 중인 글자(heldTail)는 다음 글자가 올 때까지 판정을 미룬다(천지인의 중간 모양을 틀렸다고 하지 않게).
+     옵션 hold: 입력기가 알려 준 조합 중인 문자열의 글자 수(lenient 일 때만 쓴다).
      옵션 final: 끝났을 때(미뤄 둔 마지막 글자도 맞으면 센다).
      옵션 soft: 목표의 줄바꿈 자리에 띄어쓰기를 쳐도 맞다고 본다.
      돌려주는 값: st(목표 글자마다 0 안 침·1 맞음·2 틀림·3 조합 중), cursor(다음 글쇠가 갈 글자), next(다음에 누를 글쇠),
@@ -174,16 +193,18 @@
     var chars = Array.from(tidy(value, T)), raw = '';
     var st = new Array(T.chars.length).fill(NONE);
     var r = { value: chars.join(''), st: st, cursor: 0, next: null, pendingAt: -1, pendingText: '', okStrokes: 0, okChars: 0, badChars: 0, complete: false, fk: [], fw: [], ws: [] };
-    if (opt.lenient && chars.length && isHangul(chars[chars.length - 1])) raw = chars.pop();
+    var held = opt.lenient ? heldTail(chars, opt.hold | 0) : 0;
+    if (held) raw = chars.splice(chars.length - held, held).join('');
     /* 친 글을 낱말로 */
     var iw = [{ k: [], sep: null }];
     chars.forEach(function (ch) {
       var w = iw[iw.length - 1];
       if (isSep(ch)) { w.sep = ch; iw.push({ k: [], sep: null }); } else Array.prototype.push.apply(w.k, keysOf(ch));
     });
-    if (raw && opt.final) { /* 끝나는 순간 조합 중이던 글자: 맞게 이어지는 글쇠일 때만 넣는다 */
+    if (raw && opt.final) { /* 끝나는 순간 조합 중이던 글자: 맞게 이어지는 글쇠일 때만 넣는다(아래아 같은 중간 글자는 글쇠가 아니다) */
       var lw = iw[iw.length - 1], tw = T.words[iw.length - 1];
-      if (tw) { var withRaw = lw.k.concat(keysOf(raw)); if (align(withRaw, tw.tk, true).cost <= align(lw.k, tw.tk, true).cost) lw.k = withRaw; }
+      var rk = keyStream(Array.from(raw).filter(function (ch) { return !isMid(ch); }).join(''));
+      if (tw && rk.length) { var withRaw = lw.k.concat(rk); if (align(withRaw, tw.tk, true).cost <= align(lw.k, tw.tk, true).cost) lw.k = withRaw; }
       raw = '';
     }
     for (var w = 0; w < iw.length && w < T.words.length; w++) {
@@ -222,34 +243,73 @@
     return r;
   }
   TJ.NONE = NONE; TJ.OK = OK; TJ.BAD = BAD; TJ.PENDING = PENDING;
-  TJ.prepare = prepare; TJ.tidy = tidy; TJ.align = align; TJ.partial = partial; TJ.compare = compare;
+  TJ.prepare = prepare; TJ.tidy = tidy; TJ.align = align; TJ.partial = partial; TJ.compare = compare; TJ.heldTail = heldTail;
 
   /* 한/영이 반대로 켜져 있는지: 'ko' = 한글로 바꿔야 함(한글 글인데 영문자가 들어옴), 'en' = 영어로 바꿔야 함, 'caps' = Caps Lock, null = 모름.
-     틀리기 시작한 자리부터 끝까지가 전부 반대쪽 글자이고, 자판만 바꾸면 목표와 맞아떨어질 때만 알린다. */
-  function layoutHint(T, I) {
-    var n = Math.min(I.length, T.length), m = 0;
-    while (m < n && I[m] === T[m]) m++;
-    if (m >= n) return null;
-    var tail = I.slice(m, n), tgt = T.slice(m);
-    if (tail.every(isHangul) && isLatin(tgt[0])) {
-      var q = toQwerty(tail.join('')).toLowerCase();
-      var want = tgt.slice(0, q.length).join('').toLowerCase();
-      return q.length && want === q ? 'en' : null;
-    }
-    if (tail.every(isLatin) && isHangul(tgt[0])) {
-      var typed = tail.map(function (ch) { return fromQwerty(ch); });
-      if (typed.some(function (k) { return !k; })) return null;
-      var wantK = keyStream(tgt.slice(0, tail.length).join('')).slice(0, typed.length);
-      /* Shift 없이 쳐도(ㅆ 자리에 ㅅ) 자판이 반대인 건 같다 */
-      var same = typed.every(function (k, j) { return wantK[j] != null && unshift(k) === unshift(wantK[j]); });
-      return same ? 'ko' : null;
-    }
-    if (tail.length >= 2 && tail.every(isLatin) && tgt.slice(0, tail.length).every(isLatin)) {
-      var a = tail.join(''), b = tgt.slice(0, tail.length).join('');
-      if (a !== b && a.toLowerCase() === b.toLowerCase() && a === a.toUpperCase() && b !== b.toUpperCase()) return 'caps';
-    }
-    return null;
+     낱말 단위로 본다. 지금 치는 낱말이 틀리기 시작한 자리부터 전부 반대쪽 글자이고 자판만 바꾸면 목표와 맞아떨어질 때 알리고,
+     바로 앞 낱말들도 통째로 그렇게 친 것이면 그 구간을 한 덩어리로 묶는다(띄어쓰기는 어느 자판에서나 같다).
+     그냥 틀린 글자(자판을 바꿔도 안 맞는 글자)는 알리지 않는다. */
+  function wordsOf(chars) {
+    var out = [{ s: 0, c: [], closed: false }];
+    chars.forEach(function (ch, i) {
+      if (isSep(ch)) { out[out.length - 1].closed = true; out.push({ s: i + 1, c: [], closed: false }); }
+      else out[out.length - 1].c.push(ch);
+    });
+    return out;
   }
+  function swapCase(s) { return s.replace(/[A-Za-z]/g, function (c) { return c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase(); }); }
+  /* 낱말 하나: a = 친 글자, b = 목표 글자, closed = 띄어쓰기로 닫았나(닫은 낱말은 끝까지 맞아떨어져야 한다).
+     돌려주는 값: { h: 종류, p: 낱말 안에서 반대 자판이 시작된 자리, n: (caps) 대소문자가 뒤집힌 글자 수 } 또는 null */
+  function wordLayout(a, b, closed) {
+    var p = 0, n = Math.min(a.length, b.length), i;
+    while (p < n && a[p] === b[p]) p++;
+    if (p >= a.length) return null;                 /* 틀린 곳이 없다(덜 친 것은 자판 탓이 아니다) */
+    var tail = a.slice(p), tgt = b.slice(p);
+    if (!tgt.length) return null;                   /* 목표보다 더 친 글자 */
+    var hasH = tail.some(isHangul), hasL = tail.some(isLatin);
+    if (hasH && !hasL && tail.every(function (ch) { return isHangul(ch) || isPlain(ch); })) {
+      var q = tail.map(function (ch) { return isHangul(ch) ? toQwerty(ch) : ch; }).join('').toLowerCase(), want = tgt.join('').toLowerCase();
+      return (closed ? want === q : want.slice(0, q.length) === q) ? { h: 'en', p: p } : null;
+    }
+    if (!hasL || hasH || !tail.every(function (ch) { return isLatin(ch) || isPlain(ch); })) return null;
+    if (tgt.some(isHangul)) {
+      var typed = tail.map(function (ch) { return isLatin(ch) ? fromQwerty(ch) : ch; });
+      if (typed.some(function (k) { return !k; })) return null;
+      var wantK = keyStream(tgt.join(''));
+      if (typed.length > wantK.length || (closed && typed.length !== wantK.length)) return null;
+      /* Shift 없이 쳐도(ㅆ 자리에 ㅅ) 자판이 반대인 건 같다 */
+      for (i = 0; i < typed.length; i++) if (unshift(typed[i]) !== unshift(wantK[i])) return null;
+      return { h: 'ko', p: p };
+    }
+    if (tgt.length < tail.length || (closed && tgt.length !== tail.length)) return null;
+    var A = tail.join(''), B = tgt.slice(0, tail.length).join(''), diff = 0;
+    /* Caps Lock: 소문자 자리에 대문자가 들어온다(Shift 를 같이 누른 자리는 기기에 따라 소문자 또는 대문자) */
+    if (A === B || A.toLowerCase() !== B.toLowerCase() || (A !== swapCase(B) && A !== B.toUpperCase())) return null;
+    for (i = 0; i < A.length; i++) if (A.charAt(i) !== B.charAt(i)) diff++;
+    return { h: 'caps', p: p, n: diff };
+  }
+  /* 숫자·기호만 든 낱말을 맞게 친 것: 자판과 상관없으니 앞뒤 구간을 이어 본다 */
+  function plainWord(a, b, closed) {
+    return a.length > 0 && a.every(isPlain) && (closed ? a.join('') === b.join('') : b.slice(0, a.length).join('') === a.join(''));
+  }
+  /* T = 목표 글자들, I = 친 글자들(정리한 값). 돌려주는 값: { hint, from(친 글자 몇 번째부터가 반대 자판 구간인가) } 또는 null */
+  function layoutZone(T, I) {
+    var tw = wordsOf(T), iw = wordsOf(I), j = iw.length - 1, hint = null, from = -1, n = 0;
+    if (j > 0 && !iw[j].c.length) j--;              /* 방금 띄어쓰기를 쳤다: 앞 낱말까지 본다 */
+    for (; j >= 0 && j < tw.length; j--) {
+      var k = wordLayout(iw[j].c, tw[j].c, iw[j].closed);
+      if (k && (!hint || k.h === hint)) {
+        hint = k.h; from = iw[j].s + k.p; n += k.n || 0;
+        if (k.p > 0) break;                         /* 이 낱말 가운데서부터 자판이 바뀌었다 */
+      } else if (!k && plainWord(iw[j].c, tw[j].c, iw[j].closed)) continue;
+      else break;
+    }
+    /* Caps Lock 은 뒤집힌 글자가 둘은 되어야 알린다(대문자 한 글자는 그냥 Shift 를 잘못 누른 것일 수 있다) */
+    if (!hint || (hint === 'caps' && n < 2)) return null;
+    return { hint: hint, from: from };
+  }
+  function layoutHint(T, I) { var z = layoutZone(T, I); return z ? z.hint : null; }
+  TJ.layoutZone = layoutZone;
   TJ.layoutHint = layoutHint;
 
   /* ---------- 3. 식 ---------- */
@@ -277,8 +337,12 @@
       secsText: tenths % 10 === 0 ? String(tenths / 10) : (tenths / 10).toFixed(1),
       strokes: res.strokes, speed: Math.round(res.strokes * 600 / tenths),   /* 타/분 = 맞게 친 타수 ÷ 초 × 60 */
       chars: res.okChars, wpm: Math.round(res.okChars * 120 / tenths),       /* WPM = 맞게 친 글자 ÷ 5 ÷ 초 × 60 */
+      /* 총 속도: 틀렸거나 지운 것까지 누른 키 전부(지우기 키는 빼고). 영어 = 누른 키 ÷ 5 ÷ 초 × 60, 타수 = 누른 타수(Shift 포함) ÷ 초 × 60 */
       grossWpm: Math.round(typed * 120 / tenths),
-      typed: typed, ok: ok, wrong: typed - ok, accuracy: acc, skipped: res.skippedKeys || 0
+      typedStrokes: res.typedStrokes || 0, grossSpeed: Math.round((res.typedStrokes || 0) * 600 / tenths),
+      typed: typed, ok: ok, wrong: typed - ok, accuracy: acc, skipped: res.skippedKeys || 0,
+      /* 소수 한 자리까지(버림). 통과 기준 바로 아래 값(94.87%)을 95%로 보여 주지 않으려고 쓴다 */
+      accuracy1: typed > 0 ? Math.floor(ok * 1000 / typed) / 10 : null
     };
   };
 
@@ -297,7 +361,8 @@
     this.typedKeys = 0; this.okKeys = 0; this.typedStrokes = 0;
     this.byKey = {};
     this.pairs = {};
-    this.log = [];          /* 친 글쇠마다: 셌는지(c), 맞았는지(good), 그때 쳐야 했던 글쇠(want) */
+    this.log = [];          /* 친 글쇠마다: 셌는지(c), 맞았는지(good), 그때 쳐야 했던 글쇠(want). 지금 글쇠 흐름(K)보다 길 수 있다(_tally 의 '꼬리') */
+    this.hold = 0;          /* 터치 자판: 입력기가 알려 준 조합 중인 문자열의 글자 수 */
     this.skippedKeys = 0;   /* 한/영·Caps Lock 안내가 떠 있는 동안 쳐서 세지 않은 글쇠 */
     this.lastAt = null;
     this.samples = [];
@@ -305,18 +370,16 @@
   }
   /* 글을 이어 붙인다(시간으로 재는 판에서 글이 모자랄 때) */
   Session.prototype.extend = function (more) { this.T = prepare(this.T.text + ' ' + more); this.cmp = compare(this.T, this.value, this._opt(false)); };
-  Session.prototype._opt = function (fin) { return { lenient: this.mode === 'char', soft: this.soft, final: !!fin }; };
+  Session.prototype._opt = function (fin) { return { lenient: this.mode === 'char', soft: this.soft, final: !!fin, hold: this.hold }; };
   Session.prototype._key = function (tok) { return this.byKey[tok] || (this.byKey[tok] = { hit: 0, miss: 0, ms: 0, n: 0 }); };
   /* 한/영(또는 Caps Lock)이 반대로 켜져 있다고 알리는 구간이 친 글쇠 몇 번째부터인지. 안내가 없으면 Infinity.
-     그 구간의 글쇠는 정확도·틀린 글쇠 기록에 넣지 않는다(자판 전환 실수는 타자 실력이 아니다). */
+     그 구간의 글쇠는 정확도·틀린 글쇠 기록에 넣지 않는다(자판 전환 실수는 타자 실력이 아니다). 띄어쓰기를 넘어 여러 낱말에 걸칠 수 있다. */
   Session.prototype._zone = function (r) {
-    var chars = Array.from(r.value), tc = this.T.chars, h = layoutHint(tc, chars);
-    r.hint = h;
-    if (!h) return Infinity;
-    var m = 0, n = Math.min(chars.length, tc.length), z = 0;
-    while (m < n && chars[m] === tc[m]) m++;
-    for (var i = 0; i < m; i++) z += isSep(chars[i]) ? 1 : keysOf(chars[i]).length;
-    return z;
+    var chars = Array.from(r.value), z = layoutZone(this.T.chars, chars), n = 0;
+    r.hint = z ? z.hint : null;
+    if (!z) return Infinity;
+    for (var i = 0; i < z.from; i++) n += isSep(chars[i]) ? 1 : keysOf(chars[i]).length;
+    return n;
   };
   Session.prototype._uncount = function (L) {
     this.typedKeys--; this.typedStrokes -= strokes(L.tok); this.skippedKeys++;
@@ -327,14 +390,27 @@
     }
     L.c = false;
   };
-  /* 새로 눌린 글쇠마다 그 순간 맞았는지 본다: 그 글쇠 때문에 낱말의 '고친 수'가 늘면 틀린 글쇠다. 지웠다 다시 쳐도 틀렸던 기록은 남는다. */
-  Session.prototype._tally = function (r, at) {
-    var start = lcp(this.K, r.fk), added = r.fk.length - start, T = this.T, zone = this._zone(r);
-    this.log.length = Math.min(this.log.length, start);
+  /* 새로 눌린 글쇠마다 그 순간 맞았는지 본다: 그 글쇠 때문에 낱말의 '고친 수'가 늘면 틀린 글쇠다. 지웠다 다시 쳐도 틀렸던 기록은 남는다.
+     '누른 키'는 입력칸 값이 몇 번 바뀌었는지가 아니라 글쇠 흐름으로 센다. 입력기는 받침을 다음 글자로 넘길 때 값을 두 번 바꾸고
+     ('벗' → '버' → '버스': 글쇠 흐름 ㅂㅓㅅ → ㅂㅓ → ㅂㅓㅅㅡ), 앞 글자를 지우고 합친 글자를 다시 넣는 기기도 있다('ㅎ' → '' → '하').
+     그때마다 새 글쇠로 세면 실제로 누른 것보다 많아진다. 그래서:
+     - 글쇠 흐름이 줄어도 이미 센 글쇠의 기록(log)은 버리지 않고 '꼬리'로 남겨 둔다.
+     - 다시 늘 때 같은 자리에 같은 글쇠가 오면 그 글쇠는 이미 센 것이다(입력기가 지웠다 다시 넣은 것). 다른 글쇠가 오면 거기서부터 새 글쇠다.
+     - 지우기 글쇠가 눌렸으면(del = true, 자판에서만 안다) 꼬리를 바로 버린다. 그 뒤에 같은 글쇠를 다시 쳐도 새로 누른 것으로 센다.
+     - del 을 모를 때(자판, 값만 받은 경우)는 꼬리 전체를 지나 더 나아가면 입력기가 한 일로, 꼬리 안에서 멈추면 지우고 다시 친 것으로 본다.
+     - 터치 자판(char)은 조합 중인 글자를 미뤄 두기 때문에 지우기와 입력기의 바꿔 넣기를 가릴 수 없다. 같은 자리의 같은 글쇠는 한 번만 센다. */
+  Session.prototype._tally = function (r, at, del) {
+    var fk = r.fk, log = this.log, T = this.T, zone = this._zone(r), start = lcp(this.K, fk), keep = start, from;
+    if (del === true && this.mode === 'key') log.length = Math.min(log.length, start);
+    while (keep < log.length && keep < fk.length && log[keep].tok === fk[keep]) keep++;   /* 꼬리까지 이어서 같은 글쇠인 곳 */
+    if (this.mode === 'char' || del === false) from = keep;
+    else from = (keep === log.length && fk.length > log.length) ? keep : start;
+    if (fk.length > from) log.length = Math.min(log.length, from);                        /* 새 글쇠가 왔다: 그 뒤의 꼬리는 버린다 */
+    var added = fk.length - from;
     /* 안내가 뜨기 직전에 이미 틀렸다고 센 글쇠(Caps Lock의 첫 글자 등)도 안내 구간이면 되돌린다 */
-    for (var z = zone; z < start; z++) if (this.log[z] && this.log[z].c) this._uncount(this.log[z]);
-    for (var idx = start; idx < r.fk.length; idx++) {
-      var tok = r.fk[idx], w = r.fw[idx], Tw = T.words[w], before = r.fk.slice(r.ws[w], idx);
+    for (var z = zone; z < from; z++) if (log[z] && log[z].c) this._uncount(log[z]);
+    for (var idx = from; idx < fk.length; idx++) {
+      var tok = fk[idx], w = r.fw[idx], Tw = T.words[w], before = fk.slice(r.ws[w], idx);
       var a0 = align(before, Tw.tk, true), good, want;
       if (isSep(tok)) {
         good = a0.full === a0.cost && (tok === Tw.sep || (this.soft && Tw.sep === '\n' && tok === ' '));
@@ -343,8 +419,8 @@
         good = align(before.concat([tok]), Tw.tk, true).cost === a0.cost;
         want = a0.end < Tw.tk.length ? Tw.tk[a0.end] : Tw.sep;
       }
-      if (idx >= zone) { this.log[idx] = { c: false, tok: tok, good: good, want: want }; this.skippedKeys++; continue; }
-      this.log[idx] = { c: true, tok: tok, good: good, want: want };
+      if (idx >= zone) { log[idx] = { c: false, tok: tok, good: good, want: want }; this.skippedKeys++; continue; }
+      log[idx] = { c: true, tok: tok, good: good, want: want };
       this.typedKeys++; this.typedStrokes += strokes(tok);
       if (good) {
         this.okKeys++;
@@ -360,15 +436,19 @@
     }
     if (zone !== Infinity) this.lastAt = null; /* 자판을 바꾸느라 멈춘 간격은 재지 않는다 */
     else if (added > 0 && at != null) this.lastAt = at;
-    this.K = r.fk;
+    this.K = fk;
   };
-  /* 친 글 전체(입력칸 값)와 시각(ms)을 넘긴다. 돌려주는 값은 화면이 그릴 비교 결과(r.value = 정리한 입력칸 값) */
-  Session.prototype.update = function (value, at) {
+  /* 친 글 전체(입력칸 값)와 시각(ms)을 넘긴다. 돌려주는 값은 화면이 그릴 비교 결과(r.value = 정리한 입력칸 값)
+     info.del: 이 변화가 지우기 글쇠 때문인지(true/false. 모르면 주지 않는다), info.hold: 조합 중인 문자열의 글자 수(터치 자판) */
+  Session.prototype.update = function (value, at, info) {
+    this.hold = info && info.hold ? info.hold | 0 : 0;
     var r = compare(this.T, value, this._opt(false));
-    this._tally(r, at);
+    this._tally(r, at, info ? info.del : undefined);
     this.value = r.value; this.cmp = r;
     return r;
   };
+  /* 지금 끝난 것으로 보면 다 쳤나(터치 자판은 마지막 글자 판정을 미루므로 따로 본다) */
+  Session.prototype.wouldComplete = function () { return compare(this.T, this.value, this._opt(true)).complete; };
   /* 멈췄다가 다시 시작할 때: 다음 글쇠의 간격을 재지 않는다 */
   Session.prototype.breakTiming = function () { this.lastAt = null; };
   /* 1초마다 부른다(그래프용). net = 그때까지 맞게 친 타수(지금 글 기준) */
@@ -479,16 +559,35 @@
     }
     return out;
   }
-  /* 문장을 섞어 minChars 글자가 넘을 때까지 잇는다(한 바퀴 안에서는 같은 문장이 다시 안 나온다) */
-  function sentences(list, minChars, rand) {
-    var out = [], len = 0, deck = [];
+  /* 최근에 나온 문장(avoid: 오래된 것부터 새것 순)을 뒤로 미룬다. deck 은 뒤에서부터 뽑으므로 '안 나온 것 … 오래전에 나온 것 … 방금 나온 것' 순으로 뽑힌다 */
+  function later(deck, avoid) {
+    var seen = [], fresh = [];
+    deck.forEach(function (x) { (avoid.lastIndexOf(x) >= 0 ? seen : fresh).push(x); });
+    seen.sort(function (a, b) { return avoid.lastIndexOf(b) - avoid.lastIndexOf(a); });
+    return seen.concat(fresh);
+  }
+  /* 문장을 섞어 minChars 글자가 넘을 때까지 잇는다(한 바퀴 안에서는 같은 문장이 다시 안 나온다).
+     avoid: 최근에 나온 문장들. 첫 바퀴에서 맨 뒤로 미뤄서, 안 나온 문장이 남아 있는 동안에는 다시 나오지 않는다 */
+  function sentences(list, minChars, rand, avoid) {
+    var out = [], len = 0, deck = [], lap = 0;
     if (!list.length) throw new Error('문장이 없어요');
     while (len < minChars) {
-      if (!deck.length) { deck = shuffle(list, rand); if (out.length && deck[deck.length - 1] === out[out.length - 1] && deck.length > 1) deck.reverse(); }
+      if (!deck.length) {
+        deck = shuffle(list, rand);
+        if (out.length && deck[deck.length - 1] === out[out.length - 1] && deck.length > 1) deck.reverse();
+        if (!lap++ && avoid && avoid.length) deck = later(deck, avoid);
+      }
       var s = deck.pop();
-      out.push(s); len += toChars(s).length + 1;
+      len += toChars(s).length + (out.length ? 1 : 0);   /* 띄어쓰기로 이었을 때의 길이 */
+      out.push(s);
     }
     return out;
+  }
+  /* 문장 n개(겹치지 않게). 최근에 나온 문장은 뒤로 미룬다 */
+  function some(list, n, rand, avoid) {
+    var d = shuffle(list, rand);
+    if (avoid && avoid.length) d = later(d, avoid).reverse();
+    return d.slice(0, n);
   }
   /* 틀린 글쇠가 든 낱말만 모으기: 그 글쇠가 많이 든 낱말부터 */
   function withKeys(list, toks) {
@@ -497,7 +596,7 @@
       return { w: w, c: c, i: i };
     }).filter(function (x) { return x.c > 0; }).sort(function (x, y) { return y.c - x.c || x.i - y.i; }).map(function (x) { return x.w; });
   }
-  TJ.pick = { rng: rng, crc32: crc32, shuffle: shuffle, words: words, sentences: sentences, withKeys: withKeys };
+  TJ.pick = { rng: rng, crc32: crc32, shuffle: shuffle, words: words, sentences: sentences, some: some, withKeys: withKeys };
 
   /* ---------- 7. 자판 자리(화면 자판·손가락 표시용) ---------- */
   /* 줄마다 [Shift 없이, Shift와 같이]. 손가락: 1~4 왼손 새끼~검지, 5~8 오른손 검지~새끼, 0 엄지 */

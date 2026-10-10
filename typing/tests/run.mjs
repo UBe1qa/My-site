@@ -1,6 +1,6 @@
 // 토독 핵심 로직 시험: node typing/tests/run.mjs [묶음 이름…]   (추가 설치 없이 돈다)
 // 기준값(tests/ref/ref.json)은 우리 코드와 다른 방법으로 만든 것이다: 파이썬 unicodedata(NFD·글자 이름), inko-py, hangul-js, es-hangul, zlib.
-// 다시 만드는 법은 gen_ref.py·gen_ref.mjs 머리말. TJ_CORE=<경로> 로 다른 tj-core.js 를 시험할 수 있다(tests/mutate.mjs 가 쓴다).
+// 다시 만드는 법은 gen_ref.py·gen_ref.mjs·gen_keys.py 머리말(연습 글을 고치면 gen_ref.mjs 와 gen_keys.py 를 다시 돌린다). TJ_CORE=<경로> 로 다른 tj-core.js 를 시험할 수 있다(tests/mutate.mjs 가 쓴다).
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -791,6 +791,312 @@ run('guide', () => {
   /* 소문자만 칠 때 타수 ÷ 5 = WPM */
   const lower = 'the quick fox ran over a lazy dog and then sat', sl = type(lower, lower).finish(lower.length * 200), rl = TJ.report(sl);
   eq(rl.strokes, rl.chars, '소문자·띄어쓰기만이면 타수 = 글자 수'); eq(rl.speed, rl.wpm * 5, '그때 타수 ÷ 5 = WPM');
+});
+
+/* ---- 18. '누른 키'는 글쇠 흐름으로 센다: 받침이 넘어갈 때 입력칸 값이 두 번 바뀌어도, 앞 글자를 지우고 다시 넣는 기기에서도 한 번만 ---- */
+/* 실제 입력기처럼 값이 바뀌는 차례를 낸다: 글쇠 하나에 값이 한 번 또는 두 번(확정 값 → 새 조합 값) 바뀐다 */
+class Ime2 extends Ime {
+  constructor() { super(); this.mid = []; }
+  commit() { super.commit(); this.mid.push(this.done); }
+  key2(k) { const before = this.value(); this.mid = []; const v = this.key(k); return this.mid.filter((m) => m !== v && m !== before).concat([v]); }
+}
+const twoStep = (keys) => { const ime = new Ime2(); return keys.map((k) => ime.key2(k)); };
+/* 아이폰식: 조합 중인 글자가 있으면 그 글자를 지운 값이 먼저 오고, 합친 글이 다시 들어온다. three = 지운 값 → 확정된 글 → 새 글 세 단계로 */
+const delInsert = (keys, three) => {
+  const ime = new Ime2(); let prev = '';
+  return keys.map((k) => {
+    const composing = ime.cur() !== '', steps = ime.key2(k), v = steps[steps.length - 1], out = [];
+    if (composing && isC(k) + isV(k) > 0) { out.push(Array.from(prev).slice(0, -1).join('')); if (three && steps.length > 1) out.push(steps[0]); }
+    out.push(v); prev = v;
+    return out;
+  });
+};
+const flowLen = (v) => H.keyStream(v.replace(/[ \n]/g, '')).length + (v.match(/[ \n]/g) || []).length;
+function feedSteps(target, steps, opt, info) {
+  const s = new TJ.Session(target, opt); let t = 1000, bad = 0, shrink = 0, prev = '';
+  steps.forEach((vs) => { t += 100; vs.forEach((v) => { const r = s.update(v, t, info); if (r.st.includes(BAD) || s.typedKeys !== s.okKeys) bad++; if (flowLen(v) < flowLen(prev)) shrink++; prev = v; }); });
+  return { s, bad, shrink, t };
+}
+run('keyflow', () => {
+  /* 기준값: 파이썬 unicodedata 로 따로 센 '실제 키 수'와 '받침이 넘어가는 횟수'(tests/gen_keys.py) */
+  const per = REF.keys.per.split(';').map((x) => x.split(',').map(Number));
+  eq(sha(ALL_KO.join('\n')), REF.keys.sha, '기준값을 만든 연습 글과 지금 연습 글이 같다(다르면 python3 tests/gen_keys.py)');
+  eq(per.length, ALL_KO.length, '기준값 줄 수');
+  /* 손으로 센 사례: '벗' → '버' → '버스' */
+  let s = new TJ.Session('버스'); ['ㅂ', '버', '벗', '버', '버스'].forEach((v, i) => s.update(v, i * 100));
+  eq(s.typedKeys + ':' + s.okKeys + ':' + s.typedStrokes, '4:4:4', "'버스' = 네 글쇠(받침이 넘어가도 ㅅ은 한 번)");
+  eq(s.byKey['ㅅ'].hit, 1, 'ㅅ 맞은 횟수 1');
+  /* 틀린 자음이 받침으로 붙었다가 넘어가도 틀린 기록은 한 번: '가르면'의 ㄹ 자리에 ㅅ */
+  let f = feedSteps('가르면', twoStep(['ㄱ', 'ㅏ', 'ㅅ', 'ㅡ', 'ㅁ', 'ㅕ', 'ㄴ']));
+  let res = f.s.finish(700);
+  eq(res.typedKeys + ':' + res.okKeys, '7:6', "'가스면': 누른 7, 맞은 6"); eq(res.missed.map((m) => m.key + m.miss).join(','), 'ㄹ1', '틀린 키는 ㄹ에 한 번만');
+  eq(res.pairs.map((p) => p.want + p.got + p.n).join(','), 'ㄹㅅ1', '무엇을 무엇으로 쳤는지도 한 번');
+  near(res.accuracy, 600 / 7, '정확도 = 6 ÷ 7');
+  /* 세 군데를 그렇게 틀리면 세 번(평가에서 여섯 번으로 나오던 사례) */
+  f = feedSteps('나라 가르면 다리', twoStep(H.keyStream('나사 가스면 다시')));
+  res = f.s.finish(2000);
+  eq(res.missed.map((m) => m.key + m.miss).join(','), 'ㄹ3', '세 번 틀리면 세 번'); eq(res.typedKeys + ':' + res.okKeys, '17:14', '누른 17(4 + 1 + 7 + 1 + 4), 맞은 14');
+  /* 연습 글 전부(한국어 576줄): 실제 입력 순서(받침이 넘어갈 때 두 단계)로 넣어도 누른 키 = 실제 키 수 */
+  let over = 0, keysAll = 0, movesAll = 0, bad = 0, timed = 0;
+  ALL_KO.forEach((text, i) => {
+    const keys = H.keyStream(text), steps = twoStep(keys);
+    eq(keys.length, per[i][0], '"' + text + '" 키 수(파이썬 unicodedata)');
+    for (const info of [undefined, { del: false }]) {
+      const g = feedSteps(text, steps, undefined, info), r = g.s.finish(g.t);
+      over += Math.abs(r.typedKeys - per[i][0]); bad += g.bad;
+      ok(r.typedKeys === per[i][0] && r.okKeys === per[i][0] && r.accuracy === 100 && r.missed.length === 0 && r.strokes === H.strokeCount(text) && r.typedStrokes === H.strokeCount(text) && g.bad === 0,
+        '"' + text + '" 누른 키 ' + r.typedKeys + '/' + per[i][0] + ', 맞은 ' + r.okKeys + ', 타수 ' + r.strokes + ', 틀림 표시 ' + g.bad);
+      if (!info) { keysAll += r.typedKeys; movesAll += g.shrink; eq(g.shrink, per[i][1], '"' + text + '" 받침이 넘어간 횟수(입력기 흉내 = 파이썬)'); timed += Object.values(g.s.byKey).reduce((a, b) => a + b.n, 0) - (keys.length - 1); }
+    }
+  });
+  eq(keysAll + ':' + movesAll, REF.keys.total + ':' + REF.keys.moves, '전체 누른 키 = 실제 키 수, 받침이 넘어간 횟수 = 기준값');
+  eq(over + ':' + bad, '0:0', '과다·과소 0, 틀림 표시 0');
+  eq(timed, 0, '넘어간 키도 앞 키와의 간격을 잰다(첫 키만 빼고 전부)');
+  /* 아이폰식(앞 글자를 지우고 합친 글자를 다시 넣음): 터치(글자 단위), 자판(글쇠 단위) 어느 쪽으로 받아도 같다 */
+  let ios = 0, n = 0;
+  ALL_KO.concat([SENT.slice(0, 6).join('\n')]).forEach((text, i) => {
+    const keys = H.keyStream(text), want = keys.length;
+    for (const [mode, info, three] of [['char', undefined, false], ['char', undefined, true], ['key', undefined, false], ['key', { del: false }, false], ['key', { del: false }, true]]) {
+      if (i % 4 && mode === 'key') continue;   /* 자판 쪽은 넷에 하나만(시간) */
+      const g = feedSteps(text, delInsert(keys, three), { mode }, info), r = g.s.finish(g.t);
+      n++; if (r.typedKeys !== want || r.okKeys !== want || r.strokes !== H.strokeCount(text) || g.bad) { ios++; ok(false, '아이폰식 ' + mode + (three ? ' 세 단계' : '') + ' "' + text + '" 누른 키 ' + r.typedKeys + '/' + want + ', 틀림 표시 ' + g.bad); }
+    }
+  });
+  ok(ios === 0 && n > 1200, '아이폰식 입력 ' + n + '판에서 누른 키가 다른 판 ' + ios);
+  /* 영어는 값이 한 번씩만 바뀐다 */
+  EN.sentences.slice(0, 40).forEach((text) => { const g = feedSteps(text, twoStep(Array.from(text))), r = g.s.finish(g.t); ok(r.typedKeys === text.length && r.okKeys === text.length, '영어 "' + text + '" 누른 키 ' + r.typedKeys); });
+  /* 정말 지우고 같은 키를 다시 치면 두 번 누른 것이다(자판): 지우기 키를 본 경우(del)와 값만 본 경우 둘 다 */
+  for (const info of [true, undefined]) {
+    s = new TJ.Session('버스');
+    [['ㅂ'], ['버'], ['벗'], ['버', info], ['벗'], ['버'], ['버스']].forEach(([v, d], i) => s.update(v, i * 100, d === undefined ? undefined : { del: d }));
+    eq(s.typedKeys + ':' + s.okKeys + ':' + s.byKey['ㅅ'].hit, '5:5:2', '지우고 다시 친 ㅅ은 두 번(del ' + info + ')');
+  }
+  /* 지우기 키를 봤으면 그 뒤에 온 '지웠다 다시 넣기'와 헷갈리지 않는다: 벗 → (지우기) 버 → 벗 → 버 → 버스 → (지우기 두 번) 버 → 버스 */
+  s = new TJ.Session('버스');
+  [['ㅂ', false], ['버', false], ['벗', false], ['버', true], ['벗', false], ['버', false], ['버스', false], ['버ㅅ', true], ['버', true], ['벗', false], ['버', false], ['버스', false]].forEach(([v, d], i) => s.update(v, i * 100, { del: d }));
+  eq(s.typedKeys + ':' + s.okKeys, '7:7', 'ㅂㅓㅅ + ㅅ + ㅡ + ㅅ + ㅡ = 7');
+  /* 지우기 키를 본 뒤에는 꼬리를 바로 버린다: 그 뒤에 무엇이 오든 지운 자리는 새로 누른 키다. 지우기 키가 아니었다고 알려 오면(del false) 꼬리를 그대로 둔다 */
+  s = new TJ.Session('abcd'); s.update('abc', 0, { del: false }); s.update('ab', 100, { del: true }); s.update('abcd', 200, { del: false });
+  eq(s.typedKeys, 5, '지우기 키로 지운 c 는 다시 오면 새 키(a b c c d)');
+  s = new TJ.Session('abcd'); s.update('abc', 0, { del: false }); s.update('ab', 100, { del: false }); s.update('a', 150, { del: false }); s.update('ab', 200, { del: false }); s.update('abc', 250, { del: false }); s.update('abcd', 300, { del: false });
+  eq(s.typedKeys, 4, '입력기가 지웠다가 한 글자씩 다시 넣어도(지우기 키 없음) 네 키');
+  /* 틀린 키를 지우고 맞게 치면: 누른 키에 둘 다, 틀린 기록은 한 번(값만 본 경우와 지우기 키를 본 경우가 같다) */
+  for (const d of [undefined, true]) {
+    s = new TJ.Session('한글');
+    [['ㅎ'], ['하'], ['핫'], ['하', d], ['한'], ['한ㄱ'], ['한그'], ['한글']].forEach(([v, x], i) => s.update(v, i * 100, x === undefined ? undefined : { del: x }));
+    res = s.finish(800);
+    eq(res.typedKeys + ':' + res.okKeys + ':' + res.missed.map((m) => m.key + m.miss).join(','), '7:6:ㄴ1', '고친 키: 누른 7, 맞은 6, ㄴ 1번');
+  }
+  /* 터치 자판은 지우기와 바꿔 넣기를 가릴 수 없어 같은 자리의 같은 키를 한 번만 센다(그렇게 밝혀 둔다) */
+  s = new TJ.Session('한글', { mode: 'char' });
+  ['ㅎ', '하', '한', '한ㄱ', '한', '한ㄱ', '한그', '한글'].forEach((v, i) => s.update(v, i * 100));
+  res = s.finish(800);
+  eq(res.typedKeys + ':' + res.okKeys, '6:6', '터치: 지웠다 다시 친 같은 글자는 한 번');
+  /* 받침이 넘어가는 중간 값에서 시간이 끝나도 이미 누른 키는 누른 키다 */
+  s = new TJ.Session('버스'); ['ㅂ', '버', '벗', '버'].forEach((v, i) => s.update(v, i * 100));
+  res = s.finish(400);
+  eq(res.typedKeys + ':' + res.strokes, '3:2', "'버'에서 끝: 누른 3, 남은 글의 타수 2");
+  /* 한/영 안내 구간과 같이: 반대 자판으로 친 글이 지워졌다 다시 들어와도 세지 않는다 */
+  f = feedSteps('the cat', delInsert(['ㅅ', 'ㅗ', 'ㄷ', ' ', 'ㅊ', 'ㅁ', 'ㅅ']), { mode: 'char' });
+  eq(f.s.typedKeys + ':' + f.s.cmp.hint, '0:en', '터치에서 반대 자판: 세지 않는다');
+});
+
+/* ---- 19. 터치 자판: 조합이 끝나기 전의 글자는 어느 것도 판정하지 않는다(천지인의 'ㅇㆍ' 같은 중간 모양) ---- */
+/* 천지인으로 글자를 만들 때 조합 칸에 차례로 보이는 모양(평가자의 흉내와 같은 규칙: 자음은 한 번에, 모음은 단계별, 아래아가 먼저 오면 'ㅎㆍ'처럼 두 글자) */
+const CJI = { 'ㅏ': ['ㅣ', 'ㅏ'], 'ㅓ': ['ㆍ', 'ㅓ'], 'ㅗ': ['ㆍ', 'ㅗ'], 'ㅜ': ['ㅡ', 'ㅜ'], 'ㅑ': ['ㅣ', 'ㅏ', 'ㅑ'], 'ㅕ': ['ㆍ', 'ᆢ', 'ㅕ'], 'ㅛ': ['ㆍ', 'ᆢ', 'ㅛ'], 'ㅠ': ['ㅡ', 'ㅜ', 'ㅠ'],
+  'ㅐ': ['ㅣ', 'ㅏ', 'ㅐ'], 'ㅔ': ['ㆍ', 'ㅓ', 'ㅔ'], 'ㅡ': ['ㅡ'], 'ㅣ': ['ㅣ'], 'ㅘ': ['ㆍ', 'ㅗ', 'ㅚ', 'ㅘ'], 'ㅝ': ['ㅡ', 'ㅜ', 'ㅝ'], 'ㅢ': ['ㅡ', 'ㅢ'], 'ㅚ': ['ㆍ', 'ㅗ', 'ㅚ'], 'ㅟ': ['ㅡ', 'ㅜ', 'ㅟ'],
+  'ㅙ': ['ㆍ', 'ㅗ', 'ㅚ', 'ㅘ', 'ㅙ'], 'ㅞ': ['ㅡ', 'ㅜ', 'ㅝ', 'ㅞ'], 'ㅒ': ['ㅣ', 'ㅏ', 'ㅑ', 'ㅒ'], 'ㅖ': ['ㆍ', 'ᆢ', 'ㅕ', 'ㅖ'] };
+function cjiSteps(ch) {
+  const c = ch.charCodeAt(0) - 0xAC00;
+  if (c < 0 || c > 11171) return null;
+  const cho = C19[Math.floor(c / 588)], vi = Math.floor(c / 28) % 21, fi = c % 28, syl = (v, f) => String.fromCharCode(0xAC00 + (C19.indexOf(cho) * 21 + V21.indexOf(v)) * 28 + f);
+  const out = [cho];
+  CJI[V21[vi]].forEach((m) => out.push(V21.includes(m) ? syl(m, 0) : cho + m));
+  if (fi) { const f = F28[fi], two = Object.keys(FF).find((k) => FF[k] === f); if (two) out.push(syl(V21[vi], F28.indexOf(two[0]))); out.push(ch); }
+  return out;
+}
+/* 글 전체를 천지인 흉내로 넣는다. withHold = 입력기가 조합 중인 문자열을 알려 준 경우 */
+function cjiRun(text, withHold) {
+  const s = new TJ.Session(text, { mode: 'char' }); let done = '', t = 0, bad = 0, steps = 0;
+  for (const ch of Array.from(text)) {
+    const st = cjiSteps(ch);
+    if (!st) { done += ch; t += 200; const r = s.update(done, t); if (r.st.includes(BAD)) bad++; steps++; continue; }
+    for (const m of st) { t += 200; const r = s.update(done + m, t, withHold ? { hold: Array.from(m).length } : undefined); if (r.st.includes(BAD)) bad++; steps++; }
+    done += ch; const r2 = s.update(done, t); if (r2.st.includes(BAD)) bad++;
+  }
+  return { s, bad, steps, t };
+}
+run('touch2', () => {
+  const feed = (target, values, hold) => { const s = new TJ.Session(target, { mode: 'char' }); const seen = values.map((v, i) => s.update(v, i * 300, hold ? { hold: hold[i] } : undefined).st.join('')); return { s, seen }; };
+  /* '에' = ㅇ → ㅇㆍ → 어 → 에 */
+  let p = feed('에요', ['ㅇ', 'ㅇㆍ', '어', '에', '에ㅇ', '에ㅇㆍ', '에ㅇᆢ', '에요']);
+  eq(p.seen.join(' '), '30 30 30 30 13 13 13 13', "'ㅇㆍ'·'ㅇᆢ' 가 보이는 동안 판정을 미룬다");
+  eq(p.s.typedKeys, 2, "그동안 센 키는 끝난 글자 '에'의 두 키뿐");
+  let res = p.s.finish(2400);
+  eq(res.typedKeys + ':' + res.okKeys + ':' + res.accuracy + ':' + res.missed.length, '4:4:100:0', '다 치면 4키, 정확도 100, 틀린 키 없음');
+  /* 호환 자모가 아닌 아래아(U+119E, U+11A2)와 가운뎃점도 같다 */
+  for (const mid of ['ㆍ', 'ᆞ', 'ᆢ', '·', '‥']) eq(view('어', 'ㅇ' + mid, { lenient: true }).st.join(''), '3', '중간 글자 U+' + mid.charCodeAt(0).toString(16));
+  eq(TJ.heldTail(Array.from('가ㅇㆍ'), 0) + ':' + TJ.heldTail(Array.from('가ㅇㆍㆍ'), 0) + ':' + TJ.heldTail(Array.from('가 ㆍ'), 0) + ':' + TJ.heldTail(Array.from('가'), 0) + ':' + TJ.heldTail(Array.from('가.'), 0) + ':' + TJ.heldTail([], 0), '2:3:1:1:0:0', '미룰 글자 수');
+  eq(TJ.heldTail(Array.from('한글'), 2) + ':' + TJ.heldTail(Array.from('한글'), 9) + ':' + TJ.heldTail(Array.from('a글'), 2) + ':' + TJ.heldTail(Array.from('cat'), 3), '2:2:1:0', '조합 중인 문자열이 한글이면 통째로(한글이 아닌 글자는 미루지 않는다)');
+  /* 조합 칸에 글자가 둘 이상 있어도(자판 앱이 단어를 통째로 조합 중일 때) 조합이 끝날 때까지 판정하지 않는다 */
+  p = feed('한글', ['ㅎ', '하', '한', '한ㄱ', '한그', '한글'], [1, 1, 1, 2, 2, 2]);
+  eq(p.seen.join(' '), '30 30 30 30 30 30', '조합 중인 두 글자 모두 판정을 미룬다'); eq(p.s.typedKeys, 0, '아직 센 키 없음');
+  res = p.s.finish(1800);
+  eq(res.typedKeys + ':' + res.okKeys + ':' + res.strokes, '6:6:6', '끝나면 여섯 키');
+  /* 틀리게 쓴 글자는 조합이 끝난 뒤(다음 글자가 온 뒤) 틀림으로 */
+  p = feed('에요', ['ㅇ', 'ㅇㆍ', '어', '어ㅇ']);
+  eq(p.seen.join(' '), '30 30 30 23', "'어'는 다음 글자가 온 뒤에 틀림"); eq(p.s.byKey['ㅔ'].miss, 1, '쳐야 했던 키 ㅔ에 적힌다');
+  /* 영어는 조합 중이라고 알려 와도 바로 판정한다(영어 자판의 단어 단위 조합) */
+  p = feed('cat', ['c', 'cx'], [1, 2]); eq(p.seen.join(' '), '100 120', '영어는 바로');
+  /* 끝나는 순간 중간 모양이 남아 있으면: 맞게 이어지는 키만 센다(아래아는 키가 아니다) */
+  p = feed('어', ['ㅇ', 'ㅇㆍ']); res = p.s.finish(600);
+  eq(res.typedKeys + ':' + res.strokes + ':' + res.badChars, '1:1:0', "'ㅇㆍ'에서 끝: ㅇ 하나만");
+  /* 연습 글 전부를 천지인 흉내로: 틀림 표시 0, 누른 키 = 두벌식으로 환산한 키 수(파이썬 기준값), 정확도 100 */
+  const per = REF.keys.per.split(';').map((x) => x.split(',').map(Number));
+  let bad = 0, wrong = 0, steps = 0;
+  ALL_KO.forEach((text, i) => {
+    for (const hold of [false, true]) {
+      if (hold && i % 3) continue;
+      const g = cjiRun(text, hold), r = g.s.finish(g.t);
+      bad += g.bad; steps += g.steps;
+      if (r.typedKeys !== per[i][0] || r.okKeys !== per[i][0] || r.accuracy !== 100 || r.missed.length || r.strokes !== H.strokeCount(text)) { wrong++; ok(false, '천지인 흉내 "' + text + '" 누른 키 ' + r.typedKeys + '/' + per[i][0] + ' 틀린 키 ' + r.missed.map((m) => m.key).join('')); }
+    }
+  });
+  ok(bad === 0 && wrong === 0 && steps > 20000, '천지인 흉내 ' + steps + '단계: 틀림 표시 ' + bad + '번, 숫자가 다른 글 ' + wrong);
+  /* 흉내가 정말 중간 모양을 내는지(시험이 헛돌지 않게) */
+  eq(cjiSteps('에').join(' ') + ' / ' + cjiSteps('려').join(' ') + ' / ' + cjiSteps('값').join(' '), 'ㅇ ㅇㆍ 어 에 / ㄹ ㄹㆍ ㄹᆢ 려 / ㄱ 기 가 갑 값', '천지인 흉내의 중간 모양');
+});
+
+/* ---- 20. 한/영(Caps Lock) 안내는 낱말 단위: 띄어쓰기를 넘어서도 이어지고, 그 구간은 세지 않는다 ---- */
+run('hintword', () => {
+  const hint = (t, i) => TJ.layoutHint(TJ.prepare(t).chars, H.toChars(i));
+  const zone = (t, i) => { const z = TJ.layoutZone(TJ.prepare(t).chars, H.toChars(i)); return z ? z.hint + z.from : null; };
+  eq(zone('turn done which', '셔구 '), 'en0', '띄어쓰기를 친 직후에도 안내'); eq(zone('turn done which', '셔구 ㅇ'), 'en0', '다음 낱말 첫 키'); eq(zone('turn done which', '셔구 애ㅜㄷ 조ㅑ'), 'en0', '세 낱말째');
+  eq(zone('한글 타자 연습', 'gksrmf xk'), 'ko0', '한글 글을 영문 자판으로 두 낱말'); eq(zone('한글 타자 연습', '한글 xkwk d'), 'ko3', '둘째 낱말부터면 거기서부터');
+  eq(zone('한글 타자', '한r'), 'ko1', '낱말 가운데서 바뀌면 그 자리부터'); eq(zone('the cat sat', 'thㄷ ㅊㅁ'), 'en2', '낱말 가운데서 바뀐 뒤 다음 낱말까지');
+  eq(zone('hello world', 'HELLO W'), 'caps0', 'Caps Lock: 다음 낱말은 첫 키부터'); eq(zone('a cat', 'A C'), 'caps0', '한 글자 낱말 둘이면 뒤집힌 글자가 둘');
+  eq(zone('Hello there', 'hELLO T'), 'caps0', 'Shift 를 누른 자리는 소문자로 뒤집힌다'); eq(zone('Hello there', 'HELLO T'), 'caps1', 'Shift 자리가 대문자로 남는 기기');
+  eq(hint('a cat', 'A '), null, '뒤집힌 글자 하나로는 알리지 않는다'); eq(hint('hello', 'Hel'), null, '첫 글자만 대문자는 그냥 틀린 글자'); eq(hint('it is', 'It Is'), null, '낱말마다 첫 글자만 대문자');
+  eq(zone('at 7:45, so', 'ㅁㅅ 7'), 'en0', '숫자·기호만 든 낱말은 자판과 상관없다(안내를 이어 간다)'); eq(zone('at 7:45, so', 'ㅁㅅ 7:45, 내'), 'en0', '그 뒤 낱말까지 한 구간');
+  eq(hint('at 7:45, so', 'at 7:4'), null, '맞게 친 숫자는 안내 없음'); eq(zone('office. Paper', 'ㅐㄹ럋ㄷ. ㅖ메ㄷㄱ'), 'en0', '낱말 안의 문장부호, Shift 를 누른 글자');
+  /* 그냥 틀린 글자는 낱말이 몇 개여도 알리지 않는다 */
+  eq(hint('hello world again', 'jrxxp ept;f qsdyb'), null, '영어 오타'); eq(hint('한글 타자 연습', '핫글 차자 연슥'), null, '한글 오타'); eq(hint('the cat', 'the car'), null, '맞는 자판의 오타');
+  eq(hint('the cat', '솓 ㅊㅁㄱ'), null, "반대 자판이어도 목표와 안 맞으면('car') 안내 없음"); eq(hint('the cat', '솓ㄱ '), null, '닫은 낱말은 끝까지 맞아야 한다'); eq(hint('there is', '소 '), null, "덜 치고 닫은 낱말('소' = 'th')은 안내하지 않는다"); eq(hint('there is', '소'), 'en', '치는 중인 낱말은 앞부분만 맞아도 안내');
+  eq(zone('한글 타자', 'gks xk'), 'ko4', "덜 치고 넘어간 낱말('gks' = '한')은 구간에 넣지 않는다(다음 낱말부터)"); eq(hint('한글 타자', 'gks '), null, '덜 치고 넘어간 낱말에서는 안내가 꺼진다'); eq(hint('한글', 'gksrmfx'), null, '목표보다 더 친 글자');
+  eq(zone('the cat sat', '솓 ㅊㅁㄱ ㄴㅁ'), 'en6', '틀린 낱말 뒤에 다시 반대 자판이면 그 낱말부터');
+  /* 한 판으로: 영어 글을 한글 자판으로 40키(평가의 사례) */
+  const en = 'turn done which jump could there land already';
+  const jam = Array.from(en).map((c) => H.Q2K[c] || c);
+  let s = new TJ.Session(en), hints = [];
+  twoStep(jam).forEach((vs, i) => vs.forEach((v) => hints.push(s.update(v, 1000 + i * 150).hint)));
+  ok(hints.every((h) => h === 'en'), '영어 글 + 한글 자판: 안내가 끝까지 떠 있다 ' + hints.filter((h) => h !== 'en').length + '/' + hints.length);
+  eq(s.typedKeys + ':' + s.okKeys + ':' + s.skippedKeys, '0:0:' + jam.length, '그동안 친 키는 하나도 세지 않는다');
+  eq(Object.keys(s.byKey).filter((k) => s.byKey[k].miss || s.byKey[k].hit).length + ':' + Object.keys(s.pairs).length, '0:0', '틀린 키 기록에도 안 남는다');
+  /* 지우고 영어로 다시 치면 정확도 100 */
+  let v = s.value; while (v) { v = Array.from(v).slice(0, -1).join(''); s.update(v, 9000, { del: true }); }
+  eq(s.cmp.hint, null, '지우면 안내가 사라진다');
+  Array.from(en).forEach((c, i) => s.update(en.slice(0, i + 1), 10000 + i * 100));
+  let res = s.finish(15000);
+  eq(res.typedKeys + ':' + res.okKeys + ':' + res.accuracy + ':' + res.skippedKeys, en.length + ':' + en.length + ':100:' + jam.length, '고쳐 친 뒤: 정확도 100, 세지 않은 키는 그대로');
+  /* 한글 글 + 영문 자판: 첫 낱말은 맞게 치고 둘째 낱말부터 */
+  s = new TJ.Session('한글 타자 연습'); hints = [];
+  ['ㅎ', '하', '한', '한ㄱ', '한그', '한글', '한글 '].forEach((x, i) => s.update(x, i * 100));
+  Array.from('xkwk dus').forEach((c, i, a) => hints.push(s.update('한글 ' + a.slice(0, i + 1).join(''), 1000 + i * 100).hint));
+  eq(hints.join(','), 'ko,ko,ko,ko,ko,ko,ko,ko', '둘째 낱말부터 안내'); eq(s.typedKeys + ':' + s.okKeys + ':' + s.skippedKeys, '7:7:8', '앞의 일곱 키만 센다');
+  /* Caps Lock: 첫 낱말의 첫 키만 잠깐 틀림으로 셌다가 되돌리고, 다음 낱말은 첫 키부터 안내 */
+  s = new TJ.Session('hello world again'); hints = [];
+  Array.from('HELLO WORLD AGAIN').forEach((c, i, a) => hints.push(s.update(a.slice(0, i + 1).join(''), i * 100).hint));
+  eq(hints[0] + ':' + hints.slice(1).every((h) => h === 'caps'), 'null:true', '둘째 키부터 끝까지 Caps Lock 안내(둘째·셋째 낱말은 첫 키부터)');
+  eq(s.typedKeys + ':' + s.okKeys + ':' + s.skippedKeys + ':' + (s.byKey.h ? s.byKey.h.miss : 0), '0:0:17:0', '전부 세지 않는다(처음에 센 한 키도 되돌림)');
+  /* 진짜 오타 여덟 개를 이어 쳐도 안내가 잘못 뜨지 않고 전부 틀린 키로 센다 */
+  s = new TJ.Session('typing is fun'); hints = [];
+  Array.from('yuoomh').forEach((c, i, a) => hints.push(s.update(a.slice(0, i + 1).join(''), i * 100).hint));
+  eq(hints.join(','), ',,,,,', '오타에는 안내 없음'); eq(s.typedKeys + ':' + s.okKeys + ':' + s.skippedKeys, '6:0:0', '여섯 키 모두 틀린 키');
+  /* 반대 자판으로 치다가 낱말 하나를 목표와 다르게 치면: 그 낱말에서 안내가 꺼지고, 다음 낱말을 다시 반대 자판으로 치면 그 낱말부터 다시 */
+  s = new TJ.Session('the cat sat'); hints = [];
+  ['ㅅ', '소', '솓', '솓 ', '솓 ㅊ', '솓 ㅊㅁ', '솓 ㅊㅁㄱ', '솓 ㅊㅁㄱ ', '솓 ㅊㅁㄱ ㄴ', '솓 ㅊㅁㄱ ㄴㅁ'].forEach((x, i) => hints.push(s.update(x, i * 100).hint || '-'));
+  eq(hints.join(','), 'en,en,en,en,en,en,-,-,en,en', '안 맞는 낱말에서 꺼지고 다음 낱말에서 다시');
+  eq(s.typedKeys + ':' + s.skippedKeys, '2:8', "안 맞은 키(ㄱ)와 그 뒤 띄어쓰기만 센다");
+});
+
+/* ---- 21. 연습 글(늘린 것)·최근 문장 피하기·총 속도·통과 기준 ---- */
+run('more', () => {
+  const P = TJ.pick;
+  /* 영어 문장 200개 이상, 팬그램 20개 이상(26자 전부). 팬그램과 문장은 겹치지 않는다 */
+  ok(EN.sentences.length >= 200, '영어 문장 ' + EN.sentences.length + '개(200개 이상)');
+  ok(EN.pangrams.length >= 20, '팬그램 ' + EN.pangrams.length + '개(20개 이상)');
+  EN.pangrams.forEach((t) => { eq(new Set(t.toLowerCase().replace(/[^a-z]/g, '')).size, 26, '팬그램에 26자 모두: ' + t); ok(/^[A-Z]/.test(t) && /[.?!]$/.test(t) && t.length >= 30 && t.length <= 85, '팬그램 꼴: ' + t); ok(!EN.sentences.includes(t), '문장 목록과 겹치지 않는다: ' + t); });
+  ok(EN.sentences.every((t) => new Set(t.toLowerCase().replace(/[^a-z]/g, '')).size < 26), '문장 목록에는 팬그램이 없다(팬그램은 따로 둔다)');
+  /* 겹침 검사: 글자만 남긴 꼴이 같은 문장, 한 문장이 다른 문장에 통째로 들어 있는 경우, 앞 다섯 단어가 같은 경우가 없다 */
+  for (const [name, list] of [['영어 문장', EN.sentences.concat(EN.pangrams)], ['한국어 문장', SENT.concat(KO.proverbs)]]) {
+    const norm = list.map((t) => t.toLowerCase().replace(/[^a-z0-9가-힣]/g, ''));
+    eq(new Set(norm).size, list.length, name + ' 글자만 남긴 꼴이 겹치지 않는다');
+    const inside = list.filter((t, i) => norm.some((o, j) => j !== i && o.length > norm[i].length && o.includes(norm[i])));
+    eq(inside.join(' | '), '', name + ' 다른 문장에 통째로 든 문장');
+    const head = list.map((t) => t.toLowerCase().split(' ').slice(0, 5).join(' ')).filter((h) => h.split(' ').length === 5);
+    eq(head.length - new Set(head).size, 0, name + ' 앞 다섯 단어가 같은 문장');
+  }
+  ok(!/  |[^\x20-\x7e]/.test(EN.sentences.concat(EN.pangrams).join('')), '영어 글: 겹 띄어쓰기·자판에 없는 글자 없음');
+  ok(EN.sentences.concat(EN.pangrams).every((t) => !/\b(\w+) \1\b/i.test(t) && !/ [,.?!;:]/.test(t)), '영어 글: 같은 단어 연달아·문장부호 앞 띄어쓰기 없음');
+  /* 주제를 옮기고 고친 한국어 문장 */
+  ok(!KO.sentences.work.some((t) => /농부|시 한 편|고양이/.test(t)), "'일' 주제에 일과 상관없는 문장이 없다");
+  ok(SENT.includes('비 오는 날에는 부침개 부치는 소리가 빗소리와 닮았어요.') && SENT.includes('호박을 얇게 썰어 부침가루를 묻혀 구웠어요.') && SENT.includes('숲속 오솔길에는 짙은 풀 냄새가 가득했어요.'), '고친 문장 셋');
+  ok(!SENT.join('').includes('부침 가루') && !SENT.join('').includes('풀냄새') && !SENT.join('').includes('굽는 소리'), '고치기 전 표기가 남아 있지 않다');
+  /* 문장 고르기: 최근에 나온 문장(avoid)은 안 나온 문장이 남아 있는 동안 다시 나오지 않는다 */
+  const list = EN.sentences;
+  const first = P.sentences(list, 330, P.rng(5));
+  eq(P.sentences(list, 330, P.rng(5), []).join('|'), first.join('|'), '피할 문장이 없으면 예전과 같은 글(오늘의 글이 바뀌지 않는다)');
+  ok(first.join(' ').length >= 330 && first.join(' ').length < 330 + 80, '달라는 길이를 채우고 넘치지 않는다: ' + first.join(' ').length);
+  let recent = [], seen = new Set(), rep = 0, rounds = 0;
+  for (let r = 0; r < 25; r++) {   /* 30초 판 25번('다른 글'을 25번 누른 평가의 사례) */
+    const got = P.sentences(list, 330, P.rng(1000 + r * 7919), recent);
+    got.forEach((t) => { if (seen.has(t)) rep++; seen.add(t); });
+    eq(new Set(got).size, got.length, r + '번째 판: 한 판 안에서 같은 문장이 되풀이되지 않는다');
+    recent = recent.filter((t) => !got.includes(t)).concat(got); rounds++;
+  }
+  eq(rep, 0, '25판(문장 ' + seen.size + '개) 동안 같은 문장이 다시 나오지 않는다');
+  /* 문장이 바닥나면 가장 오래전에 나온 것부터 다시 나온다 */
+  const few = ['a1', 'b2', 'c3', 'd4', 'e5', 'f6'];
+  eq(P.some(few, 2, P.rng(3), ['a1', 'b2', 'c3', 'd4']).slice().sort().join(','), 'e5,f6', '안 나온 문장 먼저');
+  eq(P.some(few, 4, P.rng(3), ['c3', 'a1', 'b2', 'd4']).slice(2).join(','), 'c3,a1', '그다음은 오래전에 나온 순서');
+  eq(P.some(few, 3, P.rng(3)).join(','), P.shuffle(few, P.rng(3)).slice(0, 3).join(','), '피할 문장이 없으면 그냥 섞어서 앞에서부터');
+  const s2 = P.sentences(few, 17, P.rng(4), ['f6', 'e5', 'd4', 'c3', 'b2', 'a1']);
+  eq(s2.slice(0, 6).join(','), 'f6,e5,d4,c3,b2,a1', '전부 나왔던 문장이면 오래된 순서로');
+  /* 팬그램만으로 120초 판(1,320자)을 채워도 한 바퀴 안에서는 되풀이되지 않는다 */
+  const pg = P.sentences(EN.pangrams, 1320, P.rng(9));
+  ok(pg.length <= EN.pangrams.length && new Set(pg).size === pg.length, '팬그램 120초 판: ' + pg.length + '문장, 되풀이 없음');
+  /* 총 속도: 틀렸거나 지운 것까지 누른 키 전부(지우기 키는 빼고) */
+  let r = TJ.report({ ms: 30000, strokes: 184, okChars: 92, typedKeys: 205, okKeys: 197, typedStrokes: 214 });
+  eq(r.grossWpm + ':' + r.grossSpeed + ':' + r.typedStrokes, '82:428:214', '총 WPM = 205 ÷ 5 ÷ 30 × 60 = 82, 총 타수 = 214 ÷ 30 × 60 = 428');
+  const type = (target, typed) => { const s = new TJ.Session(target); let v = ''; Array.from(typed).forEach((ch, i) => { const del = ch === '\b'; v = del ? v.slice(0, -1) : v + ch; s.update(v, i * 100, { del }); }); return s; };
+  r = TJ.report(type('hello world', 'hellp\bo world').finish(6000));
+  eq([r.wpm, r.grossWpm, r.typed, r.typedStrokes, r.grossSpeed].join(','), '22,24,12,12,120', '고친 사례: 순 22, 총 24 WPM, 누른 12타 ÷ 6초 × 60 = 120타/분');
+  r = TJ.report(type('Hi there', 'Hi there').finish(3000));
+  eq(r.typedStrokes + ':' + r.grossSpeed + ':' + r.speed, '9:180:180', '대문자는 Shift 포함 2타: 다 맞으면 총 타수 = 타수');
+  const sk = new TJ.Session('까치'); stepsFor(['ㄱ', '\b', 'ㄲ', 'ㅏ', 'ㅊ', 'ㅣ']).forEach((v, i) => sk.update(v, i * 100, { del: i === 1 }));
+  r = TJ.report(sk.finish(2000));
+  eq([r.strokes, r.typedStrokes, r.speed, r.grossSpeed, r.typed, r.ok].join(','), '5,6,150,180,5,4', "'까치'를 ㄱ으로 잘못 시작했다 고침: 맞게 친 5타, 누른 6타");
+  eq(TJ.report({ ms: 1000, strokes: 0, okChars: 0, typedKeys: 0, okKeys: 0 }).grossSpeed, 0, '아무것도 안 누르면 0');
+  /* 조각 글꼴(_dev/font.py 가 만든 것)에 연습 글의 글자가 전부 들어 있다. 연습 글을 고치고 font.py 를 안 돌리면 여기서 알려 준다 */
+  const fj = path.join(here, '..', '_dev', 'fonts.json');
+  ok(fs.existsSync(fj), '_dev/fonts.json 이 있다(python3 -B _dev/font.py)');
+  if (fs.existsSync(fj)) {
+    const F = JSON.parse(fs.readFileSync(fj, 'utf8')), ko = new Set(Array.from(F.ko.chars)), en = new Set(Array.from(F.en.chars));
+    const lesson = (l) => LES.list[l].flatMap((x) => x.words.concat(x.keys)).join('');
+    const koNeed = new Set(Array.from(ALL_KO.join('') + EN.words.join('') + EN.sentences.join('') + EN.pangrams.join('') + lesson('ko') + lesson('en') + 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣ'));
+    const enNeed = new Set(Array.from(EN.words.join('') + EN.sentences.join('') + EN.pangrams.join('') + lesson('en')));
+    eq([...koNeed].filter((c) => !ko.has(c)).join(''), '', '한국어 조각 글꼴에 없는 연습 글 글자');
+    eq([...enNeed].filter((c) => !en.has(c)).join(''), '', '영어 조각 글꼴에 없는 연습 글 글자');
+    /* 치는 중에 잠깐 보이는 모양(받침이 붙었다 넘어가는 글자 포함)도 들어 있다: 문장 연습의 '내가 친 글' 줄에 보인다 */
+    const mids = new Set(); SENT.concat(KO.proverbs).forEach((t) => stepsFor(H.keyStream(t)).forEach((v) => Array.from(v).forEach((c) => mids.add(c))));
+    eq([...mids].filter((c) => !ko.has(c)).join(''), '', '한국어 조각 글꼴에 없는 조합 중 모양(' + mids.size + '자 가운데)');
+    ok(fs.existsSync(path.join(here, '..', 'assets', 'fonts', F.ko.file)) && fs.existsSync(path.join(here, '..', 'assets', 'fonts', F.en.file)), '조각 글꼴 파일이 있다');
+  }
+  /* 통과 기준: 정확도 95% 이상, 반올림하기 전 값으로 */
+  eq([LES.pass(37, 39), LES.pass(38, 40), LES.pass(19, 20), LES.pass(36, 39), LES.pass(95, 100), LES.pass(949, 1000), LES.pass(0, 0), LES.pass(20, 20)].join(','), 'false,true,true,false,true,false,false,true', '94.87% 탈락, 95.0% 통과, 92.3% 탈락, 94.9% 탈락');
+  r = TJ.report({ ms: 30000, strokes: 37, okChars: 37, typedKeys: 39, okKeys: 37 });
+  eq(r.accuracy + ':' + r.accuracy1, '95:94.8', '94.87%: 반올림하면 95, 소수 한 자리(버림)는 94.8');
+  eq(TJ.report({ ms: 30000, strokes: 1, okChars: 1, typedKeys: 40, okKeys: 38 }).accuracy1, 95, '95.0%');
 });
 
 /* ---- 결과 ---- */

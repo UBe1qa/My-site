@@ -20,6 +20,8 @@ JS = {
         'formulaKo': '맞게 친 {n}타 ÷ {t}초 × 60 = {s}타/분', 'formulaEn': '맞게 친 {n}자 ÷ 5 ÷ {t}초 × 60 = {s} WPM',
         'alsoWpm': '{w} WPM',
         'accDetail': '누른 키 {typed}개 중 {ok}개 맞음',
+        'rawKo': '총 타수 {s}타/분 = 누른 {n}타 ÷ {t}초 × 60', 'rawEn': '총 WPM {w} = 누른 키 {n}개 ÷ 5 ÷ {t}초 × 60', 'rawAlso': '총 WPM {w}',
+        'withPunct': '문장부호', 'withNums': '숫자', 'recMore': '더 보기({n}개)', 'recLess': '접기',
         'skipped': '한/영이나 Caps Lock이 반대로 켜진 동안 친 키 {n}개는 세지 않았어요.',
         'first': '첫 기록이에요. 다음 판부터 이 기록과 견줘요.',
         'diffUp': '지난번보다 +{d}{u}', 'diffDown': '지난번보다 −{d}{u}', 'diffSame': '지난번과 같아요', 'bestIs': '내 최고 {b}{u}',
@@ -35,7 +37,7 @@ JS = {
                       'Shift를 누른 채 치는 ㄲㄸㅃㅆㅉ과 ㅒㅖ. Shift는 반대쪽 손 새끼손가락으로 눌러요.',
                       '배운 키를 모두 써서 짧은 문장을 쳐요.'],
         'passed': '{n}단계 통과예요.', 'passedAll': '마지막 단계까지 통과했어요. 이제 속도 측정으로 가 보세요.',
-        'notPassed': '정확도가 {a}%를 넘으면 다음 단계로 가요.', 'nextLesson': '다음 단계: {name}', 'againBtn': '한 번 더',
+        'notPassed': '정확도가 {a}% 이상이면 다음 단계로 가요.', 'nextLesson': '다음 단계: {name}', 'againBtn': '한 번 더',
         'nextKey': '다음 키', 'fingers': ['엄지', '왼손 새끼손가락', '왼손 약손가락', '왼손 가운뎃손가락', '왼손 집게손가락', '오른손 집게손가락', '오른손 가운뎃손가락', '오른손 약손가락', '오른손 새끼손가락'],
         'kbShow': '자판 보기', 'kbHide': '자판 가리기',
         'todayAt': '오늘 {t}', 'dateFmt': '{m}월 {d}일', 'bestTag': '최고', 'recBest': '{c} 최고 {b}{u}',
@@ -54,6 +56,8 @@ JS = {
         'formulaKo': '{n} correct keystrokes ÷ {t} s × 60 = {s} per minute', 'formulaEn': '{n} correct characters ÷ 5 ÷ {t} s × 60 = {s} WPM',
         'alsoWpm': '{w} WPM',
         'accDetail': '{ok} of {typed} key presses correct',
+        'rawKo': 'Raw {s} keystrokes per minute = {n} keystrokes ÷ {t} s × 60', 'rawEn': 'Raw {w} WPM = {n} key presses ÷ 5 ÷ {t} s × 60', 'rawAlso': 'raw {w} WPM',
+        'withPunct': 'punctuation', 'withNums': 'numbers', 'recMore': 'Show all ({n})', 'recLess': 'Show fewer',
         'skipped': '{n} key presses made with the wrong keyboard layout or Caps Lock were not counted.',
         'first': 'Your first result. The next one will be compared with it.',
         'diffUp': '+{d}{u} from last time', 'diffDown': '−{d}{u} from last time', 'diffSame': 'Same as last time', 'bestIs': 'your best {b}{u}',
@@ -68,7 +72,7 @@ JS = {
                       'Capitals and marks that need Shift. Hold Shift with the little finger of the other hand.',
                       'Short sentences that use every key you have practiced.'],
         'passed': 'Step {n} passed.', 'passedAll': 'You passed the last step. Try the typing test next.',
-        'notPassed': 'Reach {a}% accuracy to move on to the next step.', 'nextLesson': 'Next step: {name}', 'againBtn': 'Once more',
+        'notPassed': 'Reach {a}% accuracy or higher to move on to the next step.', 'nextLesson': 'Next step: {name}', 'againBtn': 'Once more',
         'nextKey': 'Next key', 'fingers': ['thumb', 'left little finger', 'left ring finger', 'left middle finger', 'left index finger', 'right index finger', 'right middle finger', 'right ring finger', 'right little finger'],
         'kbShow': 'Show keyboard', 'kbHide': 'Hide keyboard',
         'todayAt': 'Today {t}', 'dateFmt': '{m}/{d}', 'bestTag': 'best', 'recBest': '{c}: best {b} {u}',
@@ -83,9 +87,10 @@ TX = {
         'guides': '가이드', 'about': '소개', 'privacy': '개인정보 처리방침', 'contact': '문의', 'ad': '광고', 'home': '타자 속도 측정으로 가기',
         'lumen': '만든 곳 루멘랩', 'lumen_s': '다른 앱과 도구 보기',
         'kind_l': '글', 'more': '설정', 'mode_l': '재는 방법', 'mode_time': '시간', 'mode_count': '분량', 'punct': '문장부호 넣기', 'nums': '숫자 넣기',
-        'keys_note': '<kbd>Tab</kbd> 다른 글 · <kbd>Esc</kbd> 처음으로',
-        'start_pc': '첫 글자부터 치면 바로 시작해요', 'start_mo': '글을 누르면 자판이 열려요',
-        'trap': '화면에 보이는 글을 따라 치세요', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 시간(초)', 'nextkey': '다음 키',
+        'keys_note': '<kbd>Tab</kbd> 다른 글 · <kbd>Esc</kbd> 처음으로(치는 칸에서 나오기)',
+        'esc_note': '<kbd>Esc</kbd>를 누르면 치는 칸에서 나와요.',
+        'start_pc': '첫 글자부터 치면 바로 시작해요', 'start_off': '글을 누르거나 아무 키나 치면 시작해요', 'start_mo': '글을 누르면 자판이 열려요',
+        'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 시간(초)', 'nextkey': '다음 키',
         'fresh': '다른 글', 'quit': '그만', 'quit2': '처음 화면으로',
         'acc': '정확도', 'again': '다른 글로 다시', 'same': '같은 글 다시', 'drill': '틀린 키만 연습', 'share': '결과 그림 저장',
         'chart_aria': '초마다 속도 그래프', 'chart_cap': '초마다 속도', 'chart_err': '틀린 키가 있던 초',
@@ -103,9 +108,10 @@ TX = {
         'guides': 'Guides', 'about': 'About', 'privacy': 'Privacy', 'contact': 'Contact', 'ad': 'Ad', 'home': 'Go to the typing test',
         'lumen': 'Made by Lumen Lab', 'lumen_s': 'See our other apps and tools',
         'kind_l': 'Text', 'more': 'Settings', 'mode_l': 'Measure by', 'mode_time': 'Time', 'mode_count': 'Length', 'punct': 'Add punctuation', 'nums': 'Add numbers',
-        'keys_note': '<kbd>Tab</kbd> new text · <kbd>Esc</kbd> reset',
-        'start_pc': 'Type the first letter to start', 'start_mo': 'Tap the text to open your keyboard',
-        'trap': 'Type the text shown on screen', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Seconds left', 'nextkey': 'Next key',
+        'keys_note': '<kbd>Tab</kbd> new text · <kbd>Esc</kbd> reset and leave the typing field',
+        'esc_note': 'Press <kbd>Esc</kbd> to leave the typing field.',
+        'start_pc': 'Type the first letter to start', 'start_off': 'Click the text or press any key to start', 'start_mo': 'Tap the text to open your keyboard',
+        'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Seconds left', 'nextkey': 'Next key',
         'fresh': 'New text', 'quit': 'Stop', 'quit2': 'Back to start',
         'acc': 'Accuracy', 'again': 'Try again', 'same': 'Same text', 'drill': 'Practice missed keys', 'share': 'Save result image',
         'chart_aria': 'Speed for each second', 'chart_cap': 'Speed each second', 'chart_err': 'a second with a missed key',
@@ -146,7 +152,7 @@ TOOLS = {
         title='한글 타자 자리 연습: 두벌식 기본 자리부터 다섯 단계 | 토독', h1='타자 자리 연습',
         desc='두벌식 자판을 기본 자리, 윗줄, 아랫줄, Shift 키, 전체 순서로 익히는 무료 자리 연습이에요. 화면 자판이 다음에 누를 키와 손가락을 알려 줘요.',
         app_name='토독 타자 자리 연습',
-        basis='배운 키만으로 칠 수 있는 글이 나와요. 정확도가 95%를 넘으면 다음 단계로 가요.',
+        basis='배운 키만으로 칠 수 있는 글이 나와요. 정확도가 95% 이상이면 다음 단계로 가요.',
         safe='친 글과 기록은 이 기기 밖으로 나가지 않아요.',
     ),
     ('ko', 'sentences'): dict(
@@ -178,7 +184,7 @@ TOOLS = {
         title='Typing Practice: Home Row to Full Keyboard, with a Finger Guide | Todok', h1='Typing Practice',
         desc='Free touch typing practice in five steps: home row, top row, bottom row, Shift, then full sentences. An on-screen keyboard shows the next key and the finger to use.',
         app_name='Todok Typing Practice',
-        basis='Each step only uses keys you have already practiced. Reach 95% accuracy to move on.',
+        basis='Each step only uses keys you have already practiced. Reach 95% accuracy or higher to move on.',
         safe='What you type and your results stay on this device.',
     ),
 }
@@ -188,29 +194,30 @@ BASIS = {
     'ko': [
         ('타수(타/분)', '맞게 친 키 수 ÷ 걸린 시간(초) × 60. 두벌식 키로 세어요. 쌍자음(ㄲㄸㅃㅆㅉ)과 ㅒ·ㅖ, 영어 대문자는 Shift를 같이 누르니 2타, 겹받침(ㄳ = ㄱ + ㅅ)과 겹모음(ㅘ = ㅗ + ㅏ)은 키 두 개라 2타, 띄어쓰기와 줄바꿈은 1타예요. 예: \'한글 타자\'는 3 + 3 + 1 + 2 + 2 = 11타.'),
         ('끝났을 때의 글 기준', '타수에는 끝났을 때 화면에 맞게 남아 있는 키만 들어가요. 틀렸다가 고쳐 친 키는 한 번만 세어요.'),
-        ('정확도', '맞게 누른 키 ÷ 누른 키. 키가 눌린 그 순간 맞았는지로 세니까, 고쳐 쳐도 틀렸던 기록은 남아요. 지우기(Backspace)는 누른 키에 넣지 않아요.'),
+        ('정확도', '맞게 누른 키 ÷ 누른 키. 키가 눌린 그 순간 맞았는지로 세니까, 고쳐 쳐도 틀렸던 기록은 남아요. 지우기(Backspace)는 누른 키에 넣지 않아요. 누른 키는 실제로 누른 횟수예요. 받침이 다음 글자로 넘어가느라 화면 글자가 두 번 바뀌어도 한 번만 세어요.'),
+        ('총 타수', '틀렸거나 지운 것까지, 누른 키 전부의 타수 ÷ 걸린 시간(초) × 60. 지우기(Backspace)는 넣지 않아요. 결과의 정확도 아래에 작게 나와요.'),
         ('틀린 키와 느린 키', '틀린 키는 \'그때 쳐야 했던 키\'에 적어요(ㄴ 자리에 ㅅ을 치면 ㄴ에 1번). 느린 키는 맞게 친 키의 앞 키와의 간격 평균이 전체 평균보다 긴 키예요. 3초 넘게 쉰 간격과 세 번 못 친 키는 빼요.'),
         ('한글은 키 흐름으로 비교', '글자 모양이 아니라 두벌식 키 순서끼리 견줘요. 그래서 조합 중인 글자(\'한\'을 치는 중의 \'하\')와 받침이 다음 글자로 넘어가는 순간(\'간\' → \'가나\')을 틀렸다고 하지 않아요.'),
-        ('한/영·Caps Lock이 반대일 때', '안내가 뜬 동안 친 키는 정확도와 틀린 키 기록에 넣지 않아요. 자판 전환 실수는 타자 실력이 아니니까요.'),
+        ('한/영·Caps Lock이 반대일 때', '안내가 뜬 동안 친 키는 정확도와 틀린 키 기록에 넣지 않아요. 띄어쓰기를 넘어 여러 단어를 그렇게 쳐도 같아요. 자판 전환 실수는 타자 실력이 아니니까요.'),
         ('시간', '첫 키에서 시작하고, 탭이 가려지면 멈춰요. 결과의 시간은 0.1초까지 반올림한 값이고, 타수는 그 시간으로 계산해 반올림해요. 그래서 화면의 식을 그대로 다시 계산하면 같은 수가 나와요.'),
-        ('휴대폰 자판', '천지인 같은 터치 자판은 누른 키를 알 수 없어서 글자가 끝날 때 판정하고, 글자를 두벌식 키 수로 환산해요. 느린 키는 재지 않아요.'),
-        ('다른 프로그램과의 차이', '타수를 세는 방법은 프로그램마다 다를 수 있어요. 토독의 숫자가 다른 곳과 같다고 하지 않아요.'),
+        ('휴대폰 자판', '터치 자판은 어떤 키를 눌렀는지 알 수 없어서 글자가 끝날 때 판정하고, 글자를 두벌식 키 수로 환산해요. 지웠다가 같은 글자를 다시 치면 한 번만 세고, 느린 키는 재지 않아요. 자판 앱에 따라 다르게 보일 수 있어요.'),
+        ('다른 프로그램과의 차이', '타수를 세는 방법은 프로그램마다 다를 수 있어요. 토독에서는 틀린 채 둔 글자가 속도에서 빠지고 정확도에 남아요. 틀린 단어 전체를 빼는 곳과는 숫자가 달라요. 토독의 숫자가 다른 곳과 같다고 하지 않아요.'),
     ],
     'en': [
         ('WPM', 'Correct characters ÷ 5 ÷ seconds × 60. One "word" is any five characters, spaces included. This is net WPM: only characters that are correct in the final text count.'),
-        ('Raw speed', 'Every key press ÷ 5 ÷ minutes, including the ones you got wrong or erased. Backspace itself is not counted.'),
+        ('Raw speed', 'Every key press ÷ 5 ÷ seconds × 60, including the ones you got wrong or erased. Backspace itself is not counted. It is shown in small print under the accuracy.'),
         ('Accuracy', 'Correct key presses ÷ all key presses. A key is judged at the moment you press it, so a mistake you go back and fix still counts against accuracy.'),
         ('Missed and slow keys', 'A miss is recorded on the key you should have pressed (typing "r" where "e" was expected counts against "e"). A slow key is one whose average gap from the previous key is longer than your overall average. Pauses longer than 3 seconds and keys typed fewer than three times are left out.'),
-        ('Wrong layout or Caps Lock', 'While the "switch your keyboard" or Caps Lock notice is showing, key presses are not counted toward accuracy or missed keys.'),
+        ('Wrong layout or Caps Lock', 'While the "switch your keyboard" or Caps Lock notice is showing, key presses are not counted toward accuracy or missed keys, even when it lasts for several words.'),
         ('Time', 'The clock starts on your first key and pauses when the tab is hidden. The time in the result is rounded to 0.1 s first, and WPM is calculated from that rounded time, so the formula on screen gives the same number if you redo it by hand.'),
-        ('Touch keyboards', 'On a phone we cannot see individual keys, so each character is judged when it is complete. Slow keys are not timed.'),
-        ('Other sites', 'Typing sites do not all count the same way. We do not claim our numbers match anyone else\'s.'),
+        ('Touch keyboards', 'On a phone we cannot see individual keys, so each character is judged when it is complete. If you erase a character and type the same one again, it is counted once. Slow keys are not timed. Keyboard apps differ, so results can look different from one app to another.'),
+        ('Other sites', 'Typing sites do not all count the same way. Here a character you leave wrong is left out of WPM and stays in accuracy, so a site that drops the whole word around a mistake will show a lower number. We do not claim our numbers match anyone else\'s.'),
     ],
 }
 
 # 영타 연습(한국어 화면, 영어 글)에 더하는 기준
 BASIS_ENGLISH = [
-    ('WPM', '맞게 친 글자 수 ÷ 5 ÷ 걸린 시간(초) × 60. 다섯 글자를 한 단어로 쳐요(띄어쓰기 포함).'),
+    ('WPM', '맞게 친 글자 수 ÷ 5 ÷ 걸린 시간(초) × 60. 다섯 글자를 한 단어로 쳐요(띄어쓰기 포함). 총 WPM은 틀렸거나 지운 것까지 누른 키 전부로 같은 계산을 한 값이에요.'),
     ('영어 타수', '맞게 친 키 수 ÷ 걸린 시간(초) × 60. 대문자와 Shift가 필요한 기호(? ! : " 등)는 2타예요. 예: \'Hi there\'는 2 + 1 + 1 + 5 = 9타.'),
 ]
 
@@ -218,14 +225,14 @@ FAQ = {
     ('ko', 'test'): [
         ('다른 타자 프로그램과 타수가 왜 다른가요?', '프로그램마다 세는 기준이 다를 수 있어요. 토독은 끝났을 때 맞게 남은 키만 세고, Shift를 같이 누르는 키는 2타로 세어요. 그래서 다른 곳의 숫자와 같다고 하지 않아요. 기준은 위 \'계산 기준\'에 전부 적어 뒀어요.'),
         ('기록은 어디에 저장되나요?', '이 기기의 브라우저 저장소에만 남아요. 서버로 보내지 않고, 회원 가입도 없어요. \'내 기록\' 칸의 \'기록 지우기\'를 누르면 바로 지워져요. 다른 기기나 다른 브라우저에서는 보이지 않아요.'),
-        ('휴대폰에서도 잴 수 있나요?', '돼요. 다만 천지인 같은 터치 자판은 누른 키를 알 수 없어서 글자 단위로 판정하고, 글자를 두벌식 키 수로 환산해요. 그래서 컴퓨터 자판으로 잰 타수와 그대로 견주기는 어려워요.'),
+        ('휴대폰에서도 잴 수 있나요?', '잴 수 있어요. 터치 자판은 어떤 키를 눌렀는지 알 수 없어서 글자가 끝날 때 판정하고, 글자를 두벌식 키 수로 환산해요. 자판 앱에 따라 다르게 보일 수 있고, 컴퓨터 자판으로 잰 타수와 그대로 견주기는 어려워요.'),
         ('한글을 치는 중에 왜 틀렸다고 안 나오나요?', '글자가 아니라 키 순서로 비교해서 그래요. \'한\'을 치는 중에 보이는 \'하\'나, 받침이 다음 글자로 넘어가기 직전의 모양은 맞게 치는 중이라 틀림으로 표시하지 않아요. 틀린 키를 누른 순간에는 바로 주홍색으로 바뀌어요.'),
     ],
     ('en', 'test'): [
         ('How is WPM calculated here?', 'Correct characters ÷ 5 ÷ minutes. A "word" is any five characters, spaces included, so long and short words are treated the same. The result screen shows the numbers that went into your score.'),
         ('Why do I get a different score on another typing site?', 'Sites differ on what they count: every key press or only correct characters, whether fixed mistakes still count, and how long the test runs. We list our rules above and do not claim to match other sites.'),
         ('Where are my results stored?', 'In this browser, on this device only. Nothing you type is sent to a server and there is no account. The "Clear results" button under "Your results" deletes them.'),
-        ('Does the test work on a phone?', 'Yes. A touch keyboard does not report individual keys, so the test judges each character when it is complete and does not time slow keys. Scores from a phone and a physical keyboard are not directly comparable.'),
+        ('Does the test work on a phone?', 'Yes. A touch keyboard does not report individual keys, so the test judges each character when it is complete and does not time slow keys. Keyboard apps differ, so results can look different from one app to another, and scores from a phone and a physical keyboard are not directly comparable.'),
     ],
 }
 
@@ -235,11 +242,11 @@ EXPLAIN = {
     ('en', 'test'): [],
     ('ko', 'practice'): [
         ('손가락마다 맡은 키가 있어요', '<p>두 손 집게손가락을 ㄹ(F)과 ㅓ(J)에 올려요. 두 키에는 손끝으로 찾을 수 있는 작은 돌기가 있어요. 나머지 손가락은 옆 키에 차례로 놓고, 각 손가락은 자기 줄의 위아래 키만 맡아요. 화면 자판에서 지금 누를 키가 가지색으로 켜지고, 그 아래에 어느 손가락인지 나와요.</p>'),
-        ('단계는 다섯 개예요', '<ol class="steps-list"><li><b>기본 자리</b> ㅁㄴㅇㄹ ㅎㅗ ㅓㅏㅣ</li><li><b>윗줄</b> ㅂㅈㄷㄱㅅ ㅛㅕㅑㅐㅔ</li><li><b>아랫줄</b> ㅋㅌㅊㅍ ㅠㅜㅡ</li><li><b>Shift 키</b> ㄲㄸㅃㅆㅉ ㅒㅖ</li><li><b>전체</b> 짧은 문장</li></ol><p>단계마다 앞에서 배운 키와 새 키만 나와요. 정확도 95%를 넘으면 다음 단계가 열려요. 순서를 건너뛰어도 괜찮아요.</p>'),
+        ('단계는 다섯 개예요', '<ol class="steps-list"><li><b>기본 자리</b> ㅁㄴㅇㄹ ㅎㅗ ㅓㅏㅣ</li><li><b>윗줄</b> ㅂㅈㄷㄱㅅ ㅛㅕㅑㅐㅔ</li><li><b>아랫줄</b> ㅋㅌㅊㅍ ㅠㅜㅡ</li><li><b>Shift 키</b> ㄲㄸㅃㅆㅉ ㅒㅖ</li><li><b>전체</b> 짧은 문장</li></ol><p>단계마다 앞에서 배운 키와 새 키만 나와요. 정확도가 95% 이상이면 다음 단계를 권해요. 순서를 건너뛰어도 괜찮아요.</p>'),
     ],
     ('en', 'practice'): [
         ('Every finger has its own keys', '<p>Rest your index fingers on F and J. Both keys have a small bump you can find without looking. The other fingers sit on the keys beside them, and each finger only reaches for the keys directly above and below its own. The on-screen keyboard lights the next key and names the finger under it.</p>'),
-        ('Five steps', '<ol class="steps-list"><li><b>Home row</b> A S D F G H J K L ;</li><li><b>Top row</b> Q W E R T Y U I O P</li><li><b>Bottom row</b> Z X C V B N M , .</li><li><b>Shift</b> capitals and ? ! : "</li><li><b>All keys</b> short sentences</li></ol><p>Each step uses only the new keys and the ones before them. Pass 95% accuracy and the next step is suggested. You can also jump to any step.</p>'),
+        ('Five steps', '<ol class="steps-list"><li><b>Home row</b> A S D F G H J K L ;</li><li><b>Top row</b> Q W E R T Y U I O P</li><li><b>Bottom row</b> Z X C V B N M , .</li><li><b>Shift</b> capitals and ? ! : "</li><li><b>All keys</b> short sentences</li></ol><p>Each step uses only the new keys and the ones before them. Reach 95% accuracy or higher and the next step is suggested. You can also jump to any step.</p>'),
     ],
     ('ko', 'sentences'): [
         ('보고 치는 글과 내가 친 글을 나란히', '<p>위 줄이 보고 칠 글, 아래 줄이 내가 친 글이에요. 틀린 글자는 위 줄에서 바로 주홍색으로 바뀌어요. 문장을 다 치고 띄어쓰기나 Enter를 누르면 다음 문장이 올라와요.</p>'),
@@ -274,7 +281,7 @@ ABOUT = {
 <h2>확인하지 못한 것</h2>
 <p>실제 한글 입력기(윈도우·맥·아이폰·안드로이드)는 기기마다 조금씩 다르게 움직여요. 이상하게 재지는 곳이 있으면 아래 메일로 알려 주세요. 어떤 기기와 브라우저였는지 같이 적어 주시면 고치기 쉬워요.</p>
 <h2>만든 곳</h2>
-<p>루멘랩(Lumen Lab)이 만들고 운영해요. 글꼴은 Pretendard(길형진, SIL 오픈 폰트 라이선스 1.1)를 써요. 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩 본페이지</a>에 있어요.</p>
+<p>루멘랩(Lumen Lab)이 만들고 운영해요. 글꼴은 Pretendard(길형진, SIL 오픈 폰트 라이선스 1.1)에서 이 사이트에 나오는 글자만 남긴 조각을 써요(<a href="/assets/fonts/OFL.txt">라이선스 전문</a>). 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩 본페이지</a>에 있어요.</p>
 <h2>문의</h2>
 <p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
     ),
@@ -298,7 +305,7 @@ ABOUT = {
 <h2>What we could not check</h2>
 <p>Keyboards and input methods behave a little differently from device to device. If something is measured oddly, write to the address below and include your device and browser.</p>
 <h2>Who makes it</h2>
-<p>Todok is made and run by Lumen Lab. The typeface is Pretendard by Kil Hyung-jin, under the SIL Open Font License 1.1. Our other apps and tools are at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>
+<p>Todok is made and run by Lumen Lab. The typeface is a subset of Pretendard by Kil Hyung-jin, kept to the characters this site uses, under the SIL Open Font License 1.1 (<a href="/assets/fonts/OFL.txt">license text</a>). Our other apps and tools are at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>
 <h2>Contact</h2>
 <p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
     ),
@@ -329,9 +336,9 @@ PRIVACY = {
 <h2>광고</h2>
 <p>이 사이트는 Google 애드센스로 광고를 보여 줘요. Google을 비롯한 광고 회사는 쿠키를 써서 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 고를 수 있어요. 광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요. Google이 이 정보를 어떻게 쓰는지는 <a href="{PARTNER}" rel="noopener">Google 파트너 사이트에서 Google이 데이터를 사용하는 방식</a>에 있어요. 맞춤 광고는 <a href="{ADSET}" rel="noopener">Google 광고 설정</a>에서 끌 수 있어요.</p>
 <h2>방문 통계</h2>
-<p>방문 통계는 <a href="{CFWA}" rel="noopener">Cloudflare Web Analytics</a>로 봐요. 어느 페이지를 몇 번 봤는지, 페이지가 얼마나 빨리 떴는지 같은 숫자예요. Cloudflare 설명으로는 쿠키나 기기 저장소를 쓰지 않아요. 이 사이트에서 친 글과 기록, 설정은 여기에 실리지 않아요.</p>
+<p>방문 통계는 <a href="{CFWA}" rel="noopener">Cloudflare Web Analytics</a>로 봐요. 어느 페이지를 몇 번 봤는지와 브라우저 종류, 페이지가 얼마나 빨리 떴고 어디가 느렸는지 같은 성능 정보예요. Cloudflare 설명으로는 쿠키나 기기 저장소를 쓰지 않아요. 이 사이트에서 친 글과 기록, 설정은 여기에 실리지 않아요.</p>
 <h2>글꼴과 서버 기록</h2>
-<p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 친 글은 받지 않아요.</p>
+<p>화면 글자의 글꼴은 이 사이트에서 같이 받아요. 그 파일에 없는 드문 글자가 화면에 나올 때만 공개 전송망인 jsDelivr에서 그 글자의 글꼴을 받고, 그때는 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 친 글은 받지 않아요.</p>
 <h2>문의</h2>
 <p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
     ),
@@ -354,9 +361,9 @@ PRIVACY = {
 <h2>Ads</h2>
 <p>This site shows ads through Google AdSense. Google and other ad vendors use cookies to serve ads based on your visits to this and other websites. Because of these ads, third parties such as Google may place or read cookies in your browser and collect information through web beacons (tiny invisible images). See <a href="{PARTNER}" rel="noopener">how Google uses information from sites or apps that use its services</a>. You can turn off personalized ads in <a href="{ADSET}" rel="noopener">Google Ad Settings</a>.</p>
 <h2>Visit statistics</h2>
-<p>We look at visit statistics through <a href="{CFWA}" rel="noopener">Cloudflare Web Analytics</a>: which pages were viewed and how fast they loaded. According to Cloudflare, it does not use cookies or local storage. Nothing you type, and none of your results or settings, is included.</p>
+<p>We look at visit statistics through <a href="{CFWA}" rel="noopener">Cloudflare Web Analytics</a>: which pages were viewed, the kind of browser, and performance details such as how fast a page loaded and which part of it was slow. According to Cloudflare, it does not use cookies or local storage. Nothing you type, and none of your results or settings, is included.</p>
 <h2>Fonts and server logs</h2>
-<p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives what you type.</p>
+<p>The font for the text on screen comes from this site. Only when a rare character that is not in that file appears does the page fetch a font for it from jsDelivr, a public content network, which then receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives what you type.</p>
 <h2>Contact</h2>
 <p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
     ),

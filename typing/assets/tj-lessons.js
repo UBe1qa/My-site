@@ -61,10 +61,12 @@
     var d = drills(les.keys, rand, les.id === 'shift' ? 4 : 6), w = P.shuffle(les.words, rand).slice(0, 12);
     return d.concat(w).join(' ');
   }
-  /* 통과 기준: 정확도 95% 이상 */
+  /* 통과 기준: 정확도 95% 이상. 반올림하기 전 값으로 따진다(94.87%는 화면에 95%로 보여도 통과가 아니다).
+     ok = 맞게 누른 키, typed = 누른 키. 나눗셈 없이 정수로 견준다 */
   var PASS_ACC = 95;
+  function pass(ok, typed) { return typed > 0 && ok * 100 >= PASS_ACC * typed; }
 
-  var out = { list: L, text: text, drills: drills, PASS_ACC: PASS_ACC };
+  var out = { list: L, text: text, drills: drills, PASS_ACC: PASS_ACC, pass: pass };
   if (typeof module !== 'undefined' && module.exports) module.exports = out;
   else TJ.lessons = out;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -94,6 +94,7 @@ ARTICLES['ko'].append(dict(
 <h2>틀린 키는 어떻게 되나요</h2>
 <p>타수에는 <b>끝났을 때 맞게 남아 있는 키</b>만 들어가요. '한글 타자'를 '핫글 타자'로 치고 고치지 않았다면, 틀린 ㅅ 하나를 뺀 <b class="num" data-ok="한글 타자|핫글 타자">10</b>타만 세어요. 틀렸다가 지우고 다시 쳤다면 11타가 다 들어가요. 고친 키는 한 번만 세니까요.</p>
 <p>정확도는 따로 세어요. 맞게 누른 키 ÷ 누른 키인데, 키가 눌린 그 순간 맞았는지로 따져요. '한글'을 치다가 ㄴ 자리에 ㅅ을 눌렀다가 지우고 다시 쳤다면, 누른 키 7개 가운데 6개가 맞았으니 정확도는 {acc(6, 7, 86)}%예요. 지우기 키는 누른 키에 넣지 않아요. 그래서 고쳐 치면 타수는 지켜지지만 정확도에는 흔적이 남아요.</p>
+<p>틀린 글자를 고치지 않고 그대로 두면 그 글자만 타수에서 빠지고, 정확도에는 틀린 키로 남아요. 틀린 글자가 든 단어 전체를 빼는 프로그램과는 숫자가 달라요. 결과 화면의 정확도 아래에는 틀렸거나 지운 것까지 누른 키 전부로 계산한 '총 타수'도 작게 나와요.</p>
 <h2>다른 프로그램과 숫자가 다를 수 있는 이유</h2>
 <p>타수를 세는 방법은 하나로 정해져 있지 않아요. 프로그램마다 아래 같은 곳에서 기준이 갈릴 수 있어요.</p>
 <ul>
@@ -104,9 +105,9 @@ ARTICLES['ko'].append(dict(
 </ul>
 <p>그래서 토독의 숫자를 다른 프로그램의 숫자와 그대로 견주기는 어려워요. 같은 도구로 잰 어제의 내 기록과 견주는 쪽이 정확해요. 토독의 기준 전체는 <a href="/ko/#basis">계산 기준</a>에 있어요.</p>
 <h2>영어의 WPM과는 다른 단위예요</h2>
-<p>영어권에서는 분당 단어 수(WPM)를 써요. 다섯 글자를 한 단어로 치고 맞게 친 글자 수 ÷ 5 ÷ 분으로 계산해요. 이 정의는 타자 연구에서도 그대로 써요(<a href="{PAPER}" rel="noopener">Dhakal 외, CHI 2018</a>, 2026-10-10 확인). 한글 타수는 글자가 아니라 키를 세니까, 타수를 5로 나눈다고 WPM이 되지는 않아요. 영어를 칠 때의 두 숫자는 <a href="/ko/english/">영타 연습</a>에서 같이 볼 수 있어요.</p>
+<p>영어권에서는 분당 단어 수(WPM)를 써요. 토독은 다섯 글자를 한 단어로 치고 맞게 친 글자 수 ÷ 5 ÷ 분으로 계산해요. 다섯 글자를 한 단어로 치는 것은 타자 연구에서도 같아요(<a href="{PAPER}" rel="noopener">Dhakal 외, CHI 2018</a>, 2026-10-10 확인). 다만 그 연구는 맞게 친 글자만이 아니라 친 글 전체의 길이를 세고, 문장의 첫 키부터 마지막 키까지의 시간으로 나눠요. 토독의 채점과는 달라요. 한글 타수는 글자가 아니라 키를 세니까, 타수를 5로 나눈다고 WPM이 되지는 않아요. 영어를 칠 때의 두 숫자는 <a href="/ko/english/">영타 연습</a>에서 같이 볼 수 있어요.</p>
 <h2>휴대폰에서 잴 때</h2>
-<p>천지인 같은 터치 자판은 어떤 키를 눌렀는지 브라우저가 알 수 없어요. 그래서 토독은 완성된 글자를 두벌식 키 수로 바꿔서 세어요. '한'을 어떤 방식으로 입력했든 3타로 쳐요. 컴퓨터 자판으로 잰 타수와는 조건이 달라요.</p>''',
+<p>터치 자판은 어떤 키를 눌렀는지 브라우저가 알 수 없어요. 그래서 토독은 완성된 글자를 두벌식 키 수로 바꿔서 세어요. '한'을 어떤 방식으로 입력했든 3타로 쳐요. 컴퓨터 자판으로 잰 타수와는 조건이 다르고, 자판 앱에 따라 다르게 보일 수 있어요.</p>''',
 ))
 
 # ------------------------------------------------------------------ 한국어 2
@@ -139,7 +140,7 @@ ARTICLES['ko'].append(dict(
 <h2>연습할 때 지킬 것 세 가지</h2>
 <ul>
 <li><b>틀린 손가락으로 맞히지 않기.</b> 빨리 치려고 가까운 손가락으로 누르면 그 버릇이 굳어요. 느려도 맡은 손가락으로 눌러요.</li>
-<li><b>정확도를 먼저.</b> 토독의 자리 연습은 정확도가 95%를 넘어야 다음 단계를 권해요. 속도는 그다음이에요.</li>
+<li><b>정확도를 먼저.</b> 토독의 자리 연습은 정확도가 95% 이상이어야 다음 단계를 권해요. 속도는 그다음이에요.</li>
 <li><b>익숙해지면 화면 자판을 가리기.</b> '자판 가리기'를 누르고도 같은 정확도가 나오면 그 단계는 손에 붙은 거예요.</li>
 </ul>
 <h2>어느 키에서 막히는지 보기</h2>
@@ -178,7 +179,7 @@ ARTICLES['ko'].append(dict(
 <li><b>겹받침이 든 말을 따로 연습하기.</b> '읽어요', '앉아서', '없어요'처럼 겹받침 뒤에 모음이 오는 말에서 손이 자주 꼬여요. <a href="/ko/sentences/">문장 연습</a>의 문장에는 겹받침이 고루 들어 있어요.</li>
 </ul>
 <h2>휴대폰 자판은 방식이 달라요</h2>
-<p>천지인처럼 키 몇 개로 모음을 만들어 가는 터치 자판은 중간 모양이 더 자주 바뀌어요. 토독은 터치 자판에서는 글자가 완성된 뒤에 판정하고, 마지막 글자는 다음 글자가 올 때까지 판정을 미뤄요. 키 수는 두벌식 기준으로 바꿔서 세어요. 계산 방법은 <a href="/ko/guide/tasu-gyesan/">타수 계산 글</a>에 있어요.</p>''',
+<p>키 몇 개로 모음을 만들어 가는 터치 자판에서는 글자가 완성되기 전의 모양이 화면에 보일 수 있어요. 토독은 터치 자판에서는 글자가 끝난 뒤에 판정하고, 조합 중인 글자는 다음 글자가 올 때까지 판정을 미뤄요. 키 수는 두벌식 기준으로 바꿔서 세어요. 자판 앱마다 내보내는 글자가 달라서 실제 기기에서는 다르게 보일 수 있어요. 계산 방법은 <a href="/ko/guide/tasu-gyesan/">타수 계산 글</a>에 있어요.</p>''',
 ))
 
 # ------------------------------------------------------------------ 한국어 4
@@ -249,14 +250,14 @@ ARTICLES['en'].append(dict(
 <p>There is no single rulebook, which is why the same person can get different scores on different sites. These are the choices that move the number:</p>
 <table>
 <tr><th>Choice</th><th>What Todok does</th></tr>
-<tr><td>Headline number</td><td>Net WPM. Raw speed is calculated too, but the big number is net.</td></tr>
-<tr><td>Uncorrected errors</td><td>The wrong characters are simply not counted. No extra penalty is subtracted.</td></tr>
+<tr><td>Headline number</td><td>Net WPM. Raw WPM is shown in small print under the accuracy, with its formula.</td></tr>
+<tr><td>Uncorrected errors</td><td>The wrong characters are simply not counted. No extra penalty is subtracted, and the rest of the word still counts.</td></tr>
 <tr><td>Corrected errors</td><td>Count once toward WPM after the fix, and still count against accuracy.</td></tr>
 <tr><td>Spaces</td><td>Counted as characters.</td></tr>
 <tr><td>When the clock starts</td><td>On your first key, not when the page loads. It pauses if the tab is hidden.</td></tr>
 <tr><td>Rounding</td><td>Time is rounded to 0.1 s first, then WPM is calculated and rounded.</td></tr>
 </table>
-<p>A site that subtracts a penalty for each error, or that starts the clock earlier, will show a lower number for the same typing. We do not claim our score matches any other site. Compare today's result with your own earlier results from the same tool.</p>
+<p>A site that subtracts a penalty for each error, drops the whole word around a mistake, or starts the clock earlier will show a lower number for the same typing. We do not claim our score matches any other site. Compare today's result with your own earlier results from the same tool.</p>
 <h2>The rounding, in one example</h2>
 <p>Tests that end when you finish the text rarely take a whole number of seconds. If you type 80 correct characters in 23.449 seconds, Todok shows 23.4 s and calculates 80 ÷ 5 ÷ 23.4 × 60 = {wpm(80, 23449, 41)} WPM. The formula appears on the result screen, so you can redo it on a calculator and get the same number.</p>
 <h2>A reference point, with caveats</h2>
@@ -295,7 +296,7 @@ ARTICLES['en'].append(dict(
 <h2>Three habits that matter more than speed</h2>
 <ul>
 <li><b>Use the assigned finger even when another is closer.</b> A shortcut that works at slow speed becomes the thing that trips you later.</li>
-<li><b>Accuracy first.</b> Todok's practice suggests the next step once you pass 95% accuracy. Speed follows once the reach is automatic.</li>
+<li><b>Accuracy first.</b> Todok's practice suggests the next step once your accuracy is 95% or higher. Speed follows once the reach is automatic.</li>
 <li><b>Hide the on-screen keyboard when a step feels easy.</b> If your accuracy holds with the keyboard hidden, that row is learned.</li>
 </ul>
 <h2>Seeing which keys hold you back</h2>

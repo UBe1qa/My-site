@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Microphone Not Working in the Browser: What to Check | Checkbench</title>
-<meta name="description" content="Mic silent in a browser call? Run the mic test, read the message it gives and follow the matching fix: site permission, system setting, device or another app.">
+<title>Mic Not Working in the Browser: What to Check | Checkbench</title>
+<meta name="description" content="Mic silent in a browser call? Run the mic test, read its message and follow the matching fix: site permission, system setting, device or another app.">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#172027" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://check.lumenlab.page/guide/microphone-not-working-browser/">
@@ -12,8 +12,8 @@
 <link rel="alternate" hreflang="ko" href="https://check.lumenlab.page/ko/guide/maikeu-an-japil-ttae/">
 <link rel="alternate" hreflang="x-default" href="https://check.lumenlab.page/guide/microphone-not-working-browser/">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Microphone Not Working in the Browser: What to Check | Checkbench">
-<meta property="og:description" content="Mic silent in a browser call? Run the mic test, read the message it gives and follow the matching fix: site permission, system setting, device or another app.">
+<meta property="og:title" content="Mic Not Working in the Browser: What to Check | Checkbench">
+<meta property="og:description" content="Mic silent in a browser call? Run the mic test, read its message and follow the matching fix: site permission, system setting, device or another app.">
 <meta property="og:url" content="https://check.lumenlab.page/guide/microphone-not-working-browser/">
 <meta property="og:site_name" content="Checkbench">
 <meta property="og:image" content="https://check.lumenlab.page/og.png">
@@ -24,11 +24,11 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="preload" href="/assets/fonts/ck-en-ad53f1c8.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"CK Sans";src:url(/assets/fonts/ck-en-ad53f1c8.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional;unicode-range:U+20-7E,U+A9,U+B7,U+D7,U+2013,U+2019,U+201C-201D,U+2026,U+2190-2193,U+2212,U+2303,U+2318,U+2325,U+AC00,U+AD6D,U+AE30,U+B4E0,U+B85C,U+BAA8,U+BCF4,U+C2A4,U+C5B4,U+C5C6,U+C694,U+C774,U+C9C0,U+D14C,U+D2B8,U+D398,U+D55C}</style>
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement,p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'',m=/mac|iphone|ipad|ipod/i.test(p),l=null;h.setAttribute('data-os',m?'mac':'pc');try{l=localStorage.getItem('ck.layout')}catch(e){}if(!/^(full|iso|tkl|mac)$/.test(l||''))l=m?'mac':'full';h.setAttribute('data-kb',l);if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))h.classList.add('anim')})(document)</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Microphone not working in the browser: a permission checklist", "description": "Mic silent in a browser call? Run the mic test, read the message it gives and follow the matching fix: site permission, system setting, device or another app.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/microphone-not-working-browser/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Microphone not working in the browser: a permission checklist", "description": "Mic silent in a browser call? Run the mic test, read its message and follow the matching fix: site permission, system setting, device or another app.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://check.lumenlab.page/guide/microphone-not-working-browser/", "image": "https://check.lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://check.lumenlab.page/guide/"}, {"@type": "ListItem", "position": 2, "name": "Microphone not working in the browser: a permission checklist", "item": "https://check.lumenlab.page/guide/microphone-not-working-browser/"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
 <script src="/assets/ads-config.js"></script>
@@ -57,11 +57,13 @@
 <tr><td data-th="The mic test says">Blocked for this site.</td><td data-th="What it means">The browser is not letting this website use the microphone. A “block” may be saved for it.</td><td data-th="What to do">Use the lock or settings icon in the address bar, allow the microphone, and press the button again.</td></tr>
 <tr><td data-th="The mic test says">Blocked by your system settings.</td><td data-th="What it means">The system is not letting the browser use any microphone.</td><td data-th="What to do">Allow your browser in the system’s microphone privacy setting (paths below).</td></tr>
 <tr><td data-th="The mic test says">The permission prompt was closed.</td><td data-th="What it means">The question was dismissed without an answer.</td><td data-th="What to do">Press the button again and choose Allow.</td></tr>
+<tr><td data-th="The mic test says">The browser did not allow it.</td><td data-th="What it means">The browser refused without saying whether this website is blocked or the prompt was closed. A browser may give the same answer for both.</td><td data-th="What to do">Press the button again. If no prompt appears, allow the microphone from the lock or settings icon in the address bar.</td></tr>
 <tr><td data-th="The mic test says">No device was found.</td><td data-th="What it means">The browser sees no microphone at all.</td><td data-th="What to do">Plug it in or switch it on. Check that the system lists it as an input device.</td></tr>
 <tr><td data-th="The mic test says">The device could not be opened.</td><td data-th="What it means">A microphone exists but could not be started. Another app may be holding it.</td><td data-th="What to do">Close other apps that use the mic and press the button again.</td></tr>
 <tr><td data-th="The mic test says">This needs a secure (https) page.</td><td data-th="What it means">The page was opened without https, so the browser will not offer the microphone.</td><td data-th="What to do">Open the https address of the site.</td></tr>
 </tbody></table></div>
 <p>The test builds these messages from the error the browser hands to the page. MDN lists what each error means: <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" rel="noopener">MediaDevices.getUserMedia()</a> (checked 2026-10-10).</p>
+<div class="ad-wrap ad-wrap--in" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <h2>Where the system setting is</h2>
 <ul>
 <li><b>Windows 11:</b> Settings → Privacy &amp; security → Microphone.</li>
@@ -81,10 +83,10 @@
 </ol>
 <h2>The bar barely moves</h2>
 <p>The test says the mic picks up sound once the level passes −45 dBFS (this site’s own line). For scale, a level of −20 dBFS is one tenth of the loudest value digital audio can store. If speaking close to the mic does not get you past the line, raise the input level in the system sound settings or check that the right microphone is selected.</p>
+<p>The test asks the browser to switch off noise suppression and automatic volume, and a line under the bar tells you if the browser kept them on. When they are on, a steady sound such as a hum or music can read lower than it is, so test with your voice.</p>
 <p>To judge quality rather than just level, record five seconds and play it back. The recording stays in the tab and is never uploaded.</p>
 <p class="cta"><a class="btn" href="/mic-test/">Open the mic test</a></p>
 </article>
-<div class="ad-wrap wrap" data-slot="mid"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="mid" hidden></div></div></div>
 <section class="wrap narrow sec"><h2>Other tests</h2><ul class="tool-list"><li><a href="/keyboard-test/">Keyboard Tester</a><span>Every key, keys held at once, double-typing</span></li><li><a href="/mouse-test/">Mouse Test</a><span>Buttons, wheel, double-click fault, report rate</span></li><li><a href="/mic-test/">Mic Test</a><span>Level, recording and playback</span></li><li><a href="/webcam-test/">Webcam Test</a><span>Live picture, size, frames per second, photo</span></li><li><a href="/speaker-test/">Speaker Test (Left / Right)</a><span>Left, right, both, rising tone</span></li><li><a href="/dead-pixel-test/">Dead Pixel Test</a><span>Full-screen black, white, red, green, blue</span></li><li><a href="/refresh-rate-test/">Refresh Rate Test</a><span>Screen Hz and a moving bar</span></li><li><a href="/gamepad-tester/">Gamepad Tester</a><span>Buttons, sticks, triggers, drift, vibration</span></li></ul></section>
 <div class="ad-wrap wrap" data-slot="bottom"><div class="ad-in"><p class="ad-label">Ad</p><div class="ad-slot" data-ad="bottom" hidden></div></div></div>
 </main>

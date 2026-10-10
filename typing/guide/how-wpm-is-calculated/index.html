@@ -24,7 +24,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" href="/assets/fonts/td-en-9768b319.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"Todok Sans";src:url(/assets/fonts/td-en-9768b319.woff2) format("woff2");font-weight:400 800;font-style:normal;font-display:optional}</style>
 <link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/style.css">
 <script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
@@ -67,14 +68,14 @@
 <p>There is no single rulebook, which is why the same person can get different scores on different sites. These are the choices that move the number:</p>
 <div class="tbl"><table>
 <tr><th>Choice</th><th>What Todok does</th></tr>
-<tr><td>Headline number</td><td>Net WPM. Raw speed is calculated too, but the big number is net.</td></tr>
-<tr><td>Uncorrected errors</td><td>The wrong characters are simply not counted. No extra penalty is subtracted.</td></tr>
+<tr><td>Headline number</td><td>Net WPM. Raw WPM is shown in small print under the accuracy, with its formula.</td></tr>
+<tr><td>Uncorrected errors</td><td>The wrong characters are simply not counted. No extra penalty is subtracted, and the rest of the word still counts.</td></tr>
 <tr><td>Corrected errors</td><td>Count once toward WPM after the fix, and still count against accuracy.</td></tr>
 <tr><td>Spaces</td><td>Counted as characters.</td></tr>
 <tr><td>When the clock starts</td><td>On your first key, not when the page loads. It pauses if the tab is hidden.</td></tr>
 <tr><td>Rounding</td><td>Time is rounded to 0.1 s first, then WPM is calculated and rounded.</td></tr>
 </table></div>
-<p>A site that subtracts a penalty for each error, or that starts the clock earlier, will show a lower number for the same typing. We do not claim our score matches any other site. Compare today's result with your own earlier results from the same tool.</p>
+<p>A site that subtracts a penalty for each error, drops the whole word around a mistake, or starts the clock earlier will show a lower number for the same typing. We do not claim our score matches any other site. Compare today's result with your own earlier results from the same tool.</p>
 <h2>The rounding, in one example</h2>
 <p>Tests that end when you finish the text rarely take a whole number of seconds. If you type 80 correct characters in 23.449 seconds, Todok shows 23.4 s and calculates 80 ÷ 5 ÷ 23.4 × 60 = <b class="num" data-wpm="80,23449">41</b> WPM. The formula appears on the result screen, so you can redo it on a calculator and get the same number.</p>
 <h2>A reference point, with caveats</h2>

@@ -27,7 +27,8 @@
 
   /* 연출 1 '루멘랩 키 줄': 꼬리말의 만든 곳 칸이 화면에 들어올 때 한 번. 타자를 치는 중에는 시작하지 않는다. */
   (function () {
-    var lumen = D.getElementById('lumen'); if (!lumen) return;
+    /* 두 언어 틀을 같이 담은 장(404)에서는 보이는 쪽을 고른다 */
+    var lumen = Array.prototype.filter.call(D.querySelectorAll('.lumen'), function (x) { return x.getClientRects().length > 0; })[0]; if (!lumen) return;
     if (!('IntersectionObserver' in window)) { lumen.classList.add('in'); return; }
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
