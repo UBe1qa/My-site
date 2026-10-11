@@ -2,7 +2,8 @@
 """토독 화면 확인(Playwright): python3 typing/_dev/e2e.py [스크린샷 폴더]     서버: node typing/_dev/serve.mjs (8445)
 SEC=3 처럼 주면 그 묶음만: 1 모든 페이지(오류·깨진 그림·가로 스크롤·어두운 화면·동작 줄이기) · 2 화면 밀림(CLS) ·
 3 한국어 속도 측정(조합 입력·결과·기록·한/영 안내) · 4 영어 속도 측정·영타 · 5 자리 연습·문장 연습 · 6 휴대폰(터치 자판) · 7 광고 자리·연출·언어 띠 · 8 스크린샷 ·
-9 제3자 평가에서 나온 것(누른 키 수, 천지인 중간 모양, 낱말 단위 한/영 안내, 팬그램·문장 되풀이, 휴대폰 옵션·누르는 크기, 초점, 통과 기준, 기록 목록, 404 언어 틀)
+9 제3자 평가에서 나온 것(누른 키 수, 천지인 중간 모양, 낱말 단위 한/영 안내, 팬그램·문장 되풀이, 휴대폰 옵션·누르는 크기, 초점, 통과 기준, 기록 목록, 404 언어 틀) ·
+10 이펙트·콤보·가벼운 그리기 · 11 내가 친 글자·틀린 키의 자판 반응·긴 글·영어 문장 연습·계산 기준 카드
 
 한글은 CDP Input.imeSetComposition / Input.insertText 로 조합 입력을 흉내 낸다(컴퓨터는 글쇠 이벤트 key=Process, code=KeyX 도 같이).
 실제 한글 입력기(윈도우·맥·아이폰·안드로이드)는 이 작업 공간에서 확인할 수 없다.
@@ -756,7 +757,7 @@ def mobile(env):
     r = read_result(pg)
     ok(r['done'] and r['resultShown'], '휴대폰: 결과')
     check_formula('휴대폰 결과', r)
-    ok('터치 자판이라 글자 단위로 쟀어요' in pg.evaluate('document.getElementById("map-cap").textContent'), '터치 자판 안내 문구')
+    ok('터치 자판으로 쟀어요' in pg.evaluate('document.getElementById("map-cap").textContent'), '터치 자판 안내 문구')
     v = pg.evaluate('window.__cls')
     ok(v <= 0.02, f'휴대폰: 치는 동안과 결과로 바뀔 때 화면 밀림 {v:.4f}', pg.evaluate('window.__shifts.slice(0, 4)'))
     ok(pg.evaluate('document.querySelector(".records").getBoundingClientRect().top') >= 844 - 1, '결과가 길어져도 아래 내용은 화면 밖에서만 밀린다')
@@ -770,8 +771,8 @@ def mobile(env):
     ok(not pg._errs, '휴대폰 콘솔 오류 0', pg._errs[:3])
     c.close()
     # 자리 연습·문장 연습 휴대폰
-    for path in ('/ko/practice/', '/ko/sentences/', '/practice/'):
-        c = env.ctx(390, 844, True, lang='en' if path == '/practice/' else 'ko', dpr=2)
+    for path in ('/ko/practice/', '/ko/sentences/', '/practice/', '/sentences/'):
+        c = env.ctx(390, 844, True, lang='ko' if path.startswith('/ko/') else 'en', dpr=2)
         pg, ty = env.tool(c, path, mobile=True)
         ok(pg.evaluate('document.documentElement.classList.contains("m-tall")') and pg.evaluate('document.getElementById("txt").getBoundingClientRect().top') < 260, f'{path} 휴대폰: 치는 화면', pg.evaluate('document.getElementById("txt").getBoundingClientRect().top'))
         over = pg.evaluate('''() => { const ms = [...document.querySelectorAll('.strip > *, .meter > *, .gauge > *')].filter((e) => e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect()); let n = 0; for (let a = 0; a < ms.length; a++) for (let b = a + 1; b < ms.length; b++) { const A = ms[a], B = ms[b]; if (A.left < B.right - 1 && B.left < A.right - 1 && A.top < B.bottom - 1 && B.top < A.bottom - 1) n++; } return n; }''')
@@ -797,7 +798,7 @@ def mobile(env):
 # ---------- 7. 광고 자리·연출·언어 띠 ----------
 def ads_and_motion(env):
     print('7. 광고 자리·연출·언어 띠')
-    tool_paths = ['/', '/practice/', '/ko/', '/ko/practice/', '/ko/sentences/', '/ko/english/']
+    tool_paths = ['/', '/practice/', '/sentences/', '/ko/', '/ko/practice/', '/ko/sentences/', '/ko/english/']
     for w, h, mobile in ((1366, 768, False), (390, 844, True)):
         c = env.ctx(w, h, mobile)
         for path in tool_paths + [p for p in ('/ko/guide/tasu-gyesan/', '/guide/how-wpm-is-calculated/') if (ROOT / p.strip('/') / 'index.html').exists()]:
@@ -929,7 +930,7 @@ def shots(env):
                 pg2.close()
             c.close()
     jobs = [('ko', '/ko/', 'ko-test', False), ('ko', '/ko/practice/', 'ko-practice', False), ('ko', '/ko/sentences/', 'ko-sentences', False), ('ko', '/ko/english/', 'ko-english', False),
-            ('en', '/', 'en-test', False), ('en', '/practice/', 'en-practice', False), ('ko', '/ko/', 'ko-test-mobile', True), ('en', '/', 'en-test-mobile', True)]
+            ('en', '/', 'en-test', False), ('en', '/practice/', 'en-practice', False), ('en', '/sentences/', 'en-sentences', False), ('ko', '/ko/', 'ko-test-mobile', True), ('en', '/', 'en-test-mobile', True)]
     for lang, path, name, mob in jobs:
         c = env.ctx(390 if mob else 1366, 844 if mob else 768, mob, lang=lang, dpr=2 if mob else 1)
         pg = env.page(c, path, shots_font=True)
@@ -1382,7 +1383,7 @@ def tp_mobile(env):
         ok(not pg.evaluate('document.documentElement.classList.contains("m-tall")') and pg.evaluate('__E.kind') == 'words' and pg.evaluate('__E.secs') == 60, f'M3 {w}px 닫기(×): 고른 옵션은 그대로')
         ok(not pg._errs, f'{w}px 휴대폰 옵션 콘솔 오류 0', pg._errs[:3])
         c.close()
-    for lang, paths in (('en', ('/', '/practice/', '/guide/how-wpm-is-calculated/', '/about/')), ('ko', ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/tasu-gyesan/', '/ko/privacy/'))):
+    for lang, paths in (('en', ('/', '/practice/', '/sentences/', '/guide/how-wpm-is-calculated/', '/about/')), ('ko', ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/tasu-gyesan/', '/ko/privacy/'))):
         c = env.ctx(390, 844, True, lang=lang, dpr=2)
         for path in paths:
             pg = env.page(c, path, clock=False)
@@ -1449,7 +1450,7 @@ def tp_rest(env):
         if want == 'ko':
             ok(r['lang'] == 'ko' and r['title'] == '없는 페이지예요 | 토독' and r['h1'] == ['없는 페이지예요'] and r['nav'] == ['속도 측정', '자리 연습', '문장 연습', '영타 연습', '가이드'] and r['home'] == ['/ko/'] and r['lumen'] == ['https://lumenlab.page/'] and r['btn'] == ['/ko/', '/'], f'L6 {path}: 한국어 틀(메뉴·제목·루멘랩 링크)', r)
         else:
-            ok(r['lang'] == 'en' and r['title'].startswith('Page not found') and r['h1'] == ['Page not found'] and r['nav'] == ['Typing Test', 'Practice', 'Guides'] and r['home'] == ['/'] and r['lumen'] == ['https://lumenlab.page/en/'] and r['btn'] == ['/', '/ko/'], f'L6 {path}: 영어 틀', r)
+            ok(r['lang'] == 'en' and r['title'].startswith('Page not found') and r['h1'] == ['Page not found'] and r['nav'] == ['Typing Test', 'Practice', 'Sentences', 'Guides'] and r['home'] == ['/'] and r['lumen'] == ['https://lumenlab.page/en/'] and r['btn'] == ['/', '/ko/'], f'L6 {path}: 영어 틀', r)
             ok(not visible_hangul_outside_ko(pg), f'L6 {path}: lang 밖 한글 없음', visible_hangul_outside_ko(pg)[:3])
         ok(r['ids'] == 1 and r['skip'] == 1, f'L6 {path}: 겹치는 id 없음, 건너뛰기 링크 하나', (r['ids'], r['skip']))
         if path in ('/ko/eobtneun-juso/', '/nope/'):
@@ -1598,7 +1599,7 @@ def fx_checks(env):
     c.close()
     # 자리 연습·문장 연습·영어: 콤보 칸과 설정 팝업
     c = env.ctx()
-    for path in ('/ko/practice/', '/ko/sentences/', '/', '/practice/', '/ko/english/'):
+    for path in ('/ko/practice/', '/ko/sentences/', '/', '/practice/', '/sentences/', '/ko/english/'):
         pg, ty = env.tool(c, path)
         go(pg, ty, 14)
         ok(pg.evaluate('+document.getElementById("combo").textContent === __E.session.combo && __E.session.combo === 14'), f'{path} 콤보 14', pg.evaluate('document.getElementById("combo").textContent'))
@@ -1746,6 +1747,324 @@ def fx_checks(env):
     c.close()
 
 
+# ---------- 11. 2026-10-11 둘째 묶음: 내가 친 글자 · 틀린 키의 자판 반응 · 긴 글 · 영어 문장 연습 · 계산 기준 카드 ----------
+ANN_JS = '[...document.querySelectorAll("#txt [data-t]")].map((e) => [e.textContent, e.getAttribute("data-t"), e.classList.contains("bad") ? "bad" : e.classList.contains("pend") ? "pend" : ""])'
+KB_JS = '''(() => ({ wr: [...document.querySelectorAll(".kb .k.wr-a,.kb .k.wr-b")].map((e) => [e.textContent.trim(), e.classList.contains("wr-a") ? "a" : "b"]),
+  say: (document.querySelector("#kb-say .wr-say") || { textContent: "" }).textContent, next: document.querySelectorAll(".kb .k.next").length,
+  top: Math.round(document.querySelector(".kb").getBoundingClientRect().top), sayH: Math.round(document.getElementById("kb-say").getBoundingClientRect().height) }))()'''
+
+
+def set_text(pg, text):
+    pg.evaluate("t => { __E.text = t; __E.same = true; __E.reset(); document.getElementById('trap').focus(); __sim.reset(); }", text)
+    pg.wait_for_timeout(80)
+
+
+def feat_checks(env):
+    """11. 사용자 요청 2026-10-11(둘째): 무엇을 잘못 쳤는지 보이게, 자리 연습의 틀린 키 반응, 긴 글, 영어판 기능, 계산 기준을 읽기 좋게"""
+    print('11. 내가 친 글자·틀린 키 반응·긴 글·영어 문장 연습·계산 기준 카드')
+    # ① 속도 측정(한국어): 틀린 글자 아래에 내가 친 글자
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    set_text(pg, '달이 밝은 밤에 나무 그늘 아래를 걸어요')
+    # 자리는 배치 값(offset)으로 잰다: 틀린 순간의 흔들림(transform)은 배치를 바꾸지 않는다
+    far = '(() => { const cs = document.querySelectorAll("#txt .c"); return [cs[0].offsetLeft, cs[0].offsetTop, cs[12].offsetLeft, cs[12].offsetTop, cs[0].offsetHeight].join(","); })()'
+    y0 = pg.evaluate(far)
+    for k in 'ㄷㅏ':                         # '달' 자리에 '담'
+        ty.key(k)
+    ok(pg.evaluate(ANN_JS) == [], '맞게 치는 동안에는 적는 것이 없다', pg.evaluate(ANN_JS))
+    ty.key('ㅁ')
+    ok(pg.evaluate(ANN_JS) == [['달', '담', 'bad']], "틀린 키를 누르자마자 '달' 아래에 내가 친 '담'", pg.evaluate(ANN_JS))
+    for k in 'ㅇㅣ ':
+        ty.key(k)
+    ok(pg.evaluate(ANN_JS) == [['달', '담', 'bad']], "다음 글자로 넘어가도 남아 있다", pg.evaluate(ANN_JS))
+    after = pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), s = getComputedStyle(e, "::after"); return [s.content, s.color, s.position, parseFloat(s.fontSize) < parseFloat(getComputedStyle(e).fontSize) * 0.6, parseFloat(s.marginTop) >= 0 && Math.abs(parseFloat(s.top) - e.getBoundingClientRect().height) < 1]; })()')
+    ok(after == ['"담"', 'rgb(207, 61, 30)', 'absolute', True, True], '적은 글자는 작게, 주홍으로, 글 줄을 밀지 않게(::after, absolute), 글자 칸 바로 아래에(칸과 겹치면 윗부분이 안 읽힌다)', after)
+    ok(pg.evaluate(far) == y0, '적어도 글자 자리와 글 상자 높이가 그대로다', (y0, pg.evaluate(far)))
+    for k in 'ㅂㅏㄹㄱ':
+        ty.key(k)
+    ty.key('ㅁ')                             # '은'의 ㅇ 대신 ㅁ → 앞 글자의 받침으로 붙지 못하고(겹받침 ㄺ 뒤) 새 글자
+    for k in 'ㅡㄴ':
+        ty.key(k)
+    ok(['은', '믄', 'bad'] in pg.evaluate(ANN_JS), "틀린 첫소리: '은' 아래에 '믄'", pg.evaluate(ANN_JS))
+    ty.key(' ')
+    for k in 'ㅂㅏ':
+        ty.key(k)
+    ty.key('ㄴ')                             # '밤'의 ㅁ 대신 ㄴ
+    for k in 'ㅇㅔ':
+        ty.key(k)
+    ok(['밤', '반', 'bad'] in pg.evaluate(ANN_JS), "틀린 받침: '밤' 아래에 '반'", pg.evaluate(ANN_JS))
+    for k in ' ㄴㅏ':
+        ty.key(k)
+    ty.key('ㄱ')                             # '무'의 ㅁ 대신 ㄱ → 입력기는 일단 앞 글자 '나'의 받침으로 붙인다('낙')
+    ok(pg.evaluate('__E.session.value').endswith('낙') and ['무', 'ㄱ', 'bad'] in pg.evaluate(ANN_JS), "앞 글자의 받침으로 붙은 틀린 낱자도 그 자리에 적는다('무' 아래에 ㄱ)", (pg.evaluate('__E.session.value'), pg.evaluate(ANN_JS)))
+    ty.key('ㅜ')
+    ok(['무', '구', 'bad'] in pg.evaluate(ANN_JS), "모음을 치면 '구'로 바뀐다", pg.evaluate(ANN_JS))
+    shot(pg, 'e2e-ann-ko')
+    ok(not pg._errs, '내가 친 글자(한국어) 콘솔 오류 0', pg._errs[:3])
+    pg.keyboard.press('Tab'); pg.wait_for_timeout(120)
+    ok(pg.evaluate(ANN_JS) == [], '다른 글로 넘어가면 적은 것이 남지 않는다')
+    pg.close(); c.close()
+    # ② 속도 측정(영어): 틀린 글자, 지우고 고치기, 단어 끝에 더 친 글자
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/')
+    set_text(pg, 'quiet rivers bend slowly near the old mill')
+    for k in 'qu':
+        ty.key(k)
+    ty.key('x')
+    ok(pg.evaluate(ANN_JS) == [['i', 'x', 'bad']], "영어: 틀린 글자 'i' 아래에 'x'", pg.evaluate(ANN_JS))
+    ty.key('\b', 240)
+    ok(pg.evaluate(ANN_JS) == [], '지우면 적은 것도 지워진다', pg.evaluate(ANN_JS))
+    for k in 'iet':
+        ty.key(k)
+    ok(pg.evaluate(ANN_JS) == [] and pg.evaluate('document.querySelectorAll("#txt .bad").length') == 0, '고쳐 치면 틀린 글자·적은 글자가 없다')
+    for k in 'zz':
+        ty.key(k)
+    ok(pg.evaluate(ANN_JS) == [[' ', 'zz', 'bad']], '단어 끝에 더 친 글자는 띄어쓰기 자리에 적는다', pg.evaluate(ANN_JS))
+    for k in ' rxvers ':
+        ty.key(k)
+    ok(['i', 'x', 'bad'] in pg.evaluate(ANN_JS) and len(pg.evaluate(ANN_JS)) == 2, '앞 단어에 적은 것은 남고, 새로 틀린 글자가 더해진다', pg.evaluate(ANN_JS))
+    ok(not visible_hangul_outside_ko(pg) and not pg._errs, '영어 화면: 한글 0, 콘솔 오류 0', pg._errs[:3])
+    # 같은 글자가 이어지는 단어·빠뜨린 글자·넘치게 친 글자(평가 2026-10-11: 'hhhh' 의 첫 h 가 틀린 것으로 보이고 아래에 아무것도 안 적혔다)
+    set_text(pg, 'hhh kkk hotel boards never')
+    for k in 'hhhh kk hoteXxy boarx neverabcdefgh':
+        ty.key(k)
+    ann = pg.evaluate(ANN_JS)
+    ok(ann == [[' ', 'h', 'bad'], ['k', '–', 'bad'], ['l', 'X', 'bad'], [' ', 'xy', 'bad'], ['d', 'x', 'bad'], ['s', '–', 'bad'], [' ', 'abcd…', 'bad']], "더 친 글자는 띄어쓰기 자리에(다섯부터는 …), 빠뜨린 글자는 '–', 바꿔 친 글자는 그 글자", ann)
+    ok(pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")') == 'klds', "'hhh' 에 hhhh: 앞의 h 는 틀림이 아니다(틀린 글자는 k l d s)", pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")'))
+    geo = pg.evaluate('''() => { const top = (e) => { const s = getComputedStyle(e, '::after'); return e.getBoundingClientRect().top + parseFloat(s.top) + parseFloat(s.marginTop); };
+      const sp = document.querySelector('#txt .sp[data-t]'), c = document.querySelector('#txt .c[data-t]'), ss = getComputedStyle(sp, '::after');
+      return { d: Math.abs(top(sp) - top(c)), left: ss.left, tf: ss.transform, bar: getComputedStyle(sp).boxShadow, plain: getComputedStyle(document.querySelector('#txt .sp.ok')).boxShadow }; }''')
+    ok(geo['d'] <= 1.5 and geo['left'] == '0px' and geo['tf'] == 'none' and geo['bar'] == 'none', '띄어쓰기 자리에 적은 것: 글자 아래 적은 것과 같은 높이, 그 자리에서 오른쪽으로, 주홍 밑줄과 겹치지 않는다', geo)
+    pg.close()
+    # 줄이 넘어가 글이 위로 밀리면, 화면 위로 나간 줄에 적은 것은 지운다(맨 윗줄 위에 반쯤 걸려 보였다)
+    pg, ty = env.tool(c, '/')
+    pg.click('#kind [data-v="sentences"]'); pg.wait_for_timeout(100); pg.click('#trap'); pg.wait_for_timeout(60)
+    lines = pg.evaluate('(() => { const L = {}; document.querySelectorAll("#txt .c").forEach((e) => { const t = e.parentNode.offsetTop; (L[t] = L[t] || []).push(e); }); return Object.keys(L).map(Number).sort((a, b) => a - b).map((t) => L[t].length); })()')
+    ks = ty.keys(); line = 0; i = 0
+    while i < len(ks) and pg.evaluate('document.getElementById("txt").style.transform') in ('', 'translateY(0px)') and i < 400:
+        k = ks[i]
+        ty.key('x' if (i % 9 == 4 and k not in ' x') else k, 60); i += 1
+    for _ in range(12):
+        ty.key(ks[i], 60); i += 1
+    r = pg.evaluate('''() => { const v = document.querySelector('.view').getBoundingClientRect(); const all = [...document.querySelectorAll('#txt [data-t]')].map((e) => Math.round(e.getBoundingClientRect().bottom - v.top));
+      return { moved: document.getElementById('txt').style.transform, n: all.length, above: all.filter((b) => b <= 2).length, bad: document.querySelectorAll('#txt .bad').length }; }''')
+    ok('translateY(-' in r['moved'] and r['bad'] >= 6 and r['n'] >= 1 and r['above'] == 0, '글이 위로 밀린 뒤: 화면 위로 나간 줄에는 적은 것이 없다(보이는 줄에는 남는다)', r)
+    ok(not pg._errs, '줄 넘김 콘솔 오류 0', pg._errs[:3])
+    pg.close(); c.close()
+    # ③ 문장 연습은 '내가 친 글' 줄이 따로 있어 글자 아래에는 적지 않는다
+    for path, lang, text in (('/ko/sentences/', 'ko', '달이 밝은 밤에 걸어요'), ('/sentences/', 'en', 'quiet rivers bend slowly')):
+        c = env.ctx(lang=lang)
+        pg, ty = env.tool(c, path)
+        ks = ty.keys()
+        for i in range(8):
+            ty.key(wrong(ks[i]) if i == 2 else ks[i])
+        ok(pg.evaluate('document.querySelectorAll("#txt .bad").length') >= 1 and pg.evaluate(ANN_JS) == [] and len(pg.evaluate('document.getElementById("mine-t").textContent')) >= 3, f'{path} 틀린 글자는 주홍, 친 글은 아래 줄에(글자 아래에는 적지 않는다)', pg.evaluate(ANN_JS))
+        pg.close(); c.close()
+    # ④ 터치 자판: 판정을 미룬 낱자는 회색으로 먼저 적고, 글자가 끝나면 주홍
+    c = env.ctx(390, 844, True, dpr=2)
+    pg, ty = env.tool(c, '/ko/', mobile=True)
+    set_text(pg, '달이 밝은 밤에 나무 그늘 아래를 걸어요'); pg.tap('#trap', position={'x': 60, 'y': 30}); pg.wait_for_timeout(80)
+    for k in 'ㄷㅏㄹㅇ':
+        ty.key(k)
+    ty.key('ㅓ')
+    a1 = pg.evaluate(ANN_JS)
+    ty.key(' ')
+    a2 = pg.evaluate(ANN_JS)
+    ok(pg.evaluate('__E.session.mode') == 'char' and a1 == [['이', '어', 'pend']] and a2 == [['이', '어', 'bad']], '터치 자판: 미룬 낱자는 회색으로, 글자가 끝나면 주홍으로 적는다', (a1, a2))
+    ok(pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), b = e.getBoundingClientRect(), t = document.querySelector(".sheet").getBoundingClientRect(); return b.bottom + 14 < t.bottom && b.left > t.left; })()'), '터치 자판: 적은 글자가 종이 안에 보인다')
+    fs = pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), s = getComputedStyle(e, "::after"); return [s.fontSize, s.fontWeight, parseFloat(s.marginTop) >= 0]; })()')
+    ok(fs == ['13px', '700', True], '휴대폰: 적은 글자는 13px 굵게(받침 있는 한글이 읽히게), 글자 칸 아래에', fs)
+    shot(pg, 'e2e-ann-mobile')
+    pg.close(); c.close()
+    # ⑤ 자리 연습: 틀린 키를 화면 자판에 알린다
+    for path, lang, text, steps in (('/ko/practice/', 'ko', 'ㅁㄴㅇㄹ ㅁㄴㅇㄹ', [('ㅁ', None), ('ㄹ', 'ㄹ'), ('ㅇ', None), ('ㅁ', 'ㅁ'), ('ㅁ', 'ㅁ'), (' ', None)]),
+                                    ('/practice/', 'en', 'asdf asdf', [('a', None), ('f', 'F'), ('d', None), ('a', 'A'), ('a', 'A'), (' ', None)])):
+        c = env.ctx(lang=lang)
+        pg, ty = env.tool(c, path)
+        set_text(pg, text)
+        base = pg.evaluate(KB_JS); seen = []; an = ''
+        for k, want in steps:
+            ty.key(k); seen.append(pg.evaluate(KB_JS))
+            if seen[-1]['wr']:
+                an = pg.evaluate('getComputedStyle(document.querySelector(".kb .k.wr-a, .kb .k.wr-b")).animationName')
+                if lang == 'ko' and len(seen) == 5:
+                    shot(pg, 'e2e-wrongkey-ko')
+        ok(base['wr'] == [] and base['say'] == '' and seen[0]['wr'] == [] and seen[0]['say'] == '', f'{path} 맞은 키: 주홍 테도 알림도 없다', seen[0])
+        ok(seen[1]['wr'] and seen[1]['wr'][0][0].upper().startswith(steps[1][1].upper()) and steps[1][1].upper() in seen[1]['say'].upper(), f'{path} 틀린 키: 누른 키에 주홍 테 + "방금 누른 키"', seen[1])
+        ok(seen[1]['next'] >= 1, f'{path} 틀려도 눌러야 할 키 표시는 그대로', seen[1]['next'])
+        ok(seen[2]['wr'] == [] and seen[2]['say'] == '', f'{path} 다음 키를 맞게 누르면 사라진다', seen[2])
+        ok(seen[3]['wr'] and seen[4]['wr'] and seen[3]['wr'][0][1] != seen[4]['wr'][0][1] and seen[3]['wr'][0][0] == seen[4]['wr'][0][0], f'{path} 같은 키를 또 틀리면 움직임이 다시 돈다(이름을 번갈아)', (seen[3]['wr'], seen[4]['wr']))
+        ok(len({s['top'] for s in seen} | {base['top']}) == 1 and len({s['sayH'] for s in seen} | {base['sayH']}) == 1, f'{path} 알림이 떠도 자판이 밀리지 않는다', [(s['top'], s['sayH']) for s in seen])
+        ok(an.startswith('keywrong') and seen[5]['wr'] == [], f'{path} 틀린 키는 흔들리고, 맞게 누르면 테가 걷힌다', (an, seen[5]['wr']))
+        ok(pg.evaluate('document.querySelectorAll("#txt [data-t]").length') >= 1, f'{path} 자리 연습도 틀린 글자 아래에 친 글자를 적는다')
+        ok((lang == 'ko' or not visible_hangul_outside_ko(pg)) and not pg._errs, f'{path} 콘솔 오류 0', pg._errs[:3])
+        pg.keyboard.press('Tab'); pg.wait_for_timeout(120)
+        k2 = pg.evaluate(KB_JS)
+        ok(k2['wr'] == [] and k2['say'] == '', f'{path} 다른 글로 넘어가면 남지 않는다', k2)
+        pg.close(); c.close()
+    # Shift 만 달랐을 때(같은 키): 'Shift 없이 누른 키'라고 알려 주고, 다음 키와 겹쳐도 글자가 보인다. 지우기를 눌러도 테와 알림이 같이 남는다
+    for path, lang, text, k, say in (('/practice/', 'en', 'Paris asdf', 'p', 'Pressed without Shift'), ('/ko/practice/', 'ko', 'ㅒㅖ ㅁㄴ', 'ㅐ', 'Shift 없이 누른 키')):
+        c = env.ctx(lang=lang)
+        pg, ty = env.tool(c, path)
+        set_text(pg, text)
+        ty.key(k)
+        r = pg.evaluate(KB_JS)
+        ok(r['wr'] and say in r['say'], f'{path} Shift 를 빠뜨림: 알림이 "{say}"', r)
+        ty.key('\b', 240)
+        r2 = pg.evaluate(KB_JS)
+        ok(bool(r2['wr']) == bool(r2['say']), f'{path} 지우기를 눌러도 주홍 테와 알림이 같이 남거나 같이 사라진다', r2)
+        ok(not pg._errs, f'{path} Shift 알림 콘솔 오류 0', pg._errs[:3])
+        pg.close(); c.close()
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/practice/')
+    set_text(pg, 'asdf asdf')
+    ty.key('a'); ty.key('d')        # s 자리에 d → 다음에 누를 키가 곧 d
+    r = pg.evaluate('''() => { const k = document.querySelector('.kb .k.wr-a, .kb .k.wr-b'); if (!k) return null; const cs = getComputedStyle(k), lum = (c) => { const v = c.match(/[0-9.]+/g).slice(0, 3).map((x) => { x = x / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+      const a = lum(cs.color), b = lum(cs.backgroundColor); return { next: k.classList.contains('next'), ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05), ring: cs.boxShadow.includes('inset') }; }''')
+    ok(r and r['next'] and r['ratio'] >= 4.5 and r['ring'], '틀린 키가 곧 다음 키일 때: 글자가 읽히고(대비 4.5 이상) 주홍 테가 있다', r)
+    pg.close(); c.close()
+    # 동작 줄이기: 틀린 키는 움직이지 않고 테만 남는다
+    c = env.ctx(reduced=True)
+    pg, ty = env.tool(c, '/ko/practice/')
+    set_text(pg, 'ㅁㄴㅇㄹ ㅁㄴㅇㄹ')
+    ty.key('ㅁ'); ty.key('ㄹ')
+    r = pg.evaluate('(() => { const e = document.querySelector(".kb .k.wr-a, .kb .k.wr-b"); return e ? [getComputedStyle(e).animationName, getComputedStyle(e).boxShadow !== "none"] : null; })()')
+    ok(r and r[0] == 'none' and r[1], '동작 줄이기: 틀린 키는 흔들리지 않고 테만', r)
+    pg.close(); c.close()
+    # ⑥ 긴 글·영어 속담(속도 측정의 글 종류)
+    for path, lang, kinds in (('/ko/', 'ko', ['sentences', 'passages', 'words', 'proverbs']), ('/', 'en', ['words', 'sentences', 'passages', 'proverbs']), ('/ko/english/', 'ko', ['words', 'sentences', 'passages', 'pangrams'])):
+        c = env.ctx(lang=lang)
+        pg, ty = env.tool(c, path)
+        tl = 'en' if path != '/ko/' else 'ko'
+        ok(pg.evaluate('[...document.querySelectorAll("#kind button")].map((b) => b.dataset.v)') == kinds, f'{path} 글 종류 {kinds}')
+        pg.click('#kind [data-v="passages"]'); pg.wait_for_timeout(100)
+        parts = pg.evaluate('__E.parts')
+        ok(parts and len(parts) >= 2 and len(set(parts)) == len(parts) and all(x in pg.evaluate(f'TJ_TEXT.{tl}.passages') for x in parts), f'{path} 긴 글: 시간으로 잴 때 긴 글 여러 편(되풀이 없음)', len(parts or []))
+        if 'proverbs' in kinds:
+            pg.click('#kind [data-v="proverbs"]'); pg.wait_for_timeout(100)
+            ok(all(x in pg.evaluate(f'TJ_TEXT.{tl}.proverbs') for x in pg.evaluate('__E.parts')), f'{path} 속담')
+            pg.click('#kind [data-v="passages"]'); pg.wait_for_timeout(100)
+        # 분량으로: 한 편
+        pg.click('#more summary'); pg.click('#mode [data-v="count"]'); pg.wait_for_timeout(100); pg.click('h1'); pg.click('#trap'); pg.wait_for_timeout(80)
+        parts = pg.evaluate('__E.parts')
+        ok(len(parts) == 1 and pg.evaluate('__E.T.text') == parts[0], f'{path} 긴 글: 분량 짧게는 한 편', len(parts))
+        got = []
+        for v in ('c50', 'c100', 'c25'):
+            pg.click(f'#len-c [data-v="{v}"]'); pg.wait_for_timeout(100)
+            got.append(len(pg.evaluate('__E.parts')))
+        ok(got == [2, 3, 1], f'{path} 긴 글: 보통 두 편, 길게 세 편, 짧게 한 편', got)
+        pg.click('#trap'); pg.wait_for_timeout(80)
+        ty.run(wrong_at={5, 9, 14}, slow='')          # 셋 가운데 띄어쓰기 자리는 건너뛴다
+        pg.clock.run_for(900); pg.wait_for_timeout(200)
+        r = read_result(pg)
+        ok(r['done'] and r['rep']['wrong'] >= 1, f'{path} 긴 글 한 편을 끝까지', r['rep'])
+        check_formula(f'{path} 긴 글 결과', r, ko=(path != '/'))
+        cond = ls(pg, 'todok.runs')[0]['cond']
+        ok('|passages|' in cond, f'{path} 긴 글 기록 조건', cond)
+        rec = pg.evaluate('document.querySelector(".records").textContent')
+        ok(('긴 글' if lang == 'ko' else 'Paragraphs') in rec, f'{path} 내 기록에 글 종류 이름', rec[:160])
+        ok((lang == 'ko' or not visible_hangul_outside_ko(pg)) and not pg._errs, f'{path} 긴 글 콘솔 오류 0', pg._errs[:3])
+        if path == '/ko/':
+            shot(pg, 'e2e-passage-result')
+        pg.close(); c.close()
+    # 글 종류 넷이 휴대폰 폭에서 한 줄에(누르는 높이 44px)
+    for w in (320, 360, 390, 430):
+        for path, lang in (('/ko/', 'ko'), ('/', 'en'), ('/ko/english/', 'ko'), ('/sentences/', 'en'), ('/ko/sentences/', 'ko')):
+            c = env.ctx(w, 780, True, lang=lang)
+            pg = env.page(c, path, clock=False)
+            r = pg.evaluate('''() => { const k = document.getElementById('kind') || document.getElementById('topic'), bs = [...k.querySelectorAll('button')].map((b) => b.getBoundingClientRect());
+              const nav = [...document.querySelectorAll('nav.nav')].filter((n) => n.getClientRects().length)[0], ns = [...nav.querySelectorAll('a')].map((a) => a.getBoundingClientRect());
+              return { rows: new Set(bs.map((b) => Math.round(b.top))).size, h: Math.round(Math.min(...bs.map((b) => b.height))), right: Math.round(k.getBoundingClientRect().right), n: bs.length,
+                navRows: new Set(ns.map((b) => Math.round(b.top))).size, navGap: Math.round(Math.min(...ns.slice(1).map((b, i) => b.left - ns[i].right))), hs: document.documentElement.scrollWidth - innerWidth }; }''')
+            ok((r['rows'] == 1 or r['n'] > 4) and r['h'] >= 44 and r['right'] <= w - 8 and r['hs'] <= 0, f'{path} {w}px 글 종류·주제 단추가 한 줄에 들어간다', r)
+            ok(r['navRows'] == 1 and r['navGap'] >= 4, f'{path} {w}px 메뉴가 한 줄(겹치지 않게)', r)
+            c.close()
+    # ⑦ 영어 문장 연습(/sentences/)
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/sentences/')
+    text = pg.evaluate('__E.T.text')
+    ok(text.count('\n') == 4 and all(x in pg.evaluate('TJ_TEXT.en.sentences') for x in text.split('\n')), '영어 문장 연습: 다섯 문장(직접 쓴 문장)', text[:60])
+    ok(pg.evaluate('document.querySelector("nav.nav [aria-current]").textContent') == 'Sentences' and pg.evaluate('document.querySelector("h1").textContent') == 'Sentence Practice', '영어 문장 연습: 메뉴·제목')
+    ty.run(n=14, wrong_at={6})
+    ok(pg.evaluate('document.getElementById("speed").textContent') == str(pg.evaluate('__E.live().wpm')) and pg.evaluate('document.querySelector(".g-big span").textContent') == 'WPM', '영어 문장 연습: 큰 숫자는 WPM(타/분이 아니다)', pg.evaluate('document.getElementById("speed").textContent'))
+    shot(pg, 'e2e-en-sentences-typing')
+    i = 14; nl = 0
+    while not pg.evaluate('__E.done'):
+        ks = ty.keys()
+        if i >= len(ks):
+            break
+        k = ks[i]
+        if k == '\n':
+            nl += 1
+            ty.key(' ' if nl % 2 else '\n')
+        else:
+            ty.key(k)
+        i += 1
+    pg.clock.run_for(900); pg.wait_for_timeout(200)
+    r = read_result(pg)
+    ok(r['done'] and r['rep']['wrong'] == 1, '영어 문장 연습: 끝까지(줄 끝은 띄어쓰기·Enter 둘 다)', r['rep'])
+    check_formula('영어 문장 연습 결과', r, ko=False)
+    ok(pg.evaluate('[document.getElementById("speed").textContent, document.getElementById("acc").textContent, document.getElementById("left").textContent]') == [str(r['rep']['wpm']), str(r['rep']['accuracy']), '5/5'], '영어 문장 연습: 계기판 숫자 = 결과의 WPM·정확도', pg.evaluate('document.getElementById("speed").textContent'))
+    ok(ls(pg, 'todok.runs')[0]['cond'] == 'sentences|en|all|c5|-' and ls(pg, 'todok.runs')[0]['v'] == r['rep']['wpm'], '영어 문장 연습: 기록 조건·값(WPM)', ls(pg, 'todok.runs')[0])
+    over = pg.evaluate('(() => { const s = document.querySelector(".desk").getBoundingClientRect(); return [...document.querySelectorAll("#result *")].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && (b.right > s.right + 1 || b.bottom > s.bottom + 1); }).map((e) => e.id || e.className).slice(0, 4); })()')
+    ok(not over, '영어 문장 연습: 결과가 칸 안에 들어간다', over)
+    ok(not visible_hangul_outside_ko(pg), '영어 문장 연습: 한글 0', visible_hangul_outside_ko(pg))
+    shot(pg, 'e2e-en-sentences-result')
+    pg.clock.run_for(900)
+    for t in ('proverbs', 'pangrams'):
+        pg.click(f'#topic [data-v="{t}"]'); pg.wait_for_timeout(100)
+        ok(all(x in pg.evaluate(f'TJ_TEXT.en.{t}') for x in pg.evaluate('__E.T.text').split('\n')), f'영어 문장 연습: 주제 {t}')
+    ok(not pg._errs, '영어 문장 연습 콘솔 오류 0', pg._errs[:3])
+    pg.close(); c.close()
+    # 문장 연습의 숫자 판(휴대폰·태블릿): 가장 넓은 값에서도 판 밖으로 나가거나 겹치지 않는다
+    for w in (320, 360, 390, 430, 600, 768):
+        for path, lang in (('/ko/sentences/', 'ko'), ('/sentences/', 'en')):
+            c = env.ctx(w, 780, True, lang=lang)
+            pg, ty = env.tool(c, path, mobile=True)
+            ty.run(n=6)
+            pg.evaluate('''() => { document.getElementById('speed').textContent = '888'; document.getElementById('acc').textContent = '100'; document.getElementById('left').textContent = '20/20'; document.getElementById('combo').textContent = '888'; }''')
+            r = pg.evaluate('''() => { const g = document.querySelector('.gauge').getBoundingClientRect(), vis = (e) => e.getClientRects().length && getComputedStyle(e).visibility !== 'hidden';
+              const out = [...document.querySelectorAll('.gauge *')].filter((e) => { const b = e.getBoundingClientRect(); return vis(e) && b.width > 0 && (b.right > g.right + 0.5 || b.left < g.left - 0.5 || b.bottom > g.bottom + 0.5); }).map((e) => e.id || e.className || e.tagName).slice(0, 4);
+              const ms = [...document.querySelectorAll('.g-main, .g-facts > div, .g-act .btn')].filter(vis).map((e) => e.getBoundingClientRect()); let lap = 0;
+              for (let a = 0; a < ms.length; a++) for (let b = a + 1; b < ms.length; b++) if (ms[a].left < ms[b].right - 1 && ms[b].left < ms[a].right - 1 && ms[a].top < ms[b].bottom - 1 && ms[b].top < ms[a].bottom - 1) lap++;
+              return { out, lap, rows: new Set([...document.querySelectorAll('.g-facts > div')].map((e) => Math.round(e.getBoundingClientRect().top))).size, hs: document.documentElement.scrollWidth - innerWidth }; }''')
+            ok(not r['out'] and r['lap'] == 0 and r['rows'] == 1 and r['hs'] <= 0, f'{path} {w}px 숫자 판: 넘침·겹침 0, 숫자 셋이 한 줄', r)
+            c.close()
+    # ⑧ 계산 기준 카드
+    for w, mob in ((1366, False), (768, True), (390, True), (320, True)):
+        for path, lang in (('/ko/', 'ko'), ('/', 'en'), ('/ko/english/', 'ko'), ('/ko/practice/', 'ko'), ('/sentences/', 'en')):
+            c = env.ctx(w, 800, mob, lang=lang)
+            pg = env.page(c, path, clock=False)
+            pg.evaluate('document.getElementById("basis").scrollIntoView()'); pg.wait_for_timeout(150)
+            r = pg.evaluate('''() => { const S = document.getElementById('basis'), big = [...S.querySelectorAll('.bgrid.big > .bc')], small = [...S.querySelectorAll('.bgrid:not(.big) > .bc')];
+              const bad = [...S.querySelectorAll('.bc, .bx, .bc-lead, .bc-rest')].filter((e) => e.scrollWidth > e.clientWidth + 1).length;
+              const outside = [...S.querySelectorAll('.bx > *')].filter((e) => { const b = e.getBoundingClientRect(), p = e.closest('.bc').getBoundingClientRect(); return b.right > p.right - 4 || b.left < p.left + 4 || b.bottom > p.bottom - 4; }).length;
+              const rows = (xs) => { const m = {}; xs.forEach((e) => { const t = Math.round(e.getBoundingClientRect().top); m[t] = (m[t] || 0) + 1; }); return Object.values(m); };
+              const cs = getComputedStyle(big[0]), sk = getComputedStyle(small[0].querySelector('.bc-k'));
+              const ds = [...S.querySelectorAll('details.bc')], h0 = ds[0].offsetHeight, hidden = ds.every((d) => !d.open && d.offsetHeight - d.querySelector('summary').offsetHeight < 4);
+              ds[0].querySelector('summary').click(); const h1 = ds[0].offsetHeight, shown = ds[0].open && ds[0].querySelector('.bc-rest').offsetHeight > 10, sumH = ds[0].querySelector('summary').offsetHeight;
+              ds[0].querySelector('summary').click();
+              return { nd: ds.length, hidden, grew: h1 > h0 + 15, shown, sumH, closed: !ds[0].open, bigH: new Set(big.map((e) => Math.round(e.getBoundingClientRect().height))).size, bigTop: new Set(big.map((e) => Math.round(e.getBoundingClientRect().top))).size,
+                nb: big.length, ns: small.length, bad, outside, bigRows: rows(big), smallRows: rows(small), plate: cs.backgroundColor, cap: sk.backgroundColor, lead: parseFloat(getComputedStyle(S.querySelector('.bc-lead')).fontSize) > parseFloat(getComputedStyle(S.querySelector('.bc-rest')).fontSize),
+                minW: Math.round(Math.min(...big.concat(small).map((e) => e.getBoundingClientRect().width))), hs: document.documentElement.scrollWidth - innerWidth, sum: [...S.querySelectorAll('.bx-sum')].map((e) => e.textContent) }; }''')
+            ok(r['nb'] >= 3 and r['ns'] >= 5 and r['bad'] == 0 and r['outside'] == 0 and r['hs'] <= 0, f'{path} {w}px 계산 기준 카드: 넘침 0, 보기 그림이 카드 안에', r)
+            ok(r['minW'] >= 250 and (w < 700 or (max(r['smallRows']) == 2 and 1 not in r['bigRows'][:-1])), f'{path} {w}px 카드 줄 나눔(좁으면 한 줄에 하나, 넓으면 둘·셋)', (r['bigRows'], r['smallRows'], r['minW']))
+            ok(r['plate'] == 'rgb(232, 225, 244)' or r['plate'] != 'rgb(255, 255, 255)', f'{path} 큰 카드는 자판 판 색', r['plate'])
+            ok(r['lead'] and r['cap'] != 'rgba(0, 0, 0, 0)', f'{path} 첫 문장이 더 크고 이름은 키캡 딱지')
+            ok(r['nd'] >= 4 and r['hidden'] and r['grew'] and r['shown'] and r['closed'] and r['sumH'] >= 44, f'{path} {w}px 작은 카드는 이름과 첫 문장만 보이다가 누르면 펼쳐지고, 다시 누르면 접힌다(누르는 곳 44px 이상)', {k: r[k] for k in ('nd', 'hidden', 'grew', 'shown', 'closed', 'sumH')})
+            ok(r['bigTop'] > 1 or r['bigH'] == 1, f'{path} {w}px 한 줄에 놓인 큰 카드는 높이가 같다', (r['bigTop'], r['bigH']))
+            ok(any('%' in x for x in r['sum']), f'{path} 정확도 보기 그림', r['sum'])
+            ok(not pg._errs, f'{path} {w}px 콘솔 오류 0', pg._errs[:3])
+            if OUT and (w, path) in ((1366, '/ko/'), (390, '/ko/'), (1366, '/')):
+                pg.wait_for_timeout(300); pg.query_selector('#basis').screenshot(path=str(OUT / f'e2e-basis-{w}-{lang}.png'))
+            c.close()
+    c = env.ctx(dark=True)
+    pg = env.page(c, '/ko/', clock=False)
+    r = pg.evaluate('''() => { const S = document.getElementById('basis'); S.scrollIntoView(); const g = (q) => getComputedStyle(S.querySelector(q)); return [g('.bc.big').backgroundColor, g('.bc.big .bc-lead').color, g('.bgrid:not(.big) .bc').backgroundColor, g('.bgrid:not(.big) .bc-lead').color, g('.bx .cap').backgroundColor]; }''')
+    ok(r[0] == 'rgb(59, 45, 114)' and r[4] == 'rgb(241, 234, 219)' and r[1] != r[0] and r[2] != r[3], '어두운 화면: 계산 기준 큰 카드는 짙은 판, 키캡은 미색', r)
+    c.close()
+
+
 def main():
     proxy = os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy') or ''
     args = ['--proxy-bypass-list=localhost;127.0.0.1']
@@ -1755,7 +2074,7 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=str(exe[0]) if exe else None, args=args)
         env = Env(b)
-        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (10, fx_checks), (8, shots)):
+        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (10, fx_checks), (11, feat_checks), (8, shots)):
             if sec(n):
                 try:
                     fn(env)

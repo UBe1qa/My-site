@@ -14,10 +14,10 @@ JS = {
     'ko': {
         'brand': '토독', 'unit': '타/분', 'unitShort': '타', 'accuracy': '정확도', 'sec': '초', 'space': '띄어쓰기', 'enter': '줄바꿈', 'times': '번',
         'needKo': '<kbd>한/영</kbd> 키를 눌러 한글로 바꿔 주세요', 'needEn': '<kbd>한/영</kbd> 키를 눌러 영어로 바꿔 주세요', 'caps': '<kbd>Caps Lock</kbd>이 켜져 있어요',
-        'none': '틀린 키가 없어요', 'missed': '틀린 키', 'slow': '느린 키', 'touchNote': '터치 자판이라 글자 단위로 쟀어요. 느린 키는 재지 않아요.',
+        'none': '틀린 키가 없어요', 'missed': '틀린 키', 'slow': '느린 키', 'touchNote': '터치 자판으로 쟀어요. 느린 키는 재지 않아요.',
         'timeLeft': '남은 초', 'elapsed': '걸린 초', 'progress': '문장',
         'combo': '콤보', 'comboN': '{n} 콤보', 'bBest': '최고 기록', 'bPerfect': '틀린 키 없음', 'bCombo': '최고 콤보 {n}',
-        'fxLevels': ['끔', '가볍게', '화려하게'], 'themes': ['밝게', '어둡게'], 'sndOn': '켬', 'sndOff': '끔', 'fxAuto': '화면이 버거워해서 이펙트를 한 단계 줄였어요.', 'fxReduced': '기기의 동작 줄이기 설정이 켜져 있어서 이펙트를 꺼 뒀어요.',
+        'fxLevels': ['끔', '가볍게', '화려하게'], 'themes': ['밝게', '어둡게'], 'pressedKey': '방금 누른 키', 'noShift': 'Shift 없이 누른 키', 'withShift': 'Shift와 같이 누른 키', 'sndOn': '켬', 'sndOff': '끔', 'fxAuto': '화면이 버거워해서 이펙트를 한 단계 줄였어요.', 'fxReduced': '기기의 동작 줄이기 설정이 켜져 있어서 이펙트를 꺼 뒀어요.',
         'daily': '{m}월 {d}일의 글', 'drillLabel': '틀린 키만 모은 연습',
         'formulaKo': '맞게 친 {n}타 ÷ {t}초 × 60 = {s}타/분', 'formulaEn': '맞게 친 {n}자 ÷ 5 ÷ {t}초 × 60 = {s} WPM',
         'alsoWpm': '{w} WPM',
@@ -28,7 +28,7 @@ JS = {
         'first': '첫 기록이에요. 다음 판부터 이 기록과 견줘요.',
         'diffUp': '지난번보다 +{d}{u}', 'diffDown': '지난번보다 −{d}{u}', 'diffSame': '지난번과 같아요', 'bestIs': '내 최고 {b}{u}',
         'newBest': '최고 기록이에요. 앞 기록 {b}{u}', 'drillDone': '틀린 키 연습은 기록에 넣지 않아요.',
-        'kinds': {'sentences': '문장', 'words': '단어', 'proverbs': '속담', 'pangrams': '팬그램', 'lesson': '자리 연습',
+        'kinds': {'sentences': '문장', 'passages': '긴 글', 'words': '단어', 'proverbs': '속담', 'pangrams': '팬그램', 'lesson': '자리 연습',
                   'all': '전체', 'daily': '일상', 'season': '계절', 'food': '음식', 'work': '일'},
         'lenSecs': '{n}초', 'lenSent': '{n}문장', 'sizes': {'25': '짧게', '50': '보통', '100': '길게'},
         'lenTime': '시간(초)', 'lenSize': '분량',
@@ -51,10 +51,10 @@ JS = {
         'brand': 'Todok', 'unit': 'WPM', 'unitShort': ' WPM', 'accuracy': 'Accuracy', 'sec': 's', 'space': 'Space', 'enter': 'Enter', 'times': '×',
         'needKo': 'Switch your keyboard to Korean', 'needEn': 'Your keyboard is set to another language. Switch it to English',
         'caps': '<kbd>Caps Lock</kbd> is on',
-        'none': 'No missed keys', 'missed': 'Missed', 'slow': 'Slow', 'touchNote': 'Measured per character on a touch keyboard. Slow keys are not timed.',
+        'none': 'No missed keys', 'missed': 'Missed', 'slow': 'Slow', 'touchNote': 'Measured on a touch keyboard. Slow keys are not timed.',
         'timeLeft': 'Sec left', 'elapsed': 'Seconds', 'progress': 'Sentence',
         'combo': 'Combo', 'comboN': '{n} combo', 'bBest': 'New best', 'bPerfect': 'No mistakes', 'bCombo': 'Best combo {n}',
-        'fxLevels': ['Off', 'Light', 'Full'], 'themes': ['Light', 'Dark'], 'sndOn': 'On', 'sndOff': 'Off', 'fxAuto': 'Effects were turned down a step to keep typing smooth.', 'fxReduced': 'Effects are off because your device is set to reduce motion.',
+        'fxLevels': ['Off', 'Light', 'Full'], 'themes': ['Light', 'Dark'], 'pressedKey': 'You pressed', 'noShift': 'Pressed without Shift', 'withShift': 'Pressed with Shift', 'sndOn': 'On', 'sndOff': 'Off', 'fxAuto': 'Effects were turned down a step to keep typing smooth.', 'fxReduced': 'Effects are off because your device is set to reduce motion.',
         'daily': 'Text for {mon} {d}', 'drillLabel': 'Practice for your missed keys',
         'months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         'formulaKo': '{n} correct keystrokes ÷ {t} s × 60 = {s} per minute', 'formulaEn': '{n} correct characters ÷ 5 ÷ {t} s × 60 = {s} WPM',
@@ -66,7 +66,7 @@ JS = {
         'first': 'Your first result. The next one will be compared with it.',
         'diffUp': '+{d}{u} from last time', 'diffDown': '−{d}{u} from last time', 'diffSame': 'Same as last time', 'bestIs': 'your best {b}{u}',
         'newBest': 'New best. Previous best {b}{u}', 'drillDone': 'Missed-key practice is not added to your results.',
-        'kinds': {'sentences': 'Sentences', 'words': 'Words', 'pangrams': 'Pangrams', 'lesson': 'Practice'},
+        'kinds': {'sentences': 'Sentences', 'passages': 'Paragraphs', 'words': 'Words', 'proverbs': 'Proverbs', 'pangrams': 'Pangrams', 'lesson': 'Practice', 'all': 'Everyday'},
         'lenSecs': '{n} s', 'lenSent': '{n} sentences', 'sizes': {'25': 'Short', '50': 'Medium', '100': 'Long'},
         'lenTime': 'Seconds', 'lenSize': 'Length',
         'lessons': ['Home row', 'Top row', 'Bottom row', 'Shift', 'All keys'], 'lessonN': 'Step {n}: {name}',
@@ -81,7 +81,7 @@ JS = {
         'kbShow': 'Show keyboard', 'kbHide': 'Hide keyboard',
         'todayAt': 'Today {t}', 'dateFmt': '{m}/{d}', 'bestTag': 'best', 'recBest': '{c}: best {b} {u}',
         'clearBtn': 'Clear results', 'clearSure': 'Press again to clear', 'cleared': 'Results cleared.',
-        'speedNow': 'Speed now', 'thisRun': 'This run', 'topicSay': {},
+        'speedNow': 'Speed now', 'thisRun': 'This run', 'topicSay': {'all': 'Everyday sentences written for this site', 'proverbs': 'Traditional proverbs', 'pangrams': 'Sentences that use every letter'},
     },
 }
 
@@ -94,8 +94,8 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> 다른 글 · <kbd>Esc</kbd> 처음으로(치는 칸에서 나오기)',
         'esc_note': '<kbd>Esc</kbd>를 누르면 치는 칸에서 나와요.',
         'start_pc': '첫 글자부터 치면 바로 시작해요', 'start_off': '글을 누르거나 아무 키나 치면 시작해요', 'start_mo': '글을 누르면 자판이 열려요',
-        'nojs': '이 도구를 쓰려면 브라우저의 자바스크립트를 켜 주세요.', 'acc_s': '정확도', 'left_s': '', 'theme_l': '화면', 'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 초', 'nextkey': '다음 키',
-        'combo': '콤보', 'combo_tip': '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세요.', 'combo_note': '콤보는 이어서 맞게 누른 키 수예요.', 'fx_l': '이펙트', 'snd_l': '키 소리',
+        'nojs': '이 도구를 쓰려면 브라우저의 자바스크립트를 켜 주세요.', 'acc_s': '정확도', 'left_s': '', 'theme_l': '화면', 'basis_sub': '화면에 나오는 숫자는 전부 아래 방법으로 세어요. 이름을 누르면 설명이 펼쳐져요.', 'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 초', 'nextkey': '다음 키',
+        'combo': '콤보', 'combo_tip': '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세어요.', 'combo_note': '콤보는 이어서 맞게 누른 키 수예요.', 'fx_l': '이펙트', 'snd_l': '키 소리',
         'fresh': '다른 글', 'quit': '그만', 'quit2': '처음 화면으로',
         'acc': '정확도', 'again': '다른 글로 다시', 'same': '같은 글 다시', 'drill': '틀린 키만 연습', 'share': '결과 그림 저장',
         'chart_aria': '초마다 속도 그래프', 'chart_cap': '초마다 속도', 'chart_err': '틀린 키가 있던 초',
@@ -116,7 +116,7 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> new text · <kbd>Esc</kbd> reset and leave the typing field',
         'esc_note': 'Press <kbd>Esc</kbd> to leave the typing field.',
         'start_pc': 'Type the first letter to start', 'start_off': 'Click the text or press any key to start', 'start_mo': 'Tap the text to open your keyboard',
-        'nojs': 'Turn on JavaScript in your browser to use this tool.', 'acc_s': 'Acc %', 'left_s': 'Sec', 'theme_l': 'Theme', 'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Sec left', 'nextkey': 'Next key',
+        'nojs': 'Turn on JavaScript in your browser to use this tool.', 'acc_s': 'Acc %', 'left_s': 'Sec', 'theme_l': 'Theme', 'basis_sub': 'Every number on this page is counted the way described here. Select a card to read more.', 'count_l': 'Per round', 'look': 'Text to copy', 'mine': 'What you typed', 'topic_l': 'Topic', 'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Sec left', 'nextkey': 'Next key',
         'combo': 'Combo', 'combo_tip': 'Keys pressed correctly in a row. A wrong key starts the count again from 0.', 'combo_note': 'Combo counts keys pressed correctly in a row.', 'fx_l': 'Effects', 'snd_l': 'Key sound',
         'fresh': 'New text', 'quit': 'Stop', 'quit2': 'Back to start',
         'acc': 'Accuracy', 'again': 'Try again', 'same': 'Same text', 'drill': 'Practice missed keys', 'share': 'Save result image',
@@ -132,11 +132,11 @@ TX = {
 }
 
 NAV = {
-    'en': [('', 'Typing Test', 'test'), ('practice/', 'Practice', 'practice'), ('guide/', 'Guides', 'guide')],
+    'en': [('', 'Typing Test', 'test'), ('practice/', 'Practice', 'practice'), ('sentences/', 'Sentences', 'sentences'), ('guide/', 'Guides', 'guide')],
     'ko': [('', '속도 측정', 'test'), ('practice/', '자리 연습', 'practice'), ('sentences/', '문장 연습', 'sentences'), ('english/', '영타 연습', 'english'), ('guide/', '가이드', 'guide')],
 }
 # 같은 역할이라 서로 잇는 페이지(영어 경로 -> 한국어 경로). 문장 연습·영타 연습(한국어)은 짝이 없다. 글은 articles.py 의 pair.
-PAIRS = {'': '', 'practice/': 'practice/', 'guide/': 'guide/', 'about/': 'about/', 'privacy/': 'privacy/'}
+PAIRS = {'': '', 'practice/': 'practice/', 'sentences/': 'sentences/', 'guide/': 'guide/', 'about/': 'about/', 'privacy/': 'privacy/'}
 
 # 연구 값 한 줄(영어 타자에만 곁들인다. verified-facts 14번: Dhakal 외 2018, 2026-10-10 확인)
 CTX = {
@@ -146,7 +146,7 @@ CTX = {
 
 TOOLS = {
     ('ko', 'test'): dict(
-        path='', layout='a', text='ko', tool='test', kinds=['sentences', 'words', 'proverbs'], kind='sentences',
+        path='', layout='a', text='ko', tool='test', kinds=['sentences', 'passages', 'words', 'proverbs'], kind='sentences',
         title='타자 속도 측정·타자 연습 (한글·영어) | 토독', h1='타자 속도 측정',
         desc='들어오자마자 치는 무료 타자 속도 측정이에요. 한글 두벌식 타수(타/분)와 정확도를 재고, 끝나면 자주 틀린 키와 느린 키를 자판 그림으로 알려 줘요.',
         app_name='토독 타자 속도 측정',
@@ -170,7 +170,7 @@ TOOLS = {
         safe='친 글과 기록은 이 기기 밖으로 나가지 않아요.',
     ),
     ('ko', 'english'): dict(
-        path='english/', layout='a', text='en', tool='english', kinds=['words', 'sentences', 'pangrams'], kind='words', both=True,
+        path='english/', layout='a', text='en', tool='english', kinds=['words', 'sentences', 'passages', 'pangrams'], kind='words', both=True,
         title='영타 연습: 영어 타자 속도 측정 (타수·WPM) | 토독', h1='영타 연습',
         desc='영어 타자 속도를 타수(타/분)와 WPM으로 같이 재는 영타 연습이에요. 흔한 영어 단어와 문장을 치고, 끝나면 틀린 키와 느린 키를 알려 줘요.',
         app_name='토독 영타 연습',
@@ -178,11 +178,19 @@ TOOLS = {
         safe='친 글과 기록은 이 기기 밖으로 나가지 않아요.',
     ),
     ('en', 'test'): dict(
-        path='', layout='a', text='en', tool='test', kinds=['words', 'sentences'], kind='words',
+        path='', layout='a', text='en', tool='test', kinds=['words', 'sentences', 'passages', 'proverbs'], kind='words',
         title='Typing Test (WPM): Free Typing Speed Test | Todok', h1='Typing Test',
         desc='A free typing speed test with no sign-up. Start typing to measure WPM and accuracy over 15 to 120 seconds, then see which keys you missed and which were slow.',
         app_name='Todok Typing Test',
         basis='WPM here is correct characters ÷ 5 ÷ minutes. Other sites may count differently.',
+        safe='What you type and your results stay on this device.',
+    ),
+    ('en', 'sentences'): dict(
+        path='sentences/', layout='b', text='en', tool='sentences', topics=['all', 'proverbs', 'pangrams'], counts=[5, 10, 20], count=5,
+        title='Sentence Typing Practice: One Line at a Time, No Timer | Todok', h1='Sentence Practice',
+        desc='Untimed typing practice, one sentence at a time. Copy everyday sentences, traditional proverbs or pangrams, see what you typed under each line, and get WPM and accuracy at the end.',
+        app_name='Todok Sentence Practice',
+        basis='There is no time limit. Finish the sentences you picked to see WPM and accuracy. At the end of a line, press Space or Enter to move on.',
         safe='What you type and your results stay on this device.',
     ),
     ('en', 'practice'): dict(
@@ -200,25 +208,25 @@ BASIS = {
     'ko': [
         ('타수(타/분)', '맞게 친 키 수 ÷ 걸린 시간(초) × 60. 두벌식 키로 세어요. 쌍자음(ㄲㄸㅃㅆㅉ)과 ㅒ·ㅖ, 영어 대문자는 Shift를 같이 누르니 2타, 겹받침(ㄳ = ㄱ + ㅅ)과 겹모음(ㅘ = ㅗ + ㅏ)은 키 두 개라 2타, 띄어쓰기와 줄바꿈은 1타예요. 예: \'한글 타자\'는 3 + 3 + 1 + 2 + 2 = 11타.'),
         ('끝났을 때의 글 기준', '타수에는 끝났을 때 화면에 맞게 남아 있는 키만 들어가요. 틀렸다가 고쳐 친 키는 한 번만 세어요.'),
-        ('정확도', '맞게 누른 키 ÷ 누른 키. 키가 눌린 그 순간 맞았는지로 세니까, 고쳐 쳐도 틀렸던 기록은 남아요. 지우기(Backspace)는 누른 키에 넣지 않아요. 누른 키는 실제로 누른 횟수예요. 받침이 다음 글자로 넘어가느라 화면 글자가 두 번 바뀌어도 한 번만 세어요.'),
+        ('정확도', '맞게 누른 키 ÷ 누른 키. 키가 눌린 그 순간 맞았는지로 세니까, 고쳐 쳐도 틀렸던 기록은 남아요. 지우기(Backspace)는 누른 키에 넣지 않아요. 누른 키는 실제로 누른 횟수예요. 받침이 다음 글자로 넘어가느라 화면 글자가 두 번 바뀌어도 한 번만 세어요. Shift를 같이 누르는 키도 여기서는 한 번이에요(타수에서는 2타).'),
         ('총 타수', '틀렸거나 지운 것까지, 누른 키 전부의 타수 ÷ 걸린 시간(초) × 60. 지우기(Backspace)는 넣지 않아요. 결과의 정확도 아래에 작게 나와요.'),
-        ('틀린 키와 느린 키', '틀린 키는 \'그때 쳐야 했던 키\'에 적어요(ㄴ 자리에 ㅅ을 치면 ㄴ에 1번). 느린 키는 맞게 친 키의 앞 키와의 간격 평균이 전체 평균보다 긴 키예요. 3초 넘게 쉰 간격과 세 번 못 친 키는 빼요.'),
-        ('콤보', '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세요. 지우기(Backspace)는 세지도 끊지도 않고, 한/영이나 Caps Lock 안내가 뜬 동안 친 키로는 끊기지 않아요. 결과에는 그 판에서 가장 길었던 값이 나와요. 속도와 정확도 계산에는 들어가지 않아요.'),
+        ('틀린 키와 느린 키', '틀린 키는 \'그때 쳐야 했던 키\'에 적어요(ㄴ 자리에 ㅅ을 치면 ㄴ에 1번). 느린 키는 맞게 친 키의 앞 키와의 간격 평균이 전체 평균보다 긴 키예요. 3초 넘게 쉰 간격과, 세 번도 치지 않은 키는 빼요.'),
+        ('콤보', '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세어요. 지우기(Backspace)는 세지도 끊지도 않고, 한/영이나 Caps Lock 안내가 뜬 동안 친 키로는 끊기지 않아요. 결과에는 그 판에서 가장 길었던 값이 나와요. 속도와 정확도 계산에는 들어가지 않아요.'),
         ('한글은 키 흐름으로 비교', '글자 모양이 아니라 두벌식 키 순서끼리 견줘요. 그래서 조합 중인 글자(\'한\'을 치는 중의 \'하\')와 받침이 다음 글자로 넘어가는 순간(\'간\' → \'가나\')을 틀렸다고 하지 않아요.'),
         ('한/영·Caps Lock이 반대일 때', '안내가 뜬 동안 친 키는 정확도와 틀린 키 기록에 넣지 않아요. 띄어쓰기를 넘어 여러 단어를 그렇게 쳐도 같아요. 자판 전환 실수는 타자 실력이 아니니까요.'),
         ('시간', '첫 키에서 시작하고, 탭이 가려지면 멈춰요. 결과의 시간은 0.1초까지 반올림한 값이고, 타수는 그 시간으로 계산해 반올림해요. 그래서 화면의 식을 그대로 다시 계산하면 같은 수가 나와요.'),
-        ('휴대폰 자판', '터치 자판은 어떤 키를 눌렀는지 알 수 없어서 글자가 끝날 때 판정하고, 글자를 두벌식 키 수로 환산해요. 지웠다가 같은 글자를 다시 치면 한 번만 세고, 느린 키는 재지 않아요. 자판 앱에 따라 다르게 보일 수 있어요.'),
+        ('휴대폰 자판', '터치 자판에서도 낱자를 누를 때마다 바로 세어요. 다만 틀린 낱자는 그 글자가 끝난 뒤에 틀림으로 세어요. 낱자를 여러 번 눌러 한 글자를 만드는 자판에서는 만드는 중의 모양이 틀린 것처럼 보일 수 있어서요. 글자는 두벌식 키 수로 환산해요. 지웠다가 같은 글자를 다시 치면 한 번만 세고, 느린 키는 재지 않아요. 자판 앱에 따라 다르게 보일 수 있어요.'),
         ('다른 프로그램과의 차이', '타수를 세는 방법은 프로그램마다 다를 수 있어요. 토독에서는 틀린 채 둔 글자가 속도에서 빠지고 정확도에 남아요. 틀린 단어 전체를 빼는 곳과는 숫자가 달라요. 토독의 숫자가 다른 곳과 같다고 하지 않아요.'),
     ],
     'en': [
         ('WPM', 'Correct characters ÷ 5 ÷ seconds × 60. One "word" is any five characters, spaces included. This is net WPM: only characters that are correct in the final text count.'),
         ('Raw speed', 'Every key press ÷ 5 ÷ seconds × 60, including the ones you got wrong or erased. Backspace itself is not counted. It is shown in small print under the accuracy.'),
         ('Accuracy', 'Correct key presses ÷ all key presses. A key is judged at the moment you press it, so a mistake you go back and fix still counts against accuracy.'),
-        ('Missed and slow keys', 'A miss is recorded on the key you should have pressed (typing "r" where "e" was expected counts against "e"). A slow key is one whose average gap from the previous key is longer than your overall average. Pauses longer than 3 seconds and keys typed fewer than three times are left out.'),
+        ('Missed and slow keys', 'A miss is recorded on the key you should have pressed. Typing "r" where "e" was expected counts against "e". A slow key is one whose average gap from the previous key is longer than your overall average. Pauses longer than 3 seconds and keys typed fewer than three times are left out.'),
         ('Combo', 'The number of keys you pressed correctly in a row. A wrong key starts it again from 0. Backspace neither adds to it nor breaks it, and keys typed while the wrong-layout or Caps Lock notice is showing do not break it. The result shows the longest run of that test. It has no effect on WPM or accuracy.'),
-        ('Wrong layout or Caps Lock', 'While the "switch your keyboard" or Caps Lock notice is showing, key presses are not counted toward accuracy or missed keys, even when it lasts for several words.'),
+        ('Wrong layout or Caps Lock', 'Key presses made while the "switch your keyboard" or Caps Lock notice is showing are not counted. They are left out of accuracy and missed keys, even when the notice stays up for several words.'),
         ('Time', 'The clock starts on your first key and pauses when the tab is hidden. The time in the result is rounded to 0.1 s first, and WPM is calculated from that rounded time, so the formula on screen gives the same number if you redo it by hand.'),
-        ('Touch keyboards', 'On a phone we cannot see individual keys, so each character is judged when it is complete. If you erase a character and type the same one again, it is counted once. Slow keys are not timed. Keyboard apps differ, so results can look different from one app to another.'),
+        ('Touch keyboards', 'On a phone we cannot see individual key presses, so we compare the text you have typed so far each time it changes. If you erase a character and type the same one again, it is counted once. Slow keys are not timed. Keyboard apps differ, so results can look different from one app to another.'),
         ('Other sites', 'Typing sites do not all count the same way. Here a character you leave wrong is left out of WPM and stays in accuracy, so a site that drops the whole word around a mistake will show a lower number. We do not claim our numbers match anyone else\'s.'),
     ],
 }
@@ -233,14 +241,16 @@ FAQ = {
     ('ko', 'test'): [
         ('다른 타자 프로그램과 타수가 왜 다른가요?', '프로그램마다 세는 기준이 다를 수 있어요. 토독은 끝났을 때 맞게 남은 키만 세고, Shift를 같이 누르는 키는 2타로 세어요. 그래서 다른 곳의 숫자와 같다고 하지 않아요. 기준은 위 \'계산 기준\'에 전부 적어 뒀어요.'),
         ('기록은 어디에 저장되나요?', '이 기기의 브라우저 저장소에만 남아요. 서버로 보내지 않고, 회원 가입도 없어요. \'내 기록\' 칸의 \'기록 지우기\'를 누르면 바로 지워져요. 다른 기기나 다른 브라우저에서는 보이지 않아요.'),
-        ('휴대폰에서도 잴 수 있나요?', '잴 수 있어요. 터치 자판은 어떤 키를 눌렀는지 알 수 없어서 글자가 끝날 때 판정하고, 글자를 두벌식 키 수로 환산해요. 자판 앱에 따라 다르게 보일 수 있고, 컴퓨터 자판으로 잰 타수와 그대로 견주기는 어려워요.'),
-        ('한글을 치는 중에 왜 틀렸다고 안 나오나요?', '글자가 아니라 키 순서로 비교해서 그래요. \'한\'을 치는 중에 보이는 \'하\'나, 받침이 다음 글자로 넘어가기 직전의 모양은 맞게 치는 중이라 틀림으로 표시하지 않아요. 틀린 키를 누른 순간에는 바로 주홍색으로 바뀌어요.'),
+        ('휴대폰에서도 잴 수 있나요?', '잴 수 있어요. 터치 자판에서도 낱자를 누를 때마다 바로 세고, 글자를 두벌식 키 수로 환산해요. 틀린 낱자는 그 글자가 끝난 뒤에 틀림으로 세어요. 자판 앱에 따라 다르게 보일 수 있고, 컴퓨터 자판으로 잰 타수와 그대로 견주기는 어려워요.'),
+        ('한글을 치는 중에 왜 틀렸다고 안 나오나요?', '글자가 아니라 키 순서로 비교해서 그래요. \'한\'을 치는 중에 보이는 \'하\'나, 받침이 다음 글자로 넘어가기 직전의 모양은 맞게 치는 중이라 틀림으로 표시하지 않아요. 틀린 키를 누른 순간에는 바로 주홍색으로 바뀌고, 그 글자 아래에 내가 친 글자가 작게 나와요.'),
+        ('\'다른 글\'을 누르면 글이 얼마나 있나요?', '문장 200여 개, 긴 글 30편, 속담 100여 개, 단어 250여 개 가운데 그때그때 골라서 섞어요. 한 판 안에서는 같은 문장이 되풀이되지 않고, 방금 나온 문장은 뒤로 밀려요. 문장과 긴 글은 이 사이트를 만들며 직접 쓴 것이고, 책·기사·노래 가사는 넣지 않았어요.'),
     ],
     ('en', 'test'): [
         ('How is WPM calculated here?', 'Correct characters ÷ 5 ÷ minutes. A "word" is any five characters, spaces included, so long and short words are treated the same. The result screen shows the numbers that went into your score.'),
         ('Why do I get a different score on another typing site?', 'Sites differ on what they count: every key press or only correct characters, whether fixed mistakes still count, and how long the test runs. We list our rules above and do not claim to match other sites.'),
         ('Where are my results stored?', 'In this browser, on this device only. Nothing you type is sent to a server and there is no account. The "Clear results" button under "Your results" deletes them.'),
-        ('Does the test work on a phone?', 'Yes. A touch keyboard does not report individual keys, so the test judges each character when it is complete and does not time slow keys. Keyboard apps differ, so results can look different from one app to another, and scores from a phone and a physical keyboard are not directly comparable.'),
+        ('Does the test work on a phone?', 'Yes. A touch keyboard does not report individual keys, so the test compares what you have typed so far each time it changes, and does not time slow keys. Keyboard apps differ, so results can look different from one app to another, and scores from a phone and a physical keyboard are not directly comparable.'),
+        ('How many different texts are there?', 'More than 200 sentences, 28 paragraphs, 80 proverbs and more than 300 common words, picked and mixed at random each time. A sentence is not repeated within a test, and the ones you have just seen are held back. The sentences and paragraphs were written for this site. Nothing is taken from books, articles or song lyrics.'),
     ],
 }
 
@@ -260,6 +270,10 @@ EXPLAIN = {
         ('보고 치는 글과 내가 친 글을 나란히', '<p>위 줄이 보고 칠 글, 아래 줄이 내가 친 글이에요. 틀린 글자는 위 줄에서 바로 주홍색으로 바뀌어요. 문장을 다 치고 띄어쓰기나 Enter를 누르면 다음 문장이 올라와요.</p>'),
         ('연습 글은 직접 썼어요', '<p>문장은 이 사이트를 만들며 쓴 것이고, 속담은 지은이가 알려지지 않은 채 전해 오는 속담이에요. 책·기사·노래 가사는 넣지 않았어요. 겹받침과 쌍자음이 고루 나오도록 골랐어요.</p>'),
     ],
+    ('en', 'sentences'): [
+        ('The line to copy and the line you typed', '<p>The top line is the text to copy and the line under it is what you have typed so far. A wrong character turns red in the top line straight away. Finish the sentence, press Space or Enter, and the next one moves up.</p>'),
+        ('Where the text comes from', '<p>The everyday sentences were written for this site. The proverbs are old sayings with no known author, and each pangram uses every letter of the alphabet at least once. Nothing comes from books, articles or song lyrics.</p>'),
+    ],
     ('ko', 'english'): [
         ('한/영 키부터 확인해요', '<p>영어 글인데 한글이 들어오면 화면에 \'한/영 키를 눌러 영어로 바꿔 주세요\'가 떠요. 그동안 친 키는 정확도에 넣지 않아요.</p>'),
         ('타수와 WPM을 같이 보여 줘요', '<p>한국에서 익숙한 타수(타/분)와 영어권에서 쓰는 WPM을 한 화면에 보여 줘요. 둘은 세는 단위가 달라요. 타수는 키를 세고, WPM은 다섯 글자를 한 단어로 쳐서 단어를 세어요.</p>'),
@@ -274,7 +288,7 @@ ABOUT = {
         body=f'''<p class="lead">토독은 들어오자마자 칠 수 있는 타자 속도 측정·타자 연습 도구예요. 한글(두벌식)과 영어를 같은 화면에서 재고, 끝나면 어느 키에서 틀리고 느렸는지 자판 그림으로 보여 줘요.</p>
 <h2>무엇을 할 수 있나요</h2>
 <ul>
-<li><a href="/ko/">타자 속도 측정</a>: 15초부터 120초까지, 문장·단어·속담으로 타수(타/분)와 정확도를 재요.</li>
+<li><a href="/ko/">타자 속도 측정</a>: 15초부터 120초까지, 문장·긴 글·단어·속담으로 타수(타/분)와 정확도를 재요.</li>
 <li><a href="/ko/practice/">타자 자리 연습</a>: 두벌식 기본 자리부터 다섯 단계로, 화면 자판이 다음 키와 손가락을 알려 줘요.</li>
 <li><a href="/ko/sentences/">타자 문장 연습</a>: 시간 제한 없이 한 문장씩 보고 쳐요.</li>
 <li><a href="/ko/english/">영타 연습</a>: 영어 타자를 타수와 WPM으로 같이 재요.</li>
@@ -283,7 +297,7 @@ ABOUT = {
 <p>타수(타/분)는 맞게 친 키 수(두벌식 환산, Shift 포함)를 분으로 나눈 값이고, 영어 WPM은 맞게 친 글자 수 ÷ 5를 분으로 나눈 값이에요. 정확도는 맞게 누른 키 ÷ 누른 키예요. 자세한 기준과 예시는 <a href="/ko/#basis">계산 기준</a>과 <a href="/ko/guide/tasu-gyesan/">타수 계산 글</a>에 있어요. 타수를 세는 방법은 프로그램마다 다를 수 있어서, 토독의 숫자가 다른 곳과 같다고 하지 않아요.</p>
 <p>WPM에서 다섯 글자를 한 단어로 치는 것은 타자 연구에서도 쓰는 정의예요. 타자 1억 3천6백만 번을 분석한 2018년 논문에 그 정의가 적혀 있어요(<a href="{SOURCE_DHAKAL_PDF}" rel="noopener">Dhakal 외, CHI 2018</a>, 2026-10-10 확인).</p>
 <h2>연습 글</h2>
-<p>문장은 이 사이트를 만들며 직접 썼고, 속담은 지은이가 알려지지 않은 채 전해 오는 속담이에요. 단어는 흔히 쓰는 말을 직접 골랐어요. 책·기사·노래 가사·시·영화 대사·유명인의 말은 넣지 않았어요.</p>
+<p>문장과 긴 글은 이 사이트를 만들며 직접 썼고, 속담은 지은이가 알려지지 않은 채 전해 오는 속담이에요. 단어는 흔히 쓰는 말을 직접 골랐어요. 책·기사·노래 가사·시·영화 대사·유명인의 말은 넣지 않았어요.</p>
 <h2>내 기기 안에서</h2>
 <p>친 글과 기록은 이 기기의 브라우저에만 남고 서버로 보내지 않아요. 회원 가입도 없어요. 광고와 방문 통계가 어떻게 돌아가는지는 <a href="/ko/privacy/">개인정보 처리방침</a>에 적었어요.</p>
 <h2>확인하지 못한 것</h2>
@@ -299,15 +313,16 @@ ABOUT = {
         body=f'''<p class="lead">Todok is a typing test you can start the moment the page opens. It measures speed and accuracy and then shows, on a picture of the keyboard, which keys you missed and which were slow.</p>
 <h2>What you can do here</h2>
 <ul>
-<li><a href="/">Typing Test</a>: 15 to 120 seconds of common words or sentences, scored in WPM.</li>
+<li><a href="/">Typing Test</a>: 15 to 120 seconds of common words, sentences, paragraphs or proverbs, scored in WPM.</li>
 <li><a href="/practice/">Typing Practice</a>: five steps from the home row to full sentences, with an on-screen keyboard that shows the next key and finger.</li>
+<li><a href="/sentences/">Sentence Practice</a>: no timer, one line at a time, with what you typed shown under the line you are copying.</li>
 <li>A Korean edition at <a href="/ko/" lang="ko" hreflang="ko">/ko/</a> measures Korean typing in keystrokes per minute.</li>
 </ul>
 <h2>How scores are calculated</h2>
 <p>WPM is correct characters ÷ 5 ÷ minutes. Accuracy is correct key presses ÷ all key presses, judged at the moment each key is pressed. The full rules are under <a href="/#basis">How the numbers are calculated</a>, and the worked examples are in <a href="/guide/how-wpm-is-calculated/">How WPM is calculated</a>. Typing sites do not all count the same way, and we do not claim our numbers match anyone else's.</p>
 <p>Counting five characters as one word is the definition used in typing research too. It is stated in a 2018 paper that analysed 136 million keystrokes (<a href="{SOURCE_DHAKAL_PDF}" rel="noopener">Dhakal et al., CHI 2018</a>, checked 2026-10-10).</p>
 <h2>Practice text</h2>
-<p>The sentences were written for this site and the word list is our own pick of very common words. The pangrams are long-standing anonymous ones or written here. There is no text from books, articles, lyrics, poems, films or quotes.</p>
+<p>The sentences and paragraphs were written for this site and the word list is our own pick of very common words. The proverbs are old sayings with no known author. The pangrams are long-standing anonymous ones or written here. There is no text from books, articles, lyrics, poems, films or quotes.</p>
 <h2>On your device</h2>
 <p>What you type and your results stay in this browser and are not sent to a server. There is no account. How ads and visit statistics work is described in the <a href="/privacy/">privacy policy</a>.</p>
 <h2>What we could not check</h2>

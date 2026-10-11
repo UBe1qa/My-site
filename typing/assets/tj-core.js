@@ -152,10 +152,16 @@
     }
     var tOp = new Array(end), extra = [];
     i = n; j = end;
+    /* 같은 값으로 맞추는 길이 여럿일 때: 친 글쇠가 목표보다 많이 남아 있으면(i > j) '더 친 글쇠'를 먼저 본다 → 더 친 글쇠가 낱말 뒤쪽으로 간다.
+       'hhh' 에 hhhh → 넷째 h 가 더 친 것(띄어쓰기 자리에 표시), 'copier' 에 copierxr → xr 이 더 친 것. 전에는 짝(맞음·바꿔 침)을 늘 먼저 봐서
+       더 친 글쇠가 낱말 앞쪽으로 갔고, 'hhhh' 의 첫 h 가 틀린 것으로 보였다(평가 2026-10-11).
+       빠뜨린 글쇠는 예전대로 짝을 먼저 본다: '학교'에 '하교'를 치면 빠진 ㄱ 은 '교'의 첫소리가 아니라 '학'의 받침이어야 한다(친 글자 '교'가 온전하다).
+       값(cost)과 끝 자리(end)는 그대로라 누른 키·맞은 키·콤보는 바뀌지 않는다 */
     while (i > 0 || j > 0) {
-      var cur = D[i * W + j];
-      if (i > 0 && j > 0 && cur === D[(i - 1) * W + j - 1] + (ik[i - 1] === tk[j - 1] ? 0 : 1)) { tOp[j - 1] = ik[i - 1] === tk[j - 1] ? MATCH : SUB; i--; j--; }
-      else if (i > 0 && cur === D[(i - 1) * W + j] + 1) { extra.push(j); i--; }
+      var cur = D[i * W + j], up = i > 0 && cur === D[(i - 1) * W + j] + 1;
+      if (up && i > j) { extra.push(j); i--; }
+      else if (i > 0 && j > 0 && cur === D[(i - 1) * W + j - 1] + (ik[i - 1] === tk[j - 1] ? 0 : 1)) { tOp[j - 1] = ik[i - 1] === tk[j - 1] ? MATCH : SUB; i--; j--; }
+      else if (up) { extra.push(j); i--; }
       else { tOp[j - 1] = GONE; j--; }
     }
     return { cost: D[n * W + end], end: end, full: D[n * W + m], tOp: tOp, extra: extra };
@@ -591,6 +597,12 @@
     var seen = [], fresh = [];
     deck.forEach(function (x) { (avoid.lastIndexOf(x) >= 0 ? seen : fresh).push(x); });
     seen.sort(function (a, b) { return avoid.lastIndexOf(b) - avoid.lastIndexOf(a); });
+    /* 전부 한 번씩 나온 뒤(안 나온 것이 없다): 최근 절반만 뒤로 미루고, 오래된 절반은 새로 섞인 차례 그대로 둔다.
+       전부를 '오래된 것부터'로 줄 세우면 긴 글 30편이 늘 같은 차례로 되풀이됐다(평가 2026-10-11) */
+    if (!fresh.length && seen.length > 3) {
+      var late = seen.slice(0, Math.ceil(seen.length / 2));
+      return late.concat(deck.filter(function (x) { return late.indexOf(x) < 0; }));
+    }
     return seen.concat(fresh);
   }
   /* 문장을 섞어 minChars 글자가 넘을 때까지 잇는다(한 바퀴 안에서는 같은 문장이 다시 안 나온다).

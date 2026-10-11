@@ -73,7 +73,7 @@ class Ime {
 /* 글을 두벌식으로 칠 때 글쇠마다 입력칸에 보이는 글 */
 function stepsFor(keys) { const ime = new Ime(); return keys.map((k) => ime.key(k)); }
 const SENT = [].concat(...Object.values(KO.sentences));
-const ALL_KO = SENT.concat(KO.proverbs, KO.words);
+const ALL_KO = SENT.concat(KO.proverbs, KO.words, KO.passages);   /* tj-text-ko.js 에 적힌 차례(gen_keys.py 가 그 차례로 읽는다) */
 
 /* ---- 1. 자모 풀기·글쇠 수: 한글 음절 11,172자 전부 ---- */
 run('jamo', () => {
@@ -187,7 +187,7 @@ run('compose', () => {
   ALL_KO.forEach((t) => cleanRun(t, '연습 글'));
   cleanRun(SENT.slice(0, 12).join('\n'), '줄바꿈으로 이은 글');
   cleanRun('ㅋㅋㅋ ㅎㅎ', '낱자');
-  EN.sentences.concat(EN.pangrams).forEach((t) => cleanRun(t, '영어 문장'));
+  EN.sentences.concat(EN.pangrams, EN.proverbs, EN.passages).forEach((t) => cleanRun(t, '영어 문장'));
   /* 한글 음절 11,172자 × 다음 글자(첫소리 19가지)·띄어쓰기·마침표 */
   const NEXT = Array.from(C19).map((c, i) => String.fromCharCode(0xAC00 + (i * 21 + (i % 21)) * 28 + (i % 3 ? 0 : 4))).concat([' ', '.']);
   for (let i = 0; i < 11172; i++) {
@@ -251,6 +251,22 @@ run('wrong', () => {
   res = p.s.finish(3000);
   eq(p.seen[p.seen.length - 1], '2111111', "'하교에' = '학'만 틀림");
   eq(res.typedKeys + ':' + res.okKeys, '14:13', '누른 14, 맞은 13'); eq(res.missed.map((m) => m.key + m.miss).join(','), 'ㄱ1', '빠뜨린 ㄱ에 적힌다');
+  /* 더 친 글쇠는 낱말 뒤쪽에 둔다(같은 글자가 이어질 때 앞 글자가 틀린 것으로 보이지 않게. 평가 2026-10-11). 빠뜨린 글쇠는 예전대로(위 '하교에') */
+  const al = (typed, target) => { const x = TJ.align(Array.from(typed), Array.from(target), false); return Array.from(x.tOp).join('') + '|' + x.extra.join(','); };
+  eq(al('hhhh', 'hhh'), '111|3', "'hhh' 에 hhhh: 넷째 h 가 더 친 것(끝에)");
+  eq(al('copierxr', 'copier'), '111111|6,6', "'copier' 에 copierxr: xr 이 더 친 것");
+  eq(al('hoteXxy', 'hotel'), '11112|5,5', "'hotel' 에 hoteXxy: l 자리에 X, xy 는 더 친 것");
+  eq(al('boardWwm', 'boards'), '111112|6,6', "'boards' 에 boardWwm: s 자리에 W, wm 은 더 친 것");
+  eq(al('ba', 'ab'), '22|', "'ab' 에 ba: 두 글자를 바꿔 친 것(더 친 것·빠뜨린 것으로 보지 않는다)");
+  eq(al('aabc', 'abc'), '111|1', "'abc' 에 aabc: 둘째 a 가 더 친 것");
+  eq(al('xabc', 'abc'), '111|0', "'abc' 에 xabc: 맨 앞의 x 가 더 친 것(다른 길이 없다)");
+  eq(al('kk', 'kkk'), '311|', "'kkk' 에 kk: 빠뜨린 글쇠는 예전대로 앞쪽");
+  p = play('hhh sds', Array.from('hhhh sds'));
+  eq(p.seen[3] + ' ' + p.seen[4] + ' ' + p.seen[p.seen.length - 1], '1112000 1112000 1112111', "'hhh' 에 hhhh: 치는 중에도 띄어쓰기를 친 뒤에도 띄어쓰기 자리만 틀림(앞의 h 는 맞음)");
+  res = p.s.finish(2000);
+  eq(res.typedKeys + ':' + res.okKeys, '8:7', '누른 8, 맞은 7(값은 그대로)');
+  p = play('물소리가 나요', H.keyStream('물소리가가나 나요'));
+  eq(p.seen[p.seen.length - 1], '1111211', "'물소리가' 뒤에 '가나'를 더 침: 띄어쓰기 자리만 틀림");
   /* 글쇠를 하나 더 쳤을 때 */
   p = play('나무', ['ㄴ', 'ㅏ', 'ㅏ', 'ㅁ', 'ㅜ']);
   res = p.s.finish(1000);
@@ -514,7 +530,7 @@ run('texts', () => {
   ok(KO.words.length >= 200, '한국어 낱말 ' + KO.words.length + '개');
   ok(EN.words.length >= 300, '영어 낱말 ' + EN.words.length + '개(300개 이상)');
   ok(EN.sentences.length >= 40, '영어 문장 ' + EN.sentences.length + '개(40개 이상)');
-  const sets = { '한국어 문장': SENT, '속담': KO.proverbs, '한국어 낱말': KO.words, '영어 낱말': EN.words, '영어 문장': EN.sentences, '팬그램': EN.pangrams };
+  const sets = { '한국어 문장': SENT, '속담': KO.proverbs, '한국어 낱말': KO.words, '긴 글': KO.passages, '영어 낱말': EN.words, '영어 문장': EN.sentences, '팬그램': EN.pangrams, '영어 긴 글': EN.passages, '영어 속담': EN.proverbs };
   for (const [name, list] of Object.entries(sets)) {
     eq(new Set(list).size, list.length, name + ' 겹치는 줄 없음');
     list.forEach((t) => {
@@ -529,6 +545,18 @@ run('texts', () => {
   EN.words.forEach((t) => ok(/^[a-z]{2,10}$/.test(t), '영어 낱말은 소문자 2~10자: ' + t));
   EN.sentences.forEach((t) => { ok(/^["A-Z]/.test(t) && /[.?!"]$/.test(t), '영어 문장 첫 글자·끝 부호: ' + t); ok(t.length >= 25 && t.length <= 75, '영어 문장 길이: ' + t.length + ' ' + t); });
   EN.pangrams.forEach((t) => eq(new Set(t.toLowerCase().replace(/[^a-z]/g, '')).size, 26, '팬그램에 26자 모두: ' + t));
+  /* 긴 글(직접 쓴 것): 한국어는 120~190자에 문장 넷 이상·영문자와 숫자 없음, 영어는 40~55단어에 문장 셋 이상. 영어 속담은 한 문장 */
+  ok(KO.passages.length >= 24, '긴 글 ' + KO.passages.length + '편(24편 이상)');
+  KO.passages.forEach((t) => { ok(/[.?!]$/.test(t) && !/[A-Za-z0-9]/.test(t), '긴 글 끝 부호·영문자와 숫자 없음: ' + t.slice(0, 20)); ok(t.length >= 120 && t.length <= 190, '긴 글 길이 120~190자: ' + t.length + '자 ' + t.slice(0, 20)); ok((t.match(/[.?!]( |$)/g) || []).length >= 4, '긴 글은 문장 넷 이상: ' + t.slice(0, 20)); ok(!SENT.some((x) => t.includes(x)), '긴 글에 문장 목록의 문장이 통째로 들어 있지 않다: ' + t.slice(0, 20)); });
+  ok(EN.passages.length >= 24, '영어 긴 글 ' + EN.passages.length + '편(24편 이상)');
+  EN.passages.forEach((t) => { const w = t.split(' ').length; ok(/^[A-Z]/.test(t) && /[.?!]$/.test(t), '영어 긴 글 첫 글자·끝 부호: ' + t.slice(0, 30)); ok(w >= 40 && w <= 55, '영어 긴 글 40~55단어: ' + w + ' ' + t.slice(0, 30)); ok((t.match(/[.?!]( |$)/g) || []).length >= 3, '영어 긴 글은 문장 셋 이상: ' + t.slice(0, 30)); ok(!EN.sentences.some((x) => t.includes(x)), '영어 긴 글에 문장 목록의 문장이 통째로 들어 있지 않다: ' + t.slice(0, 30)); });
+  ok(EN.proverbs.length >= 60, '영어 속담 ' + EN.proverbs.length + '개(60개 이상)');
+  EN.proverbs.forEach((t) => { ok(/^[A-Z][A-Za-z ,']+\.$/.test(t), '영어 속담 꼴(글자·쉼표·작은따옴표, 마침표로 끝): ' + t); ok(t.length >= 15 && t.length <= 62, '영어 속담 길이: ' + t.length + ' ' + t); ok(!EN.sentences.includes(t) && !EN.pangrams.includes(t), '영어 속담은 문장·팬그램과 겹치지 않는다: ' + t); });
+  /* 화면(FAQ)에 적은 글의 수가 실제와 맞는가: 어림수는 내림한 값, 긴 글·영어 속담은 정확한 수 */
+  const page = (f) => { const x = path.join(here, '..', f, 'index.html'); return fs.existsSync(x) ? fs.readFileSync(x, 'utf8') : ''; };
+  const fl = (n, by) => Math.floor(n / by) * by;
+  ok(page('ko').includes('문장 ' + fl(SENT.length, 100) + '여 개, 긴 글 ' + KO.passages.length + '편, 속담 ' + fl(KO.proverbs.length, 100) + '여 개, 단어 ' + fl(KO.words.length, 50) + '여 개'), '한국어 FAQ 에 적은 글의 수 = 실제(문장 ' + SENT.length + ', 긴 글 ' + KO.passages.length + ', 속담 ' + KO.proverbs.length + ', 단어 ' + KO.words.length + ')');
+  ok(page('').includes('More than ' + fl(EN.sentences.length, 100) + ' sentences, ' + EN.passages.length + ' paragraphs, ' + EN.proverbs.length + ' proverbs and more than ' + fl(EN.words.length, 100) + ' common words'), '영어 FAQ 에 적은 글의 수 = 실제(문장 ' + EN.sentences.length + ', 긴 글 ' + EN.passages.length + ', 속담 ' + EN.proverbs.length + ', 단어 ' + EN.words.length + ')');
   /* 겹받침·쌍자음이 고루 나오는가: 초성 19, 중성 21, 종성 27(없음 빼고) 전부 */
   const seen = { c: new Set(), v: new Set(), f: new Set() };
   Array.from(SENT.join('')).forEach((ch) => { const p = H.parts(ch); if (p && p.v.length && p.c.length) { seen.c.add(p.c.join('')); seen.v.add(p.v.join('')); if (p.f.length) seen.f.add(p.f.join('')); } });
@@ -537,6 +565,57 @@ run('texts', () => {
   eq(seen.f.size, 27, '문장에 종성 27가지: 빠진 것 ' + H.JONG.map((v) => v.join('')).filter((v) => v && !seen.f.has(v)).join(','));
   /* 영어 낱말에 알파벳 26자가 모두 나오는가 */
   eq(new Set(EN.words.join('')).size, 26, '영어 낱말에 26자 모두');
+});
+
+/* ---- 12-2. 도구 화면 '계산 기준' 카드의 보기 그림(키캡 줄·점): 만든 HTML 의 숫자를 로직으로 다시 계산한다 ---- */
+run('basis', () => {
+  const root = path.join(here, '..');
+  const un = (s) => s.replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  const seen = { st: 0, w: 0, acc: 0, combo: 0 };
+  for (const pg of ['', 'practice/', 'sentences/', 'ko/', 'ko/practice/', 'ko/sentences/', 'ko/english/']) {
+    const f = path.join(root, pg, 'index.html');
+    ok(fs.existsSync(f), '/' + pg + ' 가 만들어져 있다(python3 _dev/build.py)');
+    if (!fs.existsSync(f)) continue;
+    const all = fs.readFileSync(f, 'utf8'), i = all.indexOf('id="basis"'), src = i < 0 ? '' : all.slice(i, all.indexOf('</section>', i));
+    ok(i >= 0 && /class="bgrid big n[34]"/.test(src) && (src.match(/class="bc big"/g) || []).length >= 3, '/' + pg + " '계산 기준'에 큰 카드가 셋 이상");
+    ok((src.match(/class="bc"/g) || []).length >= 5 && !/<dd>\s*<\/dd>/.test(src) && !/<summary>\s*<\/summary>/.test(src), '/' + pg + " 작은 카드 다섯 이상, 빈 카드 없음");
+    eq((src.match(/class="bc-lead"/g) || []).length, (src.match(/class="bc-k"/g) || []).length, '/' + pg + ' 카드마다 이름 하나에 첫 문장 하나');
+    eq((src.match(/<details class="bc"><summary>/g) || []).length, (src.match(/<\/summary><p class="bc-rest">[^<]{8,}<\/p><\/details>/g) || []).length, '/' + pg + ' 펼치는 카드에는 펼칠 글이 있다');
+    /* 키캡 줄: 키캡마다 적힌 타수와 합계 */
+    for (const m of src.matchAll(/<div class="bx" aria-hidden="true">((?:<span class="cap">[^<]*<i>\d+<\/i><\/span>)+)<span class="bx-res"><span class="bx-eq">=<\/span><b class="bx-sum"><span data-st="([^"]*)">(\d+)<\/span>/g)) {
+      seen.st++;
+      const caps = [...m[1].matchAll(/<span class="cap">([^<]*)<i>(\d+)<\/i><\/span>/g)].map((c) => [un(c[1]).replace('␣', ' '), +c[2]]);
+      eq(caps.map((c) => c[0]).join(''), un(m[2]), '/' + pg + ' 키캡 줄의 글자 = 보기 글');
+      caps.forEach((c) => eq(H.strokeCount(c[0]), c[1], '/' + pg + ' 키캡 "' + c[0] + '" 타수'));
+      eq(H.strokeCount(un(m[2])), +m[3], '/' + pg + ' "' + un(m[2]) + '" 합계 타수');
+      eq(caps.reduce((a, c) => a + c[1], 0), +m[3], '/' + pg + ' 키캡 타수의 합 = 합계');
+    }
+    /* WPM 보기: 글자 수 ÷ 5(다섯 글자씩 묶은 키캡) */
+    for (const m of src.matchAll(/((?:<span class="cap[^"]*">[^<]*<\/span>)+)<span class="bx-res"><span class="bx-eq">=<\/span><b class="bx-sum"><span data-w="([^"]*)">([\d.]+)<\/span>[^<]*<\/b><\/span><span class="bx-note">(\d+) [^<]*÷ 5<\/span>/g)) {
+      seen.w++;
+      const groups = [...m[1].matchAll(/<span class="cap[^"]*">([^<]*)<\/span>/g)].map((c) => un(c[1]).replace(/␣/g, ' ')), text = un(m[2]), n = Array.from(text).length;
+      eq(groups.join(''), text, '/' + pg + ' WPM 보기의 키캡 = 보기 글');
+      ok(groups.slice(0, -1).every((g) => g.length === 5) && groups[groups.length - 1].length <= 5, '/' + pg + ' 다섯 글자씩 묶었다');
+      eq(String(n / 5), m[3], '/' + pg + ' "' + text + '" ' + n + '글자 ÷ 5');
+      eq(+m[4], n, '/' + pg + ' 적어 둔 글자 수');
+      eq(TJ.report({ ms: 60000, strokes: 0, okChars: n, typedKeys: n, okKeys: n }).wpm, Math.round(n / 5), '/' + pg + ' 1분에 ' + n + '글자면 WPM ' + Math.round(n / 5));
+    }
+    /* 정확도 보기: 맞은 점·틀린 점의 수와 % */
+    for (const m of src.matchAll(/<span class="bx-dots">((?:<i class="d (?:ok|bad)"><\/i>)+)<\/span><span class="bx-res"><span class="bx-eq">=<\/span><b class="bx-sum"><span data-acc="(\d+),(\d+)">(\d+)<\/span>%/g)) {
+      seen.acc++;
+      eq((m[1].match(/d ok/g) || []).length + ',' + (m[1].match(/d (ok|bad)/g) || []).length, m[2] + ',' + m[3], '/' + pg + ' 점의 수 = 맞은 키, 누른 키');
+      eq(TJ.report({ ms: 1000, strokes: 0, okChars: 0, typedKeys: +m[3], okKeys: +m[2] }).accuracy, +m[4], '/' + pg + ' 정확도 ' + m[2] + '/' + m[3]);
+    }
+    /* 콤보 보기: 맞은 키 다섯 뒤에 틀린 키 하나 → 5 콤보, 그다음 0 */
+    for (const m of src.matchAll(/<span class="bx-dots">((?:<i class="d (?:ok|bad)"><\/i>)+)<\/span><span class="bx-tag">(\d+) [^<]*<\/span><span class="bx-eq">→<\/span><span class="bx-tag cold">(\d+)<\/span>/g)) {
+      seen.combo++;
+      const marks = [...m[1].matchAll(/d (ok|bad)/g)].map((x) => x[1] === 'ok');
+      const s = new TJ.Session('abcdefgh'); let v = '', top = 0;
+      marks.forEach((good, k) => { v += good ? 'abcdefgh'[k] : 'z'; s.update(v, k * 100); top = Math.max(top, s.combo); });
+      eq(top + ',' + s.combo, m[2] + ',' + m[3], '/' + pg + ' 콤보 보기: 가장 길었던 값, 틀린 뒤의 값');
+    }
+  }
+  ok(seen.st >= 4 && seen.w >= 3 && seen.acc >= 7 && seen.combo >= 7, '보기 그림을 다 읽었다: ' + JSON.stringify(seen));
 });
 
 /* ---- 13. 한/영(Caps Lock) 안내가 뜬 구간의 글쇠는 정확도·틀린 글쇠 기록에서 뺀다 ---- */
@@ -1078,7 +1157,7 @@ run('more', () => {
   EN.pangrams.forEach((t) => { eq(new Set(t.toLowerCase().replace(/[^a-z]/g, '')).size, 26, '팬그램에 26자 모두: ' + t); ok(/^[A-Z]/.test(t) && /[.?!]$/.test(t) && t.length >= 30 && t.length <= 85, '팬그램 꼴: ' + t); ok(!EN.sentences.includes(t), '문장 목록과 겹치지 않는다: ' + t); });
   ok(EN.sentences.every((t) => new Set(t.toLowerCase().replace(/[^a-z]/g, '')).size < 26), '문장 목록에는 팬그램이 없다(팬그램은 따로 둔다)');
   /* 겹침 검사: 글자만 남긴 꼴이 같은 문장, 한 문장이 다른 문장에 통째로 들어 있는 경우, 앞 다섯 단어가 같은 경우가 없다 */
-  for (const [name, list] of [['영어 문장', EN.sentences.concat(EN.pangrams)], ['한국어 문장', SENT.concat(KO.proverbs)]]) {
+  for (const [name, list] of [['영어 문장', EN.sentences.concat(EN.pangrams, EN.proverbs)], ['한국어 문장', SENT.concat(KO.proverbs)], ['긴 글', KO.passages], ['영어 긴 글', EN.passages]]) {
     const norm = list.map((t) => t.toLowerCase().replace(/[^a-z0-9가-힣]/g, ''));
     eq(new Set(norm).size, list.length, name + ' 글자만 남긴 꼴이 겹치지 않는다');
     const inside = list.filter((t, i) => norm.some((o, j) => j !== i && o.length > norm[i].length && o.includes(norm[i])));
@@ -1086,8 +1165,9 @@ run('more', () => {
     const head = list.map((t) => t.toLowerCase().split(' ').slice(0, 5).join(' ')).filter((h) => h.split(' ').length === 5);
     eq(head.length - new Set(head).size, 0, name + ' 앞 다섯 단어가 같은 문장');
   }
-  ok(!/  |[^\x20-\x7e]/.test(EN.sentences.concat(EN.pangrams).join('')), '영어 글: 겹 띄어쓰기·자판에 없는 글자 없음');
-  ok(EN.sentences.concat(EN.pangrams).every((t) => !/\b(\w+) \1\b/i.test(t) && !/ [,.?!;:]/.test(t)), '영어 글: 같은 단어 연달아·문장부호 앞 띄어쓰기 없음');
+  const EN_LINES = EN.sentences.concat(EN.pangrams, EN.proverbs, EN.passages);
+  ok(!/  |[^\x20-\x7e]/.test(EN_LINES.join('')), '영어 글: 겹 띄어쓰기·자판에 없는 글자 없음');
+  ok(EN_LINES.every((t) => !/\b(\w+) \1\b/i.test(t) && !/ [,.?!;:]/.test(t)), '영어 글: 같은 단어 연달아·문장부호 앞 띄어쓰기 없음');
   /* 주제를 옮기고 고친 한국어 문장 */
   ok(!KO.sentences.work.some((t) => /농부|시 한 편|고양이/.test(t)), "'일' 주제에 일과 상관없는 문장이 없다");
   ok(SENT.includes('비 오는 날에는 부침개 부치는 소리가 빗소리와 닮았어요.') && SENT.includes('호박을 얇게 썰어 부침가루를 묻혀 구웠어요.') && SENT.includes('숲속 오솔길에는 짙은 풀 냄새가 가득했어요.'), '고친 문장 셋');
@@ -1111,7 +1191,12 @@ run('more', () => {
   eq(P.some(few, 4, P.rng(3), ['c3', 'a1', 'b2', 'd4']).slice(2).join(','), 'c3,a1', '그다음은 오래전에 나온 순서');
   eq(P.some(few, 3, P.rng(3)).join(','), P.shuffle(few, P.rng(3)).slice(0, 3).join(','), '피할 문장이 없으면 그냥 섞어서 앞에서부터');
   const s2 = P.sentences(few, 17, P.rng(4), ['f6', 'e5', 'd4', 'c3', 'b2', 'a1']);
-  eq(s2.slice(0, 6).join(','), 'f6,e5,d4,c3,b2,a1', '전부 나왔던 문장이면 오래된 순서로');
+  /* 전부 나왔던 문장이면: 최근 절반(c3 b2 a1)은 맨 뒤에 오래된 순서로, 오래된 절반은 새로 섞인 차례로(늘 같은 차례로 되풀이되지 않게. 평가 2026-10-11) */
+  eq(s2.slice(0, 3).slice().sort().join(',') + '|' + s2.slice(3, 6).join(','), 'd4,e5,f6|c3,b2,a1', '전부 나왔던 문장이면 오래된 절반 먼저(섞어서), 최근 절반은 오래된 순서로 뒤에');
+  const orders = new Set(); for (let sd = 1; sd <= 12; sd++) orders.add(P.sentences(few, 17, P.rng(sd), ['f6', 'e5', 'd4', 'c3', 'b2', 'a1']).slice(0, 3).join(','));
+  ok(orders.size >= 3, '전부 나왔던 문장: 오래된 절반의 차례가 판마다 다르다(' + orders.size + '가지)');
+  const pas = KO.passages, seenAll = pas.slice();
+  for (let sd = 1; sd <= 6; sd++) { const pk = P.sentences(pas, 400, P.rng(sd), seenAll); ok(pk.slice(0, 3).every((x) => seenAll.indexOf(x) < Math.floor(pas.length / 2)), '긴 글이 한 바퀴 돈 뒤: 방금 나온 절반은 바로 다시 나오지 않는다(씨앗 ' + sd + ')'); }
   /* 팬그램만으로 120초 판(1,320자)을 채워도 한 바퀴 안에서는 되풀이되지 않는다 */
   const pg = P.sentences(EN.pangrams, 1320, P.rng(9));
   ok(pg.length <= EN.pangrams.length && new Set(pg).size === pg.length, '팬그램 120초 판: ' + pg.length + '문장, 되풀이 없음');
@@ -1133,12 +1218,13 @@ run('more', () => {
   if (fs.existsSync(fj)) {
     const F = JSON.parse(fs.readFileSync(fj, 'utf8')), ko = new Set(Array.from(F.ko.chars)), en = new Set(Array.from(F.en.chars));
     const lesson = (l) => LES.list[l].flatMap((x) => x.words.concat(x.keys)).join('');
-    const koNeed = new Set(Array.from(ALL_KO.join('') + EN.words.join('') + EN.sentences.join('') + EN.pangrams.join('') + lesson('ko') + lesson('en') + 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣ'));
-    const enNeed = new Set(Array.from(EN.words.join('') + EN.sentences.join('') + EN.pangrams.join('') + lesson('en')));
+    const enAll = EN.words.join('') + EN.sentences.join('') + EN.pangrams.join('') + EN.proverbs.join('') + EN.passages.join('');
+    const koNeed = new Set(Array.from(ALL_KO.join('') + enAll + lesson('ko') + lesson('en') + 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣ'));
+    const enNeed = new Set(Array.from(enAll + lesson('en')));
     eq([...koNeed].filter((c) => !ko.has(c)).join(''), '', '한국어 조각 글꼴에 없는 연습 글 글자');
     eq([...enNeed].filter((c) => !en.has(c)).join(''), '', '영어 조각 글꼴에 없는 연습 글 글자');
     /* 치는 중에 잠깐 보이는 모양(받침이 붙었다 넘어가는 글자 포함)도 들어 있다: 문장 연습의 '내가 친 글' 줄에 보인다 */
-    const mids = new Set(); SENT.concat(KO.proverbs).forEach((t) => stepsFor(H.keyStream(t)).forEach((v) => Array.from(v).forEach((c) => mids.add(c))));
+    const mids = new Set(); SENT.concat(KO.proverbs, KO.passages).forEach((t) => stepsFor(H.keyStream(t)).forEach((v) => Array.from(v).forEach((c) => mids.add(c))));
     eq([...mids].filter((c) => !ko.has(c)).join(''), '', '한국어 조각 글꼴에 없는 조합 중 모양(' + mids.size + '자 가운데)');
     ok(fs.existsSync(path.join(here, '..', 'assets', 'fonts', F.ko.file)) && fs.existsSync(path.join(here, '..', 'assets', 'fonts', F.en.file)), '조각 글꼴 파일이 있다');
   }

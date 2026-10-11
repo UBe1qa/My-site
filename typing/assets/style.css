@@ -115,6 +115,14 @@ kbd{font:inherit}
 .txt .sp.brk{position:relative;width:1.2em;text-align:center}
 .txt .sp.brk::before{content:"·";position:absolute;left:0;right:0;top:0;text-align:center;color:var(--faint);font-weight:700}
 /* 조합 중인 글자: 목표 글자는 그대로 두고 친 만큼 왼쪽부터 가지색이 찬다(--f) */
+/* 틀린 글자 아래의 '내가 친 글자'(app.js annotate 가 data-t 로 적는다). 틀린 글자에만 자리 기준(position)을 준다: 몇 개뿐이라 그리기에 부담이 없다 */
+.txt [data-t]{position:relative}
+.txt [data-t]::after{content:attr(data-t);position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:1px;font-size:.5em;line-height:1;font-weight:700;letter-spacing:0;white-space:nowrap;pointer-events:none;background:none;color:var(--bad);-webkit-text-fill-color:var(--bad)}
+.txt .pend[data-t]::after{color:var(--muted);-webkit-text-fill-color:var(--muted)}
+/* 띄어쓰기 자리에 적는 '더 친 글자': 띄어쓰기 칸은 줄 높이만큼 크므로 글자 칸(1.35em, 줄 가운데)의 아래에 맞춰 내리고, 그 자리에서 오른쪽으로 적는다.
+   적은 것이 있으면 주홍 밑줄은 긋지 않는다(글자 위로 줄이 그어져 지운 것처럼 보였다) */
+.txt .sp[data-t]::after{left:0;top:50%;transform:none;margin-top:calc(1.35em + 1px)}
+.txt .sp.bad[data-t]{box-shadow:none}
 .txt .c.pend{background-image:linear-gradient(90deg,var(--main) var(--f,50%),var(--todo) var(--f,50%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 /* 지금 칠 자리: 글자 아래 굵은 가지색 줄 하나(.car)가 다음 글자로 미끄러져 간다. 글자마다 줄을 새로 만들지 않아서 글 전체의 배치가 다시 계산되지 않는다.
    자리는 app.js 가 미리 재 둔 값으로 transform 만 바꾼다. 처음에 다섯 번만 깜빡이고 멈춘다(동작 줄이기면 미끄러지지 않고 고정) */
@@ -253,7 +261,8 @@ kbd{font:inherit}
 .play{position:relative;padding:22px 44px 18px;flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
 .playtop{display:flex;justify-content:space-between;align-items:center;gap:12px;height:24px;margin-bottom:12px}
 .daily{font-size:13px;color:var(--muted)}
-.view{height:186px;overflow:hidden}
+/* 아래 8px 는 마지막 줄 아래에 적는 '내가 친 글자'가 잘리지 않게 두는 자리(배치는 그대로: 안쪽 여백만큼 바깥 여백을 뺀다) */
+.view{height:186px;overflow:hidden;box-sizing:content-box;padding-bottom:8px;margin-bottom:-8px}
 .sheet .txt{font-size:30px;line-height:62px;transition:transform .16s var(--ease)}
 .txt .c{line-height:1.35}
 /* 숫자 줄 = 종이 아래의 자판 판(.hud). 숫자마다 키 모양 칸 하나(.hk): 납작하다(누르는 것이 아니라 보는 것). 칸 크기가 고정이라 값이 바뀌어도 둘레가 다시 계산되지 않는다.
@@ -274,7 +283,7 @@ kbd{font:inherit}
 .hk.hot.cold{background:none;box-shadow:inset 0 0 0 1.5px var(--hot-d)}
 .hk.hot.cold .hk-f{color:var(--hot-text)}
 .nk{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;width:210px;height:48px;contain:size layout style}
-.nk-l{font-size:13px;color:var(--plate-muted)}
+.nk-l{font-size:13px;color:var(--plate-muted);white-space:nowrap}
 .nk .cap{min-width:42px;height:38px;font-size:19px;font-family:var(--font)}
 /* '다음 키'는 보여 주는 것이지 누르는 것이 아니다 → 턱 없이 납작하게(옆의 '다른 글' 단추와 구분) */
 .hud .nk .cap{box-shadow:inset 0 0 0 1px var(--cap-line);margin-bottom:0}
@@ -389,6 +398,17 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
 .kb.big .k em{left:5px;right:auto;top:auto;bottom:3px;font-size:10.5px}
 .kb.big .k.miss::before,.kb.big .k.slowk::before{display:none}
 .anim .kb.big .k.pop{animation-name:keypop-big}
+/* 틀리게 누른 키(자리 연습, 치는 중): 주홍으로 번쩍이며 흔들리고, 다음 키를 누를 때까지 주홍 테가 남는다. 같은 키를 또 틀려도 다시 움직이게 이름 둘을 번갈아 쓴다 */
+.kb.big .k.wr-a,.kb.big .k.wr-b{box-shadow:0 4px 0 var(--bad),inset 0 0 0 2px var(--bad);color:var(--bad)}
+.kb.big .k.wr-a i,.kb.big .k.wr-b i{color:var(--bad)}
+/* 틀린 키가 곧 다음에 누를 키일 때(Shift 를 빠뜨렸을 때 등): 가지색 바탕 위의 주홍 글자는 안 보인다 → 글자색은 그대로 두고 테만 */
+.kb.big .k.next.wr-a,.kb.big .k.next.wr-b,.kb.big .k.next.wr-a i,.kb.big .k.next.wr-b i{color:var(--main-ink)}
+.anim .kb.big .k.wr-a{animation:keywrong-a .5s var(--ease)}
+.anim .kb.big .k.wr-b{animation:keywrong-b .5s var(--ease)}
+@keyframes keywrong-a{0%{background:var(--bad);color:var(--bad-ink);transform:translate(0,3px)}18%{transform:translate(-4px,3px)}36%{transform:translate(4px,2px)}54%{transform:translate(-3px,1px)}72%{transform:translate(2px,0)}100%{transform:none}}
+@keyframes keywrong-b{0%{background:var(--bad);color:var(--bad-ink);transform:translate(0,3px)}18%{transform:translate(-4px,3px)}36%{transform:translate(4px,2px)}54%{transform:translate(-3px,1px)}72%{transform:translate(2px,0)}100%{transform:none}}
+.kb-say .wr-say{display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--bad);font-weight:600}
+.kb-say .wr-say .cap{background:var(--bad);box-shadow:0 3px 0 rgba(0,0,0,.25);color:var(--bad-ink)}
 @keyframes keypop-big{0%{background:var(--cap);box-shadow:0 4px 0 var(--cap-edge);color:var(--cap-ink)}55%{transform:translateY(3px)}100%{transform:none}}
 .kb-off .kb.big{display:none}
 .kb-off .kb-wrap{padding-bottom:10px}
@@ -480,6 +500,51 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
 .t-b .below{max-width:1180px}
 .sec{margin-top:44px;max-width:780px}
 .sec h2{font-size:19px;letter-spacing:-.01em;margin-bottom:12px}
+/* 계산 기준: 자판 판 위의 카드. 이름은 키캡 딱지, 첫 문장(식)은 굵게, 나머지는 작게. 큰 카드에는 보기 그림(키캡 줄) */
+.basis-sec{max-width:none}
+.sec-sub{margin:-6px 0 14px;font-size:14.5px;color:var(--muted)}
+.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0}
+/* 큰 카드: 한 줄에 셋(네 장이면 둘씩). 좁으면 줄을 바꾸고, 마지막 줄의 카드는 남는 폭을 채운다 */
+.bgrid.big{display:flex;flex-wrap:wrap;margin-bottom:12px}
+.bgrid.big>.bc{flex:1 1 270px;min-width:min(270px,100%)}
+.bgrid.big.n4>.bc{flex-basis:40%}
+.bc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px 15px;min-width:0}
+.bc.big{background:var(--plate);border-color:transparent;padding:16px 18px 18px;display:flex;flex-direction:column}
+/* 작은 카드: 이름 + 첫 문장만 보이고, 누르면 나머지가 펼쳐진다. 오른쪽 위의 꺾쇠가 펼침 표시 */
+.bgrid{align-items:start}
+.bgrid.big{align-items:stretch}
+details.bc,div.bc:not(.big){padding:0}
+.bc summary,.bc-s{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 10px;margin:0;padding:14px 16px 15px;list-style:none}
+.bc summary{cursor:pointer;border-radius:13px}
+.bc summary::-webkit-details-marker{display:none}
+.bc summary .bc-k,.bc-s .bc-k{justify-self:start}
+.bc summary .bc-lead,.bc-s .bc-lead{grid-column:1/-1}
+.bc summary::after{content:"";grid-column:2;grid-row:1;width:9px;height:9px;margin:-5px 5px 0 0;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);transition:transform var(--t) var(--ease)}
+.bc summary:hover::after{border-color:var(--main)}
+.bc[open] summary::after{transform:rotate(-135deg);margin-top:5px}
+details.bc>.bc-rest{margin:0;padding:0 16px 15px}
+.bc dt{margin:0 0 8px}
+.bc dd{margin:0;display:flex;flex-direction:column;flex:1}
+.bc-k{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:7px;background:var(--cap);color:var(--cap-ink);box-shadow:inset 0 0 0 1px var(--cap-line),0 2px 0 var(--cap-edge);font-size:13.5px;font-weight:700;letter-spacing:-.01em;margin-bottom:2px}
+.bc-lead{margin:0;font-size:15.5px;font-weight:650;line-height:1.5;color:var(--ink)}
+.bc.big .bc-lead{font-size:17px;color:var(--plate-ink)}
+.bc-rest{margin:5px 0 0;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.bc.big .bc-rest{color:var(--plate-muted)}
+.bx{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:auto;padding-top:14px}
+.bx .cap{position:relative;min-width:36px;height:36px;padding:0 9px;background:var(--cap);border-color:transparent;box-shadow:0 3px 0 var(--cap-edge);color:var(--cap-ink);font-family:var(--font);font-size:16px;font-weight:700;margin-bottom:3px}
+.bx .cap i{position:absolute;right:-5px;top:-7px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--main);color:var(--main-ink);font-family:var(--numfont);font-size:11px;font-style:normal;font-weight:700;line-height:17px;text-align:center}
+.bx .cap.wide5{font-family:var(--numfont);letter-spacing:.06em}
+.bx-res{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.bx-eq{font-weight:700;color:var(--plate-muted);margin:0 2px}
+.bx-sum{font-family:var(--numfont);font-size:19px;color:var(--plate-ink);white-space:nowrap}
+html[lang="ko"] .bx-sum{font-family:var(--font)}
+.bx-sum span{font-family:var(--numfont)}
+.bx-note{flex-basis:100%;font-size:12.5px;color:var(--plate-muted)}
+.bx-dots{display:inline-flex;gap:4px}
+.bx .d{width:16px;height:16px;border-radius:5px;background:var(--main);box-shadow:0 2px 0 var(--main-edge);margin-bottom:2px}
+.bx .d.bad{background:var(--bad);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.bx-tag{display:inline-flex;align-items:center;height:26px;padding:0 9px;border-radius:7px;background:var(--hot);color:var(--hot-ink);box-shadow:0 3px 0 var(--hot-d);font-size:13.5px;font-weight:800;margin:0 0 3px 4px;white-space:nowrap}
+.bx-tag.cold{background:none;box-shadow:inset 0 0 0 1.5px var(--hot-d);color:var(--hot-text);margin-bottom:0}
 .defs{display:grid;gap:0;border-top:1px solid var(--line)}
 .defs>div{display:grid;grid-template-columns:190px minmax(0,1fr);gap:4px 20px;padding:12px 2px;border-bottom:1px solid var(--line)}
 .defs dt{font-weight:600;font-size:15px}
@@ -591,7 +656,8 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
   .g-big b{font-size:34px}
   .g-big span{font-size:13px}
   .spark{display:none}
-  .g-facts{grid-template-columns:auto auto;gap:14px;justify-content:start}
+  .g-facts{grid-template-columns:repeat(3,auto);gap:14px;justify-content:start}
+  .g-big span{white-space:nowrap}
   .g-facts dt{font-size:11.5px}
   .g-facts dd{font-size:19px}
   .g-facts small{font-size:12px}
@@ -612,6 +678,7 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
   .nav{order:3;width:100%;display:grid;gap:0;border-top:1px solid var(--line)}
   .nav.n5{grid-template-columns:repeat(5,auto);justify-content:space-between}
   .nav.n3{grid-template-columns:repeat(3,1fr)}
+  .nav.n4{grid-template-columns:repeat(4,auto);justify-content:space-between}
   .nav a{text-align:center;padding:12px 2px;font-size:13.5px;border-radius:0}
   .nav a[aria-current]{border-radius:0}
   .langbar{left:0;right:0;top:0;height:48px;border-radius:0;justify-content:space-between;padding:0 2px 0 16px}
@@ -659,6 +726,8 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
   .daily{display:none}
   .view{height:176px}
   .sheet .txt{font-size:23px;line-height:44px}
+  .txt [data-t]::after{font-size:13px}                      /* 휴대폰: 받침 있는 한글이 읽히는 가장 작은 크기 */
+  .txt .sp[data-t]::after{margin-top:16.5px}             /* 글자 칸(23px × 1.35)의 아래 + 1px */
   .hint{white-space:normal;text-align:center;border-radius:14px;width:max-content}
   /* 결과: 점수 → 다시 하기 단추(판) → 틀린 키 지도·그래프 순서로(단추를 누르려고 끝까지 내리지 않게) */
   .sheet .result{flex:none}
@@ -715,6 +784,8 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
   .rec-col.keys{height:170px}
   .rc-when{width:74px}
   .defs>div{grid-template-columns:minmax(0,1fr)}
+  .bgrid{grid-template-columns:minmax(0,1fr)}
+  .bc.big .bc-lead{font-size:16px}
   .sec{margin-top:36px}
   .prose{font-size:16px}
   .prose h1{font-size:25px}
@@ -742,6 +813,19 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
 .vk .stack{height:auto;padding-top:12px;padding-bottom:12px}
 /* 좁은 휴대폰: 숫자 칸의 숫자와 이름이 칸 밖으로 넘치지 않게(제3자 평가 2026-10-11). 이름은 짧은 것으로 바꾸고 글자를 조금 줄인다 */
 /* 터치 기기에는 자판 단축키 표시(Tab·Enter)를 보이지 않는다 */
+/* 문장 연습의 숫자 판(휴대폰): 첫 줄에 속도 · 정확도 · 문장 · 콤보, 둘째 줄에 진행 막대와 단추.
+   한 줄에 다 넣으면 가장 넓은 값(888·100%·20/20·888)에서 단추가 판 밖으로 나갔다(콤보 칸이 생긴 뒤. 영어는 이름이 길어 더) */
+@media (max-width:600px){
+  .gauge{grid-template-columns:auto minmax(0,1fr) auto;gap:6px 14px;padding:10px 14px}
+  .g-main{grid-column:1;grid-row:1}
+  .g-big{flex-direction:column-reverse;align-items:flex-start;gap:0}
+  .g-big b{font-size:26px;line-height:1.2}
+  .g-big span{font-size:11.5px;font-weight:400}
+  .g-facts{grid-column:2/-1;grid-row:1;gap:12px;justify-content:space-between;align-items:start}
+  .g-facts dd{font-size:19px;line-height:31px}
+  .g-bar{grid-column:1/3;grid-row:2;order:0;margin:0;align-self:center}
+  .g-act{grid-column:3;grid-row:2}
+}
 @media (hover:none),(pointer:coarse){.btn kbd{display:none}}
 @media (max-width:520px){
   .fx .lab{font-size:16px;padding:5px 11px 6px}
@@ -772,7 +856,9 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
   .nav a{font-size:12.5px}
   .meter{gap:6px 12px}
   .sheet .txt,.rig .txt{font-size:21px}
+  .txt .sp[data-t]::after{margin-top:15px}
   .seg button{padding:12px 7px;font-size:13.5px}
+  html[lang="en"] #kind button{padding:12px 5px;font-size:13px}   /* 영어 글 종류 넷(Words·Sentences·Paragraphs·Proverbs)이 320px 에서 한 줄에 */
   .steps button{font-size:12.5px;padding:0 8px 0 5px}
 }
 @media (prefers-reduced-motion:reduce){

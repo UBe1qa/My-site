@@ -28,8 +28,8 @@ HOST = 'typing.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 FIRST = '2026-10-10'   # 처음 올린 날
 # 그 뒤 본문·구조화 데이터·링크가 바뀐 페이지: 주소 -> 날짜
-UPDATED = {p: '2026-10-11' for p in (  # 콤보·이펙트 설정이 생기고(도구 화면 글·계산 기준), 방침의 저장 항목 설명이 바뀜
-    '/', '/practice/', '/privacy/', '/ko/', '/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/privacy/')}
+UPDATED = {p: '2026-10-11' for p in (  # 콤보·이펙트 설정이 생기고(도구 화면 글·계산 기준), 방침의 저장 항목 설명이 바뀜. 영어 문장 연습(/sentences/)이 새로 생김, 받침 글의 휴대폰 문단을 고침
+    '/', '/practice/', '/sentences/', '/privacy/', '/about/', '/ko/', '/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/privacy/', '/ko/about/', '/ko/guide/batchim-neomeogam/')}
 
 JS, TX, NAV, PAIRS, TOOLS = C.JS, C.TX, C.NAV, C.PAIRS, C.TOOLS
 FONTS = json.loads((DEV / 'fonts.json').read_text(encoding='utf-8')) if (DEV / 'fonts.json').exists() else {}
@@ -505,12 +505,69 @@ def records_html(lang):
 </section>'''
 
 
+def keycaps(parts, total_html):
+    """보기 그림: 키캡 줄(글자 + 그 키의 타수) = 합계. 화면 읽기 프로그램에는 숨긴다(같은 내용이 글에 있다)."""
+    caps = ''.join(f'<span class="cap">{esc(ch)}<i>{n}</i></span>' for ch, n in parts)
+    return f'<div class="bx" aria-hidden="true">{caps}<span class="bx-res"><span class="bx-eq">=</span><b class="bx-sum">{total_html}</b></span></div>'
+
+
+def dots(ok, bad, total_html):
+    """보기 그림: 누른 키 열 개(맞은 키 가지색, 틀린 키 주홍) = 정확도."""
+    d = '<i class="d ok"></i>' * ok + '<i class="d bad"></i>' * bad
+    return f'<div class="bx" aria-hidden="true"><span class="bx-dots">{d}</span><span class="bx-res"><span class="bx-eq">=</span><b class="bx-sum">{total_html}</b></span></div>'
+
+
+def combo_viz(lang):
+    """보기 그림: 콤보가 쌓이다가 틀리면 0."""
+    w = '콤보' if lang == 'ko' else 'combo'
+    seq = ''.join(f'<i class="d ok"></i>' for _ in range(5)) + '<i class="d bad"></i>'
+    return f'<div class="bx" aria-hidden="true"><span class="bx-dots">{seq}</span><span class="bx-tag">5 {w}</span><span class="bx-eq">→</span><span class="bx-tag cold">0</span></div>'
+
+
+# 계산 기준 가운데 크게 보여 줄 것(이름 → 보기 그림). 숫자는 로직과 같아야 한다(시험 'basis' 가 만든 HTML 의 data-st·data-acc·data-w 를 다시 계산한다)
+def basis_viz(lang, name):
+    if name == '타수(타/분)':
+        return keycaps([('한', 3), ('글', 3), ('␣', 1), ('타', 2), ('자', 2)], '<span data-st="한글 타자">11</span>타')
+    if name == '영어 타수':
+        return keycaps([('H', 2), ('i', 1), ('␣', 1), ('there', 5)], '<span data-st="Hi there">9</span>타')
+    if name == 'WPM':
+        w = '단어' if lang == 'ko' else 'words'
+        c = '글자' if lang == 'ko' else 'characters'
+        return (f'<div class="bx" aria-hidden="true"><span class="cap wide5">typin</span><span class="cap wide5">g␣tes</span><span class="cap">t</span><span class="bx-res"><span class="bx-eq">=</span>'
+                f'<b class="bx-sum"><span data-w="typing test">2.2</span> {w}</b></span><span class="bx-note">11 {c} ÷ 5</span></div>')
+    if name in ('정확도', 'Accuracy'):
+        return dots(9, 1, '<span data-acc="9,10">90</span>%')
+    if name in ('콤보', 'Combo'):
+        return combo_viz(lang)
+    return ''
+
+
+def split_lead(text):
+    """첫 문장(핵심 한 줄)과 나머지."""
+    m = re.search(r'(?<=[.?!])\s', text)
+    return (text[:m.start()], text[m.end():]) if m else (text, '')
+
+
 def basis_html(lang, tool):
+    """계산 기준: 큰 카드(식 + 보기 그림) 서너 장과 작은 카드들. 이름은 키캡 딱지, 첫 문장은 굵게, 나머지는 작게.
+    큰 카드는 글이 다 보이고, 작은 카드는 이름과 첫 문장만 보이다가 누르면 나머지가 펼쳐진다(<details>. 평가 2026-10-11: 카드로 바꿔도 길다, 휴대폰에서 네 화면)."""
     rows = list(C.BASIS[tool['text']] if lang == tool['text'] else C.BASIS[lang])
     if tool['tool'] == 'english':
         rows = C.BASIS_ENGLISH + [r for r in rows if r[0] not in ('타수(타/분)', '한글은 키 흐름으로 비교', '휴대폰 자판')]
-    items = ''.join(f'<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>' for k, v in rows)
-    return f'<section class="sec basis-sec" id="basis" aria-labelledby="basis-h"><h2 id="basis-h">{TX[lang]["basis_h"]}</h2><dl class="defs">{items}</dl></section>'
+    big, small, nbig = '', '', 0
+    for k, v in rows:
+        lead, rest = split_lead(v)
+        viz = basis_viz(lang, k)
+        body = f'<p class="bc-lead">{esc(lead)}</p>' + (f'<p class="bc-rest">{esc(rest)}</p>' if rest else '')
+        head = f'<span class="bc-k">{esc(k)}</span><span class="bc-lead">{esc(lead)}</span>'
+        if viz:
+            big += f'<div class="bc big"><dt><span class="bc-k">{esc(k)}</span></dt><dd>{body}{viz}</dd></div>'; nbig += 1
+        elif rest:
+            small += f'<details class="bc"><summary>{head}</summary><p class="bc-rest">{esc(rest)}</p></details>'
+        else:
+            small += f'<div class="bc"><p class="bc-s">{head}</p></div>'
+    return (f'<section class="sec basis-sec" id="basis" aria-labelledby="basis-h"><h2 id="basis-h">{TX[lang]["basis_h"]}</h2><p class="sec-sub">{TX[lang]["basis_sub"]}</p>'
+            f'<dl class="bgrid big n{nbig}">{big}</dl><div class="bgrid">{small}</div></section>')
 
 
 def guides_block(lang, limit=4, skip=None):
@@ -530,6 +587,7 @@ TOOL_LINE = {
     ('ko', 'english'): ('영타 연습', '영어 타자를 타수와 WPM으로'),
     ('en', 'test'): ('Typing Test', 'WPM and accuracy in 15 to 120 seconds'),
     ('en', 'practice'): ('Typing Practice', 'Five steps from the home row up'),
+    ('en', 'sentences'): ('Sentence Practice', 'One line at a time, no timer'),
 }
 
 

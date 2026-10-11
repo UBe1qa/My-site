@@ -1,7 +1,7 @@
 // 기준값 더하기(노드 쪽 라이브러리): node typing/tests/gen_ref.mjs <hangul-js·es-hangul이 깔린 node_modules 경로>
 // - hjs: hangul-js 의 disassemble 로 음절 11,172자를 낱자로 푼 것(전부 이어 붙인 글의 SHA-256)
 // - esh: es-hangul 의 convertHangulToQwerty 로 음절 11,172자를 쿼티 글자열로 바꾼 것(SHA-256)
-// - eshText: 연습 글(문장·속담·낱말) 전체를 es-hangul 로 쿼티 글자열로 바꾼 것(SHA-256)
+// - eshText: 연습 글(문장·속담·낱말·긴 글) 전체를 es-hangul 로 쿼티 글자열로 바꾼 것(SHA-256)
 // - ime2: gen_ref.py 가 적어 둔 짧은 글을 한 글쇠씩 칠 때마다 보이는 글(es-hangul convertQwertyToHangul 에 글쇠 앞부분을 차례로 넣음)
 // 우리 코드(tj-core.js)는 쓰지 않는다. 값은 tests/ref/ref.json 에 더한다(gen_ref.py 를 먼저 돌린다).
 import { createRequire } from 'node:module';
@@ -25,7 +25,7 @@ for (let cp = 0xAC00; cp <= 0xD7A3; cp++) {
   a.push(Hangul.disassemble(ch).join(''));
   b.push(es.convertHangulToQwerty(ch));
 }
-const texts = [].concat(...Object.values(ko.sentences), ko.proverbs, ko.words);
+const texts = [].concat(...Object.values(ko.sentences), ko.proverbs, ko.words, ko.passages);
 const out = path.join(here, 'ref', 'ref.json');
 const data = JSON.parse(fs.readFileSync(out, 'utf8'));
 data.hjs = sha(a.join('|'));

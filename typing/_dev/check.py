@@ -255,13 +255,13 @@ def main():
         other = a.get('ko' if lang == 'en' else 'en', '')[len(SITE):]
         ok(other in pages and alts[other].get(lang) == SITE + path, f'{path} hreflang 짝이 서로 가리키지 않는다')
     paired = sorted(p for p, a in alts.items() if a)
-    expect = sorted(['/', '/ko/', '/practice/', '/ko/practice/', '/guide/', '/ko/guide/', '/about/', '/ko/about/', '/privacy/', '/ko/privacy/',
+    expect = sorted(['/', '/ko/', '/practice/', '/ko/practice/', '/sentences/', '/ko/sentences/', '/guide/', '/ko/guide/', '/about/', '/ko/about/', '/privacy/', '/ko/privacy/',
                      '/guide/how-wpm-is-calculated/', '/ko/guide/tasu-gyesan/'])
     have_articles = any(re.fullmatch(r'/(ko/)?guide/[^/]+/', p) for p in pages)
     if have_articles:
         ok(paired == expect, f'hreflang 짝이 있는 페이지 목록이 다르다: {sorted(set(paired) ^ set(expect))}')
         ok(len([p for p in pages if re.fullmatch(r'/guide/[^/]+/', p)]) >= 3 and len([p for p in pages if re.fullmatch(r'/ko/guide/[^/]+/', p)]) >= 3, '글이 언어판마다 3편 이상이어야 한다')
-    for path in ('/ko/sentences/', '/ko/english/'):
+    for path in ('/ko/english/',):
         ok(path in pages and not alts[path], f'{path} 는 짝이 없으니 hreflang 이 없어야 한다')
 
     # 404
@@ -274,7 +274,7 @@ def main():
     ok(nf.count('data-l="en"') == 3 and nf.count('data-l="ko" lang="ko"') == 3, '404: 머리·본문·꼬리마다 두 언어 틀')
     ok("location.pathname" in nf.split('</head>')[0] and "h.lang='ko'" in nf.split('</head>')[0], '404: 주소를 보고 언어를 고르는 스크립트가 <head> 에 있다')
     ok(nf.count('id="lumen"') == 1 and nf.count('<main') == 1 and len(re.findall(r'<nav class="nav', nf)) == 2, '404: id 가 겹치지 않고 메뉴는 언어마다 하나씩')
-    for navlink in ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/', '/practice/', '/guide/'):
+    for navlink in ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/', '/practice/', '/sentences/', '/guide/'):
         ok(f'href="{navlink}"' in nf, f'404 메뉴에 {navlink}')
 
     # 방침: 웹 비콘 문장, partner-sites 링크, 방문 통계, 저장 키
@@ -350,6 +350,25 @@ def main():
         if tool:
             ok(src.find('/assets/fx.js?v=') > 0 and src.find('/assets/fx.js?v=') < src.find('/assets/app.js?v='), f'{path} fx.js 가 app.js 앞에')
             ok('id="fx-seg"' in src and 'id="snd-seg"' in src and 'id="theme-seg"' in src and 'id="combo"' in src and 'id="fx"' in src, f'{path} 이펙트·키 소리·화면 고르기, 콤보 칸, 이펙트 층')
+    # 2026-10-11 둘째 묶음: 내가 친 글자 표시, 틀린 키의 화면 자판 반응, 긴 글·영어 속담, 영어 문장 연습, 계산 기준 카드
+    ok("TextLayer.prototype.annotate" in appjs and "setAttribute('data-t'" in appjs and ".txt [data-t]::after{content:attr(data-t)" in css, "틀린 글자 아래에 내가 친 글자(data-t)를 적는다")
+    ok("slotDy: 26, ann: false" in appjs, "문장 연습은 '내가 친 글' 줄이 따로 있어 글자 아래에 적지 않는다")
+    ok("this.view.pressKey(miss.tok, true, miss.want)" in appjs and ".kb.big .k.wr-a" in css and ".kb.big .k.wr-b" in css and ".kb-say .wr-say" in css, "자리 연습: 틀린 키를 화면 자판에 알린다(누른 키 주홍, 방금 누른 키 조각)")
+    tools = {p: s for p, s in pages.items() if 'id="tj-cfg"' in s}
+    ok(sorted(tools) == ['/', '/ko/', '/ko/english/', '/ko/practice/', '/ko/sentences/', '/practice/', '/sentences/'], f'도구 화면 일곱 쪽: {sorted(tools)}')
+    for path, src in tools.items():
+        sec = src[src.find('id="basis"'):]
+        sec = sec[:sec.find('</section>')]
+        ok('class="bgrid big n' in sec and sec.count('class="bc big"') >= 3 and sec.count('class="bc-lead"') == sec.count('class="bc-k"') >= 8 and sec.count('<details class="bc"><summary>') >= 4 and 'class="defs"' not in sec, f'{path} 계산 기준은 카드(큰 카드 셋 이상 + 작은 카드)')
+        ok(sec.count('aria-hidden="true"') == sec.count('class="bx"') >= 3, f'{path} 계산 기준의 보기 그림은 화면 읽기 프로그램에 숨긴다(같은 내용이 글에 있다)')
+    for path, kinds in (('/ko/', ['sentences', 'passages', 'words', 'proverbs']), ('/ko/english/', ['words', 'sentences', 'passages', 'pangrams']), ('/', ['words', 'sentences', 'passages', 'proverbs'])):
+        got = re.findall(r'data-v="(\w+)"', pages[path][pages[path].find('id="kind"'):pages[path].find('id="kind"') + 900].split('</div>')[0])
+        ok(got == kinds, f'{path} 글 종류 {got}')
+    ok('id="mine-t"' in pages['/sentences/'] and 'id="topic"' in pages['/sentences/'] and re.findall(r'data-v="(\w+)"', pages['/sentences/'][pages['/sentences/'].find('id="topic"'):].split('</div>')[0]) == ['all', 'proverbs', 'pangrams'], '/sentences/ 영어 문장 연습(보고 치는 글 + 내가 친 글, 주제 셋)')
+    ok('tj-text-ko.js' not in pages['/sentences/'] and 'tj-text-en.js' in pages['/sentences/'], '/sentences/ 는 영어 글만 부른다')
+    for f, names in (('tj-text-ko.js', ('passages',)), ('tj-text-en.js', ('passages', 'proverbs'))):
+        t = (ROOT / 'assets' / f).read_text(encoding='utf-8')
+        ok(all(f'\n    {n}: [' in t for n in names), f'{f} 글 묶음 {names}')
     hd2 = (ROOT / '_headers').read_text(encoding='utf-8')
     ok('/assets/*.js' in hd2 and '/assets/*.css' in hd2, '_headers: 스타일·스크립트는 오래 저장(주소에 지문)')
     nj = ROOT / '_dev' / 'fonts-num.json'
