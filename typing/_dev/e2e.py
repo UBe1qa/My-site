@@ -1819,7 +1819,7 @@ def feat_checks(env):
     ok(pg.evaluate(ANN_JS) == [] and pg.evaluate('document.querySelectorAll("#txt .bad").length') == 0, '고쳐 치면 틀린 글자·적은 글자가 없다')
     for k in 'zz':
         ty.key(k)
-    ok(pg.evaluate(ANN_JS) == [[' ', 'zz', 'bad']], '단어 끝에 더 친 글자는 띄어쓰기 자리에 적는다', pg.evaluate(ANN_JS))
+    ok(pg.evaluate(ANN_JS) == [[' ', '+zz', 'bad']], '단어 끝에 더 친 글자는 띄어쓰기 자리에 + 를 붙여 적는다', pg.evaluate(ANN_JS))
     for k in ' rxvers ':
         ty.key(k)
     ok(['i', 'x', 'bad'] in pg.evaluate(ANN_JS) and len(pg.evaluate(ANN_JS)) == 2, '앞 단어에 적은 것은 남고, 새로 틀린 글자가 더해진다', pg.evaluate(ANN_JS))
@@ -1829,12 +1829,12 @@ def feat_checks(env):
     for k in 'hhhh kk hoteXxy boarx neverabcdefgh':
         ty.key(k)
     ann = pg.evaluate(ANN_JS)
-    ok(ann == [[' ', 'h', 'bad'], ['k', '–', 'bad'], ['l', 'X', 'bad'], [' ', 'xy', 'bad'], ['d', 'x', 'bad'], ['s', '–', 'bad'], [' ', 'abcd…', 'bad']], "더 친 글자는 띄어쓰기 자리에(다섯부터는 …), 빠뜨린 글자는 '–', 바꿔 친 글자는 그 글자", ann)
+    ok(ann == [[' ', '+h', 'bad'], ['k', '–', 'bad'], ['l', 'X', 'bad'], [' ', '+xy', 'bad'], ['d', 'x', 'bad'], ['s', '–', 'bad'], [' ', '+abcd…', 'bad']], "더 친 글자는 띄어쓰기 자리에(다섯부터는 …), 빠뜨린 글자는 '–', 바꿔 친 글자는 그 글자", ann)
     ok(pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")') == 'klds', "'hhh' 에 hhhh: 앞의 h 는 틀림이 아니다(틀린 글자는 k l d s)", pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")'))
     geo = pg.evaluate('''() => { const top = (e) => { const s = getComputedStyle(e, '::after'); return e.getBoundingClientRect().top + parseFloat(s.top) + parseFloat(s.marginTop); };
       const sp = document.querySelector('#txt .sp[data-t]'), c = document.querySelector('#txt .c[data-t]'), ss = getComputedStyle(sp, '::after');
-      return { d: Math.abs(top(sp) - top(c)), left: ss.left, tf: ss.transform, bar: getComputedStyle(sp).boxShadow, plain: getComputedStyle(document.querySelector('#txt .sp.ok')).boxShadow }; }''')
-    ok(geo['d'] <= 1.5 and geo['left'] == '0px' and geo['tf'] == 'none' and geo['bar'] == 'none', '띄어쓰기 자리에 적은 것: 글자 아래 적은 것과 같은 높이, 그 자리에서 오른쪽으로, 주홍 밑줄과 겹치지 않는다', geo)
+      return { d: Math.abs(top(sp) - top(c)), left: ss.right, tf: ss.transform, bar: getComputedStyle(sp).boxShadow, plain: getComputedStyle(document.querySelector('#txt .sp.ok')).boxShadow }; }''')
+    ok(geo['d'] <= 1.5 and geo['left'] == '0px' and geo['tf'] == 'none' and geo['bar'] == 'none', '띄어쓰기 자리에 적은 것: 글자 아래 적은 것과 같은 높이, 칸의 오른쪽 끝에 맞춰(다음 단어의 것과 붙지 않게), 주홍 밑줄과 겹치지 않는다', geo)
     pg.close()
     # 줄이 넘어가 글이 위로 밀리면, 화면 위로 나간 줄에 적은 것은 지운다(맨 윗줄 위에 반쯤 걸려 보였다)
     pg, ty = env.tool(c, '/')

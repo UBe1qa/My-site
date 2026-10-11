@@ -526,7 +526,8 @@
       var w = m.wo[i]; if (w < 0) return '';
       if (!tw) tw = r.value.split(/[ \n]/);
       var word = Array.from(tw[w] || ''), pos = m.po[i];
-      if (pos < 0) { var more = word.slice(T.words[w].ci.length); return more.length > 4 ? more.slice(0, 4).join('') + '…' : more.join(''); }   /* 띄어쓰기 자리에 더 친 글자(넷까지, 더 있으면 …) */
+      /* 띄어쓰기 자리에 더 친 글자: 앞에 + 를 붙인다('더 쳤다'는 뜻. 바꿔 친 글자와 헷갈리지 않게). 넷까지, 더 있으면 … */
+      if (pos < 0) { var more = word.slice(T.words[w].ci.length); return !more.length ? '' : '+' + (more.length > 4 ? more.slice(0, 4).join('') + '…' : more.join('')); }
       var short = w < cw && word.length < T.words[w].ci.length;                           /* 끝난 단어인데 목표보다 짧게 쳤다: 어딘가를 빠뜨렸다 */
       if (word[pos]) return word[pos] !== T.chars[i] ? word[pos] : (short ? SKIP : '');
       if (w < cw) return SKIP;                                                         /* 끝난 단어에서 아무것도 안 친 자리: 빠뜨린 글자 */

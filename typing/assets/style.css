@@ -119,9 +119,10 @@ kbd{font:inherit}
 .txt [data-t]{position:relative}
 .txt [data-t]::after{content:attr(data-t);position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:1px;font-size:.5em;line-height:1;font-weight:700;letter-spacing:0;white-space:nowrap;pointer-events:none;background:none;color:var(--bad);-webkit-text-fill-color:var(--bad)}
 .txt .pend[data-t]::after{color:var(--muted);-webkit-text-fill-color:var(--muted)}
-/* 띄어쓰기 자리에 적는 '더 친 글자': 띄어쓰기 칸은 줄 높이만큼 크므로 글자 칸(1.35em, 줄 가운데)의 아래에 맞춰 내리고, 그 자리에서 오른쪽으로 적는다.
+/* 띄어쓰기 자리에 적는 '더 친 글자'(+xy): 띄어쓰기 칸은 줄 높이만큼 크므로 글자 칸(1.35em, 줄 가운데)의 아래에 맞춰 내리고,
+   칸의 오른쪽 끝에 맞춰 왼쪽(방금 친 단어의 끝 아래)으로 적는다. 오른쪽으로 적으면 다음 단어 첫 글자 아래에 적은 것과 붙어 한 낱말처럼 읽혔다.
    적은 것이 있으면 주홍 밑줄은 긋지 않는다(글자 위로 줄이 그어져 지운 것처럼 보였다) */
-.txt .sp[data-t]::after{left:0;top:50%;transform:none;margin-top:calc(1.35em + 1px)}
+.txt .sp[data-t]::after{left:auto;right:0;top:50%;transform:none;margin-top:calc(1.35em + 1px)}
 .txt .sp.bad[data-t]{box-shadow:none}
 .txt .c.pend{background-image:linear-gradient(90deg,var(--main) var(--f,50%),var(--todo) var(--f,50%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 /* 지금 칠 자리: 글자 아래 굵은 가지색 줄 하나(.car)가 다음 글자로 미끄러져 간다. 글자마다 줄을 새로 만들지 않아서 글 전체의 배치가 다시 계산되지 않는다.
