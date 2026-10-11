@@ -1500,9 +1500,10 @@ def fx_checks(env):
     lab = pg.evaluate('[...document.querySelectorAll("#fx .lab")].map((x) => x.textContent).join("|")')
     ok('10' in lab and '콤보' in lab, '10 콤보 꼬리표가 뜬다', lab)
     ok(pg.evaluate(anims) >= 1, '키를 누른 직후에는 움직임이 돈다(화려하게)', pg.evaluate(anims))
-    # 꼬리표가 치는 글 위에 겹치지 않는 자리(글 위의 빈 줄)에 뜬다
-    over = pg.evaluate("""() => { const v = document.querySelector('.view').getBoundingClientRect(); const l = [...document.querySelectorAll('#fx .lab')].map((x) => x.getBoundingClientRect()).filter((b) => b.width > 0); return l.every((b) => b.bottom <= v.top + 4); }""")
-    ok(over, '콤보 꼬리표는 글 위의 빈 줄에 뜬다(치는 글을 가리지 않는다)')
+    # 꼬리표는 방금 친 글자 바로 위에 뜬다: 지금 칠 글자보다 위에 있어 칠 글(지금 자리부터 뒤)을 가리지 않는다
+    pg.wait_for_timeout(330)
+    over = pg.evaluate("""() => { const cur = document.querySelector('#txt .cur').getBoundingClientRect(); const l = [...document.querySelectorAll('#fx .lab')].map((x) => x.getBoundingClientRect()).filter((b) => b.width > 0); return l.length ? l.map((b) => Math.round(b.bottom - cur.top)) : null; }""")
+    ok(over is not None and all(v <= 8 for v in over), '콤보 꼬리표는 지금 칠 글자보다 위에 뜬다(칠 글을 가리지 않는다)', over)
     # 이펙트 층은 누르는 것을 가리지 않는다
     hit = pg.evaluate("""() => { const st = document.querySelector('.stage').getBoundingClientRect(); const pts = [[st.left + 60, st.top + 120], [st.left + st.width / 2, st.top + st.height / 2], [st.right - 80, st.bottom - 40]]; return pts.map(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? (e.closest('.fx, .fxu, .burst') ? 'fx' : e.id || e.tagName) : 'none'; }); }""")
     ok('fx' not in hit, '이펙트 층은 누르는 것을 가리지 않는다', hit)
@@ -1625,6 +1626,96 @@ def fx_checks(env):
         ok(not over, f'{path} 결과의 모든 줄이 단추 판에 가리지 않는다(760~1366px)', over)
         pg.set_viewport_size({'width': 1366, 'height': 900})
         pg.close()
+    c.close()
+    # 제3자 평가(2026-10-11)에서 나온 것
+    # ① 판이 끝난 직후의 띄어쓰기가 쪽을 굴리지 않는다(치던 손이 넘어온 키). 1.5초 뒤에는 브라우저 기본 동작 그대로
+    c = env.ctx(1366, 768)
+    pg, ty = env.tool(c, '/ko/')
+    go(pg, ty, 12)
+    pg.evaluate('__E.finish()'); pg.wait_for_timeout(120)
+    pg.keyboard.press('Space'); pg.wait_for_timeout(150); pg.keyboard.press('Space'); pg.wait_for_timeout(250)
+    ok(pg.evaluate('window.scrollY') == 0 and pg.evaluate('__E.done'), '끝난 직후 띄어쓰기를 눌러도 화면이 안 밀린다', pg.evaluate('window.scrollY'))
+    pg.evaluate('document.activeElement && document.activeElement.blur()'); pg.keyboard.press('Space'); pg.wait_for_timeout(250)
+    ok(pg.evaluate('window.scrollY') == 0, '초점이 풀린 뒤의 띄어쓰기도 안 밀린다(끝난 뒤 1.5초 안)', pg.evaluate('window.scrollY'))
+    # ② 설정 팝업은 Esc 로 닫힌다
+    pg.evaluate('__E.next({ focus: false })'); pg.wait_for_timeout(150)
+    pg.click('#more summary'); pg.wait_for_timeout(120)
+    pg.focus('#fx-seg button'); pg.keyboard.press('Escape'); pg.wait_for_timeout(120)
+    ok(not pg.evaluate('document.getElementById("more").open') and pg.evaluate('document.activeElement.tagName') == 'SUMMARY', '설정 팝업이 Esc 로 닫히고 초점이 설정 단추로 돌아온다')
+    # ③ 콤보 딱지(컴퓨터·화려하게): 콤보 10 부터 방금 친 글자 위에 뜨고, 끊기면 사라진다. 칠 글(지금 자리부터)을 가리지 않는다
+    pg.evaluate('document.getElementById("trap").focus()')
+    go(pg, ty, 14); pg.wait_for_timeout(1400)    # 고비(10)의 꼬리표가 떠 있는 동안에는 딱지가 숨는다 → 지난 뒤에 본다
+    tg = pg.evaluate("""() => { const t = document.querySelector('#fx .ctag'); if (!t) return null; const r = t.getBoundingClientRect(), cur = document.querySelector('#txt .cur').getBoundingClientRect(); return { txt: t.textContent, op: getComputedStyle(t).opacity, bottom: Math.round(r.bottom), curTop: Math.round(cur.top), combo: __E.session.combo }; }""")
+    ok(tg and tg['txt'] == str(tg['combo']) and tg['combo'] >= 11 and tg['op'] == '1' and tg['bottom'] <= tg['curTop'] + 8, '콤보 딱지: 숫자 = 콤보, 지금 칠 글자 위에 있다', tg)
+    go(pg, ty, 1, wrong_at=(0,)); pg.wait_for_timeout(500)
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#fx .ctag")).opacity') == '0' and pg.evaluate('__E.session.combo') == 0, '틀리면 콤보 딱지가 사라진다')
+    pg.evaluate('TJFX.setLevel(1, false)'); go(pg, ty, 12); pg.wait_for_timeout(200)
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#fx .ctag")).opacity') == '0', '가볍게에서는 콤보 딱지가 없다')
+    pg.evaluate('TJFX.setLevel(2, false)')
+    pg.close(); c.close()
+    # ④ 터치 자판으로 잰 결과(안내 한 줄이 더 붙는다)도 단추 판에 가리지 않는다
+    c = env.ctx(1180, 820)
+    pg, ty = env.tool(c, '/ko/')
+    ty = Typist(pg, ty.cdp, phys=False)
+    go(pg, ty, 30, wrong_at=(4,)); pg.evaluate('__E.finish()'); finish_wait(pg); pg.wait_for_timeout(600)
+    over = []
+    for w in (920, 1024, 1180, 1366):
+        pg.set_viewport_size({'width': w, 'height': 820}); pg.wait_for_timeout(80)
+        v = pg.evaluate(fit)
+        if v > 0: over.append((w, v))
+    ok(pg.evaluate('__E.session.mode') == 'char' and not over, '터치 자판 결과의 모든 줄이 단추 판에 가리지 않는다(920~1366px)', over)
+    pg.close(); c.close()
+    # ⑤ 좁은 휴대폰: 숫자 칸의 숫자·이름이 칸 밖으로 넘치지 않고 서로 겹치지 않는다(가장 넓은 값으로)
+    hudfit = r"""() => { const out = [], hud = document.querySelector('.hud'), hr = hud.getBoundingClientRect(); let prev = null;
+      for (const e of [...hud.querySelectorAll('.hk, .btn')].filter((x) => x.getBoundingClientRect().width > 0)) { const r = e.getBoundingClientRect();
+        if (prev && r.left < prev.right - 0.5 && Math.abs(r.top - prev.top) < 10) out.push('겹침 ' + e.textContent.trim().slice(0, 8));
+        if (r.right > hr.right + 0.5) out.push('판 밖 ' + e.textContent.trim().slice(0, 8));
+        for (const c of e.classList.contains('hk') ? e.querySelectorAll('b, span') : [e]) { const q = c.getBoundingClientRect(); if (q.width <= 2) continue; const g = document.createRange(); g.selectNodeContents(c); const t = g.getBoundingClientRect(); if (t.right > r.right - 1) out.push('넘침 ' + c.textContent.trim().slice(0, 10)); }
+        prev = r; } return out; }"""
+    for path in ['/ko/', '/ko/english/', '/', '/ko/practice/', '/practice/']:
+        bad = []
+        for w in (320, 360, 390, 430):
+            c = env.ctx(w, 760, mobile=True, lang='ko' if path.startswith('/ko') else 'en', dpr=2)
+            pg, ty = env.tool(c, path, mobile=True)
+            go(pg, ty, 12)
+            pg.evaluate('''() => { const s = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; }; s('speed', '888'); s('wpm', '188'); s('acc', '100'); s('left', '120'); s('combo', '188'); }''')
+            pg.wait_for_timeout(400)
+            r = pg.evaluate(hudfit)
+            if r: bad.append((w, r))
+            c.close()
+        ok(not bad, f'{path} 좁은 휴대폰(320~430px)에서 숫자 줄이 넘치거나 겹치지 않는다', bad)
+    # ⑥ 터치 자판의 '다음 화면에 한 번만 그리기'(defer, 2026-10-11 휴대폰·태블릿에서 타자가 밀린다는 말): 바로 그릴 때와 숫자가 같아야 한다.
+    #    진짜 시계로 본다(가짜 시계에서는 다음 화면이 오지 않는다). burst = 키 셋을 쉬지 않고 이어 보내 중간 값을 건너뛰게 한다
+    def touch_run(defer, burst):
+        c = env.ctx(390, 844, mobile=True, dpr=2)
+        pg = env.page(c, '/ko/', clock=False); pg.add_script_tag(content=SIM); cdp = c.new_cdp_session(pg)
+        pg.tap('#trap', position={'x': 60, 'y': 30}); pg.wait_for_timeout(250)
+        pg.evaluate('(d) => { __E.defer = d; window.__draws = 0; const a = __E.apply; __E.apply = function () { window.__draws++; return a.apply(this, arguments); }; }', defer)
+        ty = Typist(pg, cdp, phys=False)
+        ks = ty.keys()[:66]
+        for j, k in enumerate(ks):
+            ty.key(wrong(k) if j in (7, 23, 41) and k not in ' \n' else k, 0 if (burst and j % 3) else 40)
+        pg.wait_for_timeout(300)
+        r = pg.evaluate('({ typed: __E.session.typedKeys, ok: __E.session.okKeys, combo: __E.session.combo, max: __E.session.maxCombo, value: __E.session.value, cursor: __E.session.cmp.cursor, shown: +document.getElementById("combo").textContent, pending: __E.pending, mode: __E.session.mode, draws: window.__draws, errs: 0 })')
+        r['errs'] = len(pg._errs); c.close()
+        return r
+    base = touch_run(False, False)
+    for burst in (False, True):
+        d = touch_run(True, burst)
+        same = all(d[k] == base[k] for k in ('typed', 'ok', 'combo', 'max', 'value', 'cursor'))
+        ok(d['mode'] == 'char' and same and d['shown'] == d['combo'] and not d['pending'] and not d['errs'], f'터치 자판 defer({"몰아치기" if burst else "보통"}): 바로 그릴 때와 누른 키·맞은 키·콤보·글이 같다', {k: (base[k], d[k]) for k in ('typed', 'ok', 'combo', 'max', 'cursor')})
+        if burst:
+            ok(d['draws'] < base['draws'], '몰아치면 중간 값은 건너뛰고 덜 그린다', (base['draws'], d['draws']))
+    # ⑦ 진단판: ?diag 일 때만 뜨고, 저장 키를 늘리지 않는다
+    c = env.ctx(390, 844, mobile=True, dpr=2)
+    pg, ty = env.tool(c, '/ko/?diag', mobile=True)
+    go(pg, ty, 8); pg.wait_for_timeout(900)
+    dg = pg.evaluate('(() => { const e = [...document.querySelectorAll("body > pre")].find((x) => x.textContent.startsWith("DIAG")); return e ? e.textContent : ""; })()')
+    ok('input events' in dg and 'long tasks' in dg and 'mode char' in dg, '?diag: 진단판이 뜨고 숫자가 찍힌다', dg[:120])
+    ok(set(pg.evaluate('Object.keys(localStorage)')) <= {'todok.runs', 'todok.best', 'todok.keys', 'todok.set', 'todok.lang'} and not pg._errs, '?diag: 저장 키가 늘지 않고 콘솔 오류가 없다', pg._errs[:2])
+    pg.close()
+    pg = env.page(c, '/ko/')
+    ok(not pg.evaluate('[...document.querySelectorAll("body > pre")].some((x) => x.textContent.startsWith("DIAG"))'), '평소에는 진단판이 없다')
     c.close()
 
 

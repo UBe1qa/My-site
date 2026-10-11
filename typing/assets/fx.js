@@ -2,6 +2,7 @@
    원칙
    - 치는 중의 이펙트는 처음에 만들어 둔 조각(.fxu i, .fx i)을 Web Animations 로 transform·opacity 만 움직인다.
      한 번 불 때 하는 일은 animate() 한 번뿐이고(클래스·크기·글자를 바꾸지 않는다), 자리(x·y)는 app.js 가 미리 재 둔 값을 받는다(여기서 화면을 재지 않는다).
+     하나만 예외: 콤보 딱지(.ctag, 컴퓨터의 '화려하게'에서만)는 콤보 10 부터 방금 친 글자 위를 따라다니며 숫자를 바꾼다(조각 하나의 글자와 transform 만. 터치 기기에는 없다).
      그래서 키를 누를 때마다 배치 계산이 일어나지 않고, 움직임은 브라우저의 합성 단계에서 돈다. 끝나면 스스로 멈춘다(반복·타이머 0).
    - 세기 세 단계: 0 끔 · 1 가볍게(밑줄 미끄러짐, 단어 밑줄, 키캡 눌림, 틀렸을 때 작은 흔들림) · 2 화려하게(+ 누른 글자 번쩍임, 키 조각, 콤보 꼬리표, 색종이).
      '동작 줄이기'가 켜져 있으면 0 으로 고정한다. 키를 누른 뒤 화면이 나오기까지가 계속 길면(note) 스스로 한 단계 내린다(이 방문 동안만).
@@ -20,7 +21,8 @@
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
   var FX = {
-    level: REDUCED || !CAN ? 0 : 2, max: REDUCED || !CAN ? 0 : 2, locked: REDUCED || !CAN, auto: false,
+    level: REDUCED || !CAN ? 0 : 2, max: REDUCED || !CAN ? 0 : 2, locked: REDUCED || !CAN, reduced: REDUCED, auto: false,
+    tag: null, tagOn: false, tagX: 0, tagY: 0, tagN: -1,
     stage: null, over: null, layer: null, S: null, onChange: null,
     chips: null, chipC: null, labs: null, ring: null, heat: 0, lags: [], lagN: 0
   };
@@ -34,6 +36,8 @@
       /* 키 조각: 미색·가지색·겨자색·주홍 */
       FX.chips = [new Pool(FX.over, 'chip', 12), new Pool(FX.over, 'chip c1', 10), new Pool(FX.over, 'chip c2', 12), new Pool(FX.over, 'chip c3', 6)];
       FX.labs = new Pool(FX.over, 'lab', 2);
+      /* 콤보 딱지: 눈이 가 있는 곳(방금 친 글자 위)에 콤보 숫자를 보여 준다. 터치 기기는 숫자 줄이 글 바로 위에 있고 화면도 좁아 두지 않는다 */
+      if (!FX.phone) { FX.tag = mk(FX.over, 'ctag'); FX.tag.appendChild(D.createTextNode('')); }
     }
     FX.apply();
   };
@@ -50,18 +54,19 @@
   FX.setLevel = function (n, auto) {
     if (FX.locked) return;
     FX.level = Math.max(0, Math.min(2, n | 0)); FX.auto = !!auto; FX.lags.length = 0;
+    if (FX.level < 2) FX.tagHide();
     FX.apply();
     if (FX.onChange) FX.onChange(!!auto);
   };
   FX.setSound = function (on) { FX.sound = !!on; if (on) Snd.ensure(); if (FX.onChange) FX.onChange(false); };
 
-  /* 느린 기기: 키를 누른 뒤 다음 화면이 나오기까지(ms)를 받아, 최근 24번 가운데 9번 넘게 80ms 를 넘으면 한 단계 내린다 */
+  /* 느린 기기: 키를 누른 뒤 다음 화면이 나오기까지(ms)를 받아, 최근 24번 가운데 8번 넘게 70ms 를 넘으면 한 단계 내린다 */
   FX.note = function (lag) {
     if (FX.level === 0 || FX.locked) return;
-    var a = FX.lags; a.push(lag > 80 ? 1 : 0); if (a.length > 24) a.shift();
+    var a = FX.lags; a.push(lag > 70 ? 1 : 0); if (a.length > 24) a.shift();
     if (a.length < 24) return;
     var bad = 0; for (var i = 0; i < a.length; i++) bad += a[i];
-    if (bad >= 9) FX.setLevel(FX.level - 1, true);
+    if (bad >= 8) FX.setLevel(FX.level - 1, true);
   };
 
   /* ---------- 치는 중 ---------- */
@@ -71,15 +76,22 @@
     var L = FX.layer; if (!L || !L.fx || FX.level === 0) return;
     var b = L.rect(i); if (!b) return;
     if (!good) {
-      if (FX.level === 2) L.fx.bad.next().animate([{ transform: T(b.cx - 20, b.cy - 20, b.w / 40 * 1.25, b.h / 40 * 1.25), opacity: 0.5 }, { transform: T(b.cx - 20, b.cy - 20, b.w / 40, b.h / 40), opacity: 0 }], { duration: 320, easing: EASE });
-      var amp = FX.level === 2 ? 5 : 3;
-      if (L.joltEl) L.joltEl.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + -amp + 'px)' }, { transform: 'translateX(' + (amp - 1) + 'px)' }, { transform: 'translateX(-2px)' }, { transform: 'translateX(0)' }], { duration: 180, easing: 'ease-out' });
+      if (FX.level === 2) {
+        L.fx.bad.next().animate([{ transform: T(b.cx - 20, b.cy - 20, b.w / 40 * 1.45, b.h / 40 * 1.45), opacity: 0.6 }, { transform: T(b.cx - 20, b.cy - 20, b.w / 40, b.h / 40), opacity: 0 }], { duration: 360, easing: EASE });
+        /* 틀린 글자에서 주홍 키 조각이 튕겨 나간다 */
+        if (FX.over && !FX.phone) { var pm = L.toStage(b.cx, b.cy); FX.chip(pm.x, pm.y, 3, 0.75); FX.chip(pm.x, pm.y, 3, 0.6); FX.chip(pm.x, pm.y, 0, 0.6); }
+      }
+      var amp = FX.level === 2 ? 7 : 3;
+      if (L.joltEl) L.joltEl.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + -amp + 'px)' }, { transform: 'translateX(' + (amp - 1) + 'px)' }, { transform: 'translateX(-2px)' }, { transform: 'translateX(0)' }], { duration: FX.level === 2 ? 240 : 180, easing: 'ease-out' });
       return;
     }
     if (FX.level < 2) return;
-    /* 누른 글자가 한 번 번쩍인다(키가 눌렸다 올라오는 느낌). 콤보가 쌓이면 겨자색 */
+    /* 누른 글자가 한 번 번쩍인다(키가 눌렸다 올라오는 느낌). 콤보가 쌓이면 겨자색.
+       터치 기기에서는 키마다의 번쩍임과 키 조각을 뺀다: 움직임 하나가 끝날 때마다 화면을 한 번 더 그려서, 느린 휴대폰은 손을 못 따라간다.
+       (콤보 고비의 꼬리표·키 조각, 단어 밑줄, 틀림 표시, 밑줄 색은 터치 기기에도 그대로 나온다) */
+    if (FX.phone) return;
     var hot = FX.heat >= 2;
-    (hot ? L.fx.hot : L.fx.tap).next().animate([{ transform: T(b.cx - 20, b.cy - 20 + 2, b.w / 40, b.h / 40), opacity: hot ? 0.42 : 0.26 }, { transform: T(b.cx - 20, b.cy - 20, b.w / 40 * 1.16, b.h / 40 * 1.16), opacity: 0 }], { duration: 240, easing: EASE });
+    (hot ? L.fx.hot : L.fx.tap).next().animate([{ transform: T(b.cx - 20, b.cy - 20 + 2, b.w / 40, b.h / 40), opacity: hot ? 0.5 : 0.32 }, { transform: T(b.cx - 20, b.cy - 20, b.w / 40 * 1.3, b.h / 40 * 1.3), opacity: 0 }], { duration: 240, easing: EASE });
     /* 열기가 오르면 누를 때마다 키 조각이 하나씩 튄다 */
     if (FX.heat >= 2 && FX.over && combo % (FX.heat === 3 ? 2 : 3) === 0) {
       var p = L.toStage(b.cx, b.cy - b.h * 0.4);
@@ -95,8 +107,8 @@
   /* 키 조각 하나. c = 색(0 미색 1 가지색 2 겨자색 3 주홍), pow = 세기 */
   FX.chip = function (x, y, c, pow) {
     if (!FX.chips) return;
-    var e = FX.chips[c].next(), dx = rnd(-46, 46) * pow, up = rnd(26, 58) * pow, fall = rnd(20, 60) * pow, r1 = rnd(-160, 160);
-    e.animate([{ transform: T(x - 5, y - 5, 1, 1, 0), opacity: 1 }, { transform: T(x - 5 + dx * 0.55, y - 5 - up, 1, 1, r1 * 0.6), opacity: 1, offset: 0.4, easing: 'cubic-bezier(.4,0,.8,.6)' }, { transform: T(x - 5 + dx, y - 5 - up + fall + up * 0.5, 0.8, 0.8, r1), opacity: 0 }], { duration: rnd(460, 720), easing: 'cubic-bezier(.1,.7,.3,1)' });
+    var e = FX.chips[c].next(), dx = rnd(-58, 58) * pow, up = rnd(30, 72) * pow, fall = rnd(24, 70) * pow, r1 = rnd(-200, 200), sz = rnd(1, 1.8);
+    e.animate([{ transform: T(x - 5, y - 5, sz, sz, 0), opacity: 1 }, { transform: T(x - 5 + dx * 0.55, y - 5 - up, sz, sz, r1 * 0.6), opacity: 1, offset: 0.4, easing: 'cubic-bezier(.4,0,.8,.6)' }, { transform: T(x - 5 + dx, y - 5 - up + fall + up * 0.5, 0.8, 0.8, r1), opacity: 0 }], { duration: rnd(460, 720), easing: 'cubic-bezier(.1,.7,.3,1)' });
   };
   FX.burstAt = function (x, y, n, pow) { for (var k = 0; k < n; k++) FX.chip(x + rnd(-8, 8), y, k % 3 === 0 ? 2 : k % 3 === 1 ? 0 : 1, pow); };
   /* 콤보가 바뀌었다. 10·25·50·100, 그 뒤로는 50마다 꼬리표와 키 조각. 끊기면 콤보 키가 한 번 내려앉는다 */
@@ -106,18 +118,38 @@
     var h = n >= 100 ? 3 : n >= 50 ? 2 : n >= 20 ? 1 : 0;
     if (h !== FX.heat) { FX.heat = h; if (FX.stage) FX.stage.setAttribute('data-heat', String(h)); }
     if (FX.level === 0) return;
+    if (FX.tag && FX.level === 2) FX.tagAt(n, prev, i);
     if (n === 0 && prev >= 10) { if (key) FX.press(key, 'drop'); return; }
     if (n <= prev || !FX.milestone(n)) return;
     Snd.play('ms');
     if (key) FX.press(key, 'bounce');
     var L = FX.layer; if (FX.level < 2 || !L || !FX.over) return;
     var b = L.rect(i); if (!b) return;
-    /* 꼬리표는 글 위의 빈 줄에 뜬다(치는 글을 가리지 않게). 키 조각은 방금 친 글자에서 작게 튄다 */
+    /* 꼬리표는 방금 친 글자 바로 위에 뜬다(눈이 가 있는 곳. 그 위는 이미 친 줄이거나 글 위의 빈 줄이라 칠 글을 가리지 않는다).
+       문장 연습처럼 자리가 정해진 화면(slotRight)은 그 자리에. 키 조각은 방금 친 글자에서 튄다 */
     var p = L.toStage(b.cx, b.cy - b.h * 0.5), q = L.slot(), lab = FX.labs.next();
+    if (!L.slotRight) q = { x: Math.max(L.ox, Math.min(p.x - 44, L.ox + L.bw - 170)), y: Math.max(q.y - 4, p.y - 44) };
+    if (FX.tag && FX.tagOn) FX.tag.animate([{ opacity: 0 }, { opacity: 0, offset: 0.86 }, { opacity: 1 }], { duration: 1150 });
     lab.textContent = ''; var bb = D.createElement('b'); bb.textContent = String(n); lab.appendChild(bb); lab.appendChild(D.createTextNode(FX.S.combo));
     lab.animate([{ transform: T(q.x, q.y + 12, 0.6), opacity: 0 }, { transform: T(q.x, q.y - 2, 1.1), opacity: 1, offset: 0.16 }, { transform: T(q.x, q.y, 1), opacity: 1, offset: 0.3 }, { transform: T(q.x, q.y, 1), opacity: 1, offset: 0.8 }, { transform: T(q.x, q.y - 10, 1), opacity: 0 }], { duration: 1150, easing: 'ease-out' });
-    FX.burstAt(p.x, p.y, n >= 100 ? 12 : n >= 25 ? 8 : 5, n >= 100 ? 1.2 : 0.95);
+    FX.burstAt(p.x, p.y, n >= 100 ? 18 : n >= 25 ? 12 : 8, n >= 100 ? 1.35 : 1.05);
   };
+  /* 콤보 딱지(컴퓨터·화려하게): 콤보 10 부터 방금 친 글자 위를 따라다닌다. 끊기면 떨어진다. 열기가 오르면 조금 커진다 */
+  FX.tagAt = function (n, prev, i) {
+    var t = FX.tag, L = FX.layer; if (!t || !L) return;
+    if (n >= 10) {
+      var b = L.rect(i); if (!b) return;
+      var p = L.toStage(b.cx, b.cy - b.h * 0.5), sc = FX.heat >= 3 ? 1.3 : FX.heat === 2 ? 1.15 : 1;
+      FX.tagX = Math.max(L.ox, Math.min(p.x - 16, L.ox + L.bw - 60)); FX.tagY = p.y - 25;
+      if (n !== FX.tagN) { t.firstChild.nodeValue = String(n); FX.tagN = n; }
+      t.style.transform = T(FX.tagX, FX.tagY, sc);
+      if (!FX.tagOn) { FX.tagOn = true; t.style.opacity = '1'; t.animate([{ opacity: 0, transform: T(FX.tagX, FX.tagY + 8, 0.5) }, { opacity: 1, transform: T(FX.tagX, FX.tagY - 2, 1.2), offset: 0.6 }, { opacity: 1, transform: T(FX.tagX, FX.tagY, sc) }], { duration: 220, easing: EASE }); }
+    } else if (FX.tagOn) {
+      FX.tagOn = false; FX.tagN = -1; t.style.opacity = '0';
+      if (n === 0) t.animate([{ opacity: 1, transform: T(FX.tagX, FX.tagY, 1, 1, 0) }, { opacity: 0, transform: T(FX.tagX - 8, FX.tagY + 30, 0.85, 0.85, -18) }], { duration: 380, easing: 'cubic-bezier(.4,0,.9,.6)' });
+    }
+  };
+  FX.tagHide = function () { if (FX.tag) { FX.tag.style.opacity = '0'; } FX.tagOn = false; FX.tagN = -1; };
   /* 숫자 칸이 한 번 튄다(안쪽만 커졌다 돌아온다) / 화면 자판의 키가 한 번 눌린다. 크기와 자리는 바꾸지 않는다(transform 만) */
   FX.press = function (el, how, delay) {
     if (FX.level === 0 || !CAN || !el) return;
@@ -130,7 +162,7 @@
   };
   /* 첫 키: 숫자 칸이 차례로 한 번씩 튄다(시작했다는 표시) */
   FX.start = function () {
-    FX.heat = 0;
+    FX.heat = 0; FX.tagHide();
     if (FX.level === 0 || !FX.stage) return;
     var ks = FX.stage.querySelectorAll('.hud .hk');
     for (var i = 0; i < ks.length; i++) FX.press(ks[i], 'tap', i * 45);
@@ -140,6 +172,7 @@
   /* 판이 끝나거나 새 판이 시작될 때: 열기를 0 으로, 아직 떠 있는 꼬리표·키 조각을 바로 거둔다(결과의 큰 숫자를 가리지 않게) */
   FX.reset = function () {
     FX.heat = 0; if (FX.stage) FX.stage.setAttribute('data-heat', '0');
+    FX.tagHide();
     var as = FX.over && FX.over.getAnimations ? FX.over.getAnimations({ subtree: true }) : [];
     for (var i = 0; i < as.length; i++) as[i].cancel();
   };
@@ -166,7 +199,7 @@
   FX.stopConfetti = function (c) { if (raf) cancelAnimationFrame(raf); raf = 0; if (c) { c.hidden = true; c.width = c.width; } };
   FX.confetti = function (c, from, big) {
     var now = performance.now();
-    if (!c || FX.level < 2 || D.hidden || now - lastAt < 30000) return false;
+    if (!c || FX.level < 2 || D.hidden || now - lastAt < 12000) return false;
     lastAt = now;
     var box = c.parentNode.getBoundingClientRect(), dpr = Math.min(FX.phone ? 1.5 : 2, window.devicePixelRatio || 1), w = box.width, h = box.height;
     c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); c.hidden = false;

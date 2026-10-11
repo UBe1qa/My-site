@@ -21,7 +21,7 @@ const M = [
   ['틀린 글쇠를 전부 맞았다고 함', 'good = align(before.concat([tok]), Tw.tk, true).cost === a0.cost;', 'good = true;'],
   ['터치 자판에서 조합 중인 글자를 바로 판정', "var held = opt.lenient ? heldTail(chars, opt.hold | 0) : 0;", 'var held = 0;'],
   ['터치 자판에서 아래아 같은 중간 글자를 미루지 않음', "while (k < n && isMid(chars[n - 1 - k])) k++;", ''],
-  ['터치 자판에서 조합 중인 문자열 길이를 무시', "while (h < hold && h < n && (isHangul(chars[n - 1 - h]) || isMid(chars[n - 1 - h]))) h++;", ''],
+  ['터치 자판에서 조합 중인 단어를 통째로 미룸(단어가 끝나야 화면이 바뀐다)', "return k;   /* hold 는 쓰지 않는다(위 설명) */", "return Math.max(k, Math.min(hold | 0, n));"],
   ['끝날 때 아래아를 글쇠로 셈', ".filter(function (ch) { return !isMid(ch); })", ''],
   ['겹 띄어쓰기를 그대로 둠', ".replace(/([ \\n])[ \\n]+/g, '$1');", ';'],
   ['줄바꿈 자리 띄어쓰기를 틀렸다고 함', "var sepOk = I.sep === Tw.sep || (opt.soft && Tw.sep === '\\n' && I.sep === ' ');", 'var sepOk = I.sep === Tw.sep;'],

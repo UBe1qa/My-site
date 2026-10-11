@@ -337,7 +337,9 @@ def main():
     ok('prefers-reduced-motion' in fxjs and 'setInterval' not in fxjs, 'fx.js 는 동작 줄이기를 따르고 반복 타이머가 없다')
     appjs = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
     hot = appjs[appjs.index('Engine.prototype.onInput'):appjs.index('Engine.prototype.start')]
-    ok('getComputedStyle' not in hot and 'getBoundingClientRect' not in hot and 'offset' not in hot.replace('offsetWidth', ''), 'app.js 키 처리(onInput)는 화면을 재지 않는다')
+    ok('getComputedStyle' not in hot and 'getBoundingClientRect' not in hot and 'offset' not in hot.replace('offsetWidth', ''), 'app.js 키 처리(onInput·apply)는 화면을 재지 않는다')
+    ok('this.defer = TOUCH && !AUTO' in appjs and 'Engine.prototype.flush' in appjs and 'if (this.pending) { this.flush(); if (this.done) return; }' in appjs, 'app.js 터치 자판은 다음 화면에 한 번만 그리고(defer), 끝낼 때 미뤄 둔 입력을 먼저 반영한다')
+    ok("var DG = /[?&]diag\\b/.test(location.search) ?" in appjs and 'localStorage' not in appjs[appjs.index('var DG ='):appjs.index('var SPACE_GUARD')] and 'fetch(' not in appjs and 'sendBeacon' not in appjs, 'app.js 진단판은 ?diag 일 때만 켜지고 저장·전송을 하지 않는다')
     ok(".tool .below>section{content-visibility:auto" in css, 'CSS 도구 화면의 아래 칸은 화면 밖이면 그리지 않는다')
     for path, src in pages.items():
         tool = 'id="tj-cfg"' in src

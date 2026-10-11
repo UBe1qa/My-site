@@ -915,6 +915,14 @@ function cjiSteps(ch) {
   if (fi) { const f = F28[fi], two = Object.keys(FF).find((k) => FF[k] === f); if (two) out.push(syl(V21[vi], F28.indexOf(two[0]))); out.push(ch); }
   return out;
 }
+/* 두벌식으로 한 글자를 만들 때 차례로 보이는 모양(자음 → 자음+모음 → 받침) */
+function dubeolSteps(ch) {
+  const c = ch.charCodeAt(0) - 0xAC00;
+  if (c < 0 || c > 11171) return [ch];
+  const out = [C19[Math.floor(c / 588)], String.fromCharCode(0xAC00 + c - (c % 28))];
+  if (c % 28) out.push(ch);
+  return out;
+}
 /* 글 전체를 천지인 흉내로 넣는다. withHold = 입력기가 조합 중인 문자열을 알려 준 경우 */
 function cjiRun(text, withHold) {
   const s = new TJ.Session(text, { mode: 'char' }); let done = '', t = 0, bad = 0, steps = 0;
@@ -937,12 +945,25 @@ run('touch2', () => {
   /* 호환 자모가 아닌 아래아(U+119E, U+11A2)와 가운뎃점도 같다 */
   for (const mid of ['ㆍ', 'ᆞ', 'ᆢ', '·', '‥']) eq(view('어', 'ㅇ' + mid, { lenient: true }).st.join(''), '3', '중간 글자 U+' + mid.charCodeAt(0).toString(16));
   eq(TJ.heldTail(Array.from('가ㅇㆍ'), 0) + ':' + TJ.heldTail(Array.from('가ㅇㆍㆍ'), 0) + ':' + TJ.heldTail(Array.from('가 ㆍ'), 0) + ':' + TJ.heldTail(Array.from('가'), 0) + ':' + TJ.heldTail(Array.from('가.'), 0) + ':' + TJ.heldTail([], 0), '2:3:1:1:0:0', '미룰 글자 수');
-  eq(TJ.heldTail(Array.from('한글'), 2) + ':' + TJ.heldTail(Array.from('한글'), 9) + ':' + TJ.heldTail(Array.from('a글'), 2) + ':' + TJ.heldTail(Array.from('cat'), 3), '2:2:1:0', '조합 중인 문자열이 한글이면 통째로(한글이 아닌 글자는 미루지 않는다)');
-  /* 조합 칸에 글자가 둘 이상 있어도(자판 앱이 단어를 통째로 조합 중일 때) 조합이 끝날 때까지 판정하지 않는다 */
+  eq(TJ.heldTail(Array.from('한글'), 2) + ':' + TJ.heldTail(Array.from('한글'), 9) + ':' + TJ.heldTail(Array.from('a글'), 2) + ':' + TJ.heldTail(Array.from('cat'), 3), '1:1:1:0', '조합 중인 문자열이 길어도 미루는 것은 마지막 글자 하나(한글이 아닌 글자는 미루지 않는다)');
+  /* 안드로이드 자판(삼성·구글)은 단어를 통째로 조합 중으로 둔다. 그래도 앞 글자는 바로 판정한다(단어가 끝나야 화면이 바뀌면 '타자가 밀린다') */
   p = feed('한글', ['ㅎ', '하', '한', '한ㄱ', '한그', '한글'], [1, 1, 1, 2, 2, 2]);
-  eq(p.seen.join(' '), '30 30 30 30 30 30', '조합 중인 두 글자 모두 판정을 미룬다'); eq(p.s.typedKeys, 0, '아직 센 키 없음');
+  eq(p.seen.join(' '), '30 30 30 13 13 13', "다음 글자를 치기 시작하면 앞 글자 '한'은 바로 판정된다"); eq(p.s.typedKeys, 3, "그때까지 센 키는 '한'의 세 키");
   res = p.s.finish(1800);
   eq(res.typedKeys + ':' + res.okKeys + ':' + res.strokes, '6:6:6', '끝나면 여섯 키');
+  /* 단어 통째 조합으로 문장을 친다: 낱자마다 화면이 따라오고(커서가 글자마다 나아간다), 틀린 글자도 다음 글자에서 바로 보인다 */
+  {
+    const target = '얼음이 녹은 개울', s2 = new TJ.Session(target, { mode: 'char' }); let done = '', word = '', t = 0; const cursors = [];
+    for (const ch of Array.from(target)) {
+      if (ch === ' ') { done += word + ' '; word = ''; t += 200; cursors.push(s2.update(done, t).cursor); continue; }
+      for (const m of dubeolSteps(ch)) { t += 200; s2.update(done + word + m, t, { hold: Array.from(word + m).length }); }
+      word += ch; cursors.push(s2.cmp.cursor);
+    }
+    eq(cursors.join(','), '0,1,2,4,4,5,7,7,8', '단어 통째 조합: 글자를 치는 동안 커서가 글자마다 나아간다(띄어쓰기를 기다리지 않는다)');
+    const r3 = s2.finish(t); eq(r3.typedKeys + ':' + r3.okKeys + ':' + r3.accuracy, H.keyStream(target).length + ':' + H.keyStream(target).length + ':100', '단어 통째 조합: 누른 키 = 두벌식 키 수, 정확도 100');
+    const s3 = new TJ.Session('한글', { mode: 'char' }); s3.update('힌', 100, { hold: 1 }); const r4 = s3.update('힌ㄱ', 300, { hold: 2 });
+    eq(r4.st.join(''), '23', "단어 통째 조합: 틀린 글자 '힌'은 다음 글자를 치자마자 틀림으로 보인다");
+  }
   /* 틀리게 쓴 글자는 조합이 끝난 뒤(다음 글자가 온 뒤) 틀림으로 */
   p = feed('에요', ['ㅇ', 'ㅇㆍ', '어', '어ㅇ']);
   eq(p.seen.join(' '), '30 30 30 23', "'어'는 다음 글자가 온 뒤에 틀림"); eq(p.s.byKey['ㅔ'].miss, 1, '쳐야 했던 키 ㅔ에 적힌다');

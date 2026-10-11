@@ -7,3 +7,7 @@
   Cache-Control: public, max-age=31536000, immutable
 /assets/*.css
   Cache-Control: public, max-age=31536000, immutable
+
+# 파일 종류를 브라우저가 짐작해서 바꾸지 않게
+/*
+  X-Content-Type-Options: nosniff

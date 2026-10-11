@@ -22,6 +22,40 @@
   var store = new TJ.Store(storage);
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var TOUCH = window.matchMedia && matchMedia('(hover: none), (pointer: coarse)').matches;
+  /* 진단판: 주소 끝에 ?diag 를 붙이면 화면 위에 '이 기기에서 키 하나가 얼마나 걸리는지'를 숫자로 보여 준다(느리다는 기기에서 원인을 찾으려고).
+     숫자만 재고 친 글은 보지 않는다. 아무 데도 보내지 않고 저장하지 않는다. 평소에는 꺼져 있고 아무 일도 하지 않는다 */
+  var DG = /[?&]diag\b/.test(location.search) ? (function () {
+    var box = D.createElement('pre'), t = D.createTextNode('');
+    box.setAttribute('aria-hidden', 'true');
+    box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;margin:0;padding:6px 8px;font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;background:rgba(15,12,30,.88);color:#fff;white-space:pre-wrap;pointer-events:none;max-height:46vh;overflow:hidden';
+    box.appendChild(t);
+    var g = { ev: 0, ap: [], fr: [], kd: [], lt: [], who: {}, burst: 0, lastEv: 0, t0: 0 };
+    function st(a) { if (!a.length) return '-'; var b = a.slice().sort(function (x, y) { return x - y; }), sum = 0; b.forEach(function (x) { sum += x; }); return (sum / b.length).toFixed(1) + ' / ' + b[Math.floor(b.length * 0.9)].toFixed(1) + ' / ' + b[b.length - 1].toFixed(1); }
+    try {
+      new PerformanceObserver(function (l) { l.getEntries().forEach(function (e) { g.lt.push(e.duration); var a = e.attribution && e.attribution[0], w = a ? (a.containerSrc || a.containerName || a.name || '?') : '?'; w = String(w).replace(/^https?:\/\//, '').slice(0, 40); g.who[w] = (g.who[w] || 0) + Math.round(e.duration); }); }).observe({ entryTypes: ['longtask'] });
+    } catch (e) { /* 긴 작업을 못 재는 브라우저 */ }
+    function draw() {
+      var n = navigator, e = window.__E, ua = n.userAgent.replace(/Mozilla\/5\.0 |AppleWebKit\/[\d.]+ |\(KHTML, like Gecko\) |Safari\/[\d.]+/g, '').slice(0, 110), lt = 0;
+      g.lt.forEach(function (x) { lt += x; });
+      var who = Object.keys(g.who).sort(function (a, b) { return g.who[b] - g.who[a]; }).slice(0, 3).map(function (k) { return k + ' ' + g.who[k] + 'ms'; }).join(' | ');
+      t.nodeValue = 'DIAG ' + ua + '\n' +
+        'cores ' + (n.hardwareConcurrency || '?') + ' mem ' + (n.deviceMemory || '?') + ' dpr ' + (window.devicePixelRatio || 1) + ' view ' + window.innerWidth + 'x' + window.innerHeight + ' touch ' + (TOUCH ? 1 : 0) + '\n' +
+        'mode ' + (e && e.session ? e.session.mode : '?') + ' phys ' + (e && e.phys ? 1 : 0) + ' defer ' + (e && e.defer ? 1 : 0) + ' fx ' + (FX ? FX.level : '-') + (FX && FX.auto ? '(auto)' : '') + ' typed ' + (e && e.session ? e.session.typedKeys : 0) + '\n' +
+        'input events ' + g.ev + ' / draws ' + g.ap.length + ' / bursts(<8ms) ' + g.burst + '\n' +
+        'draw ms avg/p90/max  ' + st(g.ap) + '\n' +
+        'input->screen ms     ' + st(g.fr) + '  (n=' + g.fr.length + ')\n' +
+        'key wait ms          ' + st(g.kd) + '  (n=' + g.kd.length + ')\n' +
+        'long tasks ' + g.lt.length + ' total ' + Math.round(lt) + 'ms' + (who ? '  ' + who : '');
+    }
+    D.addEventListener('DOMContentLoaded', function () { D.body.appendChild(box); draw(); });
+    if (D.body) { D.body.appendChild(box); }
+    setInterval(draw, 700);
+    return {
+      ev: function () { var now = performance.now(); if (g.lastEv && now - g.lastEv < 8) g.burst++; g.lastEv = now; g.ev++; },
+      ap: function (ms) { g.ap.push(ms); }, fr: function (ms) { g.fr.push(ms); }, kd: function (ms) { g.kd.push(ms); }, data: g
+    };
+  })() : null;
+  var SPACE_GUARD = 1500;   /* 판이 끝난 뒤 이 시간(ms) 동안은 띄어쓰기로 쪽이 굴러가지 않는다 */
   var TEXT = window.TJ_TEXT[CFG.text], KO = CFG.text === 'ko';
   var PHYS = /^(Key|Digit|Space|Minus|Equal|Bracket|Backslash|Semicolon|Quote|Comma|Period|Slash|Backquote)/;
   var SALT = (Date.now() % 100000) + 17;
@@ -49,6 +83,10 @@
     this.round = 0; this.drill = null; this.same = false;
     this.timer = new TJ.Timer(function () { return performance.now(); });
     this.phys = false; this.composing = false; this.comp = ''; this.delKey = false; this.vlen = 0;
+    /* 터치 자판: 입력 이벤트마다 바로 그리지 않고 다음 화면을 그릴 때 한 번, 가장 새 값으로만 그린다(defer).
+       휴대폰 자판은 키 하나에 입력 이벤트를 여러 번 보내기도 하고, 기기가 느리면 이벤트가 밀려 쌓인다. 쌓인 것을 하나씩 다 그리면 더 밀린다 → 중간 것은 건너뛴다.
+       자동 도구에서는 끈다(가짜 시계에서는 다음 화면이 오지 않는다). 시험은 __E.defer 를 켜고 진짜 시계로 따로 본다 */
+    this.defer = TOUCH && !AUTO; this.pending = false; this.inAt = 0; this.nKey = 0; this.drawAt = 0; this.tickSec = -1;
     this.iv = 0; this.started = false; this.done = false; this.doneAt = 0;
     this.moreT = 0; this.lagWait = false;
     this.stage = D.querySelector('.stage'); this.bar = $('bar'); this.kCombo = $('k-combo'); this.kTime = $('k-time');
@@ -59,7 +97,10 @@
       if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); if (!self.done || performance.now() - self.doneAt > 700) self.next(); return; }
       if (e.key === 'Escape') { e.preventDefault(); self.quit(); return; }
       if (self.done && e.key === 'Enter') { e.preventDefault(); if (performance.now() - self.doneAt > 700) self.primary(); return; }
+      if (self.done && (e.key === ' ' || e.code === 'Space') && performance.now() - self.doneAt < SPACE_GUARD) { e.preventDefault(); return; }
       if (e.code && PHYS.test(e.code)) self.phys = true;
+      /* 키가 눌린 때와 지금의 차이 = 이 키가 처리되기까지 기다린 시간. 길면 화면이 손을 못 따라가고 있다는 뜻이다 */
+      if (self.started && !self.done && e.timeStamp > 0) { var kl = performance.now() - e.timeStamp; if (kl >= 0 && kl < 4000) { if (DG) DG.kd(kl); if (FX && !AUTO) FX.note(kl); } }
       /* 지우기 키가 눌렸는지 적어 둔다(조합 중에는 key 가 'Process' 라 code 도 본다). 다른 키가 눌리면 지워진다 */
       self.delKey = e.key === 'Backspace' || e.key === 'Delete' || e.code === 'Backspace' || e.code === 'Delete';
       if (/^(Arrow|Home|End|Page)/.test(e.key)) e.preventDefault();
@@ -82,6 +123,8 @@
       if (D.hidden) self.timer.pause(); else { self.timer.resume(); self.session.breakTiming(); self.barGo(); }
     });
     D.addEventListener('keydown', function (e) {
+      /* 설정 팝업은 Esc 로 닫힌다(초점이 팝업 안에 있었으면 '설정' 단추로 돌려준다) */
+      if (e.key === 'Escape' && e.target !== trap) { var mo = $('more'); if (mo && mo.open) { var inM = mo.contains(D.activeElement), sm = mo.querySelector('summary'); mo.open = false; if (inM && sm) sm.focus(); e.preventDefault(); return; } }
       if (e.target === trap || e.ctrlKey || e.metaKey || e.altKey) return;
       var t = e.target, tag = (t && t.tagName) || '';
       /* 치기 시작한 키: 글자 키, 또는 한글 입력기가 켜진 채 누른 키(key 가 'Process', keyCode 229 로 온다) */
@@ -93,6 +136,8 @@
         return;
       }
       if (self.done && (e.key === 'Enter' || e.key === 'Tab')) { e.preventDefault(); if (performance.now() - self.doneAt > 700) { if (e.key === 'Enter') self.primary(); else self.next(); } return; }
+      /* 판이 끝난 직후에 치던 손이 누른 띄어쓰기가 쪽을 한 화면 굴려 결과가 사라지지 않게(시간이 끝나면 초점이 치는 칸에서 풀린다) */
+      if (self.done && (e.key === ' ' || e.code === 'Space') && performance.now() - self.doneAt < SPACE_GUARD) { e.preventDefault(); return; }
       if (self.done) return;
       /* 다른 곳을 누른 뒤(Esc 로 나온 뒤) 그냥 치기 시작해도 치는 칸으로 간다 */
       if (typing) { trap.focus({ preventScroll: true }); return; }
@@ -191,6 +236,7 @@
   };
   /* 다른 글로 다시(옵션을 바꿀 때도) */
   Engine.prototype.next = function (opt) {
+    this.pending = false;
     opt = opt || {};
     this.round++; this.drill = opt.drill || null; this.same = !!opt.same;
     ['kind', 'mode', 'secs', 'count', 'punct', 'nums', 'topic', 'lesson'].forEach(function (k) { if (opt[k] != null) this[k] = opt[k]; }, this);
@@ -206,6 +252,7 @@
   };
   /* 그만하기(Esc, 휴대폰의 닫기): 처음 상태로 */
   Engine.prototype.quit = function () {
+    this.pending = false;
     this.same = true; this.reset();
     this.trap.blur();
     if (root.classList.contains('m-tall')) { root.classList.remove('m-tall'); window.scrollTo(0, 0); }
@@ -252,7 +299,20 @@
     }
   };
   Engine.prototype.onInput = function () {
-    var trap = this.trap, v = trap.value, self = this, t0 = performance.now();
+    var self = this;
+    if (DG) DG.ev();
+    /* 시작하는 첫 입력과 자판(컴퓨터)은 바로 그린다. 터치 자판으로 치는 중에는 다음 화면을 그릴 때 한 번만 */
+    if (!this.defer || !this.started || this.done || this.session.mode !== 'char') { this.inAt = 0; this.apply(); return; }
+    this.inAt = performance.now();
+    if (this.pending) return;
+    this.pending = true;
+    requestAnimationFrame(function () { if (self.pending) { self.pending = false; self.apply(); } });
+  };
+  /* 미뤄 둔 입력이 있으면 지금 반영한다(판을 끝내거나 바꾸기 직전에) */
+  Engine.prototype.flush = function () { if (this.pending) { this.pending = false; this.apply(); } };
+  Engine.prototype.apply = function () {
+    var trap = this.trap, v = trap.value, self = this, t0 = this.inAt || performance.now(), a0 = DG ? performance.now() : 0;
+    this.inAt = 0;
     if (this.done) { trap.value = ''; return; }
     if (!this.started) {
       if (!v) return;
@@ -277,11 +337,13 @@
     if (!this.limit()) this.barSet(this.live().frac.toFixed(4), REDUCED ? 0 : 200);
     this.tell(before, r);
     /* 터치 자판은 마지막 글자 판정을 미루므로 '지금 끝난 것으로 보면 다 쳤나'로 본다(마지막 글자를 조합하는 중이어도 다 쳤으면 끝). 마지막 단어를 치는 중일 때만 따져 본다 */
+    this.drawAt = performance.now();
+    if (DG) DG.ap(performance.now() - a0);
     if (r.complete || (touch && r.open && r.open.w === this.T.words.length - 1 && s.wouldComplete())) { this.finish(); return; }
-    /* 느린 기기 알아채기: 이 키를 처리하기 시작해서 그다음 화면이 나오기까지 */
-    if (FX && !AUTO && !this.lagWait && FX.level > 0) {
+    /* 느린 기기 알아채기: 입력을 받은 때부터 그다음 화면이 나오기까지. 키마다 재면 재는 것 자체가 화면을 한 번씩 더 그리게 하므로 여섯 번에 한 번만 잰다 */
+    if ((DG || (FX && !AUTO && FX.level > 0)) && !this.lagWait && ++this.nKey % 6 === 0) {
       this.lagWait = true;
-      requestAnimationFrame(function () { requestAnimationFrame(function () { self.lagWait = false; FX.note(performance.now() - t0); }); });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { self.lagWait = false; var lag = performance.now() - t0; if (DG) DG.fr(lag); if (FX && !AUTO) FX.note(lag); }); });
     }
   };
   Engine.prototype.start = function () {
@@ -296,13 +358,15 @@
       while (self.lastSec < sec) { self.lastSec++; self.session.sample(self.lastSec); }
       if (lim && ms >= lim) { self.finish(); return; }
       var live = self.live();
-      self.view.tick(live, self);
+      /* 숫자는 키를 누를 때마다 고쳐진다. 방금(0.3초 안) 키를 그렸으면 초가 바뀔 때만 다시 쓴다(치는 동안 화면을 덜 그린다) */
+      if (performance.now() - self.drawAt > 300 || sec !== self.tickSec) { self.tickSec = sec; self.view.tick(live, self); }
       if (lim && REDUCED) self.barSet(live.frac.toFixed(4), 0);
       /* 남은 5초: 시간 키가 초마다 한 번 눌린다 */
       if (lim && live.left <= 5 && live.left > 0 && live.left !== self.lastLeft) { self.lastLeft = live.left; if (FX) FX.tick(self.kTime); }
     }, 200);
   };
   Engine.prototype.finish = function () {
+    if (this.pending) { this.flush(); if (this.done) return; }
     clearInterval(this.iv); this.iv = 0;
     var lim = this.limit(), ms = lim ? Math.min(this.timer.elapsed(), lim) : this.timer.elapsed();
     this.timer.pause();
@@ -458,7 +522,7 @@
     if (this.gone) { car.style.opacity = ''; this.gone = false; }
     if (this.stale) this.measure();
     /* 같은 줄 안에서만 미끄러진다. 키 사이가 0.1초보다 짧으면(미끄러질 틈이 없다) 바로 옮긴다 */
-    var line = this.L[cursor], glide = line === this.line && !quick && !!FX && FX.level > 0;
+    var line = this.L[cursor], glide = line === this.line && !quick && !!FX && FX.level > 0 && !TOUCH;   /* 터치 기기는 미끄러지지 않고 바로(움직임이 끝날 때마다 화면을 한 번 더 그리는 값을 아낀다) */
     if (glide !== this.glide) { car.classList.toggle('glide', glide); this.glide = glide; }
     car.style.transform = 'translate3d(' + this.X[cursor].toFixed(1) + 'px,' + (this.lineY(line) - 5).toFixed(1) + 'px,0) scaleX(' + (Math.max(6, this.W[cursor]) / 20).toFixed(3) + ')';
     this.line = line;
@@ -701,7 +765,7 @@
 
   /* ================= 화면 A: 종이 한 장(속도 측정·영타) ================= */
   function ViewA() {
-    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { keep: 1 }); this.keys = board($('kb')); this.stats = new Stats();
+    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { keep: 1, slotDy: window.innerWidth <= 720 ? 28 : 36 }); this.keys = board($('kb')); this.stats = new Stats();
   }
   ViewA.prototype.onReset = function (e) {
     this.layer.build(e.T.chars, 0, null, false, e.breaks());
@@ -878,15 +942,16 @@
     var g = $('fx-seg'), say = $('fx-say');
     press(g, FX.level); press($('snd-seg'), FX.sound ? 1 : 0);
     if (g && FX.locked) Array.prototype.forEach.call(g.querySelectorAll('button'), function (b) { b.disabled = true; });
-    if (say) say.textContent = auto ? S.fxAuto : '';
+    if (say) say.textContent = FX.reduced ? S.fxReduced : (auto ? S.fxAuto : '');
   }
-  /* 처음 온 기기가 느린지 어림해 본다(짧은 셈 세 번의 가운데 값, 기기 메모리). 느리면 '가볍게'에서 시작한다. 고른 값이 있으면 그 값을 따른다.
+  /* 처음 온 기기가 느린지 어림해 본다(짧은 셈 네 번 가운데 가장 빠른 값, 기기 메모리). 느리면 '가볍게'에서 시작한다. 고른 값이 있으면 그 값을 따른다.
      화면이 다 뜬 뒤 한 번만 재고, 저장하지 않는다(치는 중에 늦어지는지는 FX.note 가 따로 본다) */
   function slowDevice() {
     var ts = [], x = 0;
-    for (var k = 0; k < 3; k++) { var t = performance.now(); for (var i = 0; i < 150000; i++) x += Math.sqrt(i) % 7; ts.push(performance.now() - t); }
+    for (var k = 0; k < 4; k++) { var t = performance.now(); for (var i = 0; i < 150000; i++) x += Math.sqrt(i) % 7; ts.push(performance.now() - t); }
     ts.sort(function (a, b) { return a - b; });
-    return ts[1] > 8 || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 2) || x < 0;
+    /* 가장 빨랐던 한 번으로 본다(처음 한두 번은 준비 시간이 섞인다). 보통 컴퓨터는 0.3~1ms, 3ms 를 넘으면 느린 기기로 친다 */
+    return ts[0] > 3 || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 2) || x < 0;
   }
   if (FX) {
     var fxSet = store.settings('fx');

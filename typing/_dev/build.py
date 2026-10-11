@@ -220,13 +220,15 @@ def kbd_btn(id_, label, key, cls='btn'):
     return f'<button type="button" class="{cls}" id="{id_}">{esc(label)} <kbd>{key}</kbd></button>'
 
 
-def hk(id_, val, label, cls='', label_id='', key_id='', tip=''):
+def hk(id_, val, label, cls='', label_id='', key_id='', tip='', short=''):
     """숫자 줄의 키캡 하나(상징 '키'). 바깥(.hk) = 키의 옆면(자리 고정), 안(.hk-f) = 윗면(눌릴 때 transform 만 바뀐다).
     숫자 칸은 크기가 고정이라 값이 바뀌어도 둘레의 배치가 다시 계산되지 않는다."""
     lid = f' id="{label_id}"' if label_id else ''
     kid = f' id="{key_id}"' if key_id else ''
     tt = f' title="{esc(tip)}"' if tip else ''
-    return f'<div class="m hk{" " + cls if cls else ""}"{kid}{tt}><div class="hk-f"><b class="num" id="{id_}">{val}</b><span{lid}>{label}</span></div></div>'
+    # short = 좁은 휴대폰(430px 아래)에서 대신 보이는 짧은 이름(칸 밖으로 넘치지 않게). 화면 읽기 프로그램은 긴 이름을 읽는다
+    sh = f'<span class="l-s" aria-hidden="true">{short}</span>' if short else ''
+    return f'<div class="m hk{" " + cls if cls else ""}{" has-s" if short else ""}"{kid}{tt}><div class="hk-f"><b class="num" id="{id_}">{val}</b><span{lid}>{label}</span>{sh}</div></div>'
 
 
 def fx_rows(lang):
@@ -334,6 +336,7 @@ def layout_a(lang, tool):
     <h1>{esc(tool['h1'])}</h1>
     {opts_a(lang, tool)}
   </div>
+  <noscript><p class="nojs">{t['nojs']}</p></noscript>
   <section class="sheet stage{' both' if both else ''}{' hasctx' if ctx else ''}" aria-label="{esc(tool['h1'])}">
     <div class="playbox" id="playbox">
       <div class="play">
@@ -344,8 +347,8 @@ def layout_a(lang, tool):
       <div class="bar" aria-hidden="true"><i id="bar"></i></div>
       <div class="meter hud" id="hud">
         {hk('speed', '0', unit, 'main')}
-        {wpm}{hk('acc', '–', t['acc_pct'])}
-        {hk('left', '30', t['left'], label_id='left-l', key_id='k-time')}
+        {wpm}{hk('acc', '–', t['acc_pct'], short=t['acc_s'])}
+        {hk('left', '30', t['left'], label_id='left-l', key_id='k-time', short=t['left_s'])}
         {hk('combo', '0', t['combo'], 'hot', key_id='k-combo', tip=t['combo_tip'])}
         <div class="nk" aria-hidden="true"><span class="nk-l">{t['nextkey']}</span><span class="cap shift" id="nextshift" hidden>Shift</span><span class="cap" id="nextkey"></span></div>
         {kbd_btn('fresh', t['fresh'], 'Tab', 'btn sm')}
@@ -380,11 +383,12 @@ def layout_c(lang, tool):
     <div class="c-opts"><div class="steps" role="group" aria-label="{t['steps_l']}" id="steps">{steps}</div>{more_only(lang)}</div>
   </div>
   <p class="step-say" id="step-say">{esc(s['lessonSay'][0])}</p>
+  <noscript><p class="nojs">{t['nojs']}</p></noscript>
   <section class="rig stage" aria-label="{esc(tool['h1'])}">
     <div class="strip hud" id="hud">
       {hk('speed', '0', t['unit'], 'main')}
-      {hk('acc', '–', t['acc_pct'])}
-      {hk('left', '0', s['elapsed'], label_id='left-l', key_id='k-time')}
+      {hk('acc', '–', t['acc_pct'], short=t['acc_s'])}
+      {hk('left', '0', s['elapsed'], label_id='left-l', key_id='k-time', short=t['left_s'])}
       {hk('combo', '0', t['combo'], 'hot', key_id='k-combo', tip=t['combo_tip'])}
       {kbd_btn('fresh', t['fresh'], 'Tab', 'btn sm')}
       <button type="button" class="btn sm quit" id="quit">{t['quit']}</button>
@@ -437,6 +441,7 @@ def layout_b(lang, tool):
     </div>
   </div>
   <div class="b-grid">
+    <noscript><p class="nojs">{t['nojs']}</p></noscript>
     <section class="desk stage" aria-label="{esc(tool['h1'])}">
       <div class="stack" id="playbox">
         <p class="ln prev first" id="prev" aria-hidden="true"></p>

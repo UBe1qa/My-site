@@ -153,8 +153,10 @@ kbd{font:inherit}
 .fx .chip.c1{background:var(--main)}
 .fx .chip.c2{background:var(--hot)}
 .fx .chip.c3{background:var(--bad)}
-.fx .lab{transform-origin:0 50%;padding:4px 10px 5px;border-radius:8px;background:var(--hot);color:var(--hot-ink);box-shadow:0 3px 0 var(--hot-d);font-size:14px;font-weight:800;line-height:1.1;white-space:nowrap}
-.fx .lab b{font-family:var(--numfont);font-size:16px;margin-right:4px}
+.fx .lab{transform-origin:0 50%;padding:6px 13px 7px;border-radius:10px;background:var(--hot);color:var(--hot-ink);box-shadow:0 4px 0 var(--hot-d);font-size:19px;font-weight:800;line-height:1.1;white-space:nowrap}
+.fx .lab b{font-family:var(--numfont);font-size:23px;margin-right:5px}
+/* 콤보 딱지: 방금 친 글자 위를 따라다니는 작은 키(컴퓨터·화려하게) */
+.fx .ctag{transform-origin:0 100%;min-width:32px;height:22px;padding:0 7px;border-radius:7px;background:var(--hot);color:var(--hot-ink);box-shadow:0 3px 0 var(--hot-d);font-family:var(--numfont);font-size:14px;font-weight:700;line-height:22px;text-align:center;white-space:nowrap;will-change:transform}
 .fx .ring{width:44px;height:44px;border-radius:11px;border:2.5px solid var(--bad)}
 .quit,.quit2{display:none}
 
@@ -229,6 +231,7 @@ kbd{font:inherit}
 /* 느린 기기라서 이펙트를 스스로 줄였을 때의 한 줄(평소에는 비어 있다) */
 .fx-say{flex:none;font-size:13px;color:var(--ink-2);max-width:300px;text-align:right}
 .fx-say:empty{display:none}
+.nojs{margin:0 0 12px;padding:12px 16px;border-radius:12px;background:var(--plate);color:var(--ink);font-size:15px}
 .more-row .seg button:disabled{opacity:.5;cursor:default}
 .c-opts{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;justify-content:flex-end}
 .basis{margin-top:12px;font-size:13.5px;color:var(--muted)}
@@ -239,7 +242,7 @@ kbd{font:inherit}
 
 /* ---------- 화면 A: 종이 한 장 ---------- */
 .main-a{max-width:1028px;padding-top:26px}
-.sheet{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:440px;box-shadow:0 1px 2px rgba(20,20,40,.04),0 16px 40px -28px rgba(20,20,40,.3)}
+.sheet{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:456px;box-shadow:0 1px 2px rgba(20,20,40,.04),0 16px 40px -28px rgba(20,20,40,.3)}
 .typing-focus .sheet,.typing-focus .rig,.typing-focus .desk{border-color:var(--line-2)}
 /* 진행 막대: 종이와 판 사이의 가는 줄(숫자 줄 바로 위라 '남은 초'와 같이 읽힌다). 시간으로 재는 판은 한 번에 채운다(app.js barGo) */
 .bar{height:4px;background:var(--plate-line);flex:none}
@@ -260,6 +263,7 @@ kbd{font:inherit}
 .hk-f{position:absolute;inset:0;color:var(--cap-ink);display:flex;flex-direction:column;justify-content:center;padding:0 0 1px 13px}
 .hk b{display:block;font-family:var(--numfont);font-size:26px;font-weight:700;line-height:1.1;letter-spacing:-.01em;white-space:nowrap}
 .hk span{display:block;font-size:12px;line-height:1.3;color:var(--cap-muted);white-space:nowrap}
+.hk .l-s{display:none}
 .hk.main{width:124px;background:var(--main);box-shadow:none}
 .hk.main .hk-f{color:var(--main-ink)}
 .hk.main span{color:inherit;opacity:.9}
@@ -271,6 +275,8 @@ kbd{font:inherit}
 .nk{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;width:210px;height:48px;contain:size layout style}
 .nk-l{font-size:13px;color:var(--plate-muted)}
 .nk .cap{min-width:42px;height:38px;font-size:19px;font-family:var(--font)}
+/* '다음 키'는 보여 주는 것이지 누르는 것이 아니다 → 턱 없이 납작하게(옆의 '다른 글' 단추와 구분) */
+.hud .nk .cap{box-shadow:inset 0 0 0 1px var(--cap-line);margin-bottom:0}
 /* 판 위의 키(다음 키)와 단추: 미색 윗면 + 아래 옆면 */
 .hud .cap{background:var(--cap);border-color:transparent;box-shadow:0 4px 0 var(--cap-edge);color:var(--cap-ink);margin-bottom:4px}
 .hud .btn.sm,.gauge .btn.sm,.kb-wrap .btn.sm{height:34px;border:0;background:var(--cap);color:var(--cap-ink);box-shadow:0 3px 0 var(--cap-edge);margin-bottom:3px;transition:transform .08s var(--ease),box-shadow .08s var(--ease)}
@@ -733,12 +739,35 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
 .vk .view{height:124px;height:clamp(62px,round(down,calc(var(--vvh,440px) - 140px),62px),186px)}
 .vk .desk{height:auto;min-height:0}
 .vk .stack{height:auto;padding-top:12px;padding-bottom:12px}
-@media (max-width:359px){
-  .meter,.strip{gap:4px;padding:8px 6px}
-  .hk b,.strip .hk b{font-size:17px}
-  .hk span{font-size:9.5px}
+/* 좁은 휴대폰: 숫자 칸의 숫자와 이름이 칸 밖으로 넘치지 않게(제3자 평가 2026-10-11). 이름은 짧은 것으로 바꾸고 글자를 조금 줄인다 */
+/* 터치 기기에는 자판 단축키 표시(Tab·Enter)를 보이지 않는다 */
+@media (hover:none),(pointer:coarse){.btn kbd{display:none}}
+@media (max-width:520px){
+  .fx .lab{font-size:16px;padding:5px 11px 6px}
+  .fx .lab b{font-size:19px}
+  .hk.has-s .l-s{display:block}
+  .hk.has-s span:not(.l-s){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+}
+@media (max-width:430px){
+  .meter,.strip{gap:4px;padding-left:8px;padding-right:8px}
   .hk-f,.strip .hk-f{padding-left:6px}
-  .meter .btn.sm,.strip .btn.sm{padding:0 7px;font-size:12.5px}
+  .hk b,.strip .hk b{font-size:18px;letter-spacing:-.035em}
+  .hk span{font-size:10px;letter-spacing:-.03em}
+  .hk.main,.strip .hk.main{flex-grow:1.15}
+  .meter .btn.sm,.strip .btn.sm{padding:0 7px;font-size:13px;margin-left:0}
+  /* 칸이 다섯인 화면(영타: 타수 + WPM)은 치는 동안 '다른 글'을 접는다('그만'을 누르면 다시 나온다) */
+  .m-tall .both #fresh{display:none}
+}
+@media (max-width:359px){
+  .meter,.strip{gap:3px;padding:8px 6px}
+  .hk b,.strip .hk b{font-size:16px}
+  .hk span{font-size:9.5px}
+  .hk-f,.strip .hk-f{padding-left:5px}
+  .meter .btn.sm,.strip .btn.sm{padding:0 6px;font-size:12.5px}
+  /* 320~359px: 치는 동안에는 '다른 글'을 접고 숫자 칸에 자리를 준다('그만'을 누르면 다시 나온다) */
+  .m-tall #fresh{display:none}
+  .both .hk b{font-size:14.5px}
+  .both .hk-f{padding-left:4px}
   .nav a{font-size:12.5px}
   .meter{gap:6px 12px}
   .sheet .txt,.rig .txt{font-size:21px}
