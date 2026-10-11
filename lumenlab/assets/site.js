@@ -39,7 +39,7 @@
   var groups = [
     { el: '.hero__in', items: '.rv', step: 0.09, once: true },
     { el: '#apps .cat__grid', items: '.rv', step: 0.08, once: true },
-    { el: '#tools .cat__grid', items: '.rv', step: 0.08, once: true },
+    { el: '#tools .wrap', items: '.rv', step: 0.08, once: true },
     { el: '.feats', items: '.sw:not(.sw--off)', step: 0.18, self: true },
     { el: '.sets', items: '.setrow__now', step: 0.16, self: true }
   ];

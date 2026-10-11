@@ -1,6 +1,24 @@
 {
-  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 칸마다 앞에서 limit개만, 넘치면 /apps/ · /tools/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다.",
+  "_설명": "첫 페이지의 앱·웹 도구 목록. 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 앱은 앞에서 limit개만, 넘치면 /apps/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에 넣고, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 묶음마다 group_limit개까지만 홈에 보이고 넘치면 /tools/ 전체 목록 페이지가 생긴다. 묶음 순서 = 화면 순서, 묶음 안 순서는 tools 순서.",
   "limit": 6,
+  "group_limit": 4,
+  "groups": [
+    {
+      "id": "calc",
+      "name": {"ko": "계산", "en": "Calculate"},
+      "line": {"ko": "날짜, 숫자, 월급을 과정까지 보이게 계산해요.", "en": "Dates, numbers and pay, worked out with every step shown."}
+    },
+    {
+      "id": "docs",
+      "name": {"ko": "글과 파일", "en": "Text and files"},
+      "line": {"ko": "글자수를 세고, 파일을 바꾸고, 달력을 인쇄해요.", "en": "Count text, convert files and print calendars."}
+    },
+    {
+      "id": "play",
+      "name": {"ko": "기기·연습·모임", "en": "Devices, practice and groups"},
+      "line": {"ko": "기기를 점검하고, 타자를 연습하고, 뽑기로 정해요.", "en": "Test your gear, practice typing and pick fairly."}
+    }
+  ],
   "apps": [
     {
       "id": "owlight",
@@ -33,6 +51,7 @@
   "tools": [
     {
       "id": "daycount",
+      "group": "calc",
       "url": "https://date.lumenlab.page/",
       "url_en": "https://date.lumenlab.page/en/",
       "icon": "/img/daycount.svg",
@@ -42,6 +61,7 @@
     },
     {
       "id": "inplace",
+      "group": "docs",
       "url": "https://convert.lumenlab.page/ko/",
       "url_en": "https://convert.lumenlab.page/",
       "icon": "/img/convert.svg",
@@ -51,6 +71,7 @@
     },
     {
       "id": "scicalc",
+      "group": "calc",
       "url": "https://calc.lumenlab.page/",
       "url_en": "https://calc.lumenlab.page/en/",
       "icon": "/img/sci-calc.svg",
@@ -60,6 +81,7 @@
     },
     {
       "id": "onesheet",
+      "group": "docs",
       "url": "https://calendar.lumenlab.page/ko/",
       "url_en": "https://calendar.lumenlab.page/",
       "icon": "/img/calendar.svg",
@@ -69,6 +91,7 @@
     },
     {
       "id": "pickboard",
+      "group": "play",
       "url": "https://pick.lumenlab.page/ko/",
       "url_en": "https://pick.lumenlab.page/",
       "icon": "/img/pick.svg",
@@ -78,6 +101,7 @@
     },
     {
       "id": "kankan",
+      "group": "docs",
       "url": "https://count.lumenlab.page/ko/",
       "url_en": "https://count.lumenlab.page/",
       "icon": "/img/count.svg",
@@ -87,6 +111,7 @@
     },
     {
       "id": "checkbench",
+      "group": "play",
       "url": "https://check.lumenlab.page/ko/",
       "url_en": "https://check.lumenlab.page/",
       "icon": "/img/check.svg",
@@ -96,6 +121,7 @@
     },
     {
       "id": "todok",
+      "group": "play",
       "url": "https://typing.lumenlab.page/ko/",
       "url_en": "https://typing.lumenlab.page/",
       "icon": "/img/typing.svg",
@@ -105,6 +131,7 @@
     },
     {
       "id": "takehome",
+      "group": "calc",
       "url": "https://salary.lumenlab.page/",
       "url_en": "https://salary.lumenlab.page/en/",
       "icon": "/img/salary.svg",

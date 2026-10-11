@@ -1,13 +1,20 @@
 # 첫 페이지의 앱·웹 도구 칸을 _dev/catalog.json 에서 다시 만든다: python3 lumenlab/_dev/build_home.py
 # index.html 의 <!-- gen:이름 --> ~ <!-- /gen:이름 --> 사이와 assets/i18n.js 의 /* gen:start */ ~ /* gen:end */ 사이만 바꾼다(손으로 고치지 말 것).
-# 칸마다 limit개를 넘으면 /apps/ · /tools/ 전체 목록 페이지를 만들고 홈에 '전체 보기'를 단다. 안 넘으면 그 페이지를 지운다.
+# 앱은 limit개, 웹 도구는 묶음(groups)마다 group_limit개를 넘으면 /apps/ · /tools/ 전체 목록 페이지를 만들고 홈에 '전체 보기'를 단다. 안 넘으면 그 페이지를 지운다.
+# 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
 # sitemap.xml 도 여기서 만든다: 홈 + 전체 목록 페이지 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
 import json, os, re, shutil, subprocess, datetime
 from html import escape
 
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 cat = json.load(open(os.path.join(here, 'catalog.json')))
-LIMIT = cat['limit']; apps = cat['apps']; tools = cat['tools']
+LIMIT = cat['limit']; GLIMIT = cat['group_limit']; apps = cat['apps']; tools = cat['tools']; groups = cat['groups']
+_gid = [g['id'] for g in groups]
+assert len(set(_gid)) == len(_gid), '묶음 id가 겹침'
+for it in tools: assert it.get('group') in _gid, f"{it['id']}: group 이 없거나 groups 에 없음 ({it.get('group')!r})"
+for g in groups: assert any(it['group'] == g['id'] for it in tools), f"묶음 {g['id']}: 도구가 하나도 없음(빈 묶음은 화면에 안 나오니 지우기)"
+by_group = {g['id']: [it for it in tools if it['group'] == g['id']] for g in groups}
+tools_overflow = any(len(v) > GLIMIT for v in by_group.values())
 EN = {}
 
 def t(key, val):
@@ -15,11 +22,11 @@ def t(key, val):
     EN[key] = val['en']
     return f'data-i18n="{key}"', val['ko']
 
-def name_html(it, cls):
+def name_html(it, cls, tag='h3'):
     k = f"c_{it['id']}_name"
     sub = f' <span class="app__en">{escape(it["sub"])}</span>' if it.get('sub') else ''
     EN[k] = it['name']['en']
-    return f'<h3 class="{cls}" data-i18n="{k}">{it["name"]["ko"]}{sub}</h3>'
+    return f'<{tag} class="{cls}" data-i18n="{k}">{it["name"]["ko"]}{sub}</{tag}>'
 
 def app_card(it, n):
     a, kind = t(f"c_{it['id']}_kind", it['kind'])
@@ -43,27 +50,49 @@ def app_card(it, n):
     out += ['            </p>', '          </div>', '        </li>']
     return '\n'.join(out)
 
-def tool_card(it):
+def tool_row(it):
     a, line = t(f"c_{it['id']}_line", it['line'])
     host = re.match(r'https?://([^/]+)', it['url']).group(1)
     return '\n'.join([
-        '        <li class="tool rv">',
-        f'          <a class="tool__a" href="{it["url"]}">',
-        f'            <img class="tool__icon" src="{it["icon"]}" width="48" height="48" alt="" loading="lazy">',
-        f'            {name_html(it, "tool__name")}',
-        f'            <p class="tool__line" {a}>{line}</p>',
-        f'            <p class="tool__url"><span>{escape(host)}</span><span class="tool__go" aria-hidden="true">→</span></p>',
-        '          </a>',
-        '        </li>'])
+        '            <li class="trow">',
+        f'              <a class="trow__a" href="{it["url"]}">',
+        f'                <img class="trow__icon" src="{it["icon"]}" width="44" height="44" alt="" loading="lazy">',
+        '                <div class="trow__text">',
+        f'                  {name_html(it, "trow__name", "h4")}',
+        f'                  <p class="trow__line" {a}>{line}</p>',
+        '                </div>',
+        f'                <span class="trow__host"><span>{escape(host)}</span><span class="trow__go" aria-hidden="true">→</span></span>',
+        '              </a>',
+        '            </li>'])
+
+def tool_groups(full=False):
+    """웹 도구를 묶음별로. 홈에는 묶음마다 group_limit개까지, 전체 목록 페이지(full)에는 전부."""
+    out = []
+    for g in groups:
+        items = by_group[g['id']]; shown = items if full else items[:GLIMIT]
+        EN[f"g_{g['id']}_name"] = g['name']['en']; EN[f"g_{g['id']}_line"] = g['line']['en']
+        rows = '\n'.join(tool_row(it) for it in shown)
+        out.append(f'''      <div class="tgroup rv" id="g-{g['id']}">
+        <div class="tgroup__head">
+          <h3 class="tgroup__name" id="g-{g['id']}-n" data-i18n="g_{g['id']}_name">{g['name']['ko']}</h3>
+          <p class="tgroup__line" data-i18n="g_{g['id']}_line">{g['line']['ko']}</p>
+        </div>
+        <ul class="tgroup__list" aria-labelledby="g-{g['id']}-n">
+{rows}
+        </ul>
+      </div>''')
+    return '\n'.join(out)
 
 def grid(kind, items, full=False):
+    if kind == 'tools':
+        more = ''
+        if not full and tools_overflow:
+            k = 'toolsAll'; EN[k] = f'See all {len(items)} tools'
+            more = f'\n      <p class="cat__all"><a href="/tools/" data-i18n="{k}">웹 도구 {len(items)}개 전체 보기</a></p>'
+        return tool_groups(full) + more
     shown = items if full else items[:LIMIT]
-    if kind == 'apps':
-        body = '\n'.join(app_card(it, i) for i, it in enumerate(shown))
-        head = '      <ul class="cat__grid cat__grid--apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">'
-    else:
-        body = '\n'.join(tool_card(it) for it in shown)
-        head = '      <ul class="cat__grid cat__grid--tools" aria-label="루멘랩의 무료 웹 도구" data-i18n-aria="toolsLabel">'
+    body = '\n'.join(app_card(it, i) for i, it in enumerate(shown))
+    head = '      <ul class="cat__grid cat__grid--apps" aria-label="루멘랩의 앱" data-i18n-aria="appsLabel">'
     more = ''
     if not full and len(items) > LIMIT:
         k = f'{kind}All'; EN[k] = f'See all {len(items)} ' + ('apps' if kind == 'apps' else 'tools')
@@ -77,7 +106,10 @@ def names(items):
     return ko, en
 
 def shelf(kind, items, label):
-    ko, en = names(items)
+    if kind == 'tools':  # 도구가 많아지면 이름 셋 + '외 N개'보다 묶음 이름이 고르기 쉽다
+        ko = ' · '.join(g['name']['ko'] for g in groups); en = ' · '.join(g['name']['en'] for g in groups)
+    else:
+        ko, en = names(items)
     EN[f'sh_{kind}_n'] = f'{len(items)} ' + (('app' if kind == 'apps' else 'tool') + ('' if len(items) == 1 else 's'))
     EN[f'sh_{kind}_names'] = en
     icons = ''.join(f'<img src="{i["icon"]}" width="36" height="36" alt="">' for i in items[:4])
@@ -114,11 +146,13 @@ open(idx, 'w').write(html)
 for f in ['404.html', 'owlight/privacy/index.html', 'owlight/support/index.html']:
     f = os.path.join(site, f); src = open(f).read(); open(f, 'w').write(put(src, 'foot', FOOT))
 
+_rd = open(os.path.join(site, '_redirects')).read()
+assert not (tools_overflow and re.search(r'^/(en/)?tools/?\s', _rd, re.M)), "/tools/ 전체 목록 페이지가 다시 생기는데 _redirects 에 /tools/ 이동이 남아 있음 → 그 줄을 지우고 다시 돌리기"
 # 전체 목록 페이지: 홈의 머리말·꼬리말을 그대로 쓰고 main만 바꾼다
 lists = []
 for kind, items, ko_t, en_t in [('apps', apps, '앱 전체', 'All apps'), ('tools', tools, '무료 웹 도구 전체', 'All free web tools')]:
     d = os.path.join(site, kind)
-    if len(items) <= LIMIT:
+    if not (tools_overflow if kind == 'tools' else len(items) > LIMIT):
         for x in (d, os.path.join(site, 'en', kind)):
             if os.path.isdir(x): shutil.rmtree(x)
         continue
@@ -147,7 +181,7 @@ gen = '\n'.join(f'    {k}: {json.dumps(v, ensure_ascii=False)},' for k, v in EN.
 js, n = re.subn(r'(/\* gen:start \*/).*?(\n[ \t]*/\* gen:end \*/)', lambda m: m.group(1) + '\n' + gen + m.group(2), js, flags=re.S)
 assert n == 1, 'i18n.js 표시 없음'
 open(i18n, 'w').write(js)
-print(f'앱 {len(apps)}개, 웹 도구 {len(tools)}개 (홈에는 칸마다 {LIMIT}개까지)')
+print(f'앱 {len(apps)}개(홈 {LIMIT}개까지), 웹 도구 {len(tools)}개 = ' + ' / '.join(f"{g['name']['ko']} {len(by_group[g['id']])}" for g in groups) + f' (묶음마다 홈 {GLIMIT}개까지)')
 
 
 # ---------- 영어 페이지 /en/ ----------
@@ -217,7 +251,7 @@ def lastmod(f):
     day = '' if dirty else subprocess.run(['git', 'log', '-1', '--format=%cs', '--', rel], cwd=site, capture_output=True, text=True).stdout.strip()
     return day or datetime.date.today().isoformat()
 # 한국어·영어 짝이 있는 주소(/ ↔ /en/, /apps/ ↔ /en/apps/ …)는 xhtml:link 로 서로를 알린다.
-home = ['/'] + [f'/{k}/' for k, items in (('apps', apps), ('tools', tools)) if len(items) > LIMIT]
+home = ['/'] + [f'/{k}/' for k, over in (('apps', len(apps) > LIMIT), ('tools', tools_overflow)) if over]
 paths = [q for p in home for q in (p, '/en' + p)]
 paths += [l['href'] for it in apps + tools for l in it.get('links', []) if l['href'].startswith('/') and l['href'] not in paths]
 urls = []
