@@ -1,19 +1,28 @@
 /* 토독(타자 속도 측정·타자 연습) 모양. 색·글꼴·간격은 :root 토큰에만 둔다.
-   색의 뜻: --main(가지색) = 지금 칠 자리·고른 것·속도 숫자·주 단추 / --bad(주홍) = 틀린 키, 그 뜻일 때만 / --slow(호박색) = 느린 키, 그 뜻일 때만 / 나머지는 무채색.
-   상징은 '키 하나'(.cap, .k): 로고, 다음 키, 결과의 틀린 키 지도, 자리 연습 자판, 루멘랩 줄, 404.
-   치는 중에는 색만 바뀐다(움직임 없음). 기본 반응은 --t 하나로. */
+   색은 키캡 한 벌처럼 맡은 일이 있다:
+   --main(가지색) = 지금 칠 자리·고른 것·속도·주 단추 / --hot(겨자색) = 콤보·최고 기록(이어 맞히는 열기) / --bad(주홍) = 틀린 키 / --slow(파랑) = 느린 키(식은 키)
+   --plate(연한 가지색) = 종이 아래의 자판 판(숫자 줄·다시 하기 단추·화면 자판이 놓이는 곳), --cap(미색) = 그 위의 키. 나머지는 옅은 보랏빛 무채색.
+   입체(아래로 두꺼운 옆면)는 누르는 것과 자판 그림의 키에만 쓴다. 숫자 칸(.hk)은 같은 키 모양이지만 납작하다(보는 것).
+   상징은 '키 하나'(.cap, .k, .hk): 로고, 숫자 칸, 다음 키, 다시 하기 단추, 결과의 틀린 키 지도, 자리 연습 자판, 루멘랩 줄, 404.
+   움직임은 transform·opacity 만. 치는 중의 이펙트는 assets/fx.js 가 미리 만들어 둔 조각을 움직인다(멈추면 그리기 0). 기본 반응은 --t 하나로. */
 [hidden]{display:none!important}
 /* 두 언어 틀을 같이 담은 장(404): <html lang> 과 다른 쪽은 숨긴다 */
 html[lang="en"] [data-l="ko"],html[lang="ko"] [data-l="en"]{display:none!important}
 img{max-width:100%;height:auto}
 .nw{white-space:nowrap}
 :root{
-  --bg:#f4f4f6; --card:#ffffff; --ink:#1a1a22; --ink-2:#3d3d4a; --muted:#62626f; --faint:#8b8b98; --line:#e2e2e8; --line-2:#c9c9d3; --well:#ececf1;
-  --main:#5b3fa6; --main-d:#4a3189; --main-soft:#ece7f7; --main-ink:#ffffff;
-  --bad:#c9391f; --bad-soft:#fdeeea; --bad-ink:#ffffff; --slow:#8f5b00; --slow-soft:#fbefd6;
-  --todo:#757587; /* 아직 안 친 글자 */
-  --key:#ffffff; --key-edge:#c9c9d3; --key-ink:#2a2a35;
+  --bg:#f3f1f7; --card:#ffffff; --ink:#1b1926; --ink-2:#3e3b4c; --muted:#646073; --faint:#8c889b; --line:#e3e0eb; --line-2:#cac6d6; --well:#ebe8f2;
+  --main:#5b3fa6; --main-d:#47308a; --main-soft:#ebe5f8; --main-ink:#ffffff; --main-edge:#3a2775;
+  --hot:#f2b233; --hot-d:#c2840a; --hot-soft:#fdf0cf; --hot-ink:#2b2140; --hot-text:#855600; /* 겨자색: 콤보·최고 기록 */
+  --bad:#cf3d1e; --bad-soft:#fdece7; --bad-ink:#ffffff; --slow:#2b6cb0; --slow-soft:#e3eefb;
+  --plate:#e8e2f4; --plate-2:#f4f0fa; --plate-line:#beb3da; --plate-ink:#2a2140; --plate-muted:#544d6e; /* 종이 아래의 자판 판 */
+  --cap:#fbf8f1; --cap-line:#d3cab8; --cap-edge:#c5baa5; --cap-ink:#2a2140; --cap-muted:#5c5570;        /* 그 위의 키(미색) */
+  --bar:#6f678a;
+  --todo:#767286; /* 아직 안 친 글자 */
+  --key:#ffffff; --key-edge:#cac6d6; --key-ink:#2a2835;
   --r:12px; --r-sm:8px; --t:.14s; --ease:cubic-bezier(.2,.7,.2,1);
+  /* "Todok Num" = 숫자·영문·기호만 담은 Rubik 700 조각(키에 새긴 글자). 숫자 줄, 큰 결과 숫자, 키 그림에만 쓴다 */
+  --numfont:"Todok Num",var(--font);
   /* "Todok Sans" = 이 사이트 화면과 연습 글에 나오는 글자만 담은 조각(같은 주소에서 받는다. @font-face 는 페이지 <head> 에: _dev/font.py).
      조각에 없는 드문 글자는 그다음 이름(Pretendard Variable, jsDelivr 의 나눠 받기 조각)에서 그 글자만 받는다 */
   --font:"Todok Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic","Segoe UI",Roboto,system-ui,sans-serif;
@@ -21,11 +30,15 @@ img{max-width:100%;height:auto}
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#121218; --card:#1a1a22; --ink:#ececf2; --ink-2:#c8c8d4; --muted:#9c9cab; --faint:#73737f; --line:#2a2a35; --line-2:#3a3a48; --well:#22222c;
-    --main:#b8a4f0; --main-d:#cdbff5; --main-soft:#2a2343; --main-ink:#1a1230;
-    --bad:#ff8468; --bad-soft:#3a1f1a; --bad-ink:#2a0f08; --slow:#f0b955; --slow-soft:#362a10;
-    --todo:#868696;
-    --key:#24242e; --key-edge:#0c0c10; --key-ink:#dcdce6;
+    --bg:#13111a; --card:#1c1926; --ink:#edeaf5; --ink-2:#cbc7d8; --muted:#9d99ad; --faint:#747083; --line:#2b2836; --line-2:#3b3749; --well:#24212e;
+    --main:#b9a5f2; --main-d:#cfc1f7; --main-soft:#2b2445; --main-ink:#1a1230; --main-edge:#7f69c4;
+    --hot:#f4bb46; --hot-d:#b97f0c; --hot-soft:#3a2d10; --hot-ink:#2b2140; --hot-text:#f4bb46;
+    --bad:#ff8468; --bad-soft:#3a1f1a; --bad-ink:#2a0f08; --slow:#7fb2ee; --slow-soft:#16283f;
+    --plate:#251d3a; --plate-2:#30274a; --plate-line:#463b66; --plate-ink:#efeaf9; --plate-muted:#b3aacd;
+    --cap:#352d4f; --cap-line:#4b416b; --cap-edge:#15101f; --cap-ink:#f1edfa; --cap-muted:#b8afd2;
+    --bar:#a79dc6;
+    --todo:#878396;
+    --key:#272431; --key-edge:#0d0c12; --key-ink:#dedbe8;
     color-scheme:dark;
   }
 }
@@ -37,6 +50,8 @@ h1,h2,h3,p,figure,dl,dd{margin:0}
 a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px}
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer}
+/* 두 번 누르기 확대를 기다리지 않게(누른 뒤 0.3초 늦는 것을 없앤다) */
+a,button,summary,label,select{touch-action:manipulation}
 :focus-visible{outline:2px solid var(--main);outline-offset:2px;border-radius:6px}
 .wrap{width:100%;margin-left:auto;margin-right:auto;padding-left:24px;padding-right:24px;max-width:1180px}
 .wrap.narrow{max-width:780px}
@@ -80,32 +95,43 @@ kbd{font:inherit}
 .lnk{border:0;background:none;padding:4px 0;font-size:14px;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-2)}
 .lnk:hover{color:var(--main);text-decoration-color:currentColor}
 /* 키 모양(상징) */
-.cap{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 9px;border-radius:7px;background:var(--key);border:1px solid var(--key-edge);box-shadow:0 2px 0 var(--key-edge);font-weight:600;font-size:16px;color:var(--key-ink);line-height:1}
+.cap{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 9px;border-radius:7px;background:var(--key);border:1px solid var(--key-edge);box-shadow:0 2px 0 var(--key-edge);font-family:var(--numfont);font-weight:600;font-size:16px;color:var(--key-ink);line-height:1}
 .cap small{font-size:11.5px;font-weight:600;margin-left:5px;color:var(--muted)}
 .cap.miss{border-color:var(--bad);box-shadow:0 2px 0 var(--bad);background:var(--bad-soft);color:var(--bad)}
 .cap.miss small{color:var(--bad)}
 
 /* ---------- 치는 글 ---------- */
 /* position:relative = 줄 위치(offsetTop)를 이 상자 기준으로 재려고(app.js scrollLines) */
-.txt{position:relative;font-weight:500;letter-spacing:.01em;color:var(--todo);user-select:none;-webkit-user-select:none}
+.txt{position:relative;isolation:isolate;font-weight:500;letter-spacing:.01em;color:var(--todo);user-select:none;-webkit-user-select:none}
 .txt .w{display:inline-block;white-space:nowrap}
-.txt .c{position:relative;display:inline-block;white-space:pre;border-radius:3px}
-.txt .sp{position:relative;display:inline-block;white-space:pre}
+/* 글자 칸은 자리 잡기(position)를 하지 않는다: 글자 800개가 저마다 따로 그리는 층이 되면, 밑줄·이펙트가 움직일 때마다 브라우저가 층을 다시 나누는 일이 무거워진다 */
+.txt .c{display:inline-block;white-space:pre;border-radius:3px}
+.txt .sp{display:inline-block;white-space:pre}
 .txt .ok{color:var(--ink)}
 .txt .bad{color:var(--bad);background:var(--bad-soft)}
 .txt .sp.bad{background:none;box-shadow:inset 0 -3px 0 var(--bad)}
 /* 속담과 속담 사이: 띄어쓰기 칸에 옅은 가운뎃점을 찍어 어디서 끊기는지 보여 준다(치는 글자는 띄어쓰기 그대로) */
-.txt .sp.brk{width:1.2em;text-align:center}
+.txt .sp.brk{position:relative;width:1.2em;text-align:center}
 .txt .sp.brk::before{content:"·";position:absolute;left:0;right:0;top:0;text-align:center;color:var(--faint);font-weight:700}
 /* 조합 중인 글자: 목표 글자는 그대로 두고 친 만큼 왼쪽부터 가지색이 찬다(--f) */
 .txt .c.pend{background-image:linear-gradient(90deg,var(--main) var(--f,50%),var(--todo) var(--f,50%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-/* 지금 칠 자리: 글자 아래 굵은 가지색 줄. 처음에 다섯 번만 깜빡이고 멈춘다(동작 줄이기면 고정) */
-.txt .cur::after{content:"";position:absolute;left:0;right:0;bottom:.02em;height:4px;border-radius:2px;background:var(--main)}
-.txt .sp.cur::after{left:1px;right:1px}
-.anim.idle .txt .cur::after{animation:blink 1.05s steps(1) 5}
+/* 지금 칠 자리: 글자 아래 굵은 가지색 줄 하나(.car)가 다음 글자로 미끄러져 간다. 글자마다 줄을 새로 만들지 않아서 글 전체의 배치가 다시 계산되지 않는다.
+   자리는 app.js 가 미리 재 둔 값으로 transform 만 바꾼다. 처음에 다섯 번만 깜빡이고 멈춘다(동작 줄이기면 미끄러지지 않고 고정) */
+.car{position:absolute;left:0;top:0;width:20px;height:4px;border-radius:2px;background:var(--main);pointer-events:none;transform-origin:0 0;will-change:transform;z-index:1}
+.anim .car.glide{transition:transform .085s cubic-bezier(.3,.7,.2,1)}
+.anim.idle .car{animation:blink 1.05s steps(1) 5}
 @keyframes blink{50%{opacity:.12}}
+.stage[data-heat="2"] .car,.stage[data-heat="3"] .car{background:var(--hot-d)}
+/* 글자 아래에 깔리는 이펙트(누른 글자 번쩍임, 단어 밑줄). 글과 같이 움직인다 */
+.fxu{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;z-index:-1}
+.fxu i,.fx i{position:absolute;left:0;top:0;opacity:0;font-style:normal;pointer-events:none}
+.fxu .tap{width:40px;height:40px;border-radius:9px;background:var(--main)}
+.fxu .tap.t-hot{background:var(--hot)}
+.fxu .tap.t-bad{background:var(--bad)}
+.fxu .wd{width:100px;height:3px;border-radius:2px;background:var(--main);transform-origin:0 50%}
+.fxu .wd.t-hot{background:var(--hot-d)}
 /* 보이지 않는 입력칸(자판 입력을 받는다) */
-.trap{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;resize:none;font-size:16px;line-height:1;color:transparent;background:transparent;caret-color:transparent;overflow:hidden;cursor:text;z-index:2}
+.trap{contain:strict;position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;resize:none;font-size:16px;line-height:1;color:transparent;background:transparent;caret-color:transparent;overflow:hidden;cursor:text;z-index:2}
 .trap:focus{outline:none}
 .hint{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;background:var(--ink);color:var(--card);font-size:14px;padding:7px 14px;border-radius:999px;white-space:nowrap;pointer-events:none;z-index:3;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis}
 .hint kbd{font-weight:700;border:1px solid currentColor;border-radius:5px;padding:0 6px;margin:0 2px}
@@ -120,7 +146,16 @@ kbd{font:inherit}
 }
 .running .start,.finished .start{visibility:hidden}
 .stage{position:relative}
-.burst{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+.burst{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+/* 글 위로 튀는 이펙트(키 조각, 콤보 꼬리표). 조각은 처음에 만들어 두고 transform·opacity 만 움직인다. 누르는 것을 가리지 않는다 */
+.fx{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden;contain:strict}
+.fx .chip{width:10px;height:10px;border-radius:3px;background:var(--cap);box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
+.fx .chip.c1{background:var(--main)}
+.fx .chip.c2{background:var(--hot)}
+.fx .chip.c3{background:var(--bad)}
+.fx .lab{transform-origin:0 50%;padding:4px 10px 5px;border-radius:8px;background:var(--hot);color:var(--hot-ink);box-shadow:0 3px 0 var(--hot-d);font-size:14px;font-weight:800;line-height:1.1;white-space:nowrap}
+.fx .lab b{font-family:var(--numfont);font-size:16px;margin-right:4px}
+.fx .ring{width:44px;height:44px;border-radius:11px;border:2.5px solid var(--bad)}
 .quit,.quit2{display:none}
 
 /* ---------- 화면 자판·틀린 키 지도 ---------- */
@@ -141,8 +176,9 @@ kbd{font:inherit}
 
 /* ---------- 결과 그래프 ---------- */
 .chart{display:block;width:100%;height:auto}
-.chart .line{fill:none;stroke:var(--main);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
-.chart .area{fill:var(--main-soft)}
+.chart .line{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:var(--well)}
+.chart .grow{transform-box:fill-box;transform-origin:50% 100%}
 .chart .base{stroke:var(--line-2);stroke-width:1}
 .chart .err{fill:var(--bad)}
 .chart text{font-size:12px;fill:var(--muted);font-family:var(--font)}
@@ -188,6 +224,13 @@ kbd{font:inherit}
 .more-row input{width:16px;height:16px;accent-color:var(--main)}
 .more-note{font-size:12.5px;color:var(--muted)}
 .more-note kbd{border:1px solid var(--line-2);border-radius:5px;padding:0 5px;font-size:12px}
+.under{display:flex;align-items:flex-start;justify-content:space-between;gap:8px 20px;margin-top:12px}
+.under .basis{margin-top:0}
+/* 느린 기기라서 이펙트를 스스로 줄였을 때의 한 줄(평소에는 비어 있다) */
+.fx-say{flex:none;font-size:13px;color:var(--ink-2);max-width:300px;text-align:right}
+.fx-say:empty{display:none}
+.more-row .seg button:disabled{opacity:.5;cursor:default}
+.c-opts{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;justify-content:flex-end}
 .basis{margin-top:12px;font-size:13.5px;color:var(--muted)}
 .basis a{color:var(--ink-2)}
 .basis .safe{white-space:nowrap}
@@ -198,8 +241,10 @@ kbd{font:inherit}
 .main-a{max-width:1028px;padding-top:26px}
 .sheet{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:440px;box-shadow:0 1px 2px rgba(20,20,40,.04),0 16px 40px -28px rgba(20,20,40,.3)}
 .typing-focus .sheet,.typing-focus .rig,.typing-focus .desk{border-color:var(--line-2)}
-.bar{height:4px;background:var(--well);flex:none}
-.bar i{display:block;height:100%;background:var(--main);transform-origin:0 50%;transform:scaleX(0);transition:transform .2s linear}
+/* 진행 막대: 종이와 판 사이의 가는 줄(숫자 줄 바로 위라 '남은 초'와 같이 읽힌다). 시간으로 재는 판은 한 번에 채운다(app.js barGo) */
+.bar{height:4px;background:var(--plate-line);flex:none}
+.bar i{display:block;height:100%;background:var(--bar);transform-origin:0 50%;transform:scaleX(0);will-change:transform}
+.stage[data-heat="2"] .bar i,.stage[data-heat="3"] .bar i{background:var(--hot-d)}
 .playbox{display:flex;flex-direction:column;flex:1;min-height:0}
 .play{position:relative;padding:22px 44px 18px;flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
 .playtop{display:flex;justify-content:space-between;align-items:center;gap:12px;height:24px;margin-bottom:12px}
@@ -207,28 +252,67 @@ kbd{font:inherit}
 .view{height:186px;overflow:hidden}
 .sheet .txt{font-size:30px;line-height:62px;transition:transform .16s var(--ease)}
 .txt .c{line-height:1.35}
-.meter{display:flex;align-items:center;gap:36px;padding:14px 44px 18px;border-top:1px solid var(--line);flex:none}
-.m b{display:block;font-size:30px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
-.m span{font-size:13px;color:var(--muted);white-space:nowrap}
-.m.main b{color:var(--main)}
-.m.main{min-width:74px}
-.nk{margin-left:auto;display:flex;align-items:center;gap:8px}
-.nk-l{font-size:13px;color:var(--muted)}
-.nk .cap{min-width:40px;height:40px;font-size:19px}
+/* 숫자 줄 = 종이 아래의 자판 판(.hud). 숫자마다 키 모양 칸 하나(.hk): 납작하다(누르는 것이 아니라 보는 것). 칸 크기가 고정이라 값이 바뀌어도 둘레가 다시 계산되지 않는다.
+   속도 = 가지색, 콤보 = 겨자색(10부터 켜진다. 그 전에는 테두리만), 나머지 = 미색 */
+.hud{background:var(--plate);color:var(--plate-ink)}
+.meter{display:flex;align-items:center;gap:8px;padding:14px 44px;flex:none}
+.hk{position:relative;flex:none;width:96px;height:58px;border-radius:11px;background:var(--cap);box-shadow:inset 0 0 0 1px var(--cap-line);contain:size layout style}
+.hk-f{position:absolute;inset:0;color:var(--cap-ink);display:flex;flex-direction:column;justify-content:center;padding:0 0 1px 13px}
+.hk b{display:block;font-family:var(--numfont);font-size:26px;font-weight:700;line-height:1.1;letter-spacing:-.01em;white-space:nowrap}
+.hk span{display:block;font-size:12px;line-height:1.3;color:var(--cap-muted);white-space:nowrap}
+.hk.main{width:124px;background:var(--main);box-shadow:none}
+.hk.main .hk-f{color:var(--main-ink)}
+.hk.main span{color:inherit;opacity:.9}
+.hk.hot{width:88px;background:var(--hot);box-shadow:inset 0 0 0 1px var(--hot-d)}
+.hk.hot .hk-f{color:var(--hot-ink)}
+.hk.hot span{color:inherit;opacity:.85}
+.hk.hot.cold{background:none;box-shadow:inset 0 0 0 1.5px var(--hot-d)}
+.hk.hot.cold .hk-f{color:var(--hot-text)}
+.nk{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;width:210px;height:48px;contain:size layout style}
+.nk-l{font-size:13px;color:var(--plate-muted)}
+.nk .cap{min-width:42px;height:38px;font-size:19px;font-family:var(--font)}
+/* 판 위의 키(다음 키)와 단추: 미색 윗면 + 아래 옆면 */
+.hud .cap{background:var(--cap);border-color:transparent;box-shadow:0 4px 0 var(--cap-edge);color:var(--cap-ink);margin-bottom:4px}
+.hud .btn.sm,.gauge .btn.sm,.kb-wrap .btn.sm{height:34px;border:0;background:var(--cap);color:var(--cap-ink);box-shadow:0 3px 0 var(--cap-edge);margin-bottom:3px;transition:transform .08s var(--ease),box-shadow .08s var(--ease)}
+.hud .btn.sm:hover,.gauge .btn.sm:hover,.kb-wrap .btn.sm:hover{background:var(--cap);filter:brightness(1.03)}
+.hud .btn.sm:active,.gauge .btn.sm:active,.kb-wrap .btn.sm:active{transform:translateY(2px);box-shadow:0 1px 0 var(--cap-edge)}
 .nk .cap.wide{font-size:13px;min-width:74px}
 .nk .cap.shift{font-size:12px;color:var(--muted);min-width:0}
 .nk .cap:empty{visibility:hidden}
 /* 결과: 같은 종이 안에서 바뀐다. 왼쪽 큰 숫자와 식, 오른쪽 틀린 키 지도(크게)와 그래프 */
-.sheet .result{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:0 44px;padding:22px 44px 18px;flex:1;align-items:start;align-content:start;min-height:0}
+.sheet .result{display:flex;flex-direction:column;flex:1;min-height:0}
+.r-body{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:0 44px;padding:20px 44px 12px;flex:1;align-items:start;align-content:start;min-height:0}
+/* 결과 아래의 판: 다시 하기 단추가 키로(치는 화면의 숫자 줄과 같은 자리·같은 높이). 주 단추 = 가지색 키, 나머지 = 미색 키와 테두리 단추 */
+.r-plate{display:flex;align-items:center;gap:10px;padding:14px 44px;min-height:86px;flex:none}
+.r-plate .btn{height:46px;padding:0 18px;border:0;border-radius:11px;background:var(--cap);color:var(--cap-ink);box-shadow:0 5px 0 var(--cap-edge);margin-bottom:5px;font-size:15.5px;transition:transform .08s var(--ease),box-shadow .08s var(--ease)}
+.r-plate .btn:hover{background:var(--cap);filter:brightness(1.03)}
+.r-plate .btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--cap-edge)}
+.r-plate .btn.pri{background:var(--main);color:var(--main-ink);box-shadow:0 5px 0 var(--main-edge)}
+.r-plate .btn.pri:hover{background:var(--main)}
+.r-plate .btn.pri:active{box-shadow:0 2px 0 var(--main-edge)}
+.r-links{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.r-plate .btn.flat{height:40px;padding:0 14px;margin-bottom:0;background:none;box-shadow:inset 0 0 0 1px var(--plate-line);color:var(--plate-ink);font-size:14.5px;font-weight:500}
+.r-plate .btn.flat:hover{background:var(--plate-2);filter:none}
+.r-plate .btn.flat:active{transform:translateY(1px);box-shadow:inset 0 0 0 1px var(--plate-line)}
 .r-big{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.r-big b{font-size:76px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--main)}
+.r-big b{font-family:var(--numfont);font-size:78px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--main)}
+.r-big b i{display:inline-block;font-style:normal}
+/* 결과 배지(납작한 꼬리표: 누르는 것이 아니다). 최고 기록 = 겨자색으로 채움, 최고 콤보 = 옅은 겨자색, 틀린 키 없음 = 옅은 가지색 */
+.r-badges{display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-top:8px}
+.r-badges:empty{display:none}
+.bdg{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:7px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;background:var(--hot-soft);color:var(--hot-text);box-shadow:inset 0 0 0 1px var(--hot-d)}
+.bdg.hot{background:var(--hot);color:var(--hot-ink)}
+.bdg.main{background:var(--main-soft);color:var(--main-d);box-shadow:inset 0 0 0 1px var(--main)}
+.bdg b{font-family:var(--numfont);font-weight:700;margin-left:5px}
 .r-big span{font-size:17px;font-weight:600;color:var(--ink-2)}
 .r-big .r-wpm{font-size:20px;color:var(--main-d);margin-left:6px}
 .r-right{display:grid;gap:12px;justify-items:start}
-.sheet .kb{--u:33px}
-.sheet .r-chart{width:100%;max-width:552px}
-.sheet .r-chart .chart{max-height:92px}
+.sheet .kb{--u:32px}
+.sheet .r-chart{width:100%;max-width:536px}
+.sheet .r-chart .chart{max-height:84px}
 .sheet.both .r-big b{font-size:64px}
+/* 영어 글을 치는 화면은 결과 아래에 연구 값 한 줄(.r-ctx)이 더 붙는다. 종이 높이를 처음부터 그만큼 높게 잡아 둔다(결과가 뜰 때 높이가 바뀌면 화면 밀림, 안 높이면 그 줄이 단추 판에 가린다) */
+.sheet.hasctx{height:504px}
 
 /* ---------- 화면 C: 화면 자판(자리 연습) ---------- */
 .main-c{max-width:1048px;padding-top:26px}
@@ -241,13 +325,15 @@ kbd{font:inherit}
 .steps .done i{color:var(--main);box-shadow:0 1.5px 0 var(--main)}
 .steps .done[aria-pressed="true"] i{color:var(--main-ink)}
 .step-say{font-size:14.5px;color:var(--ink-2);margin:-2px 0 12px;min-height:46px}
+/* 위에서부터: 숫자 줄(판) → 진행 막대 → 치는 글(종이) → 화면 자판(판). 글 바로 아래에 자판이 붙어 있어 눈을 멀리 옮기지 않는다 */
 .rig{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(20,20,40,.04),0 16px 40px -28px rgba(20,20,40,.3)}
-.strip{display:flex;align-items:center;gap:30px;padding:12px 28px;border-bottom:1px solid var(--line)}
-.strip .m{display:flex;align-items:baseline;gap:6px}
-.strip .m b{font-size:24px;line-height:1.2}
-.strip .m.main{min-width:104px}
-.c-bar{flex:1;height:4px;border-radius:2px;background:var(--well);overflow:hidden;min-width:40px}
-.c-bar i{display:block;height:100%;background:var(--main);transform-origin:0 50%;transform:scaleX(0);transition:transform .2s linear}
+.strip{display:flex;align-items:center;gap:8px;padding:11px 28px}
+.strip .hk{width:118px;height:44px;border-radius:10px}
+.strip .hk-f{flex-direction:row;align-items:baseline;justify-content:flex-start;gap:6px;padding:8px 0 0 12px}
+.strip .hk b{font-size:22px}
+.strip .hk.main{width:136px}
+.strip .hk.hot{width:104px}
+.strip #fresh{margin-left:auto}
 .band{position:relative;padding:12px 28px 14px;height:168px}
 .band .start{height:22px;margin-bottom:4px}
 .rig .view{height:108px}
@@ -257,19 +343,25 @@ kbd{font:inherit}
 .r-pass.ok{color:var(--main-d)}
 .r-side .r-acc{border:0;padding:0;margin-top:4px}
 .band .r-act{margin-top:0;align-items:center}
-.kb-wrap{background:var(--bg);border-top:1px solid var(--line);padding:12px 28px 20px}
-.kb-top{display:flex;align-items:center;gap:14px;min-height:34px;margin-bottom:10px}
-.kb-say{font-size:14.5px;color:var(--ink-2)}
-.kb-say b{color:var(--main);font-size:17px;margin:0 2px}
+.kb-wrap{background:var(--plate);color:var(--plate-ink);padding:12px 28px 22px}
+.kb-top{display:flex;align-items:center;gap:14px;min-height:38px;margin-bottom:10px}
+.kb-say{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--plate-muted)}
+/* 다음 키는 키 모양으로 보여 준다(ㅣ 같은 낱자가 구분선처럼 보이지 않게) */
+.kb-say .cap{background:var(--main);border-color:transparent;box-shadow:0 3px 0 var(--main-edge);color:var(--main-ink);font-family:var(--font);margin-bottom:3px;min-width:36px}
 .kb-top .btn{margin-left:auto}
+.kb-wrap .kb-legend{color:var(--plate-muted)}
+.kb-wrap .mo-kb{color:var(--plate-muted)}
 .kb-legend{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);align-items:center}
 .kb-legend>span>i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;font-style:normal}
-.lg-m>i{background:var(--bad)}
+.lg-m>i{background:var(--bad-soft);box-shadow:inset 0 0 0 2px var(--bad)}
 .lg-s>i{background:var(--slow-soft);box-shadow:inset 0 0 0 2px var(--slow)}
 .kb.big{--u:52px;--g:6px;min-height:244px}
-.kb.big .k{height:44px;border-radius:7px;background:var(--key);border:1px solid var(--key-edge);box-shadow:0 2px 0 var(--key-edge);color:var(--key-ink);font-size:17px}
-.kb.big .k i{display:block;position:absolute;top:4px;right:6px;font-size:11px;font-weight:500;color:var(--muted)}
-.kb.big .k.wide{flex:none;font-size:11.5px;font-weight:500;color:var(--muted);justify-content:flex-start;padding-left:9px}
+.kb.big .k{height:43px;border-radius:8px;background:var(--cap);border:0;box-shadow:0 4px 0 var(--cap-edge);color:var(--cap-ink);font-size:17px;margin-bottom:4px}
+.kb.big .k b{font-family:var(--numfont)}
+html[lang="ko"] .kb.big .k b{font-family:var(--font)}
+.kb.big .k i{display:block;position:absolute;top:4px;right:6px;font-size:11px;font-weight:500;color:var(--cap-muted)}
+.kb.big .k.wide{flex:none;font-size:11.5px;font-weight:600;color:var(--plate-muted);background:var(--plate-2);box-shadow:0 4px 0 var(--plate-line);justify-content:flex-start;padding-left:9px}
+.kb.big .k.wide b{font-family:var(--font)!important}
 .kb.big .k.wide b{display:inline;font-weight:500}
 .kb.big .r0 .wide{width:calc(var(--u)*1.7);justify-content:flex-end;padding:0 9px 0 0}
 .kb.big .r1 .wide{width:calc(var(--u)*1.35)}
@@ -278,19 +370,19 @@ kbd{font:inherit}
 .kb.big .r3 .wide{width:calc(var(--u)*2.15)}
 .kb.big .r3 .wide:last-child{width:calc(var(--u)*2.6);justify-content:flex-end;padding:0 9px 0 0}
 .kb.big .k.space{width:calc(var(--u)*6.2)}
-.kb.big .k.home::after{content:"";position:absolute;bottom:6px;left:50%;width:10px;height:2px;margin-left:-5px;border-radius:1px;background:var(--line-2)}
+.kb.big .k.home::after{content:"";position:absolute;bottom:6px;left:50%;width:10px;height:2px;margin-left:-5px;border-radius:1px;background:var(--cap-edge)}
 .kb.big .k.new::before{content:"";position:absolute;left:6px;top:6px;width:5px;height:5px;border-radius:50%;background:var(--main)}
-.kb.big .k.next{background:var(--main);border-color:var(--main-d);box-shadow:0 2px 0 var(--main-d);color:var(--main-ink)}
+.kb.big .k.next{background:var(--main);box-shadow:0 4px 0 var(--main-edge);color:var(--main-ink)}
 .kb.big .k.next i{color:var(--main-ink);opacity:.8}
 .kb.big .k.next::before{display:none}
-.kb.big .k.next.home::after{background:var(--main-ink);opacity:.6}
-.kb.big .k.with{border-color:var(--main);box-shadow:0 2px 0 var(--main);color:var(--main)}
-.kb.big .k.miss{background:var(--bad-soft);border-color:var(--bad);box-shadow:0 2px 0 var(--bad);color:var(--bad)}
-.kb.big .k.slowk{background:var(--slow-soft);border-color:var(--slow);box-shadow:0 2px 0 var(--slow);color:var(--slow)}
+.kb.big .k.next.home::after{background:var(--main-ink);opacity:.5}
+.kb.big .k.with{background:var(--main);box-shadow:0 4px 0 var(--main-edge);color:var(--main-ink)}
+.kb.big .k.miss{background:var(--bad-soft);box-shadow:0 4px 0 var(--bad);color:var(--bad)}
+.kb.big .k.slowk{background:var(--slow-soft);box-shadow:0 4px 0 var(--slow);color:var(--slow)}
 .kb.big .k em{left:5px;right:auto;top:auto;bottom:3px;font-size:10.5px}
 .kb.big .k.miss::before,.kb.big .k.slowk::before{display:none}
 .anim .kb.big .k.pop{animation-name:keypop-big}
-@keyframes keypop-big{0%{background:var(--key);border-color:var(--key-edge);box-shadow:0 2px 0 var(--key-edge);color:var(--key-ink)}55%{transform:translateY(2px);box-shadow:0 0 0 var(--bad)}100%{transform:none}}
+@keyframes keypop-big{0%{background:var(--cap);box-shadow:0 4px 0 var(--cap-edge);color:var(--cap-ink)}55%{transform:translateY(3px)}100%{transform:none}}
 .kb-off .kb.big{display:none}
 .kb-off .kb-wrap{padding-bottom:10px}
 .kb-off .kb-top{margin-bottom:0}
@@ -312,8 +404,7 @@ kbd{font:inherit}
 .mine-tag{margin-top:6px}
 .desk .txt{font-size:27px;line-height:48px;height:48px;white-space:nowrap;overflow:hidden}
 .desk .txt.measuring{white-space:normal;height:auto;visibility:hidden}
-.desk .txt .cur::after{bottom:.12em}
-.mine{position:relative;font-size:27px;line-height:48px;height:50px;font-weight:500;color:var(--ink);white-space:pre;overflow:hidden;border-bottom:2px solid var(--line-2)}
+.mine{contain:size layout;position:relative;font-size:27px;line-height:48px;height:50px;font-weight:500;color:var(--ink);white-space:pre;overflow:hidden;border-bottom:2px solid var(--line-2)}
 .typing-focus .mine{border-bottom-color:var(--main)}
 .caret{display:inline-block;width:2px;height:30px;background:var(--main);vertical-align:-5px;margin-left:1px}
 .anim.idle.typing-focus .caret{animation:blink 1.05s steps(1) 5}
@@ -325,24 +416,30 @@ kbd{font:inherit}
 .desk .kb{--u:min(26px,calc((100vw - 786px)/15))}
 .desk .r-chart{width:100%;max-width:446px}
 .desk .r-chart .chart{max-height:96px}
-.gauge{position:sticky;top:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
-.g-label{font-size:13px;color:var(--muted)}
+.gauge{position:sticky;top:18px;background:var(--plate);color:var(--plate-ink);border-radius:16px;padding:20px 22px}
+.g-label{font-size:13px;color:var(--plate-muted)}
 .g-big{display:flex;align-items:baseline;gap:6px}
-.g-big b{font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-.03em;color:var(--main)}
-.g-big span{font-size:15px;font-weight:600;color:var(--ink-2)}
-.spark{display:flex;align-items:flex-end;gap:3px;height:44px;margin:12px 0 16px;border-bottom:1px solid var(--line)}
-.spark i{flex:1;height:40px;background:var(--main-soft);border-radius:2px 2px 0 0;max-width:12px;transform-origin:50% 100%;transform:scaleY(.05)}
-.spark i.on{background:var(--main)}
+.g-big b{font-family:var(--numfont);font-size:62px;font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--main)}
+.g-big span{font-size:15px;font-weight:600;color:var(--plate-muted)}
+.spark{display:flex;align-items:flex-end;gap:3px;height:44px;margin:12px 0 16px;border-bottom:1px solid var(--plate-line)}
+.spark i{flex:1;height:40px;background:var(--plate-line);border-radius:2px 2px 0 0;max-width:12px;transform-origin:50% 100%;transform:scaleY(.05)}
+.spark i.on{background:var(--bar)}
 .spark i.er{background:var(--bad)}
-.g-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.g-facts dt{font-size:13px;color:var(--muted)}
-.g-facts dd{font-size:26px;font-weight:700;line-height:1.2}
-.g-facts small{font-size:14px;font-weight:600;color:var(--ink-2);margin-left:2px}
-.g-bar{height:4px;border-radius:2px;background:var(--well);margin:16px 0 14px;overflow:hidden}
-.g-bar i{display:block;height:100%;background:var(--main);transform-origin:0 50%;transform:scaleX(0);transition:transform .2s linear}
+.g-facts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g-combo dd span{display:inline-block;min-width:1.6em;padding:0 7px;border-radius:7px;background:var(--hot);color:var(--hot-ink);box-shadow:inset 0 0 0 1px var(--hot-d);font-family:var(--numfont);text-align:center}
+.g-combo.cold dd span{background:none;color:var(--hot-text);box-shadow:inset 0 0 0 1.5px var(--hot-d)}
+.g-facts dt{font-size:13px;color:var(--plate-muted)}
+.g-facts dd{font-family:var(--numfont);font-size:25px;font-weight:700;line-height:1.2}
+.g-facts small{font-size:14px;font-weight:600;color:var(--plate-muted);margin-left:2px}
+.g-bar{height:4px;border-radius:2px;background:var(--plate-line);margin:16px 0 14px;overflow:hidden}
+.g-bar i{display:block;height:100%;background:var(--bar);transform-origin:0 50%;transform:scaleX(0);transition:transform .2s linear}
+.stage[data-heat="2"]~.gauge .g-bar i,.stage[data-heat="3"]~.gauge .g-bar i{background:var(--hot-d)}
 .g-act{display:flex;gap:8px}
 
 /* ---------- 도구 아래: 내 기록·기준·질문·글 목록 ---------- */
+/* 도구 화면에서 화면 밖에 있는 칸은 그리지 않는다(치는 동안 브라우저가 쪽 전체를 다시 훑지 않게). 내용은 그대로 문서에 있고, 가까이 오면 그린다.
+   자리는 어림 높이로 잡아 두고 한 번 그린 뒤에는 실제 높이를 기억한다(contain-intrinsic-size: auto). 광고 자리와 꼬리말에는 쓰지 않는다 */
+.tool .below>section{content-visibility:auto;contain-intrinsic-size:auto 420px}
 .records{max-width:1028px;margin-top:34px}
 .t-c .records{max-width:1048px}
 .t-b .records{max-width:1180px}
@@ -492,7 +589,8 @@ kbd{font:inherit}
   .g-facts dd{font-size:19px}
   .g-facts small{font-size:12px}
   .g-bar{grid-column:1/-1;margin:4px 0 0;order:5}
-  .sheet .result{grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:0 24px}
+  .r-body{grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:0 24px;padding-left:28px;padding-right:28px}
+  .r-plate,.meter{padding-left:28px;padding-right:28px}
   .sheet .kb{--u:calc((100vw - 48px - 90px - 300px - 24px - 4px*14)/15)}
   .desk .result{grid-template-columns:minmax(0,1fr);height:auto;gap:18px}
   .desk .kb{--u:min(32px,calc((100vw - 48px - 72px - 56px)/15))}
@@ -513,7 +611,7 @@ kbd{font:inherit}
   .langbar button{width:44px;height:44px}
   .langbar a{padding:12px 0}
   /* 손가락으로 누르는 곳은 44px 이상 */
-  .btn,.btn.sm{height:44px}
+  .btn,.btn.sm,.gauge .btn.sm,.kb-wrap .btn.sm,.hud .btn.sm{height:44px}
   .lnk{padding:12px 0}
   .seg{flex-wrap:wrap}
   .opt{flex-wrap:wrap}
@@ -535,23 +633,36 @@ kbd{font:inherit}
   .more{margin-left:auto}
   .basis .safe{white-space:normal}
   /* A: 숫자가 글 위에 온다(자판이 아래를 가린다) */
-  .sheet{height:auto;border-radius:14px}
+  .sheet,.sheet.hasctx{height:auto;border-radius:14px}
   .playbox{flex:none}
-  .meter{order:-1;gap:6px 13px;padding:10px 16px;border-top:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .meter .btn{padding:0 12px}
-  .meter .btn.quit{margin-left:0}
-  .m b{font-size:24px}
-  .m span{font-size:11.5px}
-  .m.main{min-width:46px}
+  /* A: 숫자 줄이 글 위에 온다(기기 자판이 아래를 가린다). 숫자 칸 넷과 단추가 한 줄 */
+  .meter{order:-2;gap:5px;padding:9px 10px}
+  .sheet .bar{order:-1}
+  .hk,.hk.main,.hk.hot,.strip .hk,.strip .hk.main,.strip .hk.hot{flex:1 1 0;width:auto;min-width:0;height:46px;border-radius:9px}
+  .hk.main,.strip .hk.main{flex-grow:1.25}
+  .hk-f,.strip .hk-f{flex-direction:column;align-items:stretch;justify-content:center;gap:0;padding:0 0 1px 8px}
+  .hk b,.strip .hk b{font-size:19px}
+  .hk span{font-size:10.5px}
   .nk{display:none}
-  .meter .btn{margin-left:auto}
-  .play{padding:8px 18px 16px;flex:none}
+  .meter .btn.sm,.strip .btn.sm{flex:none;height:44px;margin:0 0 2px 1px;padding:0 10px;font-size:13.5px}
+  .strip #fresh{margin-left:1px}
+  .m-tall .quit{display:inline-flex;min-width:44px}
+  .play{padding:6px 18px 16px;flex:none}
   .playtop{margin-bottom:2px}
   .daily{display:none}
   .view{height:176px}
   .sheet .txt{font-size:23px;line-height:44px}
   .hint{white-space:normal;text-align:center;border-radius:14px;width:max-content}
-  .sheet .result{grid-template-columns:minmax(0,1fr);padding:16px 18px 20px;gap:18px;align-content:start;flex:none}
+  /* 결과: 점수 → 다시 하기 단추(판) → 틀린 키 지도·그래프 순서로(단추를 누르려고 끝까지 내리지 않게) */
+  .sheet .result{flex:none}
+  .r-body{display:contents}
+  .r-left{order:1;padding:16px 18px 16px}
+  .r-plate{order:2;flex-wrap:wrap;padding:14px 14px 12px;gap:8px;min-height:0}
+  .r-right{order:3;padding:18px 18px 18px}
+  .r-ctx{order:4;padding:0 18px 18px}
+  .r-plate .btn{flex:1 1 auto;height:48px}
+  .r-links{margin-left:0;width:100%;justify-content:flex-start}
+  .r-plate .btn.flat{flex:1 1 auto;height:44px}
   .r-big b{font-size:60px}
   .sheet .kb,.desk .kb{--u:calc((100vw - 32px - 38px - 3px*14)/14.6);--g:3px;width:100%}
   .k{font-size:12.5px;border-radius:5px;height:calc(var(--u)*1.25)}
@@ -562,13 +673,7 @@ kbd{font:inherit}
   .steps button{height:44px;padding:0 10px 0 7px;font-size:13px;gap:5px}
   .step-say{font-size:13.5px;min-height:64px}
   .rig{border-radius:14px}
-  .strip{flex-wrap:wrap;gap:6px 12px;padding:10px 16px;align-items:flex-end}
-  .strip .btn{padding:0 12px;align-self:center}
-  .strip #fresh{margin-left:auto}
-  .strip .m{display:block}
-  .strip .m.main{min-width:48px}
-  .strip .m b{display:block;font-size:22px}
-  .c-bar{order:9;flex:1 1 100%}
+  .strip{gap:5px;padding:9px 10px}
   .band{padding:8px 16px 12px;height:auto;min-height:150px}
   .rig .view{height:132px}
   .rig .txt{font-size:23px;line-height:44px}
@@ -614,15 +719,26 @@ kbd{font:inherit}
   .m-tall .top,.m-tall .a-head,.m-tall .b-head,.m-tall .c-head,.m-tall .step-say,.m-tall .langbar{display:none}
   .m-tall .main-a,.m-tall .main-b,.m-tall .main-c{padding-top:8px}
   .m-tall .stage{min-height:calc(100vh - 16px);min-height:calc(100svh - 16px)}
-  .m-tall .quit{display:inline-flex;font-size:0;width:44px;padding:0;gap:0}
-  .m-tall .quit::before{content:"×";font-size:19px;line-height:1}
   .r-right{justify-items:stretch}
   .m-tall .quit2{display:inline}
   /* 글을 눌러 자판이 열린 뒤에는 '글을 누르면 자판이 열려요'를 감춘다(자리는 그대로) */
   .m-tall.typing-focus .start,.m-tall.typing-focus .ph{visibility:hidden}
   .m-tall .b-grid .gauge{position:static}
 }
+/* 태블릿에서 화면 자판이 올라와 보이는 높이가 낮을 때(html.vk, app.js 가 붙인다. --vvh = 보이는 높이): 머리·제목·고르기를 접고 글과 숫자 줄만 남긴다 */
+.vk .top,.vk .a-head,.vk .b-head,.vk .c-head,.vk .step-say,.vk .langbar,.vk .playtop,.vk .kb-wrap,.vk .ln.n2{display:none}
+.vk .main-a,.vk .main-b,.vk .main-c{padding-top:8px}
+.vk .sheet,.vk .sheet.hasctx{height:max(240px,min(440px,calc(var(--vvh,440px) - 16px)))}
+.vk .play{padding-top:10px;padding-bottom:8px}
+.vk .view{height:124px;height:clamp(62px,round(down,calc(var(--vvh,440px) - 140px),62px),186px)}
+.vk .desk{height:auto;min-height:0}
+.vk .stack{height:auto;padding-top:12px;padding-bottom:12px}
 @media (max-width:359px){
+  .meter,.strip{gap:4px;padding:8px 6px}
+  .hk b,.strip .hk b{font-size:17px}
+  .hk span{font-size:9.5px}
+  .hk-f,.strip .hk-f{padding-left:6px}
+  .meter .btn.sm,.strip .btn.sm{padding:0 7px;font-size:12.5px}
   .nav a{font-size:12.5px}
   .meter{gap:6px 12px}
   .sheet .txt,.rig .txt{font-size:21px}

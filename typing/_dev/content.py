@@ -15,7 +15,9 @@ JS = {
         'brand': '토독', 'unit': '타/분', 'unitShort': '타', 'accuracy': '정확도', 'sec': '초', 'space': '띄어쓰기', 'enter': '줄바꿈', 'times': '번',
         'needKo': '<kbd>한/영</kbd> 키를 눌러 한글로 바꿔 주세요', 'needEn': '<kbd>한/영</kbd> 키를 눌러 영어로 바꿔 주세요', 'caps': '<kbd>Caps Lock</kbd>이 켜져 있어요',
         'none': '틀린 키가 없어요', 'missed': '틀린 키', 'slow': '느린 키', 'touchNote': '터치 자판이라 글자 단위로 쟀어요. 느린 키는 재지 않아요.',
-        'timeLeft': '남은 시간(초)', 'elapsed': '걸린 시간(초)', 'progress': '문장',
+        'timeLeft': '남은 초', 'elapsed': '걸린 초', 'progress': '문장',
+        'combo': '콤보', 'comboN': '{n} 콤보', 'bBest': '최고 기록', 'bPerfect': '틀린 키 없음', 'bCombo': '최고 콤보 {n}',
+        'fxLevels': ['끔', '가볍게', '화려하게'], 'sndOn': '켬', 'sndOff': '끔', 'fxAuto': '화면이 버거워해서 이펙트를 한 단계 줄였어요.',
         'daily': '{m}월 {d}일의 글', 'drillLabel': '틀린 키만 모은 연습',
         'formulaKo': '맞게 친 {n}타 ÷ {t}초 × 60 = {s}타/분', 'formulaEn': '맞게 친 {n}자 ÷ 5 ÷ {t}초 × 60 = {s} WPM',
         'alsoWpm': '{w} WPM',
@@ -50,7 +52,9 @@ JS = {
         'needKo': 'Switch your keyboard to Korean', 'needEn': 'Your keyboard is set to another language. Switch it to English',
         'caps': '<kbd>Caps Lock</kbd> is on',
         'none': 'No missed keys', 'missed': 'Missed', 'slow': 'Slow', 'touchNote': 'Measured per character on a touch keyboard. Slow keys are not timed.',
-        'timeLeft': 'Seconds left', 'elapsed': 'Seconds', 'progress': 'Sentence',
+        'timeLeft': 'Sec left', 'elapsed': 'Seconds', 'progress': 'Sentence',
+        'combo': 'Combo', 'comboN': '{n} combo', 'bBest': 'New best', 'bPerfect': 'No mistakes', 'bCombo': 'Best combo {n}',
+        'fxLevels': ['Off', 'Light', 'Full'], 'sndOn': 'On', 'sndOff': 'Off', 'fxAuto': 'Effects were turned down a step to keep typing smooth.',
         'daily': 'Text for {mon} {d}', 'drillLabel': 'Practice for your missed keys',
         'months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         'formulaKo': '{n} correct keystrokes ÷ {t} s × 60 = {s} per minute', 'formulaEn': '{n} correct characters ÷ 5 ÷ {t} s × 60 = {s} WPM',
@@ -90,7 +94,8 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> 다른 글 · <kbd>Esc</kbd> 처음으로(치는 칸에서 나오기)',
         'esc_note': '<kbd>Esc</kbd>를 누르면 치는 칸에서 나와요.',
         'start_pc': '첫 글자부터 치면 바로 시작해요', 'start_off': '글을 누르거나 아무 키나 치면 시작해요', 'start_mo': '글을 누르면 자판이 열려요',
-        'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 시간(초)', 'nextkey': '다음 키',
+        'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 초', 'nextkey': '다음 키',
+        'combo': '콤보', 'combo_tip': '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세요.', 'combo_note': '콤보는 이어서 맞게 누른 키 수예요.', 'fx_l': '이펙트', 'snd_l': '키 소리',
         'fresh': '다른 글', 'quit': '그만', 'quit2': '처음 화면으로',
         'acc': '정확도', 'again': '다른 글로 다시', 'same': '같은 글 다시', 'drill': '틀린 키만 연습', 'share': '결과 그림 저장',
         'chart_aria': '초마다 속도 그래프', 'chart_cap': '초마다 속도', 'chart_err': '틀린 키가 있던 초',
@@ -111,7 +116,8 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> new text · <kbd>Esc</kbd> reset and leave the typing field',
         'esc_note': 'Press <kbd>Esc</kbd> to leave the typing field.',
         'start_pc': 'Type the first letter to start', 'start_off': 'Click the text or press any key to start', 'start_mo': 'Tap the text to open your keyboard',
-        'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Seconds left', 'nextkey': 'Next key',
+        'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Sec left', 'nextkey': 'Next key',
+        'combo': 'Combo', 'combo_tip': 'Keys pressed correctly in a row. A wrong key starts the count again from 0.', 'combo_note': 'Combo counts keys pressed correctly in a row.', 'fx_l': 'Effects', 'snd_l': 'Key sound',
         'fresh': 'New text', 'quit': 'Stop', 'quit2': 'Back to start',
         'acc': 'Accuracy', 'again': 'Try again', 'same': 'Same text', 'drill': 'Practice missed keys', 'share': 'Save result image',
         'chart_aria': 'Speed for each second', 'chart_cap': 'Speed each second', 'chart_err': 'a second with a missed key',
@@ -197,6 +203,7 @@ BASIS = {
         ('정확도', '맞게 누른 키 ÷ 누른 키. 키가 눌린 그 순간 맞았는지로 세니까, 고쳐 쳐도 틀렸던 기록은 남아요. 지우기(Backspace)는 누른 키에 넣지 않아요. 누른 키는 실제로 누른 횟수예요. 받침이 다음 글자로 넘어가느라 화면 글자가 두 번 바뀌어도 한 번만 세어요.'),
         ('총 타수', '틀렸거나 지운 것까지, 누른 키 전부의 타수 ÷ 걸린 시간(초) × 60. 지우기(Backspace)는 넣지 않아요. 결과의 정확도 아래에 작게 나와요.'),
         ('틀린 키와 느린 키', '틀린 키는 \'그때 쳐야 했던 키\'에 적어요(ㄴ 자리에 ㅅ을 치면 ㄴ에 1번). 느린 키는 맞게 친 키의 앞 키와의 간격 평균이 전체 평균보다 긴 키예요. 3초 넘게 쉰 간격과 세 번 못 친 키는 빼요.'),
+        ('콤보', '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세요. 지우기(Backspace)는 세지도 끊지도 않고, 한/영이나 Caps Lock 안내가 뜬 동안 친 키로는 끊기지 않아요. 결과에는 그 판에서 가장 길었던 값이 나와요. 속도와 정확도 계산에는 들어가지 않아요.'),
         ('한글은 키 흐름으로 비교', '글자 모양이 아니라 두벌식 키 순서끼리 견줘요. 그래서 조합 중인 글자(\'한\'을 치는 중의 \'하\')와 받침이 다음 글자로 넘어가는 순간(\'간\' → \'가나\')을 틀렸다고 하지 않아요.'),
         ('한/영·Caps Lock이 반대일 때', '안내가 뜬 동안 친 키는 정확도와 틀린 키 기록에 넣지 않아요. 띄어쓰기를 넘어 여러 단어를 그렇게 쳐도 같아요. 자판 전환 실수는 타자 실력이 아니니까요.'),
         ('시간', '첫 키에서 시작하고, 탭이 가려지면 멈춰요. 결과의 시간은 0.1초까지 반올림한 값이고, 타수는 그 시간으로 계산해 반올림해요. 그래서 화면의 식을 그대로 다시 계산하면 같은 수가 나와요.'),
@@ -208,6 +215,7 @@ BASIS = {
         ('Raw speed', 'Every key press ÷ 5 ÷ seconds × 60, including the ones you got wrong or erased. Backspace itself is not counted. It is shown in small print under the accuracy.'),
         ('Accuracy', 'Correct key presses ÷ all key presses. A key is judged at the moment you press it, so a mistake you go back and fix still counts against accuracy.'),
         ('Missed and slow keys', 'A miss is recorded on the key you should have pressed (typing "r" where "e" was expected counts against "e"). A slow key is one whose average gap from the previous key is longer than your overall average. Pauses longer than 3 seconds and keys typed fewer than three times are left out.'),
+        ('Combo', 'The number of keys you pressed correctly in a row. A wrong key starts it again from 0. Backspace neither adds to it nor breaks it, and keys typed while the wrong-layout or Caps Lock notice is showing do not break it. The result shows the longest run of that test. It has no effect on WPM or accuracy.'),
         ('Wrong layout or Caps Lock', 'While the "switch your keyboard" or Caps Lock notice is showing, key presses are not counted toward accuracy or missed keys, even when it lasts for several words.'),
         ('Time', 'The clock starts on your first key and pauses when the tab is hidden. The time in the result is rounded to 0.1 s first, and WPM is calculated from that rounded time, so the formula on screen gives the same number if you redo it by hand.'),
         ('Touch keyboards', 'On a phone we cannot see individual keys, so each character is judged when it is complete. If you erase a character and type the same one again, it is counted once. Slow keys are not timed. Keyboard apps differ, so results can look different from one app to another.'),
@@ -329,7 +337,7 @@ PRIVACY = {
 <li><code>todok.runs</code>: 최근 기록 50개까지. 한 판의 조건(도구·글 종류·시간), 속도, 정확도, 끝난 시각이에요. 친 글 자체는 저장하지 않아요.</li>
 <li><code>todok.best</code>: 조건마다의 최고 기록(속도, 정확도, 시각).</li>
 <li><code>todok.keys</code>: 키마다 틀린 횟수와 맞은 횟수. \'자주 틀린 키\'를 보여 주는 데 써요.</li>
-<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계).</li>
+<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계, 이펙트와 키 소리).</li>
 <li><code>todok.lang</code>: 다른 언어판 안내 띠를 닫았다는 표시.</li>
 </ul>
 <p>\'내 기록\' 칸의 \'기록 지우기\'를 누르면 <code>todok.runs</code>, <code>todok.best</code>, <code>todok.keys</code>가 바로 지워져요. 나머지 둘은 브라우저의 사이트 데이터 지우기로 지울 수 있어요. 그 밖에는 저장하지 않아요.</p>
@@ -354,7 +362,7 @@ PRIVACY = {
 <li><code>todok.runs</code>: up to 50 recent results. Each holds the conditions of a test (tool, text type, length), the speed, the accuracy and when it ended. The text you typed is not stored.</li>
 <li><code>todok.best</code>: your best result for each set of conditions (speed, accuracy, time).</li>
 <li><code>todok.keys</code>: how many times each key was missed and hit, used to show the keys you miss most.</li>
-<li><code>todok.set</code>: the settings you last chose (text type, length, punctuation and numbers, practice step).</li>
+<li><code>todok.set</code>: the settings you last chose (text type, length, punctuation and numbers, practice step, effects and key sound).</li>
 <li><code>todok.lang</code>: a note that you closed the language suggestion bar.</li>
 </ul>
 <p>The "Clear results" button under "Your results" deletes <code>todok.runs</code>, <code>todok.best</code> and <code>todok.keys</code> at once. The other two can be removed by clearing site data in your browser. Nothing else is stored.</p>

@@ -281,7 +281,7 @@ def all_pages(env):
               return { bg, hid, anim: document.documentElement.classList.contains('anim') }; }''')
             ok(r['hid'] == 0, f'{path} {tag}: 숨은 채 남은 글자 0', r['hid'])
             if 'dark' in kw:
-                ok(r['bg'] == 'rgb(18, 18, 24)', f'{path} 어두운 바탕', r['bg'])
+                ok(r['bg'] == 'rgb(19, 17, 26)', f'{path} 어두운 바탕', r['bg'])
             else:
                 ok(not r['anim'], f'{path} 동작 줄이기면 연출을 켜지 않는다')
             ok(not pg._errs, f'{path} {tag} 콘솔 오류 0', pg._errs[:3])
@@ -800,6 +800,9 @@ def ads_and_motion(env):
         c = env.ctx(w, h, mobile)
         for path in tool_paths + [p for p in ('/ko/guide/tasu-gyesan/', '/guide/how-wpm-is-calculated/') if (ROOT / p.strip('/') / 'index.html').exists()]:
             pg = env.page(c, path + '?adpreview', clock=False)
+            # 화면 밖 칸은 그리지 않게 해 뒀으므로(content-visibility: auto) 어림 높이가 아니라 다 그린 상태의 자리로 잰다
+            pg.add_style_tag(content='*{content-visibility:visible!important}')
+            pg.wait_for_timeout(120)
             r = pg.evaluate('''() => { const ads = [...document.querySelectorAll('.ad-wrap')].map((a) => { const b = a.getBoundingClientRect(), lab = a.querySelector('.ad-label'), slot = a.querySelector('[data-ad]').getBoundingClientRect();
                 let near = 1e9, who = '';
                 document.querySelectorAll('button,a.btn,input,select,textarea,summary').forEach((e) => { const q = e.getBoundingClientRect(); if (!q.width || !q.height || e.closest('.ad-wrap')) return;
@@ -853,7 +856,7 @@ def ads_and_motion(env):
     pg.close()
     # 연출 2·3: 동작 줄이기면 지도는 처음부터 칠해져 있고, 최고 기록은 글로만
     pg, ty = env.tool(c, '/ko/')
-    ok(pg.evaluate('getComputedStyle(document.querySelector("#txt .cur"), "::after").animationName') == 'none', '동작 줄이기: 지금 칠 자리 밑줄은 깜빡이지 않고 고정')
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#txt .car")).animationName') == 'none' and pg.evaluate('getComputedStyle(document.querySelector("#txt .car")).transitionDuration') == '0s', '동작 줄이기: 지금 칠 자리 밑줄은 깜빡이지도 미끄러지지도 않는다')
     ty.run(wrong_at={5, 12})
     finish_wait(pg)
     ok(pg.evaluate('document.querySelectorAll("#kb .k.miss").length') >= 1 and pg.evaluate('document.querySelectorAll("#kb .k.pop").length') == 0, '동작 줄이기: 틀린 키는 움직임 없이 칠해져 있다')
@@ -870,7 +873,7 @@ def ads_and_motion(env):
     # 연출 2: 결과가 뜬 순간 틀린 키가 차례로 눌린다. 나오는 중에도 단추가 눌린다
     c = env.ctx()
     pg, ty = env.tool(c, '/ko/')
-    ok(pg.evaluate('getComputedStyle(document.querySelector("#txt .cur"), "::after").animationName') == 'blink' and pg.evaluate('getComputedStyle(document.querySelector("#txt .cur"), "::after").animationIterationCount') == '5', '지금 칠 자리 밑줄은 다섯 번만 깜빡인다')
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#txt .car")).animationName') == 'blink' and pg.evaluate('getComputedStyle(document.querySelector("#txt .car")).animationIterationCount') == '5', '지금 칠 자리 밑줄은 다섯 번만 깜빡인다')
     ty.run(wrong_at={5, 12, 20, 33, 41, 55, 62, 70})
     finish_wait(pg)
     pop = pg.evaluate('[...document.querySelectorAll("#kb .k.pop")].map((k) => k.style.getPropertyValue("--d"))')
@@ -1467,6 +1470,164 @@ def third_party(env):
             fails.append(f'{fn.__name__} 가 도중에 멈췄다: {e!r}'[:300])
 
 
+def fx_checks(env):
+    """10. 이펙트·콤보·가벼운 그리기(2026-10-11): 콤보 숫자 = 로직 값, 세기 고르기·저장, 동작 줄이기, 멈추면 움직임 0, 누르는 것을 가리지 않음, 밑줄 자리, 이어 붙이기, 낮은 화면(태블릿 자판)"""
+    print('10. 이펙트·콤보')
+    # 도는 움직임 수(진행 막대는 뺀다: 남은 시간을 보여 주는 것이라 이펙트 세기와 상관없이 흐른다)
+    anims = 'document.getAnimations().filter((a) => a.playState === "running" && !(a.effect && a.effect.target && a.effect.target.id === "bar")).length'
+    boxes = '[...document.querySelectorAll(".hud .hk")].map((k) => { const b = k.getBoundingClientRect(); return [Math.round(b.left), Math.round(b.top), Math.round(b.width), Math.round(b.height)].join(","); }).join("|")'
+    def go(pg, ty, n, wrong_at=()):
+        """지금 자리에서 n 키를 더 친다(wrong_at = 그 가운데 틀리게 칠 차례)."""
+        for j in range(n):
+            if pg.evaluate('__E.done'):
+                break
+            ks = ty.keys(); i = pg.evaluate('TJ.hangul.keyStream(__E.session.value).length')
+            if i >= len(ks):
+                break
+            ty.key(wrong(ks[i]) if j in wrong_at and ks[i] not in ' \n' else ks[i])
+
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    ok(pg.evaluate('!!window.TJFX && TJFX.level === 2 && !TJFX.locked') and pg.evaluate('document.querySelector("#fx-seg [aria-pressed=true]").getAttribute("data-v")') == '2', '이펙트 기본값은 화려하게')
+    ok(pg.evaluate('document.getElementById("combo").textContent') == '0' and pg.evaluate('document.getElementById("k-combo").classList.contains("cold")'), '시작 전: 콤보 0, 콤보 칸은 꺼져 있다')
+    box0 = pg.evaluate(boxes)
+    first = pg.evaluate('(() => { window.__first = document.querySelector("#txt .c"); window.__n0 = document.querySelectorAll("#txt .c, #txt .sp").length; return __E.T.chars.length; })()')
+    go(pg, ty, 9)
+    ok(pg.evaluate('+document.getElementById("combo").textContent === __E.session.combo && __E.session.combo === 9'), '아홉 키: 콤보 9(화면 = 로직)', pg.evaluate('document.getElementById("combo").textContent'))
+    ok(pg.evaluate('document.getElementById("k-combo").classList.contains("cold")'), '10 전에는 콤보 칸이 꺼져 있다')
+    go(pg, ty, 1)
+    ok(pg.evaluate('__E.session.combo') == 10 and not pg.evaluate('document.getElementById("k-combo").classList.contains("cold")'), '열 키째: 콤보 칸이 켜진다')
+    lab = pg.evaluate('[...document.querySelectorAll("#fx .lab")].map((x) => x.textContent).join("|")')
+    ok('10' in lab and '콤보' in lab, '10 콤보 꼬리표가 뜬다', lab)
+    ok(pg.evaluate(anims) >= 1, '키를 누른 직후에는 움직임이 돈다(화려하게)', pg.evaluate(anims))
+    # 꼬리표가 치는 글 위에 겹치지 않는 자리(글 위의 빈 줄)에 뜬다
+    over = pg.evaluate("""() => { const v = document.querySelector('.view').getBoundingClientRect(); const l = [...document.querySelectorAll('#fx .lab')].map((x) => x.getBoundingClientRect()).filter((b) => b.width > 0); return l.every((b) => b.bottom <= v.top + 4); }""")
+    ok(over, '콤보 꼬리표는 글 위의 빈 줄에 뜬다(치는 글을 가리지 않는다)')
+    # 이펙트 층은 누르는 것을 가리지 않는다
+    hit = pg.evaluate("""() => { const st = document.querySelector('.stage').getBoundingClientRect(); const pts = [[st.left + 60, st.top + 120], [st.left + st.width / 2, st.top + st.height / 2], [st.right - 80, st.bottom - 40]]; return pts.map(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? (e.closest('.fx, .fxu, .burst') ? 'fx' : e.id || e.tagName) : 'none'; }); }""")
+    ok('fx' not in hit, '이펙트 층은 누르는 것을 가리지 않는다', hit)
+    # 틀린 키: 콤보가 0으로, 화면도 같이
+    go(pg, ty, 3)
+    ks = ty.keys(); n = pg.evaluate('TJ.hangul.keyStream(__E.session.value).length')
+    while ks[n] in ' \n' or wrong(ks[n]) == ks[n]:
+        go(pg, ty, 1); n += 1
+    before = pg.evaluate('__E.session.combo')
+    ty.key(wrong(ks[n]))
+    ok(before >= 10 and pg.evaluate('__E.session.combo') == 0 and pg.evaluate('document.getElementById("combo").textContent') == '0', '틀린 키: 콤보 0', (before, pg.evaluate('document.getElementById("combo").textContent')))
+    ok(pg.evaluate('__E.session.maxCombo') == before, '최고 콤보는 남는다')
+    # 숫자 칸의 자리·크기는 값이 바뀌어도 그대로
+    box1 = pg.evaluate(boxes)
+    ok(box0 == box1, '숫자 칸의 자리·크기가 그대로다', (box0, box1))
+
+    # 밑줄(.car)이 지금 칠 글자 아래에 있다
+    def car_ok():
+        return pg.evaluate("""() => { const c = document.querySelector('#txt .car').getBoundingClientRect(), k = document.querySelector('#txt .cur').getBoundingClientRect(); return Math.abs(c.left - k.left) < 2.5 && c.top > k.top && c.top < k.bottom + 6 && Math.abs(c.width - Math.max(6, k.width)) < 2.5; }""")
+    pg.wait_for_timeout(260)
+    ok(car_ok(), '밑줄이 지금 칠 글자 아래에 있다')
+    # 글을 이어 붙여도 앞 글자는 그대로다(다시 만들지 않는다). 남은 글이 140자 아래로 내려가면 키를 그린 뒤에 잇는다(여기서는 바로 불러 본다)
+    go(pg, ty, 40)
+    pg.evaluate('__E.more()')
+    grew = pg.evaluate('({ same: document.querySelector("#txt .c") === window.__first, n: document.querySelectorAll("#txt .c, #txt .sp").length, n0: window.__n0, chars: __E.T.chars.length })')
+    ok(grew['chars'] > first and grew['same'] and grew['n'] == grew['chars'] and grew['n'] > grew['n0'], '글이 이어 붙고(새 글자만 더한다) 앞 글자는 그대로다', grew)
+    go(pg, ty, 12)
+    pg.wait_for_timeout(260)
+    ok(car_ok(), '이어 붙인 뒤에도 밑줄 자리가 맞다')
+    # 창 폭이 바뀌면 자리를 다시 잰다
+    pg.set_viewport_size({'width': 1000, 'height': 768}); pg.wait_for_timeout(300)
+    ok(car_ok(), '창 폭이 바뀐 뒤에도 밑줄 자리가 맞다')
+    pg.set_viewport_size({'width': 1366, 'height': 768}); pg.wait_for_timeout(200)
+    # 끝: 결과 배지 = 최고 콤보, 조금 뒤에는 움직임 0
+    mx = pg.evaluate('__E.session.maxCombo')
+    pg.clock.run_for(31000); pg.wait_for_timeout(250)
+    bd = pg.evaluate('document.getElementById("r-badges").textContent')
+    ok(str(mx) in bd.replace(',', '') and '최고 콤보' in bd, '결과 배지에 최고 콤보', (mx, bd))
+    ok(pg.evaluate('document.getElementById("r-speed").textContent') == pg.evaluate('String(__E.result.v).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",")'), '큰 숫자의 글자는 처음부터 최종 값(자리마다 나눠도 같다)')
+    pg.wait_for_timeout(2600)
+    ok(pg.evaluate(anims) == 0 and pg.evaluate('document.getElementById("burst").hidden'), '결과가 뜬 뒤 2.6초: 도는 움직임 0', pg.evaluate(anims))
+    ok(pg.evaluate('document.querySelector(".stage").getAttribute("data-heat")') == '0', '끝나면 열기 표시가 꺼진다')
+    # 세기 고르기: 끔 → 저장 → 다시 열어도 끔, 치는 동안 움직임 0
+    pg.clock.run_for(900)
+    pg.click('#more summary'); pg.click('#fx-seg [data-v="0"]'); pg.wait_for_timeout(60)
+    ok(pg.evaluate('TJFX.level') == 0 and (ls(pg, 'todok.set') or {}).get('fx', {}).get('l') == 0, "이펙트 '끔'이 저장된다", ls(pg, 'todok.set'))
+    pg.close()
+    pg, ty = env.tool(c, '/ko/')
+    ok(pg.evaluate('TJFX.level') == 0 and pg.evaluate('document.querySelector("#fx-seg [aria-pressed=true]").getAttribute("data-v")') == '0', "다시 열어도 '끔'")
+    go(pg, ty, 24, wrong_at={7})
+    ok(pg.evaluate(anims) == 0 and pg.evaluate('getComputedStyle(document.querySelector("#txt .car")).transitionDuration') == '0s', "'끔': 치는 동안 움직임 0(밑줄도 미끄러지지 않는다)", pg.evaluate(anims))
+    ok(pg.evaluate('+document.getElementById("combo").textContent === __E.session.combo'), "'끔'이어도 콤보 숫자는 나온다")
+    # 가볍게: 누른 글자 번쩍임·조각 없음
+    pg.click('#more summary'); pg.click('#fx-seg [data-v="1"]'); pg.click('h1'); pg.evaluate('document.getElementById("trap").focus()'); pg.evaluate('__sim.reset()')
+    pg.evaluate('__E.next({})'); pg.wait_for_timeout(60)
+    go(pg, ty, 22)
+    n_tap = pg.evaluate('document.getAnimations().filter((a) => a.effect && a.effect.target && /tap|chip|lab/.test(a.effect.target.className || "")).length')
+    ok(pg.evaluate('TJFX.level') == 1 and n_tap == 0, "'가볍게': 누른 글자 번쩍임·키 조각·꼬리표 없음", n_tap)
+    # 키 소리: 켜도 오류가 없고 저장된다
+    pg.click('#more summary'); pg.click('#snd-seg [data-v="1"]'); pg.click('h1'); pg.evaluate('document.getElementById("trap").focus()')
+    go(pg, ty, 30)
+    ok(pg.evaluate('TJFX.sound') is True and (ls(pg, 'todok.set') or {}).get('fx', {}).get('s') == 1 and not pg._errs, '키 소리를 켜도 오류가 없고 저장된다', pg._errs[:2])
+    ok(set(pg.evaluate('Object.keys(localStorage)')) <= {'todok.runs', 'todok.best', 'todok.keys', 'todok.set', 'todok.lang'}, '저장 키는 방침에 적은 다섯 개뿐', pg.evaluate('Object.keys(localStorage)'))
+    c.close()
+    # 느린 기기: 화면이 계속 늦으면 스스로 한 단계 내린다(이 방문 동안만, 저장하지 않는다)
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    pg.evaluate('for (let i = 0; i < 24; i++) TJFX.note(i % 2 ? 120 : 20)')
+    ok(pg.evaluate('TJFX.level') == 1 and pg.evaluate('document.getElementById("fx-say").textContent') != '' and not (ls(pg, 'todok.set') or {}).get('fx'), '느리면 스스로 한 단계 내리고 알린다(저장하지 않는다)', (pg.evaluate('TJFX.level'), ls(pg, 'todok.set')))
+    pg.evaluate('for (let i = 0; i < 24; i++) TJFX.note(20)')
+    ok(pg.evaluate('TJFX.level') == 1, '빠르면 그대로 둔다')
+    c.close()
+    # 동작 줄이기: 이펙트는 0으로 고정, 고르기 단추는 꺼져 있다
+    c = env.ctx(reduced=True)
+    pg, ty = env.tool(c, '/ko/')
+    ok(pg.evaluate('TJFX.level === 0 && TJFX.locked') and pg.evaluate('[...document.querySelectorAll("#fx-seg button")].every((b) => b.disabled)'), '동작 줄이기: 이펙트 0, 고르기 꺼짐')
+    go(pg, ty, 30, wrong_at={9})
+    ok(pg.evaluate(anims) == 0, '동작 줄이기: 치는 동안 움직임 0', pg.evaluate(anims))
+    finish_wait(pg)
+    ok(pg.evaluate(anims) == 0 and pg.evaluate('document.getElementById("burst").hidden') and pg.evaluate('document.getElementById("r-speed").children.length') == 0, '동작 줄이기: 결과도 움직임 없이')
+    c.close()
+    # 자리 연습·문장 연습·영어: 콤보 칸과 설정 팝업
+    c = env.ctx()
+    for path in ('/ko/practice/', '/ko/sentences/', '/', '/practice/', '/ko/english/'):
+        pg, ty = env.tool(c, path)
+        go(pg, ty, 14)
+        ok(pg.evaluate('+document.getElementById("combo").textContent === __E.session.combo && __E.session.combo === 14'), f'{path} 콤보 14', pg.evaluate('document.getElementById("combo").textContent'))
+        ok(pg.evaluate('!!document.querySelector("#more #fx-seg") && !!document.querySelector("#more #snd-seg")'), f'{path} 설정에 이펙트·키 소리')
+        ok(not pg._errs, f'{path} 콘솔 오류 없음', pg._errs[:2])
+        pg.close()
+    c.close()
+    # 태블릿의 화면 자판(낮은 화면): 머리·제목을 접고 글과 숫자 줄이 보이는 높이 안에 들어온다
+    c = env.ctx(1180, 820, mobile=True)
+    pg, ty = env.tool(c, '/ko/', mobile=True)
+    pg.evaluate('document.documentElement.style.setProperty("--vvh", "380px"); document.documentElement.classList.add("vk"); window.scrollTo(0, 0)')
+    pg.wait_for_timeout(250)
+    go(pg, ty, 40)
+    pg.wait_for_timeout(250)
+    r = pg.evaluate("""() => { const st = document.querySelector('.stage').getBoundingClientRect(), hud = document.querySelector('.hud').getBoundingClientRect(), cur = document.querySelector('#txt .cur').getBoundingClientRect(), v = document.querySelector('.view').getBoundingClientRect(), lh = parseFloat(getComputedStyle(document.getElementById('txt')).lineHeight); return { bottom: Math.round(st.bottom), hud: Math.round(hud.bottom), cur: cur.top >= v.top - 1 && cur.bottom <= v.bottom + 6, lines: Math.round(v.height / lh), top: getComputedStyle(document.querySelector('.top')).display }; }""")
+    ok(r['bottom'] <= 380 and r['hud'] <= 380 and r['cur'] and r['top'] == 'none' and r['lines'] >= 1, '낮은 화면(380px): 글·숫자 줄이 다 보이고 지금 칠 줄이 보인다', r)
+    c.close()
+    # 결과: 콤보 고비 직후에 끝나도 꼬리표·키 조각이 결과를 가리지 않고, 결과의 모든 줄이 단추 판 위에 있다(창 폭 여러 가지)
+    fit = r"""() => { const pl = document.querySelector('.r-plate'), body = document.querySelector('.r-body'); if (!pl || !body || getComputedStyle(body).display === 'contents') return -999;
+      const top = pl.getBoundingClientRect().top; let worst = -999; for (const e of body.querySelectorAll('*')) { const r = e.getBoundingClientRect(); if (r.width && r.height && getComputedStyle(e).position !== 'absolute') worst = Math.max(worst, r.bottom - top); } return Math.round(worst); }"""
+    c = env.ctx(1366, 900)
+    for path in ['/ko/', '/ko/english/']:
+        pg, ty = env.tool(c, path)
+        go(pg, ty, 26, wrong_at=(3,))
+        go(pg, ty, 25 - pg.evaluate('__E.session.combo'))    # 콤보 25(고비)에서 멈춘다
+        ok(pg.evaluate('__E.session.combo') == 25, f'{path} 콤보 25에서 끝내기 준비', pg.evaluate('__E.session.combo'))
+        pg.evaluate('__E.finish()')
+        left = pg.evaluate('document.querySelector("#fx").getAnimations({ subtree: true }).filter((a) => a.playState === "running").length')
+        ok(left == 0, f'{path} 끝나면 떠 있던 꼬리표·키 조각이 바로 사라진다', left)
+        finish_wait(pg); pg.wait_for_timeout(700)
+        over = []
+        for w in (760, 920, 1100, 1366):
+            pg.set_viewport_size({'width': w, 'height': 900}); pg.wait_for_timeout(80)
+            v = pg.evaluate(fit)
+            if v > 0: over.append((w, v))
+        ok(not over, f'{path} 결과의 모든 줄이 단추 판에 가리지 않는다(760~1366px)', over)
+        pg.set_viewport_size({'width': 1366, 'height': 900})
+        pg.close()
+    c.close()
+
+
 def main():
     proxy = os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy') or ''
     args = ['--proxy-bypass-list=localhost;127.0.0.1']
@@ -1476,7 +1637,7 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=str(exe[0]) if exe else None, args=args)
         env = Env(b)
-        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (8, shots)):
+        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (10, fx_checks), (8, shots)):
             if sec(n):
                 try:
                     fn(env)

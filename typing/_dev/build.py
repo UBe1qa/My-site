@@ -27,10 +27,20 @@ SITE = 'https://typing.lumenlab.page'
 HOST = 'typing.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 FIRST = '2026-10-10'   # 처음 올린 날
-UPDATED = {}           # 그 뒤 본문·구조화 데이터·링크가 바뀐 페이지: 주소 -> 날짜
+# 그 뒤 본문·구조화 데이터·링크가 바뀐 페이지: 주소 -> 날짜
+UPDATED = {p: '2026-10-11' for p in (  # 콤보·이펙트 설정이 생기고(도구 화면 글·계산 기준), 방침의 저장 항목 설명이 바뀜
+    '/', '/practice/', '/privacy/', '/ko/', '/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/privacy/')}
 
 JS, TX, NAV, PAIRS, TOOLS = C.JS, C.TX, C.NAV, C.PAIRS, C.TOOLS
 FONTS = json.loads((DEV / 'fonts.json').read_text(encoding='utf-8')) if (DEV / 'fonts.json').exists() else {}
+NUMF = json.loads((DEV / 'fonts-num.json').read_text(encoding='utf-8')) if (DEV / 'fonts-num.json').exists() else None  # 숫자·키 글자용 조각(_dev/font_num.py)
+
+
+def asset(name):
+    """/assets/ 파일 주소 뒤에 내용 지문을 붙인다(?v=). 파일이 바뀌면 주소가 바뀌므로 브라우저가 오래 저장해 두고 다시 쓸 수 있다(_headers)."""
+    import hashlib
+    data = (ROOT / 'assets' / name).read_bytes()
+    return f'/assets/{name}?v={hashlib.sha256(data).hexdigest()[:8]}'
 esc = lambda s: html.escape(str(s), quote=True)
 
 LOGO = ('<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path class="lg-e" d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5"/>'
@@ -79,12 +89,16 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
                   f'<link rel="alternate" hreflang="x-default" href="{en_u}">']
     ld = ''.join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in jsonld)
     ad = (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADS_CLIENT}" crossorigin="anonymous"></script>\n'
-          '<script src="/assets/ads-config.js"></script>\n') if ads else ''
+          f'<script src="{asset("ads-config.js")}"></script>\n') if ads else ''
     og = 'og-ko.png' if lang == 'ko' else 'og.png'
     # 화면 글자만 담은 글꼴 조각(같은 주소). optional 이라 늦게 오면 이번 방문에는 기기 글꼴 그대로 둔다(치는 글의 줄 수가 바뀌지 않게)
     fnt = FONTS.get(lang)
     font = (f'<link rel="preload" href="/assets/fonts/{fnt["file"]}" as="font" type="font/woff2" crossorigin>\n'
             f'<style>@font-face{{font-family:"Todok Sans";src:url(/assets/fonts/{fnt["file"]}) format("woff2");font-weight:400 800;font-style:normal;font-display:optional}}</style>\n') if fnt else ''
+    # 숫자·키 글자용 조각(Rubik 700 의 숫자·영문·기호만, 10KB 안쪽). 늦게 오면 이번 방문에는 본문 글꼴로 둔다(숫자 칸은 크기가 고정이라 밀리지 않는다)
+    if NUMF:
+        font += (f'<link rel="preload" href="/assets/fonts/{NUMF["file"]}" as="font" type="font/woff2" crossorigin>\n'
+                 f'<style>@font-face{{font-family:"Todok Num";src:url(/assets/fonts/{NUMF["file"]}) format("woff2");font-weight:700;font-style:normal;font-display:optional}}</style>\n')
     og_meta = '' if noindex else f'''<meta property="og:type" content="{og_type}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
@@ -103,14 +117,14 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
-{'<meta name="robots" content="noindex">' + chr(10) if noindex else ''}<meta name="theme-color" content="#f4f4f6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121218" media="(prefers-color-scheme: dark)">
+{'<meta name="robots" content="noindex">' + chr(10) if noindex else ''}<meta name="theme-color" content="#f3f1f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13111a" media="(prefers-color-scheme: dark)">
 {chr(10).join(links)}
 {og_meta}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-{font if font else '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>' + chr(10)}<link rel="stylesheet" href="/assets/pretendard.css">
-<link rel="stylesheet" href="/assets/style.css">
+{font if font else '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>' + chr(10)}<link rel="stylesheet" href="{asset('pretendard.css')}">
+<link rel="stylesheet" href="{asset('style.css')}">
 {BOOT}
 {extra}{ld}{ad}</head>'''
 
@@ -159,7 +173,7 @@ def site_cfg(lang, path):
 
 
 def page(lang, head_html, body, path, current=None, cls='', scripts=(), cfg=None, main_cls=''):
-    sc = ''.join(f'<script src="/assets/{s}.js"></script>\n' for s in scripts)
+    sc = ''.join(f'<script src="{asset(s + ".js")}"></script>\n' for s in scripts)
     site = '<script type="application/json" id="tj-site">' + json.dumps(site_cfg(lang, path), ensure_ascii=False) + '</script>'
     return f'''{head_html}
 <body{' class="' + cls + '"' if cls else ''}>
@@ -170,7 +184,7 @@ def page(lang, head_html, body, path, current=None, cls='', scripts=(), cfg=None
 {footer(lang)}
 {site}
 {cfg_script(cfg) if cfg else ''}
-{sc}<script src="/assets/site.js"></script>
+{sc}<script src="{asset('site.js')}"></script>
 </body>
 </html>
 '''
@@ -204,6 +218,40 @@ def seg(id_, label_id, items, pressed=None, off=False, cls=''):
 
 def kbd_btn(id_, label, key, cls='btn'):
     return f'<button type="button" class="{cls}" id="{id_}">{esc(label)} <kbd>{key}</kbd></button>'
+
+
+def hk(id_, val, label, cls='', label_id='', key_id='', tip=''):
+    """숫자 줄의 키캡 하나(상징 '키'). 바깥(.hk) = 키의 옆면(자리 고정), 안(.hk-f) = 윗면(눌릴 때 transform 만 바뀐다).
+    숫자 칸은 크기가 고정이라 값이 바뀌어도 둘레의 배치가 다시 계산되지 않는다."""
+    lid = f' id="{label_id}"' if label_id else ''
+    kid = f' id="{key_id}"' if key_id else ''
+    tt = f' title="{esc(tip)}"' if tip else ''
+    return f'<div class="m hk{" " + cls if cls else ""}"{kid}{tt}><div class="hk-f"><b class="num" id="{id_}">{val}</b><span{lid}>{label}</span></div></div>'
+
+
+def fx_rows(lang):
+    """설정 팝업 안의 이펙트 세기·키 소리 고르기. 고른 값은 todok.set 에 남는다. '동작 줄이기'가 켜진 기기에서는 이펙트 줄이 꺼진다(app.js)."""
+    t, s = TX[lang], JS[lang]
+    return (f'<div class="more-row"><span id="l-fx">{t["fx_l"]}</span>{seg("fx-seg", "l-fx", [(str(i), s["fxLevels"][i]) for i in (0, 1, 2)], "2")}</div>'
+            f'<div class="more-row"><span id="l-snd">{t["snd_l"]}</span>{seg("snd-seg", "l-snd", [("0", s["sndOff"]), ("1", s["sndOn"])], "0")}</div>')
+
+
+def more_only(lang):
+    """고르기 줄에 '설정'이 따로 없는 화면(자리 연습·문장 연습)의 설정 팝업: 이펙트와 키 소리만."""
+    t = TX[lang]
+    return f'<details class="more" id="more"><summary>{t["more"]}</summary><div class="more-pop">{fx_rows(lang)}<p class="more-note">{t["keys_note"]}</p></div></details>'
+
+
+def under(lang, basis_html):
+    """도구 바로 아래 줄: 계산 기준 한 줄 + (느린 기기라서 이펙트를 스스로 줄였을 때의 알림)"""
+    return f'<div class="under"><p class="basis">{basis_html}</p><p class="fx-say" id="fx-say" role="status"></p></div>'
+
+
+FX_LAYER = '<div class="fx" id="fx" aria-hidden="true"></div>'
+
+
+def badges():
+    return '<p class="r-badges" id="r-badges"></p>'
 
 
 def trap(lang):
@@ -244,6 +292,7 @@ def opts_a(lang, tool):
         <div class="more-pop">
           <div class="more-row"><span id="l-mode">{t['mode_l']}</span>{seg('mode', 'l-mode', [('time', t['mode_time']), ('count', t['mode_count'])], 'time')}</div>
           <div class="more-row checks" id="words-only"><label><input type="checkbox" id="punct"> {t['punct']}</label><label><input type="checkbox" id="nums"> {t['nums']}</label></div>
+          {fx_rows(lang)}
           <p class="more-note">{t['keys_note']}</p>
         </div>
       </details>
@@ -255,14 +304,22 @@ def result_left(lang, tool, extra=''):
     f2 = '<p class="r-formula num" id="r-formula2"></p>' if tool.get('both') else ''
     return f'''<div class="r-left">
           <p class="r-big"><b class="num" id="r-speed"></b><span id="r-unit"></span><span class="r-wpm num" id="r-wpm"></span></p>
+          {badges()}
           <p class="r-formula num" id="r-formula"></p>{f2}
           <p class="r-cmp" id="r-cmp" role="status"></p>
           <p class="r-acc"><span>{t['acc']}</span> <b class="num" id="r-acc"></b> <span class="num" id="r-accd"></span></p>
           <p class="r-raw num" id="r-raw"></p>
           <p class="r-skip" id="r-skip" hidden></p>
-          {extra}<div class="r-act">{kbd_btn('again', t['again'], 'Enter', 'btn pri')}<button type="button" class="btn" id="same">{t['same']}</button></div>
-          <div class="r-act2"><button type="button" class="lnk" id="drill">{t['drill']}</button><button type="button" class="lnk" id="share">{t['share']}</button><button type="button" class="lnk quit2" id="quit2">{t['quit2']}</button></div>
+          {extra}
         </div>'''
+
+
+def result_plate(lang):
+    """결과 화면 아래의 판: 다시 하기 단추들이 키캡으로 놓인다(치는 화면의 숫자 줄과 같은 자리)."""
+    t = TX[lang]
+    return (f'<div class="r-plate hud">{kbd_btn('again', t['again'], 'Enter', 'btn pri')}<button type="button" class="btn" id="same">{t['same']}</button>'
+            f'<span class="r-links"><button type="button" class="btn flat" id="drill">{t['drill']}</button><button type="button" class="btn flat" id="share">{t['share']}</button>'
+            f'<button type="button" class="btn flat quit2" id="quit2">{t['quit2']}</button></span></div>')
 
 
 def layout_a(lang, tool):
@@ -271,40 +328,45 @@ def layout_a(lang, tool):
     both = tool.get('both')
     unit = t['unit']
     ctx = f'<p class="r-ctx">{C.CTX[lang]}</p>' if tool['text'] == 'en' else ''
-    wpm = '<div class="m"><b class="num" id="wpm">0</b><span>WPM</span></div>' if both else ''
+    wpm = hk('wpm', '0', 'WPM') if both else ''
     return f'''<div class="wrap main-a">
   <div class="a-head">
     <h1>{esc(tool['h1'])}</h1>
     {opts_a(lang, tool)}
   </div>
-  <section class="sheet stage{' both' if both else ''}" aria-label="{esc(tool['h1'])}">
-    <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+  <section class="sheet stage{' both' if both else ''}{' hasctx' if ctx else ''}" aria-label="{esc(tool['h1'])}">
     <div class="playbox" id="playbox">
       <div class="play">
         <div class="playtop"><p class="start">{start_spans(lang)}</p><p class="daily" id="daily"></p></div>
         <div class="view"><div class="txt" id="txt" aria-hidden="true"></div></div>
         {trap(lang)}
       </div>
-      <div class="meter">
-        <div class="m main"><b class="num" id="speed">0</b><span>{unit}</span></div>
-        {wpm}<div class="m"><b class="num" id="acc">–</b><span>{t['acc_pct']}</span></div>
-        <div class="m"><b class="num" id="left">30</b><span id="left-l">{t['left']}</span></div>
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <div class="meter hud" id="hud">
+        {hk('speed', '0', unit, 'main')}
+        {wpm}{hk('acc', '–', t['acc_pct'])}
+        {hk('left', '30', t['left'], label_id='left-l', key_id='k-time')}
+        {hk('combo', '0', t['combo'], 'hot', key_id='k-combo', tip=t['combo_tip'])}
         <div class="nk" aria-hidden="true"><span class="nk-l">{t['nextkey']}</span><span class="cap shift" id="nextshift" hidden>Shift</span><span class="cap" id="nextkey"></span></div>
         {kbd_btn('fresh', t['fresh'], 'Tab', 'btn sm')}
         <button type="button" class="btn sm quit" id="quit">{t['quit']}</button>
       </div>
     </div>
     <div class="result" id="result" hidden>
+      <div class="r-body">
         {result_left(lang, tool)}
         <div class="r-right">
           {map_fig()}
           {chart_fig(lang)}
         </div>
         {ctx}
+      </div>
+      {result_plate(lang)}
     </div>
+    {FX_LAYER}
     <canvas class="burst" id="burst" aria-hidden="true" hidden></canvas>
   </section>
-  <p class="basis">{esc(tool['basis'])} <a href="#basis">{t['basis_h']}</a> <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span></p>
+  {under(lang, f"""{esc(tool['basis'])} <a href="#basis">{t['basis_h']}</a> <span class="safe">{t['combo_note']}</span> <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span>""")}
 </div>'''
 
 
@@ -315,18 +377,19 @@ def layout_c(lang, tool):
     return f'''<div class="wrap main-c">
   <div class="c-head">
     <h1>{esc(tool['h1'])}</h1>
-    <div class="steps" role="group" aria-label="{t['steps_l']}" id="steps">{steps}</div>
+    <div class="c-opts"><div class="steps" role="group" aria-label="{t['steps_l']}" id="steps">{steps}</div>{more_only(lang)}</div>
   </div>
   <p class="step-say" id="step-say">{esc(s['lessonSay'][0])}</p>
   <section class="rig stage" aria-label="{esc(tool['h1'])}">
-    <div class="strip">
-      <div class="m main"><b class="num" id="speed">0</b><span>{t['unit']}</span></div>
-      <div class="m"><b class="num" id="acc">–</b><span>{t['acc_pct']}</span></div>
-      <div class="m"><b class="num" id="left">0</b><span id="left-l">{s['elapsed']}</span></div>
-      <div class="c-bar" aria-hidden="true"><i id="bar"></i></div>
+    <div class="strip hud" id="hud">
+      {hk('speed', '0', t['unit'], 'main')}
+      {hk('acc', '–', t['acc_pct'])}
+      {hk('left', '0', s['elapsed'], label_id='left-l', key_id='k-time')}
+      {hk('combo', '0', t['combo'], 'hot', key_id='k-combo', tip=t['combo_tip'])}
       {kbd_btn('fresh', t['fresh'], 'Tab', 'btn sm')}
       <button type="button" class="btn sm quit" id="quit">{t['quit']}</button>
     </div>
+    <div class="bar" aria-hidden="true"><i id="bar"></i></div>
     <div class="band" id="playbox">
       <p class="start">{start_spans(lang)}</p>
       <div class="view"><div class="txt" id="txt" aria-hidden="true"></div></div>
@@ -352,9 +415,10 @@ def layout_c(lang, tool):
       <div class="kb big" id="kb" aria-hidden="true"></div>
       <p class="mo-kb">{t['mo_kb']}</p>
     </div>
+    {FX_LAYER}
     <canvas class="burst" id="burst" aria-hidden="true" hidden></canvas>
   </section>
-  <p class="basis">{esc(tool['basis'])} <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span></p>
+  {under(lang, f"""{esc(tool['basis'])} <span class="safe">{t['combo_note']}</span> <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span>""")}
 </div>'''
 
 
@@ -369,6 +433,7 @@ def layout_b(lang, tool):
     <div class="opts">
       <div class="opt"><span class="opt-l" id="l-topic">{t['topic_l']}</span>{seg('topic', 'l-topic', topics, tool['topics'][0])}</div>
       <label class="opt sel"><span class="opt-l">{t['count_l']}</span><select id="count">{counts}</select></label>
+      {more_only(lang)}
     </div>
   </div>
   <div class="b-grid">
@@ -387,6 +452,7 @@ def layout_b(lang, tool):
       </div>
       <div class="result" id="result" hidden>
         <div class="r-side">
+          {badges()}
           <p class="r-formula num" id="r-formula"></p>
           <p class="r-acc"><span>{t['acc']}</span> <b class="num" id="r-acc"></b> <span class="num" id="r-accd"></span></p>
           <p class="r-raw num" id="r-raw"></p>
@@ -400,6 +466,7 @@ def layout_b(lang, tool):
           {chart_fig(lang)}
         </div>
       </div>
+      {FX_LAYER}
       <canvas class="burst" id="burst" aria-hidden="true" hidden></canvas>
     </section>
     <aside class="gauge" aria-label="{s['speedNow']}">
@@ -408,12 +475,13 @@ def layout_b(lang, tool):
       <dl class="g-facts">
         <div><dt>{t['acc']}</dt><dd class="num"><span id="acc">–</span><small>%</small></dd></div>
         <div><dt id="left-l">{s['progress']}</dt><dd class="num"><span id="left">1/{tool['count']}</span></dd></div>
+        <div class="g-combo" id="k-combo" title="{esc(t['combo_tip'])}"><dt>{t['combo']}</dt><dd class="num"><span id="combo">0</span></dd></div>
       </dl>
       <div class="g-bar" aria-hidden="true"><i id="bar"></i></div>
       <div class="g-act">{kbd_btn('fresh', t['fresh'], 'Tab', 'btn sm')}<button type="button" class="btn sm quit" id="quit">{t['quit']}</button></div>
     </aside>
   </div>
-  <p class="basis">{esc(tool['basis'])} <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span></p>
+  {under(lang, f"""{esc(tool['basis'])} <span class="safe">{t['combo_note']}</span> <span class="safe">{esc(tool['safe'])}</span> <span class="safe pc">{t['esc_note']}</span>""")}
 </div>'''
 
 
@@ -495,7 +563,7 @@ def tool_page(lang, key):
            'counts': tool.get('counts', [25, 50, 100]), 'count': tool.get('count', 25), 'topics': tool.get('topics'), 'both': bool(tool.get('both')),
            'host': HOST, 'S': s}
     ld = [app_ld(lang, tool)] + ([faq_ld(faq)] if faq else [])
-    scripts = ['tj-core', 'tj-text-' + tool['text'], 'tj-store'] + (['tj-lessons'] if tool['tool'] == 'practice' else []) + ['app']
+    scripts = ['tj-core', 'tj-text-' + tool['text'], 'tj-store'] + (['tj-lessons'] if tool['tool'] == 'practice' else []) + ['fx', 'app']
     h = head(lang, tool['title'], tool['desc'], tool['path'], jsonld=ld)
     return tool['path'], page(lang, h, body + '\n' + below, tool['path'], current=key, cls='tool t-' + tool['layout'], scripts=scripts, cfg=cfg)
 
@@ -612,7 +680,7 @@ def not_found():
 {wrap('en', footer('en'))}
 {wrap('ko', footer('ko', lumen_id=False))}
 {site}
-<script src="/assets/site.js"></script>
+<script src="{asset('site.js')}"></script>
 </body>
 </html>
 '''

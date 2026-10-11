@@ -9,7 +9,7 @@ node tests/run.mjs | tail -n 12 || fail=1
 [ "${PIPESTATUS[0]}" = 0 ] || fail=1
 python3 _dev/build.py --check || fail=1
 python3 _dev/check.py || fail=1
-for f in assets/app.js assets/site.js assets/ads-config.js assets/tj-core.js assets/tj-store.js assets/tj-lessons.js assets/tj-text-ko.js assets/tj-text-en.js; do node --check "$f" || fail=1; done
+for f in assets/app.js assets/fx.js assets/site.js assets/ads-config.js assets/tj-core.js assets/tj-store.js assets/tj-lessons.js assets/tj-text-ko.js assets/tj-text-en.js; do node --check "$f" || fail=1; done
 if [ "$1" = "e2e" ]; then
   pid=""
   if curl -s -o /dev/null --max-time 3 http://localhost:8445/assets/tj-core.js; then

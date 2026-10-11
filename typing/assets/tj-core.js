@@ -44,10 +44,14 @@
     return null;
   }
   /* 글자 하나 → 글쇠(토큰) 배열. 토큰은 낱자 한 글자(Shift가 필요한 ㄲ·ㅆ·ㅒ 등은 그 낱자 그대로), 한글이 아니면 그 글자 */
-  function keysOf(ch) {
-    var p = parts(ch);
-    return p ? p.c.concat(p.v, p.f) : [ch];
+  /* keysRO: 같은 글자를 키마다 다시 풀지 않게 기억해 둔다(읽기만 한다. 고치면 안 된다). keysOf 는 밖에서 고쳐도 되게 복사본을 준다 */
+  var KEYS = Object.create(null);
+  function keysRO(ch) {
+    var k = KEYS[ch];
+    if (!k) { var p = parts(ch); k = KEYS[ch] = p ? p.c.concat(p.v, p.f) : [ch]; }
+    return k;
   }
+  function keysOf(ch) { return keysRO(ch).slice(); }
   function needsShift(tok) {
     return SHIFT_JAMO.indexOf(tok) >= 0 || (tok >= 'A' && tok <= 'Z') || (tok.length === 1 && SHIFT_ASCII.indexOf(tok) >= 0);
   }
@@ -60,7 +64,7 @@
   }
   function keyStream(text) {
     var out = [];
-    toChars(text).forEach(function (ch) { Array.prototype.push.apply(out, keysOf(ch)); });
+    toChars(text).forEach(function (ch) { Array.prototype.push.apply(out, keysRO(ch)); });
     return out;
   }
   function strokeCount(text) {
@@ -106,7 +110,7 @@
       if (isSep(ch)) { cur.sep = ch; cur.sepAt = i; cur = null; return; }
       if (!cur) { cur = { ci: [], ka: [], tk: [], sep: null, sepAt: -1 }; words.push(cur); }
       cur.ci.push(i); cur.ka.push(cur.tk.length);
-      Array.prototype.push.apply(cur.tk, keysOf(ch));
+      Array.prototype.push.apply(cur.tk, keysRO(ch));
     });
     return { text: norm, chars: chars, words: words };
   }
@@ -120,7 +124,7 @@
       if (w >= T.words.length) break;
       if (isSep(ch)) { if (T.words[w].sep == null) break; out.push(ch); w++; keys = 0; continue; }
       /* 한 낱말에 목표보다 8글쇠 넘게는 받지 않는다 */
-      var k = keysOf(ch).length;
+      var k = keysRO(ch).length;
       if (keys + k > T.words[w].tk.length + 8) continue;
       keys += k; out.push(ch);
     }
@@ -199,7 +203,7 @@
     var iw = [{ k: [], sep: null }];
     chars.forEach(function (ch) {
       var w = iw[iw.length - 1];
-      if (isSep(ch)) { w.sep = ch; iw.push({ k: [], sep: null }); } else Array.prototype.push.apply(w.k, keysOf(ch));
+      if (isSep(ch)) { w.sep = ch; iw.push({ k: [], sep: null }); } else Array.prototype.push.apply(w.k, keysRO(ch));
     });
     if (raw && opt.final) { /* 끝나는 순간 조합 중이던 글자: 맞게 이어지는 글쇠일 때만 넣는다(아래아 같은 중간 글자는 글쇠가 아니다) */
       var lw = iw[iw.length - 1], tw = T.words[iw.length - 1];
@@ -293,8 +297,15 @@
     return a.length > 0 && a.every(isPlain) && (closed ? a.join('') === b.join('') : b.slice(0, a.length).join('') === a.join(''));
   }
   /* T = 목표 글자들, I = 친 글자들(정리한 값). 돌려주는 값: { hint, from(친 글자 몇 번째부터가 반대 자판 구간인가) } 또는 null */
+  var TW = typeof WeakMap === 'function' ? new WeakMap() : null;
+  function targetWords(T) {
+    if (!TW) return wordsOf(T);
+    var w = TW.get(T);
+    if (!w) { w = wordsOf(T); TW.set(T, w); }
+    return w;
+  }
   function layoutZone(T, I) {
-    var tw = wordsOf(T), iw = wordsOf(I), j = iw.length - 1, hint = null, from = -1, n = 0;
+    var tw = targetWords(T), iw = wordsOf(I), j = iw.length - 1, hint = null, from = -1, n = 0;
     if (j > 0 && !iw[j].c.length) j--;              /* 방금 띄어쓰기를 쳤다: 앞 낱말까지 본다 */
     for (; j >= 0 && j < tw.length; j--) {
       var k = wordLayout(iw[j].c, tw[j].c, iw[j].closed);
@@ -364,6 +375,8 @@
     this.log = [];          /* 친 글쇠마다: 셌는지(c), 맞았는지(good), 그때 쳐야 했던 글쇠(want). 지금 글쇠 흐름(K)보다 길 수 있다(_tally 의 '꼬리') */
     this.hold = 0;          /* 터치 자판: 입력기가 알려 준 조합 중인 문자열의 글자 수 */
     this.skippedKeys = 0;   /* 한/영·Caps Lock 안내가 떠 있는 동안 쳐서 세지 않은 글쇠 */
+    this.combo = 0;         /* 이어서 맞게 누른 글쇠 수(틀린 글쇠를 누르면 0). 지우기 글쇠는 세지 않으므로 끊지도 않는다 */
+    this.maxCombo = 0;      /* 이 판에서 가장 길었던 것 */
     this.lastAt = null;
     this.samples = [];
     this.cmp = compare(this.T, '', this._opt(false));
@@ -378,13 +391,15 @@
     var chars = Array.from(r.value), z = layoutZone(this.T.chars, chars), n = 0;
     r.hint = z ? z.hint : null;
     if (!z) return Infinity;
-    for (var i = 0; i < z.from; i++) n += isSep(chars[i]) ? 1 : keysOf(chars[i]).length;
+    for (var i = 0; i < z.from; i++) n += isSep(chars[i]) ? 1 : keysRO(chars[i]).length;
     return n;
   };
   Session.prototype._uncount = function (L) {
     this.typedKeys--; this.typedStrokes -= strokes(L.tok); this.skippedKeys++;
-    if (L.good) { this.okKeys--; this._key(L.tok).hit--; }
+    if (L.good) { this.okKeys--; this._key(L.tok).hit--; if (this.combo > 0) this.combo--; }
     else {
+      /* 자판 전환 실수로 끊긴 콤보는 되돌린다(그 뒤에 맞게 친 키가 없을 때만) */
+      if (L.cb != null && this.combo === 0) this.combo = L.cb;
       this._key(L.want == null ? L.tok : L.want).miss--;
       if (L.want != null) { var id = L.want + '>' + L.tok; if (this.pairs[id] > 1) this.pairs[id]--; else delete this.pairs[id]; }
     }
@@ -424,12 +439,14 @@
       this.typedKeys++; this.typedStrokes += strokes(tok);
       if (good) {
         this.okKeys++;
+        this.combo++; if (this.combo > this.maxCombo) this.maxCombo = this.combo;
         var k = this._key(tok); k.hit++;
         if (this.mode === 'key' && added === 1 && this.lastAt != null && at != null) {
           var dt = at - this.lastAt;
           if (dt >= 0 && dt <= GAP_CAP) { k.ms += dt; k.n++; }
         }
       } else {
+        log[idx].cb = this.combo; this.combo = 0;
         this._key(want == null ? tok : want).miss++;
         if (want != null) { var id = want + '>' + tok; this.pairs[id] = (this.pairs[id] || 0) + 1; }
       }
@@ -483,6 +500,7 @@
       meanGap: mean,
       pairs: Object.keys(this.pairs).map(function (id) { return { want: id.split('>')[0], got: id.split('>')[1], n: self.pairs[id] }; }).sort(function (a, b) { return b.n - a.n; }),
       skippedKeys: this.skippedKeys,
+      maxCombo: this.maxCombo,
       samples: this.samples.slice(), mode: this.mode
     };
   };

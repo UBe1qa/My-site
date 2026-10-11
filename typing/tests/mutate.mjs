@@ -1,5 +1,5 @@
 // 시험이 정말 잡는지 보기: tj-core.js 를 한 군데씩 일부러 틀리게 바꾼 복사본으로 run.mjs 를 돌려 실패하는지 본다.
-// node typing/tests/mutate.mjs   (복사본은 기기 임시 폴더에 만들고 지운다. 저장소 파일은 건드리지 않는다)
+// node typing/tests/mutate.mjs [처음 끝]   (복사본은 기기 임시 폴더에 만들고 지운다. 저장소 파일은 건드리지 않는다)
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -38,6 +38,10 @@ const M = [
   ['CRC 다항식 바꿈', '0xEDB88320', '0xEDB88321'],
   ['한/영 안내를 반대로', "? { h: 'en', p: p } : null;", "? { h: 'ko', p: p } : null;"],
   ['한/영 안내가 띄어쓰기에서 꺼짐', "if (j > 0 && !iw[j].c.length) j--;", ''],
+  ['콤보를 올리지 않음', 'this.combo++; if (this.combo > this.maxCombo) this.maxCombo = this.combo;', 'if (this.combo > this.maxCombo) this.maxCombo = this.combo;'],
+  ['틀려도 콤보가 안 끊김', 'log[idx].cb = this.combo; this.combo = 0;', 'log[idx].cb = this.combo;'],
+  ['최고 콤보를 안 남김', 'this.combo++; if (this.combo > this.maxCombo) this.maxCombo = this.combo;', 'this.combo++;'],
+  ['자판 전환 실수에서 끊긴 콤보를 되살리지 않음', 'if (L.cb != null && this.combo === 0) this.combo = L.cb;', ''],
   ['한/영 안내 구간을 앞 낱말까지 묶지 않음', "if (k.p > 0) break;", 'break;'],
   ['숫자·기호만 든 낱말에서 안내 구간이 끊김', "} else if (!k && plainWord(iw[j].c, tw[j].c, iw[j].closed)) continue;", '}'],
   ['Caps Lock 을 한 글자로도 알림', "(hint === 'caps' && n < 2)", "(hint === 'caps' && n < 1)"],
@@ -63,7 +67,10 @@ const M = [
 ];
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tj-mut-'));
 let caught = 0;
-for (const [name, from, to] of M) {
+// node tests/mutate.mjs 34 55 처럼 주면 그 번째(1부터)만 돌린다(오래 걸려서 나눠 돌릴 때)
+const lo = Math.max(1, parseInt(process.argv[2], 10) || 1), hi = Math.min(M.length, parseInt(process.argv[3], 10) || M.length);
+const RUN = M.slice(lo - 1, hi);
+for (const [name, from, to] of RUN) {
   if (!src.includes(from)) { console.log('못 찾음  ' + name); process.exitCode = 1; continue; }
   const f = path.join(dir, 'core.js');
   fs.writeFileSync(f, src.replace(from, to));
@@ -73,4 +80,4 @@ for (const [name, from, to] of M) {
   console.log((r.status !== 0 ? '잡힘    ' : '안 잡힘 ') + name + '  → ' + tail);
 }
 fs.rmSync(dir, { recursive: true, force: true });
-console.log('일부러 틀리게 바꾼 ' + M.length + '가지 가운데 ' + caught + '가지를 시험이 잡았다');
+console.log('일부러 틀리게 바꾼 ' + RUN.length + '가지(전체 ' + M.length + '가지 가운데 ' + lo + '~' + hi + '번째) 가운데 ' + caught + '가지를 시험이 잡았다');

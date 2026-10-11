@@ -3,56 +3,68 @@
 <head>
 <meta charset="utf-8">
 <title>og</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/style.css">
 <style>
-/* 공유 그림(1200×630). 이 파일의 클래스 이름에는 og- 를 붙인다(사이트 CSS 와 겹치지 않게). python3 _dev/og.py 가 ?lang=en|ko 로 찍는다. */
-html,body{width:1200px;height:630px;min-height:0;overflow:hidden;color-scheme:light}
-body{display:block;background:#f4f4f6}
-.og-sheet{position:absolute;left:60px;top:56px;right:60px;bottom:56px;background:#fff;border:2px solid #c9c9d3;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(20,20,40,.4)}
-.og-bar{height:8px;background:#ececf1}
-.og-bar i{display:block;width:38%;height:100%;background:#5b3fa6}
-.og-in{padding:38px 56px 0}
-.og-brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:700;color:#1a1a22}
+/* 공유 그림(1200×630): 종이(치는 글) + 판(숫자 칸·키). 사이트와 같은 색. python3 _dev/og.py 가 ?lang=en|ko&f=<본문 조각>&n=<숫자 조각> 으로 찍는다.
+   글꼴은 사이트의 조각 글꼴을 그대로 쓴다(밖에서 받지 않는다). */
+*{box-sizing:border-box}
+html,body{width:1200px;height:630px;margin:0;overflow:hidden}
+body{background:#f3f1f7;font-family:"OG Sans","Noto Sans CJK KR",sans-serif;color:#1b1926;-webkit-font-smoothing:antialiased}
+p{margin:0}
+.og-sheet{position:absolute;left:60px;top:54px;right:60px;bottom:54px;background:#fff;border:2px solid #cac6d6;border-radius:30px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(20,20,40,.4);display:flex;flex-direction:column}
+.og-in{padding:44px 60px 0;flex:1}
+.og-brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:700}
 .og-brand svg{width:40px;height:40px}
-.og-title{font-size:66px;font-weight:800;letter-spacing:-.03em;line-height:1.15;color:#1a1a22;margin-top:26px}
-.og-line{font-size:40px;font-weight:500;margin-top:30px;color:#757587;white-space:nowrap}
-.og-line b{font-weight:500;color:#1a1a22}
+.og-title{font-size:68px;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-top:24px}
+.og-line{font-size:40px;font-weight:500;margin-top:26px;color:#767286;white-space:nowrap}
+.og-line b{font-weight:500;color:#1b1926}
 .og-line u{text-decoration:none;position:relative}
-.og-line u::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:6px;border-radius:3px;background:#5b3fa6}
-.og-line em{font-style:normal;color:#c9391f;background:#fdeeea;border-radius:5px}
-.og-foot{position:absolute;left:56px;right:56px;bottom:40px;display:flex;align-items:flex-end;justify-content:space-between}
-.og-num{display:flex;align-items:baseline;gap:12px}
-.og-num b{font-size:84px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#5b3fa6;font-variant-numeric:tabular-nums}
-.og-num span{font-size:26px;font-weight:600;color:#3d3d4a}
-.og-keys{display:flex;gap:8px}
-.og-keys span{display:grid;place-items:center;width:62px;height:62px;border-radius:12px;background:#ececf1;font-size:27px;font-weight:600;color:#62626f}
-.og-keys .og-miss{background:#c9391f;color:#fff}
-.og-keys .og-slow{background:#fbefd6;color:#8f5b00;box-shadow:inset 0 0 0 3px #8f5b00}
+.og-line u::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:7px;border-radius:4px;background:#5b3fa6}
+.og-line em{font-style:normal;color:#cf3d1e;background:#fdece7;border-radius:5px}
+.og-rail{height:7px;background:#beb3da}
+.og-rail i{display:block;width:38%;height:100%;background:#6f678a}
+.og-plate{background:#e8e2f4;display:flex;align-items:center;gap:14px;padding:26px 60px 28px}
+.og-cell{width:170px;height:104px;border-radius:20px;background:#fbf8f1;box-shadow:inset 0 0 0 2px #d3cab8;padding:14px 0 0 24px}
+.og-cell b{display:block;font-family:"OG Num","OG Sans",sans-serif;font-size:50px;font-weight:700;line-height:1.05}
+.og-cell span{display:block;font-size:21px;color:#5c5570;margin-top:2px}
+.og-cell.og-main{width:226px;background:#5b3fa6;box-shadow:none;color:#fff}
+.og-cell.og-main span{color:#fff;opacity:.9}
+.og-cell.og-hot{background:#f2b233;box-shadow:inset 0 0 0 2px #c2840a;color:#2b2140}
+.og-cell.og-hot span{color:#2b2140;opacity:.85}
+.og-keys{margin-left:auto;display:flex;gap:9px}
+.og-keys span{display:grid;place-items:center;width:66px;height:66px;border-radius:14px;background:#fbf8f1;box-shadow:0 7px 0 #c5baa5;font-family:"OG Num","OG Sans",sans-serif;font-size:28px;font-weight:700;color:#2a2140;margin-bottom:7px}
+.og-keys .og-miss{background:#fdece7;box-shadow:0 7px 0 #cf3d1e;color:#cf3d1e}
+.og-keys .og-slow{background:#e3eefb;box-shadow:0 7px 0 #2b6cb0;color:#2b6cb0}
 </style>
 </head>
 <body>
 <div class="og-sheet">
-  <div class="og-bar"><i></i></div>
   <div class="og-in">
-    <div class="og-brand"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5" fill="none" stroke="#1a1a22" stroke-width="2"/><rect x="2" y="2" width="22" height="20" rx="5" fill="#fff" stroke="#1a1a22" stroke-width="2"/><rect x="8" y="14" width="10" height="3" rx="1.5" fill="#5b3fa6"/></svg><span id="og-brand"></span></div>
+    <div class="og-brand"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5" fill="none" stroke="#1b1926" stroke-width="2"/><rect x="2" y="2" width="22" height="20" rx="5" fill="#fff" stroke="#1b1926" stroke-width="2"/><rect x="8" y="14" width="10" height="3" rx="1.5" fill="#5b3fa6"/></svg><span id="og-brand"></span></div>
     <p class="og-title" id="og-title"></p>
     <p class="og-line" id="og-line"></p>
   </div>
-  <div class="og-foot">
-    <div class="og-num"><b id="og-n"></b><span id="og-u"></span></div>
+  <div class="og-rail"><i></i></div>
+  <div class="og-plate">
+    <div class="og-cell og-main"><b id="og-n"></b><span id="og-u"></span></div>
+    <div class="og-cell"><b>97</b><span id="og-a"></span></div>
+    <div class="og-cell og-hot"><b>42</b><span id="og-c"></span></div>
     <div class="og-keys" id="og-keys"></div>
   </div>
 </div>
 <script>
-var ko = /lang=ko/.test(location.search), $ = function (id) { return document.getElementById(id); };
+var q = new URLSearchParams(location.search), ko = q.get('lang') === 'ko', $ = function (id) { return document.getElementById(id); };
+var st = document.createElement('style');
+st.textContent = '@font-face{font-family:"OG Sans";src:url(../assets/fonts/' + q.get('f') + ') format("woff2");font-weight:400 800}@font-face{font-family:"OG Num";src:url(../assets/fonts/' + q.get('n') + ') format("woff2");font-weight:700}';
+document.head.appendChild(st);
 document.documentElement.lang = ko ? 'ko' : 'en';
 $('og-brand').textContent = ko ? '토독' : 'Todok';
 $('og-title').textContent = ko ? '타자 속도 측정·타자 연습' : 'Typing Test (WPM)';
 $('og-line').innerHTML = ko ? '<b>들어오자마자 치고, 틀</b><em>린</em><b> 키를 </b><u>알</u>려 줘요.' : '<b>Start typing, then see the k</b><em>e</em><b>ys you </b><u>m</u>issed.';
 $('og-n').textContent = ko ? '368' : '74';
 $('og-u').textContent = ko ? '타/분' : 'WPM';
-(ko ? [['ㅁ'], ['ㄴ', 'og-miss'], ['ㅇ'], ['ㄹ'], ['ㅎ', 'og-slow'], ['ㅗ'], ['ㅓ', 'og-miss'], ['ㅏ']] : [['A'], ['S', 'og-miss'], ['D'], ['F'], ['G', 'og-slow'], ['H'], ['J', 'og-miss'], ['K']]).forEach(function (k) {
+$('og-a').textContent = ko ? '정확도 %' : 'Accuracy %';
+$('og-c').textContent = ko ? '콤보' : 'Combo';
+(ko ? [['ㄴ', 'og-miss'], ['ㅇ'], ['ㄹ'], ['ㅎ', 'og-slow'], ['ㅓ', 'og-miss']] : [['S', 'og-miss'], ['D'], ['F'], ['G', 'og-slow'], ['J', 'og-miss']]).forEach(function (k) {
   var s = document.createElement('span'); s.textContent = k[0]; if (k[1]) s.className = k[1]; $('og-keys').appendChild(s);
 });
 </script>

@@ -1099,6 +1099,73 @@ run('more', () => {
   eq(TJ.report({ ms: 30000, strokes: 1, okChars: 1, typedKeys: 40, okKeys: 38 }).accuracy1, 95, '95.0%');
 });
 
+/* ---- 22. 콤보: 이어서 맞게 누른 키 수. 틀린 키를 누르면 0, 지우기는 세지도 끊지도 않는다. 한 판의 최고 값은 결과에 남는다 ---- */
+run('combo', () => {
+  const feed = (s, vals, t0 = 0, info) => vals.forEach((v, i) => s.update(v, t0 + i * 100, info));
+  const grow = (text) => Array.from(text).map((c, i, a) => a.slice(0, i + 1).join(''));
+  /* 영어: 틀리지 않으면 누른 키 수와 같다 */
+  let s = new TJ.Session('hello world');
+  feed(s, grow('hello world'));
+  eq(s.combo + ':' + s.maxCombo + ':' + s.typedKeys, '11:11:11', '틀리지 않고 친 판: 콤보 = 누른 키 수');
+  eq(s.finish(5000).maxCombo, 11, '결과에 최고 콤보');
+  /* 틀린 키에서 끊기고, 지우는 동안에는 그대로 0, 다시 맞게 치면 1부터 */
+  s = new TJ.Session('hello world');
+  feed(s, grow('hel')); eq(s.combo, 3, '세 키');
+  s.update('helx', 400); eq(s.combo + ':' + s.maxCombo, '0:3', '틀린 키에서 0, 최고는 남는다');
+  s.update('hel', 500, { del: true }); eq(s.combo, 0, '지우기는 콤보를 올리지 않는다');
+  s.update('hell', 600); eq(s.combo, 1, '다시 1부터');
+  feed(s, grow('hello world').slice(4), 700); eq(s.combo + ':' + s.maxCombo, '8:8', '끝까지: 8 (앞의 3보다 길다)');
+  /* 지우고 같은 키를 다시 쳐도(틀리지 않았으면) 콤보는 이어진다 */
+  s = new TJ.Session('abc def');
+  feed(s, ['a', 'ab']); s.update('a', 300, { del: true }); s.update('ab', 400, { del: false }); feed(s, grow('abc def').slice(2), 500);
+  eq(s.combo + ':' + s.typedKeys + ':' + s.okKeys, '8:8:8', '지웠다 다시 친 키도 맞으면 이어진다(누른 키 8 = 콤보 8)');
+  /* 한글: 받침이 넘어가는 순간(값이 두 번 바뀜)에도 끊기지 않고, 콤보 = 따로 센 키 수 */
+  let bad = 0, n = 0;
+  SENT.slice(0, 60).concat(KO.proverbs.slice(0, 30)).forEach((t) => {
+    const keys = H.keyStream(t), x = new TJ.Session(t);
+    twoStep(keys).forEach((vs, i) => vs.forEach((v) => x.update(v, i * 100)));
+    n++; if (x.combo !== keys.length || x.maxCombo !== keys.length || x.typedKeys !== keys.length) bad++;
+  });
+  eq(bad + '/' + n, '0/90', '한국어 글 90개를 틀리지 않고 치면 콤보 = 키 수(받침이 넘어가도 그대로)');
+  /* 아이폰식(앞 글자를 지우고 합친 글자를 다시 넣는 기기)도 같다 */
+  bad = 0;
+  SENT.slice(0, 40).forEach((t) => {
+    const keys = H.keyStream(t), x = new TJ.Session(t);
+    delInsert(keys, false).forEach((vs, i) => vs.forEach((v) => x.update(v, i * 100)));
+    if (x.maxCombo !== keys.length) bad++;
+  });
+  eq(bad, 0, '지우고 다시 넣는 기기: 콤보 = 키 수');
+  /* 한글에서 틀린 키: '한글' 자리에 '한ㄱㅡㅁ' → ㅁ 에서 끊긴다 */
+  s = new TJ.Session('한글 타자');
+  feed(s, ['ㅎ', '하', '한', '한ㄱ', '한그']); eq(s.combo, 5, '다섯 키');
+  s.update('한금', 600); eq(s.combo + ':' + s.maxCombo, '0:5', '틀린 받침에서 0');
+  /* 자판 전환 실수(한/영·Caps Lock)는 콤보를 끊지 않는다: 안내가 뜨면서 되돌린 키만큼 되살린다 */
+  s = new TJ.Session('ab hello world');
+  feed(s, ['a', 'ab', 'ab ']); eq(s.combo, 3, '세 키');
+  s.update('ab H', 400); eq(s.combo, 0, 'Caps Lock 첫 글자는 일단 틀린 키');
+  s.update('ab HE', 500); eq(s.cmp.hint + ':' + s.combo, 'caps:3', '안내가 뜨면 끊기기 전 값으로 되돌린다');
+  s.update('ab HEL', 600); eq(s.combo, 3, '안내가 떠 있는 동안 친 키는 세지 않는다');
+  let v = 'ab HEL'; while (v !== 'ab ') { v = v.slice(0, -1); s.update(v, 700, { del: true }); }
+  feed(s, grow('ab hello world').slice(3), 800); eq(s.combo + ':' + s.maxCombo, '14:14', '고쳐서 끝까지 치면 이어진 14');
+  s = new TJ.Session('한글 타자 연습');
+  feed(s, ['ㅎ', '하', '한', '한ㄱ', '한그', '한글', '한글 ']);
+  Array.from('xkwk').forEach((c, i, a) => s.update('한글 ' + a.slice(0, i + 1).join(''), 1000 + i * 100));
+  eq(s.cmp.hint + ':' + s.combo, 'ko:7', '한글 글을 영문 자판으로: 콤보는 그대로 7');
+  /* 터치 자판(글자가 끝날 때 판정): 글자가 끝난 만큼 올라간다 */
+  s = new TJ.Session('가나 다', { mode: 'char' });
+  feed(s, ['ㄱ', '가', '간', '가나', '가나 ', '가나 ㄷ', '가나 다']);
+  const r = s.finish(3000);
+  eq(r.maxCombo + ':' + r.typedKeys + ':' + r.okKeys, '7:7:7', '터치 자판: 끝나면 콤보 = 키 수');
+  s = new TJ.Session('가나 다', { mode: 'char' });
+  feed(s, ['ㄱ', '가', '가ㅁ', '가마', '가마 ']);
+  eq(s.combo + ':' + s.maxCombo + ':' + (s.typedKeys - s.okKeys), '2:2:1', '터치 자판: 틀린 키(ㅁ)에서 끊기고 그 뒤의 ㅏ·띄어쓰기로 다시 2');
+  s = new TJ.Session('가나다라 마', { mode: 'char' });
+  feed(s, ['가', '가나', '가나다', '가나다ㅁ', '가나다마', '가나다마 ']);
+  eq(s.combo + ':' + s.maxCombo, '2:6', '터치 자판: 여섯 키 뒤 틀린 글자, 최고 6');
+  /* 아무것도 안 친 판 */
+  eq(new TJ.Session('abc').finish(1000).maxCombo, 0, '안 친 판은 0');
+});
+
 /* ---- 결과 ---- */
 let pass = 0, fail = 0;
 const partsOut = [];

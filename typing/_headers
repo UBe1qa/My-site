@@ -1,3 +1,9 @@
 # 글꼴 조각은 파일 이름에 내용 지문이 붙어 있어(글자가 바뀌면 이름도 바뀐다) 브라우저가 1년 동안 저장해 두고 다시 쓴다
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+# 스타일·스크립트는 페이지가 내용 지문을 붙여 부른다(/assets/app.js?v=…). 파일이 바뀌면 주소가 바뀌므로 오래 저장해 둬도 된다
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable

@@ -324,7 +324,45 @@ def main():
     ok(not re.search(r'transition:\s*all', css), 'transition: all 금지')
     ok('prefers-color-scheme:dark' in css and 'prefers-reduced-motion:reduce' in css and '@media print' in css, 'CSS 어두운 화면·동작 줄이기·인쇄')
     ok('font-display:optional' in (ROOT / 'assets' / 'pretendard.css').read_text(encoding='utf-8'), '글꼴 CSS 는 font-display: optional')
-    ok('.seg button{padding:12px' in css and '.btn,.btn.sm{height:44px}' in css, 'CSS 휴대폰에서 누르는 곳 44px')
+    ok('.seg button{padding:12px' in css and '.btn,.btn.sm,.gauge .btn.sm,.kb-wrap .btn.sm,.hud .btn.sm{height:44px}' in css, 'CSS 휴대폰에서 누르는 곳 44px')
+    # 가벼운 그리기·이펙트(2026-10-11): 글자 칸을 자리 잡기(position)로 만들지 않는다, 숫자 칸은 크기 고정, 움직임은 transform·opacity 만, 치는 중의 이펙트는 fx.js 가 한다
+    ok('.txt .c{display:inline-block;white-space:pre;border-radius:3px}' in css and '.txt .sp{display:inline-block;white-space:pre}' in css, 'CSS 글자 칸은 position 없이(층이 800개로 나뉘지 않게)')
+    ok('contain:size layout style' in css and '.trap{contain:strict' in css, 'CSS 숫자 칸·입력칸은 크기를 고정해 둘레가 다시 계산되지 않게(contain)')
+    ok('.car{' in css and '.txt .cur::after' not in css, 'CSS 지금 칠 자리는 밑줄 하나(.car)로')
+    kf = re.findall(r'@keyframes\s+[\w-]+\{((?:[^{}]|\{[^{}]*\})*)\}', css)
+    moved = set(re.findall(r'(?<![\w-])(width|height|top|left|right|bottom|margin[\w-]*|padding[\w-]*|font-size)\s*:', ' '.join(kf)))
+    ok(not moved, f'CSS 움직임(@keyframes)은 크기·위치를 바꾸지 않는다: {sorted(moved)}')
+    fxjs = (ROOT / 'assets' / 'fx.js').read_text(encoding='utf-8')
+    ok('getBoundingClientRect' not in fxjs.split('FX.confetti')[0] and 'offsetTop' not in fxjs and 'offsetLeft' not in fxjs, 'fx.js 는 치는 중에 화면을 재지 않는다(자리는 app.js 가 미리 재 둔 값)')
+    ok('prefers-reduced-motion' in fxjs and 'setInterval' not in fxjs, 'fx.js 는 동작 줄이기를 따르고 반복 타이머가 없다')
+    appjs = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
+    hot = appjs[appjs.index('Engine.prototype.onInput'):appjs.index('Engine.prototype.start')]
+    ok('getComputedStyle' not in hot and 'getBoundingClientRect' not in hot and 'offset' not in hot.replace('offsetWidth', ''), 'app.js 키 처리(onInput)는 화면을 재지 않는다')
+    ok(".tool .below>section{content-visibility:auto" in css, 'CSS 도구 화면의 아래 칸은 화면 밖이면 그리지 않는다')
+    for path, src in pages.items():
+        tool = 'id="tj-cfg"' in src
+        ok(not re.search(r'(?:src|href)="/assets/[\w.-]+\.(?:js|css)"', src), f'{path} 스타일·스크립트 주소에 내용 지문(?v=)')
+        if tool:
+            ok(src.find('/assets/fx.js?v=') > 0 and src.find('/assets/fx.js?v=') < src.find('/assets/app.js?v='), f'{path} fx.js 가 app.js 앞에')
+            ok('id="fx-seg"' in src and 'id="snd-seg"' in src and 'id="combo"' in src and 'id="fx"' in src, f'{path} 이펙트·키 소리 고르기, 콤보 칸, 이펙트 층')
+    hd2 = (ROOT / '_headers').read_text(encoding='utf-8')
+    ok('/assets/*.js' in hd2 and '/assets/*.css' in hd2, '_headers: 스타일·스크립트는 오래 저장(주소에 지문)')
+    nj = ROOT / '_dev' / 'fonts-num.json'
+    ok(nj.exists(), '_dev/fonts-num.json 없음(python3 -B _dev/font_num.py)')
+    if nj.exists():
+        numf = json.loads(nj.read_text(encoding='utf-8'))
+        nf_path = ROOT / 'assets' / 'fonts' / numf['file']
+        ok(nf_path.exists() and nf_path.stat().st_size == numf['bytes'] and numf['bytes'] < 16_000, f'숫자·키 글꼴 조각(Todok Num) 파일과 크기 {numf["bytes"]:,} 바이트')
+        ok(all(c in numf['chars'] for c in '0123456789,.%WPMTabEnterShiftCaps'), '숫자·키 글꼴 조각에 숫자와 키 이름 글자')
+        lic = ROOT / 'assets' / 'fonts' / 'OFL-Rubik.txt'
+        ok(lic.exists() and 'SIL OPEN FONT LICENSE' in lic.read_text(encoding='utf-8') and 'Todok Num' in lic.read_text(encoding='utf-8'), '숫자·키 글꼴 라이선스 전문(assets/fonts/OFL-Rubik.txt)')
+        for path, src in list(pages.items()) + [('404', nf)]:
+            ok(f'href="/assets/fonts/{numf["file"]}" as="font"' in src and 'font-family:"Todok Num"' in src, f'{path} 숫자·키 글꼴 조각을 미리 받는다')
+        ok('--numfont:"Todok Num",var(--font)' in css, 'CSS 숫자 글꼴 이름(Todok Num → 본문 글꼴)')
+        ok(not [f.name for f in (ROOT / 'assets' / 'fonts').glob('tn-*.woff2') if f.name != numf['file']], '쓰지 않는 옛 숫자 글꼴 조각')
+    # 방침: 이펙트·키 소리 설정은 todok.set 안에(새 저장 키 없음)
+    ok("store.saveSettings('fx'" in appjs and "store.settings('fx')" in appjs, "이펙트·키 소리 설정은 todok.set 의 'fx' 칸에")
+    ok('이펙트와 키 소리' in pages['/ko/privacy/'] and 'effects and key sound' in pages['/privacy/'], '방침의 todok.set 설명에 이펙트·키 소리')
     ok('html[lang="en"] [data-l="ko"],html[lang="ko"] [data-l="en"]{display:none!important}' in css, 'CSS 두 언어 틀 가운데 하나만 보이기(404)')
 
     # 조각 글꼴: 화면 글자와 연습 글을 전부 담는다. 모든 페이지가 자기 언어의 조각을 미리 받는다
