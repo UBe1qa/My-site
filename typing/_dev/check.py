@@ -351,8 +351,10 @@ def main():
             ok(src.find('/assets/fx.js?v=') > 0 and src.find('/assets/fx.js?v=') < src.find('/assets/app.js?v='), f'{path} fx.js 가 app.js 앞에')
             ok('id="fx-seg"' in src and 'id="snd-seg"' in src and 'id="theme-seg"' in src and 'id="combo"' in src and 'id="fx"' in src, f'{path} 이펙트·키 소리·화면 고르기, 콤보 칸, 이펙트 층')
     # 2026-10-11 둘째 묶음: 내가 친 글자 표시, 틀린 키의 화면 자판 반응, 긴 글·영어 속담, 영어 문장 연습, 계산 기준 카드
-    ok("TextLayer.prototype.annotate" in appjs and "setAttribute('data-t'" in appjs and ".txt [data-t]::after{content:attr(data-t)" in css, "틀린 글자 아래에 내가 친 글자(data-t)를 적는다")
-    ok("slotDy: 26, ann: false" in appjs, "문장 연습은 '내가 친 글' 줄이 따로 있어 글자 아래에 적지 않는다")
+    ok("function Typed(layer)" in appjs and appjs.count("this.typed.update(r, e.T);") == 2 and "data-t" not in appjs.replace("data-theme", "") and "[data-t]" not in css, "속도 측정·자리 연습에 '내가 친 글' 줄(문장 연습과 같은 모양). 글자 아래에 작게 적는 방식은 쓰지 않는다(휴대폰에서 안 보였다)")
+    for path in ('/', '/ko/', '/ko/english/', '/practice/', '/ko/practice/', '/sentences/', '/ko/sentences/'):
+        ok(pages[path].count('id="mine-t"') == 1 and pages[path].count('id="next1"') == 1, f"{path} '내가 친 글' 줄과 다음 줄")
+    ok('.lumen .lchip' in css and 'lumen-key' in css and "burst()" in (ROOT / 'assets' / 'site.js').read_text(encoding='utf-8') and all('class="cap go" aria-hidden="true"' in s2 for s2 in pages.values()), '루멘랩 칸: 판 + 키 다섯 + 화살표 키, 키 조각·꼬리표 연출')
     ok("this.view.pressKey(miss.tok, true, miss.want)" in appjs and ".kb.big .k.wr-a" in css and ".kb.big .k.wr-b" in css and ".kb-say .wr-say" in css, "자리 연습: 틀린 키를 화면 자판에 알린다(누른 키 주홍, 방금 누른 키 조각)")
     tools = {p: s for p, s in pages.items() if 'id="tj-cfg"' in s}
     ok(sorted(tools) == ['/', '/ko/', '/ko/english/', '/ko/practice/', '/ko/sentences/', '/practice/', '/sentences/'], f'도구 화면 일곱 쪽: {sorted(tools)}')

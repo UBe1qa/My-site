@@ -115,15 +115,6 @@ kbd{font:inherit}
 .txt .sp.brk{position:relative;width:1.2em;text-align:center}
 .txt .sp.brk::before{content:"·";position:absolute;left:0;right:0;top:0;text-align:center;color:var(--faint);font-weight:700}
 /* 조합 중인 글자: 목표 글자는 그대로 두고 친 만큼 왼쪽부터 가지색이 찬다(--f) */
-/* 틀린 글자 아래의 '내가 친 글자'(app.js annotate 가 data-t 로 적는다). 틀린 글자에만 자리 기준(position)을 준다: 몇 개뿐이라 그리기에 부담이 없다 */
-.txt [data-t]{position:relative}
-.txt [data-t]::after{content:attr(data-t);position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:1px;font-size:.5em;line-height:1;font-weight:700;letter-spacing:0;white-space:nowrap;pointer-events:none;background:none;color:var(--bad);-webkit-text-fill-color:var(--bad)}
-.txt .pend[data-t]::after{color:var(--muted);-webkit-text-fill-color:var(--muted)}
-/* 띄어쓰기 자리에 적는 '더 친 글자'(+xy): 띄어쓰기 칸은 줄 높이만큼 크므로 글자 칸(1.35em, 줄 가운데)의 아래에 맞춰 내리고,
-   칸의 오른쪽 끝에 맞춰 왼쪽(방금 친 단어의 끝 아래)으로 적는다. 오른쪽으로 적으면 다음 단어 첫 글자 아래에 적은 것과 붙어 한 낱말처럼 읽혔다.
-   적은 것이 있으면 주홍 밑줄은 긋지 않는다(글자 위로 줄이 그어져 지운 것처럼 보였다) */
-.txt .sp[data-t]::after{left:auto;right:0;top:50%;transform:none;margin-top:calc(1.35em + 1px)}
-.txt .sp.bad[data-t]{box-shadow:none}
 .txt .c.pend{background-image:linear-gradient(90deg,var(--main) var(--f,50%),var(--todo) var(--f,50%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 /* 지금 칠 자리: 글자 아래 굵은 가지색 줄 하나(.car)가 다음 글자로 미끄러져 간다. 글자마다 줄을 새로 만들지 않아서 글 전체의 배치가 다시 계산되지 않는다.
    자리는 app.js 가 미리 재 둔 값으로 transform 만 바꾼다. 처음에 다섯 번만 깜빡이고 멈춘다(동작 줄이기면 미끄러지지 않고 고정) */
@@ -198,6 +189,7 @@ kbd{font:inherit}
 .r-chart .lg i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--bad);margin-right:5px;vertical-align:1px}
 .r-map figcaption{font-size:14px;color:var(--ink-2);line-height:1.5;margin-top:8px}
 .r-map figcaption b,#map-cap b{color:var(--bad);font-weight:700;letter-spacing:.06em}
+#map-cap b sup{font-family:var(--numfont);font-size:.72em;font-weight:700;letter-spacing:0;margin-left:1px;opacity:.85}
 .r-map figcaption i,#map-cap i{font-style:normal;color:var(--slow);font-weight:700;letter-spacing:.06em}
 #map-cap small{font-size:12.5px;color:var(--muted)}
 #map-cap .sep{color:var(--faint)}
@@ -262,9 +254,14 @@ kbd{font:inherit}
 .play{position:relative;padding:22px 44px 18px;flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
 .playtop{display:flex;justify-content:space-between;align-items:center;gap:12px;height:24px;margin-bottom:12px}
 .daily{font-size:13px;color:var(--muted)}
-/* 아래 8px 는 마지막 줄 아래에 적는 '내가 친 글자'가 잘리지 않게 두는 자리(배치는 그대로: 안쪽 여백만큼 바깥 여백을 뺀다) */
-.view{height:186px;overflow:hidden;box-sizing:content-box;padding-bottom:8px;margin-bottom:-8px}
+/* 글 상자에는 지금 치는 줄 하나만 보인다. 그 아래가 '내가 친 글' 줄, 그 아래가 다음 줄들(문장 연습과 같은 모양) */
+.view{height:62px;overflow:hidden}
 .sheet .txt{font-size:30px;line-height:62px;transition:transform .16s var(--ease)}
+/* 지금 치는 줄 + 내가 친 글(문장 연습의 .now·.mine 과 같은 모양). 상자가 종이 여백 밖으로 18px 나가 글의 왼쪽 끝이 다음 줄들과 맞는다 */
+.sheet .now{margin:0 -18px 2px;padding:9px 18px 12px}
+.sheet .mine{font-size:30px;line-height:50px;height:52px}
+.sheet .mine-tag{margin-top:2px}
+.sheet .ln.next{margin-top:9px}
 .txt .c{line-height:1.35}
 /* 숫자 줄 = 종이 아래의 자판 판(.hud). 숫자마다 키 모양 칸 하나(.hk): 납작하다(누르는 것이 아니라 보는 것). 칸 크기가 고정이라 값이 바뀌어도 둘레가 다시 계산되지 않는다.
    속도 = 가지색, 콤보 = 겨자색(10부터 켜진다. 그 전에는 테두리만), 나머지 = 미색 */
@@ -351,10 +348,13 @@ kbd{font:inherit}
 .strip .hk.main{width:136px}
 .strip .hk.hot{width:104px}
 .strip #fresh{margin-left:auto}
-.band{position:relative;padding:12px 28px 14px;height:168px}
+.band{position:relative;padding:16px 28px 14px;height:168px}
 .band .start{height:22px;margin-bottom:4px}
-.rig .view{height:108px}
+.rig .view{height:54px}
 .rig .txt{font-size:28px;line-height:54px;transition:transform .16s var(--ease)}
+.rig .mine{font-size:28px;line-height:44px;height:46px}
+.rig .ln.next{margin-top:6px;height:27px;line-height:27px}
+.mine-l{position:absolute;right:0;top:0;font-size:12.5px;font-weight:400;color:var(--muted);pointer-events:none}
 .band.result{display:flex;align-items:center;justify-content:space-between;gap:16px 28px;flex-wrap:wrap}
 .r-pass{font-size:19px;font-weight:700;letter-spacing:-.01em}
 .r-pass.ok{color:var(--main-d)}
@@ -630,21 +630,44 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
 .foot a:hover{text-decoration:underline}
 .foot-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-left:auto}
 .foot small{width:100%;font-size:12.5px}
-.lumen{display:inline-flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none!important;padding:4px 0}
-.lumen .caps{display:inline-flex;gap:3px}
-.lumen .cap{min-width:26px;height:26px;padding:0 5px;font-size:12.5px;border-radius:6px;transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease),color .2s var(--ease)}
+/* 루멘랩으로 가는 칸(사이트 공통 고정 연출. 2026-10-11 사용자: "이펙트가 너무 약한듯" → 판 + 큰 키캡 + 치는 연출).
+   모양: 자판 판 위에 미색 키 다섯(L·U·M·E·N), 옆에 글, 끝에 가지색 화살표 키. 누를 수 있는 것이라 키에 턱이 있다 */
+.lumen{position:relative;display:inline-flex;align-items:center;gap:14px;padding:11px 14px 9px 13px;border-radius:14px;background:var(--plate);color:var(--plate-ink);text-decoration:none!important;transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
+.lumen .caps{display:inline-flex;gap:4px}
+.lumen .cap{min-width:32px;height:34px;padding:0 6px;margin-bottom:3px;border-radius:7px;border-color:transparent;background:var(--cap);box-shadow:0 3px 0 var(--cap-edge);color:var(--cap-ink);font-size:15px;font-weight:700;transition:transform .1s var(--ease),box-shadow .1s var(--ease),color .2s var(--ease)}
+.lumen .go{background:var(--main);box-shadow:0 3px 0 var(--main-edge);color:var(--main-ink);font-family:var(--font);font-size:17px}
 .lumen-t{display:grid;line-height:1.35}
-.lumen-t b{font-weight:600;font-size:14.5px;position:relative;justify-self:start}
+.lumen-t b{font-weight:700;font-size:15px;color:var(--plate-ink);position:relative;justify-self:start}
 .lumen-t b::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:1px;background:var(--main);transform:scaleX(0);transform-origin:0 50%}
-.lumen-t span{font-size:13px;color:var(--muted)}
-.lumen:hover .cap{transform:translateY(1px);box-shadow:0 1px 0 var(--key-edge)}
-.lumen:active .cap{transform:translateY(2px);box-shadow:0 0 0 var(--key-edge)}
-/* 화면에 들어올 때 한 번: 왼쪽부터 차례로 눌렸다 올라오고 글자가 가지색으로 남는다. 다 눌리면 밑줄이 한 번 그어진다 */
-.lumen.in .cap{color:var(--main)}
+.lumen-t span{font-size:13px;color:var(--plate-muted)}
+/* 기본 반응: 올리면 키 다섯이 왼쪽부터 차례로 폴짝 뛰고 화살표 키가 앞으로 나간다. 누르면 전부 눌린다 */
+.lumen:hover{box-shadow:0 6px 18px -10px rgba(40,20,90,.45)}
+.lumen:hover .go{transform:translateX(4px)}
+.anim .lumen:hover .caps .cap{animation:lumen-hop .34s var(--ease) calc(var(--i)*45ms)}
+.lumen:active .cap{transform:translateY(3px);box-shadow:0 0 0 var(--cap-edge);animation:none!important}
+.lumen:active .go{transform:translate(4px,3px);box-shadow:0 0 0 var(--main-edge)}
+/* 화면에 들어올 때: ① 키 다섯이 왼쪽부터 깊게 눌리며 가지색으로 번쩍였다가 튀어 오른다(글자가 가지색으로 남는다) ② 글이 타자 치듯 왼쪽부터 나타난다
+   ③ 밑줄이 그어진다 ④ 화살표 키가 미끄러져 들어와 두 번 앞으로 나간다. 키 조각과 '5 콤보' 꼬리표는 site.js 가 '화려하게'일 때만 얹는다 */
+.lumen.in .caps .cap{color:var(--main)}
+:root[data-theme="dark"] .lumen.in .caps .cap{color:var(--plate)}   /* 어두운 화면의 가지색은 밝아서 미색 키 위에서 안 보인다 → 판의 짙은 가지색 */
 .lumen.in .lumen-t b::after{transform:scaleX(1)}
-.anim .lumen.in .cap{animation:lumen-key .28s var(--ease) calc(var(--i)*70ms) backwards}
-.anim .lumen.in .lumen-t b::after{transition:transform .26s var(--ease) .4s}
-@keyframes lumen-key{0%{color:var(--key-ink);transform:none;box-shadow:0 2px 0 var(--key-edge)}45%{color:var(--main);transform:translateY(2px);box-shadow:0 0 0 var(--key-edge)}100%{transform:none}}
+.anim .lumen.in .caps .cap{animation:lumen-key .46s var(--ease) calc(var(--i)*90ms) backwards,lumen-hop .34s var(--ease) calc(1.5s + var(--i)*55ms)}   /* 눌림 → 끝에 다섯이 한 번 더 물결처럼 뛴다 */
+.anim .lumen.in .lumen-t{animation:lumen-type .5s steps(9,end) .52s backwards}
+.anim .lumen.in .lumen-t b::after{transition:transform .3s var(--ease) 1.05s}
+.anim .lumen.in .go{animation:lumen-go .75s var(--ease) 1.05s backwards}
+.anim .lumen.in{animation:lumen-plate .32s var(--ease) .44s}
+@keyframes lumen-key{0%{color:var(--cap-ink);background:var(--cap);transform:none;box-shadow:0 3px 0 var(--cap-edge)}28%{color:var(--main-ink);background:var(--main);transform:translateY(4px);box-shadow:0 0 0 var(--main-edge)}60%{background:var(--cap);transform:translateY(-9px);box-shadow:0 3px 0 var(--cap-edge)}100%{transform:none}}
+@keyframes lumen-hop{0%{transform:none}45%{transform:translateY(-5px)}100%{transform:none}}
+@keyframes lumen-type{0%{clip-path:inset(0 100% 0 0)}100%{clip-path:inset(0 -6px 0 0)}}
+@keyframes lumen-go{0%{opacity:0;transform:translateX(-14px)}35%{opacity:1;transform:translateX(6px)}55%{transform:none}78%{transform:translateX(6px)}100%{transform:none}}
+@keyframes lumen-plate{0%{transform:none}45%{transform:scale(.975)}100%{transform:none}}
+/* 이펙트를 끈 사람(설정 → 이펙트 → 끔): 움직이지 않고 글자색과 밑줄만 */
+.lumen.lite,.lumen.lite .cap,.lumen.lite .lumen-t{animation:none!important}
+.lumen.lite .lumen-t b::after{transition:none!important}
+/* site.js 가 얹는 조각: 키 조각(키에서 튀어 오르는 작은 네모)과 꼬리표. 움직임은 transform·opacity 만(Web Animations) */
+.lumen .lchip{position:absolute;left:0;top:0;width:11px;height:11px;border-radius:3px;box-shadow:0 2px 0 rgba(0,0,0,.14);pointer-events:none;opacity:0}
+.lumen .ltag{position:absolute;left:0;top:0;padding:4px 10px 5px;border-radius:9px;background:var(--hot);color:var(--hot-ink);box-shadow:0 3px 0 var(--hot-d);font-size:13.5px;font-weight:800;line-height:1.1;white-space:nowrap;pointer-events:none;opacity:0}
+.lumen .ltag b{font-family:var(--numfont);font-size:16px;margin-right:4px}
 
 /* ---------- 좁은 화면 ---------- */
 @media (max-width:1100px){
@@ -692,7 +715,12 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .opt{flex-wrap:wrap}
   .more summary,.opt.sel select{height:44px}
   .more-row label{min-height:44px}
-  .more-row.checks{gap:0}
+  .more-row.checks{flex-direction:row;flex-wrap:wrap;gap:0 18px}   /* 문장부호·숫자 넣기를 한 줄에(설정 창이 작은 휴대폰 화면을 넘지 않게) */
+  .lumen{display:flex;gap:10px;padding:10px 11px 8px}
+  .lumen .cap{min-width:27px;height:31px;padding:0 4px;font-size:14px}
+  .lumen .caps{gap:3px}
+  .lumen-t{flex:1;min-width:0}
+  .lumen .go{min-width:31px}
   .foot-links{gap:0 18px}
   .foot-links a{display:inline-block;padding:11px 0}
   .crumbs a{display:inline-block;padding:11px 0}
@@ -725,10 +753,11 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .play{padding:6px 18px 16px;flex:none}
   .playtop{margin-bottom:2px}
   .daily{display:none}
-  .view{height:176px}
+  .view{height:44px}
   .sheet .txt{font-size:23px;line-height:44px}
-  .txt [data-t]::after{font-size:13px}                      /* 휴대폰: 받침 있는 한글이 읽히는 가장 작은 크기 */
-  .txt .sp[data-t]::after{margin-top:16.5px}             /* 글자 칸(23px × 1.35)의 아래 + 1px */
+  .sheet .now{margin:2px -8px 0;padding:6px 8px 9px}
+  .sheet .mine,.rig .mine{font-size:23px;line-height:40px;height:42px}
+  .sheet .ln.next{margin-top:8px}
   .hint{white-space:normal;text-align:center;border-radius:14px;width:max-content}
   /* 결과: 점수 → 다시 하기 단추(판) → 틀린 키 지도·그래프 순서로(단추를 누르려고 끝까지 내리지 않게) */
   .sheet .result{flex:none}
@@ -743,7 +772,8 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .r-big b{font-size:60px}
   .sheet .kb,.desk .kb{--u:calc((100vw - 32px - 38px - 3px*14)/14.6);--g:3px;width:100%}
   .k{font-size:12.5px;border-radius:5px;height:calc(var(--u)*1.25)}
-  .k em{font-size:8.5px;right:2px;top:1px}
+  .k em{display:none}                                    /* 휴대폰: 키가 19px 라 숫자가 글자와 겹친다 → 횟수는 지도 아래 글에 적는다 */
+  #map-cap{font-size:15px}
   .r-chart figcaption{padding-left:0}
   /* C */
   .steps{gap:5px}
@@ -752,7 +782,7 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .rig{border-radius:14px}
   .strip{gap:5px;padding:9px 10px}
   .band{padding:8px 16px 12px;height:auto;min-height:150px}
-  .rig .view{height:132px}
+  .rig .view{height:44px}
   .rig .txt{font-size:23px;line-height:44px}
   .band.result{display:block}
   .band .r-act{margin-top:14px}
@@ -766,7 +796,7 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .kb.big .k.wide{font-size:0;padding:0}
   .kb.big .k.wide b{display:none}
   .kb.big .k.home::after,.kb.big .k.new::before{display:none}
-  .kb.big .k em{font-size:8.5px;left:2px;bottom:1px}
+  .kb.big .k em{display:none}
   /* B */
   .desk{min-height:0;border-radius:14px}
   .stack{padding:12px 16px 14px;height:auto}
@@ -782,6 +812,11 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   /* 아래 */
   .rec-grid{grid-template-columns:minmax(0,1fr)}
   .rec-col{padding:10px 14px}
+  /* 휴대폰: 기록 한 줄을 두 줄로(조건 이름이 '문장 · 15…'로 잘리거나 아예 빠졌다). 첫 줄에 조건, 둘째 줄에 때·속도·정확도 */
+  .rec-col:not(.keys){height:auto;min-height:206px}
+  .rec-list li{flex-wrap:wrap;height:auto;line-height:1.45;padding:7px 0 6px;white-space:normal;gap:0 8px}
+  .rc-cond{order:-1;flex:0 0 100%;white-space:nowrap}
+  .rc-acc{margin-left:auto}
   .rec-col.keys{height:170px}
   .rc-when{width:74px}
   .defs>div{grid-template-columns:minmax(0,1fr)}
@@ -809,7 +844,8 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
 .vk .main-a,.vk .main-b,.vk .main-c{padding-top:8px}
 .vk .sheet,.vk .sheet.hasctx{height:max(240px,min(440px,calc(var(--vvh,440px) - 16px)))}
 .vk .play{padding-top:10px;padding-bottom:8px}
-.vk .view{height:124px;height:clamp(62px,round(down,calc(var(--vvh,440px) - 140px),62px),186px)}
+.vk .sheet .now .tag{display:none}
+.vk .sheet .now{padding-top:4px;padding-bottom:8px}
 .vk .desk{height:auto;min-height:0}
 .vk .stack{height:auto;padding-top:12px;padding-bottom:12px}
 /* 좁은 휴대폰: 숫자 칸의 숫자와 이름이 칸 밖으로 넘치지 않게(제3자 평가 2026-10-11). 이름은 짧은 것으로 바꾸고 글자를 조금 줄인다 */
@@ -856,8 +892,7 @@ html[lang="ko"] .bx-sum{font-family:var(--font)}
   .both .hk-f{padding-left:4px}
   .nav a{font-size:12.5px}
   .meter{gap:6px 12px}
-  .sheet .txt,.rig .txt{font-size:21px}
-  .txt .sp[data-t]::after{margin-top:15px}
+  .sheet .txt,.rig .txt,.sheet .mine,.rig .mine{font-size:21px}
   .seg button{padding:12px 7px;font-size:13.5px}
   html[lang="en"] #kind button{padding:12px 5px;font-size:13px}   /* 영어 글 종류 넷(Words·Sentences·Paragraphs·Proverbs)이 320px 에서 한 줄에 */
   .steps button{font-size:12.5px;padding:0 8px 0 5px}

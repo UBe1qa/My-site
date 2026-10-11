@@ -408,12 +408,11 @@
     this.under = el('span', 'fxu'); this.car = el('i', 'car');
     this.spans = []; this.base = []; this.chars = []; this.prev = new Uint8Array(0);
     this.from = 0; this.to = 0; this.cur = -1; this.pend = -1; this.y = 0; this.line = -1; this.glide = false; this.lastW = null;
-    this.ann = opt.ann !== false; this.annV = {};   /* 틀린 글자 아래에 적어 둔 '내가 친 글자'(글자 번호 → 적은 글) */
     this.X = new Float32Array(0); this.W = new Float32Array(0); this.L = new Int16Array(0); this.cy = []; this.lh = 1; this.ch = 0; this.ox = 0; this.oy = 0;
     this.stale = true; this.vw = -1; this.raf = 0;
     var redo = function () {
       self.stale = true;
-      if (!self.raf) self.raf = requestAnimationFrame(function () { self.raf = 0; if (self.cur >= 0) self.place(self.cur); });
+      if (!self.raf) self.raf = requestAnimationFrame(function () { self.raf = 0; if (self.cur >= 0) self.place(self.cur); if (self.onRedo) self.onRedo(); });   /* onRedo: 줄 나눔이 바뀌었으니 '다음 줄'도 다시 쓴다 */
     };
     if (window.ResizeObserver) new ResizeObserver(function (es) { var w = Math.round(es[0].contentRect.width) + ':' + Math.round(es[0].contentRect.height); if (self.vw !== -1 && w !== self.vw) redo(); self.vw = w; }).observe(box.parentNode);
     if (D.fonts && D.fonts.addEventListener) D.fonts.addEventListener('loadingdone', redo);
@@ -437,7 +436,7 @@
     this.spans = []; this.base = []; this.lastW = null; this.prev = new Uint8Array(chars.length);
     this._spans(chars, this.from, this.to, brk, marks, frag);
     box.textContent = ''; box.appendChild(this.under); box.appendChild(frag); box.appendChild(this.car);
-    this.cur = -1; this.pend = -1; this.line = -1; this.stale = true; this.annV = {};
+    this.cur = -1; this.pend = -1; this.line = -1; this.stale = true;
     if (this.scrolls && this.y) { box.style.transform = ''; }
     this.y = 0;
   };
@@ -469,7 +468,7 @@
     this.ox = 0; this.oy = 0;
     for (e = box; e && e !== this.stage; e = e.offsetParent) { this.ox += e.offsetLeft; this.oy += e.offsetTop; }
     this.bw = box.offsetWidth;
-    this.stale = false;
+    this.stale = false; this.gen = (this.gen || 0) + 1;   /* 잴 때마다 하나씩 오른다(줄 나눔이 바뀌었을 수 있다는 표시) */
   };
   TextLayer.prototype.lineY = function (line) { var y = this.cy[line]; return y == null ? line * this.lh + (this.lh + (this.ch || this.lh * 0.6)) / 2 : y; };
   /* 글자 i 의 상자(글 상자 기준). 이펙트가 쓴다 */
@@ -491,9 +490,8 @@
   TextLayer.prototype.isSpace = function (i) { return this.base[i] !== 'c'; };
   var CLS = ['', ' ok', ' bad', ' pend'];
   /* 조합 중인 글자: 목표 글자는 그대로 두고, 친 만큼만 왼쪽부터 색을 채운다(다른 글자로 바꿔 그리면 틀린 것처럼 보인다) */
-  TextLayer.prototype.paint = function (r, lenient, T) {
+  TextLayer.prototype.paint = function (r, lenient) {
     var sp = this.spans, st = r.st, prev = this.prev, base = this.base, i, n = Math.min(st.length, this.to);
-    if (this.ann && T) this.annotate(r, T, n);
     for (i = this.from; i < n; i++) {
       if (prev[i] !== st[i]) { sp[i].className = base[i] + CLS[st[i]] + (this.cur === i ? ' cur' : ''); prev[i] = st[i]; }
     }
@@ -505,11 +503,7 @@
     }
     this.place(r.cursor);
   };
-  /* 틀린 글자 아래에 '내가 실제로 친 글자'를 작게 적는다(무엇을 잘못 눌렀는지 보이게. 사용자 요청 2026-10-11).
-     - 틀린 글자: 친 단어의 같은 자리 글자. 띄어쓰기 자리에 글자를 더 쳤으면 그 글자들.
-     - 터치 자판에서 아직 판정을 미룬 꼬리(안 맞는 낱자, 중간 모양): 친 그대로(회색. 그 글자가 끝나면 주홍이 된다).
-     글자를 바꾸지 않고 data-t 속성만 쓴다(그리는 것은 CSS ::after). 지금 치는 단어와 그 앞 단어만 다시 본다 */
-  var SKIP = '–';   /* 빠뜨린 글자 자리에 적는 표시(자판으로 칠 수 없는 줄표라 친 글자와 헷갈리지 않는다) */
+  /* 글자 번호 → 몇째 단어의 몇째 글자인지(띄어쓰기 칸은 po = -1). '내가 친 글' 줄이 지금 줄의 첫 단어를 찾는 데 쓴다 */
   function wordMap(T) {
     if (T._wm && T._wm.n === T.chars.length) return T._wm;
     var n = T.chars.length, wo = new Int32Array(n), po = new Int32Array(n), k;
@@ -517,42 +511,6 @@
     T.words.forEach(function (w, wi) { w.ci.forEach(function (ci, x) { wo[ci] = wi; po[ci] = x; }); if (w.sepAt >= 0) { wo[w.sepAt] = wi; po[w.sepAt] = -1; } });
     return (T._wm = { n: n, wo: wo, po: po });
   }
-  TextLayer.prototype.annotate = function (r, T, n) {
-    var m = wordMap(T), st = r.st, sp = this.spans, V = this.annV, tw = null, self = this, i;
-    if (!m.n) return;
-    var cw = m.wo[Math.min(r.cursor, m.n - 1)]; if (cw < 0) cw = T.words.length - 1;
-    var w0 = T.words[Math.max(0, cw - 1)], w1 = T.words[cw], a = w0.ci.length ? w0.ci[0] : 0, b = w1.sepAt >= 0 ? w1.sepAt : (w1.ci.length ? w1.ci[w1.ci.length - 1] : a);
-    function typed(i) {
-      var w = m.wo[i]; if (w < 0) return '';
-      if (!tw) tw = r.value.split(/[ \n]/);
-      var word = Array.from(tw[w] || ''), pos = m.po[i];
-      /* 띄어쓰기 자리에 더 친 글자: 앞에 + 를 붙인다('더 쳤다'는 뜻. 바꿔 친 글자와 헷갈리지 않게). 넷까지, 더 있으면 … */
-      if (pos < 0) { var more = word.slice(T.words[w].ci.length); return !more.length ? '' : '+' + (more.length > 4 ? more.slice(0, 4).join('') + '…' : more.join('')); }
-      var short = w < cw && word.length < T.words[w].ci.length;                           /* 끝난 단어인데 목표보다 짧게 쳤다: 어딘가를 빠뜨렸다 */
-      if (word[pos]) return word[pos] !== T.chars[i] ? word[pos] : (short ? SKIP : '');
-      if (w < cw) return SKIP;                                                         /* 끝난 단어에서 아무것도 안 친 자리: 빠뜨린 글자 */
-      /* 친 단어가 이 자리까지 오지 않았는데 틀림: 방금 친 낱자가 앞 글자의 받침으로 붙었다('울기' 다음에 ㄷ 대신 ㅁ → '울김').
-         앞 글자들의 키 수를 넘겨 친 낱자를 적는다 */
-      if (w !== cw || pos !== word.length) return '';
-      var before = T.words[w].ci.slice(0, pos).map(function (ci) { return T.chars[ci]; }).join('');
-      return TJ.hangul.keyStream(word.join('')).slice(TJ.hangul.keyStream(before).length).join('').slice(0, 3);
-    }
-    /* 화면 위로 넘어간 줄에는 적지 않는다(지나간 줄의 글자 아래에 적은 것이 맨 윗줄 위에 반쯤 걸려 보였다) */
-    var top = this.scrolls && !this.stale && this.line >= 0 ? Math.max(0, this.line - this.keep) : -1, L = this.L;
-    function put(i, t) {
-      if (t && top > 0 && L[i] < top) t = '';
-      if ((V[i] || '') === t || !sp[i]) return;
-      if (t) { sp[i].setAttribute('data-t', t); V[i] = t; } else { sp[i].removeAttribute('data-t'); delete V[i]; }
-    }
-    for (i = Math.max(a, this.from); i <= b && i < n; i++) put(i, st[i] === TJ.BAD ? typed(i) : (r.held && i === r.pendingAt && r.pendingText ? r.pendingText : ''));
-    /* 그 밖에 적어 둔 것: 더는 틀린 글자가 아니면 지운다(지우고 고쳐 쳤을 때) */
-    Object.keys(V).forEach(function (k) { k = +k; if ((k < a || k > b) && st[k] !== TJ.BAD) put(k, ''); });
-  };
-  /* 줄이 넘어가 글이 위로 밀렸을 때: 화면 위로 나간 줄에 적어 둔 것을 지운다 */
-  TextLayer.prototype.trimAnn = function (top) {
-    var V = this.annV, sp = this.spans, L = this.L;
-    Object.keys(V).forEach(function (k) { if (L[+k] < top && sp[+k]) { sp[+k].removeAttribute('data-t'); delete V[k]; } });
-  };
   /* 지금 칠 자리로 밑줄을 옮기고, 줄이 넘어갔으면 글 덩어리를 민다 */
   TextLayer.prototype.place = function (cursor) {
     var sp = this.spans, car = this.car, now = performance.now(), quick = now - (this.at || 0) < 95;
@@ -572,8 +530,37 @@
     this.line = line;
     if (this.scrolls) {
       var y = Math.max(0, line - this.keep) * this.lh;
-      if (y !== this.y) { this.box.style.transform = 'translateY(' + (-y) + 'px)'; this.y = y; if (this.ann) this.trimAnn(Math.max(0, line - this.keep)); }
+      if (y !== this.y) { this.box.style.transform = 'translateY(' + (-y) + 'px)'; this.y = y; }
     }
+  };
+  /* '내가 친 글' 줄과 다음 줄들(속도 측정·영타·자리 연습. 문장 연습과 같은 모양: 사용자 2026-10-11 "그냥 문장연습처럼 맞는것도 보이게").
+     글 상자(.view)에는 지금 치는 줄 하나만 보이고, 그 아래에 그 줄에서 내가 친 글(맞은 것도 틀린 것도 친 그대로)이 같은 크기로 나온다.
+     그 아래 두 줄은 다음에 칠 줄(글자 줄의 줄 나눔을 그대로 따라 글자만 옮긴다). 키 하나에 바꾸는 것은 '내가 친 글'의 글자뿐이고, 줄이 바뀔 때만 다음 줄을 다시 쓴다 */
+  function Typed(layer) {
+    var self = this;
+    this.layer = layer; this.mineEl = $('mine-t'); this.n1 = $('next1'); this.n2 = $('next2'); this.r = null; this.T = null; this.reset();
+    /* 폭이 바뀌거나 글꼴이 늦게 와서 줄 나눔이 달라지면(글자 줄이 다시 잰 뒤) 다음 줄과 내가 친 글을 다시 맞춘다 */
+    layer.onRedo = function () { if (self.r && self.T) self.update(self.r, self.T); };
+  }
+  Typed.prototype.reset = function () { this.line = -2; this.to = -1; this.gen = -1; this.w0 = 0; this.mine = null; if (this.mineEl) this.mineEl.textContent = ''; };
+  Typed.prototype.update = function (r, T) {
+    var L = this.layer, n = T.chars.length; if (!this.mineEl || !n) return;
+    this.r = r; this.T = T;
+    if (L.stale) L.measure();
+    var cur = Math.min(r.cursor, n - 1), line = L.L[cur];
+    if (line !== this.line || L.to !== this.to || L.gen !== this.gen) {
+      this.line = line; this.to = L.to; this.gen = L.gen;
+      var a = cur, b = cur, ln = L.L, end = Math.min(L.to, n), m = wordMap(T);
+      while (a > 0 && ln[a - 1] === line) a--;
+      this.w0 = m.wo[a] < 0 ? 0 : m.wo[a];
+      while (b < end && ln[b] === line) b++;
+      var c = b; while (c < end && ln[c] === line + 1) c++;
+      var d = c; while (d < end && ln[d] === line + 2) d++;
+      if (this.n1) this.n1.textContent = T.chars.slice(b, c).join('').replace(/\s+$/, '');
+      if (this.n2) this.n2.textContent = T.chars.slice(c, d).join('').replace(/\s+$/, '');
+    }
+    var mine = r.value.split(/[ \n]/).slice(this.w0).join(' ');
+    if (mine !== this.mine) { this.mineEl.textContent = mine; this.mine = mine; }
   };
   /* 화면 읽기 프로그램이 읽을 '칠 글'(그림으로 그린 글자 줄은 숨겨 두고 이 문단을 읽게 한다) */
   function readable(e) { var x = $('txt-sr'); if (x) x.textContent = e.T.text.replace(/\n/g, ' '); }
@@ -672,7 +659,8 @@
   function mapCaption(box, res) {
     var miss = res.missed.slice(0, 6), slow = res.slow.slice(0, 4).filter(function (s) { return !res.missed.some(function (m) { return m.key === s.key; }); });
     box.textContent = '';
-    if (miss.length) { box.appendChild(D.createTextNode(S.missed + ' ')); box.appendChild(el('b', '', names(miss))); }
+    /* 틀린 키마다 횟수를 옆에 작게 적는다(휴대폰에서는 지도의 키가 작아 키 위의 숫자를 숨긴다: 글자와 겹쳐 안 읽혔다) */
+    if (miss.length) { box.appendChild(D.createTextNode(S.missed + ' ')); miss.forEach(function (m) { var b = el('b', '', keyLabel(m.key)); b.appendChild(el('sup', '', String(m.miss))); box.appendChild(b); box.appendChild(D.createTextNode(' ')); }); }
     else box.appendChild(D.createTextNode(S.none));
     if (slow.length && res.mode === 'key') { box.appendChild(el('span', 'sep', ' · ')); box.appendChild(D.createTextNode(S.slow + ' ')); box.appendChild(el('i', '', names(slow))); }
     if (res.mode === 'char') { box.appendChild(D.createElement('br')); box.appendChild(el('small', '', S.touchNote)); }
@@ -809,10 +797,11 @@
 
   /* ================= 화면 A: 종이 한 장(속도 측정·영타) ================= */
   function ViewA() {
-    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { keep: 1, slotDy: window.innerWidth <= 720 ? 28 : 36 }); this.keys = board($('kb')); this.stats = new Stats();
+    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { keep: 0, slotDy: window.innerWidth <= 720 ? 28 : 36 }); this.keys = board($('kb')); this.stats = new Stats();
+    this.typed = new Typed(this.layer);
   }
   ViewA.prototype.onReset = function (e) {
-    this.layer.build(e.T.chars, 0, null, false, e.breaks());
+    this.layer.build(e.T.chars, 0, null, false, e.breaks()); this.typed.reset();
     $('result').hidden = true; $('playbox').hidden = false;
     var d = new Date(), daily = $('daily');
     daily.textContent = e.drill ? S.drillLabel : e.round === 0 ? fmt(S.daily, { m: d.getMonth() + 1, d: d.getDate(), mon: S.months ? S.months[d.getMonth()] : '' }) : '';
@@ -822,7 +811,8 @@
   ViewA.prototype.onExtend = function (e, from) { this.layer.append(e.T.chars, from, e.breaks()); };
   ViewA.prototype.tick = function (live, e) { this.stats.show(CFG.ui === 'en' ? live.wpm : live.speed, live.wpm, live.acc, live.left, e.session.combo); };
   ViewA.prototype.render = function (r, live, e) {
-    this.layer.paint(r, e.session.mode === 'char', e.T);
+    this.layer.paint(r, e.session.mode === 'char');
+    this.typed.update(r, e.T);
     this.tick(live, e);
     nextCap(e.done ? null : r.next);
   };
@@ -835,6 +825,7 @@
   /* ================= 화면 C: 화면 자판(자리 연습) ================= */
   function ViewC() {
     this.txt = $('txt'); this.layer = new TextLayer(this.txt, { keep: 0, slotDy: 30 }); this.keys = board($('kb')); this.lit = []; this.stats = new Stats(); this.tok = undefined;
+    this.typed = new Typed(this.layer);
   }
   ViewC.prototype.light = function (tok) {
     this.lit.forEach(function (k) { k.classList.remove('next', 'with'); }); this.lit = [];
@@ -870,7 +861,7 @@
   };
   ViewC.prototype.onReset = function (e) {
     var keys = this.keys;
-    this.layer.build(e.T.chars);
+    this.layer.build(e.T.chars); this.typed.reset();
     $('result').hidden = true; $('playbox').hidden = false; $('kb-legend').hidden = true; $('kb-say').hidden = false;
     $('left-l').textContent = S.elapsed;
     clearMap(keys); this.lit = []; this.tok = undefined; this.wrEl = null; this.wrBox = null;
@@ -885,7 +876,8 @@
   ViewC.prototype.onExtend = function () {};
   ViewC.prototype.tick = function (live, e) { this.stats.show(CFG.ui === 'en' ? live.wpm : live.speed, live.wpm, live.acc, live.left, e.session.combo); };
   ViewC.prototype.render = function (r, live, e) {
-    this.layer.paint(r, e.session.mode === 'char', e.T);
+    this.layer.paint(r, e.session.mode === 'char');
+    this.typed.update(r, e.T);
     this.tick(live, e);
     if (e.done || r.next === this.tok) return;
     this.tok = r.next;
@@ -916,7 +908,7 @@
 
   /* ================= 화면 B: 보고 치는 글 + 내가 친 글(문장 연습) ================= */
   function ViewB() {
-    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { scroll: false, jolt: this.txt.parentNode, slotRight: true, slotDy: 26, ann: false }); this.lines = []; this.cur = -1; this.bars = []; this.keys = board($('kb')); this.stats = new Stats();
+    this.txt = $('txt'); this.layer = new TextLayer(this.txt, { scroll: false, jolt: this.txt.parentNode, slotRight: true, slotDy: 26 }); this.lines = []; this.cur = -1; this.bars = []; this.keys = board($('kb')); this.stats = new Stats();
     var spark = $('spark');
     for (var i = 0; i < 30; i++) { var b = D.createElement('i'); spark.appendChild(b); this.bars.push(b); }
   }
@@ -971,7 +963,7 @@
     var k = 0, lines = this.lines, T = e.T;
     while (k + 1 < lines.length && r.cursor >= lines[k + 1][0]) k++;
     if (k !== this.cur) this.show(e, k);
-    this.layer.paint(r, e.session.mode === 'char', e.T);
+    this.layer.paint(r, e.session.mode === 'char');
     /* 내가 친 글: 이 줄에 해당하는 단어만 */
     var w0 = 0; while (w0 < T.words.length && T.words[w0].ci[0] < lines[k][0]) w0++;
     var mine = r.value.split(/[ \n]/).slice(w0).join(' ');
@@ -1091,5 +1083,7 @@
   /* 접어 둔 설정: 밖을 누르면 닫는다 */
   var more = $('more');
   if (more) D.addEventListener('click', function (ev) { if (more.open && !more.contains(ev.target)) more.open = false; });
+  /* 작은 휴대폰에서는 설정 창의 아랫줄(화면 밝기)이 화면 아래로 내려간다 → 열 때 창 전체가 보이게 쪽을 굴린다 */
+  if (more) more.addEventListener('toggle', function () { var pop = more.querySelector('.more-pop'); if (more.open && pop && pop.getBoundingClientRect().bottom > window.innerHeight - 8) pop.scrollIntoView({ block: 'end', behavior: REDUCED ? 'auto' : 'smooth' }); });
   window.__E = E; window.__store = store;
 })();

@@ -3,7 +3,7 @@
 SEC=3 처럼 주면 그 묶음만: 1 모든 페이지(오류·깨진 그림·가로 스크롤·어두운 화면·동작 줄이기) · 2 화면 밀림(CLS) ·
 3 한국어 속도 측정(조합 입력·결과·기록·한/영 안내) · 4 영어 속도 측정·영타 · 5 자리 연습·문장 연습 · 6 휴대폰(터치 자판) · 7 광고 자리·연출·언어 띠 · 8 스크린샷 ·
 9 제3자 평가에서 나온 것(누른 키 수, 천지인 중간 모양, 낱말 단위 한/영 안내, 팬그램·문장 되풀이, 휴대폰 옵션·누르는 크기, 초점, 통과 기준, 기록 목록, 404 언어 틀) ·
-10 이펙트·콤보·가벼운 그리기 · 11 내가 친 글자·틀린 키의 자판 반응·긴 글·영어 문장 연습·계산 기준 카드
+10 이펙트·콤보·가벼운 그리기 · 11 내가 친 글 줄·틀린 키의 자판 반응·긴 글·영어 문장 연습·계산 기준 카드
 
 한글은 CDP Input.imeSetComposition / Input.insertText 로 조합 입력을 흉내 낸다(컴퓨터는 글쇠 이벤트 key=Process, code=KeyX 도 같이).
 실제 한글 입력기(윈도우·맥·아이폰·안드로이드)는 이 작업 공간에서 확인할 수 없다.
@@ -206,7 +206,7 @@ def finish_wait(pg):
 def visible_hangul_outside_ko(pg):
     return pg.evaluate(r'''() => { const re = /[ᄀ-ᇿ㄰-㆏가-힣]/; const out = [];
       const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-      while (w.nextNode()) { const n = w.currentNode, p = n.parentElement; if (!re.test(n.nodeValue) || !p || p.closest('script,style,[lang="ko"]')) continue; out.push(n.nodeValue.trim().slice(0, 30)); }
+      while (w.nextNode()) { const n = w.currentNode, p = n.parentElement; if (!re.test(n.nodeValue) || !p || p.closest('script,style,[lang="ko"],#mine-t')) continue;   /* #mine-t = 사용자가 친 글 그대로(한/영이 반대면 한글이 보인다) */ out.push(n.nodeValue.trim().slice(0, 30)); }
       document.querySelectorAll('[aria-label],[title],[placeholder]').forEach((e) => { if (e.closest('[lang="ko"]')) return; for (const a of ['aria-label', 'title', 'placeholder']) { const v = e.getAttribute(a); if (v && re.test(v)) out.push(a + '=' + v); } });
       return out; }''')
 
@@ -832,19 +832,46 @@ def ads_and_motion(env):
         pg = env.page(c, path + '?adpreview', clock=False)
         ok(pg.evaluate('document.querySelectorAll("[data-ad]").length') == 0 and not pg.evaluate('!!window.TJ_ADS'), f'{path} 광고 없는 페이지')
         pg.close()
-    # 연출 1: 루멘랩 키 줄. 화면에 들어올 때 한 번, 다시 들어와도 다시 안 나온다
+    # 연출 1: 루멘랩 키 줄(2026-10-11 사용자 "이펙트가 너무 약한듯" → 판 + 큰 키 + 치는 연출 + 키 조각·'5 콤보' 꼬리표)
     pg = env.page(c, '/ko/', clock=False)
     ok(not pg.evaluate('document.getElementById("lumen").classList.contains("in")'), '루멘랩: 화면 밖에서는 시작하지 않는다')
-    pg.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(250)
-    a = pg.evaluate('''() => { const l = document.getElementById('lumen'); return { on: l.classList.contains('in'), anims: l.getAnimations({ subtree: true }).length, href: l.href, capsHidden: l.querySelector('.caps').getAttribute('aria-hidden') }; }''')
-    ok(a['on'] and a['anims'] >= 5 and a['href'] == 'https://lumenlab.page/' and a['capsHidden'] == 'true', '루멘랩: 들어오면 키 다섯 개가 차례로 눌린다', a)
+    pg.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(300)
+    a = pg.evaluate('''() => { const l = document.getElementById('lumen'), cs = getComputedStyle(l), k = l.querySelector('.caps .cap'); return { on: l.classList.contains('in'), anims: l.getAnimations({ subtree: true }).length, href: l.href, capsHidden: l.querySelector('.caps').getAttribute('aria-hidden'),
+      chips: l.querySelectorAll('.lchip').length, tag: (l.querySelector('.ltag') || { textContent: '' }).textContent, plate: cs.backgroundColor === getComputedStyle(document.querySelector('.hud')).backgroundColor, capH: k.offsetHeight, go: !!l.querySelector('.cap.go'), goHidden: l.querySelector('.cap.go').getAttribute('aria-hidden') }; }''')
+    ok(a['on'] and a['anims'] >= 20 and a['href'] == 'https://lumenlab.page/' and a['capsHidden'] == 'true' and a['goHidden'] == 'true', '루멘랩: 들어오면 키 다섯이 차례로 눌리고 글·화살표 키가 따라 나온다', a)
+    ok(a['chips'] == 15 and a['tag'] == '5콤보', "루멘랩(화려하게): 키마다 조각 셋 + '5 콤보' 꼬리표", (a['chips'], a['tag']))
+    ok(a['plate'] and a['capH'] >= 34, '루멘랩: 숫자 줄과 같은 자판 판 색 위의 큰 키(34px 이상)', (a['plate'], a['capH']))
     shot(pg, 'e2e-lumen')
-    pg.wait_for_timeout(1100)
-    ok(pg.evaluate('document.getElementById("lumen").getAnimations({ subtree: true }).length') == 0, '루멘랩: 0.7초 뒤에는 그리기가 멈춘다')
-    ok(pg.evaluate('getComputedStyle(document.querySelector("#lumen .cap")).color') == pg.evaluate('(() => { const d = document.createElement("i"); d.style.color = "var(--main)"; document.body.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; })()'), '루멘랩: 눌린 글자는 가지색으로 남는다')
-    pg.evaluate('scrollTo(0, 0)'); pg.wait_for_timeout(150)
-    pg.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(200)
-    ok(pg.evaluate('document.getElementById("lumen").getAnimations({ subtree: true }).length') == 0, '루멘랩: 다시 들어와도 다시 안 나온다')
+    pg.wait_for_timeout(2600)
+    b2 = pg.evaluate('''() => { const l = document.getElementById('lumen'); return [l.getAnimations({ subtree: true }).length, l.querySelectorAll('.lchip, .ltag').length]; }''')
+    ok(b2 == [0, 0], '루멘랩: 끝나면 그리기가 멈추고 조각을 지운다', b2)
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#lumen .caps .cap")).color') == pg.evaluate('(() => { const d = document.createElement("i"); d.style.color = "var(--main)"; document.body.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; })()'), '루멘랩: 눌린 글자는 가지색으로 남는다')
+    ok(pg.evaluate('(() => { const t = document.querySelector("#lumen .lumen-t").getBoundingClientRect(), l = document.getElementById("lumen").getBoundingClientRect(); return t.width > 60 && t.right <= l.right && getComputedStyle(document.querySelector("#lumen .lumen-t")).clipPath === "none"; })()'), '루멘랩: 끝난 뒤 글이 다 보인다(가린 채 남지 않는다)')
+    pg.evaluate('scrollTo(0, 0)'); pg.wait_for_timeout(200)
+    pg.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(250)
+    ok(pg.evaluate('document.getElementById("lumen").getAnimations({ subtree: true }).length') == 0, '루멘랩: 6초 안에 다시 들어오면 다시 나오지 않는다')
+    pg.evaluate('scrollTo(0, 0)'); pg.wait_for_timeout(6100)
+    pg.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg.wait_for_timeout(300)
+    ok(pg.evaluate('document.getElementById("lumen").getAnimations({ subtree: true }).length') >= 20, '루멘랩: 화면 밖으로 나갔다가 6초 뒤에 다시 들어오면 다시 한 번 나온다')
+    # 이펙트를 끈 사람: 움직이지 않고 색만. 가볍게: 조각·꼬리표 없이 키와 글만
+    for lv, want in ((0, 'lite'), (1, 'in')):
+        pg2 = env.page(c, '/ko/', clock=False)
+        pg2.evaluate(f'TJFX.setLevel({lv})')
+        pg2.evaluate('document.getElementById("lumen").scrollIntoView({ block: "center" })'); pg2.wait_for_timeout(300)
+        r = pg2.evaluate('''() => { const l = document.getElementById('lumen'); return [l.className, l.getAnimations({ subtree: true }).length, l.querySelectorAll('.lchip, .ltag').length]; }''')
+        ok(want in r[0] and r[2] == 0 and ((lv == 0 and r[1] == 0) or (lv == 1 and r[1] >= 5)), f'루멘랩: 이펙트 {["끔", "가볍게"][lv]}에서는 {"움직이지 않는다" if lv == 0 else "조각·꼬리표 없이 키와 글만"}', r)
+        pg2.close()
+    # 글 페이지(이펙트 엔진이 없는 곳)에서도 나오고, 좁은 휴대폰에서 판이 화면을 넘지 않는다
+    for w, path, lang in ((1366, '/ko/guide/', 'ko'), (390, '/guide/', 'en'), (320, '/ko/about/', 'ko'), (320, '/about/', 'en')):
+        c3 = env.ctx(w, 780, w < 700, lang=lang)
+        pg2 = env.page(c3, path, clock=False)
+        pg2.evaluate('document.querySelector(".lumen").scrollIntoView({ block: "center" })'); pg2.wait_for_timeout(300)
+        r = pg2.evaluate('''() => { const l = document.querySelector('.lumen'), b = l.getBoundingClientRect(); return { n: l.getAnimations({ subtree: true }).length, tag: (l.querySelector('.ltag') || { textContent: '' }).textContent, right: Math.round(b.right), vw: innerWidth, hs: document.documentElement.scrollWidth - innerWidth,
+          over: [...l.querySelectorAll('.cap, .lumen-t')].filter((e) => e.getBoundingClientRect().right > b.right + 1).length, h: Math.round(b.height) }; }''')
+        ok(r['n'] >= 20 and r['tag'] == ('5콤보' if lang == 'ko' else '5combo'), f'{path} {w}px 루멘랩 연출이 나온다', r)
+        ok(r['right'] <= r['vw'] - 8 and r['hs'] <= 0 and r['over'] == 0 and r['h'] >= 44, f'{path} {w}px 루멘랩 판이 화면 안에 들어가고 누르는 높이 44px 이상', r)
+        ok(not pg2._errs, f'{path} {w}px 루멘랩 콘솔 오류 0', pg2._errs[:2])
+        c3.close()
     near_ad = pg.evaluate('(() => { const l = document.getElementById("lumen").getBoundingClientRect(); let d = 1e9; document.querySelectorAll(".ad-wrap").forEach((a) => { const b = a.getBoundingClientRect(); if (b.height) d = Math.min(d, Math.abs(l.top - b.bottom)); }); return d; })()')
     ok(near_ad >= 60, '루멘랩 칸은 광고 자리 옆이 아니다', near_ad)
     pg.close(); c.close()
@@ -1748,7 +1775,6 @@ def fx_checks(env):
 
 
 # ---------- 11. 2026-10-11 둘째 묶음: 내가 친 글자 · 틀린 키의 자판 반응 · 긴 글 · 영어 문장 연습 · 계산 기준 카드 ----------
-ANN_JS = '[...document.querySelectorAll("#txt [data-t]")].map((e) => [e.textContent, e.getAttribute("data-t"), e.classList.contains("bad") ? "bad" : e.classList.contains("pend") ? "pend" : ""])'
 KB_JS = '''(() => ({ wr: [...document.querySelectorAll(".kb .k.wr-a,.kb .k.wr-b")].map((e) => [e.textContent.trim(), e.classList.contains("wr-a") ? "a" : "b"]),
   say: (document.querySelector("#kb-say .wr-say") || { textContent: "" }).textContent, next: document.querySelectorAll(".kb .k.next").length,
   top: Math.round(document.querySelector(".kb").getBoundingClientRect().top), sayH: Math.round(document.getElementById("kb-say").getBoundingClientRect().height) }))()'''
@@ -1761,121 +1787,103 @@ def set_text(pg, text):
 
 def feat_checks(env):
     """11. 사용자 요청 2026-10-11(둘째): 무엇을 잘못 쳤는지 보이게, 자리 연습의 틀린 키 반응, 긴 글, 영어판 기능, 계산 기준을 읽기 좋게"""
-    print('11. 내가 친 글자·틀린 키 반응·긴 글·영어 문장 연습·계산 기준 카드')
-    # ① 속도 측정(한국어): 틀린 글자 아래에 내가 친 글자
+    print('11. 내가 친 글 줄·틀린 키 반응·긴 글·영어 문장 연습·계산 기준 카드')
+    # ① '내가 친 글' 줄(사용자 2026-10-11 저녁: 글자 아래의 작은 글자는 "모바일에서 겁나 안 보여 … 그냥 문장연습처럼 맞는것도 보이게").
+    #    속도 측정·영타·자리 연습: 글 상자에는 지금 줄 하나, 그 아래에 그 줄에서 내가 친 글(맞은 것도 틀린 것도), 그 아래에 다음 줄
+    LINE_JS = '''() => { const q = (x) => document.querySelector(x), r = (e) => { const b = e.getBoundingClientRect(); return [Math.round(b.top), Math.round(b.bottom)]; };
+      const v = q('.view'), m = q('.mine'), cur = q('#txt .cur') || q('#txt .c'), n1 = q('#next1'), n2 = q('#next2'), cs = getComputedStyle(q('#txt')), ms = getComputedStyle(m);
+      return { view: r(v), mine: r(m), cur: cur ? r(cur) : null, n1: n1 ? r(n1) : null, n2: n2 && n2.getClientRects().length ? r(n2) : null, lh: parseFloat(cs.lineHeight), fs: parseFloat(cs.fontSize), mfs: parseFloat(ms.fontSize),
+        mineT: q('#mine-t').textContent, next1: n1 ? n1.textContent : '', next2: n2 ? n2.textContent : '', tags: [...document.querySelectorAll('.now .tag')].map((e) => e.textContent), marks: document.querySelectorAll('#txt [data-t]').length,
+        hs: document.documentElement.scrollWidth - innerWidth, vh: innerHeight, y: q('#txt').style.transform }; }'''
     c = env.ctx()
     pg, ty = env.tool(c, '/ko/')
     set_text(pg, '달이 밝은 밤에 나무 그늘 아래를 걸어요')
-    # 자리는 배치 값(offset)으로 잰다: 틀린 순간의 흔들림(transform)은 배치를 바꾸지 않는다
-    far = '(() => { const cs = document.querySelectorAll("#txt .c"); return [cs[0].offsetLeft, cs[0].offsetTop, cs[12].offsetLeft, cs[12].offsetTop, cs[0].offsetHeight].join(","); })()'
-    y0 = pg.evaluate(far)
-    for k in 'ㄷㅏ':                         # '달' 자리에 '담'
+    g0 = pg.evaluate(LINE_JS)
+    ok(g0['view'][1] - g0['view'][0] == round(g0['lh']) and g0['mine'][0] >= g0['view'][1] and g0['n1'][0] >= g0['mine'][1], '속도 측정: 글 상자는 한 줄, 그 아래 내가 친 글, 그 아래 다음 줄', g0)
+    ok(g0['tags'] == ['보고 치는 글', '내가 친 글'] and g0['mfs'] == g0['fs'], '문장 연습과 같은 이름표, 내가 친 글은 보고 치는 글과 같은 크기', (g0['tags'], g0['fs'], g0['mfs']))
+    for k in 'ㄷㅏㅁㅇㅣ ㅂㅏㄹㄱㅇㅡㄴ ㅂㅏㄴ':
         ty.key(k)
-    ok(pg.evaluate(ANN_JS) == [], '맞게 치는 동안에는 적는 것이 없다', pg.evaluate(ANN_JS))
-    ty.key('ㅁ')
-    ok(pg.evaluate(ANN_JS) == [['달', '담', 'bad']], "틀린 키를 누르자마자 '달' 아래에 내가 친 '담'", pg.evaluate(ANN_JS))
-    for k in 'ㅇㅣ ':
-        ty.key(k)
-    ok(pg.evaluate(ANN_JS) == [['달', '담', 'bad']], "다음 글자로 넘어가도 남아 있다", pg.evaluate(ANN_JS))
-    after = pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), s = getComputedStyle(e, "::after"); return [s.content, s.color, s.position, parseFloat(s.fontSize) < parseFloat(getComputedStyle(e).fontSize) * 0.6, parseFloat(s.marginTop) >= 0 && Math.abs(parseFloat(s.top) - e.getBoundingClientRect().height) < 1]; })()')
-    ok(after == ['"담"', 'rgb(207, 61, 30)', 'absolute', True, True], '적은 글자는 작게, 주홍으로, 글 줄을 밀지 않게(::after, absolute), 글자 칸 바로 아래에(칸과 겹치면 윗부분이 안 읽힌다)', after)
-    ok(pg.evaluate(far) == y0, '적어도 글자 자리와 글 상자 높이가 그대로다', (y0, pg.evaluate(far)))
-    for k in 'ㅂㅏㄹㄱ':
-        ty.key(k)
-    ty.key('ㅁ')                             # '은'의 ㅇ 대신 ㅁ → 앞 글자의 받침으로 붙지 못하고(겹받침 ㄺ 뒤) 새 글자
-    for k in 'ㅡㄴ':
-        ty.key(k)
-    ok(['은', '믄', 'bad'] in pg.evaluate(ANN_JS), "틀린 첫소리: '은' 아래에 '믄'", pg.evaluate(ANN_JS))
-    ty.key(' ')
-    for k in 'ㅂㅏ':
-        ty.key(k)
-    ty.key('ㄴ')                             # '밤'의 ㅁ 대신 ㄴ
-    for k in 'ㅇㅔ':
-        ty.key(k)
-    ok(['밤', '반', 'bad'] in pg.evaluate(ANN_JS), "틀린 받침: '밤' 아래에 '반'", pg.evaluate(ANN_JS))
-    for k in ' ㄴㅏ':
-        ty.key(k)
-    ty.key('ㄱ')                             # '무'의 ㅁ 대신 ㄱ → 입력기는 일단 앞 글자 '나'의 받침으로 붙인다('낙')
-    ok(pg.evaluate('__E.session.value').endswith('낙') and ['무', 'ㄱ', 'bad'] in pg.evaluate(ANN_JS), "앞 글자의 받침으로 붙은 틀린 낱자도 그 자리에 적는다('무' 아래에 ㄱ)", (pg.evaluate('__E.session.value'), pg.evaluate(ANN_JS)))
-    ty.key('ㅜ')
-    ok(['무', '구', 'bad'] in pg.evaluate(ANN_JS), "모음을 치면 '구'로 바뀐다", pg.evaluate(ANN_JS))
-    shot(pg, 'e2e-ann-ko')
-    ok(not pg._errs, '내가 친 글자(한국어) 콘솔 오류 0', pg._errs[:3])
-    pg.keyboard.press('Tab'); pg.wait_for_timeout(120)
-    ok(pg.evaluate(ANN_JS) == [], '다른 글로 넘어가면 적은 것이 남지 않는다')
-    pg.close(); c.close()
-    # ② 속도 측정(영어): 틀린 글자, 지우고 고치기, 단어 끝에 더 친 글자
-    c = env.ctx(lang='en')
-    pg, ty = env.tool(c, '/')
-    set_text(pg, 'quiet rivers bend slowly near the old mill')
-    for k in 'qu':
-        ty.key(k)
-    ty.key('x')
-    ok(pg.evaluate(ANN_JS) == [['i', 'x', 'bad']], "영어: 틀린 글자 'i' 아래에 'x'", pg.evaluate(ANN_JS))
+    g = pg.evaluate(LINE_JS)
+    ok(g['mineT'] == '담이 밝은 반' == pg.evaluate('__E.session.value'), "내가 친 글: 맞은 글자도 틀린 글자도 친 그대로('담이 밝은 반')", g['mineT'])
+    ok(pg.evaluate('[...document.querySelectorAll("#txt .bad")].map((e) => e.textContent).join("")') == '달밤' and g['marks'] == 0, '틀린 글자는 위 줄에서 주홍(글자 아래에 작게 적지 않는다)', g['marks'])
+    ok((g['view'], g['mine'], g['n1']) == (g0['view'], g0['mine'], g0['n1']), '치는 동안 줄들의 자리가 움직이지 않는다')
     ty.key('\b', 240)
-    ok(pg.evaluate(ANN_JS) == [], '지우면 적은 것도 지워진다', pg.evaluate(ANN_JS))
-    for k in 'iet':
-        ty.key(k)
-    ok(pg.evaluate(ANN_JS) == [] and pg.evaluate('document.querySelectorAll("#txt .bad").length') == 0, '고쳐 치면 틀린 글자·적은 글자가 없다')
-    for k in 'zz':
-        ty.key(k)
-    ok(pg.evaluate(ANN_JS) == [[' ', '+zz', 'bad']], '단어 끝에 더 친 글자는 띄어쓰기 자리에 + 를 붙여 적는다', pg.evaluate(ANN_JS))
-    for k in ' rxvers ':
-        ty.key(k)
-    ok(['i', 'x', 'bad'] in pg.evaluate(ANN_JS) and len(pg.evaluate(ANN_JS)) == 2, '앞 단어에 적은 것은 남고, 새로 틀린 글자가 더해진다', pg.evaluate(ANN_JS))
-    ok(not visible_hangul_outside_ko(pg) and not pg._errs, '영어 화면: 한글 0, 콘솔 오류 0', pg._errs[:3])
-    # 같은 글자가 이어지는 단어·빠뜨린 글자·넘치게 친 글자(평가 2026-10-11: 'hhhh' 의 첫 h 가 틀린 것으로 보이고 아래에 아무것도 안 적혔다)
-    set_text(pg, 'hhh kkk hotel boards never')
-    for k in 'hhhh kk hoteXxy boarx neverabcdefgh':
-        ty.key(k)
-    ann = pg.evaluate(ANN_JS)
-    ok(ann == [[' ', '+h', 'bad'], ['k', '–', 'bad'], ['l', 'X', 'bad'], [' ', '+xy', 'bad'], ['d', 'x', 'bad'], ['s', '–', 'bad'], [' ', '+abcd…', 'bad']], "더 친 글자는 띄어쓰기 자리에(다섯부터는 …), 빠뜨린 글자는 '–', 바꿔 친 글자는 그 글자", ann)
-    ok(pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")') == 'klds', "'hhh' 에 hhhh: 앞의 h 는 틀림이 아니다(틀린 글자는 k l d s)", pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")'))
-    geo = pg.evaluate('''() => { const top = (e) => { const s = getComputedStyle(e, '::after'); return e.getBoundingClientRect().top + parseFloat(s.top) + parseFloat(s.marginTop); };
-      const sp = document.querySelector('#txt .sp[data-t]'), c = document.querySelector('#txt .c[data-t]'), ss = getComputedStyle(sp, '::after');
-      return { d: Math.abs(top(sp) - top(c)), left: ss.right, tf: ss.transform, bar: getComputedStyle(sp).boxShadow, plain: getComputedStyle(document.querySelector('#txt .sp.ok')).boxShadow }; }''')
-    ok(geo['d'] <= 1.5 and geo['left'] == '0px' and geo['tf'] == 'none' and geo['bar'] == 'none', '띄어쓰기 자리에 적은 것: 글자 아래 적은 것과 같은 높이, 칸의 오른쪽 끝에 맞춰(다음 단어의 것과 붙지 않게), 주홍 밑줄과 겹치지 않는다', geo)
+    ok(pg.evaluate('document.getElementById("mine-t").textContent') == '담이 밝은 바', '지우면 내가 친 글에서도 지워진다', pg.evaluate('document.getElementById("mine-t").textContent'))
+    shot(pg, 'e2e-mine-ko')
+    pg.keyboard.press('Tab'); pg.wait_for_timeout(120)
+    ok(pg.evaluate('document.getElementById("mine-t").textContent') == '' and not pg._errs, '다른 글로 넘어가면 비워진다', pg._errs[:3])
     pg.close()
-    # 줄이 넘어가 글이 위로 밀리면, 화면 위로 나간 줄에 적은 것은 지운다(맨 윗줄 위에 반쯤 걸려 보였다)
-    pg, ty = env.tool(c, '/')
-    pg.click('#kind [data-v="sentences"]'); pg.wait_for_timeout(100); pg.click('#trap'); pg.wait_for_timeout(60)
-    lines = pg.evaluate('(() => { const L = {}; document.querySelectorAll("#txt .c").forEach((e) => { const t = e.parentNode.offsetTop; (L[t] = L[t] || []).push(e); }); return Object.keys(L).map(Number).sort((a, b) => a - b).map((t) => L[t].length); })()')
-    ks = ty.keys(); line = 0; i = 0
-    while i < len(ks) and pg.evaluate('document.getElementById("txt").style.transform') in ('', 'translateY(0px)') and i < 400:
-        k = ks[i]
-        ty.key('x' if (i % 9 == 4 and k not in ' x') else k, 60); i += 1
-    for _ in range(12):
-        ty.key(ks[i], 60); i += 1
-    r = pg.evaluate('''() => { const v = document.querySelector('.view').getBoundingClientRect(); const all = [...document.querySelectorAll('#txt [data-t]')].map((e) => Math.round(e.getBoundingClientRect().bottom - v.top));
-      return { moved: document.getElementById('txt').style.transform, n: all.length, above: all.filter((b) => b <= 2).length, bad: document.querySelectorAll('#txt .bad').length }; }''')
-    ok('translateY(-' in r['moved'] and r['bad'] >= 6 and r['n'] >= 1 and r['above'] == 0, '글이 위로 밀린 뒤: 화면 위로 나간 줄에는 적은 것이 없다(보이는 줄에는 남는다)', r)
+    # 줄이 넘어갈 때: 글 상자가 다음 줄로 올라가고, 내가 친 글은 새 줄 것으로 바뀌고, 다음 줄들이 한 줄씩 당겨진다
+    pg, ty = env.tool(c, '/ko/')
+    lines = pg.evaluate('''() => { __E.view.layer.measure(); const L = __E.view.layer.L, T = __E.T.chars, out = []; for (let i = 0; i < T.length; i++) { (out[L[i]] = out[L[i]] || []).push(T[i]); } return out.map((x) => x.join('').trim()); }''')
+    g0 = pg.evaluate(LINE_JS)
+    ok(len(lines) >= 4 and g0['next1'] == lines[1] and g0['next2'] == lines[2], '다음 줄 둘 = 글자 줄의 둘째·셋째 줄(줄 나눔이 같다)', (g0['next1'], lines[1]))
+    # 창 폭이 바뀌어 줄 나눔이 달라지면 다음 줄도 따라 바뀐다(글꼴이 늦게 왔을 때도 같은 길)
+    pg.set_viewport_size({'width': 800, 'height': 768}); pg.wait_for_timeout(250); pg.clock.run_for(100); pg.wait_for_timeout(100)   # 다시 재기는 다음 화면(rAF)에서 한다 → 멈춰 둔 시계를 조금 돌린다
+    LINES = '''() => { const L = __E.view.layer.L, T = __E.T.chars, out = []; for (let i = 0; i < T.length; i++) { (out[L[i]] = out[L[i]] || []).push(T[i]); } return out.map((x) => x.join('').trim()); }'''
+    l2 = pg.evaluate(LINES); g1 = pg.evaluate(LINE_JS)
+    ok(l2[0] != lines[0] and g1['next1'] == l2[1] and g1['next2'] == l2[2], '창 폭이 바뀌면 다음 줄도 새 줄 나눔대로 다시 쓴다', (g1['next1'], l2[1]))
+    pg.set_viewport_size({'width': 1366, 'height': 768}); pg.wait_for_timeout(250); pg.clock.run_for(100); pg.wait_for_timeout(100)
+    lines = pg.evaluate(LINES)
+    ks = ty.keys(); n1 = len(pg.evaluate('t => TJ.hangul.keyStream(t)', lines[0])) + 1
+    for k in ks[:n1]:
+        ty.key(k, 60)
+    g = pg.evaluate(LINE_JS)
+    ok(g['mineT'] == '' and g['next1'] == lines[2] and g['next2'] == lines[3] and 'translateY(-' in g['y'], '첫 줄을 다 치면: 내가 친 글이 비고, 글 상자가 둘째 줄로, 다음 줄들이 당겨진다', (g['mineT'], g['y']))
+    for k in ks[n1:n1 + 5]:
+        ty.key(k, 60)
+    pg.wait_for_timeout(250)
+    g = pg.evaluate(LINE_JS)
+    typed2 = pg.evaluate('__E.session.value').split(' ')
+    ok(g['mineT'] != '' and lines[1].startswith(g['mineT'][:1]) and g['mineT'] == ' '.join(typed2[len(lines[0].split(' ')):]), '둘째 줄에서는 둘째 줄에 친 글만 보인다', g['mineT'])
+    ok(g['cur'] and g['cur'][0] >= g['view'][0] - 1 and g['cur'][1] <= g['view'][1] + 1, '지금 칠 글자가 글 상자 안에 있다', (g['cur'], g['view']))
     ok(not pg._errs, '줄 넘김 콘솔 오류 0', pg._errs[:3])
     pg.close(); c.close()
-    # ③ 문장 연습은 '내가 친 글' 줄이 따로 있어 글자 아래에는 적지 않는다
-    for path, lang, text in (('/ko/sentences/', 'ko', '달이 밝은 밤에 걸어요'), ('/sentences/', 'en', 'quiet rivers bend slowly')):
+    # 영어: 같은 글자가 이어지는 단어(평가: 'hhhh' 의 첫 h 가 틀린 것으로 보였다) → 틀림은 띄어쓰기 자리에, 내가 친 글에는 친 그대로
+    c = env.ctx(lang='en')
+    pg, ty = env.tool(c, '/')
+    set_text(pg, 'hhh kkk hotel boards never')
+    for k in 'hhhh kk hoteXxy boarx ne':
+        ty.key(k)
+    g = pg.evaluate(LINE_JS)
+    ok(g['mineT'] == 'hhhh kk hoteXxy boarx ne' and g['tags'] == ['Text to copy', 'What you typed'], '영어 속도 측정: 내가 친 글에 친 그대로', (g['mineT'], g['tags']))
+    ok(pg.evaluate('[...document.querySelectorAll("#txt .c.bad")].map((e) => e.textContent).join("")') == 'klds' and pg.evaluate('document.querySelectorAll("#txt .sp.bad").length') == 2, "'hhh' 에 hhhh: 앞의 h 는 틀림이 아니고 띄어쓰기 자리가 틀림(틀린 글자 k l d s, 띄어쓰기 둘)")
+    ok(not visible_hangul_outside_ko(pg) and not pg._errs, '영어 화면: 한글 0, 콘솔 오류 0', pg._errs[:3])
+    pg.close(); c.close()
+    # 문장 연습은 그대로(같은 모양의 원래 주인)
+    for path, lang in (('/ko/sentences/', 'ko'), ('/sentences/', 'en')):
         c = env.ctx(lang=lang)
         pg, ty = env.tool(c, path)
         ks = ty.keys()
         for i in range(8):
             ty.key(wrong(ks[i]) if i == 2 else ks[i])
-        ok(pg.evaluate('document.querySelectorAll("#txt .bad").length') >= 1 and pg.evaluate(ANN_JS) == [] and len(pg.evaluate('document.getElementById("mine-t").textContent')) >= 3, f'{path} 틀린 글자는 주홍, 친 글은 아래 줄에(글자 아래에는 적지 않는다)', pg.evaluate(ANN_JS))
+        ok(pg.evaluate('document.querySelectorAll("#txt .bad").length') >= 1 and len(pg.evaluate('document.getElementById("mine-t").textContent')) >= 3, f'{path} 틀린 글자는 주홍, 친 글은 아래 줄에')
         pg.close(); c.close()
-    # ④ 터치 자판: 판정을 미룬 낱자는 회색으로 먼저 적고, 글자가 끝나면 주홍
-    c = env.ctx(390, 844, True, dpr=2)
-    pg, ty = env.tool(c, '/ko/', mobile=True)
-    set_text(pg, '달이 밝은 밤에 나무 그늘 아래를 걸어요'); pg.tap('#trap', position={'x': 60, 'y': 30}); pg.wait_for_timeout(80)
-    for k in 'ㄷㅏㄹㅇ':
-        ty.key(k)
-    ty.key('ㅓ')
-    a1 = pg.evaluate(ANN_JS)
-    ty.key(' ')
-    a2 = pg.evaluate(ANN_JS)
-    ok(pg.evaluate('__E.session.mode') == 'char' and a1 == [['이', '어', 'pend']] and a2 == [['이', '어', 'bad']], '터치 자판: 미룬 낱자는 회색으로, 글자가 끝나면 주홍으로 적는다', (a1, a2))
-    ok(pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), b = e.getBoundingClientRect(), t = document.querySelector(".sheet").getBoundingClientRect(); return b.bottom + 14 < t.bottom && b.left > t.left; })()'), '터치 자판: 적은 글자가 종이 안에 보인다')
-    fs = pg.evaluate('(() => { const e = document.querySelector("#txt [data-t]"), s = getComputedStyle(e, "::after"); return [s.fontSize, s.fontWeight, parseFloat(s.marginTop) >= 0]; })()')
-    ok(fs == ['13px', '700', True], '휴대폰: 적은 글자는 13px 굵게(받침 있는 한글이 읽히게), 글자 칸 아래에', fs)
-    shot(pg, 'e2e-ann-mobile')
-    pg.close(); c.close()
+    # 휴대폰·태블릿: 내가 친 글이 크게(보고 치는 글과 같은 크기, 21px 이상) 화면 자판 위에 보인다
+    for w, h, path, lang in ((390, 780, '/ko/', 'ko'), (320, 640, '/ko/', 'ko'), (320, 640, '/', 'en'), (390, 780, '/ko/english/', 'ko'), (390, 780, '/ko/practice/', 'ko'), (320, 640, '/practice/', 'en'), (820, 1180, '/ko/', 'ko')):
+        c = env.ctx(w, h, True, lang=lang, dpr=2)
+        pg, ty = env.tool(c, path, mobile=True)
+        ty.run(n=12, wrong_at={4})
+        g = pg.evaluate(LINE_JS)
+        ok(pg.evaluate('__E.session.mode') == 'char' and g['mineT'] == pg.evaluate('__E.session.value').split('\n')[-1] and g['mfs'] >= 21 and g['mfs'] == g['fs'], f'{path} {w}px 내가 친 글이 보고 치는 글과 같은 크기({g["mfs"]}px)', (g['mineT'], g['mfs'], g['fs']))
+        ok(g['mine'][0] >= g['view'][1] and g['mine'][1] <= (h * 0.56 if w < 700 else h), f'{path} {w}px 내가 친 글이 지금 줄 바로 아래, 화면 위쪽 절반 안(기기 자판에 안 가린다)', (g['view'], g['mine'], h))
+        ok(g['hs'] <= 0 and g['marks'] == 0 and not pg._errs, f'{path} {w}px 가로 넘침 0, 콘솔 오류 0', pg._errs[:3])
+        if (w, path) in ((390, '/ko/'), (390, '/ko/practice/')):
+            shot(pg, 'e2e-mine-m' + path.strip('/').replace('/', '-'))
+        c.close()
+    # 자리 연습(컴퓨터): 내가 친 글 줄이 생겨도 화면 자판은 제자리(화면 안)
+    for path, lang in (('/ko/practice/', 'ko'), ('/practice/', 'en')):
+        c = env.ctx(lang=lang)
+        pg, ty = env.tool(c, path)
+        k0 = pg.evaluate('(() => { const b = document.querySelector(".kb").getBoundingClientRect(); return [Math.round(b.top), Math.round(b.bottom)]; })()')
+        ty.run(n=9, wrong_at={3})
+        g = pg.evaluate(LINE_JS)
+        k1 = pg.evaluate('(() => { const b = document.querySelector(".kb").getBoundingClientRect(); return [Math.round(b.top), Math.round(b.bottom)]; })()')
+        two = pg.evaluate('(() => { const L = __E.view.layer.L; return L[__E.T.chars.length - 1] > 0; })()')
+        ok(len(g['mineT']) >= 6 and g['mine'][0] >= g['view'][1] - 1 and g['n1'][0] >= g['mine'][1] and (g['next1'] != '') == two, f'{path} 자리 연습: 지금 줄, 내가 친 글, 다음 줄(글이 두 줄 이상일 때)', g)
+        ok(k0 == k1 and k1[1] <= 768 and g['mine'][1] < k1[0], f'{path} 자리 연습: 화면 자판이 밀리지 않고 화면 안에 있다', (k0, k1))
+        ok(not pg._errs, f'{path} 콘솔 오류 0', pg._errs[:3])
+        pg.close(); c.close()
     # ⑤ 자리 연습: 틀린 키를 화면 자판에 알린다
     for path, lang, text, steps in (('/ko/practice/', 'ko', 'ㅁㄴㅇㄹ ㅁㄴㅇㄹ', [('ㅁ', None), ('ㄹ', 'ㄹ'), ('ㅇ', None), ('ㅁ', 'ㅁ'), ('ㅁ', 'ㅁ'), (' ', None)]),
                                     ('/practice/', 'en', 'asdf asdf', [('a', None), ('f', 'F'), ('d', None), ('a', 'A'), ('a', 'A'), (' ', None)])):
@@ -1896,7 +1904,7 @@ def feat_checks(env):
         ok(seen[3]['wr'] and seen[4]['wr'] and seen[3]['wr'][0][1] != seen[4]['wr'][0][1] and seen[3]['wr'][0][0] == seen[4]['wr'][0][0], f'{path} 같은 키를 또 틀리면 움직임이 다시 돈다(이름을 번갈아)', (seen[3]['wr'], seen[4]['wr']))
         ok(len({s['top'] for s in seen} | {base['top']}) == 1 and len({s['sayH'] for s in seen} | {base['sayH']}) == 1, f'{path} 알림이 떠도 자판이 밀리지 않는다', [(s['top'], s['sayH']) for s in seen])
         ok(an.startswith('keywrong') and seen[5]['wr'] == [], f'{path} 틀린 키는 흔들리고, 맞게 누르면 테가 걷힌다', (an, seen[5]['wr']))
-        ok(pg.evaluate('document.querySelectorAll("#txt [data-t]").length') >= 1, f'{path} 자리 연습도 틀린 글자 아래에 친 글자를 적는다')
+        ok(len(pg.evaluate('document.getElementById("mine-t").textContent')) >= 4, f'{path} 자리 연습에도 내가 친 글 줄이 있다')
         ok((lang == 'ko' or not visible_hangul_outside_ko(pg)) and not pg._errs, f'{path} 콘솔 오류 0', pg._errs[:3])
         pg.keyboard.press('Tab'); pg.wait_for_timeout(120)
         k2 = pg.evaluate(KB_JS)

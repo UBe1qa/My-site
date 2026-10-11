@@ -153,7 +153,7 @@ def footer(lang, lumen_id=True):
     caps = ''.join(f'<span class="cap" style="--i:{i}">{ch}</span>' for i, ch in enumerate('LUMEN'))
     tools = ''.join(f'<a href="{p}{h}">{esc(label)}</a>' for h, label, key in NAV[lang])
     return f'''<footer class="foot"><div class="wrap">
-  <a class="lumen"{' id="lumen"' if lumen_id else ''} href="{home}"><span class="caps" aria-hidden="true">{caps}</span><span class="lumen-t"><b>{t['lumen']}</b><span>{t['lumen_s']}</span></span></a>
+  <a class="lumen"{' id="lumen"' if lumen_id else ''} href="{home}"><span class="caps" aria-hidden="true">{caps}</span><span class="lumen-t"><b>{t['lumen']}</b><span>{t['lumen_s']}</span></span><span class="cap go" aria-hidden="true">→</span></a>
   <p class="foot-links">{tools}<a href="{p}about/">{t['about']}</a><a href="{p}privacy/">{t['privacy']}</a><a href="mailto:woxocoso@gmail.com">{t['contact']}</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>'''
@@ -344,7 +344,14 @@ def layout_a(lang, tool):
     <div class="playbox" id="playbox">
       <div class="play">
         <div class="playtop"><p class="start">{start_spans(lang)}</p><p class="daily" id="daily"></p></div>
-        <div class="view"><div class="txt" id="txt" aria-hidden="true"></div></div>
+        <div class="now">
+          <p class="tag">{t['look']}</p>
+          <div class="view"><div class="txt" id="txt" aria-hidden="true"></div></div>
+          <p class="tag mine-tag">{t['mine']}</p>
+          <div class="mine" aria-hidden="true"><span id="mine-t"></span><i class="caret"></i></div>
+        </div>
+        <p class="ln next" id="next1" aria-hidden="true"></p>
+        <p class="ln next n2" id="next2" aria-hidden="true"></p>
         {trap(lang)}
       </div>
       <div class="bar" aria-hidden="true"><i id="bar"></i></div>
@@ -398,8 +405,9 @@ def layout_c(lang, tool):
     </div>
     <div class="bar" aria-hidden="true"><i id="bar"></i></div>
     <div class="band" id="playbox">
-      <p class="start">{start_spans(lang)}</p>
       <div class="view"><div class="txt" id="txt" aria-hidden="true"></div></div>
+      <div class="mine" aria-hidden="true"><span id="mine-t"></span><i class="caret"></i><span class="ph">{start_spans(lang)}</span><span class="mine-l">{t['mine']}</span></div>
+      <p class="ln next" id="next1" aria-hidden="true"></p>
       {trap(lang)}
     </div>
     <div class="band result" id="result" hidden>
