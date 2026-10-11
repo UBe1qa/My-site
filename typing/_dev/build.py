@@ -46,7 +46,10 @@ esc = lambda s: html.escape(str(s), quote=True)
 LOGO = ('<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path class="lg-e" d="M3 20.5a4 4 0 0 0 4 3.5h12a4 4 0 0 0 4-3.5"/>'
         '<rect class="lg-k" x="2" y="2" width="22" height="20" rx="5"/><rect class="lg-u" x="8" y="14" width="10" height="3" rx="1.5"/></svg>')
 # 첫 그림 전에: 동작 줄이기가 아니면 html.anim(연출 켬)
-BOOT = "<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>"
+# + 화면(밝게/어둡게): 기본은 밝게. '설정 → 화면'에서 어둡게를 고른 사람만 어둡게(todok.set 의 fx.t). 기기의 어두운 모드는 따르지 않는다
+BOOT = ("<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim');"
+        "try{var s=JSON.parse(localStorage.getItem('todok.set')||'{}');if(s&&s.fx&&s.fx.t==='dark'){h.setAttribute('data-theme','dark');var m=d.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#15121f')}}catch(e){}"
+        "})(document)</script>")
 
 
 def prefix(lang):
@@ -117,8 +120,7 @@ def head(lang, title, desc, path, jsonld=(), og_type='website', noindex=False, a
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
-{'<meta name="robots" content="noindex">' + chr(10) if noindex else ''}<meta name="theme-color" content="#f3f1f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#13111a" media="(prefers-color-scheme: dark)">
+{'<meta name="robots" content="noindex">' + chr(10) if noindex else ''}<meta name="theme-color" content="#f3f1f7">
 {chr(10).join(links)}
 {og_meta}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -235,7 +237,8 @@ def fx_rows(lang):
     """설정 팝업 안의 이펙트 세기·키 소리 고르기. 고른 값은 todok.set 에 남는다. '동작 줄이기'가 켜진 기기에서는 이펙트 줄이 꺼진다(app.js)."""
     t, s = TX[lang], JS[lang]
     return (f'<div class="more-row"><span id="l-fx">{t["fx_l"]}</span>{seg("fx-seg", "l-fx", [(str(i), s["fxLevels"][i]) for i in (0, 1, 2)], "2")}</div>'
-            f'<div class="more-row"><span id="l-snd">{t["snd_l"]}</span>{seg("snd-seg", "l-snd", [("0", s["sndOff"]), ("1", s["sndOn"])], "0")}</div>')
+            f'<div class="more-row"><span id="l-snd">{t["snd_l"]}</span>{seg("snd-seg", "l-snd", [("0", s["sndOff"]), ("1", s["sndOn"])], "1")}</div>'
+            f'<div class="more-row"><span id="l-theme">{t["theme_l"]}</span>{seg("theme-seg", "l-theme", [("light", s["themes"][0]), ("dark", s["themes"][1])], "light")}</div>')
 
 
 def more_only(lang):

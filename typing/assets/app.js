@@ -40,12 +40,13 @@
       var who = Object.keys(g.who).sort(function (a, b) { return g.who[b] - g.who[a]; }).slice(0, 3).map(function (k) { return k + ' ' + g.who[k] + 'ms'; }).join(' | ');
       t.nodeValue = 'DIAG ' + ua + '\n' +
         'cores ' + (n.hardwareConcurrency || '?') + ' mem ' + (n.deviceMemory || '?') + ' dpr ' + (window.devicePixelRatio || 1) + ' view ' + window.innerWidth + 'x' + window.innerHeight + ' touch ' + (TOUCH ? 1 : 0) + '\n' +
-        'mode ' + (e && e.session ? e.session.mode : '?') + ' phys ' + (e && e.phys ? 1 : 0) + ' defer ' + (e && e.defer ? 1 : 0) + ' fx ' + (FX ? FX.level : '-') + (FX && FX.auto ? '(auto)' : '') + ' typed ' + (e && e.session ? e.session.typedKeys : 0) + '\n' +
+        'mode ' + (e && e.session ? e.session.mode : '?') + ' phys ' + (e && e.phys ? 1 : 0) + ' fx ' + (FX ? FX.level : '-') + (FX && FX.auto ? '(auto)' : '') + ' typed ' + (e && e.session ? e.session.typedKeys : 0) + '\n' +
         'input events ' + g.ev + ' / draws ' + g.ap.length + ' / bursts(<8ms) ' + g.burst + '\n' +
         'draw ms avg/p90/max  ' + st(g.ap) + '\n' +
         'input->screen ms     ' + st(g.fr) + '  (n=' + g.fr.length + ')\n' +
         'key wait ms          ' + st(g.kd) + '  (n=' + g.kd.length + ')\n' +
-        'long tasks ' + g.lt.length + ' total ' + Math.round(lt) + 'ms' + (who ? '  ' + who : '');
+        'long tasks ' + g.lt.length + ' total ' + Math.round(lt) + 'ms' + (who ? '  ' + who : '') + '\n' +
+        'audio ' + (FX && FX.sound ? 'on' : 'off') + (FX && FX.snd && FX.snd.ctx ? ' ' + FX.snd.ctx.state + ' base ' + Math.round((FX.snd.ctx.baseLatency || 0) * 1000) + 'ms out ' + Math.round((FX.snd.ctx.outputLatency || 0) * 1000) + 'ms rate ' + FX.snd.ctx.sampleRate : ' (not started)');
     }
     D.addEventListener('DOMContentLoaded', function () { D.body.appendChild(box); draw(); });
     if (D.body) { D.body.appendChild(box); }
@@ -83,10 +84,7 @@
     this.round = 0; this.drill = null; this.same = false;
     this.timer = new TJ.Timer(function () { return performance.now(); });
     this.phys = false; this.composing = false; this.comp = ''; this.delKey = false; this.vlen = 0;
-    /* 터치 자판: 입력 이벤트마다 바로 그리지 않고 다음 화면을 그릴 때 한 번, 가장 새 값으로만 그린다(defer).
-       휴대폰 자판은 키 하나에 입력 이벤트를 여러 번 보내기도 하고, 기기가 느리면 이벤트가 밀려 쌓인다. 쌓인 것을 하나씩 다 그리면 더 밀린다 → 중간 것은 건너뛴다.
-       자동 도구에서는 끈다(가짜 시계에서는 다음 화면이 오지 않는다). 시험은 __E.defer 를 켜고 진짜 시계로 따로 본다 */
-    this.defer = TOUCH && !AUTO; this.pending = false; this.inAt = 0; this.nKey = 0; this.drawAt = 0; this.tickSec = -1;
+    this.nKey = 0; this.drawAt = 0; this.tickSec = -1;
     this.iv = 0; this.started = false; this.done = false; this.doneAt = 0;
     this.moreT = 0; this.lagWait = false;
     this.stage = D.querySelector('.stage'); this.bar = $('bar'); this.kCombo = $('k-combo'); this.kTime = $('k-time');
@@ -236,7 +234,6 @@
   };
   /* 다른 글로 다시(옵션을 바꿀 때도) */
   Engine.prototype.next = function (opt) {
-    this.pending = false;
     opt = opt || {};
     this.round++; this.drill = opt.drill || null; this.same = !!opt.same;
     ['kind', 'mode', 'secs', 'count', 'punct', 'nums', 'topic', 'lesson'].forEach(function (k) { if (opt[k] != null) this[k] = opt[k]; }, this);
@@ -252,7 +249,6 @@
   };
   /* 그만하기(Esc, 휴대폰의 닫기): 처음 상태로 */
   Engine.prototype.quit = function () {
-    this.pending = false;
     this.same = true; this.reset();
     this.trap.blur();
     if (root.classList.contains('m-tall')) { root.classList.remove('m-tall'); window.scrollTo(0, 0); }
@@ -298,25 +294,15 @@
       }
     }
   };
-  Engine.prototype.onInput = function () {
-    var self = this;
-    if (DG) DG.ev();
-    /* 시작하는 첫 입력과 자판(컴퓨터)은 바로 그린다. 터치 자판으로 치는 중에는 다음 화면을 그릴 때 한 번만 */
-    if (!this.defer || !this.started || this.done || this.session.mode !== 'char') { this.inAt = 0; this.apply(); return; }
-    this.inAt = performance.now();
-    if (this.pending) return;
-    this.pending = true;
-    requestAnimationFrame(function () { if (self.pending) { self.pending = false; self.apply(); } });
-  };
-  /* 미뤄 둔 입력이 있으면 지금 반영한다(판을 끝내거나 바꾸기 직전에) */
-  Engine.prototype.flush = function () { if (this.pending) { this.pending = false; this.apply(); } };
+  /* 입력이 오면 그 자리에서 판정하고 그린다(소리도 그 자리에서 난다). 다음 화면까지 미루지 않는다:
+     휴대폰에서 미뤘더니 소리와 숫자가 손보다 늦었다(2026-10-11). 같은 값이 두 번 오면 apply 가 건너뛴다 */
+  Engine.prototype.onInput = function () { if (DG) DG.ev(); this.apply(); };
   Engine.prototype.apply = function () {
-    var trap = this.trap, v = trap.value, self = this, t0 = this.inAt || performance.now(), a0 = DG ? performance.now() : 0;
-    this.inAt = 0;
+    var trap = this.trap, v = trap.value, self = this, t0 = performance.now(), a0 = t0;
     if (this.done) { trap.value = ''; return; }
     if (!this.started) {
       if (!v) return;
-      /* 자판 글쇠가 한 번도 안 보였으면 터치 자판으로 보고, 글자가 끝날 때 판정한다 */
+      /* 자판 글쇠가 한 번도 안 보였으면 터치 자판으로 본다: 맞게 이어지는 낱자는 자판처럼 바로 세고, 안 맞는 낱자만 그 글자가 끝날 때 판정한다(천지인의 중간 모양 때문에) */
       if (!this.phys) { this.session = new TJ.Session(this.text, { mode: 'char', soft: !!CFG.lines }); this.T = this.session.T; }
       this.start();
     }
@@ -366,7 +352,6 @@
     }, 200);
   };
   Engine.prototype.finish = function () {
-    if (this.pending) { this.flush(); if (this.done) return; }
     clearInterval(this.iv); this.iv = 0;
     var lim = this.limit(), ms = lim ? Math.min(this.timer.elapsed(), lim) : this.timer.elapsed();
     this.timer.pause();
@@ -503,8 +488,9 @@
       if (prev[i] !== st[i]) { sp[i].className = base[i] + CLS[st[i]] + (this.cur === i ? ' cur' : ''); prev[i] = st[i]; }
     }
     if (r.pendingAt >= 0 && sp[r.pendingAt]) {
-      var total = H.keysOf(this.chars[r.pendingAt]).length, done = lenient ? 0 : H.keyStream(r.pendingText || '').length;
-      var f = lenient || !total ? 50 : Math.max(18, Math.min(86, Math.round(done / total * 100)));
+      /* 맞게 들어간 낱자 수만큼 채운다(터치 자판도 같다). 아직 맞은 낱자가 없는 꼬리(천지인의 중간 모양 등)는 조금만 */
+      var total = H.keysOf(this.chars[r.pendingAt]).length, done = r.pendingDone > 0 ? r.pendingDone : (lenient ? 0 : H.keyStream(r.pendingText || '').length);
+      var f = !total ? 50 : done > 0 ? Math.max(18, Math.min(86, Math.round(done / total * 100))) : 30;
       if (this.pend !== r.pendingAt || this.pf !== f) { sp[r.pendingAt].style.setProperty('--f', f + '%'); this.pend = r.pendingAt; this.pf = f; }
     }
     this.place(r.cursor);
@@ -940,7 +926,7 @@
   /* 고른 값은 todok.set 의 'fx' 칸에(l = 세기 0~2, s = 소리). 느린 기기라서 스스로 내린 단계는 남기지 않는다(다음 방문에 다시 재 본다) */
   function showFx(auto) {
     var g = $('fx-seg'), say = $('fx-say');
-    press(g, FX.level); press($('snd-seg'), FX.sound ? 1 : 0);
+    press(g, FX.level); press($('snd-seg'), FX.sound ? 1 : 0); press($('theme-seg'), root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
     if (g && FX.locked) Array.prototype.forEach.call(g.querySelectorAll('button'), function (b) { b.disabled = true; });
     if (say) say.textContent = FX.reduced ? S.fxReduced : (auto ? S.fxAuto : '');
   }
@@ -955,7 +941,7 @@
   }
   if (FX) {
     var fxSet = store.settings('fx');
-    FX.init({ stage: D.querySelector('.stage'), over: $('fx'), S: S, level: fxSet.l == null ? 2 : fxSet.l, sound: !!fxSet.s, phone: TOUCH, onChange: showFx });
+    FX.init({ stage: D.querySelector('.stage'), over: $('fx'), S: S, level: fxSet.l == null ? 2 : fxSet.l, sound: fxSet.s == null ? true : !!fxSet.s,   /* 키 소리는 기본이 켬(사용자 결정 2026-10-11) */ phone: TOUCH, onChange: showFx });
     if (fxSet.l == null && !FX.locked && !AUTO) setTimeout(function () { if (FX.level === 2 && !FX.auto && store.settings('fx').l == null && slowDevice()) { FX.level = 1; FX.apply(); showFx(false); } }, 400);
     showFx(false);
     /* 소리를 켜 둔 채 다시 왔을 때: 브라우저는 처음 누른 뒤에야 소리를 낼 수 있다 */
@@ -970,6 +956,14 @@
   renderRecords(E);
   function saveFx() { store.saveSettings('fx', { l: FX.level, s: FX.sound ? 1 : 0 }); }
   seg('fx-seg', function (v) { if (!FX || FX.locked) return; FX.setLevel(+v, false); saveFx(); });
+  /* 화면(밝게/어둡게): 기본은 밝게. 고른 값은 todok.set 의 fx.t 에 남고, 다음부터는 <head> 의 스크립트가 첫 그림 전에 붙인다 */
+  seg('theme-seg', function (v) {
+    var dark = v === 'dark', m = D.querySelector('meta[name="theme-color"]');
+    if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+    if (m) m.setAttribute('content', dark ? '#15121f' : '#f3f1f7');
+    store.saveSettings('fx', { t: dark ? 'dark' : 'light' });
+    press($('theme-seg'), dark ? 'dark' : 'light');
+  });
   seg('snd-seg', function (v) { if (!FX) return; FX.setSound(v === '1'); FX.snd.play('k'); saveFx(); });
   /* 태블릿의 화면 자판: 자판이 올라와 보이는 높이가 낮아지면 머리·제목·고르기를 접어 글과 숫자 줄이 자판 위에 다 보이게 한다(휴대폰은 m-tall 이 한다) */
   var vv = window.visualViewport;

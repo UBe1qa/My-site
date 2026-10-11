@@ -187,17 +187,17 @@
     return k;   /* hold 는 쓰지 않는다(위 설명) */
   }
   /* compare(준비한 목표, 친 글, 옵션) → 화면이 그릴 상태
-     옵션 lenient: 터치 자판처럼 글쇠를 알 수 없을 때. 조합 중인 글자(heldTail)는 다음 글자가 올 때까지 판정을 미룬다(천지인의 중간 모양을 틀렸다고 하지 않게).
+     옵션 lenient: 터치 자판처럼 글쇠를 알 수 없을 때. 지금 만드는 글자(heldTail)에서 목표와 맞게 이어지는 글쇠는 바로 세고, 안 맞는 글쇠는 다음 글자가 올 때까지 판정을 미룬다(천지인의 중간 모양을 틀렸다고 하지 않게).
      옵션 hold: 입력기가 알려 준 조합 중인 문자열의 글자 수(받기만 하고 판정을 더 미루는 데 쓰지 않는다: heldTail).
      옵션 final: 끝났을 때(미뤄 둔 마지막 글자도 맞으면 센다).
      옵션 soft: 목표의 줄바꿈 자리에 띄어쓰기를 쳐도 맞다고 본다.
      돌려주는 값: st(목표 글자마다 0 안 침·1 맞음·2 틀림·3 조합 중), cursor(다음 글쇠가 갈 글자), next(다음에 누를 글쇠),
-       pendingText(조합 중인 글자의 모양), okStrokes(맞게 친 타수), okChars·badChars, complete, value(정리한 입력칸 값) */
+       pendingText(조합 중인 글자의 모양), pendingDone(그 글자에서 맞게 들어간 글쇠 수), held(판정을 미룬 꼬리가 있나), okStrokes(맞게 친 타수), okChars·badChars, complete, value(정리한 입력칸 값) */
   function compare(T, value, opt) {
     opt = opt || {};
     var chars = Array.from(tidy(value, T)), raw = '';
     var st = new Array(T.chars.length).fill(NONE);
-    var r = { value: chars.join(''), st: st, cursor: 0, next: null, pendingAt: -1, pendingText: '', okStrokes: 0, okChars: 0, badChars: 0, complete: false, fk: [], fw: [], ws: [] };
+    var r = { value: chars.join(''), st: st, cursor: 0, next: null, pendingAt: -1, pendingText: '', pendingDone: 0, held: false, okStrokes: 0, okChars: 0, badChars: 0, complete: false, fk: [], fw: [], ws: [] };
     var held = opt.lenient ? heldTail(chars, opt.hold | 0) : 0;
     if (held) raw = chars.splice(chars.length - held, held).join('');
     /* 친 글을 낱말로 */
@@ -206,11 +206,18 @@
       var w = iw[iw.length - 1];
       if (isSep(ch)) { w.sep = ch; iw.push({ k: [], sep: null }); } else Array.prototype.push.apply(w.k, keysRO(ch));
     });
-    if (raw && opt.final) { /* 끝나는 순간 조합 중이던 글자: 맞게 이어지는 글쇠일 때만 넣는다(아래아 같은 중간 글자는 글쇠가 아니다) */
-      var lw = iw[iw.length - 1], tw = T.words[iw.length - 1];
-      var rk = keyStream(Array.from(raw).filter(function (ch) { return !isMid(ch); }).join(''));
-      if (tw && rk.length) { var withRaw = lw.k.concat(rk); if (align(withRaw, tw.tk, true).cost <= align(lw.k, tw.tk, true).cost) lw.k = withRaw; }
-      raw = '';
+    if (raw) {
+      /* 터치 자판에서 지금 만들고 있는 글자: 목표와 맞게 이어지는 앞쪽 글쇠는 바로 넣는다(자판으로 칠 때처럼 낱자마다 맞았다고 세고 보여 준다).
+         안 맞는 뒤쪽은 아직 판정하지 않는다: 천지인은 'ㅣ' 를 거쳐 'ㅏ' 가 되고 'ㅇㆍ' 를 거쳐 '어' 가 된다(아래아 같은 중간 글자는 글쇠가 아니다).
+         그 글자가 끝나면(다음 글자가 오면) 꼬리가 아니게 되어 보통대로 판정된다. 끝나는 순간(final)에는 맞게 이어진 만큼만 남긴다 */
+      var lw = iw[iw.length - 1], tw = T.words[iw.length - 1], rch = Array.from(raw);
+      var rk = keyStream(rch.filter(function (ch) { return !isMid(ch); }).join('')), np = 0;
+      if (tw && rk.length) {
+        var c0 = align(lw.k, tw.tk, true).cost;
+        while (np < rk.length && align(lw.k.concat(rk.slice(0, np + 1)), tw.tk, true).cost <= c0) np++;
+        if (np) lw.k = lw.k.concat(rk.slice(0, np));
+      }
+      if (opt.final || (np === rk.length && rk.length > 0 && !rch.some(isMid))) raw = '';   /* 남은 것이 없으면 미룰 것도 없다 */
     }
     for (var w = 0; w < iw.length && w < T.words.length; w++) {
       var I = iw[w], Tw = T.words[w], closed = I.sep != null, m = Tw.tk.length;
@@ -225,7 +232,7 @@
         a.extra.forEach(function (e) { if (e < m && e >= from && e < to) bad = true; }); /* 더 친 글쇠가 이 글자 안에 끼어들었다 */
         if (bad) { st[ci] = BAD; r.badChars++; }
         else if (done === to - from) { st[ci] = OK; r.okChars++; }
-        else if (done > 0) { st[ci] = PENDING; r.pendingAt = ci; r.pendingText = partial(T.chars[ci], done); }
+        else if (done > 0) { st[ci] = PENDING; r.pendingAt = ci; r.pendingText = partial(T.chars[ci], done); r.pendingDone = done; }
       });
       if (closed) {
         var sepOk = I.sep === Tw.sep || (opt.soft && Tw.sep === '\n' && I.sep === ' ');
@@ -241,9 +248,10 @@
         r.open = { w: w, cost: a.cost, end: a.end };
       }
     }
-    if (raw) { /* 터치 자판에서 조합 중인 글자는 판정하지 않고 그대로 보여 준다 */
+    if (raw) { /* 터치 자판에서 아직 판정하지 않은 꼬리(안 맞는 글쇠나 중간 글자)가 있다: 그 글자는 조합 중으로 보여 준다. 맞게 들어간 글쇠 수(pendingDone)는 그대로 둔다 */
+      var keepDone = r.pendingAt === r.cursor ? r.pendingDone : 0;
       if (r.cursor < st.length && st[r.cursor] !== BAD) { if (st[r.cursor] === OK) r.okChars--; st[r.cursor] = PENDING; }
-      r.pendingAt = r.cursor; r.pendingText = raw;
+      r.pendingAt = r.cursor; r.pendingText = raw; r.pendingDone = keepDone; r.held = true;
     }
     return r;
   }

@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>개인정보 처리방침 | 토독</title>
 <meta name="description" content="토독(타자 속도 측정·타자 연습)이 기기에 저장하는 것, 광고와 방문 통계, 글꼴과 서버 기록에 대한 안내예요.">
-<meta name="theme-color" content="#f3f1f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#13111a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f1f7">
 <link rel="canonical" href="https://typing.lumenlab.page/ko/privacy/">
 <link rel="alternate" hreflang="en" href="https://typing.lumenlab.page/privacy/">
 <link rel="alternate" hreflang="ko" href="https://typing.lumenlab.page/ko/privacy/">
@@ -29,8 +28,8 @@
 <link rel="preload" href="/assets/fonts/tn-a697bae6.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Todok Num";src:url(/assets/fonts/tn-a697bae6.woff2) format("woff2");font-weight:700;font-style:normal;font-display:optional}</style>
 <link rel="stylesheet" href="/assets/pretendard.css?v=ac1d26a1">
-<link rel="stylesheet" href="/assets/style.css?v=a6e265bd">
-<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim')})(document)</script>
+<link rel="stylesheet" href="/assets/style.css?v=dfcfc84a">
+<script>(function(d){var h=d.documentElement;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window)h.classList.add('anim');try{var s=JSON.parse(localStorage.getItem('todok.set')||'{}');if(s&&s.fx&&s.fx.t==='dark'){h.setAttribute('data-theme','dark');var m=d.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#15121f')}}catch(e){}})(document)</script>
 </head>
 <body class="doc">
 <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -49,7 +48,7 @@
 <li><code>todok.runs</code>: 최근 기록 50개까지. 한 판의 조건(도구·글 종류·시간), 속도, 정확도, 끝난 시각이에요. 친 글 자체는 저장하지 않아요.</li>
 <li><code>todok.best</code>: 조건마다의 최고 기록(속도, 정확도, 시각).</li>
 <li><code>todok.keys</code>: 키마다 틀린 횟수와 맞은 횟수. '자주 틀린 키'를 보여 주는 데 써요.</li>
-<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계, 이펙트와 키 소리).</li>
+<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계, 이펙트와 키 소리, 화면 밝기).</li>
 <li><code>todok.lang</code>: 다른 언어판 안내 띠를 닫았다는 표시.</li>
 </ul>
 <p>'내 기록' 칸의 '기록 지우기'를 누르면 <code>todok.runs</code>, <code>todok.best</code>, <code>todok.keys</code>가 바로 지워져요. 나머지 둘은 브라우저의 사이트 데이터 지우기로 지울 수 있어요. 그 밖에는 저장하지 않아요.</p>

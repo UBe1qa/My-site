@@ -322,7 +322,7 @@ def main():
     css = (ROOT / 'assets' / 'style.css').read_text(encoding='utf-8')
     ok('[hidden]{display:none!important}' in css and 'word-break:keep-all' in css and ':focus-visible' in css and 'tabular-nums' in css, 'CSS 기본기(hidden·keep-all·focus-visible·tabular-nums)')
     ok(not re.search(r'transition:\s*all', css), 'transition: all 금지')
-    ok('prefers-color-scheme:dark' in css and 'prefers-reduced-motion:reduce' in css and '@media print' in css, 'CSS 어두운 화면·동작 줄이기·인쇄')
+    ok(':root[data-theme="dark"]{' in css and 'prefers-color-scheme' not in css and 'prefers-reduced-motion:reduce' in css and '@media print' in css, 'CSS 어두운 화면(설정에서 고른 사람만, 기기 설정은 따르지 않는다)·동작 줄이기·인쇄')
     ok('font-display:optional' in (ROOT / 'assets' / 'pretendard.css').read_text(encoding='utf-8'), '글꼴 CSS 는 font-display: optional')
     ok('.seg button{padding:12px' in css and '.btn,.btn.sm,.gauge .btn.sm,.kb-wrap .btn.sm,.hud .btn.sm{height:44px}' in css, 'CSS 휴대폰에서 누르는 곳 44px')
     # 가벼운 그리기·이펙트(2026-10-11): 글자 칸을 자리 잡기(position)로 만들지 않는다, 숫자 칸은 크기 고정, 움직임은 transform·opacity 만, 치는 중의 이펙트는 fx.js 가 한다
@@ -336,9 +336,12 @@ def main():
     ok('getBoundingClientRect' not in fxjs.split('FX.confetti')[0] and 'offsetTop' not in fxjs and 'offsetLeft' not in fxjs, 'fx.js 는 치는 중에 화면을 재지 않는다(자리는 app.js 가 미리 재 둔 값)')
     ok('prefers-reduced-motion' in fxjs and 'setInterval' not in fxjs, 'fx.js 는 동작 줄이기를 따르고 반복 타이머가 없다')
     appjs = (ROOT / 'assets' / 'app.js').read_text(encoding='utf-8')
+    core = (ROOT / 'assets' / 'tj-core.js').read_text(encoding='utf-8')
     hot = appjs[appjs.index('Engine.prototype.onInput'):appjs.index('Engine.prototype.start')]
     ok('getComputedStyle' not in hot and 'getBoundingClientRect' not in hot and 'offset' not in hot.replace('offsetWidth', ''), 'app.js 키 처리(onInput·apply)는 화면을 재지 않는다')
-    ok('this.defer = TOUCH && !AUTO' in appjs and 'Engine.prototype.flush' in appjs and 'if (this.pending) { this.flush(); if (this.done) return; }' in appjs, 'app.js 터치 자판은 다음 화면에 한 번만 그리고(defer), 끝낼 때 미뤄 둔 입력을 먼저 반영한다')
+    ok('Engine.prototype.onInput = function () { if (DG) DG.ev(); this.apply(); };' in appjs and 'requestAnimationFrame(function () { if (self.pending)' not in appjs, 'app.js 입력이 오면 그 자리에서 판정하고 그린다(다음 화면까지 미루지 않는다: 휴대폰에서 소리·숫자가 늦었다)')
+    ok("sound: fxSet.s == null ? true : !!fxSet.s" in appjs, 'app.js 키 소리 기본값은 켬(사용자 결정 2026-10-11)')
+    ok("if (np) lw.k = lw.k.concat(rk.slice(0, np));" in core and "return k;   /* hold 는 쓰지 않는다(위 설명) */" in core, 'tj-core.js 터치 자판: 만드는 중인 글자의 맞는 낱자는 바로 세고, 조합 중인 단어를 통째로 미루지 않는다')
     ok("var DG = /[?&]diag\\b/.test(location.search) ?" in appjs and 'localStorage' not in appjs[appjs.index('var DG ='):appjs.index('var SPACE_GUARD')] and 'fetch(' not in appjs and 'sendBeacon' not in appjs, 'app.js 진단판은 ?diag 일 때만 켜지고 저장·전송을 하지 않는다')
     ok(".tool .below>section{content-visibility:auto" in css, 'CSS 도구 화면의 아래 칸은 화면 밖이면 그리지 않는다')
     for path, src in pages.items():
@@ -346,7 +349,7 @@ def main():
         ok(not re.search(r'(?:src|href)="/assets/[\w.-]+\.(?:js|css)"', src), f'{path} 스타일·스크립트 주소에 내용 지문(?v=)')
         if tool:
             ok(src.find('/assets/fx.js?v=') > 0 and src.find('/assets/fx.js?v=') < src.find('/assets/app.js?v='), f'{path} fx.js 가 app.js 앞에')
-            ok('id="fx-seg"' in src and 'id="snd-seg"' in src and 'id="combo"' in src and 'id="fx"' in src, f'{path} 이펙트·키 소리 고르기, 콤보 칸, 이펙트 층')
+            ok('id="fx-seg"' in src and 'id="snd-seg"' in src and 'id="theme-seg"' in src and 'id="combo"' in src and 'id="fx"' in src, f'{path} 이펙트·키 소리·화면 고르기, 콤보 칸, 이펙트 층')
     hd2 = (ROOT / '_headers').read_text(encoding='utf-8')
     ok('/assets/*.js' in hd2 and '/assets/*.css' in hd2, '_headers: 스타일·스크립트는 오래 저장(주소에 지문)')
     nj = ROOT / '_dev' / 'fonts-num.json'
@@ -364,7 +367,8 @@ def main():
         ok(not [f.name for f in (ROOT / 'assets' / 'fonts').glob('tn-*.woff2') if f.name != numf['file']], '쓰지 않는 옛 숫자 글꼴 조각')
     # 방침: 이펙트·키 소리 설정은 todok.set 안에(새 저장 키 없음)
     ok("store.saveSettings('fx'" in appjs and "store.settings('fx')" in appjs, "이펙트·키 소리 설정은 todok.set 의 'fx' 칸에")
-    ok('이펙트와 키 소리' in pages['/ko/privacy/'] and 'effects and key sound' in pages['/privacy/'], '방침의 todok.set 설명에 이펙트·키 소리')
+    ok('이펙트와 키 소리, 화면 밝기' in pages['/ko/privacy/'] and 'effects and key sound, light or dark theme' in pages['/privacy/'], '방침의 todok.set 설명에 이펙트·키 소리·화면 밝기')
+    ok("s.fx.t==='dark'" in pages['/ko/'] and "s.fx.t==='dark'" in pages['/ko/guide/'] and "store.saveSettings('fx', { t:" in appjs, "화면(밝게/어둡게)은 todok.set 의 fx.t 에 남고 모든 페이지가 첫 그림 전에 읽는다")
     ok('html[lang="en"] [data-l="ko"],html[lang="ko"] [data-l="en"]{display:none!important}' in css, 'CSS 두 언어 틀 가운데 하나만 보이기(404)')
 
     # 조각 글꼴: 화면 글자와 연습 글을 전부 담는다. 모든 페이지가 자기 언어의 조각을 미리 받는다

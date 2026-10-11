@@ -150,8 +150,10 @@ class Env:
 
     def ctx(self, w=1366, h=768, mobile=False, lang='ko', dark=False, reduced=False, dpr=1):
         c = self.b.new_context(viewport={'width': w, 'height': h}, device_scale_factor=dpr, is_mobile=mobile, has_touch=mobile,
-                               locale='ko-KR' if lang == 'ko' else 'en-US', color_scheme='dark' if dark else 'light',
+                               locale='ko-KR' if lang == 'ko' else 'en-US', color_scheme='light',
                                reduced_motion='reduce' if reduced else 'no-preference', ignore_https_errors=True)
+        if dark:  # 어두운 화면은 '설정 → 화면 → 어둡게'를 고른 사람에게만(todok.set 의 fx.t). 기기의 어두운 모드는 따르지 않는다
+            c.add_init_script("try { var s = JSON.parse(localStorage.getItem('todok.set') || '{}'); if (!s.fx || !s.fx.t) { s.fx = s.fx || {}; s.fx.t = 'dark'; localStorage.setItem('todok.set', JSON.stringify(s)); } } catch (e) {}")
         c.route(re.compile(r'googlesyndication|doubleclick|adservice|fundingchoices'), lambda r: r.abort())
         return c
 
@@ -281,7 +283,7 @@ def all_pages(env):
               return { bg, hid, anim: document.documentElement.classList.contains('anim') }; }''')
             ok(r['hid'] == 0, f'{path} {tag}: 숨은 채 남은 글자 0', r['hid'])
             if 'dark' in kw:
-                ok(r['bg'] == 'rgb(19, 17, 26)', f'{path} 어두운 바탕', r['bg'])
+                ok(r['bg'] == 'rgb(21, 18, 31)', f'{path} 어두운 바탕', r['bg'])
             else:
                 ok(not r['anim'], f'{path} 동작 줄이기면 연출을 켜지 않는다')
             ok(not pg._errs, f'{path} {tag} 콘솔 오류 0', pg._errs[:3])
@@ -1562,10 +1564,19 @@ def fx_checks(env):
     go(pg, ty, 22)
     n_tap = pg.evaluate('document.getAnimations().filter((a) => a.effect && a.effect.target && /tap|chip|lab/.test(a.effect.target.className || "")).length')
     ok(pg.evaluate('TJFX.level') == 1 and n_tap == 0, "'가볍게': 누른 글자 번쩍임·키 조각·꼬리표 없음", n_tap)
-    # 키 소리: 켜도 오류가 없고 저장된다
-    pg.click('#more summary'); pg.click('#snd-seg [data-v="1"]'); pg.click('h1'); pg.evaluate('document.getElementById("trap").focus()')
+    # 키 소리: 기본이 켬(사용자 결정 2026-10-11). 소리가 나도 오류가 없고, 끄면 저장된다
+    ok(pg.evaluate('TJFX.sound') is True and pg.evaluate('document.querySelector("#snd-seg [aria-pressed=true]").getAttribute("data-v")') == '1', '키 소리 기본값은 켬')
     go(pg, ty, 30)
-    ok(pg.evaluate('TJFX.sound') is True and (ls(pg, 'todok.set') or {}).get('fx', {}).get('s') == 1 and not pg._errs, '키 소리를 켜도 오류가 없고 저장된다', pg._errs[:2])
+    ok(pg.evaluate('!!TJFX.snd.ctx') and not pg._errs, '치면 소리 장치가 만들어지고 오류가 없다', pg._errs[:2])
+    pg.click('#more summary'); pg.click('#snd-seg [data-v="0"]'); pg.click('h1'); pg.evaluate('document.getElementById("trap").focus()')
+    ok(pg.evaluate('TJFX.sound') is False and (ls(pg, 'todok.set') or {}).get('fx', {}).get('s') == 0, '키 소리를 끄면 저장된다')
+    # 화면(밝게/어둡게): 기본은 밝게(기기가 어두운 모드여도). 어둡게를 고르면 바로 바뀌고 저장되고, 다시 열어도 첫 그림부터 어둡다
+    ok(pg.evaluate('getComputedStyle(document.body).backgroundColor') == 'rgb(243, 241, 247)' and pg.evaluate('getComputedStyle(document.querySelector(".sheet")).backgroundColor') == 'rgb(255, 255, 255)', '기본은 밝은 화면(흰 종이)')
+    pg.click('#more summary'); pg.click('#theme-seg [data-v="dark"]'); pg.wait_for_timeout(120)
+    ok(pg.evaluate('getComputedStyle(document.body).backgroundColor') == 'rgb(21, 18, 31)' and (ls(pg, 'todok.set') or {}).get('fx', {}).get('t') == 'dark' and pg.evaluate('document.querySelector("meta[name=theme-color]").content') == '#15121f', '어둡게를 고르면 바로 바뀌고 저장된다')
+    ok(pg.evaluate('getComputedStyle(document.querySelector(".hk:not(.main):not(.hot)")).backgroundColor') == 'rgb(241, 234, 219)' and pg.evaluate('getComputedStyle(document.querySelector(".hud")).backgroundColor') == 'rgb(59, 45, 114)', '어두운 화면: 짙은 가지색 판 위에 미색 키')
+    pg.click('#theme-seg [data-v="light"]'); pg.click('h1'); pg.wait_for_timeout(80)
+    ok(pg.evaluate('!document.documentElement.hasAttribute("data-theme")') and (ls(pg, 'todok.set') or {}).get('fx', {}).get('t') == 'light', '밝게로 돌아온다')
     ok(set(pg.evaluate('Object.keys(localStorage)')) <= {'todok.runs', 'todok.best', 'todok.keys', 'todok.set', 'todok.lang'}, '저장 키는 방침에 적은 다섯 개뿐', pg.evaluate('Object.keys(localStorage)'))
     c.close()
     # 느린 기기: 화면이 계속 늦으면 스스로 한 단계 내린다(이 방문 동안만, 저장하지 않는다)
@@ -1647,8 +1658,10 @@ def fx_checks(env):
     go(pg, ty, 14); pg.wait_for_timeout(1400)    # 고비(10)의 꼬리표가 떠 있는 동안에는 딱지가 숨는다 → 지난 뒤에 본다
     tg = pg.evaluate("""() => { const t = document.querySelector('#fx .ctag'); if (!t) return null; const r = t.getBoundingClientRect(), cur = document.querySelector('#txt .cur').getBoundingClientRect(); return { txt: t.textContent, op: getComputedStyle(t).opacity, bottom: Math.round(r.bottom), curTop: Math.round(cur.top), combo: __E.session.combo }; }""")
     ok(tg and tg['txt'] == str(tg['combo']) and tg['combo'] >= 11 and tg['op'] == '1' and tg['bottom'] <= tg['curTop'] + 8, '콤보 딱지: 숫자 = 콤보, 지금 칠 글자 위에 있다', tg)
+    while ty.keys()[pg.evaluate('TJ.hangul.keyStream(__E.session.value).length')] in ' \n':   # 띄어쓰기 자리는 틀리게 칠 수 없다 → 글자 키가 나올 때까지 간다
+        go(pg, ty, 1)
     go(pg, ty, 1, wrong_at=(0,)); pg.wait_for_timeout(500)
-    ok(pg.evaluate('getComputedStyle(document.querySelector("#fx .ctag")).opacity') == '0' and pg.evaluate('__E.session.combo') == 0, '틀리면 콤보 딱지가 사라진다')
+    ok(pg.evaluate('getComputedStyle(document.querySelector("#fx .ctag")).opacity') == '0' and pg.evaluate('__E.session.combo') == 0, '틀리면 콤보 딱지가 사라진다', pg.evaluate('__E.session.combo'))
     pg.evaluate('TJFX.setLevel(1, false)'); go(pg, ty, 12); pg.wait_for_timeout(200)
     ok(pg.evaluate('getComputedStyle(document.querySelector("#fx .ctag")).opacity') == '0', '가볍게에서는 콤보 딱지가 없다')
     pg.evaluate('TJFX.setLevel(2, false)')
@@ -1684,34 +1697,48 @@ def fx_checks(env):
             if r: bad.append((w, r))
             c.close()
         ok(not bad, f'{path} 좁은 휴대폰(320~430px)에서 숫자 줄이 넘치거나 겹치지 않는다', bad)
-    # ⑥ 터치 자판의 '다음 화면에 한 번만 그리기'(defer, 2026-10-11 휴대폰·태블릿에서 타자가 밀린다는 말): 바로 그릴 때와 숫자가 같아야 한다.
-    #    진짜 시계로 본다(가짜 시계에서는 다음 화면이 오지 않는다). burst = 키 셋을 쉬지 않고 이어 보내 중간 값을 건너뛰게 한다
-    def touch_run(defer, burst):
+    # ⑥ 터치 자판으로 한글을 쳐도 자판처럼 낱자마다 바로 반응한다(2026-10-11 사용자: "모바일에서 영어는 잘되는데 한글은 이상하게 됨").
+    #    ⓐ 글자 하나씩 조합 ⓑ 단어 통째 조합(안드로이드). 낱자를 누를 때마다 콤보·누른 키가 하나씩 오르고, 조합 중인 글자가 친 만큼 채워진다
+    CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
+    def jamo_steps(ch):
+        o = ord(ch) - 0xAC00
+        st = [CH[o // 588], chr(0xAC00 + o - o % 28)]
+        return st + ([ch] if o % 28 else [])
+    for whole in (False, True):
         c = env.ctx(390, 844, mobile=True, dpr=2)
-        pg = env.page(c, '/ko/', clock=False); pg.add_script_tag(content=SIM); cdp = c.new_cdp_session(pg)
+        pg = env.page(c, '/ko/', clock=False); cdp = c.new_cdp_session(pg)
         pg.tap('#trap', position={'x': 60, 'y': 30}); pg.wait_for_timeout(250)
-        pg.evaluate('(d) => { __E.defer = d; window.__draws = 0; const a = __E.apply; __E.apply = function () { window.__draws++; return a.apply(this, arguments); }; }', defer)
-        ty = Typist(pg, cdp, phys=False)
-        ks = ty.keys()[:66]
-        for j, k in enumerate(ks):
-            ty.key(wrong(k) if j in (7, 23, 41) and k not in ' \n' else k, 0 if (burst and j % 3) else 40)
-        pg.wait_for_timeout(300)
-        r = pg.evaluate('({ typed: __E.session.typedKeys, ok: __E.session.okKeys, combo: __E.session.combo, max: __E.session.maxCombo, value: __E.session.value, cursor: __E.session.cmp.cursor, shown: +document.getElementById("combo").textContent, pending: __E.pending, mode: __E.session.mode, draws: window.__draws, errs: 0 })')
-        r['errs'] = len(pg._errs); c.close()
-        return r
-    base = touch_run(False, False)
-    for burst in (False, True):
-        d = touch_run(True, burst)
-        same = all(d[k] == base[k] for k in ('typed', 'ok', 'combo', 'max', 'value', 'cursor'))
-        ok(d['mode'] == 'char' and same and d['shown'] == d['combo'] and not d['pending'] and not d['errs'], f'터치 자판 defer({"몰아치기" if burst else "보통"}): 바로 그릴 때와 누른 키·맞은 키·콤보·글이 같다', {k: (base[k], d[k]) for k in ('typed', 'ok', 'combo', 'max', 'cursor')})
-        if burst:
-            ok(d['draws'] < base['draws'], '몰아치면 중간 값은 건너뛰고 덜 그린다', (base['draws'], d['draws']))
+        text = pg.evaluate('__E.T.chars.join("")')
+        seq, fills, word, nkeys = [], [], '', 0
+        for ch in text[:9]:
+            if ch == ' ':
+                cdp.send('Input.insertText', {'text': word if whole else ''}) if whole and word else None
+                cdp.send('Input.insertText', {'text': ' '}); word = ''; nkeys += 1
+                seq.append((nkeys, pg.evaluate('__E.session.typedKeys'), pg.evaluate('+document.getElementById("combo").textContent')))
+                continue
+            if not ('가' <= ch <= '힣'):
+                break
+            steps = jamo_steps(ch)
+            for n, sh in enumerate(steps):
+                comp = (word + sh) if whole else sh
+                cdp.send('Input.imeSetComposition', {'text': comp, 'selectionStart': len(comp), 'selectionEnd': len(comp)}); nkeys += 1
+                pg.wait_for_timeout(30)
+                seq.append((nkeys, pg.evaluate('__E.session.typedKeys'), pg.evaluate('+document.getElementById("combo").textContent')))
+                if n < len(steps) - 1:
+                    fills.append(pg.evaluate('(() => { const e = document.querySelector("#txt .pend"); return e ? parseInt(e.style.getPropertyValue("--f")) : -1; })()'))
+            if whole: word += ch
+            else: cdp.send('Input.insertText', {'text': ch})
+        late = [x for x in seq if not (x[0] == x[1] == x[2])]
+        ok(pg.evaluate('__E.session.mode') == 'char' and len(seq) >= 15 and not late, f'터치 자판 한글({"단어 통째 조합" if whole else "글자 하나씩 조합"}): 낱자를 누를 때마다 누른 키·콤보가 하나씩 오른다', late[:4])
+        ok(fills and all(f > 0 for f in fills) and len(set(fills)) > 1, f'터치 자판 한글({"통째" if whole else "하나씩"}): 조합 중인 글자가 친 만큼 채워진다', fills[:8])
+        ok(pg.evaluate('!!TJFX.snd.ctx') and not pg._errs, '터치 자판: 소리 장치가 켜져 있고 오류가 없다', pg._errs[:2])
+        c.close()
     # ⑦ 진단판: ?diag 일 때만 뜨고, 저장 키를 늘리지 않는다
     c = env.ctx(390, 844, mobile=True, dpr=2)
     pg, ty = env.tool(c, '/ko/?diag', mobile=True)
     go(pg, ty, 8); pg.wait_for_timeout(900)
     dg = pg.evaluate('(() => { const e = [...document.querySelectorAll("body > pre")].find((x) => x.textContent.startsWith("DIAG")); return e ? e.textContent : ""; })()')
-    ok('input events' in dg and 'long tasks' in dg and 'mode char' in dg, '?diag: 진단판이 뜨고 숫자가 찍힌다', dg[:120])
+    ok('input events' in dg and 'long tasks' in dg and 'mode char' in dg and 'audio' in dg, '?diag: 진단판이 뜨고 숫자가 찍힌다', dg[:160])
     ok(set(pg.evaluate('Object.keys(localStorage)')) <= {'todok.runs', 'todok.best', 'todok.keys', 'todok.set', 'todok.lang'} and not pg._errs, '?diag: 저장 키가 늘지 않고 콘솔 오류가 없다', pg._errs[:2])
     pg.close()
     pg = env.page(c, '/ko/')

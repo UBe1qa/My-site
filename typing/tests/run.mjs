@@ -297,17 +297,20 @@ run('wrong', () => {
 
 /* ---- 5. 터치 자판(천지인 등): 글자가 끝날 때 판정, 글쇠 수는 두벌식으로 환산 ---- */
 run('touch', () => {
-  const feed = (target, values) => { const s = new TJ.Session(target, { mode: 'char' }); const seen = values.map((v, i) => s.update(v, i * 300).st.join('')); return { s, seen }; };
-  /* 천지인으로 '한글': ㅎ, ㅣ, ㆍ(히 → 하), ㄴ … 중간의 '히'를 틀렸다고 하지 않는다 */
+  const feed = (target, values) => { const s = new TJ.Session(target, { mode: 'char' }), keys = [], held = []; const seen = values.map((v, i) => { const r = s.update(v, i * 300); keys.push(s.typedKeys + '/' + s.okKeys); held.push(r.held ? r.pendingText + r.pendingDone : '-'); return r.st.join(''); }); return { s, seen, keys, held }; };
+  /* 천지인으로 '한글': ㅎ, ㅣ, ㆍ(히 → 하), ㄴ … 중간의 '히'를 틀렸다고 하지 않는다.
+     맞게 이어지는 글쇠는 누르는 대로 세고(자판으로 칠 때처럼), 다 된 글자는 바로 맞음으로 보인다 */
   let p = feed('한글', ['ㅎ', '히', '하', '한', '한ㄱ', '한그', '한글']);
-  eq(p.seen.join(' '), '30 30 30 30 13 13 13', '천지인 중간 모양에 틀림 표시 없음');
-  eq(p.s.cmp.pendingText, '글', '조합 중인 글자는 친 그대로 보여 준다');
+  eq(p.seen.join(' '), '30 30 30 10 13 13 11', '천지인 중간 모양에 틀림 표시 없음, 다 된 글자는 바로 맞음');
+  eq(p.keys.join(' '), '1/1 1/1 2/2 3/3 4/4 5/5 6/6', "누른 키는 맞게 이어지는 만큼 바로 센다('히'의 ㅣ는 세지 않는다)");
+  eq(p.held.join(' '), '- 히1 - - - - -', "안 맞는 꼬리('히')만 판정을 미루고 친 그대로 들고 있다(맞게 들어간 글쇠 1)");
   let res = p.s.finish(2100);
   eq(res.typedKeys + ':' + res.okKeys, '6:6', '환산 글쇠 6, 맞은 6'); eq(res.strokes, 6, '타수 6'); eq(res.accuracy, 100, '정확도 100');
   near(res.speed, 6 * 60000 / 2100, '타수 = 6 × 60000 ÷ 2100');
   /* 틀린 글자는 다음 글자가 올 때 틀림으로 */
   p = feed('한글', ['ㅎ', '하', '핫', '핫ㄱ', '핫그', '핫글']);
-  eq(p.seen.join(' '), '30 30 30 23 23 23', "'핫'은 다음 글자가 온 뒤에 틀림");
+  eq(p.seen.join(' '), '30 30 30 23 23 21', "'핫'은 다음 글자가 온 뒤에 틀림(그 전에는 틀렸다고 하지 않는다)");
+  eq(p.keys.join(' '), '1/1 2/2 2/2 4/3 5/4 6/5', "'핫'의 ㅅ은 다음 글자가 올 때 틀린 키로 세어진다");
   res = p.s.finish(1800);
   eq(res.typedKeys + ':' + res.okKeys, '6:5', '환산 글쇠 6, 맞은 5'); eq(res.missed[0].key, 'ㄴ', '틀린 글쇠 ㄴ');
   eq(res.okChars + ':' + res.badChars, '1:1', '맞은 글자 1, 틀린 글자 1');
@@ -318,7 +321,7 @@ run('touch', () => {
   eq(res.typedKeys + ':' + res.okKeys, '5:5', '누른 5, 맞은 5');
   p = feed('한글', ['ㅎ', '하', '한', '한ㄱ', '한기']);
   res = p.s.finish(1500);
-  eq(res.strokes + ':' + res.typedKeys, '3:3', '끝나는 순간 천지인 중간 모양(기)은 세지 않는다');
+  eq(res.strokes + ':' + res.typedKeys + ':' + res.okKeys + ':' + res.missed.length, '4:4:4:0', "끝나는 순간 천지인 중간 모양(기): 맞게 들어간 ㄱ까지만 세고 ㅣ는 세지 않는다(틀린 키도 아니다)");
   /* 영어는 터치 자판에서도 바로 판정 */
   p = feed('cat', ['c', 'cx']);
   eq(p.seen.join(' '), '100 120', '영어는 바로');
@@ -938,8 +941,8 @@ run('touch2', () => {
   const feed = (target, values, hold) => { const s = new TJ.Session(target, { mode: 'char' }); const seen = values.map((v, i) => s.update(v, i * 300, hold ? { hold: hold[i] } : undefined).st.join('')); return { s, seen }; };
   /* '에' = ㅇ → ㅇㆍ → 어 → 에 */
   let p = feed('에요', ['ㅇ', 'ㅇㆍ', '어', '에', '에ㅇ', '에ㅇㆍ', '에ㅇᆢ', '에요']);
-  eq(p.seen.join(' '), '30 30 30 30 13 13 13 13', "'ㅇㆍ'·'ㅇᆢ' 가 보이는 동안 판정을 미룬다");
-  eq(p.s.typedKeys, 2, "그동안 센 키는 끝난 글자 '에'의 두 키뿐");
+  eq(p.seen.join(' '), '30 30 30 10 13 13 13 11', "'ㅇㆍ'·'ㅇᆢ' 가 보이는 동안 틀렸다고 하지 않고, 다 된 글자는 바로 맞음");
+  eq(p.s.typedKeys + ':' + p.s.okKeys, '4:4', '센 키는 네 개(아래아는 키가 아니다. 중간 모양 어·ㅇᆢ 의 안 맞는 글쇠도 세지 않는다)');
   let res = p.s.finish(2400);
   eq(res.typedKeys + ':' + res.okKeys + ':' + res.accuracy + ':' + res.missed.length, '4:4:100:0', '다 치면 4키, 정확도 100, 틀린 키 없음');
   /* 호환 자모가 아닌 아래아(U+119E, U+11A2)와 가운뎃점도 같다 */
@@ -948,7 +951,7 @@ run('touch2', () => {
   eq(TJ.heldTail(Array.from('한글'), 2) + ':' + TJ.heldTail(Array.from('한글'), 9) + ':' + TJ.heldTail(Array.from('a글'), 2) + ':' + TJ.heldTail(Array.from('cat'), 3), '1:1:1:0', '조합 중인 문자열이 길어도 미루는 것은 마지막 글자 하나(한글이 아닌 글자는 미루지 않는다)');
   /* 안드로이드 자판(삼성·구글)은 단어를 통째로 조합 중으로 둔다. 그래도 앞 글자는 바로 판정한다(단어가 끝나야 화면이 바뀌면 '타자가 밀린다') */
   p = feed('한글', ['ㅎ', '하', '한', '한ㄱ', '한그', '한글'], [1, 1, 1, 2, 2, 2]);
-  eq(p.seen.join(' '), '30 30 30 13 13 13', "다음 글자를 치기 시작하면 앞 글자 '한'은 바로 판정된다"); eq(p.s.typedKeys, 3, "그때까지 센 키는 '한'의 세 키");
+  eq(p.seen.join(' '), '30 30 10 13 13 11', "글자가 다 되면 바로 맞음으로 보인다(단어가 끝나기를 기다리지 않는다)"); eq(p.s.typedKeys, 6, '낱자 여섯 개가 누르는 대로 세어졌다');
   res = p.s.finish(1800);
   eq(res.typedKeys + ':' + res.okKeys + ':' + res.strokes, '6:6:6', '끝나면 여섯 키');
   /* 단어 통째 조합으로 문장을 친다: 낱자마다 화면이 따라오고(커서가 글자마다 나아간다), 틀린 글자도 다음 글자에서 바로 보인다 */
@@ -959,7 +962,7 @@ run('touch2', () => {
       for (const m of dubeolSteps(ch)) { t += 200; s2.update(done + word + m, t, { hold: Array.from(word + m).length }); }
       word += ch; cursors.push(s2.cmp.cursor);
     }
-    eq(cursors.join(','), '0,1,2,4,4,5,7,7,8', '단어 통째 조합: 글자를 치는 동안 커서가 글자마다 나아간다(띄어쓰기를 기다리지 않는다)');
+    eq(cursors.join(','), '1,2,3,4,5,6,7,8,9', '단어 통째 조합: 글자를 다 치면 커서가 바로 다음 글자로 간다(띄어쓰기를 기다리지 않는다)');
     const r3 = s2.finish(t); eq(r3.typedKeys + ':' + r3.okKeys + ':' + r3.accuracy, H.keyStream(target).length + ':' + H.keyStream(target).length + ':100', '단어 통째 조합: 누른 키 = 두벌식 키 수, 정확도 100');
     const s3 = new TJ.Session('한글', { mode: 'char' }); s3.update('힌', 100, { hold: 1 }); const r4 = s3.update('힌ㄱ', 300, { hold: 2 });
     eq(r4.st.join(''), '23', "단어 통째 조합: 틀린 글자 '힌'은 다음 글자를 치자마자 틀림으로 보인다");
@@ -984,6 +987,32 @@ run('touch2', () => {
     }
   });
   ok(bad === 0 && wrong === 0 && steps > 20000, '천지인 흉내 ' + steps + '단계: 틀림 표시 ' + bad + '번, 숫자가 다른 글 ' + wrong);
+  /* 터치 자판으로 두벌식을 맞게 치면 자판(컴퓨터)으로 칠 때와 키마다 숫자가 같다: 누른 키·맞은 키·콤보·커서·다 쳤는지.
+     (2026-10-11 사용자: "모바일에서 영어는 잘되는데 한글은 이상하게 됨" = 한글만 글자가 끝나야 소리·콤보·색이 바뀌었다)
+     연습 글 전부를 ① 글자 하나씩 조합 ② 받침이 넘어갈 때 두 단계 ③ 단어 통째 조합(안드로이드)으로 넣어 본다 */
+  let diffSteps = 0, parity = 0, firstDiff = '';
+  const same = (a, b) => a.typedKeys === b.typedKeys && a.okKeys === b.okKeys && a.combo === b.combo && a.cmp.cursor === b.cmp.cursor && a.cmp.complete === b.cmp.complete && a.cmp.st.join('') === b.cmp.st.join('');
+  ALL_KO.forEach((text, i) => {
+    const keys = H.keyStream(text), plain = stepsFor(keys).map((v) => [v]), two = twoStep(keys);
+    for (const [kind, steps] of [['하나씩', plain], ['두 단계', two]]) {
+      if (kind === '두 단계' && i % 2) continue;
+      const pc = new TJ.Session(text, { mode: 'key' }), mo = new TJ.Session(text, { mode: 'char' }); let t = 0;
+      steps.forEach((vs, n) => { t += 100; vs.forEach((v) => { pc.update(v, t); mo.update(v, t, i % 3 ? undefined : { hold: 1 + (n % 4) }); }); parity++; if (!same(pc, mo)) { diffSteps++; if (!firstDiff) firstDiff = kind + ' "' + text + '" ' + (n + 1) + '번째 키: 자판 ' + pc.typedKeys + '/' + pc.combo + '/' + pc.cmp.cursor + ' 터치 ' + mo.typedKeys + '/' + mo.combo + '/' + mo.cmp.cursor; } });
+      const a = pc.finish(t), b = mo.finish(t);
+      if (a.typedKeys !== b.typedKeys || a.okKeys !== b.okKeys || a.strokes !== b.strokes || a.maxCombo !== b.maxCombo || b.accuracy !== 100) { diffSteps++; if (!firstDiff) firstDiff = kind + ' "' + text + '" 결과가 다르다'; }
+    }
+  });
+  ok(diffSteps === 0 && parity > 20000, '터치 자판 = 자판: ' + parity + '키 가운데 숫자·화면 상태가 다른 키 ' + diffSteps + (firstDiff ? ' (' + firstDiff + ')' : ''));
+  {
+    /* 낱자마다 한 키씩 오른다(글자가 끝나기를 기다리지 않는다). 콤보도 같이 */
+    const s4 = new TJ.Session('얼음이 녹은', { mode: 'char' }), seq = [];
+    stepsFor(H.keyStream('얼음이 녹은')).forEach((v, i) => { s4.update(v, i * 100, { hold: 3 }); seq.push(s4.typedKeys + ':' + s4.combo); });
+    eq(seq.join(' '), '1:1 2:2 3:3 4:4 5:5 6:6 7:7 8:8 9:9 10:10 11:11 12:12 13:13 14:14 15:15', '터치 자판: 낱자를 누를 때마다 누른 키와 콤보가 하나씩 오른다');
+    /* 틀린 글자: 맞게 친 앞 낱자는 바로 세고, 틀린 낱자는 그 글자가 끝난 뒤에 틀림으로(천지인의 중간 모양과 가를 수 없어서) */
+    const s5 = new TJ.Session('한글', { mode: 'char' }), q = [];
+    ['ㅎ', '히', '힌', '힌ㄱ', '힌그', '힌글'].forEach((v, i) => { const r = s5.update(v, i * 100); q.push(r.st.join('') + '/' + s5.typedKeys + '/' + s5.okKeys + '/' + s5.combo); });
+    eq(q.join(' '), '30/1/1/1 30/1/1/1 30/1/1/1 23/4/3/2 23/5/4/3 21/6/5/4', "터치 자판: '힌'은 다음 글자를 칠 때 틀림이 되고(ㅣ에서 콤보가 끊기고 ㄴ·ㄱ부터 다시 2)");
+  }
   /* 흉내가 정말 중간 모양을 내는지(시험이 헛돌지 않게) */
   eq(cjiSteps('에').join(' ') + ' / ' + cjiSteps('려').join(' ') + ' / ' + cjiSteps('값').join(' '), 'ㅇ ㅇㆍ 어 에 / ㄹ ㄹㆍ ㄹᆢ 려 / ㄱ 기 가 갑 값', '천지인 흉내의 중간 모양');
 });

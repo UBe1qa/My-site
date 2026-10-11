@@ -28,19 +28,20 @@ img{max-width:100%;height:auto}
   --font:"Todok Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic","Segoe UI",Roboto,system-ui,sans-serif;
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#13111a; --card:#1c1926; --ink:#edeaf5; --ink-2:#cbc7d8; --muted:#9d99ad; --faint:#747083; --line:#2b2836; --line-2:#3b3749; --well:#24212e;
-    --main:#b9a5f2; --main-d:#cfc1f7; --main-soft:#2b2445; --main-ink:#1a1230; --main-edge:#7f69c4;
-    --hot:#f4bb46; --hot-d:#b97f0c; --hot-soft:#3a2d10; --hot-ink:#2b2140; --hot-text:#f4bb46;
-    --bad:#ff8468; --bad-soft:#3a1f1a; --bad-ink:#2a0f08; --slow:#7fb2ee; --slow-soft:#16283f;
-    --plate:#251d3a; --plate-2:#30274a; --plate-line:#463b66; --plate-ink:#efeaf9; --plate-muted:#b3aacd;
-    --cap:#352d4f; --cap-line:#4b416b; --cap-edge:#15101f; --cap-ink:#f1edfa; --cap-muted:#b8afd2;
-    --bar:#a79dc6;
-    --todo:#878396;
-    --key:#272431; --key-edge:#0d0c12; --key-ink:#dedbe8;
-    color-scheme:dark;
-  }
+/* 어두운 화면: 기기 설정을 따르지 않고 '설정 → 화면'에서 고른 사람에게만(html[data-theme="dark"]. 첫 그림 전에 <head> 의 스크립트가 붙인다).
+   기본은 밝은 화면(흰 종이)이다. 어두운 화면도 같은 재료를 쓴다: 짙은 가지색 판 위에 미색 키(어두운 종이 + 진한 판).
+   전에는 판과 키까지 어두운 보라라 한 색으로만 보였다(사용자 2026-10-11 "색감은 그대로") */
+:root[data-theme="dark"]{
+  --bg:#15121f; --card:#1e1a2b; --ink:#f0edf8; --ink-2:#cfcbdc; --muted:#a29eb3; --faint:#787489; --line:#2e2a3c; --line-2:#3f3a50; --well:#27233a;
+  --main:#b9a5f2; --main-d:#cfc1f7; --main-soft:#2e2650; --main-ink:#1a1230; --main-edge:#7c66c2;
+  --hot:#f4bb46; --hot-d:#b97f0c; --hot-soft:#3a2d10; --hot-ink:#2b2140; --hot-text:#f4bb46;
+  --bad:#ff8468; --bad-soft:#3d201a; --bad-ink:#2a0f08; --slow:#7fb2ee; --slow-soft:#16283f;
+  --plate:#3b2d72; --plate-2:#49398a; --plate-line:#6351a8; --plate-ink:#f4f0fd; --plate-muted:#cdc3ec;
+  --cap:#f1eadb; --cap-line:#d8cdb6; --cap-edge:#a3977e; --cap-ink:#2a2140; --cap-muted:#5c5570;
+  --bar:#a79dc6;
+  --todo:#8b879b;
+  --key:#2a2636; --key-edge:#0e0c14; --key-ink:#dedbe8;
+  color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:16px}

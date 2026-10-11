@@ -17,7 +17,7 @@ JS = {
         'none': '틀린 키가 없어요', 'missed': '틀린 키', 'slow': '느린 키', 'touchNote': '터치 자판이라 글자 단위로 쟀어요. 느린 키는 재지 않아요.',
         'timeLeft': '남은 초', 'elapsed': '걸린 초', 'progress': '문장',
         'combo': '콤보', 'comboN': '{n} 콤보', 'bBest': '최고 기록', 'bPerfect': '틀린 키 없음', 'bCombo': '최고 콤보 {n}',
-        'fxLevels': ['끔', '가볍게', '화려하게'], 'sndOn': '켬', 'sndOff': '끔', 'fxAuto': '화면이 버거워해서 이펙트를 한 단계 줄였어요.', 'fxReduced': '기기의 동작 줄이기 설정이 켜져 있어서 이펙트를 꺼 뒀어요.',
+        'fxLevels': ['끔', '가볍게', '화려하게'], 'themes': ['밝게', '어둡게'], 'sndOn': '켬', 'sndOff': '끔', 'fxAuto': '화면이 버거워해서 이펙트를 한 단계 줄였어요.', 'fxReduced': '기기의 동작 줄이기 설정이 켜져 있어서 이펙트를 꺼 뒀어요.',
         'daily': '{m}월 {d}일의 글', 'drillLabel': '틀린 키만 모은 연습',
         'formulaKo': '맞게 친 {n}타 ÷ {t}초 × 60 = {s}타/분', 'formulaEn': '맞게 친 {n}자 ÷ 5 ÷ {t}초 × 60 = {s} WPM',
         'alsoWpm': '{w} WPM',
@@ -54,7 +54,7 @@ JS = {
         'none': 'No missed keys', 'missed': 'Missed', 'slow': 'Slow', 'touchNote': 'Measured per character on a touch keyboard. Slow keys are not timed.',
         'timeLeft': 'Sec left', 'elapsed': 'Seconds', 'progress': 'Sentence',
         'combo': 'Combo', 'comboN': '{n} combo', 'bBest': 'New best', 'bPerfect': 'No mistakes', 'bCombo': 'Best combo {n}',
-        'fxLevels': ['Off', 'Light', 'Full'], 'sndOn': 'On', 'sndOff': 'Off', 'fxAuto': 'Effects were turned down a step to keep typing smooth.', 'fxReduced': 'Effects are off because your device is set to reduce motion.',
+        'fxLevels': ['Off', 'Light', 'Full'], 'themes': ['Light', 'Dark'], 'sndOn': 'On', 'sndOff': 'Off', 'fxAuto': 'Effects were turned down a step to keep typing smooth.', 'fxReduced': 'Effects are off because your device is set to reduce motion.',
         'daily': 'Text for {mon} {d}', 'drillLabel': 'Practice for your missed keys',
         'months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         'formulaKo': '{n} correct keystrokes ÷ {t} s × 60 = {s} per minute', 'formulaEn': '{n} correct characters ÷ 5 ÷ {t} s × 60 = {s} WPM',
@@ -94,7 +94,7 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> 다른 글 · <kbd>Esc</kbd> 처음으로(치는 칸에서 나오기)',
         'esc_note': '<kbd>Esc</kbd>를 누르면 치는 칸에서 나와요.',
         'start_pc': '첫 글자부터 치면 바로 시작해요', 'start_off': '글을 누르거나 아무 키나 치면 시작해요', 'start_mo': '글을 누르면 자판이 열려요',
-        'nojs': '이 도구를 쓰려면 브라우저의 자바스크립트를 켜 주세요.', 'acc_s': '정확도', 'left_s': '', 'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 초', 'nextkey': '다음 키',
+        'nojs': '이 도구를 쓰려면 브라우저의 자바스크립트를 켜 주세요.', 'acc_s': '정확도', 'left_s': '', 'theme_l': '화면', 'trap': '화면에 보이는 글을 따라 치세요', 'trap_help': '칠 글은 이 칸 바로 앞 문단에 있어요. Esc를 누르면 치는 칸에서 나오고, Tab을 누르면 다른 글로 바뀌어요.', 'unit': '타/분', 'acc_pct': '정확도 %', 'left': '남은 초', 'nextkey': '다음 키',
         'combo': '콤보', 'combo_tip': '이어서 맞게 누른 키 수예요. 틀린 키를 누르면 0부터 다시 세요.', 'combo_note': '콤보는 이어서 맞게 누른 키 수예요.', 'fx_l': '이펙트', 'snd_l': '키 소리',
         'fresh': '다른 글', 'quit': '그만', 'quit2': '처음 화면으로',
         'acc': '정확도', 'again': '다른 글로 다시', 'same': '같은 글 다시', 'drill': '틀린 키만 연습', 'share': '결과 그림 저장',
@@ -116,7 +116,7 @@ TX = {
         'keys_note': '<kbd>Tab</kbd> new text · <kbd>Esc</kbd> reset and leave the typing field',
         'esc_note': 'Press <kbd>Esc</kbd> to leave the typing field.',
         'start_pc': 'Type the first letter to start', 'start_off': 'Click the text or press any key to start', 'start_mo': 'Tap the text to open your keyboard',
-        'nojs': 'Turn on JavaScript in your browser to use this tool.', 'acc_s': 'Acc %', 'left_s': 'Sec', 'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Sec left', 'nextkey': 'Next key',
+        'nojs': 'Turn on JavaScript in your browser to use this tool.', 'acc_s': 'Acc %', 'left_s': 'Sec', 'theme_l': 'Theme', 'trap': 'Type the text shown on screen', 'trap_help': 'The text to type is in the paragraph right before this field. Press Esc to leave the typing field, or Tab for a new text.', 'unit': 'WPM', 'acc_pct': 'Accuracy %', 'left': 'Sec left', 'nextkey': 'Next key',
         'combo': 'Combo', 'combo_tip': 'Keys pressed correctly in a row. A wrong key starts the count again from 0.', 'combo_note': 'Combo counts keys pressed correctly in a row.', 'fx_l': 'Effects', 'snd_l': 'Key sound',
         'fresh': 'New text', 'quit': 'Stop', 'quit2': 'Back to start',
         'acc': 'Accuracy', 'again': 'Try again', 'same': 'Same text', 'drill': 'Practice missed keys', 'share': 'Save result image',
@@ -337,7 +337,7 @@ PRIVACY = {
 <li><code>todok.runs</code>: 최근 기록 50개까지. 한 판의 조건(도구·글 종류·시간), 속도, 정확도, 끝난 시각이에요. 친 글 자체는 저장하지 않아요.</li>
 <li><code>todok.best</code>: 조건마다의 최고 기록(속도, 정확도, 시각).</li>
 <li><code>todok.keys</code>: 키마다 틀린 횟수와 맞은 횟수. \'자주 틀린 키\'를 보여 주는 데 써요.</li>
-<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계, 이펙트와 키 소리).</li>
+<li><code>todok.set</code>: 마지막으로 고른 설정(글 종류, 시간, 문장부호·숫자, 자리 연습 단계, 이펙트와 키 소리, 화면 밝기).</li>
 <li><code>todok.lang</code>: 다른 언어판 안내 띠를 닫았다는 표시.</li>
 </ul>
 <p>\'내 기록\' 칸의 \'기록 지우기\'를 누르면 <code>todok.runs</code>, <code>todok.best</code>, <code>todok.keys</code>가 바로 지워져요. 나머지 둘은 브라우저의 사이트 데이터 지우기로 지울 수 있어요. 그 밖에는 저장하지 않아요.</p>
@@ -362,7 +362,7 @@ PRIVACY = {
 <li><code>todok.runs</code>: up to 50 recent results. Each holds the conditions of a test (tool, text type, length), the speed, the accuracy and when it ended. The text you typed is not stored.</li>
 <li><code>todok.best</code>: your best result for each set of conditions (speed, accuracy, time).</li>
 <li><code>todok.keys</code>: how many times each key was missed and hit, used to show the keys you miss most.</li>
-<li><code>todok.set</code>: the settings you last chose (text type, length, punctuation and numbers, practice step, effects and key sound).</li>
+<li><code>todok.set</code>: the settings you last chose (text type, length, punctuation and numbers, practice step, effects and key sound, light or dark theme).</li>
 <li><code>todok.lang</code>: a note that you closed the language suggestion bar.</li>
 </ul>
 <p>The "Clear results" button under "Your results" deletes <code>todok.runs</code>, <code>todok.best</code> and <code>todok.keys</code> at once. The other two can be removed by clearing site data in your browser. Nothing else is stored.</p>
