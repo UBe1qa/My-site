@@ -3,7 +3,7 @@
 SEC=3 처럼 주면 그 묶음만: 1 모든 페이지(오류·깨진 그림·가로 스크롤·어두운 화면·동작 줄이기) · 2 화면 밀림(CLS) ·
 3 한국어 속도 측정(조합 입력·결과·기록·한/영 안내) · 4 영어 속도 측정·영타 · 5 자리 연습·문장 연습 · 6 휴대폰(터치 자판) · 7 광고 자리·연출·언어 띠 · 8 스크린샷 ·
 9 제3자 평가에서 나온 것(누른 키 수, 천지인 중간 모양, 낱말 단위 한/영 안내, 팬그램·문장 되풀이, 휴대폰 옵션·누르는 크기, 초점, 통과 기준, 기록 목록, 404 언어 틀) ·
-10 이펙트·콤보·가벼운 그리기 · 11 내가 친 글 줄·틀린 키의 자판 반응·긴 글·영어 문장 연습·계산 기준 카드
+10 이펙트·콤보·가벼운 그리기 · 11 내가 친 글 줄·틀린 키의 자판 반응·긴 글·영어 문장 연습·계산 기준 카드 · 12 지울 때의 반응
 
 한글은 CDP Input.imeSetComposition / Input.insertText 로 조합 입력을 흉내 낸다(컴퓨터는 글쇠 이벤트 key=Process, code=KeyX 도 같이).
 실제 한글 입력기(윈도우·맥·아이폰·안드로이드)는 이 작업 공간에서 확인할 수 없다.
@@ -1182,6 +1182,7 @@ def tp_cji(env):
     """H2. 천지인 중간 모양('ㅇㆍ' 등): 조합이 끝나기 전에는 판정하지 않는다"""
     c = env.ctx(390, 844, True, dpr=2)
     pg, ty = mobile_count(env, c)
+    pg.evaluate(DEL_SPY)
     text = pg.evaluate('__E.T.text'); n = py_keys(text)
     cdp = ty.cdp; bad = []; steps = 0; mids = 0
     for ch in text:
@@ -1203,6 +1204,7 @@ def tp_cji(env):
     r = read_result(pg)
     ok(mids >= 5, 'H2 흉내가 아래아 중간 모양을 실제로 냈다', mids)
     ok(not bad, f'H2 천지인 흉내 {steps}단계: 맞게 치는 동안 틀림 표시 없음', bad[:5])
+    ok(pg.evaluate('__dels.length') == 0, 'H2 천지인 흉내: 맞게 치는 동안 지움 반응 없음(중간 모양을 거쳐도)', pg.evaluate('__dels')[:5])
     ok(r['done'] and r['mode'] == 'char' and r['rep']['accuracy'] == 100 and r['rep']['typed'] == n and r['rep']['ok'] == n and r['missed'] == [], f'H2 천지인 흉내: 정확도 100%, 누른 키 {n}, 틀린 키 없음', (r['rep'], r['missed']))
     ok(pg.evaluate('document.getElementById("map-cap").textContent').startswith('틀린 키가 없어요'), 'H2 틀린 키 지도 글', pg.evaluate('document.getElementById("map-cap").textContent'))
     check_formula('H2 결과', r)
@@ -2073,6 +2075,123 @@ def feat_checks(env):
     c.close()
 
 
+DEL_SPY = '''() => { window.__dels = []; const o = TJFX.del; TJFX.del = function (i, c, k) { __dels.push([i, !!c, k ? k.getAttribute('data-k') : '']); return o.apply(this, arguments); }; }'''
+DEL_ANIM = '''() => { const L = __E.view.layer; return { del: L.fx ? L.fx.del.a.filter((e) => e.getAnimations().length).length : -1, caret: [...document.querySelectorAll('.mine .caret')].filter((e) => e.getAnimations().length).length,
+  crumbs: [...document.querySelectorAll('.fx .chip.c4')].filter((e) => e.getAnimations().length).length, gh: [...document.querySelectorAll('.mine .caret .gh')].filter((e) => e.getAnimations().length).map((e) => e.textContent).join(''), bk: [...document.querySelectorAll('#kb [data-k="⌫R"]')].filter((e) => e.getAnimations().length).length }; }'''
+
+
+def del_checks(env):
+    """12. 사용자 2026-10-12: "글 삭제할때도 뭐든 반응이있으면 좋겠다"(실제 써 본 사람의 말). 지우면 소리·쓸림·커서 물러남(·⌫ 키·지우개 가루).
+    입력기가 한 키 안에서 값을 줄였다 늘리는 것(받침 넘기기, 지우고 다시 넣기)에는 반응하지 않는다."""
+    print('12. 지울 때의 반응')
+    c = env.ctx()
+    pg, ty = env.tool(c, '/ko/')
+    set_text(pg, '버스 안에서 간식을 나눠 먹어요')
+    pg.evaluate(DEL_SPY)
+    for k in ty.keys()[:19]:   # '버스 안에서 간식' : 받침이 다음 글자로 넘어가는 자리(벗→버스, 앗→안, 갓→간 …)가 여럿
+        ty.key(k, 120)
+    pg.clock.run_for(120)
+    ok(pg.evaluate('__dels.length') == 0 and pg.evaluate('__E.session.value') == '버스 안에서 간식', '맞게 치는 동안(받침 넘기기 포함)에는 지움 반응이 없다', pg.evaluate('[__dels, __E.session.value]'))
+    ty.key('\b', 200); pg.clock.run_for(60)   # 조합 중인 '식'에서 ㄱ 하나를 지운다(자판: key Process, code Backspace)
+    d = pg.evaluate('__dels')
+    ok(len(d) == 1 and d[0][1] and pg.evaluate('__E.session.value') == '버스 안에서 간시', '조합 중인 낱자를 지우면 반응한다(내가 친 글의 커서도)', d)
+    ok(d and d[0][0] == pg.evaluate('__E.session.cmp.pendingAt >= 0 ? __E.session.cmp.pendingAt : __E.session.cmp.cursor'), '반응 자리 = 지운 자리(지금 칠 자리)', d)
+    a = pg.evaluate(DEL_ANIM)
+    ok(a['del'] >= 1 and a['caret'] >= 1 and a['crumbs'] >= 1, '화려하게: 지운 자리 쓸림 + 커서 물러남 + 지우개 가루', a)
+    ok(a['gh'] == 'ㄱ', "내가 친 글에서 지운 낱자('식' → '시'의 ㄱ)가 커서 오른쪽에서 떠올랐다 사라진다", a)
+    pg.clock.run_for(400)
+    for k in ['\b', '\b']:   # '시' → 'ㅅ' → '' : 글자 하나를 통째로 지운다
+        ty.key(k, 200)
+    pg.clock.run_for(60)
+    ok(len(pg.evaluate('__dels')) == 3 and pg.evaluate('__E.session.value') == '버스 안에서 간', '글자를 통째로 지워도 키마다 반응한다', pg.evaluate('[__dels, __E.session.value]'))
+    ok(pg.evaluate('document.querySelector(".mine .caret .gh").textContent') == 'ㅅ', "마지막에 지운 것 = 'ㅅ'", pg.evaluate('document.querySelector(".mine .caret .gh").textContent'))
+    n0 = len(pg.evaluate('__dels')); pg.clock.run_for(100); pg.keyboard.press('Backspace')
+    ok(len(pg.evaluate('__dels')) == n0 + 1 and pg.evaluate('__E.session.value') == '버스 안에서 ', '자판의 지우기 키로 조합 중이 아닌 글자를 지우면 기다리지 않고 바로(치는 소리처럼)', pg.evaluate('[__dels, __E.session.value]'))
+    ok(pg.evaluate('document.querySelector(".mine .caret .gh").textContent') == '간', "떠오르는 글자 = 지운 글자 '간'", pg.evaluate('document.querySelector(".mine .caret .gh").textContent'))
+    ty.key('ㄱ', 150); ty.key('ㅏ', 150); ty.key('ㄴ', 150); pg.clock.run_for(100)
+    ty.key(' ', 150); ty.key('\b', 200); pg.clock.run_for(60)
+    ok(len(pg.evaluate('__dels')) == 5 and pg.evaluate('document.querySelector(".mine .caret .gh").textContent') == '간', '띄어쓰기를 지우면 반응하되 떠오를 글자는 없다(앞 글자를 다시 쓰지 않는다)', pg.evaluate('__dels'))
+    pg.evaluate('document.getAnimations().forEach((x) => x.cancel())')
+    # 지우기 키를 누르고 있어 잇달아 지워질 때(12ms 마다 셋): 첫 키에 바로 한 번, 60ms 뒤에 한 번 더(남은 것을 모아서)
+    pg.clock.run_for(100)
+    for k in ['\b', '\b', '\b']:
+        ty.key(k, 12)
+    ok(len(pg.evaluate('__dels')) == 6, '잇달아 지울 때 첫 키는 바로 반응', pg.evaluate('__dels'))
+    pg.clock.run_for(80)
+    ok(len(pg.evaluate('__dels')) == 7, '잇달아 지우면 60ms 에 한 번만 반응한다', pg.evaluate('__dels'))
+    # 콤보·숫자는 그대로(지우기는 콤보를 올리지도 끊지도 않는다)
+    cb = pg.evaluate('__E.session.combo')
+    ty.key('\b', 200); pg.clock.run_for(60)
+    ok(pg.evaluate('__E.session.combo') == cb, '지워도 콤보는 그대로', (cb, pg.evaluate('__E.session.combo')))
+    # 끔: 움직임 없음(소리만)
+    pg.evaluate('TJFX.setLevel(0); document.getAnimations().forEach((x) => x.cancel())'); pg.clock.run_for(500)
+    ty.key('\b', 200); pg.clock.run_for(60)
+    a = pg.evaluate(DEL_ANIM)
+    ok(len(pg.evaluate('__dels')) == 9 and a['del'] == 0 and a['caret'] == 0 and a['gh'] == '', '이펙트 끔: 움직임 없이 소리만', a)
+    pg.evaluate('TJFX.setLevel(2)')
+    # 소리: 지우기 소리가 실제로 난다(소리 장치가 있을 때)
+    snd = pg.evaluate('(() => { const S = TJFX.snd; if (!S.ctx) return "none"; const t = S.last; TJFX.del(0, null, null); return S.last > t || S.ctx.state; })()')
+    ok(snd is True or snd in ('none', 'suspended'), '지우기 소리', snd)
+    ok(not pg._errs, '오류 없음', pg._errs[:3])
+    pg.close()
+    # 영어
+    pg, ty = env.tool(c, '/')
+    set_text(pg, 'the quick brown fox jumps')
+    pg.evaluate(DEL_SPY)
+    for k in 'the quix':
+        ty.key(k, 120)
+    ty.key('\b', 200); pg.clock.run_for(60)
+    ok(len(pg.evaluate('__dels')) == 1 and pg.evaluate('__E.session.value') == 'the qui' and pg.evaluate(DEL_ANIM)['gh'] == 'x', "영어: 지우면 반응한다(떠오르는 글자 'x')", pg.evaluate('[__dels, __E.session.value]'))
+    pg.close()
+    # 자리 연습: 화면 자판의 ⌫ 키도 눌린다
+    pg, ty = env.tool(c, '/ko/practice/')
+    pg.evaluate(DEL_SPY)
+    ks = ty.keys()
+    ty.key(ks[0], 150); ty.key(wrong(ks[1]), 150); ty.key('\b', 200); pg.clock.run_for(60)
+    d = pg.evaluate('__dels'); a = pg.evaluate(DEL_ANIM)
+    ok(len(d) == 1 and d[0][2] == '⌫R' and a['bk'] == 1 and d[0][1], '자리 연습: 지우면 화면 자판의 ⌫ 키가 눌린다', (d, a))
+    ok(not pg._errs, '자리 연습 오류 없음', pg._errs[:3])
+    pg.close()
+    # 문장 연습(배치 B)
+    pg, ty = env.tool(c, '/ko/sentences/')
+    pg.evaluate(DEL_SPY)
+    ks = ty.keys()
+    for k in ks[:4]:
+        ty.key(k, 150)
+    ty.key('\b', 200); pg.clock.run_for(60)
+    d = pg.evaluate('__dels')
+    ok(len(d) == 1 and d[0][1], '문장 연습: 지우면 반응한다(내가 친 글의 커서도)', d)
+    pg.close()
+    c.close()
+    # 휴대폰(터치 자판): 지우면 반응, 기기가 '앞 글자를 지우고 합친 글자를 다시 넣는' 한 키에는 반응하지 않는다
+    c = env.ctx(390, 844, mobile=True)
+    pg, ty = env.tool(c, '/ko/', mobile=True)
+    set_text(pg, '가나다 라마바 사아자')
+    pg.evaluate(DEL_SPY)
+    for k in ty.keys()[:6]:
+        ty.key(k, 150)
+    pg.clock.run_for(100)
+    ok(pg.evaluate('__dels.length') == 0, '휴대폰: 맞게 치는 동안 반응 없음', pg.evaluate('[__dels, __E.session.value]'))
+    v = pg.evaluate('__E.session.value')
+    pg.evaluate(SET_JS, [v + ' ㄹ', 'insertText', 'ㄹ']); pg.clock.run_for(60)
+    # 한 키 안에서: 앞 글자를 지우고(값이 짧아짐) 합친 글자를 넣는다
+    pg.evaluate('''([a, b]) => { const t = document.getElementById('trap'); for (const [v, ty] of [[a, 'deleteContentBackward'], [b, 'insertText']]) { t.value = v; t.dispatchEvent(new InputEvent('input', { inputType: ty, bubbles: true })); } }''', [v + ' ', v + ' 라'])
+    pg.clock.run_for(60)
+    ok(pg.evaluate('__dels.length') == 0 and pg.evaluate('__E.session.value') == v + ' 라', "휴대폰: 지우고 다시 넣는 한 키('ㄹ' → '라')에는 반응 없음", pg.evaluate('[__dels, __E.session.value]'))
+    pg.evaluate(SET_JS, [v + ' ', 'deleteContentBackward', None]); pg.clock.run_for(60)
+    a = pg.evaluate(DEL_ANIM)
+    ok(pg.evaluate('__dels.length') == 1 and a['del'] >= 1 and a['caret'] >= 1 and a['crumbs'] == 0 and a['gh'] == '라', "휴대폰: 지우면 쓸림·커서·지운 글자 '라'(가루는 컴퓨터만)", (pg.evaluate('__dels'), a))
+    # 아직 판정하지 않은 틀린 글자(터치 자판은 글자가 끝날 때 판정한다)를 지워도 반응한다
+    pg.evaluate(SET_JS, [v + ' 마', 'insertText', '마']); pg.clock.run_for(60)
+    ok(pg.evaluate('__E.session.cmp.held') and pg.evaluate('__dels.length') == 1, '휴대폰: 틀린 글자가 판정 전(꼬리)이다', pg.evaluate('[__E.session.cmp.held, __dels]'))
+    pg.evaluate(SET_JS, [v + ' ', 'deleteContentBackward', None]); pg.clock.run_for(60)
+    ok(pg.evaluate('__dels.length') == 2, '휴대폰: 판정 전의 틀린 글자를 지워도 반응한다', pg.evaluate('__dels'))
+    ok(not pg._errs, '휴대폰 오류 없음', pg._errs[:3])
+    shot(pg, 'e2e-del-phone')
+    pg.close()
+    c.close()
+
+
 def main():
     proxy = os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy') or ''
     args = ['--proxy-bypass-list=localhost;127.0.0.1']
@@ -2082,7 +2201,7 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=str(exe[0]) if exe else None, args=args)
         env = Env(b)
-        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (10, fx_checks), (11, feat_checks), (8, shots)):
+        for n, fn in ((1, all_pages), (2, cls), (3, ko_test), (4, en_test), (5, practice), (6, mobile), (7, ads_and_motion), (9, third_party), (10, fx_checks), (11, feat_checks), (12, del_checks), (8, shots)):
             if sec(n):
                 try:
                     fn(env)

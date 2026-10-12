@@ -198,12 +198,12 @@
      옵션 final: 끝났을 때(미뤄 둔 마지막 글자도 맞으면 센다).
      옵션 soft: 목표의 줄바꿈 자리에 띄어쓰기를 쳐도 맞다고 본다.
      돌려주는 값: st(목표 글자마다 0 안 침·1 맞음·2 틀림·3 조합 중), cursor(다음 글쇠가 갈 글자), next(다음에 누를 글쇠),
-       pendingText(조합 중인 글자의 모양), pendingDone(그 글자에서 맞게 들어간 글쇠 수), held(판정을 미룬 꼬리가 있나), okStrokes(맞게 친 타수), okChars·badChars, complete, value(정리한 입력칸 값) */
+       pendingText(조합 중인 글자의 모양), pendingDone(그 글자에서 맞게 들어간 글쇠 수), held(판정을 미룬 꼬리가 있나), rawKeys(그 꼬리에서 fk 에 아직 안 들어간 글쇠 수), okStrokes(맞게 친 타수), okChars·badChars, complete, value(정리한 입력칸 값) */
   function compare(T, value, opt) {
     opt = opt || {};
     var chars = Array.from(tidy(value, T)), raw = '';
     var st = new Array(T.chars.length).fill(NONE);
-    var r = { value: chars.join(''), st: st, cursor: 0, next: null, pendingAt: -1, pendingText: '', pendingDone: 0, held: false, okStrokes: 0, okChars: 0, badChars: 0, complete: false, fk: [], fw: [], ws: [] };
+    var r = { value: chars.join(''), st: st, cursor: 0, next: null, pendingAt: -1, pendingText: '', pendingDone: 0, held: false, okStrokes: 0, okChars: 0, badChars: 0, complete: false, fk: [], fw: [], ws: [], rawKeys: 0 };
     var held = opt.lenient ? heldTail(chars, opt.hold | 0) : 0;
     if (held) raw = chars.splice(chars.length - held, held).join('');
     /* 친 글을 낱말로 */
@@ -224,6 +224,7 @@
         if (np) lw.k = lw.k.concat(rk.slice(0, np));
       }
       if (opt.final || (np === rk.length && rk.length > 0 && !rch.some(isMid))) raw = '';   /* 남은 것이 없으면 미룰 것도 없다 */
+      else r.rawKeys = rk.length - np;   /* 판정을 미룬 꼬리의 글쇠 가운데 fk 에 아직 안 들어간 수(친 키의 수를 셀 때 fk 와 더한다) */
     }
     for (var w = 0; w < iw.length && w < T.words.length; w++) {
       var I = iw[w], Tw = T.words[w], closed = I.sep != null, m = Tw.tk.length;

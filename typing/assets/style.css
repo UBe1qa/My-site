@@ -129,6 +129,7 @@ kbd{font:inherit}
 .fxu .tap{width:40px;height:40px;border-radius:9px;background:var(--main)}
 .fxu .tap.t-hot{background:var(--hot)}
 .fxu .tap.t-bad{background:var(--bad)}
+.fxu .tap.t-del{background:var(--faint)}
 .fxu .wd{width:100px;height:3px;border-radius:2px;background:var(--main);transform-origin:0 50%}
 .fxu .wd.t-hot{background:var(--hot-d)}
 /* 보이지 않는 입력칸(자판 입력을 받는다) */
@@ -154,6 +155,7 @@ kbd{font:inherit}
 .fx .chip.c1{background:var(--main)}
 .fx .chip.c2{background:var(--hot)}
 .fx .chip.c3{background:var(--bad)}
+.fx .chip.c4{width:7px;height:7px;border-radius:2px;background:var(--faint)}
 .fx .lab{transform-origin:0 50%;padding:6px 13px 7px;border-radius:10px;background:var(--hot);color:var(--hot-ink);box-shadow:0 4px 0 var(--hot-d);font-size:19px;font-weight:800;line-height:1.1;white-space:nowrap}
 .fx .lab b{font-family:var(--numfont);font-size:23px;margin-right:5px}
 /* 콤보 딱지: 방금 친 글자 위를 따라다니는 작은 키(컴퓨터·화려하게) */
@@ -436,6 +438,9 @@ html[lang="ko"] .kb.big .k b{font-family:var(--font)}
 .typing-focus .mine{border-bottom-color:var(--main)}
 .caret{display:inline-block;width:2px;height:30px;background:var(--main);vertical-align:-5px;margin-left:1px}
 .anim.idle.typing-focus .caret{animation:blink 1.05s steps(1) 5}
+.mine .caret{position:relative}
+/* 지운 글자(fx.js FX.del): 커서 오른쪽, 지워진 그 자리에서 흐리게 떠올랐다 사라진다 */
+.caret .gh{position:absolute;left:3px;bottom:0;font-style:normal;font-weight:inherit;line-height:30px;white-space:pre;color:var(--faint);opacity:0;pointer-events:none}
 .ph{font-size:15px;color:var(--muted);font-weight:400;margin-left:10px;vertical-align:3px}
 .running .ph,.finished .ph{display:none}
 .desk .hint{top:-16px;bottom:auto}

@@ -225,6 +225,7 @@
     this.session = new TJ.Session(this.text, { soft: !!CFG.lines });
     this.T = this.session.T;
     this.trap.value = ''; this.vlen = 0; this.delKey = false; this.comp = ''; this.sig = null;
+    clearTimeout(this.delT); this.delT = 0; this.ksize = 0;
     root.classList.add('idle'); root.classList.remove('running', 'finished');
     if (FX) { FX.stopConfetti($('burst')); FX.reset(); }
     this.barSet(0, 0); this.lastLeft = -1;
@@ -302,6 +303,39 @@
       }
     }
   };
+  /* 지운 글자: 앞이 같은 만큼을 빼고 남은 것. 조합 중인 글자에서 낱자만 지웠으면('한' → '하') 그 낱자('ㄴ').
+     띄어쓰기·줄바꿈만 지웠으면 보여 줄 글자가 없다 */
+  function gone(a, b) {
+    var x = Array.from(a), y = Array.from(b), p = 0;
+    while (p < x.length && p < y.length && x[p] === y[p]) p++;
+    var out = x.slice(p);
+    if (out.length === 1 && y.length === p + 1) { var ka = H.keyStream(out[0]), kb = H.keyStream(y[p]); if (ka.length > kb.length && ka.slice(0, kb.length).join('') === kb.join('')) out = ka.slice(kb.length); }
+    out = out.join('').replace(/[ \n]+$/, '');
+    return Array.from(out).slice(0, 4).join('');   /* 떠오르는 자리 = 지운 글의 첫 글자 자리 → 앞에서부터 */
+  }
+  /* 지웠을 때의 반응(사용자 2026-10-12: "글 삭제할때도 뭐든 반응이 있으면"). 친 키의 수(ksize)가 줄었으면 40ms 뒤에 한 번 더 보고,
+     그때도 줄기 전(k0)보다 짧으면 지운 것으로 본다. 바로 보지 않는 까닭: 입력기는 받침을 넘길 때('벗' → '버' → '버스')나
+     앞 글자를 지우고 합친 글자를 다시 넣을 때(아이폰 등) 한 키 안에서 흐름이 잠깐 줄었다 다시 는다 → 그때 반응하면 치는 중에 '지움'이 난다.
+     자판의 지우기 키로 조합 중이 아닌 글을 지웠으면 기다리지 않는다(아래 now). 잇달아 지워지면 60ms 에 한 번 */
+  Engine.prototype.delSoon = function (k0, v0, now) {
+    var self = this;
+    if (!FX) return;
+    if (this.delT) { if (!now) return; clearTimeout(this.delT); this.delT = 0; }
+    else { this.delK0 = k0; this.delV0 = v0 || ''; }
+    /* 자판의 지우기 키로 조합 중이 아닌 글을 지웠으면 바로(입력기가 끼지 않는다. 치는 소리처럼 손과 같이 나야 한다: 제3자 평가에서 40ms 늦음이 '물렁하다') */
+    var wait = now ? 60 - (performance.now() - (this.delAt || -1e9)) : 40;   /* 지우기 키를 누르고 있으면 60ms 에 한 번(1초에 열여섯 번 안쪽) */
+    if (wait <= 0) { this.delFire(); return; }
+    this.delT = setTimeout(function () { self.delT = 0; self.delFire(); }, wait);
+  };
+  Engine.prototype.delFire = function () {
+    if (!this.started || this.done || this.ksize >= this.delK0) return;
+    this.delAt = performance.now();
+    var s = this.session, r = s.cmp, n = this.T.chars.length; if (!n) return;
+    var at = r.pendingAt >= 0 ? r.pendingAt : Math.min(r.cursor, n - 1);
+    FX.del(at, this.caret || (this.caret = this.stage && this.stage.querySelector('.mine .caret')), this.view.keys && CFG.tool === 'practice' ? this.view.keys['⌫R'] : null, gone(this.delV0, r.value));
+    /* 콤보 딱지가 지운 글자 위에 남지 않게 지금 자리로(콤보 값은 그대로) */
+    FX.combo(s.combo, s.combo, Math.max(0, Math.min(r.cursor - 1, n - 1)), null);
+  };
   /* 입력이 오면 그 자리에서 판정하고 그린다(소리도 그 자리에서 난다). 다음 화면까지 미루지 않는다:
      휴대폰에서 미뤘더니 소리와 숫자가 손보다 늦었다(2026-10-11). 같은 값이 두 번 오면 apply 가 건너뛴다 */
   Engine.prototype.onInput = function () { if (DG) DG.ev(); this.apply(); };
@@ -320,7 +354,7 @@
     var hold = touch && this.composing ? Array.from(this.comp).length : 0, sig = hold + ':' + v;
     if (sig === this.sig) return;
     this.sig = sig;
-    var before = { typed: s.typedKeys, ok: s.okKeys, combo: s.combo, cursor: s.cmp.cursor };
+    var before = { typed: s.typedKeys, ok: s.okKeys, combo: s.combo, cursor: s.cmp.cursor, v: s.cmp.value };
     var r = s.update(v, t0, touch ? { hold: hold } : { del: del });
     if (!this.composing && r.value !== v) trap.value = r.value;
     this.vlen = trap.value.length;
@@ -330,6 +364,9 @@
     this.view.render(r, this.live(), this);
     if (!this.limit()) this.barSet(this.live().frac.toFixed(4), REDUCED ? 0 : 200);
     this.tell(before, r);
+    /* 친 키의 수(판정한 키 + 터치 자판에서 아직 판정하지 않은 꼬리의 키). 줄었으면 지웠을 수 있다 */
+    var k0 = this.ksize; this.ksize = r.fk.length + (r.held ? r.rawKeys : 0);
+    if (this.ksize < k0) this.delSoon(k0, before.v, !touch && del && !this.composing);
     /* 터치 자판은 마지막 글자 판정을 미루므로 '지금 끝난 것으로 보면 다 쳤나'로 본다(마지막 글자를 조합하는 중이어도 다 쳤으면 끝). 마지막 단어를 치는 중일 때만 따져 본다 */
     this.drawAt = performance.now();
     if (DG) DG.ap(performance.now() - a0);

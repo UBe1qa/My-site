@@ -24,6 +24,8 @@ const M = [
   ['터치 자판에서 아래아 같은 중간 글자를 미루지 않음', "while (k < n && isMid(chars[n - 1 - k])) k++;", ''],
   ['터치 자판에서 조합 중인 단어를 통째로 미룸(단어가 끝나야 화면이 바뀐다)', "return k;   /* hold 는 쓰지 않는다(위 설명) */", "return Math.max(k, Math.min(hold | 0, n));"],
   ['터치 자판에서 만드는 중인 글자의 낱자를 바로 세지 않음(글자가 끝나야 소리·콤보가 난다)', "if (np) lw.k = lw.k.concat(rk.slice(0, np));", "if (np && opt.final) lw.k = lw.k.concat(rk.slice(0, np));"],
+  ['판정을 미룬 꼬리의 글쇠를 친 키 수에 넣지 않음(판정 전의 틀린 글자를 지워도 반응이 없다)', "else r.rawKeys = rk.length - np;", ';'],
+  ['판정을 미룬 꼬리의 글쇠를 두 번 셈(천지인 중간 모양에서 \'지웠다\'는 반응이 난다)', "else r.rawKeys = rk.length - np;", 'else r.rawKeys = rk.length;'],
   ['터치 자판에서 안 맞는 꼬리 낱자까지 바로 판정(천지인 중간 모양이 틀림이 된다)', "while (np < rk.length && align(lw.k.concat(rk.slice(0, np + 1)), tw.tk, true).cost <= c0) np++;", "np = rk.length;"],
   /* 뺀 것: '끝날 때 아래아를 글쇠로 셈'(.filter(!isMid) 를 없앰). 낱자를 바로 세게 바꾼 뒤(2026-10-11)로는 아래아가 목표 글쇠와 맞을 일이 없어
      없애도 결과가 같다(같은 동작이라 시험이 잡을 수 없다). 그 줄은 뜻을 드러내려고 남겨 뒀다 */

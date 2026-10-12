@@ -1006,15 +1006,18 @@ function dubeolSteps(ch) {
   return out;
 }
 /* 글 전체를 천지인 흉내로 넣는다. withHold = 입력기가 조합 중인 문자열을 알려 준 경우 */
+/* 친 키의 수(app.js 의 '지웠나' 판단에 쓴다): 판정한 글쇠 + 터치 자판에서 판정을 미룬 꼬리 가운데 아직 안 센 글쇠 */
+const kSize = (r) => r.fk.length + (r.held ? r.rawKeys : 0);
 function cjiRun(text, withHold) {
-  const s = new TJ.Session(text, { mode: 'char' }); let done = '', t = 0, bad = 0, steps = 0;
+  const s = new TJ.Session(text, { mode: 'char' }); let done = '', t = 0, bad = 0, steps = 0, shrink = 0, last = 0;
+  const seen = (r) => { if (r.st.includes(BAD)) bad++; const k = kSize(r); if (k < last) shrink++; last = k; };
   for (const ch of Array.from(text)) {
     const st = cjiSteps(ch);
-    if (!st) { done += ch; t += 200; const r = s.update(done, t); if (r.st.includes(BAD)) bad++; steps++; continue; }
-    for (const m of st) { t += 200; const r = s.update(done + m, t, withHold ? { hold: Array.from(m).length } : undefined); if (r.st.includes(BAD)) bad++; steps++; }
-    done += ch; const r2 = s.update(done, t); if (r2.st.includes(BAD)) bad++;
+    if (!st) { done += ch; t += 200; seen(s.update(done, t)); steps++; continue; }
+    for (const m of st) { t += 200; seen(s.update(done + m, t, withHold ? { hold: Array.from(m).length } : undefined)); steps++; }
+    done += ch; seen(s.update(done, t));
   }
-  return { s, bad, steps, t };
+  return { s, bad, steps, t, shrink };
 }
 run('touch2', () => {
   const feed = (target, values, hold) => { const s = new TJ.Session(target, { mode: 'char' }); const seen = values.map((v, i) => s.update(v, i * 300, hold ? { hold: hold[i] } : undefined).st.join('')); return { s, seen }; };
@@ -1056,16 +1059,17 @@ run('touch2', () => {
   eq(res.typedKeys + ':' + res.strokes + ':' + res.badChars, '1:1:0', "'ㅇㆍ'에서 끝: ㅇ 하나만");
   /* 연습 글 전부를 천지인 흉내로: 틀림 표시 0, 누른 키 = 두벌식으로 환산한 키 수(파이썬 기준값), 정확도 100 */
   const per = REF.keys.per.split(';').map((x) => x.split(',').map(Number));
-  let bad = 0, wrong = 0, steps = 0;
+  let bad = 0, wrong = 0, steps = 0, shrink = 0;
   ALL_KO.forEach((text, i) => {
     for (const hold of [false, true]) {
       if (hold && i % 3) continue;
       const g = cjiRun(text, hold), r = g.s.finish(g.t);
-      bad += g.bad; steps += g.steps;
+      bad += g.bad; steps += g.steps; shrink += g.shrink;
       if (r.typedKeys !== per[i][0] || r.okKeys !== per[i][0] || r.accuracy !== 100 || r.missed.length || r.strokes !== H.strokeCount(text)) { wrong++; ok(false, '천지인 흉내 "' + text + '" 누른 키 ' + r.typedKeys + '/' + per[i][0] + ' 틀린 키 ' + r.missed.map((m) => m.key).join('')); }
     }
   });
   ok(bad === 0 && wrong === 0 && steps > 20000, '천지인 흉내 ' + steps + '단계: 틀림 표시 ' + bad + '번, 숫자가 다른 글 ' + wrong);
+  ok(shrink === 0, '천지인 흉내: 중간 모양을 거쳐도 친 키의 수가 줄지 않는다(줄면 화면이 \'지웠다\'고 반응한다) ' + shrink + '번');
   /* 터치 자판으로 두벌식을 맞게 치면 자판(컴퓨터)으로 칠 때와 키마다 숫자가 같다: 누른 키·맞은 키·콤보·커서·다 쳤는지.
      (2026-10-11 사용자: "모바일에서 영어는 잘되는데 한글은 이상하게 됨" = 한글만 글자가 끝나야 소리·콤보·색이 바뀌었다)
      연습 글 전부를 ① 글자 하나씩 조합 ② 받침이 넘어갈 때 두 단계 ③ 단어 통째 조합(안드로이드)으로 넣어 본다 */
@@ -1091,6 +1095,27 @@ run('touch2', () => {
     const s5 = new TJ.Session('한글', { mode: 'char' }), q = [];
     ['ㅎ', '히', '힌', '힌ㄱ', '힌그', '힌글'].forEach((v, i) => { const r = s5.update(v, i * 100); q.push(r.st.join('') + '/' + s5.typedKeys + '/' + s5.okKeys + '/' + s5.combo); });
     eq(q.join(' '), '30/1/1/1 30/1/1/1 30/1/1/1 23/4/3/2 23/5/4/3 21/6/5/4', "터치 자판: '힌'은 다음 글자를 칠 때 틀림이 되고(ㅣ에서 콤보가 끊기고 ㄴ·ㄱ부터 다시 2)");
+  }
+  {
+    /* 지웠을 때의 반응(app.js delSoon): 한 키를 다 넣은 뒤의 '친 키의 수'는 맞게 칠 때 줄지 않고(한 키 안에서 잠깐 줄어도: 받침 넘기기, 아이폰식 지우고 다시 넣기), 지우면 준다 */
+    let keysSeen = 0, fall = 0, firstFall = '';
+    ALL_KO.forEach((text, i) => {
+      if (i % 2) return;
+      const keys = H.keyStream(text);
+      for (const [kind, steps] of [['하나씩', stepsFor(keys).map((v) => [v])], ['두 단계', twoStep(keys)], ['지우고 다시 넣기', delInsert(keys, i % 4 === 0)]]) {
+        for (const mode of ['key', 'char']) {
+          const s6 = new TJ.Session(text, { mode }); let last = 0, t = 0;
+          steps.forEach((vs, n) => { t += 100; vs.forEach((v) => s6.update(v, t, mode === 'char' && i % 3 === 0 ? { hold: 1 + (n % 3) } : undefined)); const k = kSize(s6.cmp); keysSeen++; if (k < last) { fall++; if (!firstFall) firstFall = kind + '/' + mode + ' "' + text + '" ' + (n + 1) + '번째 키 ' + last + '→' + k; } last = k; });
+        }
+      }
+    });
+    ok(fall === 0 && keysSeen > 20000, '맞게 치는 ' + keysSeen + '키: 키를 다 넣은 뒤 친 키의 수가 준 적 ' + fall + (firstFall ? ' (' + firstFall + ')' : ''));
+    const shrinks = [];
+    for (const mode of ['key', 'char']) for (const [a, b] of [['한', '하'], ['하', 'ㅎ'], ['한글 ', '한글'], ['한글', '한ㄱ'], ['한ㄱ', '한'], ['노래', '노랴'.slice(0, 1) + 'ㄹ'], ['cat', 'ca'], ['힌', '히'], ['어ㅁ', '어']]) {
+      const s7 = new TJ.Session(/^[a-z]/.test(a) ? 'cats' : a.startsWith('노') ? '노래방' : '한글 타자', { mode }); s7.update(a, 100, mode === 'char' ? { hold: 1 } : undefined);
+      const k0 = kSize(s7.cmp); s7.update(b, 300, mode === 'char' ? { hold: 1 } : { del: true }); shrinks.push(mode + ':' + a + '→' + b + ':' + (kSize(s7.cmp) < k0 ? 'y' : 'n'));
+    }
+    eq(shrinks.filter((x) => x.endsWith(':n')).join(' '), '', '지우면(낱자 하나, 글자 하나, 띄어쓰기, 판정 전의 틀린 글자) 친 키의 수가 준다');
   }
   /* 흉내가 정말 중간 모양을 내는지(시험이 헛돌지 않게) */
   eq(cjiSteps('에').join(' ') + ' / ' + cjiSteps('려').join(' ') + ' / ' + cjiSteps('값').join(' '), 'ㅇ ㅇㆍ 어 에 / ㄹ ㄹㆍ ㄹᆢ 려 / ㄱ 기 가 갑 값', '천지인 흉내의 중간 모양');
