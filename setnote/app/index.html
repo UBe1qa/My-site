@@ -547,6 +547,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .pr-row { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: var(--r-md); background: var(--pr-soft); color: var(--pr); font-size: calc(14 * var(--fs)); flex-wrap: wrap; font-weight: 600; }
 .pr-row .ic { color: var(--pr); }
 .pr-row b { color: var(--ink); }
+/* one quiet line above 확인 naming the routine the home card will offer next */
+.done-next { font-size: calc(13.5 * var(--fs)); color: var(--muted); text-align: center; text-wrap: balance; }
+.done-next b { color: var(--ink-2); font-weight: 700; }
 
 .toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
 .toggle-txt { display: grid; gap: 1px; }
@@ -580,9 +583,16 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 .toast { position: fixed; left: 50%; bottom: calc(var(--safe-b) + 150px); transform: translate(-50%, 8px); z-index: 70; background: var(--inv); color: var(--inv-ink); padding: 12px 16px; border-radius: 14px; font-size: calc(14 * var(--fs)); font-weight: 600; max-width: calc(100% - 32px); width: max-content; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease-standard); text-align: center; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
+/* a toast with one action (실행 취소 after a delete): message on the left, a lime button on the right. Only this kind
+   takes taps, and only while shown; the button looks 36px tall and gets its 44px touch area from ::after below */
+.toast.act { display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; text-align: left; }
+.toast.act.show { pointer-events: auto; }
+.toast-msg { flex: 1 1 auto; min-width: 0; }
+.toast-btn { position: relative; flex: none; height: 36px; padding: 0 14px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-weight: 700; white-space: nowrap; }
+.toast-btn:disabled { opacity: 1; }
 
 /* small controls keep their size on screen but get a touch area of at least 44px, the phone minimum */
-.sync::after, .icon-btn::after, .chip::after, .hero-name::after, .excard-name::after, .sd-name::after {
+.sync::after, .icon-btn::after, .chip::after, .hero-name::after, .excard-name::after, .sd-name::after, .toast-btn::after {
   content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
 }
 /* rows of icon buttons: 32px buttons 12px apart, so each gets the full 44px touch area without covering its neighbour */
@@ -594,10 +604,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* Basic reactions, one rule set for the whole app (--dur-*, --ease-standard): a press shrinks the control a
    little, new content rises 8px while fading in. Entrances are one-shot classes (S.enter, S.sheetEnter) that the
    next render drops, so typing or a timer tick never replays them. Only transform and opacity move. */
-.chip, .pill-go { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast), color var(--dur-fast); }
+.chip, .pill-go, .toast-btn { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast), color var(--dur-fast); }
 .tab { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast), color var(--dur-fast); }
 .icon-btn { transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-fast); }
-.chip:active, .tab:active, .pill-go:active, .icon-btn:active:not(:disabled) { transform: scale(.94); }
+.chip:active, .tab:active, .pill-go:active, .toast-btn:active, .icon-btn:active:not(:disabled) { transform: scale(.94); }
 .pk-row:active, .set-prev:not(:disabled):active { background: var(--surface-2); }
 .toggle:active { background: var(--surface-3); }
 .view.enter, .set.add, .excard.add { animation: rise var(--dur-base) var(--ease-standard); }
@@ -632,7 +642,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (prefers-reduced-motion: reduce) {
   .set.pop .set-check, .done-badge, .pill-dot { animation: none; }
   .btn:active:not(:disabled), .hero-go:active, .play:active, .set-check:active { transform: none; }
-  .chip:active, .tab:active, .pill-go:active, .icon-btn:active:not(:disabled) { transform: none; }
+  .chip:active, .tab:active, .pill-go:active, .toast-btn:active, .icon-btn:active:not(:disabled) { transform: none; }
   .sheet.enter, .wo.enter, .view.enter, .set.add, .excard.add, .pr-row.in, .cmp-row.in { animation-name: fade-in; }
   .mile.stamp, .mile.stamp::after, .sp-ring,
   .chart svg.draw .sp-line, .chart svg.draw .sp-area, .chart svg.draw .sp-labels, .chart svg.draw .sp-dot { animation: none; }
@@ -1739,13 +1749,16 @@ const SHEETS = {
     const st = (i, cls) => S.sheetEnter ? ` class="${cls} in" style="--i:${Math.min(i, 8)}"` : ` class="${cls}"`;
     const prs = t.prs.length ? `<div class="pr-list">${t.prs.map((p, i) => `<div${st(i, 'pr-row')}>${I('trophy')}<span><b>${esc(p.name)}</b> ${tx('신기록 · 추정 1RM', 'new record · est. 1RM')} ${fmtW(round1(p.from))} → <b>${fmtW(round1(p.to))}kg</b></span></div>`).join('')}</div>` : '';
     const cmp = t.cmp.map((c, i) => `<div${st(i + t.prs.length, 'cmp-row')}><b>${esc(c.name)}</b><span class="cmp-d${c.up ? ' up' : ''}">${c.up ? I('up') : c.dn ? I('dn') : ''}${esc(c.txt)}</span></div>`).join('');
+    // what comes next in the rotation (the same pick as the home '다음 차례' card); nothing after a free workout
+    const nr = t.next && S.routines.find(r => r.id === t.next);
+    const next = nr ? `<p class="done-next">${tx(`다음에는 <b>${esc(nr.name)}</b> 차례예요. 루틴 탭에서 바로 시작할 수 있어요.`, `Up next: <b>${esc(nr.name)}</b>. Start it anytime from Routines.`)}</p>` : '';
     const mile = t.mile ? `<div class="mile${S.sheetEnter ? ' stamp' : ''}" role="img" aria-label="${t.mile === 1 ? tx('첫 운동을 마쳤어요', 'First workout done') : tx(t.mile + '번째 운동을 마쳤어요', ordinal(t.mile) + ' workout done')}">${t.mile === 1 ? tx('<b>첫</b><span>운동</span>', '<b class="num">1st</b><span>workout</span>') : `<b class="num">${tx(t.mile, ordinal(t.mile))}</b><span>${tx('번째 운동', 'workout')}</span>`}</div>` : '';
     return {
       title: tx('수고 많으셨어요!', 'Great work!'),
       body: `<div class="done-hero${mile ? ' has-mile' : ''}">${mile}<div class="done-badge">${I(t.prs.length ? 'trophy' : 'check')}</div><div class="num"><span id="done-vol">${fmtInt(s.volume)}</span><small>kg</small></div><p>${tx('총 볼륨', 'Total volume')}</p>
           <div class="done-stats"><div><b>${fmtDur(s.endedAt - s.startedAt)}</b><small>${tx('운동 시간', 'Duration')}</small></div><div><b>${s.setCount}</b><small>${tx('세트', 'Sets')}</small></div><div><b>${(s.exercises || []).length}</b><small>${tx('운동', 'Exercises')}</small></div></div></div>
         ${prs}<h3 class="sub-h">${tx('지난번과 비교', 'Compared with last time')}</h3><div class="cmp">${cmp}</div>`,
-      foot: `<button class="btn btn-primary wide" data-act="sheet-close">${tx('확인', 'OK')}</button>`,
+      foot: `${next}<button class="btn btn-primary wide" data-act="sheet-close">${tx('확인', 'OK')}</button>`,
     };
   },
 
@@ -1876,7 +1889,25 @@ function discardWorkout(silent) {
   S.active = null; S.workoutOpen = false; S.rest = null;
   clearActiveEverywhere();
   keepAwake(false);
+  dropWorkoutUndo();
   if (!silent) { S.sheets = []; render(); toast(tx('운동을 취소했어요', 'Workout canceled')); }
+}
+/* takes the exercise out at once; 실행 취소 puts the same object (its sets, checks and values) back where it was,
+   as long as the same workout is still going */
+function removeWorkoutEx(u) {
+  const a = S.active; const k = a ? a.exercises.findIndex(e => e.u === u) : -1;
+  if (k < 0) return;
+  const ex = a.exercises[k];
+  a.exercises.splice(k, 1);
+  touchActive(); render();
+  const n = exName(ex);
+  undoToast(tx(`‘${n}’ 운동을 뺐어요`, `Removed “${n}”`), tx(`실행 취소: ‘${n}’ 다시 넣기`, `Undo: put “${n}” back`), () => {
+    const b = S.active;
+    if (!b || b.id !== a.id || b.exercises.some(e => e.u === ex.u)) return;
+    b.exercises.splice(Math.min(k, b.exercises.length), 0, ex);
+    touchActive(); render();
+    toast(tx(`‘${n}’ 운동을 다시 넣었어요`, `Put “${n}” back`));
+  }, true);
 }
 function checkSet(u, i) {
   ensureAudio();
@@ -1978,9 +2009,12 @@ function finishWorkout(upd) {
     }
   });
   keepAwake(false);
+  dropWorkoutUndo();
   const mile = milestoneFor(S.sessions.length);
+  // only after a routine workout, and only once the history is known (a half-loaded list would pick the wrong one)
+  const next = session.routineId && S.loaded.sessions ? nextRoutineId() : null;
   S.tab = 'history'; lsSet('setnote:tab', 'history');
-  S.sheets = [{ kind: 'done', session, prs, cmp, mile }];
+  S.sheets = [{ kind: 'done', session, prs, cmp, mile, next }];
   S.sheetEnter = true;
   render();
   window.scrollTo(0, 0);
@@ -2081,18 +2115,53 @@ function tickUi() {
       $('#rest-prog').style.width = clamp(100 - (left / S.rest.total) * 100, 0, 100) + '%';
     }
   }
+  placeToast();
 }
 setInterval(tickUi, 250);
 
 /* ---------- toast ---------- */
-let toastTimer = null;
-function toast(msg, ms = 2400) {
+/* toast(msg, ms) shows one line of status. With an action ({ label, aria, fn, wo }) it also gets one button.
+   A newer toast or the time running out drops the action, so it never runs late or on its own. */
+let toastTimer = null, toastAct = null;
+function toast(msg, ms = 2400, act = null) {
   const el = $('#toast');
-  el.textContent = msg;
+  toastAct = act;
+  el.classList.toggle('act', !!act);
+  if (act) el.innerHTML = `<span class="toast-msg">${esc(msg)}</span><button class="toast-btn" data-act="toast-act" aria-label="${esc(act.aria)}">${esc(act.label)}</button>`;
+  else el.textContent = msg;
   el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), ms);
+  placeToast();
+  toastClock(ms);
 }
+/* The toast's spot (150px up) clears the tab bar, but the resume pill and the rest timer grow with the text size
+   (the timer takes two rows at 320px), and the toast covered their top edge, the same colour in dark mode.
+   So a shown toast is lifted above them; tickUi calls this too, as either can appear while it is up. */
+let toastLift = '';
+function placeToast() {
+  const el = $('#toast');
+  if (!el.classList.contains('show')) return;
+  let top = Infinity;
+  for (const o of document.querySelectorAll('.pill, #rest')) if (!o.hidden) { const r = o.getBoundingClientRect(); if (r.height) top = Math.min(top, r.top); }
+  const lift = top < Infinity ? `max(calc(var(--safe-b) + 150px), ${Math.ceil(window.innerHeight - top + 10)}px)` : '';
+  if (lift !== toastLift) { toastLift = lift; el.style.bottom = lift; }
+}
+function toastClock(ms) { clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, ms); }
+function hideToast() {
+  clearTimeout(toastTimer); toastTimer = null;
+  toastAct = null;
+  const el = $('#toast');
+  el.classList.remove('show');
+  const b = el.querySelector('.toast-btn'); if (b) b.disabled = true;
+}
+/* someone who tabs to the button keeps the toast until focus leaves it */
+$('#toast').addEventListener('focusin', () => { if (toastAct) clearTimeout(toastTimer); });
+$('#toast').addEventListener('focusout', () => { if (toastAct) toastClock(3000); });
+/* Deletes take effect at once instead of asking first, and the toast offers 실행 취소 for 5 s. The removed copy
+   stays in memory and undo saves it again through the normal store path (same id and fields, so the same place in
+   the sorted lists). Holding the delete back until the toast ends would lose it if the app closed meanwhile. */
+const undoToast = (msg, aria, fn, wo = false) => toast(msg, 5000, { label: tx('실행 취소', 'Undo'), aria, fn, wo });
+/* an exercise removed from a workout can't come back once that workout has ended */
+function dropWorkoutUndo() { if (toastAct && toastAct.wo) hideToast(); }
 
 /* ---------- celebrate ---------- */
 /* One short confetti burst from the trophy when a finished workout has a new record (t.prs). It only fires on
@@ -2301,6 +2370,57 @@ function createCustom(name, cat) {
   render();
 }
 
+/* single-item deletes with 실행 취소 (see undoToast) */
+function deleteRoutine(r) {
+  const copy = clone(r);
+  S.routines = S.routines.filter(x => x.id !== r.id);
+  store.deleteRoutine(r.id);
+  if (S.mode === 'cloud') pruneV1({ r: [r.id] });
+  S.sheets = S.sheets.filter(s => !(s.kind === 'routine' && s.id === r.id));
+  render();
+  undoToast(tx('루틴을 삭제했어요. 기록은 그대로 있어요.', 'Routine deleted. Your history stays.'), tx('실행 취소: 삭제한 루틴 되살리기', 'Undo: restore the deleted routine'), () => {
+    if (!store || S.routines.some(x => x.id === copy.id)) return;
+    S.routines = sortRoutines([...S.routines, copy]);
+    store.saveRoutine(copy);
+    render();
+    toast(tx('루틴을 되살렸어요', 'Routine restored'));
+  });
+}
+function deleteSession(s) {
+  const copy = clone(s);
+  S.sessions = S.sessions.filter(x => x.id !== s.id);
+  writeOb(readOb().filter(x => x.id !== s.id));
+  store.deleteSession(s.id);
+  if (S.mode === 'cloud') pruneV1({ s: [s.id] });
+  S.sheets = S.sheets.filter(x => !(x.kind === 'session' && x.id === s.id));
+  render();
+  undoToast(tx('기록을 삭제했어요', 'Workout deleted'), tx('실행 취소: 삭제한 기록 되살리기', 'Undo: restore the deleted workout'), () => {
+    if (!store) return;
+    // back through the outbox like a just-finished workout, so a failed upload is kept and sent again
+    S.sessions = sortSessions([copy, ...S.sessions.filter(x => x.id !== copy.id)]);
+    writeOb([...readOb().filter(x => x.id !== copy.id), copy]);
+    sendSession(copy);
+    render();
+    toast(tx('기록을 되살렸어요', 'Workout restored'));
+  });
+}
+function deleteCustom(c) {
+  const k = prof().custom.findIndex(x => x.id === c.id);
+  S.profile = { ...S.profile, custom: prof().custom.filter(x => x.id !== c.id) };
+  store.saveProfile();
+  if (S.mode === 'cloud') pruneV1({ c: [c.id] });
+  render();
+  undoToast(tx(`‘${c.name}’ 운동을 목록에서 지웠어요`, `Removed “${c.name}” from the list`), tx(`실행 취소: ‘${c.name}’ 되살리기`, `Undo: restore “${c.name}”`), () => {
+    if (!store || !profileReady() || prof().custom.some(x => x.id === c.id)) return;
+    const list = prof().custom.slice();
+    list.splice(Math.min(Math.max(k, 0), list.length), 0, c);
+    S.profile = { ...S.profile, custom: list };
+    store.saveProfile();
+    render();
+    toast(tx(`‘${c.name}’ 운동을 되살렸어요`, `Restored “${c.name}”`));
+  });
+}
+
 /* ---------- backup ---------- */
 function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 async function doExport() {
@@ -2421,6 +2541,7 @@ const A = {
   'sheet-close': () => popSheet(),
   'sheet-bg': () => { const t = topSheet(); if (t && !['editor', 'finish', 'picker'].includes(t.kind)) popSheet(); },
   'confirm-ok': () => { const t = topSheet(); S.sheets.pop(); if (t && t.onOk) t.onOk(); render(); },
+  'toast-act': () => { const a = toastAct; hideToast(); if (a) a.fn(); },
   migrate: () => migrateLocal(),
   'migrate-hide': () => { S.migrateHidden = true; render(); },
   'retry-cloud': () => { if (S.deniedUid) lsDel('setnote:cloud-denied:' + S.deniedUid); S.deniedUid = null; toast(tx('새로고침하면 바로 다시 시도해요', 'It will try again when you refresh'), 3600); render(); },
@@ -2444,13 +2565,7 @@ const A = {
     toast(tx(`‘${c.name}’ 루틴을 만들었어요`, `Created “${c.name}”`));
     render();
   },
-  'del-routine': d => {
-    const r = S.routines.find(x => x.id === d.id); if (!r) return;
-    confirmSheet({
-      title: tx('루틴 삭제', 'Delete routine'), msg: tx(`‘${r.name}’ 루틴을 삭제할까요? 지금까지의 운동 기록은 그대로 남아요.`, `Delete “${r.name}”? Your workout history stays.`), ok: tx('삭제', 'Delete'), danger: true,
-      onOk: () => { S.routines = S.routines.filter(x => x.id !== r.id); store.deleteRoutine(r.id); if (S.mode === 'cloud') pruneV1({ r: [r.id] }); S.sheets = S.sheets.filter(s => !(s.kind === 'routine' && s.id === r.id)); toast(tx('루틴을 삭제했어요', 'Routine deleted')); },
-    });
-  },
+  'del-routine': d => { const r = S.routines.find(x => x.id === d.id); if (r) deleteRoutine(r); },
 
   'ed-add': () => pushSheet({ kind: 'picker', target: 'editor', sel: [], q: '', cat: '전체', creating: false }),
   'ed-move': d => { const ed = topSheet(); const a = ed.draft.exercises; const i = +d.i, j = i + (+d.dir); if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; render(); },
@@ -2468,13 +2583,7 @@ const A = {
   'open-ex': d => pushSheet({ kind: 'ex', id: d.id }),
 
   'open-session': d => pushSheet({ kind: 'session', id: d.id }),
-  'del-session': d => {
-    const s = S.sessions.find(x => x.id === d.id); if (!s) return;
-    confirmSheet({
-      title: tx('기록 삭제', 'Delete workout'), msg: tx(`${fmtDate(s.endedAt)} ‘${rName(s.routineName)}’ 기록을 삭제할까요? 되돌릴 수 없어요.`, `Delete “${rName(s.routineName)}” from ${fmtDate(s.endedAt)}? This can’t be undone.`), ok: tx('삭제', 'Delete'), danger: true,
-      onOk: () => { S.sessions = S.sessions.filter(x => x.id !== s.id); writeOb(readOb().filter(x => x.id !== s.id)); store.deleteSession(s.id); if (S.mode === 'cloud') pruneV1({ s: [s.id] }); S.sheets = S.sheets.filter(x => !(x.kind === 'session' && x.id === s.id)); toast(tx('기록을 삭제했어요', 'Workout deleted')); },
-    });
-  },
+  'del-session': d => { const s = S.sessions.find(x => x.id === d.id); if (s) deleteSession(s); },
   'repeat-session': d => {
     const s = S.sessions.find(x => x.id === d.id); if (!s) return;
     const r = s.routineId && S.routines.find(x => x.id === s.routineId);
@@ -2504,12 +2613,7 @@ const A = {
     if (i < 0 || j < 0 || j >= a.length) return;
     [a[i], a[j]] = [a[j], a[i]]; touchActive(); render();
   },
-  'wo-remove-ex': d => {
-    const ex = findEx(d.u); if (!ex) return;
-    const rm = () => { S.active.exercises = S.active.exercises.filter(e => e.u !== d.u); touchActive(); };
-    if (ex.sets.some(s => s.done)) confirmSheet({ title: tx('운동 빼기', 'Remove exercise'), msg: tx(`‘${exName(ex)}’에 완료한 세트가 있어요. 빼면 이 운동의 오늘 기록이 사라져요.`, `“${exName(ex)}” has finished sets. Removing it deletes today’s sets for it.`), ok: tx('빼기', 'Remove'), danger: true, onOk: rm });
-    else { rm(); render(); }
-  },
+  'wo-remove-ex': d => removeWorkoutEx(d.u),
   'wo-add-ex': () => pushSheet({ kind: 'picker', target: 'workout', sel: [], q: '', cat: '전체', creating: false }),
   'wo-finish': () => { flushActive(); pushSheet({ kind: 'finish', upd: false }); },
   'wo-discard': () => confirmSheet({ title: tx('운동 취소', 'Cancel workout'), msg: tx('지금까지 입력한 세트가 모두 사라져요. 취소할까요?', 'Everything you’ve entered will be lost. Cancel the workout?'), ok: tx('운동 취소', 'Cancel workout'), danger: true, onOk: () => discardWorkout(false) }),
@@ -2530,10 +2634,7 @@ const A = {
   'del-custom': d => {
     const c = prof().custom.find(x => x.id === d.id); if (!c) return;
     if (!profileReady()) return;
-    confirmSheet({
-      title: tx('운동 삭제', 'Delete exercise'), msg: tx(`‘${c.name}’을(를) 목록에서 지울까요? 이미 저장된 기록은 남아요.`, `Remove “${c.name}” from the list? Saved records stay.`), ok: tx('삭제', 'Delete'), danger: true,
-      onOk: () => { S.profile = { ...S.profile, custom: prof().custom.filter(x => x.id !== c.id) }; store.saveProfile(); if (S.mode === 'cloud') pruneV1({ c: [c.id] }); },
-    });
+    deleteCustom(c);
   },
   export: () => doExport(),
   'set-lang': d => { if (d.v === 'ko' || d.v === 'en') lsSet('setnote:lang', d.v); else lsDel('setnote:lang'); applyLang(); render(); },
