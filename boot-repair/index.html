@@ -4,10 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>가죽결 수선소 · 부츠 창갈이 (연습용 가상 공방)</title>
-<meta name="description" content="닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진 한 장으로 먼저 봐 드려요. 웹 연출 연습용으로 만든 가상의 수선소예요.">
+<meta name="description" content="닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진 세 장으로 먼저 봐 드려요. 웹 연출 연습용으로 만든 가상의 수선소예요.">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#F4F3EF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="가죽결 수선소 · 버리지 말고, 밑창만 갈아요">
@@ -25,7 +24,7 @@
 <link rel="preload" as="image" href="img/hero-tall.webp" media="(max-width: 699.98px)">
 <script>
   /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
-     3.5초 안에 motion.js가 시작하지 않으면 끈다(내용은 늘 보이게). */
+     GSAP이 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
   (function () {
     var d = document.documentElement;
     d.classList.add('js');
@@ -33,7 +32,7 @@
     if (!reduce && 'IntersectionObserver' in window) {
       d.classList.add('anim');
       window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
-      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 3500);
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
     }
   })();
 </script>
@@ -42,41 +41,42 @@
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="top">
-  <div class="top__in">
+<header class="top" id="top">
+  <div class="wrap top__in">
     <a class="logo" href="#main" aria-label="가죽결 수선소 맨 위로">
-      <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8"/><path d="M8 20 L24 20" /><path d="M8 13 L24 13"/></svg>
-      <span class="logo__txt"><small>연습용 가상 공방</small>가죽결 수선소</span>
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
     </a>
     <nav class="nav" aria-label="주요 메뉴">
       <a href="#quote">1분 견적</a>
+      <a href="#photo">사진 견적</a>
       <a href="#compare">수선 전후</a>
+      <a href="#cases">수선 예시</a>
       <a href="#steps">맡기는 순서</a>
       <a href="#faq">자주 묻는 질문</a>
     </nav>
-    <a class="btn btn--ox btn--sm" href="#apply">수선 맡기기</a>
+    <a class="btn btn--accent btn--sm top__cta" href="#apply">수선 맡기기</a>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- 1. 첫 화면: 둥근 틀 안의 '바느질 필름' -->
+  <!-- 1. 첫 화면 -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__frame">
       <div class="hero__media" aria-hidden="true">
         <picture class="hero__pic">
           <source media="(max-width: 699.98px)" srcset="img/hero-tall.webp" width="900" height="1500">
-          <img src="img/hero-wide.webp" width="2000" height="1105" alt="" fetchpriority="high" data-crop-wide="250 300 760 420" data-crop-tall="140 -260 820 1367">
+          <img src="img/hero-wide.webp" width="2000" height="1105" alt="" fetchpriority="high" data-crop-wide="-140 40 1190 657" data-crop-tall="40 -420 1000 1667">
         </picture>
         <canvas class="hero__film"></canvas>
       </div>
       <div class="hero__light" aria-hidden="true"></div>
       <div class="hero__shade" aria-hidden="true"></div>
-      <div class="hero__copy">
+      <div class="wrap hero__copy">
         <p class="hero__eyebrow">부츠·워커 굽 교체와 통창갈이</p>
         <h1 id="hero-title" class="hero__title">버리지 말고,<br>밑창만 갈아요.</h1>
         <p class="hero__sub">닳은 건 밑창이에요. 가죽은 10년 더 신어요.</p>
-        <a class="btn btn--light hero__cta" href="#quote">내 부츠 견적 보기 <span class="btn__arrow" aria-hidden="true">↘</span></a>
+        <a class="btn btn--light" href="#quote">내 부츠 견적 보기 <span class="arrow" aria-hidden="true"></span></a>
       </div>
       <button class="hero__pause" type="button" aria-pressed="false">
         <span class="hero__pause-ico" aria-hidden="true"></span><span class="hero__pause-txt">일시정지</span>
@@ -84,7 +84,7 @@
     </div>
   </section>
 
-  <!-- 2. 고정된 무대: 문장 사이가 벌어지며 클로즈업 → 약속 -->
+  <!-- 2. 고정 무대: 닳은 굽 → 가까이 → 수선사의 말 → 고친 굽 + 약속 -->
   <section class="story" aria-labelledby="story-title">
     <div class="story__stage">
       <h2 id="story-title" class="story__words">
@@ -92,25 +92,31 @@
         <span class="story__w story__w--b">한 번만 보여 주세요</span>
       </h2>
       <figure class="story__shot">
-        <picture>
+        <picture class="story__pic story__pic--worn">
+          <source media="(max-width: 699.98px)" srcset="img/close-tall-worn.webp" width="900" height="1300">
+          <img src="img/close-wide-worn.webp" width="1600" height="1000" loading="lazy" alt="맡기기 전: 뒤축이 비스듬히 닳고 밑창 둘레 실이 군데군데 끊긴 부츠를 가까이 그린 그림.">
+        </picture>
+        <picture class="story__pic story__pic--new" aria-hidden="true">
           <source media="(max-width: 699.98px)" srcset="img/close-tall.webp" width="900" height="1300">
-          <img class="story__sharp" src="img/close-wide.webp" width="1600" height="1000" loading="lazy" alt="부츠 뒤축과 밑창 둘레를 가까이 그린 그림. 밑창 가장자리를 따라 실이 촘촘히 박혀 있다.">
+          <img src="img/close-wide.webp" width="1600" height="1000" loading="lazy" alt="">
         </picture>
-        <picture aria-hidden="true">
-          <source media="(max-width: 699.98px)" srcset="img/close-tall-blur.webp">
-          <img class="story__blur" src="img/close-wide-blur.webp" alt="" loading="lazy">
+        <picture class="story__pic story__pic--blur" aria-hidden="true">
+          <source media="(max-width: 699.98px)" srcset="img/close-tall-worn-blur.webp">
+          <img src="img/close-wide-worn-blur.webp" alt="" loading="lazy">
         </picture>
+        <span class="story__badge story__badge--worn" aria-hidden="true">맡길 때</span>
+        <span class="story__badge story__badge--new" aria-hidden="true">찾아갈 때</span>
         <figcaption class="story__quote">
-          <span class="story__quote-who">수선사가 처음에 하는 말</span>
-          <span class="story__quote-big">“밑창은 갈아 끼우는 거고,<br>가죽은 오래 가요.”</span>
+          <span class="story__quote-big">“이 정도면<br>밑창만 갈면 돼요.”</span>
+          <span class="story__quote-who"><b>대표 수선사</b> · 18년째 밑창을 갈아요</span>
         </figcaption>
       </figure>
       <div class="story__promise">
         <p class="story__promise-who">맡기기 전에 약속하는 세 가지</p>
         <ol class="promise">
-          <li><span class="promise__n" aria-hidden="true">1</span><div><b>보내기 전에 사진으로 먼저 봐요</b><span>고칠 수 있는지, 얼마인지 상자를 싸기 전에 알려 드려요.</span></div></li>
-          <li><span class="promise__n" aria-hidden="true">2</span><div><b>안 고쳐도 되는 건 말씀드려요</b><span>아직 신을 만하면 그대로 두자고 해요.</span></div></li>
-          <li><span class="promise__n" aria-hidden="true">3</span><div><b>신어 볼 때까지 봐 드려요</b><span>받고 30일 안에 불편하면 다시 맞춰요.</span></div></li>
+          <li><span class="promise__n" aria-hidden="true">01</span><div><b>보내기 전에 사진으로 먼저 봐요</b><span>고칠 수 있는지, 얼마인지 상자를 싸기 전에 알려 드려요.</span></div></li>
+          <li><span class="promise__n" aria-hidden="true">02</span><div><b>안 고쳐도 되는 건 말씀드려요</b><span>아직 신을 만하면 그대로 두자고 해요.</span></div></li>
+          <li><span class="promise__n" aria-hidden="true">03</span><div><b>신어 볼 때까지 봐 드려요</b><span>받고 30일 안에 불편하면 다시 맞춰요.</span></div></li>
         </ol>
       </div>
     </div>
@@ -126,22 +132,31 @@
         <div class="bar"><span class="bar__name">새 부츠</span><span class="bar__track"><span class="bar__fill bar__fill--new" style="--w:100%"></span></span><span class="bar__v">38만 원</span></div>
         <div class="bar"><span class="bar__name">통창갈이</span><span class="bar__track"><span class="bar__fill bar__fill--fix" style="--w:31.6%"></span></span><span class="bar__v">12만 원</span></div>
       </div>
-      <p class="saving__src">연습용 예시 가격이에요 (굿이어웰트 워커 한 켤레 기준).</p>
+      <p class="saving__src">예시 가격 · 굿이어웰트 워커 한 켤레 기준</p>
     </div>
   </section>
 
   <div class="sheet">
 
-    <!-- 4. 닳은 곳 누르기 → 견적서 -->
-    <section id="quote" class="sec quote" aria-labelledby="quote-title">
-      <div class="wrap">
-        <div class="sec__head">
-          <p class="eyebrow">1분 견적</p>
-          <h2 id="quote-title" class="sec__title">닳은 곳을 누르면,<br>견적서가 써져요</h2>
-          <p class="sec__lead">어느 수선이 필요한지 몰라도 괜찮아요. 그림에서 닳은 곳만 골라 보세요.</p>
+    <!-- 4. 1분 견적 -->
+    <section id="quote" class="sec sec--white" aria-labelledby="quote-title">
+      <div class="wrap split">
+        <div class="split__text">
+          <div class="head">
+            <p class="eyebrow">1분 견적</p>
+            <h2 id="quote-title" class="head__title">닳은 곳을 누르면<br>견적서가 써져요</h2>
+            <p class="head__lead">어느 수선이 필요한지 몰라도 돼요. 그림에서 닳아 보이는 곳만 골라 보세요.</p>
+          </div>
+          <div class="chips" id="chips" role="group" aria-label="수선 항목"></div>
+          <p class="quote__why" id="quote-why" aria-live="polite">예시로 두 곳을 골라 뒀어요. 눌러서 바꿔 보세요.</p>
+          <div class="btns">
+            <a class="btn btn--accent" href="#apply" id="quote-go">이 견적으로 맡기기</a>
+            <button class="btn btn--line" type="button" id="quote-clear">모두 지우기</button>
+          </div>
+          <p class="quote__undo" id="quote-undo" hidden>지웠어요. <button type="button" class="link" id="quote-undo-btn">되돌리기</button></p>
         </div>
-        <div class="quote__grid">
-          <div class="panel quote__panel">
+        <div class="panel quote__panel">
+          <div class="card boot-card">
             <div class="boot" id="boot">
               <svg class="boot__svg" viewBox="130 90 840 570" aria-hidden="true">
                 <g class="boot__line">
@@ -161,49 +176,77 @@
               </svg>
               <div class="boot__spots" id="spots"></div>
             </div>
-            <p class="quote__why" id="quote-why" aria-live="polite">점을 누르거나 아래에서 골라도 돼요.</p>
-            <div class="chips" id="chips" role="group" aria-label="수선 항목"></div>
           </div>
-
-          <div class="quote__paper-col">
-            <article class="paper" id="paper" aria-labelledby="paper-title" aria-live="polite">
-              <header class="paper__head">
-                <h3 id="paper-title" class="paper__title">수 선 견 적 서</h3>
-                <p class="paper__sub">가죽결 수선소 · 연습용 예시 가격</p>
-              </header>
-              <ol class="paper__rows" id="paper-rows"></ol>
-              <p class="paper__empty" id="paper-empty">그림에서 닳은 곳을 누르면<br>여기에 한 줄씩 적혀요.</p>
-              <div class="paper__sum">
-                <div><span>합계</span><b id="paper-total">0원</b></div>
-                <div><span>걸리는 날</span><b id="paper-days">-</b></div>
-              </div>
-              <p class="paper__foot">※ 왕복 택배비 포함. 사진을 본 뒤 달라질 수 있어요.</p>
-              <span class="stamp" id="stamp" aria-hidden="true">견적</span>
-            </article>
-            <div class="quote__actions">
-              <a class="btn btn--ox" href="#apply" id="quote-go">이 견적으로 맡기기</a>
-              <button class="btn btn--ghost" type="button" id="quote-clear" hidden>모두 지우기</button>
+          <article class="paper" id="paper" aria-labelledby="paper-title" aria-live="polite">
+            <header class="paper__head">
+              <h3 id="paper-title" class="paper__title">수 선 견 적 서</h3>
+              <p class="paper__sub">가죽결 수선소 · 예시 가격</p>
+            </header>
+            <ol class="paper__rows" id="paper-rows"></ol>
+            <p class="paper__empty" id="paper-empty" hidden>그림에서 닳은 곳을 누르면 여기에 적혀요.</p>
+            <div class="paper__sum">
+              <div><span>합계</span><b id="paper-total">0원</b></div>
+              <div><span>걸리는 날</span><b id="paper-days">-</b></div>
             </div>
-            <p class="quote__undo" id="quote-undo" hidden>지웠어요. <button type="button" class="link" id="quote-undo-btn">되돌리기</button></p>
+            <p class="paper__foot">왕복 택배비 포함. 사진을 본 뒤 달라질 수 있어요.</p>
+            <span class="stamp" id="stamp" aria-hidden="true">견적</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 사진 견적 -->
+    <section id="photo" class="sec sec--gray" aria-labelledby="photo-title">
+      <div class="wrap split split--flip">
+        <div class="split__text">
+          <div class="head">
+            <p class="eyebrow">사진 견적</p>
+            <h2 id="photo-title" class="head__title">사진 세 장이면<br>답장이 와요</h2>
+            <p class="head__lead">뒤축, 밑창 둘레, 앞코만 찍어 보내 주세요. 상자는 견적을 보고 싸도 돼요.</p>
+          </div>
+          <a class="btn btn--soft" href="#apply">사진 보내는 법 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
+        </div>
+        <div class="panel panel--white">
+          <div class="chat" aria-label="사진 견적 예시">
+            <p class="chat__label">사진 견적 · 예시</p>
+            <div class="chat__me">
+              <div class="chat__pics">
+                <img src="img/ph-heel.webp" width="320" height="320" loading="lazy" alt="보낸 사진 1: 닳은 뒤축">
+                <img src="img/ph-welt.webp" width="320" height="320" loading="lazy" alt="보낸 사진 2: 끊긴 둘레 실">
+                <img src="img/ph-toe.webp" width="320" height="320" loading="lazy" alt="보낸 사진 3: 긁힌 앞코">
+              </div>
+              <p class="bubble bubble--me">워커 굽이 많이 닳았어요. 고칠 수 있을까요?</p>
+            </div>
+            <div class="chat__you">
+              <span class="chat__who">수선사</span>
+              <p class="bubble">굽 교체에 둘레 실만 다시 박으면 돼요. 앞코는 아직 괜찮아요.</p>
+              <div class="chat__quote">
+                <div><span>굽 교체</span><b>35,000원</b></div>
+                <div><span>웰트 실밥 다시 박기</span><b>30,000원</b></div>
+                <div class="chat__total"><span>합계 · 작업 4일</span><b>65,000원</b></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. 수선 전후 비교 -->
-    <section id="compare" class="sec compare" aria-labelledby="compare-title">
-      <div class="wrap compare__grid">
-        <div class="sec__head">
-          <p class="eyebrow">수선 전후</p>
-          <h2 id="compare-title" class="sec__title">굽과 실만 바꿨는데<br>새 신발처럼 걸려요</h2>
-          <p class="sec__lead">가운데 손잡이를 옆으로 밀어 보세요. 왼쪽이 맡길 때, 오른쪽이 찾아갈 때예요.</p>
-          <ul class="compare__list">
-            <li><b>굽</b> 비스듬히 닳은 뒤축을 새 굽으로</li>
-            <li><b>실밥</b> 끊긴 둘레 실을 다시 촘촘히</li>
-            <li><b>가죽</b> 긁힌 곳은 색을 맞춰 메우기</li>
+    <!-- 6. 수선 전후 -->
+    <section id="compare" class="sec sec--white" aria-labelledby="compare-title">
+      <div class="wrap split">
+        <div class="split__text">
+          <div class="head">
+            <p class="eyebrow">수선 전후</p>
+            <h2 id="compare-title" class="head__title">굽과 실만 바꿨는데<br>새 신발처럼 걸려요</h2>
+            <p class="head__lead">가운데 손잡이를 옆으로 밀어 보세요. 왼쪽이 맡길 때, 오른쪽이 찾아갈 때예요.</p>
+          </div>
+          <ul class="ticks">
+            <li><b>굽</b>비스듬히 닳은 뒤축을 새 굽으로</li>
+            <li><b>실밥</b>끊긴 둘레 실을 다시 촘촘히</li>
+            <li><b>가죽</b>긁힌 곳은 색을 맞춰 메우기</li>
           </ul>
         </div>
-        <div class="panel compare__panel">
+        <div class="panel">
           <div class="ba" id="ba" style="--pos:50%">
             <img class="ba__img" src="img/ba-new.webp" width="1200" height="692" loading="lazy" alt="수선한 뒤: 굽이 반듯하고 밑창 둘레 실이 촘촘하다.">
             <div class="ba__before">
@@ -214,65 +257,84 @@
             <span class="ba__handle" aria-hidden="true"><span></span></span>
             <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="수선 전후 비교: 왼쪽으로 밀면 수선 뒤, 오른쪽으로 밀면 수선 전이 더 보여요">
           </div>
-          <p class="compare__note">설명하려고 코드로 그린 그림이에요.</p>
+          <p class="panel__note">설명하려고 코드로 그린 그림이에요.</p>
         </div>
       </div>
     </section>
 
-    <!-- 6. 맡기는 순서: 고정된 수선 태그 -->
-    <section id="steps" class="sec steps" aria-labelledby="steps-title">
+    <!-- 6-2. 수선 예시 카드 줄 -->
+    <section id="cases" class="sec sec--gray" aria-labelledby="cases-title">
       <div class="wrap">
-        <div class="sec__head">
-          <p class="eyebrow">맡기는 순서</p>
-          <h2 id="steps-title" class="sec__title">사진 한 장부터,<br>나머지는 저희가 해요</h2>
+        <div class="head head--stack">
+          <p class="eyebrow">수선 예시</p>
+          <h2 id="cases-title" class="head__title">새로 사는 값의<br>몇 분의 일이면 돼요</h2>
+          <p class="head__lead">많이 맡기는 수선 네 가지를 새 부츠 값(38만 원)과 견줬어요. 가격은 예시예요.</p>
         </div>
-        <div class="steps__grid">
-          <div class="steps__visual">
-            <div class="tag" id="tag" aria-hidden="true">
-              <span class="tag__hole"></span>
-              <span class="tag__string"></span>
-              <p class="tag__shop">가죽결 수선소 · 작업 태그</p>
-              <p class="tag__no">No. 0412</p>
-              <p class="tag__state" id="tag-state">접수</p>
-              <p class="tag__note" id="tag-note">사진 3장 받음</p>
-              <div class="tag__stitches" id="tag-stitches"></div>
-              <span class="tag__count" id="tag-count">1 / 5</span>
+        <ul class="cases" id="cases-list"></ul>
+      </div>
+    </section>
+
+    <!-- 7. 맡기는 순서 -->
+    <section id="steps" class="sec sec--white steps" aria-labelledby="steps-title">
+      <div class="steps__track" id="steps-track">
+        <div class="steps__stage">
+          <div class="wrap steps__grid">
+            <div class="steps__visual">
+              <div class="panel steps__panel">
+                <div class="tag" id="tag" aria-hidden="true">
+                  <span class="tag__hole"></span>
+                  <p class="tag__shop">작업 태그 · No. 0412</p>
+                  <p class="tag__state" id="tag-state">접수</p>
+                  <p class="tag__note" id="tag-note">사진 3장 받음</p>
+                </div>
+                <ol class="mini" id="mini" aria-hidden="true"></ol>
+              </div>
+            </div>
+            <div class="steps__side">
+              <div class="head">
+                <p class="eyebrow">맡기는 순서</p>
+                <h2 id="steps-title" class="head__title">사진 한 장부터,<br>나머지는 저희가 해요</h2>
+              </div>
+              <ol class="steps__list" id="steps-list"></ol>
+              <div class="dots" id="steps-dots" aria-hidden="true"></div>
             </div>
           </div>
-          <ol class="steps__list" id="steps-list"></ol>
         </div>
+        <div class="steps__marks" id="steps-marks" aria-hidden="true"></div>
       </div>
     </section>
 
-    <!-- 7. 자주 묻는 질문 -->
-    <section id="faq" class="sec faq" aria-labelledby="faq-title">
-      <div class="wrap faq__grid">
-        <div class="sec__head">
-          <p class="eyebrow">자주 묻는 질문</p>
-          <h2 id="faq-title" class="sec__title">맡기기 전에<br>많이 묻는 것</h2>
+    <!-- 8. 자주 묻는 질문 -->
+    <section id="faq" class="sec sec--gray" aria-labelledby="faq-title">
+      <div class="wrap split split--faq">
+        <div class="split__text">
+          <div class="head">
+            <p class="eyebrow">자주 묻는 질문</p>
+            <h2 id="faq-title" class="head__title">맡기기 전에<br>많이 묻는 것</h2>
+          </div>
+          <a class="btn btn--soft" href="#apply">사진 보내기 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
         </div>
         <div class="faq__list">
           <details class="qa"><summary>다른 곳에서 산 부츠도 되나요?</summary><div class="qa__a">네, 브랜드는 상관없어요. 다만 밑창이 본드로만 붙은 신발은 통창갈이가 어려울 수 있어서, 사진을 보고 먼저 말씀드려요.</div></details>
           <details class="qa"><summary>굿이어웰트가 뭔가요?</summary><div class="qa__a">가죽과 밑창 사이에 가죽 띠(웰트)를 대고 실로 박는 방식이에요. 실만 풀면 밑창을 통째로 갈 수 있어서 오래 신는 부츠에 많이 써요.</div></details>
-          <details class="qa"><summary>고치고 나면 사이즈나 신는 느낌이 바뀌나요?</summary><div class="qa__a">원래 두께에 맞추는 게 기본이에요. 바닥을 더 얇게 하거나 쿠션을 넣고 싶으면 견적 받을 때 말씀해 주세요.</div></details>
+          <details class="qa"><summary>고치고 나면 신는 느낌이 바뀌나요?</summary><div class="qa__a">원래 두께에 맞추는 게 기본이에요. 바닥을 더 얇게 하거나 쿠션을 넣고 싶으면 견적 받을 때 말씀해 주세요.</div></details>
           <details class="qa"><summary>맡긴 동안 신발이 어떤지 알 수 있나요?</summary><div class="qa__a">작업 중간에 사진을 보내 드려요. 예상보다 손볼 곳이 늘면 먼저 여쭤보고 진행해요.</div></details>
           <details class="qa"><summary>고칠 수 없으면 어떻게 돼요?</summary><div class="qa__a">사진 단계에서 말씀드리고 비용은 받지 않아요. 상자를 보낸 뒤에 알게 되면 왕복 택배비도 저희가 내요.</div></details>
         </div>
       </div>
     </section>
 
-    <!-- 8. 끝: 두 갈래 -->
-    <section id="apply" class="sec end" aria-labelledby="end-title">
-      <div class="wrap">
-        <div class="end__box">
-          <svg class="end__thread" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 L600 20"/></svg>
-          <h2 id="end-title" class="end__title">신발장에 잠든 부츠가 있다면</h2>
-          <p class="end__lead">사진 한 장으로 시작해요. 고칠 수 있는지부터 알려 드려요.</p>
-          <div class="end__btns">
-            <button class="btn btn--ox btn--lg" type="button" data-open-apply>수선 맡기기</button>
-            <a class="btn btn--ghost btn--lg" href="#quote">닳은 곳부터 확인하기</a>
-          </div>
-        </div>
+    <!-- 9. 끝 -->
+    <section id="apply" class="sec sec--white end" aria-labelledby="end-title">
+      <div class="wrap end__in">
+        <h2 id="end-title" class="end__title">신발장에 잠든 부츠가 있다면,<br>사진부터 보내 주세요.</h2>
+        <p class="end__lead">고칠 수 있는지부터 알려 드려요. 견적은 무료예요.</p>
+        <button class="btn btn--accent btn--lg" type="button" data-open-apply>수선 맡기기</button>
+        <ul class="end__chips">
+          <li>사진 견적 무료</li>
+          <li>왕복 택배비 포함</li>
+          <li>30일 다시 맞춤</li>
+        </ul>
       </div>
     </section>
   </div>
@@ -280,13 +342,23 @@
 
 <footer class="foot">
   <div class="wrap foot__in">
-    <div>
-      <p class="foot__brand">가죽결 수선소</p>
-      <p class="foot__desc">이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격과 기간은 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
     </div>
-    <nav class="foot__nav" aria-label="꼬리말 메뉴">
-      <a href="#quote">1분 견적</a><a href="#compare">수선 전후</a><a href="#steps">맡기는 순서</a><a href="#faq">자주 묻는 질문</a>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="#quote">1분 견적</a><a href="#photo">사진 견적</a><a href="#compare">수선 전후</a><a href="#cases">수선 예시</a><a href="#steps">맡기는 순서</a><a href="#faq">자주 묻는 질문</a>
     </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
   </div>
 </footer>
 
@@ -294,23 +366,24 @@
 <div class="dock" id="dock">
   <form class="dock__form" id="dock-form" novalidate>
     <div class="dock__who">
-      <svg class="dock__mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8"/><path d="M8 20 L24 20"/><path d="M8 13 L24 13"/></svg>
-      <p><b>수선 맡기기</b><span>사진 먼저 봐 드려요</span></p>
+      <p><b>사진으로 먼저 견적 받기</b><span>답장은 문자로 와요</span></p>
     </div>
     <div class="dock__fields">
       <label class="sr" for="dock-kind">부츠 종류</label>
-      <select id="dock-kind" name="kind">
-        <option value="">부츠 종류</option>
-        <option>워커 (끈 부츠)</option>
-        <option>첼시 부츠</option>
-        <option>엔지니어 부츠</option>
-        <option>잘 모르겠어요</option>
-      </select>
+      <div class="select">
+        <select id="dock-kind" name="kind">
+          <option value="">부츠 종류</option>
+          <option>워커 (끈 부츠)</option>
+          <option>첼시 부츠</option>
+          <option>엔지니어 부츠</option>
+          <option>잘 모르겠어요</option>
+        </select>
+      </div>
       <label class="sr" for="dock-phone">휴대폰 번호</label>
       <input id="dock-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
     </div>
-    <button class="btn btn--ox dock__go" type="submit">수선 맡기기</button>
-    <button class="btn btn--ox dock__open" type="button" data-open-apply>수선 맡기기</button>
+    <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
+    <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
     <p class="dock__msg" id="dock-msg" role="status" aria-live="polite"></p>
   </form>
 </div>

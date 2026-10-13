@@ -75,10 +75,12 @@ def boot(worn=False, bg=True, w=1000, h=700, vb="0 0 1000 700", light=(300,420),
 </svg>'''
 if __name__=='__main__':
     J=[('boot-new',dict()),('boot-worn',dict(worn=True)),
-       ('hero-wide',dict(w=2000,h=1105,vb="250 300 760 420",light=(640,420),welt_stitch=False)),
-       ('hero-tall',dict(w=900,h=1500,vb="140 -260 820 1367",light=(560,380),welt_stitch=False)),
-       ('close-wide',dict(w=1600,h=1000,vb="110 360 560 350",light=(260,470))),
-       ('close-tall',dict(w=900,h=1300,vb="120 300 330 476",light=(240,470))),
+       ('hero-wide',dict(w=2000,h=1105,vb="-140 40 1190 657",light=(620,380),welt_stitch=False)),
+       ('hero-tall',dict(w=900,h=1500,vb="40 -420 1000 1667",light=(560,380),welt_stitch=False)),
+       ('close-wide',dict(w=1600,h=1000,vb="60 200 820 512",light=(300,440))),
+       ('close-tall',dict(w=900,h=1300,vb="90 170 440 636",light=(260,440))),
+       ('close-wide-worn',dict(worn=True,w=1600,h=1000,vb="60 200 820 512",light=(300,440))),
+       ('close-tall-worn',dict(worn=True,w=900,h=1300,vb="90 170 440 636",light=(260,440))),
        ('ba-worn',dict(worn=True,w=1200,h=692,vb="120 380 520 300",light=(300,470))),
        ('ba-new',dict(w=1200,h=692,vb="120 380 520 300",light=(300,470)))]
     for n,k in J: open(n+'.svg','w').write(boot(**k))

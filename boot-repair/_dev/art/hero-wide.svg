@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="250 300 760 420" width="2000" height="1105" preserveAspectRatio="xMidYMid slice">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-140 40 1190 657" width="2000" height="1105" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <radialGradient id="spot" cx="640" cy="420" r="720" gradientUnits="userSpaceOnUse">
+    <radialGradient id="spot" cx="620" cy="380" r="720" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#4A3424"/><stop offset=".45" stop-color="#22170F"/><stop offset="1" stop-color="#0E0A08"/>
     </radialGradient>
     <linearGradient id="lea" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#9A5230"/><stop offset=".55" stop-color="#7A3B1F"/><stop offset="1" stop-color="#4C2211"/>
     </linearGradient>
-    <radialGradient id="sheen" cx="640" cy="420" r="520" gradientUnits="userSpaceOnUse">
+    <radialGradient id="sheen" cx="620" cy="380" r="520" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#FFD9B0" stop-opacity=".38"/><stop offset="1" stop-color="#FFD9B0" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="depth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></linearGradient>

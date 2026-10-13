@@ -130,6 +130,7 @@
     if (!lastCleared) return;
     picked = lastCleared; lastCleared = null; undoP.hidden = true; render(false);
   });
+  picked = ['heel', 'welt'];   // 빈 견적서 대신 예시 두 곳을 골라 둔 채로 시작
   render(false);
 
   /* ---------- 전후 비교 ---------- */
@@ -137,33 +138,71 @@
   function setPos() { ba.style.setProperty('--pos', baRange.value + '%'); }
   baRange.addEventListener('input', setPos); setPos();
 
+  /* ---------- 수선 예시 카드 ---------- */
+  var C = window.CASES || [], NB = window.NEW_BOOT || 380000, cl = $('#cases-list');
+  C.forEach(function (c) {
+    var pct = Math.round(c.price * 100 / NB);
+    var li = document.createElement('li'); li.className = 'case';
+    li.innerHTML = '<p class="case__boot"></p><p class="case__what"></p><p class="case__why"></p>' +
+      '<p class="case__pct"><span></span>%<small>새 부츠 값의</small></p><div class="case__bar"><i></i></div>' +
+      '<p class="case__foot"><span></span><b></b></p>';
+    li.querySelector('.case__boot').textContent = c.boot;
+    li.querySelector('.case__what').textContent = c.what;
+    li.querySelector('.case__why').textContent = c.why;
+    li.querySelector('.case__pct span').textContent = pct;
+    li.querySelector('.case__bar i').style.setProperty('--w', pct + '%');
+    li.querySelector('.case__foot span').textContent = '작업 ' + c.days + '일';
+    li.querySelector('.case__foot b').textContent = won(c.price);
+    cl.appendChild(li);
+  });
+
   /* ---------- 맡기는 순서 + 태그 ---------- */
-  var S = window.STEPS || [], list = $('#steps-list');
-  var tag = $('#tag'), tState = $('#tag-state'), tNote = $('#tag-note'), tCount = $('#tag-count'), tSt = $('#tag-stitches');
+  var S = window.STEPS || [], list = $('#steps-list'), dots = $('#steps-dots'), marks = $('#steps-marks');
+  var tag = $('#tag'), tState = $('#tag-state'), tNote = $('#tag-note'), mini = $('#mini');
   S.forEach(function (st, i) {
     var li = document.createElement('li'); li.className = 'step'; li.dataset.i = i;
-    li.innerHTML = '<span class="step__n" aria-hidden="true"></span><div><h3 class="step__t"></h3><p class="step__b"></p></div>';
+    li.innerHTML = '<span class="step__n" aria-hidden="true"></span><div><h3 class="step__t"></h3><p class="step__b"></p><p class="step__meta"></p></div>';
     li.querySelector('.step__n').textContent = i + 1;
-    li.querySelector('.step__t').textContent = (i + 1) + '. ' + st.title;
+    li.querySelector('.step__t').textContent = st.title;
     li.querySelector('.step__b').textContent = st.body;
+    (st.meta || []).forEach(function (m) { var sp = document.createElement('span'); sp.textContent = m; li.querySelector('.step__meta').appendChild(sp); });
     list.appendChild(li);
-    var dash = document.createElement('i'); tSt.appendChild(dash);
+    var mi = document.createElement('li'); mi.innerHTML = '<i></i><span></span>';
+    mi.querySelector('i').textContent = i + 1; mi.querySelector('span').textContent = st.title; mini.appendChild(mi);
+    dots.appendChild(document.createElement('i'));
+    var mk = document.createElement('div'); mk.dataset.i = i; marks.appendChild(mk);
   });
   var cur = -1;
   function setStep(i) {
     if (i === cur) return; cur = i;
-    $$('.step', list).forEach(function (li, k) { li.classList.toggle('is-on', k === i); li.classList.toggle('is-done', k < i); });
-    $$('i', tSt).forEach(function (d, k) { d.classList.toggle('is-done', k <= i); });
-    tState.textContent = S[i].tag; tNote.textContent = S[i].note; tCount.textContent = (i + 1) + ' / ' + S.length;
+    if (anim()) $$('.step', list).forEach(function (li, k) { li.classList.toggle('is-on', k === i); });
+    $$('li', mini).forEach(function (d, k) { d.classList.toggle('is-on', k === i); d.classList.toggle('is-done', k < i); });
+    $$('i', dots).forEach(function (d, k) { d.classList.toggle('is-on', k === i); d.classList.toggle('is-done', k < i); });
+    tState.textContent = S[i].tag; tNote.textContent = S[i].note;
     if (anim()) { tag.classList.remove('is-flip'); void tag.offsetWidth; tag.classList.add('is-flip'); }
   }
   setStep(0);
-  if ('IntersectionObserver' in window) {
+  if (anim()) {
+    // 고정 무대: 화면 가운데를 지나는 표시(다섯 칸)로 지금 단계를 고른다
     var stepIO = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) setStep(+e.target.dataset.i); });
-    }, { rootMargin: '-48% 0px -48% 0px' });
-    $$('.step', list).forEach(function (li) { stepIO.observe(li); });
-  } else { $$('.step', list).forEach(function (li) { li.classList.add('is-on'); }); }
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    $$('div', marks).forEach(function (m) { stepIO.observe(m); });
+    // 키보드 초점이 단계 글에 들어오면 그 단계로
+    list.addEventListener('focusin', function (e) { var li = e.target.closest('.step'); if (li) setStep(+li.dataset.i); });
+  }
+
+  /* ---------- 머리줄: 첫 화면 뒤로 내릴 땐 숨고, 올릴 땐 나온다 ---------- */
+  var topEl = $('#top'), lastY = window.scrollY, ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      var y = window.scrollY, d = y - lastY;
+      if (Math.abs(d) > 6) { topEl.classList.toggle('is-hidden', d > 0 && y > window.innerHeight * .8 && !topEl.contains(document.activeElement)); lastY = y; }
+      ticking = false;
+    });
+  }, { passive: true });
+  topEl.addEventListener('focusin', function () { topEl.classList.remove('is-hidden'); });
 
   /* ---------- 신청 바 ---------- */
   var dock = $('#dock'), form = $('#dock-form'), phone = $('#dock-phone'), msg = $('#dock-msg');
@@ -174,9 +213,9 @@
     var upd = function () { dock.classList.toggle('is-show', heroOut && !footIn && !busy || dock.classList.contains('is-open')); };
     var busyIO = new IntersectionObserver(function (es) {
       es.forEach(function (e) { e.target.__in = e.isIntersecting; });
-      busy = $$('.quote__paper-col, .end__box').filter(function (el) { return el.__in; }).length; upd();
+      busy = $$('#quote .btns, .end__in').filter(function (el) { return el.__in; }).length; upd();
     }, { rootMargin: '-15% 0px -15% 0px' });
-    $$('.quote__paper-col, .end__box').forEach(function (el) { busyIO.observe(el); });
+    $$('#quote .btns, .end__in').forEach(function (el) { busyIO.observe(el); });
     new IntersectionObserver(function (es) { heroOut = !es[0].isIntersecting; upd(); }, { rootMargin: '-40% 0px 0px 0px' }).observe(hero);
     new IntersectionObserver(function (es) { footIn = es[0].isIntersecting; upd(); }, { rootMargin: '0px 0px -120px 0px' }).observe(foot);
   } else dock.classList.add('is-show');
@@ -215,11 +254,12 @@
   /* ---------- 드러내기 + 숫자 세기 (들어올 때마다) ---------- */
   if (anim()) {
     var groups = [
-      ['.quote .sec__head', '.quote__panel', '.quote__paper-col'],
-      ['.compare .sec__head', '.compare__panel'],
-      ['.steps .sec__head'],
-      ['.faq .sec__head', '.qa'],
-      ['.end__box']
+      ['#quote .head', '#quote .chips', '#quote .panel'],
+      ['#photo .head', '#photo .panel'],
+      ['#compare .head', '#compare .ticks', '#compare .panel'],
+      ['#cases .head', '.case'],
+      ['#faq .head', '.qa'],
+      ['.end__title', '.end__lead']
     ];
     groups.forEach(function (g) {
       var els = []; g.forEach(function (s) { els = els.concat($$(s)); });
@@ -228,9 +268,10 @@
     var play = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('in'); });
     }, { rootMargin: '0px 0px -12% 0px' });
+    // 되돌리기는 화면에서 40px 넘게 벗어났을 때만: 드러내기의 24px 미끄러짐보다 커야 경계에서 깜빡이지 않는다
     var reset = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (!e.isIntersecting && !e.target.contains(document.activeElement)) e.target.classList.remove('in'); });
-    });
+    }, { rootMargin: '40px 0px 40px 0px' });
     $$('.rv').forEach(function (el) { play.observe(el); reset.observe(el); });
     document.addEventListener('focusin', function (e) { var r = e.target.closest('.rv'); if (r) r.classList.add('in'); });
 
