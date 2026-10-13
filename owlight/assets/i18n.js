@@ -129,7 +129,7 @@
     endLead: 'When it’s out, the App Store link will be right here. Until then, the support page shows how it works.',
     endBtn: 'See how it works',
     lumenLine: 'Owlight is one light Lumen Lab has switched on',
-    lumenGo: 'See our other apps and tools →',
+    lumenGo: 'See our other apps and tools <span class="lumen__arrow" aria-hidden="true">→</span>',
     footMaker: 'Owlight is made by <a href="https://lumenlab.page/" class="nw">Lumen Lab</a>, a sole proprietorship in Korea.',
     crumbSupport: 'Support',
     crumbPrivacy: 'Privacy Policy',

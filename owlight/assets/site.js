@@ -186,6 +186,18 @@
     });
   });
 
+  /* ── 루멘랩 칸: 60% 이상 들어오면 한 번 재생(눈이 뜨이고 불빛이 차례로 켜짐). 나갔다 오면 다시. ── */
+  var lumen = d.querySelector('.lumen');
+  if (lumen && anim) {
+    var lit = 0;
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { if (!lit) { lit = Date.now(); lumen.classList.add('is-lit'); } }
+        else if (lit && Date.now() - lit > 3500) { lit = 0; lumen.classList.remove('is-lit'); }
+      });
+    }, { threshold: 0.6 }).observe(lumen);
+  }
+
   /* ── 칸 드러내기 ── */
   if (anim) {
     window.__rvOn = true;

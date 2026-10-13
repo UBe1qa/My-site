@@ -302,10 +302,23 @@ if(l==='en'&&window.MutationObserver){var sw=function(e){['src','srcset'].forEac
       <h2 id="end-title" data-i18n="endTitle">Mac App Store 출시를 <span class="nw">준비하고 있어요</span></h2>
       <p class="end__lead" data-i18n="endLead">나오면 이 페이지에 App Store 링크를 달아요. 그 전에 쓰는 법이 궁금하면 지원 페이지를 보세요.</p>
       <p class="end__act"><a class="btn btn--line" href="/support/" data-i18n="endBtn">사용법과 문제 해결 보기</a></p>
-      <!-- 루멘랩 본페이지로: 밤하늘에 Owlight 말고도 다른 불빛(앱·도구)이 있다는 그림 -->
+      <!-- 루멘랩 본페이지로: 밤하늘의 부엉이가 다른 불빛(앱·도구)을 하나씩 쳐다본다. 화면에 들어오면 눈이 뜨이고, 불빛이 차례로 켜지며 눈동자가 따라간다 -->
       <a class="lumen" href="https://lumenlab.page/">
-        <span class="lumen__sky" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="lumen__txt"><span data-i18n="lumenLine">Owlight는 루멘랩이 켠 불빛 하나예요</span><b data-i18n="lumenGo">루멘랩의 다른 앱과 도구 보기 →</b></span>
+        <svg class="lumen__scene" viewBox="0 0 240 120" aria-hidden="true" focusable="false">
+          <g class="lumen__lights">
+            <g class="l1"><circle class="glow" cx="132" cy="86" r="11"/><circle class="core" cx="132" cy="86" r="4"/></g>
+            <g class="l2"><circle class="glow" cx="164" cy="50" r="14"/><circle class="core" cx="164" cy="50" r="6"/></g>
+            <g class="l3"><circle class="glow" cx="199" cy="78" r="12"/><circle class="core" cx="199" cy="78" r="4.6"/></g>
+            <g class="l4"><circle class="glow" cx="224" cy="30" r="10"/><circle class="core" cx="224" cy="30" r="3.4"/></g>
+          </g>
+          <g transform="translate(10 12) scale(4)">
+            <path d="M4 21V11c-.2-3.3.2-5 1-6.6 1 2.3 5 2.4 7 2.5 2-.1 6-.2 7-2.5.8 1.6 1.2 3.3 1 6.6v10Z" fill="#3B3672"/>
+            <g class="eyes"><circle cx="8.6" cy="13" r="3" fill="var(--amber)"/><circle cx="15.4" cy="13" r="3" fill="var(--amber)"/></g>
+            <g class="pupils"><circle cx="8.6" cy="13.2" r="1.3" fill="#14132A"/><circle cx="15.4" cy="13.2" r="1.3" fill="#14132A"/></g>
+            <path class="lids" d="M5.6 13.2q3 2 6 0M12.4 13.2q3 2 6 0" fill="none" stroke="var(--night-muted)" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <span class="lumen__txt"><span data-i18n="lumenLine">Owlight는 루멘랩이 켠 불빛 하나예요</span><b data-i18n="lumenGo">루멘랩의 다른 앱과 도구 보기 <span class="lumen__arrow" aria-hidden="true">→</span></b></span>
       </a>
     </div>
   </section>

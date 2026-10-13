@@ -54,7 +54,7 @@ with sync_playwright() as p:
                 if path == '/':
                     pg.wait_for_timeout(3000)  # 예시 하루 재생(약 3.5초)이 끝나길 기다림
                     # 첫 화면의 흉내 낸 화면(.stage)은 켜고 끌 때 일부러 숨기는 조각이 있어 뺀다
-                    hidden = pg.evaluate('''[...document.querySelectorAll('main *')].filter(e => { if (e.closest('.stage')) return false;
+                    hidden = pg.evaluate('''[...document.querySelectorAll('main *')].filter(e => { if (e.closest('.stage, .lumen__scene')) return false;
                         const r = e.getBoundingClientRect(); if (r.width < 4 || r.height < 4) return false;
                         let o = 1, n = e; while (n && n.nodeType === 1) { o *= +getComputedStyle(n).opacity; n = n.parentElement }
                         return o < 0.2 || getComputedStyle(e).visibility === 'hidden' }).length''')
@@ -124,7 +124,7 @@ with sync_playwright() as p:
     # 동작 줄이기: 내리지 않아도 전부 보임
     c = br.new_context(viewport={'width': 390, 'height': 800}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(300)
     n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
-    n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => !e.closest(".stage") && +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
+    n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => !e.closest(".stage, .lumen__scene") && +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
     ok(n == 0 and pg.evaluate('document.querySelectorAll(".sw[aria-checked=true]").length') == 2, '동작 줄이기: 숨은 요소 0, 첫 화면 메뉴에 발표가 바로 켜짐')
     c.close()
 
