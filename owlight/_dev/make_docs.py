@@ -59,7 +59,7 @@ for name, (key, crumb, title) in PAGES.items():
     </a>
     <nav class="nav" aria-label="이 사이트" data-i18n-aria="navLabel">
       <a href="/#features" data-i18n="navFeatures">기능</a>
-      <a href="/#scenes" data-i18n="navScenes">장면</a>
+      <a href="/#price" data-i18n="navPrice">가격</a>
       <a href="/#faq" data-i18n="navFaq">자주 묻는 질문</a>
       <a href="/support/" data-i18n="navSupport">지원</a>
     </nav>

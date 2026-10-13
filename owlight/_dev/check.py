@@ -1,8 +1,9 @@
 # Owlight 배포 전 확인: bash _dev/check.sh (사이트 폴더를 8766으로 띄우고 이 파일을 돌림)
-# 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 페이지 안 링크, 영어에 한글 남음, 제목 줄 수, 장면 판 누르기,
+# 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 페이지 안 링크, 영어에 한글 남음, 제목 줄 수, 첫 화면 '눌러 보는 메뉴'(장면·스위치),
 # 동작 줄이기에서 다 보임, 움직임 켠 채 끝까지 내린 뒤 숨은 요소, 첫 화면이 다시 흐려지지 않음,
 # 지원·방침(/support/, /privacy/) 본문이 lumenlab.page/owlight/… 와 같은지, 고른 언어 칸만 보이는지,
-# 불침번 칸에서 새로고침했을 때(LCP 그림) 영어 방문자가 한국어 스크린숏을 받지 않고 그림이 숨었다 다시 나타나지 않는지,
+# 아래쪽(몰입 세션·단축키 칸)에서 새로고침했을 때 영어 방문자가 한국어 스크린숏을 받지 않고 그림이 숨었다 다시 나타나지 않는지,
+# Mac/맥을 슬로건·소유격으로 쓰지 않는지(App Store 심사 5.2.5: 'Mac App Store'만 허용),
 # 휴대폰용 잘라 낸 그림의 <source> 크기가 실제 파일과 같은지(자리 밀림 방지)
 import os, re, sys
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,13 @@ for name in ('support', 'privacy'):
     a = os.path.join(SITE, name, 'index.html'); b = os.path.join(os.path.dirname(SITE), 'lumenlab', 'owlight', name, 'index.html')
     ok(os.path.exists(a) and body_text(a) == body_text(b), f'/{name}/ 본문이 lumenlab.page/owlight/{name}/ 와 같음 (다르면 python3 _dev/make_docs.py)')
 
+# Mac/맥 슬로건·소유격 금지(2026-10-13 App Store 거절 5.2.5). 'Mac App Store'와 macOS만 쓴다
+for f in ('index.html', 'assets/i18n.js', 'support/index.html', 'privacy/index.html', '404.html', '_dev/og.html'):
+    t = open(os.path.join(SITE, f), encoding='utf-8').read()
+    t = re.sub(r'<!--.*?-->|/\*.*?\*/', '', t, flags=re.S)
+    hits = re.findall(r'.{0,12}(?:맥|\bMac(?!\s*App Store)\b|\bMacs\b).{0,12}', t)
+    ok(not hits, f'{f}: Mac/맥 문구는 Mac App Store뿐 {hits[:3]}')
+
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path=CHROME)
     for path in ('/', '/404.html', '/support/', '/privacy/'):
@@ -44,7 +52,9 @@ with sync_playwright() as p:
                 broken = pg.evaluate('[...document.images].filter(i => i.complete && i.naturalWidth === 0).map(i => i.src)')
                 ok(not broken, f'{tag} 깨진 사진 0 {broken[:2]}')
                 if path == '/':
-                    hidden = pg.evaluate('''[...document.querySelectorAll('main *')].filter(e => {
+                    pg.wait_for_timeout(3000)  # 예시 하루 재생(약 3.5초)이 끝나길 기다림
+                    # 첫 화면의 흉내 낸 화면(.stage)은 켜고 끌 때 일부러 숨기는 조각이 있어 뺀다
+                    hidden = pg.evaluate('''[...document.querySelectorAll('main *')].filter(e => { if (e.closest('.stage')) return false;
                         const r = e.getBoundingClientRect(); if (r.width < 4 || r.height < 4) return false;
                         let o = 1, n = e; while (n && n.nodeType === 1) { o *= +getComputedStyle(n).opacity; n = n.parentElement }
                         return o < 0.2 || getComputedStyle(e).visibility === 'hidden' }).length''')
@@ -60,8 +70,8 @@ with sync_playwright() as p:
                     if w <= 390:
                         lines = pg.evaluate('(() => { const h = document.querySelector("h1"); return Math.round(h.getBoundingClientRect().height / parseFloat(getComputedStyle(h).lineHeight)) })()')
                         ok(lines <= 2 or w == 320, f'{tag} 첫 화면 제목 {lines}줄')
-                        btn = pg.evaluate('(() => { scrollTo(0,0); const b = document.querySelector(".hero .btn").getBoundingClientRect(); return b.bottom <= innerHeight })()')
-                        ok(btn, f'{tag} 첫 화면에서 버튼이 스크롤 없이 보임')
+                        btn = pg.evaluate('(() => { scrollTo(0,0); const b = document.querySelector(".panel__scenes .chip:last-child").getBoundingClientRect(); return b.bottom <= innerHeight })()')
+                        ok(btn, f'{tag} 첫 화면에서 장면 단추 넷이 스크롤 없이 보임')
                 c.close()
 
     # 페이지 안 링크(#…)가 있는 곳을 가리킴
@@ -73,16 +83,28 @@ with sync_playwright() as p:
     locals_ = pg.evaluate('[...document.querySelectorAll("a[href^=\'/\'], link[href^=\'/\'], img[src^=\'/\'], script[src^=\'/\']")].map(e => e.getAttribute("href") || e.getAttribute("src"))')
     bad = [u for u in set(locals_) if pg.request.get(BASE + u.split('#')[0]).status != 200]
     ok(not bad, f'사이트 안 파일 링크 전부 200 {bad}')
-    # 장면 판: 앱 기본값과 같은 조합으로 켜지고, 켠 장면을 다시 누르면 다 꺼짐
-    expect = {'scFocus': 'nightwatch halo', 'scShare': 'nightwatch curtain halo', 'scMovie': 'nightwatch', 'scPresent': 'nightwatch curtain'}  # 발표가 처음에 눌려 있어서 맨 뒤에
-    good = True
+    # 첫 화면 메뉴: 처음에 '발표'가 스스로 눌리고, 네 장면 조합이 앱 기본값과 같고, 켠 장면을 다시 누르면 다 꺼짐,
+    # 스위치를 하나씩 눌러 장면과 같은 조합이 되면 그 장면에 불이 들어옴
+    pg.wait_for_timeout(2100)  # 1.6초에 '발표'가 스스로 눌림
+    on = lambda: pg.evaluate('[...document.querySelectorAll(".sw[aria-checked=true]")].map(e => e.dataset.f).join(" ")')
+    good = on() == 'nightwatch curtain' and pg.evaluate('document.querySelector("[data-demo]").classList.contains("is-curtain")')
+    expect = {'scFocus': 'nightwatch halo', 'scShare': 'nightwatch curtain halo', 'scMovie': 'nightwatch', 'scPresent': 'nightwatch curtain'}
     for k, v in expect.items():
-        pg.click(f'[data-i18n={k}]'); pg.wait_for_timeout(50)
-        on = pg.evaluate('[...document.querySelectorAll(".sw.is-on")].map(e => e.dataset.f).join(" ")')
-        good = good and on == v
-    pg.click('[data-i18n=scPresent]'); pg.wait_for_timeout(50)
-    good = good and pg.evaluate('document.querySelectorAll(".sw.is-on").length') == 0
-    ok(good, '장면 판: 네 장면 조합이 앱과 같고, 다시 누르면 모두 꺼짐')
+        pg.click(f'.chip[data-i18n={k}]'); pg.wait_for_timeout(50)
+        good = good and on() == v
+    pg.click('.chip[data-i18n=scPresent]'); pg.wait_for_timeout(50)
+    good = good and on() == '' and pg.evaluate('document.querySelector("[data-state]").textContent') == '모두 꺼짐'
+    pg.click('.sw[data-f=nightwatch]'); pg.wait_for_timeout(50)
+    good = good and pg.evaluate('document.querySelector(".chip[data-i18n=scMovie]").getAttribute("aria-pressed")') == 'true'
+    pg.click('.sw[data-f=curtain]'); pg.wait_for_timeout(50)
+    good = good and pg.evaluate('[...document.querySelectorAll(".chip[aria-pressed=true]")].map(c => c.dataset.i18n).join()') == 'scPresent'
+    ok(good, '첫 화면 메뉴: 처음 발표, 네 장면 조합이 앱과 같음, 다시 누르면 꺼짐, 스위치 조합이 장면과 맞으면 불 켜짐')
+    # 기능 탭: 누르면 그 칸만 보이고 화살표 키로도 옮겨 감
+    pg.click('#tab-curtain'); pg.wait_for_timeout(50)
+    t1 = pg.evaluate('[...document.querySelectorAll("[role=tabpanel]")].map(p => p.hidden ? 0 : 1).join("")')
+    pg.keyboard.press('ArrowRight'); pg.wait_for_timeout(50)
+    t2 = pg.evaluate('[document.activeElement.id, [...document.querySelectorAll("[role=tabpanel]")].map(p => p.hidden ? 0 : 1).join("")]')
+    ok(t1 == '010' and t2 == ['tab-nightwatch', '001'], f'기능 탭: 누르기·화살표 키 ({t1}, {t2})')
     # 언어 버튼: 누르면 바뀌고 다시 열어도 유지
     pg.click('[data-lang-btn]'); pg.wait_for_timeout(100)
     l1 = pg.evaluate('document.documentElement.lang'); pg.reload(); pg.wait_for_timeout(300)
@@ -102,42 +124,43 @@ with sync_playwright() as p:
     # 동작 줄이기: 내리지 않아도 전부 보임
     c = br.new_context(viewport={'width': 390, 'height': 800}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(300)
     n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
-    ok(n == 0 and pg.evaluate('document.querySelectorAll(".sw.is-on").length') == 2, '동작 줄이기: 숨은 요소 0, 장면 판 바로 켜짐')
+    n = pg.evaluate('[...document.querySelectorAll("main *")].filter(e => !e.closest(".stage") && +getComputedStyle(e).opacity < 0.2 && e.getBoundingClientRect().width > 4).length')
+    ok(n == 0 and pg.evaluate('document.querySelectorAll(".sw[aria-checked=true]").length') == 2, '동작 줄이기: 숨은 요소 0, 첫 화면 메뉴에 발표가 바로 켜짐')
     c.close()
 
-    # 불침번 칸까지 내린 뒤 새로고침(브라우저가 그 위치를 되살림, Cloudflare가 LCP 4.5초로 잡은 경우):
-    # 영어면 한국어 스크린숏을 받지 않음(맨 위 큰 그림은 미리 읽기가 먼저 받아서 빼고), 그 그림이 숨었다 다시 나타나지 않음
+    # 몰입 세션·단축키 칸까지 내린 뒤 새로고침(브라우저가 그 위치를 되살림, 예전에 Cloudflare가 LCP 4.5초로 잡은 경우):
+    # 영어면 한국어 스크린숏을 받지 않음, 그 칸이 숨었다 다시 나타나지 않음
     for loc in ('en-US', 'ko-KR'):
         for w in (390, 1366):
             c = br.new_context(viewport={'width': w, 'height': 800}, locale=loc); pg = c.new_page()
-            pg.goto(BASE + '/'); pg.evaluate("document.getElementById('nightwatch').scrollIntoView()"); pg.wait_for_timeout(1200)
-            pg.add_init_script("""window.__hid=0;(function f(){var e=document.querySelector('#nightwatch .feat__shot');
+            pg.goto(BASE + '/'); pg.evaluate("document.querySelector('.auto__grid').scrollIntoView()"); pg.wait_for_timeout(1200)
+            pg.add_init_script("""window.__hid=0;(function f(){var e=document.querySelector('.auto__item');
               if(e&&(e.hasAttribute('data-rv')||+getComputedStyle(e).opacity<.95))window.__hid++;if(performance.now()<4000)requestAnimationFrame(f)})()""")
             cdp = c.new_cdp_session(pg); cdp.send('Network.enable'); cdp.send('Network.clearBrowserCache')
             # 느린 망·느린 CPU에서만 드러남(빠르면 i18n.js가 먼저 돌아 옛 방식도 통과했다)
             cdp.send('Network.emulateNetworkConditions', {'offline': False, 'latency': 150, 'downloadThroughput': 200000, 'uploadThroughput': 94000})
             cdp.send('Emulation.setCPUThrottlingRate', {'rate': 4})
             pg.reload(); pg.wait_for_timeout(4500)
-            r = pg.evaluate("""({y: scrollY, hid: window.__hid, src: document.querySelector('#nightwatch img.shot').currentSrc.replace(location.origin, ''),
-              ko: performance.getEntriesByType('resource').map(e => e.name.replace(location.origin, '')).filter(n => /\/img\/ko-/.test(n) && !/ko-hero/.test(n))})""")
-            tag = f'불침번 칸 새로고침 {loc[:2]} {w}px'
+            r = pg.evaluate("""({y: scrollY, hid: window.__hid, src: document.querySelector('.auto__item img.shot').currentSrc.replace(location.origin, ''),
+              ko: performance.getEntriesByType('resource').map(e => e.name.replace(location.origin, '')).filter(n => /[/]img[/]ko-/.test(n))})""")
+            tag = f'몰입 세션 칸 새로고침 {loc[:2]} {w}px'
             ok(r['y'] > 1500 and r['hid'] == 0, f'{tag}: 그림이 숨지 않음 (scrollY {r["y"]}, 숨은 프레임 {r["hid"]})')
             if loc == 'en-US':
-                ok('/img/en-3' in r['src'] and not r['ko'], f'{tag}: 영어 그림만 받음 ({r["src"]}, 한국어 {r["ko"]})')
+                ok('/img/en-5' in r['src'] and not r['ko'], f'{tag}: 영어 그림만 받음 ({r["src"]}, 한국어 {r["ko"]})')
             c.close()
 
     # 휴대폰용 잘라 낸 그림(<source>)의 width·height = 실제 파일 크기 (다르면 그림이 뜰 때 아래 글이 밀림)
     c = br.new_context(viewport={'width': 390, 'height': 800}, locale='ko-KR'); pg = c.new_page(); pg.goto(BASE + '/')
     scroll_all(pg)
-    bad = pg.evaluate("""[...document.querySelectorAll('picture source[data-shot]')].map(s => { const i = s.parentElement.querySelector('img');
+    bad = pg.evaluate("""[...document.querySelectorAll('picture source[data-shot]')].filter(s => !s.closest('[hidden]')).map(s => { const i = s.parentElement.querySelector('img');
       return [s.dataset.shot, +s.getAttribute('width'), +s.getAttribute('height'), i.naturalWidth, i.naturalHeight, i.currentSrc.includes(s.dataset.shot + '-')] })
       .filter(a => !a[5] || a[1] !== a[3] || a[2] !== a[4])""")
     ok(not bad, f'휴대폰 그림 <source> 크기 = 파일 크기 {bad}')
     c.close()
 
-    # 첫 화면이 보인 뒤 다시 흐려지지 않음 (제목·버튼·스크린숏 opacity 2.5초 기록)
+    # 첫 화면이 보인 뒤 다시 흐려지지 않음 (제목·장면 단추·흉내 낸 화면 opacity 2.5초 기록)
     c = br.new_context(viewport={'width': 1366, 'height': 800}); pg = c.new_page()
-    pg.add_init_script('''window.__op=[];const t0=performance.now();(function f(){const q=['h1','.hero .btn','.hero__shot img'].map(s=>document.querySelector(s));
+    pg.add_init_script('''window.__op=[];const t0=performance.now();(function f(){const q=['h1','.panel__scenes .chip','.stage'].map(s=>document.querySelector(s));
       if(q.every(Boolean)){window.__op.push(q.map(e=>{let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}return o}))}
       if(performance.now()-t0<2500)requestAnimationFrame(f)})()''')
     pg.goto(BASE + '/'); pg.wait_for_timeout(2700)
