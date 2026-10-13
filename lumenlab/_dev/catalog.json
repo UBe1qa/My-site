@@ -24,9 +24,9 @@
       "id": "owlight",
       "icon": "/img/owlight.webp",
       "name": {"ko": "Owlight", "en": "Owlight"},
-      "kind": {"ko": "Mac 메뉴 막대 앱 <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 이상</span>", "en": "Menu bar app for Mac <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 or later</span>"},
+      "kind": {"ko": "macOS 메뉴 막대 앱 <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 이상</span>", "en": "Menu bar app for macOS <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 or later</span>"},
       "status": {"ko": "App Store 출시 준비 중", "en": "Getting ready for the App Store"},
-      "line": {"ko": "잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.", "en": "Keep your Mac awake, cover the desktop, highlight the front-most window and more, right from the menu bar."},
+      "line": {"ko": "잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.", "en": "Keep your computer awake, cover the desktop, highlight the front-most window and more, right from the menu bar."},
       "url": "https://owlight.lumenlab.page/",
       "links": [
         {"href": "https://owlight.lumenlab.page/", "go": true, "ko": "어떤 앱인지", "en": "What it does"},
