@@ -1,0 +1,5 @@
+_dev
+.assetsignore
+wrangler.jsonc
+.deploy-actions
+CLAUDE.md

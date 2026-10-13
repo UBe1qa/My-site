@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700">
+  <rect width="1000" height="700" fill="#EFEDE8"/>
+  <g fill="none" stroke="#1B1A19" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- tongue (behind) -->
+    <path d="M392 170 Q404 116 444 112 Q470 114 470 136 L478 330 L430 330 Z" fill="#6A311B" stroke-width="4"/>
+    <!-- upper -->
+    <path id="upper" d="M176 572 Q150 520 168 470 Q186 410 194 300 L206 172 Q300 156 398 160 L414 250 Q426 320 470 360 Q540 420 660 446 Q800 470 884 494 Q936 512 936 562 L176 572 Z" fill="#7A3B22"/>
+    <!-- heel counter seam -->
+    <path d="M168 452 Q250 448 296 486 Q326 520 330 568" stroke-width="4"/>
+    <!-- toe cap seam -->
+    <path d="M736 456 Q776 500 764 564" stroke-width="4"/>
+    <!-- collar -->
+    <path d="M206 172 Q300 156 398 160" stroke-width="12" stroke="#2A1B14"/>
+    <!-- pull tab -->
+    <path d="M204 178 L196 120 Q198 106 212 108 L224 168" fill="#3A2A22" stroke-width="4"/>
+    <!-- welt strip -->
+    <path id="welt" d="M164 588 L166 570 L930 560 Q950 566 950 584 Z" fill="#C9B79C"/>
+    <!-- heel block -->
+    <path id="heel" d="M168 588 L332 588 L330 640 L182 640 Q168 640 168 626 Z" fill="#3A2A22"/>
+    <!-- outsole -->
+    <path id="sole" d="M332 588 L948 584 Q956 604 934 614 L820 640 L520 640 Q420 612 332 606 Z" fill="#3A2A22"/>
+    <!-- eyelets -->
+    <g fill="#C9B79C" stroke-width="3">
+      <circle cx="404" cy="190" r="7"/><circle cx="410" cy="230" r="7"/><circle cx="418" cy="270" r="7"/>
+      <circle cx="434" cy="310" r="7"/><circle cx="462" cy="346" r="7"/><circle cx="494" cy="376" r="7"/>
+    </g>
+    <path d="M404 190 L452 214 M410 230 L456 252 M418 270 L462 290 M434 310 L474 326" stroke-width="4" stroke="#E8DCC2"/>
+  </g>
+  <!-- welt stitches -->
+  <path d="M178 579 L936 571" fill="none" stroke="#F3EEE4" stroke-width="3" stroke-dasharray="10 8"/>
+</svg>
