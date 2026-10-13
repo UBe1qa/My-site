@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>부츠 관리법 · 가죽결 수선소 (연습용 가상 공방)</title>
+<meta name="description" content="비 맞은 날, 철 지나 넣어 둘 때, 오일 먹이기까지. 수선을 늦추는 부츠 관리 여덟 가지를 상황별로 모았어요. 웹 연출 연습용 가상 수선소예요.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/care/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="부츠 관리법 · 가죽결 수선소">
+<meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
+<meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
+    }
+  })();
+</script>
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
+</head>
+<body data-page="care">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<!--@top-->
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="/check/">맡길 수 있나요</a>
+      <a href="/repairs/">수선 종류</a>
+      <a href="/cases/">수선 사례</a>
+      <a href="/care/" aria-current="page">관리법</a>
+      <a href="/maker/">수선사</a>
+    </nav>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/" aria-current="page"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
+
+<main id="main">
+  <!-- 첫 화면: 비스듬히 깔린 관리 카드 위 가운데 글 -->
+  <section class="phero phero--tiles" data-hero aria-labelledby="t">
+    <div class="tbg" aria-hidden="true">
+      <div><img src="/img/ph-welt.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/ba-new.webp" width="1200" height="692" alt="" decoding="async"></div>
+      <div><img src="/img/ph-heel.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/close-wide-worn.webp" width="1600" height="1000" alt="" decoding="async"></div>
+      <div><img src="/img/ph-toe.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/ba-worn.webp" width="1200" height="692" alt="" decoding="async"></div>
+      <div><img src="/img/close-wide.webp" width="1600" height="1000" alt="" decoding="async"></div>
+      <div><img src="/img/ph-heel.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/ba-new.webp" width="1200" height="692" alt="" decoding="async"></div>
+      <div><img src="/img/ph-toe.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/close-wide-worn.webp" width="1600" height="1000" alt="" decoding="async"></div>
+      <div><img src="/img/ph-welt.webp" width="320" height="320" alt="" decoding="async"></div>
+      <div><img src="/img/ba-worn.webp" width="1200" height="692" alt="" decoding="async"></div>
+      <div><img src="/img/close-wide.webp" width="1600" height="1000" alt="" decoding="async"></div>
+      <div><img src="/img/ph-heel.webp" width="320" height="320" alt="" decoding="async"></div>
+    </div>
+    <div class="wrap pwrap">
+      <p class="eyebrow">관리법</p>
+      <h1 id="t" class="phero__title">맡기기 전에,<br>집에서 하는 관리</h1>
+      <p class="phero__lead">수선을 늦추는 건 평소 관리예요. 집에서 할 수 있는 여덟 가지를 상황별로 모았어요.</p>
+      <div class="btns"><a class="btn btn--ghost" href="#guides">관리법 8가지 보기 <span class="arrow arrow--down" aria-hidden="true"></span></a></div>
+    </div>
+  </section>
+
+  <!-- 01 관리법 카드 -->
+  <section id="guides" class="psec" aria-labelledby="s1">
+    <div class="wrap pwrap">
+      <div class="psec__head--row">
+        <div>
+          <span class="num" data-rv="s1">01</span>
+          <h2 id="s1" class="psec__title" data-rv="s1">상황별로<br>골라 보세요</h2>
+          <p class="psec__lead" data-rv="s1">비 맞은 날부터 철 지나 넣어 둘 때까지, 순서대로 따라 하면 돼요.</p>
+        </div>
+        <div class="filters" id="gfilters" role="group" aria-label="관리법 거르기" data-rv="s1"></div>
+      </div>
+      <ul class="gcards" id="gcards"></ul>
+    </div>
+  </section>
+
+  <!-- 02 맡길 신호 -->
+  <section class="psec" aria-labelledby="s2">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s2">02</span>
+      <h2 id="s2" class="psec__title" data-rv="s2">이럴 땐<br>맡기는 게 나아요</h2>
+      <p class="psec__lead" data-rv="s2">집에서 손보기 어려운 신호예요. 더 두면 고칠 곳이 늘어나요.</p>
+      <div class="stage stage--narrow">
+        <div class="signs">
+          <a class="sign" href="/repairs/#welt" data-rv="signs"><div><b>밑창 둘레 실이 끊겨 틈이 보여요</b><span>비 오는 날 물이 스며들기 시작해요</span></div><em>둘레 실 다시 박기 <span class="go" aria-hidden="true"></span></em></a>
+          <a class="sign" href="/repairs/#heel" data-rv="signs"><div><b>뒤축 모서리가 비스듬히 닳았어요</b><span>걸을 때 몸이 바깥으로 기울어요</span></div><em>굽 교체 <span class="go" aria-hidden="true"></span></em></a>
+          <a class="sign" href="/repairs/#half" data-rv="signs"><div><b>앞바닥에 돌이 느껴져요</b><span>구멍이 나기 직전이에요</span></div><em>앞 밑창 덧대기 <span class="go" aria-hidden="true"></span></em></a>
+          <a class="sign" href="/repairs/#leather" data-rv="signs"><div><b>접히는 곳이 트고 갈라졌어요</b><span>오일로도 메워지지 않아요</span></div><em>가죽 관리 <span class="go" aria-hidden="true"></span></em></a>
+          <a class="sign" href="/repairs/#full" data-rv="signs"><div><b>밑창이 갈라져 물이 새요</b><span>굽과 앞바닥이 같이 닳았어요</span></div><em>통창갈이 <span class="go" aria-hidden="true"></span></em></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 끝 -->
+  <section class="endcta" aria-labelledby="e">
+    <div class="wrap pwrap">
+      <h2 id="e" class="psec__title" data-rv="end">관리로 안 되면,<br>사진을 보내 주세요</h2>
+      <div class="btns" data-dock-hide data-rv="end">
+        <a class="btn btn--accent" href="/apply/">사진 보내고 견적 받기</a>
+      </div>
+      <div class="next">
+        <a class="next__card" href="/check/" data-rv="end"><div><span>나도 될까요?</span><b>맡길 수 있나요 보기</b></div><i class="go" aria-hidden="true"></i></a>
+        <a class="next__card" href="/repairs/" data-rv="end"><div><span>얼마나 드나요?</span><b>수선 종류와 가격 보기</b></div><i class="go" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!--@foot-->
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
+    </div>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
+    </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+  </div>
+</footer>
+<!--/@foot-->
+<!--@dock-->
+<div class="dock" id="dock">
+  <form class="dock__form" id="dock-form" novalidate>
+    <div class="dock__who">
+      <p><b>사진으로 먼저 견적 받기</b><span>답장은 문자로 와요</span></p>
+    </div>
+    <div class="dock__fields">
+      <label class="sr" for="dock-kind">부츠 종류</label>
+      <div class="select">
+        <select id="dock-kind">
+          <option value="">부츠 종류</option>
+          <option>워커 (끈 부츠)</option>
+          <option>첼시 부츠</option>
+          <option>엔지니어 부츠</option>
+          <option>잘 모르겠어요</option>
+        </select>
+      </div>
+      <label class="sr" for="dock-phone">휴대폰 번호</label>
+      <input id="dock-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
+    </div>
+    <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
+    <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
+    <p class="dock__msg" id="dock-msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@dock-->
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/sub.js"></script>
+</body>
+</html>

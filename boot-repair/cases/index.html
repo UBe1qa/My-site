@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>수선 사례 · 가죽결 수선소 (연습용 가상 공방)</title>
+<meta name="description" content="워커·첼시·엔지니어 부츠를 새로 사는 값의 몇 분의 일로 고친 예시 사례 8건이에요. 웹 연출 연습용 가상 수선소예요.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/cases/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="수선 사례 · 가죽결 수선소">
+<meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
+<meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
+    }
+  })();
+</script>
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
+</head>
+<body data-page="cases">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<!--@top-->
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="/check/">맡길 수 있나요</a>
+      <a href="/repairs/">수선 종류</a>
+      <a href="/cases/" aria-current="page">수선 사례</a>
+      <a href="/care/">관리법</a>
+      <a href="/maker/">수선사</a>
+    </nav>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/" aria-current="page"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
+
+<main id="main">
+  <!-- 첫 화면: 어두운 띠 + 작업 태그 세 장 -->
+  <section class="phero phero--dark" data-hero aria-labelledby="t">
+    <div class="wrap pwrap phero__grid">
+      <div>
+        <p class="eyebrow">수선 사례 · 예시</p>
+        <h1 id="t" class="phero__title">비슷한 부츠는<br>이렇게 고쳤어요</h1>
+        <div class="stat">
+          <p class="stat__k">새로 사는 값과 견주면</p>
+          <p class="stat__v" id="stat">새 부츠 값의 7~37%</p>
+          <p class="stat__note">새 부츠(굿이어웰트 워커) 38만 원 기준 · 예시 사례 8건, 값은 예시 가격표로 셈했어요.</p>
+        </div>
+        <div class="btns"><a class="btn btn--ghost" href="#list">사례 8건 모두 보기 <span class="arrow arrow--down" aria-hidden="true"></span></a></div>
+      </div>
+      <div class="fan" id="fan" aria-hidden="true">
+        <div class="ftag ftag--l"></div>
+        <div class="ftag ftag--r"></div>
+        <div class="ftag ftag--c"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 사례 카드 -->
+  <section id="list" class="psec" aria-labelledby="s1">
+    <div class="wrap pwrap">
+      <div class="psec__head--row">
+        <div>
+          <span class="num" data-rv="s1">01</span>
+          <h2 id="s1" class="psec__title" data-rv="s1">누르면 고친 곳과<br>한 일을 볼 수 있어요</h2>
+          <p class="psec__lead" data-rv="s1">고친 곳을 그림에 칠해 뒀어요. 모두 설명을 위한 예시 사례예요.</p>
+        </div>
+        <div class="filters" id="cfilters" role="group" aria-label="사례 거르기" data-rv="s1"></div>
+      </div>
+      <ul class="cgrid" id="cgrid"></ul>
+      <div class="cmore"><button class="more" id="cmore" type="button" hidden><span id="cmore-t">나머지 4건 더 보기</span> <span class="go go--down" aria-hidden="true"></span></button></div>
+    </div>
+  </section>
+
+  <!-- 02 가까이 전후 -->
+  <section class="psec" aria-labelledby="s2">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s2">02</span>
+      <h2 id="s2" class="psec__title" data-rv="s2">굽만 가까이 보면<br>이렇게 달라요</h2>
+      <p class="psec__lead" data-rv="s2">같은 굽을 같은 자리에서 그렸어요. 손잡이를 밀어 보세요. 왼쪽이 맡길 때(비스듬히 닳은 굽, 끊긴 실), 오른쪽이 찾아갈 때예요.</p>
+      <div class="stage stage--narrow" data-rv="s2">
+        <div class="ba ba--close" style="--pos:50%">
+          <picture>
+            <source media="(max-width: 699.98px)" srcset="/img/heel-tall.webp" width="900" height="1300">
+            <img class="ba__img" src="/img/heel-wide.webp" width="1600" height="1000" loading="lazy" alt="수선한 뒤: 새 굽이 반듯하고 둘레 실이 촘촘하다.">
+          </picture>
+          <div class="ba__before">
+            <picture>
+              <source media="(max-width: 699.98px)" srcset="/img/heel-tall-worn.webp" width="900" height="1300">
+              <img class="ba__img" src="/img/heel-wide-worn.webp" width="1600" height="1000" loading="lazy" alt="수선하기 전: 뒤축이 비스듬히 닳고 둘레 실이 끊겼다.">
+            </picture>
+          </div>
+          <span class="ba__tag ba__tag--l">맡길 때</span>
+          <span class="ba__tag ba__tag--r">찾아갈 때</span>
+          <span class="ba__handle" aria-hidden="true"><span></span></span>
+          <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="수선 전후 비교: 왼쪽으로 밀면 수선 뒤, 오른쪽으로 밀면 수선 전이 더 보여요">
+        </div>
+        <p class="panel__note">설명하려고 코드로 그린 그림이에요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 새로 사는 값과 나란히 -->
+  <section class="psec" aria-labelledby="s3">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s3">03</span>
+      <h2 id="s3" class="psec__title" data-rv="s3">새로 사는 값과<br>나란히 놓아 봤어요</h2>
+      <p class="psec__lead" data-rv="s3">여덟 사례를 싼 것부터 줄 세웠어요. 맨 아래 줄이 새 부츠 한 켤레 값이에요.</p>
+      <div class="stage stage--narrow" data-rv="s3">
+        <div class="mcard"><ol class="cbars" id="cbars"></ol></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 끝 -->
+  <section class="endcta" aria-labelledby="e">
+    <div class="wrap pwrap">
+      <h2 id="e" class="psec__title" data-rv="end">비슷해 보여도<br>내 부츠는 다르니까</h2>
+      <div class="btns" data-dock-hide data-rv="end">
+        <a class="btn btn--accent" href="/apply/">사진으로 견적 받기</a>
+        <a class="endcta__sub" href="/check/">맡길 수 있는지 먼저 보기 <span class="go" aria-hidden="true"></span></a>
+      </div>
+      <div class="next">
+        <a class="next__card" href="/repairs/" data-rv="end"><div><span>얼마나 드나요?</span><b>수선 종류와 가격 보기</b></div><i class="go" aria-hidden="true"></i></a>
+        <a class="next__card" href="/maker/" data-rv="end"><div><span>누가 고치나요?</span><b>수선사 보기</b></div><i class="go" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dlg" id="cdlg" aria-labelledby="cdlg-t">
+  <div class="dlg__tag" id="cdlg-in"></div>
+</dialog>
+
+<!--@foot-->
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
+    </div>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
+    </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+  </div>
+</footer>
+<!--/@foot-->
+<!--@dock-->
+<div class="dock" id="dock">
+  <form class="dock__form" id="dock-form" novalidate>
+    <div class="dock__who">
+      <p><b>사진으로 먼저 견적 받기</b><span>답장은 문자로 와요</span></p>
+    </div>
+    <div class="dock__fields">
+      <label class="sr" for="dock-kind">부츠 종류</label>
+      <div class="select">
+        <select id="dock-kind">
+          <option value="">부츠 종류</option>
+          <option>워커 (끈 부츠)</option>
+          <option>첼시 부츠</option>
+          <option>엔지니어 부츠</option>
+          <option>잘 모르겠어요</option>
+        </select>
+      </div>
+      <label class="sr" for="dock-phone">휴대폰 번호</label>
+      <input id="dock-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
+    </div>
+    <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
+    <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
+    <p class="dock__msg" id="dock-msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@dock-->
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/sub.js"></script>
+</body>
+</html>

@@ -13,18 +13,19 @@
 <meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
 <meta property="og:url" content="https://boot-repair.mysitebox.workers.dev/">
 <meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
-<link rel="preload" as="image" href="img/hero-wide.webp" media="(min-width: 700px)">
-<link rel="preload" as="image" href="img/hero-tall.webp" media="(max-width: 699.98px)">
+<link rel="preload" as="image" href="/img/hero-wide.webp" media="(min-width: 700px)">
+<link rel="preload" as="image" href="/img/hero-tall.webp" media="(max-width: 699.98px)">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>
   /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
-     GSAP이 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
   (function () {
     var d = document.documentElement;
     d.classList.add('js');
@@ -36,27 +37,41 @@
     }
   })();
 </script>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
 </head>
-<body>
+<body data-page="home">
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 
+<!--@top-->
 <header class="top" id="top">
   <div class="wrap top__in">
-    <a class="logo" href="#main" aria-label="가죽결 수선소 맨 위로">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
       <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
     </a>
     <nav class="nav" aria-label="주요 메뉴">
-      <a href="#quote">1분 견적</a>
-      <a href="#photo">사진 견적</a>
-      <a href="#compare">수선 전후</a>
-      <a href="#cases">수선 예시</a>
-      <a href="#steps">맡기는 순서</a>
-      <a href="#faq">자주 묻는 질문</a>
+      <a href="/check/">맡길 수 있나요</a>
+      <a href="/repairs/">수선 종류</a>
+      <a href="/cases/">수선 사례</a>
+      <a href="/care/">관리법</a>
+      <a href="/maker/">수선사</a>
     </nav>
-    <a class="btn btn--accent btn--sm top__cta" href="#apply">수선 맡기기</a>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
   </div>
 </header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/" aria-current="page"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
 
 <main id="main">
 
@@ -149,8 +164,8 @@
           </div>
           <div class="chips" id="chips" role="group" aria-label="수선 항목"></div>
           <p class="quote__why" id="quote-why" aria-live="polite">예시로 두 곳을 골라 뒀어요. 눌러서 바꿔 보세요.</p>
-          <div class="btns">
-            <a class="btn btn--accent" href="#apply" id="quote-go">이 견적으로 맡기기</a>
+          <div class="btns" data-dock-hide>
+            <a class="btn btn--accent" href="/apply/?items=heel,welt" id="quote-go">이 견적으로 맡기기</a>
             <button class="btn btn--line" type="button" id="quote-clear">모두 지우기</button>
           </div>
           <p class="quote__undo" id="quote-undo" hidden>지웠어요. <button type="button" class="link" id="quote-undo-btn">되돌리기</button></p>
@@ -204,7 +219,7 @@
             <h2 id="photo-title" class="head__title">사진 세 장이면<br>답장이 와요</h2>
             <p class="head__lead">뒤축, 밑창 둘레, 앞코만 찍어 보내 주세요. 상자는 견적을 보고 싸도 돼요.</p>
           </div>
-          <a class="btn btn--soft" href="#apply">사진 보내는 법 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
+          <a class="btn btn--soft" href="/check/#photos">사진 찍는 법 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
         </div>
         <div class="panel panel--white">
           <div class="chat" aria-label="사진 견적 예시">
@@ -271,6 +286,7 @@
           <p class="head__lead">많이 맡기는 수선 네 가지를 새 부츠 값(38만 원)과 견줬어요. 가격은 예시예요.</p>
         </div>
         <ul class="cases" id="cases-list"></ul>
+        <a class="more" href="/cases/">수선 사례 8건 모두 보기 <span class="go" aria-hidden="true"></span></a>
       </div>
     </section>
 
@@ -312,7 +328,7 @@
             <p class="eyebrow">자주 묻는 질문</p>
             <h2 id="faq-title" class="head__title">맡기기 전에<br>많이 묻는 것</h2>
           </div>
-          <a class="btn btn--soft" href="#apply">사진 보내기 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
+          <a class="btn btn--soft" href="/check/">맡길 수 있는지 보기 <span class="arrow arrow--dark" aria-hidden="true"></span></a>
         </div>
         <div class="faq__list">
           <details class="qa"><summary>다른 곳에서 산 부츠도 되나요?</summary><div class="qa__a">네, 브랜드는 상관없어요. 다만 밑창이 본드로만 붙은 신발은 통창갈이가 어려울 수 있어서, 사진을 보고 먼저 말씀드려요.</div></details>
@@ -326,10 +342,10 @@
 
     <!-- 9. 끝 -->
     <section id="apply" class="sec sec--white end" aria-labelledby="end-title">
-      <div class="wrap end__in">
+      <div class="wrap end__in" data-dock-hide>
         <h2 id="end-title" class="end__title">신발장에 잠든 부츠가 있다면,<br>사진부터 보내 주세요.</h2>
         <p class="end__lead">고칠 수 있는지부터 알려 드려요. 견적은 무료예요.</p>
-        <button class="btn btn--accent btn--lg" type="button" data-open-apply>수선 맡기기</button>
+        <a class="btn btn--accent btn--lg" href="/apply/">수선 맡기기</a>
         <ul class="end__chips">
           <li>사진 견적 무료</li>
           <li>왕복 택배비 포함</li>
@@ -340,6 +356,7 @@
   </div>
 </main>
 
+<!--@foot-->
 <footer class="foot">
   <div class="wrap foot__in">
     <div class="foot__col foot__col--brand">
@@ -348,21 +365,24 @@
     </div>
     <nav class="foot__col" aria-label="꼬리말 메뉴">
       <p class="foot__h">메뉴</p>
-      <a href="#quote">1분 견적</a><a href="#photo">사진 견적</a><a href="#compare">수선 전후</a><a href="#cases">수선 예시</a><a href="#steps">맡기는 순서</a><a href="#faq">자주 묻는 질문</a>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
     </nav>
     <div class="foot__col">
       <p class="foot__h">수선소</p>
       <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
       <p>답장 · 평일 10시~18시</p>
       <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
     </div>
   </div>
   <div class="wrap foot__bottom">
-    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
   </div>
 </footer>
+<!--/@foot-->
 
 <!-- 늘 떠 있는 신청 바 -->
+<!--@dock-->
 <div class="dock" id="dock">
   <form class="dock__form" id="dock-form" novalidate>
     <div class="dock__who">
@@ -371,7 +391,7 @@
     <div class="dock__fields">
       <label class="sr" for="dock-kind">부츠 종류</label>
       <div class="select">
-        <select id="dock-kind" name="kind">
+        <select id="dock-kind">
           <option value="">부츠 종류</option>
           <option>워커 (끈 부츠)</option>
           <option>첼시 부츠</option>
@@ -380,7 +400,7 @@
         </select>
       </div>
       <label class="sr" for="dock-phone">휴대폰 번호</label>
-      <input id="dock-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
+      <input id="dock-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
     </div>
     <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
     <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
@@ -389,12 +409,14 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@dock-->
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script src="film.js"></script>
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/app.js"></script>
+<script src="/film.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="motion.js" defer></script>
+<script src="/motion.js" defer></script>
 </body>
 </html>

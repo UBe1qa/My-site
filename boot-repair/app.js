@@ -1,18 +1,8 @@
-/* 가죽결 수선소 · 화면 코드 (움직임이 꺼져 있어도 다 돌아가는 것들) */
+/* 가죽결 수선소 · 처음 화면 코드 (움직임이 꺼져 있어도 다 돌아가는 것들)
+   알림·머리줄·신청 바·드러내기는 common.js (window.BR) */
 (function () {
   'use strict';
-  var $ = function (s, r) { return (r || document).querySelector(s); };
-  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var root = document.documentElement;
-  var won = function (n) { return n.toLocaleString('ko-KR') + '원'; };
-  var anim = function () { return root.classList.contains('anim'); };
-
-  /* ---------- 알림 ---------- */
-  var toastEl = $('#toast'), toastT;
-  function toast(msg, ms) {
-    toastEl.textContent = msg; toastEl.hidden = false;
-    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.hidden = true; }, ms || 3600);
-  }
+  var B = window.BR, $ = B.$, $$ = B.$$, won = B.won, anim = B.anim, toast = B.toast;
 
   /* ---------- 1분 견적 ---------- */
   var R = window.REPAIRS || [];
@@ -22,7 +12,7 @@
   var boot = $('#boot'), spots = $('#spots'), chips = $('#chips');
   var rowsEl = $('#paper-rows'), emptyEl = $('#paper-empty'), totalEl = $('#paper-total'), daysEl = $('#paper-days');
   var whyEl = $('#quote-why');
-  var stamp = $('#stamp'), clearBtn = $('#quote-clear'), undoP = $('#quote-undo');
+  var stamp = $('#stamp'), clearBtn = $('#quote-clear'), undoP = $('#quote-undo'), goBtn = $('#quote-go');
 
   var vb = boot.querySelector('svg').viewBox.baseVal;
   R.forEach(function (r, i) {
@@ -111,6 +101,7 @@
     totalEl.textContent = won(sum);
     daysEl.textContent = picked.length ? '작업 ' + days + '일 + 택배 2~3일' : '-';
     clearBtn.hidden = picked.length === 0;
+    goBtn.href = '/apply/' + (picked.length ? '?items=' + picked.join(',') : '');
     // 도장: 비어 있다가 처음 적힐 때만 크게 찍는다 (드물수록 크게)
     stamp.classList.toggle('is-on', picked.length > 0);
     if (added && wasEmpty && picked.length && anim()) {
@@ -132,11 +123,6 @@
   });
   picked = ['heel', 'welt'];   // 빈 견적서 대신 예시 두 곳을 골라 둔 채로 시작
   render(false);
-
-  /* ---------- 전후 비교 ---------- */
-  var ba = $('#ba'), baRange = $('.ba__range');
-  function setPos() { ba.style.setProperty('--pos', baRange.value + '%'); }
-  baRange.addEventListener('input', setPos); setPos();
 
   /* ---------- 수선 예시 카드 ---------- */
   var C = window.CASES || [], NB = window.NEW_BOOT || 380000, cl = $('#cases-list');
@@ -192,89 +178,19 @@
     list.addEventListener('focusin', function (e) { var li = e.target.closest('.step'); if (li) setStep(+li.dataset.i); });
   }
 
-  /* ---------- 머리줄: 첫 화면 뒤로 내릴 땐 숨고, 올릴 땐 나온다 ---------- */
-  var topEl = $('#top'), lastY = window.scrollY, ticking = false;
-  window.addEventListener('scroll', function () {
-    if (ticking) return; ticking = true;
-    requestAnimationFrame(function () {
-      var y = window.scrollY, d = y - lastY;
-      if (Math.abs(d) > 6) { topEl.classList.toggle('is-hidden', d > 0 && y > window.innerHeight * .8 && !topEl.contains(document.activeElement)); lastY = y; }
-      ticking = false;
-    });
-  }, { passive: true });
-  topEl.addEventListener('focusin', function () { topEl.classList.remove('is-hidden'); });
-
-  /* ---------- 신청 바 ---------- */
-  var dock = $('#dock'), form = $('#dock-form'), phone = $('#dock-phone'), msg = $('#dock-msg');
-  var wide = window.matchMedia('(min-width: 900px)');
-  if ('IntersectionObserver' in window) {
-    var hero = $('.hero'), foot = $('.foot'), heroOut = false, footIn = false;
-    var busy = 0;   // 견적서·끝 칸이 보이는 동안은 숨긴다 (그 칸에 같은 단추가 있다)
-    var upd = function () { dock.classList.toggle('is-show', heroOut && !footIn && !busy || dock.classList.contains('is-open')); };
-    var busyIO = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { e.target.__in = e.isIntersecting; });
-      busy = $$('#quote .btns, .end__in').filter(function (el) { return el.__in; }).length; upd();
-    }, { rootMargin: '-15% 0px -15% 0px' });
-    $$('#quote .btns, .end__in').forEach(function (el) { busyIO.observe(el); });
-    new IntersectionObserver(function (es) { heroOut = !es[0].isIntersecting; upd(); }, { rootMargin: '-40% 0px 0px 0px' }).observe(hero);
-    new IntersectionObserver(function (es) { footIn = es[0].isIntersecting; upd(); }, { rootMargin: '0px 0px -120px 0px' }).observe(foot);
-  } else dock.classList.add('is-show');
-
-  function openApply() {
-    dock.classList.add('is-show');
-    if (!wide.matches) dock.classList.add('is-open');
-    setTimeout(function () { (wide.matches ? phone : $('#dock-kind')).focus(); }, 60);
-  }
-  $$('[data-open-apply]').forEach(function (b) { b.addEventListener('click', openApply); });
-  $$('a[href="#apply"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      if (a.closest('.end')) return;
-      e.preventDefault();
-      $('#apply').scrollIntoView({ behavior: anim() ? 'smooth' : 'auto', block: 'center' });
-      setTimeout(openApply, anim() ? 500 : 0);
-    });
-  });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dock.classList.remove('is-open'); });
-  document.addEventListener('pointerdown', function (e) {
-    if (dock.classList.contains('is-open') && !dock.contains(e.target) && !e.target.closest('[data-open-apply], a[href="#apply"]')) dock.classList.remove('is-open');
-  });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var digits = phone.value.replace(/[^0-9０-９]/g, '');
-    if (digits.length < 9) {
-      phone.setAttribute('aria-invalid', 'true');
-      msg.textContent = digits.length ? '번호가 짧아요. 010부터 다 적어 주세요.' : '연락받을 휴대폰 번호를 적어 주세요.';
-      phone.focus(); return;
-    }
-    phone.removeAttribute('aria-invalid'); msg.textContent = '';
-    toast('연습용 사이트라 실제로 접수되지는 않아요. 진짜 공방이라면 여기서 사진 보낼 링크가 문자로 가요.', 5200);
-  });
-  phone.addEventListener('input', function () { if (phone.getAttribute('aria-invalid')) { phone.removeAttribute('aria-invalid'); msg.textContent = ''; } });
-
   /* ---------- 드러내기 + 숫자 세기 (들어올 때마다) ---------- */
+  [
+    ['#quote .head', '#quote .chips', '#quote .panel'],
+    ['#photo .head', '#photo .panel'],
+    ['#compare .head', '#compare .ticks', '#compare .panel'],
+    ['#cases .head', '.case', '#cases .more'],
+    ['#faq .head', '.qa'],
+    ['.end__title', '.end__lead']
+  ].forEach(function (g) {
+    var els = []; g.forEach(function (s) { els = els.concat($$(s)); });
+    B.reveal(els);
+  });
   if (anim()) {
-    var groups = [
-      ['#quote .head', '#quote .chips', '#quote .panel'],
-      ['#photo .head', '#photo .panel'],
-      ['#compare .head', '#compare .ticks', '#compare .panel'],
-      ['#cases .head', '.case'],
-      ['#faq .head', '.qa'],
-      ['.end__title', '.end__lead']
-    ];
-    groups.forEach(function (g) {
-      var els = []; g.forEach(function (s) { els = els.concat($$(s)); });
-      els.forEach(function (el, k) { el.classList.add('rv'); el.style.setProperty('--d', (k * 0.08) + 's'); });
-    });
-    var play = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('in'); });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    // 되돌리기는 화면에서 40px 넘게 벗어났을 때만: 드러내기의 24px 미끄러짐보다 커야 경계에서 깜빡이지 않는다
-    var reset = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (!e.isIntersecting && !e.target.contains(document.activeElement)) e.target.classList.remove('in'); });
-    }, { rootMargin: '40px 0px 40px 0px' });
-    $$('.rv').forEach(function (el) { play.observe(el); reset.observe(el); });
-    document.addEventListener('focusin', function (e) { var r = e.target.closest('.rv'); if (r) r.classList.add('in'); });
-
     // 큰 숫자: 최종 값이 기본, 보일 때 0부터 다시 센다
     var val = $('.saving__val'), fills = $$('.bar__fill'), countT;
     var countIO = new IntersectionObserver(function (es) {
@@ -293,6 +209,4 @@
     }, { rootMargin: '0px 0px -25% 0px' });
     countIO.observe($('.saving__num'));
   }
-
-  window.addEventListener('beforeprint', function () { $$('.rv').forEach(function (el) { el.classList.add('in'); }); });
 })();

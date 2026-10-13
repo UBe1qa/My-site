@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>수선 종류와 가격 · 가죽결 수선소 (연습용 가상 공방)</title>
+<meta name="description" content="굽 교체부터 통창갈이까지, 일곱 가지 부츠 수선을 언제 맡기는지와 어떻게 고치는지, 예시 가격으로 정리했어요. 웹 연출 연습용 가상 수선소예요.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/repairs/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="수선 종류와 가격 · 가죽결 수선소">
+<meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
+<meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
+    }
+  })();
+</script>
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
+</head>
+<body data-page="repairs">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<!--@top-->
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="/check/">맡길 수 있나요</a>
+      <a href="/repairs/" aria-current="page">수선 종류</a>
+      <a href="/cases/">수선 사례</a>
+      <a href="/care/">관리법</a>
+      <a href="/maker/">수선사</a>
+    </nav>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/" aria-current="page"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
+
+<main id="main">
+  <!-- 첫 화면: 가격표 -->
+  <section class="phero" data-hero aria-labelledby="t">
+    <div class="wrap pwrap">
+      <p class="eyebrow">수선 종류</p>
+      <h1 id="t" class="phero__title">닳은 곳마다<br>하는 일이 달라요</h1>
+      <p class="phero__lead">일곱 가지 수선을 언제 맡기는지, 무엇을 하는지, 얼마인지 정리했어요. 가격은 예시예요.</p>
+      <div class="stage">
+        <div class="mcard pricecard">
+          <p class="mcard__label">가격표 · 예시</p>
+          <p class="mcard__title">왕복 택배비까지 들어 있는 값이에요</p>
+          <div class="plist" id="plist"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 부위별 -->
+  <section id="pick" class="psec" aria-labelledby="s1">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s1">01</span>
+      <h2 id="s1" class="psec__title" data-rv="s1">닳은 곳을 고르면<br>할 일이 보여요</h2>
+      <p class="psec__lead" data-rv="s1">부위를 눌러 보세요. 언제 맡기는지, 어떻게 고치는지, 같이 많이 하는 수선까지 보여 드려요.</p>
+      <div class="stage" data-rv="s1">
+        <div class="tabs" id="rtabs" role="tablist" aria-label="수선 부위"></div>
+        <div id="rpanels"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 통창갈이 열흘 -->
+  <section class="psec" aria-labelledby="s2">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s2">02</span>
+      <h2 id="s2" class="psec__title" data-rv="s2">통창갈이는<br>열흘 이렇게 걸려요</h2>
+      <p class="psec__lead" data-rv="s2">밑창을 통째로 새로 다는 일이에요. 단계마다 사진을 보내 드려서, 맡긴 동안에도 어디까지 했는지 알 수 있어요.</p>
+      <div class="stage stage--narrow">
+        <div class="days" data-rv="s2" aria-hidden="true">
+          <span style="--n:1">1</span><span style="--n:2">2</span><span style="--n:2">3</span><span style="--n:2">4</span><span style="--n:2">5</span><span style="--n:1">6</span>
+        </div>
+        <p class="days__axis" aria-hidden="true"><span>1일</span><span>10일</span></p>
+        <ol class="flow">
+          <li data-rv="flow"><span class="flow__n">1</span><div><b>실 풀고 옛 밑창 떼기</b><span>둘레 실을 한 땀씩 풀어요</span></div><span class="flow__day">1일째</span></li>
+          <li data-rv="flow"><span class="flow__n">2</span><div><b>바닥 고르기</b><span>속 코르크를 새로 채워요</span></div><span class="flow__day">2~3일째</span></li>
+          <li data-rv="flow"><span class="flow__n">3</span><div><b>새 밑창 대기</b><span>웰트에 맞춰 눌러 붙여요</span></div><span class="flow__day">4~5일째</span></li>
+          <li data-rv="flow"><span class="flow__n">4</span><div><b>둘레 다시 박기</b><span>원래 구멍을 따라 왁스 실로</span></div><span class="flow__day">6~7일째</span></li>
+          <li data-rv="flow"><span class="flow__n">5</span><div><b>다듬고 색 맞추기</b><span>옆면을 갈고 색을 입혀요</span></div><span class="flow__day">8~9일째</span></li>
+          <li data-rv="flow"><span class="flow__n">6</span><div><b>마무리 사진 · 보내기</b><span>보내기 전에 사진으로 먼저 보여 드려요</span></div><span class="flow__day">10일째</span></li>
+        </ol>
+        <ul class="roles">
+          <li class="mcard" data-rv="roles"><p class="mcard__label">수선사</p><p class="roles__t">고칠 곳을 정해요</p><p class="roles__b">사진을 보고 고칠 곳과 그대로 둘 곳을 나눠요.</p></li>
+          <li class="mcard" data-rv="roles"><p class="mcard__label">작업실</p><p class="roles__t">오가는 길을 챙겨요</p><p class="roles__b">택배를 받아 상태를 찍고, 다 되면 싸서 보내요.</p></li>
+          <li class="mcard" data-rv="roles"><p class="mcard__label">맡기는 분</p><p class="roles__t">사진만 보내 주세요</p><p class="roles__b">견적을 보고 괜찮으면 상자에 넣어 보내면 끝이에요.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 값에 든 것 -->
+  <section class="psec" aria-labelledby="s3">
+    <div class="wrap pwrap">
+      <div class="stage inc">
+        <div>
+          <span class="num" data-rv="s3">03</span>
+          <h2 id="s3" class="psec__title" data-rv="s3">사진 견적은<br>무료예요</h2>
+          <p class="psec__lead" data-rv="s3">얼마인지 알고 나서 보내도 돼요. 고칠 수 없으면 비용을 받지 않고, 상자를 보낸 뒤에 알게 되면 왕복 택배비도 저희가 내요.</p>
+        </div>
+        <div class="mcard" data-rv="s3">
+          <p class="mcard__label">사진 견적</p>
+          <p class="inc__big">0원<small>견적 문자까지</small></p>
+          <p class="inc__k">받게 되는 견적 문자 · 예시</p>
+          <div class="sms">
+            <p class="sms__from">가죽결 수선소 <span>오후 2:14</span></p>
+            <p class="sms__b">굽 교체 35,000원 · 작업 3일이에요.<br>둘레 실은 아직 괜찮아서 뺐어요.<br>괜찮으시면 상자 보낼 주소를 알려 드릴게요.</p>
+          </div>
+          <p class="inc__k">값에 들어 있는 것</p>
+          <ul class="checks">
+            <li>왕복 택배비</li>
+            <li>작업 중간 사진</li>
+            <li>받고 30일 안 다시 맞춤</li>
+            <li>통창갈이엔 새 끈 한 벌</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 끝 -->
+  <section class="endcta" aria-labelledby="e">
+    <div class="wrap pwrap">
+      <h2 id="e" class="psec__title" data-rv="end">어떤 수선인지<br>몰라도 괜찮아요</h2>
+      <div class="btns" data-dock-hide data-rv="end">
+        <a class="btn btn--accent" href="/apply/">사진 보내기</a>
+        <a class="endcta__sub" href="/check/">세 가지로 먼저 확인하기 <span class="go" aria-hidden="true"></span></a>
+      </div>
+      <div class="next">
+        <a class="next__card" href="/check/" data-rv="end"><div><span>나도 될까요?</span><b>맡길 수 있나요 보기</b></div><i class="go" aria-hidden="true"></i></a>
+        <a class="next__card" href="/maker/" data-rv="end"><div><span>누가 고치나요?</span><b>수선사 보기</b></div><i class="go" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!--@foot-->
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
+    </div>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
+    </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+  </div>
+</footer>
+<!--/@foot-->
+<!--@dock-->
+<div class="dock" id="dock">
+  <form class="dock__form" id="dock-form" novalidate>
+    <div class="dock__who">
+      <p><b>사진으로 먼저 견적 받기</b><span>답장은 문자로 와요</span></p>
+    </div>
+    <div class="dock__fields">
+      <label class="sr" for="dock-kind">부츠 종류</label>
+      <div class="select">
+        <select id="dock-kind">
+          <option value="">부츠 종류</option>
+          <option>워커 (끈 부츠)</option>
+          <option>첼시 부츠</option>
+          <option>엔지니어 부츠</option>
+          <option>잘 모르겠어요</option>
+        </select>
+      </div>
+      <label class="sr" for="dock-phone">휴대폰 번호</label>
+      <input id="dock-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
+    </div>
+    <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
+    <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
+    <p class="dock__msg" id="dock-msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@dock-->
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/sub.js"></script>
+</body>
+</html>

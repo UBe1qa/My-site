@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>수선 맡기기 · 가죽결 수선소 (연습용 가상 공방)</title>
+<meta name="description" content="사진을 보내 주시면 견적을 문자로 보내 드려요. 연습용 가상 수선소라 실제로 접수되지는 않아요.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/apply/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="수선 맡기기 · 가죽결 수선소">
+<meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
+<meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
+    }
+  })();
+</script>
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
+</head>
+<body data-page="apply">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<!--@top-->
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="/check/">맡길 수 있나요</a>
+      <a href="/repairs/">수선 종류</a>
+      <a href="/cases/">수선 사례</a>
+      <a href="/care/">관리법</a>
+      <a href="/maker/">수선사</a>
+    </nav>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/" aria-current="page">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
+
+<main id="main" class="apply">
+  <div class="wrap pwrap apply__grid">
+    <div class="apply__intro">
+      <a class="back" href="/"><span class="go" aria-hidden="true"></span>처음으로</a>
+      <p class="eyebrow">수선 맡기기</p>
+      <h1 class="apply__title">사진을 보내 주시면,<br>견적을 문자로<br>보내 드려요</h1>
+      <p class="apply__lead">이름과 연락처만 있으면 돼요. 신발 상자는 견적을 보고 나서 싸도 돼요.</p>
+    </div>
+    <div class="fcard">
+      <!-- 입력 칸에 name을 두지 않는다: 스크립트가 꺼진 채 보내져도 이름·번호가 주소창에 실리지 않게 -->
+      <form id="aform" novalidate>
+        <p class="fcard__k">수선 정보</p>
+        <h2 class="fcard__t">어떤 부츠인가요?</h2>
+        <p class="fcard__lead">아는 만큼만 적어 주세요. 모르는 건 사진을 보고 저희가 정해요.</p>
+        <div class="row2">
+          <div class="field">
+            <label for="a-name">이름</label>
+            <input class="inp" id="a-name" autocomplete="name" placeholder="이름" aria-describedby="a-name-err">
+            <p class="err" id="a-name-err"></p>
+          </div>
+          <div class="field">
+            <label for="a-phone">휴대폰</label>
+            <input class="inp" id="a-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" aria-describedby="a-phone-err">
+            <p class="err" id="a-phone-err"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="a-kind">부츠 종류</label>
+          <div class="select">
+            <select class="inp" id="a-kind">
+              <option value="">골라 주세요</option>
+              <option>워커 (끈 부츠)</option>
+              <option>첼시 부츠</option>
+              <option>엔지니어 부츠</option>
+              <option>처커 부츠</option>
+              <option>웨스턴 부츠</option>
+              <option>잘 모르겠어요</option>
+            </select>
+          </div>
+        </div>
+        <fieldset class="field">
+          <legend>원하는 수선 <small>여러 개 골라도 돼요</small></legend>
+          <div class="pick" id="a-items"><p class="fnote">스크립트가 켜져 있으면 여기서 고를 수 있어요.</p></div>
+        </fieldset>
+        <div class="field">
+          <span class="field__label">사진 <small>최대 3장 · 선택</small></span>
+          <label class="drop" id="drop">
+            <input id="a-photo" type="file" accept="image/*" multiple aria-describedby="a-photo-note">
+            <span class="drop__ic" aria-hidden="true"></span>
+            <span class="drop__t"><b>사진 고르기</b><span id="a-photo-note">뒤축 · 밑창 둘레 · 앞코. 사진은 이 화면에서만 보여요.</span></span>
+          </label>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <fieldset class="field">
+          <legend>받는 방법</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="how" value="택배" checked><b>택배로 보내기</b><span>왕복 택배비는 저희가 내요</span></label>
+            <label class="choice"><input type="radio" name="how" value="작업실"><b>작업실에 맡기기</b><span>주소와 날짜는 답장 문자로 알려 드려요</span></label>
+          </div>
+        </fieldset>
+        <details class="extra">
+          <summary><span>더 남길 말 <small>선택</small></span></summary>
+          <div class="extra__in">
+            <label class="sr" for="a-memo">더 남길 말</label>
+            <textarea class="inp" id="a-memo" placeholder="예: 바닥을 조금 더 얇게 하고 싶어요"></textarea>
+          </div>
+        </details>
+        <div class="agree">
+          <div class="agree__row agree__all"><label><input class="ck" type="checkbox" id="a-all"> 모두 동의 (이용 안내 · 개인정보 수집·이용)</label></div>
+          <div class="agree__row"><label><input class="ck" type="checkbox" id="a-terms" data-req> 이용 안내 <span class="req">필수</span></label><button class="link agree__see" type="button" aria-expanded="false" aria-controls="t-terms">보기</button></div>
+          <p class="agree__text" id="t-terms" hidden>사진을 보고 드리는 견적은 예상 값이에요. 신발을 받아 보고 손볼 곳이 늘면 먼저 여쭤본 뒤 진행해요. (연습용 예시 문구)</p>
+          <div class="agree__row"><label><input class="ck" type="checkbox" id="a-privacy" data-req> 개인정보 수집·이용 <span class="req">필수</span></label><button class="link agree__see" type="button" aria-expanded="false" aria-controls="t-privacy">보기</button></div>
+          <p class="agree__text" id="t-privacy" hidden>진짜 공방이라면 이름·휴대폰 번호·사진을 견적 답장에만 쓰고 수선이 끝나면 지워요. 이 연습 사이트는 아무것도 보내거나 저장하지 않아요.</p>
+          <p class="err" id="a-agree-err"></p>
+        </div>
+        <button class="btn btn--accent submit" type="submit">견적 신청하기 <span class="arrow" aria-hidden="true"></span></button>
+        <p class="fnote">연습용 사이트예요. 적은 내용과 사진은 이 화면 밖으로 나가지 않아요.</p>
+      </form>
+
+      <div class="done" id="done" tabindex="-1" hidden>
+        <span class="done__ic" aria-hidden="true"></span>
+        <h2 class="done__t">접수 화면 예시예요</h2>
+        <p class="done__b">연습용 사이트라 실제로 접수되지는 않았어요.<br>진짜 공방이라면 이 내용으로 견적 문자가 가요.</p>
+        <div class="done__sum" id="done-sum"></div>
+        <div class="btns">
+          <a class="btn btn--accent" href="/">처음으로</a>
+          <button class="btn btn--line" type="button" id="again">다시 쓰기</button>
+        </div>
+      </div>
+    </div>
+    <div class="apply__more">
+      <div class="after">
+        <h2>신청하면 이렇게 이어져요</h2>
+        <ol>
+          <li><span class="after__n">01</span><div><b>사진 확인</b><span>보내 주신 사진으로 고칠 수 있는지부터 봐요.</span></div></li>
+          <li><span class="after__n">02</span><div><b>견적 문자</b><span>가격과 기간을 문자로 보내 드려요. 평일엔 보통 1시간 안이에요.</span></div></li>
+          <li><span class="after__n">03</span><div><b>택배로 보내기</b><span>견적이 괜찮으면 상자에 넣어 보내 주세요. 왕복 택배비는 저희가 내요.</span></div></li>
+        </ol>
+      </div>
+      <div class="apply__contact">
+        <p><b>답장</b> · 평일 10시~18시</p>
+        <p><b>작업 기간</b> · 보통 4~10일</p>
+        <p><b>전화·주소</b> · 가상 공방이라 적지 않았어요. 진짜 공방이라면 전화번호와 작업실 주소가 적힐 자리예요.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!--@foot-->
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
+    </div>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
+    </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+  </div>
+</footer>
+<!--/@foot-->
+<!--@toast-->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@toast-->
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/sub.js"></script>
+</body>
+</html>

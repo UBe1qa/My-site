@@ -82,5 +82,10 @@ if __name__=='__main__':
        ('close-wide-worn',dict(worn=True,w=1600,h=1000,vb="60 200 820 512",light=(300,440))),
        ('close-tall-worn',dict(worn=True,w=900,h=1300,vb="90 170 440 636",light=(260,440))),
        ('ba-worn',dict(worn=True,w=1200,h=692,vb="120 380 520 300",light=(300,470))),
-       ('ba-new',dict(w=1200,h=692,vb="120 380 520 300",light=(300,470)))]
+       ('ba-new',dict(w=1200,h=692,vb="120 380 520 300",light=(300,470))),
+       # 3판: 사례 페이지 전후 비교 — 굽이 가운데 오게 (손잡이가 굽을 가르도록)
+       ('heel-wide',dict(w=1600,h=1000,vb="50 420 400 250",light=(250,520))),
+       ('heel-wide-worn',dict(worn=True,w=1600,h=1000,vb="50 420 400 250",light=(250,520))),
+       ('heel-tall',dict(w=900,h=1300,vb="110 336 280 404",light=(250,520))),
+       ('heel-tall-worn',dict(worn=True,w=900,h=1300,vb="110 336 280 404",light=(250,520)))]
     for n,k in J: open(n+'.svg','w').write(boot(**k))

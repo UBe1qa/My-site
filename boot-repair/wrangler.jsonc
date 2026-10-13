@@ -1,9 +1,9 @@
 // Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'boot-repair' 하나 (가죽결 수선소, 연습용 가상 공방)
 // 주소: https://boot-repair.mysitebox.workers.dev  · 검색 제외(noindex)
-// 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
+// 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다(페이지마다 폴더/index.html, 없는 주소는 404.html). 올리지 않을 파일은 .assetsignore 에 적는다.
 // 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
 {
   "name": "boot-repair",
   "compatibility_date": "2026-09-01",
-  "assets": { "directory": "." }
+  "assets": { "directory": ".", "not_found_handling": "404-page" }
 }

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>맡길 수 있나요 · 가죽결 수선소 (연습용 가상 공방)</title>
+<meta name="description" content="밑창 둘레에 실이 보이면 대부분 고칠 수 있어요. 세 가지 질문으로 내 부츠에 맞는 수선을 먼저 확인해 보세요. 웹 연출 연습용 가상 수선소예요.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://boot-repair.mysitebox.workers.dev/check/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="맡길 수 있나요 · 가죽결 수선소">
+<meta property="og:description" content="웹 연출 연습용으로 만든 가상의 부츠 수선소예요.">
+<meta property="og:image" content="https://boot-repair.mysitebox.workers.dev/img/og.jpg">
+<!--@head-->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만 켠다.
+     움직임 코드가 6초 안에 시작하지 않으면 끈다(내용은 늘 보이게). */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      d.classList.add('anim');
+      window.__unanim = function () { d.classList.remove('anim'); window.__filmStill && window.__filmStill(); };
+      setTimeout(function () { if (!window.__motionOn) window.__unanim(); }, 6000);
+    }
+  })();
+</script>
+<link rel="stylesheet" href="/style.css">
+<!--/@head-->
+</head>
+<body data-page="check">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<!--@top-->
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="logo" href="/" aria-label="가죽결 수선소 처음으로">
+      <span class="logo__word">가죽결</span><span class="logo__sub">부츠 수선소</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="/check/" aria-current="page">맡길 수 있나요</a>
+      <a href="/repairs/">수선 종류</a>
+      <a href="/cases/">수선 사례</a>
+      <a href="/care/">관리법</a>
+      <a href="/maker/">수선사</a>
+    </nav>
+    <a class="btn btn--accent btn--sm top__cta" href="/apply/">수선 맡기기 <span class="go" aria-hidden="true"></span></a>
+    <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="sr">메뉴 열기</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap menu__in" aria-label="전체 메뉴">
+    <a class="menu__a menu__a--home" href="/"><b>처음으로</b><span>버리지 말고, 밑창만 갈아요</span></a>
+    <a class="menu__a" href="/check/" aria-current="page"><b>맡길 수 있나요</b><span>내 부츠도 고칠 수 있는지</span></a>
+    <a class="menu__a" href="/repairs/"><b>수선 종류</b><span>닳은 곳마다 하는 일과 가격</span></a>
+    <a class="menu__a" href="/cases/"><b>수선 사례</b><span>비슷한 부츠는 이렇게 고쳤어요</span></a>
+    <a class="menu__a" href="/care/"><b>관리법</b><span>맡기기 전에 집에서 하는 관리</span></a>
+    <a class="menu__a" href="/maker/"><b>수선사</b><span>누가, 어떻게 고치나요</span></a>
+    <a class="btn btn--accent btn--lg menu__cta" href="/apply/">수선 맡기기</a>
+  </nav>
+</div>
+<!--/@top-->
+
+<main id="main">
+  <!-- 첫 화면: 채팅식 자가 확인 -->
+  <section class="phero" data-hero aria-labelledby="t">
+    <div class="wrap pwrap">
+      <p class="eyebrow">맡길 수 있나요</p>
+      <h1 id="t" class="phero__title">내 부츠도<br>고칠 수 있을까요?</h1>
+      <p class="phero__lead">밑창 둘레에 실이 보이면 대부분 돼요. 세 가지만 답하면 어떤 수선인지 알려 드려요.</p>
+      <div class="stage">
+        <div class="quiz" id="quiz" aria-live="polite">
+          <!-- 스크립트가 없으면 예시 대화가 그대로 보인다 -->
+          <p class="q-ask">밑창 둘레에 실밥이 보이나요?</p>
+          <p class="q-ans">네, 보여요</p>
+          <p class="q-ask">어디가 가장 닳았나요?</p>
+          <p class="q-ans">뒤축(굽)</p>
+          <div class="q-res">
+            <p class="q-res__label">확인 결과 · 예시 가격</p>
+            <p class="q-res__title">굽 교체로 충분해 보여요</p>
+            <p class="q-res__body">실로 박은 밑창이라 나중에 통창갈이도 할 수 있어요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 밑창 짜임 -->
+  <section class="psec" aria-labelledby="s1">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s1">01</span>
+      <h2 id="s1" class="psec__title" data-rv="s1">둘레에 실이 보이면<br>밑창을 통째로 갈아요</h2>
+      <p class="psec__lead" data-rv="s1">실로 박은 밑창(굿이어웰트)은 실만 풀면 떼어 낼 수 있어요. 본드로 붙인 밑창은 굽과 앞바닥을 따로 갈아요.</p>
+      <div class="cons">
+        <article class="mcard" data-rv="cons">
+          <div class="cons__fig">
+            <svg viewBox="0 0 360 200" role="img" aria-label="실로 박은 밑창 단면: 가죽과 밑창 사이에 가죽 띠(웰트)를 대고 실로 꿰매 이었다">
+              <path d="M84 132 C84 64 120 34 180 34 C240 34 276 64 276 132" fill="#fff" stroke="#0E1726" stroke-width="5" stroke-linecap="round"/>
+              <rect x="80" y="127" width="200" height="11" rx="2" fill="#D9DCE2"/>
+              <rect x="50" y="125" width="42" height="15" rx="3" fill="#FFC7B2" stroke="#0E1726" stroke-width="3"/>
+              <rect x="268" y="125" width="42" height="15" rx="3" fill="#FFC7B2" stroke="#0E1726" stroke-width="3"/>
+              <rect x="90" y="140" width="180" height="12" fill="#E7DCC8"/>
+              <rect x="44" y="152" width="272" height="25" rx="6" fill="#2B2F36"/>
+              <path d="M66 118 V184 M294 118 V184" stroke="#EE5A24" stroke-width="4" stroke-dasharray="7 5" stroke-linecap="round"/>
+              <path d="M92 112 L102 136 M268 112 L258 136" stroke="#EE5A24" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="badge">통창갈이 돼요</span>
+          <h3 class="cons__t">실로 박은 밑창</h3>
+          <p class="cons__b">밑창 둘레를 보면 실밥이 한 땀씩 보여요. 워커·엔지니어 부츠에 많아요.</p>
+          <ul class="legend"><li style="--c:#FFC7B2">웰트(가죽 띠)</li><li style="--c:#EE5A24">실</li><li style="--c:#E7DCC8">코르크</li><li style="--c:#2B2F36">밑창</li></ul>
+        </article>
+        <article class="mcard" data-rv="cons">
+          <div class="cons__fig">
+            <svg viewBox="0 0 360 200" role="img" aria-label="본드로 붙인 밑창 단면: 가죽 끝을 안으로 접고 밑창을 접착제로 붙였다">
+              <path d="M84 140 C84 64 120 34 180 34 C240 34 276 64 276 140" fill="#fff" stroke="#0E1726" stroke-width="5" stroke-linecap="round"/>
+              <rect x="80" y="135" width="200" height="11" rx="2" fill="#D9DCE2"/>
+              <path d="M58 150 Q88 144 118 150 T178 150 T238 150 T302 150" stroke="#EE5A24" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <rect x="54" y="153" width="252" height="25" rx="6" fill="#2B2F36"/>
+            </svg>
+          </div>
+          <span class="badge badge--gray">굽·앞바닥만 갈아요</span>
+          <h3 class="cons__t">본드로 붙인 밑창</h3>
+          <p class="cons__b">둘레에 실이 없고 매끈해요. 가벼운 첼시·패션 부츠에 많아요.</p>
+          <ul class="legend"><li style="--c:#EE5A24">본드</li><li style="--c:#2B2F36">밑창</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 짜임별로 되는 수선 -->
+  <section class="psec" aria-labelledby="s2">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s2">02</span>
+      <h2 id="s2" class="psec__title" data-rv="s2">본드 밑창이어도<br>굽과 앞바닥은 갈아요</h2>
+      <p class="psec__lead" data-rv="s2">짜임에 따라 되는 수선이 달라요. 어느 쪽인지 몰라도 사진을 보면 저희가 먼저 알려 드려요.</p>
+      <div class="stage stage--narrow" data-rv="s2">
+        <div class="mcard">
+          <table class="mtable">
+            <caption>짜임별로 되는 수선</caption>
+            <thead><tr><th scope="col">수선</th><th scope="col">실로 박은 밑창</th><th scope="col">본드로 붙인 밑창</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">굽 교체<small>뒤축만 새로</small></th><td class="y">✓ 돼요</td><td class="y">✓ 돼요</td></tr>
+              <tr><th scope="row">앞 밑창 덧대기<small>앞바닥만 덧대기</small></th><td class="y">✓ 돼요</td><td class="y">✓ 돼요</td></tr>
+              <tr><th scope="row">웰트 실밥 다시 박기<small>둘레 실</small></th><td class="y">✓ 돼요</td><td class="n">해당 없음</td></tr>
+              <tr><th scope="row">통창갈이<small>밑창 전체</small></th><td class="y">✓ 돼요</td><td class="m">사진 보고 정해요</td></tr>
+              <tr><th scope="row">가죽·앞코·끈구멍<small>겉 손질</small></th><td class="y">✓ 돼요</td><td class="y">✓ 돼요</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 맡기는 부츠 -->
+  <section class="psec" aria-labelledby="s3">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s3">03</span>
+      <h2 id="s3" class="psec__title" data-rv="s3">이런 부츠를<br>많이 맡겨요</h2>
+      <p class="psec__lead" data-rv="s3">브랜드는 상관없어요. 가죽 부츠라면 대부분 봐 드려요.</p>
+      <ul class="tiles">
+        <li class="tile" data-rv="tiles" data-boot="worker"><span class="tile__n">01</span><h3 class="tile__t">워커</h3><p class="tile__b">끈을 발목까지 묶는 부츠예요.</p><p class="tile__f">많이 하는 수선 · <b>통창갈이, 굽</b></p></li>
+        <li class="tile" data-rv="tiles" data-boot="chelsea"><span class="tile__n">02</span><h3 class="tile__t">첼시 부츠</h3><p class="tile__b">옆에 고무 밴드가 있어 쑥 신는 부츠예요.</p><p class="tile__f">많이 하는 수선 · <b>굽 교체</b></p></li>
+        <li class="tile" data-rv="tiles" data-boot="engineer"><span class="tile__n">03</span><h3 class="tile__t">엔지니어 부츠</h3><p class="tile__b">끈 없이 버클로 조이는 긴 부츠예요.</p><p class="tile__f">많이 하는 수선 · <b>반창, 실밥</b></p></li>
+        <li class="tile" data-rv="tiles" data-boot="chukka"><span class="tile__n">04</span><h3 class="tile__t">처커 부츠</h3><p class="tile__b">끈구멍이 두세 개인 낮은 부츠예요.</p><p class="tile__f">많이 하는 수선 · <b>가죽 관리, 끈구멍</b></p></li>
+        <li class="tile" data-rv="tiles" data-boot="western"><span class="tile__n">05</span><h3 class="tile__t">웨스턴 부츠</h3><p class="tile__b">굽이 높고 앞코가 뾰족한 부츠예요.</p><p class="tile__f">많이 하는 수선 · <b>굽, 통창갈이</b></p></li>
+        <li class="tile" data-rv="tiles" data-boot="worker"><span class="tile__n">06</span><h3 class="tile__t">서비스 부츠</h3><p class="tile__b">앞코가 둥글고 매끈한 군화 모양이에요.</p><p class="tile__f">많이 하는 수선 · <b>앞코 복원</b></p></li>
+      </ul>
+      <div class="limits" data-rv="tiles"><b>맡기기 어려운 것</b><ul><li>고무 장화</li><li>밑창과 몸체가 한 덩어리인 운동화</li><li>겉이 벗겨진 합성 가죽</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 04 사진 세 장 -->
+  <section id="photos" class="psec" aria-labelledby="s4">
+    <div class="wrap pwrap">
+      <span class="num" data-rv="s4">04</span>
+      <h2 id="s4" class="psec__title" data-rv="s4">사진 세 장이면<br>저희가 판단해요</h2>
+      <p class="psec__lead" data-rv="s4">밝은 곳에서 신발을 바닥에 두고 찍어 주세요. 고칠 수 있는지와 가격을 답장으로 보내 드려요.</p>
+      <div class="stage stage--narrow" data-rv="s4">
+        <ol class="shots">
+          <li class="shot"><img src="/img/ph-heel.webp" width="320" height="320" loading="lazy" alt="예시 사진: 뒤에서 찍은 닳은 뒤축"><div><span class="shot__n">사진 1</span><h3 class="shot__t">뒤축</h3><p class="shot__b">뒤에서, 닳은 모서리가 보이게</p></div></li>
+          <li class="shot"><img src="/img/ph-welt.webp" width="320" height="320" loading="lazy" alt="예시 사진: 옆에서 가까이 찍은 밑창 둘레 실"><div><span class="shot__n">사진 2</span><h3 class="shot__t">밑창 둘레</h3><p class="shot__b">옆에서 가까이, 실이 보이게</p></div></li>
+          <li class="shot"><img src="/img/ph-toe.webp" width="320" height="320" loading="lazy" alt="예시 사진: 위에서 찍은 긁힌 앞코"><div><span class="shot__n">사진 3</span><h3 class="shot__t">앞코</h3><p class="shot__b">위에서, 긁힌 곳이 보이게</p></div></li>
+        </ol>
+        <p class="stage__foot"><span class="pill">세 장이면 충분해요</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 끝 -->
+  <section class="endcta" aria-labelledby="e">
+    <div class="wrap pwrap">
+      <h2 id="e" class="psec__title" data-rv="end">내 부츠로<br>확인해 볼까요?</h2>
+      <div class="btns" data-dock-hide data-rv="end">
+        <a class="btn btn--accent" href="/apply/">사진 보내고 견적 받기</a>
+        <a class="endcta__sub" href="/#quote">견적서부터 써 보기 <span class="go" aria-hidden="true"></span></a>
+      </div>
+      <div class="next">
+        <a class="next__card" href="/repairs/" data-rv="end"><div><span>얼마나 드나요?</span><b>수선 종류와 가격 보기</b></div><i class="go" aria-hidden="true"></i></a>
+        <a class="next__card" href="/cases/" data-rv="end"><div><span>어떻게 바뀌나요?</span><b>수선 사례 보기</b></div><i class="go" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!--@foot-->
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__col foot__col--brand">
+      <p class="foot__brand">가죽결 <span>부츠 수선소</span></p>
+      <p class="foot__desc">닳은 건 밑창이에요. 부츠·워커 굽 교체와 통창갈이를 사진으로 먼저 봐 드려요.</p>
+    </div>
+    <nav class="foot__col" aria-label="꼬리말 메뉴">
+      <p class="foot__h">메뉴</p>
+      <a href="/">처음으로</a><a href="/check/">맡길 수 있나요</a><a href="/repairs/">수선 종류</a><a href="/cases/">수선 사례</a><a href="/care/">관리법</a><a href="/maker/">수선사</a><a href="/apply/">수선 맡기기</a>
+    </nav>
+    <div class="foot__col">
+      <p class="foot__h">수선소</p>
+      <p>받는 방법 · 택배 (왕복 택배비 포함)</p>
+      <p>답장 · 평일 10시~18시</p>
+      <p>작업 기간 · 보통 4~10일</p>
+      <p>전화·주소 · 가상 공방이라 없어요</p>
+    </div>
+  </div>
+  <div class="wrap foot__bottom">
+    <p>이 사이트는 웹 연출을 연습하려고 만든 <b>가상의 수선소</b>예요. 가격·기간·사례·수선사 소개는 예시이고, 신청해도 실제로 접수되지 않아요. 그림은 모두 코드(SVG)로 그렸어요.</p>
+  </div>
+</footer>
+<!--/@foot-->
+<!--@dock-->
+<div class="dock" id="dock">
+  <form class="dock__form" id="dock-form" novalidate>
+    <div class="dock__who">
+      <p><b>사진으로 먼저 견적 받기</b><span>답장은 문자로 와요</span></p>
+    </div>
+    <div class="dock__fields">
+      <label class="sr" for="dock-kind">부츠 종류</label>
+      <div class="select">
+        <select id="dock-kind">
+          <option value="">부츠 종류</option>
+          <option>워커 (끈 부츠)</option>
+          <option>첼시 부츠</option>
+          <option>엔지니어 부츠</option>
+          <option>잘 모르겠어요</option>
+        </select>
+      </div>
+      <label class="sr" for="dock-phone">휴대폰 번호</label>
+      <input id="dock-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="휴대폰 번호" aria-describedby="dock-msg">
+    </div>
+    <button class="btn btn--accent dock__go" type="submit">견적 받기</button>
+    <button class="btn btn--accent dock__open" type="button" data-open-apply>견적 받기</button>
+    <p class="dock__msg" id="dock-msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<!--/@dock-->
+<script src="/data.js"></script>
+<script src="/common.js"></script>
+<script src="/sub.js"></script>
+</body>
+</html>

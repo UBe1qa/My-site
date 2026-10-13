@@ -3,7 +3,10 @@ from playwright.sync_api import sync_playwright
 from PIL import Image, ImageEnhance
 SAT = 0.65   # 2판: 갈색이 화면을 덮지 않게 채도를 낮춘다(제3자 미감 피드백 '색 구조')
 art=pathlib.Path(__file__).resolve().parent/'art'; out=pathlib.Path(__file__).resolve().parent.parent/'img'
-names=['hero-wide','hero-tall','close-wide','close-tall','close-wide-worn','close-tall-worn','ba-worn','ba-new']
+names=['hero-wide','hero-tall','close-wide','close-tall','close-wide-worn','close-tall-worn','ba-worn','ba-new',
+       'heel-wide','heel-wide-worn','heel-tall','heel-tall-worn']
+import sys
+if len(sys.argv) > 1: names = sys.argv[1:]   # 이름을 주면 그것만 굽는다
 with sync_playwright() as p:
     b=p.chromium.launch()
     for n in names:
