@@ -1,0 +1,128 @@
+{
+  "_about": "공식 출처에서 확인한 사실만 둔다. 화면·글은 여기서 꺼내 쓴다. 값 / 출처 / 확인한 날 / 원문 요지 / 확인 못 한 것.",
+  "chrome_throttling": {
+    "checked": "2026-10-14",
+    "url": "https://developer.chrome.com/blog/timer-throttling-in-chrome-88",
+    "label": "Chrome for Developers: Heavy throttling of chained JS timers beginning in Chrome 88",
+    "verified": [
+      "숨은 페이지라도 최근 30초 안에 소리를 냈으면 타이머를 거의 늦추지 않는다(조용한 소리 트랙은 치지 않음).",
+      "그렇지 않은 숨은 페이지의 타이머는 1초에 한 번씩 몰아서 확인한다(이어 건 타이머 5번 미만이거나 숨은 지 5분 미만일 때).",
+      "숨은 지 5분이 넘고, 이어 건 타이머가 5번 이상이고, 30초 넘게 조용하고, WebRTC를 안 쓰면 1분에 한 번만 확인한다(Chrome 88부터)."
+    ],
+    "not_verified": [
+      "Safari·Firefox의 같은 규칙(숫자)은 확인하지 않았다."
+    ]
+  },
+  "page_lifecycle": {
+    "checked": "2026-10-14",
+    "url": "https://developer.chrome.com/docs/web-platform/page-lifecycle-api",
+    "label": "Chrome for Developers: Page Lifecycle API",
+    "verified": [
+      "브라우저는 배터리·CPU·데이터를 아끼려고 페이지를 '얼린다'(frozen). 얼어 있는 동안 자바스크립트 타이머는 돌지 않는다.",
+      "휴대폰에서 다른 앱으로 가면 visibilitychange(숨음)가 일어난다. 페이지는 얼려지거나 버려질(discarded) 수 있다."
+    ],
+    "not_verified": [
+      "휴대폰 브라우저마다 몇 초 뒤에 얼리는지는 확인하지 않았다."
+    ]
+  },
+  "wake_lock": {
+    "checked": "2026-10-14",
+    "url": "https://github.com/mdn/browser-compat-data/blob/main/api/WakeLock.json",
+    "label": "MDN browser-compat-data: WakeLock",
+    "verified": [
+      "Screen Wake Lock 지원 시작: Chrome 84, Firefox 126, Safari 16.4, iOS Safari 18.4 (Edge·안드로이드 Chrome·삼성 인터넷은 Chrome과 같음)."
+    ]
+  },
+  "notification": {
+    "checked": "2026-10-14",
+    "url": "https://github.com/mdn/browser-compat-data/blob/main/api/Notification.json",
+    "label": "MDN browser-compat-data: Notification",
+    "verified": [
+      "안드로이드 Chrome·삼성 인터넷은 페이지에서 바로 알림(new Notification)을 띄울 수 없고 서비스 워커로만 된다. iOS는 홈 화면에 추가한 웹앱에서만 된다."
+    ],
+    "use": "알림은 컴퓨터 브라우저에서만 켤 수 있게 한다."
+  },
+  "dst_us": {
+    "checked": "2026-10-14",
+    "url": "https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst",
+    "label": "NIST: Daylight Saving Time",
+    "verified": [
+      "미국 서머타임은 3월 둘째 일요일 새벽 2시에 시작(2시→3시), 11월 첫째 일요일 새벽 2시에 끝난다(2시→1시).",
+      "하와이, 아메리칸사모아, 괌, 푸에르토리코, 버진아일랜드, 애리조나(나바호 보호구역 제외)는 서머타임을 하지 않는다."
+    ]
+  },
+  "dst_uk": {
+    "checked": "2026-10-14",
+    "url": "https://www.gov.uk/when-do-the-clocks-change",
+    "label": "GOV.UK: When do the clocks change?",
+    "verified": [
+      "영국: 3월 마지막 일요일 새벽 1시에 1시간 앞으로, 10월 마지막 일요일 새벽 2시에 1시간 뒤로. 2026년 3월 29일·10월 25일, 2027년 3월 28일·10월 31일."
+    ]
+  },
+  "dst_nsw": {
+    "checked": "2026-10-14",
+    "url": "https://www.nsw.gov.au/about-nsw/daylight-saving",
+    "label": "NSW Government: Daylight saving",
+    "verified": [
+      "시드니(NSW): 2026년 10월 4일 새벽 2시(AEST)에 시작, 2027년 4월 4일 새벽 3시(AEDT)에 끝."
+    ]
+  },
+  "dst_nz": {
+    "checked": "2026-10-14",
+    "url": "https://www.govt.nz/browse/recreation-and-the-environment/daylight-saving/",
+    "label": "New Zealand Government: Daylight saving",
+    "verified": [
+      "뉴질랜드: 9월 마지막 일요일 새벽 2시 시작, 4월 첫째 일요일 새벽 3시 끝. 2026년 9월 27일 시작, 2027년 4월 4일 끝, 2027년 9월 26일 시작, 2028년 4월 2일 끝."
+    ]
+  },
+  "tzdb": {
+    "use": "도시별 시차·서머타임 바뀌는 시각은 브라우저의 시간대 자료(IANA tz database)로 계산한다. 시험은 파이썬 zoneinfo 값과 대조한다. 글에는 '계산하면'이라고 밝힌다.",
+    "url": "https://www.iana.org/time-zones",
+    "label": "IANA Time Zone Database"
+  },
+  "tz_2026": {
+    "checked": "2026-10-14",
+    "url": "https://data.iana.org/time-zones/tzdb/NEWS",
+    "label": "IANA Time Zone Database NEWS (2026b–2026e)",
+    "links": [
+      [
+        "IANA tz 2026e release",
+        "https://www.iana.org/time-zones/releases/2026e"
+      ],
+      [
+        "The Weather Network: B.C. ends time changes",
+        "https://www.theweathernetwork.com/en/news/lifestyle/community/bc-ends-time-change"
+      ],
+      [
+        "The Weather Network: Manitoba adopts permanent daylight time",
+        "https://www.theweathernetwork.com/en/news/weather/seasonal/manitoba-adopts-permanent-daylight-time"
+      ],
+      [
+        "Hespress: Maroc, retour à l'heure GMT à partir du 20 septembre",
+        "https://fr.hespress.com/480202-maroc-le-retour-a-lheure-gmt-officiellement-acte-a-partir-du-20-septembre.html"
+      ]
+    ],
+    "verified": [
+      "브리티시컬럼비아(밴쿠버): 2026-03-08 앞당긴 뒤로 더 바꾸지 않고 늘 UTC−7(2026b). 법으로는 2026-03-09부터, tz 자료는 2026-11-01 02:00에 이름만 MST로 바꿈(시차는 그대로).",
+      "앨버타(캘거리·에드먼턴): 늘 UTC−6(2026c, 법으로 2026-06-18).",
+      "노스웨스트 준주(이누빅): 늘 UTC−6(2026d).",
+      "매니토바(위니펙): 늘 UTC−5(2026e, 법으로 2026-10-31).",
+      "모로코(카사블랑카): 2026-09-20 02:00에 서머타임을 끝내고 늘 UTC+0(2026c)."
+    ],
+    "use": "core.js OT.PATCH. 브라우저의 시간대 자료가 낡았으면(이 다섯 곳의 2027년 오프셋이 다르면) 세계 시간 화면에 알리고 표 값으로 계산한다.",
+    "not_verified": [
+      "온타리오(토론토)·퀘벡(몬트리올)은 tz 자료에 바뀜이 없다(2026e까지). 정부 발표는 따로 보지 않았다."
+    ]
+  },
+  "lap_split": {
+    "checked": "2026-10-14",
+    "url": "https://support.casio.com/global/en/wat/manual/5512_en/KPNDSYgycjqbww.html",
+    "label": "CASIO EDIFICE Module No. 5512 manual",
+    "verified": [
+      "split time = 시작부터 경기 중 어느 지점까지 지난 시간, lap time = 특정 랩 동안 지난 시간(카시오 설명서)."
+    ],
+    "not_verified": [
+      "모든 제조사·종목이 같은 말을 쓰는지는 확인하지 않았다(수영·육상에서는 구간 기록을 split이라 부르기도 한다는 것은 출처 없음 → 쓰지 않음)."
+    ]
+  }
+}
