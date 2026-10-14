@@ -1,0 +1,15 @@
+# 스타일·스크립트는 페이지가 내용 지문을 붙여 부른다(/assets/app.js?v=…). 파일이 바뀌면 주소가 바뀌므로 오래 저장해 둬도 된다
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+# 틀 문구 글자 모양 조각(내용이 바뀌면 base.json 주소의 ?v= 가 바뀐다)
+/assets/glyphs/*
+  Cache-Control: public, max-age=604800
+/assets/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 파일 종류를 브라우저가 짐작해서 바꾸지 않게 + 다른 사이트로 넘길 때 주소 전체를 보내지 않게
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

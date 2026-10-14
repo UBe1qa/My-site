@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR코드 스캐너 — 열기 전에 주소부터 확인 | 오래QR</title>
+<meta name="description" content="카메라나 사진으로 QR코드를 읽고, 열기 전에 실제 주소와 위험 신호(짧은 주소·암호화 없음·이상한 도메인)를 먼저 보여 줘요. 화면은 이 기기 안에서만 처리해요.">
+<meta name="theme-color" content="#f4f7f5">
+<link rel="canonical" href="https://qr.lumenlab.page/ko/scan/">
+<link rel="alternate" hreflang="en" href="https://qr.lumenlab.page/scan/">
+<link rel="alternate" hreflang="ko" href="https://qr.lumenlab.page/ko/scan/">
+<link rel="alternate" hreflang="x-default" href="https://qr.lumenlab.page/scan/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QR코드 스캐너 — 열기 전에 주소부터 확인 | 오래QR">
+<meta property="og:description" content="카메라나 사진으로 QR코드를 읽고, 열기 전에 실제 주소와 위험 신호(짧은 주소·암호화 없음·이상한 도메인)를 먼저 보여 줘요. 화면은 이 기기 안에서만 처리해요.">
+<meta property="og:url" content="https://qr.lumenlab.page/ko/scan/">
+<meta property="og:site_name" content="오래QR">
+<meta property="og:image" content="https://qr.lumenlab.page/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=9aa7447b">
+<script>(function(d){var h=d.documentElement,s={};try{s=JSON.parse(localStorage.getItem('staycode.set')||'{}')||{}}catch(e){}var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,fx=rm?0:(s.fx==null?2:s.fx);h.classList.add('fx'+fx);if(rm)h.classList.add('rm');if(s.theme==='dark'){h.setAttribute('data-theme','dark');var m=d.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#121815')}else h.setAttribute('data-theme','light')})(document)</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "오래QR QR코드 스캐너", "url": "https://qr.lumenlab.page/ko/scan/", "description": "카메라나 사진으로 QR코드를 읽고, 열기 전에 실제 주소와 위험 신호(짧은 주소·암호화 없음·이상한 도메인)를 먼저 보여 줘요. 화면은 이 기기 안에서만 처리해요.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "inLanguage": "ko", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/", "email": "woxocoso@gmail.com"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "QR코드로 사기를 당할 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "네. 가짜 주소로 보내 로그인·결제 정보를 받아 가는 '큐싱'이 있어요. 그래서 이 스캐너는 주소를 바로 열지 않고, 실제로 가는 도메인과 위험 신호를 먼저 보여 줘요. 모르는 곳에서 본 QR이 로그인·결제를 요구하면 열지 마세요."}}, {"@type": "Question", "name": "어떤 신호에 경고하나요?", "acceptedAnswer": {"@type": "Answer", "text": "암호화 없는 http, 짧은 주소 서비스, 도메인 대신 IP 주소, 모양이 비슷한 글자로 꾸민 퓨니코드(xn--)나 %로 바꿔 쓴 도메인, 주소 앞부분에 @가 들어가 실제 도메인이 숨은 경우, 앞부분을 다른 사이트 이름처럼 꾸민 주소, 로그인·결제·인증 같은 낱말, 060 같은 유료 번호예요. 경고가 없다고 안전하다는 뜻은 아니에요."}}, {"@type": "Question", "name": "카메라 화면이 어디로 가나요?", "acceptedAnswer": {"@type": "Answer", "text": "어디로도 가지 않아요. 카메라 화면과 올린 사진은 이 기기 브라우저 안에서만 읽고, 저장하거나 보내지 않아요."}}, {"@type": "Question", "name": "카메라가 안 켜져요.", "acceptedAnswer": {"@type": "Answer", "text": "카메라 권한을 허용해야 해요. 주소창 옆 자물쇠 아이콘에서 카메라를 허용하거나, 사진·스크린샷을 올려서 읽어도 돼요."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body class="is-tool">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="/ko/"><svg class="lg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect class="lg-l" x="1" y="1" width="26" height="26" rx="7"/><path class="lg-s" d="M6 6h16v10l-6 6H6z"/><path class="lg-c" d="M22 16l-6 6v-4.5a1.5 1.5 0 0 1 1.5-1.5z"/><rect class="lg-q" x="8.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="15.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="8.5" y="15.5" width="4" height="4" rx="1"/></svg><span>오래QR</span></a>
+    <nav class="nav" aria-label="주요 메뉴"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/" aria-current="page">스캐너</a></nav>
+    <div class="top-r">
+      <a class="lang" href="/scan/" lang="en" hreflang="en">English</a>
+      <details class="setting"><summary aria-label="화면 설정" title="화면 설정"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8.2 4.6.1-1.1-.1-1.1 2-1.6-2-3.4-2.4 1a8 8 0 0 0-1.9-1.1L15.5 3h-4l-.4 2.7a8 8 0 0 0-1.9 1.1l-2.4-1-2 3.4 2 1.6-.1 1.1.1 1.1-2 1.6 2 3.4 2.4-1a8 8 0 0 0 1.9 1.1l.4 2.7h4l.4-2.7a8 8 0 0 0 1.9-1.1l2.4 1 2-3.4z"/></svg></summary>
+        <div class="set-pop"><p class="set-row"><span>이펙트</span><span class="seg" role="group" aria-label="이펙트" id="set-fx"><button type="button" data-fx="0" aria-pressed="false">끔</button><button type="button" data-fx="1" aria-pressed="false">가볍게</button><button type="button" data-fx="2" aria-pressed="false">화려하게</button></span></p>
+        <p class="set-row"><span>화면</span><span class="seg" role="group" aria-label="화면" id="set-theme"><button type="button" data-theme="light" aria-pressed="false">밝게</button><button type="button" data-theme="dark" aria-pressed="false">어둡게</button></span></p>
+        <p class="set-note" id="set-note">기기에서 '동작 줄이기'가 켜져 있어 이펙트를 껐어요.</p></div>
+      </details>
+    </div>
+  </div>
+</header>
+<main id="main">
+<section id="tool" class="tool scan" aria-labelledby="h1">
+  <div class="wrap t-head"><h1 id="h1">QR코드 스캐너</h1><p class="why">읽은 주소를 바로 열지 않고 어디로 가는지 먼저 크게 보여 줘요. 카메라 화면은 이 기기 안에서만 처리해요.</p></div>
+  <noscript><p class="wrap nojs">이 도구는 자바스크립트가 켜져 있어야 돼요.</p></noscript>
+  <div class="wrap s-grid">
+    <div class="s-in">
+      <div class="s-btns"><button type="button" class="btn main" id="s-cam">카메라로 찍기</button>
+        <label class="btn ghost file"><input type="file" id="s-file" accept="image/*" class="sr"><span>사진·스크린샷 올리기</span></label>
+        <button type="button" class="btn ghost" id="s-paste">붙여넣기</button></div>
+      <p class="hint">복사한 그림은 Ctrl+V(⌘V)로도 붙여 넣을 수 있어요.</p>
+      <div class="cam" id="s-camw" hidden><video id="s-video" playsinline muted></video><span class="cam-box" aria-hidden="true"></span><button type="button" class="btn ghost sm cam-stop" id="s-stop">카메라 끄기</button><p class="cam-t" id="s-camt">QR코드를 네모 안에 맞춰 주세요.</p></div>
+      <p class="hint safe">카메라는 누른 뒤에만 켜고, 화면은 이 기기 안에서만 읽어요. 어디에도 보내지 않아요.</p>
+      <p class="msg" id="s-msg" role="status" aria-live="polite"></p>
+    </div>
+    <div class="s-out" id="s-out">
+      <div class="liner small s-liner" id="s-empty" aria-hidden="true"><span class="s-ph"></span></div>
+      <div class="s-res" id="s-res" hidden></div>
+    </div>
+  </div>
+</section>
+<div class="wrap below">
+<section class="sec faq" aria-labelledby="faq-h"><h2 id="faq-h">자주 묻는 질문</h2><details><summary>QR코드로 사기를 당할 수 있나요?</summary><p>네. 가짜 주소로 보내 로그인·결제 정보를 받아 가는 &#x27;큐싱&#x27;이 있어요. 그래서 이 스캐너는 주소를 바로 열지 않고, 실제로 가는 도메인과 위험 신호를 먼저 보여 줘요. 모르는 곳에서 본 QR이 로그인·결제를 요구하면 열지 마세요.</p></details><details><summary>어떤 신호에 경고하나요?</summary><p>암호화 없는 http, 짧은 주소 서비스, 도메인 대신 IP 주소, 모양이 비슷한 글자로 꾸민 퓨니코드(xn--)나 %로 바꿔 쓴 도메인, 주소 앞부분에 @가 들어가 실제 도메인이 숨은 경우, 앞부분을 다른 사이트 이름처럼 꾸민 주소, 로그인·결제·인증 같은 낱말, 060 같은 유료 번호예요. 경고가 없다고 안전하다는 뜻은 아니에요.</p></details><details><summary>카메라 화면이 어디로 가나요?</summary><p>어디로도 가지 않아요. 카메라 화면과 올린 사진은 이 기기 브라우저 안에서만 읽고, 저장하거나 보내지 않아요.</p></details><details><summary>카메라가 안 켜져요.</summary><p>카메라 권한을 허용해야 해요. 주소창 옆 자물쇠 아이콘에서 카메라를 허용하거나, 사진·스크린샷을 올려서 읽어도 돼요.</p></details></section>
+<section class="sec" aria-labelledby="tools-h"><h2 id="tools-h">다른 도구</h2><ul class="cards"><li><a href="/ko/"><b>QR코드 만들기</b><span>URL·글·메일·일정 등 열 가지</span></a></li><li><a href="/ko/wifi/"><b>와이파이 QR</b><span>찍으면 바로 연결</span></a></li><li><a href="/ko/vcard/"><b>명함 QR</b><span>찍으면 연락처에 추가</span></a></li><li><a href="/ko/bulk/"><b>대량 만들기</b><span>목록·CSV로 최대 1,000개</span></a></li></ul></section>
+
+</div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" id="lumen" href="https://lumenlab.page/"><span class="lsheet" aria-hidden="true"><span class="ls" style="--i:0"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="19" rx="3" class="lk-a"/><rect x="5" y="7" width="22" height="6" rx="3" class="lk-b"/><rect x="10" y="17" width="4" height="4" rx="1" class="lk-b"/></svg></span><span class="ls" style="--i:1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" class="lk-a"/><path d="M16 16V5a11 11 0 0 1 9.5 5.5z" class="lk-b"/><circle cx="16" cy="16" r="2.5" class="lk-c"/></svg></span><span class="ls" style="--i:2"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M9 13h14M9 17h10M9 21h6" class="lk-l"/></svg></span><span class="ls" style="--i:3"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3" class="lk-a"/><rect x="11" y="17" width="10" height="3" rx="1.5" class="lk-b"/></svg></span><span class="ls" style="--i:4"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M10 12l2.5 8 3.5-8 3.5 8 2.5-8M9 15h14" class="lk-l"/></svg></span><span class="ls" style="--i:5"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="16" rx="3" class="lk-a"/><path d="M11 15l3.5 3.5L21 12" class="lk-l"/><path d="M12 27h8" class="lk-l"/></svg></span><span class="ls-gap"></span></span><span class="lumen-t"><b>루멘랩의 다른 무료 도구</b><span>달력, 뽑기, 글자수, 타자, 급여 계산…</span></span><span class="lgo" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/">스캐너</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <p class="tm">QR 코드는 (주)덴소웨이브의 등록 상표입니다.</p>
+  <small>© 2026 Lumen Lab · 오래QR</small>
+</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div><script type="application/json" id="qr-site">{"lang": "ko", "other": "/scan/", "otherLang": "en", "offer": "English version", "bar": "This page is also in English.", "close": "닫기"}</script>
+<script type="application/json" id="qr-cfg">{"lang": "ko", "page": "scan", "S": {"cam": "카메라로 찍기", "cam_stop": "카메라 끄기", "file": "사진·스크린샷 올리기", "paste": "붙여넣기", "paste_note": "복사한 그림은 Ctrl+V(⌘V)로도 붙여 넣을 수 있어요.", "cam_note": "카메라는 누른 뒤에만 켜고, 화면은 이 기기 안에서만 읽어요. 어디에도 보내지 않아요.", "waiting": "QR코드를 네모 안에 맞춰 주세요.", "none": "QR코드를 찾지 못했어요. 더 가까이, 밝은 곳에서 다시 해 보세요.", "cam_denied": "카메라를 쓸 수 없어요. 권한을 허용하거나 사진을 올려 주세요.", "cam_none": "이 기기에서 카메라를 찾지 못했어요. 사진을 올려 주세요.", "paste_none": "붙여 넣을 그림이 없어요. 그림을 복사한 뒤 다시 눌러 주세요.", "paste_denied": "이 브라우저는 붙여넣기 단추를 막아요. Ctrl+V(⌘V)로 붙여 넣어 주세요.", "res_h": "읽은 내용", "kind": "종류", "open": "이 주소 열기", "copy": "복사", "copied": "복사했어요", "again": "다시 찍기", "goes": "실제로 가는 곳", "full": "전체 주소", "safe_none": "눈에 띄는 위험 신호는 없어요. 그래도 로그인·결제를 요구하면 주소를 한 번 더 보세요.", "flags": {"http": "암호화가 없는 http 주소예요. 입력한 정보가 그대로 보일 수 있어요.", "short": "짧은 주소 서비스예요. 실제로 어디로 가는지 열기 전에는 알 수 없어요.", "ip": "도메인 대신 IP 주소예요. 정상 서비스는 보통 이렇게 쓰지 않아요.", "puny": "퓨니코드(xn--) 도메인이에요. 비슷하게 생긴 글자로 다른 사이트를 흉내 낼 수 있어요.", "at": "주소 앞부분에 @가 있어요. @ 앞은 꾸밈이고, 실제로는 @ 뒤 도메인으로 가요.", "words": "로그인·결제·인증 같은 낱말이 들어 있어요. 이런 페이지는 주소를 꼭 확인하세요.", "port": "드문 포트 번호가 붙어 있어요.", "pct": "도메인에 %로 바꿔 쓴 글자가 있어요. 눈에 보이는 이름과 실제로 가는 곳이 다를 수 있어요.", "lookalike": "앞부분이 다른 사이트 이름처럼 꾸며져 있어요. 실제로 가는 곳은 위에 크게 쓴 도메인이에요.", "paid": "060 같은 유료 정보 서비스 번호예요. 걸거나 보내면 요금이 붙을 수 있어요.", "blocked": "열면 안 되는 종류(스크립트·파일 등)라 열기 단추를 두지 않았어요."}, "t": {"url": "주소(URL)", "wifi": "와이파이", "vcard": "연락처", "email": "이메일", "sms": "문자", "tel": "전화", "geo": "위치", "event": "일정", "text": "글", "blocked": "열지 않는 내용"}, "wifi_ssid": "이름", "wifi_pass": "비밀번호", "show": "보기", "hide": "가리기", "wifi_auth": "보안", "wifi_hidden": "숨긴 네트워크", "yes": "예", "v_name": "이름", "v_org": "회사", "v_title": "직함", "v_tel": "전화", "v_email": "이메일", "v_url": "웹", "v_adr": "주소", "v_note": "메모", "save_vcf": "연락처 파일(.vcf) 받기", "e_title": "일정", "e_start": "시작", "e_end": "끝", "e_loc": "장소", "save_ics": "캘린더 파일(.ics) 받기", "m_to": "받는 사람", "m_sub": "제목", "m_body": "내용", "s_phone": "번호", "s_msg": "내용", "g_open": "구글 지도에서 열기", "open_app": "앱으로 열기", "raw": "원래 글 보기"}, "worker": "/assets/scan-worker.js?v=31cd95cd"}</script>
+<script src="/assets/qr-parse.js?v=81ba709e"></script>
+<script src="/assets/verify.js?v=ac463a70"></script>
+<script src="/assets/scan.js?v=27d95101"></script>
+<script src="/assets/site.js?v=362d987e"></script>
+</body>
+</html>

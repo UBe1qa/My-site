@@ -1,0 +1,11 @@
+_dev
+tests
+CLAUDE.md
+wrangler.jsonc
+.assetsignore
+.deploy-actions
+.wrangler
+.DS_Store
+node_modules
+__pycache__
+*.py

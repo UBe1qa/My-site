@@ -33,7 +33,7 @@
     /* gen:start */
     sh_apps_n: "2 apps",
     sh_apps_names: "Owlight · SetNote",
-    sh_tools_n: "9 tools",
+    sh_tools_n: "10 tools",
     sh_tools_names: "Calculate · Text and files · Devices, practice and groups",
     c_owlight_kind: "Menu bar app for macOS <span aria-hidden=\"true\">·</span> <span class=\"nw\">macOS 14 or later</span>",
     c_owlight_name: "Owlight",
@@ -63,6 +63,8 @@
     c_onesheet_name: "Onesheet",
     c_kankan_line: "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits.",
     c_kankan_name: "Kankan",
+    c_staycode_line: "Free QR code generator with logos, frames and print files. No sign-up, never expires, and it checks that your code scans.",
+    c_staycode_name: "Staycode",
     g_play_name: "Devices, practice and groups",
     g_play_line: "Test your gear, practice typing and pick fairly.",
     c_pickboard_line: "Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result.",
@@ -82,6 +84,7 @@
     f_checkbench: "Checkbench",
     f_todok: "Todok",
     f_takehome: "Takehome Korea",
+    f_staycode: "Staycode",
     backHome: "Back to Lumen Lab",
     /* gen:end */
     owlTitle: 'Five switches in your menu bar',

@@ -1,0 +1,5 @@
+# 검색엔진과 AI 검색·답변 서비스 모두 허용 (AI 답변에 출처로 나오게)
+User-agent: *
+Allow: /
+
+Sitemap: https://qr.lumenlab.page/sitemap.xml
