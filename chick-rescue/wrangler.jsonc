@@ -1,0 +1,16 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'chick-rescue' 하나 (게임 '병아리 구조대' 소개 사이트)
+// 주소: https://chick-rescue.lumenlab.page (한국어 /, 영어 /en/). 서버 코드 없음, 이 폴더 파일이 그대로 사이트.
+// 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
+{
+  "name": "chick-rescue",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "chick-rescue.lumenlab.page", "custom_domain": true }
+  ]
+}

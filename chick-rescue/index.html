@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>병아리 구조대 — 동물 친구들과 병아리를 구하는 정렬 퍼즐</title>
+<meta name="description" content="튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.">
+<link rel="canonical" href="https://chick-rescue.lumenlab.page/">
+<link rel="alternate" hreflang="ko" href="https://chick-rescue.lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://chick-rescue.lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://chick-rescue.lumenlab.page/en/">
+<meta name="theme-color" content="#171B2B">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="병아리 구조대">
+<meta property="og:title" content="병아리 구조대 — 동물 친구들과 병아리를 구하는 정렬 퍼즐">
+<meta property="og:description" content="튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.">
+<meta property="og:url" content="https://chick-rescue.lumenlab.page/">
+<meta property="og:image" content="https://chick-rescue.lumenlab.page/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/head.woff2?v=bb276743" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/img/logo-ko.webp" as="image" fetchpriority="high">
+<link rel="stylesheet" href="/assets/site.css?v=102e811a">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "병아리 구조대", "url": "https://chick-rescue.lumenlab.page/", "description": "튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.", "genre": "Puzzle", "gamePlatform": "Android", "inLanguage": ["ko", "en", "ja"], "image": "https://chick-rescue.lumenlab.page/og.jpg", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "언제, 어디서 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요."}}, {"@type": "Question", "name": "아이폰에서도 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요."}}, {"@type": "Question", "name": "인터넷 없이 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "네. 게임은 인터넷 연결 없이 돌아가요."}}, {"@type": "Question", "name": "진행 기록은 어디에 저장되나요?", "acceptedAnswer": {"@type": "Answer", "text": "휴대폰 안에 저장돼요. 계정이나 클라우드 저장은 없어요."}}, {"@type": "Question", "name": "내 정보를 모으나요?", "acceptedAnswer": {"@type": "Answer", "text": "지금 만든 게임은 정보를 모으거나 보내지 않아요. 출시할 때 광고를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요."}}, {"@type": "Question", "name": "어떤 언어로 할 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "한국어, 영어, 일본어예요."}}, {"@type": "Question", "name": "무서운 장면이나 뽑기가 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "없어요. 싸우거나 무서운 장면이 없고, 돈을 내고 무작위로 뽑는 아이템도 없어요. 연령 등급은 출시할 때 받아요."}}]}</script>
+</head>
+<body>
+<a class="skip" href="#try">맛보기 판으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon-256.webp" width="32" height="32" alt="">병아리 구조대</a>
+    <a class="lang" href="/en/" hreflang="en" lang="en" aria-label="Read this page in English">English</a>
+  </div>
+</header>
+<main>
+<section class="hero" id="try" aria-labelledby="h1">
+  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-forest.webp" alt="" width="1080" height="1920" fetchpriority="low"></div>
+  <figure class="hero-side l" aria-hidden="true"><img src="/img/shot-home_ko.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>실제 게임 첫 화면</figcaption></figure>
+  <figure class="hero-side r" aria-hidden="true"><img src="/img/shot-level_clear_ko.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>판을 깨면 별을 받아요</figcaption></figure>
+  <div class="hero-col">
+    <img class="hero-logo" src="/img/logo-ko.webp" width="640" height="425" alt="병아리 구조대">
+    <h1 id="h1">동물 친구들을 옮겨 갇힌 병아리를 구하는 정렬 퍼즐</h1>
+    <div class="demo" id="demo">
+      <p class="demo-head"><span class="demo-count" aria-live="polite"></span></p>
+      <div class="nest" aria-hidden="true"></div>
+      <div class="board"><div class="pieces" aria-hidden="true"></div></div>
+      <p class="demo-tip" aria-live="polite"></p>
+      <div class="demo-ctrl">
+        <button type="button" class="btn btn-soft" data-act="undo">되돌리기</button>
+        <button type="button" class="btn btn-hint" data-act="hint">힌트</button>
+        <button type="button" class="btn btn-soft" data-act="restart">다시 하기</button>
+      </div>
+      <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
+        <h2 id="demo-done-h"></h2><p></p>
+        <button type="button" class="btn btn-play" data-act="next"></button>
+        <button type="button" class="btn btn-soft" data-act="real"></button>
+      </div>
+      <canvas class="fx" aria-hidden="true"></canvas>
+      <script type="application/json" id="demo-text">{"names": {"A": "빨강이", "B": "파랑이", "C": "노랑이", "c": "다람쥐", "b": "병아리"}, "empty": "비었어요", "tube": "튜브 {n}", "tip1": "튜브를 눌러 맨 위 친구를 옮겨 보세요. 병아리가 맨 위로 나오면 둥지로 날아가요.", "tip2": "다람쥐를 꾹 누르면 꼭대기까지 올라가요. 병아리 위를 비워 주세요.", "pick": "옮길 튜브를 누르세요. 비었거나 맨 위가 같은 친구인 튜브로 가요.", "go": "좋아요. 병아리 위에 있는 친구들을 치워 주세요.", "cant": "거기는 못 가요. 맨 위 친구가 같은 튜브나 빈 튜브로만 옮길 수 있어요.", "cantFull": "그 튜브는 꽉 찼어요. 한 튜브에 4칸까지 들어가요.", "cantSealed": "그 튜브는 이미 다 모아서 잠겼어요.", "climbTop": "다람쥐가 이미 맨 위예요.", "saved": "병아리가 둥지로 날아갔어요!", "count": "이동 {n}번 · 가장 적게 {min}번", "best": "가장 적은 수예요.", "doneTitle": "구했어요!", "done": "{n}번 만에 병아리를 구했어요.", "doneAllTitle": "맛보기 끝!", "doneAll": "{n}번 만에 구했어요. 실제 게임엔 무료로 하는 판만 1,440판이에요.", "next": "다음 판: 다람쥐 능력", "seeReal": "실제 게임 화면 보기", "again": "처음부터 다시", "hintPour": "‘여기서’ 튜브를 누른 다음 ‘여기로’ 튜브를 눌러 보세요.", "hintFrom": "여기서", "hintTo": "여기로", "hintClimb": "빛나는 다람쥐를 꾹 눌러 보세요.", "stuck": "더 풀 수 없어요. 되돌리기나 다시 하기를 눌러 주세요."}</script>
+    </div>
+    <p class="hero-status"><b>안드로이드 출시 준비 중</b> · 웹으로 옮긴 맛보기예요. <a href="#real">실제 게임 화면 보기</a></p>
+  </div>
+</section>
+
+<section class="sec" id="real" aria-labelledby="real-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">실제 게임 화면</span><h2 id="real-h">맛보기 말고, 진짜 게임은 이렇게 움직여요</h2><p>개발 중인 게임에서 병아리 구출 한 판을 처음부터 끝까지 푼 화면이에요. 함께 놓인 화면도 게임에서 그대로 찍었어요.</p></div>
+    <div class="real">
+      <div>
+        <div class="phone">
+          <video id="play-video" muted loop playsinline preload="none" poster="/img/play-ko-poster.webp" width="600" height="1300" aria-label="구출 판을 푸는 실제 게임 영상">
+            <source src="/img/play-ko.mp4" type="video/mp4">
+            <source src="/img/play-ko.webm" type="video/webm">
+          </video>
+        </div>
+        <p class="phone-cap">실제 플레이 13초 · 소리 없음</p>
+      </div>
+      <div class="shots" tabindex="0" aria-label="실제 게임 화면">
+        <figure class="shot"><img src="/img/shot-rescue_play_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="구출: 병아리만 꺼내면 끝, 다 정리하지 않아도 돼요"><figcaption><b>구출</b>병아리만 꺼내면 끝, 다 정리하지 않아도 돼요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-ability_use_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="능력: 사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요"><figcaption><b>능력</b>사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-classic_play_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="클래식: 능력 없이 같은 색끼리 모아요"><figcaption><b>클래식</b>능력 없이 같은 색끼리 모아요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-level_clear_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="판 깸: 적은 수로 깰수록 별이 많아요"><figcaption><b>판 깸</b>적은 수로 깰수록 별이 많아요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-stage_map_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="판 지도: 모드마다 16스테이지, 절반을 깨면 다음 스테이지가 열려요"><figcaption><b>판 지도</b>모드마다 16스테이지, 절반을 깨면 다음 스테이지가 열려요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-home_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="첫 화면: 모드 셋과 퍼즐 모음"><figcaption><b>첫 화면</b>모드 셋과 퍼즐 모음</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="friends" aria-labelledby="fr-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">열두 친구의 능력</span><h2 id="fr-h">꾹 누르면 능력을 써요. 능력을 써야 풀리는 판이 있어요</h2><p>같은 색끼리 옮기는 것만이 아니에요. 친구를 눌러 무슨 능력인지 보세요.</p></div>
+    <div class="abil">
+      <div>
+        <div class="friends"><button type="button" class="friend" data-k="squirrel" aria-pressed="true"><img src="/img/c-squirrel.webp" width="52" height="52" alt="" loading="lazy">다람쥐</button><button type="button" class="friend" data-k="frog" aria-pressed="false"><img src="/img/c-frog.webp" width="52" height="52" alt="" loading="lazy">개구리</button><button type="button" class="friend" data-k="otter" aria-pressed="false"><img src="/img/c-otter.webp" width="52" height="52" alt="" loading="lazy">해달</button><button type="button" class="friend" data-k="bat" aria-pressed="false"><img src="/img/c-bat.webp" width="52" height="52" alt="" loading="lazy">박쥐</button><button type="button" class="friend" data-k="octopus" aria-pressed="false"><img src="/img/c-octopus.webp" width="52" height="52" alt="" loading="lazy">문어</button><button type="button" class="friend" data-k="turtle" aria-pressed="false"><img src="/img/c-turtle.webp" width="52" height="52" alt="" loading="lazy">거북이</button><button type="button" class="friend" data-k="penguin" aria-pressed="false"><img src="/img/c-penguin.webp" width="52" height="52" alt="" loading="lazy">펭귄</button><button type="button" class="friend" data-k="mole" aria-pressed="false"><img src="/img/c-mole.webp" width="52" height="52" alt="" loading="lazy">두더지</button><button type="button" class="friend" data-k="owl" aria-pressed="false"><img src="/img/c-owl.webp" width="52" height="52" alt="" loading="lazy">부엉이</button><button type="button" class="friend" data-k="elephant" aria-pressed="false"><img src="/img/c-elephant.webp" width="52" height="52" alt="" loading="lazy">코끼리</button><button type="button" class="friend" data-k="lion" aria-pressed="false"><img src="/img/c-lion.webp" width="52" height="52" alt="" loading="lazy">사자</button><button type="button" class="friend" data-k="whale" aria-pressed="false"><img src="/img/c-whale.webp" width="52" height="52" alt="" loading="lazy">고래</button></div>
+        <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>다람쥐</h3><p>꾹 누르면 꼭대기까지 올라가요. 위 친구들은 한 칸씩 내려와요.</p></div></div>
+        <p class="abil-note">능력 모드에서 동물 친구가 나오는 판은 모두 능력을 써야 풀려요. 능력·구출 모드 1~4스테이지에서 스테이지마다 새 친구가 세 마리씩 나와요.</p>
+      </div>
+      <figure class="shot abil-shot"><img src="/img/shot-ability_use_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="능력: 사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요"><figcaption><b>능력</b>사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요</figcaption></figure>
+    </div>
+    <script type="application/json" id="friend-text">{"squirrel": ["다람쥐", "꾹 누르면 꼭대기까지 올라가요. 위 친구들은 한 칸씩 내려와요."], "frog": ["개구리", "꾹 누른 뒤 튜브를 고르면, 어디에 있든 그 튜브 맨 위로 뛰어가요. 빈 튜브나 맨 위가 개구리인 튜브로 갈 수 있어요."], "otter": ["해달", "꾹 누르면 바로 아래 친구와 자리를 바꿔요."], "bat": ["박쥐", "꾹 누르면 박쥐가 있는 튜브를 통째로 뒤집어요."], "octopus": ["문어", "맨 위에 있을 때 꾹 누르면 왼쪽 튜브 맨 위 친구를 자기 위로 끌어와요. 맨 왼쪽에서는 맨 오른쪽 튜브에서 끌어와요."], "turtle": ["거북이", "꾹 누르면 바닥까지 잠수해요. 아래 친구들은 한 칸씩 올라와요."], "penguin": ["펭귄", "맨 위에 있을 때 꾹 누르면 바로 오른쪽 튜브 맨 위로 미끄러져 가요. 그 튜브에 누가 있든 자리만 있으면 돼요. 맨 오른쪽에서는 첫 튜브로 가요."], "mole": ["두더지", "맨 위에 있을 때 꾹 누르면 오른쪽 튜브 바닥으로 파고들어요. 그 튜브 친구들은 한 칸씩 올라가요. 맨 오른쪽에서는 첫 튜브로 가요."], "owl": ["부엉이", "꾹 누르면 자기 튜브를 한 칸 돌려요. 맨 위 친구가 바닥으로 내려가고 나머지는 한 칸씩 올라가요."], "elephant": ["코끼리", "맨 위에 있을 때 꾹 누르면 물을 뿜어서, 오른쪽 튜브 맨 위 친구를 그다음 튜브로 날려 보내요. 받는 튜브에 자리만 있으면 돼요."], "lion": ["사자", "맨 위에 있을 때 꾹 누른 뒤 다른 튜브를 고르면, 그 튜브 맨 위 친구와 자리를 바꿔요. 튜브가 꽉 차 있어도 돼요."], "whale": ["고래", "꾹 누르면 큰 파도가 쳐서, 모든 튜브의 맨 위 친구가 한 칸씩 오른쪽 튜브로 옮겨 가요. 맨 오른쪽 친구는 첫 튜브로 가요. 완성된 튜브는 쉬어요."]}</script>
+  </div>
+</section>
+
+<section class="sec" id="help" aria-labelledby="help-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">막혔을 때</span><h2 id="help-h">막혀도 혼자 끙끙대지 않게 만들었어요</h2></div>
+    <div class="helps"><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2h5c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg></span><div><h3>판마다 첫 힌트는 무료</h3><p>다음에 둘 수를 판 위에 보여 줘요. 위 맛보기의 힌트 단추와 같아요.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></span><div><h3>되돌리기와 다시 하기는 늘 무료</h3><p>지금 정한 규칙으로는 몇 번을 눌러도 광고나 돈이 들지 않아요.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h3>막히면 막히기 직전으로 한 번에</h3><p>더 풀 수 없는 상태가 되면 알려 주고, 그 직전으로 한 번에 되돌려요.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg></span><div><h3>남은 정리는 알아서</h3><p>섞인 튜브가 없으면 같은 색끼리 합치는 마무리는 게임이 해요.</p></div></div></div>
+    <p class="money-note">퍼즐이 낯설면 능력 없는 클래식부터 시작하면 돼요.</p>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="long" aria-labelledby="long-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">오래 할 거리</span><h2 id="long-h">한 판은 짧고, 할 판은 많아요</h2></div>
+    <div class="nums"><div class="num rv"><b>18초</b><span>한 판에 걸린 시간(중앙값)</span><small>개발하면서 직접 푼 45판 기준</small></div><div class="num rv"><b>1,440판</b><span>메인 판, 전부 무료</span><small>클래식·능력·구출 × 16스테이지 × 30판</small></div><div class="num rv"><b>960판</b><span>퍼즐 모음(중난도·고난도)</span><small>모음 6개, 모음마다 첫 스테이지 무료</small></div><div class="num rv"><b>하루 1판</b><span>오늘의 도전</span><small>도장 7개마다 친구들 장식</small></div></div>
+    <div class="shots long" tabindex="0" aria-label="오래 할 거리">
+      <figure class="shot"><img src="/img/shot-village_homes_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="마을: 별로 친구 집을 짓고 넓히면 그 친구의 옷이 열려요"><figcaption><b>마을</b>별로 친구 집을 짓고 넓히면 그 친구의 옷이 열려요</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-chick_nest_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="둥지 나무: 구한 병아리는 둥지 나무에 살아요"><figcaption><b>둥지 나무</b>구한 병아리는 둥지 나무에 살아요</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-daily_calendar_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="오늘의 도전: 같은 날엔 모두 같은 문제, 풀면 도장을 받아요"><figcaption><b>오늘의 도전</b>같은 날엔 모두 같은 문제, 풀면 도장을 받아요</figcaption></figure>
+    </div>
+    <p class="src">판 수는 지금 만든 게임 기준이에요. 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</section>
+
+<section class="sec" id="money" aria-labelledby="money-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">돈</span><h2 id="money-h">메인 1,440판은 끝까지 무료예요</h2><p>광고와 앱 안 결제는 아직 붙이지 않았어요. 지금 만들어 둔 규칙은 이래요.</p></div>
+    <div class="money">
+      <div class="mcard free rv"><h3>무료로 하는 것</h3><ul><li>메인 1,440판 전부</li><li>오늘의 도전</li><li>퍼즐 모음 6개의 첫 스테이지</li><li>판마다 첫 힌트, 되돌리기, 다시 하기</li></ul></div>
+      <div class="mcard rv"><h3>광고</h3><ul><li>처음 쓰는 날과 첫 15판에는 판 사이 광고가 없어요</li><li>그 뒤에도 많아야 3판에 한 번, 3분 간격을 두게 만들었어요</li><li>짧은 광고를 보면 힌트나 별을 더 받을 수 있어요(원할 때만)</li></ul></div>
+      <div class="mcard rv"><h3>결제하면</h3><ul><li>광고 제거</li><li>퍼즐 모음 2스테이지부터(840판)</li><li>지난 날의 오늘의 도전</li><li>힌트 묶음</li></ul><span class="tag">가격은 출시 때 정해요</span></div>
+    </div>
+    <p class="money-note">돈을 내고 무작위로 뽑는 아이템은 없어요. 출시 전이라 이 규칙도 바뀔 수 있어요.</p>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="faq-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="faq-h">자주 묻는 질문</h2></div>
+    <div class="faq"><details><summary>언제, 어디서 받을 수 있나요?</summary><p>안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요.</p></details><details><summary>아이폰에서도 되나요?</summary><p>준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요.</p></details><details><summary>인터넷 없이 되나요?</summary><p>네. 게임은 인터넷 연결 없이 돌아가요.</p></details><details><summary>진행 기록은 어디에 저장되나요?</summary><p>휴대폰 안에 저장돼요. 계정이나 클라우드 저장은 없어요.</p></details><details><summary>내 정보를 모으나요?</summary><p>지금 만든 게임은 정보를 모으거나 보내지 않아요. 출시할 때 광고를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요.</p></details><details><summary>어떤 언어로 할 수 있나요?</summary><p>한국어, 영어, 일본어예요.</p></details><details><summary>무서운 장면이나 뽑기가 있나요?</summary><p>없어요. 싸우거나 무서운 장면이 없고, 돈을 내고 무작위로 뽑는 아이템도 없어요. 연령 등급은 출시할 때 받아요.</p></details></div>
+  </div>
+</section>
+
+<section class="end" id="end" aria-labelledby="end-h">
+  <div class="end-bg" aria-hidden="true"><img src="/img/bg-night.webp" alt="" width="1080" height="1920" loading="lazy"></div>
+  <div class="wrap">
+    <h2 id="end-h">지금은 출시 준비 중이에요</h2>
+    <p class="end-lead">안드로이드부터 내놓을 거예요. 나오면 이 페이지에 받는 곳을 바로 붙일게요.</p>
+    <ol class="end-steps"><li class=""><i aria-hidden="true">✓</i>게임 내용 만들기</li><li class="is-now"><i aria-hidden="true">2</i>휴대폰 플레이테스트 <span class="sr">(지금)</span></li><li class=""><i aria-hidden="true">3</i>비공개 테스트</li><li class=""><i aria-hidden="true">4</i>구글 플레이 출시</li><li class=""><i aria-hidden="true">5</i>아이폰</li></ol>
+    <div class="end-acts">
+      <a class="btn btn-play" href="mailto:woxocoso@gmail.com?subject=%5B%EB%B3%91%EC%95%84%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%EB%8C%80%5D%20%EB%AC%B8%EC%9D%98">메일로 묻기</a>
+      <a class="btn btn-line" href="#try">맛보기 다시 하기</a>
+    </div>
+    <p class="mail-note">루멘랩(Lumen Lab)이 만들어요. 메일 <span class="nw">woxocoso@gmail.com</span> <button type="button" class="btn-copy" data-copy="woxocoso@gmail.com" data-done="복사했어요">복사</button></p>
+    <a class="lumen" href="https://lumenlab.page/">
+      <svg viewBox="0 0 96 64" aria-hidden="true">
+        <circle class="l-glow" cx="70" cy="30" r="26" fill="url(#lg0)"/>
+        <defs><radialGradient id="lg0"><stop offset="0" stop-color="#FFD166" stop-opacity=".55"/><stop offset="1" stop-color="#FFD166" stop-opacity="0"/></radialGradient></defs>
+        <path d="M2 50 Q40 40 94 46" stroke="#6E4A2D" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M52 44 Q70 60 88 44 Z" fill="#5C3B23"/><path d="M50 44 h40" stroke="#8A5E3A" stroke-width="5" stroke-linecap="round"/>
+        <g class="l-chick"><image href="/img/c-chick.webp" x="57" y="14" width="26" height="26"/></g>
+      </svg>
+      <div><b>루멘랩 Lumen Lab</b><span>병아리 구조대를 만든 곳. 다른 앱과 무료 웹 도구도 있어요</span></div><span class="arr" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Lumen Lab</span>
+    <a href="/en/" hreflang="en" lang="en">English</a>
+    <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>
+    <p>로고·배경·집 그림은 AI 도구(Higgsfield)로 만들었고, 동물 친구와 효과는 게임 코드로 그렸어요. 화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</footer>
+<script src="/assets/demo.js?v=b88a80a1" defer></script>
+<script src="/assets/site.js?v=71fc0bc9" defer></script>
+</body>
+</html>
