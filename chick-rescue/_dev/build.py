@@ -22,7 +22,7 @@ S = {
   'other_lang': ('English', '한국어'),
   'other_lang_label': ('Read this page in English', '한국어로 보기'),
   'h1': ('동물 친구들을 옮겨 갇힌 병아리를 구하는 정렬 퍼즐', 'A sort puzzle: move the critters, free the trapped chicks'),
-  'undo': ('되돌리기', 'Undo'), 'hint': ('힌트', 'Hint'), 'restart': ('다시 하기', 'Restart'),
+  'sound': ('소리', 'Sound'), 'undo': ('되돌리기', 'Undo'), 'hint': ('힌트', 'Hint'), 'restart': ('다시 하기', 'Restart'),
   'status': ('<b>안드로이드 출시 준비 중</b> · 웹으로 옮긴 맛보기예요. <a href="#real">실제 게임 화면 보기</a>',
              '<b>Coming to Android</b> · This is a web taste of two levels. <a href="#real">See the real game</a>'),
   'side_l': ('실제 게임 첫 화면', 'The real game’s home screen'),
@@ -265,7 +265,7 @@ def page(i):
     <img class="hero-logo" src="/img/logo-{lang}.webp" width="640" height="425" alt="{e('name')}">
     <h1 id="h1">{t('h1')}</h1>
     <div class="demo" id="demo">
-      <p class="demo-head"><span class="demo-count" aria-live="polite"></span></p>
+      <p class="demo-head"><span class="demo-count" aria-live="polite"></span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>{t('sound')}</button></p>
       <div class="nest" aria-hidden="true"></div>
       <div class="board"><div class="pieces" aria-hidden="true"></div></div>
       <p class="demo-tip" aria-live="polite"></p>
