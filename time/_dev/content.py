@@ -305,7 +305,7 @@ def _about(lang):
 <h2>시간대 자료</h2>
 <p>도시별 시각은 브라우저에 들어 있는 시간대 자료(IANA)로 계산해요. 2026년에 바뀐 캐나다 세 주와 모로코의 규칙은 브라우저 자료가 예전 것이어도 맞게 계산하도록 이 사이트가 따로 고쳐 넣었어요({L(IANA, "IANA 변경 기록")}, {CHK['ko']}). 시험할 때는 파이썬 zoneinfo로 구한 값과 도시 시간대마다 대조해요.</p>
 <h2>만든 곳</h2>
-<p>루멘랩(Lumen Lab)이 만들었어요. 틀린 곳이나 바라는 기능은 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 알려 주세요. 다른 도구는 <a href="https://lumenlab.page/">lumenlab.page</a>에 있어요.</p>'''
+<p>루멘랩(Lumen Lab)이 만들었어요. 틀린 곳이나 바라는 기능은 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 다른 도구는 <a href="https://lumenlab.page/">lumenlab.page</a>에 있어요.</p>'''
     return f'''<h1>About Oneturn</h1>
 <p>Oneturn is a set of time tools built around one dial. The timer shows the time left, the stopwatch the time gone by, and the alarm the time until it rings, all as a band on the dial. The world clock gives each city's time difference and its next daylight saving change.</p>
 <h2>What it does</h2>
@@ -318,7 +318,7 @@ def _about(lang):
 <h2>Time zone data</h2>
 <p>City times come from the time zone database built into your browser (IANA). The 2026 rule changes for three Canadian provinces and Morocco are applied by this site even if your browser's data is older ({L(IANA, "IANA change log")}, {CHK['en']}). The tests compare every city's time zone with Python's zoneinfo.</p>
 <h2>Who makes it</h2>
-<p>Made by Lumen Lab. Found a mistake or want a feature? Write to <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>. More tools at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>'''
+<p>Made by Lumen Lab. Found a mistake or want a feature? Write to <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. More tools at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>'''
 
 
 STORE_KEYS = ['ot.set', 'ot.timers', 'ot.watch', 'ot.alarms', 'ot.cities', 'ot.lang']
@@ -344,7 +344,7 @@ def _privacy(lang):
 <h2>알림</h2>
 <p>\'컴퓨터 알림\'을 켜면 브라우저가 알림 권한을 물어요. 알림은 이 기기 안에서만 띄우고, 알림 내용(타이머 이름)은 서버로 보내지 않아요.</p>
 <h2>문의</h2>
-<p>루멘랩: <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''
+<p>루멘랩: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''
     return f'''<h1>Privacy Policy</h1>
 <p>Last checked: October 14, 2026</p>
 <h2>What this site keeps on your device</h2>
@@ -363,7 +363,7 @@ def _privacy(lang):
 <h2>Notifications</h2>
 <p>If you turn on desktop notifications, the browser asks for permission. Notifications are shown on this device only; the timer name is not sent anywhere.</p>
 <h2>Contact</h2>
-<p>Lumen Lab: <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''
+<p>Lumen Lab: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''
 
 
 for _l in ('ko', 'en'):

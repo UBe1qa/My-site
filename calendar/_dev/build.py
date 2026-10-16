@@ -173,7 +173,7 @@ def footer(lang):
   <div class="wrap foot-in">
     <div>
       <a class="lumen" href="{LUMEN[lang]}"><small>{u['made']}</small><b>{u['lumen_b']}</b><span>{u['lumen_s']}</span></a>
-      <small>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">{u['contact']}</a></small>
+      <small>© 2026 Lumen Lab · <a href="mailto:contact@lumenlab.page">{u['contact']}</a></small>
     </div>
     <div class="foot-cols">{ch}</div>
   </div>

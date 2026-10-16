@@ -413,7 +413,7 @@ HEADER_DOC = """<body class="doc-page">
 def foot_en(ko_href="/"):
     return f"""<footer class="foot wrap">
   <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/en/">Visit Lumen Lab →</a></div><script>(function(m){{if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){{if(e[0].isIntersecting){{m.classList.add("in");o.disconnect()}}}},{{threshold:.6}});o.observe(m)}})(document.querySelector(".maker"))</script>
-  <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a> · <a href="{ko_href}" hreflang="ko" lang="ko">한국어</a></p>
+  <p><a href="/en/">Daycount</a> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · <a href="/privacy#en">Privacy policy</a> · <a href="mailto:contact@lumenlab.page">Contact</a> · <a href="{ko_href}" hreflang="ko" lang="ko">한국어</a></p>
   <p>© 2026 Lumen Lab</p>
 </footer>
 </body>
@@ -482,7 +482,7 @@ def about_page():
     path = "/en/about/"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "AboutPage", "name": "About Daycount", "url": BASE + path, "inLanguage": "en",
-         "publisher": dict(ORG, email="woxocoso@gmail.com")},
+         "publisher": dict(ORG, email="contact@lumenlab.page")},
         crumbs([("Daycount", "/en/"), ("About", path)])]}
     return head_en("About Daycount: who makes it and how it calculates | Daycount",
                    "Daycount is a free date calculator made by Lumen Lab. How it counts days, months, age and business days, where the holiday data comes from, and how to reach us.",
@@ -513,7 +513,7 @@ def about_page():
     <p>The site shows Google AdSense ads to cover its running costs. The <a href="/privacy#en">privacy policy</a> explains the ads and cookies.</p>
 
     <h2>Contact</h2>
-    <p>Found a wrong result or a missing holiday, or want a feature? Email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.</p>
+    <p>Found a wrong result or a missing holiday, or want a feature? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.</p>
   </article>
 </main>
 """ + foot_en("/about/")
@@ -569,7 +569,7 @@ def tool_page():
     body = one(r'(<h2 id="h-faq"[^>]*>[^<]*</h2>\n).*?(\n\s*<div class="ad-slot" data-ad="bottom")', lambda m: m.group(1) + faq_html() + m.group(2), body)
     body = one(r'<footer class="foot wrap">.*?</footer>',
                '<footer class="foot wrap">\n  <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>Daycount is made by <b>Lumen Lab</b>. We make other apps and tools too.</p><a href="https://lumenlab.page/en/">Visit Lumen Lab →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>\n  <p><span>© 2026 Lumen Lab</span> · <a href="/en/guide/">Guides</a> · <a href="/en/about/">About</a> · '
-               '<a href="/privacy#en">Privacy policy</a> · <a href="mailto:woxocoso@gmail.com">Contact</a></p>\n</footer>', body)
+               '<a href="/privacy#en">Privacy policy</a> · <a href="mailto:contact@lumenlab.page">Contact</a></p>\n</footer>', body)
     # 영어 사용자에겐 '시작한 날을 1일째로(한국식)'를 기본으로 끈다: 100일 = 시작일 + 100일
     body = one(r'<input type="checkbox" id="an-one" checked>', '<input type="checkbox" id="an-one">', body)
     body = body.replace('src="assets/', 'src="/assets/')

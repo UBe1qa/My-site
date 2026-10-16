@@ -180,7 +180,7 @@ def footer(lang):
             '<nav aria-label="%s">%s</nav>' % (T(lang, '아래 메뉴', 'Footer menu'), ''.join('<a href="%s">%s</a>' % h for h in nav)) +
             '<p>%s</p>' % T(lang, '계산은 모두 이 브라우저 안에서 해요. 시험·업무에 쓰기 전에는 중요한 값을 한 번 더 확인해 주세요.',
                             'Everything is calculated in your browser. Double-check important results before using them for exams or work.') +
-            '<p>© 2026 Lumen Lab · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'
+            '<p>© 2026 Lumen Lab · <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'
             '</div></footer>')
 
 

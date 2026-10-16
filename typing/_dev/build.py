@@ -154,7 +154,7 @@ def footer(lang, lumen_id=True):
     tools = ''.join(f'<a href="{p}{h}">{esc(label)}</a>' for h, label, key in NAV[lang])
     return f'''<footer class="foot"><div class="wrap">
   <a class="lumen"{' id="lumen"' if lumen_id else ''} href="{home}"><span class="caps" aria-hidden="true">{caps}</span><span class="lumen-t"><b>{t['lumen']}</b><span>{t['lumen_s']}</span></span><span class="cap go" aria-hidden="true">→</span></a>
-  <p class="foot-links">{tools}<a href="{p}about/">{t['about']}</a><a href="{p}privacy/">{t['privacy']}</a><a href="mailto:woxocoso@gmail.com">{t['contact']}</a></p>
+  <p class="foot-links">{tools}<a href="{p}about/">{t['about']}</a><a href="{p}privacy/">{t['privacy']}</a><a href="mailto:contact@lumenlab.page">{t['contact']}</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>'''
 

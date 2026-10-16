@@ -142,7 +142,7 @@ def footer(lang):
   <div class="foot-grid">
     <div><p class="foot-h">{u['f_tools']}</p><ul>{tools}</ul></div>
     <div><p class="foot-h">{u['f_guides']}</p><ul>{guides}</ul></div>
-    <div><p class="foot-h">{u['f_info']}</p><ul><li><a href="{p}about/">{u['about']}</a></li><li><a href="{p}privacy/">{u['privacy']}</a></li><li><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></li></ul></div>
+    <div><p class="foot-h">{u['f_info']}</p><ul><li><a href="{p}about/">{u['about']}</a></li><li><a href="{p}privacy/">{u['privacy']}</a></li><li><a href="mailto:contact@lumenlab.page">{u['contact']}</a></li></ul></div>
     <a class="lumen" href="{lumen}" data-lumen>{LUMEN_SVG}<span class="lm-t"><b>{u['made']}</b><small>{u['more']}</small></span></a>
   </div>
   <p class="safe">{u['safe']} © 2026 Lumen Lab</p>

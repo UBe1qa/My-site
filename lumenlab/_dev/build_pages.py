@@ -71,7 +71,7 @@ nf = head('페이지를 찾을 수 없어요 · Lumen Lab', 'Lumen Lab(루멘랩
 ''' + header + '''<main id="main" class="wrap nf">
 <h1 data-i18n="nfTitle">찾는 페이지가 없어요</h1>
 <p data-i18n="nfText">주소가 바뀌었거나 잘못 들어왔을 수 있어요. 앱 목록에서 다시 골라 주세요.</p>
-<p class="row"><a class="btn btn--main" href="/" data-i18n="nfHome">앱 목록으로</a><a class="btn btn--line" href="mailto:woxocoso@gmail.com" data-i18n="nfMail">메일로 문의</a></p>
+<p class="row"><a class="btn btn--main" href="/" data-i18n="nfHome">앱 목록으로</a><a class="btn btn--line" href="mailto:contact@lumenlab.page" data-i18n="nfMail">메일로 문의</a></p>
 </main>
 ''' + footer + tail
 open('404.html', 'w').write(nf)

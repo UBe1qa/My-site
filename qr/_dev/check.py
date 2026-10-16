@@ -170,7 +170,7 @@ for path, (p, txt) in pages.items():
     # 꼬리말
     ok((C.TX['ko' if ko else 'en']['trademark']) in txt, f'{path} 상표 문장')
     ok(('href="https://lumenlab.page/"' if ko else 'href="https://lumenlab.page/en/"') in txt, f'{path} 루멘랩 링크 언어')
-    ok('woxocoso@gmail.com' in txt, f'{path} 문의 메일')
+    ok('contact@lumenlab.page' in txt, f'{path} 문의 메일')
     # 첫 HTML 에 제목·본문
     ok('<h1' in txt and len(re.sub(r'<[^>]+>', '', txt)) > 800, f'{path} 첫 HTML 내용')
 

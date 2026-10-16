@@ -192,7 +192,7 @@ def footer(lang):
   <div class="wrap">
     <div class="foot-cols">{''.join(cols)}</div>
     <a class="lumen" href="https://lumenlab.page/{'en/' if lang == 'en' else ''}" data-lumen><span class="lumen-k">{u['next_stop']}</span>{flap('LUMEN', 'sm')}<span class="lumen-t"><b>{u['made']} Lumen Lab</b><small>{u['more_from']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
-    <p class="foot-links"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
+    <p class="foot-links"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:contact@lumenlab.page">{u['contact']}</a></p>
     <p class="muted small">© 2026 Lumen Lab</p>
   </div>
 </footer>'''
@@ -408,7 +408,7 @@ PRIVACY = {
 <h2>Fonts and server logs</h2>
 <p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives your files.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''),
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
     'ko': ('개인정보 처리방침 | 인플레이스', '인플레이스는 파일을 브라우저 안에서 변환하고 올리지 않아요. 기기에 남는 것과 광고 쿠키에 대해 적었어요.', '''<h1>개인정보 처리방침</h1>
 <p>시행일: 2026년 10월 6일 · 운영: 루멘랩(Lumen Lab)</p>
 <h2>올린 파일</h2>
@@ -420,7 +420,7 @@ PRIVACY = {
 <h2>글꼴과 서버 기록</h2>
 <p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 파일은 받지 않아요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''),
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
 }
 
 LICENSES = [

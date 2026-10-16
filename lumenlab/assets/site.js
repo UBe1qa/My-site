@@ -38,6 +38,7 @@
   /* 묶음마다: 안의 요소에 --d(순서 × 간격)를 주고, 묶음이 들어오면 .in */
   var groups = [
     { el: '.hero__in', items: '.rv', step: 0.09, once: true },
+    { el: '#games .cat__grid', items: '.rv', step: 0.08, once: true },
     { el: '#apps .cat__grid', items: '.rv', step: 0.08, once: true },
     { el: '#tools .wrap', items: '.rv', step: 0.08, once: true },
     { el: '.feats', items: '.sw:not(.sw--off)', step: 0.18, self: true },

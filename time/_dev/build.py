@@ -260,7 +260,7 @@ def footer(lang):
     tools = ''.join(f'<a href="{p}{TOOL_PATH[k]}">{esc(NAV[lang][k])}</a>' for k in TOOLS)
     return f'''<footer class="foot"><div class="wrap">
   <a class="lumen" href="{home}">{lumen_svg()}<span class="lumen-t"><b>{u['lumen_b']}</b><small>{u['lumen_s']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
-  <p class="foot-links">{tools}<a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
+  <p class="foot-links">{tools}<a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:contact@lumenlab.page">{u['contact']}</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>'''
 

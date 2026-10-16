@@ -294,7 +294,7 @@ ABOUT = {
 <p class="meta">마지막 확인 2026년 10월 10일</p>
 <div class="prose">
 <h2>누가 만들었나요</h2>
-<p>개인사업자 루멘랩(Lumen Lab)이 만들고 운영해요. 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩</a>에 있어요. 문의는 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 보내 주세요.</p>
+<p>개인사업자 루멘랩(Lumen Lab)이 만들고 운영해요. 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩</a>에 있어요. 문의는 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 보내 주세요.</p>
 <h2>공휴일은 무엇을 기준으로 하나요</h2>
 <ul>
 <li>한국: <a href="''' + LAW + '''">관공서의 공휴일에 관한 규정</a>(시행 2026. 5. 11., 대통령령 제36290호)의 공휴일과 대체공휴일 규칙을 그대로 옮겨 계산해요. 2026·2027년은 공식 발표와 한 날도 다르지 않은지 맞춰 봤어요. 2027년은 <a href="''' + KASA + '''">우주항공청 2027년 월력요항</a> 기준 공휴일 72일, 주5일 휴일 119일이에요.</li>
@@ -318,7 +318,7 @@ ABOUT = {
 <p class="meta">Last checked October 10, 2026</p>
 <div class="prose">
 <h2>Who makes it</h2>
-<p>Onesheet is made and run by Lumen Lab, a one-person studio. More apps and tools are at <a href="https://lumenlab.page/en/">Lumen Lab</a>. Contact: <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.</p>
+<p>Onesheet is made and run by Lumen Lab, a one-person studio. More apps and tools are at <a href="https://lumenlab.page/en/">Lumen Lab</a>. Contact: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.</p>
 <h2>Where the holidays come from</h2>
 <ul>
 <li>United States: the federal holidays set by 5 U.S.C. 6103, including the observed weekday when a holiday falls on a weekend. The 2026 and 2027 dates were compared day by day with the <a href="''' + OPM + '''">holiday schedules of the U.S. Office of Personnel Management</a> (checked October 10, 2026).</li>
@@ -350,7 +350,7 @@ PRIVACY = {
 <h2>글꼴과 서버 기록</h2>
 <p>글꼴은 공개 전송망인 jsDelivr에서 받아요. 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
 </div>'''),
     'en': ('Privacy policy | Onesheet', 'Onesheet makes calendars inside your browser and does not send the files you make. What is stored on your device, visit statistics, and how ads use cookies.', '''<h1>Privacy policy</h1>
 <p class="meta">Effective October 10, 2026 · Operated by Lumen Lab</p>
@@ -367,7 +367,7 @@ PRIVACY = {
 <h2>Fonts and server logs</h2>
 <p>The page loads its font from jsDelivr, a public content network, which receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
 </div>'''),
 }
 

@@ -9,7 +9,7 @@ import hashlib, html, json, os, re, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
 BASE = 'https://chick-rescue.lumenlab.page'
-MAIL = 'woxocoso@gmail.com'
+MAIL = 'contact@lumenlab.page'
 
 # 키: (한국어, 영어)
 S = {

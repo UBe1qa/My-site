@@ -609,7 +609,7 @@ def about(lang):
 <li>세무·노무 상담이 아니에요. 정확한 금액은 급여명세서, 국민연금공단, 국민건강보험공단, 고용센터에서 확인하세요.</li>
 </ul>
 <h2>만든 곳</h2>
-<p>루멘랩(Lumen Lab)이 만들고 운영해요. 틀린 숫자나 바뀐 기준을 보면 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 알려 주세요. 루멘랩의 다른 앱과 도구는 <a href="https://lumenlab.page/">lumenlab.page</a>에 있어요.</p>
+<p>루멘랩(Lumen Lab)이 만들고 운영해요. 틀린 숫자나 바뀐 기준을 보면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 루멘랩의 다른 앱과 도구는 <a href="https://lumenlab.page/">lumenlab.page</a>에 있어요.</p>
 <p class="note">글꼴은 Pretendard(SIL Open Font License 1.1)에서 이 사이트에 나오는 글자만 추린 것을 써요. <a href="/assets/fonts/OFL.txt">라이선스 전문</a></p>
 </div>'''
     rows = [
@@ -668,7 +668,7 @@ def about(lang):
 <li>It is not tax or labor advice. Check exact amounts on your payslip or with the National Pension Service, the National Health Insurance Service or a local employment center.</li>
 </ul>
 <h2>Who runs it</h2>
-<p>Takehome Korea is made and run by Lumen Lab. If you spot a wrong figure or a rule that has changed, write to <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>. More apps and tools are at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>
+<p>Takehome Korea is made and run by Lumen Lab. If you spot a wrong figure or a rule that has changed, write to <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. More apps and tools are at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>
 <p class="note">The typeface is a subset of Pretendard, under the SIL Open Font License 1.1. <a href="/assets/fonts/OFL.txt">License text</a></p>
 </div>'''
 
@@ -695,7 +695,7 @@ def privacy(lang):
 <h2>글꼴과 서버 기록</h2>
 <p>글꼴은 이 사이트에서 함께 받아요. 글꼴 때문에 다른 곳에 접속하지 않아요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 입력한 금액과 날짜는 받지 않아요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
 </div>'''
     return f'''<h1>Privacy policy</h1>
 <p class="meta">Effective {date_en(CHECKED)} · Operated by Lumen Lab</p>
@@ -716,5 +716,5 @@ def privacy(lang):
 <h2>Fonts and server logs</h2>
 <p>The typeface is served from this site, so fonts do not make your browser contact anyone else. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. It does not receive the amounts or dates you enter.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
 </div>'''

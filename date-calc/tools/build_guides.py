@@ -298,7 +298,7 @@ def head(title, desc, path, extra_ld, alt=""):
 
 FOOT = """<footer class="foot wrap">
   <div class="maker"><span class="maker-fan" aria-hidden="true"><i></i><i></i><i></i></span><p>며칠 계산기는 <b>루멘랩</b>이 만들었어요. 다른 앱과 도구도 있어요.</p><a href="https://lumenlab.page/">루멘랩 둘러보기 →</a></div><script>(function(m){if(!m)return;if(!("IntersectionObserver"in window))return m.classList.add("in");var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){m.classList.add("in");o.disconnect()}},{threshold:.6});o.observe(m)})(document.querySelector(".maker"))</script>
-  <p><a href="/">며칠 계산기</a> · <a href="/guide/">가이드</a> · <a href="/about/">소개</a> · <a href="/privacy">개인정보 처리방침</a> · <a href="mailto:woxocoso@gmail.com">문의</a></p>
+  <p><a href="/">며칠 계산기</a> · <a href="/guide/">가이드</a> · <a href="/about/">소개</a> · <a href="/privacy">개인정보 처리방침</a> · <a href="mailto:contact@lumenlab.page">문의</a></p>
   <p>© 2026 루멘랩(Lumen Lab)</p>
 </footer>
 </body>
@@ -368,7 +368,7 @@ def about_page():
     path = "/about/"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "AboutPage", "name": "며칠 계산기 소개", "url": BASE + path, "inLanguage": "ko",
-         "publisher": {"@type": "Organization", "name": "루멘랩(Lumen Lab)", "url": "https://lumenlab.page/", "email": "woxocoso@gmail.com"}},
+         "publisher": {"@type": "Organization", "name": "루멘랩(Lumen Lab)", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}},
         crumbs([("며칠 계산기", "/"), ("소개", path)])]}
     import build_en  # 영어 소개(/en/about/)와 hreflang으로 잇는다
     return head("며칠 계산기 소개 — 만든 곳, 계산 기준, 문의 | 며칠 계산기",
@@ -399,7 +399,7 @@ def about_page():
     <p>사이트 운영비를 위해 Google 애드센스 광고를 보여 줘요. 광고와 쿠키에 관한 내용은 <a href="/privacy">개인정보 처리방침</a>에 있어요.</p>
 
     <h2>문의</h2>
-    <p>틀린 계산, 빠진 공휴일, 있었으면 하는 기능은 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>으로 알려 주세요.</p>
+    <p>틀린 계산, 빠진 공휴일, 있었으면 하는 기능은 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요.</p>
   </article>
 </main>
 """ + FOOT

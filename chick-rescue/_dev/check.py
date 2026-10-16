@@ -23,7 +23,7 @@ for k, f in pages.items():
         ok(h.count('hreflang=') >= 3, f'{k} hreflang')
         ok('noindex' not in h, f'{k} noindex 없음')
 ko = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
-ok(not re.search(r'[A-Za-z]{4,}', re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|woxocoso@gmail\.com|English|iOS|Chick Rescue|Android', '', re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', ko, flags=re.S))), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)')
+ok(not re.search(r'[A-Za-z]{4,}', re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|contact@lumenlab\.page|English|iOS|Chick Rescue|Android', '', re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', ko, flags=re.S))), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)')
 en = re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', open(os.path.join(SITE, 'en/index.html'), encoding='utf-8').read(), flags=re.S)
 ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', en)), '영어판 화면에 한글 없음(한국어 링크 빼고)')
 from fontTools.ttLib import TTFont

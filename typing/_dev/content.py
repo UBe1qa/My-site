@@ -305,7 +305,7 @@ ABOUT = {
 <h2>만든 곳</h2>
 <p>루멘랩(Lumen Lab)이 만들고 운영해요. 글꼴은 Pretendard(길형진, SIL 오픈 폰트 라이선스 1.1)에서 이 사이트에 나오는 글자만 남긴 조각을 써요(<a href="/assets/fonts/OFL.txt">라이선스 전문</a>). 다른 앱과 도구는 <a href="https://lumenlab.page/">루멘랩 본페이지</a>에 있어요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>''',
     ),
     'en': dict(
         title='About Todok: How This Typing Test Counts Speed and Accuracy', h1='About Todok',
@@ -330,7 +330,7 @@ ABOUT = {
 <h2>Who makes it</h2>
 <p>Todok is made and run by Lumen Lab. The typeface is a subset of Pretendard by Kil Hyung-jin, kept to the characters this site uses, under the SIL Open Font License 1.1 (<a href="/assets/fonts/OFL.txt">license text</a>). Our other apps and tools are at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>''',
     ),
 }
 
@@ -363,7 +363,7 @@ PRIVACY = {
 <h2>글꼴과 서버 기록</h2>
 <p>화면 글자의 글꼴은 이 사이트에서 같이 받아요. 그 파일에 없는 드문 글자가 화면에 나올 때만 공개 전송망인 jsDelivr에서 그 글자의 글꼴을 받고, 그때는 다른 웹 요청처럼 접속 IP가 전달돼요. 사이트는 Cloudflare에서 제공되고, Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요. 어느 쪽도 이용자가 친 글은 받지 않아요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>''',
     ),
     'en': dict(
         title='Privacy Policy | Todok', h1='Privacy policy',
@@ -388,7 +388,7 @@ PRIVACY = {
 <h2>Fonts and server logs</h2>
 <p>The font for the text on screen comes from this site. Only when a rare character that is not in that file appears does the page fetch a font for it from jsDelivr, a public content network, which then receives your IP address like any web request. The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to run the service securely. Neither ever receives what you type.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>''',
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>''',
     ),
 }
 

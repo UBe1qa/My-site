@@ -241,7 +241,7 @@ def footer(lang):
                     for h, label, key in NAV[lang] if key not in ('home', 'guide'))
     return f'''<footer class="foot"><div class="wrap">
   <a class="lumen" href="{home}"><span class="lumen-cells" aria-hidden="true">{cells}</span><span class="lumen-t"><b>{u['lumen_b']}</b><small>{u['lumen_s']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
-  <p class="foot-links">{tools}<a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
+  <p class="foot-links">{tools}<a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="{p}licenses/">{u['licenses']}</a><a href="mailto:contact@lumenlab.page">{u['contact']}</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>'''
 

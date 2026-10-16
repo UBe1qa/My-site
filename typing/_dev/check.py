@@ -234,7 +234,7 @@ def main():
         # 루멘랩 링크는 같은 언어 본페이지로
         want = 'https://lumenlab.page/' + ('en/' if lang == 'en' else '')
         ok(f'class="lumen" id="lumen" href="{want}"' in src, f'{path} 루멘랩 링크가 {want} 가 아니다')
-        ok('woxocoso@gmail.com' in src, f'{path} 문의 메일')
+        ok('contact@lumenlab.page' in src, f'{path} 문의 메일')
     for t, ps in titles.items():
         ok(len(ps) == 1, f'title 이 겹친다: {ps}')
     for d, ps in descs.items():
@@ -295,7 +295,7 @@ def main():
         ok(('성능 정보' in src and '브라우저 종류' in src) if path.startswith('/ko/') else ('performance details' in src and 'kind of browser' in src), f'{path} 방문 통계에 브라우저 종류·성능 정보를 밝힌다')
         ok(set(re.findall(r'<code>(todok\.[a-z]+)</code>', src)) == js_keys, f'{path} 저장 키 이름이 코드와 다르다')
         ok(not re.search(r'분석 도구를 쓰지 않|통계를 모으지 않|아무것도 보내지 않|no analytics|do not use analytics|nothing is sent', src, re.I), f'{path} "분석 도구 없음" 뜻의 문장')
-        ok('woxocoso@gmail.com' in src and 'jsDelivr' in src, f'{path} 문의·글꼴 안내')
+        ok('contact@lumenlab.page' in src and 'jsDelivr' in src, f'{path} 문의·글꼴 안내')
     for path, src in pages.items():
         ok(not re.search(r'아무것도 보내지 않|어떤 정보도 보내지|sends nothing|nothing leaves', src, re.I), f'{path} 너무 넓게 쓴 안심 문구')
 

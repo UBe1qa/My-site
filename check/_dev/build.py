@@ -217,7 +217,7 @@ def footer(lang):
     return f'''<footer class="foot"><div class="wrap">
   <a class="lumen" href="{home}" data-lumen><span class="lumen-lamps" aria-hidden="true">{lamps}</span><span class="lumen-t"><b>{u['lumen_b']}</b><small>{u['lumen_s']}</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
   <p class="foot-links">{tools}</p>
-  <p class="foot-links"><a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></p>
+  <p class="foot-links"><a href="{p}guide/">{u['guides']}</a><a href="{p}about/">{u['about']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:contact@lumenlab.page">{u['contact']}</a></p>
   <small>© 2026 Lumen Lab</small>
 </div></footer>'''
 
@@ -583,7 +583,7 @@ def about_page(lang):
         if s.get('list'):
             inner += '<ul>' + ''.join(f'<li>{esc(x)}</li>' for x in s['list']) + '</ul>'
     p = prefix(lang)
-    inner += f'<p><a href="{p}privacy/">{UI[lang]["privacy"]}</a> · <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'
+    inner += f'<p><a href="{p}privacy/">{UI[lang]["privacy"]}</a> · <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'
     return page(lang, head(lang, a['title'], a['desc'], 'about/', ads=False, scripts=SCRIPTS['doc']), f'<article class="wrap narrow doc">{inner}<h2>{UI[lang]["more_tests"]}</h2>{tools_block(lang)}</article>', 'about/', current='about')
 
 

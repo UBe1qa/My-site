@@ -124,7 +124,7 @@
     q4: 'When can I get it?',
     a4: 'We are getting it ready for the Mac App Store. When it is out, the App Store link will be right here on this page.',
     q5: 'More questions?',
-    a5: 'The <a href="/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.',
+    a5: 'The <a href="/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.',
     endTitle: 'Getting ready for <span class="nw">the Mac App Store</span>',
     endLead: 'When it’s out, the App Store link will be right here. Until then, the support page shows how it works.',
     endBtn: 'See how it works',

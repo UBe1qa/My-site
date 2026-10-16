@@ -239,7 +239,7 @@ PAGES = {
 <h2>광고</h2>
 <p>운영비를 위해 Google 애드센스 광고를 보여 줘요. 광고와 쿠키는 <a href="/privacy/">개인정보 처리방침</a>에 있어요.</p>
 <h2>문의</h2>
-<p>틀린 결과를 찾았거나 필요한 기능이 있으면 <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a> 으로 알려 주세요.</p>'''},
+<p>틀린 결과를 찾았거나 필요한 기능이 있으면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요.</p>'''},
         'en': {'title': 'About | Scientific Calculator', 'desc': 'How this scientific calculator works, who makes it, and how its results are checked.',
                'h1': 'About this calculator', 'lede': 'A free scientific calculator that runs in your browser.',
                'body': '''
@@ -260,7 +260,7 @@ PAGES = {
 <h2>Advertising</h2>
 <p>Google AdSense ads cover the running costs. See the <a href="/en/privacy/">privacy policy</a> for ads and cookies.</p>
 <h2>Contact</h2>
-<p>Found a wrong result or missing a feature? Email <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a>.</p>'''},
+<p>Found a wrong result or missing a feature? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.</p>'''},
     },
     'privacy': {
         'ko': {'title': '개인정보 처리방침 | 공학용 계산기', 'desc': '공학용 계산기가 저장하는 정보와 광고 쿠키에 대한 안내예요.',
@@ -275,7 +275,7 @@ PAGES = {
 <h2>서버 기록</h2>
 <p>사이트는 Cloudflare에서 제공돼요. Cloudflare는 서비스를 안전하게 운영하려고 접속 IP 같은 기본 기록을 잠시 남길 수 있어요.</p>
 <h2>문의</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''},
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''},
         'en': {'title': 'Privacy policy | Scientific Calculator', 'desc': 'What the scientific calculator stores and how ads use cookies.',
                'h1': 'Privacy policy', 'lede': 'Effective October 6, 2026 · Operated by Lumen Lab',
                'body': '''
@@ -288,6 +288,6 @@ PAGES = {
 <h2>Server logs</h2>
 <p>The site is served by Cloudflare, which may briefly keep basic request logs such as IP addresses to operate the service securely.</p>
 <h2>Contact</h2>
-<p><a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''},
+<p><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''},
     },
 }

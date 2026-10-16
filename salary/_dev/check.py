@@ -295,7 +295,7 @@ def main():
         ok('tk.in' in vis[p] and 'sessionStorage' in vis[p] and ('이 탭을 닫으면 사라져요' in vis[p] or 'gone when you close the tab' in vis[p]), f'{p}: 입력 유지(sessionStorage tk.in)와 "탭을 닫으면 사라진다"가 방침에 없음')
         ok('Cloudflare Web Analytics' in vis[p] and 'https://www.cloudflare.com/web-analytics/' in hrefs[p], f'{p}: Cloudflare Web Analytics 문장·링크')
         ok(('브라우저 종류' in vis[p] and '성능 정보' in vis[p]) or ('kind of browser' in vis[p] and 'performance data' in vis[p]), f'{p}: 방문 통계 문장에 브라우저 종류·성능 정보가 없음')
-        ok('woxocoso@gmail.com' in vis[p] and 'https://www.google.com/settings/ads' in hrefs[p], f'{p}: 문의 메일·광고 설정 링크')
+        ok('contact@lumenlab.page' in vis[p] and 'https://www.google.com/settings/ads' in hrefs[p], f'{p}: 문의 메일·광고 설정 링크')
     for p in docs:
         bad = re.search(r'입력[^.]{0,12}저장(하지|되지) 않|(?<!그 밖에는 )저장하지 않아요|(?<!else )is (not|never) (stored|saved)|분석 도구[를는은]? ?(쓰지|사용하지|없)|통계[를는은]? ?(모으지|수집하지) 않|추적하지 않|no analytics|(do not|don\'t|never) (use|run) (any )?analytics|no tracking|(do not|don\'t) track|아무것도 (보내지|전송하지) 않|nothing (is|gets) sent', vis[p], re.I)
         ok(not bad, f'{p}: 방문 통계·전송·저장이 없다는 뜻의 넓은 문장 "{bad.group(0) if bad else ""}"')
@@ -393,7 +393,7 @@ def main():
             ok((date_ko(CHECKED) if not p.startswith('/en/') else date_en(CHECKED)) in vis[p], f'{p}: 출처를 확인한 날이 없음')
     # 모든 바깥 링크는 자료 파일의 출처이거나 정해 둔 곳
     known = {link(k) for k in S} | {'https://lumenlab.page/', 'https://lumenlab.page/en/', 'https://www.cloudflare.com/web-analytics/', 'https://www.google.com/settings/ads',
-                                    'https://policies.google.com/technologies/partner-sites', 'https://policies.google.com/technologies/partner-sites?hl=ko', 'mailto:woxocoso@gmail.com'}
+                                    'https://policies.google.com/technologies/partner-sites', 'https://policies.google.com/technologies/partner-sites?hl=ko', 'mailto:contact@lumenlab.page'}
     for p in docs:
         ext = {h for h in hrefs[p] if not h.startswith(('/', '#'))}
         ok(ext <= known, f'{p}: 자료 파일에 없는 바깥 링크 {sorted(ext - known)[:2]}')

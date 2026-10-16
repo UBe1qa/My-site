@@ -172,7 +172,7 @@ def footer(lang):
     lumen = 'https://lumenlab.page/' + ('en/' if lang == 'en' else '')
     return f'''<footer class="foot">
   <div class="wrap foot-in">
-    <nav class="foot-links" aria-label="{u['footNav']}"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:woxocoso@gmail.com">{u['contact']}</a></nav>
+    <nav class="foot-links" aria-label="{u['footNav']}"><a href="{p}about/">{u['about']}</a><a href="{p}guide/">{u['guides']}</a><a href="{p}privacy/">{u['privacy']}</a><a href="mailto:contact@lumenlab.page">{u['contact']}</a></nav>
     <p class="made"><span class="made-k">{u['madeBy']}</span><a class="lumen" href="{lumen}" data-lumen>{LUMEN_WHEEL}<b>{u['made']}</b><span class="lumen-go">{u['moreFrom']}</span></a></p>
     <small>© 2026 Lumen Lab</small>
   </div>

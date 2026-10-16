@@ -4,7 +4,7 @@
 """
 
 BRAND = {'ko': '오래QR', 'en': 'Staycode'}
-CONTACT = 'woxocoso@gmail.com'
+CONTACT = 'contact@lumenlab.page'
 PARTNER = 'https://policies.google.com/technologies/partner-sites'
 ADSET = 'https://adssettings.google.com/'
 CFWA = 'https://www.cloudflare.com/web-analytics/'
@@ -545,7 +545,7 @@ ABOUT = {
 <h2>못 하는 것</h2>
 <p>인쇄한 뒤 주소 바꾸기와 찍힌 수 세기는 하지 않아요. 둘 다 이 사이트 서버를 거치게 해야 해서, 이 사이트가 멈추면 코드도 멈추기 때문이에요. 찍힌 수는 UTM 꼬리표로 내 분석 도구에서 볼 수 있어요.</p>
 <h2>운영</h2>
-<p>루멘랩(Lumen Lab)이 만들고 광고로 운영해요. 문의: <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''),
+<p>루멘랩(Lumen Lab)이 만들고 광고로 운영해요. 문의: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
     'en': dict(title='About Staycode — A Free QR Code Generator That Never Expires', h1='About Staycode', desc='Staycode is a free QR code generator by Lumen Lab. It makes static codes only, so they never expire, with design, print files, bulk and scan check, no sign-up.',
                body='''<p>Staycode makes QR codes that keep working after you print them, styled as well as on paid sites, with no sign-up.</p>
 <h2>Why we built it</h2>
@@ -555,7 +555,7 @@ ABOUT = {
 <h2>What it does not do</h2>
 <p>It does not change links after printing or count scans. Both would require every scan to pass through this site, so the code would stop if the site did. You can count scans in your own analytics with UTM tags.</p>
 <h2>Who runs it</h2>
-<p>Made by Lumen Lab and paid for by ads. Contact: <a href="mailto:woxocoso@gmail.com">woxocoso@gmail.com</a></p>'''),
+<p>Made by Lumen Lab and paid for by ads. Contact: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
 }
 
 # 방침의 저장 키는 코드(assets/*.js)와 같아야 한다(check.py 가 대조)

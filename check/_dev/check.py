@@ -228,7 +228,7 @@ def main():
         for key in KEYS:
             ok(key in vis[p], f'{p}: 저장 항목 {key}가 방침에 없음')
         ok('Cloudflare Web Analytics' in vis[p] and 'https://www.cloudflare.com/web-analytics/' in hrefs[p], f'{p}: Cloudflare Web Analytics 문장·링크')
-        ok('woxocoso@gmail.com' in vis[p], f'{p}: 문의 메일')
+        ok('contact@lumenlab.page' in vis[p], f'{p}: 문의 메일')
         ok(('type of browser' in vis[p]) or ('브라우저 종류' in vis[p]), f'{p}: 방문 통계에 실리는 것(브라우저 종류·성능 정보) 문장')
         ok('jsDelivr' not in vis[p], f'{p}: 글꼴을 이 사이트에서 보내는데 방침에 글꼴 CDN 문장이 남아 있음')
     for p in ('/privacy/', '/ko/privacy/', '/about/', '/ko/about/', '/', '/ko/'):

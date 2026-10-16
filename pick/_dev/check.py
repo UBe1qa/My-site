@@ -273,8 +273,8 @@ def main():
     tool_paths = [x for x in paths if x.count('/') <= (3 if x.startswith('/ko/') else 2) and not any(k in x for k in ('guide', 'about', 'privacy'))]
     ok(len(tool_paths) == 14 and all(x in nf.anchors for x in tool_paths), '404: 두 언어의 도구 7개씩으로 가는 링크', str([x for x in tool_paths if x not in nf.anchors]))
     ok('공평뽑기' in nf.raw and 'Pickboard' in nf.raw and "indexOf('/ko/')" in nf.raw, '404: 주소가 /ko/ 로 시작하면 한국어 상표·문구만 남긴다')
-    for path, need in (('/privacy/', ('web beacons', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'woxocoso@gmail.com')),
-                       ('/ko/privacy/', ('웹 비콘', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'woxocoso@gmail.com'))):
+    for path, need in (('/privacy/', ('web beacons', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'contact@lumenlab.page')),
+                       ('/ko/privacy/', ('웹 비콘', 'https://policies.google.com/technologies/partner-sites', 'pick.list', 'pick.history', 'pick.sound', 'pick.lang', 'contact@lumenlab.page'))):
         ok(all(n in pages[path].raw for n in need), f'방침: 웹 비콘 문장, partner-sites 링크, 저장 항목 4개, 문의 메일: {path}')
         # 실제 주소에서는 Cloudflare가 방문 통계 스크립트를 끼워 넣는다 → 방침에 적혀 있어야 하고 "분석 도구 없음" 꼴의 말이 없어야 한다
         ok('Cloudflare Web Analytics' in pages[path].raw and 'https://www.cloudflare.com/web-analytics/' in pages[path].anchors and not NO_ANALYTICS.search(pages[path].raw),
