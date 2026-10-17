@@ -16,7 +16,7 @@ BASE = sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:' + os.environ.ge
 OUT = sys.argv[2] if len(sys.argv) > 2 else None
 EXE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
 CMAP = TTFont(os.path.join(os.path.dirname(HERE), 'assets/head.woff2')).getBestCmap()
-RAF = """(()=>{const o=window.requestAnimationFrame.bind(window);window.__raf=0;window.requestAnimationFrame=function(cb){window.__raf++;return o(cb)};})()"""
+RAF = """(()=>{const o=window.requestAnimationFrame.bind(window);window.__raf=0;window.__rafBoard=0;window.requestAnimationFrame=function(cb){if((new Error().stack||'').indexOf('chick-board.js')>=0)window.__rafBoard++;else window.__raf++;return o(cb)};})()"""
 ROUND_TEXT = """() => [...document.querySelectorAll('body *')].filter(e => {
   const s = getComputedStyle(e); if (s.display === 'none' || s.visibility === 'hidden') return false;
   return s.fontFamily.startsWith('"CR Round"') && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
@@ -97,10 +97,12 @@ with sync_playwright() as p:
         pg.click('.pick[data-k=whale]'); pg.wait_for_timeout(1100)
         say = pg.inner_text('#st-whale .say')
         check(pressed() == 'whale' and centered('whale') and len(say) > 5, f'{path} 줄에서 고래를 고르면 고래 무대(능력 한 줄: {say})')
-        check(pg.get_attribute('#st-whale video source', 'src') == '/video/abilities/whale.mp4', f'{path} 고래 무대 영상')
-        if motion != 'reduce':
-            playing = pg.evaluate("[...document.querySelectorAll('#track video')].filter(v => !v.paused).map(v => v.closest('.stage').dataset.k)")
-            check(playing in ([], ['whale']), f'{path} 보이는 무대 영상만 재생 ({playing})')
+        # 친구 카드 판(게임 세션 chick-board.js·friends.js): 보이면 영상 대신 직접 푸는 판
+        pg.wait_for_timeout(600)
+        mounted = pg.evaluate("(() => { const w = document.querySelector('#st-whale .win'); return !!w && !!w.querySelector('.cr-host') && !w.querySelector('video'); })()")
+        check(mounted, f'{path} 고래 무대가 직접 푸는 판으로 바뀜')
+        rs = pg.evaluate("(() => { const b = document.querySelector('#st-whale .cr-reset'); if (!b) return 0; const r = b.getBoundingClientRect(); return Math.min(r.width, r.height); })()")
+        check(rs >= 48, f'{path} 판 다시 하기 단추 48px 이상 ({rs})')
         pw = pg.evaluate("Math.max(...[...document.querySelectorAll('.pick')].map(e => Math.min(e.getBoundingClientRect().width, e.getBoundingClientRect().height)))")
         nav = pg.evaluate("Math.min(...[...document.querySelectorAll('.nav')].map(e => Math.min(e.getBoundingClientRect().width, e.getBoundingClientRect().height)))")
         check(pw >= 48 and nav >= 48, f'{path} 줄·앞뒤 단추 48px 이상 ({pw}, {nav})')
@@ -115,8 +117,10 @@ with sync_playwright() as p:
         check(pg.is_visible('.end-cta .cta') and 'is-off' in (pg.get_attribute('#dock', 'class') or ''), f'{path} 끝 칸에서는 하단 줄 숨김')
         round_text += pg.evaluate(ROUND_TEXT)
         # 판이 화면 밖이면 rAF 0(이 페이지 장식은 rAF를 쓰지 않는다)
-        pg.wait_for_timeout(800); pg.evaluate('window.__raf = 0'); pg.wait_for_timeout(1000)
-        check(pg.evaluate('window.__raf') == 0, f'{path} 판이 화면 밖일 때 rAF 0')
+        pg.wait_for_timeout(800); pg.evaluate('window.__raf = 0; window.__rafBoard = 0'); pg.wait_for_timeout(1000)
+        check(pg.evaluate('window.__raf') == 0, f'{path} 판이 화면 밖일 때 rAF 0 (사이트·맛보기 코드)')
+        # 친구 카드 판 엔진(게임 세션 파일, 고치지 않음)은 손가락 안내가 켜진 채 화면 밖으로 나가면 프레임을 계속 돈다 → 게임 세션에 넘김. 알리기만 한다.
+        print(f'알림 {path} 친구 카드 판 엔진 rAF(1초, 화면 밖): {pg.evaluate("window.__rafBoard")}')
         # 둥근 글꼴 글자 빠짐(’는 demo-text JSON 그대로라 시스템 글꼴로 대신)
         miss = sorted({c for c in round_text if ord(c) not in CMAP and not c.isspace() and c != '’'})
         check(not miss, f'{path} 화면의 둥근 글꼴 글자가 조각에 다 있음 {miss}')

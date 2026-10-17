@@ -3,7 +3,7 @@
 글은 아래 S 사전 한 곳에서 고친다(한국어·영어 같이). 페이지 틀은 page() 하나.
 얼굴(2026-10-17): 시안 Q '튜브 쇼케이스'. 칸 순서 = 맛보기 → 둥지 나무 → 친구 무대 → 클래식 vs 구출 → 질문 → 끝 단추 → 꼬리말.
 숫자·사실의 출처: 게임 저장소 UBe1qa/mobile-games(landing-kit d926451)와 게임 세션 답(2026-10-16).
-루멘랩 사업체 문서 '병아리 구조대' 칸에 같은 내용이 있다. 맛보기 /assets/demo.js는 게임 세션이 준 그대로 두고 고치지 않는다.
+루멘랩 사업체 문서 '병아리 구조대' 칸에 같은 내용이 있다. 맛보기 /assets/demo.js와 친구 카드 판 /assets/chick-board.js·friends.js(LEVELS는 게임 규칙으로 확인한 판)는 게임 세션이 준 그대로 두고 고치지 않는다(mobile-games landing-kit 2f7bbeb).
 """
 import hashlib, html, json, os, re, subprocess, sys
 
@@ -404,6 +404,8 @@ def page(i):
 
 <script src="/assets/demo.js?v=__DEMO__" defer></script>
 <script src="/assets/site.js?v=__SITE__" defer></script>
+<script src="/assets/chick-board.js?v=__BOARD__" defer></script>
+<script src="/assets/friends.js?v=__FRIENDS__" defer></script>
 </body>
 </html>
 '''
@@ -470,7 +472,7 @@ def main():
     css2 = re.sub(r'head\.woff2\?v=[^)"]+', 'head.woff2?v=' + sha('assets/head.woff2'), css)
     if css2 != css:
         open(css_p, 'w', encoding='utf-8').write(css2)
-    v = {'__CSS__': sha('assets/site.css'), '__DEMO__': sha('assets/demo.js'), '__SITE__': sha('assets/site.js'),
+    v = {'__CSS__': sha('assets/site.css'), '__DEMO__': sha('assets/demo.js'), '__SITE__': sha('assets/site.js'), '__BOARD__': sha('assets/chick-board.js'), '__FRIENDS__': sha('assets/friends.js'),
          '__HEADFONT__': sha('assets/head.woff2')}
 
     def fill(s):

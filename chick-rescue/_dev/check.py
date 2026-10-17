@@ -14,6 +14,8 @@ read = lambda f: open(os.path.join(SITE, f), encoding='utf-8').read()
 # 맛보기 판은 게임 세션이 준 그대로(한 글자도 고치지 않는다)
 DEMO_SHA = '59e00cd6'
 ok(hashlib.sha256(open(os.path.join(SITE, 'assets/demo.js'), 'rb').read()).hexdigest()[:8] == DEMO_SHA, f'demo.js 원본 그대로({DEMO_SHA})')
+for _f, _h in (('chick-board.js', 'c8215103'), ('friends.js', '45cc96b6')):  # 게임 세션 파일(landing-kit 2f7bbeb), 고치지 않는다
+    ok(hashlib.sha256(open(os.path.join(SITE, 'assets', _f), 'rb').read()).hexdigest()[:8] == _h, f'{_f} 원본 그대로({_h})')
 
 pages = {'/': 'index.html', '/en/': 'en/index.html', '404': '404.html'}
 for k, f in pages.items():
