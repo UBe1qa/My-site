@@ -33,7 +33,9 @@ CTA = {
 # 원본은 게임 저장소 games/sort-puzzle/store/privacy_*.md(landing-kit 4c23b40으로 받음). 앱 부분(항목·권한·목적)은 실제 빌드에서 확인한 사실이라
 # 바꾸지 않는다(바꿔야 하면 게임 세션에 먼저). 게임 설정 창 단추가 이 두 주소를 그대로 연다(주소를 바꾸면 게임 세션에 알린다).
 PRIVACY = {
-    'officer': ('', ''),  # 개인정보 보호책임자 이름(사용자에게 받는다, 비어 있으면 check.py가 실패)
+    # 보호책임자 칸: 사용자 결정(2026-10-17) 실명 대신 담당 부서 + 전화(개인정보 보호법 제30조가 허용). 비어 있으면 check.py가 실패
+    'officer': ('Lumen Lab 개인정보 보호 담당', 'Lumen Lab privacy team'),
+    'phone': ('070-8098-5263', '+82 70-8098-5263'),
     'inquiry_keep': ('답변을 마친 뒤 1년, 삭제를 요청하면 바로', '1 year after we reply, or right away if you ask us to delete it'),
     'title': ('개인정보 처리방침 · 병아리 구조대', 'Privacy Policy · Chick Rescue'),
     'desc': ('병아리 구조대 앱과 사이트가 처리하는 정보: 광고(Google AdMob)·결제(Google Play)·앱 권한·방문 통계·문의 메일.',
@@ -475,7 +477,7 @@ def privacy(i):
     other = ('/en' if i == 0 else '') + '/privacy'
     olang = S['lang'][1 - i]
     md = open(os.path.join(HERE, 'privacy', f'privacy_{lang}.md'), encoding='utf-8').read()
-    for key in ('officer', 'inquiry_keep'):
+    for key in ('officer', 'phone', 'inquiry_keep'):
         md = md.replace('{' + key + '}', PRIVACY[key][i] or '[' + key + ']')
     e = lambda x: html.escape(x, quote=True)
     return f'''<!doctype html>

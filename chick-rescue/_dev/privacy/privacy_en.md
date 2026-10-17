@@ -100,7 +100,7 @@ The app does not use location, contacts, photos, camera or microphone permission
 
 ## 11. Contact
 
-Lumen Lab — privacy contact: {officer} — contact@lumenlab.page
+Privacy contact: {officer} — contact@lumenlab.page — {phone}
 
 ## 12. Changes
 

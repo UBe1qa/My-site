@@ -110,8 +110,9 @@ Lumen Lab(이하 '개발자')은 모바일 게임 「병아리 구조대」(Andr
 
 ## 12. 개인정보 보호책임자
 
-- 개인정보 보호책임자: {officer} (Lumen Lab)
+- 개인정보 보호 담당 부서: {officer}
 - 메일: contact@lumenlab.page
+- 전화: {phone}
 - 열람 청구 등 개인정보 관련 문의도 위 메일로 받아요.
 
 ## 13. 권익침해 구제 방법
