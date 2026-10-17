@@ -2,7 +2,7 @@
    제목·숫자·단추만 CU Head(Black Han Sans 조각, OFL), 본문은 시스템 글꼴. 외부 라이브러리 없음. */
 @font-face{
   font-family:"CU Head";
-  src:url(/assets/head.woff2?v=d7ab88bd) format("woff2");
+  src:url(/assets/head.woff2?v=8d467175) format("woff2");
   font-display:swap;
 }
 :root{
@@ -265,54 +265,49 @@ p{margin:0}
 .confetti{position:absolute;top:0;z-index:4;width:9px;height:14px;border-radius:2px;pointer-events:none;animation:conf var(--d) cubic-bezier(.2,.6,.4,1) forwards}
 @keyframes conf{from{transform:translate(0,0) rotate(0);opacity:1}to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
 
-/* ── 루멘랩으로 가는 칸(사이트 공통 고정): 돌 다섯(L·U·M·E·N)이 아래부터 쿵쿵 쌓여 망루가 되고 금빛 깃발이 오른다 → 글 → 화살표 ── */
-.lumen{background:linear-gradient(var(--night),#100822);padding:34px 0 10px}
-.lumen-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:end;gap:20px;max-width:580px;margin:0 auto;padding:18px 20px 20px 24px;
-  border-radius:14px;background:#2A1A4E;border:2px solid #6E52A6;color:var(--paper);text-decoration:none;
-  box-shadow:0 6px 0 #0B0518,0 14px 30px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s,border-color .12s;-webkit-tap-highlight-color:transparent}
-.lumen-card:hover{border-color:var(--gold2)}
-.lumen-card:active{transform:translateY(4px);box-shadow:0 2px 0 #0B0518,0 8px 18px rgba(0,0,0,.35)}
-.lumen-tower{position:relative;display:flex;flex-direction:column;align-items:center;width:62px;padding-top:44px}
-.lt-b{display:grid;place-items:center;width:58px;height:30px;margin-top:-2px;font:19px/1 var(--head);color:var(--gold1);
-  background:linear-gradient(180deg,#7A68A0,#5B4A80);border:2px solid #2B1D4A;border-radius:4px;box-shadow:inset 0 3px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.2);
-  text-shadow:0 2px 0 #3A1D0B}
-.lt-b:nth-child(odd){width:54px}
-.lt-top{width:66px;height:14px;margin-bottom:-2px;background:linear-gradient(90deg,#5B4A80 0 20%,transparent 20% 40%,#5B4A80 40% 60%,transparent 60% 80%,#5B4A80 80%);
-  border-radius:3px 3px 0 0}
-.lt-flag{position:absolute;left:50%;top:0;width:3px;height:46px;background:#E7D7B0;border-radius:2px;transform-origin:50% 100%}
-.lt-flag i{position:absolute;left:3px;top:2px;width:30px;height:20px;background:linear-gradient(180deg,var(--gold1),var(--gold2));
-  clip-path:polygon(0 0,100% 50%,0 100%);transform-origin:0 50%}
-.lumen-card:hover .lt-flag i{animation:ltwave .6s ease-in-out}
-.lumen-txt{display:flex;flex-direction:column;gap:3px;min-width:0;padding-bottom:4px}
-.lumen-txt small{font-size:14px;color:var(--soft)}
-.lumen-txt b{font:32px/1.1 var(--head);font-weight:400;color:var(--gold1);text-shadow:0 3px 0 #3A1D0B}
-.lumen-sub{font-size:15px;line-height:1.4;color:#fff;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;text-decoration-color:var(--gold2)}
-.lumen-go{display:grid;place-items:center;width:52px;height:52px;border-radius:10px;background:linear-gradient(180deg,var(--gold1),var(--gold2));
-  border:2px solid var(--gold-edge);box-shadow:0 4px 0 var(--gold-edge);transition:translate .16s var(--spring)}
-.lumen-go svg{width:26px;height:26px;fill:none;stroke:var(--gold-ink);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
-.lumen-card:hover .lumen-go{translate:5px 0}
-@media (max-width:519px){
-  .lumen-card{grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:18px;row-gap:12px;padding:16px 16px 18px 20px}
-  .lumen-tower{grid-row:1 / 3}
-  .lumen-txt{align-self:end;padding-bottom:0}
-  .lumen-go{align-self:start;width:48px;height:48px}
-}
-.js .lumen.arm .lt-b,.js .lumen.arm .lt-top,.js .lumen.arm .lt-flag,.js .lumen.arm .lumen-txt>*,.js .lumen.arm .lumen-go{opacity:0}
-.js .lumen.in .lt-b{animation:ltdrop .42s calc(var(--i) * .11s) cubic-bezier(.5,0,.7,.4) both}
-.js .lumen.in .lt-top{animation:ltdrop .42s .55s cubic-bezier(.5,0,.7,.4) both}
-.js .lumen.in .lt-flag{animation:ltpole .4s .85s var(--spring) both}
-.js .lumen.in .lt-flag i{animation:ltwave .7s 1.15s ease-in-out}
-.js .lumen.in .lumen-txt>*{animation:lttxt .45s calc(.9s + var(--d, 0s)) cubic-bezier(.3,.7,.4,1) both}
-.js .lumen.in .lumen-txt b{--d:.08s}
-.js .lumen.in .lumen-txt .lumen-sub{--d:.16s}
-.js .lumen.in .lumen-go{animation:ltgo .5s 1.3s var(--spring) both}
-.js .lumen.in .lumen-tower{animation:ltshake .5s .5s ease-out}
-@keyframes ltdrop{0%{opacity:0;transform:translateY(-120px)}30%{opacity:1}78%{transform:translateY(0) scale(1.08,.84)}90%{transform:translateY(-3px)}100%{opacity:1;transform:none}}
-@keyframes ltpole{0%{opacity:0;transform:scaleY(0)}100%{opacity:1;transform:none}}
-@keyframes ltwave{0%,100%{transform:none}25%{transform:scaleX(.8) skewY(8deg)}50%{transform:scaleX(1.05) skewY(-6deg)}75%{transform:scaleX(.9) skewY(4deg)}}
-@keyframes lttxt{0%{opacity:0;transform:translateX(-14px)}100%{opacity:1;transform:none}}
-@keyframes ltgo{0%{opacity:0;transform:translateY(-30px) rotate(-12deg)}100%{opacity:1;transform:none}}
-@keyframes ltshake{0%,100%{transform:none}30%{transform:translateY(2px)}60%{transform:translateY(-1px)}}
+/* ── 루멘랩으로 가는 칸(사이트 공통 고정, 모양은 이 게임 것): 성벽에서 내려와 펼쳐지는 성주 알림 두루마리.
+   들어오면 윗막대가 걸리고 → 양피지가 아래로 펼쳐지고 → 글이 써지고 → 붉은 밀랍 봉인이 쾅 찍힌다. 두루마리 전체가 링크 ── */
+.lumen{padding:40px 16px 58px;background:linear-gradient(var(--night),#100822);text-align:center}
+.decree{position:relative;display:inline-flex;flex-direction:column;align-items:center;width:min(360px,calc(100% - 40px));color:var(--ink);text-decoration:none;
+  -webkit-tap-highlight-color:transparent;transition:translate .12s}
+.decree:active{translate:0 3px}
+.rod{position:relative;z-index:2;width:calc(100% + 28px);height:18px;border-radius:9px;background:linear-gradient(180deg,#B07A45,#7A4E26);
+  box-shadow:0 3px 0 #3D2410}
+.rod::before,.rod::after{content:"";position:absolute;top:-4px;width:22px;height:26px;border-radius:7px;background:linear-gradient(180deg,var(--gold1),var(--gold2));
+  border:2px solid var(--gold-edge)}
+.rod::before{left:-6px}.rod::after{right:-6px}
+.unroll{display:grid;grid-template-rows:1fr;width:100%;margin:-6px 0}
+.sheet{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:0;overflow:hidden;padding:26px 24px 30px;
+  background:radial-gradient(120% 80% at 50% 50%,var(--parch1) 55%,var(--parch2)),var(--parch1);
+  box-shadow:inset 10px 0 14px -10px rgba(120,80,30,.45),inset -10px 0 14px -10px rgba(120,80,30,.45)}
+.d-head{white-space:nowrap;font:18px/1.2 var(--head);letter-spacing:.12em;color:var(--s-fire)}
+.d-head::before,.d-head::after{content:"—";margin:0 8px;color:var(--gold-edge)}
+.d-small{margin-top:8px;font-size:15px;color:#5A3A1E}
+.d-name{font:44px/1.05 var(--head);font-weight:400;color:#3A1D0B}
+.d-sub{font-size:15px;line-height:1.45;color:#4A3320}
+.d-go{margin-top:12px;font-size:15px;font-weight:700;color:var(--s-fire);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
+.seal{position:absolute;z-index:3;left:50%;bottom:-40px;margin-left:-31px;display:grid;place-items:center;width:62px;height:62px;border-radius:50%;
+  font:28px/1 var(--head);color:#FFD9B8;text-shadow:0 -1px 0 rgba(0,0,0,.35);rotate:-10deg;
+  background:radial-gradient(circle at 38% 34%,#E0543A,#A3320F 62%,#7C220A);box-shadow:0 0 0 4px #A3320F,0 0 0 6px rgba(124,34,10,.6),0 5px 0 rgba(0,0,0,.35);
+  transition:translate .16s var(--spring),scale .16s var(--spring)}
+.decree:hover .seal{translate:0 -4px;scale:1.06}
+.decree:active .seal{scale:.94}
+.decree:hover .d-go{color:#7A2408}
+.decree:focus-visible{outline:3px solid #fff;outline-offset:6px;border-radius:12px}
+.js .lumen.arm .rod,.js .lumen.arm .seal,.js .lumen.arm .sheet>*{opacity:0}
+.js .lumen.arm .unroll{grid-template-rows:0fr}
+.js .lumen.in .rod-t{animation:rodin .4s var(--spring) both}
+.js .lumen.in .rod-b{animation:rodin .4s var(--spring) both}
+.js .lumen.in .unroll{animation:unroll .75s .3s cubic-bezier(.4,0,.2,1) both}
+.js .lumen.in .sheet>*{animation:ink .4s calc(.85s + var(--i, 0) * .1s) ease-out both}
+.js .lumen.in .d-small{--i:1}.js .lumen.in .d-name{--i:2}.js .lumen.in .d-sub{--i:3}.js .lumen.in .d-go{--i:4}
+.js .lumen.in .seal{animation:sealin .45s 1.45s cubic-bezier(.5,0,.7,.4) both}
+.js .lumen.in .decree{animation:thump .35s 1.82s ease-out}
+@keyframes rodin{0%{opacity:0;transform:translateY(-40px)}100%{opacity:1;transform:none}}
+@keyframes unroll{0%{grid-template-rows:0fr}100%{grid-template-rows:1fr}}
+@keyframes ink{0%{opacity:0;filter:blur(3px)}100%{opacity:1;filter:none}}
+@keyframes sealin{0%{opacity:0;transform:scale(2.6) rotate(-30deg)}60%{opacity:1}85%{transform:scale(.9)}100%{opacity:1;transform:none}}
+@keyframes thump{0%,100%{transform:none}30%{transform:translateY(4px)}60%{transform:translateY(-1px)}}
 
 /* ── 꼬리말 ── */
 .foot{background:#100822;color:#CDBFE6;font-size:14px;line-height:1.6;padding:24px 0 32px}
@@ -412,7 +407,8 @@ body.has-keep{padding-bottom:84px}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .js .drop,.js .summit img,.js .got,.js .stamp{opacity:1;transform:none}
-  .js .lumen.arm .lt-b,.js .lumen.arm .lt-top,.js .lumen.arm .lt-flag,.js .lumen.arm .lumen-txt>*,.js .lumen.arm .lumen-go{opacity:1}
+  .js .lumen.arm .rod,.js .lumen.arm .seal,.js .lumen.arm .sheet>*{opacity:1}
+  .js .lumen.arm .unroll{grid-template-rows:1fr}
   .js .stamp{transform:rotate(-14deg)}
   .js .bar i{transform:scaleX(1)}
   .js .hp i{transform:scaleX(.62)}

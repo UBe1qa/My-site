@@ -114,8 +114,11 @@ S = {
 
   # 꼬리말
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
-  'lumen_small': ('이 게임을 지은 곳', 'This castle was built by'), 'lumen_name': ('루멘랩', 'Lumen Lab'),
-  'lumen_sub': ('다른 게임·앱·웹 도구 보기', 'See our other games, apps and tools'),
+  # 루멘랩 알림 두루마리: 성에서 내려오는 포고문, 밀랍 봉인이 찍힌다
+  'lumen_head': ('성주 알림', 'Royal notice'),
+  'lumen_small': ('이 성을 지은 곳은', 'This castle was built by'), 'lumen_name': ('루멘랩', 'Lumen Lab'),
+  'lumen_sub': ('다른 게임·앱·웹 도구도 지어요', 'We build other games, apps and web tools too'),
+  'lumen_go': ('두루마리를 눌러 둘러보기', 'Tap the scroll to take a look'),
   'foot_ai': ('로고·영웅·보스·성·배경 그림은 AI 도구(Higgsfield)로, 게임 속 캐릭터 움직임은 AI 영상 도구(Kling)로 만들었어요.',
               'The logo, heroes, bosses, castles and backgrounds were made with an AI tool (Higgsfield); in-game character motion comes from AI video (Kling).'),
   'foot_dev': ('화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.', 'Screens and numbers reflect the game in development and may change before launch.'),
@@ -386,17 +389,18 @@ def page(i):
 {f5}
 </main>
 <aside class="lumen" id="lumen" aria-label="{e('lumen_name')}">
-  <div class="wrap">
-    <a class="lumen-card" href="{t('lumen_url')}">
-      <span class="lumen-tower" aria-hidden="true">
-        <span class="lt-flag"><i></i></span>
-        <span class="lt-top"></span>
-        {''.join(f'<span class="lt-b" style="--i:{4 - n}">{c}</span>' for n, c in enumerate('LUMEN'))}
-      </span>
-      <span class="lumen-txt"><small>{t('lumen_small')}</small><b>{t('lumen_name')}</b><span class="lumen-sub">{t('lumen_sub')}</span></span>
-      <span class="lumen-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
-    </a>
-  </div>
+  <a class="decree" href="{t('lumen_url')}">
+    <span class="rod rod-t" aria-hidden="true"></span>
+    <span class="unroll"><span class="sheet">
+      <span class="d-head">{t('lumen_head')}</span>
+      <span class="d-small">{t('lumen_small')}</span>
+      <b class="d-name">{t('lumen_name')}</b>
+      <span class="d-sub">{t('lumen_sub')}</span>
+      <span class="d-go">{t('lumen_go')}</span>
+    </span></span>
+    <span class="rod rod-b" aria-hidden="true"></span>
+    <span class="seal" aria-hidden="true">L</span>
+  </a>
 </aside>
 <footer class="foot">
   <div class="wrap">
@@ -438,7 +442,7 @@ def sha(path):
 
 # 제목 글꼴(CU Head)을 쓰는 글: 제목·숫자·단추·이름표. check.py가 실제 페이지에서 빠진 글자를 다시 센다.
 HEAD_KEYS = ('name', 'h1', 'f1_h2', 'f1_count', 'f2_h2', 'day_h', 'night_h', 'got', 'f3_h2', 'wanted', 'faq_h2', 'promo', 'end_h2',
-             'pop_weak', 'grade_meta', 'lumen_name')
+             'pop_weak', 'grade_meta', 'lumen_name', 'lumen_head')
 
 
 def head_font(src):

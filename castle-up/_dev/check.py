@@ -37,7 +37,7 @@ for k, f in pages.items():
         ok('contact@lumenlab.page' in h, f'{k} 연락 메일')
         ok(build.S['lumen_url'][i] in h, f'{k} 같은 언어 루멘랩 본페이지 링크')
         lum = h[h.index('<aside class="lumen"'):h.index('<footer')] if '<aside class="lumen"' in h else ''
-        ok(f'href="{build.S["lumen_url"][i]}"' in lum and lum.count('class="lt-b"') == 5 and 'class="lumen-tower" aria-hidden="true"' in lum, f'{k} 루멘랩으로 가는 칸(같은 언어 본페이지, 장식 숨김)')
+        ok(f'href="{build.S["lumen_url"][i]}"' in lum and 'class="decree"' in lum and 'class="seal" aria-hidden="true"' in lum, f'{k} 루멘랩 알림 두루마리(같은 언어 본페이지, 봉인 장식 숨김)')
         ok(build.S['foot_dev'][i] in h, f'{k} 출시 전에 바뀔 수 있음 한 줄')
         ok('com.example' not in h, f'{k} 임시 앱 ID 없음')
         ctas = re.findall(r'<a class="cta[^"]*"[^>]*href="([^"]+)"[^>]*>.*?<span class="cta-t">([^<]+)</span>', h)
@@ -49,7 +49,7 @@ for k, f in pages.items():
         ok(h.count('class="poster"') == 6, f'{k} 보스 수배 전단 6장')
 
 ko = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
-kov = re.sub(r'<script\b.*?</script>|<head>.*?</head>|<svg\b.*?</svg>|<span class="lumen-tower" aria-hidden="true">.*?(?=<span class="lumen-txt">)', '', ko, flags=re.S)  # 루멘랩 망루 돌 글자 L·U·M·E·N은 장식
+kov = re.sub(r'<script\b.*?</script>|<head>.*?</head>|<svg\b.*?</svg>', '', ko, flags=re.S)
 kov = re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|contact@lumenlab\.page|lumenlab\.page|English|Castle Up|Kling', '', kov)
 ok(not re.search(r'[A-Za-z]{4,}', kov), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)' + (f' {re.search(r"[A-Za-z]{4,}", kov).group(0)}' if re.search(r'[A-Za-z]{4,}', kov) else ''))
 en = re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', open(os.path.join(SITE, 'en/index.html'), encoding='utf-8').read(), flags=re.S)

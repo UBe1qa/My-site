@@ -55,7 +55,7 @@ for k, f in pages.items():
         top = h[h.index('<header'):h.index('</header>')]
         ok(f'href="{("", "/en")[i]}/privacy"' in top, f'{k} 머리말에 개인정보 처리방침 단추')
         lum = h[h.index('<aside class="lumen"'):h.index('<footer')] if '<aside class="lumen"' in h else ''
-        ok(f'href="{build.S["lumen_url"][i]}"' in lum and lum.count('class="lb') == 4 and 'aria-hidden="true"' in lum, f'{k} 루멘랩으로 가는 칸(같은 언어 본페이지, 장식 숨김)')
+        ok(f'href="{build.S["lumen_url"][i]}"' in lum and lum.count('class="plank ') == 4 and all(f'{build.S["lumen_url"][i]}#{x}"' in lum for x in ('games', 'apps', 'tools')), f'{k} 루멘랩 이정표(같은 언어 본페이지·게임·앱·웹 도구 판자)')
         ok(h.count('data-act="next"') == 1 and h.count('data-act="real"') == 1, f'{k} 맛보기 완료 창 단추(demo.js 약속)')
 # 개인정보 처리방침: 게임 설정 창이 /privacy·/en/privacy를 그대로 연다. 빈칸 없이, 첫 페이지 꼬리말에서 바로 간다
 for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html', 'en/index.html'))):

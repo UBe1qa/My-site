@@ -117,8 +117,11 @@ S = {
   'og': ('튜브 속 병아리를 구해요', 'Free the trapped chick'),
 
   # 꼬리말
+  # 루멘랩 이정표: 판자 넷이 각각 루멘랩 본페이지·게임·앱·웹 도구 칸으로
+  'lumen_label': ('루멘랩으로 가는 이정표', 'Signpost to Lumen Lab'),
   'lumen_small': ('이 게임을 만든 곳', 'This game is made by'), 'lumen_name': ('루멘랩', 'Lumen Lab'),
-  'lumen_sub': ('다른 게임·앱·웹 도구 보기', 'See our other games, apps and tools'), 'lumen_peep': ('삐약!', 'Peep!'),
+  'lumen_games': ('다른 게임', 'More games'), 'lumen_apps': ('앱', 'Apps'), 'lumen_tools': ('웹 도구', 'Web tools'),
+  'lumen_peep': ('삐약!', 'Peep!'),
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
   'foot_ai': ('로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요.',
               'The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code.'),
@@ -412,20 +415,16 @@ def page(i):
 </section>
 </main>
 
-<aside class="lumen" id="lumen" aria-label="{e('lumen_name')}">
-  <div class="wrap">
-    <a class="lumen-card" href="{t('lumen_url')}">
-      <span class="lumen-tube" aria-hidden="true">
-        <img class="lb" style="--i:0" src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy">
-        <img class="lb" style="--i:1" src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy">
-        <img class="lb" style="--i:2" src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy">
-        <img class="lb lb-chick" style="--i:3" src="/img/c-chick.webp" width="160" height="160" alt="" loading="lazy">
-        <span class="lumen-peep">{j(t('lumen_peep'))}</span>
-      </span>
-      <span class="lumen-txt"><small>{t('lumen_small')}</small><b>{j(t('lumen_name'))}</b><span class="lumen-sub">{t('lumen_sub')}</span></span>
-      <span class="lumen-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
-    </a>
+<aside class="lumen" id="lumen" aria-label="{e('lumen_label')}">
+  <div class="post">
+    <span class="post-pole" aria-hidden="true"></span>
+    <span class="post-chick" aria-hidden="true"><img src="/img/c-chick.webp" width="160" height="160" alt="" loading="lazy"><span class="post-peep">{j(t('lumen_peep'))}</span></span>
+    <a class="plank plank-main" style="--i:0" href="{t('lumen_url')}"><small>{t('lumen_small')}</small><b>{j(t('lumen_name'))}</b></a>
+    <a class="plank plank-r" style="--i:1" href="{t('lumen_url')}#games">{j(t('lumen_games'))}</a>
+    <a class="plank plank-l" style="--i:2" href="{t('lumen_url')}#apps">{j(t('lumen_apps'))}</a>
+    <a class="plank plank-r" style="--i:3" href="{t('lumen_url')}#tools">{j(t('lumen_tools'))}</a>
   </div>
+  <div class="post-grass" aria-hidden="true"></div>
 </aside>
 
 <footer class="foot">
