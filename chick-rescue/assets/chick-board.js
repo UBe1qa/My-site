@@ -663,8 +663,10 @@
       }
       if (this.coachOn) this.coachTime += dt;
     }
-    var breathing = this.visible && !reduce && !document.hidden && this.live.length > 0;
-    return breathing || this.shk.time > 0 || !!this.hold || this.coachOn || !!this.aim;
+    var shown = this.visible && !document.hidden;
+    var breathing = shown && !reduce && this.live.length > 0;
+    // 손가락 안내·개구리/사자 고르기의 빛남은 판이 보일 때만 프레임을 돌린다(화면 밖이면 멈추고, 다시 보이면 IntersectionObserver·visibilitychange가 깨운다)
+    return breathing || this.shk.time > 0 || !!this.hold || (shown && (this.coachOn || !!this.aim));
   };
   B.wantsOverlay = function () { return this.visible && ((this.hold && !this.hold.fired) || this.coachOn); };
   B.drawOverlay = function () {

@@ -119,8 +119,8 @@ with sync_playwright() as p:
         # 판이 화면 밖이면 rAF 0(이 페이지 장식은 rAF를 쓰지 않는다)
         pg.wait_for_timeout(800); pg.evaluate('window.__raf = 0; window.__rafBoard = 0'); pg.wait_for_timeout(1000)
         check(pg.evaluate('window.__raf') == 0, f'{path} 판이 화면 밖일 때 rAF 0 (사이트·맛보기 코드)')
-        # 친구 카드 판 엔진(게임 세션 파일, 고치지 않음)은 손가락 안내가 켜진 채 화면 밖으로 나가면 프레임을 계속 돈다 → 게임 세션에 넘김. 알리기만 한다.
-        print(f'알림 {path} 친구 카드 판 엔진 rAF(1초, 화면 밖): {pg.evaluate("window.__rafBoard")}')
+        # 친구 카드 판 엔진(게임 세션 파일)도 화면 밖이면 멈춘다(landing-kit a56f51a에서 고침)
+        check(pg.evaluate('window.__rafBoard') == 0, f'{path} 판이 화면 밖일 때 rAF 0 (친구 카드 판 엔진)')
         # 둥근 글꼴 글자 빠짐(’는 demo-text JSON 그대로라 시스템 글꼴로 대신)
         miss = sorted({c for c in round_text if ord(c) not in CMAP and not c.isspace() and c != '’'})
         check(not miss, f'{path} 화면의 둥근 글꼴 글자가 조각에 다 있음 {miss}')
