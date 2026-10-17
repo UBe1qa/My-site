@@ -33,6 +33,20 @@
       "links": [
         {"href": "https://chick-rescue.lumenlab.page/", "go": true, "ko": "어떤 게임인지", "en": "What it is"}
       ]
+    },
+    {
+      "id": "castleup",
+      "icon": "/img/castle-up.webp",
+      "name": {"ko": "캐슬업!", "en": "Castle Up!"},
+      "sub": "Castle Up!",
+      "kind": {"ko": "휴대폰 방치형 디펜스 <span aria-hidden=\"true\">·</span> <span class=\"nw\">안드로이드 먼저</span>", "en": "Idle defense for phones <span aria-hidden=\"true\">·</span> <span class=\"nw\">Android first</span>"},
+      "status": {"ko": "플레이테스트 중", "en": "Play-testing"},
+      "line": {"ko": "층층이 세운 영웅들이 알아서 싸우고, 15웨이브마다 오는 보스는 약점 순서대로 스킬을 맞혀 무너뜨리는 디펜스예요.", "en": "An idle defense: heroes on every floor fight on their own, and every 15 waves you break a boss by hitting its weakness order."},
+      "url": "https://castle-up.lumenlab.page/",
+      "url_en": "https://castle-up.lumenlab.page/en/",
+      "links": [
+        {"href": "https://castle-up.lumenlab.page/", "go": true, "ko": "어떤 게임인지", "en": "What it is"}
+      ]
     }
   ],
   "apps": [
