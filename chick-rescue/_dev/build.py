@@ -1,8 +1,9 @@
-"""병아리 구조대 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, sitemap, 제목 글꼴 조각.
-  python3 _dev/build.py [게임 글꼴 PretendardJP-Bold.otf 경로]
-글은 아래 S 사전 한 곳에서 고친다(한국어·영어 같이). 페이지 틀은 PAGE 하나.
+"""병아리 구조대 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, sitemap, robots, 제목 글꼴 조각.
+  python3 _dev/build.py [Jua-Regular.ttf 경로 = _dev/var2/fonts/Jua-Regular.ttf]
+글은 아래 S 사전 한 곳에서 고친다(한국어·영어 같이). 페이지 틀은 page() 하나.
+얼굴(2026-10-17): 시안 Q '튜브 쇼케이스'. 칸 순서 = 맛보기 → 둥지 나무 → 친구 무대 → 클래식 vs 구출 → 질문 → 끝 단추 → 꼬리말.
 숫자·사실의 출처: 게임 저장소 UBe1qa/mobile-games(landing-kit d926451)와 게임 세션 답(2026-10-16).
-루멘랩 사업체 문서 '병아리 구조대' 칸에 같은 내용이 있다.
+루멘랩 사업체 문서 '병아리 구조대' 칸에 같은 내용이 있다. 맛보기 /assets/demo.js는 게임 세션이 준 그대로 두고 고치지 않는다.
 """
 import hashlib, html, json, os, re, subprocess, sys
 
@@ -10,115 +11,98 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
 BASE = 'https://chick-rescue.lumenlab.page'
 MAIL = 'contact@lumenlab.page'
+FONT_SRC = os.path.join(HERE, 'var2', 'fonts', 'Jua-Regular.ttf')  # OFL 원본(저장소에 넣지 않는다)
+FONT_NAME = 'CR Round'  # 조각 글꼴 이름(OFL: 원래 이름을 쓰지 않는다)
+
+
+def _pct(s):
+    return re.sub(r'[^A-Za-z0-9]', lambda m: ''.join('%%%02X' % b for b in m.group().encode()), s)
+
+
+# ── 주 단추(목표 행동): 말·주소·안내를 여기 한 곳에서 바꾸면 머리말·하단 줄·맛보기 완료 창·끝 칸이 다 같이 바뀐다 ──
+# 구글 플레이 사전 등록으로 바꿀 때: 'href'를 스토어 주소로, 'label'을 ('구글 플레이 사전 등록', 'Pre-register on Google Play')로,
+# 'note'를 사전 등록 안내로 바꾼다. 사이트 안 메일 신청 칸으로 바꿀 때는 'href'를 '#signup' 같은 칸 주소로.
+CTA = {
+    'label': ('출시 소식 메일로 받기', 'Get launch news by email'),
+    'href': ('mailto:' + MAIL + '?subject=' + _pct('병아리 구조대 출시 알림 신청'),
+             'mailto:' + MAIL + '?subject=' + _pct('Chick Rescue launch alert')),
+    'note': ('메일 앱이 열리면 그대로 보내 주세요.', 'Your mail app opens with the note ready. Just send it.'),
+}
 
 # 키: (한국어, 영어)
 S = {
   'lang': ('ko', 'en'),
-  'title': ('병아리 구조대 — 동물 친구들과 병아리를 구하는 정렬 퍼즐', 'Chick Rescue — an animal sort puzzle with special abilities'),
+  'title': ('병아리 구조대 — 튜브를 옮겨 갇힌 병아리를 구하는 정렬 퍼즐', 'Chick Rescue — a sort puzzle where you free trapped chicks'),
   'desc': ('튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.',
            'Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Coming to Android.'),
   'skip': ('맛보기 판으로 건너뛰기', 'Skip to the playable level'),
   'name': ('병아리 구조대', 'Chick Rescue'),
   'other_lang': ('English', '한국어'),
   'other_lang_label': ('Read this page in English', '한국어로 보기'),
-  'h1': ('동물 친구들을 옮겨 갇힌 병아리를 구하는 정렬 퍼즐', 'A sort puzzle: move the critters, free the trapped chicks'),
+
+  # 1. 첫 화면 + 맛보기
+  'h1': ('튜브를 옮겨 병아리를 구해요', 'Move the critters, free the chick'),
+  'sub': ('<b>메인 1,440판 무료</b> · 인터넷 없이', '<b>1,440 main levels free</b> · plays offline'),
   'sound': ('소리', 'Sound'), 'undo': ('되돌리기', 'Undo'), 'hint': ('힌트', 'Hint'), 'restart': ('다시 하기', 'Restart'),
-  'status': ('<b>안드로이드 출시 준비 중</b> · 웹으로 옮긴 맛보기예요. <a href="#real">실제 게임 화면 보기</a>',
-             '<b>Coming to Android</b> · This is a web taste of two levels. <a href="#real">See the real game</a>'),
-  'side_l': ('실제 게임 첫 화면', 'The real game’s home screen'),
-  'side_r': ('판을 깨면 별을 받아요', 'Clear a level, earn stars'),
+  'peep': ('삐약! 꺼내 줘요', 'Peep! Get me out!'),
+  # 지금 사이트 '막혔을 때' 칸(help1~3)을 한 줄로
+  'help': ('막혀도 괜찮아요. 판마다 첫 힌트와 되돌리기·다시 하기는 무료, 막히면 막히기 직전으로 한 번에 돌아가요.',
+           'Stuck? The first hint on every level is free, undo and restart always are, and one tap takes you back to just before you got stuck.'),
+  'status': ('안드로이드 출시 준비 중 · 웹으로 옮긴 맛보기 두 판', 'Coming to Android · two levels to try on the web'),
 
-  'real_eye': ('실제 게임 화면', 'The real game'),
-  'real_h2': ('맛보기 말고, 진짜 게임은 이렇게 움직여요', 'Here is how the real game plays'),
-  'real_p': ('개발 중인 게임에서 병아리 구출 한 판을 처음부터 끝까지 푼 화면이에요. 함께 놓인 화면도 게임에서 그대로 찍었어요.',
-             'One Rescue level solved start to finish in the game in development. Every screen here is captured straight from the game.'),
-  'video_cap': ('실제 플레이 13초 · 소리 없음', '13 seconds of real play · no sound'),
-  'video_label': ('구출 판을 푸는 실제 게임 영상', 'Video of the real game solving a Rescue level'),
-  'shot_rescue': ('구출', 'Rescue'), 'shot_rescue_c': ('병아리만 꺼내면 끝, 다 정리하지 않아도 돼요', 'Free every chick and you win, no need to sort it all'),
-  'shot_ability': ('능력', 'Abilities'), 'shot_ability_c': ('사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요', 'Hold the lion to trade places with another tube’s top critter'),
-  'shot_classic': ('클래식', 'Classic'), 'shot_classic_c': ('능력 없이 같은 색끼리 모아요', 'Plain sorting, no abilities'),
-  'shot_clear': ('판 깸', 'Level clear'), 'shot_clear_c': ('적은 수로 깰수록 별이 많아요', 'Fewer moves, more stars'),
-  'shot_map': ('판 지도', 'Level map'), 'shot_map_c': ('모드마다 16스테이지, 절반을 깨면 다음 스테이지가 열려요', '16 stages per mode, clear half to open the next'),
-  'shot_home': ('첫 화면', 'Home'), 'shot_home_c': ('모드 셋과 퍼즐 모음', 'Three modes and puzzle packs'),
+  # 2. 둥지 나무(판을 깨면 병아리가 사는 곳)
+  'nest_h2': ('구한 병아리는<br>둥지 나무에서 살아요', 'Every chick you save<br>moves into the nest tree'),
+  'nest_lead': ('별을 모아 친구 집을 짓고, 하루 한 판 오늘의 도전도 있어요.', 'Spend stars on homes for your friends, and solve a new Daily Challenge every day.'),
+  'tree_alt': ('둥지 아홉 개가 달린 큰 나무. 사다리와 등불이 걸려 있어요', 'A big tree with nine nests, a ladder and a lantern'),
+  'sign_n': ('1,440판', '1,440'), 'sign_s': ('메인 판<br>전부 무료', 'main levels<br>all free'),
+  'ground': ('퍼즐 모음 6개·960판도 있어요. 모음마다 첫 스테이지는 무료예요.', 'Plus 6 puzzle packs with 960 levels. The first stage of each pack is free.'),
 
-  'fr_eye': ('열두 친구의 능력', 'Twelve friends, twelve abilities'),
-  'fr_h2': ('꾹 누르면 능력을 써요. 능력을 써야 풀리는 판이 있어요', 'Hold a friend to use its ability. Some levels need it.'),
-  'fr_p': ('같은 색끼리 옮기는 것만이 아니에요. 친구를 눌러 무슨 능력인지 보세요.', 'It is more than moving colors around. Tap a friend to see what it can do.'),
-  'fr_note': ('능력 모드에서 동물 친구가 나오는 판은 모두 능력을 써야 풀려요. 능력·구출 모드 1~4스테이지에서 스테이지마다 새 친구가 세 마리씩 나와요.',
-              'Every Abilities level with a friend in it needs that ability to solve. In Abilities and Rescue, stages 1 to 4 each bring three new friends.'),
+  # 3. 친구 무대
+  'fr_h2': ('친구를 꾹 누르면<br>능력이 나가요', 'Hold a friend<br>to use its ability'),
+  'fr_lead': ('능력을 써야만 풀리는 판이 있어요. 친구 12마리, 능력도 12가지.', 'Some levels need an ability to solve. Twelve friends, twelve abilities.'),
+  'fr_show': ('친구 능력', 'Friend abilities'), 'fr_pick': ('친구 고르기', 'Pick a friend'),
+  'fr_prev': ('이전 친구', 'Previous friend'), 'fr_next': ('다음 친구', 'Next friend'),
+  'fr_clip': ('{name} 능력을 쓰는 실제 게임 장면', 'Real game clip of the {name} ability'),
+  'fr_note': ('능력·구출 모드 1~4스테이지에서는 스테이지마다 새 친구가 셋씩 나와요.', 'In Abilities and Rescue, stages 1 to 4 each bring three new friends.'),
 
-  'help_eye': ('막혔을 때', 'When you get stuck'),
-  'help_h2': ('막혀도 혼자 끙끙대지 않게 만들었어요', 'Built so you never stay stuck'),
-  'help1': ('판마다 첫 힌트는 무료', 'First hint free on every level'),
-  'help1_p': ('다음에 둘 수를 판 위에 보여 줘요. 위 맛보기의 힌트 단추와 같아요.', 'It shows your next move on the board, like the Hint button in the level above.'),
-  'help2': ('되돌리기와 다시 하기는 늘 무료', 'Undo and restart are always free'),
-  'help2_p': ('지금 정한 규칙으로는 몇 번을 눌러도 광고나 돈이 들지 않아요.', 'Under the current plan, use them as often as you like with no ads and no cost.'),
-  'help3': ('막히면 막히기 직전으로 한 번에', 'Back to just before you got stuck'),
-  'help3_p': ('더 풀 수 없는 상태가 되면 알려 주고, 그 직전으로 한 번에 되돌려요.', 'If the board can no longer be solved, the game tells you and takes you back in one tap.'),
-  'help4': ('남은 정리는 알아서', 'The tidy-up is done for you'),
-  'help4_p': ('섞인 튜브가 없으면 같은 색끼리 합치는 마무리는 게임이 해요.', 'Once no tube is mixed, the game finishes merging the colors itself.'),
-  'help_note': ('퍼즐이 낯설면 능력 없는 클래식부터 시작하면 돼요.', 'New to sort puzzles? Start with Classic, which has no abilities.'),
+  # 4. 클래식 vs 구출(실제 화면)
+  'real_h2': ('다 모으지 않아도 돼요<br>병아리만 꺼내면 끝', 'No need to sort it all.<br>Free the chick and you win'),
+  'classic': ('클래식', 'Classic'), 'classic_c': ('같은 색끼리 다 모아야 끝', 'Sort every color to win'),
+  'classic_alt': ('클래식 모드 실제 게임 화면: 같은 색끼리 다 모아야 끝나요', 'Real Classic mode screen: sort every color to finish'),
+  'rescue': ('구출', 'Rescue'), 'rescue_c': ('병아리만 꺼내면 끝', 'Free the chicks to win'),
+  'video_label': ('구출 판을 처음부터 끝까지 푸는 실제 게임 영상 13초, 소리 없음', '13-second clip of a Rescue level solved start to finish in the real game, no sound'),
+  'real_note': ('모드는 클래식·능력·구출 셋, 모드마다 16스테이지예요. 한 판은 18초쯤이에요.',
+                'Three modes, Classic, Abilities and Rescue, with 16 stages each. A level takes about 18 seconds.'),
+  'real_src': ('한 판 시간: 개발하면서 직접 푼 45판의 중앙값', 'Level time: median of 45 levels the developer played'),
 
-  'long_eye': ('오래 할 거리', 'Plenty to play'),
-  'long_h2': ('한 판은 짧고, 할 판은 많아요', 'Short levels, lots of them'),
-  'n1': ('18초', '18 s'), 'n1_s': ('한 판에 걸린 시간(중앙값)', 'Median time per level'), 'n1_m': ('개발하면서 직접 푼 45판 기준', 'Based on 45 levels the developer played'),
-  'n2': ('1,440판', '1,440'), 'n2_s': ('메인 판, 전부 무료', 'Main levels, all free'), 'n2_m': ('클래식·능력·구출 × 16스테이지 × 30판', 'Classic, Abilities, Rescue × 16 stages × 30'),
-  'n3': ('960판', '960'), 'n3_s': ('퍼즐 모음(중난도·고난도)', 'Puzzle pack levels (medium and expert)'), 'n3_m': ('모음 6개, 모음마다 첫 스테이지 무료', '6 packs, first stage of each free'),
-  'n4': ('하루 1판', '1 a day'), 'n4_s': ('오늘의 도전', 'Daily Challenge'), 'n4_m': ('도장 7개마다 친구들 장식', 'A new accessory every 7 stamps'),
-  'l_village': ('마을', 'Village'), 'l_village_c': ('별로 친구 집을 짓고 넓히면 그 친구의 옷이 열려요', 'Spend stars to build and grow homes, and unlock outfits'),
-  'l_nest': ('둥지 나무', 'Nest tree'), 'l_nest_c': ('구한 병아리는 둥지 나무에 살아요', 'Every chick you rescue lives in the nest tree'),
-  'l_daily': ('오늘의 도전', 'Daily Challenge'), 'l_daily_c': ('같은 날엔 모두 같은 문제, 풀면 도장을 받아요', 'Everyone gets the same puzzle each day, and a stamp for solving it'),
-  'long_src': ('판 수는 지금 만든 게임 기준이에요. 출시 전에 바뀔 수 있어요.', 'Level counts are for the current build and may change before launch.'),
-
-  'm_eye': ('돈', 'Cost'),
-  'm_h2': ('메인 1,440판은 끝까지 무료예요', 'All 1,440 main levels are free'),
-  'm_p': ('광고와 앱 안 결제는 아직 붙이지 않았어요. 지금 만들어 둔 규칙은 이래요.', 'Ads and in-app purchases are not switched on yet. Here are the rules already built in.'),
-  'm_free': ('무료로 하는 것', 'Free'),
-  'm_free_l': (['메인 1,440판 전부', '오늘의 도전', '퍼즐 모음 6개의 첫 스테이지', '판마다 첫 힌트, 되돌리기, 다시 하기'],
-               ['All 1,440 main levels', 'The Daily Challenge', 'The first stage of all 6 puzzle packs', 'The first hint on every level, plus undo and restart']),
-  'm_ads': ('광고', 'Ads'),
-  'm_ads_l': (['처음 쓰는 날과 첫 15판에는 판 사이 광고가 없어요', '그 뒤에도 많아야 3판에 한 번, 3분 간격을 두게 만들었어요', '짧은 광고를 보면 힌트나 별을 더 받을 수 있어요(원할 때만)'],
-              ['No ads between levels on your first day or your first 15 levels', 'After that, at most one every 3 levels and never within 3 minutes', 'Watch a short ad for an extra hint or stars, only if you want to']),
-  'm_pay': ('결제하면', 'If you pay'),
-  'm_pay_l': (['광고 제거', '퍼즐 모음 2스테이지부터(840판)', '지난 날의 오늘의 도전', '힌트 묶음'],
-              ['Remove ads', 'Puzzle packs from stage 2 on (840 levels)', 'Past Daily Challenges', 'Hint bundles']),
-  'm_pay_tag': ('가격은 출시 때 정해요', 'Prices are set at launch'),
-  'm_note': ('돈을 내고 무작위로 뽑는 아이템은 없어요. 출시 전이라 이 규칙도 바뀔 수 있어요.', 'There are no paid random draws. Since the game is not out yet, these rules may still change.'),
-
+  # 5. 자주 묻는 질문(넷)
   'faq_h2': ('자주 묻는 질문', 'Questions'),
   'faq': ([
     ('언제, 어디서 받을 수 있나요?', '안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요.'),
     ('아이폰에서도 되나요?', '준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요.'),
-    ('인터넷 없이 되나요?', '네. 게임은 인터넷 연결 없이 돌아가요.'),
-    ('진행 기록은 어디에 저장되나요?', '휴대폰 안에 저장돼요. 계정이나 클라우드 저장은 없어요.'),
-    ('내 정보를 모으나요?', '지금 만든 게임은 정보를 모으거나 보내지 않아요. 출시할 때 광고를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요.'),
-    ('어떤 언어로 할 수 있나요?', '한국어, 영어, 일본어예요.'),
-    ('무서운 장면이나 뽑기가 있나요?', '없어요. 싸우거나 무서운 장면이 없고, 돈을 내고 무작위로 뽑는 아이템도 없어요. 연령 등급은 출시할 때 받아요.'),
+    ('돈을 써야 하나요? 광고는요?', '메인 1,440판은 끝까지 무료예요. 지금 정한 규칙으로는 처음 쓰는 날과 첫 15판엔 판 사이 광고가 없고, 그 뒤에도 많아야 3판에 한 번이에요. '
+                            '광고 제거와 퍼즐 모음은 결제로 열고, 가격은 출시 때 정해요. 돈을 내고 무작위로 뽑는 아이템은 없어요.'),
+    ('퍼즐을 잘 못해도 할 수 있나요?', '네. 능력 없는 클래식부터 시작하면 돼요. 섞인 튜브가 없으면 남은 정리는 게임이 알아서 끝내 줘요.'),
   ], [
     ('When and where can I get it?', 'Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet.'),
     ('Will it work on iPhone?', 'It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet.'),
-    ('Does it work offline?', 'Yes. The game runs without an internet connection.'),
-    ('Where is my progress saved?', 'On your phone. There are no accounts and no cloud saves.'),
-    ('Does it collect my data?', 'The current game collects and sends nothing. If ads are added at launch, we will publish a privacy policy on this site first, saying exactly what is collected.'),
-    ('Which languages?', 'Korean, English and Japanese.'),
-    ('Any scary scenes or loot boxes?', 'No. There is no fighting or scary content, and no paid random draws. The age rating will be set at launch.'),
+    ('Do I have to pay? What about ads?', 'All 1,440 main levels are free to the end. Under the current plan there are no ads between levels on your first day or your first 15 levels, '
+                                          'and after that at most one every 3 levels. Removing ads and the puzzle packs are paid, with prices set at launch. There are no paid random draws.'),
+    ('I’m not great at puzzles. Can I still play?', 'Yes. Start with Classic, which has no abilities. Once no tube is mixed, the game finishes the tidy-up for you.'),
   ]),
 
-  'end_h2': ('지금은 출시 준비 중이에요', 'Getting ready for launch'),
-  'end_p': ('안드로이드부터 내놓을 거예요. 나오면 이 페이지에 받는 곳을 바로 붙일게요.', 'Android comes first. When it is out, the download link goes right here.'),
-  'steps': ([('게임 내용 만들기', 'done'), ('휴대폰 플레이테스트', 'now'), ('비공개 테스트', ''), ('구글 플레이 출시', ''), ('아이폰', '')],
-            [('Build the game', 'done'), ('Play-test on phones', 'now'), ('Closed testing', ''), ('Launch on Google Play', ''), ('iPhone', '')]),
-  'step_done': ('끝남', 'done'), 'step_now': ('지금', 'now'),
-  'mail_btn': ('메일로 묻기', 'Ask by email'),
-  'mail_subject': ('[병아리 구조대] 문의', '[Chick Rescue] Question'),
-  'again_btn': ('맛보기 다시 하기', 'Play the level again'),
-  'mail_note': ('루멘랩(Lumen Lab)이 만들어요. 메일 ', 'Made by Lumen Lab. Email '),
-  'copy': ('복사', 'Copy'), 'copied': ('복사했어요', 'Copied'),
-  'lumen_b': ('루멘랩 Lumen Lab', 'Lumen Lab'),
-  'lumen_s': ('병아리 구조대를 만든 곳. 다른 앱과 무료 웹 도구도 있어요', 'The studio behind Chick Rescue, with more apps and free web tools'),
+  # 6. 끝 칸
+  'end_h2': ('나오면 제일 먼저<br>알려 드릴게요', 'Be the first to know<br>when it launches'),
+  'end_note': ('안드로이드부터 나와요.', 'Android comes first.'),
+
+  # 공유 그림(og.jpg·og-en.jpg) 한 줄: _dev/og.html이 data-og로 읽는다
+  'og': ('튜브 속 병아리를 구해요', 'Free the trapped chick'),
+
+  # 꼬리말
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
-  'foot_note': ('로고·배경·집 그림은 AI 도구(Higgsfield)로 만들었고, 동물 친구와 효과는 게임 코드로 그렸어요. 화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.',
-                'The logo, backgrounds and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code. Screens and numbers reflect the game in development and may change before launch.'),
+  'foot_ai': ('로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요.',
+              'The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code.'),
+  'foot_dev': ('화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.', 'Screens and numbers reflect the game in development and may change before launch.'),
 }
 
 FRIENDS = ['squirrel', 'frog', 'otter', 'bat', 'octopus', 'turtle', 'penguin', 'mole', 'owl', 'elephant', 'lion', 'whale']
@@ -173,12 +157,30 @@ DEMO = {
         'stuck': 'This board can’t be solved now. Try Undo or Restart.'},
 }
 
-ICONS = {
- 'hint': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2h5c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg>',
- 'undo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>',
- 'back': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
- 'auto': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>',
+
+# 친구 무대: 소리말(만든 말)·한 줄(FR 설명을 줄인 것)·무대 색(면, 테두리, 글자)
+STAGE = {
+ 'squirrel': (('쏙!', '꾹 누르면 꼭대기까지 올라가요'), ('Zip!', 'Hold to climb straight to the top'), '#F5A04A', '#C9772A', 'ink'),
+ 'frog': (('폴짝!', '꾹 누르고 튜브를 고르면 그리로 뛰어가요'), ('Hop!', 'Hold, pick a tube, and it jumps there'), '#8FD15A', '#5FA62F', 'ink'),
+ 'otter': (('휙!', '꾹 누르면 바로 아래 친구와 자리를 바꿔요'), ('Swap!', 'Hold to swap with the friend right below'), '#FF9E8A', '#D9705C', 'ink'),
+ 'bat': (('홱!', '꾹 누르면 튜브를 통째로 뒤집어요'), ('Flip!', 'Hold to flip its whole tube upside down'), '#7A5CC0', '#5A3F99', 'white'),
+ 'octopus': (('쭉!', '맨 위에서 꾹 누르면 왼쪽 튜브 맨 위 친구를 끌어와요'), ('Grab!', 'On top, hold to pull over the top friend on its left'), '#F08CC8', '#C45E9E', 'ink'),
+ 'turtle': (('풍덩!', '꾹 누르면 바닥까지 잠수해요'), ('Dive!', 'Hold to dive straight to the bottom'), '#3FC1A5', '#23917A', 'ink'),
+ 'penguin': (('쓩!', '맨 위에서 꾹 누르면 오른쪽 튜브로 미끄러져 가요'), ('Slide!', 'On top, hold to slide onto the next tube'), '#7CC7F2', '#4A9CCB', 'ink'),
+ 'mole': (('파바박!', '맨 위에서 꾹 누르면 오른쪽 튜브 바닥으로 파고들어요'), ('Dig!', 'On top, hold to dig to the bottom of the next tube'), '#B9A4F0', '#8C74CC', 'ink'),
+ 'owl': (('빙그르!', '꾹 누르면 자기 튜브를 한 칸 돌려요'), ('Spin!', 'Hold to turn its tube round by one'), '#CFE9A0', '#9DC066', 'ink'),
+ 'elephant': (('뿌우!', '맨 위에서 꾹 누르면 물을 뿜어 옆 튜브 친구를 날려 보내요'), ('Whoosh!', 'On top, hold to spray the next top friend along'), '#A9C3F5', '#7895CF', 'ink'),
+ 'lion': (('어흥!', '맨 위에서 꾹 누르고 튜브를 고르면 그 맨 위 친구와 자리를 바꿔요'), ('Roar!', 'On top, hold and pick a tube to trade places with its top friend'), '#FFD45C', '#D9A825', 'ink'),
+ 'whale': (('철썩!', '파도 한 번에 모든 튜브 맨 위 친구가 옆 튜브로'), ('Splash!', 'One wave moves every top friend one tube along'), '#2A72C2', '#1C5594', 'white'),
 }
+
+JUA = set()  # 'CR Round'로 그리는 글자(page()가 모은다 → 글꼴 조각)
+
+
+def j(s):
+    """제목·숫자·단추처럼 둥근 글꼴로 그리는 글. 글자를 모아 조각에 넣는다."""
+    JUA.update(re.sub(r'<[^>]+>|&[a-z]+;', '', s))
+    return s
 
 
 def L(key, i):
@@ -190,30 +192,41 @@ def page(i):
     pre = '' if i == 0 else '/en'
     url = BASE + ('/' if i == 0 else '/en/')
     other = '/en/' if i == 0 else '/'
+    olang = S['lang'][1 - i]
     t = lambda k: L(k, i)
     e = lambda k: html.escape(L(k, i), quote=True)
-    shot = lambda name, h, c, extra='': (
-        f'<figure class="shot{extra}"><img src="/img/shot-{name}_{lang}.webp" width="600" height="1300" loading="lazy" decoding="async" '
-        f'alt="{html.escape(t(h) + ": " + t(c), quote=True)}"><figcaption><b>{t(h)}</b>{t(c)}</figcaption></figure>')
-    friends = ''.join(
-        f'<button type="button" class="friend" data-k="{k}" aria-pressed="{"true" if k == "squirrel" else "false"}">'
-        f'<img src="/img/c-{k}.webp" width="52" height="52" alt="" loading="lazy">{FR[k][i][0]}</button>' for k in FRIENDS)
-    fr_json = json.dumps({k: FR[k][i] for k in FRIENDS}, ensure_ascii=False)
-    helps = ''.join(
-        f'<div class="help rv"><span class="help-ic">{ICONS[ic]}</span><div><h3>{t(h)}</h3><p>{t(h + "_p")}</p></div></div>'
-        for ic, h in (('hint', 'help1'), ('undo', 'help2'), ('back', 'help3'), ('auto', 'help4')))
-    nums = ''.join(
-        f'<div class="num rv"><b>{t(n)}</b><span>{t(n + "_s")}</span><small>{t(n + "_m")}</small></div>' for n in ('n1', 'n2', 'n3', 'n4'))
-    li = lambda key: ''.join(f'<li>{x}</li>' for x in t(key))
+    cta_href = html.escape(CTA['href'][i], quote=True)
+    cta = lambda cls='': f'<a class="cta{(" " + cls) if cls else ""}" href="{cta_href}" data-cta>{j(CTA["label"][i])}</a>'
+    # 친구 무대(옆으로 넘기기) + 12마리 줄
+    slides, picks = [], []
+    for n, k in enumerate(FRIENDS):
+        verb, say = STAGE[k][i]
+        bg, rim, ink = STAGE[k][2], STAGE[k][3], STAGE[k][4]
+        nm = FR[k][i][0]
+        clip = html.escape(t('fr_clip').replace('{name}', nm), quote=True)
+        slides.append(
+            f'<article class="stage{" is-white" if ink == "white" else ""}" id="st-{k}" data-k="{k}" style="--c:{bg};--cd:{rim}" '
+            f'role="group" aria-roledescription="{"카드" if i == 0 else "slide"}" aria-label="{n + 1} / {len(FRIENDS)}: {html.escape(nm)}">'
+            f'<div class="stage-top"><img class="ball" src="/img/c-{k}.webp" width="160" height="160" alt="" loading="lazy">'
+            f'<div><p class="verb" aria-hidden="true">{j(verb)}</p><h3>{j(nm)}</h3></div></div>'
+            f'<p class="say">{say}</p>'
+            f'<div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/{k}.webp" width="480" height="512" aria-label="{clip}">'
+            f'<source src="/video/abilities/{k}.mp4" type="video/mp4"></video></div></article>')
+        picks.append(f'<button type="button" class="pick" data-k="{k}" aria-controls="st-{k}" aria-pressed="{"true" if n == 0 else "false"}" style="--c:{bg}">'
+                     f'<img src="/img/c-{k}.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">{nm}</span></button>')
+    rows = ''.join(f'<div class="pick-tube">{"".join(picks[r * 6:(r + 1) * 6])}</div>' for r in range(2))
+    chicks = ''.join(f'<span class="tc" style="--x:{x}%;--y:{y}%;--i:{n}" aria-hidden="true"></span>' for n, (x, y) in enumerate(
+        ((50, 11.5), (31, 22), (69, 22), (25, 36), (74.5, 36), (23.5, 50), (77.5, 50), (23.5, 63), (76.5, 63.5))))
+    spill = ''.join(f'<img class="s{n + 1}" style="--i:{n}" src="/img/c-{k}.webp" width="160" height="160" alt="">'
+                    for n, k in enumerate(('frog', 'whale', 'squirrel', 'bat', 'lion', 'penguin')))
     faq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in t('faq'))
     faq_ld = json.dumps({'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
         {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in t('faq')]}, ensure_ascii=False)
-    steps = ''.join(
-        f'<li class="{"is-now" if s == "now" else ""}"><i aria-hidden="true">{"✓" if s == "done" else n + 1}</i>{name}'
-        f'{" <span class=\"sr\">(" + t("step_now") + ")</span>" if s == "now" else ""}</li>'
-        for n, (name, s) in enumerate(t('steps')))
-    mailto = f'mailto:{MAIL}?subject=' + re.sub(r'[^A-Za-z0-9]', lambda m: ''.join('%%%02X' % b for b in m.group().encode()), t('mail_subject'))
-    demo_json = json.dumps(DEMO[lang], ensure_ascii=False)
+    demo = DEMO[lang]
+    for k in ('doneTitle', 'doneAllTitle', 'hintFrom', 'hintTo'):
+        j(demo[k])
+    j({'ko': '완성!콤보 x', 'en': 'Done!Combo x'}[lang])  # demo.js 떠오르는 글자(판 글꼴로 그린다)
+    demo_json = json.dumps(demo, ensure_ascii=False)
     game_ld = json.dumps({'@context': 'https://schema.org', '@type': 'VideoGame', 'name': t('name'), 'url': url,
                           'description': t('desc'), 'genre': 'Puzzle', 'gamePlatform': 'Android',
                           'inLanguage': ['ko', 'en', 'ja'], 'image': BASE + ('/og.jpg' if i == 0 else '/og-en.jpg'),
@@ -223,13 +236,14 @@ def page(i):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
 <title>{e('title')}</title>
 <meta name="description" content="{e('desc')}">
 <link rel="canonical" href="{url}">
 <link rel="alternate" hreflang="ko" href="{BASE}/">
 <link rel="alternate" hreflang="en" href="{BASE}/en/">
 <link rel="alternate" hreflang="x-default" href="{BASE}/en/">
-<meta name="theme-color" content="#171B2B">
+<meta name="theme-color" content="#FFE680">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{e('name')}">
 <meta property="og:title" content="{e('title')}">
@@ -250,159 +264,144 @@ def page(i):
 </head>
 <body>
 <a class="skip" href="#try">{t('skip')}</a>
-<header class="top">
+<header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="{pre}/"><img src="/img/icon-256.webp" width="32" height="32" alt="">{t('name')}</a>
-    <a class="lang" href="{other}" hreflang="{S['lang'][1 - i]}" lang="{S['lang'][1 - i]}" aria-label="{e('other_lang_label')}">{t('other_lang')}</a>
+    <a class="brand" href="{pre}/"><img class="brand-logo" src="/img/logo-{lang}.webp" width="640" height="425" alt="{e('name')}"><span class="brand-mini"><img src="/img/icon-256.webp" width="34" height="34" alt="">{j(t('name'))}</span></a>
+    <div class="top-r">
+      <a class="lang" href="{other}" hreflang="{olang}" lang="{olang}" aria-label="{e('other_lang_label')}">{j(t('other_lang'))}</a>
+      {cta('cta-top')}
+    </div>
   </div>
 </header>
 <main>
 <section class="hero" id="try" aria-labelledby="h1">
-  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-forest.webp" alt="" width="1080" height="1920" fetchpriority="low"></div>
-  <figure class="hero-side l" aria-hidden="true"><img src="/img/shot-home_{lang}.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>{t('side_l')}</figcaption></figure>
-  <figure class="hero-side r" aria-hidden="true"><img src="/img/shot-level_clear_{lang}.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>{t('side_r')}</figcaption></figure>
+  <div class="rays" aria-hidden="true"></div>
+  <div class="spill" aria-hidden="true">{spill}</div>
   <div class="hero-col">
-    <img class="hero-logo" src="/img/logo-{lang}.webp" width="640" height="425" alt="{e('name')}">
-    <h1 id="h1">{t('h1')}</h1>
+    <img class="hero-logo" src="/img/logo-{lang}.webp" width="640" height="425" alt="" aria-hidden="true">
+    <h1 id="h1">{j(t('h1'))}</h1>
+    <p class="hero-sub">{t('sub')}</p>
     <div class="demo" id="demo">
-      <p class="demo-head"><span class="demo-count" aria-live="polite"></span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>{t('sound')}</button></p>
-      <div class="nest" aria-hidden="true"></div>
+      <div class="demo-bar">
+        <span class="demo-count" aria-live="polite"></span>
+        <div class="nest" aria-hidden="true"></div>
+        <button type="button" class="btn demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>{j(t('sound'))}</button>
+      </div>
+      <p class="peep" aria-hidden="true" hidden>{j(t('peep'))}</p>
       <div class="board"><div class="pieces" aria-hidden="true"></div></div>
       <p class="demo-tip" aria-live="polite"></p>
       <div class="demo-ctrl">
-        <button type="button" class="btn btn-soft" data-act="undo">{t('undo')}</button>
-        <button type="button" class="btn btn-hint" data-act="hint">{t('hint')}</button>
-        <button type="button" class="btn btn-soft" data-act="restart">{t('restart')}</button>
+        <button type="button" class="btn" data-act="undo">{j(t('undo'))}</button>
+        <button type="button" class="btn btn-hint" data-act="hint">{j(t('hint'))}</button>
+        <button type="button" class="btn" data-act="restart">{j(t('restart'))}</button>
       </div>
       <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
         <h2 id="demo-done-h"></h2><p></p>
-        <button type="button" class="btn btn-play" data-act="next"></button>
-        <button type="button" class="btn btn-soft" data-act="real"></button>
+        {cta('cta-done')}
+        <small class="done-note">{CTA['note'][i]}</small>
+        <div class="done-more">
+          <button type="button" class="btn btn-link" data-act="next"></button>
+          <button type="button" class="btn btn-link" data-act="real"></button>
+        </div>
       </div>
       <canvas class="fx" aria-hidden="true"></canvas>
       <script type="application/json" id="demo-text">{demo_json}</script>
     </div>
+    <p class="hero-help">{t('help')}</p>
     <p class="hero-status">{t('status')}</p>
   </div>
 </section>
 
-<section class="sec" id="real" aria-labelledby="real-h">
+<section class="nestsec" id="nest" aria-labelledby="nest-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">{t('real_eye')}</span><h2 id="real-h">{t('real_h2')}</h2><p>{t('real_p')}</p></div>
-    <div class="real">
-      <div>
-        <div class="phone">
-          <video id="play-video" muted loop playsinline preload="none" poster="/img/play-{lang}-poster.webp" width="600" height="1300" aria-label="{e('video_label')}">
-            <source src="/img/play-{lang}.mp4" type="video/mp4">
-            <source src="/img/play-{lang}.webm" type="video/webm">
-          </video>
-        </div>
-        <p class="phone-cap">{t('video_cap')}</p>
-      </div>
-      <div class="shots" tabindex="0" aria-label="{e('real_eye')}">
-        {shot('rescue_play', 'shot_rescue', 'shot_rescue_c')}
-        {shot('ability_use', 'shot_ability', 'shot_ability_c')}
-        {shot('classic_play', 'shot_classic', 'shot_classic_c')}
-        {shot('level_clear', 'shot_clear', 'shot_clear_c')}
-        {shot('stage_map', 'shot_map', 'shot_map_c')}
-        {shot('home', 'shot_home', 'shot_home_c')}
-      </div>
+    <div class="nest-copy">
+      <h2 class="h2" id="nest-h">{j(t('nest_h2'))}</h2>
+      <p class="lead">{t('nest_lead')}</p>
+      <div class="houses" aria-hidden="true"><img src="/img/house-squirrel.webp" width="320" height="320" alt="" loading="lazy"><img src="/img/house-frog.webp" width="320" height="320" alt="" loading="lazy"></div>
+    </div>
+    <div class="tree drop">
+      <img src="/img/nest-tree.webp" width="640" height="857" loading="lazy" decoding="async" alt="{e('tree_alt')}">
+      {chicks}
+      <p class="sign"><b>{j(t('sign_n'))}</b><span>{t('sign_s')}</span></p>
     </div>
   </div>
+  <div class="ground"><p>{t('ground')}</p></div>
 </section>
 
-<section class="sec sec-alt" id="friends" aria-labelledby="fr-h">
+<section class="friends" id="friends" aria-labelledby="fr-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">{t('fr_eye')}</span><h2 id="fr-h">{t('fr_h2')}</h2><p>{t('fr_p')}</p></div>
-    <div class="abil">
-      <div>
-        <div class="friends">{friends}</div>
-        <div class="friend-show">
-          <div class="friend-clip"><video id="friend-clip" src="/video/abilities/squirrel.mp4" poster="/img/abilities/squirrel.webp"
-            width="480" height="512" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video></div>
-          <div>
-            <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>{FR['squirrel'][i][0]}</h3><p>{FR['squirrel'][i][1]}</p></div></div>
-            <p class="abil-note">{t('fr_note')}</p>
-          </div>
-        </div>
-      </div>
+    <h2 class="h2" id="fr-h">{j(t('fr_h2'))}</h2>
+    <p class="lead">{t('fr_lead')}</p>
+    <div class="show" role="region" aria-roledescription="{'카드 넘기기' if i == 0 else 'carousel'}" aria-label="{e('fr_show')}">
+      <button type="button" class="nav nav-prev" aria-label="{e('fr_prev')}" aria-controls="track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="track" id="track" tabindex="0" aria-label="{e('fr_show')}">{''.join(slides)}</div>
+      <button type="button" class="nav nav-next" aria-label="{e('fr_next')}" aria-controls="track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-    <script type="application/json" id="friend-text">{fr_json}</script>
+    <div class="picker" role="group" aria-label="{e('fr_pick')}">{rows}</div>
+    <p class="fr-note">{t('fr_note')}</p>
   </div>
 </section>
 
-<section class="sec" id="help" aria-labelledby="help-h">
+<section class="real" id="real" aria-labelledby="real-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">{t('help_eye')}</span><h2 id="help-h">{t('help_h2')}</h2></div>
-    <div class="helps">{helps}</div>
-    <p class="money-note">{t('help_note')}</p>
-  </div>
-</section>
-
-<section class="sec sec-alt" id="long" aria-labelledby="long-h">
-  <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">{t('long_eye')}</span><h2 id="long-h">{t('long_h2')}</h2></div>
-    <div class="nums">{nums}</div>
-    <div class="shots long" tabindex="0" aria-label="{e('long_eye')}">
-      {shot('village_homes', 'l_village', 'l_village_c')}
-      {shot('chick_nest', 'l_nest', 'l_nest_c')}
-      {shot('daily_calendar', 'l_daily', 'l_daily_c')}
+    <h2 class="h2" id="real-h">{j(t('real_h2'))}</h2>
+    <div class="vs">
+      <figure class="ph ph-classic drop">
+        <div class="ph-frame"><img src="/img/shot-classic_play_{lang}.webp" width="600" height="1300" loading="lazy" decoding="async" alt="{e('classic_alt')}"></div>
+        <figcaption><b>{j(t('classic'))}</b>{t('classic_c')}</figcaption>
+      </figure>
+      <figure class="ph ph-rescue drop">
+        <div class="ph-frame"><video data-auto muted loop playsinline preload="none" poster="/img/play-{lang}-poster.webp" width="600" height="1300" aria-label="{e('video_label')}"><source src="/img/play-{lang}.mp4" type="video/mp4"><source src="/img/play-{lang}.webm" type="video/webm"></video></div>
+        <figcaption><b>{j(t('rescue'))}</b><span>{t('rescue_c')}</span></figcaption>
+      </figure>
     </div>
-    <p class="src">{t('long_src')}</p>
+    <p class="note">{t('real_note')}</p>
+    <p class="src">{t('real_src')}</p>
   </div>
 </section>
 
-<section class="sec" id="money" aria-labelledby="money-h">
+<section class="faq" id="faq" aria-labelledby="faq-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">{t('m_eye')}</span><h2 id="money-h">{t('m_h2')}</h2><p>{t('m_p')}</p></div>
-    <div class="money">
-      <div class="mcard free rv"><h3>{t('m_free')}</h3><ul>{li('m_free_l')}</ul></div>
-      <div class="mcard rv"><h3>{t('m_ads')}</h3><ul>{li('m_ads_l')}</ul></div>
-      <div class="mcard rv"><h3>{t('m_pay')}</h3><ul>{li('m_pay_l')}</ul><span class="tag">{t('m_pay_tag')}</span></div>
-    </div>
-    <p class="money-note">{t('m_note')}</p>
-  </div>
-</section>
-
-<section class="sec" id="faq" aria-labelledby="faq-h">
-  <div class="wrap">
-    <div class="sec-head"><h2 id="faq-h">{t('faq_h2')}</h2></div>
-    <div class="faq">{faq}</div>
+    <h2 class="h2" id="faq-h">{j(t('faq_h2'))}</h2>
+    <div class="qa">{faq}</div>
   </div>
 </section>
 
 <section class="end" id="end" aria-labelledby="end-h">
-  <div class="end-bg" aria-hidden="true"><img src="/img/bg-night.webp" alt="" width="1080" height="1920" loading="lazy"></div>
   <div class="wrap">
-    <h2 id="end-h">{t('end_h2')}</h2>
-    <p class="end-lead">{t('end_p')}</p>
-    <ol class="end-steps">{steps}</ol>
-    <div class="end-acts">
-      <a class="btn btn-play" href="{mailto}">{t('mail_btn')}</a>
-      <a class="btn btn-line" href="#try">{t('again_btn')}</a>
+    <h2 class="h2" id="end-h">{j(t('end_h2'))}</h2>
+    <div class="end-stack">
+      <div class="end-cta">
+        {cta('cta-end')}
+        <img class="end-chick" src="/img/c-chick.webp" width="160" height="160" alt="" aria-hidden="true">
+      </div>
+      <div class="big-tube" aria-hidden="true">
+        <img style="--i:0" src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy">
+        <img style="--i:1" src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy">
+        <img style="--i:2" src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy">
+      </div>
+      <div class="end-shelf" aria-hidden="true"></div>
     </div>
-    <p class="mail-note">{t('mail_note')}<span class="nw">{MAIL}</span> <button type="button" class="btn-copy" data-copy="{MAIL}" data-done="{e('copied')}">{t('copy')}</button></p>
-    <a class="lumen" href="{t('lumen_url')}">
-      <svg viewBox="0 0 96 64" aria-hidden="true">
-        <circle class="l-glow" cx="70" cy="30" r="26" fill="url(#lg{i})"/>
-        <defs><radialGradient id="lg{i}"><stop offset="0" stop-color="#FFD166" stop-opacity=".55"/><stop offset="1" stop-color="#FFD166" stop-opacity="0"/></radialGradient></defs>
-        <path d="M2 50 Q40 40 94 46" stroke="#6E4A2D" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M52 44 Q70 60 88 44 Z" fill="#5C3B23"/><path d="M50 44 h40" stroke="#8A5E3A" stroke-width="5" stroke-linecap="round"/>
-        <g class="l-chick"><image href="/img/c-chick.webp" x="57" y="14" width="26" height="26"/></g>
-      </svg>
-      <div><b>{t('lumen_b')}</b><span>{t('lumen_s')}</span></div><span class="arr" aria-hidden="true">→</span>
-    </a>
+    <p class="end-note">{t('end_note')} {CTA['note'][i]}</p>
   </div>
 </section>
 </main>
+
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 Lumen Lab</span>
-    <a href="{other}" hreflang="{S['lang'][1 - i]}" lang="{S['lang'][1 - i]}">{t('other_lang')}</a>
-    <a href="mailto:{MAIL}">{MAIL}</a>
-    <p>{t('foot_note')}</p>
+    <div class="row">
+      <span>© 2026 Lumen Lab</span>
+      <a href="mailto:{MAIL}">{MAIL}</a>
+      <a href="{t('lumen_url')}">lumenlab.page</a>
+      <a href="{other}" hreflang="{olang}" lang="{olang}">{t('other_lang')}</a>
+    </div>
+    <p>{t('foot_ai')}</p>
+    <p>{t('foot_dev')}</p>
   </div>
 </footer>
+
+<div class="dock" id="dock">{cta('cta-dock')}</div>
+
 <script src="/assets/demo.js?v=__DEMO__" defer></script>
 <script src="/assets/site.js?v=__SITE__" defer></script>
 </body>
@@ -410,19 +409,21 @@ def page(i):
 '''
 
 
-NOT_FOUND = '''<!doctype html>
+def not_found():
+    return f'''<!doctype html>
 <html lang="ko">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="only light">
 <title>페이지가 없어요 · 병아리 구조대</title><meta name="robots" content="noindex">
-<meta name="theme-color" content="#171B2B"><link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="theme-color" content="#FFE680"><link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="stylesheet" href="/assets/site.css?v=__CSS__">
 </head>
-<body style="background:var(--night);color:var(--night-ink)">
-<main class="wrap" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px;padding-top:40px;padding-bottom:40px">
-<img src="/img/c-chick.webp" width="72" height="72" alt="">
-<h1 style="font-size:28px">이 페이지는 둥지에 없어요</h1>
-<p style="color:var(--night-muted)">This page doesn’t exist.</p>
-<p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-play" href="/">병아리 구조대 홈</a><a class="btn btn-soft" href="/en/" lang="en">Chick Rescue home</a></p>
+<body class="lost">
+<main class="lost-box">
+<div class="lost-tube" aria-hidden="true"><img src="/img/c-chick.webp" width="160" height="160" alt=""></div>
+<h1>{j('이 페이지는 둥지에 없어요')}</h1>
+<p lang="en">This page doesn’t exist.</p>
+<p class="lost-acts"><a class="cta" href="/">{j('병아리 구조대 홈')}</a><a class="lang" href="/en/" lang="en">{j('Chick Rescue home')}</a></p>
 </main>
 </body>
 </html>
@@ -434,17 +435,9 @@ def sha(path):
 
 
 def head_font(src):
-    """제목에 쓰는 글자만 남긴 게임 글꼴 조각(OFL: 이름을 바꾸고 라이선스를 같이 둔다)."""
-    keys = [k for k in S if re.match(r'(h1|real_h2|fr_h2|help\d$|help_h2|long_h2|n\d$|m_h2|m_free$|m_ads$|m_pay$|faq_h2|end_h2|name|fr_eye)', k)]
-    chars = set()
-    for k in keys:
-        for v in S[k]:
-            chars |= set(v if isinstance(v, str) else '')
-    for k in FRIENDS:
-        chars |= set(FR[k][0][0]) | set(FR[k][1][0])
-    for d in DEMO.values():
-        chars |= set(d['doneTitle'] + d['doneAllTitle'])
-    chars |= set('0123456789,.·!?:-–— ()&ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz’\'')
+    """둥근 제목 글꼴(Jua, OFL) 중 page()가 모은 글자만 남긴 조각. 이름을 바꾸고 라이선스(assets/OFL.txt)를 같이 둔다."""
+    chars = set(JUA) | set('0123456789,.·!?:;-–—~() &/%+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz’\'"“”')
+    chars.discard('\n')
     txt = os.path.join(HERE, '.head-chars.txt')
     open(txt, 'w', encoding='utf-8').write(''.join(sorted(chars)))
     out = os.path.join(SITE, 'assets', 'head.woff2')
@@ -453,33 +446,40 @@ def head_font(src):
                     '--name-IDs=0,1,2,3,4,5,6', '--name-languages=*'], check=True)
     from fontTools.ttLib import TTFont
     f = TTFont(out, recalcTimestamp=False)
-    for rec in f['name'].names:  # OFL 예약 이름(Pretendard) 빼기
-        if rec.nameID in (1, 3, 4, 6, 16, 17):
-            rec.string = 'CR Head Bold' if rec.nameID in (4,) else ('CRHead-Bold' if rec.nameID == 6 else ('CR Head' if rec.nameID in (1, 16) else ('Bold' if rec.nameID == 17 else 'CR Head Bold subset')))
+    names = {1: FONT_NAME, 3: FONT_NAME + ' subset', 4: FONT_NAME, 6: FONT_NAME.replace(' ', '') + '-Regular', 16: FONT_NAME, 17: 'Regular'}
+    for rec in f['name'].names:
+        if rec.nameID in names:
+            rec.string = names[rec.nameID]
     f.flavor = 'woff2'
     f.save(out)
     os.remove(txt)
 
 
 def main():
-    if len(sys.argv) > 1:
-        head_font(sys.argv[1])
+    src = sys.argv[1] if len(sys.argv) > 1 else FONT_SRC
+    pages = [page(0), page(1), not_found()]  # 먼저 만들어야 둥근 글꼴 글자가 모인다
+    for x in S['og']:  # 공유 그림(_dev/og.html)도 같은 조각을 쓴다
+        j(x)
+    if os.path.exists(src):
+        head_font(src)
+    else:
+        print('글꼴 원본이 없어 assets/head.woff2를 그대로 둬요:', src)
+    # CSS 안의 글꼴 주소 지문을 먼저 맞춘 뒤 CSS 지문을 잰다
+    css_p = os.path.join(SITE, 'assets/site.css')
+    css = open(css_p, encoding='utf-8').read()
+    css2 = re.sub(r'head\.woff2\?v=[^)"]+', 'head.woff2?v=' + sha('assets/head.woff2'), css)
+    if css2 != css:
+        open(css_p, 'w', encoding='utf-8').write(css2)
     v = {'__CSS__': sha('assets/site.css'), '__DEMO__': sha('assets/demo.js'), '__SITE__': sha('assets/site.js'),
          '__HEADFONT__': sha('assets/head.woff2')}
+
     def fill(s):
         for k, x in v.items():
             s = s.replace(k, x)
         return s
     os.makedirs(os.path.join(SITE, 'en'), exist_ok=True)
-    open(os.path.join(SITE, 'index.html'), 'w', encoding='utf-8').write(fill(page(0)))
-    open(os.path.join(SITE, 'en', 'index.html'), 'w', encoding='utf-8').write(fill(page(1)))
-    open(os.path.join(SITE, '404.html'), 'w', encoding='utf-8').write(fill(NOT_FOUND))
-    # CSS 안의 글꼴 주소 지문
-    css = open(os.path.join(SITE, 'assets/site.css'), encoding='utf-8').read()
-    css2 = re.sub(r'head\.woff2\?v=[^)"]+', 'head.woff2?v=' + v['__HEADFONT__'], css)
-    if css2 != css:
-        open(os.path.join(SITE, 'assets/site.css'), 'w', encoding='utf-8').write(css2)
-        print('site.css 글꼴 지문을 바꿨어요. 한 번 더 돌려 주세요(CSS 지문이 바뀜).')
+    for p, s in zip(('index.html', 'en/index.html', '404.html'), pages):
+        open(os.path.join(SITE, p), 'w', encoding='utf-8').write(fill(s))
     sm = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ''' + ''.join(f'''  <url><loc>{BASE}{p}</loc>
@@ -490,7 +490,7 @@ def main():
 ''' for p in ('/', '/en/')) + '</urlset>\n'
     open(os.path.join(SITE, 'sitemap.xml'), 'w', encoding='utf-8').write(sm)
     open(os.path.join(SITE, 'robots.txt'), 'w', encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n')
-    print('ok', v)
+    print('ok', v, '둥근 글꼴 글자', len(JUA))
 
 
 if __name__ == '__main__':

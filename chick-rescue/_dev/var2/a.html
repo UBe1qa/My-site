@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>병아리 구조대 — 튜브를 옮겨 병아리를 구하는 퍼즐</title>
+<meta name="description" content="튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 갇힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.">
+<meta name="theme-color" content="#FFE680">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preload" href="/img/logo-ko.webp" as="image" fetchpriority="high">
+<style>
+/* 병아리 구조대 랜딩 시안 A "튜브 쇼케이스" (2026-10-17)
+   개성 2: 칸 자체가 시험관(위가 열린 둥근 캡슐), 칸이 공처럼 떨어져 착지, 스크롤만큼 공이 쌓이는 작은 튜브.
+   친숙 8: 키 아트(로고) + 바로 해 보는 판 → 캐릭터 → 실제 화면 → 세계(둥지 나무) → 짧은 FAQ → 알림 단추 → 꼬리말. */
+@font-face{font-family:"Jua";src:url(fonts/Jua-Regular.ttf) format("truetype");font-display:swap}
+
+:root{
+  --paper:#FFF8EC;      /* 알 껍데기 크림 */
+  --paper-2:#FFF1D6;
+  --sun:#FFE680;        /* 첫 화면 햇살 */
+  --chick:#FFD84D;      /* 병아리 노랑(둥지 칸 면) */
+  --chick-deep:#F5B700;
+  --ink:#2B2235;        /* 게임 윤곽선 색 */
+  --ink-2:#4A3F57;
+  --cta:#FF8A1F;        /* 목표 행동 하나(게임 주황 친구 색) */
+  --cta-deep:#C9620A;
+  --cta-ink:#2B1A05;
+  --glass:rgba(255,255,255,.62);
+  --glass-line:rgba(43,34,53,.26);
+  --win:#151A2E;        /* 게임 화면 창문 테두리(밤 남색은 창문 안에서만) */
+  /* 친구 무대 면 */
+  --sq:#F0A04B; --sq-d:#C9772A;
+  --fr:#8FD15A; --fr-d:#5FA62F;
+  --bt:#7A5CC0; --bt-d:#5A3F99;
+  --wh:#2A72C2; --wh-d:#1C5594;
+  --mint:#C6F0EA;
+  --round:"Jua","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic","Segoe UI",sans-serif;
+  --pop:cubic-bezier(.34,1.56,.64,1);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:12px}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);word-break:keep-all;overflow-wrap:break-word;overflow-x:hidden}
+img,video{max-width:100%;height:auto}
+[hidden]{display:none!important}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;letter-spacing:-.005em}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:12px 14px;border-radius:12px;z-index:90}
+.skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── 목표 행동 단추: 게임 공처럼 둥글고 반짝(주제 재료 단추) ── */
+.cta{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:56px;padding:0 28px 3px;border-radius:999px;border:0;cursor:pointer;
+  background:radial-gradient(120% 140% at 30% 20%,#FFB45E 0%,var(--cta) 45%,#F27A0C 100%);
+  color:var(--cta-ink);font:20px/1.1 var(--round);text-decoration:none;white-space:nowrap;
+  box-shadow:inset 0 -5px 0 rgba(0,0,0,.14),0 5px 0 var(--cta-deep),0 10px 22px rgba(201,98,10,.28);
+  -webkit-tap-highlight-color:transparent;transition:box-shadow .12s;
+}
+.cta::before{content:"";position:absolute;left:22px;top:9px;width:26px;height:10px;border-radius:50%;background:rgba(255,255,255,.55);transform:rotate(-12deg)}
+.cta svg{width:22px;height:22px;flex:0 0 auto}
+.cta:active{box-shadow:inset 0 -3px 0 rgba(0,0,0,.14),0 2px 0 var(--cta-deep),0 4px 10px rgba(201,98,10,.25)}
+.cta.is-press{animation:squish .38s var(--pop)}
+@keyframes squish{0%{transform:scale(.92,.9)}45%{transform:scale(1.06,.96)}100%{transform:none}}
+
+/* ── 머리줄 ── */
+.top{position:absolute;left:0;right:0;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.brand{display:inline-flex;align-items:center;gap:9px;font:19px/1 var(--round);text-decoration:none;min-height:48px}
+.brand img{width:34px;height:34px;border-radius:10px;box-shadow:0 2px 0 rgba(43,34,53,.18)}
+.top .cta{display:none;min-height:48px;font-size:17px;padding:0 22px 2px}
+.top .cta::before{left:16px;top:7px;width:20px;height:8px}
+
+/* ── 1. 첫 화면: 햇살 + 바로 해 보는 판 ── */
+.hero{position:relative;overflow:hidden;isolation:isolate;padding:56px 0 54px;
+  background:linear-gradient(180deg,var(--sun) 0%,#FFF0B0 58%,var(--paper) 100%);
+  border-radius:0 0 50% 50% / 0 0 36px 36px}
+.rays{position:absolute;left:50%;top:-340px;width:1100px;height:1100px;margin-left:-550px;z-index:-1;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.42) 0deg 9deg,rgba(255,255,255,0) 9deg 22.5deg);
+  -webkit-mask:radial-gradient(closest-side,#000 25%,transparent 100%);mask:radial-gradient(closest-side,#000 25%,transparent 100%)}
+.hero-col{position:relative;max-width:560px;margin:0 auto;padding:0 16px;text-align:center}
+.hero-logo{display:block;width:158px;height:auto;margin:0 auto;filter:drop-shadow(0 6px 0 rgba(160,90,0,.18))}
+.hero h1{font-size:clamp(24px,6.6vw,38px);margin:4px auto 0;max-width:15em}
+.hero-sub{margin-top:6px;font-size:16px;color:var(--ink-2)}
+.hero-sub b{font:inherit;font-weight:700;color:var(--ink)}
+.hero-status{margin-top:14px;font-size:15px;color:var(--ink-2)}
+.spill{position:absolute;inset:0;pointer-events:none;z-index:-1}
+.spill img{position:absolute;width:46px;height:46px}
+.spill .s1{left:12px;top:78px;rotate:-10deg}
+.spill .s2{right:12px;top:96px;rotate:12deg}
+.spill .s3,.spill .s4,.spill .s5,.spill .s6{display:none}
+
+/* 맛보기 판(demo.js가 찾는 요소와 판 동작 CSS만 /assets/site.css에서 옮겨 밝은 바탕에 맞춤) */
+.demo{position:relative;max-width:460px;margin:12px auto 0;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;font-family:var(--round)}
+.demo-head{display:flex;justify-content:center;gap:10px;align-items:center;font:15px/1.3 var(--body);color:var(--ink-2);min-height:40px}
+.demo-count{font-variant-numeric:tabular-nums}
+.demo-sound{min-height:40px;padding:0 12px;font-size:15px;gap:6px}
+.demo-sound svg{width:18px;height:18px}
+.demo-sound .off,.demo-sound[aria-pressed="false"] .on{display:none}
+.demo-sound[aria-pressed="false"] .off{display:inline}
+.demo-sound[aria-pressed="false"]{color:#6A5F75}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:999px;border:0;cursor:pointer;
+  font:17px/1.1 var(--round);color:var(--ink);background:#fff;text-decoration:none;
+  box-shadow:inset 0 0 0 2px rgba(43,34,53,.16),0 3px 0 rgba(43,34,53,.16);-webkit-tap-highlight-color:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-soft{background:#fff}
+.btn-hint{color:#14603F;box-shadow:inset 0 0 0 2px rgba(31,140,92,.55),0 3px 0 rgba(31,140,92,.3)}
+.btn-play{background:var(--chick);box-shadow:inset 0 -4px 0 rgba(0,0,0,.08),0 4px 0 #C99400}
+.demo-tip{margin-top:8px;min-height:48px;font:15px/1.45 var(--body);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 6px}
+.nest{display:flex;justify-content:center;gap:10px;height:46px;align-items:flex-end;margin:2px 0 4px}
+.nest-slot{width:46px;height:28px;border-radius:0 0 24px 24px;background:#7A4E2A;box-shadow:inset 0 4px 0 #9A6A3E,0 2px 0 #4F2F17;position:relative}
+.nest-slot::before{content:"";position:absolute;left:-4px;right:-4px;top:-3px;height:8px;border-radius:6px;background:repeating-linear-gradient(90deg,#C8964F 0 5px,#9A6A3E 5px 9px)}
+.nest-slot[data-full]::after{content:"";position:absolute;left:50%;bottom:8px;width:40px;height:40px;margin-left:-20px;background:url(/img/c-chick.webp) center/contain no-repeat}
+.board{position:relative;display:flex;justify-content:center;gap:var(--gap,10px);touch-action:manipulation;padding-bottom:16px}
+.board::after{content:"";position:absolute;left:-4px;right:-4px;bottom:0;height:14px;border-radius:8px;background:linear-gradient(#D69A5A,#B0773D);box-shadow:0 4px 0 #84531F}
+.tube{position:relative;width:var(--tw,62px);height:var(--th,236px);border:0;padding:0;cursor:pointer;
+  background:linear-gradient(90deg,rgba(255,255,255,.8),rgba(255,255,255,.5) 45%,rgba(255,255,255,.72));
+  border-radius:10px 10px 50% 50% / 10px 10px 30px 30px;
+  box-shadow:inset 0 0 0 3px var(--glass-line),inset 0 -8px 16px rgba(255,216,77,.18);
+  transition:box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.tube::after{content:"";position:absolute;left:15%;top:9%;width:9%;bottom:22%;border-radius:9px;background:rgba(255,255,255,.95);pointer-events:none}
+.tube.is-sel{box-shadow:inset 0 0 0 4px var(--cta),0 0 0 5px rgba(255,138,31,.22)}
+.tube.is-hint{box-shadow:inset 0 0 0 4px #1F8C5C,0 0 0 5px rgba(31,140,92,.22)}
+.tube[data-hint]::before{content:attr(data-hint);position:absolute;left:50%;top:-14px;transform:translateX(-50%);padding:2px 9px;border-radius:999px;background:#57D29F;color:#10241B;font:13px/1.4 var(--round);white-space:nowrap;z-index:2}
+.tube.is-nudge{animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{box-shadow:inset 0 0 0 4px var(--cta),0 0 0 7px rgba(255,138,31,.25)}}
+.tube.is-sealed{box-shadow:inset 0 0 0 3px rgba(245,183,0,.95)}
+.pieces{position:absolute;inset:0;pointer-events:none}
+.pc{position:absolute;left:0;top:0;width:var(--pw,52px);height:var(--pw,52px);will-change:transform}
+.pc svg,.pc img{display:block;width:100%;height:100%}
+.pc.is-hintpc::after{content:"";position:absolute;inset:-6px;border-radius:50%;box-shadow:0 0 0 3px #1F8C5C}
+.demo-ctrl{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.demo-ctrl .btn{min-width:96px}
+.demo-done{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:min(330px,94%);z-index:3;
+  background:var(--paper);border-radius:28px;padding:22px 18px 18px;
+  box-shadow:0 0 0 4px var(--chick),0 22px 50px rgba(43,34,53,.28)}
+.demo-done h2{font-size:30px}
+.demo-done p{font:16px/1.5 var(--body);color:var(--ink-2);margin:8px 0 14px}
+.demo-done .btn{width:100%}
+.demo-done .btn + .btn{margin-top:8px}
+.demo-done .cr-stars polygon[fill^="rgba"]{fill:rgba(43,34,53,.14)}
+.fx{position:absolute;inset:-40px 0 0 0;pointer-events:none;z-index:4}
+/* 갇힌 병아리 말풍선(판 위, 친구들 뒤) */
+.peep{position:absolute;left:0;top:0;transform:translate(-50%,-100%);padding:5px 12px 6px;border-radius:16px;background:#fff;color:var(--ink);
+  font:15px/1.2 var(--round);white-space:nowrap;box-shadow:0 0 0 2px rgba(43,34,53,.14),0 4px 0 rgba(43,34,53,.1);pointer-events:none}
+.peep::after{content:"";position:absolute;left:var(--tail,50%);bottom:-7px;width:14px;height:14px;margin-left:-7px;background:#fff;transform:rotate(45deg);border-radius:0 0 4px 0;box-shadow:2px 2px 0 rgba(43,34,53,.1)}
+.peep.is-pop{animation:peep .5s var(--pop)}
+@keyframes peep{0%{scale:.3;opacity:0}100%{scale:1;opacity:1}}
+
+/* ── 칸 머리: 라벨 없이 둥근 제목 한 줄 + 한 줄 ── */
+.h2{font-size:clamp(30px,8vw,48px);text-align:center}
+.lead{margin-top:8px;text-align:center;font-size:17px;color:var(--ink-2)}
+
+/* ── 2. 친구 무대: 칸 하나 = 시험관 하나 ── */
+.friends{padding:56px 0 64px}
+.rack{display:grid;gap:34px;margin-top:34px}
+.stage{position:relative;margin:0 auto;width:100%;max-width:380px;padding:26px 20px 54px;text-align:center;
+  background:var(--c);color:var(--t,var(--ink));
+  border-radius:12px 12px 50% 50% / 12px 12px 120px 120px;
+  box-shadow:inset 0 -14px 0 rgba(0,0,0,.08),0 10px 0 var(--cd)}
+.stage::before{content:"";position:absolute;left:-9px;right:-9px;top:-10px;height:18px;border-radius:10px;background:var(--cd);box-shadow:inset 0 3px 0 rgba(255,255,255,.25)}
+.stage::after{content:"";position:absolute;left:14px;top:30px;bottom:34%;width:9px;border-radius:9px;background:rgba(255,255,255,.4)}
+.st-sq{--c:var(--sq);--cd:var(--sq-d)}
+.st-fr{--c:var(--fr);--cd:var(--fr-d)}
+.st-bt{--c:var(--bt);--cd:var(--bt-d);--t:#fff}
+.st-wh{--c:var(--wh);--cd:var(--wh-d);--t:#fff}
+.stage-top{display:flex;align-items:center;justify-content:center;gap:12px}
+.ball{width:86px;height:86px;flex:0 0 auto;filter:drop-shadow(0 5px 0 rgba(0,0,0,.14))}
+.stage-top div{text-align:left}
+.verb{font:46px/1 var(--round);letter-spacing:-.01em}
+.stage h3{font-size:22px;margin-top:2px}
+.say{margin-top:12px;font-size:17px;line-height:1.5;font-weight:600}
+.win{width:min(100%,236px);margin:14px auto 0;border-radius:22px;padding:6px;background:var(--win);box-shadow:0 8px 0 rgba(0,0,0,.16)}
+.win video{display:block;width:100%;height:auto;aspect-ratio:480/512;border-radius:17px;background:#232A48;object-fit:cover}
+.puff{position:absolute;left:50%;bottom:-14px;width:0;height:0;pointer-events:none}
+.puff::before,.puff::after{content:"";position:absolute;bottom:0;width:26px;height:16px;border-radius:50%;background:rgba(255,255,255,.95);opacity:0}
+.puff::before{left:-120px}.puff::after{left:94px}
+/* 나머지 여덟 친구: 누운 튜브 한 줄 */
+.band{margin:44px auto 0;max-width:640px;text-align:center}
+.band-tube{position:relative;display:flex;justify-content:space-between;gap:2px;padding:7px 12px;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.6));box-shadow:inset 0 0 0 3px var(--glass-line)}
+.band-tube img{width:38px;height:38px}
+.band-tube::after{content:"";position:absolute;right:-8px;top:-4px;bottom:-4px;width:12px;border-radius:8px;background:#E5D2B0;box-shadow:inset 0 0 0 2px var(--glass-line)}
+.band h3{font-size:24px;margin-top:16px}
+.band p{font-size:16px;color:var(--ink-2);margin-top:2px}
+
+/* ── 3. 실제 화면: 클래식과 구출을 나란히(전후 비교) ── */
+.real{position:relative;z-index:1;padding:60px 0 72px;background:var(--mint);border-radius:44px 44px 50% 50% / 44px 44px 40px 40px}
+.vs{display:flex;justify-content:center;align-items:flex-end;gap:14px;margin-top:30px}
+.ph{margin:0;width:46%;max-width:270px;text-align:center}
+.ph-frame{border-radius:28px;padding:6px;background:var(--win);box-shadow:0 10px 0 rgba(21,26,46,.18)}
+.ph-frame img,.ph-frame video{display:block;width:100%;height:auto;aspect-ratio:600/1300;border-radius:23px;background:#171B2B;object-fit:cover}
+.ph-classic{width:40%;rotate:-4deg;opacity:.92}
+.ph-classic .ph-frame{background:#3A3F55}
+.ph-rescue{rotate:3deg}
+.ph figcaption{margin-top:14px;font-size:16px;line-height:1.4}
+.ph figcaption b{display:block;font:22px/1.2 var(--round);font-weight:400}
+.ph-rescue figcaption span{display:inline-block;margin-top:4px;padding:3px 10px 4px;border-radius:999px;background:var(--chick);font-weight:700}
+.real .note{text-align:center;margin-top:22px;font-size:16px;color:var(--ink-2)}
+
+/* ── 4. 둥지 나무: 큰 그림 한 장 ── */
+.nestsec{position:relative;padding:64px 0 0;background:var(--chick);margin-top:-36px;overflow:hidden;isolation:isolate}
+.nestsec::before{content:"";position:absolute;left:50%;top:-180px;width:900px;height:900px;margin-left:-450px;border-radius:50%;z-index:-1;
+  background:radial-gradient(closest-side,rgba(255,255,255,.55),rgba(255,255,255,0))}
+.nestsec .wrap{padding-top:36px}
+.tree{position:relative;width:min(100%,520px);margin:18px auto 0}
+.tree img{display:block;width:100%;height:auto}
+.tc{position:absolute;left:var(--x);top:var(--y);width:12%;aspect-ratio:1;transform:translate(-50%,-78%);background:url(/img/c-chick.webp) center/contain no-repeat}
+.tc::after{content:"♥";position:absolute;left:50%;top:-10%;font:16px/1 var(--body);color:#E8457A;opacity:0;transform:translateX(-50%)}
+.sign{position:absolute;left:4%;top:71%;width:31%;padding:8px 4px 9px;text-align:center;border-radius:10px;
+  background:linear-gradient(#C98E52,#A9713A);color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15),0 4px 0 #6F4520;transform-origin:50% -40px}
+.sign::before,.sign::after{content:"";position:absolute;top:-34px;width:3px;height:34px;background:#6F4520}
+.sign::before{left:22%}.sign::after{right:22%}
+.sign b{display:block;font:clamp(21px,6.4vw,34px)/1 var(--round);font-weight:400;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.sign span{display:block;font-size:13px;line-height:1.3;margin-top:3px;font-weight:700;color:#FFF6E6}
+.ground{position:relative;margin-top:-30px;padding:44px 0 46px;background:#7CC35A;border-radius:50% 50% 0 0 / 34px 34px 0 0;text-align:center;z-index:-1}
+.ground p{font-size:17px;color:#14290B;font-weight:600}
+.houses{display:none}
+
+/* ── 5. 자주 묻는 질문(흔한 접는 모양) ── */
+.faq{padding:60px 0 40px}
+.qa{max-width:720px;margin:26px auto 0;border-top:2px solid rgba(43,34,53,.12)}
+.qa details{border-bottom:2px solid rgba(43,34,53,.12)}
+.qa summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:10px 2px;cursor:pointer;font-size:18px;font-weight:700}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"";flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--paper-2) center/14px no-repeat;
+  background-image:linear-gradient(var(--ink),var(--ink)),linear-gradient(var(--ink),var(--ink));background-size:12px 2.5px,2.5px 12px;background-position:center;transition:rotate .25s}
+.qa details[open] summary::after{rotate:45deg}
+.qa details p{padding:0 2px 18px;color:var(--ink-2);font-size:16px}
+
+/* ── 6. 끝: 큰 튜브에서 단추가 맨 위 공처럼 올라와요 ── */
+.end{padding:40px 0 70px;text-align:center;overflow:hidden}
+.end .h2{font-size:clamp(28px,7.6vw,44px)}
+.end-stack{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;margin-top:26px}
+.end-stack::before{content:"";position:absolute;left:50%;top:-30px;width:420px;height:420px;margin-left:-210px;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(255,216,77,.6),rgba(255,216,77,0))}
+.end-shelf{width:230px;height:14px;margin-top:-6px;border-radius:8px;background:linear-gradient(#D69A5A,#B0773D);box-shadow:0 4px 0 #84531F}
+.end-cta{position:relative;z-index:2}
+.end-cta .cta{min-height:64px;font-size:22px;padding:0 30px 3px}
+.end-chick{position:absolute;right:-6px;top:-34px;width:52px;height:52px;rotate:10deg}
+.big-tube{position:relative;width:132px;margin-top:-8px;padding:22px 0 18px;display:flex;flex-direction:column-reverse;align-items:center;gap:6px;
+  background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,255,255,.6) 45%,rgba(255,255,255,.85));
+  border-radius:12px 12px 50% 50% / 12px 12px 56px 56px;box-shadow:inset 0 0 0 4px var(--glass-line),inset 0 -12px 20px rgba(255,216,77,.25)}
+.big-tube::before{content:"";position:absolute;left:-10px;right:-10px;top:-8px;height:14px;border-radius:8px;background:#E5D2B0;box-shadow:inset 0 0 0 2px var(--glass-line)}
+.big-tube::after{content:"";position:absolute;left:18px;top:24px;bottom:50px;width:10px;border-radius:9px;background:rgba(255,255,255,.95)}
+.big-tube img{width:86px;height:86px}
+.end-note{margin-top:22px;font-size:16px;color:var(--ink-2)}
+
+/* ── 꼬리말 ── */
+.foot{background:var(--paper-2);padding:28px 0 34px;font-size:14px;color:var(--ink-2)}
+.foot .row{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.foot a{display:inline-flex;align-items:center;min-height:44px;text-underline-offset:3px}
+.foot p{margin-top:6px;font-size:13px;line-height:1.55}
+
+/* ── 스크롤만큼 공이 쌓이는 작은 튜브 + 휴대폰 하단 줄 ── */
+.mini{position:relative;width:24px;height:72px;flex:0 0 auto;display:flex;flex-direction:column-reverse;align-items:center;gap:2px;padding:4px 0 6px;
+  border-radius:6px 6px 50% 50% / 6px 6px 12px 12px;background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 2px var(--glass-line)}
+.mini i{width:15px;height:15px;border-radius:50%;flex:0 0 auto;opacity:0;transform:translateY(-34px);
+  background:radial-gradient(circle at 35% 30%,#7DB4FF 0 18%,#3E8BFF 40%,#2C6CD0 100%);
+  transition:transform .45s cubic-bezier(.5,1.8,.6,.8),opacity .15s}
+.mini i.on{opacity:1;transform:none}
+.mini::before{content:"";position:absolute;left:-3px;right:-3px;top:-4px;height:5px;border-radius:3px;background:#F5C400;opacity:0;transform:translateY(-16px)}
+.mini.is-full::before{opacity:1;transform:none;transition:transform .45s cubic-bezier(.3,1.8,.6,1) .1s,opacity .1s .1s}
+.mini b{position:absolute;left:50%;top:-34px;width:34px;height:34px;margin-left:-17px;background:url(/img/c-chick.webp) center/contain no-repeat;opacity:0;transform:translateY(20px) scale(.4);pointer-events:none}
+.mini.is-full b{opacity:1;transform:none;transition:transform .5s var(--pop) .35s,opacity .1s .35s}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(255,248,236,.96);box-shadow:0 -2px 0 rgba(43,34,53,.08),0 -10px 24px rgba(43,34,53,.08);
+  transform:translateY(110%);visibility:hidden;transition:transform .35s var(--pop),visibility 0s .35s}
+.dock.is-on{transform:none;visibility:visible;transition:transform .35s var(--pop),visibility 0s}
+.dock .cta{flex:1;min-width:0;min-height:52px;font-size:18px;padding:0 14px 2px}
+.dock .cta::before{left:16px;top:8px;width:20px;height:8px}
+.dock .mini{height:52px;width:20px}
+.dock .mini i{width:11px;height:11px}
+.dock.is-bump .cta{animation:bump .7s var(--pop)}
+@keyframes bump{0%{transform:translateY(0)}30%{transform:translateY(-14px) scale(1.04,.96)}55%{transform:translateY(0) scale(1.06,.92)}75%{transform:translateY(-4px)}100%{transform:none}}
+.mini-v{position:fixed;right:22px;top:50%;margin-top:-48px;z-index:30;display:none;width:30px;height:96px}
+.mini-v i{width:20px;height:20px}
+
+/* ── 나타나기: 공처럼 '퐁' 떨어져 착지(스쿼시·스트레치) ── */
+.js-motion .drop{opacity:0}
+.js-motion .drop.is-in{animation:land .85s cubic-bezier(.3,.7,.4,1) both}
+@keyframes land{
+  0%{opacity:0;transform:translateY(-110px) scale(.94,1.08)}
+  12%{opacity:1}
+  48%{transform:translateY(0) scale(1.07,.9)}
+  64%{transform:translateY(-16px) scale(.97,1.03)}
+  80%{transform:translateY(0) scale(1.02,.98)}
+  100%{opacity:1;transform:none}}
+.js-motion .stage .ball{opacity:0}
+.js-motion .stage.is-in .ball{animation:ballin .7s .38s cubic-bezier(.3,.7,.4,1) both}
+@keyframes ballin{0%{opacity:0;transform:translateY(-70px) rotate(-30deg)}20%{opacity:1}55%{transform:translateY(0) scale(1.18,.82)}75%{transform:translateY(-10px) scale(.95,1.05)}100%{opacity:1;transform:none}}
+.js-motion .stage.is-in .puff::before{animation:puffl .55s .36s ease-out both}
+.js-motion .stage.is-in .puff::after{animation:puffr .55s .36s ease-out both}
+@keyframes puffl{0%{opacity:.95;transform:none}100%{opacity:0;transform:translate(-26px,-10px) scale(1.6)}}
+@keyframes puffr{0%{opacity:.95;transform:none}100%{opacity:0;transform:translate(26px,-10px) scale(1.6)}}
+.js-motion .band-tube img{opacity:0}
+.js-motion .band.is-in .band-tube img{animation:roll .6s calc(var(--i) * .07s + .2s) cubic-bezier(.3,.7,.4,1) both}
+@keyframes roll{0%{opacity:0;transform:translateX(220px) rotate(300deg)}70%{opacity:1;transform:translateX(-5px) rotate(-12deg)}100%{opacity:1;transform:none}}
+.js-motion .tc{opacity:0}
+.js-motion .tree.is-in .tc{animation:chickin .6s calc(var(--i) * .16s + .25s) cubic-bezier(.3,.7,.4,1) both}
+.js-motion .tree.is-in .tc::after{animation:heart 1s calc(var(--i) * .16s + .6s) ease-out both}
+@keyframes chickin{0%{opacity:0;transform:translate(-50%,-260%) scale(.6)}25%{opacity:1}60%{transform:translate(-50%,-78%) scale(1.25,.78)}80%{transform:translate(-50%,-92%) scale(.94,1.06)}100%{opacity:1;transform:translate(-50%,-78%)}}
+@keyframes heart{0%{opacity:0;transform:translate(-50%,0) scale(.5)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-34px) scale(1.2)}}
+.js-motion .tree.is-in .sign{animation:swing 1.4s .4s ease-out both}
+@keyframes swing{0%{rotate:-12deg}30%{rotate:8deg}55%{rotate:-4deg}78%{rotate:2deg}100%{rotate:0deg}}
+.js-motion .big-tube img,.js-motion .end-cta,.js-motion .end-chick{opacity:0}
+.js-motion .end-stack.is-in .big-tube img{animation:ballin .6s calc(var(--i) * .22s) cubic-bezier(.3,.7,.4,1) both}
+.js-motion .end-stack.is-in .end-cta{animation:rise .7s .75s var(--pop) both}
+.js-motion .end-stack.is-in .end-chick{animation:hopin .6s 1.3s cubic-bezier(.3,.7,.4,1) both}
+@keyframes rise{0%{opacity:0;transform:translateY(120px) scale(.5)}30%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes hopin{0%{opacity:0;transform:translate(30px,-60px)}50%{opacity:1;transform:translate(0,0) scale(1.2,.8)}75%{transform:translateY(-8px)}100%{opacity:1;transform:none}}
+.js-motion .hero-logo{animation:logo .9s .05s cubic-bezier(.3,.7,.4,1) both}
+@keyframes logo{0%{opacity:0;transform:translateY(-60px) scale(.8)}45%{opacity:1;transform:translateY(0) scale(1.1,.9)}65%{transform:translateY(-8px) scale(.96,1.04)}100%{transform:none}}
+.js-motion .spill img{animation:spill .9s calc(var(--i) * .09s + .25s) cubic-bezier(.3,.7,.4,1) both}
+@keyframes spill{0%{opacity:0;transform:translateY(-160px)}20%{opacity:1}50%{transform:translateY(0) scale(1.15,.85)}68%{transform:translateY(-22px)}84%{transform:translateY(0) scale(1.04,.96)}100%{opacity:1;transform:none}}
+
+/* ── 넓은 화면 ── */
+@media (min-width:700px){
+  .rack{grid-template-columns:repeat(2,minmax(0,1fr));gap:52px 28px}
+  .vs{gap:34px}
+}
+@media (min-width:1000px){
+  body{font-size:18px}
+  .top{position:sticky;background:rgba(255,230,128,.0);transition:background .2s}
+  .top.is-stuck{background:rgba(255,248,236,.94);box-shadow:0 2px 0 rgba(43,34,53,.06)}
+  .top .wrap{height:68px}
+  .top .cta{display:inline-flex}
+  .hero{margin-top:-68px;padding:80px 0 72px;border-radius:0 0 50% 50% / 0 0 64px 64px}
+  .hero-logo{width:230px}
+  .spill img{width:112px;height:112px}
+  .spill .s1{left:calc(50% - 520px);top:170px}
+  .spill .s2{right:calc(50% - 520px);top:150px}
+  .spill .s3{display:block;left:calc(50% - 430px);top:420px;rotate:8deg}
+  .spill .s4{display:block;right:calc(50% - 440px);top:440px;rotate:-8deg}
+  .spill .s5{display:block;left:calc(50% - 560px);top:640px;width:92px;height:92px}
+  .spill .s6{display:block;right:calc(50% - 560px);top:660px;width:92px;height:92px}
+  .friends{padding:80px 0 90px}
+  .rack{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:50px;align-items:start}
+  .stage{padding:30px 16px 60px;border-radius:12px 12px 50% 50% / 12px 12px 96px 96px}
+  .rack .stage:nth-child(2){margin-top:40px}
+  .rack .stage:nth-child(4){margin-top:40px}
+  .stage-top{flex-direction:column;gap:6px}
+  .stage-top div{text-align:center}
+  .ball{width:96px;height:96px}
+  .verb{font-size:44px}
+  .say{min-height:3em;font-size:17px}
+  .band{margin-top:64px}
+  .band-tube{padding:9px 18px}
+  .band-tube img{width:56px;height:56px}
+  .real{padding:90px 0 100px}
+  .ph-classic{width:230px}
+  .ph-rescue{width:280px}
+  .nestsec{padding-top:90px}
+  .nestsec .wrap{display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:40px;align-items:center}
+  .nestsec .h2,.nestsec .lead{text-align:left}
+  .houses{display:flex;gap:10px;margin-top:40px}
+  .houses img{width:180px;height:180px}
+  .houses img+img{margin-top:40px;width:150px;height:150px}
+  .faq{padding:90px 0 50px}
+  .end{padding:60px 0 100px}
+  .dock{display:none}
+  .mini-v{display:flex}
+}
+@media (max-width:999px){ .foot{padding-bottom:110px} }
+@media (max-width:360px){
+  .hero-logo{width:136px}
+  .demo-ctrl .btn{min-width:0;padding:0 14px}
+  .stage{padding-left:14px;padding-right:14px}
+  .verb{font-size:40px}
+  .dock .cta{font-size:16px}
+  .end-cta .cta{font-size:19px;padding:0 20px 3px}
+  .band-tube{padding:6px 8px}
+  .band-tube img{width:32px;height:32px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js-motion .drop,.js-motion .stage .ball,.js-motion .band-tube img,.js-motion .tc,.js-motion .big-tube img,.js-motion .end-cta,.js-motion .end-chick{opacity:1}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#try">맛보기 판으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon-256.webp" width="34" height="34" alt="">병아리 구조대</a>
+    <a class="cta" href="mailto:contact@lumenlab.page?subject=%EB%B3%91%EC%95%84%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%EB%8C%80%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD">출시 소식 메일로 받기</a>
+  </div>
+</header>
+<main>
+
+<section class="hero" id="try" aria-labelledby="h1">
+  <div class="rays" aria-hidden="true"></div>
+  <div class="spill" aria-hidden="true">
+    <img class="s1" style="--i:0" src="/img/c-frog.webp" width="160" height="160" alt="">
+    <img class="s2" style="--i:1" src="/img/c-whale.webp" width="160" height="160" alt="">
+    <img class="s3" style="--i:2" src="/img/c-squirrel.webp" width="160" height="160" alt="">
+    <img class="s4" style="--i:3" src="/img/c-bat.webp" width="160" height="160" alt="">
+    <img class="s5" style="--i:4" src="/img/c-lion.webp" width="160" height="160" alt="">
+    <img class="s6" style="--i:5" src="/img/c-penguin.webp" width="160" height="160" alt="">
+  </div>
+  <div class="hero-col">
+    <img class="hero-logo" src="/img/logo-ko.webp" width="640" height="425" alt="병아리 구조대">
+    <h1 id="h1">튜브를 옮겨, 갇힌 병아리를 구해요</h1>
+    <p class="hero-sub">한 판 18초쯤 · <b>메인 1,440판 무료</b> · 인터넷 없이</p>
+    <div class="demo" id="demo">
+      <p class="demo-head"><span class="demo-count" aria-live="polite"></span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>소리</button></p>
+      <p class="peep" aria-hidden="true" hidden>삐약! 꺼내 줘요</p>
+      <div class="nest" aria-hidden="true"></div>
+      <div class="board"><div class="pieces" aria-hidden="true"></div></div>
+      <p class="demo-tip" aria-live="polite"></p>
+      <div class="demo-ctrl">
+        <button type="button" class="btn btn-soft" data-act="undo">되돌리기</button>
+        <button type="button" class="btn btn-hint" data-act="hint">힌트</button>
+        <button type="button" class="btn btn-soft" data-act="restart">다시 하기</button>
+      </div>
+      <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
+        <h2 id="demo-done-h"></h2><p></p>
+        <button type="button" class="btn btn-play" data-act="next"></button>
+        <button type="button" class="btn btn-soft" data-act="real"></button>
+      </div>
+      <canvas class="fx" aria-hidden="true"></canvas>
+      <script type="application/json" id="demo-text">{"names": {"A": "빨강이", "B": "파랑이", "C": "노랑이", "c": "다람쥐", "b": "병아리"}, "empty": "비었어요", "tube": "튜브 {n}", "tip1": "튜브를 눌러 맨 위 친구를 옮겨 보세요. 병아리가 맨 위로 나오면 둥지로 날아가요.", "tip2": "다람쥐를 꾹 누르면 꼭대기까지 올라가요. 병아리 위를 비워 주세요.", "pick": "옮길 튜브를 누르세요. 비었거나 맨 위가 같은 친구인 튜브로 가요.", "go": "좋아요. 병아리 위에 있는 친구들을 치워 주세요.", "cant": "거기는 못 가요. 맨 위 친구가 같은 튜브나 빈 튜브로만 옮길 수 있어요.", "cantFull": "그 튜브는 꽉 찼어요. 한 튜브에 4칸까지 들어가요.", "cantSealed": "그 튜브는 이미 다 모아서 잠겼어요.", "climbTop": "다람쥐가 이미 맨 위예요.", "saved": "병아리가 둥지로 날아갔어요!", "count": "이동 {n}번 · 가장 적게 {min}번", "best": "가장 적은 수예요.", "doneTitle": "구했어요!", "done": "{n}번 만에 병아리를 구했어요.", "doneAllTitle": "맛보기 끝!", "doneAll": "{n}번 만에 구했어요. 실제 게임엔 무료로 하는 판만 1,440판이에요.", "next": "다음 판: 다람쥐 능력", "seeReal": "실제 게임 화면 보기", "again": "처음부터 다시", "hintPour": "‘여기서’ 튜브를 누른 다음 ‘여기로’ 튜브를 눌러 보세요.", "hintFrom": "여기서", "hintTo": "여기로", "hintClimb": "빛나는 다람쥐를 꾹 눌러 보세요.", "stuck": "더 풀 수 없어요. 되돌리기나 다시 하기를 눌러 주세요."}</script>
+    </div>
+    <p class="hero-status">안드로이드 출시 준비 중 · 웹 맛보기 두 판</p>
+  </div>
+</section>
+
+<section class="friends" id="friends" aria-labelledby="fr-h">
+  <div class="wrap">
+    <h2 class="h2" id="fr-h">친구를 꾹 누르면<br>능력이 나가요</h2>
+    <p class="lead">능력을 써야 풀리는 판이 있어요.</p>
+    <div class="rack">
+      <article class="stage st-sq drop">
+        <div class="stage-top"><img class="ball" src="/img/c-squirrel.webp" width="160" height="160" alt=""><div><p class="verb" aria-hidden="true">쏙!</p><h3>다람쥐</h3></div></div>
+        <p class="say">꾹 누르면 꼭대기까지 올라가요</p>
+        <div class="win"><video data-auto muted loop playsinline preload="none" poster="/img/abilities/squirrel.webp" width="480" height="512" aria-label="다람쥐가 꼭대기로 올라가는 실제 게임 장면"><source src="/video/abilities/squirrel.mp4" type="video/mp4"></video></div>
+        <i class="puff" aria-hidden="true"></i>
+      </article>
+      <article class="stage st-fr drop">
+        <div class="stage-top"><img class="ball" src="/img/c-frog.webp" width="160" height="160" alt=""><div><p class="verb" aria-hidden="true">폴짝!</p><h3>개구리</h3></div></div>
+        <p class="say">꾹 누르고 튜브를 고르면 그리로 뛰어가요</p>
+        <div class="win"><video data-auto muted loop playsinline preload="none" poster="/img/abilities/frog.webp" width="480" height="512" aria-label="개구리가 다른 튜브로 뛰어가는 실제 게임 장면"><source src="/video/abilities/frog.mp4" type="video/mp4"></video></div>
+        <i class="puff" aria-hidden="true"></i>
+      </article>
+      <article class="stage st-bt drop">
+        <div class="stage-top"><img class="ball" src="/img/c-bat.webp" width="160" height="160" alt=""><div><p class="verb" aria-hidden="true">홱!</p><h3>박쥐</h3></div></div>
+        <p class="say">꾹 누르면 튜브를 통째로 뒤집어요</p>
+        <div class="win"><video data-auto muted loop playsinline preload="none" poster="/img/abilities/bat.webp" width="480" height="512" aria-label="박쥐가 튜브를 뒤집는 실제 게임 장면"><source src="/video/abilities/bat.mp4" type="video/mp4"></video></div>
+        <i class="puff" aria-hidden="true"></i>
+      </article>
+      <article class="stage st-wh drop">
+        <div class="stage-top"><img class="ball" src="/img/c-whale.webp" width="160" height="160" alt=""><div><p class="verb" aria-hidden="true">철썩!</p><h3>고래</h3></div></div>
+        <p class="say">파도 한 번에 모든 튜브 맨 위 친구가 옆으로</p>
+        <div class="win"><video data-auto muted loop playsinline preload="none" poster="/img/abilities/whale.webp" width="480" height="512" aria-label="고래가 파도를 일으키는 실제 게임 장면"><source src="/video/abilities/whale.mp4" type="video/mp4"></video></div>
+        <i class="puff" aria-hidden="true"></i>
+      </article>
+    </div>
+    <div class="band drop">
+      <div class="band-tube">
+        <img style="--i:0" src="/img/c-otter.webp" width="160" height="160" alt="해달">
+        <img style="--i:1" src="/img/c-octopus.webp" width="160" height="160" alt="문어">
+        <img style="--i:2" src="/img/c-turtle.webp" width="160" height="160" alt="거북이">
+        <img style="--i:3" src="/img/c-penguin.webp" width="160" height="160" alt="펭귄">
+        <img style="--i:4" src="/img/c-mole.webp" width="160" height="160" alt="두더지">
+        <img style="--i:5" src="/img/c-owl.webp" width="160" height="160" alt="부엉이">
+        <img style="--i:6" src="/img/c-elephant.webp" width="160" height="160" alt="코끼리">
+        <img style="--i:7" src="/img/c-lion.webp" width="160" height="160" alt="사자">
+      </div>
+      <h3>친구 12마리, 능력도 12가지</h3>
+      <p>해달·문어·거북이·펭귄·두더지·부엉이·코끼리·사자도 기다려요</p>
+    </div>
+  </div>
+</section>
+
+<section class="real" id="real" aria-labelledby="real-h">
+  <div class="wrap">
+    <h2 class="h2" id="real-h">다 모으지 않아도 돼요<br>병아리만 꺼내면 끝</h2>
+    <div class="vs">
+      <figure class="ph ph-classic drop">
+        <div class="ph-frame"><img src="/img/shot-classic_play_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="클래식 모드 실제 게임 화면: 같은 색끼리 다 모아야 끝나요"></div>
+        <figcaption><b>클래식</b>같은 색끼리 다 모아야 끝</figcaption>
+      </figure>
+      <figure class="ph ph-rescue drop">
+        <div class="ph-frame"><video data-auto muted loop playsinline preload="none" poster="/img/play-ko-poster.webp" width="600" height="1300" aria-label="구출 판을 처음부터 끝까지 푸는 실제 게임 영상 13초, 소리 없음"><source src="/img/play-ko.mp4" type="video/mp4"><source src="/img/play-ko.webm" type="video/webm"></video></div>
+        <figcaption><b>구출</b><span>병아리만 꺼내면 끝</span></figcaption>
+      </figure>
+    </div>
+    <p class="note">모드는 클래식·능력·구출 셋, 모드마다 16스테이지예요.</p>
+  </div>
+</section>
+
+<section class="nestsec" id="nest" aria-labelledby="nest-h">
+  <div class="wrap">
+    <div>
+      <h2 class="h2" id="nest-h">구한 병아리는<br>둥지 나무에서 살아요</h2>
+      <p class="lead">별을 모아 친구 집도 짓고, 하루 한 판 오늘의 도전도 있어요.</p>
+      <div class="houses" aria-hidden="true"><img src="/img/house-squirrel.webp" width="320" height="320" alt="" loading="lazy"><img src="/img/house-frog.webp" width="320" height="320" alt="" loading="lazy"></div>
+    </div>
+    <div class="tree drop">
+      <img src="/img/nest-tree.webp" width="640" height="857" loading="lazy" decoding="async" alt="둥지 아홉 개가 달린 큰 나무. 사다리와 등불이 걸려 있어요">
+      <span class="tc" style="--x:50%;--y:11.5%;--i:0" aria-hidden="true"></span>
+      <span class="tc" style="--x:31%;--y:22%;--i:1" aria-hidden="true"></span>
+      <span class="tc" style="--x:69%;--y:22%;--i:2" aria-hidden="true"></span>
+      <span class="tc" style="--x:25%;--y:36%;--i:3" aria-hidden="true"></span>
+      <span class="tc" style="--x:74.5%;--y:36%;--i:4" aria-hidden="true"></span>
+      <span class="tc" style="--x:23.5%;--y:50%;--i:5" aria-hidden="true"></span>
+      <span class="tc" style="--x:77.5%;--y:50%;--i:6" aria-hidden="true"></span>
+      <span class="tc" style="--x:23.5%;--y:63%;--i:7" aria-hidden="true"></span>
+      <span class="tc" style="--x:76.5%;--y:63.5%;--i:8" aria-hidden="true"></span>
+      <p class="sign"><b>1,440판</b><span>메인 판<br>전부 무료</span></p>
+    </div>
+  </div>
+  <div class="ground"><p>퍼즐 모음 960판은 모음마다 첫 스테이지가 무료예요.</p></div>
+</section>
+
+<section class="faq" id="faq" aria-labelledby="faq-h">
+  <div class="wrap">
+    <h2 class="h2" id="faq-h">자주 묻는 질문</h2>
+    <div class="qa">
+      <details><summary>언제, 어디서 받을 수 있나요?</summary><p>안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요.</p></details>
+      <details><summary>아이폰에서도 되나요?</summary><p>준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요.</p></details>
+      <details><summary>돈을 써야 하나요? 광고는요?</summary><p>메인 1,440판은 끝까지 무료예요. 처음 쓰는 날과 첫 15판엔 판 사이 광고가 없고, 그 뒤에도 많아야 3판에 한 번이에요. 광고 제거·퍼즐 모음은 결제로 열고, 가격은 출시 때 정해요. 돈을 내고 무작위로 뽑는 아이템은 없어요.</p></details>
+      <details><summary>퍼즐을 잘 못해도 할 수 있나요?</summary><p>판마다 첫 힌트는 무료고, 되돌리기와 다시 하기는 늘 무료예요. 막히면 알려 주고 막히기 직전으로 한 번에 돌아가요. 능력 없는 클래식부터 시작해도 돼요.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="end" id="end" aria-labelledby="end-h">
+  <div class="wrap">
+    <h2 class="h2" id="end-h">나오면 제일 먼저<br>알려 드릴게요</h2>
+    <div class="end-stack">
+      <div class="end-cta">
+        <a class="cta" href="mailto:contact@lumenlab.page?subject=%EB%B3%91%EC%95%84%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%EB%8C%80%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD">출시 소식 메일로 받기</a>
+        <img class="end-chick" src="/img/c-chick.webp" width="160" height="160" alt="" aria-hidden="true">
+      </div>
+      <div class="big-tube" aria-hidden="true">
+        <img style="--i:0" src="/img/c-squirrel.webp" width="160" height="160" alt="">
+        <img style="--i:1" src="/img/c-frog.webp" width="160" height="160" alt="">
+        <img style="--i:2" src="/img/c-whale.webp" width="160" height="160" alt="">
+      </div>
+      <div class="end-shelf" aria-hidden="true"></div>
+    </div>
+    <p class="end-note">안드로이드부터 나와요. 메일 주시면 알려 드려요.</p>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="row">
+      <span>© 2026 Lumen Lab</span>
+      <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>
+      <a href="https://lumenlab.page/">lumenlab.page</a>
+      <a href="/en/" hreflang="en" lang="en">English</a>
+    </div>
+    <p>로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요.</p>
+    <p>화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <div class="mini" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+  <a class="cta" href="mailto:contact@lumenlab.page?subject=%EB%B3%91%EC%95%84%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%EB%8C%80%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD">출시 소식 메일로 받기</a>
+</div>
+<div class="mini mini-v" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+
+<script src="/assets/demo.js?v=59e00cd6" defer></script>
+<script>
+/* 시안 A 페이지 움직임: 나타나기·영상·말풍선·스크롤 튜브·하단 줄. 외부 라이브러리 없음. */
+(function () {
+  'use strict';
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = 'IntersectionObserver' in window;
+  var doc = document.documentElement;
+  if (io && !reduce) doc.classList.add('js-motion');
+
+  /* 나타나기: 보일 때 한 번 '퐁' */
+  var once = function (sel, cls, opt) {
+    var els = document.querySelectorAll(sel);
+    if (!io || reduce) { els.forEach(function (e) { e.classList.add(cls); }); return; }
+    var ob = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add(cls); ob.unobserve(e.target); } });
+    }, opt || { rootMargin: '0px 0px -12% 0px' });
+    els.forEach(function (e) { ob.observe(e); });
+  };
+  once('.drop', 'is-in');
+  once('.end-stack', 'is-in', { threshold: .5 });
+
+  /* 영상: 보일 때만 재생. 동작 줄이기면 포스터 + 재생 단추 */
+  document.querySelectorAll('video[data-auto]').forEach(function (v) {
+    if (reduce || !io) { v.controls = true; return; }
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () { v.controls = true; }); }
+        else v.pause();
+      });
+    }, { threshold: .35 }).observe(v);
+  });
+
+  /* 단추 누름: 공처럼 찌그러졌다 펴짐 */
+  document.querySelectorAll('.cta').forEach(function (b) {
+    b.addEventListener('pointerdown', function () { b.classList.remove('is-press'); void b.offsetWidth; b.classList.add('is-press'); });
+  });
+
+  /* 갇힌 병아리 말풍선: 병아리가 있는 튜브 위에. 튜브를 고르거나 판을 다 풀면 숨김 */
+  var demo = document.getElementById('demo'), peep = demo && demo.querySelector('.peep'), pq = 0, lastT = null;
+  function placePeep() {
+    pq = 0;
+    if (!peep) return;
+    var t = null;
+    demo.querySelectorAll('.tube').forEach(function (b) { if ((b.getAttribute('aria-label') || '').indexOf('병아리') >= 0) t = b; });
+    if (!t || demo.querySelector('.tube.is-sel') || demo.classList.contains('is-done')) { peep.hidden = true; lastT = null; return; }
+    var r = t.getBoundingClientRect(), o = demo.getBoundingClientRect();
+    var wasHidden = peep.hidden;
+    peep.hidden = false;
+    var w = peep.offsetWidth, cx = r.left + r.width / 2 - o.left, x = Math.max(w / 2 + 2, Math.min(o.width - w / 2 - 2, cx));
+    peep.style.left = x + 'px';
+    peep.style.top = (r.top - o.top - 12) + 'px';
+    peep.style.setProperty('--tail', (50 + (cx - x) / w * 100) + '%');
+    if ((wasHidden || lastT !== t) && !reduce) { peep.classList.remove('is-pop'); void peep.offsetWidth; peep.classList.add('is-pop'); }
+    lastT = t;
+  }
+  function queuePeep() { if (!pq) pq = requestAnimationFrame(placePeep); }
+  if (demo && 'MutationObserver' in window) {
+    new MutationObserver(queuePeep).observe(demo, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'aria-label'] });
+    addEventListener('resize', function () { setTimeout(queuePeep, 200); });
+    setTimeout(queuePeep, 300);
+  }
+
+  /* 소리: 손으로 누른 뒤, 맛보기 소리가 켜져 있을 때만 '딩' */
+  var touched = false, actx = null;
+  addEventListener('pointerdown', function () { touched = true; }, { once: true, capture: true });
+  function ding() {
+    try { if (localStorage.getItem('cr-demo-sound') === '0') return; } catch (e) {}
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!touched || !AC) return;
+    try { actx = actx || new AC(); } catch (e) { return; }
+    var t0 = actx.currentTime;
+    [1, 1.25, 1.5, 2].forEach(function (r, k) {
+      var o = actx.createOscillator(), g = actx.createGain(), t = t0 + k * 0.11;
+      o.type = 'sine'; o.frequency.value = 784 * r;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.16, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0008, t + 0.8);
+      o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + 0.85);
+    });
+  }
+
+  /* 스크롤만큼 작은 튜브에 공이 쌓이고, 끝까지 오면 뚜껑 쾅 + 병아리 */
+  var minis = document.querySelectorAll('.mini'), STEPS = [0.1, 0.36, 0.62, 0.96], full = false, sq = 0;
+  function onScroll() {
+    sq = 0;
+    var max = doc.scrollHeight - innerHeight, p = max > 0 ? scrollY / max : 1, n = 0;
+    STEPS.forEach(function (s) { if (p >= s) n++; });
+    if (full) n = 4;
+    minis.forEach(function (m) { m.querySelectorAll('i').forEach(function (b, k) { b.classList.toggle('on', k < n); }); });
+    if (n === 4 && !full) { full = true; minis.forEach(function (m) { m.classList.add('is-full'); }); ding(); }
+    var top = document.querySelector('.top');
+    if (top) top.classList.toggle('is-stuck', scrollY > 20);
+  }
+  addEventListener('scroll', function () { if (!sq) sq = requestAnimationFrame(onScroll); }, { passive: true });
+  onScroll();
+
+  /* 휴대폰 하단 줄: 맛보기 단추 줄을 지나면 나오고, 끝 칸 단추가 보이면 숨음. 맛보기를 풀면 통 튀어요 */
+  var dock = document.getElementById('dock'), pastDemo = false, endSeen = false;
+  function syncDock() { dock.classList.toggle('is-on', (pastDemo || (demo && demo.classList.contains('is-done'))) && !endSeen); }
+  if (io) {
+    var ctrl = document.querySelector('.demo-ctrl');
+    if (ctrl) new IntersectionObserver(function (es) { var e = es[0]; pastDemo = !e.isIntersecting && e.boundingClientRect.top < 0; syncDock(); }).observe(ctrl);
+    var endBtn = document.querySelector('.end-cta');
+    if (endBtn) new IntersectionObserver(function (es) { endSeen = es[0].isIntersecting; syncDock(); }, { rootMargin: '0px 0px -40px 0px' }).observe(endBtn);
+  } else pastDemo = true;
+  if (demo && 'MutationObserver' in window) {
+    var wasDone = false;
+    new MutationObserver(function () {
+      var d = demo.classList.contains('is-done');
+      syncDock();
+      if (d && !wasDone) {
+        if (!reduce) setTimeout(function () { dock.classList.remove('is-bump'); void dock.offsetWidth; dock.classList.add('is-bump'); }, 1300);
+      }
+      wasDone = d;
+    }).observe(demo, { attributes: true, attributeFilter: ['class'] });
+  }
+  syncDock();
+})();
+</script>
+</body>
+</html>

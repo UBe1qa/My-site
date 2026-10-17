@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>캐슬업! — 켜 두면, 성이 자라요</title>
+<meta name="description" content="성을 층층이 쌓아 층마다 영웅을 세우는 방치형 디펜스. 15웨이브마다 보스가 길을 막아요. 안드로이드 출시 준비 중.">
+<meta name="theme-color" content="#3A2160">
+<link rel="icon" href="/favicon.ico">
+<link rel="preload" href="/img/logo-ko.webp" as="image" fetchpriority="high">
+<style>
+@font-face{font-family:"BHS";src:url("fonts/BlackHanSans-Regular.ttf") format("truetype");font-display:swap}
+:root{
+  --ink:#2B1433;            /* 밝은 바탕 위 글씨 */
+  --paper:#FFF6EA;          /* 어두운 바탕 위 글씨 */
+  --soft:#EADCF4;           /* 어두운 바탕 위 둘째 글씨 */
+  --gold1:#FFD866; --gold2:#F2B33D; --gold-edge:#8A5A12; --gold-ink:#3A1D0B;
+  --f1t:#F2A55E; --f1b:#E8875B;   /* 1층: 노을 주황 */
+  --f2t:#B04F7B; --f2b:#7B3E8D;   /* 2층: 노을 자주 */
+  --f3t:#5A2D86; --f3b:#3D2169;   /* 3층: 보라 */
+  --f4t:#2E1A57; --f4b:#24144A;   /* 질문: 짙은 보라 */
+  --night:#170C2E;
+  --phys:#E3DACB; --fire:#FF8A4C; --ice:#7FD0FF; --bolt:#FFD84A; --holy:#FFF0A6; --dark:#B48CFF;
+  --head:"BHS","Black Han Sans",-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --merlon:22px;
+}
+*{box-sizing:border-box}
+html{background:var(--night);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--night);color:var(--paper);font:17px/1.6 var(--body);word-break:keep-all;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--head);font-weight:400;margin:0;line-height:1.2;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:8px;top:-60px;z-index:50;background:var(--gold1);color:var(--gold-ink);padding:12px 16px;border-radius:8px}
+.skip:focus{top:8px}
+:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+/* ── 금색 주 단추: 게임 단추처럼 두툼한 아랫단 ── */
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 26px;
+  font:19px/1.15 var(--head);color:var(--gold-ink);text-decoration:none;text-align:center;
+  background:linear-gradient(180deg,var(--gold1),var(--gold2));border:2px solid var(--gold-edge);border-radius:12px;
+  box-shadow:0 5px 0 var(--gold-edge),0 10px 24px rgba(40,10,40,.35);position:relative;overflow:hidden;
+  transition:transform .12s,box-shadow .12s}
+.btn-gold svg{width:22px;height:22px;flex:none}
+.btn-gold:hover{filter:brightness(1.05)}
+.btn-gold:active{transform:translateY(4px) scale(.98,.96);box-shadow:0 1px 0 var(--gold-edge),0 4px 10px rgba(40,10,40,.3)}
+.btn-gold.shine::after{content:"";position:absolute;inset:-20% auto -20% -40%;width:30%;transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:shine 3.2s ease-in-out 1s infinite}
+@keyframes shine{0%,55%{left:-40%}85%,100%{left:130%}}
+
+/* ── 머리말 ── */
+.top{position:absolute;left:0;right:0;top:0;z-index:5}
+.top .wrap{display:flex;align-items:center;height:60px}
+.brand{display:flex;align-items:center;gap:10px;min-height:48px;text-decoration:none;font:20px var(--head);color:#fff;text-shadow:0 2px 6px rgba(30,10,40,.6)}
+.brand img{width:34px;height:34px;border-radius:9px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+
+/* ── 첫 화면 ── */
+.hero{position:relative;overflow:hidden;min-height:100svh;padding:64px 0 calc(var(--merlon) + 34px);isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(46,22,82,.78) 0%,rgba(70,32,96,.5) 34%,rgba(90,40,90,.12) 62%,rgba(60,24,80,.45) 100%)}
+.hero-grid{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.hero-text{display:contents}
+.hero-logo{order:1}.hero h1{order:2}.hero-sub{order:3}.hero-media{order:4}.hero-act{order:5}
+.hero-logo{width:150px;height:auto;filter:drop-shadow(0 6px 14px rgba(30,8,40,.55))}
+.hero h1{font-size:36px;color:#fff;text-shadow:0 3px 0 rgba(58,22,80,.75),0 6px 18px rgba(30,8,50,.6)}
+.hero-sub{max-width:24em;font-size:16.5px;line-height:1.5;color:#fff;text-shadow:0 1px 3px rgba(30,8,40,.9),0 0 14px rgba(40,10,60,.7)}
+.hero-act{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:4px}
+.hero-note{font-size:14px;color:#fff;background:rgba(40,16,62,.62);padding:4px 12px;border-radius:999px}
+
+/* 탑 창문 모양 영상 틀 */
+.tower{position:relative;width:min(178px,50vw);margin:40px auto 0}
+.tower-flag{position:absolute;left:50%;bottom:100%;width:46px;height:54px;margin-left:-4px;transform:translateY(8px)}
+.tower-flag .pole{position:absolute;left:0;bottom:0;width:4px;height:54px;background:#5A3B22;border-radius:2px}
+.tower-flag .cloth{position:absolute;left:4px;top:2px;width:38px;height:24px;background:var(--gold2);
+  clip-path:polygon(0 0,100% 18%,78% 50%,100% 82%,0 100%);transform-origin:0 50%;animation:flag 1.6s ease-in-out infinite}
+@keyframes flag{0%,100%{transform:skewY(0) scaleX(1)}50%{transform:skewY(-7deg) scaleX(.86)}}
+.tower-cren{height:16px;margin:0 -10px;background:#9C8C88;
+  -webkit-mask:linear-gradient(90deg,#000 0 22px,transparent 22px 34px) 0 0/34px 100% repeat-x;
+  mask:linear-gradient(90deg,#000 0 22px,transparent 22px 34px) 0 0/34px 100% repeat-x}
+.tower-body{position:relative;margin:0 -10px;padding:10px;border-radius:4px;
+  background:#8A7B78 repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 2px,transparent 2px 22px);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.12),0 18px 40px rgba(30,8,40,.5)}
+.tower-win{position:relative;overflow:hidden;border-radius:110px 110px 6px 6px/64px 64px 6px 6px;background:#2B1433;
+  aspect-ratio:600/1066;box-shadow:inset 0 0 0 3px #4A3640}
+.tower-win video,.tower-win img{width:100%;height:100%;object-fit:cover;display:block}
+.tower-cap{margin-top:6px;font-size:13.5px;color:#fff;text-shadow:0 1px 3px rgba(20,6,30,.9)}
+
+/* 떨어지는 단풍잎(상시 배경 움직임) */
+.leaves{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;top:-30px;width:14px;height:10px;border-radius:0 80% 0 80%;background:var(--c,#E8642C);opacity:.85;
+  animation:leaf var(--d,9s) linear var(--w,0s) infinite}
+@keyframes leaf{0%{transform:translate(0,-20px) rotate(0)}50%{transform:translate(var(--x,40px),55vh) rotate(260deg)}100%{transform:translate(calc(var(--x,40px)*-.4),110vh) rotate(520deg)}}
+
+/* ── 층(칸): 위 가장자리를 성벽 총안 모양으로 ── */
+.floor{position:relative;padding:44px 0 calc(var(--merlon) + 48px);color:var(--paper);
+  background:repeating-linear-gradient(0deg,rgba(20,0,30,.05) 0 2px,transparent 2px 46px),linear-gradient(180deg,var(--top),var(--bot))}
+.floor::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:var(--merlon);background:var(--top);
+  -webkit-mask:linear-gradient(90deg,#000 0 30px,transparent 30px 48px) 0 0/48px 100% repeat-x;
+  mask:linear-gradient(90deg,#000 0 30px,transparent 30px 48px) 0 0/48px 100% repeat-x}
+.floor::after{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:rgba(0,0,0,.12)}
+.f1{--top:var(--f1t);--bot:var(--f1b);color:var(--ink)}
+.f2{--top:var(--f2t);--bot:var(--f2b)}
+.f3{--top:var(--f3t);--bot:var(--f3b)}
+.f4{--top:var(--f4t);--bot:var(--f4b)}
+.f5{--top:var(--night);--bot:var(--night)}
+.floor h2{font-size:32px}
+.lead{margin-top:10px;font-size:17px;max-width:30em}
+.f1 .lead{color:#3A1A3A}
+
+/* 쿵 하고 내려앉기 */
+.js .drop{opacity:0;transform:translateY(-46px)}
+.js .drop.in{animation:thud .62s cubic-bezier(.3,.7,.3,1) var(--dl,0s) both}
+@keyframes thud{0%{opacity:0;transform:translateY(-46px)}55%{opacity:1;transform:translateY(5px) scale(1.03,.93)}75%{transform:translateY(-3px) scale(.99,1.02)}100%{opacity:1;transform:none}}
+.puff{position:absolute;width:16px;height:16px;border-radius:50%;background:rgba(255,240,220,.85);pointer-events:none;z-index:4;
+  animation:puff .6s ease-out forwards}
+@keyframes puff{from{transform:translate(0,0) scale(.4);opacity:.9}to{transform:translate(var(--px),var(--py)) scale(1.6);opacity:0}}
+
+/* ── 1층: 한 층에 영웅 한 명 (층 단면) ── */
+.f1-grid{display:grid;gap:26px}
+.stack{list-style:none;margin:0 auto;padding:0;width:100%;max-width:440px;position:relative}
+.roof{position:relative;height:74px;margin:0 6px}
+.roof::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#6A3F86,#4B2A6A);
+  clip-path:polygon(50% 0,100% 100%,0 100%)}
+.roof::after{content:"";position:absolute;left:50%;top:-34px;width:4px;height:40px;background:#5A3B22;transform:translateX(-50%)}
+.roof i{position:absolute;left:50%;top:-34px;width:34px;height:20px;background:var(--gold2);clip-path:polygon(0 0,100% 20%,78% 50%,100% 80%,0 100%);
+  transform-origin:0 50%;margin-left:2px;animation:flag 1.6s ease-in-out infinite}
+.room{position:relative;height:118px;margin-top:0;border-left:10px solid #7C6461;border-right:10px solid #7C6461;
+  background:#9A5C4C repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0 2px,transparent 2px 24px);
+  box-shadow:inset 0 -12px 0 #5E3A2A,inset 0 -14px 0 #3E2418}
+.room+.room{border-top:8px solid #7C6461}
+.room .win{position:absolute;right:22px;top:16px;width:40px;height:52px;border-radius:20px 20px 3px 3px;background:#F8C77F;
+  box-shadow:inset 0 0 0 4px #5E3A2A;opacity:.85}
+.room img{position:absolute;left:14px;bottom:10px;height:136px;width:auto;z-index:2;filter:drop-shadow(0 4px 2px rgba(0,0,0,.35))}
+.plate{position:absolute;right:12px;bottom:20px;z-index:3;min-width:150px;padding:6px 12px 7px 14px;border-radius:6px;background:#2B1433;color:#fff;
+  border-left:6px solid var(--rc)}
+.plate b{display:block;font:20px/1.2 var(--head)}
+.plate span{display:flex;align-items:center;gap:6px;font-size:14px;color:#E6DAF0}
+.plate em{font-style:normal;color:var(--rc);font-weight:700}
+.plate svg{width:16px;height:16px;color:var(--ec)}
+.base{height:22px;margin:0 -8px;background:#6E5A58 repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 40px);border-radius:3px}
+
+/* ── 2층: 켜 둔 동안 / 꺼 둔 동안 (낮·밤 비교) ── */
+.duo{display:grid;gap:18px;margin-top:26px}
+.pane{position:relative;border-radius:14px;overflow:hidden;padding:18px 18px 20px}
+.pane h3{font-size:24px;display:flex;align-items:center;gap:10px}
+.pane h3 svg{width:28px;height:28px;flex:none}
+.pane p{margin-top:6px;font-size:16.5px;line-height:1.55}
+.pane-day{background:linear-gradient(180deg,#FFE7BE,#FFD39A);color:var(--ink);box-shadow:0 8px 0 rgba(60,10,50,.25)}
+.pane-day .shot{margin-top:14px;border-radius:10px;overflow:hidden;aspect-ratio:600/560;border:3px solid #5E3A2A}
+.pane-day .shot img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.pane-night{display:flex;flex-direction:column;background:radial-gradient(circle at 84% 14%,rgba(255,244,200,.28) 0 30px,transparent 31px),
+  linear-gradient(180deg,#2B1856,#1C0F3C);color:var(--paper);box-shadow:0 8px 0 rgba(20,4,30,.35)}
+.moon{position:absolute;right:20px;top:18px;width:34px;height:34px;border-radius:50%;background:#FFF1C2;box-shadow:0 0 22px rgba(255,240,190,.7)}
+.trips{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:14px}
+.trip{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center}
+.face{width:48px;height:48px;border-radius:50%;overflow:hidden;background:#4A2F7A;border:2px solid rgba(255,255,255,.55)}
+.face,.join-faces span{position:relative}
+.face img,.join-faces img{position:absolute;max-width:none;height:auto;width:var(--z,150px);left:calc(50% - var(--fx)*var(--z,150px));top:calc(42% - var(--fy)*var(--z,150px)*var(--ar))}
+.trip-top{display:flex;justify-content:space-between;font-size:14.5px;color:var(--soft)}
+.trip-top b{color:#fff;font-weight:700}
+.bar{position:relative;height:14px;margin-top:4px;border-radius:7px;background:rgba(255,255,255,.14);overflow:hidden}
+.bar i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(var(--to,1));background:linear-gradient(90deg,#F2B33D,#FFE08A);border-radius:7px}
+.js .bar i{transform:scaleX(0)}
+.js .run .bar i{transform:scaleX(1);transition:transform var(--t,2s) cubic-bezier(.4,.1,.5,1) var(--dl,0s)}
+.got{display:inline-block;opacity:0;color:var(--gold1);font:15px var(--head)}
+.js .run .got{animation:pop .4s cubic-bezier(.3,1.6,.5,1) calc(var(--t,2s) + var(--dl,0s)) both}
+html:not(.js) .got{opacity:1}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+.ribbon{margin:22px auto 0;display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:16.5px;
+  padding:10px 18px;border-radius:18px;background:rgba(30,6,40,.32);width:fit-content;max-width:100%}
+.stay{margin-top:auto!important;padding-top:16px;font-size:15.5px;color:var(--soft)}
+.ribbon svg{width:22px;height:22px;flex:none;color:var(--gold1)}
+
+/* ── 3층: 보스 한 마리씩 크게 ── */
+.boss-head{display:flex;align-items:center;gap:14px}
+.big{font:112px/0.82 var(--head);color:var(--gold1);text-shadow:0 5px 0 #7A3E10,0 12px 26px rgba(10,0,20,.5)}
+.boss-head h2{font-size:30px}
+.reel{position:relative;margin-top:24px}
+.slides{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
+.slides::-webkit-scrollbar{display:none}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;height:452px;border-radius:14px;overflow:hidden;isolation:isolate;
+  box-shadow:0 10px 0 rgba(10,0,24,.35);margin:0}
+.slide .bg{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.slide::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(20,6,40,.5) 0%,transparent 26%,transparent 54%,rgba(20,6,40,.88) 100%)}
+.slide .art{position:absolute;left:50%;bottom:78px;width:min(300px,80%);transform:translateX(-50%);filter:drop-shadow(0 10px 10px rgba(0,0,0,.45))}
+.slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:0 18px 18px}
+.slide figcaption b{display:block;font:34px/1.1 var(--head);color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.4)}
+.wave{position:absolute;left:14px;top:14px;font-size:14.5px;font-weight:700;color:#fff;background:rgba(20,6,40,.72);padding:5px 12px;border-radius:999px}
+.stamp{position:absolute;right:14px;top:14px;width:88px;height:88px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(20,6,40,.78);border:3px solid var(--c);color:#fff;transform:rotate(-12deg);font:15px/1.1 var(--head);
+  box-shadow:0 0 0 3px rgba(20,6,40,.5),0 0 18px color-mix(in srgb,var(--c) 60%,transparent)}
+.stamp svg{width:26px;height:26px;color:var(--c);margin:2px 0}
+.stamp small{font:13px var(--body);font-weight:700;color:#EADCF4}
+.js .slide .art{opacity:0;transform:translateX(-50%) scale(.7) translateY(30px)}
+.js .slide .stamp{opacity:0}
+.js .slide.on .art{animation:rise .55s cubic-bezier(.2,1.3,.4,1) both}
+.js .slide.on .stamp{animation:stamp .42s cubic-bezier(.5,0,.6,1.4) .45s both}
+.js .slide.on{animation:quake .32s linear .82s}
+@keyframes rise{from{opacity:0;transform:translateX(-50%) scale(.7) translateY(30px)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes stamp{0%{opacity:0;transform:rotate(-30deg) scale(2.4)}70%{opacity:1;transform:rotate(-10deg) scale(.92)}100%{opacity:1;transform:rotate(-12deg) scale(1)}}
+@keyframes quake{0%,100%{transform:none}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,-1px)}}
+.reel-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:16px}
+.nav-btn{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.6);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;
+  display:grid;place-items:center;transition:transform .12s,background .15s}
+.nav-btn:hover{background:rgba(255,255,255,.2)}
+.nav-btn:active{transform:scale(.9)}
+.nav-btn svg{width:24px;height:24px}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.count{font:20px var(--head);min-width:64px;text-align:center}
+.join{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:20px;border-top:2px dashed rgba(255,255,255,.22)}
+.join-faces{display:flex;flex:none}
+.join-faces span{width:58px;height:58px;border-radius:50%;overflow:hidden;border:3px solid #FF6B6B;background:#2B1856;margin-left:-12px}
+.join-faces span:first-child{margin-left:0}
+.join-faces span{--z:176px}
+.join p{font-size:16.5px;line-height:1.5}
+
+/* ── 질문(흔한 접기) ── */
+.faq{margin-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+.faq details{border-bottom:1px solid rgba(255,255,255,.2)}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:10px 2px;font-size:17.5px;font-weight:700}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:12px;height:12px;border-right:3px solid currentColor;border-bottom:3px solid currentColor;transform:rotate(45deg);margin:-6px 6px 0;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.faq details p{padding:0 2px 18px;color:var(--soft);font-size:16.5px}
+
+/* ── 꼭대기 ── */
+.f5{overflow:hidden;text-align:center;padding-top:56px;
+  background:radial-gradient(1.5px 1.5px at 12% 18%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 30% 8%,#fff 50%,transparent 51%),
+  radial-gradient(2px 2px at 82% 14%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 68% 32%,#fff 50%,transparent 51%),
+  radial-gradient(1.5px 1.5px at 90% 44%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 52%,#fff 50%,transparent 51%),
+  radial-gradient(ellipse at 50% 34%,#4A2A86 0,#2A1656 38%,var(--night) 70%)}
+.summit{position:relative;width:min(300px,78vw);margin:0 auto}
+.summit .beam{position:absolute;left:50%;bottom:24%;width:150%;height:150%;transform:translateX(-50%);z-index:0;pointer-events:none;
+  background:conic-gradient(from 160deg at 50% 100%,transparent 0deg,rgba(255,230,150,.32) 14deg,transparent 22deg,rgba(255,230,150,.22) 30deg,transparent 40deg);
+  opacity:.9}
+.summit img{position:relative;z-index:1;width:100%;filter:drop-shadow(0 0 30px rgba(180,120,255,.55))}
+.js .summit img{opacity:0;transform:translateY(60px) scale(.8)}
+.js .summit.in img{animation:grow 1s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes grow{from{opacity:0;transform:translateY(60px) scale(.8)}to{opacity:1;transform:none}}
+.promo{position:absolute;left:50%;top:6%;z-index:3;transform:translateX(-50%);white-space:nowrap;font:30px var(--head);color:var(--gold1);
+  text-shadow:0 3px 0 #7A3E10,0 0 18px rgba(255,200,80,.7);opacity:0;pointer-events:none}
+.summit.in .promo{animation:promo 1.9s ease-out .7s both}
+@keyframes promo{0%{opacity:0;transform:translateX(-50%) scale(.4)}18%{opacity:1;transform:translateX(-50%) scale(1.15)}30%{transform:translateX(-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-24px)}}
+.plaque{display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:8px 18px;border-radius:8px;background:#3A2466;border:2px solid #6E52A6;font:19px var(--head);color:#fff}
+.plaque i{font-style:normal;color:var(--gold1)}
+.f5 h2{margin-top:20px;font-size:34px}
+.f5 .lead{margin:10px auto 0;color:var(--soft)}
+.end-act{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px}
+.end-note{font-size:14.5px;color:var(--soft)}
+.confetti{position:absolute;top:0;width:9px;height:14px;border-radius:2px;z-index:4;pointer-events:none;animation:conf var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes conf{from{transform:translate(0,0) rotate(0);opacity:1}to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+
+/* ── 꼬리말 ── */
+.foot{background:#100822;color:#CDBFE6;font-size:14px;line-height:1.6;padding:28px 0 34px}
+.foot .row{display:flex;flex-wrap:wrap;align-items:center;gap:0 18px}
+.foot .row a{display:inline-flex;align-items:center;min-height:48px}
+.foot a{color:#fff}
+.foot p{margin-top:10px}
+
+/* ── 자라는 내 성 (휴대폰: 아래 고정 줄 / 넓은 화면: 오른쪽 아래) ── */
+.keep{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:#2A1656;color:#fff;transform:translateY(130%);transition:transform .35s cubic-bezier(.3,.8,.3,1);box-shadow:0 -6px 20px rgba(10,0,20,.35)}
+.keep::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:12px;background:#2A1656;
+  -webkit-mask:linear-gradient(90deg,#000 0 20px,transparent 20px 32px) 0 0/32px 100% repeat-x;
+  mask:linear-gradient(90deg,#000 0 20px,transparent 20px 32px) 0 0/32px 100% repeat-x}
+.keep.show{transform:none}
+.keep-castle{position:relative;width:52px;height:56px;flex:none;display:flex;align-items:flex-end;justify-content:center}
+.keep-castle img{max-height:56px;width:auto;transform-origin:50% 100%}
+.keep-castle img.thud{animation:kthud .42s cubic-bezier(.3,.7,.3,1)}
+@keyframes kthud{0%{transform:translateY(-14px) scale(.9,1.1);opacity:.4}55%{transform:translateY(2px) scale(1.12,.86);opacity:1}100%{transform:none}}
+.keep-castle .glow{position:absolute;left:50%;bottom:0;width:90px;height:130px;transform:translateX(-50%);opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 80%,rgba(255,226,140,.8),transparent 65%)}
+.keep-castle .glow.on{animation:glow 1s ease-out}
+@keyframes glow{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.keep-txt{flex:1;min-width:0;line-height:1.2}
+.keep-txt b{display:block;font:17px var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.keep-txt span{font-size:13.5px;color:var(--soft);white-space:nowrap}
+.keep-txt b.pop{animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.keep .btn-gold{min-height:50px;padding:0 14px;font-size:16px;box-shadow:0 4px 0 var(--gold-edge);flex:none}
+.keep .btn-gold svg{display:none}
+body{padding-bottom:0}
+body.has-keep{padding-bottom:84px}
+@media (max-width:359px){.keep-txt span{display:none}.keep .btn-gold{font-size:15px;padding:0 10px}}
+
+/* ── 넓은 화면 ── */
+@media (min-width:720px){
+  .wrap{padding:0 28px}
+  .floor{padding:64px 0 calc(var(--merlon) + 64px)}
+  .floor h2{font-size:42px}
+  .lead{font-size:18px}
+  .hero{display:flex;align-items:center;padding:84px 0 calc(var(--merlon) + 48px)}
+  .hero .wrap{width:100%}
+  .hero-grid{display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;gap:48px}
+  .hero-text{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+  .hero-logo,.hero h1,.hero-sub,.hero-media,.hero-act{order:0}
+  .hero-logo{width:340px}
+  .hero h1{font-size:60px}
+  .hero-sub{font-size:19px}
+  .hero-act{align-items:flex-start}
+  .tower{width:300px;margin:46px 10px 0}
+  .tower-cap{text-align:center}
+  .f1-grid{grid-template-columns:1fr 440px;align-items:end;gap:48px}
+  .f1-text{align-self:center}
+  .duo{grid-template-columns:1fr 1fr;gap:24px}
+  .pane-day .shot{aspect-ratio:600/400}
+  .trips{gap:22px;margin-top:22px}
+  .slides{margin:0;padding:0;scroll-padding:0}
+  .slide{height:540px}
+  .slide .art{width:380px;bottom:96px}
+  .big{font-size:150px}
+  .boss-head h2{font-size:42px}
+  .summit{width:340px}
+  .f5 h2{font-size:46px}
+}
+@media (min-width:1240px){
+  .keep{left:auto;right:22px;bottom:22px;width:176px;flex-direction:column;align-items:stretch;gap:8px;padding:14px 12px 12px;border-radius:12px;transform:none;text-align:center;
+    background:rgba(42,22,86,.92);box-shadow:0 12px 30px rgba(10,0,20,.45)}
+  .keep::before{left:8px;right:8px;background:rgba(42,22,86,.92)}
+  .keep-castle{width:auto;height:170px}
+  .keep-castle img{max-height:170px;max-width:150px}
+  .keep-txt b{font-size:19px}
+  .keep .btn-gold{display:none;font-size:15.5px;line-height:1.25;padding:8px 10px;min-height:56px}
+  .keep.show .btn-gold{display:flex}
+  body.has-keep{padding-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .drop,.js .slide .art,.js .slide .stamp,.js .summit img{opacity:1;transform:none}
+  .js .slide .art{transform:translateX(-50%)}
+  .js .slide .stamp{transform:rotate(-12deg)}
+  .js .bar i{transform:scaleX(var(--to,1))}
+  .got{opacity:1}
+  .leaves,.promo{display:none}
+}
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-phys" viewBox="0 0 24 24"><path d="M19 3h2v2l-9.5 9.5-2-2z" fill="currentColor"/><path d="m6.5 13.5 4 4M8 16l-4 4M5 18.5 3.5 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.3-4.2 2.6-5.3.1 1.6.9 2.8 2 3.3-.6-3.4.2-6.3.9-9z" fill="currentColor"/></symbol>
+<symbol id="i-ice" viewBox="0 0 24 24"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z" fill="currentColor"/></symbol>
+<symbol id="i-holy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-dark" viewBox="0 0 24 24"><path d="M15.5 3.2A9 9 0 1 0 20.8 15 7 7 0 0 1 15.5 3.2z" fill="currentColor"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap"><a class="brand" href="./a.html"><img src="/img/icon-256.webp" width="34" height="34" alt="">캐슬업!</a></div>
+</header>
+
+<main id="main">
+<!-- 첫 화면: 실제 게임 영상 + 한 줄 -->
+<section class="hero" aria-labelledby="h1">
+  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-autumn.webp" width="1280" height="1600" alt="" fetchpriority="high"></div>
+  <div class="leaves" aria-hidden="true">
+    <i class="leaf" style="left:6%;--d:11s;--w:-2s;--x:60px"></i><i class="leaf" style="left:22%;--d:9s;--w:-6s;--x:-30px;--c:#F2A33A"></i>
+    <i class="leaf" style="left:41%;--d:13s;--w:-1s;--x:50px;--c:#C9402A"></i><i class="leaf" style="left:63%;--d:10s;--w:-4s;--x:-50px"></i>
+    <i class="leaf" style="left:80%;--d:12s;--w:-8s;--x:40px;--c:#F2A33A"></i><i class="leaf" style="left:92%;--d:9.5s;--w:-3s;--x:-40px;--c:#C9402A"></i>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <img class="hero-logo" src="/img/logo-ko.webp" width="720" height="530" alt="캐슬업!" fetchpriority="high">
+      <h1 id="h1">켜 두면, 성이 자라요</h1>
+      <p class="hero-sub">층마다 영웅을 세우는 방치형 디펜스.<br>15웨이브마다 보스가 길을 막아요.</p>
+      <div class="hero-act" id="heroAct">
+        <a class="btn-gold" href="mailto:contact@lumenlab.page?subject=%EC%BA%90%EC%8A%AC%EC%97%85%21%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD"><svg aria-hidden="true"><use href="#i-mail"/></svg>출시 소식 메일로 받기</a>
+        <span class="hero-note">안드로이드 출시 준비 중이에요</span>
+      </div>
+    </div>
+    <div class="hero-media">
+      <div class="tower">
+        <div class="tower-flag" aria-hidden="true"><i class="pole"></i><i class="cloth"></i></div>
+        <div class="tower-cren" aria-hidden="true"></div>
+        <div class="tower-body">
+          <div class="tower-win">
+            <video id="heroVideo" muted loop playsinline autoplay preload="metadata" poster="/img/boss-ko-poster.webp" width="600" height="1066"
+              aria-label="자동 스킬로 박쥐 여왕과 싸우는 실제 게임 영상. 성의 층마다 선 영웅이 공격하고 ‘카운터! 그로기!’가 터져요.">
+              <source src="/img/boss-ko.webm" type="video/webm">
+              <source src="/img/boss-ko.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <p class="tower-cap">실제 게임 화면 · 45웨이브 박쥐 여왕</p>
+    </div>
+  </div>
+</section>
+
+<!-- 1층: 한 층에 영웅 한 명 -->
+<section class="floor f1" aria-labelledby="h-f1">
+  <div class="wrap f1-grid">
+    <div class="f1-text drop">
+      <h2 id="h-f1">한 층에 영웅 한 명</h2>
+      <p class="lead">승급할 때마다 성이 바뀌고 층이 하나 늘어요. 층보다 영웅이 많아서 누구를 세울지 골라요.</p>
+    </div>
+    <div>
+      <div class="roof drop" aria-hidden="true" style="--dl:.62s"><i></i></div>
+      <ul class="stack" aria-label="층마다 선 영웅">
+        <li class="room drop" style="--rc:#FF9A3C;--ec:var(--holy);--dl:.48s"><span class="win"></span><img src="/img/h-sword-king.webp" width="360" height="560" alt="성검의 왕">
+          <div class="plate"><b>성검의 왕</b><span><em>전설</em> · <svg aria-hidden="true"><use href="#i-holy"/></svg>빛</span></div></li>
+        <li class="room drop" style="--rc:#C27BFF;--ec:var(--holy);--dl:.32s"><span class="win"></span><img src="/img/h-angel.webp" width="360" height="347" alt="천사" style="height:118px">
+          <div class="plate"><b>천사</b><span><em>에픽</em> · <svg aria-hidden="true"><use href="#i-holy"/></svg>빛</span></div></li>
+        <li class="room drop" style="--rc:#5FB4FF;--ec:var(--ice);--dl:.16s"><span class="win"></span><img src="/img/h-frost-witch.webp" width="360" height="395" alt="얼음 마녀" style="height:124px">
+          <div class="plate"><b>얼음 마녀</b><span><em>희귀</em> · <svg aria-hidden="true"><use href="#i-ice"/></svg>얼음</span></div></li>
+        <li class="room drop" style="--rc:#C9CED8;--ec:var(--phys);--dl:0s"><span class="win"></span><img src="/img/h-archer.webp" width="360" height="437" alt="궁수" style="height:126px">
+          <div class="plate"><b>궁수</b><span><em>일반</em> · <svg aria-hidden="true"><use href="#i-phys"/></svg>물리</span></div></li>
+      </ul>
+      <div class="base" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2층: 켜 둔 동안 / 꺼 둔 동안 -->
+<section class="floor f2" aria-labelledby="h-f2">
+  <div class="wrap">
+    <h2 id="h-f2" class="drop">켜 두면 싸우고,<br>꺼 두면 원정 가요</h2>
+    <div class="duo">
+      <div class="pane pane-day drop" style="--dl:.1s">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg>켜 둔 동안</h3>
+        <p>자동 스킬로 싸우고, 깬 웨이브는 자동 반복으로 골드를 모아요.</p>
+        <div class="shot"><img src="/img/shot-wave_battle_ko.webp" width="600" height="1067" loading="lazy" alt="실제 게임의 웨이브 전투 화면. 층마다 선 영웅이 오른쪽에서 몰려오는 적을 쏴요."></div>
+      </div>
+      <div class="pane pane-night drop" style="--dl:.25s" id="trips">
+        <span class="moon" aria-hidden="true"></span>
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg>꺼 둔 동안</h3>
+        <p>영웅을 셋까지 원정 보내면 1·4·8시간 뒤 보상을 가져와요.</p>
+        <ul class="trips" aria-label="원정 예시">
+          <li class="trip" style="--t:1.2s;--dl:.3s"><span class="face" style="--fx:.42;--fy:.2;--ar:1.214"><img src="/img/h-archer.webp" width="360" height="437" alt=""></span>
+            <div><div class="trip-top"><b>궁수</b><span>1시간 <span class="got">보상 도착!</span></span></div><div class="bar"><i></i></div></div></li>
+          <li class="trip" style="--t:2.6s;--dl:.3s"><span class="face" style="--fx:.37;--fy:.25;--ar:1.097"><img src="/img/h-frost-witch.webp" width="360" height="395" alt=""></span>
+            <div><div class="trip-top"><b>얼음 마녀</b><span>4시간 <span class="got">보상 도착!</span></span></div><div class="bar"><i></i></div></div></li>
+          <li class="trip" style="--t:4.4s;--dl:.3s"><span class="face" style="--fx:.44;--fy:.22;--ar:.964"><img src="/img/h-angel.webp" width="360" height="347" alt=""></span>
+            <div><div class="trip-top"><b>천사</b><span>8시간 <span class="got">보상 도착!</span></span></div><div class="bar"><i></i></div></div></li>
+        </ul>
+        <p class="stay">원정 중에도 영웅은 성을 떠나지 않아요.</p>
+      </div>
+    </div>
+    <p class="ribbon drop" style="--dl:.4s"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>져도 벌칙은 없어요. 번 골드는 그대로 남아요.</p>
+  </div>
+</section>
+
+<!-- 3층: 보스 -->
+<section class="floor f3" aria-labelledby="h-f3">
+  <div class="wrap">
+    <div class="boss-head drop">
+      <span class="big" aria-hidden="true">20</span>
+      <h2 id="h-f3"><span class="sr">보스 20마리. </span>마리 보스가<br>길을 막아요</h2>
+    </div>
+    <p class="lead drop" style="--dl:.1s">15웨이브마다 한 마리씩. 머리 위 약점 순서대로 맞히면 무너져요.</p>
+    <div class="reel">
+      <div class="slides" id="slides" tabindex="0" aria-label="보스 여섯 마리, 옆으로 넘겨 보기">
+        <figure class="slide" style="--c:var(--phys)"><img class="bg" src="/img/bg-meadow.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">15웨이브 · 푸른 초원</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-phys"/></svg>물리</span>
+          <img class="art" src="/img/b-warlord.webp" width="360" height="367" alt="돌격 대장" loading="lazy">
+          <figcaption><b>돌격 대장</b></figcaption></figure>
+        <figure class="slide" style="--c:var(--fire)"><img class="bg" src="/img/bg-autumn.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">45웨이브 · 단풍 숲</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-fire"/></svg>불</span>
+          <img class="art" src="/img/b-bat-queen.webp" width="360" height="345" alt="박쥐 여왕" loading="lazy">
+          <figcaption><b>박쥐 여왕</b></figcaption></figure>
+        <figure class="slide" style="--c:var(--bolt)"><img class="bg" src="/img/bg-canyon.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">75웨이브 · 붉은 협곡</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-bolt"/></svg>번개</span>
+          <img class="art" src="/img/b-golem.webp" width="360" height="364" alt="바위 골렘" loading="lazy">
+          <figcaption><b>바위 골렘</b></figcaption></figure>
+        <figure class="slide" style="--c:var(--ice)"><img class="bg" src="/img/bg-volcano.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">135웨이브 · 불의 산</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-ice"/></svg>얼음</span>
+          <img class="art" src="/img/b-dragon.webp" width="360" height="337" alt="화염 드래곤" loading="lazy">
+          <figcaption><b>화염 드래곤</b></figcaption></figure>
+        <figure class="slide" style="--c:var(--bolt)"><img class="bg" src="/img/bg-coast.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">240웨이브 · 폭풍 해안</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-bolt"/></svg>번개</span>
+          <img class="art" src="/img/b-kraken.webp" width="360" height="330" alt="크라켄" loading="lazy">
+          <figcaption><b>크라켄</b></figcaption></figure>
+        <figure class="slide" style="--c:var(--holy)"><img class="bg" src="/img/bg-demon-castle.webp" width="1280" height="1600" alt="" loading="lazy">
+          <span class="wave">300웨이브 · 마왕성</span>
+          <span class="stamp"><small>약점</small><svg aria-hidden="true"><use href="#i-holy"/></svg>빛</span>
+          <img class="art" src="/img/b-demon-lord.webp" width="360" height="359" alt="마왕" loading="lazy">
+          <figcaption><b>마왕</b></figcaption></figure>
+      </div>
+      <div class="reel-nav">
+        <button type="button" class="nav-btn" id="prev" aria-label="이전 보스"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+        <span class="count" id="count" aria-live="polite">1 / 6</span>
+        <button type="button" class="nav-btn" id="next" aria-label="다음 보스"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <div class="join drop">
+      <div class="join-faces" aria-hidden="true">
+        <span style="--fx:.45;--fy:.26;--ar:1.128"><img src="/img/h-bat-tower.webp" width="360" height="406" alt="" loading="lazy"></span>
+        <span style="--fx:.58;--fy:.24;--ar:1.183"><img src="/img/h-golem-forge.webp" width="360" height="426" alt="" loading="lazy"></span>
+        <span style="--fx:.40;--fy:.22;--ar:1.219"><img src="/img/h-little-demon.webp" width="360" height="439" alt="" loading="lazy"></span>
+      </div>
+      <p>처음 잡은 보스는 그 힘을 이은 보스 영웅이 되어 성에 합류해요.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 질문 -->
+<section class="floor f4" aria-labelledby="h-faq">
+  <div class="wrap">
+    <h2 id="h-faq" class="drop">자주 묻는 질문</h2>
+    <div class="faq">
+      <details><summary>언제, 어디서 받을 수 있나요?</summary><p>안드로이드(구글 플레이) 출시를 준비하고 있어요. 지금은 휴대폰에서 플레이테스트 중이고, 출시일은 아직 정하지 않았어요.</p></details>
+      <details><summary>아이폰에서도 되나요?</summary><p>아직 정하지 않았어요. 지금 준비하는 건 안드로이드예요.</p></details>
+      <details><summary>돈을 써야 하나요?</summary><p>받는 건 무료로 설계했어요. 2배속, 자동 스킬, 자동 반복도 무료예요. 광고는 보고 싶을 때만 보는 보상형으로 설계했고, 영웅 모집은 확률로 뽑는 방식이에요(확률은 게임 안에서 보여 줘요).</p></details>
+      <details><summary>계속 붙잡고 있어야 하나요?</summary><p>아니요. 스킬은 자동으로 쓰게 둘 수 있고, 깬 웨이브는 자동 반복으로 다시 돌아요. 원정은 게임을 꺼 둬도 시간이 가요. 다음 웨이브로 넘어가는 것만 직접 눌러요.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 꼭대기 -->
+<section class="floor f5" aria-labelledby="h-end" id="end">
+  <div class="wrap">
+    <div class="summit drop" id="summit">
+      <span class="beam" aria-hidden="true"></span>
+      <span class="promo" aria-hidden="true">성 승급!</span>
+      <img src="/img/castle-20.webp" width="320" height="380" alt="20등급 우주의 성" loading="lazy">
+    </div>
+    <p class="plaque"><i>20등급</i> 우주의 성 · 22층</p>
+    <h2 id="h-end">출시되면, 직접 쌓아 보세요</h2>
+    <p class="lead">돌 성 3층에서 우주의 성 22층까지. 안드로이드로 먼저 나와요.</p>
+    <div class="end-act" id="endAct">
+      <a class="btn-gold shine" href="mailto:contact@lumenlab.page?subject=%EC%BA%90%EC%8A%AC%EC%97%85%21%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD"><svg aria-hidden="true"><use href="#i-mail"/></svg>출시 소식 메일로 받기</a>
+      <span class="end-note">메일 앱이 열리면 그대로 보내 주세요.</span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="row"><span>© 2026 Lumen Lab</span><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a><a href="https://lumenlab.page/">lumenlab.page</a></div>
+    <p>로고·영웅·보스·성·배경 그림은 AI 도구(Higgsfield)로, 캐릭터 움직임은 AI 영상 도구(Kling)로 만들었어요.</p>
+    <p>화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</footer>
+
+<!-- 스크롤할수록 한 층씩 자라는 내 성 -->
+<aside class="keep" id="keep" aria-label="스크롤하면 자라는 성">
+  <div class="keep-castle" aria-hidden="true"><span class="glow" id="keepGlow"></span><img id="keepImg" src="/img/castle-01.webp" width="320" height="444" alt=""></div>
+  <div class="keep-txt" aria-hidden="true"><b id="keepName">돌 성</b><span id="keepMeta">1등급 · 3층</span></div>
+  <a class="btn-gold" href="mailto:contact@lumenlab.page?subject=%EC%BA%90%EC%8A%AC%EC%97%85%21%20%EC%B6%9C%EC%8B%9C%20%EC%95%8C%EB%A6%BC%20%EC%8B%A0%EC%B2%AD"><svg aria-hidden="true"><use href="#i-mail"/></svg>출시 소식 메일로 받기</a>
+</aside>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wide = window.matchMedia('(min-width: 1240px)');
+  var GRADES = ['돌 성','망루 성','요새','성채','황금 왕성','천공성','별의 성','수정 성','은빛 성채','용의 성',
+    '바람의 성','달빛 궁전','태양 궁전','하늘 요새','무지개 성','천사의 성','별바다 성','영원의 성','신들의 성','우주의 성'];
+  function pad(n){return (n<10?'0':'')+n}
+
+  /* 먼지 (착지할 때) */
+  function puff(host, n){
+    if(reduce) return;
+    var r = host.getBoundingClientRect();
+    for(var i=0;i<n;i++){
+      var s=document.createElement('i'); s.className='puff';
+      var left = (i%2? r.width*0.12 : r.width*0.88) + (Math.random()*20-10);
+      s.style.left=left+'px'; s.style.bottom='-6px';
+      s.style.setProperty('--px',(i%2?-1:1)*(10+Math.random()*24)+'px');
+      s.style.setProperty('--py',(-6-Math.random()*14)+'px');
+      host.appendChild(s); setTimeout(function(x){x.remove()},650,s);
+    }
+  }
+
+  /* 칸이 보이면 쿵 */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el=e.target; el.classList.add('in'); io.unobserve(el);
+      if(el.classList.contains('room')){
+        el.addEventListener('animationend',function(){puff(el,4)},{once:true});
+      }
+      if(el.id==='trips'){ el.classList.add('run'); }
+      if(el.id==='summit'){ burst(el); }
+    });
+  },{threshold:.25, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.drop').forEach(function(el){ io.observe(el) });
+
+  /* 색종이 (꼭대기) */
+  function burst(host){
+    if(reduce) return;
+    var cols=['#FFD866','#F2A55E','#C27BFF','#7FD0FF','#FF8A4C','#FFF0A6'];
+    setTimeout(function(){
+      for(var i=0;i<42;i++){
+        var c=document.createElement('i'); c.className='confetti';
+        c.style.left=(40+Math.random()*20)+'%'; c.style.top='18%';
+        c.style.background=cols[i%cols.length];
+        c.style.setProperty('--x',(Math.random()*320-160)+'px');
+        c.style.setProperty('--y',(120+Math.random()*260)+'px');
+        c.style.setProperty('--r',(Math.random()*720-360)+'deg');
+        c.style.setProperty('--d',(1.2+Math.random()*1.2)+'s');
+        host.appendChild(c); setTimeout(function(x){x.remove()},2600,c);
+      }
+    },700);
+  }
+
+  /* 보스: 한 마리씩 */
+  var box=document.getElementById('slides'), slides=[].slice.call(box.querySelectorAll('.slide'));
+  var count=document.getElementById('count'), prev=document.getElementById('prev'), next=document.getElementById('next');
+  var cur=0;
+  function setCur(i){ cur=i; count.textContent=(i+1)+' / '+slides.length; prev.disabled=i===0; next.disabled=i===slides.length-1; }
+  var sio=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.intersectionRatio>=.6){ var i=slides.indexOf(e.target); setCur(i); e.target.classList.add('on'); }
+    });
+  },{root:box, threshold:[.6]});
+  /* 화면에 들어와야 첫 보스가 등장 */
+  var vio=new IntersectionObserver(function(es){
+    if(es[0].isIntersecting){ slides.forEach(function(s){ sio.observe(s) }); vio.disconnect(); }
+  },{threshold:.35});
+  vio.observe(box);
+  function goTo(i){ var s=slides[i]; box.scrollTo({left:s.offsetLeft - slides[0].offsetLeft, behavior:reduce?'auto':'smooth'}); }
+  prev.addEventListener('click',function(){ goTo(Math.max(0,cur-1)) });
+  next.addEventListener('click',function(){ goTo(Math.min(slides.length-1,cur+1)) });
+  box.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'){ e.preventDefault(); goTo(Math.min(slides.length-1,cur+1)) }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); goTo(Math.max(0,cur-1)) }
+  });
+  setCur(0);
+
+  /* 영상: 보일 때만 재생, 움직임 줄이기면 멈춘 채로 */
+  var v=document.getElementById('heroVideo');
+  if(reduce){ v.removeAttribute('autoplay'); v.pause(); v.controls=true; }
+  else{
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ var p=v.play(); if(p&&p.catch) p.catch(function(){}) } else v.pause(); });
+    },{threshold:.2}).observe(v);
+  }
+
+  /* 자라는 성 */
+  var keep=document.getElementById('keep'), kImg=document.getElementById('keepImg'), kName=document.getElementById('keepName'),
+      kMeta=document.getElementById('keepMeta'), kGlow=document.getElementById('keepGlow');
+  var grade=1, heroOut=false, endIn=false;
+  function setGrade(g){
+    if(g===grade) return;
+    var up=g>grade; grade=g;
+    kImg.src='/img/castle-'+pad(g)+'.webp';
+    kName.textContent=GRADES[g-1]; kMeta.textContent=g+'등급 · '+(g+2)+'층';
+    if(reduce) return;
+    kImg.classList.remove('thud'); void kImg.offsetWidth; kImg.classList.add('thud');
+    kName.classList.remove('pop'); void kName.offsetWidth; kName.classList.add('pop');
+    if(up){ puff(kImg.parentNode,2); if(g%5===0){ kGlow.classList.remove('on'); void kGlow.offsetWidth; kGlow.classList.add('on'); } }
+  }
+  var ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var max=document.documentElement.scrollHeight-innerHeight;
+      var p=max>0? Math.min(1,Math.max(0,scrollY/max)) : 0;
+      setGrade(1+Math.min(19,Math.floor(p*19.999)));
+    });
+  }
+  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll); onScroll();
+  function sync(){ keep.classList.toggle('show', heroOut && !endIn); }
+  document.body.classList.add('has-keep');
+  new IntersectionObserver(function(es){ heroOut=!es[0].isIntersecting; sync(); }).observe(document.getElementById('heroAct'));
+  new IntersectionObserver(function(es){ endIn=es[0].isIntersecting; sync(); },{threshold:.15}).observe(document.getElementById('endAct'));
+  if(wide.addEventListener) wide.addEventListener('change',sync);
+  sync();
+
+  /* 성 그림 미리 받기 */
+  addEventListener('load',function(){ setTimeout(function(){ for(var i=2;i<=20;i++){ (new Image()).src='/img/castle-'+pad(i)+'.webp' } },1200) });
+})();
+</script>
+</body>
+</html>

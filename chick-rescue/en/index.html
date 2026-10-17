@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Chick Rescue — an animal sort puzzle with special abilities</title>
+<meta name="color-scheme" content="only light">
+<title>Chick Rescue — a sort puzzle where you free trapped chicks</title>
 <meta name="description" content="Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Coming to Android.">
 <link rel="canonical" href="https://chick-rescue.lumenlab.page/en/">
 <link rel="alternate" hreflang="ko" href="https://chick-rescue.lumenlab.page/">
 <link rel="alternate" hreflang="en" href="https://chick-rescue.lumenlab.page/en/">
 <link rel="alternate" hreflang="x-default" href="https://chick-rescue.lumenlab.page/en/">
-<meta name="theme-color" content="#171B2B">
+<meta name="theme-color" content="#FFE680">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Chick Rescue">
-<meta property="og:title" content="Chick Rescue — an animal sort puzzle with special abilities">
+<meta property="og:title" content="Chick Rescue — a sort puzzle where you free trapped chicks">
 <meta property="og:description" content="Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Coming to Android.">
 <meta property="og:url" content="https://chick-rescue.lumenlab.page/en/">
 <meta property="og:image" content="https://chick-rescue.lumenlab.page/og-en.jpg">
@@ -22,168 +23,153 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/assets/head.woff2?v=bb276743" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/head.woff2?v=f5fbc09e" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/img/logo-en.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="/assets/site.css?v=1e8155ff">
+<link rel="stylesheet" href="/assets/site.css?v=0cb02738">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Chick Rescue", "url": "https://chick-rescue.lumenlab.page/en/", "description": "Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Coming to Android.", "genre": "Puzzle", "gamePlatform": "Android", "inLanguage": ["ko", "en", "ja"], "image": "https://chick-rescue.lumenlab.page/og-en.jpg", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "When and where can I get it?", "acceptedAnswer": {"@type": "Answer", "text": "Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet."}}, {"@type": "Question", "name": "Will it work on iPhone?", "acceptedAnswer": {"@type": "Answer", "text": "It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet."}}, {"@type": "Question", "name": "Does it work offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The game runs without an internet connection."}}, {"@type": "Question", "name": "Where is my progress saved?", "acceptedAnswer": {"@type": "Answer", "text": "On your phone. There are no accounts and no cloud saves."}}, {"@type": "Question", "name": "Does it collect my data?", "acceptedAnswer": {"@type": "Answer", "text": "The current game collects and sends nothing. If ads are added at launch, we will publish a privacy policy on this site first, saying exactly what is collected."}}, {"@type": "Question", "name": "Which languages?", "acceptedAnswer": {"@type": "Answer", "text": "Korean, English and Japanese."}}, {"@type": "Question", "name": "Any scary scenes or loot boxes?", "acceptedAnswer": {"@type": "Answer", "text": "No. There is no fighting or scary content, and no paid random draws. The age rating will be set at launch."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "When and where can I get it?", "acceptedAnswer": {"@type": "Answer", "text": "Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet."}}, {"@type": "Question", "name": "Will it work on iPhone?", "acceptedAnswer": {"@type": "Answer", "text": "It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet."}}, {"@type": "Question", "name": "Do I have to pay? What about ads?", "acceptedAnswer": {"@type": "Answer", "text": "All 1,440 main levels are free to the end. Under the current plan there are no ads between levels on your first day or your first 15 levels, and after that at most one every 3 levels. Removing ads and the puzzle packs are paid, with prices set at launch. There are no paid random draws."}}, {"@type": "Question", "name": "I’m not great at puzzles. Can I still play?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Start with Classic, which has no abilities. Once no tube is mixed, the game finishes the tidy-up for you."}}]}</script>
 </head>
 <body>
 <a class="skip" href="#try">Skip to the playable level</a>
-<header class="top">
+<header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="/en/"><img src="/img/icon-256.webp" width="32" height="32" alt="">Chick Rescue</a>
-    <a class="lang" href="/" hreflang="ko" lang="ko" aria-label="한국어로 보기">한국어</a>
+    <a class="brand" href="/en/"><img class="brand-logo" src="/img/logo-en.webp" width="640" height="425" alt="Chick Rescue"><span class="brand-mini"><img src="/img/icon-256.webp" width="34" height="34" alt="">Chick Rescue</span></a>
+    <div class="top-r">
+      <a class="lang" href="/" hreflang="ko" lang="ko" aria-label="한국어로 보기">한국어</a>
+      <a class="cta cta-top" href="mailto:contact@lumenlab.page?subject=Chick%20Rescue%20launch%20alert" data-cta>Get launch news by email</a>
+    </div>
   </div>
 </header>
 <main>
 <section class="hero" id="try" aria-labelledby="h1">
-  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-forest.webp" alt="" width="1080" height="1920" fetchpriority="low"></div>
-  <figure class="hero-side l" aria-hidden="true"><img src="/img/shot-home_en.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>The real game’s home screen</figcaption></figure>
-  <figure class="hero-side r" aria-hidden="true"><img src="/img/shot-level_clear_en.webp" width="600" height="1300" alt="" loading="lazy"><figcaption>Clear a level, earn stars</figcaption></figure>
+  <div class="rays" aria-hidden="true"></div>
+  <div class="spill" aria-hidden="true"><img class="s1" style="--i:0" src="/img/c-frog.webp" width="160" height="160" alt=""><img class="s2" style="--i:1" src="/img/c-whale.webp" width="160" height="160" alt=""><img class="s3" style="--i:2" src="/img/c-squirrel.webp" width="160" height="160" alt=""><img class="s4" style="--i:3" src="/img/c-bat.webp" width="160" height="160" alt=""><img class="s5" style="--i:4" src="/img/c-lion.webp" width="160" height="160" alt=""><img class="s6" style="--i:5" src="/img/c-penguin.webp" width="160" height="160" alt=""></div>
   <div class="hero-col">
-    <img class="hero-logo" src="/img/logo-en.webp" width="640" height="425" alt="Chick Rescue">
-    <h1 id="h1">A sort puzzle: move the critters, free the trapped chicks</h1>
+    <img class="hero-logo" src="/img/logo-en.webp" width="640" height="425" alt="" aria-hidden="true">
+    <h1 id="h1">Move the critters, free the chick</h1>
+    <p class="hero-sub"><b>1,440 main levels free</b> · plays offline</p>
     <div class="demo" id="demo">
-      <p class="demo-head"><span class="demo-count" aria-live="polite"></span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>Sound</button></p>
-      <div class="nest" aria-hidden="true"></div>
+      <div class="demo-bar">
+        <span class="demo-count" aria-live="polite"></span>
+        <div class="nest" aria-hidden="true"></div>
+        <button type="button" class="btn demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>Sound</button>
+      </div>
+      <p class="peep" aria-hidden="true" hidden>Peep! Get me out!</p>
       <div class="board"><div class="pieces" aria-hidden="true"></div></div>
       <p class="demo-tip" aria-live="polite"></p>
       <div class="demo-ctrl">
-        <button type="button" class="btn btn-soft" data-act="undo">Undo</button>
+        <button type="button" class="btn" data-act="undo">Undo</button>
         <button type="button" class="btn btn-hint" data-act="hint">Hint</button>
-        <button type="button" class="btn btn-soft" data-act="restart">Restart</button>
+        <button type="button" class="btn" data-act="restart">Restart</button>
       </div>
       <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
         <h2 id="demo-done-h"></h2><p></p>
-        <button type="button" class="btn btn-play" data-act="next"></button>
-        <button type="button" class="btn btn-soft" data-act="real"></button>
+        <a class="cta cta-done" href="mailto:contact@lumenlab.page?subject=Chick%20Rescue%20launch%20alert" data-cta>Get launch news by email</a>
+        <small class="done-note">Your mail app opens with the note ready. Just send it.</small>
+        <div class="done-more">
+          <button type="button" class="btn btn-link" data-act="next"></button>
+          <button type="button" class="btn btn-link" data-act="real"></button>
+        </div>
       </div>
       <canvas class="fx" aria-hidden="true"></canvas>
       <script type="application/json" id="demo-text">{"names": {"A": "Red", "B": "Blue", "C": "Yellow", "c": "Squirrel", "b": "Chick"}, "empty": "empty", "tube": "Tube {n}", "tip1": "Tap a tube to move its top critter. When a chick reaches the top, it flies home.", "tip2": "Hold the squirrel to climb to the top. Clear the way above the chick.", "pick": "Now tap where it goes: an empty tube, or one with the same critter on top.", "go": "Nice. Clear the critters sitting on the chick.", "cant": "Can’t go there. Move onto the same critter, or into an empty tube.", "cantFull": "That tube is full. Each tube holds 4.", "cantSealed": "That tube is already sorted and locked.", "climbTop": "The squirrel is already on top.", "saved": "The chick flew home!", "count": "Moves {n} · best {min}", "best": "That’s the fewest possible.", "doneTitle": "Rescued!", "done": "You saved the chick in {n} moves.", "doneAllTitle": "That’s the taste!", "doneAll": "Saved in {n} moves. The real game has 1,440 free main levels.", "next": "Next: the squirrel’s ability", "seeReal": "See the real game", "again": "Start over", "hintPour": "Tap the “From” tube, then the “To” tube.", "hintFrom": "From", "hintTo": "To", "hintClimb": "Hold the glowing squirrel.", "stuck": "This board can’t be solved now. Try Undo or Restart."}</script>
     </div>
-    <p class="hero-status"><b>Coming to Android</b> · This is a web taste of two levels. <a href="#real">See the real game</a></p>
+    <p class="hero-help">Stuck? The first hint on every level is free, undo and restart always are, and one tap takes you back to just before you got stuck.</p>
+    <p class="hero-status">Coming to Android · two levels to try on the web</p>
   </div>
 </section>
 
-<section class="sec" id="real" aria-labelledby="real-h">
+<section class="nestsec" id="nest" aria-labelledby="nest-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">The real game</span><h2 id="real-h">Here is how the real game plays</h2><p>One Rescue level solved start to finish in the game in development. Every screen here is captured straight from the game.</p></div>
-    <div class="real">
-      <div>
-        <div class="phone">
-          <video id="play-video" muted loop playsinline preload="none" poster="/img/play-en-poster.webp" width="600" height="1300" aria-label="Video of the real game solving a Rescue level">
-            <source src="/img/play-en.mp4" type="video/mp4">
-            <source src="/img/play-en.webm" type="video/webm">
-          </video>
-        </div>
-        <p class="phone-cap">13 seconds of real play · no sound</p>
-      </div>
-      <div class="shots" tabindex="0" aria-label="The real game">
-        <figure class="shot"><img src="/img/shot-rescue_play_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Rescue: Free every chick and you win, no need to sort it all"><figcaption><b>Rescue</b>Free every chick and you win, no need to sort it all</figcaption></figure>
-        <figure class="shot"><img src="/img/shot-ability_use_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Abilities: Hold the lion to trade places with another tube’s top critter"><figcaption><b>Abilities</b>Hold the lion to trade places with another tube’s top critter</figcaption></figure>
-        <figure class="shot"><img src="/img/shot-classic_play_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Classic: Plain sorting, no abilities"><figcaption><b>Classic</b>Plain sorting, no abilities</figcaption></figure>
-        <figure class="shot"><img src="/img/shot-level_clear_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Level clear: Fewer moves, more stars"><figcaption><b>Level clear</b>Fewer moves, more stars</figcaption></figure>
-        <figure class="shot"><img src="/img/shot-stage_map_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Level map: 16 stages per mode, clear half to open the next"><figcaption><b>Level map</b>16 stages per mode, clear half to open the next</figcaption></figure>
-        <figure class="shot"><img src="/img/shot-home_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Home: Three modes and puzzle packs"><figcaption><b>Home</b>Three modes and puzzle packs</figcaption></figure>
-      </div>
+    <div class="nest-copy">
+      <h2 class="h2" id="nest-h">Every chick you save<br>moves into the nest tree</h2>
+      <p class="lead">Spend stars on homes for your friends, and solve a new Daily Challenge every day.</p>
+      <div class="houses" aria-hidden="true"><img src="/img/house-squirrel.webp" width="320" height="320" alt="" loading="lazy"><img src="/img/house-frog.webp" width="320" height="320" alt="" loading="lazy"></div>
+    </div>
+    <div class="tree drop">
+      <img src="/img/nest-tree.webp" width="640" height="857" loading="lazy" decoding="async" alt="A big tree with nine nests, a ladder and a lantern">
+      <span class="tc" style="--x:50%;--y:11.5%;--i:0" aria-hidden="true"></span><span class="tc" style="--x:31%;--y:22%;--i:1" aria-hidden="true"></span><span class="tc" style="--x:69%;--y:22%;--i:2" aria-hidden="true"></span><span class="tc" style="--x:25%;--y:36%;--i:3" aria-hidden="true"></span><span class="tc" style="--x:74.5%;--y:36%;--i:4" aria-hidden="true"></span><span class="tc" style="--x:23.5%;--y:50%;--i:5" aria-hidden="true"></span><span class="tc" style="--x:77.5%;--y:50%;--i:6" aria-hidden="true"></span><span class="tc" style="--x:23.5%;--y:63%;--i:7" aria-hidden="true"></span><span class="tc" style="--x:76.5%;--y:63.5%;--i:8" aria-hidden="true"></span>
+      <p class="sign"><b>1,440</b><span>main levels<br>all free</span></p>
     </div>
   </div>
+  <div class="ground"><p>Plus 6 puzzle packs with 960 levels. The first stage of each pack is free.</p></div>
 </section>
 
-<section class="sec sec-alt" id="friends" aria-labelledby="fr-h">
+<section class="friends" id="friends" aria-labelledby="fr-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">Twelve friends, twelve abilities</span><h2 id="fr-h">Hold a friend to use its ability. Some levels need it.</h2><p>It is more than moving colors around. Tap a friend to see what it can do.</p></div>
-    <div class="abil">
-      <div>
-        <div class="friends"><button type="button" class="friend" data-k="squirrel" aria-pressed="true"><img src="/img/c-squirrel.webp" width="52" height="52" alt="" loading="lazy">Squirrel</button><button type="button" class="friend" data-k="frog" aria-pressed="false"><img src="/img/c-frog.webp" width="52" height="52" alt="" loading="lazy">Frog</button><button type="button" class="friend" data-k="otter" aria-pressed="false"><img src="/img/c-otter.webp" width="52" height="52" alt="" loading="lazy">Otter</button><button type="button" class="friend" data-k="bat" aria-pressed="false"><img src="/img/c-bat.webp" width="52" height="52" alt="" loading="lazy">Bat</button><button type="button" class="friend" data-k="octopus" aria-pressed="false"><img src="/img/c-octopus.webp" width="52" height="52" alt="" loading="lazy">Octopus</button><button type="button" class="friend" data-k="turtle" aria-pressed="false"><img src="/img/c-turtle.webp" width="52" height="52" alt="" loading="lazy">Turtle</button><button type="button" class="friend" data-k="penguin" aria-pressed="false"><img src="/img/c-penguin.webp" width="52" height="52" alt="" loading="lazy">Penguin</button><button type="button" class="friend" data-k="mole" aria-pressed="false"><img src="/img/c-mole.webp" width="52" height="52" alt="" loading="lazy">Mole</button><button type="button" class="friend" data-k="owl" aria-pressed="false"><img src="/img/c-owl.webp" width="52" height="52" alt="" loading="lazy">Owl</button><button type="button" class="friend" data-k="elephant" aria-pressed="false"><img src="/img/c-elephant.webp" width="52" height="52" alt="" loading="lazy">Elephant</button><button type="button" class="friend" data-k="lion" aria-pressed="false"><img src="/img/c-lion.webp" width="52" height="52" alt="" loading="lazy">Lion</button><button type="button" class="friend" data-k="whale" aria-pressed="false"><img src="/img/c-whale.webp" width="52" height="52" alt="" loading="lazy">Whale</button></div>
-        <div class="friend-show">
-          <div class="friend-clip"><video id="friend-clip" src="/video/abilities/squirrel.mp4" poster="/img/abilities/squirrel.webp"
-            width="480" height="512" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video></div>
-          <div>
-            <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>Squirrel</h3><p>Hold to climb straight to the top. The critters above move down one space.</p></div></div>
-            <p class="abil-note">Every Abilities level with a friend in it needs that ability to solve. In Abilities and Rescue, stages 1 to 4 each bring three new friends.</p>
-          </div>
-        </div>
-      </div>
+    <h2 class="h2" id="fr-h">Hold a friend<br>to use its ability</h2>
+    <p class="lead">Some levels need an ability to solve. Twelve friends, twelve abilities.</p>
+    <div class="show" role="region" aria-roledescription="carousel" aria-label="Friend abilities">
+      <button type="button" class="nav nav-prev" aria-label="Previous friend" aria-controls="track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="track" id="track" tabindex="0" aria-label="Friend abilities"><article class="stage" id="st-squirrel" data-k="squirrel" style="--c:#F5A04A;--cd:#C9772A" role="group" aria-roledescription="slide" aria-label="1 / 12: Squirrel"><div class="stage-top"><img class="ball" src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Zip!</p><h3>Squirrel</h3></div></div><p class="say">Hold to climb straight to the top</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/squirrel.webp" width="480" height="512" aria-label="Real game clip of the Squirrel ability"><source src="/video/abilities/squirrel.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-frog" data-k="frog" style="--c:#8FD15A;--cd:#5FA62F" role="group" aria-roledescription="slide" aria-label="2 / 12: Frog"><div class="stage-top"><img class="ball" src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Hop!</p><h3>Frog</h3></div></div><p class="say">Hold, pick a tube, and it jumps there</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/frog.webp" width="480" height="512" aria-label="Real game clip of the Frog ability"><source src="/video/abilities/frog.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-otter" data-k="otter" style="--c:#FF9E8A;--cd:#D9705C" role="group" aria-roledescription="slide" aria-label="3 / 12: Otter"><div class="stage-top"><img class="ball" src="/img/c-otter.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Swap!</p><h3>Otter</h3></div></div><p class="say">Hold to swap with the friend right below</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/otter.webp" width="480" height="512" aria-label="Real game clip of the Otter ability"><source src="/video/abilities/otter.mp4" type="video/mp4"></video></div></article><article class="stage is-white" id="st-bat" data-k="bat" style="--c:#7A5CC0;--cd:#5A3F99" role="group" aria-roledescription="slide" aria-label="4 / 12: Bat"><div class="stage-top"><img class="ball" src="/img/c-bat.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Flip!</p><h3>Bat</h3></div></div><p class="say">Hold to flip its whole tube upside down</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/bat.webp" width="480" height="512" aria-label="Real game clip of the Bat ability"><source src="/video/abilities/bat.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-octopus" data-k="octopus" style="--c:#F08CC8;--cd:#C45E9E" role="group" aria-roledescription="slide" aria-label="5 / 12: Octopus"><div class="stage-top"><img class="ball" src="/img/c-octopus.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Grab!</p><h3>Octopus</h3></div></div><p class="say">On top, hold to pull over the top friend on its left</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/octopus.webp" width="480" height="512" aria-label="Real game clip of the Octopus ability"><source src="/video/abilities/octopus.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-turtle" data-k="turtle" style="--c:#3FC1A5;--cd:#23917A" role="group" aria-roledescription="slide" aria-label="6 / 12: Turtle"><div class="stage-top"><img class="ball" src="/img/c-turtle.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Dive!</p><h3>Turtle</h3></div></div><p class="say">Hold to dive straight to the bottom</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/turtle.webp" width="480" height="512" aria-label="Real game clip of the Turtle ability"><source src="/video/abilities/turtle.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-penguin" data-k="penguin" style="--c:#7CC7F2;--cd:#4A9CCB" role="group" aria-roledescription="slide" aria-label="7 / 12: Penguin"><div class="stage-top"><img class="ball" src="/img/c-penguin.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Slide!</p><h3>Penguin</h3></div></div><p class="say">On top, hold to slide onto the next tube</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/penguin.webp" width="480" height="512" aria-label="Real game clip of the Penguin ability"><source src="/video/abilities/penguin.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-mole" data-k="mole" style="--c:#B9A4F0;--cd:#8C74CC" role="group" aria-roledescription="slide" aria-label="8 / 12: Mole"><div class="stage-top"><img class="ball" src="/img/c-mole.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Dig!</p><h3>Mole</h3></div></div><p class="say">On top, hold to dig to the bottom of the next tube</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/mole.webp" width="480" height="512" aria-label="Real game clip of the Mole ability"><source src="/video/abilities/mole.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-owl" data-k="owl" style="--c:#CFE9A0;--cd:#9DC066" role="group" aria-roledescription="slide" aria-label="9 / 12: Owl"><div class="stage-top"><img class="ball" src="/img/c-owl.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Spin!</p><h3>Owl</h3></div></div><p class="say">Hold to turn its tube round by one</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/owl.webp" width="480" height="512" aria-label="Real game clip of the Owl ability"><source src="/video/abilities/owl.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-elephant" data-k="elephant" style="--c:#A9C3F5;--cd:#7895CF" role="group" aria-roledescription="slide" aria-label="10 / 12: Elephant"><div class="stage-top"><img class="ball" src="/img/c-elephant.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Whoosh!</p><h3>Elephant</h3></div></div><p class="say">On top, hold to spray the next top friend along</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/elephant.webp" width="480" height="512" aria-label="Real game clip of the Elephant ability"><source src="/video/abilities/elephant.mp4" type="video/mp4"></video></div></article><article class="stage" id="st-lion" data-k="lion" style="--c:#FFD45C;--cd:#D9A825" role="group" aria-roledescription="slide" aria-label="11 / 12: Lion"><div class="stage-top"><img class="ball" src="/img/c-lion.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Roar!</p><h3>Lion</h3></div></div><p class="say">On top, hold and pick a tube to trade places with its top friend</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/lion.webp" width="480" height="512" aria-label="Real game clip of the Lion ability"><source src="/video/abilities/lion.mp4" type="video/mp4"></video></div></article><article class="stage is-white" id="st-whale" data-k="whale" style="--c:#2A72C2;--cd:#1C5594" role="group" aria-roledescription="slide" aria-label="12 / 12: Whale"><div class="stage-top"><img class="ball" src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy"><div><p class="verb" aria-hidden="true">Splash!</p><h3>Whale</h3></div></div><p class="say">One wave moves every top friend one tube along</p><div class="win"><video muted loop playsinline preload="none" poster="/img/abilities/whale.webp" width="480" height="512" aria-label="Real game clip of the Whale ability"><source src="/video/abilities/whale.mp4" type="video/mp4"></video></div></article></div>
+      <button type="button" class="nav nav-next" aria-label="Next friend" aria-controls="track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-    <script type="application/json" id="friend-text">{"squirrel": ["Squirrel", "Hold to climb straight to the top. The critters above move down one space."], "frog": ["Frog", "Hold, then tap a tube. It jumps out from wherever it is onto that tube. It can land in an empty tube or on another frog."], "otter": ["Otter", "Hold to swap places with the critter right below it."], "bat": ["Bat", "Hold to flip its whole tube upside down."], "octopus": ["Octopus", "When on top, hold to pull the top critter of the tube on its left onto itself. From the first tube it pulls from the last one."], "turtle": ["Turtle", "Hold to dive straight to the bottom. The critters below move up one space."], "penguin": ["Penguin", "When on top, hold to slide onto the tube right next to it. Any critter can be on top there as long as there is room. From the last tube it slides to the first."], "mole": ["Mole", "When on top, hold to dig down to the bottom of the tube on its right. The critters there move up one space. From the last tube it digs into the first."], "owl": ["Owl", "Hold to turn its tube by one: the top critter goes to the bottom and the rest move up one space."], "elephant": ["Elephant", "When on top, hold to spray water: the top critter of the tube on its right is pushed one more tube to the right. That tube just needs room."], "lion": ["Lion", "When on top, hold and then tap another tube to trade places with its top critter. Works even if the tubes are full."], "whale": ["Whale", "Hold to make a big wave: the top critter of every tube moves one tube to the right, and the last one goes to the first. Completed tubes stay out of it."]}</script>
+    <div class="picker" role="group" aria-label="Pick a friend"><div class="pick-tube"><button type="button" class="pick" data-k="squirrel" aria-controls="st-squirrel" aria-pressed="true" style="--c:#F5A04A"><img src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Squirrel</span></button><button type="button" class="pick" data-k="frog" aria-controls="st-frog" aria-pressed="false" style="--c:#8FD15A"><img src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Frog</span></button><button type="button" class="pick" data-k="otter" aria-controls="st-otter" aria-pressed="false" style="--c:#FF9E8A"><img src="/img/c-otter.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Otter</span></button><button type="button" class="pick" data-k="bat" aria-controls="st-bat" aria-pressed="false" style="--c:#7A5CC0"><img src="/img/c-bat.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Bat</span></button><button type="button" class="pick" data-k="octopus" aria-controls="st-octopus" aria-pressed="false" style="--c:#F08CC8"><img src="/img/c-octopus.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Octopus</span></button><button type="button" class="pick" data-k="turtle" aria-controls="st-turtle" aria-pressed="false" style="--c:#3FC1A5"><img src="/img/c-turtle.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Turtle</span></button></div><div class="pick-tube"><button type="button" class="pick" data-k="penguin" aria-controls="st-penguin" aria-pressed="false" style="--c:#7CC7F2"><img src="/img/c-penguin.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Penguin</span></button><button type="button" class="pick" data-k="mole" aria-controls="st-mole" aria-pressed="false" style="--c:#B9A4F0"><img src="/img/c-mole.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Mole</span></button><button type="button" class="pick" data-k="owl" aria-controls="st-owl" aria-pressed="false" style="--c:#CFE9A0"><img src="/img/c-owl.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Owl</span></button><button type="button" class="pick" data-k="elephant" aria-controls="st-elephant" aria-pressed="false" style="--c:#A9C3F5"><img src="/img/c-elephant.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Elephant</span></button><button type="button" class="pick" data-k="lion" aria-controls="st-lion" aria-pressed="false" style="--c:#FFD45C"><img src="/img/c-lion.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Lion</span></button><button type="button" class="pick" data-k="whale" aria-controls="st-whale" aria-pressed="false" style="--c:#2A72C2"><img src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy"><span class="sr">Whale</span></button></div></div>
+    <p class="fr-note">In Abilities and Rescue, stages 1 to 4 each bring three new friends.</p>
   </div>
 </section>
 
-<section class="sec" id="help" aria-labelledby="help-h">
+<section class="real" id="real" aria-labelledby="real-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">When you get stuck</span><h2 id="help-h">Built so you never stay stuck</h2></div>
-    <div class="helps"><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2h5c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg></span><div><h3>First hint free on every level</h3><p>It shows your next move on the board, like the Hint button in the level above.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></span><div><h3>Undo and restart are always free</h3><p>Under the current plan, use them as often as you like with no ads and no cost.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h3>Back to just before you got stuck</h3><p>If the board can no longer be solved, the game tells you and takes you back in one tap.</p></div></div><div class="help rv"><span class="help-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg></span><div><h3>The tidy-up is done for you</h3><p>Once no tube is mixed, the game finishes merging the colors itself.</p></div></div></div>
-    <p class="money-note">New to sort puzzles? Start with Classic, which has no abilities.</p>
-  </div>
-</section>
-
-<section class="sec sec-alt" id="long" aria-labelledby="long-h">
-  <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">Plenty to play</span><h2 id="long-h">Short levels, lots of them</h2></div>
-    <div class="nums"><div class="num rv"><b>18 s</b><span>Median time per level</span><small>Based on 45 levels the developer played</small></div><div class="num rv"><b>1,440</b><span>Main levels, all free</span><small>Classic, Abilities, Rescue × 16 stages × 30</small></div><div class="num rv"><b>960</b><span>Puzzle pack levels (medium and expert)</span><small>6 packs, first stage of each free</small></div><div class="num rv"><b>1 a day</b><span>Daily Challenge</span><small>A new accessory every 7 stamps</small></div></div>
-    <div class="shots long" tabindex="0" aria-label="Plenty to play">
-      <figure class="shot"><img src="/img/shot-village_homes_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Village: Spend stars to build and grow homes, and unlock outfits"><figcaption><b>Village</b>Spend stars to build and grow homes, and unlock outfits</figcaption></figure>
-      <figure class="shot"><img src="/img/shot-chick_nest_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Nest tree: Every chick you rescue lives in the nest tree"><figcaption><b>Nest tree</b>Every chick you rescue lives in the nest tree</figcaption></figure>
-      <figure class="shot"><img src="/img/shot-daily_calendar_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Daily Challenge: Everyone gets the same puzzle each day, and a stamp for solving it"><figcaption><b>Daily Challenge</b>Everyone gets the same puzzle each day, and a stamp for solving it</figcaption></figure>
+    <h2 class="h2" id="real-h">No need to sort it all.<br>Free the chick and you win</h2>
+    <div class="vs">
+      <figure class="ph ph-classic drop">
+        <div class="ph-frame"><img src="/img/shot-classic_play_en.webp" width="600" height="1300" loading="lazy" decoding="async" alt="Real Classic mode screen: sort every color to finish"></div>
+        <figcaption><b>Classic</b>Sort every color to win</figcaption>
+      </figure>
+      <figure class="ph ph-rescue drop">
+        <div class="ph-frame"><video data-auto muted loop playsinline preload="none" poster="/img/play-en-poster.webp" width="600" height="1300" aria-label="13-second clip of a Rescue level solved start to finish in the real game, no sound"><source src="/img/play-en.mp4" type="video/mp4"><source src="/img/play-en.webm" type="video/webm"></video></div>
+        <figcaption><b>Rescue</b><span>Free the chicks to win</span></figcaption>
+      </figure>
     </div>
-    <p class="src">Level counts are for the current build and may change before launch.</p>
+    <p class="note">Three modes, Classic, Abilities and Rescue, with 16 stages each. A level takes about 18 seconds.</p>
+    <p class="src">Level time: median of 45 levels the developer played</p>
   </div>
 </section>
 
-<section class="sec" id="money" aria-labelledby="money-h">
+<section class="faq" id="faq" aria-labelledby="faq-h">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">Cost</span><h2 id="money-h">All 1,440 main levels are free</h2><p>Ads and in-app purchases are not switched on yet. Here are the rules already built in.</p></div>
-    <div class="money">
-      <div class="mcard free rv"><h3>Free</h3><ul><li>All 1,440 main levels</li><li>The Daily Challenge</li><li>The first stage of all 6 puzzle packs</li><li>The first hint on every level, plus undo and restart</li></ul></div>
-      <div class="mcard rv"><h3>Ads</h3><ul><li>No ads between levels on your first day or your first 15 levels</li><li>After that, at most one every 3 levels and never within 3 minutes</li><li>Watch a short ad for an extra hint or stars, only if you want to</li></ul></div>
-      <div class="mcard rv"><h3>If you pay</h3><ul><li>Remove ads</li><li>Puzzle packs from stage 2 on (840 levels)</li><li>Past Daily Challenges</li><li>Hint bundles</li></ul><span class="tag">Prices are set at launch</span></div>
-    </div>
-    <p class="money-note">There are no paid random draws. Since the game is not out yet, these rules may still change.</p>
-  </div>
-</section>
-
-<section class="sec" id="faq" aria-labelledby="faq-h">
-  <div class="wrap">
-    <div class="sec-head"><h2 id="faq-h">Questions</h2></div>
-    <div class="faq"><details><summary>When and where can I get it?</summary><p>Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet.</p></details><details><summary>Will it work on iPhone?</summary><p>It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet.</p></details><details><summary>Does it work offline?</summary><p>Yes. The game runs without an internet connection.</p></details><details><summary>Where is my progress saved?</summary><p>On your phone. There are no accounts and no cloud saves.</p></details><details><summary>Does it collect my data?</summary><p>The current game collects and sends nothing. If ads are added at launch, we will publish a privacy policy on this site first, saying exactly what is collected.</p></details><details><summary>Which languages?</summary><p>Korean, English and Japanese.</p></details><details><summary>Any scary scenes or loot boxes?</summary><p>No. There is no fighting or scary content, and no paid random draws. The age rating will be set at launch.</p></details></div>
+    <h2 class="h2" id="faq-h">Questions</h2>
+    <div class="qa"><details><summary>When and where can I get it?</summary><p>Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet.</p></details><details><summary>Will it work on iPhone?</summary><p>It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet.</p></details><details><summary>Do I have to pay? What about ads?</summary><p>All 1,440 main levels are free to the end. Under the current plan there are no ads between levels on your first day or your first 15 levels, and after that at most one every 3 levels. Removing ads and the puzzle packs are paid, with prices set at launch. There are no paid random draws.</p></details><details><summary>I’m not great at puzzles. Can I still play?</summary><p>Yes. Start with Classic, which has no abilities. Once no tube is mixed, the game finishes the tidy-up for you.</p></details></div>
   </div>
 </section>
 
 <section class="end" id="end" aria-labelledby="end-h">
-  <div class="end-bg" aria-hidden="true"><img src="/img/bg-night.webp" alt="" width="1080" height="1920" loading="lazy"></div>
   <div class="wrap">
-    <h2 id="end-h">Getting ready for launch</h2>
-    <p class="end-lead">Android comes first. When it is out, the download link goes right here.</p>
-    <ol class="end-steps"><li class=""><i aria-hidden="true">✓</i>Build the game</li><li class="is-now"><i aria-hidden="true">2</i>Play-test on phones <span class="sr">(now)</span></li><li class=""><i aria-hidden="true">3</i>Closed testing</li><li class=""><i aria-hidden="true">4</i>Launch on Google Play</li><li class=""><i aria-hidden="true">5</i>iPhone</li></ol>
-    <div class="end-acts">
-      <a class="btn btn-play" href="mailto:contact@lumenlab.page?subject=%5BChick%20Rescue%5D%20Question">Ask by email</a>
-      <a class="btn btn-line" href="#try">Play the level again</a>
+    <h2 class="h2" id="end-h">Be the first to know<br>when it launches</h2>
+    <div class="end-stack">
+      <div class="end-cta">
+        <a class="cta cta-end" href="mailto:contact@lumenlab.page?subject=Chick%20Rescue%20launch%20alert" data-cta>Get launch news by email</a>
+        <img class="end-chick" src="/img/c-chick.webp" width="160" height="160" alt="" aria-hidden="true">
+      </div>
+      <div class="big-tube" aria-hidden="true">
+        <img style="--i:0" src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy">
+        <img style="--i:1" src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy">
+        <img style="--i:2" src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy">
+      </div>
+      <div class="end-shelf" aria-hidden="true"></div>
     </div>
-    <p class="mail-note">Made by Lumen Lab. Email <span class="nw">contact@lumenlab.page</span> <button type="button" class="btn-copy" data-copy="contact@lumenlab.page" data-done="Copied">Copy</button></p>
-    <a class="lumen" href="https://lumenlab.page/en/">
-      <svg viewBox="0 0 96 64" aria-hidden="true">
-        <circle class="l-glow" cx="70" cy="30" r="26" fill="url(#lg1)"/>
-        <defs><radialGradient id="lg1"><stop offset="0" stop-color="#FFD166" stop-opacity=".55"/><stop offset="1" stop-color="#FFD166" stop-opacity="0"/></radialGradient></defs>
-        <path d="M2 50 Q40 40 94 46" stroke="#6E4A2D" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M52 44 Q70 60 88 44 Z" fill="#5C3B23"/><path d="M50 44 h40" stroke="#8A5E3A" stroke-width="5" stroke-linecap="round"/>
-        <g class="l-chick"><image href="/img/c-chick.webp" x="57" y="14" width="26" height="26"/></g>
-      </svg>
-      <div><b>Lumen Lab</b><span>The studio behind Chick Rescue, with more apps and free web tools</span></div><span class="arr" aria-hidden="true">→</span>
-    </a>
+    <p class="end-note">Android comes first. Your mail app opens with the note ready. Just send it.</p>
   </div>
 </section>
 </main>
+
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 Lumen Lab</span>
-    <a href="/" hreflang="ko" lang="ko">한국어</a>
-    <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>
-    <p>The logo, backgrounds and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code. Screens and numbers reflect the game in development and may change before launch.</p>
+    <div class="row">
+      <span>© 2026 Lumen Lab</span>
+      <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>
+      <a href="https://lumenlab.page/en/">lumenlab.page</a>
+      <a href="/" hreflang="ko" lang="ko">한국어</a>
+    </div>
+    <p>The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code.</p>
+    <p>Screens and numbers reflect the game in development and may change before launch.</p>
   </div>
 </footer>
+
+<div class="dock" id="dock"><a class="cta cta-dock" href="mailto:contact@lumenlab.page?subject=Chick%20Rescue%20launch%20alert" data-cta>Get launch news by email</a></div>
+
 <script src="/assets/demo.js?v=59e00cd6" defer></script>
-<script src="/assets/site.js?v=54a5ce82" defer></script>
+<script src="/assets/site.js?v=b35ccf84" defer></script>
 </body>
 </html>

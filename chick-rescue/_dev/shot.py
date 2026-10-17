@@ -1,8 +1,9 @@
-"""화면 찍기: python3 _dev/shot.py 출력폴더 [주소=http://127.0.0.1:8765]
-휴대폰 390·320, 컴퓨터 1366, 한국어·영어, 밝게·어둡게(휴대폰). 콘솔 오류·깨진 그림·가로 넘침도 센다."""
+"""화면 찍기: python3 _dev/shot.py 출력폴더 [주소=http://127.0.0.1:$PORT(8792)]
+휴대폰 390·320, 컴퓨터 1366, 한국어·영어, 밝게·어둡게(휴대폰, 밝은 얼굴 고정이라 같아야 한다), 404.
+콘솔 오류·깨진 그림·가로 넘침·페이지 높이·첫 화면 판 단추 줄 아래 끝도 센다."""
 import sys, os, json
 from playwright.sync_api import sync_playwright
-OUT = sys.argv[1]; BASE = sys.argv[2] if len(sys.argv) > 2 else 'http://127.0.0.1:8765'
+OUT = sys.argv[1]; BASE = sys.argv[2] if len(sys.argv) > 2 else 'http://127.0.0.1:' + os.environ.get('PORT', '8792')
 os.makedirs(OUT, exist_ok=True)
 EXE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
 res = {}
@@ -25,12 +26,17 @@ with sync_playwright() as p:
               broken: [...document.images].filter(i => i.complete && i.naturalWidth === 0).map(i => i.src),
               h1lines: (() => { const e = document.querySelector('h1'); return Math.round(e.getBoundingClientRect().height / parseFloat(getComputedStyle(e).lineHeight)); })(),
               boardBottom: Math.round(document.querySelector('.demo-ctrl').getBoundingClientRect().bottom),
+              height: document.documentElement.scrollHeight,
+              bg: getComputedStyle(document.body).backgroundColor,
             })''')
             info['errors'] = errs
             res[key] = info
             pg.screenshot(path=f'{OUT}/{key}-top.png')
-            if w != 320 or True:
-                pg.screenshot(path=f'{OUT}/{key}-full.png', full_page=True)
+            pg.screenshot(path=f'{OUT}/{key}-full.png', full_page=True)
             ctx.close()
+    ctx = b.new_context(viewport={'width': 390, 'height': 844}, device_scale_factor=1)
+    pg = ctx.new_page(); pg.goto(BASE + '/404.html', wait_until='networkidle'); pg.screenshot(path=f'{OUT}/404-390.png')
+    res['404'] = {'overflow': pg.evaluate('document.documentElement.scrollWidth - innerWidth'), 'broken': pg.evaluate('[...document.images].filter(i => i.complete && i.naturalWidth === 0).length')}
+    ctx.close()
     b.close()
 print(json.dumps(res, ensure_ascii=False, indent=1))

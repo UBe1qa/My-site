@@ -1,6 +1,37 @@
-<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/site.css">
-<style>body{margin:0;width:1200px;height:630px;overflow:hidden;background:#171B2B}
-.og-bg{position:absolute;inset:0;background:center/cover no-repeat}
-.og-chip{position:absolute;left:56px;bottom:44px;font:700 28px/1 var(--head);color:#171B2B;background:#FFD166;padding:16px 24px;border-radius:999px}
-</style></head><body><div class="og-bg" id="bg"></div><div class="og-chip" id="chip"></div>
-<script>var l=location.hash.slice(1)||'ko';document.getElementById('bg').style.backgroundImage='url(/_dev/fg-'+l+'.png)';document.getElementById('chip').textContent=l=='ko'?'안드로이드 출시 준비 중 · 맛보기 판':'Coming to Android · try a level';</script></body></html>
+<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="only light"><link rel="stylesheet" href="/assets/site.css">
+<!-- 공유 그림 1200×630: 햇살 노랑 + 튜브 속 병아리(주인공 하나) + 로고 + 짧은 한 줄. og.py가 찍는다(글은 build.py S['og']). -->
+<style>
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:var(--sun)}
+.og{position:relative;width:1200px;height:630px;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,var(--sun) 0%,#FFF0B0 70%,#FFE58A 100%)}
+.og-rays{position:absolute;left:820px;top:300px;width:2000px;height:2000px;margin:-1000px 0 0 -1000px;z-index:-1;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.5) 0deg 9deg,rgba(255,255,255,0) 9deg 22.5deg);
+  -webkit-mask:radial-gradient(closest-side,#000 20%,transparent 75%);mask:radial-gradient(closest-side,#000 20%,transparent 75%)}
+.og-logo{position:absolute;left:70px;top:70px;width:440px;height:auto;filter:drop-shadow(0 8px 0 rgba(160,90,0,.18))}
+.og-line{position:absolute;left:76px;top:410px;width:640px;font:56px/1.2 var(--round);color:var(--ink);letter-spacing:-.01em}
+.og-tube{position:absolute;left:740px;top:96px;width:210px;height:470px;display:flex;flex-direction:column-reverse;align-items:center;gap:8px;padding:0 0 26px;
+  background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,255,255,.62) 45%,rgba(255,255,255,.88));
+  border-radius:18px 18px 50% 50% / 18px 18px 90px 90px;box-shadow:inset 0 0 0 7px rgba(43,34,53,.26),inset 0 -20px 30px rgba(255,216,77,.3)}
+.og-tube::after{content:"";position:absolute;left:30px;top:40px;bottom:120px;width:16px;border-radius:12px;background:rgba(255,255,255,.95)}
+.og-tube img{width:136px;height:136px}
+.og-chick{position:absolute;left:735px;top:-18px;width:220px;height:220px;rotate:-6deg;filter:drop-shadow(0 8px 0 rgba(160,90,0,.2))}
+.og-peep{position:absolute;left:955px;top:34px;padding:12px 22px 14px;border-radius:26px;background:#fff;font:36px/1 var(--round);color:var(--ink);box-shadow:0 0 0 3px rgba(43,34,53,.14),0 6px 0 rgba(43,34,53,.1)}
+.og-peep::after{content:"";position:absolute;left:18px;bottom:-10px;width:22px;height:22px;background:#fff;transform:rotate(45deg);border-radius:0 0 6px 0}
+.og-shelf{position:absolute;left:690px;top:560px;width:310px;height:24px;border-radius:12px;background:linear-gradient(#D69A5A,#B0773D);box-shadow:0 6px 0 #84531F}
+.og-side{position:absolute;width:120px;height:120px}
+</style></head><body><div class="og">
+<div class="og-rays"></div>
+<img class="og-logo" id="logo" alt="">
+<p class="og-line" id="line"></p>
+<img class="og-side" src="/img/c-frog.webp" style="left:1010px;top:330px;rotate:10deg" alt="">
+<img class="og-side" src="/img/c-squirrel.webp" style="left:600px;top:250px;rotate:-12deg;width:96px;height:96px" alt="">
+<div class="og-tube"><img src="/img/c-whale.webp" alt=""><img src="/img/c-bat.webp" alt=""></div>
+<img class="og-chick" src="/img/c-chick.webp" alt="">
+<div class="og-peep" id="peep"></div>
+<div class="og-shelf"></div>
+</div>
+<script>
+var q = new URLSearchParams(location.search), l = q.get('l') || 'ko';
+document.getElementById('logo').src = '/img/logo-' + l + '.webp';
+document.getElementById('line').textContent = q.get('t') || '';
+document.getElementById('peep').textContent = q.get('p') || '';
+</script></body></html>
