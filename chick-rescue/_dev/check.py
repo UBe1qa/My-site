@@ -61,7 +61,7 @@ for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html
     ok(f'<link rel="canonical" href="{url}">' in h and h.count('hreflang=') >= 4 and 'noindex' not in h, f'{url} canonical·hreflang')
     ok(('시행일: 2026년 10월 18일', 'Effective date: October 18, 2026')[i] in h, f'{url} 맨 위 시행일')
     ok(f'mailto:{build.MAIL}' in h and h.count(build.MAIL) >= 3, f'{url} 문의 메일')
-    ok(h.count('<table>') == (3, 3)[i], f'{url} 표 3개(처리 항목·위탁·권한)')
+    ok(h.count('<table>') == 4, f'{url} 표 4개(처리 항목·위탁·Android 권한·iOS 권한)')
     for src in re.findall(r'(?:src|href)="(/[^"#?]*)', h):
         pth = os.path.join(SITE, src.lstrip('/'))
         pth = os.path.join(pth, 'index.html') if src.endswith('/') else (pth if os.path.exists(pth) else pth + '.html')
@@ -69,7 +69,7 @@ for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html
     foot = read(home)[read(home).index('<footer'):]
     ok(f'href="{("", "/en")[i]}/privacy"' in foot, f'{k} 꼬리말에 개인정보 처리방침 링크')
     md = open(os.path.join(HERE, 'privacy', ('privacy_ko.md', 'privacy_en.md')[i]), encoding='utf-8').read()
-    ok('READ_BASIC_PHONE_STATE' in md and 'AdMob' in md and 'PG' in md, f'{url} 앱 부분(권한·광고) 그대로 있음')
+    ok('READ_BASIC_PHONE_STATE' in md and 'AdMob' in md and 'PG' in md and 'App Tracking Transparency' in md and 'IDFA' in md and 'User Messaging Platform' in md, f'{url} 앱 부분(권한·광고·iOS ATT) 그대로 있음')
 ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', read('en/privacy.html'))), '영어 방침에 한글 없음(한국어 링크 빼고)')
 ok('/privacy</loc>' in read('sitemap.xml') and '/en/privacy</loc>' in read('sitemap.xml'), 'sitemap에 방침 두 주소')
 ko = read('index.html')
