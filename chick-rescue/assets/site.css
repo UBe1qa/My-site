@@ -192,7 +192,8 @@ p{margin:0}
 }
 
 /* 능력 친구들 */
-.friends{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:560px}
+.friends{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (min-width:700px){.friends{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .friend{
   display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;min-height:44px;
   border:0;border-radius:16px;background:var(--card);color:var(--ink);cursor:pointer;font:600 14px/1.2 var(--body);
@@ -204,15 +205,20 @@ p{margin:0}
 .friend[aria-pressed="true"]{box-shadow:inset 0 0 0 3px var(--play)}
 .friend[aria-pressed="true"] img{animation:hop .45s var(--ease)}
 @keyframes hop{40%{transform:translateY(-10px) scale(1.06)}}
-.friend-say{margin-top:16px;max-width:560px;background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:inset 0 0 0 1.5px var(--line);display:flex;gap:16px;align-items:center;min-height:118px}
+.friend-show{margin-top:16px}
+.friend-clip{max-width:300px;margin:0 auto 16px;border-radius:var(--r);overflow:hidden;background:#232A48;box-shadow:inset 0 0 0 1.5px var(--line)}
+.friend-clip video{display:block;width:100%;height:auto;aspect-ratio:480/512}
+@media (min-width:700px){
+  .friend-show{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start}
+  .friend-clip{margin:0}
+}
+.friend-say{max-width:560px;background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:inset 0 0 0 1.5px var(--line);display:flex;gap:16px;align-items:center;min-height:118px}
 .friend-say img{width:64px;height:64px;flex:0 0 auto}
 .friend-say h3{font-size:19px}
 .friend-say p{color:var(--ink-2);font-size:16px;margin-top:4px}
-.abil{display:grid;gap:28px}
+.abil{display:grid;gap:28px;max-width:860px}
 .abil-note{font-size:15px;color:var(--ink-2);margin-top:16px;max-width:560px}
-@media (min-width:900px){.abil{grid-template-columns:minmax(0,560px) minmax(0,1fr);align-items:start}}
-.abil-shot{display:none}
-@media (min-width:900px){.abil-shot{display:block;max-width:260px;margin:0 auto}}
+
 
 /* 막혀도 괜찮아요 */
 .helps{display:grid;gap:12px;max-width:720px}

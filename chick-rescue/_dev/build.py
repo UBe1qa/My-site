@@ -317,10 +317,15 @@ def page(i):
     <div class="abil">
       <div>
         <div class="friends">{friends}</div>
-        <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>{FR['squirrel'][i][0]}</h3><p>{FR['squirrel'][i][1]}</p></div></div>
-        <p class="abil-note">{t('fr_note')}</p>
+        <div class="friend-show">
+          <div class="friend-clip"><video id="friend-clip" src="/video/abilities/squirrel.mp4" poster="/img/abilities/squirrel.webp"
+            width="480" height="512" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video></div>
+          <div>
+            <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>{FR['squirrel'][i][0]}</h3><p>{FR['squirrel'][i][1]}</p></div></div>
+            <p class="abil-note">{t('fr_note')}</p>
+          </div>
+        </div>
       </div>
-      {shot('ability_use', 'shot_ability', 'shot_ability_c', ' abil-shot')}
     </div>
     <script type="application/json" id="friend-text">{fr_json}</script>
   </div>

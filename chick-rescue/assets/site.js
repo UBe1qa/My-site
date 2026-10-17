@@ -31,6 +31,19 @@
   /* 능력 친구 고르기 */
   var data = document.getElementById('friend-text');
   var say = document.querySelector('.friend-say');
+  var clip = document.getElementById('friend-clip');
+  function showClip(k) { // 친구마다 능력 시연 영상(게임 도감 팝업과 같은 장면)
+    if (!clip) return;
+    clip.poster = '/img/abilities/' + k + '.webp';
+    clip.src = '/video/abilities/' + k + '.mp4';
+    if (!reduce) { var p = clip.play(); if (p && p.catch) p.catch(function () { clip.controls = true; }); }
+  }
+  if (clip) {
+    if (reduce) { clip.removeAttribute('autoplay'); clip.controls = true; } // 동작 줄이기: 포스터만, 눌러서 재생
+    else if (io) new IntersectionObserver(function (es) { // 보일 때만 재생
+      es.forEach(function (e) { if (e.isIntersecting) { var p = clip.play(); if (p && p.catch) p.catch(function () {}); } else clip.pause(); });
+    }, { threshold: .35 }).observe(clip);
+  }
   if (data && say) {
     var F = JSON.parse(data.textContent);
     document.querySelectorAll('.friend').forEach(function (b) {
@@ -41,6 +54,7 @@
         say.querySelector('img').src = '/img/c-' + b.dataset.k + '.webp';
         say.querySelector('h3').textContent = f[0];
         say.querySelector('p').textContent = f[1];
+        showClip(b.dataset.k);
         if (!reduce) say.animate([{ opacity: .4, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'ease-out' });
       });
     });

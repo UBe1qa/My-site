@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/head.woff2?v=bb276743" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/img/logo-ko.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="/assets/site.css?v=c62a4911">
+<link rel="stylesheet" href="/assets/site.css?v=1e8155ff">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "병아리 구조대", "url": "https://chick-rescue.lumenlab.page/", "description": "튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.", "genre": "Puzzle", "gamePlatform": "Android", "inLanguage": ["ko", "en", "ja"], "image": "https://chick-rescue.lumenlab.page/og.jpg", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "언제, 어디서 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요."}}, {"@type": "Question", "name": "아이폰에서도 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요."}}, {"@type": "Question", "name": "인터넷 없이 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "네. 게임은 인터넷 연결 없이 돌아가요."}}, {"@type": "Question", "name": "진행 기록은 어디에 저장되나요?", "acceptedAnswer": {"@type": "Answer", "text": "휴대폰 안에 저장돼요. 계정이나 클라우드 저장은 없어요."}}, {"@type": "Question", "name": "내 정보를 모으나요?", "acceptedAnswer": {"@type": "Answer", "text": "지금 만든 게임은 정보를 모으거나 보내지 않아요. 출시할 때 광고를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요."}}, {"@type": "Question", "name": "어떤 언어로 할 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "한국어, 영어, 일본어예요."}}, {"@type": "Question", "name": "무서운 장면이나 뽑기가 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "없어요. 싸우거나 무서운 장면이 없고, 돈을 내고 무작위로 뽑는 아이템도 없어요. 연령 등급은 출시할 때 받아요."}}]}</script>
 </head>
@@ -97,10 +97,15 @@
     <div class="abil">
       <div>
         <div class="friends"><button type="button" class="friend" data-k="squirrel" aria-pressed="true"><img src="/img/c-squirrel.webp" width="52" height="52" alt="" loading="lazy">다람쥐</button><button type="button" class="friend" data-k="frog" aria-pressed="false"><img src="/img/c-frog.webp" width="52" height="52" alt="" loading="lazy">개구리</button><button type="button" class="friend" data-k="otter" aria-pressed="false"><img src="/img/c-otter.webp" width="52" height="52" alt="" loading="lazy">해달</button><button type="button" class="friend" data-k="bat" aria-pressed="false"><img src="/img/c-bat.webp" width="52" height="52" alt="" loading="lazy">박쥐</button><button type="button" class="friend" data-k="octopus" aria-pressed="false"><img src="/img/c-octopus.webp" width="52" height="52" alt="" loading="lazy">문어</button><button type="button" class="friend" data-k="turtle" aria-pressed="false"><img src="/img/c-turtle.webp" width="52" height="52" alt="" loading="lazy">거북이</button><button type="button" class="friend" data-k="penguin" aria-pressed="false"><img src="/img/c-penguin.webp" width="52" height="52" alt="" loading="lazy">펭귄</button><button type="button" class="friend" data-k="mole" aria-pressed="false"><img src="/img/c-mole.webp" width="52" height="52" alt="" loading="lazy">두더지</button><button type="button" class="friend" data-k="owl" aria-pressed="false"><img src="/img/c-owl.webp" width="52" height="52" alt="" loading="lazy">부엉이</button><button type="button" class="friend" data-k="elephant" aria-pressed="false"><img src="/img/c-elephant.webp" width="52" height="52" alt="" loading="lazy">코끼리</button><button type="button" class="friend" data-k="lion" aria-pressed="false"><img src="/img/c-lion.webp" width="52" height="52" alt="" loading="lazy">사자</button><button type="button" class="friend" data-k="whale" aria-pressed="false"><img src="/img/c-whale.webp" width="52" height="52" alt="" loading="lazy">고래</button></div>
-        <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>다람쥐</h3><p>꾹 누르면 꼭대기까지 올라가요. 위 친구들은 한 칸씩 내려와요.</p></div></div>
-        <p class="abil-note">능력 모드에서 동물 친구가 나오는 판은 모두 능력을 써야 풀려요. 능력·구출 모드 1~4스테이지에서 스테이지마다 새 친구가 세 마리씩 나와요.</p>
+        <div class="friend-show">
+          <div class="friend-clip"><video id="friend-clip" src="/video/abilities/squirrel.mp4" poster="/img/abilities/squirrel.webp"
+            width="480" height="512" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video></div>
+          <div>
+            <div class="friend-say" aria-live="polite"><img src="/img/c-squirrel.webp" width="64" height="64" alt=""><div><h3>다람쥐</h3><p>꾹 누르면 꼭대기까지 올라가요. 위 친구들은 한 칸씩 내려와요.</p></div></div>
+            <p class="abil-note">능력 모드에서 동물 친구가 나오는 판은 모두 능력을 써야 풀려요. 능력·구출 모드 1~4스테이지에서 스테이지마다 새 친구가 세 마리씩 나와요.</p>
+          </div>
+        </div>
       </div>
-      <figure class="shot abil-shot"><img src="/img/shot-ability_use_ko.webp" width="600" height="1300" loading="lazy" decoding="async" alt="능력: 사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요"><figcaption><b>능력</b>사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요</figcaption></figure>
     </div>
     <script type="application/json" id="friend-text">{"squirrel": ["다람쥐", "꾹 누르면 꼭대기까지 올라가요. 위 친구들은 한 칸씩 내려와요."], "frog": ["개구리", "꾹 누른 뒤 튜브를 고르면, 어디에 있든 그 튜브 맨 위로 뛰어가요. 빈 튜브나 맨 위가 개구리인 튜브로 갈 수 있어요."], "otter": ["해달", "꾹 누르면 바로 아래 친구와 자리를 바꿔요."], "bat": ["박쥐", "꾹 누르면 박쥐가 있는 튜브를 통째로 뒤집어요."], "octopus": ["문어", "맨 위에 있을 때 꾹 누르면 왼쪽 튜브 맨 위 친구를 자기 위로 끌어와요. 맨 왼쪽에서는 맨 오른쪽 튜브에서 끌어와요."], "turtle": ["거북이", "꾹 누르면 바닥까지 잠수해요. 아래 친구들은 한 칸씩 올라와요."], "penguin": ["펭귄", "맨 위에 있을 때 꾹 누르면 바로 오른쪽 튜브 맨 위로 미끄러져 가요. 그 튜브에 누가 있든 자리만 있으면 돼요. 맨 오른쪽에서는 첫 튜브로 가요."], "mole": ["두더지", "맨 위에 있을 때 꾹 누르면 오른쪽 튜브 바닥으로 파고들어요. 그 튜브 친구들은 한 칸씩 올라가요. 맨 오른쪽에서는 첫 튜브로 가요."], "owl": ["부엉이", "꾹 누르면 자기 튜브를 한 칸 돌려요. 맨 위 친구가 바닥으로 내려가고 나머지는 한 칸씩 올라가요."], "elephant": ["코끼리", "맨 위에 있을 때 꾹 누르면 물을 뿜어서, 오른쪽 튜브 맨 위 친구를 그다음 튜브로 날려 보내요. 받는 튜브에 자리만 있으면 돼요."], "lion": ["사자", "맨 위에 있을 때 꾹 누른 뒤 다른 튜브를 고르면, 그 튜브 맨 위 친구와 자리를 바꿔요. 튜브가 꽉 차 있어도 돼요."], "whale": ["고래", "꾹 누르면 큰 파도가 쳐서, 모든 튜브의 맨 위 친구가 한 칸씩 오른쪽 튜브로 옮겨 가요. 맨 오른쪽 친구는 첫 튜브로 가요. 완성된 튜브는 쉬어요."]}</script>
   </div>
@@ -179,6 +184,6 @@
   </div>
 </footer>
 <script src="/assets/demo.js?v=59e00cd6" defer></script>
-<script src="/assets/site.js?v=71fc0bc9" defer></script>
+<script src="/assets/site.js?v=54a5ce82" defer></script>
 </body>
 </html>
