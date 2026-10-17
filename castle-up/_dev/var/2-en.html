@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Castle Up! — stack heroes in your castle and break the boss</title>
+<meta name="description" content="An idle castle defense game: raise your castle floor by floor and put a hero on each. Every 15 waves a boss blocks the road; hit its weakness order to stagger it. Play-testing on Android.">
+<link rel="canonical" href="https://castle-up.lumenlab.page/en/">
+<link rel="alternate" hreflang="ko" href="https://castle-up.lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://castle-up.lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://castle-up.lumenlab.page/en/">
+<meta name="theme-color" content="#2A1D4E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Castle Up!">
+<meta property="og:title" content="Castle Up! — stack heroes in your castle and break the boss">
+<meta property="og:description" content="An idle castle defense game: raise your castle floor by floor and put a hero on each. Every 15 waves a boss blocks the road; hit its weakness order to stagger it. Play-testing on Android.">
+<meta property="og:url" content="https://castle-up.lumenlab.page/en/">
+<meta property="og:image" content="https://castle-up.lumenlab.page/og-en.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/head.woff2?v=cf6c8a20" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/site.css?v=26801f5b">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Castle Up!", "url": "https://castle-up.lumenlab.page/en/", "description": "An idle castle defense game: raise your castle floor by floor and put a hero on each. Every 15 waves a boss blocks the road; hit its weakness order to stagger it. Play-testing on Android.", "genre": ["Idle", "Tower defense"], "gamePlatform": "Android", "inLanguage": ["ko", "en", "ja"], "image": "https://castle-up.lumenlab.page/og-en.jpg", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "When and where can I get it?", "acceptedAnswer": {"@type": "Answer", "text": "A Google Play (Android) launch is in the works. The game is being play-tested on phones now, and there is no release date yet."}}, {"@type": "Question", "name": "Will it be on iPhone?", "acceptedAnswer": {"@type": "Answer", "text": "Not decided yet. Android comes first."}}, {"@type": "Question", "name": "Do I have to keep playing by hand?", "acceptedAnswer": {"@type": "Answer", "text": "No. Skills can fire on their own, and cleared waves can replay automatically. Expeditions keep going while the game is closed. Only moving to the next wave needs a tap."}}, {"@type": "Question", "name": "Where is my progress saved?", "acceptedAnswer": {"@type": "Answer", "text": "In 10 save slots on your phone. There are no accounts or cloud saves for now."}}, {"@type": "Question", "name": "Does it collect my data?", "acceptedAnswer": {"@type": "Answer", "text": "The current game sends nothing anywhere. If ads or payments are added at launch, we will publish a privacy policy on this site first, saying exactly what is collected."}}, {"@type": "Question", "name": "Which languages?", "acceptedAnswer": {"@type": "Answer", "text": "Korean, English and Japanese."}}, {"@type": "Question", "name": "Is it scary?", "acceptedAnswer": {"@type": "Answer", "text": "It is fantasy combat in a bold-outline cartoon style, with fantasy foes like a Bone Shaman and a Demon Lord. The age rating will be set at launch."}}]}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-phys" viewBox="0 0 24 24"><path d="M19 3h2v2l-9.5 9.5-2-2z" fill="currentColor"/><path d="m6.5 13.5 4 4M8 16l-4 4M5 18.5 3.5 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.3-4.2 2.6-5.3.1 1.6.9 2.8 2 3.3-.6-3.4.2-6.3.9-9z" fill="currentColor"/></symbol>
+<symbol id="i-ice" viewBox="0 0 24 24"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z" fill="currentColor"/></symbol>
+<symbol id="i-holy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-dark" viewBox="0 0 24 24"><path d="M15.5 3.2A9 9 0 1 0 20.8 15 7 7 0 0 1 15.5 3.2z" fill="currentColor"/></symbol>
+</svg>
+<a class="skip" href="#try">Skip to the playable taste</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/en/"><img src="/img/icon-256.webp" width="32" height="32" alt="">Castle Up!</a>
+    <a class="lang" href="/" hreflang="ko" lang="ko" aria-label="한국어로 보기">한국어</a>
+  </div>
+</header>
+<main>
+<section class="hero hero-v2" aria-labelledby="h1">
+  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-autumn.webp" alt="" width="1280" height="1600" fetchpriority="low"></div>
+  <div class="wrap v2-grid">
+    <div class="v2-text">
+      <span class="logo-text" role="img" aria-label="Castle Up!">Castle Up!</span>
+      <h1 id="h1">Stack heroes floor by floor and break the boss: an idle castle defense</h1>
+      <p class="hero-sub">A boss blocks the road every 15 waves. Hit it with skills in its weakness order to stagger it. Recruit heroes and raise your castle to the clouds.</p>
+      <p class="v2-acts"><a class="btn btn-main" href="#try">Try breaking a boss yourself</a></p>
+      <p class="hero-status"><b>Play-testing on Android</b></p>
+    </div>
+    <div class="v2-video"><div class="phone">
+          <video id="play-video" muted loop playsinline autoplay preload="metadata" poster="/img/boss-en-poster.webp" width="600" height="1066" aria-label="Video of the real game fighting the Bat Queen on Auto skills">
+            <source src="/img/boss-en.mp4" type="video/mp4">
+            <source src="/img/boss-en.webm" type="video/webm">
+          </video>
+        </div>
+        <p class="phone-cap">15 seconds on Auto · no sound</p></div>
+  </div>
+</section>
+<section class="sec" id="try" aria-labelledby="try-h"><div class="wrap"><div class="hero-col" style="padding:0">
+  <div class="sec-head" style="margin:0 auto 8px;text-align:center"><span class="eyebrow">Try it</span><h2 id="try-h">Hit the boss in the order above its head</h2></div><div class="demo" id="demo">
+      <p class="demo-head"><span><b>Try it</b> · stagger the Bat Queen</span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>Sound</button></p>
+      <div class="stage">
+        <img class="st-bg" src="/img/bg-autumn.webp" width="1280" height="1600" alt="" fetchpriority="low">
+        <img class="st-castle" src="/img/castle-04.webp" width="320" height="358" alt="">
+        <div class="st-name"><b>Bat Queen</b><span class="hp"><i></i></span></div>
+        <div class="boss"><div class="chain" role="img"></div><img src="/img/b-bat-queen.webp" width="360" height="345" alt="Bat Queen"></div>
+        <canvas class="fx" aria-hidden="true"></canvas>
+        <div class="st-flash" aria-hidden="true"></div>
+      </div>
+      <p class="demo-tip" aria-live="polite"></p>
+      <div class="skills"><button type="button" class="sk" data-el="phys" style="--c:var(--phys)"><span class="sk-next" aria-hidden="true">Next!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span>Arrow Rain<small>Physical<span class="sr"> · Ranger</span></small></button><button type="button" class="sk" data-el="fire" style="--c:var(--fire)"><span class="sk-next" aria-hidden="true">Next!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span>Meteor<small>Fire<span class="sr"> · Flame Mage</span></small></button><button type="button" class="sk" data-el="bolt" style="--c:var(--bolt)"><span class="sk-next" aria-hidden="true">Next!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span>Thunder<small>Lightning<span class="sr"> · Storm Monk</span></small></button><button type="button" class="sk" data-el="ice" style="--c:var(--ice)"><span class="sk-next" aria-hidden="true">Next!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span>Blizzard<small>Ice<span class="sr"> · Frost Witch</span></small></button></div>
+      <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
+        <h2 id="demo-done-h"></h2><p></p>
+        <button type="button" class="btn btn-main" data-act="again">Play again</button>
+        <button type="button" class="btn btn-soft" data-act="real">See the real game</button>
+      </div>
+      <script type="application/json" id="demo-text">{"tip": "Hit the boss with skills in the order above its head. Press the button marked ‘Next!’", "step": "Nice! Next is {el}. Land it within 8 seconds.", "wrong": "Out-of-order elements just deal damage, no penalty. {el} is next.", "reset": "The next step wasn’t hit within 8 seconds, so the order started over.", "groggyTip": "Staggered! Stunned for 4 seconds and taking 1.8× damage. Flying bosses crash down.", "inGroggy": "While staggered, any skill hits 1.8×.", "rise": "She’s flying again, with a new weakness order.", "groggy": "Staggered!", "weak": "Weak point!", "fall": "Fallen!", "chainLabel": "Weakness order: {order}.", "chainNext": "Next: {el}.", "doneTitle": "Bat Queen down!", "done": "{g} staggers, {c} combos. The real game has 20 bosses like this.", "el": {"phys": "Physical", "fire": "Fire", "ice": "Ice", "bolt": "Lightning", "holy": "Light", "dark": "Dark"}, "combo": {"steam": "Steam Blast!", "shock": "Shock!", "shatter": "Shatter!", "overload": "Overload!", "flame_arrows": "Fire Arrows!", "lightning_rod": "Lightning Rod!", "judgement": "Judgement!", "eclipse": "Eclipse!", "hellfire": "Hellfire!", "purify": "Purify!", "quench": "Quench!", "black_lightning": "Black Lightning!", "shadow_strike": "Shadow Strike!", "blessed_blade": "Blessed Blade!"}, "again": "Play again", "real": "See the real game"}</script>
+    </div></div></div></section>
+<section class="sec" id="real" aria-labelledby="real-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">The real game</span><h2 id="real-h">A real boss fight, 15 seconds, hands off</h2><p>Wave 45 against the Bat Queen in the game in development, with skills left on Auto. Watch the Fire Arrows combo, then the stagger that drops her to the ground before she flies again. The screens beside it are straight from the game too.</p></div>
+    <div class="real">
+      
+      <div class="shots" tabindex="0" aria-label="The real game">
+        <figure class="shot"><img src="/img/shot-wave_battle_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Wave battle: Heroes on every floor shoot as enemies pour in from the right"><figcaption><b>Wave battle</b>Heroes on every floor shoot as enemies pour in from the right</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-boss_weak_order_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Weakness order: The order above the Flame Dragon, and ‘Next!’ on the skill to press"><figcaption><b>Weakness order</b>The order above the Flame Dragon, and ‘Next!’ on the skill to press</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-groggy_fall_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Stagger · fall: Finish the order to stagger; flying bosses crash down"><figcaption><b>Stagger · fall</b>Finish the order to stagger; flying bosses crash down</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-skill_combo_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Combo: Ice then Lightning: Shock!"><figcaption><b>Combo</b>Ice then Lightning: Shock!</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-wave_result_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Wave cleared: Damage per hero, then Replay or Next wave"><figcaption><b>Wave cleared</b>Damage per hero, then Replay or Next wave</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-title_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Title: Campaign and 10 save slots"><figcaption><b>Title</b>Campaign and 10 save slots</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="boss" aria-labelledby="boss-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Boss fights</span><h2 id="boss-h">A boss every 15 waves. Get the order right and it crumbles</h2><p>Every boss shows a weakness order above its head. Skills fire on their own if you like, but aiming for the order yourself changes the fight.</p></div>
+    <div class="rules"><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h2M14.5 12h2"/></svg></i>Weakness order → stagger</h3><p>Hit 2 to 4 elements in order and the boss is stunned for 4 seconds, taking 1.8× damage. A wrong element just passes with no penalty, and the button to press says ‘Next!’.</p><div class="rule-order" aria-hidden="true"><span class="ch ch-done" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><i class="ch-arr on"></i><span class="ch ch-done" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><i class="ch-arr on"></i><span class="ch ch-done" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></div></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 7.4 5" stroke-width="3.4"/></svg></i>Parry</h3><p>A boss’s wind-up ring turns gold for its last half second. Hold your skills and hit it then to cancel the attack and stagger it for 5 seconds.</p></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20"/></svg></i>Counter</h3><p>Finish the order during a wind-up to cut the attack short and land a longer, bigger stagger.</p></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M6 11l6 6 6-6M4 21h16"/></svg></i>Flyers fall</h3><p>Flying bosses crash down while staggered, so ground-only skills reach them. Then they take off again.</p></div></div>
+    <div class="combos"><h3>14 element combos</h3><p>When two skills’ elements pair up within 5 seconds, the second one hits 1.5 to 2× harder with a bonus effect.</p><ul class="combo-list"><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>Steam Blast<span class="sr"> (Ice → Fire)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>Shock<span class="sr"> (Ice → Lightning)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>Shatter<span class="sr"> (Ice → Physical)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>Overload<span class="sr"> (Fire → Lightning)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>Fire Arrows<span class="sr"> (Physical → Fire)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>Lightning Rod<span class="sr"> (Physical → Lightning)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span></span><span>Judgement<span class="sr"> (Lightning → Light)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span></span><span>Eclipse<span class="sr"> (Light → Dark)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>Hellfire<span class="sr"> (Dark → Fire)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span></span><span>Purify<span class="sr"> (Dark → Light)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span></span><span>Quench<span class="sr"> (Fire → Ice)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span></span><span>Black Lightning<span class="sr"> (Lightning → Dark)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>Shadow Strike<span class="sr"> (Dark → Physical)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>Blessed Blade<span class="sr"> (Light → Physical)</span></span></li></ul></div>
+    <div class="combos"><h3>20 bosses, 10 regions</h3></div>
+    <div class="bosses"><figure class="bossc rv"><img class="bg" src="/img/bg-meadow.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-warlord.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Charging Warlord</b><span>Green Meadow · wave 15</span><span class="weak" style="--c:var(--phys)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></i>Weak to Physical</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-autumn.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-bat-queen.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Bat Queen</b><span>Autumn Woods · wave 45</span><span class="weak" style="--c:var(--fire)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></i>Weak to Fire</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-canyon.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-golem.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Stone Golem</b><span>Red Canyon · wave 75</span><span class="weak" style="--c:var(--bolt)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></i>Weak to Lightning</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-volcano.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-dragon.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Flame Dragon</b><span>Fire Mountain · wave 135</span><span class="weak" style="--c:var(--ice)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></i>Weak to Ice</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-coast.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-kraken.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Kraken</b><span>Storm Coast · wave 240</span><span class="weak" style="--c:var(--bolt)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></i>Weak to Lightning</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-demon-castle.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-demon-lord.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>Demon Lord</b><span>Demon Castle · wave 300</span><span class="weak" style="--c:var(--holy)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></i>Weak to Light</span></figcaption></figure></div>
+    <p class="boss-note">Each region has 30 waves, with bosses on waves 15 and 30 and a mid-boss right before each. Beat a boss for the first time and a boss hero with its power joins your castle.</p>
+  </div>
+</section>
+
+<section class="sec" id="castle" aria-labelledby="castle-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Grow your castle</span><h2 id="castle-h">A hero on every floor, all the way to the clouds</h2><p>Every promotion changes your castle and adds a floor. Flip through all 20 grades below.</p></div>
+    <div class="grow">
+      <div class="tower" data-grades='[["Stone Keep", 1, 3], ["Watch Castle", 2, 4], ["Fortress", 3, 5], ["Citadel", 4, 6], ["Golden Palace", 5, 7], ["Sky Castle", 6, 8], ["Star Castle", 7, 9], ["Crystal Castle", 8, 10], ["Silver Citadel", 9, 11], ["Dragon Castle", 10, 12], ["Castle of Winds", 11, 13], ["Moonlight Palace", 12, 14], ["Sun Palace", 13, 15], ["Sky Fortress", 14, 16], ["Rainbow Castle", 15, 17], ["Castle of Angels", 16, 18], ["Starsea Castle", 17, 19], ["Eternal Castle", 18, 20], ["Castle of Gods", 19, 21], ["Cosmic Castle", 20, 22]]' data-meta="Grade {n} · {f} floors">
+        <div class="tower-img"><img src="/img/castle-13.webp" width="320" height="444" alt="" loading="lazy"></div>
+        <p class="tower-name" aria-live="polite">Sun Palace</p>
+        <p class="tower-meta">Grade 13 · 15 floors</p>
+        <div class="tower-ctrl">
+          <button type="button" data-step="-1" aria-label="Previous grade">‹</button>
+          <input type="range" min="1" max="20" value="13" aria-label="Castle grade">
+          <button type="button" data-step="1" aria-label="Next grade">›</button>
+        </div>
+      </div>
+      <div class="grow-text"><ul><li class="rv"><b>20 grades, from 3 floors to 22</b><span>Each promotion adds a floor and multiplies all damage and castle HP by 1.25.</span></li><li class="rv"><b>50 heroes</b><span>30 you recruit, plus 20 boss heroes who join when you first beat their boss.</span></li><li class="rv"><b>Who stands where</b><span>There are more heroes than floors, so you pick who stands. Every hero with a skill becomes a skill button.</span></li><li class="rv"><b>Up to 20 stars</b><span>Get the same hero again to raise its ★: gold, then red, purple and rainbow stars.</span></li></ul></div>
+    </div>
+    <div class="heroes"><figure class="heroc" data-r="0"><img src="/img/h-archer.webp" width="360" height="400" alt="" loading="lazy"><b>Archer</b><span>Common · Physical</span></figure><figure class="heroc" data-r="0"><img src="/img/h-spear.webp" width="360" height="400" alt="" loading="lazy"><b>Spearman</b><span>Common · Physical</span></figure><figure class="heroc" data-r="2"><img src="/img/h-frost-witch.webp" width="360" height="400" alt="" loading="lazy"><b>Frost Witch</b><span>Rare · Ice</span></figure><figure class="heroc" data-r="3"><img src="/img/h-angel.webp" width="360" height="400" alt="" loading="lazy"><b>Angel</b><span>Epic · Light</span></figure><figure class="heroc" data-r="4"><img src="/img/h-sword-king.webp" width="360" height="400" alt="" loading="lazy"><b>Holy Sword King</b><span>Legendary · Light</span></figure><figure class="heroc" data-r="b"><img src="/img/h-bat-tower.webp" width="360" height="400" alt="" loading="lazy"><b>Bat Princess</b><span>Boss hero · Dark</span></figure><figure class="heroc" data-r="b"><img src="/img/h-golem-forge.webp" width="360" height="400" alt="" loading="lazy"><b>Little Golem</b><span>Boss hero · Physical</span></figure><figure class="heroc" data-r="b"><img src="/img/h-little-demon.webp" width="360" height="400" alt="" loading="lazy"><b>Little Demon Lord</b><span>Boss hero · Fire</span></figure></div>
+    <p class="heroes-note">Border: orange Legendary · purple Epic · red boss hero</p>
+    <div class="shots three" tabindex="0" aria-label="Grow your castle">
+      <figure class="shot"><img src="/img/shot-castle_status_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Castle status: The grade path and the hero on each floor"><figcaption><b>Castle status</b>The grade path and the hero on each floor</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-hero_info_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Hero info: A tiny live battle shows the skill"><figcaption><b>Hero info</b>A tiny live battle shows the skill</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-recruit_en.webp" width="600" height="1067" loading="lazy" decoding="async" alt="Recruit: Cards flip and glow in their rarity color"><figcaption><b>Recruit</b>Cards flip and glow in their rarity color</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="idle" aria-labelledby="idle-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Hands off</span><h2 id="idle-h">Leave it on and the castle fights</h2></div>
+    <div class="idle"><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><div><h3>Auto skills</h3><p>Choose Manual, Auto, or Boss by hand. It starts on Auto.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><div><h3>Free auto replay</h3><p>Cleared waves replay by themselves to gather gold. Only moving on to the next wave is your call.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h3>Losing costs nothing</h3><p>There is no penalty for losing. The gold you earned stays.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h3>Expeditions keep going</h3><p>Send up to three heroes for 1, 4 or 8 hours. Time passes even with the game closed, and the heroes never leave the castle.</p></div></div></div>
+    <div class="nums"><div class="num rv"><b>300</b><span>Waves per loop</span><small>10 regions × 30, and the waves keep coming</small></div><div class="num rv"><b>20</b><span>Bosses</span><small>Plus 10 mid-bosses</small></div><div class="num rv"><b>50</b><span>Heroes</span><small>30 recruits + 20 boss heroes</small></div><div class="num rv"><b>20</b><span>Castle grades</span><small>Stone Keep to Cosmic Castle</small></div></div>
+    <div class="modes"><div class="mode rv"><h3>Boss Hall</h3><p>Rematch bosses you have beaten across 15 levels. They wear a barrier, so staggers and parries are the key.</p></div><div class="mode rv"><h3>Endless Tower</h3><p>One climb is one run. Every 3 floors you pick 1 of 3 blessings, and floor rules change every week.</p></div><div class="mode rv"><h3>Expedition</h3><p>Send resting heroes off and collect later.</p></div></div>
+    <p class="src">Numbers are for the current build and may change before launch.</p>
+  </div>
+</section>
+
+<section class="sec" id="money" aria-labelledby="money-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Cost</span><h2 id="money-h">No ads or payments yet</h2><p>This is how it is designed for launch. In the current build, ads and purchases are test screens that cost nothing.</p></div>
+    <div class="money">
+      <div class="mcard free rv"><h3>Free</h3><ul><li>2× speed</li><li>Auto skills and auto replay</li><li>Trying again after a loss (your gold stays)</li></ul></div>
+      <div class="mcard rv"><h3>Ads</h3><ul><li>Designed as opt-in rewarded ads only</li><li>Revive, double expedition rewards, 3× speed for 30 minutes</li></ul></div>
+      <div class="mcard rv"><h3>If you pay</h3><ul><li>Keep 3× speed</li><li>Rewards without ads</li><li>Gems</li></ul><span class="tag">Prices are set at launch</span></div>
+    </div>
+    <p class="money-note">Recruiting heroes is a random draw. The odds are shown in the game and are still being tuned. Since the game is not out yet, these rules may change.</p>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="faq-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="faq-h">Questions</h2></div>
+    <div class="faq"><details><summary>When and where can I get it?</summary><p>A Google Play (Android) launch is in the works. The game is being play-tested on phones now, and there is no release date yet.</p></details><details><summary>Will it be on iPhone?</summary><p>Not decided yet. Android comes first.</p></details><details><summary>Do I have to keep playing by hand?</summary><p>No. Skills can fire on their own, and cleared waves can replay automatically. Expeditions keep going while the game is closed. Only moving to the next wave needs a tap.</p></details><details><summary>Where is my progress saved?</summary><p>In 10 save slots on your phone. There are no accounts or cloud saves for now.</p></details><details><summary>Does it collect my data?</summary><p>The current game sends nothing anywhere. If ads or payments are added at launch, we will publish a privacy policy on this site first, saying exactly what is collected.</p></details><details><summary>Which languages?</summary><p>Korean, English and Japanese.</p></details><details><summary>Is it scary?</summary><p>It is fantasy combat in a bold-outline cartoon style, with fantasy foes like a Bone Shaman and a Demon Lord. The age rating will be set at launch.</p></details></div>
+  </div>
+</section>
+
+<section class="end" id="end" aria-labelledby="end-h">
+  <div class="end-bg" aria-hidden="true"><img src="/img/bg-sky-isle.webp" alt="" width="1280" height="1600" loading="lazy"></div>
+  <div class="wrap">
+    <h2 id="end-h">Play-testing on phones right now</h2>
+    <p class="end-lead">Android comes first. When it is out, the download link goes right here.</p>
+    <ol class="end-steps"><li class=""><i aria-hidden="true">✓</i>Build 10 regions, 20 bosses, 50 heroes</li><li class="is-now"><i aria-hidden="true">2</i>Play-test on phones <span class="sr">(now)</span></li><li class=""><i aria-hidden="true">3</i>Add ads and payments</li><li class=""><i aria-hidden="true">4</i>Closed testing</li><li class=""><i aria-hidden="true">5</i>Launch on Google Play</li></ol>
+    <div class="end-acts">
+      <a class="btn btn-main" href="mailto:contact@lumenlab.page?subject=%5BCastle%20Up%21%5D%20Question">Ask by email</a>
+      <a class="btn btn-line" href="#try">Try the boss fight again</a>
+    </div>
+    <p class="mail-note">Made by Lumen Lab. Email <span class="nw">contact@lumenlab.page</span> <button type="button" class="btn-copy" data-copy="contact@lumenlab.page" data-done="Copied">Copy</button></p>
+    <a class="lumen" href="https://lumenlab.page/en/">
+      <svg viewBox="0 0 64 80" aria-hidden="true">
+        <circle class="l-glow" cx="32" cy="14" r="22" fill="url(#lg1)"/>
+        <defs><radialGradient id="lg1"><stop offset="0" stop-color="#FFD24A" stop-opacity=".5"/><stop offset="1" stop-color="#FFD24A" stop-opacity="0"/></radialGradient></defs>
+        <path d="M32 4v18" stroke="#9AA3BF" stroke-width="2"/>
+        <g class="l-flag"><path d="M33 5h14l-4 4 4 4H33z" fill="#FFD24A"/></g>
+        <path d="M16 24h32v-6h-5v3h-4v-3h-5v3h-4v-3h-5v3h-4v-3h-5z" fill="#6E6A86"/>
+        <rect x="18" y="24" width="28" height="52" fill="#4D4A66"/>
+        <path d="M14 76h36" stroke="#3A3752" stroke-width="4" stroke-linecap="round"/>
+        <rect class="l-win w3" x="28" y="30" width="8" height="10" rx="4"/>
+        <rect class="l-win w2" x="28" y="46" width="8" height="10" rx="4"/>
+        <rect class="l-win w1" x="27" y="62" width="10" height="14" rx="5"/>
+      </svg>
+      <div><b>Lumen Lab</b><span>The studio behind Castle Up!, with more games, apps and free web tools</span></div><span class="arr" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Lumen Lab</span>
+    <a href="/" hreflang="ko" lang="ko">한국어</a>
+    <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>
+    <p>The logo, icon, heroes, bosses, castles and backgrounds were made with an AI tool (Higgsfield), and character motion comes from AI video made with the same tool. Effects, screens and sounds are made by the game’s own code. Screens and numbers reflect the game in development and may change before launch.</p>
+  </div>
+</footer>
+<script src="/assets/demo.js?v=1dfedb95" defer></script>
+<script src="/assets/site.js?v=1407cc11" defer></script>
+</body>
+</html>

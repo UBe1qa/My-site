@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/site.css">
+<style>body{margin:0;width:1200px;height:630px;overflow:hidden;position:relative;background:linear-gradient(180deg,#2A1D4E,#4A2556 45%,#7A3448)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 80%;opacity:.85}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(23,27,43,.92) 0%,rgba(23,27,43,.7) 42%,rgba(23,27,43,0) 70%)}
+.l{position:absolute;left:60px;top:60px;width:560px}
+.l img{width:400px;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,.45))}
+.l .logo-text{font-size:96px;margin:30px 0 10px}
+.l h1{font-family:var(--head);font-weight:400;font-size:38px;white-space:nowrap;line-height:1.25;color:#FFF2DD;margin-top:14px;text-shadow:0 3px 10px rgba(0,0,0,.5)}
+.chip{position:absolute;left:60px;bottom:48px;font:800 27px/1 var(--body);color:#1E2233;background:#FFD24A;padding:16px 24px;border-radius:999px}
+.castle{position:absolute;left:640px;bottom:30px;width:230px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
+.boss{position:absolute;right:40px;top:150px;width:330px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
+.ochain{position:absolute;right:110px;top:96px;display:flex;gap:8px;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(13,13,31,.7)}
+.ochain span{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#1E2233}
+.ochain span svg{width:32px;height:32px}
+.ochain i{border-left:10px solid rgba(255,255,255,.8);border-top:8px solid transparent;border-bottom:8px solid transparent}
+.ochain span.n{background:rgba(20,20,41,.92);color:var(--c);box-shadow:inset 0 0 0 5px var(--c),0 0 0 8px rgba(255,116,72,.35)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><symbol id="i-phys" viewBox="0 0 24 24"><path d="M19 3h2v2l-9.5 9.5-2-2z" fill="currentColor"/><path d="m6.5 13.5 4 4M8 16l-4 4M5 18.5 3.5 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol><symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.3-4.2 2.6-5.3.1 1.6.9 2.8 2 3.3-.6-3.4.2-6.3.9-9z" fill="currentColor"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z" fill="currentColor"/></symbol></symbol></svg>
+<img class="bg" src="/img/bg-autumn.webp"><div class="shade"></div>
+<img class="castle" src="/img/castle-04.webp"><img class="boss" src="/img/b-bat-queen.webp">
+<div class="ochain"><span style="--c:#E9DCC3"><svg><use href="#i-phys"/></svg></span><i></i><span style="--c:#FFE15A"><svg><use href="#i-bolt"/></svg></span><i></i><span class="n" style="--c:#FF7448"><svg><use href="#i-fire"/></svg></span></div>
+<div class="l" id="l"></div><div class="chip" id="chip"></div>
+<script>var l=location.hash.slice(1)||'ko';
+document.getElementById('l').innerHTML=l=='ko'?'<img src="/img/logo-ko.webp"><h1>영웅을 층층이 세운 성으로<br>보스를 무너뜨리는 디펜스</h1>':'<span class="logo-text">Castle Up!</span><h1>Stack heroes floor by floor,<br>break the boss</h1>';
+document.getElementById('chip').textContent=l=='ko'?'안드로이드 플레이테스트 중 · 맛보기 보스전':'Play-testing on Android · try a boss fight';</script></body></html>

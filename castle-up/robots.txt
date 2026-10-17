@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://castle-up.lumenlab.page/sitemap.xml

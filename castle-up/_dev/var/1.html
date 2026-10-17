@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>캐슬업! — 영웅을 층층이 세운 성으로 보스를 무너뜨리는 디펜스 게임</title>
+<meta name="description" content="성을 층층이 쌓아 영웅을 세우는 방치형 디펜스. 15웨이브마다 나오는 보스를 약점 순서대로 맞혀 그로기로 만들어요. 안드로이드에서 플레이테스트 중.">
+<link rel="canonical" href="https://castle-up.lumenlab.page/">
+<link rel="alternate" hreflang="ko" href="https://castle-up.lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://castle-up.lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://castle-up.lumenlab.page/en/">
+<meta name="theme-color" content="#2A1D4E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="캐슬업!">
+<meta property="og:title" content="캐슬업! — 영웅을 층층이 세운 성으로 보스를 무너뜨리는 디펜스 게임">
+<meta property="og:description" content="성을 층층이 쌓아 영웅을 세우는 방치형 디펜스. 15웨이브마다 나오는 보스를 약점 순서대로 맞혀 그로기로 만들어요. 안드로이드에서 플레이테스트 중.">
+<meta property="og:url" content="https://castle-up.lumenlab.page/">
+<meta property="og:image" content="https://castle-up.lumenlab.page/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/head.woff2?v=cf6c8a20" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/img/logo-ko.webp" as="image" fetchpriority="high">
+<link rel="stylesheet" href="/assets/site.css?v=26801f5b">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "캐슬업!", "url": "https://castle-up.lumenlab.page/", "description": "성을 층층이 쌓아 영웅을 세우는 방치형 디펜스. 15웨이브마다 나오는 보스를 약점 순서대로 맞혀 그로기로 만들어요. 안드로이드에서 플레이테스트 중.", "genre": ["Idle", "Tower defense"], "gamePlatform": "Android", "inLanguage": ["ko", "en", "ja"], "image": "https://castle-up.lumenlab.page/og.jpg", "author": {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "언제, 어디서 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "안드로이드(구글 플레이) 출시를 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요."}}, {"@type": "Question", "name": "아이폰에서도 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "아직 정하지 않았어요. 지금은 안드로이드부터 준비하고 있어요."}}, {"@type": "Question", "name": "계속 붙잡고 있어야 하나요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요. 스킬은 자동으로 쓰게 둘 수 있고, 깬 웨이브는 자동 반복으로 다시 돌릴 수 있어요. 원정은 게임을 꺼 둬도 시간이 가요. 다음 웨이브로 넘어가는 것만 직접 눌러요."}}, {"@type": "Question", "name": "진행 기록은 어디에 저장되나요?", "acceptedAnswer": {"@type": "Answer", "text": "휴대폰 안 저장 슬롯 10개에 저장돼요. 지금은 계정이나 클라우드 저장이 없어요."}}, {"@type": "Question", "name": "내 정보를 모으나요?", "acceptedAnswer": {"@type": "Answer", "text": "지금 만든 게임은 정보를 밖으로 보내지 않아요. 출시할 때 광고나 결제를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요."}}, {"@type": "Question", "name": "어떤 언어로 할 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "한국어, 영어, 일본어예요."}}, {"@type": "Question", "name": "무서운 장면이 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "굵은 선 카툰 그림의 판타지 전투예요. 해골 주술사나 마왕 같은 판타지 적이 나와요. 연령 등급은 출시할 때 받아요."}}]}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-phys" viewBox="0 0 24 24"><path d="M19 3h2v2l-9.5 9.5-2-2z" fill="currentColor"/><path d="m6.5 13.5 4 4M8 16l-4 4M5 18.5 3.5 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.3-4.2 2.6-5.3.1 1.6.9 2.8 2 3.3-.6-3.4.2-6.3.9-9z" fill="currentColor"/></symbol>
+<symbol id="i-ice" viewBox="0 0 24 24"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z" fill="currentColor"/></symbol>
+<symbol id="i-holy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-dark" viewBox="0 0 24 24"><path d="M15.5 3.2A9 9 0 1 0 20.8 15 7 7 0 0 1 15.5 3.2z" fill="currentColor"/></symbol>
+</svg>
+<a class="skip" href="#try">맛보기로 건너뛰기</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon-256.webp" width="32" height="32" alt="">캐슬업!</a>
+    <a class="lang" href="/en/" hreflang="en" lang="en" aria-label="Read this page in English">English</a>
+  </div>
+</header>
+<main>
+<section class="hero" id="try" aria-labelledby="h1">
+  <div class="hero-bg" aria-hidden="true"><img src="/img/bg-autumn.webp" alt="" width="1280" height="1600" fetchpriority="low"></div>
+  <div class="hero-col v1-grid">
+    <div class="v1-text">
+      <img class="hero-logo" src="/img/logo-ko.webp" width="720" height="530" alt="캐슬업!" fetchpriority="high">
+      <h1 id="h1">영웅을 층층이 세운 성으로 보스를 무너뜨리는 디펜스 게임</h1>
+      <p class="hero-sub v1-sub">15웨이브마다 보스가 길을 막아요. 보스의 약점 순서대로 스킬을 맞혀 그로기로 만들어요. 영웅을 모집해 성을 구름까지 쌓아요.</p>
+    </div>
+    <div class="v1-play">
+      <div class="demo" id="demo">
+      <p class="demo-head"><span><b>맛보기</b> · 박쥐 여왕을 그로기로</span><button type="button" class="btn btn-soft demo-sound" data-act="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 6 6m0-6-6 6"/></svg>소리</button></p>
+      <div class="stage">
+        <img class="st-bg" src="/img/bg-autumn.webp" width="1280" height="1600" alt="" fetchpriority="low">
+        <img class="st-castle" src="/img/castle-04.webp" width="320" height="358" alt="">
+        <div class="st-name"><b>박쥐 여왕</b><span class="hp"><i></i></span></div>
+        <div class="boss"><div class="chain" role="img"></div><img src="/img/b-bat-queen.webp" width="360" height="345" alt="박쥐 여왕"></div>
+        <canvas class="fx" aria-hidden="true"></canvas>
+        <div class="st-flash" aria-hidden="true"></div>
+      </div>
+      <p class="demo-tip" aria-live="polite"></p>
+      <div class="skills"><button type="button" class="sk" data-el="phys" style="--c:var(--phys)"><span class="sk-next" aria-hidden="true">다음!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span>화살비<small>물리<span class="sr"> · 레인저</span></small></button><button type="button" class="sk" data-el="fire" style="--c:var(--fire)"><span class="sk-next" aria-hidden="true">다음!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span>메테오<small>불<span class="sr"> · 불꽃 마법사</span></small></button><button type="button" class="sk" data-el="bolt" style="--c:var(--bolt)"><span class="sk-next" aria-hidden="true">다음!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span>낙뢰<small>번개<span class="sr"> · 번개 수도사</span></small></button><button type="button" class="sk" data-el="ice" style="--c:var(--ice)"><span class="sk-next" aria-hidden="true">다음!</span><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span>눈보라<small>얼음<span class="sr"> · 얼음 마녀</span></small></button></div>
+      <div class="demo-done" role="dialog" aria-labelledby="demo-done-h" aria-live="polite" hidden>
+        <h2 id="demo-done-h"></h2><p></p>
+        <button type="button" class="btn btn-main" data-act="again">다시 하기</button>
+        <button type="button" class="btn btn-soft" data-act="real">실제 게임 화면 보기</button>
+      </div>
+      <script type="application/json" id="demo-text">{"tip": "보스 머리 위 순서대로 스킬을 맞혀요. ‘다음!’이 뜬 버튼을 누르면 돼요!", "step": "좋아요! 다음은 {el} 스킬이에요. 8초 안에 이어서 맞혀요.", "wrong": "순서와 다른 속성은 피해만 들어가요. 벌칙은 없어요. 지금은 {el} 차례예요.", "reset": "8초 안에 다음 칸을 못 맞혀서 순서가 처음으로 돌아갔어요.", "groggyTip": "그로기! 4초 동안 기절하고 1.8배로 아파요. 나는 보스는 땅으로 떨어져요.", "inGroggy": "그로기 동안은 아무 스킬이나 1.8배예요.", "rise": "다시 날아올랐어요. 새 약점 순서가 떴어요.", "groggy": "그로기!", "weak": "약점 노출!", "fall": "추락!", "chainLabel": "약점 순서: {order}.", "chainNext": "다음: {el}.", "doneTitle": "박쥐 여왕을 잡았어요!", "done": "그로기 {g}번, 연계 {c}번. 실제 게임에는 이런 보스가 20마리 있어요.", "el": {"phys": "물리", "fire": "불", "ice": "얼음", "bolt": "번개", "holy": "빛", "dark": "어둠"}, "combo": {"steam": "증기 폭발!", "shock": "감전!", "shatter": "산산조각!", "overload": "과부하!", "flame_arrows": "불화살!", "lightning_rod": "피뢰침!", "judgement": "심판!", "eclipse": "일식!", "hellfire": "지옥불!", "purify": "정화!", "quench": "급랭!", "black_lightning": "검은 번개!", "shadow_strike": "그림자 일격!", "blessed_blade": "축복의 칼날!"}, "again": "다시 하기", "real": "실제 게임 화면 보기"}</script>
+    </div>
+      <p class="hero-status"><b>안드로이드에서 플레이테스트 중</b> · 웹으로 옮긴 맛보기예요(스킬 대기 시간만 줄였어요). <a href="#real">실제 게임 화면 보기</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="real" aria-labelledby="real-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">실제 게임 화면</span><h2 id="real-h">손대지 않고 둔 실제 보스전 15초</h2><p>개발 중인 게임에서 45웨이브 보스 박쥐 여왕과 자동 스킬로 싸운 장면이에요. 연계 ‘불화살!’이 터지고, 약점 순서를 끝내 그로기가 되면 땅으로 떨어졌다가 다시 날아올라요. 옆 화면도 게임에서 그대로 찍었어요.</p></div>
+    <div class="real">
+      <div><div class="phone">
+          <video id="play-video" muted loop playsinline preload="none" poster="/img/boss-ko-poster.webp" width="600" height="1066" aria-label="박쥐 여왕 보스전을 자동 스킬로 싸우는 실제 게임 영상">
+            <source src="/img/boss-ko.mp4" type="video/mp4">
+            <source src="/img/boss-ko.webm" type="video/webm">
+          </video>
+        </div>
+        <p class="phone-cap">자동 스킬 그대로 15초 · 소리 없음</p></div>
+      <div class="shots" tabindex="0" aria-label="실제 게임 화면">
+        <figure class="shot"><img src="/img/shot-wave_battle_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="웨이브 전투: 층마다 선 영웅이 쏘고, 오른쪽에서 적이 몰려와요"><figcaption><b>웨이브 전투</b>층마다 선 영웅이 쏘고, 오른쪽에서 적이 몰려와요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-boss_weak_order_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="약점 순서: 화염 드래곤 머리 위 순서, 다음 스킬 버튼엔 ‘다음!’"><figcaption><b>약점 순서</b>화염 드래곤 머리 위 순서, 다음 스킬 버튼엔 ‘다음!’</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-groggy_fall_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="그로기 · 추락: 순서를 끝내면 그로기, 나는 보스는 땅으로 떨어져요"><figcaption><b>그로기 · 추락</b>순서를 끝내면 그로기, 나는 보스는 땅으로 떨어져요</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-skill_combo_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="연계: 얼음 스킬 다음 번개 스킬이면 ‘감전!’"><figcaption><b>연계</b>얼음 스킬 다음 번개 스킬이면 ‘감전!’</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-wave_result_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="웨이브 끝: 영웅별 피해를 보고 다시 하기나 다음 웨이브"><figcaption><b>웨이브 끝</b>영웅별 피해를 보고 다시 하기나 다음 웨이브</figcaption></figure>
+        <figure class="shot"><img src="/img/shot-title_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="첫 화면: 캠페인과 저장 슬롯 10개"><figcaption><b>첫 화면</b>캠페인과 저장 슬롯 10개</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="boss" aria-labelledby="boss-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">보스전</span><h2 id="boss-h">15웨이브마다 보스, 순서를 맞히면 무너져요</h2><p>보스는 머리 위에 약점 속성 순서를 띄워요. 스킬은 자동으로 두어도 쓰지만, 순서를 노리고 직접 누르면 보스전이 달라져요.</p></div>
+    <div class="rules"><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h2M14.5 12h2"/></svg></i>약점 순서 → 그로기</h3><p>속성 2~4개를 순서대로 맞히면 보스가 4초 동안 기절하고 1.8배로 아파요. 틀린 속성은 벌칙 없이 넘어가고, 누를 버튼에는 ‘다음!’이 떠요.</p><div class="rule-order" aria-hidden="true"><span class="ch ch-done" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><i class="ch-arr on"></i><span class="ch ch-done" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><i class="ch-arr on"></i><span class="ch ch-done" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></div></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 7.4 5" stroke-width="3.4"/></svg></i>패링</h3><p>필살기 예고 고리는 마지막 0.5초에 금빛이 돼요. 스킬을 참았다가 그때 맞히면 필살기가 취소되고 5초 동안 그로기예요.</p></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20"/></svg></i>카운터</h3><p>필살기 예고 중에 약점 순서를 끝내면 필살기를 끊고 더 길고 큰 한 방이 들어가요.</p></div><div class="rule rv"><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M6 11l6 6 6-6M4 21h16"/></svg></i>나는 보스 추락</h3><p>나는 보스는 그로기 동안 땅으로 떨어져서 땅에만 닿던 스킬도 맞아요. 그로기가 끝나면 다시 날아올라요.</p></div></div>
+    <div class="combos"><h3>속성 연계 14가지</h3><p>앞 스킬과 뒤 스킬의 속성이 짝이 맞으면, 5초 안에 이어 쓴 뒤 스킬이 1.5~2배로 세지고 덤 효과가 붙어요.</p><ul class="combo-list"><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>증기 폭발<span class="sr"> (얼음 → 불)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>감전<span class="sr"> (얼음 → 번개)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>산산조각<span class="sr"> (얼음 → 물리)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>과부하<span class="sr"> (불 → 번개)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>불화살<span class="sr"> (물리 → 불)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span></span><span>피뢰침<span class="sr"> (물리 → 번개)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span></span><span>심판<span class="sr"> (번개 → 빛)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span></span><span>일식<span class="sr"> (빛 → 어둠)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span></span><span>지옥불<span class="sr"> (어둠 → 불)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span></span><span>정화<span class="sr"> (어둠 → 빛)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--fire)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--ice)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></span></span><span>급랭<span class="sr"> (불 → 얼음)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--bolt)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span></span><span>검은 번개<span class="sr"> (번개 → 어둠)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--dark)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dark"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>그림자 일격<span class="sr"> (어둠 → 물리)</span></span></li><li><span class="pair"><span class="dot" style="--c:var(--holy)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></span><span class="arr">▶</span><span class="dot" style="--c:var(--phys)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></span></span><span>축복의 칼날<span class="sr"> (빛 → 물리)</span></span></li></ul></div>
+    <div class="combos"><h3>보스 20마리, 지역 10곳</h3></div>
+    <div class="bosses"><figure class="bossc rv"><img class="bg" src="/img/bg-meadow.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-warlord.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>돌격 대장</b><span>푸른 초원 · 15웨이브</span><span class="weak" style="--c:var(--phys)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phys"/></svg></i>약점 물리</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-autumn.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-bat-queen.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>박쥐 여왕</b><span>단풍 숲 · 45웨이브</span><span class="weak" style="--c:var(--fire)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg></i>약점 불</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-canyon.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-golem.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>바위 골렘</b><span>붉은 협곡 · 75웨이브</span><span class="weak" style="--c:var(--bolt)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></i>약점 번개</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-volcano.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-dragon.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>화염 드래곤</b><span>불의 산 · 135웨이브</span><span class="weak" style="--c:var(--ice)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ice"/></svg></i>약점 얼음</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-coast.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-kraken.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>크라켄</b><span>폭풍 해안 · 240웨이브</span><span class="weak" style="--c:var(--bolt)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg></i>약점 번개</span></figcaption></figure><figure class="bossc rv"><img class="bg" src="/img/bg-demon-castle.webp" width="1280" height="1600" alt="" loading="lazy"><img class="art" src="/img/b-demon-lord.webp" width="360" height="360" alt="" loading="lazy"><figcaption><b>마왕</b><span>마왕성 · 300웨이브</span><span class="weak" style="--c:var(--holy)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-holy"/></svg></i>약점 빛</span></figcaption></figure></div>
+    <p class="boss-note">지역마다 30웨이브, 15·30웨이브째에 보스가 나오고 바로 앞에는 중간 보스가 있어요. 처음 잡은 보스는 그 힘을 이은 보스 영웅으로 성에 합류해요.</p>
+  </div>
+</section>
+
+<section class="sec" id="castle" aria-labelledby="castle-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">성 키우기</span><h2 id="castle-h">층마다 영웅을 세우고, 성을 구름까지</h2><p>승급할 때마다 성의 모습이 바뀌고 층이 하나씩 늘어요. 아래에서 20등급을 넘겨 보세요.</p></div>
+    <div class="grow">
+      <div class="tower" data-grades='[["돌 성", 1, 3], ["망루 성", 2, 4], ["요새", 3, 5], ["성채", 4, 6], ["황금 왕성", 5, 7], ["천공성", 6, 8], ["별의 성", 7, 9], ["수정 성", 8, 10], ["은빛 성채", 9, 11], ["용의 성", 10, 12], ["바람의 성", 11, 13], ["달빛 궁전", 12, 14], ["태양 궁전", 13, 15], ["하늘 요새", 14, 16], ["무지개 성", 15, 17], ["천사의 성", 16, 18], ["별바다 성", 17, 19], ["영원의 성", 18, 20], ["신들의 성", 19, 21], ["우주의 성", 20, 22]]' data-meta="{n}등급 · {f}층">
+        <div class="tower-img"><img src="/img/castle-13.webp" width="320" height="444" alt="" loading="lazy"></div>
+        <p class="tower-name" aria-live="polite">태양 궁전</p>
+        <p class="tower-meta">13등급 · 15층</p>
+        <div class="tower-ctrl">
+          <button type="button" data-step="-1" aria-label="이전 등급">‹</button>
+          <input type="range" min="1" max="20" value="13" aria-label="성 등급">
+          <button type="button" data-step="1" aria-label="다음 등급">›</button>
+        </div>
+      </div>
+      <div class="grow-text"><ul><li class="rv"><b>20등급, 3층에서 22층까지</b><span>승급하면 층이 하나 늘고, 모든 피해와 성 체력이 1.25배가 돼요.</span></li><li class="rv"><b>영웅 50명</b><span>모집으로 만나는 30명과, 보스를 처음 잡으면 합류하는 보스 영웅 20명이에요.</span></li><li class="rv"><b>누구를 어느 층에</b><span>층보다 영웅이 많아서 세울 영웅을 직접 골라요. 스킬이 있는 영웅은 모두 스킬 버튼이 돼요.</span></li><li class="rv"><b>별 20성</b><span>같은 영웅이 또 오면 ★이 올라 더 세져요. 금·빨강·보라·무지개 별까지.</span></li></ul></div>
+    </div>
+    <div class="heroes"><figure class="heroc" data-r="0"><img src="/img/h-archer.webp" width="360" height="400" alt="" loading="lazy"><b>궁수</b><span>일반 · 물리</span></figure><figure class="heroc" data-r="0"><img src="/img/h-spear.webp" width="360" height="400" alt="" loading="lazy"><b>창병</b><span>일반 · 물리</span></figure><figure class="heroc" data-r="2"><img src="/img/h-frost-witch.webp" width="360" height="400" alt="" loading="lazy"><b>얼음 마녀</b><span>희귀 · 얼음</span></figure><figure class="heroc" data-r="3"><img src="/img/h-angel.webp" width="360" height="400" alt="" loading="lazy"><b>천사</b><span>에픽 · 빛</span></figure><figure class="heroc" data-r="4"><img src="/img/h-sword-king.webp" width="360" height="400" alt="" loading="lazy"><b>성검의 왕</b><span>전설 · 빛</span></figure><figure class="heroc" data-r="b"><img src="/img/h-bat-tower.webp" width="360" height="400" alt="" loading="lazy"><b>박쥐 공주</b><span>보스 영웅 · 어둠</span></figure><figure class="heroc" data-r="b"><img src="/img/h-golem-forge.webp" width="360" height="400" alt="" loading="lazy"><b>꼬마 골렘</b><span>보스 영웅 · 물리</span></figure><figure class="heroc" data-r="b"><img src="/img/h-little-demon.webp" width="360" height="400" alt="" loading="lazy"><b>꼬마 마왕</b><span>보스 영웅 · 불</span></figure></div>
+    <p class="heroes-note">테두리: 주황 전설 · 보라 에픽 · 빨강 보스 영웅</p>
+    <div class="shots three" tabindex="0" aria-label="성 키우기">
+      <figure class="shot"><img src="/img/shot-castle_status_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="성 현황: 등급 길과 층마다 선 영웅"><figcaption><b>성 현황</b>등급 길과 층마다 선 영웅</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-hero_info_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="영웅 정보: 실제 전투를 작게 돌려 스킬을 보여 줘요"><figcaption><b>영웅 정보</b>실제 전투를 작게 돌려 스킬을 보여 줘요</figcaption></figure>
+      <figure class="shot"><img src="/img/shot-recruit_ko.webp" width="600" height="1067" loading="lazy" decoding="async" alt="모집: 카드가 뒤집히며 희귀도 색으로 빛나요"><figcaption><b>모집</b>카드가 뒤집히며 희귀도 색으로 빛나요</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="idle" aria-labelledby="idle-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">손을 놓아도</span><h2 id="idle-h">켜 두면 성이 알아서 싸워요</h2></div>
+    <div class="idle"><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><div><h3>자동 스킬</h3><p>수동, 자동, 보스만 수동 중에 골라요. 처음엔 자동이에요.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><div><h3>자동 반복 무료</h3><p>깬 웨이브를 저절로 다시 하며 골드를 모아요. 다음 웨이브로 가는 것만 직접 눌러요.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h3>져도 잃지 않아요</h3><p>진 것에 벌칙은 없어요. 번 골드는 그대로 남아요.</p></div></div><div class="idle-item rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h3>꺼 둬도 가는 원정</h3><p>영웅을 셋까지 보내면 1·4·8시간 뒤 보상을 가져와요. 게임을 꺼 둬도 시간이 가고, 영웅은 성을 떠나지 않아요.</p></div></div></div>
+    <div class="nums"><div class="num rv"><b>300</b><span>한 바퀴 웨이브</span><small>지역 10곳 × 30웨이브, 그 뒤로도 이어져요</small></div><div class="num rv"><b>20</b><span>보스</span><small>중간 보스 10마리는 따로</small></div><div class="num rv"><b>50</b><span>영웅</span><small>모집 30 + 보스 영웅 20</small></div><div class="num rv"><b>20</b><span>성 등급</span><small>돌 성에서 우주의 성까지</small></div></div>
+    <div class="modes"><div class="mode rv"><h3>보스 도전관</h3><p>잡은 보스와 1~15단계로 다시 붙어요. 방패막을 둘러서 그로기와 패링이 열쇠예요.</p></div><div class="mode rv"><h3>무한의 탑</h3><p>등반 한 번이 한 판이에요. 3층마다 축복 3장 중 1장을 골라 강해지고, 층 조건은 매주 바뀌어요.</p></div><div class="mode rv"><h3>원정</h3><p>쉬는 영웅을 보내 놓고 나중에 보상을 받아요.</p></div></div>
+    <p class="src">숫자는 지금 만든 게임 기준이에요. 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</section>
+
+<section class="sec" id="money" aria-labelledby="money-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">돈</span><h2 id="money-h">광고와 결제는 아직 붙이지 않았어요</h2><p>출시 때 붙이려고 설계해 둔 규칙이에요. 지금 게임 안의 광고·결제는 돈이 나가지 않는 테스트 화면이에요.</p></div>
+    <div class="money">
+      <div class="mcard free rv"><h3>무료로 하는 것</h3><ul><li>2배속</li><li>자동 스킬과 자동 반복</li><li>진 뒤 다시 하기(번 골드는 남아요)</li></ul></div>
+      <div class="mcard rv"><h3>광고</h3><ul><li>보고 싶을 때만 보는 보상형으로 설계했어요</li><li>부활, 원정 보상 2배, 3배속 30분</li></ul></div>
+      <div class="mcard rv"><h3>결제하면</h3><ul><li>3배속 계속 쓰기</li><li>광고 없이 보상 받기</li><li>보석</li></ul><span class="tag">가격은 출시 때 정해요</span></div>
+    </div>
+    <p class="money-note">영웅 모집은 확률로 뽑는 방식이에요. 확률은 게임 안에서 보여 주고, 값은 아직 맞추는 중이에요. 출시 전이라 이 규칙도 바뀔 수 있어요.</p>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="faq-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="faq-h">자주 묻는 질문</h2></div>
+    <div class="faq"><details><summary>언제, 어디서 받을 수 있나요?</summary><p>안드로이드(구글 플레이) 출시를 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요.</p></details><details><summary>아이폰에서도 되나요?</summary><p>아직 정하지 않았어요. 지금은 안드로이드부터 준비하고 있어요.</p></details><details><summary>계속 붙잡고 있어야 하나요?</summary><p>아니요. 스킬은 자동으로 쓰게 둘 수 있고, 깬 웨이브는 자동 반복으로 다시 돌릴 수 있어요. 원정은 게임을 꺼 둬도 시간이 가요. 다음 웨이브로 넘어가는 것만 직접 눌러요.</p></details><details><summary>진행 기록은 어디에 저장되나요?</summary><p>휴대폰 안 저장 슬롯 10개에 저장돼요. 지금은 계정이나 클라우드 저장이 없어요.</p></details><details><summary>내 정보를 모으나요?</summary><p>지금 만든 게임은 정보를 밖으로 보내지 않아요. 출시할 때 광고나 결제를 붙이면 무엇을 모으는지 개인정보 처리방침에 먼저 적어 이 사이트에 올릴게요.</p></details><details><summary>어떤 언어로 할 수 있나요?</summary><p>한국어, 영어, 일본어예요.</p></details><details><summary>무서운 장면이 있나요?</summary><p>굵은 선 카툰 그림의 판타지 전투예요. 해골 주술사나 마왕 같은 판타지 적이 나와요. 연령 등급은 출시할 때 받아요.</p></details></div>
+  </div>
+</section>
+
+<section class="end" id="end" aria-labelledby="end-h">
+  <div class="end-bg" aria-hidden="true"><img src="/img/bg-sky-isle.webp" alt="" width="1280" height="1600" loading="lazy"></div>
+  <div class="wrap">
+    <h2 id="end-h">지금은 휴대폰에서 플레이테스트 중이에요</h2>
+    <p class="end-lead">안드로이드부터 내놓을 거예요. 나오면 이 페이지에 받는 곳을 바로 붙일게요.</p>
+    <ol class="end-steps"><li class=""><i aria-hidden="true">✓</i>지역 10·보스 20·영웅 50 만들기</li><li class="is-now"><i aria-hidden="true">2</i>휴대폰 플레이테스트 <span class="sr">(지금)</span></li><li class=""><i aria-hidden="true">3</i>광고·결제 붙이기</li><li class=""><i aria-hidden="true">4</i>비공개 테스트</li><li class=""><i aria-hidden="true">5</i>구글 플레이 출시</li></ol>
+    <div class="end-acts">
+      <a class="btn btn-main" href="mailto:contact@lumenlab.page?subject=%5B%EC%BA%90%EC%8A%AC%EC%97%85%21%5D%20%EB%AC%B8%EC%9D%98">메일로 묻기</a>
+      <a class="btn btn-line" href="#try">맛보기 다시 하기</a>
+    </div>
+    <p class="mail-note">루멘랩(Lumen Lab)이 만들어요. 메일 <span class="nw">contact@lumenlab.page</span> <button type="button" class="btn-copy" data-copy="contact@lumenlab.page" data-done="복사했어요">복사</button></p>
+    <a class="lumen" href="https://lumenlab.page/">
+      <svg viewBox="0 0 64 80" aria-hidden="true">
+        <circle class="l-glow" cx="32" cy="14" r="22" fill="url(#lg0)"/>
+        <defs><radialGradient id="lg0"><stop offset="0" stop-color="#FFD24A" stop-opacity=".5"/><stop offset="1" stop-color="#FFD24A" stop-opacity="0"/></radialGradient></defs>
+        <path d="M32 4v18" stroke="#9AA3BF" stroke-width="2"/>
+        <g class="l-flag"><path d="M33 5h14l-4 4 4 4H33z" fill="#FFD24A"/></g>
+        <path d="M16 24h32v-6h-5v3h-4v-3h-5v3h-4v-3h-5v3h-4v-3h-5z" fill="#6E6A86"/>
+        <rect x="18" y="24" width="28" height="52" fill="#4D4A66"/>
+        <path d="M14 76h36" stroke="#3A3752" stroke-width="4" stroke-linecap="round"/>
+        <rect class="l-win w3" x="28" y="30" width="8" height="10" rx="4"/>
+        <rect class="l-win w2" x="28" y="46" width="8" height="10" rx="4"/>
+        <rect class="l-win w1" x="27" y="62" width="10" height="14" rx="5"/>
+      </svg>
+      <div><b>루멘랩 Lumen Lab</b><span>캐슬업!을 만든 곳. 다른 게임과 앱, 무료 웹 도구도 있어요</span></div><span class="arr" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Lumen Lab</span>
+    <a href="/en/" hreflang="en" lang="en">English</a>
+    <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>
+    <p>로고·아이콘·영웅·보스·성·배경 그림은 AI 도구(Higgsfield)로 만들었고, 게임 속 캐릭터 움직임도 같은 도구의 AI 영상에서 뽑았어요. 효과·화면·효과음은 게임 코드로 만들었어요. 화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.</p>
+  </div>
+</footer>
+<script src="/assets/demo.js?v=1dfedb95" defer></script>
+<script src="/assets/site.js?v=1407cc11" defer></script>
+</body>
+</html>
