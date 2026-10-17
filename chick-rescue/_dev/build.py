@@ -41,6 +41,7 @@ PRIVACY = {
     'desc': ('병아리 구조대 앱(Android·iOS)과 사이트가 처리하는 정보: 광고(Google AdMob)·추적 허용(ATT)·결제(Google Play·App Store)·앱 권한·방문 통계·문의 메일.',
              'What the Chick Rescue app (Android and iOS) and site handle: ads (Google AdMob), tracking permission (ATT), purchases (Google Play, App Store), app permissions, visit statistics and email.'),
     'link': ('개인정보 처리방침', 'Privacy Policy'),
+    'short': ('개인정보', 'Privacy'), 'more': ('처리방침', 'Policy'),  # 머리말 단추: 좁은 화면은 앞말만 보인다
     'back': ('병아리 구조대 홈', 'Chick Rescue home'),
 }
 
@@ -84,6 +85,8 @@ S = {
   'real_h2': ('다 모으지 않아도 돼요<br>병아리만 꺼내면 끝', 'No need to sort it all.<br>Free the chick and you win'),
   'classic': ('클래식', 'Classic'), 'classic_c': ('같은 색끼리 다 모아야 끝', 'Sort every color to win'),
   'classic_alt': ('클래식 모드 실제 게임 화면: 같은 색끼리 다 모아야 끝나요', 'Real Classic mode screen: sort every color to finish'),
+  'ability': ('능력', 'Abilities'), 'ability_c': ('꾹 눌러 능력을 써야 풀려요', 'Hold a critter to use its power'),
+  'ability_alt': ('능력 모드 실제 게임 화면: 사자를 꾹 눌러 능력을 쓰는 순간', 'Real Abilities mode screen: holding the lion to use its power'),
   'rescue': ('구출', 'Rescue'), 'rescue_c': ('병아리만 꺼내면 끝', 'Free the chicks to win'),
   'video_label': ('구출 판을 처음부터 끝까지 푸는 실제 게임 영상 13초, 소리 없음', '13-second clip of a Rescue level solved start to finish in the real game, no sound'),
   'real_note': ('모드는 클래식·능력·구출 셋, 모드마다 16스테이지예요. 한 판은 18초쯤이에요.',
@@ -114,6 +117,8 @@ S = {
   'og': ('튜브 속 병아리를 구해요', 'Free the trapped chick'),
 
   # 꼬리말
+  'lumen_small': ('이 게임을 만든 곳', 'This game is made by'), 'lumen_name': ('루멘랩', 'Lumen Lab'),
+  'lumen_sub': ('다른 게임·앱·웹 도구 보기', 'See our other games, apps and tools'), 'lumen_peep': ('삐약!', 'Peep!'),
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
   'foot_ai': ('로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요.',
               'The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code.'),
@@ -283,6 +288,7 @@ def page(i):
   <div class="wrap">
     <a class="brand" href="{pre}/"><img class="brand-logo" src="/img/logo-{lang}.webp" width="640" height="425" alt="{e('name')}"><span class="brand-mini"><img src="/img/icon-256.webp" width="34" height="34" alt="">{j(t('name'))}</span></a>
     <div class="top-r">
+      <a class="lang lang-pol" href="{pre}/privacy">{j(PRIVACY['short'][i])}<span class="pol-more">{j(PRIVACY['more'][i])}</span></a>
       <a class="lang" href="{other}" hreflang="{olang}" lang="{olang}" aria-label="{e('other_lang_label')}">{j(t('other_lang'))}</a>
       {cta('cta-top')}
     </div>
@@ -365,6 +371,10 @@ def page(i):
         <div class="ph-frame"><img src="/img/shot-classic_play_{lang}.webp" width="600" height="1300" loading="lazy" decoding="async" alt="{e('classic_alt')}"></div>
         <figcaption><b>{j(t('classic'))}</b>{t('classic_c')}</figcaption>
       </figure>
+      <figure class="ph ph-ability drop">
+        <div class="ph-frame"><img src="/img/shot-ability_use_{lang}.webp" width="600" height="1300" loading="lazy" decoding="async" alt="{e('ability_alt')}"></div>
+        <figcaption><b>{j(t('ability'))}</b>{t('ability_c')}</figcaption>
+      </figure>
       <figure class="ph ph-rescue drop">
         <div class="ph-frame"><video data-auto muted loop playsinline preload="none" poster="/img/play-{lang}-poster.webp" width="600" height="1300" aria-label="{e('video_label')}"><source src="/img/play-{lang}.mp4" type="video/mp4"><source src="/img/play-{lang}.webm" type="video/webm"></video></div>
         <figcaption><b>{j(t('rescue'))}</b><span>{t('rescue_c')}</span></figcaption>
@@ -401,6 +411,22 @@ def page(i):
   </div>
 </section>
 </main>
+
+<aside class="lumen" id="lumen" aria-label="{e('lumen_name')}">
+  <div class="wrap">
+    <a class="lumen-card" href="{t('lumen_url')}">
+      <span class="lumen-tube" aria-hidden="true">
+        <img class="lb" style="--i:0" src="/img/c-whale.webp" width="160" height="160" alt="" loading="lazy">
+        <img class="lb" style="--i:1" src="/img/c-frog.webp" width="160" height="160" alt="" loading="lazy">
+        <img class="lb" style="--i:2" src="/img/c-squirrel.webp" width="160" height="160" alt="" loading="lazy">
+        <img class="lb lb-chick" style="--i:3" src="/img/c-chick.webp" width="160" height="160" alt="" loading="lazy">
+        <span class="lumen-peep">{j(t('lumen_peep'))}</span>
+      </span>
+      <span class="lumen-txt"><small>{t('lumen_small')}</small><b>{j(t('lumen_name'))}</b><span class="lumen-sub">{t('lumen_sub')}</span></span>
+      <span class="lumen-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</aside>
 
 <footer class="foot">
   <div class="wrap">

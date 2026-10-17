@@ -51,6 +51,11 @@ for k, f in pages.items():
         ok(h.count('<details>') == 4, f'{k} 질문 4개')
         ok(len(re.findall(r'class="stage[ "]', h)) == 12 and h.count('class="pick"') == 12, f'{k} 친구 무대 12칸·줄 12마리')
         ok('class="mini' not in h, f'{k} 스크롤 진행 튜브 없음')
+        ok(h.count('class="ph ph-') == 3 and f'shot-ability_use_{("ko", "en")[i]}.webp' in h, f'{k} 모드 셋(클래식·능력·구출) 휴대폰')
+        top = h[h.index('<header'):h.index('</header>')]
+        ok(f'href="{("", "/en")[i]}/privacy"' in top, f'{k} 머리말에 개인정보 처리방침 단추')
+        lum = h[h.index('<aside class="lumen"'):h.index('<footer')] if '<aside class="lumen"' in h else ''
+        ok(f'href="{build.S["lumen_url"][i]}"' in lum and lum.count('class="lb') == 4 and 'aria-hidden="true"' in lum, f'{k} 루멘랩으로 가는 칸(같은 언어 본페이지, 장식 숨김)')
         ok(h.count('data-act="next"') == 1 and h.count('data-act="real"') == 1, f'{k} 맛보기 완료 창 단추(demo.js 약속)')
 # 개인정보 처리방침: 게임 설정 창이 /privacy·/en/privacy를 그대로 연다. 빈칸 없이, 첫 페이지 꼬리말에서 바로 간다
 for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html', 'en/index.html'))):
@@ -78,7 +83,7 @@ en = re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', read('en/index.html')
 ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', en)), '영어판 화면에 한글 없음(한국어 링크 빼고)')
 ok(not re.search(r'[가-힣]', re.sub(r'"names".*', '', read('en/index.html').split('id="demo-text">')[1].split('</script>')[0])), '영어판 맛보기 글(demo-text)에 한글 없음')
 css = read('assets/site.css')
-ok(not re.search(r'\.(sec-head|eyebrow|mcard|nums|helps|end-steps|lumen|hero-side|shots)\b', css), '예전 칸 CSS 없음')
+ok(not re.search(r'\.(sec-head|eyebrow|mcard|nums|helps|end-steps|hero-side|shots)\b', css), '예전 칸 CSS 없음')
 ok(re.search(r'head\.woff2\?v=' + build.sha('assets/head.woff2'), css) is not None, 'CSS 글꼴 주소 지문이 맞음')
 
 # 둥근 글꼴 조각: 이름을 바꿨고(OFL), 둥근 글꼴로 그리는 글자가 다 들어 있다

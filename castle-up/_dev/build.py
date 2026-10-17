@@ -114,6 +114,8 @@ S = {
 
   # 꼬리말
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
+  'lumen_small': ('이 게임을 지은 곳', 'This castle was built by'), 'lumen_name': ('루멘랩', 'Lumen Lab'),
+  'lumen_sub': ('다른 게임·앱·웹 도구 보기', 'See our other games, apps and tools'),
   'foot_ai': ('로고·영웅·보스·성·배경 그림은 AI 도구(Higgsfield)로, 게임 속 캐릭터 움직임은 AI 영상 도구(Kling)로 만들었어요.',
               'The logo, heroes, bosses, castles and backgrounds were made with an AI tool (Higgsfield); in-game character motion comes from AI video (Kling).'),
   'foot_dev': ('화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.', 'Screens and numbers reflect the game in development and may change before launch.'),
@@ -383,6 +385,19 @@ def page(i):
 {f4}
 {f5}
 </main>
+<aside class="lumen" id="lumen" aria-label="{e('lumen_name')}">
+  <div class="wrap">
+    <a class="lumen-card" href="{t('lumen_url')}">
+      <span class="lumen-tower" aria-hidden="true">
+        <span class="lt-flag"><i></i></span>
+        <span class="lt-top"></span>
+        {''.join(f'<span class="lt-b" style="--i:{4 - n}">{c}</span>' for n, c in enumerate('LUMEN'))}
+      </span>
+      <span class="lumen-txt"><small>{t('lumen_small')}</small><b>{t('lumen_name')}</b><span class="lumen-sub">{t('lumen_sub')}</span></span>
+      <span class="lumen-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</aside>
 <footer class="foot">
   <div class="wrap">
     <div class="foot-row"><span>© 2026 Lumen Lab</span><a href="mailto:{MAIL}">{MAIL}</a><a href="{t('lumen_url')}">lumenlab.page</a><a href="{other}" hreflang="{other_lang}" lang="{other_lang}">{t('other_lang')}</a></div>
@@ -423,7 +438,7 @@ def sha(path):
 
 # 제목 글꼴(CU Head)을 쓰는 글: 제목·숫자·단추·이름표. check.py가 실제 페이지에서 빠진 글자를 다시 센다.
 HEAD_KEYS = ('name', 'h1', 'f1_h2', 'f1_count', 'f2_h2', 'day_h', 'night_h', 'got', 'f3_h2', 'wanted', 'faq_h2', 'promo', 'end_h2',
-             'pop_weak', 'grade_meta')
+             'pop_weak', 'grade_meta', 'lumen_name')
 
 
 def head_font(src):

@@ -21,6 +21,19 @@
     els.forEach(function (e) { ob.observe(e); });
   }
   once('.drop');
+
+  /* 루멘랩 칸: 60% 넘게 보이면 친구들이 튜브에 떨어지고 병아리가 '삐약'(1.8초, 한 번). 나갔다 6초 뒤 다시 들어오면 다시 */
+  var lumen = $('#lumen');
+  if (lumen && io && !reduce) {
+    var lumenAt = 0;
+    lumen.classList.add('arm');
+    new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting || es[0].intersectionRatio < .6 || document.hidden) return;
+      if (lumenAt && Date.now() - lumenAt < 6000) return;
+      lumenAt = Date.now();
+      lumen.classList.remove('in'); void lumen.offsetWidth; lumen.classList.add('in');
+    }, { threshold: [0, .6] }).observe(lumen);
+  }
   once('.end-stack', { threshold: .5 });
 
   /* 실제 화면 영상: 보일 때만 재생. 움직임 줄이기면 포스터 + 재생 단추 */

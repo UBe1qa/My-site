@@ -16,6 +16,19 @@
   /* 보일 때만 움직이기: 화면 밖 칸의 반복 움직임(보스 둥실, 깃발, 단추 반짝임)은 CSS에서 멈춘다 */
   watch($$('[data-live]'), function (el, on) { el.classList.toggle('is-live', on); });
 
+  /* 루멘랩 칸: 60% 넘게 보이면 돌 다섯이 쌓여 망루가 되고 깃발이 오른다(1.8초, 한 번). 나갔다 6초 뒤 다시 들어오면 다시 */
+  var lumen = $('#lumen');
+  if (lumen && hasIO && !reduce) {
+    var lumenAt = 0;
+    lumen.classList.add('arm');
+    new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting || es[0].intersectionRatio < .6 || document.hidden) return;
+      if (lumenAt && Date.now() - lumenAt < 6000) return;
+      lumenAt = Date.now();
+      lumen.classList.remove('in'); void lumen.offsetWidth; lumen.classList.add('in');
+    }, { threshold: [0, .6] }).observe(lumen);
+  }
+
   /* 먼지 */
   function puff(host, n) {
     if (reduce) return;
