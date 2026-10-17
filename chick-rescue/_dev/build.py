@@ -1,4 +1,4 @@
-"""병아리 구조대 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, sitemap, robots, 제목 글꼴 조각.
+"""병아리 구조대 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, 개인정보 처리방침 /privacy·/en/privacy, sitemap, robots, 제목 글꼴 조각.
   python3 _dev/build.py [Jua-Regular.ttf 경로 = _dev/var2/fonts/Jua-Regular.ttf]
 글은 아래 S 사전 한 곳에서 고친다(한국어·영어 같이). 페이지 틀은 page() 하나.
 얼굴(2026-10-17): 시안 Q '튜브 쇼케이스'. 칸 순서 = 맛보기 → 둥지 나무 → 친구 무대 → 클래식 vs 구출 → 질문 → 끝 단추 → 꼬리말.
@@ -27,6 +27,19 @@ CTA = {
     'href': ('mailto:' + MAIL + '?subject=' + _pct('병아리 구조대 출시 알림 신청'),
              'mailto:' + MAIL + '?subject=' + _pct('Chick Rescue launch alert')),
     'note': ('메일 앱이 열리면 그대로 보내 주세요.', 'Your mail app opens with the note ready. Just send it.'),
+}
+
+# ── 개인정보 처리방침(/privacy, /en/privacy): 본문은 _dev/privacy/privacy_ko.md·privacy_en.md ──
+# 원본은 게임 저장소 games/sort-puzzle/store/privacy_*.md(landing-kit 4c23b40으로 받음). 앱 부분(항목·권한·목적)은 실제 빌드에서 확인한 사실이라
+# 바꾸지 않는다(바꿔야 하면 게임 세션에 먼저). 게임 설정 창 단추가 이 두 주소를 그대로 연다(주소를 바꾸면 게임 세션에 알린다).
+PRIVACY = {
+    'officer': ('', ''),  # 개인정보 보호책임자 이름(사용자에게 받는다, 비어 있으면 check.py가 실패)
+    'inquiry_keep': ('답변을 마친 뒤 1년, 삭제를 요청하면 바로', '1 year after we reply, or right away if you ask us to delete it'),
+    'title': ('개인정보 처리방침 · 병아리 구조대', 'Privacy Policy · Chick Rescue'),
+    'desc': ('병아리 구조대 앱과 사이트가 처리하는 정보: 광고(Google AdMob)·결제(Google Play)·앱 권한·방문 통계·문의 메일.',
+             'What the Chick Rescue app and site handle: ads (Google AdMob), purchases (Google Play), app permissions, visit statistics and email.'),
+    'link': ('개인정보 처리방침', 'Privacy Policy'),
+    'back': ('병아리 구조대 홈', 'Chick Rescue home'),
 }
 
 # 키: (한국어, 영어)
@@ -392,6 +405,7 @@ def page(i):
     <div class="row">
       <span>© 2026 Lumen Lab</span>
       <a href="mailto:{MAIL}">{MAIL}</a>
+      <a href="{pre}/privacy">{PRIVACY['link'][i]}</a>
       <a href="{t('lumen_url')}">lumenlab.page</a>
       <a href="{other}" hreflang="{olang}" lang="{olang}">{t('other_lang')}</a>
     </div>
@@ -406,6 +420,104 @@ def page(i):
 <script src="/assets/site.js?v=__SITE__" defer></script>
 <script src="/assets/chick-board.js?v=__BOARD__" defer></script>
 <script src="/assets/friends.js?v=__FRIENDS__" defer></script>
+</body>
+</html>
+'''
+
+
+def _inline(t):
+    t = html.escape(t, quote=False)
+    t = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', t)
+    return re.sub(r'\[([^\]]+)\]\((https?://[^)\s]+)\)', r'<a href="\2">\1</a>', t)
+
+
+def md_html(md):
+    """방침 본문(제목·문단·목록·표·굵게·링크만 쓰는 마크다운)을 HTML로. 표는 칸마다 data-label을 달아 좁은 화면에서 세로 목록으로 바꾼다."""
+    out, lines, k = [], md.strip('\n').split('\n'), 0
+    while k < len(lines):
+        ln = lines[k]
+        if not ln.strip():
+            k += 1
+        elif ln.startswith('# '):
+            out.append(f'<h1>{_inline(ln[2:])}</h1>'); k += 1
+        elif ln.startswith('## '):
+            out.append(f'<h2>{_inline(ln[3:])}</h2>'); k += 1
+        elif ln.startswith('|'):
+            rows = []
+            while k < len(lines) and lines[k].startswith('|'):
+                rows.append([c.strip() for c in lines[k].strip().strip('|').split('|')]); k += 1
+            head, body = rows[0], [r for r in rows[2:]]
+            assert all(len(r) == len(head) for r in body), rows
+            th = ''.join(f'<th scope="col">{_inline(c)}</th>' for c in head)
+            tr = ''.join('<tr>' + ''.join(f'<td data-label="{html.escape(h, quote=True)}">{_inline(c)}</td>' for h, c in zip(head, r)) + '</tr>' for r in body)
+            out.append(f'<div class="pol-table"><table><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>')
+        elif ln.startswith('- '):
+            items = []
+            while k < len(lines) and (lines[k].startswith('- ') or lines[k].startswith('  - ')):
+                if lines[k].startswith('- '):
+                    items.append([_inline(lines[k][2:]), []])
+                else:
+                    items[-1][1].append(_inline(lines[k][4:]))
+                k += 1
+            out.append('<ul>' + ''.join(f'<li>{a}' + (f'<ul>{"".join(f"<li>{x}</li>" for x in sub)}</ul>' if sub else '') + '</li>' for a, sub in items) + '</ul>')
+        else:
+            para = []
+            while k < len(lines) and lines[k].strip() and not lines[k].startswith(('#', '|', '- ')):
+                para.append(lines[k]); k += 1
+            out.append(f'<p>{_inline(" ".join(para))}</p>')
+    return '\n'.join(out)
+
+
+def privacy(i):
+    lang = S['lang'][i]
+    pre = '' if i == 0 else '/en'
+    url = BASE + pre + '/privacy'
+    other = ('/en' if i == 0 else '') + '/privacy'
+    olang = S['lang'][1 - i]
+    md = open(os.path.join(HERE, 'privacy', f'privacy_{lang}.md'), encoding='utf-8').read()
+    for key in ('officer', 'inquiry_keep'):
+        md = md.replace('{' + key + '}', PRIVACY[key][i] or '[' + key + ']')
+    e = lambda x: html.escape(x, quote=True)
+    return f'''<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>{e(PRIVACY['title'][i])}</title>
+<meta name="description" content="{e(PRIVACY['desc'][i])}">
+<link rel="canonical" href="{url}">
+<link rel="alternate" hreflang="ko" href="{BASE}/privacy">
+<link rel="alternate" hreflang="en" href="{BASE}/en/privacy">
+<link rel="alternate" hreflang="x-default" href="{BASE}/en/privacy">
+<meta name="theme-color" content="#FFE680">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=__CSS__">
+</head>
+<body class="pol-page">
+<header class="pol-top">
+  <div class="wrap">
+    <a class="brand" href="{pre}/"><span class="brand-mini"><img src="/img/icon-256.webp" width="34" height="34" alt="">{j(S['name'][i])}</span></a>
+    <a class="lang" href="{other}" hreflang="{olang}" lang="{olang}">{j(S['other_lang'][i])}</a>
+  </div>
+</header>
+<main class="pol wrap">
+{md_html(md)}
+<p class="pol-back"><a class="cta" href="{pre}/">{j(PRIVACY['back'][i])}</a></p>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <div class="row">
+      <span>© 2026 Lumen Lab</span>
+      <a href="mailto:{MAIL}">{MAIL}</a>
+      <a href="{pre}/privacy" aria-current="page">{PRIVACY['link'][i]}</a>
+      <a href="{S['lumen_url'][i]}">lumenlab.page</a>
+      <a href="{other}" hreflang="{olang}" lang="{olang}">{S['other_lang'][i]}</a>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
 '''
@@ -459,7 +571,7 @@ def head_font(src):
 
 def main():
     src = sys.argv[1] if len(sys.argv) > 1 else FONT_SRC
-    pages = [page(0), page(1), not_found()]  # 먼저 만들어야 둥근 글꼴 글자가 모인다
+    pages = [page(0), page(1), not_found(), privacy(0), privacy(1)]  # 먼저 만들어야 둥근 글꼴 글자가 모인다
     for x in S['og']:  # 공유 그림(_dev/og.html)도 같은 조각을 쓴다
         j(x)
     if os.path.exists(src):
@@ -480,7 +592,7 @@ def main():
             s = s.replace(k, x)
         return s
     os.makedirs(os.path.join(SITE, 'en'), exist_ok=True)
-    for p, s in zip(('index.html', 'en/index.html', '404.html'), pages):
+    for p, s in zip(('index.html', 'en/index.html', '404.html', 'privacy.html', 'en/privacy.html'), pages):  # privacy.html은 /privacy로 열린다(auto-trailing-slash)
         open(os.path.join(SITE, p), 'w', encoding='utf-8').write(fill(s))
     sm = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
@@ -489,7 +601,12 @@ def main():
     <xhtml:link rel="alternate" hreflang="en" href="{BASE}/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="{BASE}/en/"/>
   </url>
-''' for p in ('/', '/en/')) + '</urlset>\n'
+''' for p in ('/', '/en/')) + ''.join(f'''  <url><loc>{BASE}{p}</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="{BASE}/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="{BASE}/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{BASE}/en/privacy"/>
+  </url>
+''' for p in ('/privacy', '/en/privacy')) + '</urlset>\n'
     open(os.path.join(SITE, 'sitemap.xml'), 'w', encoding='utf-8').write(sm)
     open(os.path.join(SITE, 'robots.txt'), 'w', encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n')
     print('ok', v, '둥근 글꼴 글자', len(JUA))

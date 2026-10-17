@@ -31,6 +31,7 @@ for k, f in pages.items():
     for src in re.findall(r'(?:src|href|poster)="(/[^"#?]*)', h):
         p = os.path.join(SITE, src.lstrip('/'))
         if src.endswith('/'): p = os.path.join(p, 'index.html')
+        elif not os.path.exists(p): p += '.html'  # /privacy → privacy.html(auto-trailing-slash)
         ok(os.path.exists(p), f'{k} 파일 있음 {src}') if not os.path.exists(p) else None
     ok('<meta name="color-scheme" content="only light">' in h, f'{k} 밝은 얼굴 고정(color-scheme)')
     ok('Pretendard' not in h, f'{k} 예전 제목 글꼴 이름 없음')
@@ -51,6 +52,26 @@ for k, f in pages.items():
         ok(len(re.findall(r'class="stage[ "]', h)) == 12 and h.count('class="pick"') == 12, f'{k} 친구 무대 12칸·줄 12마리')
         ok('class="mini' not in h, f'{k} 스크롤 진행 튜브 없음')
         ok(h.count('data-act="next"') == 1 and h.count('data-act="real"') == 1, f'{k} 맛보기 완료 창 단추(demo.js 약속)')
+# 개인정보 처리방침: 게임 설정 창이 /privacy·/en/privacy를 그대로 연다. 빈칸 없이, 첫 페이지 꼬리말에서 바로 간다
+for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html', 'en/index.html'))):
+    h, k = read(f), ('/', '/en/')[i]
+    url = build.BASE + ('/privacy', '/en/privacy')[i]
+    ok(not re.search(r'\[(officer|inquiry_keep|사이트에서 채울|정할 것|이름을 넣을|Site to fill|Name to fill|To decide)', h) and not re.search(r'__[A-Z]+__', h), f'{url} 빈칸·자리표시자 없음')
+    ok(all(build.PRIVACY['officer']), '개인정보 보호책임자 이름이 있음')
+    ok(f'<link rel="canonical" href="{url}">' in h and h.count('hreflang=') >= 4 and 'noindex' not in h, f'{url} canonical·hreflang')
+    ok(('시행일: 2026년 10월 18일', 'Effective date: October 18, 2026')[i] in h, f'{url} 맨 위 시행일')
+    ok(f'mailto:{build.MAIL}' in h and h.count(build.MAIL) >= 3, f'{url} 문의 메일')
+    ok(h.count('<table>') == (3, 3)[i], f'{url} 표 3개(처리 항목·위탁·권한)')
+    for src in re.findall(r'(?:src|href)="(/[^"#?]*)', h):
+        pth = os.path.join(SITE, src.lstrip('/'))
+        pth = os.path.join(pth, 'index.html') if src.endswith('/') else (pth if os.path.exists(pth) else pth + '.html')
+        ok(os.path.exists(pth), f'{url} 파일 있음 {src}') if not os.path.exists(pth) else None
+    foot = read(home)[read(home).index('<footer'):]
+    ok(f'href="{("", "/en")[i]}/privacy"' in foot, f'{k} 꼬리말에 개인정보 처리방침 링크')
+    md = open(os.path.join(HERE, 'privacy', ('privacy_ko.md', 'privacy_en.md')[i]), encoding='utf-8').read()
+    ok('READ_BASIC_PHONE_STATE' in md and 'AdMob' in md and 'PG' in md, f'{url} 앱 부분(권한·광고) 그대로 있음')
+ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', read('en/privacy.html'))), '영어 방침에 한글 없음(한국어 링크 빼고)')
+ok('/privacy</loc>' in read('sitemap.xml') and '/en/privacy</loc>' in read('sitemap.xml'), 'sitemap에 방침 두 주소')
 ko = read('index.html')
 ok(not re.search(r'[A-Za-z]{4,}', re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|contact@lumenlab\.page|lumenlab\.page|English|iOS', '', re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', ko, flags=re.S))), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)')
 en = re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', read('en/index.html'), flags=re.S)

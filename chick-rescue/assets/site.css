@@ -372,3 +372,34 @@ h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;lett
 /* 친구 카드 판(friends.js가 넣는 판 바깥 모양): 누르는 곳 48px */
 #track .cr-reset{width:48px;height:48px;line-height:48px;right:4px;top:4px}
 #track .cr-done button{min-height:48px;padding:0 18px}
+
+/* 개인정보 처리방침(/privacy, /en/privacy): 읽기 쉬운 글 한 단, 표는 좁은 화면에서 세로 목록 */
+.pol-page{background:var(--paper)}
+.pol-top{background:var(--sun)}
+.pol-top .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px}
+.pol-top .brand-mini{display:inline-flex;color:var(--ink)}
+.pol{max-width:46rem;padding-top:28px;padding-bottom:48px;font-size:17px;line-height:1.7}
+.pol h1{font:800 30px/1.3 var(--body);margin:0 0 6px}
+.pol h1+p{color:var(--ink-2);font-size:16px}
+.pol h2{font:700 21px/1.4 var(--body);margin:36px 0 10px;padding-top:4px}
+.pol p{margin:10px 0}
+.pol ul{margin:8px 0;padding-left:1.3em}
+.pol li{margin:5px 0}
+.pol li ul{margin:4px 0}
+.pol a{color:var(--ink);text-underline-offset:3px;overflow-wrap:anywhere}
+.pol-table{margin:12px 0}
+.pol table{width:100%;border-collapse:collapse;font-size:16px;line-height:1.55;background:#fff;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 1.5px var(--glass-line)}
+.pol th,.pol td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid rgba(43,34,53,.12)}
+.pol th{background:var(--paper-2);font-weight:700}
+.pol tr:last-child td{border-bottom:0}
+.pol-back{margin-top:36px!important}
+@media (max-width:620px){
+  .pol h1{font-size:26px}
+  .pol table,.pol tbody,.pol tr,.pol td{display:block;width:100%}
+  .pol thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .pol tr{padding:6px 0;border-bottom:1px solid rgba(43,34,53,.14)}
+  .pol tr:last-child{border-bottom:0}
+  .pol td{border:0;padding:4px 14px}
+  .pol td::before{content:attr(data-label);display:block;font-size:14px;font-weight:700;color:var(--ink-2)}
+}
+.pol-page .foot{padding-bottom:34px}
