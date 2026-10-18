@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title data-i18n="docTitle">Lumen Lab 루멘랩 · 게임, 앱, 무료 웹 도구</title>
-<meta name="description" content="혼자 운영하는 소프트웨어 스튜디오 루멘랩(Lumen Lab). 가입 없이 바로 쓰는 무료 웹 도구 11개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 칸칸, 한장달력, 오래QR, 공평뽑기, 체크벤치, 토독, 한바퀴)와 게임, 앱을 만들고, 도구마다 계산 기준과 확인한 방법을 밝혀 둬요.">
+<meta name="description" content="혼자 운영하는 소프트웨어 스튜디오 루멘랩(Lumen Lab). 가입 없이 바로 쓰는 무료 웹 도구 11개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력, 칸칸, 공평뽑기, 토독, 한바퀴, 체크벤치)와 게임, 앱을 만들고, 도구마다 계산 기준과 확인한 방법을 밝혀 둬요.">
 <!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
 <meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
 <link rel="canonical" href="https://lumenlab.page/">
@@ -26,6 +26,13 @@
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/landing.css">
 <link rel="stylesheet" href="/assets/store.css">
+<!-- 첫 화면 문장 칸을 채울 도구 계산 파일(build_home.py) -->
+<!-- gen:nowpre -->
+<link rel="preload" as="script" href="https://date.lumenlab.page/assets/dates.js?v=00387aef43">
+<link rel="preload" as="script" href="https://time.lumenlab.page/assets/core.js?v=302abdc683">
+<link rel="preload" as="script" href="https://check.lumenlab.page/assets/ck-measure.js?v=884603707c">
+<link rel="preload" as="script" href="https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c">
+<!-- /gen:nowpre -->
 <script>
 /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
 (function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
@@ -49,90 +56,50 @@
 </header>
 
 <main id="main">
-  <!-- 첫 화면: 결과 위로 불빛을 대면 그 결과를 어떻게 확인했는지(속)가 보인다. 겉·속 글은 둘 다 실제로 확인된 사실만(소개 페이지와 같은 근거) -->
+  <!-- 첫 화면: 큰 문장 하나. 빛나는 칸은 루멘랩 도구 넷의 진짜 계산 파일이 방문자 기기에서 채운다(이 페이지의 주사율, 오늘, 올해 남은 날, 다른 도시 시각, 이 문장 글자 수).
+       칸을 누르면 그 도구의 소개 창, 칸에 손을 대면 아래 풀이 줄에 어떻게 셌는지가 나온다(assets/landing.js). 문장은 build_home.py 가 만든다(gen:now) -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero__in">
-      <div class="hero__text">
-        <p class="hero__eyebrow rv" data-i18n="eyebrow">게임·앱·무료 웹 도구를 혼자 만드는 스튜디오</p>
-        <h1 id="hero-title" class="hero__title rv" data-i18n="h1"><span class="lm"><span>풀이까지 보여 주는</span></span> <span class="lm"><span>소프트웨어를 만들어요</span></span></h1>
-        <p class="hero__lead rv" data-i18n="lead">실수령액 계산, 파일 변환, 돌림판 같은 무료 웹 도구를 가입 없이 바로 써요.</p>
-        <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
-        <p class="hero__act rv"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">만든 것 15개 둘러보기</a></p>
-      </div>
-
-      <div class="room rv" data-room>
-        <div class="room__stage" data-stage>
-          <button type="button" class="room__all" data-allon><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5a5.5 5.5 0 0 0-3.2 10c.5.4.7.9.7 1.5v.5h5v-.5c0-.6.2-1.1.7-1.5a5.5 5.5 0 0 0-3.2-10Z"/><path d="M8 17h4"/></svg><span data-i18n="allOn">불 다 켜기</span><span data-i18n="allOff" hidden>불 끄기</span></button>
-
-          <div class="spec is-on" id="spec-takehome" role="tabpanel" aria-labelledby="tab-takehome" data-spec>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s1o1">고용노동부 퇴직금 예제</span></p>
-              <p class="r2"><b class="big" data-i18n="s1big">88,641<small>원</small> 31<small>전</small></b></p>
-              <p class="r3"><span data-i18n="s1o3">1일 평균임금</span><span class="card__by" data-i18n="t1">떼고얼마</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s1i1">고용노동부 예제와 31전까지 같아요</span></p>
-              <p class="r2"><span class="v"><b class="big" data-i18n="s1big">88,641<small>원</small> 31<small>전</small></b><span class="stamp" data-i18n="s1st">같음</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s1i3">요율마다 출처와 확인 날짜를 적어요</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-inplace" role="tabpanel" aria-labelledby="tab-inplace" data-spec hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s2o1">사진 바꾸기</span><span class="ex" data-i18n="ex">예시</span></p>
-              <p class="r2"><span class="file">IMG_2041<small>.HEIC</small></span><span class="arrow">→</span><span class="file">JPG</span></p>
-              <p class="r3"><span class="bar"><i></i></span><span data-i18n="s2o3">다 바꿨어요 · 1장</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s2i1">파일이 브라우저 밖으로 나가지 않아요</span></p>
-              <p class="r2"><span class="v"><span class="file">IMG_2041<small>.HEIC</small></span><span class="arrow">→</span><span class="file">JPG</span><span class="stamp" data-i18n="s2st">기기 안</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s2i3">루멘랩엔 파일을 받는 서버가 없어요</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-pick" role="tabpanel" aria-labelledby="tab-pick" data-spec data-pick hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s3o1">오늘 커피 살 사람</span><span class="ex" data-i18n="ex">예시</span></p>
-              <p class="r2 names"><span data-i18n="n1">민지</span><span data-i18n="n2">서준</span><span data-i18n="n3">하윤</span><span data-i18n="n4">도윤</span></p>
-              <p class="r3"><span data-i18n="s3o3">결과는 링크로 다시 보여 줘요</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s3i1">브라우저 보안 난수로 매번 새로 뽑아요</span></p>
-              <p class="r2"><span class="v odds"><span class="o"><b data-i18n="n1">민지</b>25%</span><span class="o"><b data-i18n="n2">서준</b>25%</span><span class="o"><b data-i18n="n3">하윤</b>25%</span><span class="o"><b data-i18n="n4">도윤</b>25%</span><span class="stamp" data-i18n="s3st">고르게</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s3i3">10만 번 뽑기 카이제곱 검정으로 시험해요</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-chick" role="tabpanel" aria-labelledby="tab-chick" data-spec hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s4o1">병아리 구조대</span></p>
-              <p class="r2"><span data-i18n="s4o2">튜브 정렬 퍼즐</span></p>
-              <p class="r3"><span data-i18n="s4o3">안드로이드 먼저</span><span class="ex" data-i18n="s4ex">출시 준비 중</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s4i1">인터넷 없이 돌아가요</span></p>
-              <p class="r2"><span class="v"><b class="big" data-i18n="s4i2"><small>메인 </small>1,440<small>판</small></b><span class="stamp" data-i18n="s4st">무료</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s4i3">계정 없이, 진행은 휴대폰에 저장돼요</span></p>
-            </div>
-          </div>
-
-          <div class="lamp" data-lamp aria-hidden="true"><i class="lamp__knob"></i></div>
-          <p class="room__hint" aria-hidden="true" data-i18n="hint">불빛을 끌거나, 볼 줄을 눌러 보세요</p>
+    <div class="wrap">
+      <div class="now" data-now-box>
+        <h1 id="hero-title" class="now__h1" data-i18n="h1">루멘랩은 가입 없이 바로 쓰는 무료 웹 도구와 게임·앱을 만들어요</h1>
+        <p class="now__cue" data-i18n="nowCue">빛나는 칸은 루멘랩 도구가 이 기기에서 센 값이에요. 누르면 그 도구가 열려요.</p>
+        <!-- gen:now -->
+        <p class="now__line" data-now data-core="[&quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine"><span data-part="date">오늘은 <a class="nt" data-nt="date" href="/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="며칠 계산기" aria-describedby="nw-date" style="--tc:#c2512b;--w:6.9em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>, 올해가 <a class="nt" data-nt="left" href="/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="며칠 계산기" aria-describedby="nw-left" style="--tc:#c2512b;--w:2.3em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> 남았어요.</span> <span data-part="time"><span data-city>뉴욕</span>은 지금 <span class="nw"><a class="nt" data-nt="time" href="/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" aria-label="한바퀴" aria-describedby="nw-time" style="--tc:#0d7068;--w:5.6em"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>이에요.</span></span> <span data-part="hz">이 브라우저는 화면을 1초에 <span class="nw"><a class="nt" data-nt="hz" href="/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" aria-label="체크벤치" aria-describedby="nw-hz" style="--tc:#17b3c4;--w:2.3em"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> 그려요.</span></span> <span data-part="count">이 글은 마침표까지 <span class="nw"><a class="nt" data-nt="count" href="/works/kankan/" data-show="kankan" aria-haspopup="dialog" aria-label="칸칸" aria-describedby="nw-count" style="--tc:#1e3a6e;--w:2.3em"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>예요.</span></span></p>
+<!-- 칸 자리만 어림(값은 숨김). 켜지는 값은 도구 계산 파일이 센 것(landing.js) -->
+<script>
+(function(l){try{var en=document.documentElement.lang==='en',L=en?'en-US':'ko-KR',n=new Date(),y=n.getFullYear(),
+v=function(k,t){var e=l.querySelector('[data-nt="'+k+'"] .nt__v');if(e)e.textContent=t},
+f=function(z,o){var x={};for(var i in o)x[i]=o[i];if(z)x.timeZone=z;return n.toLocaleString(en?'en-US':'ko-KR',x)},
+left=Math.round((Date.UTC(y,11,31)-Date.UTC(y,n.getMonth(),n.getDate()))/864e5),
+c=en?[['Asia/Seoul','Seoul'],['America/New_York','New York']]:[['America/New_York','\ub274\uc695'],['Asia/Seoul','\uc11c\uc6b8']],D={day:'numeric',hour:'numeric',minute:'numeric'};
+if(f(c[0][0],D)===f(null,D))c[0]=c[1];
+var z=c[0][0],t=f(z,{hour:'numeric',minute:'2-digit'}).replace(/[\u202f\u00a0]/g,' ');
+if(f(z,{day:'numeric'})!==f(null,{day:'numeric'}))t=f(z,{weekday:'long'})+' '+t;
+l.querySelector('[data-city]').textContent=c[0][1];
+v('date',n.toLocaleDateString(L,{weekday:'long',month:'long',day:'numeric'}));
+v('left',en?(left?left+(left===1?' day':' days'):'just today'):(left?left+'\uc77c':'\uc624\ub298 \ud558\ub8e8'));
+v('time',t);
+var h=l.querySelector('[data-nt="hz"] .nt__v');if(h){h.textContent=en?'120 frames':'120\ubc88';h.style.minWidth=(h.getBoundingClientRect().width/parseFloat(getComputedStyle(h).fontSize)).toFixed(3)+'em'}
+v('hz',en?'60 frames':'60\ubc88');
+for(var i=0,m=0,k;i<6;i++){v('count',en?m+' characters':m+'\uc790');k=Array.from(l.textContent.replace(/\s+/g,' ').trim()).length;if(k===m)break;m=k}
+}catch(e){}
+setTimeout(function(){if(!window.__nowOn)l.parentNode.classList.add('is-plain')},6000);
+})(document.querySelector('[data-now]'));
+</script>
+        <!-- /gen:now -->
+        <p class="now__plain" data-i18n="nowPlain">날짜를 세고, 세계 시간을 맞추고, 글자 수를 세고, 화면을 재는 도구가 이 기기 안에서 바로 계산해요.</p>
+        <noscript><style>.now__cue,.now__line,.now__tools,.now__how,.now__all{display:none}.now__plain{display:block}</style></noscript>
+        <p class="now__how" data-now-how aria-hidden="true"><span data-i18n="nowWait">도구 계산 파일을 불러오는 중</span></p>
+        <!-- gen:nowall -->
+        <details class="now__all"><summary data-i18n="nowAllS">숫자마다 어떻게 셌는지 보기</summary><ul class="now__list"><li class="now__list-wait" data-i18n="nowAllW">도구 계산 파일을 불러오는 중이에요.</li><li id="nw-date"></li><li id="nw-left"></li><li id="nw-time"></li><li id="nw-hz"></li><li id="nw-count"></li></ul></details>
+        <!-- /gen:nowall -->
+        <div class="now__foot">
+          <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
+          <p class="now__act"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">만든 것 15개 둘러보기</a></p>
+          <!-- gen:nowtools -->
+          <p class="now__tools"><span class="now__tools-h" data-i18n="nowToolsH">이 문장을 채우는 도구</span><span class="now__tools-l" data-i18n="nowTools"><a class="ntool" data-tool="daycount" href="/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img src="/img/daycount.svg" width="22" height="22" alt=""><span>며칠 계산기</span></a><a class="ntool" data-tool="oneturn" href="/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068"><img src="/img/time.svg" width="22" height="22" alt=""><span>한바퀴</span></a><a class="ntool" data-tool="checkbench" href="/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4"><img src="/img/check.svg" width="22" height="22" alt=""><span>체크벤치</span></a><a class="ntool" data-tool="kankan" href="/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e"><img src="/img/count.svg" width="22" height="22" alt=""><span>칸칸</span></a></span></p>
+          <!-- /gen:nowtools -->
         </div>
-
-        <div class="room__tabs" role="tablist" aria-label="불빛을 대 볼 것" data-i18n-aria="tabsLabel">
-          <button type="button" role="tab" id="tab-takehome" aria-controls="spec-takehome" aria-selected="true"><img src="/img/salary.svg" width="28" height="28" alt=""><span data-i18n="t1">떼고얼마</span></button>
-          <button type="button" role="tab" id="tab-inplace" aria-controls="spec-inplace" aria-selected="false" tabindex="-1"><img src="/img/convert.svg" width="28" height="28" alt=""><span data-i18n="t2">인플레이스</span></button>
-          <button type="button" role="tab" id="tab-pick" aria-controls="spec-pick" aria-selected="false" tabindex="-1"><img src="/img/pick.svg" width="28" height="28" alt=""><span data-i18n="t3">공평뽑기</span></button>
-          <button type="button" role="tab" id="tab-chick" aria-controls="spec-chick" aria-selected="false" tabindex="-1"><img src="/img/chick-rescue.webp" width="28" height="28" alt=""><span data-i18n="tab4">병아리</span></button>
-        </div>
-      </div>
-
-      <div class="caps rv" aria-live="polite">
-        <p class="cap" data-cap="spec-takehome"><b data-i18n="t1">떼고얼마</b> <span data-i18n="c1">월급 실수령액·퇴직금 계산</span> <a href="/works/takehome/" class="cap__go" data-show="takehome" data-from="#tab-takehome img" aria-haspopup="dialog" data-i18n="capTry">바로 써 보기</a></p>
-        <p class="cap" data-cap="spec-inplace" hidden><b data-i18n="t2">인플레이스</b> <span data-i18n="c2">이미지·영상·PDF 파일 변환</span> <a href="/works/inplace/" class="cap__go" data-show="inplace" data-from="#tab-inplace img" aria-haspopup="dialog" data-i18n="capTry">바로 써 보기</a></p>
-        <p class="cap" data-cap="spec-pick" hidden><b data-i18n="t3">공평뽑기</b> <span data-i18n="c3">돌림판·사다리타기·팀 나누기</span> <a href="/works/pickboard/" class="cap__go" data-show="pickboard" data-from="#tab-pick img" aria-haspopup="dialog" data-i18n="capTry">바로 써 보기</a></p>
-        <p class="cap" data-cap="spec-chick" hidden><b data-i18n="t4">병아리 구조대</b> <span data-i18n="c4">휴대폰 퍼즐 게임 · 출시 준비 중</span> <a href="/works/chickrescue/" class="cap__go" data-show="chickrescue" data-from="#tab-chick img" aria-haspopup="dialog" data-i18n="capSee">게임 미리 보기</a></p>
       </div>
     </div>
   </section>
@@ -148,8 +115,12 @@
       </div>
       <!-- gen:wall -->
       <div class="shelf" id="games">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">게임과 앱</h3><p class="shelf__line" data-i18n="wl_games_l">휴대폰 게임은 안드로이드부터 준비하고 있고, 앱은 맥과 브라우저에서 써요.</p></div>
-        <ul class="wall"><li><a class="wi" href="/works/chickrescue/" data-show="chickrescue" aria-haspopup="dialog" style="--tc:#1f7a4a;--tcp:82%"><img class="wi__icon" src="/img/chick-rescue.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_chickrescue_n">병아리 구조대</span><span class="wi__w" data-i18n="wl_chickrescue_w">병아리 구하는 정렬 퍼즐</span><span class="wi__s" data-i18n="wl_chickrescue_s">출시 준비 중</span></a></li><li><a class="wi" href="/works/castleup/" data-show="castleup" aria-haspopup="dialog" style="--tc:#7a2e8e;--tcp:82%"><img class="wi__icon" src="/img/castle-up.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_castleup_n">캐슬업!</span><span class="wi__w" data-i18n="wl_castleup_w">층마다 영웅을 세우는 방치형 디펜스</span><span class="wi__s" data-i18n="wl_castleup_s">플레이테스트 중</span></a></li><li id="apps"><a class="wi" href="/works/owlight/" data-show="owlight" aria-haspopup="dialog" style="--tc:#33337a;--tcp:82%"><img class="wi__icon" src="/img/owlight.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_owlight_n">Owlight</span><span class="wi__w" data-i18n="wl_owlight_w">맥 잠자기 방지·화면 가리기</span><span class="wi__s" data-i18n="wl_owlight_s">App Store 출시 준비 중</span></a></li><li><a class="wi" href="/works/setnote/" data-show="setnote" aria-haspopup="dialog" style="--tc:#9ccc1f;--tcp:58%"><img class="wi__icon" src="/img/setnote.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_setnote_n">세트노트</span><span class="wi__w" data-i18n="wl_setnote_w">운동 세트 기록, 지난번과 나란히</span><span class="wi__s" data-i18n="wl_setnote_s">지금 쓸 수 있어요</span></a></li></ul>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">게임</h3><p class="shelf__line" data-i18n="wl_games_l">휴대폰 게임이에요. 안드로이드부터 출시를 준비하고 있어요.</p></div>
+        <ul class="wall"><li><a class="wi" href="/works/chickrescue/" data-show="chickrescue" aria-haspopup="dialog" style="--tc:#1f7a4a;--tcp:82%"><img class="wi__icon" src="/img/chick-rescue.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_chickrescue_n">병아리 구조대</span><span class="wi__w" data-i18n="wl_chickrescue_w">병아리 구하는 정렬 퍼즐</span><span class="wi__s" data-i18n="wl_chickrescue_s">출시 준비 중</span></a></li><li><a class="wi" href="/works/castleup/" data-show="castleup" aria-haspopup="dialog" style="--tc:#7a2e8e;--tcp:82%"><img class="wi__icon" src="/img/castle-up.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_castleup_n">캐슬업!</span><span class="wi__w" data-i18n="wl_castleup_w">층마다 영웅을 세우는 방치형 디펜스</span><span class="wi__s" data-i18n="wl_castleup_s">플레이테스트 중</span></a></li></ul>
+      </div>
+      <div class="shelf" id="apps">
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_apps_h">앱</h3><p class="shelf__line" data-i18n="wl_apps_l">맥과 브라우저에서 쓰는 앱이에요.</p></div>
+        <ul class="wall"><li><a class="wi" href="/works/owlight/" data-show="owlight" aria-haspopup="dialog" style="--tc:#33337a;--tcp:82%"><img class="wi__icon" src="/img/owlight.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_owlight_n">Owlight</span><span class="wi__w" data-i18n="wl_owlight_w">맥 잠자기 방지·화면 가리기</span><span class="wi__s" data-i18n="wl_owlight_s">App Store 출시 준비 중</span></a></li><li><a class="wi" href="/works/setnote/" data-show="setnote" aria-haspopup="dialog" style="--tc:#9ccc1f;--tcp:58%"><img class="wi__icon" src="/img/setnote.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_setnote_n">세트노트</span><span class="wi__w" data-i18n="wl_setnote_w">운동 세트 기록, 지난번과 나란히</span><span class="wi__s" data-i18n="wl_setnote_s">지금 쓸 수 있어요</span></a></li></ul>
       </div>
       <div id="tools">
       <div class="shelf" id="g-calc">
@@ -157,12 +128,12 @@
         <ul class="wall"><li><a class="wi" href="/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b;--tcp:82%"><img class="wi__icon" src="/img/daycount.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_daycount_n">며칠 계산기</span><span class="wi__w" data-i18n="wl_daycount_w">날짜 사이·디데이·만 나이</span><span class="wi__p" data-i18n="wl_daycount_p">정답 3,200여 개와 대조</span></a></li><li><a class="wi" href="/works/scicalc/" data-show="scicalc" aria-haspopup="dialog" style="--tc:#f25c05;--tcp:78%"><img class="wi__icon" src="/img/sci-calc.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_scicalc_n">공학용 계산기</span><span class="wi__w" data-i18n="wl_scicalc_w">공학 함수·물리 상수 계산</span><span class="wi__p" data-i18n="wl_scicalc_p">정답 3,700여 개와 대조</span></a></li><li><a class="wi" href="/works/takehome/" data-show="takehome" aria-haspopup="dialog" style="--tc:#9b2743;--tcp:82%"><img class="wi__icon" src="/img/salary.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_takehome_n">떼고얼마</span><span class="wi__w" data-i18n="wl_takehome_w">월급 실수령액·퇴직금 계산</span><span class="wi__p" data-i18n="wl_takehome_p">노동부 예제와 31전까지 같음</span></a></li></ul>
       </div>
       <div class="shelf" id="g-docs">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_docs_h">글과 파일</h3><p class="shelf__line" data-i18n="wl_g_docs_l">글자수를 세고, 파일을 바꾸고, 달력을 인쇄해요.</p></div>
-        <ul class="wall"><li><a class="wi" href="/works/inplace/" data-show="inplace" aria-haspopup="dialog" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">인플레이스</span><span class="wi__w" data-i18n="wl_inplace_w">이미지·영상·PDF 파일 변환</span><span class="wi__p" data-i18n="wl_inplace_p">파일을 서버로 보내지 않음</span></a></li><li><a class="wi" href="/works/onesheet/" data-show="onesheet" aria-haspopup="dialog" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">한장달력</span><span class="wi__w" data-i18n="wl_onesheet_w">달력 인쇄·공휴일</span><span class="wi__p" data-i18n="wl_onesheet_p">1900~2100년 요일 전부 시험</span></a></li><li><a class="wi" href="/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">칸칸</span><span class="wi__w" data-i18n="wl_kankan_w">글자 수 세기</span><span class="wi__p" data-i18n="wl_kankan_p">자동 테스트 3만 5천여 개</span></a></li><li><a class="wi" href="/works/staycode/" data-show="staycode" aria-haspopup="dialog" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">오래QR</span><span class="wi__w" data-i18n="wl_staycode_w">QR코드 만들기</span><span class="wi__p" data-i18n="wl_staycode_p">만든 그림을 다시 읽어 확인</span></a></li></ul>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_docs_h">글과 파일</h3><p class="shelf__line" data-i18n="wl_g_docs_l">파일을 바꾸고, QR을 만들고, 달력을 인쇄하고, 글자 수를 세요.</p></div>
+        <ul class="wall"><li><a class="wi" href="/works/inplace/" data-show="inplace" aria-haspopup="dialog" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">인플레이스</span><span class="wi__w" data-i18n="wl_inplace_w">이미지·영상·PDF 파일 변환</span><span class="wi__p" data-i18n="wl_inplace_p">파일을 서버로 보내지 않음</span></a></li><li><a class="wi" href="/works/staycode/" data-show="staycode" aria-haspopup="dialog" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">오래QR</span><span class="wi__w" data-i18n="wl_staycode_w">QR코드 만들기</span><span class="wi__p" data-i18n="wl_staycode_p">만든 그림을 다시 읽어 확인</span></a></li><li><a class="wi" href="/works/onesheet/" data-show="onesheet" aria-haspopup="dialog" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">한장달력</span><span class="wi__w" data-i18n="wl_onesheet_w">달력 인쇄·공휴일</span><span class="wi__p" data-i18n="wl_onesheet_p">1900~2100년 요일 전부 시험</span></a></li><li><a class="wi" href="/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">칸칸</span><span class="wi__w" data-i18n="wl_kankan_w">글자 수 세기</span><span class="wi__p" data-i18n="wl_kankan_p">자동 테스트 3만 5천여 개</span></a></li></ul>
       </div>
       <div class="shelf" id="g-play">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_play_h">기기·시간·연습·모임</h3><p class="shelf__line" data-i18n="wl_g_play_l">기기를 점검하고, 시간을 재고, 타자를 연습하고, 뽑기로 정해요.</p></div>
-        <ul class="wall"><li><a class="wi" href="/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">공평뽑기</span><span class="wi__w" data-i18n="wl_pickboard_w">돌림판·사다리타기·팀 나누기</span><span class="wi__p" data-i18n="wl_pickboard_p">10만 번 뽑아 카이제곱 검정</span></a></li><li><a class="wi" href="/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">체크벤치</span><span class="wi__w" data-i18n="wl_checkbench_w">키보드·마우스·마이크 테스트</span><span class="wi__p" data-i18n="wl_checkbench_p">판정 기준을 결과 옆에 밝힘</span></a></li><li><a class="wi" href="/works/todok/" data-show="todok" aria-haspopup="dialog" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">토독</span><span class="wi__w" data-i18n="wl_todok_w">한글·영어 타자 연습</span><span class="wi__p" data-i18n="wl_todok_p">타수 세는 기준을 공개</span></a></li><li><a class="wi" href="/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">한바퀴</span><span class="wi__w" data-i18n="wl_oneturn_w">타이머·스톱워치·세계 시간</span><span class="wi__p" data-i18n="wl_oneturn_p">도시마다 zoneinfo와 대조</span></a></li></ul>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_play_h">모임·연습·시간·기기</h3><p class="shelf__line" data-i18n="wl_g_play_l">뽑기로 정하고, 타자를 연습하고, 시간을 재고, 기기를 점검해요.</p></div>
+        <ul class="wall"><li><a class="wi" href="/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">공평뽑기</span><span class="wi__w" data-i18n="wl_pickboard_w">돌림판·사다리타기·팀 나누기</span><span class="wi__p" data-i18n="wl_pickboard_p">10만 번 뽑아 카이제곱 검정</span></a></li><li><a class="wi" href="/works/todok/" data-show="todok" aria-haspopup="dialog" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">토독</span><span class="wi__w" data-i18n="wl_todok_w">한글·영어 타자 연습</span><span class="wi__p" data-i18n="wl_todok_p">타수 세는 기준을 공개</span></a></li><li><a class="wi" href="/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">한바퀴</span><span class="wi__w" data-i18n="wl_oneturn_w">타이머·스톱워치·세계 시간</span><span class="wi__p" data-i18n="wl_oneturn_p">도시마다 zoneinfo와 대조</span></a></li><li><a class="wi" href="/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">체크벤치</span><span class="wi__w" data-i18n="wl_checkbench_w">키보드·마우스·마이크 테스트</span><span class="wi__p" data-i18n="wl_checkbench_p">판정 기준을 결과 옆에 밝힘</span></a></li></ul>
       </div>
       </div>
       <!-- /gen:wall -->
@@ -200,7 +171,7 @@
       <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
       <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
       <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
-      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
       <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
       <!-- /gen:foot -->
     </div>

@@ -85,7 +85,8 @@ KO = {
            'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'play': '영상 재생', 'pause': '영상 멈춤'},
     'wall_title': lambda n: f'만든 것 {n}개, <span class="nw">눌러서 바로 써 보세요</span>',
     'wall_lead': '웹 도구는 창 안에서 그 도구의 계산이 그대로 돌고, 게임과 앱은 실제 화면을 보여 드려요. 도구 아이콘 밑 ✓ 줄은 그 도구가 확인하고 밝혀 둔 것이에요.',
-    'ga_line': '휴대폰 게임은 안드로이드부터 준비하고 있고, 앱은 맥과 브라우저에서 써요.',
+    'games_line': '휴대폰 게임이에요. 안드로이드부터 출시를 준비하고 있어요.',
+    'apps_line': '맥과 브라우저에서 쓰는 앱이에요.',
 }
 EN = {
     'open': 'Open', 'try': 'Try it here', 'shots': 'Preview', 'more': 'It can also', 'more_w': 'Learn more',
@@ -95,9 +96,10 @@ EN = {
     'title': lambda n, w: f'{n}: {w} · Lumen Lab',
     'ui': {'close': 'Close', 'open': 'Open', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
            'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'play': 'Play video', 'pause': 'Pause video'},
-    'wall_title': lambda n: f'{n} things we make. <span class="nw">Tap one to try it</span>',
+    'wall_title': lambda n: f'{n} things we make. <span class="nw">Open one to try it</span>',
     'wall_lead': 'The web tools run their real calculations right in the window, and the games and apps show real screens. The ✓ line under each tool is what it checks and discloses.',
-    'ga_line': 'Phone games, Android first, and apps for the Mac and the browser.',
+    'games_line': 'Games for your phone, getting ready for Android first.',
+    'apps_line': 'Apps for the Mac and the browser.',
 }
 
 def text_mix(hex_):
@@ -262,7 +264,7 @@ def article(kind, it, lang, gdata, cat):
 # ---------- 홈 아이콘 칸 ----------
 def wall(cat, EN_OUT):
     """홈 gen:wall 칸(한국어, 영어는 EN_OUT 사전에 넣어 build_home.py 의 to_en 이 바꾼다)."""
-    def cell(kind, it, anchor=None):
+    def cell(kind, it):
         s = sc_of(kind, it); k = it['id']
         EN_OUT[f'fi_{k}_n'] = it['name']['en']; EN_OUT[f'wl_{k}_w'] = short_what(kind, it, 'en')
         extra = ''
@@ -272,8 +274,7 @@ def wall(cat, EN_OUT):
         elif it.get('status'):
             EN_OUT[f'wl_{k}_s'] = plain(it['status']['en'])
             extra = f'<span class="wi__s" data-i18n="wl_{k}_s">{esc(plain(it["status"]["ko"]))}</span>'
-        li = f'<li id="{anchor}">' if anchor else '<li>'
-        return (f'{li}<a class="wi" href="/works/{k}/" data-show="{k}" aria-haspopup="dialog" style="--tc:{s["color"]};--tcp:{text_mix(s["color"])}%">'
+        return (f'<li><a class="wi" href="/works/{k}/" data-show="{k}" aria-haspopup="dialog" style="--tc:{s["color"]};--tcp:{text_mix(s["color"])}%">'
                 f'<img class="wi__icon" src="{it["icon"]}" width="84" height="84" alt="" loading="lazy">'
                 f'<span class="wi__n" data-i18n="fi_{k}_n">{esc(it["name"]["ko"])}</span>'
                 f'<span class="wi__w" data-i18n="wl_{k}_w">{esc(short_what(kind, it, "ko"))}</span>{extra}</a></li>')
@@ -285,9 +286,9 @@ def wall(cat, EN_OUT):
         return (f'      <div class="shelf" id="{id_}">\n        <div class="shelf__label">{k}<h3 class="shelf__h" data-i18n="wl_{key}_h">{head_ko}</h3>'
                 f'<p class="shelf__line" data-i18n="wl_{key}_l">{line_ko}</p></div>\n        <ul class="wall">{"".join(cells)}</ul>\n      </div>')
     games, apps = cat.get('games', []), cat['apps']
-    # 게임과 앱은 한 선반(둘 다 두 개뿐이라 따로 두면 줄이 비어 보임). 옛 #apps 주소는 첫 앱 칸으로
-    cells = [cell('games', it) for it in games] + [cell('apps', it, 'apps' if i == 0 else None) for i, it in enumerate(apps)]
-    out = [shelf('games', '게임과 앱' if games else '앱', 'Games and apps' if games else 'Apps', KO['ga_line'], EN['ga_line'], cells)]
+    # 게임과 앱은 따로 한 선반씩(2026-10-18 사용자 요청). 웹 도구 선반과 같은 모양이라 칸이 둘뿐이어도 줄이 맞는다
+    out = [shelf('games', '게임', 'Games', KO['games_line'], EN['games_line'], [cell('games', it) for it in games])] if games else []
+    out.append(shelf('apps', '앱', 'Apps', KO['apps_line'], EN['apps_line'], [cell('apps', it) for it in apps]))
     EN_OUT['wl_kick'] = 'Web tools'
     tg = [shelf(f'g-{g["id"]}', esc(g['name']['ko']), g['name']['en'], esc(g['line']['ko']), g['line']['en'],
                 [cell('tools', it) for it in cat['tools'] if it['group'] == g['id']], kick='웹 도구' if i == 0 else None) for i, g in enumerate(cat['groups'])]
@@ -311,7 +312,7 @@ def build(site, cat, ko_src, en_src):
             path = page_path(it['id'], lang); paths.append(path); keep.add(path)
             name = it['name'][lang]; what = it['what'][lang] if kind == 'tools' else short_what(kind, it, lang)
             if kind == 'tools': up_href, up_t = f'/#g-{it["group"]}', next(g['name'][lang] for g in cat['groups'] if g['id'] == it['group'])
-            else: up_href, up_t = '/#games', ('게임과 앱', 'Games and apps')[lang == 'en']   # 홈에선 게임과 앱이 한 선반
+            else: up_href, up_t = f'/#{kind}', {'games': ('게임', 'Games'), 'apps': ('앱', 'Apps')}[kind][lang == 'en']
             pre = '/en' if lang == 'en' else ''
             crumb = (f'<nav class="pp__crumb" aria-label="{T["crumb_label"]}"><a href="{pre}/#works">{T["crumb"]}</a><span aria-hidden="true">›</span>'
                      f'<a href="{pre}{up_href}">{esc(up_t)}</a></nav>')

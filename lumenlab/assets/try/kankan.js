@@ -68,6 +68,8 @@ window.LLTry.kankan = function (stage, c) {
   return {
     auto: function (A) {
       A.set(ta, '');
+      // 첫 화면 '이 글 글자 수' 칸에서 열면 그 글을 그대로 넣어 같은 수가 나오는 것을 보인다
+      if (c.seed && c.seed.text) return A.type(ta, c.seed.text, Math.min(28, Math.round(2600 / Array.from(c.seed.text).length)));
       return A.type(ta, T.sample[0], 70)
         .then(function () { return A.wait(250); })
         .then(function () { A.set(ta, ta.value + '\n'); return A.type(ta, T.sample[1], 70); })

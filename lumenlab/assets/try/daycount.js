@@ -141,6 +141,8 @@ window.LLTry.daycount = function (stage, c) {
   return {
     auto: function (A) {
       A.set(toIn, '');
+      // 첫 화면 '올해 남은 날' 칸에서 열면 그 끝 날짜(12월 31일)만 쳐서 같은 수가 나오는 것을 보인다
+      if (c.seed && c.seed.to) return A.type(toIn, c.seed.to, 90);
       return A.type(toIn, T.sample[0], 90)
         .then(function () { return A.wait(1400); })
         .then(function () { A.set(toIn, ''); return A.type(toIn, T.sample[1], 90); })

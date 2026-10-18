@@ -117,16 +117,74 @@ with sync_playwright() as p:
 
     # 첫 화면이 보인 뒤 다시 흐려지지 않음
     c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
-    pg.add_init_script('''window.__op=[];(function f(t){const e=document.querySelector('.hero__lead');if(e){let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}__op.push(o)}if(performance.now()<2500)requestAnimationFrame(f)})()''')
+    pg.add_init_script('''window.__op=[];(function f(t){const e=document.querySelector('.now__h1');if(e){let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}__op.push(o)}if(performance.now()<2500)requestAnimationFrame(f)})()''')
     pg.goto(BASE + '/'); pg.wait_for_timeout(2800)
     ops = pg.evaluate('__op'); peak = False; dip = False
     for o in ops:
         if o >= .95: peak = True
         elif peak and o < .85: dip = True
-    ok(peak and not dip, '첫 화면 소개 글이 한 번 보인 뒤 다시 흐려지지 않음')
-    # 제목 두 줄
-    lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__title');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
+    ok(peak and not dip, '첫 화면 제목이 한 번 보인 뒤 다시 흐려지지 않음')
+    # 제목(루멘랩이 무엇을 만드는지) 두 줄
+    lines = pg.evaluate("(()=>{const h=document.querySelector('.now__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄')
+    c.close()
+
+    # 첫 화면 문장: 빛나는 칸 다섯이 도구의 진짜 계산 파일로 다 켜지고(값에 숫자, 자리 점 없음), 글자 수 칸은 칸칸으로 다시 세도 같고,
+    # 다른 도시는 방문자와 다른 시각대, 칸을 누르면 그 도구 창, 계산 파일을 못 받거나 JS가 꺼져 있으면 칸 없는 글
+    NOW = r"""()=>{const l=document.querySelector('[data-now]'),t=[...l.querySelectorAll('.nt')];const c=l.cloneNode(true);c.querySelectorAll('.nt__who').forEach(x=>x.remove());
+      const txt=c.textContent.replace(/\s+/g,' ').trim(),cnt=t.find(a=>a.dataset.nt==='count').querySelector('.nt__v').textContent;
+      return{on:t.filter(a=>a.classList.contains('is-on')).length,n:t.length,vals:t.map(a=>a.querySelector('.nt__v').textContent),
+        same:window.LC?+cnt.replace(/[^0-9]/g,'')===LC.analyze(txt,{segment:false}).chars:false,city:l.querySelector('[data-city]').textContent,
+        how:document.querySelector('[data-now-how]').innerText.trim(),plain:document.querySelector('.now').classList.contains('is-plain'),
+        pills:document.querySelectorAll('.ntool.is-on').length,seed:(JSON.parse(t.find(a=>a.dataset.nt==='count').dataset.seed||'{}').text||'')===txt}}"""
+    for pre, w, tz, city in (('', 390, 'Asia/Seoul', '뉴욕'), ('', 1366, 'America/New_York', '서울'), ('/en', 390, 'America/Los_Angeles', 'Seoul'), ('/en', 1366, 'Asia/Seoul', 'New York')):
+        c = br.new_context(viewport={'width': w, 'height': 844}, timezone_id=tz); pg = c.new_page(); errs = []
+        pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
+        pg.goto(BASE + pre + '/'); pg.wait_for_timeout(4500)
+        st = pg.evaluate(NOW)
+        good = (st['on'] == st['n'] == 5 and all((re.search(r'[0-9]', v) or v in ('오늘 하루', 'just today')) and '·' not in v for v in st['vals']) and st['same'] and st['seed']
+                and st['city'] == city and st['how'] and not st['plain'] and st['pills'] == 4 and not errs)
+        ok(good, f"{pre}/ {w}px {tz} 첫 화면 칸 {st['on']}/{st['n']} 켜짐 {st['vals']}, 글자 수 {'맞음' if st['same'] else '틀림'}, 도구 줄 {st['pills']}/4, 도시 {st['city']} {errs[:2]}")
+        if w == 1366:  # 글자 수·남은 날 칸을 누르면 창 안 바로 써 보기가 같은 글·같은 끝 날짜로 같은 수를 낸다
+            for k in ('count', 'left'):
+                want = re.sub(r'[^0-9]', '', pg.evaluate(f"document.querySelector('[data-now] [data-nt={k}] .nt__v').textContent"))
+                pg.locator(f'[data-now] .nt[data-nt="{k}"]').click(); got = ''; m = None
+                for _ in range(40):  # 시연이 다 칠 때까지(최대 8초)
+                    pg.wait_for_timeout(200)
+                    got = pg.evaluate("(()=>{const b=document.querySelector('dialog.sheet .tr-big');return b?b.textContent:''})()")
+                    m = re.search(r'[0-9][0-9,]*', got)
+                    if m and m.group().replace(',', '') == want: break
+                ok(want and m and m.group().replace(',', '') == want, f"{pre}/ {k} 칸을 누르면 창의 바로 써 보기도 {want} ({got.strip()[:40]})")
+                pg.keyboard.press('Escape'); pg.wait_for_timeout(700)
+        a = pg.locator('[data-now] .nt[data-nt="hz"]'); a.click(); pg.wait_for_timeout(1200)
+        op = pg.evaluate("document.querySelector('dialog.sheet').open && location.pathname")
+        pg.keyboard.press('Escape'); pg.wait_for_timeout(600)
+        ok(op == f'{pre}/works/checkbench/' and pg.evaluate("location.pathname") == pre + '/', f'{pre}/ {w}px 첫 화면 주사율 칸을 누르면 체크벤치 창({op}), 닫으면 홈')
+        c.close()
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
+    pg.route(SUB, lambda r: r.fulfill(status=404, body=''))
+    pg.goto(BASE + '/'); pg.wait_for_timeout(1200)
+    ok(pg.evaluate("document.querySelector('.now').classList.contains('is-plain') && getComputedStyle(document.querySelector('.now__plain')).display==='block' && getComputedStyle(document.querySelector('[data-now]')).display==='none'"),
+       '계산 파일을 못 받으면 첫 화면은 칸 없는 글')
+    c.close()
+    # 계산 파일 하나가 끝내 안 오면 그 도구 문장만 빠지고(이미 켜진 칸은 그대로), 남은 글을 다시 세고, 그 도구 이름표도 빠진다
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route(SUB, lambda r: None if 'ck-measure' in r.request.url else sub_file(r))   # 체크벤치 파일은 답하지 않음(그래서 load 도 안 옴)
+    pg.goto(BASE + '/', wait_until='domcontentloaded'); pg.wait_for_timeout(6800)
+    st = pg.evaluate(NOW)
+    gone = pg.evaluate("!document.querySelector('[data-part=hz]') && document.querySelector('.ntool[data-tool=checkbench]').hidden && !!document.getElementById('nw-hz').textContent")
+    ok(not st['plain'] and gone and st['on'] == st['n'] == 4 and st['same'] and not errs, f"체크벤치 파일이 안 오면 그 문장만 빠짐 (켜짐 {st['on']}/{st['n']}, 글자 수 {'맞음' if st['same'] else '틀림'}) {errs[:1]}")
+    c.close()
+    # landing.js 자체를 못 받으면 6초 뒤 칸 없는 글(빈 막대와 '불러오는 중'이 남지 않게)
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
+    pg.route(SUB, sub_file); pg.route(re.compile(r'.*/assets/landing\.js.*'), lambda r: r.abort())
+    pg.goto(BASE + '/'); pg.wait_for_timeout(6500)
+    ok(pg.evaluate("document.querySelector('.now').classList.contains('is-plain') && getComputedStyle(document.querySelector('.now__plain')).display==='block'"), 'landing.js를 못 받으면 6초 뒤 칸 없는 글')
+    c.close()
+    c = br.new_context(viewport={'width': 390, 'height': 844}, java_script_enabled=False); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(300)
+    ok(pg.evaluate("getComputedStyle(document.querySelector('.now__plain')).display==='block' && getComputedStyle(document.querySelector('[data-now]')).display==='none'"), 'JS가 꺼져 있으면 첫 화면은 칸 없는 글')
     c.close()
 
     # 언어: 한국어 / 와 영어 /en/ 은 따로 된 페이지. 자동으로 넘기지 않고 띠로만 알림, 방침 페이지는 #en 이면 영어 칸
@@ -152,8 +210,8 @@ with sync_playwright() as p:
     ko_left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
     ok(not ko_left, f'영어 화면에 한국어가 남지 않음 {ko_left}')
     sw = pg.evaluate('document.documentElement.scrollWidth'); ok(sw <= 390, f'영어 390px 가로 넘침 없음 ({sw})')
-    lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__title');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
-    ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
+    lines = pg.evaluate("(()=>{const h=document.querySelector('.now__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
+    ok(lines <= 3, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
     ok(all(h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not (h.startswith(("/en/", "#", "http", "mailto:", "tel:")) or h == "/")]}')
     pg.route(SUB, sub_file)
@@ -167,7 +225,7 @@ with sync_playwright() as p:
         if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
     pg.goto(BASE + '/en/'); pg.wait_for_timeout(300)
     pg.click('a.lang'); pg.wait_for_timeout(400)
-    ok(pg.url == BASE + '/' and '풀이' in pg.inner_text('h1'), '한국어 단추로 / 로')
+    ok(pg.url == BASE + '/' and '루멘랩' in pg.inner_text('h1'), '한국어 단추로 / 로')
     ok(pg.locator('.langbar').count() == 0, '한국어를 고르면 띠가 다시 안 뜸')
     pg.goto(BASE + '/owlight/privacy/#en'); pg.wait_for_timeout(300)
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")

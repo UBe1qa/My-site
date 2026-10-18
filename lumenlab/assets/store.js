@@ -170,7 +170,8 @@
     var n = root.querySelector('.sh__name');
     return n && n.firstChild ? n.firstChild.textContent.trim() : '';
   }
-  function mountDemo(root, UI, isLive) {
+  // seed: 첫 화면 문장 칸이 넘긴 값(data-seed). 바로 써 보기가 그 칸의 값을 같은 계산으로 다시 보인다
+  function mountDemo(root, UI, isLive, seed) {
     var stage = root.querySelector('.stage[data-tool]');
     if (!stage) return null;
     var id = stage.getAttribute('data-tool'), badge = root.querySelector('.stage__badge'), replay = root.querySelector('.stage__replay');
@@ -195,7 +196,7 @@
       stage.textContent = '';
       stage.classList.remove('is-loading');
       // mine(): 무대 밖에서 받은 진짜 입력(예: 키보드 시험의 키 누름)도 손님 차례로 넘긴다
-      d = window.LLTry[id](stage, { lang: LANG, h: h, svg: svg, reduced: reduced, tool: t, fail: fail, mine: function () { if (auto) auto.mine(); } });
+      d = window.LLTry[id](stage, { lang: LANG, h: h, svg: svg, reduced: reduced, tool: t, fail: fail, seed: seed || null, mine: function () { if (auto) auto.mine(); } });
       if (failed) { if (d.stop) d.stop(); return; }
       auto = d.auto ? Auto(stage, badge, replay, d.auto, { reset: d.reset, fail: fail, ui: UI }) : null;
       if (auto) setTimeout(function () { if (alive && !failed) auto.start(reduced); }, reduced ? 200 : 650);
@@ -224,8 +225,8 @@
     vids.forEach(function (v) { io.observe(v); });
     return function () { io.disconnect(); vids.forEach(function (v) { v.pause(); }); };
   }
-  function start(root, UI, isLive) {
-    var stops = [mountDemo(root, UI, isLive), wireVideos(root)].filter(Boolean);
+  function start(root, UI, isLive, seed) {
+    var stops = [mountDemo(root, UI, isLive, seed), wireVideos(root)].filter(Boolean);
     return function () { stops.forEach(function (f) { f(); }); };
   }
 
@@ -274,7 +275,7 @@
   var panel = h('div', { class: 'sh' });
   dlg.appendChild(panel);
   document.body.appendChild(dlg);
-  var cur = null, opener = null, stopNow = null, closing = false, watchOpen = null, flyAnim = null, token = 0;
+  var cur = null, opener = null, stopNow = null, closing = false, watchOpen = null, flyAnim = null, token = 0, seed = null;
 
   function swapTag(el, tag) {
     var n = document.createElement(tag);
@@ -326,7 +327,7 @@
     if (watchOpen) watchOpen.observe(openBtn);
     panel.classList.remove('is-past');
     var my = ++token;
-    stopNow = start(body, UI, function () { return my === token && !!cur; });
+    stopNow = start(body, UI, function () { return my === token && !!cur; }, seed);
     return body;
   }
   function setTitle(id) { if (cur === id && titles[id]) document.title = titles[id]; }
@@ -388,7 +389,8 @@
 
   function open(id, trigger, push) {
     if (cur) return;
-    cur = id; opener = trigger || null; closing = false;
+    cur = id; opener = trigger || null; closing = false; seed = null;
+    if (trigger && trigger.getAttribute('data-show') === id && trigger.hasAttribute('data-seed')) try { seed = JSON.parse(trigger.getAttribute('data-seed')); } catch (e) {}
     var gap = innerWidth - document.documentElement.clientWidth;
     if (gap > 0) document.documentElement.style.paddingRight = gap + 'px';
     document.documentElement.classList.add('is-sheet');
@@ -405,7 +407,7 @@
   // 창 안의 '다른 것도 둘러보기': 창은 그대로 두고 내용만 바꾼다
   function swap(id) {
     if (!cur || closing || id === cur) return;
-    var was = cur; cur = id;
+    var was = cur; cur = id; seed = null;
     if (stopNow) { stopNow(); stopNow = null; }
     history.replaceState({ sheet: id }, '', urlOf(id));
     get(id).then(function (art) {
@@ -436,7 +438,7 @@
     if (back) back.style.visibility = '';
     var focusTo = opener && opener.getAttribute('data-show') === id ? opener : document.querySelector('.works a[data-show="' + id + '"]') || opener;
     if (focusTo) focusTo.focus({ preventScroll: true });
-    cur = null; closing = false; token++;
+    cur = null; closing = false; seed = null; token++;
   }
   function animateClose(fromY) {
     if (!cur || closing) return;
