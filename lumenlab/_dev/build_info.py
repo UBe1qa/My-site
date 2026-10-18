@@ -257,10 +257,10 @@ KO = {
     'a_lead': '휴대폰 게임과 앱, 브라우저에서 바로 쓰는 무료 웹 도구를 만들어요. 누가 만드는지, 도구마다 무엇을 확인하는지, 운영비는 어디서 나오는지 적었어요.',
     'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '확인하고 밝혀 둔 것'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
-  <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 목록</a></li>
+  <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/works/#tools">웹 도구 목록</a></li>
   <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 한곳에 모아 두었어요. <a href="/guides/">가이드 모음</a></li>
-  <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/#games">게임 목록</a></li>
-  <li><b>앱 {na}개</b> {apps}. <a href="/#apps">앱 목록</a></li>
+  <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/works/#games">게임 목록</a></li>
+  <li><b>앱 {na}개</b> {apps}. <a href="/works/#apps">앱 목록</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">누가 만드나요</h2>
@@ -490,10 +490,10 @@ EN = {
     'a_lead': 'We make phone games, apps and free web tools that work right in your browser. This page covers who makes them, what each tool checks and how the sites pay for themselves.',
     'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'What each tool checks'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
-  <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
+  <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/works/#tools">See the tools</a></li>
   <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site and are collected in one place. <a href="/en/guides/">All guides</a></li>
-  <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/#games">See the games</a></li>
-  <li><b>{na} apps</b> {apps}. <a href="/en/#apps">See the apps</a></li>
+  <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/works/#games">See the games</a></li>
+  <li><b>{na} apps</b> {apps}. <a href="/en/works/#apps">See the apps</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">Who we are</h2>

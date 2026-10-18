@@ -5,7 +5,11 @@
 /setnote/index.html https://setnote.lumenlab.page/app/ 301
 /setnote/manifest.webmanifest https://setnote.lumenlab.page/app/manifest.webmanifest 301
 
-# 웹 도구를 묶음별로 홈에 다 보여 주게 되어(2026-10-11) /tools/ 전체 목록 페이지가 없어졌다. 어제 만든 주소라 홈으로 영구 이동.
-# 묶음 하나가 group_limit개를 넘어 /tools/ 페이지가 다시 생기면 이 두 줄을 먼저 지운다(build_home.py 가 남아 있으면 멈춘다).
-/tools/ /#tools 301
-/en/tools/ /en/#tools 301
+# 홈이 루멘랩을 알리는 랜딩이 되면서(2026-10-18) 게임·앱·웹 도구 목록은 /works/ 로 옮겼다. 예전 전체 목록 주소는 그리로 영구 이동.
+# (홈의 #games·#apps·#tools 칸 주소는 서버가 못 보니 index.html 머리의 짧은 스크립트가 /works/#… 로 넘긴다)
+/tools/ /works/#tools 301
+/en/tools/ /en/works/#tools 301
+/apps/ /works/#apps 301
+/en/apps/ /en/works/#apps 301
+/games/ /works/#games 301
+/en/games/ /en/works/#games 301
