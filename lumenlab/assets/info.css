@@ -72,6 +72,7 @@ html[lang="en"] .idoc p,html[lang="en"] .idoc li,html[lang="en"] .idoc dd{word-b
 .ck dt a{color:var(--ink);text-decoration-color:var(--line)}
 .ck dt a:hover{text-decoration-color:currentColor}
 .ck dd{margin:6px 0 0;color:var(--ink-2);font-size:15.5px;line-height:1.65}
+.ck__src{font-weight:650;white-space:nowrap}
 .ck__host{font-size:15px;font-weight:600;color:var(--muted)}
 @media (max-width:420px){.ck{padding:14px 16px}}
 

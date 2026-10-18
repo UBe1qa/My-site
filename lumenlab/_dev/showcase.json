@@ -1583,8 +1583,8 @@
   "castleup": {
    "color": "#7a2e8e",
    "what": {
-    "ko": "영웅을 쌓는 방치형 디펜스",
-    "en": "Idle defense with stacked heroes"
+    "ko": "층마다 영웅을 세우는 방치형 디펜스",
+    "en": "Idle defense with a hero on every floor"
    },
    "facts": [
     {

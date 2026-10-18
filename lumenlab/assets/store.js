@@ -295,13 +295,13 @@
     ]);
   }
   // 받기 전: 막대 + 아이콘만 있는 몸통(아이콘이 날아와 앉을 자리). 받으면 fill 이 바꾼다
-  function skeleton(trigger) {
+  function skeleton(trigger, id) {
     var img = trigger && trigger.querySelector('img');
     panel.removeAttribute('style');
     panel.textContent = '';
     panel.appendChild(bar({ close: BASE_UI.close }));
     var icon = h('img', { class: 'sh__icon', src: img ? img.getAttribute('src') : '', width: 96, height: 96, alt: '' });
-    var nm = trigger && trigger.querySelector('.wi__n');
+    var nm = (trigger && trigger.querySelector('.wi__n')) || document.querySelector('.works a[data-show="' + id + '"] .wi__n');   // 첫 화면 단추·앞으로 가기면 칸의 이름
     panel.appendChild(h('div', { class: 'sh__body' }, [h('header', { class: 'sh__head' }, [icon, h('div', { class: 'sh__id' }, [
       h('h2', { class: 'sh__name', id: 'sh-name', tabindex: '-1', text: nm ? nm.textContent.trim() : '' }),
       h('p', { class: 'stage__msg sh__wait', text: BASE_UI.loading })])])]));
@@ -389,8 +389,10 @@
   function open(id, trigger, push) {
     if (cur) return;
     cur = id; opener = trigger || null; closing = false;
+    var gap = innerWidth - document.documentElement.clientWidth;
+    if (gap > 0) document.documentElement.style.paddingRight = gap + 'px';
     document.documentElement.classList.add('is-sheet');
-    var target = ready[id] ? null : skeleton(trigger);
+    var target = ready[id] ? null : skeleton(trigger, id);
     var body = ready[id] ? fill(ready[id]) : null;
     dlg.showModal();
     var b = panel.querySelector('.sh__body'); if (b) b.scrollTop = 0;
@@ -428,6 +430,7 @@
     panel.style.transform = '';
     $$(dlg, '.sh__ghost').forEach(function (g) { g.remove(); });
     document.documentElement.classList.remove('is-sheet');
+    document.documentElement.style.paddingRight = '';
     document.title = HOME_TITLE;
     var back = homeIcon(id, opener);
     if (back) back.style.visibility = '';

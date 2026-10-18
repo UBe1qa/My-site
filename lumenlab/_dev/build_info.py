@@ -166,9 +166,10 @@ def about_main(lang, cat, tools, groups, counts):
     for g in groups:
         for it in [t for t in tools if t['group'] == g['id']]:
             work = ('/en' if lang == 'en' else '') + f"/works/{it['id']}/"
+            tp = tool_pages(it, lang)
             checks.append(f"""      <div class="ck" id="c-{it['id']}">
         <dt><img src="{it['icon']}" width="28" height="28" alt="" loading="lazy"><a href="{work}">{nm(it)}</a> <span class="ck__host">{esc(it['what'][lang])}</span></dt>
-        <dd>{esc(it['check'][lang])}</dd>
+        <dd>{esc(it['check'][lang])} <a class="ck__src" href="{esc(tp['about'])}">{T['ck_src']} <span aria-hidden="true">→</span></a></dd>
       </div>""")
     body = T['about_body'](what, '\n'.join(checks))
     return ihead(T, T['a_kicker'], T['a_title'], T['a_lead'], T['about_jumps']) + f'\n<div class="wrap idoc">\n{body}\n</div>\n' + T['a_end']
@@ -202,12 +203,13 @@ KO = {
     'a_kicker': '소개',
     'a_title': '루멘랩은 혼자 운영하는 작은 소프트웨어 <span class="nw">스튜디오예요</span>',
     'a_lead': '휴대폰 게임과 앱, 브라우저에서 바로 쓰는 무료 웹 도구를 만들어요. 누가 만드는지, 도구마다 무엇을 확인하는지, 운영비는 어디서 나오는지 적었어요.',
+    'ck_src': '기준과 출처',
     'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '확인하고 밝혀 둔 것'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 둘러보기</a></li>
   <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 도구마다 소개 창에 목록을 모아 두었어요.</li>
   <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/#games">게임 보기</a></li>
-  <li><b>앱 {na}개</b> {apps}. <a href="/#apps">앱 보기</a></li>
+  <li><b>앱 {na}개</b> {apps}. <a href="/#games">앱 보기</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">누가 만드나요</h2>
@@ -236,7 +238,7 @@ KO = {
 
 <section id="check" aria-labelledby="check-t">
 <h2 id="check-t">도구마다 확인하고 밝혀 둔 것</h2>
-<p>각 도구의 소개 페이지에 적은 것을 한곳에 모았어요. 자세한 기준과 출처는 도구 이름을 누르면 나오는 소개 페이지에 있어요.</p>
+<p>각 도구의 소개 페이지에 적은 것을 한곳에 모았어요. 도구 이름을 누르면 바로 써 볼 수 있고, 자세한 기준과 출처는 '기준과 출처'를 누르면 그 도구 사이트에서 볼 수 있어요.</p>
 <dl class="ichecks">
 {checks}
 </dl>
@@ -421,12 +423,13 @@ EN = {
     'a_kicker': 'About',
     'a_title': 'Lumen Lab is a small, one-person <span class="nw">software studio</span>',
     'a_lead': 'We make phone games, apps and free web tools that work right in your browser. This page covers who makes them, what each tool checks and how the sites pay for themselves.',
+    'ck_src': 'Rules and sources',
     'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'What each tool checks'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
   <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site, and each tool’s preview lists them.</li>
   <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/#games">See the games</a></li>
-  <li><b>{na} apps</b> {apps}. <a href="/en/#apps">See the apps</a></li>
+  <li><b>{na} apps</b> {apps}. <a href="/en/#games">See the apps</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">Who we are</h2>
@@ -455,7 +458,7 @@ EN = {
 
 <section id="check" aria-labelledby="check-t">
 <h2 id="check-t">What each tool checks and discloses</h2>
-<p>This gathers what each tool’s About page says. Follow a tool’s name for its full rules and sources.</p>
+<p>This gathers what each tool’s About page says. Follow a tool’s name to try it here, or “Rules and sources” for the full details on the tool’s own site.</p>
 <dl class="ichecks">
 {checks}
 </dl>
