@@ -235,19 +235,19 @@
 
   /* ---------- 2) 홈의 소개 창 ---------- */
   if (!document.querySelector('a[data-show]') || typeof HTMLDialogElement !== 'function' || !window.fetch || !window.DOMParser) return;
-  var HOME = location.pathname;   // 창을 닫으면 돌아올 주소
+  var HOME = location.pathname, HOME_TITLE = document.title;   // 창을 닫으면 돌아올 주소와 제목
   var urlOf = function (id) { return PRE + '/works/' + id + '/'; };
 
   // 소개 페이지 받기(한 번 받은 건 그대로). 실패하면 그 페이지로 그냥 이동한다
-  var cache = {}, ready = {};
+  var cache = {}, ready = {}, titles = {};
   function get(id) {
     if (!cache[id]) cache[id] = fetch(urlOf(id), { credentials: 'same-origin' }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.text();
     }).then(function (txt) {
-      var art = new DOMParser().parseFromString(txt, 'text/html').querySelector('article.sh-doc');
+      var doc = new DOMParser().parseFromString(txt, 'text/html'), art = doc.querySelector('article.sh-doc');
       if (!art || art.getAttribute('data-id') !== id) throw new Error('no sheet ' + id);
-      ready[id] = art;
+      ready[id] = art; titles[id] = doc.title;
       return art;
     }).catch(function (e) { delete cache[id]; throw e; });
     return cache[id];
@@ -301,7 +301,10 @@
     panel.textContent = '';
     panel.appendChild(bar({ close: BASE_UI.close }));
     var icon = h('img', { class: 'sh__icon', src: img ? img.getAttribute('src') : '', width: 96, height: 96, alt: '' });
-    panel.appendChild(h('div', { class: 'sh__body' }, [h('header', { class: 'sh__head' }, [icon, h('div', { class: 'sh__id' }, [h('p', { class: 'stage__msg sh__wait', text: BASE_UI.loading })])])]));
+    var nm = trigger && trigger.querySelector('.wi__n');
+    panel.appendChild(h('div', { class: 'sh__body' }, [h('header', { class: 'sh__head' }, [icon, h('div', { class: 'sh__id' }, [
+      h('h2', { class: 'sh__name', id: 'sh-name', tabindex: '-1', text: nm ? nm.textContent.trim() : '' }),
+      h('p', { class: 'stage__msg sh__wait', text: BASE_UI.loading })])])]));
     return icon;
   }
   function fill(art) {
@@ -326,6 +329,7 @@
     stopNow = start(body, UI, function () { return my === token && !!cur; });
     return body;
   }
+  function setTitle(id) { if (cur === id && titles[id]) document.title = titles[id]; }
   function focusName() {
     var n = panel.querySelector('.sh__name') || panel.querySelector('.sh__x');
     if (n) n.focus({ preventScroll: true });   // 첫 초점은 제목: Space·PageDown 으로 창이 내려가고, Space 가 닫기를 누르지 않는다
@@ -393,8 +397,8 @@
     flyAnim = fly(homeIcon(id, trigger), target || body.querySelector('.sh__icon'), 360);
     panelIn();
     if (push !== false) history.pushState({ sheet: id }, '', urlOf(id));
-    if (body) focusName();
-    else get(id).then(function (art) { if (cur === id) { fill(art); focusName(); } }, function () { if (cur === id) location.href = urlOf(id); });
+    if (body) { setTitle(id); focusName(); }
+    else get(id).then(function (art) { if (cur === id) { fill(art); setTitle(id); focusName(); } }, function () { if (cur === id) location.href = urlOf(id); });
   }
   // 창 안의 '다른 것도 둘러보기': 창은 그대로 두고 내용만 바꾼다
   function swap(id) {
@@ -405,7 +409,7 @@
     get(id).then(function (art) {
       if (cur !== id) return;
       var go = function () {
-        fill(art);
+        fill(art); setTitle(id);
         var b = panel.querySelector('.sh__body'); if (b) b.scrollTop = 0;
         if (!reduced) panel.querySelector('.sh__body').animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: EASE });
         focusName();
@@ -424,6 +428,7 @@
     panel.style.transform = '';
     $$(dlg, '.sh__ghost').forEach(function (g) { g.remove(); });
     document.documentElement.classList.remove('is-sheet');
+    document.title = HOME_TITLE;
     var back = homeIcon(id, opener);
     if (back) back.style.visibility = '';
     var focusTo = opener && opener.getAttribute('data-show') === id ? opener : document.querySelector('.works a[data-show="' + id + '"]') || opener;

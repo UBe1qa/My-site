@@ -165,9 +165,9 @@ def about_main(lang, cat, tools, groups, counts):
     checks = []
     for g in groups:
         for it in [t for t in tools if t['group'] == g['id']]:
-            tp = tool_pages(it, lang)
+            work = ('/en' if lang == 'en' else '') + f"/works/{it['id']}/"
             checks.append(f"""      <div class="ck" id="c-{it['id']}">
-        <dt><img src="{it['icon']}" width="28" height="28" alt="" loading="lazy"><a href="{esc(tp['about'])}">{nm(it)}</a> <span class="ck__host">{esc(it['what'][lang])}</span></dt>
+        <dt><img src="{it['icon']}" width="28" height="28" alt="" loading="lazy"><a href="{work}">{nm(it)}</a> <span class="ck__host">{esc(it['what'][lang])}</span></dt>
         <dd>{esc(it['check'][lang])}</dd>
       </div>""")
     body = T['about_body'](what, '\n'.join(checks))
@@ -288,7 +288,7 @@ KO = {
 <section id="p-scope" aria-labelledby="p-scope-t">
 <h2 id="p-scope-t">1. 이 방침이 다루는 곳</h2>
 <ul class="ilist">
-  <li><b>lumenlab.page</b> 루멘랩 소개, 가이드 모음, 앱 지원 페이지</li>
+  <li><b>lumenlab.page</b> 루멘랩 홈과 만든 것 소개 페이지, 루멘랩 소개, 앱 지원 페이지</li>
   <li><b>웹 도구 사이트</b> 아래 도구들이에요. 각 도구의 방침은 이 방침에 그 도구에만 해당하는 내용(이 기기에 남기는 항목 등)을 더한 것이에요.</li>
   <li><b>세트노트(setnote.lumenlab.page)</b> 운동 기록 웹 앱이에요. 기록과 설정은 이 기기의 브라우저 저장소에만 남고 서버로 보내지 않아요. 광고가 없어요.</li>
   <li><b>캐슬업! 소개 사이트(castle-up.lumenlab.page)</b> 아직 출시 전인 게임의 소개 페이지예요. 광고가 없고 이 기기에 남기는 것도 없어요. 방문 통계(3번)만 있어요.</li>
@@ -507,7 +507,7 @@ EN = {
 <section id="p-scope" aria-labelledby="p-scope-t">
 <h2 id="p-scope-t">1. Where this policy applies</h2>
 <ul class="ilist">
-  <li><b>lumenlab.page</b> the Lumen Lab site, the guide list and the app support pages</li>
+  <li><b>lumenlab.page</b> the Lumen Lab home and product pages, About Lumen Lab and the app support pages</li>
   <li><b>The web tool sites</b> listed below. Each tool’s own policy adds what applies to that tool only, such as what it saves on your device.</li>
   <li><b>SetNote (setnote.lumenlab.page)</b> a workout log web app. Your log and settings stay in your browser’s storage on this device and are never sent to a server. It has no ads.</li>
   <li><b>Castle Up! (castle-up.lumenlab.page)</b> the page for a game that is not out yet. It has no ads and saves nothing on your device; only the visit statistics in section 3 apply.</li>

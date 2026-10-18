@@ -185,14 +185,14 @@ with sync_playwright() as p:
     SHEET = """()=>{const d=document.querySelector('dialog.sheet'),s=d.querySelector('.stage'),b=d.querySelector('.sh__body');return{open:d.open,path:location.pathname,
       name:(d.querySelector('.sh__name')||{}).textContent||'',fail:!!(s&&s.querySelector('.stage__msg')),text:s?s.innerText:'',stage:!!s,shots:d.querySelectorAll('.shots li').length,
       facts:d.querySelectorAll('.sh__facts li').length,cards:d.querySelectorAll('.sh__cards li').length,others:d.querySelectorAll('.sh__others a').length,h1:d.querySelectorAll('h1').length,
-      over:b.scrollWidth>b.clientWidth+1}}"""
+      over:b.scrollWidth>b.clientWidth+1,title:document.title}}"""
     for pre in ('', '/en'):
         for w in (390, 1366):
             c = br.new_context(viewport={'width': w, 'height': 844}, has_touch=w < 500); pg = c.new_page(); errs = []
             pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
             pg.on('pageerror', lambda e: errs.append(str(e)))
             pg.route(SUB, sub_file)
-            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(300)
+            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(300); home_title = pg.title()
             for i, (kind, tid) in enumerate(ITEMS):
                 errs.clear(); a = pg.locator(f'.works a[data-show="{tid}"]')
                 a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
@@ -202,11 +202,12 @@ with sync_playwright() as p:
                 if i % 2: pg.go_back()
                 else: pg.keyboard.press('Escape')
                 pg.wait_for_timeout(700)
-                shut = not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname+location.hash') == pre + '/'
+                shut = not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname+location.hash') == pre + '/' and pg.title() == home_title
+                titled = st['title'] == open(os.path.join(site, pre.strip('/'), 'works', tid, 'index.html')).read().split('<title>')[1].split('</title>')[0].replace('&amp;', '&')
                 body_ok = (st['stage'] and not st['fail'] and st['text'] != before) if kind == 'tools' else (not st['stage'] and st['shots'] >= 3)
-                good = st['open'] and st['path'] == f'{pre}/works/{tid}/' and body_ok and st['facts'] == 3 and st['cards'] >= 2 and st['others'] == len(ITEMS) - 1 and st['h1'] == 0 and not st['over'] and shut and not errs
+                good = st['open'] and st['path'] == f'{pre}/works/{tid}/' and titled and body_ok and st['facts'] == 3 and st['cards'] >= 2 and st['others'] == len(ITEMS) - 1 and st['h1'] == 0 and not st['over'] and shut and not errs
                 what = ('바로 써 보기 ' + ('실패' if st['fail'] else '뜸') + ', 시연 ' + ('움직임' if st['text'] != before else '멈춤')) if kind == 'tools' else f"미리 보기 {st['shots']}장"
-                ok(good, f"{pre}/ {w}px {tid} 소개 창: 주소 {st['path']}, {what}, 숫자 {st['facts']}·카드 {st['cards']}·다른 것 {st['others']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
+                ok(good, f"{pre}/ {w}px {tid} 소개 창: 주소 {st['path']}, 제목 {'맞음' if titled else st['title']}, {what}, 숫자 {st['facts']}·카드 {st['cards']}·다른 것 {st['others']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
             # 창 안 '다른 것도 둘러보기'를 누르면 창 내용만 바뀌고(주소도), 한 번 닫으면 홈
             a = pg.locator('.works a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
             nxt = pg.locator('dialog.sheet .sh__others a').first; nid = nxt.get_attribute('data-show')

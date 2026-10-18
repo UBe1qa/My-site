@@ -43,9 +43,6 @@
 /* 첫 화면·끝 칸의 주 단추는 불빛 색 하나(검은·흰 알약이 불빛보다 세지 않게) */
 .hero .btn--main,.end .btn--main{background:var(--lamp);color:#1B1A24}
 .hero .btn--main:hover,.end .btn--main:hover{background:color-mix(in srgb,var(--lamp) 86%,#fff)}
-.hero__more{font-weight:700;color:var(--ink-2);text-decoration:none}
-.hero__more::after{content:" →"}
-.hero__more:hover{color:var(--ink);text-decoration:underline}
 @media (max-width:900px){
   .hero{padding-top:26px;padding-bottom:56px}
   .hero__in{grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "room" "caps";row-gap:12px}
@@ -111,7 +108,6 @@
 .names{gap:6px!important}
 .names span{min-width:44px;text-align:center;font-size:14px;font-weight:700;line-height:1;padding:9px 8px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);transition:background .12s,color .12s}
 .names span.win{background:var(--lamp);color:#1B1A24;box-shadow:none}
-.gicon{flex:none;border-radius:13px}
 .card--out .r2:not(.names)>span:not(.file):not(.arrow){font-size:17px;font-weight:800;color:#DAD7EC}
 
 /* 불빛: 고리 + 손잡이. 고리 자체는 누름을 통과시키고 손잡이만 잡힌다 */
@@ -185,7 +181,8 @@
 .wi__icon{display:block;width:84px;height:84px;margin-bottom:14px;border-radius:22%;box-shadow:0 1px 2px rgba(27,26,36,.08),0 8px 20px color-mix(in srgb,var(--tc) 26%,transparent);
   transition:transform .28s cubic-bezier(.3,1.4,.5,1)}
 .wi__n{font-size:17px;font-weight:750;line-height:1.4;letter-spacing:-.01em}
-.wi__w{margin-top:2px;font-size:15px;line-height:1.5;color:var(--ink-2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.wi__n,.wi__w,.wi__p,.wi__s{text-wrap:pretty}
+.wi__w{margin-top:2px;font-size:15px;line-height:1.5;color:var(--ink-2)}
 /* 도구: 결과를 확인한 방법 한 줄 */
 .wi__p{display:flex;gap:6px;margin-top:8px;font-size:15px;font-weight:650;line-height:1.45;color:var(--lamp-ink)}
 .wi__p::before{content:"✓";flex:none;font-weight:800}
@@ -193,6 +190,7 @@
 .wi__s{display:flex;gap:8px;margin-top:8px;font-size:15px;font-weight:650;line-height:1.45;color:var(--tct)}
 .wi__s::before{content:"";flex:none;width:8px;height:8px;margin:.42em 1px 0 2px;border-radius:50%;background:var(--tc);box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 24%,transparent)}
 .wi:hover{background:var(--card);box-shadow:0 0 0 1px var(--line),var(--shadow)}
+.wi:focus-visible{border-radius:22px;outline-offset:2px}
 .wi:hover::before{opacity:.42;transform:translateY(18px) scale(.95)}
 .wi:hover .wi__icon{transform:translateY(-4px)}
 .wi:active .wi__icon{transform:scale(.95)}
@@ -217,7 +215,7 @@
   .wi::before{left:10px;top:28px;width:72px;height:72px}
   .wi__icon{width:72px;height:72px;margin-bottom:12px}
   .wi__n{font-size:16.5px}
-  .wi__w{-webkit-line-clamp:3;line-clamp:3}
+  .wi:focus-visible{border-radius:20px}
 }
 @media (prefers-color-scheme:dark){.wi{--tct:color-mix(in srgb,var(--tc) 55%,#fff)}.wi::before{opacity:.3}}
 @media (prefers-reduced-motion:reduce){.wi,.wi::before,.wi__icon{transition:none}.wi:hover .wi__icon,.wi:active .wi__icon{transform:none}}
