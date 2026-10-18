@@ -205,7 +205,7 @@
       "url_en": "https://salary.lumenlab.page/en/",
       "icon": "/img/salary.svg",
       "name": {"ko": "떼고얼마", "en": "Takehome Korea"},
-      "find": {"ko": "실수령액 월급 연봉 퇴직금 주휴수당 실업급여 연차 4대 보험 세금", "en": "take-home pay salary net pay severance korea tax"},
+      "find": {"ko": "실수령액 월급 연봉 퇴직금 주휴수당 시급 실업급여 연차 4대 보험 세금 계산기", "en": "take-home pay salary net pay severance hourly wage korea tax calculator"},
       "sub": "Takehome Korea",
       "line": {"ko": "연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요.", "en": "Korea net salary calculator laid out like a payslip, plus severance pay, hourly wage and weekly holiday allowance, with the rates and sources shown."},
       "check": {"ko": "요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요.", "en": "Rates and limits are taken only from laws and agency notices opened directly, and every figure is listed with its source and the day it was checked. Severance pay matches the Ministry of Employment and Labor's worked example to the last jeon (₩88,641.31 average daily wage)."}

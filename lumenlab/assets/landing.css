@@ -43,7 +43,7 @@
 .room{grid-area:room}
 .caps{grid-area:caps}
 .hero__eyebrow{margin:0 0 14px;font-size:15px;font-weight:700;color:var(--lamp-ink)}
-.hero__title{margin:0;font-size:clamp(30px,8.2vw,42px);line-height:1.2;letter-spacing:-.035em;font-weight:800}
+.hero__title{margin:0;font-size:clamp(26px,8.2vw,42px);line-height:1.2;letter-spacing:-.035em;font-weight:800}
 @media (min-width:901px){.hero__title{font-size:min(42px,3.5vw)}}
 .lm{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}
 .lm>span{display:inline-block}
@@ -69,6 +69,7 @@
   box-shadow:inset 0 0 0 1px var(--room-line),0 30px 60px -32px rgba(23,22,43,.6)}
 @media (min-width:700px){.room{--r0:132px}}
 .room.is-all{--r:640px}
+.room.is-dark{--r:0px}
 @media (prefers-reduced-motion:no-preference){.room{transition:--r .6s var(--ease)}}
 .room__stage{--sx:50%;--sy:50%;position:relative;height:330px;border-radius:18px;overflow:hidden;touch-action:pan-y;cursor:grab;background:var(--room)}
 .room__stage:active{cursor:grabbing}
@@ -88,8 +89,8 @@
 .card--out{background:var(--room-2);color:var(--room-muted);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 18px 40px -18px rgba(0,0,0,.55)}
 .card--out .r2{border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)}
 .card--in{background:var(--lit);color:var(--lit-ink);box-shadow:inset 0 0 0 1px var(--lit-line);
-  -webkit-mask-image:radial-gradient(circle var(--r) at var(--lx,50%) var(--ly,50%),#000 calc(var(--r) - 12px),transparent var(--r));
-  mask-image:radial-gradient(circle var(--r) at var(--lx,50%) var(--ly,50%),#000 calc(var(--r) - 12px),transparent var(--r))}
+  -webkit-mask-image:radial-gradient(circle var(--r) at var(--lx,50%) var(--ly,50%),#000 calc(var(--r) - 6px),transparent var(--r));
+  mask-image:radial-gradient(circle var(--r) at var(--lx,50%) var(--ly,50%),#000 calc(var(--r) - 6px),transparent var(--r))}
 .card--in .r2{border-top:1.5px dashed var(--lit-line);border-bottom:1.5px dashed var(--lit-line)}
 .card--in .r1,.card--in .r3{display:block;justify-self:center;align-self:center;max-width:calc(var(--r0) * 1.32 + 26px);
   text-align:center;text-wrap:balance;color:var(--lit-mute);font-size:14px;font-weight:700;line-height:1.4}
@@ -126,12 +127,12 @@
 .lamp{position:absolute;left:0;top:0;z-index:2;width:calc(var(--r) * 2);height:calc(var(--r) * 2);margin:calc(var(--r) * -1) 0 0 calc(var(--r) * -1);border-radius:50%;
   transform:translate3d(var(--sx),var(--sy),0);pointer-events:none;
   box-shadow:0 0 0 1.5px rgba(245,185,74,.75),0 0 36px 4px rgba(245,185,74,.16);transition:opacity .35s ease}
-/* 손잡이: 44px, 잡는 곳임을 2×3 점(끌기 표시)으로. 둘레 8px까지 잡힌다 */
-.lamp__knob{position:absolute;left:calc(var(--r) * 1.5 - 22px);top:calc(var(--r) * 1.866 - 22px);width:44px;height:44px;border-radius:50%;pointer-events:auto;touch-action:none;cursor:grab;
+/* 손잡이: 원의 3시 방향 44px, 잡는 곳임을 2×3 점(끌기 표시)으로. 둘레 8px까지 잡힌다 */
+.lamp__knob{position:absolute;left:calc(var(--r) * 2 - 22px);top:calc(var(--r) - 22px);width:44px;height:44px;border-radius:50%;pointer-events:auto;touch-action:none;cursor:grab;
   background-color:var(--lamp);box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 -3px 0 rgba(0,0,0,.14);
   background-image:radial-gradient(circle at calc(50% - 3.5px) calc(50% - 7px),#1B1A24 1.6px,transparent 2.1px),radial-gradient(circle at calc(50% - 3.5px) calc(50% + 0px),#1B1A24 1.6px,transparent 2.1px),radial-gradient(circle at calc(50% - 3.5px) calc(50% + 7px),#1B1A24 1.6px,transparent 2.1px),radial-gradient(circle at calc(50% + 3.5px) calc(50% - 7px),#1B1A24 1.6px,transparent 2.1px),radial-gradient(circle at calc(50% + 3.5px) calc(50% + 0px),#1B1A24 1.6px,transparent 2.1px),radial-gradient(circle at calc(50% + 3.5px) calc(50% + 7px),#1B1A24 1.6px,transparent 2.1px)}
 .lamp__knob::before{content:"";position:absolute;inset:-8px;border-radius:50%}
-.room.is-all .lamp{opacity:0}
+.room.is-all .lamp,.room.is-dark .lamp{opacity:0}
 /* JS가 없으면 불을 다 켠 채(속이 다 보임). 불빛·안내·단추는 JS가 켤 때만 */
 .room:not(.is-live){--r:640px}
 .room:not(.is-live) .lamp,.room:not(.is-live) .room__hint,.room:not(.is-live) .room__all{display:none}
@@ -182,6 +183,7 @@
 .finder__field{position:relative}
 .finder__field svg{position:absolute;left:16px;top:50%;width:22px;height:22px;margin-top:-11px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;pointer-events:none}
 .finder__field input{width:100%;height:58px;border-radius:16px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:18px;padding:0 16px 0 50px;-webkit-appearance:none;appearance:none;transition:border-color .18s,box-shadow .18s}
+.finder__field input{scroll-margin-top:36px}
 .finder__field input::placeholder{color:var(--muted)}
 .finder__field input:focus{outline:none;border-color:var(--lamp);box-shadow:0 0 0 4px color-mix(in srgb,var(--lamp) 26%,transparent)}
 .finder__field input::-webkit-search-cancel-button{-webkit-appearance:none}
@@ -234,6 +236,11 @@
   .find__text{position:static}
 }
 @media (max-width:420px){.finder{padding:16px;border-radius:20px}}
+/* 휴대폰·좁은 화면: 찾는 동안엔 개수와 결과를 입력 칸 바로 밑으로(키보드가 떠도 보이게), 자주 찾는 일과 판은 그 아래로 */
+@media (max-width:900px){
+  .finder.is-q{display:flex;flex-direction:column}
+  .finder.is-q .finder__chips,.finder.is-q .board{order:2}
+}
 
 /* ---------- 확인 기록지 ---------- */
 .proof{padding-top:96px;padding-bottom:96px;border-top:1px solid var(--line)}

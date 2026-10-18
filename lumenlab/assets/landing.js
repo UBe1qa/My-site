@@ -1,6 +1,6 @@
 /* 루멘랩 홈(랜딩) 전용. 라이브러리 없음.
    1) 첫 화면 방: 결과 카드 위로 불빛을 대면 그 칸의 속(어떻게 확인했는지)이 보인다.
-      화면에 들어오면 불빛이 위에서부터 세 줄을 짚고(과정 다시 보기), 방문자가 한 번 만지면 그 뒤론 방문자 몫(다시 보기 없음).
+      화면에 들어오면 불이 첫째 줄에서 켜지고 세 줄을 차례로 짚는다(과정 다시 보기). 방문자가 한 번 만지면 그 뒤론 방문자 몫(다시 보기 없음).
    2) 찾기: 하려는 일을 적으면 catalog.json 의 이름·찾는 말·설명으로 점수를 매겨 맞는 것만 켠다(판의 아이콘도 같이).
    3) 기록지·작업대: 처음 화면에 들어올 때 한 번 .in (CSS가 기록지를 내리고 전구를 켬). */
 (function () {
@@ -40,10 +40,10 @@
       });
     };
 
-    /* 손잡이(원의 5시 방향, 44px)가 무대 밖으로 잘리지 않게 오른쪽·아래를 막는다. 막아도 카드 끝까지 불빛이 닿는다 */
+    /* 손잡이(원의 3시 방향, 44px)가 무대 밖으로 잘리지 않게 오른쪽·위아래를 막는다. 막아도 카드 끝까지 불빛이 닿고, 셋째 줄 가운데까지 내려간다 */
     var place = function (nx, ny) {
-      x = Math.max(0, Math.min(stage.clientWidth - R * .5 - 24, nx));
-      y = Math.max(0, Math.min(stage.clientHeight - R * .866 - 24, ny));
+      x = Math.max(0, Math.min(stage.clientWidth - R - 24, nx));
+      y = Math.max(24, Math.min(stage.clientHeight - 24, ny));
       var c = card();
       stage.style.setProperty('--sx', x + 'px');
       stage.style.setProperty('--sy', y + 'px');
@@ -74,37 +74,39 @@
       return [c.l + c.w / 2, Math.min(a.t + a.h, b.t - R - 4)];
     };
     var rest = function () { var s = restAt(); place(s[0], s[1]); };
-    /* 과정 다시 보기 출발점: 카드 왼쪽 위(아래로만 짚어 내려가게) */
-    var home = function () { var c = box(card()); place(c.l + c.w * .15, Math.max(0, c.t - R * .35)); };
+    /* 불 끔(is-dark, 반지름 0): 과정 다시 보기 전엔 겉(도구 화면)만 깨끗이 보이고, 첫째 줄에서 불이 켜진다 */
+    var dark = function (on) { room.classList.toggle('is-dark', on); };
     var unhit = function (sp) { rows(sp).forEach(function (p) { p.classList.remove('hit'); }); };
 
-    /* 과정 다시 보기: 카드 왼쪽 위에서(here 면 지금 자리에서) 첫째 줄 → 가운데 줄 → 셋째 줄을 차례로 짚고 쉬는 자리로.
+    /* 과정 다시 보기: 불이 꺼져 있으면 첫째 줄에서 켜지고(here 면 지금 자리에서 미끄러져) 첫째 줄 → 가운데 줄 → 셋째 줄을 차례로 짚고 쉬는 자리로.
        줄마다 멈출 때 그 줄의 확인 표시만 튄다. 가운데 줄(결과와 도장)에서 가장 오래 멈춘다. 이동 0.42초 */
     var tour = function (wait, here) {
       stop();
       if (used || room.classList.contains('is-all')) return;
-      if (!moving()) { rest(); rows().forEach(function (p) { p.classList.add('hit'); }); return; }
+      if (!moving()) { dark(false); rest(); rows().forEach(function (p) { p.classList.add('hit'); }); return; }
       var id = tourId;
       unhit();
-      if (!here) home();
+      if (!here) dark(true);
       touring = true;
       var stops = [[0, 260], [1, 700], [2, 260], [-1, 0]], i = 0;
       var next = function () {
         if (id !== tourId) return;
         if (i >= stops.length) { touring = false; hits(); return; }
         var st = stops[i++], s = st[0] < 0 ? restAt() : spot(.5, st[0]);
-        glide(s[0], s[1], 420, function () {
+        var arrive = function () {
           if (id !== tourId) return;
           if (st[0] >= 0) rows()[st[0]].classList.add('hit');
           setTimeout(next, st[1]);
-        });
+        };
+        if (room.classList.contains('is-dark')) { place(s[0], s[1]); dark(false); setTimeout(arrive, 450); }
+        else glide(s[0], s[1], 420, arrive);
       };
       setTimeout(next, wait || 0);
     };
 
     var take = function () {
       if (used) return;
-      used = true; stop(); room.classList.add('is-used');
+      used = true; stop(); dark(false); room.classList.add('is-used');
     };
 
     /* 끌기: 손잡이는 바로 잡고, 무대 빈 곳은 마우스면 그 자리로 미끄러진 뒤 따라오고,
@@ -143,7 +145,7 @@
     var labels = allBtn.querySelectorAll('[data-i18n]');
     allBtn.addEventListener('click', function () {
       var on = !room.classList.contains('is-all');
-      stop();
+      stop(); dark(false);
       room.classList.toggle('is-all', on);
       labels[0].hidden = on; labels[1].hidden = !on;
       if (on) specs.forEach(function (sp) { rows(sp).forEach(function (p) { p.classList.add('hit'); }); });
@@ -201,7 +203,7 @@
     /* 크기 바뀌면 지금 칸 가운데 줄로 */
     var measure = function () {
       var v = parseFloat(getComputedStyle(room).getPropertyValue('--r'));
-      if (!room.classList.contains('is-all') && v) R = v;
+      if (!room.classList.contains('is-all') && !room.classList.contains('is-dark') && v) R = v;
     };
     var rw = stage.clientWidth;
     addEventListener('resize', function () {
@@ -209,25 +211,27 @@
       rw = stage.clientWidth; stop(); measure(); rest();
     });
 
-    /* JS가 없으면 CSS가 불을 다 켠 채로 둔다. 켜지는 순간의 전환은 건너뛰고 불빛 모드로 */
-    room.style.transition = 'none';
+    /* JS가 없으면 CSS가 불을 다 켠 채로 둔다. 켜지는 순간의 전환은 건너뛰고 불빛 모드로(움직임이 있으면 불을 끈 채로 시작) */
+    var lamp = room.querySelector('.lamp');
+    room.style.transition = lamp.style.transition = 'none';
     room.classList.add('is-live');
     measure();
-    room.style.transition = '';
+    if (moving() && 'IntersectionObserver' in window) { unhit(); dark(true); }
+    void room.offsetWidth;
+    room.style.transition = lamp.style.transition = '';
 
-    /* 움직임이 없으면 불빛은 쉬는 자리, 세 줄 다 확인 표시. 있으면 출발점에서 기다리다가
+    /* 움직임이 없으면 불빛은 쉬는 자리, 세 줄 다 확인 표시. 있으면 불을 끈 채 기다리다가
        화면에 40% 이상 들어올 때마다 과정 다시 보기(방문자가 한 번 만졌으면 더는 안 함, 옮겨 둔 불빛을 뺏지 않게) */
     rest();
     var seen = false, first = true;
     if ('IntersectionObserver' in window) {
-      if (moving()) { unhit(); home(); }
       new IntersectionObserver(function (es) {
         es.forEach(function (e) {
           if (e.intersectionRatio >= .4 && !seen) {
             seen = true; tour(first ? 500 : 150); first = false;
           } else if (!e.isIntersecting && seen) {
             seen = false;
-            if (!used) { stop(); unhit(); }
+            if (!used) { stop(); unhit(); dark(true); }
           }
         });
       }, { threshold: [0, .4] }).observe(room);
@@ -257,16 +261,18 @@
     });
     /* 칸마다 무게: 종류(게임·앱·웹 도구) > 이름 > 찾는 말 > 설명 > 한 줄 소개 */
     var W = { k: 5, n: 4, f: 3, w: 2, l: 1 };
-    /* '계산기·무료·사이트'처럼 어디에나 붙는 말은 맞으면 점수만 더하고, 꼭 맞아야 하는 말에선 뺀다 */
-    var SOFT = /^(계산기|계산|도구|사이트|무료|하기|해주는|변환기|프로그램|온라인|웹|앱|어플|만들기|사용법|방법|calculator|calc|tools?|online|free|apps?|maker|generator|converter|website|site|web)$/;
+    /* '계산기·무료·사이트'처럼 어디에나 붙는 말과 '5분·2027·10명' 같은 숫자는 맞으면 점수만 더하고, 꼭 맞아야 하는 말에선 뺀다 */
+    var SOFT = /^(\d+[가-힣]*|계산기|계산|도구|사이트|무료|하기|해주는|변환기|프로그램|온라인|웹|앱|어플|만들기|사용법|방법|calculator|calc|tools?|online|free|apps?|maker|generator|converter|website|site|web)$/;
 
-    /* 낱말 하나가 칸 k에 맞는지: 칸 글 안에 들어 있으면 온 무게(실수령 → 실수령액).
-       아니면 절반 무게로: 낱말이 칸의 낱말을 품거나(동영상 → 영상, 연봉실수령액 → 연봉), 세 글자 넘는 한글 낱말의 끝 글자를 뗀 줄기가 들어 있거나(합치는 → 합치기) */
+    /* 낱말 하나가 칸 k에 맞는지: 칸 글 안에 들어 있으면(띄어쓰기 빼고도) 온 무게(실수령 → 실수령액, 타자연습 → 타자 연습).
+       아니면 절반 무게로: 낱말이 종류·이름·찾는 말의 세 글자 넘는 낱말을 품거나(연봉실수령액 → 실수령액, apps → app.
+       설명 글과 두 글자 낱말은 빼서 유튜브 → 튜브, 게임패드 → 게임 같은 헛맞음이 없게),
+       세 글자 넘는 한글 낱말의 끝 글자를 뗀 줄기가 들어 있거나(합치는 → 합치기) */
     var match = function (f, t) {
-      var k, j, stem = /^[가-힣]{3,}$/.test(t) ? t.slice(0, -1) : '';
-      for (k in W) if (f[k].indexOf(t) > -1) return { k: k, w: W[k], full: true };
+      var k, j, w, stem = /^[가-힣]{3,}$/.test(t) ? t.slice(0, -1) : '';
+      for (k in W) if (f[k].indexOf(t) > -1 || f[k + 'c'].indexOf(t) > -1) return { k: k, w: W[k], full: true };
       for (k in W) {
-        for (j = 0; j < f[k + 'w'].length; j++) if (t.indexOf(f[k + 'w'][j]) > -1) return { k: k, w: W[k] / 2 };
+        if (W[k] >= 3) for (j = 0; j < f[k + 'w'].length; j++) { w = f[k + 'w'][j]; if (w.length > 2 && t.indexOf(w) > -1) return { k: k, w: W[k] / 2 }; }
         if (stem && f[k].indexOf(stem) > -1) return { k: k, w: W[k] / 2 };
       }
       return null;
@@ -343,6 +349,14 @@
       if (a) { e.preventDefault(); location.href = a.href; }
     });
     if (input.value) run(input.value);
+    /* '하려는 일로 찾기' 단추: 입력 칸으로 내려가 바로 칠 수 있게(휴대폰은 키보드가 뜨면서 결과가 입력 칸 바로 밑에) */
+    Array.prototype.forEach.call(document.querySelectorAll('a[href="#fq"]'), function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        input.scrollIntoView({ block: 'start', behavior: moving() && !matchMedia('(pointer: coarse)').matches ? 'smooth' : 'auto' });
+        input.focus({ preventScroll: true });
+      });
+    });
   })();
 
   /* ---------- 3) 기록지·작업대 ---------- */
