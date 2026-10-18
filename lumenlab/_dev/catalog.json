@@ -1,5 +1,5 @@
 {
-  "_설명": "도구의 dir = 이 저장소의 폴더(루트 /guides/ 가 그 폴더의 글 목록을 읽는다), check = 그 도구의 결과를 어떻게 확인했는지 한 줄(도구 소개 페이지에 이미 적힌 사실만, /guides/·/about/ 에 나옴). 게임·앱의 privacy = 방침 주소가 links 에 없을 때 한국어·영어 주소(바닥글 '앱 개인정보 처리방침'과 /privacy/ 목록에 나옴). 첫 페이지의 게임·앱·웹 도구 목록(게임은 앱과 같은 카드 모양, 칸만 따로). 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 앱은 앞에서 limit개만, 넘치면 /apps/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에 넣고, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 묶음마다 group_limit개까지만 홈에 보이고 넘치면 /tools/ 전체 목록 페이지가 생긴다. 묶음 순서 = 화면 순서, 묶음 안 순서는 tools 순서.",
+  "_설명": "도구의 dir = 이 저장소의 폴더(루트 /guides/ 가 그 폴더의 글 목록을 읽는다), what = 그 도구가 하는 일을 몇 마디로(가이드 모음에서 이름 옆, 이름만으론 뭘 하는지 모르니), check = 그 도구의 결과를 어떻게 확인했는지 한 줄(도구 소개 페이지에 이미 적힌 사실만, /guides/·/about/ 에 나옴). 게임·앱의 privacy = 방침 주소가 links 에 없을 때 한국어·영어 주소(바닥글 '앱 개인정보 처리방침'과 /privacy/ 목록에 나옴). 첫 페이지의 게임·앱·웹 도구 목록(게임은 앱과 같은 카드 모양, 칸만 따로). 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 앱은 앞에서 limit개만, 넘치면 /apps/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에 넣고, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 묶음마다 group_limit개까지만 홈에 보이고 넘치면 /tools/ 전체 목록 페이지가 생긴다. 묶음 순서 = 화면 순서, 묶음 안 순서는 tools 순서.",
   "limit": 6,
   "group_limit": 4,
   "groups": [
@@ -82,6 +82,7 @@
   "tools": [
     {
       "id": "daycount",
+      "what": {"ko": "날짜 사이·디데이·만 나이", "en": "Days between dates, age and business days"},
       "dir": "date-calc",
       "group": "calc",
       "url": "https://date.lumenlab.page/",
@@ -94,6 +95,7 @@
     },
     {
       "id": "inplace",
+      "what": {"ko": "이미지·영상·PDF 파일 변환", "en": "Image, video and PDF converter"},
       "dir": "convert",
       "group": "docs",
       "url": "https://convert.lumenlab.page/ko/",
@@ -106,6 +108,7 @@
     },
     {
       "id": "scicalc",
+      "what": {"ko": "공학 함수·물리 상수 계산", "en": "Scientific functions and physical constants"},
       "dir": "sci-calc",
       "group": "calc",
       "url": "https://calc.lumenlab.page/",
@@ -118,6 +121,7 @@
     },
     {
       "id": "onesheet",
+      "what": {"ko": "달력 인쇄·공휴일", "en": "Printable calendars and holidays"},
       "dir": "calendar",
       "group": "docs",
       "url": "https://calendar.lumenlab.page/ko/",
@@ -130,6 +134,7 @@
     },
     {
       "id": "pickboard",
+      "what": {"ko": "돌림판·사다리타기·팀 나누기", "en": "Wheel, ladder and team picker"},
       "dir": "pick",
       "group": "play",
       "url": "https://pick.lumenlab.page/ko/",
@@ -142,6 +147,7 @@
     },
     {
       "id": "kankan",
+      "what": {"ko": "글자 수 세기", "en": "Character counter"},
       "dir": "count",
       "group": "docs",
       "url": "https://count.lumenlab.page/ko/",
@@ -154,6 +160,7 @@
     },
     {
       "id": "checkbench",
+      "what": {"ko": "키보드·마우스·마이크 테스트", "en": "Keyboard, mouse and mic tests"},
       "dir": "check",
       "group": "play",
       "url": "https://check.lumenlab.page/ko/",
@@ -166,6 +173,7 @@
     },
     {
       "id": "todok",
+      "what": {"ko": "한글·영어 타자 연습", "en": "Korean and English typing practice"},
       "dir": "typing",
       "group": "play",
       "url": "https://typing.lumenlab.page/ko/",
@@ -178,6 +186,7 @@
     },
     {
       "id": "takehome",
+      "what": {"ko": "월급 실수령액·퇴직금 계산", "en": "Korean take-home pay and severance"},
       "dir": "salary",
       "group": "calc",
       "url": "https://salary.lumenlab.page/",
@@ -190,6 +199,7 @@
     },
     {
       "id": "staycode",
+      "what": {"ko": "QR코드 만들기", "en": "QR code maker"},
       "dir": "qr",
       "group": "docs",
       "url": "https://qr.lumenlab.page/ko/",
@@ -202,6 +212,7 @@
     },
     {
       "id": "oneturn",
+      "what": {"ko": "타이머·스톱워치·세계 시간", "en": "Timer, stopwatch and world clock"},
       "dir": "time",
       "group": "play",
       "url": "https://time.lumenlab.page/ko/",

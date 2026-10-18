@@ -50,8 +50,8 @@
   <div class="wrap ihead__in ihead__in--wide">
     <p class="ihead__kicker">가이드</p>
     <h1 class="ihead__title">도구를 쓰다 막히는 곳을 <span class="nw">풀어 쓴 글</span></h1>
-    <p class="ihead__lead">루멘랩 웹 도구 11개에 딸린 글 56편을 도구별로 모았어요. 글은 각 도구 사이트에 있고, 쓴 날과 고친 날을 함께 적었어요. 도구마다 무엇을 확인하고 밝혀 두었는지도 한 줄씩 붙였어요.</p>
-    <nav class="ijump" aria-label="이 페이지 안"><a href="#g-calc">계산 <span>18편</span></a><a href="#g-docs">글과 파일 <span>23편</span></a><a href="#g-play">기기·시간·연습·모임 <span>15편</span></a></nav>
+    <p class="ihead__lead">웹 도구 11개에 딸린 글 56편이에요. 글마다 쓴 날과 고친 날을 적었어요.</p>
+    <nav class="ijump ijump--tools" aria-label="이 페이지 안"><a href="#t-daycount">며칠 계산기 <span>6</span></a><a href="#t-scicalc">공학용 계산기 <span>6</span></a><a href="#t-takehome">떼고얼마 <span>6</span></a><a href="#t-inplace">인플레이스 <span>8</span></a><a href="#t-onesheet">한장달력 <span>4</span></a><a href="#t-kankan">칸칸 <span>4</span></a><a href="#t-staycode">오래QR <span>7</span></a><a href="#t-pickboard">공평뽑기 <span>4</span></a><a href="#t-checkbench">체크벤치 <span>4</span></a><a href="#t-todok">토독 <span>4</span></a><a href="#t-oneturn">한바퀴 <span>3</span></a></nav>
   </div>
 </header>
 <section class="gs" id="g-calc" aria-labelledby="g-calc-t">
@@ -59,6 +59,7 @@
     <div class="gs__head">
       <h2 class="gs__name" id="g-calc-t">계산</h2>
       <p class="gs__line">날짜, 숫자, 월급을 과정까지 보이게 계산해요.</p>
+      <ul class="gs__nav" aria-label="계산"><li><a href="#t-daycount">며칠 계산기 <span>6</span></a></li><li><a href="#t-scicalc">공학용 계산기 <span>6</span></a></li><li><a href="#t-takehome">떼고얼마 <span>6</span></a></li></ul>
     </div>
     <div class="gs__tools">
       <article class="gt" id="t-daycount" aria-labelledby="t-daycount-n">
@@ -66,132 +67,57 @@
           <img class="gt__icon" src="/img/daycount.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-daycount-n">며칠 계산기 <span class="gt__en" lang="en">Daycount</span></h3>
-            <p class="gt__host"><a href="https://date.lumenlab.page/">date.lumenlab.page</a> <span aria-hidden="true">·</span> 6편</p>
+            <p class="gt__kind">날짜 사이·디데이·만 나이 <span aria-hidden="true">·</span> 6편</p>
           </div>
         </div>
         <p class="gt__what">날짜 사이 기간, 디데이, 만 나이, 영업일, 대체공휴일, 기념일을 정확하게 세는 법을 예시와 표로 정리한 가이드 모음이에요.</p>
-        <p class="gt__check"><b>만든 기준</b> 다른 방식(파이썬 날짜 라이브러리)으로 따로 구한 정답 3,200여 개와 대조하는 자동 시험을 통과해야 배포해요. <a href="https://date.lumenlab.page/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/days-between/">
-            <span class="gl__t">두 날짜 사이 며칠인지 세는 법 — 시작일 포함과 미포함</span>
-            <span class="gl__d">두 날짜 사이 기간을 셀 때 시작일을 넣느냐에 따라 하루가 달라져요. 빼기 계산, 시작일 포함, 개월·주 단위로 바꾸는 법을 예시로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/d-day/">
-            <span class="gl__t">디데이(D-day) 세는 법 — D-1, D-Day, D+1의 뜻</span>
-            <span class="gl__d">디데이는 목표일까지 남은 날을 D-숫자로, 지난 날을 D+숫자로 표시해요. 계산 공식과 시험·전역일·기념일에서 쓰는 방식 차이를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/korean-age/">
-            <span class="gl__t">만 나이 계산법 — 만 나이, 연 나이, 세는 나이 차이</span>
-            <span class="gl__d">2023년 6월 28일부터 한국 법과 행정은 만 나이를 써요. 만 나이 계산 공식과 연 나이(병역·청소년보호법), 세는 나이의 차이를 예시와 표로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/business-days/">
-            <span class="gl__t">영업일 계산법 — 주말·공휴일을 빼고 세는 방법</span>
-            <span class="gl__d">영업일은 토·일요일과 공휴일(대체 휴일 포함)을 뺀 날이에요. &#x27;5영업일 이내&#x27; 기한 계산, 기간 안 영업일 수 세기를 실제 2026년 달력 예시로 설명해요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/substitute-holidays/">
-            <span class="gl__t">대체공휴일 규칙 정리 — 언제, 어떤 공휴일이 대신 쉬나</span>
-            <span class="gl__d">설·추석은 일요일이나 다른 공휴일과 겹칠 때, 어린이날·국경일·부처님오신날·성탄절은 토·일요일과 겹칠 때 대체공휴일이 생겨요. 2026·2027년 실제 예시로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://date.lumenlab.page/guide/anniversary/">
-            <span class="gl__t">100일·1000일 기념일 계산법 — 시작한 날을 1일로 셀까</span>
-            <span class="gl__d">한국에서 100일은 보통 시작한 날을 1일째로 세서 99일 뒤예요. 100일·200일·1000일·주년 날짜를 2026년 1월 1일 예시로 계산해 보고 헷갈리는 점을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/days-between/"><span class="gl__t">두 날짜 사이 며칠인지 세는 법 — 시작일 포함과 미포함</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/d-day/"><span class="gl__t">디데이(D-day) 세는 법 — D-1, D-Day, D+1의 뜻</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/korean-age/"><span class="gl__t">만 나이 계산법 — 만 나이, 연 나이, 세는 나이 차이</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/business-days/"><span class="gl__t">영업일 계산법 — 주말·공휴일을 빼고 세는 방법</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/substitute-holidays/"><span class="gl__t">대체공휴일 규칙 정리 — 언제, 어떤 공휴일이 대신 쉬나</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://date.lumenlab.page/guide/anniversary/"><span class="gl__t">100일·1000일 기념일 계산법 — 시작한 날을 1일로 셀까</span><span class="gl__m"><time datetime="2026-10-03">2026. 10. 3.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://date.lumenlab.page/">며칠 계산기 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://date.lumenlab.page/">며칠 계산기 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-daycount">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-scicalc" aria-labelledby="t-scicalc-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/sci-calc.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-scicalc-n">공학용 계산기 <span class="gt__en" lang="en">Scientific Calculator</span></h3>
-            <p class="gt__host"><a href="https://calc.lumenlab.page/">calc.lumenlab.page</a> <span aria-hidden="true">·</span> 6편</p>
+            <p class="gt__kind">공학 함수·물리 상수 계산 <span aria-hidden="true">·</span> 6편</p>
           </div>
         </div>
         <p class="gt__what">공학용 계산기를 쓰다 헷갈리는 것들을 예시와 함께 풀었어요. 6÷2(1+2), 표준편차 σ와 s, 도와 라디안, 이차·연립방정식, 순열과 조합.</p>
-        <p class="gt__check"><b>만든 기준</b> 파이썬 수학 라이브러리(sympy·mpmath·scipy·numpy)로 따로 구한 정답 3,700여 개와 결과를 자동으로 맞춰 보고, 물리 상수는 NIST 표와 한 자리씩 비교했어요. <a href="https://calc.lumenlab.page/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/order-of-operations/">
-            <span class="gl__t">6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</span>
-            <span class="gl__d">6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/standard-deviation/">
-            <span class="gl__t">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법</span>
-            <span class="gl__d">모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/degrees-radians/">
-            <span class="gl__t">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때</span>
-            <span class="gl__d">공학용 계산기에서 sin 30이 0.5가 아니라 −0.988이 나오는 이유, 도와 라디안의 뜻과 환산 공식, 자주 쓰는 각도 환산표, 어떤 단위를 언제 쓰는지 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/equations/">
-            <span class="gl__t">이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</span>
-            <span class="gl__d">이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/permutations-combinations/">
-            <span class="gl__t">순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</span>
-            <span class="gl__d">순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/exact-vs-decimal/">
-            <span class="gl__t">계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</span>
-            <span class="gl__d">공학용 계산기 답이 √2/2, 1/3, π/4처럼 분수·루트로 나오는 이유와 S⇔D로 소수로 바꾸는 법, 소수점 자리 고정(Fix)·유효숫자(Sci) 설정, 0.1+0.2 반올림 오차 이야기를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/order-of-operations/"><span class="gl__t">6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/standard-deviation/"><span class="gl__t">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/degrees-radians/"><span class="gl__t">도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/equations/"><span class="gl__t">이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/permutations-combinations/"><span class="gl__t">순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://calc.lumenlab.page/guide/exact-vs-decimal/"><span class="gl__t">계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://calc.lumenlab.page/">공학용 계산기 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://calc.lumenlab.page/">공학용 계산기 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-scicalc">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-takehome" aria-labelledby="t-takehome-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/salary.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-takehome-n">떼고얼마 <span class="gt__en" lang="en">Takehome Korea</span></h3>
-            <p class="gt__host"><a href="https://salary.lumenlab.page/">salary.lumenlab.page</a> <span aria-hidden="true">·</span> 6편</p>
+            <p class="gt__kind">월급 실수령액·퇴직금 계산 <span aria-hidden="true">·</span> 6편</p>
           </div>
         </div>
         <p class="gt__what">급여명세서가 계산기와 다른 이유, 4대 보험 요율, 주휴수당과 퇴직금 계산을 공식 출처와 계산 예로 풀어 쓴 글이에요.</p>
-        <p class="gt__check"><b>만든 기준</b> 요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요. <a href="https://salary.lumenlab.page/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/myeongseseo-dareun-iyu/">
-            <span class="gl__t">급여명세서 금액이 실수령액 계산기와 다른 이유</span>
-            <span class="gl__d">국민연금은 1년에 한 번 정한 소득으로 매기고, 비과세·부양가족 수·세금 떼는 비율은 회사에 등록된 값을 써요. 차이가 나는 다섯 군데를 계산 예로 짚었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/2026-4dae-boheom-yoyul/">
-            <span class="gl__t">2026년 4대 보험 요율과 2027년에 바뀌는 것</span>
-            <span class="gl__d">2026년 근로자 몫은 국민연금 4.75%, 건강보험 3.595%, 고용보험 0.9%예요. 2027년에는 국민연금이 5.0%로 오르고 장기요양보험료율은 아직 정해지지 않았어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/juhyu-sudang-gyesan/">
-            <span class="gl__t">주휴수당 계산법: 주 15시간 기준과 시간별 계산 예</span>
-            <span class="gl__d">주휴수당은 1일 소정근로시간 × 시급이에요. 주 15시간 이상 일하고 그 주를 개근하면 생겨요. 2026년 최저임금으로 주 15시간부터 40시간까지의 금액을 계산했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/toejikgeum-gyesan-yeje/">
-            <span class="gl__t">퇴직금 계산을 고용노동부 예제로 따라가 보기</span>
-            <span class="gl__d">퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365. 고용노동부 예제(재직 1,080일)를 한 단계씩 계산해 1일 평균임금 88,641원 31전까지 맞춰 봤어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/choejeoimgeum-209sigan/">
-            <span class="gl__t">최저임금 월급 환산의 209시간은 어디서 나오나</span>
-            <span class="gl__d">209시간은 주 40시간에 유급 주휴 8시간을 더해 한 달로 환산한 값이에요. 고시 문장과 시행령의 계산 방법, 2026·2027년 최저임금 월급을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/sileopgeupyeo-haru-geumaek/">
-            <span class="gl__t">2026년 실업급여 하루 금액이 66,048~68,100원에 모이는 이유</span>
-            <span class="gl__d">2026년 구직급여는 평균임금의 60%지만 하루 8시간 근로자는 하한 66,048원과 상한 68,100원 사이에서 정해져요. 상·하한이 나오는 식과 받는 날 수 표를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/myeongseseo-dareun-iyu/"><span class="gl__t">급여명세서 금액이 실수령액 계산기와 다른 이유</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/2026-4dae-boheom-yoyul/"><span class="gl__t">2026년 4대 보험 요율과 2027년에 바뀌는 것</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/juhyu-sudang-gyesan/"><span class="gl__t">주휴수당 계산법: 주 15시간 기준과 시간별 계산 예</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/toejikgeum-gyesan-yeje/"><span class="gl__t">퇴직금 계산을 고용노동부 예제로 따라가 보기</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/choejeoimgeum-209sigan/"><span class="gl__t">최저임금 월급 환산의 209시간은 어디서 나오나</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://salary.lumenlab.page/guide/sileopgeupyeo-haru-geumaek/"><span class="gl__t">2026년 실업급여 하루 금액이 66,048~68,100원에 모이는 이유</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://salary.lumenlab.page/">떼고얼마 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://salary.lumenlab.page/">떼고얼마 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-takehome">확인하고 밝혀 둔 것</a></p>
       </article>
     </div>
   </div>
@@ -201,6 +127,7 @@
     <div class="gs__head">
       <h2 class="gs__name" id="g-docs-t">글과 파일</h2>
       <p class="gs__line">글자수를 세고, 파일을 바꾸고, 달력을 인쇄해요.</p>
+      <ul class="gs__nav" aria-label="글과 파일"><li><a href="#t-inplace">인플레이스 <span>8</span></a></li><li><a href="#t-onesheet">한장달력 <span>4</span></a></li><li><a href="#t-kankan">칸칸 <span>4</span></a></li><li><a href="#t-staycode">오래QR <span>7</span></a></li></ul>
     </div>
     <div class="gs__tools">
       <article class="gt" id="t-inplace" aria-labelledby="t-inplace-n">
@@ -208,171 +135,75 @@
           <img class="gt__icon" src="/img/convert.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-inplace-n">인플레이스 <span class="gt__en" lang="en">Inplace</span></h3>
-            <p class="gt__host"><a href="https://convert.lumenlab.page/ko/">convert.lumenlab.page</a> <span aria-hidden="true">·</span> 8편</p>
+            <p class="gt__kind">이미지·영상·PDF 파일 변환 <span aria-hidden="true">·</span> 8편</p>
           </div>
         </div>
         <p class="gt__what">HEIC·CSV·MP3처럼 자주 막히는 파일 형식 문제를 정리한 글이에요.</p>
-        <p class="gt__check"><b>만든 기준</b> 파일은 서버로 보내지 않고 브라우저 안에서 바꿔요. 변환에 쓰는 오픈소스 라이브러리(Mediabunny, LAME, libheif, PDF.js, pdf-lib, qpdf, SheetJS 등)를 소개에 모두 적었어요. <a href="https://convert.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/iphone-heic-jpg/">
-            <span class="gl__t">아이폰 사진 HEIC를 JPG로 바꾸는 법</span>
-            <span class="gl__d">아이폰 사진이 HEIC인 이유, JPG로 바꿔야 하는 경우, 설정 › 카메라 › 포맷 › 높은 호환성과 &#x27;Mac 또는 PC로 전송&#x27; 설정, 이미 찍은 사진을 변환하는 방법까지 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/csv-excel-hangul/">
-            <span class="gl__t">CSV를 엑셀에서 열면 한글이 깨지는 이유와 해결법</span>
-            <span class="gl__d">CSV를 엑셀에서 열면 한글이 깨지는 이유(BOM 없는 UTF-8을 코드 페이지 949로 읽음)와, UTF-8 BOM 저장·&#x27;텍스트/CSV에서&#x27; 가져오기로 해결하는 방법을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/youtube-mp3-legal/">
-            <span class="gl__t">유튜브 영상을 MP3로 바꿔도 될까요?</span>
-            <span class="gl__d">유튜브 약관이 다운로드에 대해 정한 내용, 저작권법 제104조의2·제136조·제30조 조문, 프리미엄 오프라인 저장과 유튜브 스튜디오 다운로드 같은 합법적인 대안을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-yongryang-julgi/">
-            <span class="gl__t">PDF 용량 줄이기: 스캔 PDF가 큰 이유와 줄이는 법</span>
-            <span class="gl__d">제출 서류나 메일 첨부가 용량 제한에 걸릴 때 PDF를 줄이는 방법. 스캔 PDF가 큰 이유, 압축 단계 고르는 법, Gmail 25MB 제한, 압축으로 안 줄어드는 경우를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-amho-haeje/">
-            <span class="gl__t">PDF 암호 해제하는 법: 암호를 알 때와 모를 때</span>
-            <span class="gl__d">카드 명세서처럼 암호를 아는 PDF의 암호를 푸는 방법, 열기 암호와 권한 암호(인쇄·복사 제한)의 차이, 잊어버린 열기 암호는 왜 풀 수 없는지 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/dongyeongsang-yongryang-julgi/">
-            <span class="gl__t">동영상 용량 줄이기: 메일로 보낼 수 있게 만드는 법</span>
-            <span class="gl__d">동영상 용량을 정하는 해상도·비트레이트·길이, Gmail 25MB·Outlook 20MB 같은 첨부 한도, 자르고 압축하는 순서, 링크로 보내는 편이 나은 경우를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-hapchigi/">
-            <span class="gl__t">PDF 합치기: 기기별로 여러 PDF를 하나로 묶는 법</span>
-            <span class="gl__d">맥 미리보기와 Finder의 PDF 생성, 아이폰 미리보기 앱의 파일에서 삽입, 윈도우·안드로이드에서 브라우저로 PDF를 합치는 방법과 합치기 전 쪽 정리·압축 요령을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-markdown-ai-token/">
-            <span class="gl__t">PDF를 마크다운으로 바꿔서 AI에 넣기</span>
-            <span class="gl__d">많은 AI 서비스가 PDF 쪽마다 글과 그림을 함께 읽어요. 마크다운으로 바꾸면 쪽 그림 몫이 빠져요. OpenAI·앤트로픽·구글 문서의 비용 구조, 직접 재 본 결과, PDF 그대로 넣는 게 나은 경우를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-07">2026. 10. 7.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/iphone-heic-jpg/"><span class="gl__t">아이폰 사진 HEIC를 JPG로 바꾸는 법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/csv-excel-hangul/"><span class="gl__t">CSV를 엑셀에서 열면 한글이 깨지는 이유와 해결법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/youtube-mp3-legal/"><span class="gl__t">유튜브 영상을 MP3로 바꿔도 될까요?</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-yongryang-julgi/"><span class="gl__t">PDF 용량 줄이기: 스캔 PDF가 큰 이유와 줄이는 법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-amho-haeje/"><span class="gl__t">PDF 암호 해제하는 법: 암호를 알 때와 모를 때</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/dongyeongsang-yongryang-julgi/"><span class="gl__t">동영상 용량 줄이기: 메일로 보낼 수 있게 만드는 법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-hapchigi/"><span class="gl__t">PDF 합치기: 기기별로 여러 PDF를 하나로 묶는 법</span><span class="gl__m"><time datetime="2026-10-06">2026. 10. 6.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://convert.lumenlab.page/ko/guide/pdf-markdown-ai-token/"><span class="gl__t">PDF를 마크다운으로 바꿔서 AI에 넣기</span><span class="gl__m"><time datetime="2026-10-07">2026. 10. 7.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://convert.lumenlab.page/ko/">인플레이스 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://convert.lumenlab.page/ko/">인플레이스 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-inplace">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-onesheet" aria-labelledby="t-onesheet-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/calendar.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-onesheet-n">한장달력 <span class="gt__en" lang="en">Onesheet</span></h3>
-            <p class="gt__host"><a href="https://calendar.lumenlab.page/ko/">calendar.lumenlab.page</a> <span aria-hidden="true">·</span> 4편</p>
+            <p class="gt__kind">달력 인쇄·공휴일 <span aria-hidden="true">·</span> 4편</p>
           </div>
         </div>
         <p class="gt__what">2026년 공휴일 개정, 대체공휴일 규칙, 달력을 한 장에 인쇄하는 법, 음력과 윤달을 다룬 글이에요.</p>
-        <p class="gt__check"><b>만든 기준</b> 한국 공휴일은 「관공서의 공휴일에 관한 규정」대로 계산하고, 2026·2027년은 공식 발표와 한 날씩 맞춰 봤어요. 요일은 1900~2100년의 모든 날을 검사해요. <a href="https://calendar.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/2026-nodongjeol-jeheonjeol/">
-            <span class="gl__t">노동절·제헌절, 2026년부터 공휴일이 됐어요</span>
-            <span class="gl__d">2026년 4월 개정으로 노동절(5월 1일)과 제헌절(7월 17일)이 관공서 공휴일이 됐어요. 5월 1일이 그전과 무엇이 다른지, 2026~2028년 달력에서 달라지는 날, 회사가 쉬는 기준을 담았어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/daeche-gonghyuil/">
-            <span class="gl__t">대체공휴일이 생기는 세 가지 경우와 2026~2030년 날짜</span>
-            <span class="gl__d">대체공휴일이 생기는 세 가지 경우와 생기지 않는 경우(1월 1일·현충일), 2026년부터 2030년까지의 날짜를 표로 담았어요. 회사에 적용되는 기준도 같이 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/a4-han-jang-inswae/">
-            <span class="gl__t">달력을 A4 한 장에 맞게 인쇄하는 법</span>
-            <span class="gl__d">달력이 두 장으로 나뉘거나 한쪽이 잘릴 때 볼 인쇄 설정이에요. 용지 크기, 배율, 여백, 머리글과 바닥글, 가로세로를 차례로 짚어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/eumnyeok-yundal/">
-            <span class="gl__t">2025년 윤6월, 2028년 윤5월로 보는 음력과 윤달</span>
-            <span class="gl__d">음력 한 달은 29일이나 30일이고, 몇 해에 한 번 윤달이 들어가요. 2025~2028년 음력 해의 길이와 윤달 날짜, 설날·추석 날짜를 표로 볼 수 있어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
+          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/2026-nodongjeol-jeheonjeol/"><span class="gl__t">노동절·제헌절, 2026년부터 공휴일이 됐어요</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/daeche-gonghyuil/"><span class="gl__t">대체공휴일이 생기는 세 가지 경우와 2026~2030년 날짜</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/a4-han-jang-inswae/"><span class="gl__t">달력을 A4 한 장에 맞게 인쇄하는 법</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://calendar.lumenlab.page/ko/guide/eumnyeok-yundal/"><span class="gl__t">2025년 윤6월, 2028년 윤5월로 보는 음력과 윤달</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://calendar.lumenlab.page/ko/">한장달력 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://calendar.lumenlab.page/ko/">한장달력 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-onesheet">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-kankan" aria-labelledby="t-kankan-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/count.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-kankan-n">칸칸 <span class="gt__en" lang="en">Kankan</span></h3>
-            <p class="gt__host"><a href="https://count.lumenlab.page/ko/">count.lumenlab.page</a> <span aria-hidden="true">·</span> 4편</p>
+            <p class="gt__kind">글자 수 세기 <span aria-hidden="true">·</span> 4편</p>
           </div>
         </div>
         <p class="gt__what">글자 수가 사이트마다 다른 이유, 나이스 500자가 1,500바이트인 이유, 이모지와 바이트를 세는 법을 직접 센 숫자와 출처와 함께 정리했어요.</p>
-        <p class="gt__check"><b>만든 기준</b> 세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요. <a href="https://count.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/geulja-su-dareun-iyu/">
-            <span class="gl__t">같은 글인데 글자 수가 다르게 나오는 이유</span>
-            <span class="gl__d">같은 글을 넣어도 도구마다 글자 수가 다른 건 공백, 줄바꿈, 이모지, 바이트를 세는 기준이 달라서예요. 사람인, 잡코리아, 인크루트, 네이버 검색에 2026년 10월에 직접 넣어 본 값을 표로 실었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/neis-500ja-1500byte/">
-            <span class="gl__t">나이스 500자는 왜 1,500바이트일까</span>
-            <span class="gl__d">나이스는 학교생활기록부 글을 바이트로 세어요. 2026학년도 고등학교 기재요령의 바이트 규칙(한글 3Byte, 영문·숫자 1Byte, 엔터 1Byte)과 항목별 최대 글자 수를 표로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/">
-            <span class="gl__t">이모지 하나는 몇 글자일까</span>
-            <span class="gl__d">👨‍👩‍👧 하나가 세는 방식에 따라 1, 5, 8, 18이 되는 이유를 조각으로 뜯어 보고, 자주 쓰는 이모지와 한글 자모를 네 가지 방식으로 센 표를 실었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/hangul-byte-utf8-euckr/">
-            <span class="gl__t">한글은 왜 2바이트이기도 하고 3바이트이기도 할까</span>
-            <span class="gl__d">한글 한 자는 EUC-KR에서 2바이트, UTF-8에서 3바이트예요. 인코딩마다 글자별 바이트 수를 표로 비교하고, 바이트 제한을 글자 수로 바꾸는 법을 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
+          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/geulja-su-dareun-iyu/"><span class="gl__t">같은 글인데 글자 수가 다르게 나오는 이유</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/neis-500ja-1500byte/"><span class="gl__t">나이스 500자는 왜 1,500바이트일까</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/"><span class="gl__t">이모지 하나는 몇 글자일까</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://count.lumenlab.page/ko/guide/hangul-byte-utf8-euckr/"><span class="gl__t">한글은 왜 2바이트이기도 하고 3바이트이기도 할까</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://count.lumenlab.page/ko/">칸칸 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://count.lumenlab.page/ko/">칸칸 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-kankan">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-staycode" aria-labelledby="t-staycode-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/qr.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-staycode-n">오래QR <span class="gt__en" lang="en">Staycode</span></h3>
-            <p class="gt__host"><a href="https://qr.lumenlab.page/ko/">qr.lumenlab.page</a> <span aria-hidden="true">·</span> 7편</p>
+            <p class="gt__kind">QR코드 만들기 <span aria-hidden="true">·</span> 7편</p>
           </div>
         </div>
         <p class="gt__what">QR코드가 만료되는지, 인쇄는 몇 cm가 좋은지, 와이파이·명함 QR은 어떻게 만드는지 확인한 내용으로 정리한 글이에요.</p>
-        <p class="gt__check"><b>만든 기준</b> 정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 이 사이트가 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요. <a href="https://qr.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-manryo/">
-            <span class="gl__t">QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</span>
-            <span class="gl__d">QR코드 자체에는 유효기간이 없어요. 멈추는 건 업체 서버를 거치는 동적 QR이에요. 체험이 끝나면 꺼지는 구조, 내 QR이 동적인지 찍어서 확인하는 법, 이미 인쇄했다면 할 일.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/wifi-qr/">
-            <span class="gl__t">와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</span>
-            <span class="gl__d">와이파이 QR은 WIFI:T:WPA;S:이름;P:비밀번호;; 한 줄을 담은 QR이에요. 비밀번호의 ; : 같은 기호 처리, 숨긴 네트워크, 아이폰·안드로이드에서 연결되는 방식, 가게 안내판 팁.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-inswae-keugi/">
-            <span class="gl__t">QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</span>
-            <span class="gl__d">가까이서 찍는 QR은 무늬 한 변 2cm 이상, 찍는 거리는 크기의 10배쯤까지가 경험칙이에요. 명함·테이블·포스터·현수막 크기 표, 둘레 여백 4칸, A4 스티커 시트에 몇 장 들어가는지.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-logo/">
-            <span class="gl__t">QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</span>
-            <span class="gl__d">로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 이 사이트의 찍힘 확인 규칙 그대로.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/myeongham-qr/">
-            <span class="gl__t">명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</span>
-            <span class="gl__d">명함 QR은 이름·전화·이메일을 vCard 글로 담아, 찍으면 휴대폰이 연락처 추가를 띄워요. 실제로 담기는 줄, 칸을 많이 넣으면 얼마나 촘촘해지는지, 명함 인쇄 팁.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-daeryang/">
-            <span class="gl__t">QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</span>
-            <span class="gl__d">목록을 붙여 넣거나 CSV를 올리면 같은 꾸밈으로 한 번에 최대 1,000개를 만들어 ZIP으로 받아요. URL·글·와이파이마다 다른 줄 규칙, 엑셀에서 붙여 넣는 법, 파일 이름 정하기.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-ssing/">
-            <span class="gl__t">큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</span>
-            <span class="gl__d">큐싱은 QR코드로 가짜 사이트에 보내는 사기예요. 찍은 뒤 바로 열지 말고 실제 도메인부터 보세요. 정부 권고와 통계, 주소에서 볼 곳, 스캐너가 알려 주는 경고 신호를 예시로.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-manryo/"><span class="gl__t">QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/wifi-qr/"><span class="gl__t">와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-inswae-keugi/"><span class="gl__t">QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-logo/"><span class="gl__t">QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/myeongham-qr/"><span class="gl__t">명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-daeryang/"><span class="gl__t">QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://qr.lumenlab.page/ko/guide/qr-ssing/"><span class="gl__t">큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://qr.lumenlab.page/ko/">오래QR 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://qr.lumenlab.page/ko/">오래QR 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-staycode">확인하고 밝혀 둔 것</a></p>
       </article>
     </div>
   </div>
@@ -382,6 +213,7 @@
     <div class="gs__head">
       <h2 class="gs__name" id="g-play-t">기기·시간·연습·모임</h2>
       <p class="gs__line">기기를 점검하고, 시간을 재고, 타자를 연습하고, 뽑기로 정해요.</p>
+      <ul class="gs__nav" aria-label="기기·시간·연습·모임"><li><a href="#t-pickboard">공평뽑기 <span>4</span></a></li><li><a href="#t-checkbench">체크벤치 <span>4</span></a></li><li><a href="#t-todok">토독 <span>4</span></a></li><li><a href="#t-oneturn">한바퀴 <span>3</span></a></li></ul>
     </div>
     <div class="gs__tools">
       <article class="gt" id="t-pickboard" aria-labelledby="t-pickboard-n">
@@ -389,131 +221,67 @@
           <img class="gt__icon" src="/img/pick.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-pickboard-n">공평뽑기 <span class="gt__en" lang="en">Pickboard</span></h3>
-            <p class="gt__host"><a href="https://pick.lumenlab.page/ko/">pick.lumenlab.page</a> <span aria-hidden="true">·</span> 4편</p>
+            <p class="gt__kind">돌림판·사다리타기·팀 나누기 <span aria-hidden="true">·</span> 4편</p>
           </div>
         </div>
         <p class="gt__what">사다리타기가 정말 공평한지 직접 돌려 본 숫자, 돌림판에 많은 인원을 넣는 법, 단톡방에서 제비뽑기 결과를 믿게 하는 법, 팀을 고르게 나누는 법을 정리했어요.</p>
-        <p class="gt__check"><b>만든 기준</b> 뽑을 때마다 브라우저의 crypto.getRandomValues()로 새 씨앗을 받아 쓰고, 10만 번씩 뽑아 보는 카이제곱 검정을 포함한 자동 테스트 500여 개로 고르게 나오는지 확인해요. 결과 링크로 누구나 같은 결과를 다시 계산할 수 있어요. <a href="https://pick.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/ladder-fairness/">
-            <span class="gl__t">사다리타기는 정말 공평할까: 직접 돌려 본 숫자</span>
-            <span class="gl__d">사다리만으로는 출발한 자리 근처에 도착하기 쉬워요. 8명 사다리에서 맨 끝 사람이 바로 아래 칸에 도착하는 비율과, 그걸 고르게 만드는 방법을 숫자로 보여 드려요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/wheel-many-names/">
-            <span class="gl__t">돌림판에 30명 넘게 넣는 법, 뽑힌 사람 빼고 다시 돌리기</span>
-            <span class="gl__d">반 전체 명단을 한 번에 붙여 넣고, 뽑힌 사람을 빼 가며 돌리는 법을 정리했어요. 몇 명까지 되는지, 칸이 많을 때 결과가 어떻게 보이는지도 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/share-draw-result/">
-            <span class="gl__t">단톡방에서 제비뽑기 결과를 믿게 하는 법</span>
-            <span class="gl__d">캡처 한 장으로는 다시 뽑았는지 알 수 없어요. 누가 열어도 같은 결과가 다시 나오는 링크로 보내는 법과, 그 링크가 보여 주지 못하는 것까지 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/split-teams/">
-            <span class="gl__t">팀을 고르게 나누는 법: 팀 수로, 한 팀 인원으로</span>
-            <span class="gl__d">30명을 4팀으로 나누면 8·8·7·7명이에요. 팀 수로 나눌 때와 한 팀 인원으로 나눌 때 남는 사람이 어떻게 들어가는지, 실력을 맞추려면 어떻게 하는지 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span>
-          </a></li>
+          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/ladder-fairness/"><span class="gl__t">사다리타기는 정말 공평할까: 직접 돌려 본 숫자</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/wheel-many-names/"><span class="gl__t">돌림판에 30명 넘게 넣는 법, 뽑힌 사람 빼고 다시 돌리기</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/share-draw-result/"><span class="gl__t">단톡방에서 제비뽑기 결과를 믿게 하는 법</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://pick.lumenlab.page/ko/guide/split-teams/"><span class="gl__t">팀을 고르게 나누는 법: 팀 수로, 한 팀 인원으로</span><span class="gl__m"><time datetime="2026-10-09">2026. 10. 9.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-10">2026. 10. 10.</time> 고침</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://pick.lumenlab.page/ko/">공평뽑기 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://pick.lumenlab.page/ko/">공평뽑기 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-pickboard">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-checkbench" aria-labelledby="t-checkbench-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/check.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-checkbench-n">체크벤치 <span class="gt__en" lang="en">Checkbench</span></h3>
-            <p class="gt__host"><a href="https://check.lumenlab.page/ko/">check.lumenlab.page</a> <span aria-hidden="true">·</span> 4편</p>
+            <p class="gt__kind">키보드·마우스·마이크 테스트 <span aria-hidden="true">·</span> 4편</p>
           </div>
         </div>
         <p class="gt__what">체크벤치 테스트와 같이 보는 짧은 가이드예요. 채터링 확인, 동시 입력, 마이크가 안 잡힐 때, 새 모니터 확인을 다뤄요.</p>
-        <p class="gt__check"><b>만든 기준</b> 판정마다 기준(키보드 채터링 30ms, 마우스 더블클릭 50ms 등)을 결과 옆에 밝히고, 웹페이지로는 알 수 없는 것(마우스의 실제 USB 폴링레이트 등)은 알 수 없다고 적어 둬요. <a href="https://check.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/keyboard-chattering/">
-            <span class="gl__t">키보드 채터링 확인하는 법</span>
-            <span class="gl__d">한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/maikeu-an-japil-ttae/">
-            <span class="gl__t">마이크가 안 잡힐 때 브라우저·윈도우·맥에서 볼 곳</span>
-            <span class="gl__d">화상회의에서 마이크가 안 될 때, 마이크 테스트가 알려 주는 안내 문장별로 어디를 고치면 되는지 정리했어요. 사이트 권한, 운영체제 설정, 다른 장치, 다른 앱 순서예요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/bulryang-hwaso-hwagin/">
-            <span class="gl__t">새 모니터 불량화소 확인 순서</span>
-            <span class="gl__d">새 모니터나 노트북을 받으면 10분 안에 확인할 것. 전체 화면 단색으로 불량화소를 찾는 순서, 적어 둘 것, 주사율이 사양대로 나오는지 보는 법이에요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/dongsi-ipryeok-rollover/">
-            <span class="gl__t">동시 입력(롤오버)이 뭔가요: 몇 키까지 눌리는지 확인하기</span>
-            <span class="gl__d">키보드가 한 번에 몇 키까지 받는지 직접 확인하는 법이에요. 키보드 테스트의 &#x27;동시에 눌린 키&#x27;가 어떻게 세는지와, 안 눌리는 조합(고스팅)을 찾는 순서를 적었어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/keyboard-chattering/"><span class="gl__t">키보드 채터링 확인하는 법</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/maikeu-an-japil-ttae/"><span class="gl__t">마이크가 안 잡힐 때 브라우저·윈도우·맥에서 볼 곳</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/bulryang-hwaso-hwagin/"><span class="gl__t">새 모니터 불량화소 확인 순서</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://check.lumenlab.page/ko/guide/dongsi-ipryeok-rollover/"><span class="gl__t">동시 입력(롤오버)이 뭔가요: 몇 키까지 눌리는지 확인하기</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://check.lumenlab.page/ko/">체크벤치 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://check.lumenlab.page/ko/">체크벤치 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-checkbench">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-todok" aria-labelledby="t-todok-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/typing.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-todok-n">토독 <span class="gt__en" lang="en">Todok</span></h3>
-            <p class="gt__host"><a href="https://typing.lumenlab.page/ko/">typing.lumenlab.page</a> <span aria-hidden="true">·</span> 4편</p>
+            <p class="gt__kind">한글·영어 타자 연습 <span aria-hidden="true">·</span> 4편</p>
           </div>
         </div>
         <p class="gt__what">타수(타/분)를 계산하는 기준, 두벌식 자리를 익히는 순서, 받침이 다음 글자로 넘어가 보이는 이유, 영타 연습 순서를 한 편씩 정리했어요.</p>
-        <p class="gt__check"><b>만든 기준</b> 타수와 WPM을 세는 기준을 공개하고(‘다섯 글자 = 한 단어’는 Dhakal 외, CHI 2018의 정의), 책·기사·노래 가사 같은 남의 글은 연습 글에 넣지 않았어요. <a href="https://typing.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/tasu-gyesan/">
-            <span class="gl__t">타수(타/분)는 어떻게 계산하나요</span>
-            <span class="gl__d">타수는 맞게 친 키 수를 분으로 나눈 값이에요. 글자마다 몇 타로 세는지, Shift와 겹받침은 어떻게 세는지, 틀린 키는 어떻게 되는지를 예시 계산으로 보여 드려요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/dubeolsik-jari/">
-            <span class="gl__t">두벌식 자리 익히는 순서</span>
-            <span class="gl__d">두벌식 자판을 보지 않고 치려면 가운데 줄에 손가락을 올리는 것부터 시작해요. 손가락마다 맡는 키 표와, 기본 자리에서 Shift 키까지 다섯 단계 순서를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/batchim-neomeogam/">
-            <span class="gl__t">받침이 다음 글자로 넘어가 보이는 이유</span>
-            <span class="gl__d">&#x27;가나&#x27;를 치면 화면에 잠깐 &#x27;간&#x27;이 보였다가 &#x27;가나&#x27;가 돼요. 두벌식에 받침 키가 따로 없어서 생기는 일이에요. 키마다 화면에 무엇이 보이는지 표로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-11">2026. 10. 11.</time> 고침</span>
-          </a></li>
-          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/yeongta-yeonseup/">
-            <span class="gl__t">영타가 느릴 때 연습 순서</span>
-            <span class="gl__d">한글 타자는 빠른데 영타만 느리다면 손가락 자리는 이미 알고 있는 거예요. 같은 키의 한글·영문 짝, 한 손으로만 치는 단어, 타수와 WPM의 관계, 연습 순서를 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/tasu-gyesan/"><span class="gl__t">타수(타/분)는 어떻게 계산하나요</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/dubeolsik-jari/"><span class="gl__t">두벌식 자리 익히는 순서</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/batchim-neomeogam/"><span class="gl__t">받침이 다음 글자로 넘어가 보이는 이유</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀 <span aria-hidden="true">·</span> <time datetime="2026-10-11">2026. 10. 11.</time> 고침</span></a></li>
+          <li><a class="gl__a" href="https://typing.lumenlab.page/ko/guide/yeongta-yeonseup/"><span class="gl__t">영타가 느릴 때 연습 순서</span><span class="gl__m"><time datetime="2026-10-10">2026. 10. 10.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://typing.lumenlab.page/ko/">토독 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://typing.lumenlab.page/ko/">토독 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-todok">확인하고 밝혀 둔 것</a></p>
       </article>
       <article class="gt" id="t-oneturn" aria-labelledby="t-oneturn-n">
         <div class="gt__head">
           <img class="gt__icon" src="/img/time.svg" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-oneturn-n">한바퀴 <span class="gt__en" lang="en">Oneturn</span></h3>
-            <p class="gt__host"><a href="https://time.lumenlab.page/ko/">time.lumenlab.page</a> <span aria-hidden="true">·</span> 3편</p>
+            <p class="gt__kind">타이머·스톱워치·세계 시간 <span aria-hidden="true">·</span> 3편</p>
           </div>
         </div>
         <p class="gt__what">타이머가 늦게 울리는 이유, 랩과 스플릿의 차이, 나라별 시차와 서머타임 바뀌는 날을 실제 계산으로 정리했어요.</p>
-        <p class="gt__check"><b>만든 기준</b> 도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다 세 주·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요. <a href="https://time.lumenlab.page/ko/about/">도구 소개 보기</a></p>
         <ol class="gl">
-          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/korea-time-difference/">
-            <span class="gl__t">한국과 나라별 시차 표: 2026·2027 서머타임 바뀌는 날까지</span>
-            <span class="gl__d">미국·영국·유럽·호주·뉴질랜드와 한국의 시차가 언제 1시간 바뀌는지, 서머타임이 없는 나라의 시차, 2026년에 규칙이 바뀐 캐나다·모로코까지 계산해 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/timer-background/">
-            <span class="gl__t">다른 탭·화면 꺼짐에서 타이머가 늦거나 안 울리는 이유</span>
-            <span class="gl__d">웹 타이머가 다른 탭에서 1분씩 늦게 울리거나 휴대폰 화면이 꺼지면 멈추는 이유를 크롬 문서로 설명하고, 제때 울리게 쓰는 법을 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
-          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/lap-split/">
-            <span class="gl__t">스톱워치 랩 타임과 스플릿 타임, 무엇이 다를까</span>
-            <span class="gl__d">랩 타임은 한 바퀴 동안 걸린 시간, 스플릿 타임은 시작부터 그 지점까지 걸린 시간이에요. 같은 기록을 두 가지로 읽는 법과 가장 빠른 랩 찾는 법을 예시로 정리했어요.</span>
-            <span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span>
-          </a></li>
+          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/korea-time-difference/"><span class="gl__t">한국과 나라별 시차 표: 2026·2027 서머타임 바뀌는 날까지</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/timer-background/"><span class="gl__t">다른 탭·화면 꺼짐에서 타이머가 늦거나 안 울리는 이유</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
+          <li><a class="gl__a" href="https://time.lumenlab.page/ko/guide/lap-split/"><span class="gl__t">스톱워치 랩 타임과 스플릿 타임, 무엇이 다를까</span><span class="gl__m"><time datetime="2026-10-14">2026. 10. 14.</time> 씀</span></a></li>
         </ol>
-        <p class="gt__more"><a class="gt__open" href="https://time.lumenlab.page/ko/">한바퀴 열기 <span aria-hidden="true">→</span></a></p>
+        <p class="gt__more"><a class="gt__open" href="https://time.lumenlab.page/ko/">한바퀴 열기 <span aria-hidden="true">→</span></a> <a class="gt__check" href="/about/#c-oneturn">확인하고 밝혀 둔 것</a></p>
       </article>
     </div>
   </div>
