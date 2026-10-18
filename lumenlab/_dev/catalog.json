@@ -1,5 +1,5 @@
 {
-  "_설명": "첫 페이지의 게임·앱·웹 도구 목록(게임은 앱과 같은 카드 모양, 칸만 따로). 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 앱은 앞에서 limit개만, 넘치면 /apps/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에 넣고, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 묶음마다 group_limit개까지만 홈에 보이고 넘치면 /tools/ 전체 목록 페이지가 생긴다. 묶음 순서 = 화면 순서, 묶음 안 순서는 tools 순서.",
+  "_설명": "도구의 dir = 이 저장소의 폴더(루트 /guides/ 가 그 폴더의 글 목록을 읽는다), check = 그 도구의 결과를 어떻게 확인했는지 한 줄(도구 소개 페이지에 이미 적힌 사실만, /guides/·/about/ 에 나옴). 게임·앱의 privacy = 방침 주소가 links 에 없을 때 한국어·영어 주소(바닥글 '앱 개인정보 처리방침'과 /privacy/ 목록에 나옴). 첫 페이지의 게임·앱·웹 도구 목록(게임은 앱과 같은 카드 모양, 칸만 따로). 새 앱이나 새 도구 사이트를 만들면 여기에 한 줄(항목 하나) 더하고 python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). 앱 카드 단추는 소개('어떤 앱인지', 주소 = url, 강조)가 첫째, 그다음 '열기'·지원·방침(build_home.py 가 이 순서를 검사한다). 도구의 영어 주소가 다르면 url_en (영어 본페이지 /en/ 의 카드가 그리로 간다). 홈에는 앱은 앞에서 limit개만, 넘치면 /apps/ 전체 목록 페이지가 생기고 '전체 보기'가 붙는다. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에 넣고, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 묶음마다 group_limit개까지만 홈에 보이고 넘치면 /tools/ 전체 목록 페이지가 생긴다. 묶음 순서 = 화면 순서, 묶음 안 순서는 tools 순서.",
   "limit": 6,
   "group_limit": 4,
   "groups": [
@@ -30,6 +30,7 @@
       "line": {"ko": "튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요.", "en": "A sort puzzle: move animal friends between tubes, hold them to use abilities, and send the buried chicks home."},
       "url": "https://chick-rescue.lumenlab.page/",
       "url_en": "https://chick-rescue.lumenlab.page/en/",
+      "privacy": {"ko": "https://chick-rescue.lumenlab.page/privacy", "en": "https://chick-rescue.lumenlab.page/en/privacy"},
       "links": [
         {"href": "https://chick-rescue.lumenlab.page/", "go": true, "ko": "어떤 게임인지", "en": "What it is"}
       ]
@@ -81,113 +82,135 @@
   "tools": [
     {
       "id": "daycount",
+      "dir": "date-calc",
       "group": "calc",
       "url": "https://date.lumenlab.page/",
       "url_en": "https://date.lumenlab.page/en/",
       "icon": "/img/daycount.svg",
       "name": {"ko": "며칠 계산기", "en": "Daycount"},
       "sub": "Daycount",
-      "line": {"ko": "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.", "en": "Days between dates, countdowns, business days excluding holidays, age and anniversaries."}
+      "line": {"ko": "두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.", "en": "Days between dates, countdowns, business days excluding holidays, age and anniversaries."},
+      "check": {"ko": "다른 방식(파이썬 날짜 라이브러리)으로 따로 구한 정답 3,200여 개와 대조하는 자동 시험을 통과해야 배포해요.", "en": "It is tested automatically against more than 3,200 answers worked out separately with Python’s date library."}
     },
     {
       "id": "inplace",
+      "dir": "convert",
       "group": "docs",
       "url": "https://convert.lumenlab.page/ko/",
       "url_en": "https://convert.lumenlab.page/",
       "icon": "/img/convert.svg",
       "name": {"ko": "인플레이스", "en": "Inplace"},
       "sub": "Inplace",
-      "line": {"ko": "영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.", "en": "Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload."}
+      "line": {"ko": "영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.", "en": "Video to MP3, image and HEIC conversion, PDF merge and split, CSV and Excel, all in your browser with no upload."},
+      "check": {"ko": "파일은 서버로 보내지 않고 브라우저 안에서 바꿔요. 변환에 쓰는 오픈소스 라이브러리(Mediabunny, LAME, libheif, PDF.js, pdf-lib, qpdf, SheetJS 등)를 소개에 모두 적었어요.", "en": "Files are converted inside your browser and never uploaded. The open-source libraries that do the work (Mediabunny, LAME, libheif, PDF.js, pdf-lib, qpdf, SheetJS and more) are all named on its About page."}
     },
     {
       "id": "scicalc",
+      "dir": "sci-calc",
       "group": "calc",
       "url": "https://calc.lumenlab.page/",
       "url_en": "https://calc.lumenlab.page/en/",
       "icon": "/img/sci-calc.svg",
       "name": {"ko": "공학용 계산기", "en": "Scientific Calculator"},
       "sub": "Scientific Calculator",
-      "line": {"ko": "분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.", "en": "Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n."}
+      "line": {"ko": "분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.", "en": "Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n."},
+      "check": {"ko": "파이썬 수학 라이브러리(sympy·mpmath·scipy·numpy)로 따로 구한 정답 3,700여 개와 결과를 자동으로 맞춰 보고, 물리 상수는 NIST 표와 한 자리씩 비교했어요.", "en": "Results are compared automatically with about 3,700 answers computed separately in Python (sympy, mpmath, scipy and numpy), and the physical constants were checked digit by digit against the NIST table."}
     },
     {
       "id": "onesheet",
+      "dir": "calendar",
       "group": "docs",
       "url": "https://calendar.lumenlab.page/ko/",
       "url_en": "https://calendar.lumenlab.page/",
       "icon": "/img/calendar.svg",
       "name": {"ko": "한장달력", "en": "Onesheet"},
       "sub": "Onesheet",
-      "line": {"ko": "공휴일 넣은 1년 달력을 한 장 PDF로 받고, 월별 달력·음력·손 없는 날까지 인쇄해요.", "en": "Printable year-on-a-page and monthly calendars with holidays, as PDF, image or print."}
+      "line": {"ko": "공휴일 넣은 1년 달력을 한 장 PDF로 받고, 월별 달력·음력·손 없는 날까지 인쇄해요.", "en": "Printable year-on-a-page and monthly calendars with holidays, as PDF, image or print."},
+      "check": {"ko": "한국 공휴일은 「관공서의 공휴일에 관한 규정」대로 계산하고, 2026·2027년은 공식 발표와 한 날씩 맞춰 봤어요. 요일은 1900~2100년의 모든 날을 검사해요.", "en": "US federal holidays for 2026 and 2027 were checked day by day against the Office of Personnel Management schedules, Korean holidays against the official announcements, and weekdays are tested for every day from 1900 to 2100."}
     },
     {
       "id": "pickboard",
+      "dir": "pick",
       "group": "play",
       "url": "https://pick.lumenlab.page/ko/",
       "url_en": "https://pick.lumenlab.page/",
       "icon": "/img/pick.svg",
       "name": {"ko": "공평뽑기", "en": "Pickboard"},
       "sub": "Pickboard",
-      "line": {"ko": "돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 몇 명이든 넣고 결과는 링크로 다시 보여 줘요.", "en": "Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result."}
+      "line": {"ko": "돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 몇 명이든 넣고 결과는 링크로 다시 보여 줘요.", "en": "Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result."},
+      "check": {"ko": "뽑을 때마다 브라우저의 crypto.getRandomValues()로 새 씨앗을 받아 쓰고, 10만 번씩 뽑아 보는 카이제곱 검정을 포함한 자동 테스트 500여 개로 고르게 나오는지 확인해요. 결과 링크로 누구나 같은 결과를 다시 계산할 수 있어요.", "en": "Every pick starts from a fresh seed from the browser's crypto.getRandomValues(), and more than 500 automated tests, including chi-square checks over 100,000 draws, confirm that results come out even. A result link lets anyone recompute the same result."}
     },
     {
       "id": "kankan",
+      "dir": "count",
       "group": "docs",
       "url": "https://count.lumenlab.page/ko/",
       "url_en": "https://count.lumenlab.page/",
       "icon": "/img/count.svg",
       "name": {"ko": "칸칸", "en": "Kankan"},
       "sub": "Kankan",
-      "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, SNS 한도, 원고지까지.", "en": "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits."}
+      "line": {"ko": "글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, SNS 한도, 원고지까지.", "en": "Word and character counter that shows every counting rule side by side, plus X, Instagram, YouTube and SMS limits."},
+      "check": {"ko": "세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요.", "en": "The counting code is covered by about 35,000 automated tests, with expected values taken from Python's codecs and Unicode libraries, the twitter-text package and three independent SMS calculators."}
     },
     {
       "id": "checkbench",
+      "dir": "check",
       "group": "play",
       "url": "https://check.lumenlab.page/ko/",
       "url_en": "https://check.lumenlab.page/",
       "icon": "/img/check.svg",
       "name": {"ko": "체크벤치", "en": "Checkbench"},
       "sub": "Checkbench",
-      "line": {"ko": "키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요.", "en": "Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded."}
+      "line": {"ko": "키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요.", "en": "Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded."},
+      "check": {"ko": "판정마다 기준(키보드 채터링 30ms, 마우스 더블클릭 50ms 등)을 결과 옆에 밝히고, 웹페이지로는 알 수 없는 것(마우스의 실제 USB 폴링레이트 등)은 알 수 없다고 적어 둬요.", "en": "Each verdict shows its threshold (30 ms for keyboard chatter, 50 ms for double-clicks and so on), and what a web page cannot see, such as a mouse's true USB polling rate, is stated plainly."}
     },
     {
       "id": "todok",
+      "dir": "typing",
       "group": "play",
       "url": "https://typing.lumenlab.page/ko/",
       "url_en": "https://typing.lumenlab.page/",
       "icon": "/img/typing.svg",
       "name": {"ko": "토독", "en": "Todok"},
       "sub": "Todok",
-      "line": {"ko": "한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.", "en": "Typing test and practice in English and Korean that shows which keys you missed and where you slowed down."}
+      "line": {"ko": "한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.", "en": "Typing test and practice in English and Korean that shows which keys you missed and where you slowed down."},
+      "check": {"ko": "타수와 WPM을 세는 기준을 공개하고(‘다섯 글자 = 한 단어’는 Dhakal 외, CHI 2018의 정의), 책·기사·노래 가사 같은 남의 글은 연습 글에 넣지 않았어요.", "en": "The way speed and WPM are counted is published (five characters per word, as defined in Dhakal et al., CHI 2018), and the practice texts contain no books, articles or lyrics."}
     },
     {
       "id": "takehome",
+      "dir": "salary",
       "group": "calc",
       "url": "https://salary.lumenlab.page/",
       "url_en": "https://salary.lumenlab.page/en/",
       "icon": "/img/salary.svg",
       "name": {"ko": "떼고얼마", "en": "Takehome Korea"},
       "sub": "Takehome Korea",
-      "line": {"ko": "연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요.", "en": "Korea net salary calculator laid out like a payslip, plus severance pay, hourly wage and weekly holiday allowance, with the rates and sources shown."}
+      "line": {"ko": "연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요.", "en": "Korea net salary calculator laid out like a payslip, plus severance pay, hourly wage and weekly holiday allowance, with the rates and sources shown."},
+      "check": {"ko": "요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요.", "en": "Rates and limits are taken only from laws and agency notices opened directly, and every figure is listed with its source and the day it was checked. Severance pay matches the Ministry of Employment and Labor's worked example to the last jeon (₩88,641.31 average daily wage)."}
     },
     {
       "id": "staycode",
+      "dir": "qr",
       "group": "docs",
       "url": "https://qr.lumenlab.page/ko/",
       "url_en": "https://qr.lumenlab.page/",
       "icon": "/img/qr.svg",
       "name": {"ko": "오래QR", "en": "Staycode"},
       "sub": "Staycode",
-      "line": {"ko": "가입 없이 로고·틀까지 넣은 QR코드를 만들어요. 이 사이트를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요.", "en": "Free QR code generator with logos, frames and print files. No sign-up, never expires, and it checks that your code scans."}
+      "line": {"ko": "가입 없이 로고·틀까지 넣은 QR코드를 만들어요. 이 사이트를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요.", "en": "Free QR code generator with logos, frames and print files. No sign-up, never expires, and it checks that your code scans."},
+      "check": {"ko": "정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 이 사이트가 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.", "en": "It makes static codes only, so the link lives inside the image and keeps working even if this site stops. Every code is read back right away to check that it scans."}
     },
     {
       "id": "oneturn",
+      "dir": "time",
       "group": "play",
       "url": "https://time.lumenlab.page/ko/",
       "url_en": "https://time.lumenlab.page/",
       "icon": "/img/time.svg",
       "name": {"ko": "한바퀴", "en": "Oneturn"},
       "sub": "Oneturn",
-      "line": {"ko": "남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요.", "en": "A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change."}
+      "line": {"ko": "남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요.", "en": "A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change."},
+      "check": {"ko": "도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다 세 주·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.", "en": "City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python's zoneinfo."}
     }
   ]
 }

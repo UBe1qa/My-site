@@ -4,7 +4,8 @@ import os, sys, hashlib, re
 from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8765')
-PAGES = ['/', '/en/', '/owlight/privacy/', '/owlight/support/', '/nope/']
+PAGES = ['/', '/en/', '/guides/', '/en/guides/', '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
+PAIRS = [('/', '/en/'), ('/guides/', '/en/guides/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')]  # 한국어·영어가 따로 된 페이지
 ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 fails = []
@@ -27,6 +28,22 @@ def body_text(f):
 for pg in ['owlight/privacy', 'owlight/support']:
     o = os.path.join(os.path.dirname(ORIG), pg, 'index.html')
     if os.path.exists(o): ok(body_text(o) == body_text(os.path.join(site, pg, 'index.html')), f'{pg} 본문이 원래 문구 그대로')
+
+# lumenlab.page 의 어떤 페이지에도 광고 코드가 없음(광고는 도구 사이트에만)
+ads = [os.path.relpath(os.path.join(r, f), site) for r, ds, fs in os.walk(site) if '/_dev' not in r for f in fs if f.endswith('.html') and re.search(r'adsbygoogle|pagead2\.googlesyndication', open(os.path.join(r, f)).read())]
+ok(not ads, f'lumenlab.page 페이지에 광고 코드 없음 {ads[:3]}')
+
+# 가이드 모음·소개·방침이 가리키는 도구·앱 사이트 주소가 이 저장소의 실제 파일과 맞음(옆 폴더 = 그 사이트)
+import json
+cat = json.load(open(os.path.join(here, 'catalog.json')))
+hostdir = {urlparse(it['url']).netloc: it['dir'] for it in cat['tools']}
+mono = os.path.dirname(site); missing = []; nlinks = 0
+for pth in [a for pair in PAIRS[1:] for a in pair]:
+    for h in set(re.findall(r'href="(https://[a-z0-9-]+\.lumenlab\.page/[^"#]*)', open(os.path.join(site, pth.strip('/'), 'index.html')).read())):
+        u = urlparse(h); d = hostdir.get(u.netloc, u.netloc.split('.')[0]); base = os.path.join(mono, d, u.path.strip('/'))
+        nlinks += 1
+        if not any(os.path.isfile(x) for x in (os.path.join(base, 'index.html'), base + '.html')): missing.append(h)
+ok(nlinks > 100 and not missing, f'정보 페이지의 도구·앱 사이트 링크 {nlinks}개가 실제 파일과 맞음 {missing[:3]}')
 
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path='/opt/pw-browsers/chromium-1194/chrome-linux/chrome')
@@ -98,14 +115,19 @@ with sync_playwright() as p:
     c.close()
 
     # 언어: 한국어 / 와 영어 /en/ 은 따로 된 페이지. 자동으로 넘기지 않고 띠로만 알림, 방침 페이지는 #en 이면 영어 칸
-    for path, lang, other in [('/', 'ko', '/en/'), ('/en/', 'en', '/')]:
-        html = open(os.path.join(site, path.strip('/'), 'index.html')).read()
-        alts = dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="https://lumenlab\.page([^"]*)"', html))
-        ok(alts == {'ko': '/', 'en': '/en/', 'x-default': '/en/'}, f'{path} hreflang 짝 {alts}')
-        ok(f'<link rel="canonical" href="https://lumenlab.page{path}">' in html, f'{path} canonical 은 자기 주소')
-        ok(f'<html lang="{lang}"' in html and 'i18n.js' not in html, f'{path} 언어 {lang}, 글 바꾸는 스크립트 없음')
     sm = open(os.path.join(site, 'sitemap.xml')).read()
-    ok('<loc>https://lumenlab.page/</loc>' in sm and '<loc>https://lumenlab.page/en/</loc>' in sm, 'sitemap 에 / 와 /en/')
+    for ko, en in PAIRS:
+        for path, lang, other in [(ko, 'ko', en), (en, 'en', ko)]:
+            html = open(os.path.join(site, path.strip('/'), 'index.html')).read()
+            alts = dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="https://lumenlab\.page([^"]*)"', html))
+            ok(alts == {'ko': ko, 'en': en, 'x-default': en}, f'{path} hreflang 짝 {alts}')
+            ok(f'<link rel="canonical" href="https://lumenlab.page{path}">' in html, f'{path} canonical 은 자기 주소')
+            ok(f'<html lang="{lang}"' in html and 'i18n.js' not in html, f'{path} 언어 {lang}, 글 바꾸는 스크립트 없음')
+            ok(f'<a class="lang" href="{other}"' in html, f'{path} 언어 단추는 {other}')
+            ok(f'<loc>https://lumenlab.page{path}</loc>' in sm, f'sitemap 에 {path}')
+        for path in (ko, en):  # 머리말·바닥글에서 가이드·소개·방침으로 갈 수 있음
+            html = open(os.path.join(site, path.strip('/'), 'index.html')).read(); pre = '/en' if path.startswith('/en/') else ''
+            ok(all(f'href="{pre}{q}"' in html for q in ('/guides/', '/about/', '/privacy/')), f'{path} 에서 가이드·소개·방침 링크')
     c = br.new_context(viewport={'width': 390, 'height': 844}, locale='en-US'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
     ok(pg.evaluate("document.documentElement.lang") == 'ko' and pg.url == BASE + '/', '영어 브라우저도 / 는 한국어 그대로(자동 이동 없음)')
     ok(pg.locator('.langbar a[href="/en/"]').count() == 1, '영어 브라우저면 영어 페이지 제안 띠')
@@ -119,6 +141,15 @@ with sync_playwright() as p:
     ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
     ok(all(h.startswith(('/en/', '#', 'http', 'mailto:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not h.startswith(("/en/", "#", "http", "mailto:"))]}')
+    for path in ('/en/guides/', '/en/about/', '/en/privacy/'):
+        pg.goto(BASE + path); pg.wait_for_timeout(200)
+        left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
+        ok(not left, f'{path} 화면에 한국어가 남지 않음 {left}')
+        hs = pg.evaluate('[...document.querySelectorAll("a[href]:not(.lang)")].map(a=>a.getAttribute("href"))')
+        bad = [h for h in hs if not (h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h == '/')]
+        ok(not bad, f'{path} 안 링크는 영어 쪽 {bad[:4]}')
+        if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current="page"]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
+    pg.goto(BASE + '/en/'); pg.wait_for_timeout(300)
     pg.click('a.lang'); pg.wait_for_timeout(400)
     ok(pg.url == BASE + '/' and '만드는 곳' in pg.inner_text('h1'), '한국어 단추로 / 로')
     ok(pg.locator('.langbar').count() == 0, '한국어를 고르면 띠가 다시 안 뜸')
