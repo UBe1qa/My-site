@@ -1,5 +1,5 @@
 {
- "_설명": "가이드 모음의 소개 창(도구 머리를 누르면 뜨는 창)에만 쓰는 자료. color = 그 도구 아이콘의 주된 색(창의 은은한 바탕·카드 그림 색), facts = 창 머리 밑 사실 줄(값 v, 이름 l, 3~4칸, 그 도구 페이지에 적힌 사실만), more = '이런 것도 돼요' 카드(그 도구의 하위 페이지, g = guides.js GLYPH 이름), demo.core = 바로 써 보기에 불러올 그 도구 사이트의 계산 파일(순서대로, 그 사이트 주소 그대로), demo.cap = 무대 밑 한 줄. 미리보기 화면은 assets/try/<id>.js.",
+ "_설명": "홈 아이콘을 누르면 뜨는 소개 창과 같은 내용의 페이지(/works/<id>/)에 쓰는 자료(catalog.json 에 없는 것만). tools / games / apps 는 catalog.json 의 칸과 같고, 거기 있는 항목마다 여기도 하나씩 있어야 한다(build_store.py 가 검사). color = 아이콘의 주된 색(창의 은은한 바탕·카드 그림 색), facts = 머리 밑 사실 줄(값 v, 이름 l, 3칸, 그 사이트에 적힌 사실만), proof = 홈 아이콘 밑 한 줄(도구가 확인한 것, catalog check 를 줄인 것), more = '이런 것도 돼요' 카드(그 사이트의 페이지·칸, g = build_store.py GLYPH 이름), 도구: demo.core = 바로 써 보기에 불러올 그 도구 사이트의 계산 파일(순서대로), demo.cap = 무대 밑 한 줄, 미리보기 화면은 assets/try/<id>.js. 게임·앱: shots = 미리 보기 줄(실제 화면 사진 src 또는 영상 video(확장자 없이, .mp4·.webm 둘 다 있어야 함)+poster, w·h = 원본 크기), note = '밝혀 둔 것' 문단(그 사이트에 적힌 사실만), open = 머리의 열기 단추를 바꿀 때(없으면 catalog 의 url).",
  "tools": {
   "daycount": {
    "color": "#c2512b",
@@ -136,6 +136,10 @@
      "ko": "칸 하나가 하루이고, 공휴일은 며칠에 든 2015~2035년 공휴일 표로 칠해요.",
      "en": "Each square is one day, and holidays come from Daycount’s US federal holiday table for 2015–2035."
     }
+   },
+   "proof": {
+    "ko": "정답 3,200여 개와 대조",
+    "en": "Checked against 3,200+ answers"
    }
   },
   "inplace": {
@@ -270,6 +274,10 @@
      "ko": "품질을 낮추면 용량이 줄고, 확대 그림에서 뭉개지는 곳이 보여요.",
      "en": "Lower the quality to shrink the file and watch the zoomed detail blur."
     }
+   },
+   "proof": {
+    "ko": "파일을 서버로 보내지 않음",
+    "en": "Files never leave your browser"
    }
   },
   "scicalc": {
@@ -406,6 +414,10 @@
      "ko": "답은 √2/2처럼 정확값으로 나오고, S⇔D를 누르면 소수로 바뀌어요.",
      "en": "Answers come out exact, like √2/2, and S⇔D switches to the decimal."
     }
+   },
+   "proof": {
+    "ko": "정답 3,700여 개와 대조",
+    "en": "Checked against 3,700+ answers"
    }
   },
   "onesheet": {
@@ -514,6 +526,10 @@
      "ko": "사이트에서는 이 그림을 바로 인쇄하거나 PDF·이미지로 받아요.",
      "en": "On the site you print it or save it as a PDF or image."
     }
+   },
+   "proof": {
+    "ko": "1900~2100년 요일 전부 시험",
+    "en": "Every weekday 1900–2100 tested"
    }
   },
   "pickboard": {
@@ -652,6 +668,10 @@
      "ko": "돌리기 전에 브라우저 암호 난수로 결과를 먼저 정하고, 판은 그 칸에 멈추도록 돌아요.",
      "en": "The result is decided first with your browser’s cryptographic randomness, then the wheel spins to land on it."
     }
+   },
+   "proof": {
+    "ko": "10만 번 뽑아 카이제곱 검정",
+    "en": "Chi-square tested on 100,000 draws"
    }
   },
   "kankan": {
@@ -775,6 +795,10 @@
      "ko": "아래 원고지는 칸칸이 200자 원고지에 놓는 방식 그대로 첫 장을 그려요.",
      "en": "The grid below shows the first sheet of 200-square manuscript paper, filled the way Kankan lays it out."
     }
+   },
+   "proof": {
+    "ko": "자동 테스트 3만 5천여 개",
+    "en": "35,000+ automatic tests"
    }
   },
   "checkbench": {
@@ -942,6 +966,10 @@
      "ko": "위 숫자는 지금 보고 있는 이 화면의 주사율이고, 키보드는 같은 키를 뗀 뒤 30ms 안에 다시 눌리면 채터링 의심으로 알려요.",
      "en": "The number on top is the refresh rate of the screen you’re looking at, and the keyboard flags a key pressed again within 30 ms of release as possible double-typing."
     }
+   },
+   "proof": {
+    "ko": "판정 기준을 결과 옆에 밝힘",
+    "en": "Shows the rule beside each result"
    }
   },
   "todok": {
@@ -1033,6 +1061,10 @@
      "ko": "한글은 두벌식 키 흐름으로 견주기 때문에 조합 중인 글자를 틀린 것으로 보지 않아요.",
      "en": "WPM is correct characters ÷ 5 ÷ minutes, the same formula the site shows with every result."
     }
+   },
+   "proof": {
+    "ko": "타수 세는 기준을 공개",
+    "en": "Publishes how speed is counted"
    }
   },
   "takehome": {
@@ -1156,6 +1188,10 @@
      "ko": "소득세는 근로소득 간이세액표에서 찾고, 보험료와 세금의 10원 미만은 버려요.",
      "en": "Income tax comes from Korea’s official withholding table, and premiums and tax drop anything under ₩10."
     }
+   },
+   "proof": {
+    "ko": "노동부 예제와 31전까지 같음",
+    "en": "Matches the ministry’s example"
    }
   },
   "staycode": {
@@ -1262,6 +1298,10 @@
      "ko": "오류 복원을 높이면 칸이 촘촘해지는 대신 일부가 가려져도 읽혀요.",
      "en": "Higher error correction makes the code denser but still readable when part of it is covered."
     }
+   },
+   "proof": {
+    "ko": "만든 그림을 다시 읽어 확인",
+    "en": "Every code is read back"
    }
   },
   "oneturn": {
@@ -1353,6 +1393,686 @@
      "ko": "판을 끌어 1분 단위로 맞추고, 돌기 시작하면 판 한 바퀴가 맞춘 시간에 맞춰 바뀌어요.",
      "en": "Drag the dial to set the minutes. Once it runs, one turn of the dial matches the time you set."
     }
+   },
+   "proof": {
+    "ko": "도시마다 zoneinfo와 대조",
+    "en": "Each city checked with zoneinfo"
+   }
+  }
+ },
+ "games": {
+  "chickrescue": {
+   "color": "#1f7a4a",
+   "facts": [
+    {
+     "v": {
+      "ko": "1,440판",
+      "en": "1,440"
+     },
+     "l": {
+      "ko": "메인 판 전부 무료",
+      "en": "main levels, all free"
+     }
+    },
+    {
+     "v": {
+      "ko": "12마리",
+      "en": "12"
+     },
+     "l": {
+      "ko": "능력 쓰는 친구",
+      "en": "friends with abilities"
+     }
+    },
+    {
+     "v": {
+      "ko": "인터넷 없이",
+      "en": "Offline"
+     },
+     "l": {
+      "ko": "계정 없이 휴대폰에 저장",
+      "en": "no account, saved on the phone"
+     }
+    }
+   ],
+   "shots": {
+    "w": 600,
+    "h": 1300,
+    "items": [
+     {
+      "video": {
+       "ko": "https://chick-rescue.lumenlab.page/img/play-ko",
+       "en": "https://chick-rescue.lumenlab.page/img/play-en"
+      },
+      "poster": {
+       "ko": "https://chick-rescue.lumenlab.page/img/play-ko-poster.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/play-en-poster.webp"
+      },
+      "alt": {
+       "ko": "구출 판을 처음부터 끝까지 푸는 실제 게임 영상 13초, 소리 없음",
+       "en": "13-second clip of a Rescue level solved start to finish in the real game, no sound"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://chick-rescue.lumenlab.page/img/shot-rescue_play_ko.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/shot-rescue_play_en.webp"
+      },
+      "alt": {
+       "ko": "구출: 병아리만 꺼내면 끝, 다 정리하지 않아도 돼요",
+       "en": "Rescue: free the chick and you win, no need to sort everything"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://chick-rescue.lumenlab.page/img/shot-ability_use_ko.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/shot-ability_use_en.webp"
+      },
+      "alt": {
+       "ko": "능력: 사자를 꾹 눌러 다른 튜브 맨 위 친구와 자리를 바꿔요",
+       "en": "Abilities: hold the lion to swap places with the top friend of another tube"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://chick-rescue.lumenlab.page/img/shot-village_homes_ko.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/shot-village_homes_en.webp"
+      },
+      "alt": {
+       "ko": "마을: 별로 친구 집을 짓고 넓히면 그 친구의 옷이 열려요",
+       "en": "Village: spend stars to build and grow homes, which unlocks each friend’s outfits"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://chick-rescue.lumenlab.page/img/shot-chick_nest_ko.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/shot-chick_nest_en.webp"
+      },
+      "alt": {
+       "ko": "둥지 나무: 구한 병아리는 둥지 나무에 살아요",
+       "en": "Nest tree: every chick you save lives in the nest tree"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://chick-rescue.lumenlab.page/img/shot-daily_calendar_ko.webp",
+       "en": "https://chick-rescue.lumenlab.page/img/shot-daily_calendar_en.webp"
+      },
+      "alt": {
+       "ko": "오늘의 도전: 같은 날엔 모두 같은 문제, 풀면 도장을 받아요",
+       "en": "Daily Challenge: everyone gets the same puzzle each day, and solving it earns a stamp"
+      }
+     }
+    ],
+    "cap": {
+     "ko": "실제 게임 화면이에요. 개발 중인 게임이라 출시 전에 바뀔 수 있어요.",
+     "en": "Real game screens. The game is still in development, so they may change before launch."
+    }
+   },
+   "more": [
+    {
+     "g": "play",
+     "href": {
+      "ko": "https://chick-rescue.lumenlab.page/#try",
+      "en": "https://chick-rescue.lumenlab.page/en/#try"
+     },
+     "t": {
+      "ko": "맛보기 두 판",
+      "en": "Two levels on the web"
+     },
+     "d": {
+      "ko": "웹으로 옮긴 판을 바로 풀어 봐요",
+      "en": "Play them right in your browser"
+     }
+    },
+    {
+     "g": "paw",
+     "href": {
+      "ko": "https://chick-rescue.lumenlab.page/#friends",
+      "en": "https://chick-rescue.lumenlab.page/en/#friends"
+     },
+     "t": {
+      "ko": "친구 12마리의 능력",
+      "en": "Twelve abilities"
+     },
+     "d": {
+      "ko": "꾹 누르면 나가는 능력을 영상으로",
+      "en": "Watch each friend’s ability in action"
+     }
+    },
+    {
+     "g": "home",
+     "href": {
+      "ko": "https://chick-rescue.lumenlab.page/#nest",
+      "en": "https://chick-rescue.lumenlab.page/en/#nest"
+     },
+     "t": {
+      "ko": "둥지 나무와 마을",
+      "en": "Nest tree and village"
+     },
+     "d": {
+      "ko": "별을 모아 친구 집을 지어요",
+      "en": "Spend stars on homes for your friends"
+     }
+    },
+    {
+     "g": "help",
+     "href": {
+      "ko": "https://chick-rescue.lumenlab.page/#faq",
+      "en": "https://chick-rescue.lumenlab.page/en/#faq"
+     },
+     "t": {
+      "ko": "자주 묻는 질문",
+      "en": "Questions"
+     },
+     "d": {
+      "ko": "출시, 광고, 결제 계획",
+      "en": "Launch, ads and payment plans"
+     }
+    }
+   ],
+   "note": {
+    "ko": "화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요. 로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요. 메인 1,440판은 끝까지 무료이고, 돈을 내고 무작위로 뽑는 아이템은 없어요.",
+    "en": "Screens and numbers reflect the game in development and may change before launch. The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code. All 1,440 main levels stay free, and there are no paid random draws."
+   }
+  },
+  "castleup": {
+   "color": "#7a2e8e",
+   "facts": [
+    {
+     "v": {
+      "ko": "50명",
+      "en": "50"
+     },
+     "l": {
+      "ko": "영웅(모집 30 + 보스 20)",
+      "en": "heroes (30 recruits + 20 boss)"
+     }
+    },
+    {
+     "v": {
+      "ko": "20마리",
+      "en": "20"
+     },
+     "l": {
+      "ko": "15웨이브마다 보스",
+      "en": "bosses, one every 15 waves"
+     }
+    },
+    {
+     "v": {
+      "ko": "1·4·8시간",
+      "en": "1, 4, 8 h"
+     },
+     "l": {
+      "ko": "꺼 둬도 원정 보상",
+      "en": "expeditions while closed"
+     }
+    }
+   ],
+   "shots": {
+    "w": 600,
+    "h": 1066,
+    "items": [
+     {
+      "video": {
+       "ko": "https://castle-up.lumenlab.page/img/boss-ko",
+       "en": "https://castle-up.lumenlab.page/img/boss-en"
+      },
+      "poster": {
+       "ko": "https://castle-up.lumenlab.page/img/boss-ko-poster.webp",
+       "en": "https://castle-up.lumenlab.page/img/boss-en-poster.webp"
+      },
+      "alt": {
+       "ko": "45웨이브 보스 박쥐 여왕과 자동 스킬로 싸우는 실제 게임 영상, 소리 없음",
+       "en": "The real game fighting the wave 45 boss, the Bat Queen, on Auto skills, no sound"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://castle-up.lumenlab.page/img/shot-wave_battle_ko.webp",
+       "en": "https://castle-up.lumenlab.page/img/shot-wave_battle_en.webp"
+      },
+      "alt": {
+       "ko": "웨이브 전투: 층마다 선 영웅이 알아서 싸워요",
+       "en": "Wave battle: the hero on each floor fights on its own"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://castle-up.lumenlab.page/img/shot-boss_weak_order_ko.webp",
+       "en": "https://castle-up.lumenlab.page/img/shot-boss_weak_order_en.webp"
+      },
+      "alt": {
+       "ko": "화염 드래곤 보스전: 약점 순서대로 스킬을 맞혀요",
+       "en": "Flame Dragon boss fight: hit its weaknesses in order"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://castle-up.lumenlab.page/img/shot-groggy_fall_ko.webp",
+       "en": "https://castle-up.lumenlab.page/img/shot-groggy_fall_en.webp"
+      },
+      "alt": {
+       "ko": "보스가 그로기에 빠진 순간",
+       "en": "The moment a boss is staggered"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://castle-up.lumenlab.page/img/shot-castle_status_ko.webp",
+       "en": "https://castle-up.lumenlab.page/img/shot-castle_status_en.webp"
+      },
+      "alt": {
+       "ko": "성 현황: 성 등급과 전투력, 층마다 세운 영웅",
+       "en": "Castle status: grade, battle power and the hero on each floor"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://castle-up.lumenlab.page/img/shot-recruit_ko.webp",
+       "en": "https://castle-up.lumenlab.page/img/shot-recruit_en.webp"
+      },
+      "alt": {
+       "ko": "영웅 모집 결과",
+       "en": "Hero recruit results"
+      }
+     }
+    ],
+    "cap": {
+     "ko": "실제 게임 화면이에요. 개발 중인 게임이라 출시 전에 바뀔 수 있어요.",
+     "en": "Real game screens. The game is still in development, so they may change before launch."
+    }
+   },
+   "more": [
+    {
+     "g": "sword",
+     "href": {
+      "ko": "https://castle-up.lumenlab.page/#heroes",
+      "en": "https://castle-up.lumenlab.page/en/#heroes"
+     },
+     "t": {
+      "ko": "한 층에 영웅 한 명",
+      "en": "One hero per floor"
+     },
+     "d": {
+      "ko": "승급할 때마다 성이 바뀌고 층이 늘어요",
+      "en": "Every promotion adds a floor"
+     }
+    },
+    {
+     "g": "moon",
+     "href": {
+      "ko": "https://castle-up.lumenlab.page/#idle",
+      "en": "https://castle-up.lumenlab.page/en/#idle"
+     },
+     "t": {
+      "ko": "켜 두면 싸우고, 꺼 두면 원정",
+      "en": "Fights on, explores off"
+     },
+     "d": {
+      "ko": "자동 스킬·자동 반복·원정 보상",
+      "en": "Auto skills, auto replay and expeditions"
+     }
+    },
+    {
+     "g": "castle",
+     "href": {
+      "ko": "https://castle-up.lumenlab.page/#bosses",
+      "en": "https://castle-up.lumenlab.page/en/#bosses"
+     },
+     "t": {
+      "ko": "보스 20마리",
+      "en": "20 bosses"
+     },
+     "d": {
+      "ko": "보스마다 약점 속성이 있어요",
+      "en": "Each one has a weak element"
+     }
+    },
+    {
+     "g": "help",
+     "href": {
+      "ko": "https://castle-up.lumenlab.page/#faq",
+      "en": "https://castle-up.lumenlab.page/en/#faq"
+     },
+     "t": {
+      "ko": "자주 묻는 질문",
+      "en": "Questions"
+     },
+     "d": {
+      "ko": "출시, 결제, 광고 계획",
+      "en": "Launch, payment and ad plans"
+     }
+    }
+   ],
+   "note": {
+    "ko": "화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요. 로고·영웅·보스·성·배경 그림은 AI 도구(Higgsfield)로, 게임 속 캐릭터 움직임은 AI 영상 도구(Kling)로 만들었어요. 영웅 모집은 확률로 뽑는 방식이고, 확률은 게임 안에서 보여 줘요.",
+    "en": "Screens and numbers reflect the game in development and may change before launch. The logo, heroes, bosses, castles and backgrounds were made with an AI tool (Higgsfield); in-game character motion comes from AI video (Kling). Recruiting heroes is a random draw, and the odds are shown in the game."
+   }
+  }
+ },
+ "apps": {
+  "owlight": {
+   "color": "#33337a",
+   "facts": [
+    {
+     "v": {
+      "ko": "US$5.99",
+      "en": "US$5.99"
+     },
+     "l": {
+      "ko": "한 번 구매, 구독 없음",
+      "en": "one-time, no subscription"
+     }
+    },
+    {
+     "v": {
+      "ko": "macOS 14",
+      "en": "macOS 14"
+     },
+     "l": {
+      "ko": "이상에서 돌아가요",
+      "en": "or later"
+     }
+    },
+    {
+     "v": {
+      "ko": "수집 없음",
+      "en": "No data"
+     },
+     "l": {
+      "ko": "계정·네트워크·분석 도구 없음",
+      "en": "no account, network or analytics"
+     }
+    }
+   ],
+   "shots": {
+    "w": 800,
+    "h": 456,
+    "items": [
+     {
+      "src": {
+       "ko": "https://owlight.lumenlab.page/img/ko-1-800.webp",
+       "en": "https://owlight.lumenlab.page/img/en-1-800.webp"
+      },
+      "alt": {
+       "ko": "후광을 켠 화면: 앞의 설정 창만 밝고 뒤의 메모 창들은 어둡게 가라앉아 있다",
+       "en": "Halo on: the settings window in front stays bright while the note windows behind it are dimmed"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://owlight.lumenlab.page/img/ko-2-800.webp",
+       "en": "https://owlight.lumenlab.page/img/en-2-800.webp"
+      },
+      "alt": {
+       "ko": "커튼을 친 바탕화면: 오로라 그라데이션 위에 큰 시계, 날짜, ‘5분 뒤에 돌아올게요’ 문구",
+       "en": "Curtain on the desktop: an Aurora gradient with a large clock, the date and the note “Back in five”"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://owlight.lumenlab.page/img/ko-3-800.webp",
+       "en": "https://owlight.lumenlab.page/img/en-3-800.webp"
+      },
+      "alt": {
+       "ko": "불침번 설정 화면: 기본 시간, 디스플레이 켜 두기, 배터리 지킴이와 멈출 배터리 잔량",
+       "en": "Nightwatch settings: default duration, keep display on, battery guard and the battery level to stop at"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://owlight.lumenlab.page/img/ko-5-800.webp",
+       "en": "https://owlight.lumenlab.page/img/en-5-800.webp"
+      },
+      "alt": {
+       "ko": "몰입 세션이 진행 중인 메뉴 패널: 24분 54초 남음, 오늘 몰입 95분",
+       "en": "The menu panel during a Focus Session: 24:54 left, 95 minutes focused today"
+      }
+     },
+     {
+      "src": {
+       "ko": "https://owlight.lumenlab.page/img/ko-6-800.webp",
+       "en": "https://owlight.lumenlab.page/img/en-6-800.webp"
+      },
+      "alt": {
+       "ko": "단축키 설정 화면: 불침번, 커튼, 후광, 몰입 세션과 장면마다 단축키 칸",
+       "en": "Shortcut settings: a shortcut field for Nightwatch, Curtain, Halo, Focus Session and each Scene"
+      }
+     }
+    ],
+    "cap": {
+     "ko": "실제 앱 화면이에요. Mac App Store 출시를 준비하고 있어요.",
+     "en": "Real app screens. A Mac App Store release is in the works."
+    }
+   },
+   "more": [
+    {
+     "g": "sun",
+     "href": {
+      "ko": "https://owlight.lumenlab.page/#features",
+      "en": "https://owlight.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "후광",
+      "en": "Halo"
+     },
+     "d": {
+      "ko": "지금 쓰는 창만 또렷하게",
+      "en": "Only your window stays sharp"
+     }
+    },
+    {
+     "g": "screen",
+     "href": {
+      "ko": "https://owlight.lumenlab.page/#features",
+      "en": "https://owlight.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "커튼",
+      "en": "Curtain"
+     },
+     "d": {
+      "ko": "바탕화면 아이콘을 가려요",
+      "en": "Covers your desktop icons"
+     }
+    },
+    {
+     "g": "moon",
+     "href": {
+      "ko": "https://owlight.lumenlab.page/#features",
+      "en": "https://owlight.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "불침번",
+      "en": "Nightwatch"
+     },
+     "d": {
+      "ko": "자동 잠자기만 막아요",
+      "en": "Stops automatic sleep only"
+     }
+    },
+    {
+     "g": "clock",
+     "href": {
+      "ko": "https://owlight.lumenlab.page/#auto",
+      "en": "https://owlight.lumenlab.page/#auto"
+     },
+     "t": {
+      "ko": "알아서 켜고 끄기",
+      "en": "Switches itself"
+     },
+     "d": {
+      "ko": "충전기, 앱, 요일별 시간표에 맞춰",
+      "en": "By charger, app or weekday schedule"
+     }
+    }
+   ],
+   "note": {
+    "ko": "Mac App Store 샌드박스 안에서 돌아가고, 계정·네트워크 접속·분석 도구·광고가 없어요. 후광은 창의 위치와 크기만 보고 창 제목이나 화면 내용은 읽지 않아요. 불침번은 자동 잠자기만 막아서 덮개를 닫으면 잠들어요. 커튼의 풍경 그림 10장은 AI 이미지 생성 도구로 만들었어요.",
+    "en": "It runs inside the Mac App Store sandbox, with no account, no network access, no analytics and no ads. Halo only looks at window positions and sizes, never window titles or screen contents. Nightwatch stops automatic sleep only, so closing the lid still puts the Mac to sleep. The ten scenery pictures in Curtain were made with an AI image generator."
+   }
+  },
+  "setnote": {
+   "color": "#9ccc1f",
+   "open": {
+    "href": {
+     "ko": "https://setnote.lumenlab.page/app/",
+     "en": "https://setnote.lumenlab.page/app/"
+    },
+    "t": {
+     "ko": "열기",
+     "en": "Open"
+    }
+   },
+   "facts": [
+    {
+     "v": {
+      "ko": "가입 없음",
+      "en": "No sign-up"
+     },
+     "l": {
+      "ko": "휴대폰 브라우저에서 바로",
+      "en": "opens in your phone’s browser"
+     }
+    },
+    {
+     "v": {
+      "ko": "인터넷 없이",
+      "en": "Offline"
+     },
+     "l": {
+      "ko": "홈 화면에 추가하면",
+      "en": "once on your Home Screen"
+     }
+    },
+    {
+     "v": {
+      "ko": "기기 안에만",
+      "en": "On device"
+     },
+     "l": {
+      "ko": "기록을 서버로 안 보내요",
+      "en": "your log isn’t sent anywhere"
+     }
+    }
+   ],
+   "shots": {
+    "w": 600,
+    "h": 1298,
+    "items": [
+     {
+      "src": {
+       "ko": "/img/setnote/workout-ko.webp",
+       "en": "/img/setnote/workout-en.webp"
+      },
+      "alt": {
+       "ko": "운동 중: 세트마다 지난번 무게와 횟수가 옆에 있고, 끝낸 세트는 칠해져요",
+       "en": "During a workout: last time’s weight and reps sit beside each set, and finished sets are highlighted"
+      }
+     },
+     {
+      "src": {
+       "ko": "/img/setnote/routines-ko.webp",
+       "en": "/img/setnote/routines-en.webp"
+      },
+      "alt": {
+       "ko": "루틴: 저장해 둔 루틴을 한 번에 불러와 시작해요",
+       "en": "Routines: start a saved routine in one tap"
+      }
+     },
+     {
+      "src": {
+       "ko": "/img/setnote/done-ko.webp",
+       "en": "/img/setnote/done-en.webp"
+      },
+      "alt": {
+       "ko": "운동을 끝내면 총 볼륨, 신기록, 지난번과 비교한 변화가 나와요",
+       "en": "Finishing shows total volume, new records and the change since last time"
+      }
+     },
+     {
+      "src": {
+       "ko": "/img/setnote/history-ko.webp",
+       "en": "/img/setnote/history-en.webp"
+      },
+      "alt": {
+       "ko": "기록: 끝낸 운동이 날짜별로 쌓이고 이번 주 볼륨과 연속 운동이 보여요",
+       "en": "History: finished workouts by date, with this week’s volume and streak"
+      }
+     }
+    ],
+    "cap": {
+     "ko": "실제 앱 화면이에요. 예시로 이틀 운동을 적어 보고 찍었어요.",
+     "en": "Real app screens, taken after logging two sample workouts."
+    }
+   },
+   "more": [
+    {
+     "g": "list",
+     "href": {
+      "ko": "https://setnote.lumenlab.page/#features",
+      "en": "https://setnote.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "루틴 저장",
+      "en": "Saved routines"
+     },
+     "d": {
+      "ko": "자주 하는 운동 순서를 한 번에",
+      "en": "Bring up your usual order at once"
+     }
+    },
+    {
+     "g": "dumbbell",
+     "href": {
+      "ko": "https://setnote.lumenlab.page/#features",
+      "en": "https://setnote.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "지난번과 바로 비교",
+      "en": "Last time, right there"
+     },
+     "d": {
+      "ko": "세트마다 지난번 무게와 횟수",
+      "en": "Weight and reps beside every set"
+     }
+    },
+    {
+     "g": "hour",
+     "href": {
+      "ko": "https://setnote.lumenlab.page/#features",
+      "en": "https://setnote.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "세트 사이 쉬는 시간",
+      "en": "Rest timer"
+     },
+     "d": {
+      "ko": "끝날 때 소리로 알려 줘요",
+      "en": "With an optional sound at the end"
+     }
+    },
+    {
+     "g": "stats",
+     "href": {
+      "ko": "https://setnote.lumenlab.page/#features",
+      "en": "https://setnote.lumenlab.page/#features"
+     },
+     "t": {
+      "ko": "쌓이는 기록",
+      "en": "Your history"
+     },
+     "d": {
+      "ko": "최고 무게, 추정 1RM, 이번 주 볼륨",
+      "en": "Best weight, estimated 1RM, weekly volume"
+     }
+    }
+   ],
+   "note": {
+    "ko": "기록은 이 기기에만 저장되고 서버로 보내지 않아요. 다른 기기로 옮길 땐 백업 파일로 내보내고 가져와요. 위 화면은 실제 앱에 예시 운동 두 번을 적어 넣고 찍은 거예요.",
+    "en": "Your log is saved on this device only and never sent to a server. To move it to another device, export and import a backup file. The screens above are the real app after logging two sample workouts."
    }
   }
  }

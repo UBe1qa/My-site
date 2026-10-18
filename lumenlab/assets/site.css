@@ -72,7 +72,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .top nav{display:flex;gap:4px}
 .top nav a{color:var(--ink-2);text-decoration:none;font-size:16px;font-weight:600;padding:8px 12px;border-radius:10px}
 .top nav a:hover{background:var(--line)}
-.top nav a[aria-current="page"]{color:var(--ink);background:var(--line)}
+.top nav a[aria-current]{color:var(--ink);background:var(--line)}
 
 /* 공통 바닥글 */
 .foot{border-top:1px solid var(--line);margin-top:0;color:var(--muted);font-size:15px}

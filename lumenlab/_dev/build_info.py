@@ -1,4 +1,4 @@
-# 루트의 가이드 모음·소개·개인정보 처리방침(한국어 /guides/ /about/ /privacy/, 영어 /en/…)을 만든다.
+# 루트의 소개·개인정보 처리방침(한국어 /about/ /privacy/, 영어 /en/…)을 만든다. (가이드 모음 /guides/ 는 2026-10-18 홈의 소개 창으로 합쳤다)
 # 혼자 돌리지 않고 build_home.py 가 홈·영어 홈을 만든 뒤 불러 쓴다(머리말·꼬리말을 그 두 페이지에서 그대로 가져온다).
 # 가이드 목록은 손으로 적지 않는다: catalog.json 도구마다 dir(이 저장소의 폴더)의 guide/ 아래 글을 읽어서
 #   제목(h1)·설명(meta description)·쓴 날·고친 날(JSON-LD)·주소(canonical)를 가져오고, 순서는 그 도구의 가이드 목록 페이지 순서를 따른다.
@@ -72,7 +72,7 @@ def fdate(d, lang):
 
 
 # ---------- 페이지 틀 ----------
-def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''):
+def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js='', css=('/assets/site.css', '/assets/info.css')):
     ko_path = path[3:] if lang == 'en' else path
     en_path = '/en' + ko_path
     hdr = head_src[head_src.index('<a class="skip"'):head_src.index('<main')]
@@ -110,9 +110,7 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css">
-<link rel="stylesheet" href="/assets/info.css">
-{ldj}</head>
+{''.join(f'<link rel="stylesheet" href="{c}">' + chr(10) for c in css)}{ldj}</head>
 <body>
 {hdr}<main id="main">
 {main}
@@ -140,76 +138,7 @@ def ihead(T, kicker, title, lead, jumps, wide=False, jcls='', after=''):
 </header>"""
 
 
-# ---------- 가이드 모음 ----------
-# 한눈에 훑게: 글은 제목과 날짜만(설명은 글 페이지에 있다), 맨 위에 도구 바로가기, 컴퓨터는 왼쪽 묶음 칸에도 도구 목록.
-# 도구마다 '확인하고 밝혀 둔 것'은 소개 페이지 한 곳에만 두고 여기선 링크(같은 글을 두 번 싣지 않는다).
-def guides_main(lang, groups, tools, data):
-    T = KO if lang == 'ko' else EN
-    pre = '' if lang == 'ko' else '/en'
-    n_all = sum(len(data[it['id']][1]) for it in tools)
-    in_group = lambda g: [it for it in tools if it['group'] == g['id']]
-    # 맨 위: 휴대폰 첫 화면처럼 도구 아이콘을 묶음별로 늘어놓은 줄(누르면 그 도구 글로).
-    # 그 줄이 화면 위로 지나가면 머리말 밑에 같은 아이콘의 작은 줄(.tdock)이 내려와 따라온다(guides.js).
-    grid, dock = [], []
-    for gi, g in enumerate(groups):
-        cells = ''.join(f'<li><a class="tgrid__a" href="#t-{it["id"]}"><img src="{it["icon"]}" width="56" height="56" alt=""><span>{esc(it["name"][lang])}</span></a></li>' for it in in_group(g))
-        grid.append(f'<li class="tgrid__g"><p class="tgrid__h">{esc(g["name"][lang])}</p><ul>{cells}</ul></li>')
-        if gi: dock.append('<li class="tdock__sep" aria-hidden="true"></li>')
-        for it in in_group(g):
-            dock.append(f'<li><a class="tdock__a" href="#t-{it["id"]}" tabindex="-1"><span class="tdock__ic"><img src="{it["icon"]}" width="28" height="28" alt=""></span><span class="tdock__n">{esc(it["name"][lang])}</span></a></li>')
-    tgrid = f'<nav class="tgrid" aria-label="{T["dock_label"]}"><ul class="tgrid__list">{"".join(grid)}</ul></nav>'
-    out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), [], wide=True, after=tgrid),
-           f'<div class="tdock" aria-hidden="true"><div class="wrap tdock__in"><ul class="tdock__list">{"".join(dock)}</ul></div></div>']
-    for g in groups:
-        blocks = []
-        for it in in_group(g):
-            index, items = data[it['id']]
-            tp = tool_pages(it, lang)
-            name = it['name'][lang]
-            rows = []
-            for a in items:
-                dates = T['written'](f'<time datetime="{a["pub"]}">{fdate(a["pub"], lang)}</time>')
-                if a['mod'] and a['mod'] != a['pub']:
-                    dates += ' <span aria-hidden="true">·</span> ' + T['updated'](f'<time datetime="{a["mod"]}">{fdate(a["mod"], lang)}</time>')
-                rows.append(f'          <li><a class="gl__a" href="{esc(a["url"])}"><span class="gl__t">{esc(a["title"])}</span><span class="gl__m">{dates}</span></a></li>')
-            sub = '' if lang == 'en' or not it.get('sub') else f' <span class="gt__en" lang="en">{esc(it["sub"])}</span>'
-            blocks.append(f"""      <article class="gt" id="t-{it['id']}" aria-labelledby="t-{it['id']}-n" tabindex="-1">
-        <div class="gt__top">
-          <div class="gt__head">
-            <img class="gt__icon" src="{it['icon']}" width="48" height="48" alt="">
-            <div class="gt__name-wrap">
-              <h3 class="gt__name" id="t-{it['id']}-n">{esc(name)}{sub}</h3>
-              <p class="gt__kind">{esc(it['what'][lang])} <span aria-hidden="true">·</span> {T['n_guides'](len(items))}</p>
-            </div>
-            <a class="gt__show" href="{esc(tp['home'])}" data-show="{it['id']}" aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5z"/></svg><span>{T['try']}</span></a>
-          </div>
-          <p class="gt__what">{esc(index['desc'])}</p>
-        </div>
-        <ol class="gl">
-{chr(10).join(rows)}
-        </ol>
-        <p class="gt__more"><a class="gt__open" href="{esc(tp['home'])}">{T['open_tool'](esc(name))} <span aria-hidden="true">→</span></a> <a class="gt__check" href="{pre}/about/#c-{it['id']}">{T['checked']}</a></p>
-      </article>""")
-        out.append(f"""<section class="gs" id="g-{g['id']}" aria-labelledby="g-{g['id']}-t">
-  <div class="wrap gs__in">
-    <div class="gs__head">
-      <h2 class="gs__name" id="g-{g['id']}-t">{esc(g['name'][lang])}</h2>
-      <p class="gs__line">{esc(g['line'][lang])}</p>
-    </div>
-    <div class="gs__tools">
-{chr(10).join(blocks)}
-    </div>
-  </div>
-</section>""")
-    out.append(T['g_end'])
-    out.append(showcase_data(lang, tools, data, T))
-    return '\n'.join(out), n_all
-
-
-# 소개 창(가이드 모음에서 도구 머리를 누르면 뜨는 창)에 쓸 자료. 도구 사실은 catalog.json, 창에만 쓰는 것(사실 줄·더 할 수 있는 일·
-# 바로 써 보기 설정)은 showcase.json. 화면은 assets/guides.js 가 그린다.
-SHOWCASE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'showcase.json')))
-
+# ---------- 도구 사이트 파일 확인(소개 창·페이지가 쓴다, build_store.py) ----------
 def core_url(it, f):
     """도구 사이트의 계산 파일 주소(/assets/…) → 그 사이트 주소 + 내용 지문(파일이 바뀌면 주소도 바뀌어 묵은 캐시를 안 쓴다)."""
     import hashlib
@@ -225,24 +154,6 @@ def sub_page_ok(it, href):
     local = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), it['dir'], u.path.lstrip('/'), 'index.html')
     assert os.path.isfile(local), f"{it['id']}: 카드 페이지가 없음 {href}"
     return True
-
-def showcase_data(lang, tools, data, T):
-    out = {'ui': T['sheet'], 'tools': {}}
-    for it in tools:
-        tp = tool_pages(it, lang)
-        sc = SHOWCASE['tools'][it['id']]
-        L = lambda v: v[lang] if isinstance(v, dict) and lang in v else v
-        out['tools'][it['id']] = {
-            'name': it['name'][lang], 'sub': it.get('sub') if lang == 'ko' else None, 'what': it['what'][lang], 'icon': it['icon'],
-            'home': tp['home'], 'check': it['check'][lang], 'color': sc['color'],
-            'facts': [{'v': L(f['v']), 'l': L(f['l'])} for f in sc['facts']],
-            'more': [{'href': L(m['href']), 't': L(m['t']), 'd': L(m['d']), 'g': m['g']} for m in sc['more'] if L(m['href']) and sub_page_ok(it, L(m['href']))],
-            'demo': {'core': [core_url(it, f) for f in sc['demo']['core']], 'mod': [core_url(it, f) for f in sc['demo'].get('mod', [])], 'cap': L(sc['demo']['cap'])},
-            'guides': [{'t': a['title'], 'u': a['url']} for a in data[it['id']][1]],
-        }
-    j = json.dumps(out, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
-    return f'<script type="application/json" id="tooldata">{j}</script>'
-
 
 # ---------- 소개 ----------
 def about_main(lang, cat, tools, groups, counts):
@@ -288,34 +199,15 @@ def privacy_main(lang, cat, tools, groups):
 # ---------- 글 (한국어) ----------
 KO = {
     'jump_label': '이 페이지 안',
-    'dock_label': '도구 바로가기',
-    'try': '바로 써 보기',
-    'sheet': {'close': '닫기', 'open': '열기', 'try': '바로 써 보기', 'more': '이런 것도 돼요', 'check': '확인하고 밝혀 둔 것',
-              'guides': '가이드', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
-              'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'dialog': '도구 소개'},
-    'n_guides': lambda n: f'{n}편',
-    'written': lambda d: f'{d} 씀', 'updated': lambda d: f'{d} 고침',
-    'checked': '확인하고 밝혀 둔 것',
-    'open_tool': lambda n: f'{n} 열기',
-    'g_kicker': '가이드',
-    'g_title': '도구를 쓰다 막히는 곳을 <span class="nw">풀어 쓴 글</span>',
-    'g_lead': lambda t, n: f'웹 도구 {t}개에 딸린 글 {n}편이에요. 글마다 쓴 날과 고친 날을 적었어요.',
-    'g_end': '''<section class="iend" aria-labelledby="iend-t">
-  <div class="wrap iend__in">
-    <h2 id="iend-t" class="iend__title">찾는 글이 없거나 틀린 곳이 있나요?</h2>
-    <p class="iend__lead">어떤 도구에서 무엇이 궁금했는지 메일로 알려 주세요. 다음 글을 고르는 데 쓰고, 틀린 곳은 고친 뒤 고친 날을 적어요.</p>
-    <p class="iend__row"><a class="btn btn--lamp" href="mailto:contact@lumenlab.page">메일 쓰기</a> <a class="iend__more" href="/about/">루멘랩이 도구를 만드는 기준 <span aria-hidden="true">→</span></a></p>
-  </div>
-</section>''',
     'a_kicker': '소개',
     'a_title': '루멘랩은 혼자 운영하는 작은 소프트웨어 <span class="nw">스튜디오예요</span>',
     'a_lead': '휴대폰 게임과 앱, 브라우저에서 바로 쓰는 무료 웹 도구를 만들어요. 누가 만드는지, 도구마다 무엇을 확인하는지, 운영비는 어디서 나오는지 적었어요.',
     'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '확인하고 밝혀 둔 것'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
-  <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/works/#tools">웹 도구 목록</a></li>
-  <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 한곳에 모아 두었어요. <a href="/guides/">가이드 모음</a></li>
-  <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/works/#games">게임 목록</a></li>
-  <li><b>앱 {na}개</b> {apps}. <a href="/works/#apps">앱 목록</a></li>
+  <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 둘러보기</a></li>
+  <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 도구마다 소개 창에 목록을 모아 두었어요.</li>
+  <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/#games">게임 보기</a></li>
+  <li><b>앱 {na}개</b> {apps}. <a href="/#apps">앱 보기</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">누가 만드나요</h2>
@@ -357,7 +249,7 @@ KO = {
   <li><b>떼고얼마</b> 4대 보험 요율과 상한·하한, 근로소득 간이세액표가 새로 나오면 반영해요. 2027년 몫은 지금도 확정된 것, 의결된 것, 아직 안 정해진 것으로 나눠 보여 줘요.</li>
   <li><b>한장달력</b> 다음 해 월력요항이 발표되면(해마다 6월 말쯤) 그해 공휴일을 공식 자료로 바꿔요. 발표 전인 해는 ‘공식 발표 전 자료’라고 표시해요.</li>
   <li><b>한바퀴</b> 나라나 지역이 서머타임과 시간대 규칙을 바꾸면 반영해요. 2026년에 바뀐 캐나다 세 주와 모로코가 그 예예요.</li>
-  <li><b>모든 도구</b> 틀린 결과를 알려 주시면 확인해서 고치고, 글을 고치면 그 글에 고친 날을 적어요. <a href="/guides/">가이드 모음</a>에서 글마다 쓴 날과 고친 날을 볼 수 있어요.</li>
+  <li><b>모든 도구</b> 틀린 결과를 알려 주시면 확인해서 고치고, 글을 고치면 그 글에 고친 날을 적어요.</li>
 </ul>
 </section>
 
@@ -374,7 +266,7 @@ KO = {
   <div class="wrap iend__in">
     <h2 id="contact-t" class="iend__title">틀린 결과나 바라는 기능은 메일로 알려 주세요</h2>
     <p class="iend__lead">어떤 도구인지, 기기와 브라우저, 넣은 값을 같이 적어 주시면 빨리 확인할 수 있어요. 전화는 <a href="tel:{TEL_INTL}">{TEL}</a>이에요.</p>
-    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">메일 쓰기</a> <a class="iend__more" href="/guides/">가이드 모음 <span aria-hidden="true">→</span></a></p>
+    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">메일 쓰기</a> <a class="iend__more" href="/#works">만든 것 둘러보기 <span aria-hidden="true">→</span></a></p>
   </div>
 </section>''',
     'p_title': '루멘랩 개인정보 처리방침',
@@ -526,34 +418,15 @@ KO = {
 # ---------- 글 (영어) ----------
 EN = {
     'jump_label': 'On this page',
-    'dock_label': 'Jump to a tool',
-    'try': 'Try it here',
-    'sheet': {'close': 'Close', 'open': 'Open', 'try': 'Try it here', 'more': 'It can also', 'check': 'What it checks and discloses',
-              'guides': 'Guides', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
-              'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'dialog': 'Tool preview'},
-    'n_guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'),
-    'written': lambda d: f'Published {d}', 'updated': lambda d: f'updated {d}',
-    'checked': 'What it checks and discloses',
-    'open_tool': lambda n: f'Open {n}',
-    'g_kicker': 'Guides',
-    'g_title': 'Guides to the tricky parts <span class="nw">of each tool</span>',
-    'g_lead': lambda t, n: f'{n} guides for our {t} web tools, each with the date it was published and last updated.',
-    'g_end': '''<section class="iend" aria-labelledby="iend-t">
-  <div class="wrap iend__in">
-    <h2 id="iend-t" class="iend__title">Missing a guide, or found a mistake?</h2>
-    <p class="iend__lead">Tell us which tool and what you wanted to know. It helps us pick the next guide, and any fix comes with an updated date.</p>
-    <p class="iend__row"><a class="btn btn--lamp" href="mailto:contact@lumenlab.page">Write an email</a> <a class="iend__more" href="/en/about/">How Lumen Lab builds its tools <span aria-hidden="true">→</span></a></p>
-  </div>
-</section>''',
     'a_kicker': 'About',
     'a_title': 'Lumen Lab is a small, one-person <span class="nw">software studio</span>',
     'a_lead': 'We make phone games, apps and free web tools that work right in your browser. This page covers who makes them, what each tool checks and how the sites pay for themselves.',
     'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'What each tool checks'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
-  <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/works/#tools">See the tools</a></li>
-  <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site and are collected in one place. <a href="/en/guides/">All guides</a></li>
-  <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/works/#games">See the games</a></li>
-  <li><b>{na} apps</b> {apps}. <a href="/en/works/#apps">See the apps</a></li>
+  <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
+  <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site, and each tool’s preview lists them.</li>
+  <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/#games">See the games</a></li>
+  <li><b>{na} apps</b> {apps}. <a href="/en/#apps">See the apps</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">Who we are</h2>
@@ -595,7 +468,7 @@ EN = {
   <li><b>Takehome Korea</b> New social insurance rates, contribution limits and the withholding table are added when they are published. For 2027 it already separates what is set, what is approved and what is not decided yet.</li>
   <li><b>Onesheet</b> Korean holidays are switched to the official almanac once it is published each year (around late June). Until it is out, that year is marked “not yet official”.</li>
   <li><b>Oneturn</b> Changes to daylight saving or time zone rules are added as countries make them, like the 2026 changes in three Canadian provinces and Morocco.</li>
-  <li><b>All tools</b> If you report a wrong result, we check it and fix it. When a guide changes, it shows the date it was updated. You can see each guide’s dates in <a href="/en/guides/">the guide list</a>.</li>
+  <li><b>All tools</b> If you report a wrong result, we check it and fix it. When a guide changes, it shows the date it was updated.</li>
 </ul>
 </section>
 
@@ -612,7 +485,7 @@ EN = {
   <div class="wrap iend__in">
     <h2 id="contact-t" class="iend__title">Found a wrong result, or want a feature? Email us</h2>
     <p class="iend__lead">Tell us which tool, your device and browser, and what you entered, and we can check it faster. Phone: <a href="tel:{TEL_INTL}">{TEL_INTL}</a> (in Korean).</p>
-    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">Write an email</a> <a class="iend__more" href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">Write an email</a> <a class="iend__more" href="/en/#works">See what we make <span aria-hidden="true">→</span></a></p>
   </div>
 </section>''',
     'p_title': 'Lumen Lab Privacy Policy',
@@ -757,34 +630,27 @@ EN = {
 
 # ---------- 만들기 ----------
 def build(site, cat, groups, tools):
-    """루트 정보 페이지 여섯 개를 쓰고, 사이트맵에 넣을 한·영 짝을 돌려준다. 홈의 '가이드 N편' 줄에 쓸 글 수도."""
+    """루트 정보 페이지(소개·방침과 영어판)를 쓰고, 사이트맵에 넣을 주소(한국어 쪽)와 언어별 가이드 글 수를 돌려준다."""
     ko_src = open(os.path.join(site, 'index.html')).read()
     en_src = open(os.path.join(site, 'en', 'index.html')).read()
-    data = {l: {it['id']: read_guides(site, it, l) for it in tools} for l in ('ko', 'en')}
-    counts = {l: sum(len(v[1]) for v in data[l].values()) for l in ('ko', 'en')}
+    counts = {l: sum(len(read_guides(site, it, l)[1]) for it in tools) for l in ('ko', 'en')}
     org = {'@type': 'Organization', 'name': 'Lumen Lab', 'alternateName': '루멘랩', 'url': ROOT + '/', 'email': MAIL, 'telephone': TEL_INTL}
     out = []
     for lang, src in (('ko', ko_src), ('en', en_src)):
-        T = KO if lang == 'ko' else EN
         pre = '' if lang == 'ko' else '/en'
-        gm, n = guides_main(lang, groups, tools, data[lang])
         if lang == 'ko':
-            gt, gd = '가이드 모음 · Lumen Lab 루멘랩', f'루멘랩 웹 도구 {len(tools)}개에 딸린 가이드 {n}편을 도구별로 모았어요. 날짜·급여·공학용 계산, 글자수, 파일 변환, 달력, QR코드, 타이머, 타자, 기기 테스트, 뽑기.'
             at, ad = '루멘랩 소개 · Lumen Lab', '루멘랩(Lumen Lab)은 혼자 운영하는 작은 소프트웨어 스튜디오예요. 누가 만드는지, 웹 도구의 결과를 어떻게 확인하는지, 운영비와 연락처.'
             pt, pd = '개인정보 처리방침 · Lumen Lab 루멘랩', 'lumenlab.page와 루멘랩 웹 도구 사이트의 개인정보 처리방침: 처리하는 정보, 광고 쿠키(Google 애드센스), 방문 통계, 위탁과 국외 이전, 이용자의 권리.'
         else:
-            gt, gd = 'Guides · Lumen Lab', f'All {n} English guides for Lumen Lab’s {len(tools)} free web tools, grouped by tool: date, pay and scientific calculators, character counting, file conversion, calendars, QR codes, timers, typing, device tests and fair picks.'
             at, ad = 'About Lumen Lab', 'Lumen Lab is a small, one-person software studio. Who makes the tools, how their results are checked, how the sites are paid for, and how to reach us.'
             pt, pd = 'Privacy Policy · Lumen Lab', 'Privacy policy for lumenlab.page and the Lumen Lab web tool sites: what is processed, advertising cookies (Google AdSense), visit statistics, service providers and your rights.'
         pages = [
-            (f'{pre}/guides/', gt, gd, gm, 'website', {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': gt, 'url': f'{ROOT}{pre}/guides/', 'inLanguage': lang, 'publisher': org}),
             (f'{pre}/about/', at, ad, about_main(lang, cat, tools, groups, counts), 'website', {'@context': 'https://schema.org', '@type': 'AboutPage', 'name': at, 'url': f'{ROOT}{pre}/about/', 'inLanguage': lang, 'mainEntity': org}),
             (f'{pre}/privacy/', pt, pd, privacy_main(lang, cat, tools, groups), 'article', None),
         ]
         for path, title, desc, main, kind, ld in pages:
             d = os.path.join(site, path.strip('/')); os.makedirs(d, exist_ok=True)
-            js = '<script src="/assets/guides.js" defer></script>\n' if path.endswith('/guides/') else ''
-            open(os.path.join(d, 'index.html'), 'w').write(page(lang, path, title, desc, main, src, kind, ld, js))
+            open(os.path.join(d, 'index.html'), 'w').write(page(lang, path, title, desc, main, src, kind, ld))
             out.append(path)
     print('정보 페이지:', ', '.join(out), f'(가이드 한국어 {counts["ko"]}편, 영어 {counts["en"]}편)')
-    return ['/guides/', '/about/', '/privacy/'], counts
+    return ['/about/', '/privacy/'], counts
