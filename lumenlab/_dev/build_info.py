@@ -124,70 +124,68 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None):
 </html>
 '''
 
-def ihead(T, kicker, title, lead, jumps, wide=False):
+def ihead(T, kicker, title, lead, jumps, wide=False, jcls=''):
     nav = ''.join(f'<a href="#{i}">{t}</a>' for i, t in jumps)
-    return f'''<header class="ihead">
-  <div class="wrap ihead__in{' ihead__in--wide' if wide else ''}">
-    <p class="ihead__kicker">{kicker}</p>
+    kick = f'\n    <p class="ihead__kicker">{kicker}</p>' if kicker else ''
+    return f"""<header class="ihead">
+  <div class="wrap ihead__in{' ihead__in--wide' if wide else ''}">{kick}
     <h1 class="ihead__title">{title}</h1>
     <p class="ihead__lead">{lead}</p>
-    <nav class="ijump" aria-label="{T['jump_label']}">{nav}</nav>
+    <nav class="ijump{' ' + jcls if jcls else ''}" aria-label="{T['jump_label']}">{nav}</nav>
   </div>
-</header>'''
+</header>"""
 
 
 # ---------- 가이드 모음 ----------
+# 한눈에 훑게: 글은 제목과 날짜만(설명은 글 페이지에 있다), 맨 위에 도구 바로가기, 컴퓨터는 왼쪽 묶음 칸에도 도구 목록.
+# 도구마다 '확인하고 밝혀 둔 것'은 소개 페이지 한 곳에만 두고 여기선 링크(같은 글을 두 번 싣지 않는다).
 def guides_main(lang, groups, tools, data):
     T = KO if lang == 'ko' else EN
+    pre = '' if lang == 'ko' else '/en'
     n_all = sum(len(data[it['id']][1]) for it in tools)
-    jumps = []
+    in_group = lambda g: [it for it in tools if it['group'] == g['id']]
+    jumps = [(f"t-{it['id']}", f"{esc(it['name'][lang])} <span>{len(data[it['id']][1])}</span>") for g in groups for it in in_group(g)]
+    out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), jumps, wide=True, jcls='ijump--tools')]
     for g in groups:
-        n = sum(len(data[it['id']][1]) for it in tools if it['group'] == g['id'])
-        jumps.append((f"g-{g['id']}", f"{esc(g['name'][lang])} <span>{T['n_guides'](n)}</span>"))
-    out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), jumps, wide=True)]
-    for g in groups:
-        tl = [it for it in tools if it['group'] == g['id']]
-        blocks = []
-        for it in tl:
+        blocks, nav = [], []
+        for it in in_group(g):
             index, items = data[it['id']]
             tp = tool_pages(it, lang)
+            name = it['name'][lang]
+            nav.append(f'<li><a href="#t-{it["id"]}">{esc(name)} <span>{len(items)}</span></a></li>')
             rows = []
-            for i, a in enumerate(items):
+            for a in items:
                 dates = T['written'](f'<time datetime="{a["pub"]}">{fdate(a["pub"], lang)}</time>')
                 if a['mod'] and a['mod'] != a['pub']:
                     dates += ' <span aria-hidden="true">·</span> ' + T['updated'](f'<time datetime="{a["mod"]}">{fdate(a["mod"], lang)}</time>')
-                rows.append(f'''          <li><a class="gl__a" href="{esc(a['url'])}">
-            <span class="gl__t">{esc(a['title'])}</span>
-            <span class="gl__d">{esc(a['desc'])}</span>
-            <span class="gl__m">{dates}</span>
-          </a></li>''')
-            name = it['name'][lang]; sub = '' if lang == 'en' or not it.get('sub') else f' <span class="gt__en" lang="en">{esc(it["sub"])}</span>'
-            blocks.append(f'''      <article class="gt" id="t-{it['id']}" aria-labelledby="t-{it['id']}-n">
+                rows.append(f'          <li><a class="gl__a" href="{esc(a["url"])}"><span class="gl__t">{esc(a["title"])}</span><span class="gl__m">{dates}</span></a></li>')
+            sub = '' if lang == 'en' or not it.get('sub') else f' <span class="gt__en" lang="en">{esc(it["sub"])}</span>'
+            blocks.append(f"""      <article class="gt" id="t-{it['id']}" aria-labelledby="t-{it['id']}-n">
         <div class="gt__head">
           <img class="gt__icon" src="{it['icon']}" width="44" height="44" alt="" loading="lazy">
           <div class="gt__name-wrap">
             <h3 class="gt__name" id="t-{it['id']}-n">{esc(name)}{sub}</h3>
-            <p class="gt__host"><a href="{esc(tp['home'])}">{tp['host']}</a> <span aria-hidden="true">·</span> {T['n_guides'](len(items))}</p>
+            <p class="gt__kind">{esc(it['what'][lang])} <span aria-hidden="true">·</span> {T['n_guides'](len(items))}</p>
           </div>
         </div>
         <p class="gt__what">{esc(index['desc'])}</p>
-        <p class="gt__check"><b>{T['checked']}</b> {esc(it['check'][lang])} <a href="{esc(tp['about'])}">{T['see_about']}</a></p>
         <ol class="gl">
 {chr(10).join(rows)}
         </ol>
-        <p class="gt__more"><a class="gt__open" href="{esc(tp['home'])}">{T['open_tool'](esc(name))} <span aria-hidden="true">→</span></a></p>
-      </article>''')
-        out.append(f'''<section class="gs" id="g-{g['id']}" aria-labelledby="g-{g['id']}-t">
+        <p class="gt__more"><a class="gt__open" href="{esc(tp['home'])}">{T['open_tool'](esc(name))} <span aria-hidden="true">→</span></a> <a class="gt__check" href="{pre}/about/#c-{it['id']}">{T['checked']}</a></p>
+      </article>""")
+        out.append(f"""<section class="gs" id="g-{g['id']}" aria-labelledby="g-{g['id']}-t">
   <div class="wrap gs__in">
     <div class="gs__head">
       <h2 class="gs__name" id="g-{g['id']}-t">{esc(g['name'][lang])}</h2>
       <p class="gs__line">{esc(g['line'][lang])}</p>
+      <ul class="gs__nav" aria-label="{esc(g['name'][lang])}">{''.join(nav)}</ul>
     </div>
     <div class="gs__tools">
 {chr(10).join(blocks)}
     </div>
   </div>
-</section>''')
+</section>""")
     out.append(T['g_end'])
     return '\n'.join(out), n_all
 
@@ -203,13 +201,12 @@ def about_main(lang, cat, tools, groups, counts):
     for g in groups:
         for it in [t for t in tools if t['group'] == g['id']]:
             tp = tool_pages(it, lang)
-            checks.append(f'''      <div class="ck">
-        <dt><img src="{it['icon']}" width="28" height="28" alt="" loading="lazy"><a href="{esc(tp['about'])}">{nm(it)}</a> <span class="ck__host">{tp['host']}</span></dt>
+            checks.append(f"""      <div class="ck" id="c-{it['id']}">
+        <dt><img src="{it['icon']}" width="28" height="28" alt="" loading="lazy"><a href="{esc(tp['about'])}">{nm(it)}</a> <span class="ck__host">{esc(it['what'][lang])}</span></dt>
         <dd>{esc(it['check'][lang])}</dd>
-      </div>''')
+      </div>""")
     body = T['about_body'](what, '\n'.join(checks))
-    jumps = T['about_jumps']
-    return ihead(T, T['a_kicker'], T['a_title'], T['a_lead'], jumps) + f'\n<div class="wrap idoc">\n{body}\n</div>'
+    return ihead(T, T['a_kicker'], T['a_title'], T['a_lead'], T['about_jumps']) + f'\n<div class="wrap idoc">\n{body}\n</div>\n' + T['a_end']
 
 
 # ---------- 개인정보 처리방침 ----------
@@ -219,16 +216,16 @@ def privacy_main(lang, cat, tools, groups):
     for g in groups:
         for it in [t for t in tools if t['group'] == g['id']]:
             tp = tool_pages(it, lang)
-            rows.append(f'<li><a href="{esc(tp["home"])}">{esc(it["name"][lang])}</a> <span class="ck__host">{tp["host"]}</span> <span aria-hidden="true">·</span> <a href="{esc(tp["privacy"])}">{T["its_policy"]}</a></li>')
+            rows.append(f'<li><a href="{esc(tp["privacy"])}">{T["its_policy"](esc(it["name"][lang]))}</a> <span class="ck__host">{tp["host"]}</span></li>')
     apps = []
     for it in cat.get('games', []) + cat['apps']:
         if it.get('privacy'):
-            apps.append(f'<li><a href="{esc(it["privacy"][lang])}">{esc(it["name"][lang])}</a></li>')
+            apps.append(f'<li><a href="{esc(it["privacy"][lang])}">{T["its_policy"](esc(it["name"][lang]))}</a></li>')
         for l in it['links']:
             if l['href'].endswith('/privacy/'):   # 한 주소에 두 언어인 방침(Owlight)
-                apps.append(f'<li><a href="{esc(l["href"])}{"#en" if lang == "en" else ""}">{esc(it["name"][lang])}</a></li>')
+                apps.append(f'<li><a href="{esc(l["href"])}{"#en" if lang == "en" else ""}">{T["its_policy"](esc(it["name"][lang]))}</a></li>')
     body = T['privacy_body']('\n'.join(rows), '\n'.join(apps))
-    return ihead(T, T['p_kicker'], T['p_title'], T['p_lead'], T['privacy_jumps']) + f'\n<div class="wrap idoc">\n{body}\n</div>'
+    return ihead(T, '', T['p_title'], T['p_lead'], T['privacy_jumps'], jcls='ijump--toc') + f'\n<div class="wrap idoc">\n{body}\n</div>'
 
 
 # ---------- 글 (한국어) ----------
@@ -236,11 +233,11 @@ KO = {
     'jump_label': '이 페이지 안',
     'n_guides': lambda n: f'{n}편',
     'written': lambda d: f'{d} 씀', 'updated': lambda d: f'{d} 고침',
-    'checked': '만든 기준', 'see_about': '도구 소개 보기',
+    'checked': '확인하고 밝혀 둔 것',
     'open_tool': lambda n: f'{n} 열기',
     'g_kicker': '가이드',
     'g_title': '도구를 쓰다 막히는 곳을 <span class="nw">풀어 쓴 글</span>',
-    'g_lead': lambda t, n: f'루멘랩 웹 도구 {t}개에 딸린 글 {n}편을 도구별로 모았어요. 글은 각 도구 사이트에 있고, 쓴 날과 고친 날을 함께 적었어요. 도구마다 무엇을 확인하고 밝혀 두었는지도 한 줄씩 붙였어요.',
+    'g_lead': lambda t, n: f'웹 도구 {t}개에 딸린 글 {n}편이에요. 글마다 쓴 날과 고친 날을 적었어요.',
     'g_end': '''<section class="iend" aria-labelledby="iend-t">
   <div class="wrap iend__in">
     <h2 id="iend-t" class="iend__title">찾는 글이 없거나 틀린 곳이 있나요?</h2>
@@ -251,7 +248,7 @@ KO = {
     'a_kicker': '소개',
     'a_title': '루멘랩은 혼자 운영하는 작은 소프트웨어 <span class="nw">스튜디오예요</span>',
     'a_lead': '휴대폰 게임과 앱, 브라우저에서 바로 쓰는 무료 웹 도구를 만들어요. 누가 만드는지, 도구마다 무엇을 확인하는지, 운영비는 어디서 나오는지 적었어요.',
-    'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '도구별 기준'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
+    'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '확인하고 밝혀 둔 것'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 목록</a></li>
   <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 한곳에 모아 두었어요. <a href="/guides/">가이드 모음</a></li>
@@ -310,28 +307,27 @@ KO = {
   <li>광고와 쿠키, 방문 통계가 어떻게 동작하는지는 <a href="/privacy/">개인정보 처리방침</a>에 있어요.</li>
 </ul>
 </section>
-
-<section id="contact" aria-labelledby="contact-t">
-<h2 id="contact-t">연락처</h2>
-<p>문의, 틀린 결과 제보, 바라는 기능은 메일로 받아요. 어떤 도구인지, 기기와 브라우저, 넣은 값을 같이 적어 주시면 빨리 확인할 수 있어요.</p>
-<dl class="ifacts">
-  <div><dt>메일</dt><dd><a href="mailto:{MAIL}">{MAIL}</a></dd></div>
-  <div><dt>전화</dt><dd><a href="tel:{TEL_INTL}">{TEL}</a></dd></div>
-</dl>
+''',
+    'a_end': f'''<section class="iend" id="contact" aria-labelledby="contact-t">
+  <div class="wrap iend__in">
+    <h2 id="contact-t" class="iend__title">틀린 결과나 바라는 기능은 메일로 알려 주세요</h2>
+    <p class="iend__lead">어떤 도구인지, 기기와 브라우저, 넣은 값을 같이 적어 주시면 빨리 확인할 수 있어요. 전화는 <a href="tel:{TEL_INTL}">{TEL}</a>이에요.</p>
+    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">메일 쓰기</a> <a class="iend__more" href="/guides/">가이드 모음 <span aria-hidden="true">→</span></a></p>
+  </div>
 </section>''',
-    'p_kicker': '개인정보 처리방침',
     'p_title': '루멘랩 개인정보 처리방침',
     'p_lead': f'시행일: {EFFECTIVE[0]}. 루멘랩(Lumen Lab)이 lumenlab.page와 웹 도구 사이트를 운영하면서 이용자의 개인정보를 어떻게 처리하는지 적었어요.',
-    'privacy_jumps': [('p-sum', '한눈에 보기'), ('p-ads', '광고와 쿠키'), ('p-share', '위탁과 국외 이전'), ('p-rights', '이용자의 권리'), ('p-officer', '보호책임자')],
-    'its_policy': '이 도구의 방침',
+    'privacy_jumps': [('p-sum', '한눈에 보기'), ('p-scope', '1. 다루는 곳'), ('p-direct', '2. 직접 처리하는 정보'), ('p-auto', '3. 기기에 남는 것·방문 통계'), ('p-ads', '4. 광고와 쿠키'), ('p-share', '5. 위탁·국외 이전'), ('p-destroy', '6. 파기'), ('p-rights', '7. 이용자의 권리'), ('p-safe', '8. 안전 조치'), ('p-officer', '9. 보호책임자'), ('p-help', '10. 구제 방법'), ('p-change', '11. 변경')],
+    'its_policy': lambda n: f'{n} 방침',
     'privacy_body': lambda rows, apps: f'''<section id="p-sum" aria-labelledby="p-sum-t">
 <h2 id="p-sum-t">한눈에 보기</h2>
 <ul class="ilist">
   <li>회원 가입과 로그인이 없어요. 루멘랩은 사이트에서 이름, 이메일, 전화번호 같은 개인정보를 받지 않아요.</li>
   <li>도구에 넣은 글, 숫자, 날짜, 명단, 파일과 마이크 소리, 카메라 영상은 이용자 브라우저 안에서만 처리하고 루멘랩 서버로 보내지 않아요.</li>
   <li>루멘랩이 직접 받는 개인정보는 이용자가 보낸 문의 메일(메일 주소와 내용)뿐이에요.</li>
-  <li>웹 도구 사이트에는 Google 애드센스 광고가 나와요. 이때 Google 같은 광고 업체가 쿠키를 쓸 수 있어요(4번). lumenlab.page에는 광고가 없어요.</li>
-  <li>모든 사이트에 쿠키를 쓰지 않는 방문 통계(Cloudflare Web Analytics)가 있어요(3번).</li>
+  <li>웹 도구 사이트에는 Google 애드센스 광고가 나와요. 이때 Google 같은 광고 업체가 쿠키를 쓸 수 있어요(<a href="#p-ads">4번</a>). lumenlab.page에는 광고가 없어요.</li>
+  <li>맞춤 광고는 <a href="https://adssettings.google.com/">Google 광고 설정</a>에서 끌 수 있어요.</li>
+  <li>모든 사이트에 쿠키를 쓰지 않는 방문 통계(Cloudflare Web Analytics)가 있어요(<a href="#p-auto">3번</a>).</li>
 </ul>
 </section>
 
@@ -343,6 +339,7 @@ KO = {
   <li><b>세트노트(setnote.lumenlab.page)</b> 운동 기록 웹 앱이에요. 기록과 설정은 이 기기의 브라우저 저장소에만 남고 서버로 보내지 않아요. 광고가 없어요.</li>
   <li><b>캐슬업! 소개 사이트(castle-up.lumenlab.page)</b> 아직 출시 전인 게임의 소개 페이지예요. 광고가 없고 이 기기에 남기는 것도 없어요. 방문 통계(3번)만 있어요.</li>
 </ul>
+<p>도구마다 그 도구의 방침으로 이어져요.</p>
 <ul class="isites">
 {rows}
 </ul>
@@ -469,11 +466,11 @@ EN = {
     'jump_label': 'On this page',
     'n_guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'),
     'written': lambda d: f'Published {d}', 'updated': lambda d: f'updated {d}',
-    'checked': 'How it’s built', 'see_about': 'About this tool',
+    'checked': 'What it checks and discloses',
     'open_tool': lambda n: f'Open {n}',
     'g_kicker': 'Guides',
     'g_title': 'Guides to the tricky parts <span class="nw">of each tool</span>',
-    'g_lead': lambda t, n: f'All {n} English guides for Lumen Lab’s {t} web tools, grouped by tool. Each guide lives on its tool’s site and shows when it was published and last updated. Every tool also gets one line on what it checks and discloses.',
+    'g_lead': lambda t, n: f'{n} guides for our {t} web tools, each with the date it was published and last updated.',
     'g_end': '''<section class="iend" aria-labelledby="iend-t">
   <div class="wrap iend__in">
     <h2 id="iend-t" class="iend__title">Missing a guide, or found a mistake?</h2>
@@ -484,7 +481,7 @@ EN = {
     'a_kicker': 'About',
     'a_title': 'Lumen Lab is a small, one-person <span class="nw">software studio</span>',
     'a_lead': 'We make phone games, apps and free web tools that work right in your browser. This page covers who makes them, what each tool checks and how the sites pay for themselves.',
-    'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'Tool by tool'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
+    'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'What each tool checks'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
   <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site and are collected in one place. <a href="/en/guides/">All guides</a></li>
@@ -543,28 +540,27 @@ EN = {
   <li>How ads, cookies and visit statistics work is explained in the <a href="/en/privacy/">privacy policy</a>.</li>
 </ul>
 </section>
-
-<section id="contact" aria-labelledby="contact-t">
-<h2 id="contact-t">Contact</h2>
-<p>Questions, wrong results and feature requests are all welcome by email. Tell us which tool, your device and browser, and what you entered, and we can check it faster.</p>
-<dl class="ifacts">
-  <div><dt>Email</dt><dd><a href="mailto:{MAIL}">{MAIL}</a></dd></div>
-  <div><dt>Phone</dt><dd><a href="tel:{TEL_INTL}">{TEL_INTL}</a> (in Korean)</dd></div>
-</dl>
+''',
+    'a_end': f'''<section class="iend" id="contact" aria-labelledby="contact-t">
+  <div class="wrap iend__in">
+    <h2 id="contact-t" class="iend__title">Found a wrong result, or want a feature? Email us</h2>
+    <p class="iend__lead">Tell us which tool, your device and browser, and what you entered, and we can check it faster. Phone: <a href="tel:{TEL_INTL}">{TEL_INTL}</a> (in Korean).</p>
+    <p class="iend__row"><a class="btn btn--lamp" href="mailto:{MAIL}">Write an email</a> <a class="iend__more" href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+  </div>
 </section>''',
-    'p_kicker': 'Privacy Policy',
     'p_title': 'Lumen Lab Privacy Policy',
     'p_lead': f'Effective {EFFECTIVE[1]}. How Lumen Lab handles personal information on lumenlab.page and its web tool sites.',
-    'privacy_jumps': [('p-sum', 'Summary'), ('p-ads', 'Ads and cookies'), ('p-share', 'Service providers'), ('p-rights', 'Your rights'), ('p-officer', 'Contact')],
-    'its_policy': 'its privacy policy',
+    'privacy_jumps': [('p-sum', 'Summary'), ('p-scope', '1. Where it applies'), ('p-direct', '2. What we handle'), ('p-auto', '3. Device storage and statistics'), ('p-ads', '4. Ads and cookies'), ('p-share', '5. Service providers'), ('p-destroy', '6. Deletion'), ('p-rights', '7. Your rights'), ('p-safe', '8. Security'), ('p-officer', '9. Privacy contact'), ('p-help', '10. Complaints'), ('p-change', '11. Changes')],
+    'its_policy': lambda n: f'{n} privacy policy',
     'privacy_body': lambda rows, apps: f'''<section id="p-sum" aria-labelledby="p-sum-t">
 <h2 id="p-sum-t">Summary</h2>
 <ul class="ilist">
   <li>There are no accounts or logins. Lumen Lab does not collect your name, email address or phone number on these sites.</li>
   <li>Text, numbers, dates, name lists, files, microphone audio and camera video you use in the tools are processed in your browser only and are never sent to a Lumen Lab server.</li>
   <li>The only personal information Lumen Lab receives directly is an email you choose to send us (your address and the message).</li>
-  <li>The web tool sites show Google AdSense ads, and ad companies such as Google may use cookies (section 4). lumenlab.page itself has no ads.</li>
-  <li>Every site has cookie-free visit statistics (Cloudflare Web Analytics, section 3).</li>
+  <li>The web tool sites show Google AdSense ads, and ad companies such as Google may use cookies (<a href="#p-ads">section 4</a>). lumenlab.page itself has no ads.</li>
+  <li>You can turn off personalized ads in <a href="https://adssettings.google.com/">Google Ad Settings</a>.</li>
+  <li>Every site has cookie-free visit statistics (Cloudflare Web Analytics, <a href="#p-auto">section 3</a>).</li>
 </ul>
 </section>
 
@@ -576,6 +572,7 @@ EN = {
   <li><b>SetNote (setnote.lumenlab.page)</b> a workout log web app. Your log and settings stay in your browser’s storage on this device and are never sent to a server. It has no ads.</li>
   <li><b>Castle Up! (castle-up.lumenlab.page)</b> the page for a game that is not out yet. It has no ads and saves nothing on your device; only the visit statistics in section 3 apply.</li>
 </ul>
+<p>Each tool links to its own policy.</p>
 <ul class="isites">
 {rows}
 </ul>

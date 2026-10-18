@@ -52,7 +52,7 @@
     <p class="ihead__kicker">About</p>
     <h1 class="ihead__title">Lumen Lab is a small, one-person <span class="nw">software studio</span></h1>
     <p class="ihead__lead">We make phone games, apps and free web tools that work right in your browser. This page covers who makes them, what each tool checks and how the sites pay for themselves.</p>
-    <nav class="ijump" aria-label="On this page"><a href="#who">Who we are</a><a href="#rules">How we build</a><a href="#check">Tool by tool</a><a href="#upkeep">Keeping things current</a><a href="#ads">Ads</a><a href="#contact">Contact</a></nav>
+    <nav class="ijump" aria-label="On this page"><a href="#who">Who we are</a><a href="#rules">How we build</a><a href="#check">What each tool checks</a><a href="#upkeep">Keeping things current</a><a href="#ads">Ads</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 <div class="wrap idoc">
@@ -90,48 +90,48 @@
 <h2 id="check-t">What each tool checks and discloses</h2>
 <p>This gathers what each tool’s About page says. Follow a tool’s name for its full rules and sources.</p>
 <dl class="ichecks">
-      <div class="ck">
-        <dt><img src="/img/daycount.svg" width="28" height="28" alt="" loading="lazy"><a href="https://date.lumenlab.page/en/about/">Daycount</a> <span class="ck__host">date.lumenlab.page</span></dt>
+      <div class="ck" id="c-daycount">
+        <dt><img src="/img/daycount.svg" width="28" height="28" alt="" loading="lazy"><a href="https://date.lumenlab.page/en/about/">Daycount</a> <span class="ck__host">Days between dates, age and business days</span></dt>
         <dd>It is tested automatically against more than 3,200 answers worked out separately with Python’s date library.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/sci-calc.svg" width="28" height="28" alt="" loading="lazy"><a href="https://calc.lumenlab.page/en/about/">Scientific Calculator</a> <span class="ck__host">calc.lumenlab.page</span></dt>
+      <div class="ck" id="c-scicalc">
+        <dt><img src="/img/sci-calc.svg" width="28" height="28" alt="" loading="lazy"><a href="https://calc.lumenlab.page/en/about/">Scientific Calculator</a> <span class="ck__host">Scientific functions and physical constants</span></dt>
         <dd>Results are compared automatically with about 3,700 answers computed separately in Python (sympy, mpmath, scipy and numpy), and the physical constants were checked digit by digit against the NIST table.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/salary.svg" width="28" height="28" alt="" loading="lazy"><a href="https://salary.lumenlab.page/en/about/">Takehome Korea</a> <span class="ck__host">salary.lumenlab.page</span></dt>
+      <div class="ck" id="c-takehome">
+        <dt><img src="/img/salary.svg" width="28" height="28" alt="" loading="lazy"><a href="https://salary.lumenlab.page/en/about/">Takehome Korea</a> <span class="ck__host">Korean take-home pay and severance</span></dt>
         <dd>Rates and limits are taken only from laws and agency notices opened directly, and every figure is listed with its source and the day it was checked. Severance pay matches the Ministry of Employment and Labor&#x27;s worked example to the last jeon (₩88,641.31 average daily wage).</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/convert.svg" width="28" height="28" alt="" loading="lazy"><a href="https://convert.lumenlab.page/about/">Inplace</a> <span class="ck__host">convert.lumenlab.page</span></dt>
+      <div class="ck" id="c-inplace">
+        <dt><img src="/img/convert.svg" width="28" height="28" alt="" loading="lazy"><a href="https://convert.lumenlab.page/about/">Inplace</a> <span class="ck__host">Image, video and PDF converter</span></dt>
         <dd>Files are converted inside your browser and never uploaded. The open-source libraries that do the work (Mediabunny, LAME, libheif, PDF.js, pdf-lib, qpdf, SheetJS and more) are all named on its About page.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/calendar.svg" width="28" height="28" alt="" loading="lazy"><a href="https://calendar.lumenlab.page/about/">Onesheet</a> <span class="ck__host">calendar.lumenlab.page</span></dt>
+      <div class="ck" id="c-onesheet">
+        <dt><img src="/img/calendar.svg" width="28" height="28" alt="" loading="lazy"><a href="https://calendar.lumenlab.page/about/">Onesheet</a> <span class="ck__host">Printable calendars and holidays</span></dt>
         <dd>US federal holidays for 2026 and 2027 were checked day by day against the Office of Personnel Management schedules, Korean holidays against the official announcements, and weekdays are tested for every day from 1900 to 2100.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/count.svg" width="28" height="28" alt="" loading="lazy"><a href="https://count.lumenlab.page/about/">Kankan</a> <span class="ck__host">count.lumenlab.page</span></dt>
+      <div class="ck" id="c-kankan">
+        <dt><img src="/img/count.svg" width="28" height="28" alt="" loading="lazy"><a href="https://count.lumenlab.page/about/">Kankan</a> <span class="ck__host">Character counter</span></dt>
         <dd>The counting code is covered by about 35,000 automated tests, with expected values taken from Python&#x27;s codecs and Unicode libraries, the twitter-text package and three independent SMS calculators.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/qr.svg" width="28" height="28" alt="" loading="lazy"><a href="https://qr.lumenlab.page/about/">Staycode</a> <span class="ck__host">qr.lumenlab.page</span></dt>
+      <div class="ck" id="c-staycode">
+        <dt><img src="/img/qr.svg" width="28" height="28" alt="" loading="lazy"><a href="https://qr.lumenlab.page/about/">Staycode</a> <span class="ck__host">QR code maker</span></dt>
         <dd>It makes static codes only, so the link lives inside the image and keeps working even if this site stops. Every code is read back right away to check that it scans.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/pick.svg" width="28" height="28" alt="" loading="lazy"><a href="https://pick.lumenlab.page/about/">Pickboard</a> <span class="ck__host">pick.lumenlab.page</span></dt>
+      <div class="ck" id="c-pickboard">
+        <dt><img src="/img/pick.svg" width="28" height="28" alt="" loading="lazy"><a href="https://pick.lumenlab.page/about/">Pickboard</a> <span class="ck__host">Wheel, ladder and team picker</span></dt>
         <dd>Every pick starts from a fresh seed from the browser&#x27;s crypto.getRandomValues(), and more than 500 automated tests, including chi-square checks over 100,000 draws, confirm that results come out even. A result link lets anyone recompute the same result.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/check.svg" width="28" height="28" alt="" loading="lazy"><a href="https://check.lumenlab.page/about/">Checkbench</a> <span class="ck__host">check.lumenlab.page</span></dt>
+      <div class="ck" id="c-checkbench">
+        <dt><img src="/img/check.svg" width="28" height="28" alt="" loading="lazy"><a href="https://check.lumenlab.page/about/">Checkbench</a> <span class="ck__host">Keyboard, mouse and mic tests</span></dt>
         <dd>Each verdict shows its threshold (30 ms for keyboard chatter, 50 ms for double-clicks and so on), and what a web page cannot see, such as a mouse&#x27;s true USB polling rate, is stated plainly.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/typing.svg" width="28" height="28" alt="" loading="lazy"><a href="https://typing.lumenlab.page/about/">Todok</a> <span class="ck__host">typing.lumenlab.page</span></dt>
+      <div class="ck" id="c-todok">
+        <dt><img src="/img/typing.svg" width="28" height="28" alt="" loading="lazy"><a href="https://typing.lumenlab.page/about/">Todok</a> <span class="ck__host">Korean and English typing practice</span></dt>
         <dd>The way speed and WPM are counted is published (five characters per word, as defined in Dhakal et al., CHI 2018), and the practice texts contain no books, articles or lyrics.</dd>
       </div>
-      <div class="ck">
-        <dt><img src="/img/time.svg" width="28" height="28" alt="" loading="lazy"><a href="https://time.lumenlab.page/about/">Oneturn</a> <span class="ck__host">time.lumenlab.page</span></dt>
+      <div class="ck" id="c-oneturn">
+        <dt><img src="/img/time.svg" width="28" height="28" alt="" loading="lazy"><a href="https://time.lumenlab.page/about/">Oneturn</a> <span class="ck__host">Timer, stopwatch and world clock</span></dt>
         <dd>City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python&#x27;s zoneinfo.</dd>
       </div>
 </dl>
@@ -157,15 +157,14 @@
 </ul>
 </section>
 
-<section id="contact" aria-labelledby="contact-t">
-<h2 id="contact-t">Contact</h2>
-<p>Questions, wrong results and feature requests are all welcome by email. Tell us which tool, your device and browser, and what you entered, and we can check it faster.</p>
-<dl class="ifacts">
-  <div><dt>Email</dt><dd><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></dd></div>
-  <div><dt>Phone</dt><dd><a href="tel:+82-70-8098-5263">+82-70-8098-5263</a> (in Korean)</dd></div>
-</dl>
-</section>
 </div>
+<section class="iend" id="contact" aria-labelledby="contact-t">
+  <div class="wrap iend__in">
+    <h2 id="contact-t" class="iend__title">Found a wrong result, or want a feature? Email us</h2>
+    <p class="iend__lead">Tell us which tool, your device and browser, and what you entered, and we can check it faster. Phone: <a href="tel:+82-70-8098-5263">+82-70-8098-5263</a> (in Korean).</p>
+    <p class="iend__row"><a class="btn btn--lamp" href="mailto:contact@lumenlab.page">Write an email</a> <a class="iend__more" href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
 </main>
 
 <footer class="foot">
