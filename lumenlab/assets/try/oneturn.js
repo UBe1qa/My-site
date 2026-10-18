@@ -13,9 +13,10 @@ window.LLTry.oneturn = function (stage, c) {
   var RO = 76, RI = 58, RK = 67, CX = 120, CY = 120;
   var wedge = s('path', { class: 'ot-wedge' });
   var ticks = s('g', { class: 'ot-ticks' });
-  var hand = s('circle', { class: 'ot-knob', r: 9 });
+  var hand = s('circle', { class: 'ot-knob', r: 9, 'data-grab': '' });
+  var grip = s('circle', { class: 'ot-grip', cx: CX, cy: CY, r: RK, 'data-grab': '' });   // 손가락으로 잡는 고리(띠보다 굵게, 안 보임)
   var face = s('svg', { viewBox: '0 0 240 240', class: 'ot-face', role: 'slider', tabindex: '0', 'aria-label': T.dial, 'aria-valuemin': '0', 'aria-valuemax': '60', 'aria-valuenow': '0' }, [
-    s('circle', { cx: CX, cy: CY, r: 116, class: 'ot-rim' }), s('circle', { cx: CX, cy: CY, r: (RO + RI) / 2, class: 'ot-band' }), ticks, wedge, s('circle', { cx: CX, cy: CY, r: RI - 4, class: 'ot-hub' }), hand
+    s('circle', { cx: CX, cy: CY, r: 116, class: 'ot-rim' }), s('circle', { cx: CX, cy: CY, r: (RO + RI) / 2, class: 'ot-band' }), ticks, wedge, s('circle', { cx: CX, cy: CY, r: RI - 4, class: 'ot-hub' }), grip, hand
   ]);
   var readout = h('p', { class: 'ot-time', 'aria-live': 'off' });
   var hint = h('p', { class: 'tr-note ot-hint', text: T.drag });
@@ -103,6 +104,7 @@ window.LLTry.oneturn = function (stage, c) {
   }
   face.addEventListener('pointerdown', function (e) {
     if (t.state === 'run') return;
+    if (e.pointerType !== 'mouse' && !e.target.closest('[data-grab]')) return;   // 터치는 고리에서 시작할 때만(나머지는 스크롤)
     dragging = true; face.setPointerCapture(e.pointerId);
     if (t.state !== 'idle') t = OT.timerReset(t);
     setMinutes(OT.dragMinutes(mins, angleOf(e)));
@@ -124,13 +126,13 @@ window.LLTry.oneturn = function (stage, c) {
 
   if (!document.getElementById('try-ot-css')) document.head.appendChild(h('style', { id: 'try-ot-css', text:
     '.ot{display:grid;grid-template-columns:240px minmax(0,1fr);gap:22px;align-items:center}' +
-    '.ot-face{width:240px;height:240px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.ot-face:active{cursor:grabbing}' +
+    '.ot-face{width:240px;height:240px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}.ot-face:active{cursor:grabbing}' +
     '.ot-face:focus{outline:none}.ot-face:focus-visible .ot-rim{stroke:var(--focus);stroke-width:3}' +
     '.ot-rim{fill:var(--paper);stroke:var(--line);stroke-width:2}.ot-ticks line{stroke:var(--muted);stroke-width:1.4}' +
     '.ot-ticks text{fill:var(--ink-2);font-size:15px;font-weight:650;font-variant-numeric:tabular-nums}' +
-    '.ot-wedge{fill:var(--tc);fill-rule:evenodd}.ot-band{fill:none;stroke:color-mix(in srgb,var(--tc) 12%,var(--line));stroke-width:' + (RO - RI) + '}.ot-hub{fill:var(--card);stroke:var(--line)}.ot-knob{fill:#fff;stroke:var(--tc);stroke-width:3}' +
+    '.ot-wedge{fill:var(--tc);fill-rule:evenodd}.ot-band{fill:none;stroke:color-mix(in srgb,var(--tc) 12%,var(--line));stroke-width:' + (RO - RI) + '}.ot-hub{fill:var(--card);stroke:var(--line)}.ot-knob{fill:#fff;stroke:var(--tc);stroke-width:3;touch-action:none}.ot-grip{fill:none;stroke:transparent;stroke-width:44;pointer-events:stroke;touch-action:none}' +
     '.ot-time{margin:0;font-size:clamp(34px,7vw,48px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}' +
-    '.is-done .ot-time{color:var(--tc)}.ot-side{display:grid;gap:12px;align-content:center}' +
+    '.is-done .ot-time{color:var(--tct)}.ot-side{display:grid;gap:12px;align-content:center}' +
     '.ot-world{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}' +
     '.ot-world li{padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}' +
     '.ot-world b{display:block;font-size:20px;font-variant-numeric:tabular-nums}.ot-world span{font-size:15px;color:var(--muted)}' +
@@ -147,6 +149,7 @@ window.LLTry.oneturn = function (stage, c) {
     auto: function (A) {
       doReset(); setMinutes(0);
       // 손가락이 12시에서 시계 방향으로 판을 끌어 5분을 맞추고 시작을 누른다 → 판 한 바퀴가 5분짜리로 바뀐다
+      if (A.fast) { setMinutes(5); return Promise.resolve(); }   // 동작 줄이기: 5분 맞춘 모습만(돌리지 않는다)
       if (A.reduced) { setMinutes(5); return A.wait(300).then(function () { return A.press(go); }); }
       var a = 0;
       function sweep() {

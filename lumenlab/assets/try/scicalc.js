@@ -107,7 +107,7 @@ window.LLTry.scicalc = function (stage, c) {
     '.m-idx{font-size:.55em;margin-right:-.5em;align-self:flex-start;transform:translateY(.1em)}.m-sup{font-size:.62em;align-self:flex-start;display:inline-flex}' +
     '.sc-keys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;max-width:400px}.sc-key{min-width:0;padding:0;font-size:18px}' +
     '.sc-sd{position:absolute;top:10px;right:10px;min-height:36px;padding:0 10px;font-size:15px}.sc-sd:disabled{opacity:.4;cursor:default}' +
-    '.sc-exh{margin:0;font-size:15px;font-weight:600;color:var(--muted)}.sc-ex{font-size:17px;font-weight:600;min-height:52px}' +
+    '.sc-exh{margin:0;font-size:15px;font-weight:600;color:var(--muted)}.sc-ex{font-size:19px;font-weight:600;min-height:52px}' +
     '.sc-in{font-size:18px}.sc-note{min-height:1.6em}' }));
   stage.appendChild(h('div', { class: 'tr' }, [
     h('div', { class: 'sc-lcd' }, [sdBtn, exprEl, h('div', { class: 'sc-ansrow' }, [kind, ansEl])]),

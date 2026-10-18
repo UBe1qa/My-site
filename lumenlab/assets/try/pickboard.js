@@ -34,7 +34,9 @@ window.LLTry.pickboard = function (stage, c) {
     wheel.textContent = '';
     var n = items.length;
     if (!n) return;
-    var m = P.sliceColorCount(n), size = P.labelSize(R, n);
+    // 이름 글자는 화면에서 15px 넘게(칸 폭이 허락하는 만큼까지만 키운다)
+    var px = (face.getBoundingClientRect().width || 300) / 232;
+    var m = P.sliceColorCount(n), size = Math.max(P.labelSize(R, n), Math.min(15 / px, 2 * R * 0.66 * Math.sin(Math.PI / n) * 0.56));
     for (var i = 0; i < n; i++) {
       var g = s('g', { class: 'pb-slice' + (hi >= 0 && i !== hi ? ' is-dim' : '') });
       g.appendChild(s('path', { d: arc(i, n), fill: PAL[i % m] }));
@@ -105,7 +107,7 @@ window.LLTry.pickboard = function (stage, c) {
     '.pb-box{position:relative;width:100%;max-width:300px;aspect-ratio:1;margin:0 auto}.pb-face{display:block;width:100%;height:100%;overflow:visible}' +
     '.pb-rim{fill:var(--card);stroke:var(--line);stroke-width:1.5}.pb-slice path{stroke:#fff;stroke-width:1.2}.pb-slice text{fill:#1b2026;font-weight:700}' +
     '.pb-slice.is-dim{opacity:.26}.pb-needle{fill:var(--tc);stroke:#fff;stroke-width:2;stroke-linejoin:round;transform-origin:' + (R + 13) + 'px 0;transform-box:view-box}' +
-    '.pb-hub{position:absolute;left:50%;top:50%;width:27%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:0;background:var(--tc);color:#fff;' +
+    '.pb-hub{position:absolute;left:50%;top:50%;width:27%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:0;background:color-mix(in srgb,var(--tc) 86%,#000);color:#fff;' +
     'font:inherit;font-size:clamp(15px,4vw,18px);font-weight:800;cursor:pointer;box-shadow:0 0 0 5px var(--card),0 6px 14px rgba(20,28,36,.28);transition:transform .12s}' +
     '.pb-hub:active,.pb-hub.is-auto-press{transform:translate(-50%,-50%) scale(.94)}.pb-hub:disabled{cursor:default}' +
     '.pb-side{display:grid;gap:12px;align-content:start}.pb-res{display:grid;gap:2px;min-height:64px}.pb-rl{font-size:15px;font-weight:600;color:var(--muted)}' +
@@ -128,13 +130,14 @@ window.LLTry.pickboard = function (stage, c) {
     if (!P || !RNG) throw new Error('pick core');
     sync();
   });
-  ready.catch(function (e) { console.warn(e); resName.textContent = c.tool.name; });
+  ready.catch(function (e) { c.fail(e); });   // 불러오지 못하면 빈 판 대신 안내와 공평뽑기 링크
   return {
     stop: function () { alive = false; cancelAnimationFrame(raf); },
     auto: function (A) {
       return ready.then(function () { return A.press(hub); })
-        .then(function () { return A.wait(lastDur + 2200); })
-        .then(function () { return A.press(outBtn); });
+        .then(function () { if (A.fast) throw 0; return A.wait(lastDur + 2200); })   // 동작 줄이기: 뽑힌 모습에서 멈춘다
+        .then(function () { return A.press(outBtn); })
+        .catch(function (e) { if (e !== 0) throw e; });
     }
   };
 };

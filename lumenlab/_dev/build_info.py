@@ -156,7 +156,7 @@ def guides_main(lang, groups, tools, data):
         grid.append(f'<li class="tgrid__g"><p class="tgrid__h">{esc(g["name"][lang])}</p><ul>{cells}</ul></li>')
         if gi: dock.append('<li class="tdock__sep" aria-hidden="true"></li>')
         for it in in_group(g):
-            dock.append(f'<li><a class="tdock__a" href="#t-{it["id"]}" tabindex="-1"><span class="tdock__ic"><img src="{it["icon"]}" width="28" height="28" alt=""><svg class="tdock__ring" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5" pathLength="100"/></svg></span><span class="tdock__n">{esc(it["name"][lang])}</span></a></li>')
+            dock.append(f'<li><a class="tdock__a" href="#t-{it["id"]}" tabindex="-1"><span class="tdock__ic"><img src="{it["icon"]}" width="28" height="28" alt=""></span><span class="tdock__n">{esc(it["name"][lang])}</span></a></li>')
     tgrid = f'<nav class="tgrid" aria-label="{T["dock_label"]}"><ul class="tgrid__list">{"".join(grid)}</ul></nav>'
     out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), [], wide=True, after=tgrid),
            f'<div class="tdock" aria-hidden="true"><div class="wrap tdock__in"><ul class="tdock__list">{"".join(dock)}</ul></div></div>']
@@ -289,8 +289,8 @@ def privacy_main(lang, cat, tools, groups):
 KO = {
     'jump_label': '이 페이지 안',
     'dock_label': '도구 바로가기',
-    'try': '미리 써 보기',
-    'sheet': {'close': '닫기', 'open': '열기', 'try': '여기서 바로 써 보기', 'more': '이런 것도 돼요', 'check': '확인하고 밝혀 둔 것',
+    'try': '바로 써 보기',
+    'sheet': {'close': '닫기', 'open': '열기', 'try': '바로 써 보기', 'more': '이런 것도 돼요', 'check': '확인하고 밝혀 둔 것',
               'guides': '가이드', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
               'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'dialog': '도구 소개'},
     'n_guides': lambda n: f'{n}편',
@@ -528,7 +528,7 @@ EN = {
     'jump_label': 'On this page',
     'dock_label': 'Jump to a tool',
     'try': 'Try it here',
-    'sheet': {'close': 'Close', 'open': 'Open', 'try': 'Try it right here', 'more': 'It can also', 'check': 'What it checks and discloses',
+    'sheet': {'close': 'Close', 'open': 'Open', 'try': 'Try it here', 'more': 'It can also', 'check': 'What it checks and discloses',
               'guides': 'Guides', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
               'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'dialog': 'Tool preview'},
     'n_guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'),

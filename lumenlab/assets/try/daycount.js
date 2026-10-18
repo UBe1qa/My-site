@@ -38,10 +38,13 @@ window.LLTry.daycount = function (stage, c) {
   function run(pop) {
     var a = read(fromIn), b = read(toIn);
     if (a == null || b == null) {
+      // 치는 중: 지난 결과를 흐리게 남겨 둔다(칸 띠가 사라졌다 다시 생기며 무대가 출렁이지 않게)
+      if (lastKey) { root.classList.add('is-stale'); sub.textContent = toIn.value ? T.bad : ''; return; }
       big.textContent = '–'; sub.textContent = toIn.value ? T.bad : ''; dtag.textContent = '';
-      strip.textContent = ''; legend.textContent = ''; hols.textContent = ''; note.hidden = true; lastKey = '';
+      strip.textContent = ''; legend.textContent = ''; hols.textContent = ''; note.hidden = true;
       return;
     }
+    root.classList.remove('is-stale');
     var lo = Math.min(a, b), hi = Math.max(a, b);
     var bt = DC.between(a, b, inc);
     big.textContent = '';
@@ -67,11 +70,13 @@ window.LLTry.daycount = function (stage, c) {
     lastKey = key;
     var end = Math.min(hi, lo + 370), clip = hi > end;
     var first = lo - DC.weekday(lo), weeks = Math.ceil((end - first + 1) / 7);
+    // 요일 글자(15px)는 칸이 그만큼 클 때만(몇 달 넘으면 칸이 작아져 글자 없이 색만)
+    var showWd = ((root.clientWidth || 300) - 34) / weeks - 3 >= 15;
     var holSet = {};
     bd.holidays.forEach(function (x) { holSet[x.day] = x.name[ko ? 0 : 1]; });
     strip.textContent = '';
     strip.style.setProperty('--wk', weeks);
-    for (var r = 0; r < 7; r++) strip.appendChild(h('b', { class: 'dc-wd', style: 'grid-row:' + (r + 1), text: T.wd[r] }));
+    if (showWd) for (var r = 0; r < 7; r++) strip.appendChild(h('b', { class: 'dc-wd', style: 'grid-row:' + (r + 1), text: T.wd[r] }));
     for (var n = first; n < first + weeks * 7; n++) {
       var cls = 'dc-d';
       if (n < lo || n > end) cls += ' is-out';
@@ -93,8 +98,9 @@ window.LLTry.daycount = function (stage, c) {
   if (!document.getElementById('try-dc-css')) document.head.appendChild(h('style', { id: 'try-dc-css', text:
     '.dc-res{display:grid;gap:4px}.dc-tag{display:inline-block;margin-left:12px;padding:3px 10px;border-radius:999px;background:var(--tc);color:#fff;font-size:15px;font-weight:800;letter-spacing:0;vertical-align:middle}' +
     '.dc-tag:empty{display:none}.dc-sub{font-variant-numeric:tabular-nums;min-height:1.6em}' +
-    '.dc-strip{display:grid;grid-template-columns:auto repeat(var(--wk),minmax(0,1fr));grid-template-rows:repeat(7,auto);gap:3px;max-width:calc(var(--wk) * 22px + 26px);align-items:center}' +
-    '.dc-wd{font-size:11px;font-weight:600;color:var(--muted);line-height:1;padding-right:5px;text-align:right}' +
+    '.dc-strip{display:grid;grid-template-columns:auto repeat(var(--wk),minmax(0,1fr));grid-template-rows:repeat(7,auto);gap:3px;max-width:calc(var(--wk) * 22px + 34px);align-items:center}' +
+    '.dc-wd{font-size:15px;font-weight:600;color:var(--muted);line-height:1;padding-right:6px;text-align:right}' +
+    '.is-stale .tr-big,.is-stale .dc-strip,.is-stale .dc-legend,.is-stale .dc-hols{opacity:.3;transition:opacity .15s}' +
     '.dc-d{display:block;aspect-ratio:1;border-radius:3px;background:var(--line)}' +
     '.dc-d.is-out{background:none}.dc-d.is-work{background:color-mix(in srgb,var(--tc) 55%,var(--card))}' +
     '.dc-d.is-off{background:color-mix(in srgb,var(--muted) 30%,var(--card))}.dc-d.is-hol{background:var(--tc);box-shadow:inset 0 0 0 2px color-mix(in srgb,#fff 55%,transparent)}' +
@@ -105,12 +111,13 @@ window.LLTry.daycount = function (stage, c) {
     '.dc-k{display:flex;align-items:center;gap:6px}.dc-k i{width:13px;height:13px;border-radius:3px}.dc-k b{color:var(--ink);font-variant-numeric:tabular-nums}' +
     '.dc-k--work i{background:color-mix(in srgb,var(--tc) 55%,var(--card))}.dc-k--off i{background:color-mix(in srgb,var(--muted) 30%,var(--card))}.dc-k--hol i{background:var(--tc)}' +
     '.dc-hols{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}.dc-hols:empty{display:none}' +
-    '.dc-hols li{padding:4px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:15px}.dc-hols b{color:var(--tc);font-variant-numeric:tabular-nums}' }));
-  stage.appendChild(h('div', { class: 'tr' }, [
+    '.dc-hols li{padding:4px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:15px}.dc-hols b{color:var(--tct);font-variant-numeric:tabular-nums}' }));
+  var root = h('div', { class: 'tr' }, [
     h('div', { class: 'tr-row' }, [field(T.from, fromIn), field(T.to, toIn), incBtn]),
     h('div', { class: 'dc-res' }, [big, sub]),
     strip, legend, hols, note
-  ]));
+  ]);
+  stage.appendChild(root);
   run(false);
   return {
     auto: function (A) {

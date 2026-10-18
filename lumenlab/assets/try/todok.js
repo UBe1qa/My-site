@@ -108,15 +108,15 @@ window.LLTry.todok = function (stage, c) {
     '.td-line{margin:0;padding:16px 16px 14px;border-radius:14px;background:var(--paper);border:1px solid var(--line);font-size:clamp(19px,4.6vw,23px);line-height:1.6;letter-spacing:.01em;word-break:keep-all}' +
     '.td-c{color:var(--muted);border-bottom:2px solid transparent}.td-c.is-ok{color:var(--ink)}' +
     '.td-c.is-bad{color:#d9472b;border-bottom-color:#d9472b}.td-c.is-cur{border-bottom-color:var(--tc)}' +
-    '.td-c.is-pend{background:linear-gradient(90deg,var(--tc) var(--f,0%),var(--muted) var(--f,0%));-webkit-background-clip:text;background-clip:text;color:transparent}' +
+    '.td-c.is-pend{background:linear-gradient(90deg,var(--tct) var(--f,0%),var(--muted) var(--f,0%));-webkit-background-clip:text;background-clip:text;color:transparent}' +
     '.td-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}' +
-    '.td-in{font-size:18px}.td-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.td-stats li b{color:var(--ink)}.td-stats li:first-child b{color:var(--tc)}' +
+    '.td-in{font-size:18px}.td-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.td-stats li b{color:var(--ink)}.td-stats li:first-child b{color:var(--tct)}' +
     '.td-caps{display:flex;gap:5px;min-height:36px;overflow:hidden;justify-content:flex-end}' +
     '.td-cap{flex:none;display:grid;place-items:center;min-width:32px;height:34px;padding:0 6px;border-radius:8px;background:#f1eadb;color:#2a2340;font-weight:800;font-size:16px;' +
     'box-shadow:0 3px 0 color-mix(in srgb,var(--tc) 55%,#000)}.td-cap.is-new{animation:tdcap .22s cubic-bezier(.2,.8,.2,1)}' +
     '@keyframes tdcap{from{transform:translateY(-10px) scale(.7);opacity:0}to{transform:none;opacity:1}}' +
     '.td-res{display:grid;gap:2px;padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--tc) 10%,var(--card));border:1px solid color-mix(in srgb,var(--tc) 30%,var(--line))}' +
-    '.td-res .tr-big{color:var(--tc)}.td-row{display:flex;justify-content:flex-end}' }));
+    '.td-res .tr-big{color:var(--tct)}.td-row{display:flex;justify-content:flex-end}' }));
   stage.appendChild(h('div', { class: 'tr' }, [line, srLine, input, caps, stats, result, h('div', { class: 'td-row' }, [nextBtn])]));
   load(target);
 
@@ -138,7 +138,9 @@ window.LLTry.todok = function (stage, c) {
   }
   return {
     stop: function () { clearInterval(tick); },
+    reset: function () { load(T.samples[si]); },   // 손님 차례: 시연이 친 글과 시계를 지우고 빈 칸으로
     auto: function (A) {
+      if (A.fast) return Promise.resolve();   // 동작 줄이기: 빈 칸 그대로 손님 차례
       load(T.samples[si]);
       var seq = ko ? stages(target) : Array.from(target).map(function (_, i) { return target.slice(0, i + 1); });
       return A.type(input, seq, ko ? 140 : 120);

@@ -21,10 +21,12 @@ window.LLTry.checkbench = function (stage, c) {
   var KEY_KO = { AltRight: '한/영', ControlRight: '한자' };
   var layoutId = CK.defaultLayout(navigator.platform || '');
   var L = CK.layout(layoutId), mac = layoutId === 'mac';
-  // 휴대폰에서도 읽히게 PC 자판은 글자 자판 부분(맨 왼쪽 15칸)만
-  var keys = L.keys.filter(function (k) { return mac || k.x + k.w <= 15.01; });
-  var W = 0, H = 0;
-  keys.forEach(function (k) { W = Math.max(W, k.x + k.w); H = Math.max(H, k.y + k.h); });
+  // PC 자판은 글자 자판 부분(맨 왼쪽 15칸)만. 좁은 화면(휴대폰)은 글자 키 26개만 크게(키 글자 15px 넘게)
+  var compact = (stage.clientWidth || 400) < 520;
+  var keys = L.keys.filter(function (k) { return compact ? /^Key[A-Z]$/.test(k.code) : (mac || k.x + k.w <= 15.01); });
+  var X0 = Infinity, Y0 = Infinity, W = 0, H = 0;
+  keys.forEach(function (k) { X0 = Math.min(X0, k.x); Y0 = Math.min(Y0, k.y); });
+  keys.forEach(function (k) { W = Math.max(W, k.x + k.w - X0); H = Math.max(H, k.y + k.h - Y0); });
   function label(code) {
     if (mac && code in KEY_MAC) return KEY_MAC[code];
     if (ko && !mac && code in KEY_KO) return KEY_KO[code];
@@ -67,11 +69,11 @@ window.LLTry.checkbench = function (stage, c) {
 
   /* ② 키보드 */
   var tracker = CK.createTracker({ chatterMs: CK.KEY_CHATTER_MS });
-  var board = h('div', { class: 'ck-board' + (mac ? ' is-mac' : ''), style: 'aspect-ratio:' + W + '/' + H });
+  var board = h('div', { class: 'ck-board' + (mac ? ' is-mac' : '') + (compact ? ' is-compact' : ''), style: 'aspect-ratio:' + W + '/' + H });
   var el = {};
   keys.forEach(function (k) {
     var b = h('button', { type: 'button', class: 'ck-key', tabindex: '-1', 'data-code': k.code,
-      style: 'left:' + (k.x / W * 100) + '%;top:' + (k.y / H * 100) + '%;width:' + (k.w / W * 100) + '%;height:' + (k.h / H * 100) + '%' }, [h('span', { text: label(k.code) })]);
+      style: 'left:' + ((k.x - X0) / W * 100) + '%;top:' + ((k.y - Y0) / H * 100) + '%;width:' + (k.w / W * 100) + '%;height:' + (k.h / H * 100) + '%' }, [h('span', { text: label(k.code) })]);
     el[k.code] = b; board.appendChild(b);
   });
   var countEl = h('b'), heldEl = h('span');
@@ -92,6 +94,13 @@ window.LLTry.checkbench = function (stage, c) {
     return d;
   }
   function release(id, t) { tracker.up(id, t); if (el[id]) el[id].classList.remove('is-down'); show(); }
+  // 손님 차례가 되면 시연이 누른 키·채터링 알림을 지우고 처음부터 센다
+  function reset() {
+    tracker = CK.createTracker({ chatterMs: CK.KEY_CHATTER_MS });
+    Object.keys(el).forEach(function (k) { el[k].classList.remove('is-seen', 'is-down', 'is-warn'); });
+    warn.textContent = '';
+    show();
+  }
   board.addEventListener('click', function (e) {
     var b = e.target.closest('.ck-key'); if (!b) return;
     var id = b.getAttribute('data-code'), t = performance.now();
@@ -125,9 +134,10 @@ window.LLTry.checkbench = function (stage, c) {
     '.ck-board{container-type:inline-size;position:relative;width:100%;max-width:560px;margin:4px auto 0}' +
     '.ck-key{position:absolute;box-sizing:border-box;padding:0;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}' +
     '.ck-key span{position:absolute;inset:4% 5% 10% 5%;display:grid;place-items:center;border-radius:max(3px,1.1cqw);background:var(--paper);border:1px solid var(--line);' +
-    'box-shadow:0 2px 0 var(--line);font-size:clamp(7px,2.3cqw,13px);font-weight:700;color:var(--ink-2);line-height:1;white-space:nowrap;overflow:hidden;transition:transform .08s,background .15s,box-shadow .08s}' +
+    'box-shadow:0 2px 0 var(--line);font-size:clamp(7px,2.7cqw,15px);font-weight:700;color:var(--ink-2);line-height:1;white-space:nowrap;overflow:hidden;transition:transform .08s,background .15s,box-shadow .08s}' +
+    '.ck-board.is-compact{max-width:420px}.ck-board.is-compact .ck-key span{font-size:clamp(15px,4.8cqw,18px);border-radius:max(5px,1.6cqw)}' +
     '.ck-key.is-seen span{background:color-mix(in srgb,var(--tc) 22%,var(--paper));border-color:color-mix(in srgb,var(--tc) 55%,var(--line));color:var(--ink)}' +
-    '.ck-key.is-down span{transform:translateY(2px);box-shadow:0 0 0 var(--line);background:var(--tc);color:#fff}' +
+    '.ck-key.is-down span{transform:translateY(2px);box-shadow:0 0 0 var(--line);background:var(--tc);color:#1B1A24}' +
     '.ck-key.is-warn span{background:#d9472b;border-color:#d9472b;color:#fff}' +
     '.ck-stat{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--ink-2)}.ck-stat b{color:var(--ink);font-variant-numeric:tabular-nums}' +
     '.ck-warn{color:#c23a22;font-weight:600;min-height:1.6em}' +
@@ -137,13 +147,13 @@ window.LLTry.checkbench = function (stage, c) {
     track,
     h('p', { class: 'ck-h', text: T.kb }),
     h('p', { class: 'tr-note', text: T.tip }),
-    board,
-    h('div', { class: 'ck-stat' }, [countEl, heldEl]),
-    warn
+    h('div', null, [h('div', { class: 'ck-stat' }, [countEl, heldEl]), warn]),
+    board
   ]));
   show();
   measure();
   return {
+    reset: reset,
     stop: function () {
       alive = false; cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onDown, true);
@@ -152,6 +162,7 @@ window.LLTry.checkbench = function (stage, c) {
     },
     auto: function (A) {
       // L·U·M·E·N 을 차례로 누르고, N 을 뗀 지 12ms 만에 한 번 더 눌린 것처럼 보내 채터링 알림을 보여 준다
+      if (A.fast) return Promise.resolve();   // 동작 줄이기: 일부러 만든 채터링을 손님 결과처럼 남기지 않는다
       var seq = ['KeyL', 'KeyU', 'KeyM', 'KeyE', 'KeyN'].filter(function (k) { return el[k]; });
       var p = A.wait(2400);
       seq.forEach(function (k) { p = p.then(function () { return A.press(el[k]); }).then(function () { return A.wait(160); }); });
