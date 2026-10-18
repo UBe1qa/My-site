@@ -55,19 +55,19 @@ html = put(html, 'foot', FOOT)
 #   칸 = {이름}. 색·아이콘·이름은 showcase.json·catalog.json 에서, 계산 파일 주소는 소개 창과 같은 것(내용 지문 붙음, 창을 열 때 캐시를 같이 씀).
 #   칸 이름과 도구: date 오늘, left 올해 남은 날, time 다른 도시 지금 시각, hz 이 페이지 주사율, count 이 글 글자 수(마침표까지).
 #   계산 전 칸은 값 길이만 한 빈 막대(--w, 그 언어에서 흔한 값의 폭)라 켜질 때 줄이 덜 흔들린다. 칸과 붙은 글은 .nw 로 한 줄에.
-#   data-part 는 그 문장째 빼도 말이 되는 덩어리(주사율을 끝내 못 재면 그 문장을 뺀다). 문장 밑 도구 줄 = 계산한 도구 넷(누르면 소개 창)
+#   data-part = 그 도구의 문장(도구 하나에 하나). 계산 파일을 제때 못 받거나 주사율을 끝내 못 재면 그 문장만 뺀다. 문장 밑 도구 줄 = 계산한 도구 넷(누르면 소개 창)
 NOW_TOOL = {'date': 'daycount', 'left': 'daycount', 'time': 'oneturn', 'hz': 'checkbench', 'count': 'kankan'}
 NOW_CORE = [('daycount', '/assets/dates.js'), ('oneturn', '/assets/core.js'), ('checkbench', '/assets/ck-measure.js'), ('kankan', '/assets/lc-core.js')]
 NOW = {
-    'ko': ('오늘은 {date}, 올해가 {left} 남았어요. '
+    'ko': ('<span data-part="date">오늘은 {date}, 올해가 {left} 남았어요.</span> '
            '<span data-part="time"><span data-city>뉴욕</span>은 지금 <span class="nw">{time}이에요.</span></span> '
-           '<span data-part="hz">이 페이지는 1초에 <span class="nw">{hz} 새로</span> 그려져요.</span> '
-           '이 글은 마침표까지 <span class="nw">{count}예요.</span>',
+           '<span data-part="hz">이 브라우저는 화면을 1초에 <span class="nw">{hz} 그려요.</span></span> '
+           '<span data-part="count">이 글은 마침표까지 <span class="nw">{count}예요.</span></span>',
            {'date': 6.9, 'left': 2.3, 'time': 5.6, 'hz': 2.3, 'count': 2.3}),
-    'en': ('Today is <span class="nw">{date},</span> with {left} left this year. '
+    'en': ('<span data-part="date">Today is <span class="nw">{date},</span> with {left} left this year.</span> '
            '<span data-part="time">It’s <span class="nw">{time} in</span> <span data-city>Seoul</span>.</span> '
-           '<span data-part="hz">This page redraws <span class="nw">{hz} a</span> second.</span> '
-           'This paragraph is <span class="nw">{count} long.</span>',
+           '<span data-part="hz">Your browser draws <span class="nw">{hz} a</span> second.</span> '
+           '<span data-part="count">This paragraph is <span class="nw">{count} long.</span></span>',
            {'date': 8.4, 'left': 3.6, 'time': 4.6, 'hz': 3.9, 'count': 6.4}),
 }
 _tool = {it['id']: it for it in tools}
@@ -88,9 +88,14 @@ def now_tools(lang):
     return ''.join(seen)
 core = [build_info.core_url(_tool[t], f) for t, f in NOW_CORE]
 EN['nowLine'] = now_line('en'); EN['nowTools'] = now_tools('en')
-why = ''.join(f'<span id="nw-{k}"></span>' for k in NOW_TOOL)
+# 풀이 목록: 칸마다 무엇으로 어떻게 셌는지(landing.js 가 채움). 칸의 aria-describedby 도 이 줄. 손가락 화면엔 hover 가 없어 펼쳐 보게 둔다
+ALLS = {'ko': '숫자마다 어떻게 셌는지 보기', 'en': 'How each number was worked out'}
+ALLW = {'ko': '도구 계산 파일을 불러오는 중이에요.', 'en': 'Loading the tools’ code.'}
+EN['nowAllS'] = ALLS['en']; EN['nowAllW'] = ALLW['en']
+why = ''.join(f'<li id="nw-{k}"></li>' for k in NOW_TOOL)
 # 칸 자리 잡기: 계산 파일이 오기 전(첫 그림 전)에 브라우저 기본 날짜 함수로 값을 어림해 칸 폭만 잡는다(글자는 숨김, CSS).
-#   켜지는 값은 도구 계산 파일이 다시 센 것(landing.js)이고, 어림과 같으면 켜질 때 줄이 하나도 안 움직인다. 주사율은 흔한 60으로 어림
+#   켜지는 값은 도구 계산 파일이 다시 센 것(landing.js)이고, 어림과 같으면 켜질 때 줄이 하나도 안 움직인다. 주사율은 흔한 60으로 어림하되
+#   칸 폭은 세 자리(120)만큼 잡아 둔다. landing.js 가 6초 안에 시작하지 않으면(파일을 못 받음) 칸 없는 글로
 # (스크립트 안에는 한국어 글자를 쓰지 않는다: 영어 페이지 검사가 화면 요소 속 한국어를 찾는다. 그래서 \u 로)
 GUESS = '''<!-- 칸 자리만 어림(값은 숨김). 켜지는 값은 도구 계산 파일이 센 것(landing.js) -->
 <script>
@@ -105,12 +110,18 @@ if(f(z,{day:'numeric'})!==f(null,{day:'numeric'}))t=f(z,{weekday:'long'})+' '+t;
 l.querySelector('[data-city]').textContent=c[0][1];
 v('date',n.toLocaleDateString(L,{weekday:'long',month:'long',day:'numeric'}));
 v('left',en?(left?left+(left===1?' day':' days'):'just today'):(left?left+'\\uc77c':'\\uc624\\ub298 \\ud558\\ub8e8'));
-v('time',t);v('hz',en?'60 times':'60\\ubc88');
+v('time',t);
+var h=l.querySelector('[data-nt="hz"] .nt__v');if(h){h.textContent=en?'120 frames':'120\\ubc88';h.style.minWidth=(h.getBoundingClientRect().width/parseFloat(getComputedStyle(h).fontSize)).toFixed(3)+'em'}
+v('hz',en?'60 frames':'60\\ubc88');
 for(var i=0,m=0,k;i<6;i++){v('count',en?m+' characters':m+'\\uc790');k=Array.from(l.textContent.replace(/\\s+/g,' ').trim()).length;if(k===m)break;m=k}
-}catch(e){}})(document.querySelector('[data-now]'));
+}catch(e){}
+setTimeout(function(){if(!window.__nowOn)l.parentNode.classList.add('is-plain')},6000);
+})(document.querySelector('[data-now]'));
 </script>'''
 html = put(html, 'now', f'        <p class="now__line" data-now data-core="{escape(json.dumps(core))}" data-i18n="nowLine">{now_line("ko")}</p>\n'
-                        f'        <span class="now__why" hidden>{why}</span>\n' + GUESS)
+                        + GUESS)
+html = put(html, 'nowall', f'        <details class="now__all"><summary data-i18n="nowAllS">{ALLS["ko"]}</summary>'
+                           f'<ul class="now__list"><li class="now__list-wait" data-i18n="nowAllW">{ALLW["ko"]}</li>{why}</ul></details>')
 html = put(html, 'nowtools', f'          <p class="now__tools"><span class="now__tools-h" data-i18n="nowToolsH">이 문장을 채우는 도구</span>'
                              f'<span class="now__tools-l" data-i18n="nowTools">{now_tools("ko")}</span></p>')
 # 머리말에서 계산 파일을 미리 받아 둔다(landing.js 가 실행되기 전에 받기 시작). 주소는 위 core 와 같아야 쓸모가 있다

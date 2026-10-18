@@ -168,6 +168,21 @@ with sync_playwright() as p:
     ok(pg.evaluate("document.querySelector('.now').classList.contains('is-plain') && getComputedStyle(document.querySelector('.now__plain')).display==='block' && getComputedStyle(document.querySelector('[data-now]')).display==='none'"),
        '계산 파일을 못 받으면 첫 화면은 칸 없는 글')
     c.close()
+    # 계산 파일 하나가 끝내 안 오면 그 도구 문장만 빠지고(이미 켜진 칸은 그대로), 남은 글을 다시 세고, 그 도구 이름표도 빠진다
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route(SUB, lambda r: None if 'ck-measure' in r.request.url else sub_file(r))   # 체크벤치 파일은 답하지 않음(그래서 load 도 안 옴)
+    pg.goto(BASE + '/', wait_until='domcontentloaded'); pg.wait_for_timeout(6800)
+    st = pg.evaluate(NOW)
+    gone = pg.evaluate("!document.querySelector('[data-part=hz]') && document.querySelector('.ntool[data-tool=checkbench]').hidden && !!document.getElementById('nw-hz').textContent")
+    ok(not st['plain'] and gone and st['on'] == st['n'] == 4 and st['same'] and not errs, f"체크벤치 파일이 안 오면 그 문장만 빠짐 (켜짐 {st['on']}/{st['n']}, 글자 수 {'맞음' if st['same'] else '틀림'}) {errs[:1]}")
+    c.close()
+    # landing.js 자체를 못 받으면 6초 뒤 칸 없는 글(빈 막대와 '불러오는 중'이 남지 않게)
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
+    pg.route(SUB, sub_file); pg.route(re.compile(r'.*/assets/landing\.js.*'), lambda r: r.abort())
+    pg.goto(BASE + '/'); pg.wait_for_timeout(6500)
+    ok(pg.evaluate("document.querySelector('.now').classList.contains('is-plain') && getComputedStyle(document.querySelector('.now__plain')).display==='block'"), 'landing.js를 못 받으면 6초 뒤 칸 없는 글')
+    c.close()
     c = br.new_context(viewport={'width': 390, 'height': 844}, java_script_enabled=False); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(300)
     ok(pg.evaluate("getComputedStyle(document.querySelector('.now__plain')).display==='block' && getComputedStyle(document.querySelector('[data-now]')).display==='none'"), 'JS가 꺼져 있으면 첫 화면은 칸 없는 글')
     c.close()

@@ -63,9 +63,9 @@
     <div class="wrap">
       <div class="now" data-now-box>
         <h1 id="hero-title" class="now__h1" data-i18n="h1">Lumen Lab makes free web tools you can use without signing up, plus games and apps</h1>
+        <p class="now__cue" data-i18n="nowCue">Lumen Lab tools work out the glowing values on this device. Open one to try it.</p>
         <!-- gen:now -->
-        <p class="now__line" data-now data-core="[&quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine">Today is <span class="nw"><a class="nt" data-nt="date" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-date" style="--tc:#c2512b;--w:8.4em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>,</span> with <a class="nt" data-nt="left" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-left" style="--tc:#c2512b;--w:3.6em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> left this year. <span data-part="time">It’s <span class="nw"><a class="nt" data-nt="time" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" aria-label="Oneturn" aria-describedby="nw-time" style="--tc:#0d7068;--w:4.6em"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> in</span> <span data-city>Seoul</span>.</span> <span data-part="hz">This page redraws <span class="nw"><a class="nt" data-nt="hz" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" aria-label="Checkbench" aria-describedby="nw-hz" style="--tc:#17b3c4;--w:3.9em"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> a</span> second.</span> This paragraph is <span class="nw"><a class="nt" data-nt="count" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" aria-label="Kankan" aria-describedby="nw-count" style="--tc:#1e3a6e;--w:6.4em"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> long.</span></p>
-        <span class="now__why" hidden><span id="nw-date"></span><span id="nw-left"></span><span id="nw-time"></span><span id="nw-hz"></span><span id="nw-count"></span></span>
+        <p class="now__line" data-now data-core="[&quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine"><span data-part="date">Today is <span class="nw"><a class="nt" data-nt="date" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-date" style="--tc:#c2512b;--w:8.4em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>,</span> with <a class="nt" data-nt="left" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-left" style="--tc:#c2512b;--w:3.6em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> left this year.</span> <span data-part="time">It’s <span class="nw"><a class="nt" data-nt="time" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" aria-label="Oneturn" aria-describedby="nw-time" style="--tc:#0d7068;--w:4.6em"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> in</span> <span data-city>Seoul</span>.</span> <span data-part="hz">Your browser draws <span class="nw"><a class="nt" data-nt="hz" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" aria-label="Checkbench" aria-describedby="nw-hz" style="--tc:#17b3c4;--w:3.9em"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> a</span> second.</span> <span data-part="count">This paragraph is <span class="nw"><a class="nt" data-nt="count" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" aria-label="Kankan" aria-describedby="nw-count" style="--tc:#1e3a6e;--w:6.4em"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> long.</span></span></p>
 <!-- 칸 자리만 어림(값은 숨김). 켜지는 값은 도구 계산 파일이 센 것(landing.js) -->
 <script>
 (function(l){try{var en=document.documentElement.lang==='en',L=en?'en-US':'ko-KR',n=new Date(),y=n.getFullYear(),
@@ -79,14 +79,21 @@ if(f(z,{day:'numeric'})!==f(null,{day:'numeric'}))t=f(z,{weekday:'long'})+' '+t;
 l.querySelector('[data-city]').textContent=c[0][1];
 v('date',n.toLocaleDateString(L,{weekday:'long',month:'long',day:'numeric'}));
 v('left',en?(left?left+(left===1?' day':' days'):'just today'):(left?left+'\uc77c':'\uc624\ub298 \ud558\ub8e8'));
-v('time',t);v('hz',en?'60 times':'60\ubc88');
+v('time',t);
+var h=l.querySelector('[data-nt="hz"] .nt__v');if(h){h.textContent=en?'120 frames':'120\ubc88';h.style.minWidth=(h.getBoundingClientRect().width/parseFloat(getComputedStyle(h).fontSize)).toFixed(3)+'em'}
+v('hz',en?'60 frames':'60\ubc88');
 for(var i=0,m=0,k;i<6;i++){v('count',en?m+' characters':m+'\uc790');k=Array.from(l.textContent.replace(/\s+/g,' ').trim()).length;if(k===m)break;m=k}
-}catch(e){}})(document.querySelector('[data-now]'));
+}catch(e){}
+setTimeout(function(){if(!window.__nowOn)l.parentNode.classList.add('is-plain')},6000);
+})(document.querySelector('[data-now]'));
 </script>
         <!-- /gen:now -->
         <p class="now__plain" data-i18n="nowPlain">Tools that count days, tell the time around the world, count characters and test your screen, working right on your device.</p>
-        <noscript><style>.now__line,.now__tools,.now__how{display:none}.now__plain{display:block}</style></noscript>
+        <noscript><style>.now__cue,.now__line,.now__tools,.now__how,.now__all{display:none}.now__plain{display:block}</style></noscript>
         <p class="now__how" data-now-how aria-hidden="true"><span data-i18n="nowWait">Loading the tools’ code</span></p>
+        <!-- gen:nowall -->
+        <details class="now__all"><summary data-i18n="nowAllS">How each number was worked out</summary><ul class="now__list"><li class="now__list-wait" data-i18n="nowAllW">Loading the tools’ code.</li><li id="nw-date"></li><li id="nw-left"></li><li id="nw-time"></li><li id="nw-hz"></li><li id="nw-count"></li></ul></details>
+        <!-- /gen:nowall -->
         <div class="now__foot">
           <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
           <p class="now__act"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>

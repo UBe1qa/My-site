@@ -38,9 +38,12 @@
 .now::before{content:"";position:absolute;z-index:-1;left:-260px;top:-420px;width:1160px;height:1160px;pointer-events:none;
   background:radial-gradient(closest-side,rgba(255,196,102,.24),rgba(255,196,102,.06) 62%,transparent);opacity:calc(.2 + var(--glow) * .8);transition:opacity .6s}
 .now__h1{margin:0;max-width:36em;font-size:clamp(17px,2vw,20px);line-height:1.5;font-weight:700;letter-spacing:-.01em;color:var(--lamp);text-wrap:balance}
-.now__line,.now__plain{margin:18px 0 0;max-width:22em;font-size:clamp(26px,3.9vw,44px);line-height:1.42;font-weight:800;letter-spacing:-.03em;text-wrap:pretty}
+.now__cue{display:flex;align-items:baseline;gap:8px;margin:10px 0 0;max-width:46em;font-size:15px;line-height:1.5;font-weight:600;color:var(--room-muted)}
+.now__cue::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--lamp);box-shadow:0 0 10px var(--lamp);transform:translateY(-1px)}
+.now__line,.now__plain{margin:14px 0 0;max-width:22em;font-size:clamp(26px,3.7vw,42px);line-height:1.42;font-weight:800;letter-spacing:-.03em;text-wrap:pretty}
+:lang(en) .now__line{font-size:clamp(26px,3.3vw,38px)}   /* 영어 낱말이 넓어 같은 크기면 한 줄 더 */
 .now__plain{display:none}
-.now.is-plain .now__line,.now.is-plain .now__how,.now.is-plain .now__tools{display:none}
+.now.is-plain .now__cue,.now.is-plain .now__line,.now.is-plain .now__how,.now.is-plain .now__all,.now.is-plain .now__tools{display:none}
 .now.is-plain .now__plain{display:block}
 /* 칸: 아이콘 + 값. 글줄 기준선에 맞추려고 inline-block(아이콘은 글자 높이에 맞춰 내림).
    켜진 글자색 --tl = 도구 색을 방 위에서 읽히게 밝히되 채도는 남긴다(oklch, 안 되는 브라우저는 흰색 섞기) */
@@ -53,6 +56,7 @@
 .nt__v{font-weight:inherit;font-variant-numeric:tabular-nums}
 .nt:not(.is-on) .nt__v{color:transparent;background:linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)) 0 60%/100% .46em no-repeat}
 .nt__v:empty{display:inline-block;width:var(--w);height:1.1em;vertical-align:-.2em}
+.nt[data-nt="hz"] .nt__v{display:inline-block;text-align:center}   /* 폭은 세 자리만큼(build_home.py GUESS) */
 .nt.is-on{color:var(--tl);background-color:color-mix(in srgb,var(--tl) 13%,transparent);
   box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tl) 46%,transparent)}
 .nt.is-on .nt__i{filter:none;opacity:1}
@@ -65,12 +69,22 @@
 .anim .nt.is-fresh{animation:ntIn .9s var(--ease)}
 @keyframes ntIn{30%{box-shadow:inset 0 0 0 2px var(--tl),0 0 1.1em color-mix(in srgb,var(--tl) 50%,transparent)}}
 /* 풀이 줄: 풀이가 바뀌어도 밑이 출렁이지 않게 가장 긴 풀이만큼(넓은 화면 두 줄, 폰 세 줄) 자리를 둔다 */
-.now__how{min-height:2.9em;margin:20px 0 0;max-width:46em;font-size:15px;line-height:1.45;font-weight:600;color:var(--room-muted)}
+.now__how{min-height:2.9em;margin:18px 0 0;max-width:46em;font-size:15px;line-height:1.45;font-weight:600;color:var(--room-muted)}
 .now__how b{color:var(--room-ink);font-weight:750}
 .anim .now__how.is-new span{animation:howIn .4s ease both}
 @keyframes howIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* 풀이 목록: 접어 두고, 펴면 칸마다 한 줄 */
+.now__all{margin:4px 0 0;max-width:46em;font-size:14px;line-height:1.5;color:var(--room-muted)}
+.now__all summary{display:inline-flex;align-items:center;gap:6px;min-height:32px;cursor:pointer;font-weight:650;color:var(--room-ink);list-style:none;border-radius:6px}
+.now__all summary::-webkit-details-marker{display:none}
+.now__all summary::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);transition:transform .2s}
+.now__all[open] summary::after{transform:translateY(1px) rotate(-135deg)}
+.now__all summary:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+.now__list{margin:6px 0 4px;padding:0;list-style:none;display:grid;gap:6px}
+.now__list li:empty{display:none}
+.now__list b{color:var(--room-ink);font-weight:750}
 /* 아래 줄: 넓으면 단추(왼쪽)와 도구 줄(오른쪽) 한 줄, 좁으면 단추 밑에 도구 줄 */
-.now__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin:22px 0 0;padding-top:22px;border-top:1px solid var(--room-line)}
+.now__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin:14px 0 0;padding-top:20px;border-top:1px solid var(--room-line)}
 .now__tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0}
 .now__tools-h{font-size:14px;font-weight:650;color:var(--room-muted)}
 .now__tools-l{display:flex;flex-wrap:wrap;gap:8px}
@@ -80,8 +94,7 @@
 .ntool.is-on{color:var(--room-ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tl) 50%,transparent)}
 .ntool.is-on img{filter:none;opacity:1}
 .ntool:hover{background-color:rgba(255,255,255,.07)}
-.ntool.is-off{color:var(--room-muted)}
-.ntool.is-off img{filter:grayscale(1);opacity:.4}
+.ntool[hidden]{display:none}
 .now__act{margin:0}
 /* 첫 화면·끝 칸의 주 단추는 불빛 색 하나(검은·흰 알약이 불빛보다 세지 않게) */
 .hero .btn--main,.end .btn--main{background:var(--lamp);color:#1B1A24}
@@ -95,9 +108,12 @@
   .hero .wrap{padding-left:8px;padding-right:8px}
   .now{padding:24px 18px 22px;border-radius:24px}
   .now__h1{font-size:16px}
+  .now__cue{margin-top:8px;font-size:13.5px}
   .now__line,.now__plain{margin-top:12px;font-size:23px;line-height:1.4}
+  :lang(en) .now__line{font-size:21px}
   .now__how{min-height:4.35em;margin-top:14px;font-size:14px}
-  .now__foot{gap:14px;margin-top:14px;padding-top:16px}
+  .now__all{font-size:13.5px}
+  .now__foot{gap:14px;margin-top:10px;padding-top:16px}
   .now__tools-h{width:100%;font-size:13px}
   .now__tools-l{gap:6px}
   .ntool{min-height:34px;gap:6px;padding:3px 11px 3px 5px;font-size:13.5px}
@@ -108,6 +124,7 @@
 @media (max-width:360px){
   .now{padding-left:16px;padding-right:16px}
   .now__line,.now__plain{font-size:21px}
+  :lang(en) .now__line{font-size:20px}
 }
 @media (prefers-reduced-motion:reduce){.nt,.nt__i,.ntool,.ntool img,.now::before{transition:none}.nt.is-on:hover .nt__i{transform:none}}
 
