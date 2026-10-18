@@ -4,8 +4,8 @@ import os, sys, hashlib, re
 from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8765')
-PAGES = ['/', '/en/', '/guides/', '/en/guides/', '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
-PAIRS = [('/', '/en/'), ('/guides/', '/en/guides/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')]  # 한국어·영어가 따로 된 페이지
+PAGES = ['/', '/en/', '/works/', '/en/works/', '/guides/', '/en/guides/', '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
+PAIRS = [('/', '/en/'), ('/works/', '/en/works/'), ('/guides/', '/en/guides/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')]  # 한국어·영어가 따로 된 페이지
 ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 fails = []
@@ -140,8 +140,8 @@ with sync_playwright() as p:
     lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__title');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
-    ok(all(h.startswith(('/en/', '#', 'http', 'mailto:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not h.startswith(("/en/", "#", "http", "mailto:"))]}')
-    for path in ('/en/guides/', '/en/about/', '/en/privacy/'):
+    ok(all(h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not (h.startswith(("/en/", "#", "http", "mailto:", "tel:")) or h == "/")]}')
+    for path in ('/en/works/', '/en/guides/', '/en/about/', '/en/privacy/'):
         pg.goto(BASE + path); pg.wait_for_timeout(200)
         left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
         ok(not left, f'{path} 화면에 한국어가 남지 않음 {left}')
@@ -151,7 +151,7 @@ with sync_playwright() as p:
         if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current="page"]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
     pg.goto(BASE + '/en/'); pg.wait_for_timeout(300)
     pg.click('a.lang'); pg.wait_for_timeout(400)
-    ok(pg.url == BASE + '/' and '만드는 곳' in pg.inner_text('h1'), '한국어 단추로 / 로')
+    ok(pg.url == BASE + '/' and '풀이' in pg.inner_text('h1'), '한국어 단추로 / 로')
     ok(pg.locator('.langbar').count() == 0, '한국어를 고르면 띠가 다시 안 뜸')
     pg.goto(BASE + '/owlight/privacy/#en'); pg.wait_for_timeout(300)
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")
