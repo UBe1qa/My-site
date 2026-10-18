@@ -21,9 +21,9 @@
   .ijump--tools::-webkit-scrollbar{display:none}
   .ijump--tools a{flex:none}
 }
-/* 방침의 목차: 번호 순서대로 위에서 아래로 읽는 목록 */
+/* 방침의 목차: 요약 바로 뒤, 번호 순서대로 위에서 아래로 읽는 목록 */
 .ijump--toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,auto);grid-auto-flow:column;gap:0 32px;
-  margin-top:24px;padding:10px 20px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--paper)}
+  margin-top:28px;padding:10px 20px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--paper)}
 .ijump--toc a{display:flex;min-height:40px;padding:0;border:0;border-radius:0;background:none;font-weight:600}
 .ijump--toc a:hover{text-decoration:underline}
 @media (max-width:560px){.ijump--toc{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row;padding:6px 16px}.ijump--toc a{min-height:38px}}

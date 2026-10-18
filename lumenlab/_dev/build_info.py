@@ -124,14 +124,18 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None):
 </html>
 '''
 
-def ihead(T, kicker, title, lead, jumps, wide=False, jcls=''):
+def jumpnav(T, jumps, jcls=''):
+    if not jumps: return ''
     nav = ''.join(f'<a href="#{i}">{t}</a>' for i, t in jumps)
+    return f'<nav class="ijump{" " + jcls if jcls else ""}" aria-label="{T["jump_label"]}">{nav}</nav>'
+
+def ihead(T, kicker, title, lead, jumps, wide=False, jcls=''):
     kick = f'\n    <p class="ihead__kicker">{kicker}</p>' if kicker else ''
     return f"""<header class="ihead">
   <div class="wrap ihead__in{' ihead__in--wide' if wide else ''}">{kick}
     <h1 class="ihead__title">{title}</h1>
     <p class="ihead__lead">{lead}</p>
-    <nav class="ijump{' ' + jcls if jcls else ''}" aria-label="{T['jump_label']}">{nav}</nav>
+    {jumpnav(T, jumps, jcls)}
   </div>
 </header>"""
 
@@ -225,7 +229,10 @@ def privacy_main(lang, cat, tools, groups):
             if l['href'].endswith('/privacy/'):   # 한 주소에 두 언어인 방침(Owlight)
                 apps.append(f'<li><a href="{esc(l["href"])}{"#en" if lang == "en" else ""}">{T["its_policy"](esc(it["name"][lang]))}</a></li>')
     body = T['privacy_body']('\n'.join(rows), '\n'.join(apps))
-    return ihead(T, '', T['p_title'], T['p_lead'], T['privacy_jumps'], jcls='ijump--toc') + f'\n<div class="wrap idoc">\n{body}\n</div>'
+    # 요약(한눈에 보기)이 먼저, 번호 목차는 그 바로 뒤(폰에서 목차가 요약을 첫 화면 밖으로 밀지 않게)
+    cut = body.index('</section>') + len('</section>')
+    body = body[:cut] + '\n' + jumpnav(T, T['privacy_jumps'], 'ijump--toc') + body[cut:]
+    return ihead(T, '', T['p_title'], T['p_lead'], []) + f'\n<div class="wrap idoc">\n{body}\n</div>'
 
 
 # ---------- 글 (한국어) ----------
@@ -317,7 +324,7 @@ KO = {
 </section>''',
     'p_title': '루멘랩 개인정보 처리방침',
     'p_lead': f'시행일: {EFFECTIVE[0]}. 루멘랩(Lumen Lab)이 lumenlab.page와 웹 도구 사이트를 운영하면서 이용자의 개인정보를 어떻게 처리하는지 적었어요.',
-    'privacy_jumps': [('p-sum', '한눈에 보기'), ('p-scope', '1. 다루는 곳'), ('p-direct', '2. 직접 처리하는 정보'), ('p-auto', '3. 기기에 남는 것·방문 통계'), ('p-ads', '4. 광고와 쿠키'), ('p-share', '5. 위탁·국외 이전'), ('p-destroy', '6. 파기'), ('p-rights', '7. 이용자의 권리'), ('p-safe', '8. 안전 조치'), ('p-officer', '9. 보호책임자'), ('p-help', '10. 구제 방법'), ('p-change', '11. 변경')],
+    'privacy_jumps': [('p-scope', '1. 다루는 곳'), ('p-direct', '2. 직접 처리하는 정보'), ('p-auto', '3. 기기에 남는 것·방문 통계'), ('p-ads', '4. 광고와 쿠키'), ('p-share', '5. 위탁·국외 이전'), ('p-destroy', '6. 파기'), ('p-rights', '7. 이용자의 권리'), ('p-safe', '8. 안전 조치'), ('p-officer', '9. 보호책임자'), ('p-help', '10. 구제 방법'), ('p-change', '11. 변경')],
     'its_policy': lambda n: f'{n} 방침',
     'privacy_body': lambda rows, apps: f'''<section id="p-sum" aria-labelledby="p-sum-t">
 <h2 id="p-sum-t">한눈에 보기</h2>
@@ -550,7 +557,7 @@ EN = {
 </section>''',
     'p_title': 'Lumen Lab Privacy Policy',
     'p_lead': f'Effective {EFFECTIVE[1]}. How Lumen Lab handles personal information on lumenlab.page and its web tool sites.',
-    'privacy_jumps': [('p-sum', 'Summary'), ('p-scope', '1. Where it applies'), ('p-direct', '2. What we handle'), ('p-auto', '3. Device storage and statistics'), ('p-ads', '4. Ads and cookies'), ('p-share', '5. Service providers'), ('p-destroy', '6. Deletion'), ('p-rights', '7. Your rights'), ('p-safe', '8. Security'), ('p-officer', '9. Privacy contact'), ('p-help', '10. Complaints'), ('p-change', '11. Changes')],
+    'privacy_jumps': [('p-scope', '1. Where it applies'), ('p-direct', '2. What we handle'), ('p-auto', '3. Device storage and statistics'), ('p-ads', '4. Ads and cookies'), ('p-share', '5. Service providers'), ('p-destroy', '6. Deletion'), ('p-rights', '7. Your rights'), ('p-safe', '8. Security'), ('p-officer', '9. Privacy contact'), ('p-help', '10. Complaints'), ('p-change', '11. Changes')],
     'its_policy': lambda n: f'{n} privacy policy',
     'privacy_body': lambda rows, apps: f'''<section id="p-sum" aria-labelledby="p-sum-t">
 <h2 id="p-sum-t">Summary</h2>
