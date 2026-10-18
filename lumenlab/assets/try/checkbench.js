@@ -140,9 +140,9 @@ window.LLTry.checkbench = function (stage, c) {
     '.ck-key.is-down span{transform:translateY(2px);box-shadow:0 0 0 var(--line);background:var(--tc);color:#1B1A24}' +
     '.ck-key.is-warn span{background:#d9472b;border-color:#d9472b;color:#fff}' +
     '.ck-stat{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--ink-2)}.ck-stat b{color:var(--ink);font-variant-numeric:tabular-nums}' +
-    '.ck-warn{color:#c23a22;font-weight:600;min-height:1.6em}' +
+    '.ck-warn{color:#c23a22;font-weight:600;min-height:1.6em}.is-compact-kb .ck-warn{min-height:3.2em}' +
     '@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .ck-warn{color:#ff8a7a}}' }));
-  stage.appendChild(h('div', { class: 'tr' }, [
+  stage.appendChild(h('div', { class: 'tr' + (compact ? ' is-compact-kb' : '') }, [
     h('div', { class: 'ck-top' }, [h('p', { class: 'ck-h', text: T.hz }), hzBig, againBtn, hzNote]),
     track,
     h('p', { class: 'ck-h', text: T.kb }),

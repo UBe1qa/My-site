@@ -152,12 +152,21 @@
     }));
   }
 
+  // 글자로 쓰는 도구 색(--tct): 밝은 종이(#FAF9F6) 위에서 4.5:1이 넘을 때까지 검정을 섞는다(노랑·하늘색 도구도 읽히게)
+  function textMix(hex) {
+    function lum(v) { v = v.map(function (x) { return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; }
+    var c = [1, 3, 5].map(function (i) { return parseInt(hex.substr(i, 2), 16) / 255; }), paper = lum([250 / 255, 249 / 255, 246 / 255]);
+    for (var p = 82; p > 40; p -= 4) if ((paper + 0.05) / (lum(c.map(function (x) { return x * p / 100; })) + 0.05) >= 4.6) return p;
+    return 40;
+  }
+
   function fill(id) {
     var t = DATA.tools[id];
     panel.style.setProperty('--tc', t.color);
+    panel.style.setProperty('--tcp', textMix(t.color) + '%');
     panel.textContent = '';
     var icon = h('img', { class: 'sh__icon', src: t.icon, width: 88, height: 88, alt: '' });
-    var name = h('h2', { class: 'sh__name', id: 'sh-name' }, [t.name, t.sub ? h('span', { lang: 'en', text: ' ' + t.sub }) : null]);
+    var name = h('h2', { class: 'sh__name', id: 'sh-name', tabindex: '-1' }, [t.name, t.sub ? h('span', { lang: 'en', text: ' ' + t.sub }) : null]);
     var stage = h('div', { class: 'stage', 'data-tool': id });
     var badge = h('p', { class: 'stage__badge', 'aria-live': 'polite' });
     var replay = h('button', { type: 'button', class: 'stage__replay', hidden: true }, [UI.replay]);
@@ -205,7 +214,7 @@
     }, { root: bodyEl, threshold: 0 }) : null;
     if (watchOpen) watchOpen.observe(openBtn);
     panel.classList.remove('is-past');
-    return { icon: icon, stage: stage, badge: badge, replay: replay, tool: t };
+    return { icon: icon, name: name, stage: stage, badge: badge, replay: replay, tool: t };
   }
 
   /* 계산 파일 불러오기: 도구 사이트의 assets 파일을 순서대로(한 번 불러온 건 다시 안 부른다) */
@@ -317,12 +326,13 @@
       if (running) { gen++; running = false; hideDot(); setBadge(false); }
       if (dirty) { dirty = false; if (hooks.reset) hooks.reset(); }
     }
-    var CTRL = 'input, textarea, select, button, a, label, [data-grab]';
+    var GRAB = '[data-grab], input[type=range]';
     function opt(passive) { return { capture: true, passive: passive }; }
     stage.addEventListener('pointerdown', function (e) {
       if (!e.isTrusted) return;
-      // 마우스·단추·입력 칸은 누르는 순간, 손가락은 떼었을 때 거의 안 움직였으면(쓸어 올린 스크롤이면 시연을 이어 간다)
-      if (e.pointerType === 'mouse' || (e.target.closest && e.target.closest(CTRL))) { down = null; mine(); }
+      // 마우스와 끌어서 쓰는 것(고리·슬라이더)은 누르는 순간, 나머지 손가락은 떼었을 때 거의 안 움직였으면.
+      // 칸·단추 위에서 시작해도 쓸어 올린 스크롤이면 시연을 이어 간다
+      if (e.pointerType === 'mouse' || (e.target.closest && e.target.closest(GRAB))) { down = null; mine(); }
       else down = { x: e.clientX, y: e.clientY, id: e.pointerId };
     }, opt(true));
     stage.addEventListener('pointerup', function (e) {
@@ -427,6 +437,7 @@
     var parts = fill(id);
     document.documentElement.classList.add('is-sheet');
     dlg.showModal();
+    parts.name.focus({ preventScroll: true });   // 첫 초점은 제목: Space·PageDown 으로 창이 내려가고, Space 가 닫기를 누르지 않는다
     var body = panel.querySelector('.sh__body'); if (body) body.scrollTop = 0;
     var fromIcon = trigger && trigger.closest('.gt') && trigger.closest('.gt').querySelector('.gt__icon');
     fly(fromIcon, parts.icon, 360);

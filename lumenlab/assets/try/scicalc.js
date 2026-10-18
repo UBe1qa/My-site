@@ -92,9 +92,10 @@ window.LLTry.scicalc = function (stage, c) {
   }
   input.addEventListener('input', function () { flip = false; show(false); });
 
+  // 화면(.sc-lcd)은 진짜 계산기 화면처럼 크기가 그대로다: 분수 답(√2/2)이 와도 아래 칸이 밀리지 않게 가장 큰 모양에 맞춘 높이
   if (!document.getElementById('try-sc-css')) document.head.appendChild(h('style', { id: 'try-sc-css', text:
-    '.sc-lcd{position:relative;display:grid;gap:6px;padding:16px 18px 14px;border-radius:16px;background:var(--paper);border:1px solid var(--line);min-height:132px}' +
-    '.sc-expr{min-height:34px;padding-right:64px;font-size:21px;color:var(--ink-2);display:flex;flex-wrap:wrap;align-items:center;row-gap:4px}' +
+    '.sc-lcd{position:relative;display:grid;grid-template-rows:auto 1fr;gap:6px;padding:16px 18px 14px;border-radius:16px;background:var(--paper);border:1px solid var(--line);min-height:172px}' +
+    '.sc-expr{min-height:34px;padding-right:72px;font-size:21px;color:var(--ink-2);display:flex;flex-wrap:wrap;align-items:center;row-gap:4px}' +
     '.sc-ansrow{display:flex;align-items:flex-end;gap:10px;justify-content:flex-end;min-height:62px}' +
     '.sc-ans{font-size:clamp(28px,6vw,38px);font-weight:750;display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;transition:opacity .2s}' +
     '.sc-ans.is-wait{opacity:.35}.sc-ans.is-err{font-size:17px;font-weight:600;color:var(--muted)}.sc-ans.is-flip{animation:scflip .3s cubic-bezier(.2,.8,.2,1)}' +
@@ -106,9 +107,9 @@ window.LLTry.scicalc = function (stage, c) {
     '.m-under{display:inline-flex;align-items:center;border-top:.07em solid currentColor;padding:.06em .1em 0;line-height:1.15}' +
     '.m-idx{font-size:.55em;margin-right:-.5em;align-self:flex-start;transform:translateY(.1em)}.m-sup{font-size:.62em;align-self:flex-start;display:inline-flex}' +
     '.sc-keys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;max-width:400px}.sc-key{min-width:0;padding:0;font-size:18px}' +
-    '.sc-sd{position:absolute;top:10px;right:10px;min-height:36px;padding:0 10px;font-size:15px}.sc-sd:disabled{opacity:.4;cursor:default}' +
+    '.sc-sd{position:absolute;top:8px;right:8px;min-height:44px;padding:0 12px;font-size:15px}.sc-sd:disabled{opacity:.4;cursor:default}' +
     '.sc-exh{margin:0;font-size:15px;font-weight:600;color:var(--muted)}.sc-ex{font-size:19px;font-weight:600;min-height:52px}' +
-    '.sc-in{font-size:18px}.sc-note{min-height:1.6em}' }));
+    '.sc-in{font-size:18px}.sc-note{min-height:1.6em}@media (max-width:640px){.sc-note{min-height:3.2em}}' }));
   stage.appendChild(h('div', { class: 'tr' }, [
     h('div', { class: 'sc-lcd' }, [sdBtn, exprEl, h('div', { class: 'sc-ansrow' }, [kind, ansEl])]),
     noteEl,
