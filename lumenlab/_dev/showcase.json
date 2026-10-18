@@ -1,5 +1,5 @@
 {
- "_설명": "홈 아이콘을 누르면 뜨는 소개 창과 같은 내용의 페이지(/works/<id>/)에 쓰는 자료(catalog.json 에 없는 것만). tools / games / apps 는 catalog.json 의 칸과 같고, 거기 있는 항목마다 여기도 하나씩 있어야 한다(build_store.py 가 검사). color = 아이콘의 주된 색(창의 은은한 바탕·카드 그림 색), facts = 머리 밑 사실 줄(값 v, 이름 l, 3칸, 그 사이트에 적힌 사실만), proof = 홈 아이콘 밑 한 줄(도구가 확인한 것, catalog check 를 줄인 것), more = '이런 것도 돼요' 카드(그 사이트의 페이지·칸, g = build_store.py GLYPH 이름), 도구: demo.core = 바로 써 보기에 불러올 그 도구 사이트의 계산 파일(순서대로), demo.cap = 무대 밑 한 줄, 미리보기 화면은 assets/try/<id>.js. 게임·앱: shots = 미리 보기 줄(실제 화면 사진 src 또는 영상 video(확장자 없이, .mp4·.webm 둘 다 있어야 함)+poster, w·h = 원본 크기), note = '밝혀 둔 것' 문단(그 사이트에 적힌 사실만), open = 머리의 열기 단추를 바꿀 때(없으면 catalog 의 url).",
+ "_설명": "홈 아이콘을 누르면 뜨는 소개 창과 같은 내용의 페이지(/works/<id>/)에 쓰는 자료(catalog.json 에 없는 것만). tools / games / apps 는 catalog.json 의 칸과 같고, 거기 있는 항목마다 여기도 하나씩 있어야 한다(build_store.py 가 검사). color = 아이콘의 주된 색(창의 은은한 바탕·카드 그림 색), what = 게임·앱이 하는 일 몇 마디(홈 아이콘 밑과 페이지 제목, 도구는 catalog 의 what), facts = 머리 밑 사실 줄(값 v, 이름 l, 3칸, 그 사이트에 적힌 사실만), proof = 홈 아이콘 밑 한 줄(도구가 확인한 것, catalog check 를 줄인 것), more = '이런 것도 돼요' 카드(그 사이트의 페이지·칸, g = build_store.py GLYPH 이름), 도구: demo.core = 바로 써 보기에 불러올 그 도구 사이트의 계산 파일(순서대로), demo.cap = 무대 밑 한 줄, 미리보기 화면은 assets/try/<id>.js. 게임·앱: shots = 미리 보기 줄(실제 화면 사진 src 또는 영상 video(확장자 없이, .mp4·.webm 둘 다 있어야 함)+poster, w·h = 원본 크기), note = '밝혀 둔 것' 문단(그 사이트에 적힌 사실만), open = 머리의 열기 단추를 바꿀 때(없으면 catalog 의 url).",
  "tools": {
   "daycount": {
    "color": "#c2512b",
@@ -797,7 +797,7 @@
     }
    },
    "proof": {
-    "ko": "자동 테스트 3만 5천여 개",
+    "ko": "자동 테스트 3만 5천여 개",
     "en": "35,000+ automatic tests"
    }
   },
@@ -1093,7 +1093,7 @@
     {
      "v": {
       "ko": "가입 없음",
-      "en": "No sign-up"
+      "en": "No sign‑up"
      },
      "l": {
       "ko": "브라우저 안에서 계산",
@@ -1403,6 +1403,10 @@
  "games": {
   "chickrescue": {
    "color": "#1f7a4a",
+   "what": {
+    "ko": "병아리 구하는 정렬 퍼즐",
+    "en": "Sort puzzle to rescue chicks"
+   },
    "facts": [
     {
      "v": {
@@ -1578,6 +1582,10 @@
   },
   "castleup": {
    "color": "#7a2e8e",
+   "what": {
+    "ko": "영웅을 쌓는 방치형 디펜스",
+    "en": "Idle defense with stacked heroes"
+   },
    "facts": [
     {
      "v": {
@@ -1755,6 +1763,10 @@
  "apps": {
   "owlight": {
    "color": "#33337a",
+   "what": {
+    "ko": "맥 잠자기 방지·화면 가리기",
+    "en": "Keeps your Mac awake, hides the desktop"
+   },
    "facts": [
     {
      "v": {
@@ -1916,6 +1928,10 @@
   },
   "setnote": {
    "color": "#9ccc1f",
+   "what": {
+    "ko": "운동 세트 기록, 지난번과 나란히",
+    "en": "Workout log with last time beside it"
+   },
    "open": {
     "href": {
      "ko": "https://setnote.lumenlab.page/app/",
@@ -1930,7 +1946,7 @@
     {
      "v": {
       "ko": "가입 없음",
-      "en": "No sign-up"
+      "en": "No sign‑up"
      },
      "l": {
       "ko": "휴대폰 브라우저에서 바로",

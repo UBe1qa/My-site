@@ -138,11 +138,10 @@ html[data-lang="en"] .doc section#ko,html[data-lang="ko"] .doc section#en{displa
 html[data-lang] .doc section h2{border-top:0;padding-top:20px;margin-top:20px}
 html[data-lang="en"] .doc-head nav a[href="#en"],html[data-lang="ko"] .doc-head nav a[href="#ko"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
-/* 머리말이 한 줄에 들어가게: 좁아지면 문의(첫 화면 끝과 바닥글에도 있음)부터 빼서 만든 것·가이드·소개 + 언어 단추만.
+/* 머리말이 한 줄에 들어가게: 좁아지면 문의(첫 화면 끝과 바닥글에도 있음)부터 빼서 만든 것·소개 + 언어 단추만.
    더 좁으면 간격을 줄이고 로고 옆 '루멘랩'(영어 페이지가 먼저)과 소개(첫 화면이 소개, 바닥글에도 있음)를,
    320px 언저리에선 만든 것(첫 화면 단추·바닥글에도 있음)까지 뺀다 */
 .top .brand,.top nav a,.lang{white-space:nowrap}
-@media (max-width:820px){.top nav .nav-cat{display:none}}
 @media (max-width:600px){.top nav .nav-contact{display:none}}
 @media (max-width:560px){
   .top__in{gap:8px}
