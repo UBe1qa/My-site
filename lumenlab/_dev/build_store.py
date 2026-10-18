@@ -311,7 +311,7 @@ def build(site, cat, ko_src, en_src):
             path = page_path(it['id'], lang); paths.append(path); keep.add(path)
             name = it['name'][lang]; what = it['what'][lang] if kind == 'tools' else short_what(kind, it, lang)
             if kind == 'tools': up_href, up_t = f'/#g-{it["group"]}', next(g['name'][lang] for g in cat['groups'] if g['id'] == it['group'])
-            else: up_href, up_t = f'/#{kind}', {'games': ('게임', 'Games'), 'apps': ('앱', 'Apps')}[kind][lang == 'en']
+            else: up_href, up_t = '/#games', ('게임과 앱', 'Games and apps')[lang == 'en']   # 홈에선 게임과 앱이 한 선반
             pre = '/en' if lang == 'en' else ''
             crumb = (f'<nav class="pp__crumb" aria-label="{T["crumb_label"]}"><a href="{pre}/#works">{T["crumb"]}</a><span aria-hidden="true">›</span>'
                      f'<a href="{pre}{up_href}">{esc(up_t)}</a></nav>')

@@ -90,7 +90,7 @@
     wl_chickrescue_w: "Sort puzzle to rescue chicks",
     wl_chickrescue_s: "Getting ready for launch",
     fi_castleup_n: "Castle Up!",
-    wl_castleup_w: "Idle defense with stacked heroes",
+    wl_castleup_w: "Idle defense with a hero on every floor",
     wl_castleup_s: "Play-testing",
     fi_owlight_n: "Owlight",
     wl_owlight_w: "Keeps your Mac awake, hides the desktop",
@@ -171,6 +171,10 @@
     arias.forEach(function (el) {
       var k = el.getAttribute('data-i18n-aria');
       el.setAttribute('aria-label', lang === 'en' && EN[k] != null ? EN[k] : KOA[k]);
+    });
+    document.querySelectorAll('[data-href-en]').forEach(function (a) {   // 영어일 때 다른 주소로 가는 링크(404의 홈 단추)
+      if (!a.hasAttribute('data-href-ko')) a.setAttribute('data-href-ko', a.getAttribute('href'));
+      a.setAttribute('href', a.getAttribute(lang === 'en' ? 'data-href-en' : 'data-href-ko'));
     });
     if (btn) {
       btn.innerHTML = lang === 'en' ? '<span lang="ko">한국어</span>' : '<span lang="en">English</span>';
