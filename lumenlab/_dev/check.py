@@ -160,6 +160,47 @@ with sync_playwright() as p:
     vis = pg.evaluate("[...document.querySelectorAll('.doc section')].map(s=>s.id+':'+(s.offsetHeight>0))")
     ok(vis == ['ko:true', 'en:false'], f'한국어 누르면 한국어 칸 {vis}')
     c.close()
+
+    # 가이드 모음 소개 창: 도구마다 창이 열리고, 그 사이트의 진짜 파일로 '바로 써 보기'가 뜨고(오류 0), 자동 시연이 화면을 바꾸고, Esc·뒤로 가기로 닫힘
+    # 도구 사이트 주소(https://*.lumenlab.page/assets/…)는 이 저장소의 옆 폴더 파일로 돌려준다. 공평뽑기 모듈은 실제 사이트처럼 허락 머리말을 붙인다
+    sc = json.load(open(os.path.join(here, 'showcase.json')))['tools']
+    gids = [t['id'] for t in cat['tools'] if t.get('group')]
+    ok(all(i in sc and os.path.isfile(os.path.join(site, 'assets', 'try', i + '.js')) for i in gids), f'가이드 도구 {len(gids)}개 모두 소개 내용과 바로 써 보기 파일이 있음')
+    def tool_file(r):
+        u = urlparse(r.request.url); f = os.path.join(mono, hostdir.get(u.netloc, '-'), u.path.lstrip('/'))
+        if u.netloc not in hostdir or not os.path.isfile(f): return r.fulfill(status=404, body='')
+        hd = {'content-type': 'application/javascript' if f.endswith('.js') else 'application/octet-stream'}
+        if u.netloc.startswith('pick.') and u.path.startswith('/assets/core/'): hd['access-control-allow-origin'] = '*'
+        r.fulfill(path=f, headers=hd)
+    for pre in ('', '/en'):
+        for w in (390, 1366):
+            c = br.new_context(viewport={'width': w, 'height': 844}, has_touch=w < 500); pg = c.new_page(); errs = []
+            pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
+            pg.on('pageerror', lambda e: errs.append(str(e)))
+            pg.route(re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*'), tool_file)
+            pg.goto(BASE + pre + '/guides/'); pg.wait_for_timeout(300)
+            pg.evaluate('scrollTo(0, document.querySelector("#t-' + gids[len(gids) // 2] + '").offsetTop)'); pg.wait_for_timeout(500)
+            ok(pg.evaluate("document.querySelector('.tdock').classList.contains('is-on')"), f'{pre}/guides/ {w}px 아래로 내리면 도구 바로가기 줄이 따라옴')
+            pg.evaluate('scrollTo(0,0)'); pg.wait_for_timeout(300)
+            for i, tid in enumerate(gids):
+                errs.clear(); a = pg.locator(f'a[data-show="{tid}"]')
+                a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
+                before = pg.evaluate("document.querySelector('.stage').innerText"); pg.wait_for_timeout(3200)
+                st = pg.evaluate("""()=>{const s=document.querySelector('.stage'),b=document.querySelector('.sh__body');return{fail:!!s.querySelector('.stage__msg'),text:s.innerText,hash:location.hash,open:document.querySelector('dialog.sheet').open,
+                  facts:document.querySelectorAll('.sh__facts li').length,cards:document.querySelectorAll('.sh__cards li').length,over:b.scrollWidth>b.clientWidth+1}}""")
+                if i % 2: pg.go_back()
+                else: pg.keyboard.press('Escape')
+                pg.wait_for_timeout(700)
+                shut = not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.hash') == ''
+                good = st['open'] and st['hash'] == '#try-' + tid and not st['fail'] and st['text'] != before and st['facts'] == 3 and st['cards'] >= 2 and not st['over'] and shut and not errs
+                ok(good, f"{pre}/guides/ {w}px {tid} 소개 창: 바로 써 보기 {'실패' if st['fail'] else '뜸'}, 시연 {'움직임' if st['text'] != before else '멈춤'}, 숫자 {st['facts']}·카드 {st['cards']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
+            c.close()
+    # 동작 줄이기여도 바로 써 보기는 그대로 뜸(날아오기·밀어 올리기 대신 흐려졌다 나타남, 손가락은 옮겨 가지 않고 바로 누름)
+    c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*'), tool_file)
+    pg.goto(BASE + '/guides/#try-' + gids[0]); pg.wait_for_timeout(1200)
+    ok(pg.evaluate("document.querySelector('dialog.sheet').open && !document.querySelector('.stage .stage__msg') && document.querySelector('.stage').innerText.length > 20") and not errs, f'동작 줄이기 + #try- 주소로 바로 열어도 소개 창이 뜸 {errs[:2]}')
+    c.close()
     br.close()
 
 print('\n실패 %d개' % len(fails) if fails else '\n모두 통과')

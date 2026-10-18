@@ -72,7 +72,7 @@ def fdate(d, lang):
 
 
 # ---------- 페이지 틀 ----------
-def page(lang, path, title, desc, main, head_src, kind='article', ld=None):
+def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''):
     ko_path = path[3:] if lang == 'en' else path
     en_path = '/en' + ko_path
     hdr = head_src[head_src.index('<a class="skip"'):head_src.index('<main')]
@@ -120,7 +120,7 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None):
 
 {ftr}
 <script src="/assets/site.js" defer></script>
-</body>
+{js}</body>
 </html>
 '''
 
@@ -129,13 +129,13 @@ def jumpnav(T, jumps, jcls=''):
     nav = ''.join(f'<a href="#{i}">{t}</a>' for i, t in jumps)
     return f'<nav class="ijump{" " + jcls if jcls else ""}" aria-label="{T["jump_label"]}">{nav}</nav>'
 
-def ihead(T, kicker, title, lead, jumps, wide=False, jcls=''):
+def ihead(T, kicker, title, lead, jumps, wide=False, jcls='', after=''):
     kick = f'\n    <p class="ihead__kicker">{kicker}</p>' if kicker else ''
     return f"""<header class="ihead">
   <div class="wrap ihead__in{' ihead__in--wide' if wide else ''}">{kick}
     <h1 class="ihead__title">{title}</h1>
     <p class="ihead__lead">{lead}</p>
-    {jumpnav(T, jumps, jcls)}
+    {jumpnav(T, jumps, jcls)}{after}
   </div>
 </header>"""
 
@@ -148,15 +148,24 @@ def guides_main(lang, groups, tools, data):
     pre = '' if lang == 'ko' else '/en'
     n_all = sum(len(data[it['id']][1]) for it in tools)
     in_group = lambda g: [it for it in tools if it['group'] == g['id']]
-    jumps = [(f"t-{it['id']}", f"{esc(it['name'][lang])} <span>{len(data[it['id']][1])}</span>") for g in groups for it in in_group(g)]
-    out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), jumps, wide=True, jcls='ijump--tools')]
+    # 맨 위: 휴대폰 첫 화면처럼 도구 아이콘을 묶음별로 늘어놓은 줄(누르면 그 도구 글로).
+    # 그 줄이 화면 위로 지나가면 머리말 밑에 같은 아이콘의 작은 줄(.tdock)이 내려와 따라온다(guides.js).
+    grid, dock = [], []
+    for gi, g in enumerate(groups):
+        cells = ''.join(f'<li><a class="tgrid__a" href="#t-{it["id"]}"><img src="{it["icon"]}" width="56" height="56" alt=""><span>{esc(it["name"][lang])}</span></a></li>' for it in in_group(g))
+        grid.append(f'<li class="tgrid__g"><p class="tgrid__h">{esc(g["name"][lang])}</p><ul>{cells}</ul></li>')
+        if gi: dock.append('<li class="tdock__sep" aria-hidden="true"></li>')
+        for it in in_group(g):
+            dock.append(f'<li><a class="tdock__a" href="#t-{it["id"]}" tabindex="-1"><span class="tdock__ic"><img src="{it["icon"]}" width="28" height="28" alt=""><svg class="tdock__ring" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5" pathLength="100"/></svg></span><span class="tdock__n">{esc(it["name"][lang])}</span></a></li>')
+    tgrid = f'<nav class="tgrid" aria-label="{T["dock_label"]}"><ul class="tgrid__list">{"".join(grid)}</ul></nav>'
+    out = [ihead(T, T['g_kicker'], T['g_title'], T['g_lead'](len(tools), n_all), [], wide=True, after=tgrid),
+           f'<div class="tdock" aria-hidden="true"><div class="wrap tdock__in"><ul class="tdock__list">{"".join(dock)}</ul></div></div>']
     for g in groups:
-        blocks, nav = [], []
+        blocks = []
         for it in in_group(g):
             index, items = data[it['id']]
             tp = tool_pages(it, lang)
             name = it['name'][lang]
-            nav.append(f'<li><a href="#t-{it["id"]}">{esc(name)} <span>{len(items)}</span></a></li>')
             rows = []
             for a in items:
                 dates = T['written'](f'<time datetime="{a["pub"]}">{fdate(a["pub"], lang)}</time>')
@@ -164,15 +173,18 @@ def guides_main(lang, groups, tools, data):
                     dates += ' <span aria-hidden="true">·</span> ' + T['updated'](f'<time datetime="{a["mod"]}">{fdate(a["mod"], lang)}</time>')
                 rows.append(f'          <li><a class="gl__a" href="{esc(a["url"])}"><span class="gl__t">{esc(a["title"])}</span><span class="gl__m">{dates}</span></a></li>')
             sub = '' if lang == 'en' or not it.get('sub') else f' <span class="gt__en" lang="en">{esc(it["sub"])}</span>'
-            blocks.append(f"""      <article class="gt" id="t-{it['id']}" aria-labelledby="t-{it['id']}-n">
-        <div class="gt__head">
-          <img class="gt__icon" src="{it['icon']}" width="44" height="44" alt="" loading="lazy">
-          <div class="gt__name-wrap">
-            <h3 class="gt__name" id="t-{it['id']}-n">{esc(name)}{sub}</h3>
-            <p class="gt__kind">{esc(it['what'][lang])} <span aria-hidden="true">·</span> {T['n_guides'](len(items))}</p>
+            blocks.append(f"""      <article class="gt" id="t-{it['id']}" aria-labelledby="t-{it['id']}-n" tabindex="-1">
+        <div class="gt__top">
+          <div class="gt__head">
+            <img class="gt__icon" src="{it['icon']}" width="48" height="48" alt="">
+            <div class="gt__name-wrap">
+              <h3 class="gt__name" id="t-{it['id']}-n">{esc(name)}{sub}</h3>
+              <p class="gt__kind">{esc(it['what'][lang])} <span aria-hidden="true">·</span> {T['n_guides'](len(items))}</p>
+            </div>
+            <a class="gt__show" href="{esc(tp['home'])}" data-show="{it['id']}" aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5z"/></svg><span>{T['try']}</span></a>
           </div>
+          <p class="gt__what">{esc(index['desc'])}</p>
         </div>
-        <p class="gt__what">{esc(index['desc'])}</p>
         <ol class="gl">
 {chr(10).join(rows)}
         </ol>
@@ -183,7 +195,6 @@ def guides_main(lang, groups, tools, data):
     <div class="gs__head">
       <h2 class="gs__name" id="g-{g['id']}-t">{esc(g['name'][lang])}</h2>
       <p class="gs__line">{esc(g['line'][lang])}</p>
-      <ul class="gs__nav" aria-label="{esc(g['name'][lang])}">{''.join(nav)}</ul>
     </div>
     <div class="gs__tools">
 {chr(10).join(blocks)}
@@ -191,7 +202,46 @@ def guides_main(lang, groups, tools, data):
   </div>
 </section>""")
     out.append(T['g_end'])
+    out.append(showcase_data(lang, tools, data, T))
     return '\n'.join(out), n_all
+
+
+# 소개 창(가이드 모음에서 도구 머리를 누르면 뜨는 창)에 쓸 자료. 도구 사실은 catalog.json, 창에만 쓰는 것(사실 줄·더 할 수 있는 일·
+# 바로 써 보기 설정)은 showcase.json. 화면은 assets/guides.js 가 그린다.
+SHOWCASE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'showcase.json')))
+
+def core_url(it, f):
+    """도구 사이트의 계산 파일 주소(/assets/…) → 그 사이트 주소 + 내용 지문(파일이 바뀌면 주소도 바뀌어 묵은 캐시를 안 쓴다)."""
+    import hashlib
+    local = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), it['dir'], f.lstrip('/'))
+    assert f.startswith('/assets/') and os.path.isfile(local), f"{it['id']}: 계산 파일이 없음 {local}"
+    v = hashlib.sha1(open(local, 'rb').read()).hexdigest()[:10]
+    return f"https://{urlparse(it['url']).netloc}{f}?v={v}"
+
+def sub_page_ok(it, href):
+    """'이런 것도 돼요' 카드가 가리키는 페이지가 그 도구 폴더에 실제로 있는지(없는 주소를 싣지 않는다)."""
+    u = urlparse(href)
+    assert u.netloc == urlparse(it['url']).netloc, f"{it['id']}: 다른 사이트 주소 {href}"
+    local = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), it['dir'], u.path.lstrip('/'), 'index.html')
+    assert os.path.isfile(local), f"{it['id']}: 카드 페이지가 없음 {href}"
+    return True
+
+def showcase_data(lang, tools, data, T):
+    out = {'ui': T['sheet'], 'tools': {}}
+    for it in tools:
+        tp = tool_pages(it, lang)
+        sc = SHOWCASE['tools'][it['id']]
+        L = lambda v: v[lang] if isinstance(v, dict) and lang in v else v
+        out['tools'][it['id']] = {
+            'name': it['name'][lang], 'sub': it.get('sub') if lang == 'ko' else None, 'what': it['what'][lang], 'icon': it['icon'],
+            'home': tp['home'], 'check': it['check'][lang], 'color': sc['color'],
+            'facts': [{'v': L(f['v']), 'l': L(f['l'])} for f in sc['facts']],
+            'more': [{'href': L(m['href']), 't': L(m['t']), 'd': L(m['d']), 'g': m['g']} for m in sc['more'] if L(m['href']) and sub_page_ok(it, L(m['href']))],
+            'demo': {'core': [core_url(it, f) for f in sc['demo']['core']], 'mod': [core_url(it, f) for f in sc['demo'].get('mod', [])], 'cap': L(sc['demo']['cap'])},
+            'guides': [{'t': a['title'], 'u': a['url']} for a in data[it['id']][1]],
+        }
+    j = json.dumps(out, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+    return f'<script type="application/json" id="tooldata">{j}</script>'
 
 
 # ---------- 소개 ----------
@@ -238,6 +288,11 @@ def privacy_main(lang, cat, tools, groups):
 # ---------- 글 (한국어) ----------
 KO = {
     'jump_label': '이 페이지 안',
+    'dock_label': '도구 바로가기',
+    'try': '미리 써 보기',
+    'sheet': {'close': '닫기', 'open': '열기', 'try': '여기서 바로 써 보기', 'more': '이런 것도 돼요', 'check': '확인하고 밝혀 둔 것',
+              'guides': '가이드', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
+              'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'dialog': '도구 소개'},
     'n_guides': lambda n: f'{n}편',
     'written': lambda d: f'{d} 씀', 'updated': lambda d: f'{d} 고침',
     'checked': '확인하고 밝혀 둔 것',
@@ -471,6 +526,11 @@ KO = {
 # ---------- 글 (영어) ----------
 EN = {
     'jump_label': 'On this page',
+    'dock_label': 'Jump to a tool',
+    'try': 'Try it here',
+    'sheet': {'close': 'Close', 'open': 'Open', 'try': 'Try it right here', 'more': 'It can also', 'check': 'What it checks and discloses',
+              'guides': 'Guides', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
+              'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'dialog': 'Tool preview'},
     'n_guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'),
     'written': lambda d: f'Published {d}', 'updated': lambda d: f'updated {d}',
     'checked': 'What it checks and discloses',
@@ -723,7 +783,8 @@ def build(site, cat, groups, tools):
         ]
         for path, title, desc, main, kind, ld in pages:
             d = os.path.join(site, path.strip('/')); os.makedirs(d, exist_ok=True)
-            open(os.path.join(d, 'index.html'), 'w').write(page(lang, path, title, desc, main, src, kind, ld))
+            js = '<script src="/assets/guides.js" defer></script>\n' if path.endswith('/guides/') else ''
+            open(os.path.join(d, 'index.html'), 'w').write(page(lang, path, title, desc, main, src, kind, ld, js))
             out.append(path)
     print('정보 페이지:', ', '.join(out), f'(가이드 한국어 {counts["ko"]}편, 영어 {counts["en"]}편)')
     return ['/guides/', '/about/', '/privacy/'], counts
