@@ -3,6 +3,7 @@
 # 2026-10-18: 홈 = 루멘랩 랜딩 + 만든 것 전부(큰 아이콘 칸, gen:wall). 예전 '만든 것'(/works/)·'가이드 모음'(/guides/) 페이지는 이 홈으로 합쳤다(주소 이동은 _redirects).
 #   아이콘을 누르면 assets/store.js 가 소개 창을 띄우고, 창 내용은 소개 페이지 /works/<id>/ 를 그대로 쓴다(build_store.py 가 만듦).
 #   그래서 새 앱·도구는 catalog.json 한 줄 + showcase.json 한 항목(+ 도구면 assets/try/<id>.js)만 더하고 이 스크립트를 돌린다.
+#   첫 화면 문장(gen:now)도 여기서: 빛나는 칸은 도구 넷의 계산 파일이 방문자 기기에서 채운다(아래 NOW, 계산은 assets/landing.js).
 # 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
 # sitemap.xml 도 여기서 만든다: 홈 + 소개·개인정보 처리방침 + 소개 페이지 15개(한·영) + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
 # 소개(/about/)·방침(/privacy/)과 영어판은 build_info.py, 소개 페이지는 build_store.py 가 만든다(이 파일 끝에서 부름). 도구 사이트의 글을 읽으니 도구 폴더(catalog.json 의 dir)가 옆에 있어야 한다.
@@ -49,6 +50,33 @@ html = put(html, 'wall', wall)
 html, n = re.subn(r'(data-i18n="wlTitle">).*?(</h2>)', lambda m: m.group(1) + wt + m.group(2), html, flags=re.S); assert n == 1, '아이콘 칸 제목을 못 찾음'
 html, n = re.subn(r'(data-i18n="wlLead">).*?(</p>)', lambda m: m.group(1) + wl + m.group(2), html, flags=re.S); assert n == 1, '아이콘 칸 설명을 못 찾음'
 html = put(html, 'foot', FOOT)
+
+# 첫 화면 문장(gen:now): 빛나는 칸은 도구 넷(체크벤치·며칠 계산기·한바퀴·칸칸)의 진짜 계산 파일이 방문자 기기에서 채운다(assets/landing.js).
+#   칸 = {이름}. 색·아이콘·이름은 showcase.json·catalog.json 에서, 계산 파일 주소는 소개 창과 같은 것(내용 지문 붙음, 창을 열 때 캐시를 같이 씀).
+#   칸 안 글자 '··'는 계산 전 자리(꺼진 칸). 칸 이름과 도구: hz 주사율, date 오늘, left 올해 남은 날, time 다른 도시 지금 시각, count 이 문장 글자 수
+NOW_TOOL = {'hz': 'checkbench', 'date': 'daycount', 'left': 'daycount', 'time': 'oneturn', 'count': 'kankan'}
+NOW_CORE = [('checkbench', '/assets/ck-measure.js'), ('daycount', '/assets/dates.js'), ('oneturn', '/assets/core.js'), ('kankan', '/assets/lc-core.js')]
+NOW = {
+    'ko': ('이 페이지는 1초에 {hz} 새로 그려져요. 오늘은 {date}, 올해가 {left} 남았고 '
+           '<span class="now__city" data-city>뉴욕</span>은 지금 {time}이에요. 여기까지 {count}.',
+           {'hz': '··번', 'date': '··월 ··일 ·요일', 'left': '··일', 'time': '·· ·:··', 'count': '··자'}),
+    'en': ('This page redraws {hz} a second. Today is {date}, with {left} left this year, '
+           'and it’s {time} in <span class="now__city" data-city>Seoul</span>. That’s {count} so far.',
+           {'hz': '·· times', 'date': '······, ······· ··', 'left': '·· days', 'time': '·:·· ··', 'count': '··· characters'}),
+}
+_tool = {it['id']: it for it in tools}
+def now_line(lang):
+    tpl, ph = NOW[lang]
+    def tok(m):
+        k = m.group(1); tid = NOW_TOOL[k]; it = _tool[tid]; sc = build_store.SC['tools'][tid]
+        return (f'<a class="nt" data-nt="{k}" href="/works/{tid}/" data-show="{tid}" aria-haspopup="dialog" style="--tc:{sc["color"]}">'
+                f'<img class="nt__i" src="{it["icon"]}" width="24" height="24" alt=""><b class="nt__v">{ph[k]}</b>'
+                f'<span class="nt__who"> ({escape(it["name"][lang])})</span></a>')
+    return re.sub(r'\{(\w+)\}', tok, tpl)
+core = [build_info.core_url(_tool[t], f) for t, f in NOW_CORE]
+EN['nowLine'] = now_line('en')
+html = put(html, 'now', f'        <p class="now__line" data-now data-core="{escape(json.dumps(core))}" data-i18n="nowLine">{now_line("ko")}</p>')
+
 EN['ctaWorks'] = f"See all {nall} things we make"
 html, n = re.subn(r'(data-i18n="ctaWorks">)[^<]*', lambda m: m.group(1) + f'만든 것 {nall}개 둘러보기', html); assert n >= 1, "'만든 것 N개' 단추를 못 찾음"
 open(idx, 'w').write(html)

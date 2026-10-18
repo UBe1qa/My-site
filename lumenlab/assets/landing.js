@@ -1,6 +1,9 @@
 /* 루멘랩 홈(랜딩) 전용. 라이브러리 없음.
-   1) 첫 화면 방: 결과 카드 위로 불빛을 대면 그 칸의 속(어떻게 확인했는지)이 보인다.
-      화면에 들어오면 불이 첫째 줄에서 켜지고 세 줄을 차례로 짚는다(과정 다시 보기). 방문자가 한 번 만지면 그 뒤론 방문자 몫(다시 보기 없음).
+   1) 첫 화면 문장: 빛나는 칸을 루멘랩 도구 넷의 진짜 계산 파일(문장의 data-core, 소개 창과 같은 주소)로 이 기기에서 채운다.
+      date·left = 며칠 계산기(DC: 요일, 두 날짜 사이), time = 한바퀴(OT: 그 도시의 지금 시각과 UTC 차), hz = 체크벤치(CK: 화면 121장 시각 간격의 중앙값,
+      고르지 않으면 체크벤치 기준대로 값을 말하지 않고 다시 잰다), count = 칸칸(LC: 이 문장 전체 글자 수, 띄어쓰기 포함, 이 숫자까지 들어가니 바뀌지 않을 때까지 다시 셈).
+      칸이 처음 켜질 때마다 풀이 줄에 그 칸을 무엇으로 어떻게 셌는지가 나오고, 칸에 손을 대거나 포커스가 가면 그 칸 풀이로 바뀐다. 누르면 그 도구 소개 창(store.js).
+      계산 파일을 못 불러오면 칸 없는 글(.now__plain)로 바꾼다. 시각과 날짜는 분이 바뀔 때마다 다시 센다.
    2) 만든 것 칸: 줄(.shelf)이 처음 화면에 들어올 때 한 번 .in → CSS가 그 줄 아이콘을 하나씩 켠다(꺼진 전구 → 켜진 불).
       아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
@@ -8,234 +11,163 @@
   var ko = d.lang !== 'en';
   var calm = matchMedia('(prefers-reduced-motion: reduce)');
   var moving = function () { return d.classList.contains('anim') && !calm.matches; };
+  var $$ = function (r, s) { return Array.prototype.slice.call(r.querySelectorAll(s)); };
 
-  /* ---------- 1) 방 ---------- */
-  var room = document.querySelector('[data-room]');
-  if (room) (function () {
-    var stage = room.querySelector('[data-stage]');
-    var allBtn = room.querySelector('[data-allon]');
-    var tabs = Array.prototype.slice.call(room.querySelectorAll('[role="tab"]'));
-    var specs = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
-    var caps = Array.prototype.slice.call(document.querySelectorAll('[data-cap]'));
-    var cur = 0, x = 0, y = 0, R = 100;
-    var used = false, touring = false, tourId = 0, tween = 0;
-
-    var card = function () { return specs[cur].querySelector('.card--in'); };
-    var rows = function (sp) { return Array.prototype.slice.call((sp || specs[cur]).querySelectorAll('.card--in p')); };
-    var box = function (el) { return { l: el.offsetLeft, t: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight }; };
-
-    /* 카드 안 자리(가로 비율, 몇째 줄 가운데)를 무대 좌표로 */
-    var spot = function (fx, i) {
-      var c = box(card()), r = box(rows()[i]);
-      return [c.l + c.w * fx, r.t + r.h / 2];
+  /* ---------- 1) 첫 화면 문장 ---------- */
+  var line = document.querySelector('[data-now]');
+  if (line) (function () {
+    var box = line.closest('[data-now-box]'), how = box.querySelector('[data-now-how]');
+    var howI = how.querySelector('img'), howT = how.querySelector('span'), city = line.querySelector('[data-city]');
+    var tok = {}, why = {}, keys = [];
+    $$(line, '.nt').forEach(function (a) { var k = a.getAttribute('data-nt'); tok[k] = a; keys.push(k); });
+    var lit = 0, hot = null, anim = {};
+    var nf = new Intl.NumberFormat(ko ? 'ko-KR' : 'en-US');
+    var WD = ko ? ['일', '월', '화', '수', '목', '금', '토'] : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    // 다른 도시: 첫째가 방문자와 같은 시각대면 둘째
+    var T = ko ? {
+      hz: function (n) { return n + '번'; }, left: function (n) { return nf.format(n) + '일'; }, count: function (n) { return nf.format(n) + '자'; },
+      date: function (m, dd, w) { return m + '월 ' + dd + '일 ' + WD[w] + '요일'; }, dayPre: function (w) { return WD[w] + '요일 '; },
+      hzWait: '이 페이지가 새로 그려지는 간격을 재는 중', hzRe: '간격이 고르지 않아 다시 재는 중',
+      hzWhy: function (n, ms) { return '화면 ' + n + '장을 그린 시각, 간격의 중앙값 ' + ms + 'ms'; },
+      dateWhy: '이 기기 시계의 오늘, 요일은 1970년 1월 1일부터 센 날 번호로', leftWhy: function (y) { return '오늘은 빼고 ' + y + '년 12월 31일까지'; },
+      timeWhy: function (z, u) { return z + ' 시간대, 지금 ' + u; }, countWhy: '이 문장 전체, 띄어쓰기와 이 숫자까지',
+      cities: [['America/New_York', '뉴욕'], ['Asia/Seoul', '서울']]
+    } : {
+      hz: function (n) { return n + ' times'; }, left: function (n) { return nf.format(n) + (n === 1 ? ' day' : ' days'); }, count: function (n) { return nf.format(n) + ' characters'; },
+      date: function (m, dd, w) { return WD[w] + ', ' + MON[m - 1] + ' ' + dd; }, dayPre: function (w) { return WD[w] + ' '; },
+      hzWait: 'Timing how often this page redraws', hzRe: 'Frames came unevenly, timing again',
+      hzWhy: function (n, ms) { return 'median gap between ' + n + ' frames, ' + ms + ' ms'; },
+      dateWhy: 'today on this device’s clock, weekday from the day number since Jan 1, 1970', leftWhy: function (y) { return 'to December 31, ' + y + ', not counting today'; },
+      timeWhy: function (z, u) { return z + ' time zone, ' + u + ' right now'; }, countWhy: 'this whole sentence, spaces and this number included',
+      cities: [['Asia/Seoul', 'Seoul'], ['America/New_York', 'New York']]
     };
+    var later = function (fn, ms) { return ms > 0 ? setTimeout(fn, ms) : fn(); };
+    var who = function (k) { return tok[k].querySelector('.nt__who').textContent.replace(/^\s*\(|\)\s*$/g, ''); };
+    var setVal = function (k, text) { tok[k].querySelector('.nt__v').textContent = text; };
 
-    /* 불빛이 닿은 줄에 .hit(확인 표시가 튐). 과정 다시 보기 중엔 멈출 때마다 그 줄만 */
-    var hits = function () {
-      if (touring) return;
-      rows().forEach(function (p) {
-        var b = box(p);
-        var dx = Math.max(b.l - x, 0, x - b.l - b.w), dy = Math.max(b.t - y, 0, y - b.t - b.h);
-        if (dx * dx + dy * dy < R * R * .09) p.classList.add('hit');
-      });
-    };
-
-    /* 손잡이(원의 3시 방향, 44px)가 무대 밖으로 잘리지 않게 오른쪽·위아래를 막는다. 막아도 카드 끝까지 불빛이 닿고, 셋째 줄 가운데까지 내려간다 */
-    var place = function (nx, ny) {
-      x = Math.max(0, Math.min(stage.clientWidth - R - 24, nx));
-      y = Math.max(24, Math.min(stage.clientHeight - 24, ny));
-      var c = card();
-      stage.style.setProperty('--sx', x + 'px');
-      stage.style.setProperty('--sy', y + 'px');
-      c.style.setProperty('--lx', (x - c.offsetLeft) + 'px');
-      c.style.setProperty('--ly', (y - c.offsetTop) + 'px');
-      hits();
-    };
-
-    var stop = function () { tourId++; touring = false; cancelAnimationFrame(tween); tween = 0; };
-
-    /* 지금 자리에서 (tx, ty)까지 ms 동안 미끄러지듯. 끝나면 done */
-    var glide = function (tx, ty, ms, done) {
-      cancelAnimationFrame(tween);
-      var x0 = x, y0 = y, t0 = 0;
-      if (!moving() || ms <= 0) { place(tx, ty); tween = 0; if (done) done(); return; }
-      var step = function (t) {
+    /* 풀이 줄: 도구 아이콘 + 이름 + 어떻게 셌는지 */
+    function show(k) {
+      if (!why[k]) return;
+      howI.src = tok[k].querySelector('.nt__i').getAttribute('src');
+      howT.textContent = '';
+      var b = document.createElement('b'); b.textContent = who(k);
+      howT.appendChild(b); howT.appendChild(document.createTextNode(' · ' + why[k]));
+      how.classList.remove('is-new'); void how.offsetWidth; how.classList.add('is-new');
+    }
+    /* 칸 켜기: 처음이면 깜빡이며 켜지고 방 불빛이 한 칸만큼 밝아진다 */
+    function light(k, text, w) {
+      var a = tok[k], first = !a.classList.contains('is-on'), same = why[k] === w;
+      why[k] = w;
+      if (text != null) setVal(k, text);
+      a.classList.remove('is-wait');
+      if (first) {
+        a.classList.add('is-on'); lit++;
+        box.style.setProperty('--glow', (lit / keys.length).toFixed(2));
+        if (moving()) { a.classList.remove('is-flick'); void a.offsetWidth; a.classList.add('is-flick'); }
+      }
+      if (hot ? hot === k && !same : first) show(k);
+      if (k !== 'count') recount();
+    }
+    /* 숫자가 0에서 올라가며 켜진다(움직임을 줄이면 바로) */
+    function rise(k, n, fmt, w) {
+      if (!moving()) return light(k, fmt(n), w);
+      cancelAnimationFrame(anim[k]);
+      var t0 = 0, ms = 520;
+      light(k, fmt(0), w);
+      anim[k] = requestAnimationFrame(function step(t) {
         if (!t0) t0 = t;
-        var k = Math.min(1, (t - t0) / ms), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-        place(x0 + (tx - x0) * e, y0 + (ty - y0) * e);
-        if (k < 1) tween = requestAnimationFrame(step); else { tween = 0; if (done) done(); }
-      };
-      tween = requestAnimationFrame(step);
-    };
-
-    /* 쉬는 자리: 위 두 줄(속 문장, 결과와 도장)은 가로 전체가 불빛 안, 셋째 줄 글은 불빛 밖으로 깨끗이 갈리게 */
-    var restAt = function () {
-      var c = box(card()), r = rows(), a = box(r[0]), b = box(r[2]);
-      return [c.l + c.w / 2, Math.min(a.t + a.h, b.t - R - 4)];
-    };
-    var rest = function () { var s = restAt(); place(s[0], s[1]); };
-    /* 불 끔(is-dark, 반지름 0): 과정 다시 보기 전엔 겉(도구 화면)만 깨끗이 보이고, 첫째 줄에서 불이 켜진다 */
-    var dark = function (on) { room.classList.toggle('is-dark', on); };
-    var unhit = function (sp) { rows(sp).forEach(function (p) { p.classList.remove('hit'); }); };
-
-    /* 과정 다시 보기: 불이 꺼져 있으면 첫째 줄에서 켜지고(here 면 지금 자리에서 미끄러져) 첫째 줄 → 가운데 줄 → 셋째 줄을 차례로 짚고 쉬는 자리로.
-       줄마다 멈출 때 그 줄의 확인 표시만 튄다. 가운데 줄(결과와 도장)에서 가장 오래 멈춘다. 이동 0.42초 */
-    var tour = function (wait, here) {
-      stop();
-      if (used || room.classList.contains('is-all')) return;
-      if (!moving()) { dark(false); rest(); rows().forEach(function (p) { p.classList.add('hit'); }); return; }
-      var id = tourId;
-      unhit();
-      if (!here) dark(true);
-      touring = true;
-      var stops = [[0, 260], [1, 700], [2, 260], [-1, 0]], i = 0;
-      var next = function () {
-        if (id !== tourId) return;
-        if (i >= stops.length) { touring = false; hits(); return; }
-        var st = stops[i++], s = st[0] < 0 ? restAt() : spot(.5, st[0]);
-        var arrive = function () {
-          if (id !== tourId) return;
-          if (st[0] >= 0) rows()[st[0]].classList.add('hit');
-          setTimeout(next, st[1]);
-        };
-        if (room.classList.contains('is-dark')) { place(s[0], s[1]); dark(false); setTimeout(arrive, 450); }
-        else glide(s[0], s[1], 420, arrive);
-      };
-      setTimeout(next, wait || 0);
-    };
-
-    var take = function () {
-      if (used) return;
-      used = true; stop(); dark(false); room.classList.add('is-used');
-    };
-
-    /* 끌기: 손잡이는 바로 잡고, 무대 빈 곳은 마우스면 그 자리로 미끄러진 뒤 따라오고,
-       손가락이면 짧게 누르거나(탭) 옆으로 밀 때만 움직인다(위아래로 밀면 화면이 내려가야 하므로) */
-    var drag = null;
-    var at = function (e) { var b = stage.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
-    stage.addEventListener('pointerdown', function (e) {
-      if (e.button > 0 || e.target.closest('button, a') || room.classList.contains('is-all')) return;
-      var p = at(e), knob = e.target.classList.contains('lamp__knob');
-      drag = { id: e.pointerId, ox: knob ? x - p[0] : 0, oy: knob ? y - p[1] : 0, sx: p[0], sy: p[1], live: knob || e.pointerType !== 'touch' };
-      if (drag.live) {
-        take(); try { stage.setPointerCapture(e.pointerId); } catch (er) {}
-        if (!knob) glide(p[0], p[1], 220);
-        e.preventDefault();
-      }
-    });
-    stage.addEventListener('pointermove', function (e) {
-      if (!drag || e.pointerId !== drag.id) return;
-      var p = at(e);
-      if (!drag.live) {
-        if (Math.abs(p[0] - drag.sx) < 8) return;
-        drag.live = true; take(); try { stage.setPointerCapture(e.pointerId); } catch (er) {}
-      }
-      if (tween) return;
-      place(p[0] + drag.ox, p[1] + drag.oy);
-    });
-    var end = function (e) {
-      if (!drag || e.pointerId !== drag.id) return;
-      if (!drag.live && e.type === 'pointerup') { take(); var p = at(e); glide(p[0], p[1], 220); }
-      drag = null;
-    };
-    stage.addEventListener('pointerup', end);
-    stage.addEventListener('pointercancel', function (e) { if (drag && e.pointerId === drag.id) drag = null; });
-
-    /* 불 다 켜기 ↔ 불 끄기: 모든 카드의 속을 한 번에(키보드로도 속을 다 볼 수 있게). 단추 글이 바뀐다 */
-    var labels = allBtn.querySelectorAll('[data-i18n]');
-    allBtn.addEventListener('click', function () {
-      var on = !room.classList.contains('is-all');
-      stop(); dark(false);
-      room.classList.toggle('is-all', on);
-      labels[0].hidden = on; labels[1].hidden = !on;
-      if (on) specs.forEach(function (sp) { rows(sp).forEach(function (p) { p.classList.add('hit'); }); });
-      else { used = true; room.classList.add('is-used'); rest(); }
-    });
-
-    /* 공평뽑기 카드: 뽑기 칸을 열 때마다 실제로 하나 뽑아 겉(이름)과 속(모두 25%) 양쪽에 표시(4는 2^32를 나누어떨어지므로 나머지로 고르게) */
-    var draw = function () {
-      var lists = [specs[cur].querySelectorAll('.names > span'), specs[cur].querySelectorAll('.odds > .o')];
-      var n = lists[0].length, win = crypto.getRandomValues(new Uint32Array(1))[0] % n;
-      var show = function (k) { lists.forEach(function (ns) { for (var j = 0; j < ns.length; j++) ns[j].classList.toggle('win', j === k); }); };
-      if (!moving()) { show(win); return; }
-      var waits = [60, 70, 85, 105, 135, 175], k = (win + n - waits.length % n) % n, i = 0, sel = cur;
-      var go = function () {
-        if (sel !== cur) return;
-        show(k); k = (k + 1) % n;
-        if (i < waits.length) setTimeout(go, waits[i++]);
-      };
-      go();
-    };
-
-    var select = function (i, focus) {
-      if (i === cur) return;
-      stop(); unhit(specs[cur]);
-      var c0 = box(card()), fx = (x - c0.l) / c0.w, fy = (y - c0.t) / c0.h;
-      tabs.forEach(function (t, j) {
-        var on = j === i;
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1;
-        specs[j].hidden = !on;
-        specs[j].classList.toggle('is-on', on);
+        var e = Math.min(1, (t - t0) / ms), v = Math.round(n * (1 - Math.pow(1 - e, 3)));
+        setVal(k, fmt(v));
+        if (e < 1) anim[k] = requestAnimationFrame(step); else recount();
       });
-      caps.forEach(function (c) { c.hidden = c.getAttribute('data-cap') !== specs[i].id; });
-      cur = i;
-      if (focus) tabs[i].focus();
-      if (specs[i].hasAttribute('data-pick')) draw();
-      if (room.classList.contains('is-all')) return;
-      var c = box(card());
-      place(c.l + c.w * fx, c.t + c.h * fy);
-      /* 새 카드는 늘 쉬는 자리에서 시작(가장자리에 두고 바꿔도 조각난 글로 시작하지 않게). 아직 안 만졌으면 과정 다시 보기 */
-      if (!used) tour(120, true);
-      else { var s = restAt(); glide(s[0], s[1], 240); }
-    };
-    tabs.forEach(function (t, i) {
-      t.addEventListener('click', function () { select(i); });
-      t.addEventListener('keydown', function (e) {
-        var k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key], n = tabs.length;
-        if (e.key === 'Home') k = -cur; else if (e.key === 'End') k = n - 1 - cur;
-        if (k === undefined) return;
-        e.preventDefault();
-        select((cur + k + n) % n, true);
+    }
+
+    /* 이 문장 글자 수(칸칸). 안 보이는 도구 이름은 빼고, 화면에 보이는 그대로 */
+    var countReady = false;
+    function text() {
+      var c = line.cloneNode(true);
+      $$(c, '.nt__who').forEach(function (x) { x.parentNode.removeChild(x); });
+      return c.textContent.replace(/\s+/g, ' ').trim();
+    }
+    function recount() {
+      if (!countReady || !tok.count) return;
+      var n = 0;
+      for (var i = 0; i < 8; i++) {
+        setVal('count', T.count(n));
+        var m = LC.analyze(text(), { segment: false, locale: ko ? 'ko' : 'en' }).chars;
+        if (m === n) break;
+        n = m;
+      }
+      light('count', T.count(n), T.countWhy);
+    }
+
+    /* 오늘·올해 남은 날(며칠 계산기), 다른 도시 지금 시각(한바퀴). 분이 바뀌면 다시 */
+    function tick(first) {
+      var now = new Date(), ts = now.getTime(), y = now.getFullYear(), m = now.getMonth() + 1, dd = now.getDate();
+      var n = DC.fromYMD(y, m, dd), gap = first && moving() ? 170 : 0;
+      later(function () { light('date', T.date(m, dd, DC.weekday(n)), T.dateWhy); }, 0);
+      later(function () { var left = DC.between(n, DC.fromYMD(y, 12, 31)).days; if (first) rise('left', left, T.left, T.leftWhy(y)); else light('left', T.left(left), T.leftWhy(y)); }, gap);
+      later(function () {
+        var here = -now.getTimezoneOffset(), c = T.cities[0];
+        if (OT.offset(c[0], ts) === here) c = T.cities[1];
+        city.textContent = c[1];
+        var p = OT.parts(c[0], ts), clock = OT.fmtClock(p.h, p.mi, ko ? 'ko' : 'en', true);
+        if (p.d !== dd) clock = T.dayPre(p.wd) + clock;
+        light('time', clock, T.timeWhy(c[0], OT.utcLabel(OT.offset(c[0], ts))));
+      }, gap * 2);
+      setTimeout(function () { tick(false); }, 60000 - ts % 60000 + 40);
+    }
+
+    /* 이 페이지 주사율(체크벤치와 같은 방법·기준). 탭이 가려져 있으면 보일 때 잰다 */
+    function measure(tries) {
+      if (document.hidden) {
+        document.addEventListener('visibilitychange', function f() { if (!document.hidden) { document.removeEventListener('visibilitychange', f); measure(tries); } });
+        return;
+      }
+      tok.hz.classList.add('is-wait'); why.hz = tries ? T.hzRe : T.hzWait;
+      if (!hot && !tok.hz.classList.contains('is-on') && (tries || !lit)) show('hz');
+      var times = [], N = 121;
+      requestAnimationFrame(function f(t) {
+        times.push(t);
+        if (times.length < N) return requestAnimationFrame(f);
+        var est = CK.refreshEstimate(CK.intervals(times));
+        if (CK.refreshSteady(est)) rise('hz', Math.round(est.hz), T.hz, T.hzWhy(N, est.medianMs.toFixed(1)));
+        else setTimeout(function () { measure(tries + 1); }, 600);
       });
+    }
+
+    function start() {
+      if (!window.DC || !window.OT || !window.CK || !window.LC) return plain();
+      line.classList.add('is-live');
+      tok.hz.classList.add('is-wait');
+      tick(true);
+      // 처음엔 나머지 칸이 다 켜진 뒤에 글자 수를 센다(주사율은 재는 데 1~2초)
+      later(function () { countReady = true; recount(); }, moving() ? 520 : 0);
+      var go = function () { setTimeout(function () { measure(0); }, 250); };
+      if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
+    }
+    function plain() { box.classList.add('is-plain'); }
+
+    keys.forEach(function (k) {
+      var a = tok[k];
+      var on = function () { hot = k; a.classList.add('is-hot'); show(k); };
+      var off = function () { if (hot === k) hot = null; a.classList.remove('is-hot'); };
+      a.addEventListener('pointerenter', on); a.addEventListener('pointerleave', off);
+      a.addEventListener('focus', on); a.addEventListener('blur', off);
     });
 
-    /* 크기 바뀌면 지금 칸 가운데 줄로 */
-    var measure = function () {
-      var v = parseFloat(getComputedStyle(room).getPropertyValue('--r'));
-      if (!room.classList.contains('is-all') && !room.classList.contains('is-dark') && v) R = v;
+    var core = [];
+    try { core = JSON.parse(line.getAttribute('data-core') || '[]'); } catch (e) {}
+    var load = function (src) {
+      return new Promise(function (ok, no) {
+        var s = document.createElement('script');
+        s.src = src; s.async = false; s.onload = ok; s.onerror = no;
+        document.head.appendChild(s);
+      });
     };
-    var rw = stage.clientWidth;
-    addEventListener('resize', function () {
-      if (stage.clientWidth === rw) return;
-      rw = stage.clientWidth; stop(); measure(); rest();
-    });
-
-    /* JS가 없으면 CSS가 불을 다 켠 채로 둔다. 켜지는 순간의 전환은 건너뛰고 불빛 모드로(움직임이 있으면 불을 끈 채로 시작) */
-    var lamp = room.querySelector('.lamp');
-    room.style.transition = lamp.style.transition = 'none';
-    room.classList.add('is-live');
-    measure();
-    if (moving() && 'IntersectionObserver' in window) { unhit(); dark(true); }
-    void room.offsetWidth;
-    room.style.transition = lamp.style.transition = '';
-
-    /* 움직임이 없으면 불빛은 쉬는 자리, 세 줄 다 확인 표시. 있으면 불을 끈 채 기다리다가
-       화면에 40% 이상 들어올 때마다 과정 다시 보기(방문자가 한 번 만졌으면 더는 안 함, 옮겨 둔 불빛을 뺏지 않게) */
-    rest();
-    var seen = false, first = true;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.intersectionRatio >= .4 && !seen) {
-            seen = true; tour(first ? 500 : 150); first = false;
-          } else if (!e.isIntersecting && seen) {
-            seen = false;
-            if (!used) { stop(); unhit(); dark(true); }
-          }
-        });
-      }, { threshold: [0, .4] }).observe(room);
-    } else tour(0);
+    if (!window.Promise || !core.length) return plain();
+    Promise.all(core.map(load)).then(start, plain);
   })();
 
   /* ---------- 2) 만든 것 칸 ---------- */

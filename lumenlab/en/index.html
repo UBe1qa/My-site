@@ -50,90 +50,21 @@
 </header>
 
 <main id="main">
-  <!-- 첫 화면: 결과 위로 불빛을 대면 그 결과를 어떻게 확인했는지(속)가 보인다. 겉·속 글은 둘 다 실제로 확인된 사실만(소개 페이지와 같은 근거) -->
+  <!-- 첫 화면: 큰 문장 하나. 빛나는 칸은 루멘랩 도구 넷의 진짜 계산 파일이 방문자 기기에서 채운다(이 페이지의 주사율, 오늘, 올해 남은 날, 다른 도시 시각, 이 문장 글자 수).
+       칸을 누르면 그 도구의 소개 창, 칸에 손을 대면 아래 풀이 줄에 어떻게 셌는지가 나온다(assets/landing.js). 문장은 build_home.py 가 만든다(gen:now) -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero__in">
-      <div class="hero__text">
-        <p class="hero__eyebrow rv" data-i18n="eyebrow">A one-person studio for games, apps and free web tools</p>
-        <h1 id="hero-title" class="hero__title rv" data-i18n="h1"><span class="lm"><span>Small software</span></span> <span class="lm"><span>that shows its work</span></span></h1>
-        <p class="hero__lead rv" data-i18n="lead">Free web tools for take-home pay, file conversion, spin wheels and more. No sign-up.</p>
+    <div class="wrap">
+      <div class="now" data-now-box>
+        <h1 id="hero-title" class="now__h1" data-i18n="h1">Lumen Lab makes free web tools you can use without signing up, plus games and apps</h1>
+        <!-- gen:now -->
+        <p class="now__line" data-now data-core="[&quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine">This page redraws <a class="nt" data-nt="hz" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v">·· times</b><span class="nt__who"> (Checkbench)</span></a> a second. Today is <a class="nt" data-nt="date" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v">······, ······· ··</b><span class="nt__who"> (Daycount)</span></a>, with <a class="nt" data-nt="left" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v">·· days</b><span class="nt__who"> (Daycount)</span></a> left this year, and it’s <a class="nt" data-nt="time" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v">·:·· ··</b><span class="nt__who"> (Oneturn)</span></a> in <span class="now__city" data-city>Seoul</span>. That’s <a class="nt" data-nt="count" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v">··· characters</b><span class="nt__who"> (Kankan)</span></a> so far.</p>
+        <!-- /gen:now -->
+        <p class="now__plain" data-i18n="nowPlain">Tools that count days, tell the time around the world, count characters and test your screen, working right on your device.</p>
+        <noscript><style>.now__line{display:none}.now__plain{display:block}</style></noscript>
+        <p class="now__how" data-now-how aria-hidden="true"><img class="now__how-i" src="/favicon.svg" width="22" height="22" alt=""><span data-i18n="nowWait">Loading the tools’ code</span></p>
+        <p class="now__note" data-i18n="lead">The glowing values were just worked out on this device by Lumen Lab’s web tools. Tap one to open that tool.</p>
         <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
-        <p class="hero__act rv"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>
-      </div>
-
-      <div class="room rv" data-room>
-        <div class="room__stage" data-stage>
-          <button type="button" class="room__all" data-allon><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5a5.5 5.5 0 0 0-3.2 10c.5.4.7.9.7 1.5v.5h5v-.5c0-.6.2-1.1.7-1.5a5.5 5.5 0 0 0-3.2-10Z"/><path d="M8 17h4"/></svg><span data-i18n="allOn">Lights on</span><span data-i18n="allOff" hidden>Lights off</span></button>
-
-          <div class="spec is-on" id="spec-takehome" role="tabpanel" aria-labelledby="tab-takehome" data-spec>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s1o1">Ministry of Employment severance example</span></p>
-              <p class="r2"><b class="big" data-i18n="s1big">₩88,641<small>.31</small></b></p>
-              <p class="r3"><span data-i18n="s1o3">Average daily wage</span><span class="card__by" data-i18n="t1">Takehome</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s1i1">Matches the ministry’s example</span></p>
-              <p class="r2"><span class="v"><b class="big" data-i18n="s1big">₩88,641<small>.31</small></b><span class="stamp" data-i18n="s1st">Same</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s1i3">Each rate lists source and check date</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-inplace" role="tabpanel" aria-labelledby="tab-inplace" data-spec hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s2o1">Convert a photo</span><span class="ex" data-i18n="ex">Example</span></p>
-              <p class="r2"><span class="file">IMG_2041<small>.HEIC</small></span><span class="arrow">→</span><span class="file">JPG</span></p>
-              <p class="r3"><span class="bar"><i></i></span><span data-i18n="s2o3">Done · 1 file</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s2i1">Files never leave this browser</span></p>
-              <p class="r2"><span class="v"><span class="file">IMG_2041<small>.HEIC</small></span><span class="arrow">→</span><span class="file">JPG</span><span class="stamp" data-i18n="s2st">On device</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s2i3">Lumen Lab has no upload server</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-pick" role="tabpanel" aria-labelledby="tab-pick" data-spec data-pick hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s3o1">Who buys coffee today</span><span class="ex" data-i18n="ex">Example</span></p>
-              <p class="r2 names"><span data-i18n="n1">Mia</span><span data-i18n="n2">Leo</span><span data-i18n="n3">Ava</span><span data-i18n="n4">Sam</span></p>
-              <p class="r3"><span data-i18n="s3o3">The result can be shared as a link</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s3i1">Each draw uses the browser’s secure RNG</span></p>
-              <p class="r2"><span class="v odds"><span class="o"><b data-i18n="n1">Mia</b>25%</span><span class="o"><b data-i18n="n2">Leo</b>25%</span><span class="o"><b data-i18n="n3">Ava</b>25%</span><span class="o"><b data-i18n="n4">Sam</b>25%</span><span class="stamp" data-i18n="s3st">Fair</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s3i3">Chi-square tested over 100,000 draws</span></p>
-            </div>
-          </div>
-
-          <div class="spec" id="spec-chick" role="tabpanel" aria-labelledby="tab-chick" data-spec hidden>
-            <div class="card card--out" aria-hidden="true">
-              <p class="r1"><span data-i18n="s4o1">Chick Rescue</span></p>
-              <p class="r2"><span data-i18n="s4o2">Tube sort puzzle</span></p>
-              <p class="r3"><span data-i18n="s4o3">Android first</span><span class="ex" data-i18n="s4ex">Coming soon</span></p>
-            </div>
-            <div class="card card--in">
-              <p class="r1"><i class="tick" aria-hidden="true"></i><span data-i18n="s4i1">Works with no internet</span></p>
-              <p class="r2"><span class="v"><b class="big" data-i18n="s4i2">1,440<small> levels</small></b><span class="stamp" data-i18n="s4st">Free</span></span></p>
-              <p class="r3"><i class="tick" aria-hidden="true"></i><span data-i18n="s4i3">No account; progress stays on the phone</span></p>
-            </div>
-          </div>
-
-          <div class="lamp" data-lamp aria-hidden="true"><i class="lamp__knob"></i></div>
-          <p class="room__hint" aria-hidden="true" data-i18n="hint">Drag the light, or tap a line</p>
-        </div>
-
-        <div class="room__tabs" role="tablist" aria-label="Things to look inside" data-i18n-aria="tabsLabel">
-          <button type="button" role="tab" id="tab-takehome" aria-controls="spec-takehome" aria-selected="true"><img src="/img/salary.svg" width="28" height="28" alt=""><span data-i18n="t1">Takehome</span></button>
-          <button type="button" role="tab" id="tab-inplace" aria-controls="spec-inplace" aria-selected="false" tabindex="-1"><img src="/img/convert.svg" width="28" height="28" alt=""><span data-i18n="t2">Inplace</span></button>
-          <button type="button" role="tab" id="tab-pick" aria-controls="spec-pick" aria-selected="false" tabindex="-1"><img src="/img/pick.svg" width="28" height="28" alt=""><span data-i18n="t3">Pickboard</span></button>
-          <button type="button" role="tab" id="tab-chick" aria-controls="spec-chick" aria-selected="false" tabindex="-1"><img src="/img/chick-rescue.webp" width="28" height="28" alt=""><span data-i18n="tab4">Chick</span></button>
-        </div>
-      </div>
-
-      <div class="caps rv" aria-live="polite">
-        <p class="cap" data-cap="spec-takehome"><b data-i18n="t1">Takehome</b> <span data-i18n="c1">Korean take-home pay and severance</span> <a href="/en/works/takehome/" class="cap__go" data-show="takehome" data-from="#tab-takehome img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
-        <p class="cap" data-cap="spec-inplace" hidden><b data-i18n="t2">Inplace</b> <span data-i18n="c2">Image, video and PDF converter</span> <a href="/en/works/inplace/" class="cap__go" data-show="inplace" data-from="#tab-inplace img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
-        <p class="cap" data-cap="spec-pick" hidden><b data-i18n="t3">Pickboard</b> <span data-i18n="c3">Wheel, ladder and team picker</span> <a href="/en/works/pickboard/" class="cap__go" data-show="pickboard" data-from="#tab-pick img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
-        <p class="cap" data-cap="spec-chick" hidden><b data-i18n="t4">Chick Rescue</b> <span data-i18n="c4">Puzzle game for phones · Coming soon</span> <a href="/en/works/chickrescue/" class="cap__go" data-show="chickrescue" data-from="#tab-chick img" aria-haspopup="dialog" data-i18n="capSee">Preview the game</a></p>
+        <p class="now__act"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>
       </div>
     </div>
   </section>
@@ -149,8 +80,12 @@
       </div>
       <!-- gen:wall -->
       <div class="shelf" id="games">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">Games and apps</h3><p class="shelf__line" data-i18n="wl_games_l">Phone games, Android first, and apps for the Mac and the browser.</p></div>
-        <ul class="wall"><li><a class="wi" href="/en/works/chickrescue/" data-show="chickrescue" aria-haspopup="dialog" style="--tc:#1f7a4a;--tcp:82%"><img class="wi__icon" src="/img/chick-rescue.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_chickrescue_n">Chick Rescue</span><span class="wi__w" data-i18n="wl_chickrescue_w">Sort puzzle to rescue chicks</span><span class="wi__s" data-i18n="wl_chickrescue_s">Getting ready for launch</span></a></li><li><a class="wi" href="/en/works/castleup/" data-show="castleup" aria-haspopup="dialog" style="--tc:#7a2e8e;--tcp:82%"><img class="wi__icon" src="/img/castle-up.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_castleup_n">Castle Up!</span><span class="wi__w" data-i18n="wl_castleup_w">Idle defense with a hero on every floor</span><span class="wi__s" data-i18n="wl_castleup_s">Play-testing</span></a></li><li id="apps"><a class="wi" href="/en/works/owlight/" data-show="owlight" aria-haspopup="dialog" style="--tc:#33337a;--tcp:82%"><img class="wi__icon" src="/img/owlight.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_owlight_n">Owlight</span><span class="wi__w" data-i18n="wl_owlight_w">Keeps your Mac awake, hides the desktop</span><span class="wi__s" data-i18n="wl_owlight_s">Getting ready for the App Store</span></a></li><li><a class="wi" href="/en/works/setnote/" data-show="setnote" aria-haspopup="dialog" style="--tc:#9ccc1f;--tcp:58%"><img class="wi__icon" src="/img/setnote.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_setnote_n">SetNote</span><span class="wi__w" data-i18n="wl_setnote_w">Workout log with last time beside it</span><span class="wi__s" data-i18n="wl_setnote_s">Available now</span></a></li></ul>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">Games</h3><p class="shelf__line" data-i18n="wl_games_l">Games for your phone, getting ready for Android first.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/chickrescue/" data-show="chickrescue" aria-haspopup="dialog" style="--tc:#1f7a4a;--tcp:82%"><img class="wi__icon" src="/img/chick-rescue.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_chickrescue_n">Chick Rescue</span><span class="wi__w" data-i18n="wl_chickrescue_w">Sort puzzle to rescue chicks</span><span class="wi__s" data-i18n="wl_chickrescue_s">Getting ready for launch</span></a></li><li><a class="wi" href="/en/works/castleup/" data-show="castleup" aria-haspopup="dialog" style="--tc:#7a2e8e;--tcp:82%"><img class="wi__icon" src="/img/castle-up.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_castleup_n">Castle Up!</span><span class="wi__w" data-i18n="wl_castleup_w">Idle defense with a hero on every floor</span><span class="wi__s" data-i18n="wl_castleup_s">Play-testing</span></a></li></ul>
+      </div>
+      <div class="shelf" id="apps">
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_apps_h">Apps</h3><p class="shelf__line" data-i18n="wl_apps_l">Apps for the Mac and the browser.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/owlight/" data-show="owlight" aria-haspopup="dialog" style="--tc:#33337a;--tcp:82%"><img class="wi__icon" src="/img/owlight.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_owlight_n">Owlight</span><span class="wi__w" data-i18n="wl_owlight_w">Keeps your Mac awake, hides the desktop</span><span class="wi__s" data-i18n="wl_owlight_s">Getting ready for the App Store</span></a></li><li><a class="wi" href="/en/works/setnote/" data-show="setnote" aria-haspopup="dialog" style="--tc:#9ccc1f;--tcp:58%"><img class="wi__icon" src="/img/setnote.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_setnote_n">SetNote</span><span class="wi__w" data-i18n="wl_setnote_w">Workout log with last time beside it</span><span class="wi__s" data-i18n="wl_setnote_s">Available now</span></a></li></ul>
       </div>
       <div id="tools">
       <div class="shelf" id="g-calc">
@@ -159,11 +94,11 @@
       </div>
       <div class="shelf" id="g-docs">
         <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_docs_h">Text and files</h3><p class="shelf__line" data-i18n="wl_g_docs_l">Count text, convert files and print calendars.</p></div>
-        <ul class="wall"><li><a class="wi" href="/en/works/inplace/" data-show="inplace" aria-haspopup="dialog" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">Inplace</span><span class="wi__w" data-i18n="wl_inplace_w">Image, video and PDF converter</span><span class="wi__p" data-i18n="wl_inplace_p">Files never leave your browser</span></a></li><li><a class="wi" href="/en/works/onesheet/" data-show="onesheet" aria-haspopup="dialog" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">Onesheet</span><span class="wi__w" data-i18n="wl_onesheet_w">Printable calendars and holidays</span><span class="wi__p" data-i18n="wl_onesheet_p">Every weekday 1900–2100 tested</span></a></li><li><a class="wi" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">Kankan</span><span class="wi__w" data-i18n="wl_kankan_w">Character counter</span><span class="wi__p" data-i18n="wl_kankan_p">35,000+ automatic tests</span></a></li><li><a class="wi" href="/en/works/staycode/" data-show="staycode" aria-haspopup="dialog" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">Staycode</span><span class="wi__w" data-i18n="wl_staycode_w">QR code maker</span><span class="wi__p" data-i18n="wl_staycode_p">Every code is read back</span></a></li></ul>
+        <ul class="wall"><li><a class="wi" href="/en/works/inplace/" data-show="inplace" aria-haspopup="dialog" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">Inplace</span><span class="wi__w" data-i18n="wl_inplace_w">Image, video and PDF converter</span><span class="wi__p" data-i18n="wl_inplace_p">Files never leave your browser</span></a></li><li><a class="wi" href="/en/works/staycode/" data-show="staycode" aria-haspopup="dialog" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">Staycode</span><span class="wi__w" data-i18n="wl_staycode_w">QR code maker</span><span class="wi__p" data-i18n="wl_staycode_p">Every code is read back</span></a></li><li><a class="wi" href="/en/works/onesheet/" data-show="onesheet" aria-haspopup="dialog" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">Onesheet</span><span class="wi__w" data-i18n="wl_onesheet_w">Printable calendars and holidays</span><span class="wi__p" data-i18n="wl_onesheet_p">Every weekday 1900–2100 tested</span></a></li><li><a class="wi" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">Kankan</span><span class="wi__w" data-i18n="wl_kankan_w">Character counter</span><span class="wi__p" data-i18n="wl_kankan_p">35,000+ automatic tests</span></a></li></ul>
       </div>
       <div class="shelf" id="g-play">
         <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_play_h">Devices, time, practice and groups</h3><p class="shelf__line" data-i18n="wl_g_play_l">Test your gear, time things, practice typing and pick fairly.</p></div>
-        <ul class="wall"><li><a class="wi" href="/en/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">Pickboard</span><span class="wi__w" data-i18n="wl_pickboard_w">Wheel, ladder and team picker</span><span class="wi__p" data-i18n="wl_pickboard_p">Chi-square tested on 100,000 draws</span></a></li><li><a class="wi" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">Checkbench</span><span class="wi__w" data-i18n="wl_checkbench_w">Keyboard, mouse and mic tests</span><span class="wi__p" data-i18n="wl_checkbench_p">Shows the rule beside each result</span></a></li><li><a class="wi" href="/en/works/todok/" data-show="todok" aria-haspopup="dialog" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">Todok</span><span class="wi__w" data-i18n="wl_todok_w">Korean and English typing practice</span><span class="wi__p" data-i18n="wl_todok_p">Publishes how speed is counted</span></a></li><li><a class="wi" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">Oneturn</span><span class="wi__w" data-i18n="wl_oneturn_w">Timer, stopwatch and world clock</span><span class="wi__p" data-i18n="wl_oneturn_p">Each city checked with zoneinfo</span></a></li></ul>
+        <ul class="wall"><li><a class="wi" href="/en/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">Pickboard</span><span class="wi__w" data-i18n="wl_pickboard_w">Wheel, ladder and team picker</span><span class="wi__p" data-i18n="wl_pickboard_p">Chi-square tested on 100,000 draws</span></a></li><li><a class="wi" href="/en/works/todok/" data-show="todok" aria-haspopup="dialog" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">Todok</span><span class="wi__w" data-i18n="wl_todok_w">Korean and English typing practice</span><span class="wi__p" data-i18n="wl_todok_p">Publishes how speed is counted</span></a></li><li><a class="wi" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">Oneturn</span><span class="wi__w" data-i18n="wl_oneturn_w">Timer, stopwatch and world clock</span><span class="wi__p" data-i18n="wl_oneturn_p">Each city checked with zoneinfo</span></a></li><li><a class="wi" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">Checkbench</span><span class="wi__w" data-i18n="wl_checkbench_w">Keyboard, mouse and mic tests</span><span class="wi__p" data-i18n="wl_checkbench_p">Shows the rule beside each result</span></a></li></ul>
       </div>
       </div>
       <!-- /gen:wall -->
@@ -201,7 +136,7 @@
       <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
       <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
       <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
-      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
       <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
       <!-- /gen:foot -->
     </div>
