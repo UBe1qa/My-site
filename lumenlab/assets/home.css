@@ -133,10 +133,8 @@
 .contact__title{margin:0;font-size:clamp(26px,3.6vw,36px);line-height:1.3;letter-spacing:-.02em}
 .contact__lead{margin:14px 0 28px;color:var(--night-muted)}
 .contact__mail{margin:0}
-.btn--lamp{background:var(--lamp);color:#1B1A24;padding-left:28px;padding-right:28px}
 .contact__mail{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
 .contact__addr{color:var(--night-ink);font-weight:600;font-size:17px;user-select:all}
-.btn--lamp:hover{filter:brightness(1.06)}
 .contact a:focus-visible{outline-color:var(--lamp)}
 .foot{margin-top:0}
 

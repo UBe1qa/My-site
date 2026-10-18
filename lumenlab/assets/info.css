@@ -1,0 +1,122 @@
+/* 루트 정보 페이지 전용: 가이드 모음(/guides/), 소개(/about/), 개인정보 처리방침(/privacy/). 페이지는 _dev/build_info.py 가 만든다.
+   색은 site.css 토큰만 쓴다. 가이드 모음은 홈의 웹 도구 칸(왼쪽 묶음 이름, 오른쪽 목록)과 같은 짜임. */
+
+/* 머리 칸: 무엇이 있는 페이지인지 + 페이지 안 바로가기 */
+.ihead{background:var(--card);border-bottom:1px solid var(--line)}
+.ihead__in{max-width:808px;padding-top:44px;padding-bottom:30px}
+.ihead__in--wide{max-width:var(--wrap)}
+.ihead__kicker{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--lamp-ink)}
+.ihead__title{margin:0;font-size:clamp(28px,4.4vw,42px);line-height:1.25;letter-spacing:-.025em;font-weight:800}
+.ihead__lead{margin:14px 0 0;color:var(--ink-2);max-width:40em}
+.ijump{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.ijump a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;
+  text-decoration:none;color:var(--ink);font-size:15px;font-weight:600;background:var(--paper)}
+.ijump a:hover{border-color:var(--muted)}
+.ijump a span{color:var(--muted);font-weight:600}
+@media (max-width:560px){.ihead__in{padding-top:30px;padding-bottom:24px}.ijump a{min-height:38px;padding:0 12px;font-size:14.5px}}
+
+/* 가이드 모음: 묶음(왼쪽 이름) → 도구 카드(오른쪽) → 글 목록 */
+.gs{padding-top:56px;padding-bottom:8px}
+.gs+.gs{border-top:1px solid var(--line);margin-top:48px}
+.gs__in{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.6fr);gap:16px 40px;align-items:start}
+.gs__head{position:sticky;top:96px}
+.gs__name{margin:0;font-size:26px;line-height:1.3;letter-spacing:-.02em}
+.gs__line{margin:8px 0 0;color:var(--ink-2);font-size:16px;line-height:1.6;max-width:16em}
+.gs__tools{display:grid;gap:22px}
+.gt{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:84px}
+.gt__head{display:flex;align-items:center;gap:14px;padding:22px 24px 0}
+.gt__icon{display:block;flex:none;border-radius:11px}
+.gt__name-wrap{min-width:0}
+.gt__name{margin:0;font-size:21px;line-height:1.3;letter-spacing:-.01em}
+.gt__en{font-size:14px;font-weight:600;color:var(--muted);margin-left:4px}
+.gt__host{margin:2px 0 0;font-size:14px;font-weight:600;color:var(--muted)}
+.gt__host a{color:var(--lamp-ink);text-decoration:none}
+.gt__host a:hover{text-decoration:underline}
+.gt__what{margin:12px 24px 0;color:var(--ink-2);font-size:16px;line-height:1.65}
+.gt__check{margin:14px 24px 16px;padding:12px 14px;border-radius:var(--radius-s);background:var(--paper);border:1px solid var(--line);font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+.gt__check b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.gt__check b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lamp);margin-right:8px;vertical-align:.08em}
+.gt__check a{font-weight:600;white-space:nowrap}
+.gl{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.gl li+li{border-top:1px solid var(--line)}
+.gl__a{display:block;padding:15px 24px;color:var(--ink);text-decoration:none;transition:background .2s}
+.gl__a:hover{background:var(--lamp-soft)}
+.gl__t{display:block;font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.01em}
+.gl__d{display:block;margin-top:3px;font-size:15px;line-height:1.6;color:var(--ink-2)}
+.gl__m{display:block;margin-top:5px;font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.gt__more{margin:0;padding:14px 24px 16px;border-top:1px solid var(--line)}
+.gt__open{font-weight:700;text-decoration:none}
+.gt__open:hover{text-decoration:underline}
+@media (max-width:860px){
+  .gs{padding-top:40px}
+  .gs+.gs{margin-top:36px}
+  .gs__in{grid-template-columns:minmax(0,1fr);gap:16px}
+  .gs__head{position:static}
+  .gs__line{max-width:none}
+}
+@media (max-width:420px){
+  .gt__head{padding:18px 16px 0;gap:12px}
+  .gt__icon{width:40px;height:40px}
+  .gt__what{margin:10px 16px 0}
+  .gt__check{margin:12px 16px 14px}
+  .gl__a{padding:14px 16px}
+  .gt__more{padding:12px 16px 14px}
+}
+
+/* 끝 칸: 밤 바탕(홈의 문의 칸과 같은 결) */
+.iend{margin-top:72px;background:var(--night);color:var(--night-ink);padding-top:72px;padding-bottom:76px}
+.iend__title{margin:0;font-size:clamp(24px,3.2vw,32px);line-height:1.3;letter-spacing:-.02em}
+.iend__lead{margin:12px 0 26px;color:var(--night-muted);max-width:36em}
+.iend__row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin:0}
+.iend__more{color:var(--night-ink);font-weight:600}
+.iend a:focus-visible{outline-color:var(--lamp)}
+@media (max-width:860px){.iend{margin-top:56px;padding-top:56px;padding-bottom:60px}}
+
+/* 소개·방침 본문 */
+.idoc{max-width:808px;padding-top:8px;padding-bottom:80px}
+.idoc h2{font-size:23px;line-height:1.35;margin:52px 0 10px;padding-top:30px;border-top:1px solid var(--line);letter-spacing:-.015em;scroll-margin-top:72px}
+.idoc section:first-child h2{border-top:0;padding-top:24px;margin-top:20px}
+.idoc h3{font-size:18px;line-height:1.45;margin:30px 0 6px}
+.idoc p{margin:10px 0;color:var(--ink-2)}
+.idoc section{scroll-margin-top:72px}
+html[lang="en"] .idoc p,html[lang="en"] .idoc li,html[lang="en"] .idoc dd{word-break:normal}
+
+/* 점 목록: 앞의 굵은 말이 있으면 그 줄의 이름 */
+.ilist{list-style:none;margin:14px 0;padding:0;display:grid;gap:12px}
+.ilist li{position:relative;padding-left:22px;color:var(--ink-2)}
+.ilist li::before{content:"";position:absolute;left:2px;top:.66em;width:8px;height:8px;border-radius:50%;background:var(--lamp)}
+.ilist li>b:first-child{display:block;color:var(--ink)}
+
+/* 만드는 기준: 짧은 약속 카드 */
+.irules{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.irules li{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-s);padding:16px 18px;color:var(--ink-2);font-size:16px;line-height:1.65}
+.irules b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+@media (max-width:640px){.irules{grid-template-columns:minmax(0,1fr)}}
+
+/* 이름 – 값 표 */
+.ifacts{margin:16px 0;padding:0;border-bottom:1px solid var(--line)}
+.ifacts div{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:4px 18px;padding:11px 0;border-top:1px solid var(--line)}
+.ifacts dt{color:var(--muted);font-size:15.5px;font-weight:600}
+.ifacts dd{margin:0;color:var(--ink)}
+.ifacts--rows div{grid-template-columns:10.5em minmax(0,1fr)}
+.ifacts--rows dt{color:var(--ink)}
+.ifacts--rows dd{color:var(--ink-2)}
+@media (max-width:560px){.ifacts div,.ifacts--rows div{grid-template-columns:minmax(0,1fr);gap:2px}}
+
+/* 도구마다 확인한 방법 */
+.ichecks{margin:18px 0 0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.ck{padding:15px 20px}
+.ck+.ck{border-top:1px solid var(--line)}
+.ck dt{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-weight:700;font-size:17px}
+.ck dt img{display:block;border-radius:8px}
+.ck dt a{color:var(--ink);text-decoration-color:var(--line)}
+.ck dt a:hover{text-decoration-color:currentColor}
+.ck dd{margin:6px 0 0;color:var(--ink-2);font-size:15.5px;line-height:1.65}
+.ck__host{font-size:13.5px;font-weight:600;color:var(--muted)}
+@media (max-width:420px){.ck{padding:14px 16px}}
+
+/* 방침이 다루는 사이트 목록 */
+.isites{list-style:none;margin:14px 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+.isites li{padding:9px 0;border-bottom:1px solid var(--line);color:var(--muted);font-size:15.5px}
+.isites li>a:first-child{font-weight:700;color:var(--ink)}
+@media (max-width:640px){.isites{grid-template-columns:minmax(0,1fr)}}

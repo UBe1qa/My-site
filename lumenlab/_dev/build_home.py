@@ -2,11 +2,13 @@
 # index.html 의 <!-- gen:이름 --> ~ <!-- /gen:이름 --> 사이와 assets/i18n.js 의 /* gen:start */ ~ /* gen:end */ 사이만 바꾼다(손으로 고치지 말 것).
 # 게임·앱은 각각 limit개, 웹 도구는 묶음(groups)마다 group_limit개를 넘으면 /apps/ · /tools/ 전체 목록 페이지를 만들고 홈에 '전체 보기'를 단다. 안 넘으면 그 페이지를 지운다.
 # 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
-# sitemap.xml 도 여기서 만든다: 홈 + 전체 목록 페이지 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
-import json, os, re, shutil, subprocess, datetime
+# sitemap.xml 도 여기서 만든다: 홈 + 전체 목록 페이지 + 가이드 모음·소개·개인정보 처리방침 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
+# 가이드 모음(/guides/)·소개(/about/)·방침(/privacy/)과 영어판은 build_info.py 가 만든다(이 파일 끝에서 부름). 도구 사이트의 글을 읽으니 도구 폴더(catalog.json 의 dir)가 옆에 있어야 한다.
+import json, os, re, shutil, subprocess, datetime, sys
 from html import escape
 
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
+sys.path.insert(0, here); import build_info
 cat = json.load(open(os.path.join(here, 'catalog.json')))
 LIMIT = cat['limit']; GLIMIT = cat['group_limit']; apps = cat['apps']; games = cat.get('games', []); tools = cat['tools']; groups = cat['groups']
 _gid = [g['id'] for g in groups]
@@ -16,6 +18,8 @@ for g in groups: assert any(it['group'] == g['id'] for it in tools), f"묶음 {g
 by_group = {g['id']: [it for it in tools if it['group'] == g['id']] for g in groups}
 tools_overflow = any(len(v) > GLIMIT for v in by_group.values())
 EN = {}
+# 홈의 '가이드 N편' 줄과 소개 페이지에 쓰는 글 수(도구 사이트의 guide/ 아래 글, noindex 뺌)
+GCOUNT = {l: sum(len(build_info.read_guides(site, it, l)[1]) for it in tools) for l in ('ko', 'en')}
 
 def t(key, val):
     """한국어는 HTML에, 영어는 i18n.js 사전에."""
@@ -141,10 +145,15 @@ html = put(html, 'shelves', (shelf('games', games, '게임') + '\n' if games els
 html = put(html, 'games', grid('games', games))
 html = put(html, 'apps', grid('apps', apps))
 html = put(html, 'tools', grid('tools', tools))
+EN['guidesLink'] = f"All {GCOUNT['en']} guides on how each tool works and the rules behind its numbers"
+html = put(html, 'guides', f'      <p class="cat__all cat__guides"><a href="/guides/" data-i18n="guidesLink">도구마다 쓰는 법과 계산 기준을 풀어 쓴 가이드 {GCOUNT["ko"]}편 모아 보기</a> <span aria-hidden="true">→</span></p>')
 # 앱 심사·이용자가 어느 페이지에서든 방침을 찾게, 방침이 있는 앱은 '개인정보 처리방침' 줄에 이름 하나씩
-pv = ''.join(f'<a href="{l["href"]}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it in games + apps for l in it['links'] if l['href'].endswith('/privacy/'))
-FOOT = (f'      <div><b data-i18n="ftGames">게임</b>{foot(games, "games")}</div>\n' if games else '') + f'      <div><b data-i18n="ftApps">앱</b>{foot(apps, "apps")}</div>\n      <div><b data-i18n="ftTools">웹 도구</b>{foot(tools, "tools")}</div>'
-if pv: FOOT += f'\n      <div><b data-i18n="privacy">개인정보 처리방침</b>{pv}</div>'
+pv = ''.join(f'<a href="{h}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it in games + apps for h in ([it['privacy']['ko']] if it.get('privacy') else []) + [l['href'] for l in it['links'] if l['href'].endswith('/privacy/')])
+# 첫 줄은 루멘랩 자체(소개·가이드·사이트 전체 방침·문의): 어느 페이지에서든 누가 운영하는지와 방침을 찾게
+for k, v in (('ftLumen', 'Lumen Lab'), ('ftAbout', 'About'), ('ftGuides', 'Guides'), ('ftPrivacy', 'Privacy Policy'), ('ftContact', 'Contact'), ('ftAppPrivacy', 'App privacy policies')): EN[k] = v
+FOOT = '      <div><b data-i18n="ftLumen">루멘랩</b><a href="/about/" data-i18n="ftAbout">소개</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>\n'
+FOOT += (f'      <div><b data-i18n="ftGames">게임</b>{foot(games, "games")}</div>\n' if games else '') + f'      <div><b data-i18n="ftApps">앱</b>{foot(apps, "apps")}</div>\n      <div><b data-i18n="ftTools">웹 도구</b>{foot(tools, "tools")}</div>'
+if pv: FOOT += f'\n      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b>{pv}</div>'
 html = put(html, 'foot', FOOT)
 open(idx, 'w').write(html)
 for f in ['404.html', 'owlight/privacy/index.html', 'owlight/support/index.html']:
@@ -220,11 +229,13 @@ def to_en(page, path):
     page = page.replace('<meta property="og:type" content="website">', '<meta property="og:type" content="website">\n<meta property="og:locale" content="en_US">')
     page = re.sub(r'(rel="canonical" href="https://lumenlab\.page/)', r'\1en/', page)
     page = re.sub(r'(property="og:url" content="https://lumenlab\.page/)', r'\1en/', page)
-    # 사이트 안 이동은 영어 쪽으로, 앱 방침·지원(한 주소에 두 언어)은 #en 으로, 도구는 영어 주소로
-    page = re.sub(r'href="/(#[^"]*|games/|apps/|tools/)?"', lambda m: f'href="/en/{m.group(1) or ""}"', page)
-    page = re.sub(r'href="((?:https://[a-z0-9-]+\.lumenlab\.page)?/(?:[a-z]+/)?(?:privacy|support)/)"', r'href="\1#en"', page)  # 앱 주소의 방침·지원도(owlight.lumenlab.page/support/)
+    # 사이트 안 이동은 영어 쪽으로(루트의 가이드·소개·방침은 /en/… 영어판이 따로 있음), 앱 방침·지원(한 주소에 두 언어)은 #en 으로, 도구는 영어 주소로
+    page = re.sub(r'href="/(#[^"]*|games/|apps/|tools/|guides/|about/|privacy/)?"', lambda m: f'href="/en/{m.group(1) or ""}"', page)
+    page = re.sub(r'href="((?:https://[a-z0-9-]+\.lumenlab\.page/(?:[a-z]+/)?|/(?!en/)[a-z]+/)(?:privacy|support)/)"', r'href="\1#en"', page)  # 앱 주소의 방침·지원도(owlight.lumenlab.page/support/)
     for it in tools + apps + games:
         if it.get('url_en'): page = page.replace(f'href="{it["url"]}"', f'href="{it["url_en"]}"')
+        if it.get('privacy'): page = page.replace(f'href="{it["privacy"]["ko"]}"', f'href="{it["privacy"]["en"]}"')
+    page = page.replace('<span>Lumen Lab(<span lang="ko">루멘랩</span>)</span>', '<span>Lumen Lab (<span lang="ko">루멘랩</span>)</span>')  # 영어는 괄호 앞 띄어쓰기
     page = page.replace('<a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>English</a>', '<a class="lang" href="/" hreflang="ko" lang="ko" data-other-lang>한국어</a>')
     return page
 
@@ -247,6 +258,11 @@ for kind, en_t, page in lists:
     open(os.path.join(site, kind, 'index.html'), 'w').write(page)
     write_en(f'en/{kind}/', page)
 
+# 가이드 모음·소개·개인정보 처리방침(한·영): 방금 만든 홈·영어 홈의 머리말·꼬리말을 그대로 쓴다
+info_paths, _ = build_info.build(site, cat, groups, tools)
+for p in info_paths:
+    for q in (p, '/en' + p): no_left(open(os.path.join(site, q.strip('/'), 'index.html')).read(), q)
+
 # sitemap.xml: 서브도메인 사이트는 각자 사이트맵이 있어서 여기엔 lumenlab.page 주소만 넣는다.
 # canonical이 다른 주소인 페이지(예: 앱스토어에 적힌 옛 주소를 canonical로 둔 방침·지원)는 빼서 사이트맵 = canonical을 지킨다.
 def lastmod(f):
@@ -255,7 +271,7 @@ def lastmod(f):
     day = '' if dirty else subprocess.run(['git', 'log', '-1', '--format=%cs', '--', rel], cwd=site, capture_output=True, text=True).stdout.strip()
     return day or datetime.date.today().isoformat()
 # 한국어·영어 짝이 있는 주소(/ ↔ /en/, /apps/ ↔ /en/apps/ …)는 xhtml:link 로 서로를 알린다.
-home = ['/'] + [f'/{k}/' for k, over in (('games', len(games) > LIMIT), ('apps', len(apps) > LIMIT), ('tools', tools_overflow)) if over]
+home = ['/'] + [f'/{k}/' for k, over in (('games', len(games) > LIMIT), ('apps', len(apps) > LIMIT), ('tools', tools_overflow)) if over] + info_paths
 paths = [q for p in home for q in (p, '/en' + p)]
 paths += [l['href'] for it in games + apps + tools for l in it.get('links', []) if l['href'].startswith('/') and l['href'] not in paths]
 urls = []
@@ -272,4 +288,4 @@ smf = os.path.join(site, 'sitemap.xml')
 if not os.path.isfile(smf) or open(smf).read().split('<url>')[1:] != sm.split('<url>')[1:]:
     open(smf, 'w').write(sm)
 print(f'sitemap.xml: 주소 {len(urls)}개')
-print('영어 페이지:', ', '.join(['/en/'] + [f'/en/{k}/' for k, _, _ in lists]))
+print('영어 페이지:', ', '.join(['/en/'] + [f'/en/{k}/' for k, _, _ in lists] + ['/en' + p for p in info_paths]))
