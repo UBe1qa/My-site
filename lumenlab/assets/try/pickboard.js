@@ -134,10 +134,10 @@ window.LLTry.pickboard = function (stage, c) {
   return {
     stop: function () { alive = false; cancelAnimationFrame(raf); },
     auto: function (A) {
+      if (A.fast) return ready;   // 동작 줄이기: 손님이 돌리지 않은 결과를 남기지 않는다
       return ready.then(function () { return A.press(hub); })
-        .then(function () { if (A.fast) throw 0; return A.wait(lastDur + 2200); })   // 동작 줄이기: 뽑힌 모습에서 멈춘다
-        .then(function () { return A.press(outBtn); })
-        .catch(function (e) { if (e !== 0) throw e; });
+        .then(function () { return A.wait(lastDur + 2200); })
+        .then(function () { return A.press(outBtn); });
     }
   };
 };

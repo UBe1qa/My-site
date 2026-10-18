@@ -146,6 +146,7 @@ window.LLTry.oneturn = function (stage, c) {
 
   return {
     stop: function () { alive = false; clearTimeout(timer); clearInterval(worldTimer); cancelAnimationFrame(raf); },
+    reset: doReset,
     auto: function (A) {
       doReset(); setMinutes(0);
       // 손가락이 12시에서 시계 방향으로 판을 끌어 5분을 맞추고 시작을 누른다 → 판 한 바퀴가 5분짜리로 바뀐다
