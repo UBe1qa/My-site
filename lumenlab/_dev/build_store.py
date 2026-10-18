@@ -96,7 +96,7 @@ EN = {
     'title': lambda n, w: f'{n}: {w} · Lumen Lab',
     'ui': {'close': 'Close', 'open': 'Open', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
            'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'play': 'Play video', 'pause': 'Pause video'},
-    'wall_title': lambda n: f'{n} things we make. <span class="nw">Tap one to try it</span>',
+    'wall_title': lambda n: f'{n} things we make. <span class="nw">Open one to try it</span>',
     'wall_lead': 'The web tools run their real calculations right in the window, and the games and apps show real screens. The ✓ line under each tool is what it checks and discloses.',
     'games_line': 'Games for your phone, getting ready for Android first.',
     'apps_line': 'Apps for the Mac and the browser.',

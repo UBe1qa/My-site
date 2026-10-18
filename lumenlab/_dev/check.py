@@ -117,13 +117,13 @@ with sync_playwright() as p:
 
     # 첫 화면이 보인 뒤 다시 흐려지지 않음
     c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
-    pg.add_init_script('''window.__op=[];(function f(t){const e=document.querySelector('.now__note');if(e){let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}__op.push(o)}if(performance.now()<2500)requestAnimationFrame(f)})()''')
+    pg.add_init_script('''window.__op=[];(function f(t){const e=document.querySelector('.now__h1');if(e){let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}__op.push(o)}if(performance.now()<2500)requestAnimationFrame(f)})()''')
     pg.goto(BASE + '/'); pg.wait_for_timeout(2800)
     ops = pg.evaluate('__op'); peak = False; dip = False
     for o in ops:
         if o >= .95: peak = True
         elif peak and o < .85: dip = True
-    ok(peak and not dip, '첫 화면 소개 글이 한 번 보인 뒤 다시 흐려지지 않음')
+    ok(peak and not dip, '첫 화면 제목이 한 번 보인 뒤 다시 흐려지지 않음')
     # 제목(루멘랩이 무엇을 만드는지) 두 줄
     lines = pg.evaluate("(()=>{const h=document.querySelector('.now__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄')
@@ -135,15 +135,28 @@ with sync_playwright() as p:
       const txt=c.textContent.replace(/\s+/g,' ').trim(),cnt=t.find(a=>a.dataset.nt==='count').querySelector('.nt__v').textContent;
       return{on:t.filter(a=>a.classList.contains('is-on')).length,n:t.length,vals:t.map(a=>a.querySelector('.nt__v').textContent),
         same:window.LC?+cnt.replace(/[^0-9]/g,'')===LC.analyze(txt,{segment:false}).chars:false,city:l.querySelector('[data-city]').textContent,
-        how:document.querySelector('[data-now-how]').innerText.trim(),plain:document.querySelector('.now').classList.contains('is-plain')}}"""
+        how:document.querySelector('[data-now-how]').innerText.trim(),plain:document.querySelector('.now').classList.contains('is-plain'),
+        pills:document.querySelectorAll('.ntool.is-on').length,seed:(JSON.parse(t.find(a=>a.dataset.nt==='count').dataset.seed||'{}').text||'')===txt}}"""
     for pre, w, tz, city in (('', 390, 'Asia/Seoul', '뉴욕'), ('', 1366, 'America/New_York', '서울'), ('/en', 390, 'America/Los_Angeles', 'Seoul'), ('/en', 1366, 'Asia/Seoul', 'New York')):
         c = br.new_context(viewport={'width': w, 'height': 844}, timezone_id=tz); pg = c.new_page(); errs = []
         pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
         pg.goto(BASE + pre + '/'); pg.wait_for_timeout(4500)
         st = pg.evaluate(NOW)
-        good = st['on'] == st['n'] == 5 and all(re.search(r'[0-9]', v) and '·' not in v for v in st['vals']) and st['same'] and st['city'] == city and st['how'] and not st['plain'] and not errs
-        ok(good, f"{pre}/ {w}px {tz} 첫 화면 칸 {st['on']}/{st['n']} 켜짐 {st['vals']}, 글자 수 {'맞음' if st['same'] else '틀림'}, 도시 {st['city']} {errs[:2]}")
+        good = (st['on'] == st['n'] == 5 and all((re.search(r'[0-9]', v) or v in ('오늘 하루', 'just today')) and '·' not in v for v in st['vals']) and st['same'] and st['seed']
+                and st['city'] == city and st['how'] and not st['plain'] and st['pills'] == 4 and not errs)
+        ok(good, f"{pre}/ {w}px {tz} 첫 화면 칸 {st['on']}/{st['n']} 켜짐 {st['vals']}, 글자 수 {'맞음' if st['same'] else '틀림'}, 도구 줄 {st['pills']}/4, 도시 {st['city']} {errs[:2]}")
+        if w == 1366:  # 글자 수·남은 날 칸을 누르면 창 안 바로 써 보기가 같은 글·같은 끝 날짜로 같은 수를 낸다
+            for k in ('count', 'left'):
+                want = re.sub(r'[^0-9]', '', pg.evaluate(f"document.querySelector('[data-now] [data-nt={k}] .nt__v').textContent"))
+                pg.locator(f'[data-now] .nt[data-nt="{k}"]').click(); got = ''; m = None
+                for _ in range(40):  # 시연이 다 칠 때까지(최대 8초)
+                    pg.wait_for_timeout(200)
+                    got = pg.evaluate("(()=>{const b=document.querySelector('dialog.sheet .tr-big');return b?b.textContent:''})()")
+                    m = re.search(r'[0-9][0-9,]*', got)
+                    if m and m.group().replace(',', '') == want: break
+                ok(want and m and m.group().replace(',', '') == want, f"{pre}/ {k} 칸을 누르면 창의 바로 써 보기도 {want} ({got.strip()[:40]})")
+                pg.keyboard.press('Escape'); pg.wait_for_timeout(700)
         a = pg.locator('[data-now] .nt[data-nt="hz"]'); a.click(); pg.wait_for_timeout(1200)
         op = pg.evaluate("document.querySelector('dialog.sheet').open && location.pathname")
         pg.keyboard.press('Escape'); pg.wait_for_timeout(600)

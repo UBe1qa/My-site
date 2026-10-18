@@ -11,7 +11,7 @@
     addEventListener('scroll', onScroll, { passive: true });
   }
 
-  /* 한국어 / ↔ 영어 /en/ 은 따로 된 페이지. 브라우저 언어가 이 페이지와 다르면 작은 띠로 다른 언어 쪽을 알려 준다(자동으로 넘기지 않음).
+  /* 한국어 / ↔ 영어 /en/ 은 따로 된 페이지. 브라우저 언어가 이 페이지와 다르면 화면 아래 작은 띠로 다른 언어 쪽을 알려 준다(자동으로 넘기지 않음).
      lumen:langbar = 방문자가 고른 언어(띠의 ×를 누르거나 언어 단추를 누르면 저장) */
   var other = document.querySelector('a.lang[data-other-lang]');
   if (other && top) {

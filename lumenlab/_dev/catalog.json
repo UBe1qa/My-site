@@ -9,12 +9,12 @@
     {
       "id": "docs",
       "name": {"ko": "글과 파일", "en": "Text and files"},
-      "line": {"ko": "글자수를 세고, 파일을 바꾸고, 달력을 인쇄해요.", "en": "Count text, convert files and print calendars."}
+      "line": {"ko": "파일을 바꾸고, QR을 만들고, 달력을 인쇄하고, 글자 수를 세요.", "en": "Convert files, make QR codes, print calendars and count text."}
     },
     {
       "id": "play",
-      "name": {"ko": "기기·시간·연습·모임", "en": "Devices, time, practice and groups"},
-      "line": {"ko": "기기를 점검하고, 시간을 재고, 타자를 연습하고, 뽑기로 정해요.", "en": "Test your gear, time things, practice typing and pick fairly."}
+      "name": {"ko": "모임·연습·시간·기기", "en": "Groups, practice, time and devices"},
+      "line": {"ko": "뽑기로 정하고, 타자를 연습하고, 시간을 재고, 기기를 점검해요.", "en": "Pick fairly, practice typing, time things and test your gear."}
     }
   ],
   "games": [

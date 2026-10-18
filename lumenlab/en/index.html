@@ -27,6 +27,13 @@
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/landing.css">
 <link rel="stylesheet" href="/assets/store.css">
+<!-- 첫 화면 문장 칸을 채울 도구 계산 파일(build_home.py) -->
+<!-- gen:nowpre -->
+<link rel="preload" as="script" href="https://date.lumenlab.page/assets/dates.js?v=00387aef43">
+<link rel="preload" as="script" href="https://time.lumenlab.page/assets/core.js?v=302abdc683">
+<link rel="preload" as="script" href="https://check.lumenlab.page/assets/ck-measure.js?v=884603707c">
+<link rel="preload" as="script" href="https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c">
+<!-- /gen:nowpre -->
 <script>
 /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
 (function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
@@ -57,14 +64,36 @@
       <div class="now" data-now-box>
         <h1 id="hero-title" class="now__h1" data-i18n="h1">Lumen Lab makes free web tools you can use without signing up, plus games and apps</h1>
         <!-- gen:now -->
-        <p class="now__line" data-now data-core="[&quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine">This page redraws <a class="nt" data-nt="hz" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v">·· times</b><span class="nt__who"> (Checkbench)</span></a> a second. Today is <a class="nt" data-nt="date" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v">······, ······· ··</b><span class="nt__who"> (Daycount)</span></a>, with <a class="nt" data-nt="left" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v">·· days</b><span class="nt__who"> (Daycount)</span></a> left this year, and it’s <a class="nt" data-nt="time" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v">·:·· ··</b><span class="nt__who"> (Oneturn)</span></a> in <span class="now__city" data-city>Seoul</span>. That’s <a class="nt" data-nt="count" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v">··· characters</b><span class="nt__who"> (Kankan)</span></a> so far.</p>
+        <p class="now__line" data-now data-core="[&quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;, &quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;, &quot;https://check.lumenlab.page/assets/ck-measure.js?v=884603707c&quot;, &quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;]" data-i18n="nowLine">Today is <span class="nw"><a class="nt" data-nt="date" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-date" style="--tc:#c2512b;--w:8.4em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a>,</span> with <a class="nt" data-nt="left" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" aria-label="Daycount" aria-describedby="nw-left" style="--tc:#c2512b;--w:3.6em"><img class="nt__i" src="/img/daycount.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> left this year. <span data-part="time">It’s <span class="nw"><a class="nt" data-nt="time" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" aria-label="Oneturn" aria-describedby="nw-time" style="--tc:#0d7068;--w:4.6em"><img class="nt__i" src="/img/time.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> in</span> <span data-city>Seoul</span>.</span> <span data-part="hz">This page redraws <span class="nw"><a class="nt" data-nt="hz" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" aria-label="Checkbench" aria-describedby="nw-hz" style="--tc:#17b3c4;--w:3.9em"><img class="nt__i" src="/img/check.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> a</span> second.</span> This paragraph is <span class="nw"><a class="nt" data-nt="count" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" aria-label="Kankan" aria-describedby="nw-count" style="--tc:#1e3a6e;--w:6.4em"><img class="nt__i" src="/img/count.svg" width="24" height="24" alt=""><b class="nt__v"></b></a> long.</span></p>
+        <span class="now__why" hidden><span id="nw-date"></span><span id="nw-left"></span><span id="nw-time"></span><span id="nw-hz"></span><span id="nw-count"></span></span>
+<!-- 칸 자리만 어림(값은 숨김). 켜지는 값은 도구 계산 파일이 센 것(landing.js) -->
+<script>
+(function(l){try{var en=document.documentElement.lang==='en',L=en?'en-US':'ko-KR',n=new Date(),y=n.getFullYear(),
+v=function(k,t){var e=l.querySelector('[data-nt="'+k+'"] .nt__v');if(e)e.textContent=t},
+f=function(z,o){var x={};for(var i in o)x[i]=o[i];if(z)x.timeZone=z;return n.toLocaleString(en?'en-US':'ko-KR',x)},
+left=Math.round((Date.UTC(y,11,31)-Date.UTC(y,n.getMonth(),n.getDate()))/864e5),
+c=en?[['Asia/Seoul','Seoul'],['America/New_York','New York']]:[['America/New_York','\ub274\uc695'],['Asia/Seoul','\uc11c\uc6b8']],D={day:'numeric',hour:'numeric',minute:'numeric'};
+if(f(c[0][0],D)===f(null,D))c[0]=c[1];
+var z=c[0][0],t=f(z,{hour:'numeric',minute:'2-digit'}).replace(/[\u202f\u00a0]/g,' ');
+if(f(z,{day:'numeric'})!==f(null,{day:'numeric'}))t=f(z,{weekday:'long'})+' '+t;
+l.querySelector('[data-city]').textContent=c[0][1];
+v('date',n.toLocaleDateString(L,{weekday:'long',month:'long',day:'numeric'}));
+v('left',en?(left?left+(left===1?' day':' days'):'just today'):(left?left+'\uc77c':'\uc624\ub298 \ud558\ub8e8'));
+v('time',t);v('hz',en?'60 times':'60\ubc88');
+for(var i=0,m=0,k;i<6;i++){v('count',en?m+' characters':m+'\uc790');k=Array.from(l.textContent.replace(/\s+/g,' ').trim()).length;if(k===m)break;m=k}
+}catch(e){}})(document.querySelector('[data-now]'));
+</script>
         <!-- /gen:now -->
         <p class="now__plain" data-i18n="nowPlain">Tools that count days, tell the time around the world, count characters and test your screen, working right on your device.</p>
-        <noscript><style>.now__line{display:none}.now__plain{display:block}</style></noscript>
-        <p class="now__how" data-now-how aria-hidden="true"><img class="now__how-i" src="/favicon.svg" width="22" height="22" alt=""><span data-i18n="nowWait">Loading the tools’ code</span></p>
-        <p class="now__note" data-i18n="lead">The glowing values were just worked out on this device by Lumen Lab’s web tools. Tap one to open that tool.</p>
-        <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
-        <p class="now__act"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>
+        <noscript><style>.now__line,.now__tools,.now__how{display:none}.now__plain{display:block}</style></noscript>
+        <p class="now__how" data-now-how aria-hidden="true"><span data-i18n="nowWait">Loading the tools’ code</span></p>
+        <div class="now__foot">
+          <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
+          <p class="now__act"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>
+          <!-- gen:nowtools -->
+          <p class="now__tools"><span class="now__tools-h" data-i18n="nowToolsH">The tools filling in this sentence</span><span class="now__tools-l" data-i18n="nowTools"><a class="ntool" data-tool="daycount" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b"><img src="/img/daycount.svg" width="22" height="22" alt=""><span>Daycount</span></a><a class="ntool" data-tool="oneturn" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068"><img src="/img/time.svg" width="22" height="22" alt=""><span>Oneturn</span></a><a class="ntool" data-tool="checkbench" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4"><img src="/img/check.svg" width="22" height="22" alt=""><span>Checkbench</span></a><a class="ntool" data-tool="kankan" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e"><img src="/img/count.svg" width="22" height="22" alt=""><span>Kankan</span></a></span></p>
+          <!-- /gen:nowtools -->
+        </div>
       </div>
     </div>
   </section>
@@ -75,7 +104,7 @@
   <section class="works" id="works" aria-labelledby="works-title">
     <div class="wrap">
       <div class="works__head">
-        <h2 id="works-title" class="sec-title" data-i18n="wlTitle">15 things we make. <span class="nw">Tap one to try it</span></h2>
+        <h2 id="works-title" class="sec-title" data-i18n="wlTitle">15 things we make. <span class="nw">Open one to try it</span></h2>
         <p class="sec-lead" data-i18n="wlLead">The web tools run their real calculations right in the window, and the games and apps show real screens. The ✓ line under each tool is what it checks and discloses.</p>
       </div>
       <!-- gen:wall -->
@@ -93,11 +122,11 @@
         <ul class="wall"><li><a class="wi" href="/en/works/daycount/" data-show="daycount" aria-haspopup="dialog" style="--tc:#c2512b;--tcp:82%"><img class="wi__icon" src="/img/daycount.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_daycount_n">Daycount</span><span class="wi__w" data-i18n="wl_daycount_w">Days between dates, age and business days</span><span class="wi__p" data-i18n="wl_daycount_p">Checked against 3,200+ answers</span></a></li><li><a class="wi" href="/en/works/scicalc/" data-show="scicalc" aria-haspopup="dialog" style="--tc:#f25c05;--tcp:78%"><img class="wi__icon" src="/img/sci-calc.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_scicalc_n">Scientific Calculator</span><span class="wi__w" data-i18n="wl_scicalc_w">Scientific functions and physical constants</span><span class="wi__p" data-i18n="wl_scicalc_p">Checked against 3,700+ answers</span></a></li><li><a class="wi" href="/en/works/takehome/" data-show="takehome" aria-haspopup="dialog" style="--tc:#9b2743;--tcp:82%"><img class="wi__icon" src="/img/salary.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_takehome_n">Takehome Korea</span><span class="wi__w" data-i18n="wl_takehome_w">Korean take-home pay and severance</span><span class="wi__p" data-i18n="wl_takehome_p">Matches the ministry’s example</span></a></li></ul>
       </div>
       <div class="shelf" id="g-docs">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_docs_h">Text and files</h3><p class="shelf__line" data-i18n="wl_g_docs_l">Count text, convert files and print calendars.</p></div>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_docs_h">Text and files</h3><p class="shelf__line" data-i18n="wl_g_docs_l">Convert files, make QR codes, print calendars and count text.</p></div>
         <ul class="wall"><li><a class="wi" href="/en/works/inplace/" data-show="inplace" aria-haspopup="dialog" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">Inplace</span><span class="wi__w" data-i18n="wl_inplace_w">Image, video and PDF converter</span><span class="wi__p" data-i18n="wl_inplace_p">Files never leave your browser</span></a></li><li><a class="wi" href="/en/works/staycode/" data-show="staycode" aria-haspopup="dialog" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">Staycode</span><span class="wi__w" data-i18n="wl_staycode_w">QR code maker</span><span class="wi__p" data-i18n="wl_staycode_p">Every code is read back</span></a></li><li><a class="wi" href="/en/works/onesheet/" data-show="onesheet" aria-haspopup="dialog" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">Onesheet</span><span class="wi__w" data-i18n="wl_onesheet_w">Printable calendars and holidays</span><span class="wi__p" data-i18n="wl_onesheet_p">Every weekday 1900–2100 tested</span></a></li><li><a class="wi" href="/en/works/kankan/" data-show="kankan" aria-haspopup="dialog" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">Kankan</span><span class="wi__w" data-i18n="wl_kankan_w">Character counter</span><span class="wi__p" data-i18n="wl_kankan_p">35,000+ automatic tests</span></a></li></ul>
       </div>
       <div class="shelf" id="g-play">
-        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_play_h">Devices, time, practice and groups</h3><p class="shelf__line" data-i18n="wl_g_play_l">Test your gear, time things, practice typing and pick fairly.</p></div>
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_g_play_h">Groups, practice, time and devices</h3><p class="shelf__line" data-i18n="wl_g_play_l">Pick fairly, practice typing, time things and test your gear.</p></div>
         <ul class="wall"><li><a class="wi" href="/en/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">Pickboard</span><span class="wi__w" data-i18n="wl_pickboard_w">Wheel, ladder and team picker</span><span class="wi__p" data-i18n="wl_pickboard_p">Chi-square tested on 100,000 draws</span></a></li><li><a class="wi" href="/en/works/todok/" data-show="todok" aria-haspopup="dialog" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">Todok</span><span class="wi__w" data-i18n="wl_todok_w">Korean and English typing practice</span><span class="wi__p" data-i18n="wl_todok_p">Publishes how speed is counted</span></a></li><li><a class="wi" href="/en/works/oneturn/" data-show="oneturn" aria-haspopup="dialog" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">Oneturn</span><span class="wi__w" data-i18n="wl_oneturn_w">Timer, stopwatch and world clock</span><span class="wi__p" data-i18n="wl_oneturn_p">Each city checked with zoneinfo</span></a></li><li><a class="wi" href="/en/works/checkbench/" data-show="checkbench" aria-haspopup="dialog" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">Checkbench</span><span class="wi__w" data-i18n="wl_checkbench_w">Keyboard, mouse and mic tests</span><span class="wi__p" data-i18n="wl_checkbench_p">Shows the rule beside each result</span></a></li></ul>
       </div>
       </div>
