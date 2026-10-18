@@ -1,13 +1,18 @@
 # 루멘랩 배포 전 확인: 사이트 폴더에서 python3 -m http.server 8765 를 띄운 뒤 python3 _dev/check.py
-# 페이지마다 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 사이트 안 링크, 동작 줄이기, 움직임 뒤 숨은 요소, 첫 화면 다시 흐려짐, 세트노트 파일이 원본과 같은지
+# 페이지마다 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 사이트 안 링크, 동작 줄이기, 움직임 뒤 숨은 요소, 첫 화면 다시 흐려짐,
+# 홈 '만든 것' 아이콘마다 소개 창(주소 /works/<id>/, 바로 써 보기·미리 보기, Esc·뒤로 가기로 닫힘), 소개 페이지에서 바로 써 보기
 import os, sys, hashlib, re
 from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
 BASE = os.environ.get('BASE', 'http://localhost:8765')
-PAGES = ['/', '/en/', '/works/', '/en/works/', '/guides/', '/en/guides/', '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
-PAIRS = [('/', '/en/'), ('/works/', '/en/works/'), ('/guides/', '/en/guides/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')]  # 한국어·영어가 따로 된 페이지
+import json
+here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here); mono = os.path.dirname(site)
+cat = json.load(open(os.path.join(here, 'catalog.json')))
+ITEMS = [(k, it['id']) for k in ('games', 'apps') for it in cat.get(k, [])] + [('tools', it['id']) for g in cat['groups'] for it in cat['tools'] if it['group'] == g['id']]
+PAGES = ['/', '/en/', '/works/daycount/', '/en/works/pickboard/', '/works/castleup/', '/en/works/chickrescue/', '/works/owlight/', '/works/setnote/',
+         '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
+PAIRS = [('/', '/en/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')] + [(f'/works/{i}/', f'/en/works/{i}/') for _, i in ITEMS]  # 한국어·영어가 따로 된 페이지
 ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
-here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
 fails = []
 def ok(c, msg):
     print(('통과 ' if c else '실패 ') + msg)
@@ -33,17 +38,26 @@ for pg in ['owlight/privacy', 'owlight/support']:
 ads = [os.path.relpath(os.path.join(r, f), site) for r, ds, fs in os.walk(site) if '/_dev' not in r for f in fs if f.endswith('.html') and re.search(r'adsbygoogle|pagead2\.googlesyndication', open(os.path.join(r, f)).read())]
 ok(not ads, f'lumenlab.page 페이지에 광고 코드 없음 {ads[:3]}')
 
-# 가이드 모음·소개·방침이 가리키는 도구·앱 사이트 주소가 이 저장소의 실제 파일과 맞음(옆 폴더 = 그 사이트)
-import json
-cat = json.load(open(os.path.join(here, 'catalog.json')))
+# 소개 페이지·소개·방침이 가리키는 도구·앱 사이트 주소가 이 저장소의 실제 파일과 맞음(옆 폴더 = 그 사이트)
 hostdir = {urlparse(it['url']).netloc: it['dir'] for it in cat['tools']}
-mono = os.path.dirname(site); missing = []; nlinks = 0
+missing = []; nlinks = 0
 for pth in [a for pair in PAIRS[1:] for a in pair]:
     for h in set(re.findall(r'href="(https://[a-z0-9-]+\.lumenlab\.page/[^"#]*)', open(os.path.join(site, pth.strip('/'), 'index.html')).read())):
         u = urlparse(h); d = hostdir.get(u.netloc, u.netloc.split('.')[0]); base = os.path.join(mono, d, u.path.strip('/'))
         nlinks += 1
         if not any(os.path.isfile(x) for x in (os.path.join(base, 'index.html'), base + '.html')): missing.append(h)
 ok(nlinks > 100 and not missing, f'정보 페이지의 도구·앱 사이트 링크 {nlinks}개가 실제 파일과 맞음 {missing[:3]}')
+
+# 도구·게임·앱 사이트 주소(https://*.lumenlab.page/…)는 이 저장소의 옆 폴더 파일로 돌려준다(바로 써 보기 계산 파일, 미리 보기 사진·영상).
+# 공평뽑기 모듈은 실제 사이트처럼 허락 머리말을 붙인다
+TYPES = {'.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.mp4': 'video/mp4', '.webm': 'video/webm', '.json': 'application/json'}
+def sub_file(r):
+    u = urlparse(r.request.url); f = os.path.join(mono, hostdir.get(u.netloc, u.netloc.split('.')[0]), u.path.lstrip('/'))
+    if not os.path.isfile(f): return r.fulfill(status=404, body='')
+    hd = {'content-type': TYPES.get(os.path.splitext(f)[1], 'application/octet-stream')}
+    if u.netloc.startswith('pick.') and u.path.startswith('/assets/core/'): hd['access-control-allow-origin'] = '*'
+    r.fulfill(path=f, headers=hd)
+SUB = re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*')
 
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path='/opt/pw-browsers/chromium-1194/chrome-linux/chrome')
@@ -54,7 +68,8 @@ with sync_playwright() as p:
             pg = c.new_page(); errs = []
             pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
             pg.on('pageerror', lambda e: errs.append(str(e)))
-            r = pg.goto(BASE + path); pg.wait_for_timeout(700)
+            pg.route(SUB, sub_file)
+            r = pg.goto(BASE + path); pg.wait_for_timeout(700 if '/works/' not in path else 1500)
             if path == '/nope/':
                 errs = [e for e in errs if '404' not in e]
             sw = pg.evaluate('document.documentElement.scrollWidth')
@@ -125,9 +140,9 @@ with sync_playwright() as p:
             ok(f'<html lang="{lang}"' in html and 'i18n.js' not in html, f'{path} 언어 {lang}, 글 바꾸는 스크립트 없음')
             ok(f'<a class="lang" href="{other}"' in html, f'{path} 언어 단추는 {other}')
             ok(f'<loc>https://lumenlab.page{path}</loc>' in sm, f'sitemap 에 {path}')
-        for path in (ko, en):  # 머리말·바닥글에서 가이드·소개·방침으로 갈 수 있음
+        for path in (ko, en):  # 머리말·바닥글에서 만든 것·소개·방침으로 갈 수 있음
             html = open(os.path.join(site, path.strip('/'), 'index.html')).read(); pre = '/en' if path.startswith('/en/') else ''
-            ok(all(f'href="{pre}{q}"' in html for q in ('/guides/', '/about/', '/privacy/')), f'{path} 에서 가이드·소개·방침 링크')
+            ok(all(f'href="{pre}{q}"' in html for q in ('/#works', '/about/', '/privacy/')), f'{path} 에서 만든 것·소개·방침 링크')
     c = br.new_context(viewport={'width': 390, 'height': 844}, locale='en-US'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
     ok(pg.evaluate("document.documentElement.lang") == 'ko' and pg.url == BASE + '/', '영어 브라우저도 / 는 한국어 그대로(자동 이동 없음)')
     ok(pg.locator('.langbar a[href="/en/"]').count() == 1, '영어 브라우저면 영어 페이지 제안 띠')
@@ -141,14 +156,15 @@ with sync_playwright() as p:
     ok(lines <= 2, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
     ok(all(h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not (h.startswith(("/en/", "#", "http", "mailto:", "tel:")) or h == "/")]}')
-    for path in ('/en/works/', '/en/guides/', '/en/about/', '/en/privacy/'):
-        pg.goto(BASE + path); pg.wait_for_timeout(200)
+    pg.route(SUB, sub_file)
+    for path in ('/en/about/', '/en/privacy/') + tuple(f'/en/works/{i}/' for _, i in ITEMS):
+        pg.goto(BASE + path); pg.wait_for_timeout(200 if '/works/' not in path else 600)
         left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
         ok(not left, f'{path} 화면에 한국어가 남지 않음 {left}')
         hs = pg.evaluate('[...document.querySelectorAll("a[href]:not(.lang)")].map(a=>a.getAttribute("href"))')
         bad = [h for h in hs if not (h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h == '/')]
         ok(not bad, f'{path} 안 링크는 영어 쪽 {bad[:4]}')
-        if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current="page"]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
+        if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
     pg.goto(BASE + '/en/'); pg.wait_for_timeout(300)
     pg.click('a.lang'); pg.wait_for_timeout(400)
     ok(pg.url == BASE + '/' and '풀이' in pg.inner_text('h1'), '한국어 단추로 / 로')
@@ -161,46 +177,67 @@ with sync_playwright() as p:
     ok(vis == ['ko:true', 'en:false'], f'한국어 누르면 한국어 칸 {vis}')
     c.close()
 
-    # 가이드 모음 소개 창: 도구마다 창이 열리고, 그 사이트의 진짜 파일로 '바로 써 보기'가 뜨고(오류 0), 자동 시연이 화면을 바꾸고, Esc·뒤로 가기로 닫힘
-    # 도구 사이트 주소(https://*.lumenlab.page/assets/…)는 이 저장소의 옆 폴더 파일로 돌려준다. 공평뽑기 모듈은 실제 사이트처럼 허락 머리말을 붙인다
-    sc = json.load(open(os.path.join(here, 'showcase.json')))['tools']
-    gids = [t['id'] for t in cat['tools'] if t.get('group')]
-    ok(all(i in sc and os.path.isfile(os.path.join(site, 'assets', 'try', i + '.js')) for i in gids), f'가이드 도구 {len(gids)}개 모두 소개 내용과 바로 써 보기 파일이 있음')
-    def tool_file(r):
-        u = urlparse(r.request.url); f = os.path.join(mono, hostdir.get(u.netloc, '-'), u.path.lstrip('/'))
-        if u.netloc not in hostdir or not os.path.isfile(f): return r.fulfill(status=404, body='')
-        hd = {'content-type': 'application/javascript' if f.endswith('.js') else 'application/octet-stream'}
-        if u.netloc.startswith('pick.') and u.path.startswith('/assets/core/'): hd['access-control-allow-origin'] = '*'
-        r.fulfill(path=f, headers=hd)
+    # 홈 '만든 것' 소개 창: 아이콘마다 창이 열리고 주소가 /works/<id>/ 가 되고, 도구는 그 사이트의 진짜 파일로 '바로 써 보기'가 뜨고(오류 0)
+    # 자동 시연이 화면을 바꾸고, 게임·앱은 실제 화면 미리 보기가 있고, Esc·뒤로 가기로 닫히면 주소가 홈으로 돌아옴
+    sc = json.load(open(os.path.join(here, 'showcase.json')))
+    ok(all(i in sc[k] for k, i in ITEMS) and all(os.path.isfile(os.path.join(site, 'assets', 'try', i + '.js')) for k, i in ITEMS if k == 'tools'),
+       f'만든 것 {len(ITEMS)}개 모두 소개 내용이 있고, 도구는 바로 써 보기 파일이 있음')
+    SHEET = """()=>{const d=document.querySelector('dialog.sheet'),s=d.querySelector('.stage'),b=d.querySelector('.sh__body');return{open:d.open,path:location.pathname,
+      name:(d.querySelector('.sh__name')||{}).textContent||'',fail:!!(s&&s.querySelector('.stage__msg')),text:s?s.innerText:'',stage:!!s,shots:d.querySelectorAll('.shots li').length,
+      facts:d.querySelectorAll('.sh__facts li').length,cards:d.querySelectorAll('.sh__cards li').length,others:d.querySelectorAll('.sh__others a').length,h1:d.querySelectorAll('h1').length,
+      over:b.scrollWidth>b.clientWidth+1}}"""
     for pre in ('', '/en'):
         for w in (390, 1366):
             c = br.new_context(viewport={'width': w, 'height': 844}, has_touch=w < 500); pg = c.new_page(); errs = []
             pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
             pg.on('pageerror', lambda e: errs.append(str(e)))
-            pg.route(re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*'), tool_file)
-            pg.goto(BASE + pre + '/guides/'); pg.wait_for_timeout(300)
-            pg.evaluate('scrollTo(0, document.querySelector("#t-' + gids[len(gids) // 2] + '").offsetTop)'); pg.wait_for_timeout(500)
-            ok(pg.evaluate("document.querySelector('.tdock').classList.contains('is-on')"), f'{pre}/guides/ {w}px 아래로 내리면 도구 바로가기 줄이 따라옴')
-            pg.evaluate('scrollTo(0,0)'); pg.wait_for_timeout(300)
-            for i, tid in enumerate(gids):
-                errs.clear(); a = pg.locator(f'a[data-show="{tid}"]')
+            pg.route(SUB, sub_file)
+            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(300)
+            for i, (kind, tid) in enumerate(ITEMS):
+                errs.clear(); a = pg.locator(f'.works a[data-show="{tid}"]')
                 a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
-                before = pg.evaluate("document.querySelector('.stage').innerText"); pg.wait_for_timeout(3200)
-                st = pg.evaluate("""()=>{const s=document.querySelector('.stage'),b=document.querySelector('.sh__body');return{fail:!!s.querySelector('.stage__msg'),text:s.innerText,hash:location.hash,open:document.querySelector('dialog.sheet').open,
-                  facts:document.querySelectorAll('.sh__facts li').length,cards:document.querySelectorAll('.sh__cards li').length,over:b.scrollWidth>b.clientWidth+1}}""")
+                before = pg.evaluate("(document.querySelector('dialog.sheet .stage')||{}).innerText||''")
+                if kind == 'tools': pg.wait_for_timeout(3200)
+                st = pg.evaluate(SHEET)
                 if i % 2: pg.go_back()
                 else: pg.keyboard.press('Escape')
                 pg.wait_for_timeout(700)
-                shut = not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.hash') == ''
-                good = st['open'] and st['hash'] == '#try-' + tid and not st['fail'] and st['text'] != before and st['facts'] == 3 and st['cards'] >= 2 and not st['over'] and shut and not errs
-                ok(good, f"{pre}/guides/ {w}px {tid} 소개 창: 바로 써 보기 {'실패' if st['fail'] else '뜸'}, 시연 {'움직임' if st['text'] != before else '멈춤'}, 숫자 {st['facts']}·카드 {st['cards']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
+                shut = not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname+location.hash') == pre + '/'
+                body_ok = (st['stage'] and not st['fail'] and st['text'] != before) if kind == 'tools' else (not st['stage'] and st['shots'] >= 3)
+                good = st['open'] and st['path'] == f'{pre}/works/{tid}/' and body_ok and st['facts'] == 3 and st['cards'] >= 2 and st['others'] == len(ITEMS) - 1 and st['h1'] == 0 and not st['over'] and shut and not errs
+                what = ('바로 써 보기 ' + ('실패' if st['fail'] else '뜸') + ', 시연 ' + ('움직임' if st['text'] != before else '멈춤')) if kind == 'tools' else f"미리 보기 {st['shots']}장"
+                ok(good, f"{pre}/ {w}px {tid} 소개 창: 주소 {st['path']}, {what}, 숫자 {st['facts']}·카드 {st['cards']}·다른 것 {st['others']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
+            # 창 안 '다른 것도 둘러보기'를 누르면 창 내용만 바뀌고(주소도), 한 번 닫으면 홈
+            a = pg.locator('.works a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
+            nxt = pg.locator('dialog.sheet .sh__others a').first; nid = nxt.get_attribute('data-show')
+            nxt.scroll_into_view_if_needed(); nxt.click(); pg.wait_for_timeout(1200)
+            st = pg.evaluate(SHEET)
+            pg.keyboard.press('Escape'); pg.wait_for_timeout(700)
+            ok(st['open'] and st['path'] == f'{pre}/works/{nid}/' and not pg.evaluate("document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname') == pre + '/',
+               f'{pre}/ {w}px 창 안에서 다른 것({nid})으로 바뀌고 한 번 닫으면 홈')
             c.close()
-    # 동작 줄이기여도 바로 써 보기는 그대로 뜸(날아오기·밀어 올리기 대신 흐려졌다 나타남, 손가락은 옮겨 가지 않고 바로 누름)
-    c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); errs = []
-    pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*'), tool_file)
-    pg.goto(BASE + '/guides/#try-' + gids[0]); pg.wait_for_timeout(1200)
-    ok(pg.evaluate("document.querySelector('dialog.sheet').open && !document.querySelector('.stage .stage__msg') && document.querySelector('.stage').innerText.length > 20") and not errs, f'동작 줄이기 + #try- 주소로 바로 열어도 소개 창이 뜸 {errs[:2]}')
+    # 소개 페이지에서 바로: 도구마다 바로 써 보기가 뜨고 오류 0, 홈으로 가는 위치 줄
+    c = br.new_context(viewport={'width': 1366, 'height': 900}); pg = c.new_page(); errs = []
+    pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
+    pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
+    for kind, tid in ITEMS:
+        if kind != 'tools': continue
+        errs.clear(); pg.goto(BASE + f'/works/{tid}/'); pg.wait_for_timeout(1500)
+        st = pg.evaluate("""()=>({fail:!!document.querySelector('.stage .stage__msg'),h1:document.querySelectorAll('h1').length,crumb:document.querySelectorAll('.pp__crumb a[href^="/#"]').length,text:document.querySelector('.stage').innerText.length})""")
+        ok(not st['fail'] and st['text'] > 20 and st['h1'] == 1 and st['crumb'] == 2 and not errs, f'/works/{tid}/ 페이지에서 바로 써 보기가 뜸 {errs[:2]}')
     c.close()
+    # 동작 줄이기여도 바로 써 보기는 그대로 뜸(날아오기·밀어 올리기 대신 흐려졌다 나타남), 예전 가이드 주소의 #try-·#t- 로 와도 그 창이 열림
+    tools = [i for k, i in ITEMS if k == 'tools']
+    for frag in ('#try-' + tools[0], '#t-' + tools[1]):
+        c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
+        pg.goto(BASE + '/' + frag); pg.wait_for_timeout(1500)
+        tid = frag.split('-', 1)[1]
+        ok(pg.evaluate("document.querySelector('dialog.sheet').open && !document.querySelector('.stage .stage__msg') && document.querySelector('.stage').innerText.length > 20")
+           and pg.evaluate('location.pathname') == f'/works/{tid}/' and not errs, f'동작 줄이기 + 예전 {frag} 주소로 와도 소개 창이 뜸 {errs[:2]}')
+        pg.keyboard.press('Escape'); pg.wait_for_timeout(500)
+        ok(pg.evaluate('location.pathname+location.hash') == '/', f'{frag} 창을 닫으면 주소가 홈')
+        c.close()
     br.close()
 
 print('\n실패 %d개' % len(fails) if fails else '\n모두 통과')

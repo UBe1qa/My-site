@@ -26,9 +26,8 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/landing.css">
+<link rel="stylesheet" href="/assets/store.css">
 <script>
-/* 예전 홈의 칸 주소(/#games·#apps·#tools)는 목록이 옮겨 간 /works/ 로(병아리 구조대 이정표 등이 이 주소를 가리킴) */
-(function(l){var m=/^#(games|apps|tools)$/.exec(l.hash);if(m)l.replace((document.documentElement.lang==='en'?'/en':'')+'/works/'+m[0])})(location);
 /* 움직임은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만. 3초 안에 site.js가 시작 안 하면 풀어서 내용이 항상 보이게 */
 (function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}})(document.documentElement);
 </script>
@@ -42,8 +41,7 @@
       <span>Lumen Lab <small lang="ko">루멘랩</small></span>
     </a>
     <nav aria-label="Site" data-i18n-aria="navLabel">
-      <a class="nav-works" href="/en/works/" data-i18n="navWorks">Work</a>
-      <a class="nav-guides" href="/en/guides/" data-i18n="navGuides">Guides</a>
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
       <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
       <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
       <a class="lang" href="/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
@@ -59,8 +57,8 @@
         <p class="hero__eyebrow rv" data-i18n="eyebrow">A one-person studio for games, apps and free web tools</p>
         <h1 id="hero-title" class="hero__title rv" data-i18n="h1"><span class="lm"><span>Small software</span></span> <span class="lm"><span>that shows its work</span></span></h1>
         <p class="hero__lead rv" data-i18n="lead">Free web tools for take-home pay, file conversion, spin wheels and more. No sign-up.</p>
-        <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다(data-i18n="ctaWorks" 가 붙은 곳 전부) -->
-        <p class="hero__act rv"><a class="btn btn--main" href="#fq" data-i18n="ctaFind">Find by task</a> <a class="hero__more" href="/en/works/" data-i18n="ctaWorks">See all 15 things we've made</a></p>
+        <!-- '만든 것 N개' 숫자는 build_home.py 가 catalog.json 에서 채운다 -->
+        <p class="hero__act rv"><a class="btn btn--main" href="#works" data-i18n="ctaWorks">See all 15 things we make</a></p>
       </div>
 
       <div class="room rv" data-room>
@@ -132,287 +130,47 @@
       </div>
 
       <div class="caps rv" aria-live="polite">
-        <p class="cap" data-cap="spec-takehome"><b data-i18n="t1">Takehome</b> <span data-i18n="c1">Korean take-home pay and severance</span> <a href="https://salary.lumenlab.page/en/" class="cap__go" data-i18n="openTool">Open it</a></p>
-        <p class="cap" data-cap="spec-inplace" hidden><b data-i18n="t2">Inplace</b> <span data-i18n="c2">Image, video and PDF converter</span> <a href="https://convert.lumenlab.page/" class="cap__go" data-i18n="openTool">Open it</a></p>
-        <p class="cap" data-cap="spec-pick" hidden><b data-i18n="t3">Pickboard</b> <span data-i18n="c3">Wheel, ladder and team picker</span> <a href="https://pick.lumenlab.page/" class="cap__go" data-i18n="openTool">Open it</a></p>
-        <p class="cap" data-cap="spec-chick" hidden><b data-i18n="t4">Chick Rescue</b> <span data-i18n="c4">Puzzle game for phones · Coming soon</span> <a href="https://chick-rescue.lumenlab.page/en/" class="cap__go" data-i18n="openGame">See the game</a></p>
+        <p class="cap" data-cap="spec-takehome"><b data-i18n="t1">Takehome</b> <span data-i18n="c1">Korean take-home pay and severance</span> <a href="/en/works/takehome/" class="cap__go" data-show="takehome" data-from="#tab-takehome img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
+        <p class="cap" data-cap="spec-inplace" hidden><b data-i18n="t2">Inplace</b> <span data-i18n="c2">Image, video and PDF converter</span> <a href="/en/works/inplace/" class="cap__go" data-show="inplace" data-from="#tab-inplace img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
+        <p class="cap" data-cap="spec-pick" hidden><b data-i18n="t3">Pickboard</b> <span data-i18n="c3">Wheel, ladder and team picker</span> <a href="/en/works/pickboard/" class="cap__go" data-show="pickboard" data-from="#tab-pick img" aria-haspopup="dialog" data-i18n="capTry">Try it here</a></p>
+        <p class="cap" data-cap="spec-chick" hidden><b data-i18n="t4">Chick Rescue</b> <span data-i18n="c4">Puzzle game for phones · Coming soon</span> <a href="/en/works/chickrescue/" class="cap__go" data-show="chickrescue" data-from="#tab-chick img" aria-haspopup="dialog" data-i18n="capSee">Preview the game</a></p>
       </div>
     </div>
   </section>
 
-  <!-- 찾기: 하려는 일을 적으면 맞는 도구·게임·앱이 켜진다. 목록은 build_home.py 가 catalog.json 에서 만든다 -->
-  <section class="find" id="find" aria-labelledby="find-title">
-    <div class="wrap find__in">
-      <div class="find__text">
-        <h2 id="find-title" class="sec-title" data-i18n="fdTitle">Type what you need, and <span class="nw">the right tool lights up</span></h2>
-        <p class="sec-lead" data-i18n="fdLead">No sign-up, no install, no daily limit, and what you put in stays on your device.</p>
-      </div>
-      <div class="finder" data-finder>
-        <label class="finder__label" for="fq" data-i18n="fdLabel">What do you want to do?</label>
-        <div class="finder__field">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
-          <input id="fq" type="search" autocomplete="off" enterkeyhint="search" spellcheck="false" placeholder="e.g. merge PDF, take-home pay, timer" data-i18n-ph="fdPh" aria-describedby="fq-n">
-        </div>
-        <p class="finder__chips" aria-label="Common tasks" data-i18n-aria="fdChips">
-          <button type="button" data-i18n="q1">days between dates</button>
-          <button type="button" data-i18n="q2">take-home pay</button>
-          <button type="button" data-i18n="q3">merge PDF</button>
-          <button type="button" data-i18n="q4">word count</button>
-          <button type="button" data-i18n="q5">QR code</button>
-          <button type="button" data-i18n="q6">spin wheel</button>
-          <button type="button" data-i18n="q7">timer</button>
-          <button type="button" data-i18n="q8">typing test</button>
-        </p>
-        <!-- 판: 루멘랩이 만든 것 전부. 처음엔 꺼진 전구처럼 흐리고, 찾으면 맞는 것만 켜진다(build_home.py 가 채움) -->
-        <ul class="board" aria-label="Everything Lumen Lab makes" data-i18n-aria="bdLabel">
-          <!-- gen:board -->
-          <li><a class="bd" href="https://chick-rescue.lumenlab.page/en/" data-id="chickrescue">
-            <img src="/img/chick-rescue.webp" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_chickrescue_n">Chick Rescue</span>
-          </a></li>
-          <li><a class="bd" href="https://castle-up.lumenlab.page/en/" data-id="castleup">
-            <img src="/img/castle-up.webp" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_castleup_n">Castle Up!</span>
-          </a></li>
-          <li><a class="bd" href="https://owlight.lumenlab.page/" data-id="owlight">
-            <img src="/img/owlight.webp" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_owlight_n">Owlight</span>
-          </a></li>
-          <li><a class="bd" href="https://setnote.lumenlab.page/" data-id="setnote">
-            <img src="/img/setnote.webp" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_setnote_n">SetNote</span>
-          </a></li>
-          <li><a class="bd" href="https://date.lumenlab.page/en/" data-id="daycount">
-            <img src="/img/daycount.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_daycount_n">Daycount</span>
-          </a></li>
-          <li><a class="bd" href="https://convert.lumenlab.page/" data-id="inplace">
-            <img src="/img/convert.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_inplace_n">Inplace</span>
-          </a></li>
-          <li><a class="bd" href="https://calc.lumenlab.page/en/" data-id="scicalc">
-            <img src="/img/sci-calc.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_scicalc_n">Scientific Calculator</span>
-          </a></li>
-          <li><a class="bd" href="https://calendar.lumenlab.page/" data-id="onesheet">
-            <img src="/img/calendar.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_onesheet_n">Onesheet</span>
-          </a></li>
-          <li><a class="bd" href="https://pick.lumenlab.page/" data-id="pickboard">
-            <img src="/img/pick.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_pickboard_n">Pickboard</span>
-          </a></li>
-          <li><a class="bd" href="https://count.lumenlab.page/" data-id="kankan">
-            <img src="/img/count.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_kankan_n">Kankan</span>
-          </a></li>
-          <li><a class="bd" href="https://check.lumenlab.page/" data-id="checkbench">
-            <img src="/img/check.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_checkbench_n">Checkbench</span>
-          </a></li>
-          <li><a class="bd" href="https://typing.lumenlab.page/" data-id="todok">
-            <img src="/img/typing.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_todok_n">Todok</span>
-          </a></li>
-          <li><a class="bd" href="https://salary.lumenlab.page/en/" data-id="takehome">
-            <img src="/img/salary.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_takehome_n">Takehome Korea</span>
-          </a></li>
-          <li><a class="bd" href="https://qr.lumenlab.page/" data-id="staycode">
-            <img src="/img/qr.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_staycode_n">Staycode</span>
-          </a></li>
-          <li><a class="bd" href="https://time.lumenlab.page/" data-id="oneturn">
-            <img src="/img/time.svg" width="40" height="40" alt="" loading="lazy">
-            <span data-i18n="fi_oneturn_n">Oneturn</span>
-          </a></li>
-          <!-- /gen:board -->
-        </ul>
-        <p class="finder__n" id="fq-n" aria-live="polite"></p>
-        <ul class="finder__list">
-          <!-- gen:finder -->
-          <li class="fi" hidden data-id="daycount" data-n="며칠 계산기 daycount daycount" data-f="날짜 세기 날짜 계산 며칠 디데이 d-day 기념일 100일 만 나이 영업일 days between dates date calculator countdown d-day anniversary age business days" data-k="웹 도구 도구 tool web tool" data-w="날짜 사이·디데이·만 나이 days between dates, age and business days 계산 calculate" data-l="두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요. days between dates, countdowns, business days excluding holidays, age and anniversaries.">
-            <a class="fi__a" href="https://date.lumenlab.page/en/">
-              <img class="fi__icon" src="/img/daycount.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_daycount_n">Daycount</b><span data-i18n="fi_daycount_w">Days between dates, age and business days</span></span>
-              <span class="fi__host"><span>date.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="inplace" data-n="인플레이스 inplace inplace" data-f="파일 변환 pdf 합치기 사진 바꾸기 heic jpg png mp3 추출 엑셀 csv 영상 동영상 용량 줄이기 압축 크기 조절 file converter merge pdf convert photo heic jpg png mp3 excel csv video compress resize" data-k="웹 도구 도구 tool web tool" data-w="이미지·영상·pdf 파일 변환 image, video and pdf converter 글과 파일 text and files" data-l="영상에서 mp3 뽑기, 사진·heic 바꾸기, pdf 합치기, csv·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요. video to mp3, image and heic conversion, pdf merge and split, csv and excel, all in your browser with no upload.">
-            <a class="fi__a" href="https://convert.lumenlab.page/">
-              <img class="fi__icon" src="/img/convert.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_inplace_n">Inplace</b><span data-i18n="fi_inplace_w">Image, video and PDF converter</span></span>
-              <span class="fi__host"><span>convert.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="scicalc" data-n="공학용 계산기 scientific calculator scientific calculator" data-f="계산기 공학용 계산 분수 루트 방정식 행렬 통계 진법 물리 상수 calculator scientific fraction root equation matrix statistics base constants" data-k="웹 도구 도구 tool web tool" data-w="공학 함수·물리 상수 계산 scientific functions and physical constants 계산 calculate" data-l="분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지. fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n.">
-            <a class="fi__a" href="https://calc.lumenlab.page/en/">
-              <img class="fi__icon" src="/img/sci-calc.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_scicalc_n">Scientific Calculator</b><span data-i18n="fi_scicalc_w">Scientific functions and physical constants</span></span>
-              <span class="fi__host"><span>calc.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="onesheet" data-n="한장달력 onesheet onesheet" data-f="달력 인쇄 공휴일 음력 손 없는 날 월별 달력 pdf calendar printable holidays lunar monthly calendar pdf" data-k="웹 도구 도구 tool web tool" data-w="달력 인쇄·공휴일 printable calendars and holidays 글과 파일 text and files" data-l="공휴일 넣은 1년 달력을 한 장 pdf로 받고, 월별 달력·음력·손 없는 날까지 인쇄해요. printable year-on-a-page and monthly calendars with holidays, as pdf, image or print.">
-            <a class="fi__a" href="https://calendar.lumenlab.page/">
-              <img class="fi__icon" src="/img/calendar.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_onesheet_n">Onesheet</b><span data-i18n="fi_onesheet_w">Printable calendars and holidays</span></span>
-              <span class="fi__host"><span>calendar.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="pickboard" data-n="공평뽑기 pickboard pickboard" data-f="돌림판 룰렛 사다리타기 제비뽑기 팀 나누기 추첨 랜덤 뽑기 spin wheel roulette ladder draw lots team picker random picker" data-k="웹 도구 도구 tool web tool" data-w="돌림판·사다리타기·팀 나누기 wheel, ladder and team picker 기기·시간·연습·모임 devices, time, practice and groups" data-l="돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 몇 명이든 넣고 결과는 링크로 다시 보여 줘요. wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result.">
-            <a class="fi__a" href="https://pick.lumenlab.page/">
-              <img class="fi__icon" src="/img/pick.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_pickboard_n">Pickboard</b><span data-i18n="fi_pickboard_w">Wheel, ladder and team picker</span></span>
-              <span class="fi__host"><span>pick.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="kankan" data-n="칸칸 kankan kankan" data-f="글자 수 글자수 세기 공백 바이트 자소서 생기부 원고지 sns word count character count characters bytes essay" data-k="웹 도구 도구 tool web tool" data-w="글자 수 세기 character counter 글과 파일 text and files" data-l="글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, sns 한도, 원고지까지. word and character counter that shows every counting rule side by side, plus x, instagram, youtube and sms limits.">
-            <a class="fi__a" href="https://count.lumenlab.page/">
-              <img class="fi__icon" src="/img/count.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_kankan_n">Kankan</b><span data-i18n="fi_kankan_w">Character counter</span></span>
-              <span class="fi__host"><span>count.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="checkbench" data-n="체크벤치 checkbench checkbench" data-f="키보드 테스트 마우스 마이크 웹캠 스피커 모니터 게임패드 기기 점검 keyboard test mouse mic webcam speaker monitor gamepad device test" data-k="웹 도구 도구 tool web tool" data-w="키보드·마우스·마이크 테스트 keyboard, mouse and mic tests 기기·시간·연습·모임 devices, time, practice and groups" data-l="키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요. test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. nothing is uploaded.">
-            <a class="fi__a" href="https://check.lumenlab.page/">
-              <img class="fi__icon" src="/img/check.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_checkbench_n">Checkbench</b><span data-i18n="fi_checkbench_w">Keyboard, mouse and mic tests</span></span>
-              <span class="fi__host"><span>check.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="todok" data-n="토독 todok todok" data-f="타자 연습 타수 타자 속도 한글 영어 wpm typing test typing practice speed wpm" data-k="웹 도구 도구 tool web tool" data-w="한글·영어 타자 연습 korean and english typing practice 기기·시간·연습·모임 devices, time, practice and groups" data-l="한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요. typing test and practice in english and korean that shows which keys you missed and where you slowed down.">
-            <a class="fi__a" href="https://typing.lumenlab.page/">
-              <img class="fi__icon" src="/img/typing.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_todok_n">Todok</b><span data-i18n="fi_todok_w">Korean and English typing practice</span></span>
-              <span class="fi__host"><span>typing.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="takehome" data-n="떼고얼마 takehome korea takehome korea" data-f="실수령액 월급 연봉 퇴직금 주휴수당 시급 실업급여 연차 4대 보험 세금 계산기 take-home pay salary net pay severance hourly wage korea tax calculator" data-k="웹 도구 도구 tool web tool" data-w="월급 실수령액·퇴직금 계산 korean take-home pay and severance 계산 calculate" data-l="연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요. korea net salary calculator laid out like a payslip, plus severance pay, hourly wage and weekly holiday allowance, with the rates and sources shown.">
-            <a class="fi__a" href="https://salary.lumenlab.page/en/">
-              <img class="fi__icon" src="/img/salary.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_takehome_n">Takehome Korea</b><span data-i18n="fi_takehome_w">Korean take-home pay and severance</span></span>
-              <span class="fi__host"><span>salary.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="staycode" data-n="오래qr staycode staycode" data-f="qr코드 qr 큐알 만들기 로고 와이파이 qr code qr maker logo wifi" data-k="웹 도구 도구 tool web tool" data-w="qr코드 만들기 qr code maker 글과 파일 text and files" data-l="가입 없이 로고·틀까지 넣은 qr코드를 만들어요. 이 사이트를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요. free qr code generator with logos, frames and print files. no sign-up, never expires, and it checks that your code scans.">
-            <a class="fi__a" href="https://qr.lumenlab.page/">
-              <img class="fi__icon" src="/img/qr.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_staycode_n">Staycode</b><span data-i18n="fi_staycode_w">QR code maker</span></span>
-              <span class="fi__host"><span>qr.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="oneturn" data-n="한바퀴 oneturn oneturn" data-f="타이머 스톱워치 알람 세계 시간 시차 서머타임 시계 timer stopwatch alarm world clock time zone" data-k="웹 도구 도구 tool web tool" data-w="타이머·스톱워치·세계 시간 timer, stopwatch and world clock 기기·시간·연습·모임 devices, time, practice and groups" data-l="남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요. a dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city&#x27;s next daylight saving change.">
-            <a class="fi__a" href="https://time.lumenlab.page/">
-              <img class="fi__icon" src="/img/time.svg" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_oneturn_n">Oneturn</b><span data-i18n="fi_oneturn_w">Timer, stopwatch and world clock</span></span>
-              <span class="fi__host"><span>time.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="chickrescue" data-n="병아리 구조대 chick rescue chick rescue" data-f="게임 퍼즐 정렬 병아리 한 판 휴대폰 게임 game puzzle sort chick phone game" data-k="게임 game" data-w="휴대폰 퍼즐 게임 · 안드로이드 먼저 puzzle game for phones · android first 게임 game" data-l="튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요. a sort puzzle: move animal friends between tubes, hold them to use abilities, and send the buried chicks home.">
-            <a class="fi__a" href="https://chick-rescue.lumenlab.page/en/">
-              <img class="fi__icon" src="/img/chick-rescue.webp" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_chickrescue_n">Chick Rescue</b><span data-i18n="fi_chickrescue_w">Puzzle game for phones · Android first</span></span>
-              <span class="fi__host"><span>chick-rescue.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="castleup" data-n="캐슬업! castle up! castle up!" data-f="게임 디펜스 방치형 성 보스 휴대폰 게임 game idle defense castle tower boss phone game" data-k="게임 game" data-w="휴대폰 방치형 디펜스 · 안드로이드 먼저 idle defense for phones · android first 게임 game" data-l="층층이 세운 영웅들이 알아서 싸우고, 15웨이브마다 오는 보스는 약점 순서대로 스킬을 맞혀 무너뜨리는 디펜스예요. an idle defense: heroes on every floor fight on their own, and every 15 waves you break a boss by hitting its weakness order.">
-            <a class="fi__a" href="https://castle-up.lumenlab.page/en/">
-              <img class="fi__icon" src="/img/castle-up.webp" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_castleup_n">Castle Up!</b><span data-i18n="fi_castleup_w">Idle defense for phones · Android first</span></span>
-              <span class="fi__host"><span>castle-up.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="owlight" data-n="owlight owlight" data-f="맥 메뉴 막대 잠자기 방지 바탕화면 가리기 창 강조 발표 화면 공유 mac menu bar keep awake hide desktop focus window presentation screen share" data-k="앱 app" data-w="macos 메뉴 막대 앱 · macos 14 이상 menu bar app for macos · macos 14 or later 앱 app" data-l="잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요. keep your computer awake, cover the desktop, highlight the front-most window and more, right from the menu bar.">
-            <a class="fi__a" href="https://owlight.lumenlab.page/">
-              <img class="fi__icon" src="/img/owlight.webp" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_owlight_n">Owlight</b><span data-i18n="fi_owlight_w">Menu bar app for macOS · macOS 14 or later</span></span>
-              <span class="fi__host"><span>owlight.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <li class="fi" hidden data-id="setnote" data-n="세트노트 setnote setnote" data-f="운동 기록 헬스 루틴 세트 무게 횟수 workout log gym routine sets weight reps" data-k="앱 app" data-w="브라우저로 여는 앱 · 홈 화면에 추가 opens in your browser · add it to your home screen 앱 app" data-l="루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요. save your routines and log every set with last time’s weight and reps beside it.">
-            <a class="fi__a" href="https://setnote.lumenlab.page/">
-              <img class="fi__icon" src="/img/setnote.webp" width="44" height="44" alt="" loading="lazy">
-              <span class="fi__t"><b data-i18n="fi_setnote_n">SetNote</b><span data-i18n="fi_setnote_w">Opens in your browser · add it to your Home Screen</span></span>
-              <span class="fi__host"><span>setnote.lumenlab.page</span> <span aria-hidden="true">→</span></span>
-            </a>
-          </li>
-          <!-- /gen:finder -->
-        </ul>
-        <p class="finder__more" hidden><a href="/en/works/" data-i18n="fdMore">There’s more. See everything we make</a></p>
-        <p class="finder__none" hidden><span data-i18n="fdNone">Nothing fits yet. Browse everything, or tell us what you’d like us to make.</span> <a href="/en/works/" data-i18n="fdAll">Everything we make</a> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page" data-i18n="mailBtn">Email us</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 확인 기록지: 소개 페이지 '도구마다 확인하고 밝혀 둔 것'(catalog.json 의 check)을 짧게. 숫자를 바꾸면 거기와 같이 -->
-  <section class="proof" id="proof" aria-labelledby="proof-title">
-    <div class="wrap proof__in">
-      <div class="proof__text">
-        <h2 id="proof-title" class="sec-title" data-i18n="prTitle">Every tool is checked against <span class="nw">answers worked out another way</span></h2>
-        <p class="sec-lead" data-i18n="prLead">The part that counts and calculates is kept apart from the screen, with automatic tests that compare it to values found another way. Where the answer depends on a rule, the screen says which rule.</p>
-        <p class="proof__links"><a href="/en/guides/" data-i18n="prGuides">48 guides that explain the rules</a> <a href="/en/about/" data-i18n="prAbout">What we checked, tool by tool</a></p>
-      </div>
-      <figure class="slip" data-slip>
-        <div class="slip__slot" aria-hidden="true"></div>
-        <div class="slip__clip">
-          <div class="slip__paper">
-            <p class="slip__head"><span data-i18n="slHead">Lumen Lab check log</span><span class="slip__date">2026</span></p>
-            <ol class="slip__rows">
-              <li><b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a></b><span data-i18n="p1">3,200+ answers from a separate date library</span><i aria-hidden="true">✓</i></li>
-              <li><b><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a></b><span data-i18n="p3">35,000+ automatic tests</span><i aria-hidden="true">✓</i></li>
-              <li><b><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a></b><span data-i18n="p4">100,000 draws checked for evenness (chi-square), 500+ tests</span><i aria-hidden="true">✓</i></li>
-              <li><b><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a></b><span data-i18n="p6">Weekday checked for every day from 1900 to 2100</span><i aria-hidden="true">✓</i></li>
-              <li><b><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a></b><span data-i18n="p8">Every code is read back right away to make sure it scans</span><i aria-hidden="true">✓</i></li>
-            </ol>
-            <p class="slip__more"><a href="/en/about/" data-i18n="slMore">Everything we checked, tool by tool</a></p>
-            <p class="slip__note" data-i18n="slNote">We write down what we can’t do, too: Checkbench says plainly that a web page can’t read a mouse’s real USB polling rate.</p>
-            <p class="slip__note" data-i18n="slNote2">That’s also why this page has no user counts or ratings. We don’t print numbers we haven’t checked.</p>
-          </div>
-        </div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 작업대: 만드는 중인 것(catalog.json 의 status 가 있는 게임·앱)과 때가 되면 고치는 것(소개 페이지 '계속 고치는 일'과 같은 내용) -->
-  <section class="bench" id="bench" aria-labelledby="bench-title">
+  <!-- 만든 것 전부: 큰 아이콘. 누르면 같은 페이지에 소개 창이 뜬다(assets/store.js, 창 내용 = 소개 페이지 /works/<id>/).
+       아이콘 밑 한 줄은 도구가 결과를 확인한 방법(showcase.json 의 proof, 소개 페이지 '확인하고 밝혀 둔 것'을 줄인 것)이나 게임·앱의 출시 상태.
+       칸은 build_home.py 가 catalog.json·showcase.json 에서 채운다 -->
+  <section class="works" id="works" aria-labelledby="works-title">
     <div class="wrap">
-      <h2 id="bench-title" class="sec-title" data-i18n="bnTitle">Still being made, <span class="nw">and kept up to date</span></h2>
-      <div class="bench__grid">
-        <div class="bench__col">
-          <h3 class="bench__h" data-i18n="bnNow">On the workbench</h3>
-          <ul class="making" data-making>
-            <!-- gen:making -->
-            <li class="mk">
-              <span class="bulb" aria-hidden="true"></span>
-              <img class="mk__icon" src="/img/chick-rescue.webp" width="48" height="48" alt="" loading="lazy">
-              <span class="mk__t"><b data-i18n="mk_chickrescue">Chick Rescue</b><span data-i18n="mk_chickrescue_s">Getting ready for launch</span></span>
-              <a class="mk__go" href="https://chick-rescue.lumenlab.page/en/" data-i18n="mk_chickrescue_go">What it is</a>
-            </li>
-            <li class="mk">
-              <span class="bulb" aria-hidden="true"></span>
-              <img class="mk__icon" src="/img/castle-up.webp" width="48" height="48" alt="" loading="lazy">
-              <span class="mk__t"><b data-i18n="mk_castleup">Castle Up!</b><span data-i18n="mk_castleup_s">Play-testing</span></span>
-              <a class="mk__go" href="https://castle-up.lumenlab.page/en/" data-i18n="mk_castleup_go">What it is</a>
-            </li>
-            <li class="mk">
-              <span class="bulb" aria-hidden="true"></span>
-              <img class="mk__icon" src="/img/owlight.webp" width="48" height="48" alt="" loading="lazy">
-              <span class="mk__t"><b data-i18n="mk_owlight">Owlight</b><span data-i18n="mk_owlight_s">Getting ready for the App Store</span></span>
-              <a class="mk__go" href="https://owlight.lumenlab.page/" data-i18n="mk_owlight_go">What it does</a>
-            </li>
-            <!-- /gen:making -->
-          </ul>
-        </div>
-        <div class="bench__col">
-          <h3 class="bench__h" data-i18n="bnFix">What we update, and when</h3>
-          <ol class="fixes">
-            <li><b data-i18n="x1w">When new rates or tax tables come out</b><span data-i18n="x1">Takehome Korea’s insurance rates, caps and withholding tax</span></li>
-            <li><b data-i18n="x2w">When next year’s official calendar is out (around late June)</b><span data-i18n="x2">Onesheet’s holidays for the coming year</span></li>
-            <li><b data-i18n="x3w">When a country changes its time zone or DST rules</b><span data-i18n="x3">Oneturn’s city times. In 2026 that meant three Canadian provinces and Morocco</span></li>
-            <li><b data-i18n="x4w">When you tell us something is wrong</b><span data-i18n="x4">Any tool. When a guide changes, it shows the date it was fixed</span></li>
-          </ol>
-        </div>
+      <div class="works__head">
+        <h2 id="works-title" class="sec-title" data-i18n="wlTitle">15 things we make. <span class="nw">Tap one to try it</span></h2>
+        <p class="sec-lead" data-i18n="wlLead">The web tools run their real calculations right in the window, and the games and apps show real screens. The line under each tool says how its results are checked.</p>
       </div>
+      <!-- gen:wall -->
+      <div class="shelf" id="games">
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">Games</h3><p class="shelf__line" data-i18n="wl_games_l">Games for phones. Android comes first.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/chickrescue/" data-show="chickrescue" style="--tc:#1f7a4a;--tcp:82%"><img class="wi__icon" src="/img/chick-rescue.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_chickrescue_n">Chick Rescue</span><span class="wi__w" data-i18n="wl_chickrescue_w">Puzzle game for phones</span><span class="wi__s" data-i18n="wl_chickrescue_s">Getting ready for launch</span></a></li><li><a class="wi" href="/en/works/castleup/" data-show="castleup" style="--tc:#7a2e8e;--tcp:82%"><img class="wi__icon" src="/img/castle-up.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_castleup_n">Castle Up!</span><span class="wi__w" data-i18n="wl_castleup_w">Idle defense for phones</span><span class="wi__s" data-i18n="wl_castleup_s">Play-testing</span></a></li></ul>
+      </div>
+      <div class="shelf" id="apps">
+        <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_apps_h">Apps</h3><p class="shelf__line" data-i18n="wl_apps_l">A Mac menu bar app and an app that opens in your browser.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/owlight/" data-show="owlight" style="--tc:#33337a;--tcp:82%"><img class="wi__icon" src="/img/owlight.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_owlight_n">Owlight</span><span class="wi__w" data-i18n="wl_owlight_w">Menu bar app for macOS</span><span class="wi__s" data-i18n="wl_owlight_s">Getting ready for the App Store</span></a></li><li><a class="wi" href="/en/works/setnote/" data-show="setnote" style="--tc:#9ccc1f;--tcp:58%"><img class="wi__icon" src="/img/setnote.webp" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_setnote_n">SetNote</span><span class="wi__w" data-i18n="wl_setnote_w">Opens in your browser</span></a></li></ul>
+      </div>
+      <div id="tools">
+      <div class="shelf" id="g-calc">
+        <div class="shelf__label"><p class="shelf__kick" data-i18n="wl_kick">Web tools</p><h3 class="shelf__h" data-i18n="wl_g_calc_h">Calculate</h3><p class="shelf__line" data-i18n="wl_g_calc_l">Dates, numbers and pay, worked out with every step shown.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/daycount/" data-show="daycount" style="--tc:#c2512b;--tcp:82%"><img class="wi__icon" src="/img/daycount.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_daycount_n">Daycount</span><span class="wi__w" data-i18n="wl_daycount_w">Days between dates, age and business days</span><span class="wi__p" data-i18n="wl_daycount_p">Checked against 3,200+ answers</span></a></li><li><a class="wi" href="/en/works/scicalc/" data-show="scicalc" style="--tc:#f25c05;--tcp:78%"><img class="wi__icon" src="/img/sci-calc.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_scicalc_n">Scientific Calculator</span><span class="wi__w" data-i18n="wl_scicalc_w">Scientific functions and physical constants</span><span class="wi__p" data-i18n="wl_scicalc_p">Checked against 3,700+ answers</span></a></li><li><a class="wi" href="/en/works/takehome/" data-show="takehome" style="--tc:#9b2743;--tcp:82%"><img class="wi__icon" src="/img/salary.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_takehome_n">Takehome Korea</span><span class="wi__w" data-i18n="wl_takehome_w">Korean take-home pay and severance</span><span class="wi__p" data-i18n="wl_takehome_p">Matches the ministry’s example</span></a></li></ul>
+      </div>
+      <div class="shelf" id="g-docs">
+        <div class="shelf__label"><p class="shelf__kick" data-i18n="wl_kick">Web tools</p><h3 class="shelf__h" data-i18n="wl_g_docs_h">Text and files</h3><p class="shelf__line" data-i18n="wl_g_docs_l">Count text, convert files and print calendars.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/inplace/" data-show="inplace" style="--tc:#e0a800;--tcp:62%"><img class="wi__icon" src="/img/convert.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_inplace_n">Inplace</span><span class="wi__w" data-i18n="wl_inplace_w">Image, video and PDF converter</span><span class="wi__p" data-i18n="wl_inplace_p">Files never leave your browser</span></a></li><li><a class="wi" href="/en/works/onesheet/" data-show="onesheet" style="--tc:#0e6a51;--tcp:82%"><img class="wi__icon" src="/img/calendar.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_onesheet_n">Onesheet</span><span class="wi__w" data-i18n="wl_onesheet_w">Printable calendars and holidays</span><span class="wi__p" data-i18n="wl_onesheet_p">Every weekday 1900–2100 tested</span></a></li><li><a class="wi" href="/en/works/kankan/" data-show="kankan" style="--tc:#1e3a6e;--tcp:82%"><img class="wi__icon" src="/img/count.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_kankan_n">Kankan</span><span class="wi__w" data-i18n="wl_kankan_w">Character counter</span><span class="wi__p" data-i18n="wl_kankan_p">35,000+ automatic tests</span></a></li><li><a class="wi" href="/en/works/staycode/" data-show="staycode" style="--tc:#2f6b4f;--tcp:82%"><img class="wi__icon" src="/img/qr.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_staycode_n">Staycode</span><span class="wi__w" data-i18n="wl_staycode_w">QR code maker</span><span class="wi__p" data-i18n="wl_staycode_p">Every code is read back</span></a></li></ul>
+      </div>
+      <div class="shelf" id="g-play">
+        <div class="shelf__label"><p class="shelf__kick" data-i18n="wl_kick">Web tools</p><h3 class="shelf__h" data-i18n="wl_g_play_h">Devices, time, practice and groups</h3><p class="shelf__line" data-i18n="wl_g_play_l">Test your gear, time things, practice typing and pick fairly.</p></div>
+        <ul class="wall"><li><a class="wi" href="/en/works/pickboard/" data-show="pickboard" style="--tc:#e23a3f;--tcp:82%"><img class="wi__icon" src="/img/pick.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_pickboard_n">Pickboard</span><span class="wi__w" data-i18n="wl_pickboard_w">Wheel, ladder and team picker</span><span class="wi__p" data-i18n="wl_pickboard_p">Chi-square tested on 100,000 draws</span></a></li><li><a class="wi" href="/en/works/checkbench/" data-show="checkbench" style="--tc:#17b3c4;--tcp:70%"><img class="wi__icon" src="/img/check.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_checkbench_n">Checkbench</span><span class="wi__w" data-i18n="wl_checkbench_w">Keyboard, mouse and mic tests</span><span class="wi__p" data-i18n="wl_checkbench_p">Shows the rule beside each result</span></a></li><li><a class="wi" href="/en/works/todok/" data-show="todok" style="--tc:#5b3fa6;--tcp:82%"><img class="wi__icon" src="/img/typing.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_todok_n">Todok</span><span class="wi__w" data-i18n="wl_todok_w">Korean and English typing practice</span><span class="wi__p" data-i18n="wl_todok_p">Publishes how speed is counted</span></a></li><li><a class="wi" href="/en/works/oneturn/" data-show="oneturn" style="--tc:#0d7068;--tcp:82%"><img class="wi__icon" src="/img/time.svg" width="84" height="84" alt="" loading="lazy"><span class="wi__n" data-i18n="fi_oneturn_n">Oneturn</span><span class="wi__w" data-i18n="wl_oneturn_w">Timer, stopwatch and world clock</span><span class="wi__p" data-i18n="wl_oneturn_p">Each city checked with zoneinfo</span></a></li></ul>
+      </div>
+      </div>
+      <!-- /gen:wall -->
     </div>
   </section>
 
@@ -421,7 +179,7 @@
       <div class="end__text">
         <h2 id="contact-title" class="sec-title" data-i18n="enTitle">Found a mistake? <span class="nw">One email and we fix it</span></h2>
         <p class="sec-lead" data-i18n="enLead">Tell us which tool, your device and browser, and what you entered, and we can check it quickly.</p>
-        <p class="end__act"><a class="btn btn--main" href="mailto:contact@lumenlab.page" data-i18n="mailBtn">Email us</a> <a class="btn btn--line" href="/en/works/" data-i18n="ctaWorks">See all 15 things we've made</a></p>
+        <p class="end__act"><a class="btn btn--main" href="mailto:contact@lumenlab.page" data-i18n="mailBtn">Email us</a> <a class="btn btn--line" href="/en/about/" data-i18n="enAbout">About Lumen Lab</a></p>
       </div>
       <div class="bcard">
         <p class="bcard__name"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab <span lang="ko">루멘랩</span></span></p>
@@ -444,7 +202,7 @@
     </div>
     <div class="foot__links">
       <!-- gen:foot -->
-      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/works/" data-i18n="ftWorks">Everything we make</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
       <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
       <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
       <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a></div>
@@ -455,5 +213,6 @@
 </footer>
 <script src="/assets/site.js" defer></script>
 <script src="/assets/landing.js" defer></script>
+<script src="/assets/store.js" defer></script>
 </body>
 </html>

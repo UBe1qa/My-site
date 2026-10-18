@@ -1,8 +1,8 @@
 /* 루멘랩 홈(랜딩) 전용. 라이브러리 없음.
    1) 첫 화면 방: 결과 카드 위로 불빛을 대면 그 칸의 속(어떻게 확인했는지)이 보인다.
       화면에 들어오면 불이 첫째 줄에서 켜지고 세 줄을 차례로 짚는다(과정 다시 보기). 방문자가 한 번 만지면 그 뒤론 방문자 몫(다시 보기 없음).
-   2) 찾기: 하려는 일을 적으면 catalog.json 의 이름·찾는 말·설명으로 점수를 매겨 맞는 것만 켠다(판의 아이콘도 같이).
-   3) 기록지·작업대: 처음 화면에 들어올 때 한 번 .in (CSS가 기록지를 내리고 전구를 켬). */
+   2) 만든 것 칸: 줄(.shelf)이 처음 화면에 들어올 때 한 번 .in → CSS가 그 줄 아이콘을 하나씩 켠다(꺼진 전구 → 켜진 불).
+      아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
   var d = document.documentElement;
   var ko = d.lang !== 'en';
@@ -238,135 +238,13 @@
     } else tour(0);
   })();
 
-  /* ---------- 2) 찾기 ---------- */
-  var finder = document.querySelector('[data-finder]');
-  if (finder) (function () {
-    var input = finder.querySelector('input');
-    var list = finder.querySelector('.finder__list');
-    var count = finder.querySelector('.finder__n');
-    var none = finder.querySelector('.finder__none');
-    var chips = Array.prototype.slice.call(finder.querySelectorAll('.finder__chips button'));
-    var more = finder.querySelector('.finder__more');
-    var tiles = {};
-    Array.prototype.forEach.call(finder.querySelectorAll('.bd'), function (a) { tiles[a.getAttribute('data-id')] = a; });
-    finder.classList.add('is-live');
-    var items = Array.prototype.slice.call(list.querySelectorAll('.fi')).map(function (li) {
-      var f = {};
-      ['k', 'n', 'f', 'w', 'l'].forEach(function (k) {
-        f[k] = li.getAttribute('data-' + k) || '';
-        f[k + 'c'] = f[k].replace(/\s+/g, '');
-        f[k + 'w'] = f[k].split(/\s+/).filter(function (w) { return w.length > 1; });
-      });
-      return { li: li, f: f, id: li.getAttribute('data-id') };
-    });
-    /* 칸마다 무게: 종류(게임·앱·웹 도구) > 이름 > 찾는 말 > 설명 > 한 줄 소개 */
-    var W = { k: 5, n: 4, f: 3, w: 2, l: 1 };
-    /* '계산기·무료·사이트'처럼 어디에나 붙는 말과 '5분·2027·10명' 같은 숫자는 맞으면 점수만 더하고, 꼭 맞아야 하는 말에선 뺀다 */
-    var SOFT = /^(\d+[가-힣]*|계산기|계산|도구|사이트|무료|하기|해주는|변환기|프로그램|온라인|웹|앱|어플|만들기|사용법|방법|calculator|calc|tools?|online|free|apps?|maker|generator|converter|website|site|web)$/;
-
-    /* 낱말 하나가 칸 k에 맞는지: 칸 글 안에 들어 있으면(띄어쓰기 빼고도) 온 무게(실수령 → 실수령액, 타자연습 → 타자 연습).
-       아니면 절반 무게로: 낱말이 종류·이름·찾는 말의 세 글자 넘는 낱말을 품거나(연봉실수령액 → 실수령액, apps → app.
-       설명 글과 두 글자 낱말은 빼서 유튜브 → 튜브, 게임패드 → 게임 같은 헛맞음이 없게),
-       세 글자 넘는 한글 낱말의 끝 글자를 뗀 줄기가 들어 있거나(합치는 → 합치기) */
-    var match = function (f, t) {
-      var k, j, w, stem = /^[가-힣]{3,}$/.test(t) ? t.slice(0, -1) : '';
-      for (k in W) if (f[k].indexOf(t) > -1 || f[k + 'c'].indexOf(t) > -1) return { k: k, w: W[k], full: true };
-      for (k in W) {
-        if (W[k] >= 3) for (j = 0; j < f[k + 'w'].length; j++) { w = f[k + 'w'][j]; if (w.length > 2 && t.indexOf(w) > -1) return { k: k, w: W[k] / 2 }; }
-        if (stem && f[k].indexOf(stem) > -1) return { k: k, w: W[k] / 2 };
-      }
-      return null;
-    };
-
-    /* 꼭 맞아야 하는 말(SOFT 아닌 것)이 두 개 이하면 다, 그보다 많으면 하나 빼고 맞아야 후보. 붙여 쓴 말이 이름·찾는 말에 통째로 있으면 바로 후보.
-       loose 면 하나만 맞아도 후보(엄격하게 찾아 0개일 때 '비슷한 것'으로) */
-    var score = function (it, toks, whole, loose) {
-      var s = 0, need = 0, hit = 0, kind = false, f = it.f, all = false;
-      toks.forEach(function (t) {
-        var soft = SOFT.test(t) && toks.length > 1, m = match(f, t);
-        if (!soft) need++;
-        if (!m) return;
-        s += m.w;
-        if (!soft) { hit++; if (m.k === 'k' && m.full) kind = true; }
-      });
-      if (toks.length > 1 && whole.length > 1) {
-        if (f.nc.indexOf(whole) > -1) { s += 5; all = true; }
-        else if (f.fc.indexOf(whole) > -1) { s += 4; all = true; }
-      }
-      var ok = all || (need ? hit >= (loose ? 1 : need > 2 ? need - 1 : need) : s > 0);
-      return ok ? { s: s, kind: kind } : null;
-    };
-
-    var run = function (q) {
-      q = q.trim().toLowerCase();
-      var toks = q.split(/\s+/).filter(Boolean), whole = q.replace(/\s+/g, '');
-      items.forEach(function (it) { it.li.hidden = true; it.li.classList.remove('is-top', 'is-lit'); });
-      for (var id in tiles) tiles[id].classList.remove('on');
-      none.hidden = true; more.hidden = true;
-      finder.classList.toggle('is-q', toks.length > 0);
-      if (!toks.length) { count.textContent = ''; return; }
-      var rank = function (loose) {
-        return items.map(function (it) { var r = score(it, toks, whole, loose); return r && { it: it, s: r.s, kind: r.kind }; })
-          .filter(Boolean)
-          .sort(function (a, b) { return b.s - a.s; });
-      };
-      var ranked = rank(false), near = false;
-      if (!ranked.length && toks.length > 1) { ranked = rank(true); near = ranked.length > 0; }
-      /* '게임'·'앱'처럼 종류를 찾으면 그 종류만 */
-      if (ranked.some(function (r) { return r.kind; })) ranked = ranked.filter(function (r) { return r.kind; });
-      var top = ranked.length ? ranked[0].s : 0;
-      ranked = ranked.filter(function (r) { return r.s >= top * .5; });
-      if (!ranked.length) { count.textContent = ''; none.hidden = false; return; }
-      ranked.forEach(function (r) { if (tiles[r.it.id]) tiles[r.it.id].classList.add('on'); });
-      var total = ranked.length;
-      more.hidden = total <= 4;
-      ranked = ranked.slice(0, 4);
-      ranked.forEach(function (r, i) {
-        var li = r.it.li;
-        list.appendChild(li);
-        li.hidden = false;
-        li.classList.toggle('is-top', i === 0);
-        li.style.setProperty('--d', (i * .07).toFixed(2) + 's');
-        void li.offsetWidth;
-        li.classList.add('is-lit');
-      });
-      count.textContent = near ? (ko ? '딱 맞는 건 없고, 비슷한 것 ' + total + '개' : 'No exact match. ' + total + ' close') :
-        ko ? total + '개 찾았어요' : total + (total === 1 ? ' match' : ' matches');
-    };
-
-    var press = function (b) { chips.forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); }); };
-    chips.forEach(function (b) {
-      b.setAttribute('aria-pressed', 'false');
-      b.addEventListener('click', function () { input.value = b.textContent; press(b); run(input.value); });
-    });
-    input.addEventListener('input', function () {
-      press(chips.filter(function (c) { return c.textContent === input.value; })[0]);
-      run(input.value);
-    });
-    input.addEventListener('keydown', function (e) {
-      if (e.key !== 'Enter' || e.isComposing) return;
-      var a = list.querySelector('.fi.is-top a');
-      if (a) { e.preventDefault(); location.href = a.href; }
-    });
-    if (input.value) run(input.value);
-    /* '하려는 일로 찾기' 단추: 입력 칸으로 내려가 바로 칠 수 있게(휴대폰은 키보드가 뜨면서 결과가 입력 칸 바로 밑에) */
-    Array.prototype.forEach.call(document.querySelectorAll('a[href="#fq"]'), function (a) {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        input.scrollIntoView({ block: 'start', behavior: moving() && !matchMedia('(pointer: coarse)').matches ? 'smooth' : 'auto' });
-        input.focus({ preventScroll: true });
-      });
-    });
-  })();
-
-  /* ---------- 3) 기록지·작업대 ---------- */
-  var slip = document.querySelector('[data-slip]'), making = document.querySelector('[data-making]');
-  if (slip) Array.prototype.forEach.call(slip.querySelectorAll('.slip__rows li'), function (li, i) { li.style.setProperty('--i', i); });
-  if (making) Array.prototype.forEach.call(making.querySelectorAll('.bulb'), function (b, i) { b.style.setProperty('--d', (.15 + i * .22).toFixed(2) + 's'); });
-  var watched = [slip, making].filter(Boolean);
-  if (!watched.length || !('IntersectionObserver' in window)) return;
+  /* ---------- 2) 만든 것 칸 ---------- */
+  var shelves = Array.prototype.slice.call(document.querySelectorAll('.works .shelf'));
+  shelves.forEach(function (sh) { Array.prototype.forEach.call(sh.querySelectorAll('.wi'), function (a, i) { a.style.setProperty('--i', i); }); });
+  if (!shelves.length || !moving() || !('IntersectionObserver' in window)) return;
+  d.classList.add('wall-wait');
   var on = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); on.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -25% 0px' });
-  watched.forEach(function (el) { on.observe(el); });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  shelves.forEach(function (el) { on.observe(el); });
 })();

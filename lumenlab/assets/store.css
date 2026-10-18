@@ -1,0 +1,192 @@
+/* 소개 창과 소개 페이지. 둘 다 build_store.py 가 만든 같은 본문(.sh__body)을 쓴다.
+   소개 페이지(/works/<id>/) = .pp 안의 .sh-doc. 홈에서 아이콘을 누르면 store.js 가 그 페이지를 받아 본문만 창(.sheet > .sh)에 옮기고
+   제목 단계를 하나씩 내린다(페이지 h1·h2 → 창 h2·h3). 컴퓨터는 가운데 창, 휴대폰은 아래에서 올라오는 창.
+   --tc = 아이콘 색(showcase.json), --tcp = 종이 위 글자로 쓸 때 섞는 비율. '바로 써 보기' 무대(.stage)는 /assets/try/<도구>.js 가 채운다.
+   글자는 15px 아래로 내리지 않는다. */
+.sh,.sh-doc{--tc:var(--lamp);--tct:color-mix(in srgb,var(--tc) var(--tcp,82%),#000)}
+
+/* ---------- 창 ---------- */
+html.is-sheet{overflow:hidden}
+.sheet{padding:0;border:0;margin:0;width:100%;height:100%;max-width:none;max-height:none;background:transparent;color:var(--ink);overflow:hidden}
+.sheet[open]{display:flex;align-items:center;justify-content:center}
+.sheet::backdrop{background:rgba(12,11,24,.52)}
+.sh{position:relative;display:flex;flex-direction:column;width:min(780px,calc(100% - 48px));max-height:min(90vh,940px);
+  background:var(--paper);border-radius:26px;box-shadow:0 30px 90px rgba(0,0,0,.38);overflow:hidden}
+.sh__bar{position:absolute;top:0;left:0;right:0;z-index:3;height:0}
+.sh__grab{display:none}
+.sh__x{position:absolute;top:16px;right:16px;width:44px;height:44px;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+  background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--ink)}
+.sh__x:hover{background:color-mix(in srgb,var(--ink) 15%,transparent)}
+.sh__x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.sh__pill{position:absolute;top:16px;right:70px;display:flex;align-items:center;gap:8px;height:44px;padding:0 18px 0 9px;border-radius:999px;
+  background:var(--lamp);color:#1B1A24;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.16);
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility 0s .18s}
+.sh__pill img{display:block;width:26px;height:26px;border-radius:7px}
+.sh.is-past .sh__pill{opacity:1;visibility:visible;transform:none;transition:opacity .18s,transform .18s,visibility 0s}
+.sh__bar::after{content:"";position:absolute;left:0;right:0;top:0;height:68px;z-index:-1;pointer-events:none;opacity:0;transition:opacity .18s;
+  background:linear-gradient(var(--paper) 62%,color-mix(in srgb,var(--paper) 0%,transparent))}
+.sh.is-past .sh__bar::after{opacity:1}
+.sh__body{overflow:auto;overscroll-behavior:contain;padding:34px 38px 40px}
+.sh__ghost{position:fixed;z-index:10;pointer-events:none;transform-origin:0 0;border-radius:22%}
+.sh__wait{text-align:left}
+
+/* ---------- 본문(창·페이지 같이) ---------- */
+.sh__head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center;padding-right:48px}
+.sh__icon{display:block;width:96px;height:96px;border-radius:22%;box-shadow:0 10px 26px color-mix(in srgb,var(--tc) 38%,transparent)}
+.sh__name{margin:0;font-size:27px;line-height:1.25;letter-spacing:-.02em}.sh__name:focus{outline:none}
+.sh__name span{font-size:17px;font-weight:600;color:var(--muted);white-space:nowrap}
+.sh__what{margin:4px 0 14px;color:var(--ink-2);font-size:16px;line-height:1.5}
+/* 게임·앱의 지금 상태: 아이콘 색 알약 */
+.sh__status{display:inline-flex;align-items:center;gap:7px;margin:-4px 0 14px;padding:3px 12px 3px 10px;border-radius:999px;
+  background:color-mix(in srgb,var(--tc) 13%,transparent);color:var(--tct);font-size:15px;font-weight:700;line-height:1.6}
+.sh__status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--tc)}
+.sh__status+.sh__open{display:flex;width:max-content}
+.sh__open{min-height:44px;padding:0 20px;font-size:15px}
+.sh__lead{margin:22px 0 0;color:var(--ink-2);font-size:17px;line-height:1.7}
+.sh__facts{list-style:none;margin:22px 0 0;padding:14px 0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sh__facts li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:2px 10px;text-align:center}
+.sh__facts li+li{border-left:1px solid var(--line)}
+.sh__facts b{font-size:18px;line-height:1.3;font-weight:750;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.sh__facts span{font-size:15px;line-height:1.35;color:var(--muted)}
+.sh__sec{margin-top:32px}
+.sh__sec>h2,.sh__sec>h3,.sh__try-h h2,.sh__try-h h3{margin:0 0 12px;font-size:19px;line-height:1.35;letter-spacing:-.01em}
+.sh__try-h{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;margin-bottom:10px}
+.sh__try-h h2,.sh__try-h h3{margin:0}
+.sh__cap{margin:10px 2px 0;color:var(--muted);font-size:15px;line-height:1.6}
+
+/* 바로 써 보기 무대 */
+.stage__badge{margin:0;font-size:15px;font-weight:600;color:var(--muted)}
+.stage__badge.is-auto{color:var(--lamp-ink)}
+.stage__badge:not(:empty)::before{content:"";display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:var(--muted);vertical-align:.08em}
+.stage__badge.is-auto::before{background:var(--lamp)}
+.stage__replay{margin-left:auto;min-height:44px;padding:0 4px;border:0;background:none;color:var(--lamp-ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.stage__replay[hidden]{display:block!important;visibility:hidden}   /* 자리는 늘 잡아 둔다(나타날 때 무대가 밀려 첫 탭이 빗나가지 않게) */
+.stage__replay:hover{text-decoration:underline}
+.stage{position:relative;min-height:240px;padding:22px;border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden;
+  background-image:radial-gradient(120% 70% at 50% -10%,color-mix(in srgb,var(--tc) 12%,transparent),transparent 70%)}
+.stage.is-loading{display:grid;place-items:center}
+.stage__msg{margin:0;text-align:center;color:var(--muted);font-size:15px;line-height:1.6}
+.touch{position:absolute;left:0;top:0;z-index:6;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;pointer-events:none;opacity:0;
+  background:color-mix(in srgb,var(--ink) 24%,transparent);box-shadow:0 0 0 2px rgba(255,255,255,.92),0 2px 8px rgba(0,0,0,.22);
+  transition:transform .42s cubic-bezier(.2,.8,.2,1),opacity .2s,background-color .1s}
+.touch::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--ink);opacity:0}
+.touch.is-on{opacity:1}
+.touch.is-press{background-color:color-mix(in srgb,var(--ink) 44%,transparent)}
+.touch.is-press::after{animation:touchring .38s ease-out}
+@keyframes touchring{from{opacity:.45;transform:none}to{opacity:0;transform:scale(1.9)}}
+.is-auto-press{transform:scale(.95)}
+
+/* 게임·앱 미리 보기: 실제 화면을 옆으로 넘긴다. 세로 화면은 높이를, 가로 화면은 너비를 맞춘다 */
+.shots{list-style:none;margin:0 -38px;padding:2px 38px 10px;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 38px;scrollbar-width:thin}
+.shots li{flex:none;scroll-snap-align:start;aspect-ratio:var(--ar);border-radius:18px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line)}
+.shots.is-tall li{height:380px}
+.shots.is-wide li{width:min(560px,84%)}
+.shots img,.shots video{display:block;width:100%;height:100%;object-fit:cover;background:var(--card)}
+
+/* 이런 것도 돼요: 옆으로 넘기는 카드 */
+.sh__cards{list-style:none;margin:0 -38px;padding:2px 38px 10px;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(196px,226px);gap:12px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 38px;scrollbar-width:thin}
+.sh__cards li{display:flex;scroll-snap-align:start}
+.sh__cards a{display:flex;flex-direction:column;gap:4px;width:100%;padding:16px 16px 18px;border-radius:18px;background:var(--card);border:1px solid var(--line);
+  color:var(--ink);text-decoration:none;transition:border-color .2s,transform .15s}
+.sh__cards a:hover{border-color:color-mix(in srgb,var(--tc) 70%,var(--line))}
+.sh__cards a:active{transform:scale(.98)}
+.sh__gly{display:grid;place-items:center;width:46px;height:46px;margin-bottom:8px;border-radius:13px;background:color-mix(in srgb,var(--tc) 17%,transparent)}
+.gly{width:25px;height:25px;fill:none;stroke:color-mix(in srgb,var(--tc) 75%,var(--ink));stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sh__cards b{font-size:16px;line-height:1.4}
+.sh__cards a>span:last-child{font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+/* 밝혀 둔 것·가이드 */
+.sh__check{margin:0;color:var(--ink-2)}
+.sh__links{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.sh__links a{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;
+  background:var(--card);color:var(--ink);font-size:15px;font-weight:650;text-decoration:none;transition:border-color .2s}
+.sh__links a:hover{border-color:color-mix(in srgb,var(--tc) 70%,var(--line))}
+.sh__links a span{color:var(--muted)}
+.sh__guides{margin:0;padding-left:1.3em;display:grid;gap:10px}
+.sh__guides li::marker{color:var(--muted);font-variant-numeric:tabular-nums}
+.sh__guides a{color:var(--ink);text-decoration-color:var(--line);text-underline-offset:3px}
+.sh__guides a:hover{text-decoration-color:currentColor}
+
+/* 다른 것도 둘러보기: 아이콘 줄(창 안에서 누르면 창 내용만 바뀐다) */
+.sh__oth{padding-top:26px;border-top:1px solid var(--line)}
+.sh__others{list-style:none;margin:0 -38px;padding:2px 38px 4px;display:grid;grid-auto-flow:column;grid-auto-columns:84px;gap:6px;
+  overflow-x:auto;scroll-padding:0 38px;scrollbar-width:thin}
+.sh__others a{display:flex;flex-direction:column;align-items:center;gap:7px;padding:8px 2px 6px;border-radius:16px;color:var(--ink);text-decoration:none;
+  font-size:15px;font-weight:650;line-height:1.3;text-align:center;word-break:keep-all;transition:background .2s}
+.sh__others img{display:block;width:56px;height:56px;border-radius:14px;box-shadow:0 4px 12px rgba(27,26,36,.12);transition:transform .2s}
+.sh__others a:hover{background:var(--lamp-soft)}
+.sh__others a:hover img{transform:translateY(-2px)}
+.sh__others a:active img{transform:scale(.94)}
+
+/* ---------- 소개 페이지 ---------- */
+.pp{max-width:880px;padding-top:26px;padding-bottom:80px}
+.pp__crumb{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0 0 14px;font-size:15px;font-weight:600;color:var(--muted)}
+.pp__crumb a{color:var(--ink-2);text-decoration:none}
+.pp__crumb a:hover{color:var(--ink);text-decoration:underline}
+.sh-doc{position:relative;isolation:isolate;padding:34px 38px 40px;background:var(--paper);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);overflow:hidden}
+.sh-doc::before{content:"";position:absolute;left:0;right:0;top:0;height:240px;z-index:-1;pointer-events:none;
+  background:linear-gradient(color-mix(in srgb,var(--tc) 12%,transparent),transparent)}
+.sh-doc .sh__body{padding:0;overflow:visible}
+.sh-doc .sh__head{padding-right:0}
+
+/* ---------- 휴대폰 ---------- */
+@media (max-width:640px){
+  .sheet[open]{align-items:flex-end}
+  .sh{width:100%;max-height:calc(100dvh - 24px);border-radius:24px 24px 0 0}
+  .sh__bar{position:relative;flex:none;height:30px;touch-action:none}
+  .sh__grab{display:block;width:42px;height:5px;margin:10px auto 0;border-radius:3px;background:var(--line)}
+  .sh__x{top:8px;right:10px;width:44px;height:44px}
+  .sh__pill{top:8px;right:62px}
+  .sh__body{padding:6px 18px calc(30px + env(safe-area-inset-bottom))}
+  .sh__head{gap:16px;padding-right:0}
+  .sh__try-h h2,.sh__try-h h3{flex-basis:100%}
+  .sh__icon{width:80px;height:80px}
+  .sh__name{font-size:23px}
+  .sh__facts li{padding:2px 6px}
+  .sh__facts b{font-size:17px}
+  .stage{padding:16px;border-radius:18px}
+  .sh__cards,.shots,.sh__others{margin:0 -18px;padding-left:18px;padding-right:18px;scroll-padding:0 18px}
+  .shots.is-tall li{height:340px}
+  .shots.is-wide li{width:88%}
+  .pp{padding-top:16px;padding-bottom:56px}
+  .sh-doc{padding:24px 18px 30px;border-radius:22px}
+}
+
+/* ---------- 바로 써 보기 무대 안에서 같이 쓰는 조각 ---------- */
+.tr{display:grid;gap:14px}
+.tr-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.tr-field{display:grid;gap:5px;flex:1 1 150px;min-width:0}
+.tr-field>span{font-size:15px;font-weight:600;color:var(--muted)}
+.tr-in{width:100%;min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;font-size:17px}
+.tr-in:focus{outline:2px solid var(--focus);outline-offset:1px;border-color:transparent}
+textarea.tr-in{min-height:96px;padding:10px 12px;line-height:1.6;resize:vertical}
+.tr-big{margin:0;font-size:clamp(30px,6vw,44px);line-height:1.1;font-weight:800;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.tr-big small{font-size:.5em;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-left:4px}
+.tr-note{margin:0;font-size:15px;line-height:1.6;color:var(--ink-2)}
+.tr-stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
+.tr-stats li{padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.tr-stats b{display:block;font-size:22px;line-height:1.2;font-weight:800;font-variant-numeric:tabular-nums}
+.tr-stats span{font-size:15px;color:var(--muted)}
+.tr-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tr-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--paper);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:transform .12s,background .15s,border-color .15s}
+.tr-btn:hover{border-color:var(--muted)}
+.tr-btn:disabled,.pb-hub:disabled{opacity:.45;cursor:default}
+.tr-btn:active,.tr-btn.is-auto-press{transform:scale(.95)}
+.tr-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tr-btn--main{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tr-pop{animation:trpop .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes trpop{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+@media (prefers-color-scheme:dark){
+  .sh,.sh-doc{--tct:color-mix(in srgb,var(--tc) 55%,#fff)}
+  .sh{box-shadow:0 0 0 1px var(--line),0 30px 90px rgba(0,0,0,.5)}
+  .sh-doc::before{background:linear-gradient(color-mix(in srgb,var(--tc) 18%,transparent),transparent)}
+}
+@media (prefers-reduced-motion:reduce){
+  .tr-pop{animation:none}.touch{transition:opacity .15s}.touch.is-press::after{animation:none}
+  .sh__pill,.sh.is-past .sh__pill{transition:opacity .15s,visibility 0s;transform:none}
+  .sh__others img,.sh__others a:hover img{transition:none;transform:none}
+}

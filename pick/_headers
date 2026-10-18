@@ -2,7 +2,7 @@
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# 루멘랩 가이드 모음(lumenlab.page/guides/)의 '바로 써 보기'가 이 뽑기 파일들을 ES 모듈로 불러 같은 계산을 돌린다.
+# 루멘랩 홈의 소개 창과 소개 페이지(lumenlab.page/works/pickboard/)의 '바로 써 보기'가 이 뽑기 파일들을 ES 모듈로 불러 같은 계산을 돌린다.
 # 모듈은 다른 주소에서 부르려면 이 허락이 있어야 한다(일반 script 파일은 필요 없음). 공개 파일이라 주소를 가리지 않는다(www·workers.dev 로 열어도 되게).
 /assets/core/*
   Access-Control-Allow-Origin: *
