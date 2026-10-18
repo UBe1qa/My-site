@@ -1,9 +1,9 @@
 /* 가이드 모음(/guides/, /en/guides/) 전용.
    1) 맨 위 도구 아이콘 줄(.tgrid)이 화면 위로 지나가면 머리말 밑에 작은 줄(.tdock)이 내려와 따라온다.
-      지금 읽는 도구만 이름이 펼쳐지고, 아이콘 둘레 고리 = 그 도구 글 목록을 얼마나 내려왔는지.
+      화면을 가장 많이 차지한 도구 칸이 '지금 도구'라 그것만 이름이 펼쳐진다.
    2) 소개 창: 도구 칸 머리(아이콘·이름·설명)를 누르면 뜬다. 맨 위 아이콘이 칸에서 창으로 날아오고,
       창 안 '여기서 바로 써 보기'는 그 도구 사이트의 계산 파일(assets/…)을 그대로 불러 돌린다(같은 계산, 같은 결과).
-      처음엔 손가락이 한 번 써 보이고, 손님이 만지면 바로 멈추고 손님 차례가 된다.
+      처음엔 터치 자국이 한 번 써 보이고, 손님이 누르거나 키를 치면 바로 멈추고 손님 차례가 된다.
    자료는 페이지 안 #tooldata(빌드가 catalog.json·showcase.json으로 만든다), 도구별 미리보기는 /assets/try/<id>.js. */
 (function () {
   'use strict';
@@ -17,7 +17,6 @@
     var list = dock.querySelector('.tdock__list');
     var links = [].slice.call(dock.querySelectorAll('.tdock__a'));
     var arts = links.map(function (a) { return document.getElementById(a.hash.slice(1)); });
-    var rings = links.map(function (a) { return a.querySelector('.tdock__ring circle'); });
     var active = -1, ticking = false, on = false;
     var DOCK_H = 61;   // .tdock 높이(숨어 있을 때도 같은 값으로 잰다)
     function setActive(i) {
@@ -34,15 +33,15 @@
     }
     function update() {
       ticking = false;
-      var L = HEAD + DOCK_H + 28, idx = -1, prog = 0;
+      // 줄 아래로 보이는 높이가 가장 큰 도구 칸(같으면 위쪽)
+      var top = HEAD + DOCK_H, idx = -1, best = 0;
       for (var i = 0; i < arts.length; i++) {
-        var r = arts[i].getBoundingClientRect();
-        if (r.top <= L) { idx = i; prog = Math.min(1, (L - r.top) / Math.max(1, r.height)); }
+        var r = arts[i].getBoundingClientRect(), seen = Math.min(r.bottom, innerHeight) - Math.max(r.top, top);
+        if (seen > best) { best = seen; idx = i; }
       }
       var show = grid.getBoundingClientRect().bottom < HEAD + 4;
       if (show !== on) { on = show; dock.classList.toggle('is-on', on); }
       setActive(idx);
-      if (idx >= 0) rings[idx].style.strokeDashoffset = String(100 - prog * 100);
     }
     addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     addEventListener('resize', update, { passive: true });
@@ -144,11 +143,12 @@
   var panel = h('div', { class: 'sh' });
   dlg.appendChild(panel);
   document.body.appendChild(dlg);
-  var cur = null, opener = null, stopDemo = null, closing = false;
+  var cur = null, opener = null, stopDemo = null, closing = false, watchOpen = null;
 
   function factsRow(t) {
     return h('ul', { class: 'sh__facts' }, t.facts.map(function (f) {
-      return h('li', null, [h('b', { text: f.v }), h('span', { text: f.l })]);
+      // 가운뎃점 앞뒤에서 줄이 갈리지 않게(줄 맨 앞에 '·PDF'가 오지 않게)
+      return h('li', null, [h('b', { text: f.v }), h('span', { text: f.l.replace(/·/g, '\u2060·\u2060') })]);
     }));
   }
 
@@ -175,8 +175,11 @@
         return h('li', null, [h('a', { href: m.href }, [h('span', { class: 'sh__gly' }, [glyph(m.g)]), h('b', { text: m.t }), h('span', { text: m.d })])]);
       }))
     ]) : null;
+    // 머리의 '열기'가 위로 지나가면 같은 단추가 작게 창 위 막대에 붙는다(스토어의 '받기'처럼)
+    var pill = h('a', { class: 'sh__pill', href: t.home, tabindex: '-1', 'aria-hidden': 'true' }, [h('img', { src: t.icon, width: 26, height: 26, alt: '' }), h('span', { text: UI.open })]);
     panel.appendChild(h('div', { class: 'sh__bar' }, [
       h('span', { class: 'sh__grab', 'aria-hidden': 'true' }),
+      pill,
       h('button', { type: 'button', class: 'sh__x', 'aria-label': UI.close, onclick: requestClose }, [svg('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, [svg('path', { d: 'M6 6l12 12M18 6L6 18' })])])
     ]));
     panel.appendChild(h('div', { class: 'sh__body' }, [
@@ -194,6 +197,14 @@
         h('ol', { class: 'sh__guides' }, t.guides.map(function (g) { return h('li', null, [h('a', { href: g.u, text: g.t })]); }))
       ])
     ]));
+    var openBtn = head.querySelector('.sh__open'), bodyEl = panel.querySelector('.sh__body');
+    if (watchOpen) watchOpen.disconnect();
+    watchOpen = 'IntersectionObserver' in window ? new IntersectionObserver(function (en) {
+      var e = en[en.length - 1];
+      panel.classList.toggle('is-past', !e.isIntersecting && e.boundingClientRect.top < e.rootBounds.top + 10);
+    }, { root: bodyEl, threshold: 0 }) : null;
+    if (watchOpen) watchOpen.observe(openBtn);
+    panel.classList.remove('is-past');
     return { icon: icon, stage: stage, badge: badge, replay: replay, tool: t };
   }
 
@@ -214,50 +225,49 @@
   }
   window.LLTry = window.LLTry || {};
 
-  /* 자동 시연: 손가락이 움직이고 글자를 친다. 손님이 만지는 순간(진짜 입력) 멈춘다. */
-  function Auto(stage, badge, replay, run) {
-    var gen = 0, finger = null, alive = true;
+  /* 자동 시연: 누르는 자리에 동그란 터치 자국이 찍히고(앱 미리보기 영상의 '터치 보기'처럼) 글자가 쳐진다.
+     손님이 누르거나(쓸어 넘기는 스크롤은 빼고) 키를 치면 그 즉시 멈추고, 도구가 reset 을 주면 시연이 바꿔 둔 값을 처음으로 돌린다.
+     동작 줄이기: 기다림·터치 자국 없이 끝 모습만 바로 그리고 처음부터 손님 차례. '다시 보기'를 누를 때만 차례로 보여 준다. */
+  function Auto(stage, badge, replay, run, hooks) {
+    var gen = 0, dot = null, alive = true, running = false, dirty = false, ran = false, down = null;
     function stopErr() { var e = new Error('stop'); e.stop = true; return e; }
-    function api(my) {
+    function api(my, fast) {
       function live() { if (!alive || my !== gen) throw stopErr(); }
       function wait(ms) {
         return new Promise(function (ok, no) {
-          setTimeout(function () { try { live(); ok(); } catch (e) { no(e); } }, ms);
+          setTimeout(function () { try { live(); ok(); } catch (e) { no(e); } }, fast ? 0 : ms);
         });
       }
-      function pointAt(el, fx, fy) {   // fx·fy = 그 칸 안 어디(0~1, 기본 가운데 조금 아래)
-        live();
-        if (!finger) {
-          finger = h('span', { class: 'finger', 'aria-hidden': 'true' });
-          finger.appendChild(svg('svg', { viewBox: '0 0 24 24' }, [svg('path', { d: 'M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4a1.5 1.5 0 0 1 3 0v6m0-.5a1.5 1.5 0 0 1 3 0V14c0 3.5-2.5 6.5-6 6.5-2.6 0-4-1.3-5.4-3.4L4.2 13.4a1.5 1.5 0 0 1 2.5-1.6L9 14.5' })]));
-          stage.appendChild(finger);
-        }
+      function at(el, fx, fy) {   // fx·fy = 그 칸 안 어디(0~1, 기본 가운데)
         var s = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
-        finger.style.transition = '';
-        finger.style.transform = 'translate(' + (r.left - s.left + r.width * (fx == null ? 0.5 : fx)) + 'px,' + (r.top - s.top + r.height * (fy == null ? 0.6 : fy)) + 'px)';
-        finger.classList.add('is-on');
-        return wait(reduced ? 60 : 480);
+        return 'translate(' + (r.left - s.left + r.width * (fx == null ? 0.5 : fx)) + 'px,' + (r.top - s.top + r.height * (fy == null ? 0.5 : fy)) + 'px)';
       }
-      // 손가락만 옮긴다(끌기 시연: 기다리지 않고 바로, 움직임은 .finger 의 transition 이 잇는다)
+      function pointAt(el, fx, fy) {
+        live();
+        if (fast) return Promise.resolve();
+        if (!dot) { dot = h('span', { class: 'touch', 'aria-hidden': 'true' }); stage.appendChild(dot); }
+        dot.style.transition = '';
+        dot.style.transform = at(el, fx, fy);
+        dot.classList.add('is-on');
+        return wait(reduced ? 60 : 420);
+      }
+      // 자국만 옮긴다(끌기 시연: 기다리지 않고 바로, 움직임은 transition 이 잇는다)
       function moveTo(el, fx, fy) {
         live();
-        if (!finger) return pointAt(el, fx, fy);
-        var s = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
-        finger.style.transition = 'transform .08s linear,opacity .2s';
-        finger.style.transform = 'translate(' + (r.left - s.left + r.width * fx) + 'px,' + (r.top - s.top + r.height * fy) + 'px)';
+        if (fast) return Promise.resolve();
+        if (!dot || !dot.classList.contains('is-on')) return pointAt(el, fx, fy);
+        dot.style.transition = 'transform .08s linear,opacity .2s';
+        dot.style.transform = at(el, fx, fy);
         return Promise.resolve();
       }
+      function tap(el) {
+        if (fast) return Promise.resolve();
+        dot.classList.add('is-press');
+        if (el) el.classList.add('is-auto-press');
+        return wait(140).then(function () { dot.classList.remove('is-press'); if (el) el.classList.remove('is-auto-press'); });
+      }
       function press(el) {
-        return pointAt(el).then(function () {
-          finger.classList.add('is-press');
-          el.classList.add('is-auto-press');
-          return wait(140);
-        }).then(function () {
-          finger.classList.remove('is-press');
-          el.classList.remove('is-auto-press');
-          el.click();
-          return wait(120);
-        });
+        return pointAt(el).then(function () { return tap(el); }).then(function () { el.click(); hideDot(); return wait(120); });
       }
       function setValue(input, v) {
         live();
@@ -265,67 +275,106 @@
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
       }
+      // 칸을 한 번 톡 누르고 자국을 치운 뒤 친다(자국이 쳐지는 글자를 가리지 않게)
       function type(input, text, ms) {
         var chars = Array.isArray(text) ? text : Array.from(text);
         var i = 0, base = Array.isArray(text) ? '' : input.value;
+        if (fast) { setValue(input, Array.isArray(text) ? chars[chars.length - 1] : base + text); return Promise.resolve(); }
         function step() {
           if (i >= chars.length) return Promise.resolve();
           setValue(input, Array.isArray(text) ? chars[i] : base + chars.slice(0, i + 1).join(''));
           i++;
           return wait(ms || 85).then(step);
         }
-        return pointAt(input).then(step);
+        return pointAt(input).then(function () { return tap(null); }).then(function () { hideDot(); return step(); });
       }
-      return { wait: wait, point: pointAt, move: moveTo, press: press, set: setValue, type: type, reduced: reduced, live: live };
+      return { wait: wait, point: pointAt, move: moveTo, press: press, set: setValue, type: type, reduced: reduced, fast: fast, live: live };
     }
-    function hideFinger() { if (finger) finger.classList.remove('is-on'); }
-    function start() {
+    function hideDot() { if (dot) dot.classList.remove('is-on'); }
+    function setBadge(auto) {
+      badge.textContent = auto ? UI.auto : UI.yours;
+      badge.className = 'stage__badge' + (auto ? ' is-auto' : '');
+      replay.hidden = auto;
+    }
+    function start(fast) {
       var my = ++gen;
-      badge.textContent = UI.auto;
-      badge.className = 'stage__badge is-auto';
-      replay.hidden = true;
-      Promise.resolve().then(function () { return run(api(my)); }).then(function () {
+      fast = fast === true;
+      if (ran && hooks.reset) hooks.reset();   // 다시 보기: 손님이 바꾼 것부터 지우고 처음 모습에서
+      ran = true; dirty = true; running = !fast;
+      setBadge(!fast);
+      Promise.resolve().then(function () { return run(api(my, fast)); }).then(function () {
         if (my !== gen) return;
-        hideFinger();
-        badge.textContent = UI.yours; badge.className = 'stage__badge';
-        replay.hidden = false;
-      }, function (e) { if (!e || !e.stop) console.warn(e); });
+        running = false; hideDot(); setBadge(false);
+      }, function (e) {
+        if (e && e.stop) return;
+        running = false; hideDot();
+        if (hooks.fail) hooks.fail(e);
+      });
     }
-    function takeOver(e) {
-      if (!e.isTrusted || !alive) return;
-      if (e.target === replay) return;
-      if (badge.classList.contains('is-auto')) {
-        gen++; hideFinger();
-        badge.textContent = UI.yours; badge.className = 'stage__badge';
-        replay.hidden = false;
-      }
+    // 손님 차례: 돌던 시연을 멈추고, 시연이 남긴 값은 한 번만 처음으로
+    function mine() {
+      if (!alive) return;
+      if (running) { gen++; running = false; hideDot(); setBadge(false); }
+      if (dirty) { dirty = false; if (hooks.reset) hooks.reset(); }
     }
-    ['pointerdown', 'keydown', 'wheel'].forEach(function (ev) { stage.addEventListener(ev, takeOver, { capture: true, passive: true }); });
-    replay.addEventListener('click', start);
-    return { start: start, mine: function () { takeOver({ isTrusted: true, target: null }); }, stop: function () { alive = false; gen++; } };
+    var CTRL = 'input, textarea, select, button, a, label, [data-grab]';
+    function opt(passive) { return { capture: true, passive: passive }; }
+    stage.addEventListener('pointerdown', function (e) {
+      if (!e.isTrusted) return;
+      // 마우스·단추·입력 칸은 누르는 순간, 손가락은 떼었을 때 거의 안 움직였으면(쓸어 올린 스크롤이면 시연을 이어 간다)
+      if (e.pointerType === 'mouse' || (e.target.closest && e.target.closest(CTRL))) { down = null; mine(); }
+      else down = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    }, opt(true));
+    stage.addEventListener('pointerup', function (e) {
+      if (!down || e.pointerId !== down.id) return;
+      var far = Math.abs(e.clientX - down.x) + Math.abs(e.clientY - down.y) > 10;
+      down = null;
+      if (!far) mine();
+    }, opt(true));
+    stage.addEventListener('pointercancel', function () { down = null; }, opt(true));
+    stage.addEventListener('keydown', function (e) { if (e.isTrusted) mine(); }, opt(true));
+    replay.addEventListener('click', function () { start(false); });
+    return { start: start, mine: mine, stop: function () { alive = false; gen++; } };
   }
 
+  function failMsg(t) {
+    return h('p', { class: 'stage__msg' }, [UI.fail + ' ', h('a', { href: t.home, text: t.name + ' ' + UI.open + ' ↗' })]);
+  }
   function mountDemo(parts, id) {
     var t = parts.tool, stage = parts.stage;
     stage.classList.add('is-loading');
     stage.appendChild(h('p', { class: 'stage__msg', text: UI.loading }));
-    var my = cur;
+    var my = cur, auto = null, d = null, failed = false;
+    // 불러온 뒤에 실패해도(예: 모듈 허락이 없는 주소) 빈 판 대신 안내와 도구 링크를 보인다
+    function fail(e) {
+      if (failed || cur !== my) return;
+      failed = true;
+      if (e) console.warn(e);
+      if (auto) auto.stop();
+      if (d && d.stop) d.stop();
+      parts.badge.textContent = ''; parts.badge.className = 'stage__badge'; parts.replay.hidden = true;
+      stage.textContent = '';
+      stage.classList.add('is-loading');
+      stage.appendChild(failMsg(t));
+    }
     loadAll(t.demo.core.concat(['/assets/try/' + id + '.js'])).then(function () {
       if (cur !== my || !window.LLTry[id]) throw new Error('no demo');
       stage.textContent = '';
       stage.classList.remove('is-loading');
-      var auto = null;
       // mine(): 무대 밖에서 받은 진짜 입력(예: 키보드 시험의 키 누름)도 손님 차례로 넘긴다
-      var d = window.LLTry[id](stage, { lang: LANG, h: h, svg: svg, reduced: reduced, tool: t, mine: function () { if (auto) auto.mine(); } });
-      auto = d.auto ? Auto(stage, parts.badge, parts.replay, d.auto) : null;
-      if (auto) setTimeout(function () { if (cur === my) auto.start(); }, reduced ? 200 : 650);
+      d = window.LLTry[id](stage, { lang: LANG, h: h, svg: svg, reduced: reduced, tool: t, fail: fail, mine: function () { if (auto) auto.mine(); } });
+      if (failed) { if (d.stop) d.stop(); return; }
+      auto = d.auto ? Auto(stage, parts.badge, parts.replay, d.auto, { reset: d.reset, fail: fail }) : null;
+      if (auto) setTimeout(function () { if (cur === my && !failed) auto.start(reduced); }, reduced ? 200 : 650);
       stopDemo = function () { if (auto) auto.stop(); if (d.stop) d.stop(); };
     }).catch(function (e) {
       if (cur !== my) return;
       console.warn(e);
+      failed = true;
       stage.classList.remove('is-loading');
       stage.textContent = '';
-      stage.appendChild(h('p', { class: 'stage__msg' }, [UI.fail + ' ', h('a', { href: t.home, text: t.name + ' ' + UI.open + ' ↗' })]));
+      stage.classList.add('is-loading');
+      stage.appendChild(failMsg(t));
     });
   }
 
@@ -334,7 +383,7 @@
   function panelIn() {
     if (reduced) return panel.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160 });
     return mobile.matches
-      ? panel.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 340, easing: EASE })
+      ? panel.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 300, easing: EASE })
       : panel.animate([{ opacity: 0, transform: 'translateY(28px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE });
   }
   function panelOut(fromY) {
@@ -380,13 +429,14 @@
     dlg.showModal();
     var body = panel.querySelector('.sh__body'); if (body) body.scrollTop = 0;
     var fromIcon = trigger && trigger.closest('.gt') && trigger.closest('.gt').querySelector('.gt__icon');
-    fly(fromIcon, parts.icon, 420);
+    fly(fromIcon, parts.icon, 360);
     panelIn();
     if (push !== false) history.pushState({ sheet: id }, '', '#try-' + id);
     mountDemo(parts, id);
   }
   function finishClose() {
     if (stopDemo) { stopDemo(); stopDemo = null; }
+    if (watchOpen) { watchOpen.disconnect(); watchOpen = null; }
     dlg.close();
     panel.getAnimations().forEach(function (a) { a.cancel(); });
     panel.style.transform = '';
@@ -419,25 +469,34 @@
   dlg.addEventListener('cancel', function (e) { e.preventDefault(); requestClose(); });
   dlg.addEventListener('click', function (e) { if (e.target === dlg) requestClose(); });   // 창 밖(어두운 곳)
 
-  // 휴대폰: 창 위쪽(손잡이·머리)을 끌어내리면 닫힌다
+  // 휴대폰: 창 위쪽(손잡이·머리)을 끌어내리면 닫힌다. 위로 쓸면 머리 위에서 시작해도 그냥 스크롤
   (function () {
-    var y0 = null, t0 = 0, dy = 0, pid = null;
-    panel.addEventListener('pointerdown', function (e) {
-      if (!mobile.matches || e.pointerType === 'mouse') return;
+    var y0 = null, t0 = 0, dy = 0, drag = false;
+    panel.addEventListener('touchstart', function (e) {
+      if (!mobile.matches || e.touches.length !== 1) return;
       if (!e.target.closest('.sh__bar, .sh__head') || e.target.closest('a, button')) return;
       var body = panel.querySelector('.sh__body');
       if (body && body.scrollTop > 0) return;
-      y0 = e.clientY; t0 = performance.now(); dy = 0; pid = e.pointerId;
-    });
-    panel.addEventListener('pointermove', function (e) {
-      if (y0 == null || e.pointerId !== pid) return;
-      dy = Math.max(0, e.clientY - y0);
+      y0 = e.touches[0].clientY; t0 = performance.now(); dy = 0; drag = false;
+    }, { passive: true });
+    panel.addEventListener('touchmove', function (e) {
+      if (y0 == null) return;
+      var d = e.touches[0].clientY - y0;
+      if (!drag) {
+        if (d < -4) { y0 = null; return; }   // 위로 → 스크롤에 맡긴다
+        if (d < 6) return;
+        drag = true;
+      }
+      if (e.cancelable) e.preventDefault();
+      dy = Math.max(0, d);
       panel.style.transform = 'translateY(' + dy + 'px)';
-    });
-    function end(e) {
-      if (y0 == null || e.pointerId !== pid) return;
-      var v = dy / Math.max(1, performance.now() - t0);
+    }, { passive: false });
+    function end() {
+      if (y0 == null) return;
       y0 = null;
+      if (!drag) return;
+      drag = false;
+      var v = dy / Math.max(1, performance.now() - t0);
       if (dy > 110 || v > 0.6) {
         var keep = dy;
         if (history.state && history.state.sheet) { closeFromY = keep; history.back(); }
@@ -447,8 +506,8 @@
         panel.style.transform = '';
       }
     }
-    panel.addEventListener('pointerup', end);
-    panel.addEventListener('pointercancel', end);
+    panel.addEventListener('touchend', end);
+    panel.addEventListener('touchcancel', end);
   })();
 
   document.addEventListener('click', function (e) {
