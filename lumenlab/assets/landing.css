@@ -1,9 +1,7 @@
-/* 루멘랩 홈(랜딩) 전용. 색은 site.css 토큰 + 아래 방(첫 화면 무대)·종이 토큰만 쓴다.
-   칸마다 모양이 다르다: 첫 화면 = 어두운 방에서 도구 계산으로 하나씩 켜지는 문장, 만든 것 = 하나씩 켜지는 큰 아이콘 선반(누르면 소개 창, store.css), 끝 = 명함 */
+/* 루멘랩 홈(랜딩) 전용. 색은 site.css 토큰 + 아래 방(끝 칸)·종이·밤 장면(첫 화면) 토큰만 쓴다.
+   칸마다 모양이 다르다: 첫 화면 = 밤거리의 불 켜진 작업실 창(내리면 그 창 안으로), 만든 것 = 하나씩 켜지는 큰 아이콘 선반(누르면 소개 창, store.css), 끝 = 명함 */
 :root{
   --room:#17162B;
-  --room-2:#22203C;
-  --room-line:rgba(255,255,255,.09);
   --room-ink:#EFEDF7;
   --room-muted:#A9A6C2;
   --lit:#FFF6E2;           /* 불빛이 닿은 속: 따뜻한 종이 */
@@ -11,14 +9,52 @@
   --lit-mute:#6E5527;
   --lit-line:#E8CF9C;
   --ease:cubic-bezier(.2,.7,.2,1);
+  /* 첫 화면 밤 장면(그림 SVG의 칠도 여기서). 밤이라 어두운 화면 설정에서도 같다 */
+  --n-sky-1:#05040F;
+  --n-sky-2:#0C0A22;
+  --n-sky-3:#1B173A;
+  --n-far:#221F47;         /* 먼 지붕: 하늘 아래쪽보다 조금 밝게(실루엣이 보이게) */
+  --n-far2:#1B1940;
+  --n-far-win:#2E2A58;
+  --n-bld:#141131;
+  --n-band:#1C1940;
+  --n-dark:#0D0B24;
+  --n-frame:#1F1B45;
+  --n-arm:#2A2650;
+  --n-glass:#2A2440;       /* 불 켜지기 전 창 */
+  --n-street:#0B0920;
+  --n-ink:#EFEDF7;
+  --n-sub:#C3C0D6;
+  --n-cta:#FFD27A;
+  --n-cta-line:rgba(242,179,61,.75);
+  --n-warm-1:#FFF4DD;      /* 창 안 벽: 위에서 아래로 */
+  --n-warm-2:#FBE3B0;
+  --n-warm-3:#F3C877;
+  --n-wood:#93703E;        /* 방 안 가구는 불투명 색(겹쳐도 비치지 않게) */
+  --n-wood-2:#A07E4A;
+  --n-chair:#AD8952;
+  --n-man:#6B4D2A;
+  --n-leaf:#9DB67F;
+  --n-pot:#A57E48;
+  --n-shelf:#DDB879;
+  --n-screen:#FFF9EC;
+  --n-line-1:#E2CFA6;
+  --n-line-2:#EADCBD;
+  --n-door:#6E5530;
+  --n-o1:#EFB283;
+  --n-o2:#BBAAC6;
+  --n-o3:#A6C3A3;
+  --n-o4:#EBA79C;
 }
 @media (prefers-color-scheme:dark){
   :root{
     --room:#06050D;
-    --room-2:#17162B;
-    --room-line:rgba(255,255,255,.14);
     --lit:#F6E7C4;
     --lit-line:#D9BC80;
+    --n-screen:#1E1B36;      /* 어두운 화면 설정: 방 안 모니터도 어두운 화면(확대 끝이 어두운 종이로 바로 이어지게) */
+    --n-warm-1:#F6DCA6;      /* 방 벽도 한 톤 진한 호박색: 확대 끝에 불빛을 낮출 때 회갈색이 아니라 어두운 갈색으로 */
+    --n-warm-2:#EDBD6E;
+    --n-warm-3:#DE9C47;
   }
 }
 
@@ -26,113 +62,162 @@
 .sec-lead{margin:14px 0 0;color:var(--ink-2);max-width:32em}
 @media (max-width:520px){.sec-title .nw{white-space:normal}}
 
-/* ---------- 첫 화면: 도구가 채우는 문장 ----------
-   어두운 방 한 칸에 큰 문장 하나. 칸(.nt)은 계산 전엔 빈 막대: 첫 그림 전에 어림한 값(build_home.py GUESS)을 숨긴 폭, 어림이 없으면 --w.
-   그 도구의 계산이 끝나면 그 도구 색으로 켜진다(.is-on). 어림과 계산이 같으면 켜질 때 줄이 움직이지 않는다.
-   칸이 켜질수록 방 왼쪽 위에서 불빛이 번진다(--glow 0~1, landing.js). 풀이 줄(.now__how) = 지금 짚은 칸을 무엇으로 어떻게 셌는지,
-   아래 줄(.now__foot) = 주 단추 + 이 문장을 채우는 도구 넷(.now__tools, 계산을 마치면 켜짐). 계산 파일을 못 받으면 .is-plain: 칸 없는 글 한 줄 */
-.hero{padding-top:28px;padding-bottom:76px}
-.now{--glow:0;position:relative;isolation:isolate;overflow:hidden;background:var(--room);color:var(--room-ink);border-radius:32px;padding:46px 56px 44px;
-  box-shadow:inset 0 0 0 1px var(--room-line),0 30px 60px -32px rgba(23,22,43,.6)}
-/* 불빛 크기는 px로 고정(칸 높이를 따라가면 높이가 바뀔 때 불빛 막이 '밀린 것'으로 잡힌다) */
-.now::before{content:"";position:absolute;z-index:-1;left:-260px;top:-420px;width:1160px;height:1160px;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(255,196,102,.24),rgba(255,196,102,.06) 62%,transparent);opacity:calc(.2 + var(--glow) * .8);transition:opacity .6s}
-.now__h1{margin:0;max-width:36em;font-size:clamp(17px,2vw,20px);line-height:1.5;font-weight:700;letter-spacing:-.01em;color:var(--lamp);text-wrap:balance}
-.now__cue{display:flex;align-items:baseline;gap:8px;margin:10px 0 0;max-width:46em;font-size:15px;line-height:1.5;font-weight:600;color:var(--room-muted)}
-.now__cue::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--lamp);box-shadow:0 0 10px var(--lamp);transform:translateY(-1px)}
-.now__line,.now__plain{margin:14px 0 0;max-width:22em;font-size:clamp(26px,3.7vw,42px);line-height:1.42;font-weight:800;letter-spacing:-.03em;text-wrap:pretty}
-:lang(en) .now__line{font-size:clamp(26px,3.3vw,38px)}   /* 영어 낱말이 넓어 같은 크기면 한 줄 더 */
-.now__plain{display:none}
-.now.is-plain .now__cue,.now.is-plain .now__line,.now.is-plain .now__how,.now.is-plain .now__all,.now.is-plain .now__tools{display:none}
-.now.is-plain .now__plain{display:block}
-/* 칸: 아이콘 + 값. 글줄 기준선에 맞추려고 inline-block(아이콘은 글자 높이에 맞춰 내림).
-   켜진 글자색 --tl = 도구 색을 방 위에서 읽히게 밝히되 채도는 남긴다(oklch, 안 되는 브라우저는 흰색 섞기) */
-.nt,.ntool{--tc:var(--lamp);--tl:color-mix(in srgb,var(--tc) 45%,#fff)}
-@supports (color:oklch(from red l c h)){.nt,.ntool{--tl:oklch(from var(--tc) .84 max(c,.12) h)}}
-.nt{position:relative;display:inline-block;white-space:nowrap;line-height:1.18;
-  margin:0 .03em;padding:0 .2em 0 .14em;border-radius:.3em;color:rgba(239,237,247,.32);text-decoration:none;
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.1);transition:color .4s,background-color .4s,box-shadow .4s}
-.nt__i{display:inline-block;width:.66em;height:.66em;margin-right:.16em;vertical-align:-.06em;border-radius:24%;filter:grayscale(1);opacity:.32;transition:filter .4s,opacity .4s,transform .25s cubic-bezier(.3,1.4,.5,1)}
-.nt__v{font-weight:inherit;font-variant-numeric:tabular-nums}
-.nt:not(.is-on) .nt__v{color:transparent;background:linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)) 0 60%/100% .46em no-repeat}
-.nt__v:empty{display:inline-block;width:var(--w);height:1.1em;vertical-align:-.2em}
-.nt[data-nt="hz"] .nt__v{display:inline-block;text-align:center}   /* 폭은 세 자리만큼(build_home.py GUESS) */
-.nt.is-on{color:var(--tl);background-color:color-mix(in srgb,var(--tl) 13%,transparent);
-  box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tl) 46%,transparent)}
-.nt.is-on .nt__i{filter:none;opacity:1}
-.nt.is-hot,.nt.is-on:hover{background-color:color-mix(in srgb,var(--tl) 24%,transparent)}
-.nt.is-on:hover .nt__i{transform:translateY(-.06em) rotate(-6deg)}
-.nt:focus-visible,.ntool:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
-.anim .nt.is-wait .nt__v,.anim .nt.is-wait .nt__i{animation:ntWait 1.1s ease-in-out infinite}
-@keyframes ntWait{50%{opacity:.35}}
-/* 처음 켜질 때 한 번 그 색 불빛이 번졌다 가라앉는다 */
-.anim .nt.is-fresh{animation:ntIn .9s var(--ease)}
-@keyframes ntIn{30%{box-shadow:inset 0 0 0 2px var(--tl),0 0 1.1em color-mix(in srgb,var(--tl) 50%,transparent)}}
-/* 풀이 줄: 풀이가 바뀌어도 밑이 출렁이지 않게 가장 긴 풀이만큼(넓은 화면 두 줄, 폰 세 줄) 자리를 둔다 */
-.now__how{min-height:2.9em;margin:18px 0 0;max-width:46em;font-size:15px;line-height:1.45;font-weight:600;color:var(--room-muted)}
-.now__how b{color:var(--room-ink);font-weight:750}
-.anim .now__how.is-new span{animation:howIn .4s ease both}
-@keyframes howIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-/* 풀이 목록: 접어 두고, 펴면 칸마다 한 줄 */
-.now__all{margin:4px 0 0;max-width:46em;font-size:14px;line-height:1.5;color:var(--room-muted)}
-.now__all summary{display:inline-flex;align-items:center;gap:6px;min-height:32px;cursor:pointer;font-weight:650;color:var(--room-ink);list-style:none;border-radius:6px}
-.now__all summary::-webkit-details-marker{display:none}
-.now__all summary::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);transition:transform .2s}
-.now__all[open] summary::after{transform:translateY(1px) rotate(-135deg)}
-.now__all summary:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
-.now__list{margin:6px 0 4px;padding:0;list-style:none;display:grid;gap:6px}
-.now__list li:empty{display:none}
-.now__list b{color:var(--room-ink);font-weight:750}
-/* 아래 줄: 넓으면 단추(왼쪽)와 도구 줄(오른쪽) 한 줄, 좁으면 단추 밑에 도구 줄 */
-.now__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin:14px 0 0;padding-top:20px;border-top:1px solid var(--room-line)}
-.now__tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0}
-.now__tools-h{font-size:14px;font-weight:650;color:var(--room-muted)}
-.now__tools-l{display:flex;flex-wrap:wrap;gap:8px}
-.ntool{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:4px 13px 4px 6px;border-radius:999px;font-size:14.5px;font-weight:700;
-  color:var(--room-muted);text-decoration:none;box-shadow:inset 0 0 0 1px var(--room-line);transition:color .4s,box-shadow .4s,background-color .2s}
-.ntool img{width:24px;height:24px;border-radius:7px;filter:grayscale(1);opacity:.4;transition:filter .4s,opacity .4s}
-.ntool.is-on{color:var(--room-ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tl) 50%,transparent)}
-.ntool.is-on img{filter:none;opacity:1}
-.ntool:hover{background-color:rgba(255,255,255,.07)}
-.ntool[hidden]{display:none}
-.now__act{margin:0}
-/* 첫 화면·끝 칸의 주 단추는 불빛 색 하나(검은·흰 알약이 불빛보다 세지 않게) */
-.hero .btn--main,.end .btn--main{background:var(--lamp);color:#1B1A24}
-.hero .btn--main:hover,.end .btn--main:hover{background:color-mix(in srgb,var(--lamp) 86%,#fff)}
-@media (max-width:900px){
-  .hero{padding-top:18px;padding-bottom:56px}
-  .now{padding:34px 32px 32px;border-radius:28px}
+/* ---------- 첫 화면: 불 켜진 작업실 ----------
+   밤거리에 불 켜진 창 하나(루멘랩 작업실, 창 위에 가로 간판, 방 안에 일하는 사람). 넓은 화면은 글이 왼쪽, 건물이 오른쪽 아래(화면 높이에 맞춰 키우고
+   글 뒤까지 벽이 올 수 있지만 창·간판은 글과 겹치지 않음: check.py), 세로 화면은 글이 위, 건물이 아래(양옆으로 넘치고 높이 상한). 하늘·별은 CSS, 먼 지붕 띠·건물은 SVG(index.html). 머리말 밑까지 깔리게 위로 65px 당긴다.
+   .zoom(움직임 켜짐, landing.js가 시작함)이고 화면 높이 560px 이상이면 첫 화면이 화면 두 장 높이가 되고 무대가 붙어 있는 동안
+   landing.js가 스크롤 위치대로 창 안 모니터 화면 쪽으로 키우고(.night transform), 글을 흐리고, 종이색(.hero__wash, --f)을 덮는다.
+   불은 처음 한 번 깜빡이며 켜진다(.anim .n-lit). 동작 줄이기·JS 없음이면 켜진 채 그림 한 장 */
+.hero{--street-h:clamp(26px,4.4vh,44px);--copy-w:min(560px,calc(50vw - 48px));position:relative;margin-top:-65px;background:var(--n-street)}
+.hero__stage{position:relative;isolation:isolate;overflow:hidden;height:100vh;height:100svh;min-height:560px;color:var(--n-ink)}
+.night{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,var(--n-sky-1) 0%,var(--n-sky-2) 50%,var(--n-sky-3) 100%)}
+.night::before{content:"";position:absolute;inset:0 0 45% 0;opacity:.6;pointer-events:none;
+  background-image:radial-gradient(1.3px 1.3px at 12% 18%,#fff 60%,transparent),radial-gradient(1px 1px at 33% 30%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 47% 10%,#fff 60%,transparent),
+    radial-gradient(1px 1px at 61% 24%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 79% 8%,#fff 60%,transparent),radial-gradient(1px 1px at 91% 28%,#fff 60%,transparent),
+    radial-gradient(1px 1px at 4% 36%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 69% 40%,#fff 60%,transparent)}
+.night svg{position:absolute;display:block;overflow:visible}
+.night__defs{left:0;top:0}
+.night__far{left:0;right:0;bottom:var(--street-h);width:100%;height:30%}
+.night__street{position:absolute;left:0;right:0;bottom:0;height:var(--street-h);background:var(--n-street);border-top:3px solid var(--n-band)}
+.night__bld--wide{--bl:calc(max(24px,(100% - var(--wrap)) / 2 + 24px) + var(--copy-w) + 32px);   /* 글 칸 오른쪽 끝 + 32px */
+  left:var(--bl);bottom:var(--street-h);width:calc(100% - var(--bl));height:min(calc(100% - 200px - var(--street-h)),760px)}
+.night .night__bld--tall{display:none}
+/* 그림 칠 */
+.n-far{fill:var(--n-far)}
+.n-far2{fill:var(--n-far2)}
+.n-farwin{fill:var(--n-far-win)}
+.n-farlit{fill:var(--lamp);opacity:.35}
+.n-bld{fill:var(--n-bld)}
+.n-band{fill:var(--n-band)}
+.n-dark{fill:var(--n-dark)}
+.n-frame{fill:var(--n-frame)}
+.n-arm{fill:var(--n-arm)}
+.n-glass{fill:var(--n-glass)}
+.n-door{fill:var(--n-warm-3);fill-opacity:.3}   /* 문 유리: 안쪽 불빛이 은은하게 */
+.n-core{fill:var(--lamp)}
+.n-board{fill:var(--n-dark);stroke:var(--n-frame);stroke-width:2}
+.n-name{fill:var(--n-cta);font-family:var(--font);font-weight:800}   /* 글자 사이는 textLength가 판 폭에 맞춘다 */
+.ns-lamp{stop-color:var(--lamp)}
+.ns-white{stop-color:#fff}
+.ns-w1{stop-color:var(--n-warm-1)}
+.ns-w2{stop-color:var(--n-warm-2)}
+.ns-w3{stop-color:var(--n-warm-3)}
+.r-shelf{fill:var(--n-shelf)}
+.r-o1{fill:var(--n-o1)}
+.r-o2{fill:var(--n-o2)}
+.r-o3{fill:var(--n-o3)}
+.r-o4{fill:var(--n-o4)}
+.r-mon{fill:var(--n-wood-2)}
+.r-scr{fill:var(--n-screen)}
+.r-app{fill:var(--lamp)}
+.r-ln{fill:var(--n-line-1)}
+.r-ln2{fill:var(--n-line-2)}
+.r-desk{fill:var(--n-wood)}
+.r-arm{fill:none;stroke:var(--n-wood);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.r-man{fill:var(--n-man)}
+.r-chair{fill:var(--n-chair)}
+.r-leg{fill:var(--n-wood)}
+.r-leaf{fill:var(--n-leaf)}
+.r-pot{fill:var(--n-pot)}
+/* 글 */
+.hero__copy{position:relative;z-index:2;padding-top:calc(65px + clamp(36px,13vh,140px))}
+.hero__kick{margin:0 0 14px;max-width:var(--copy-w);color:var(--n-cta);font-weight:700;font-size:clamp(15px,1.3vw,17px);letter-spacing:-.01em}
+.hero__h1{margin:0;max-width:var(--copy-w);font-size:clamp(34px,4.2vw,56px);line-height:1.18;font-weight:800;letter-spacing:-.03em;text-wrap:balance}
+:lang(en) .hero__h1{font-size:clamp(30px,3.5vw,46px)}
+.hero__sub{margin:22px 0 0;max-width:var(--copy-w);font-size:clamp(16px,1.45vw,19px);line-height:1.68;color:var(--n-sub);text-wrap:pretty}
+.hero__act{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;margin:30px 0 0}
+.hero__cta{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:999px;background:var(--lamp);color:#1B1A24;
+  font-weight:800;font-size:17px;text-decoration:none;box-shadow:0 6px 24px rgba(242,179,61,.28);transition:filter .2s}
+.hero__cta:hover{filter:brightness(1.07)}
+.hero__more{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--n-cta);font-weight:700;font-size:16px;text-decoration:none}
+.hero__more::after{content:"↓";content:"↓"/"";font-weight:700;transition:transform .2s}
+.hero__more:hover{text-decoration:underline;text-underline-offset:4px}
+.hero__more:hover::after{transform:translateY(3px)}
+.hero__cta:focus-visible,.hero__more:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
+.hero__wash{display:none;position:absolute;inset:0;z-index:3;background:var(--paper);opacity:0;pointer-events:none}
+/* 세로 화면(폰·세운 태블릿): 글 위, 건물 아래 가운데 */
+@media (max-aspect-ratio:5/4),(max-width:640px){
+  .hero{--copy-w:36em}
+  .night .night__bld--wide{display:none}
+  .night .night__bld--tall{display:block;left:0;right:0;bottom:var(--street-h);width:100%;height:auto;aspect-ratio:330/324;max-height:48%}
+  .night__far{height:26%}
+  .hero__copy{padding-top:calc(65px + clamp(18px,4vh,64px))}
+  .hero__h1{font-size:clamp(28px,8.4vw,50px);line-height:1.22}
+  :lang(en) .hero__h1{font-size:clamp(28px,7.6vw,46px)}
+  .hero__sub{margin-top:14px;font-size:clamp(15px,4vw,19px);line-height:1.62}
+  .hero__act{margin-top:20px}
+  .hero__act{gap:6px 18px}
+  .hero__cta{min-height:48px;padding:0 22px;font-size:16px}
+  .hero__more{font-size:15px}
+  .hero__kick{margin-bottom:10px;font-size:14px}
 }
-@media (max-width:560px){
-  .hero{padding-top:10px;padding-bottom:44px}
-  .hero .wrap{padding-left:8px;padding-right:8px}
-  .now{padding:24px 18px 22px;border-radius:24px}
-  .now__h1{font-size:16px}
-  .now__cue{margin-top:8px;font-size:13.5px}
-  .now__line,.now__plain{margin-top:12px;font-size:23px;line-height:1.4}
-  :lang(en) .now__line{font-size:21px}
-  .now__how{min-height:4.35em;margin-top:14px;font-size:14px}
-  .now__all{font-size:13.5px}
-  .now__foot{gap:14px;margin-top:10px;padding-top:16px}
-  .now__tools-h{width:100%;font-size:13px}
-  .now__tools-l{gap:6px}
-  .ntool{min-height:34px;gap:6px;padding:3px 11px 3px 5px;font-size:13.5px}
-  .ntool img{width:22px;height:22px}
-  .now__act{width:100%}
-  .now__act .btn{width:100%}
+/* 낮은 세로 화면: 글과 건물을 줄여 겹치지 않게 */
+/* 좁은 폰: 단추 둘이 한 줄에 들어가게 */
+@media (max-width:400px){.hero__act{gap:6px 14px}.hero__cta{padding:0 17px;font-size:15px}.hero__more{font-size:14.5px;gap:6px}}
+/* 큰 세운 태블릿: 글 밑이 비지 않게 건물을 더 키운다 */
+@media (max-aspect-ratio:5/4) and (min-width:700px) and (min-height:1200px){.night .night__bld--tall{max-height:56%}}
+@media (max-aspect-ratio:5/4) and (max-height:700px),(max-width:640px) and (max-height:700px){
+  .night .night__bld--tall{max-height:40%}
+  .hero__h1,:lang(en) .hero__h1{font-size:clamp(26px,7.6vw,40px)}
+  .hero__kick{display:none}   /* 낮은 폰: 머리 줄(이름은 머리말에 있음)을 빼서 글이 건물에 닿지 않게 */
+  .hero__sub{font-size:14.5px;line-height:1.58}
+  .hero__act{margin-top:16px}
 }
-@media (max-width:360px){
-  .now{padding-left:16px;padding-right:16px}
-  .now__line,.now__plain{font-size:21px}
-  :lang(en) .now__line{font-size:20px}
+@media (max-aspect-ratio:5/4) and (max-height:620px),(max-width:640px) and (max-height:620px){.night .night__bld--tall{max-height:34%}.hero__sub{font-size:14px}.hero__more{display:none}}   /* 더 낮으면 '구경하기'(= 내리기)도 뺀다 */
+/* 낮은 가로 화면(눕힌 폰): 화면 한 장에 글과 건물이 다 들어오게 줄인다(확대는 하지 않음) */
+@media (min-aspect-ratio:5/4) and (max-height:559px) and (min-width:641px){
+  .hero__stage{min-height:340px}
+  .hero__copy{padding-top:calc(65px + 14px)}
+  .hero__h1,:lang(en) .hero__h1{font-size:clamp(24px,3.6vw,34px)}
+  .hero__sub{margin-top:10px;font-size:14px;line-height:1.55}
+  .hero__act{margin-top:14px}
+  .hero__cta{min-height:40px;padding:0 16px;font-size:14.5px}
+  .hero__more{min-height:36px;font-size:14px}
+  .hero__kick{margin-bottom:6px;font-size:13px}
+  .night__bld--wide{height:min(calc(100% - 96px - var(--street-h)),760px)}
 }
-@media (prefers-reduced-motion:reduce){.nt,.nt__i,.ntool,.ntool img,.now::before{transition:none}.nt.is-on:hover .nt__i{transform:none}}
+/* 확대: 첫 화면 = 무대 한 장 + 다가가는 거리 한 장. 무대는 그동안 붙어 있다 */
+@media screen and (min-height:560px){
+  .zoom .hero{height:200vh;height:200svh;background:color-mix(in srgb,var(--paper) calc(var(--f,0) * 100%),color-mix(in srgb,var(--n-warm-3) calc(var(--g,0) * 100%),var(--n-street)))}
+  .zoom .hero__stage{position:sticky;top:0}
+  .zoom .hero__wash{display:block}
+  .zoom .night{transform-origin:50% 75%}
+}
+/* 머리말: 밤 장면 위에선 밤색, 종이색이 덮이면 원래대로(landing.js) */
+.top-night .top{background:color-mix(in srgb,var(--n-sky-1) 72%,transparent)}
+.top-night .top.is-stuck{border-bottom-color:rgba(255,255,255,.07)}
+.top-night .top .brand{color:var(--n-ink)}
+.top-night .top .brand small{color:var(--n-sub)}
+.top-night .top nav a{color:var(--n-sub)}
+.top-night .top nav a:hover{background:rgba(255,255,255,.08);color:var(--n-ink)}
+.top-night .top .lang{border-color:rgba(255,255,255,.22)}
+/* 불 켜기: 처음 한 번 */
+.anim .n-lit{animation:nOn 1.3s .35s backwards}   /* backwards: 끝나면 애니메이션이 남지 않아 그리기 층이 늘지 않는다 */
+@keyframes nOn{0%{opacity:0}30%{opacity:1}40%{opacity:.35}58%,100%{opacity:1}}
+/* 글이 흐려진 뒤에도 단추에 포커스가 오면 다시 보인다 */
+.hero__copy:focus-within{opacity:1!important;transform:none!important}
+/* 인쇄: 그림·확대 없이 글만 종이 위에 */
+@media print{
+  .hero,.zoom .hero{height:auto;margin-top:0;background:none}
+  .hero__stage{position:static!important;height:auto;min-height:0;color:#000}
+  .night,.hero__wash{display:none!important}
+  .hero__copy{opacity:1!important;transform:none!important;padding-top:24px;padding-bottom:24px}
+  .hero__sub,.hero__sub span{color:#333}
+  .hero__cta{color:#000;border-color:#999}
+  .zoom .works{margin-top:0}
+  .top-night .top{background:none}
+  .top-night .top .brand,.top-night .top nav a{color:#000}
+}
 
 /* ---------- 만든 것: 큰 아이콘 칸 ----------
    묶음마다 선반 한 줄(왼쪽 이름, 오른쪽 아이콘). 아이콘 밑에 이름·하는 일, 그리고 도구는 결과를 확인한 방법, 게임·앱은 지금 상태.
    누르면 소개 창(store.js). 선반이 화면에 들어오면 꺼져 있던 아이콘이 하나씩 켜지고, 켜진 아이콘 밑에 그 색 불빛이 깔린다(JS가 켤 때만 흐림). */
-.works{padding-top:96px;padding-bottom:88px;border-top:1px solid var(--line)}
+.works{padding-top:96px;padding-bottom:88px}
+/* 확대할 때: 첫 화면의 둘째 장(다가가는 거리 100svh)과 겹친다. 그동안은 landing.js가 이 칸을 투명·누를 수 없게 두었다가,
+   모니터 화면이 종이색으로 바뀌는 끝에 제자리(화면 가운데쯤)에서 드러낸다: 빈 종이를 내려 기다리는 구간이 없다 */
+@media screen and (min-height:560px){.zoom .works{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh;padding-top:64px;background:var(--paper)}}
 .works__head{max-width:46em;margin-bottom:36px}
+.works__kick{margin:0 0 6px;font-size:15px;font-weight:700;color:var(--lamp-ink)}
 .shelf{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px 32px;align-items:start;padding:30px 0 26px;border-top:1px solid var(--line)}
 .shelf__label{padding-top:16px}
 .shelf__kick{margin:0 0 2px;font-size:15px;font-weight:700;color:var(--lamp-ink)}
@@ -196,6 +281,9 @@
 .end .sec-title{color:var(--room-ink)}
 .end .sec-lead{color:var(--room-muted);margin-left:auto;margin-right:auto}
 .end__act{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:30px 0 0}
+/* 끝 칸의 주 단추는 불빛 색 하나(검은·흰 알약이 불빛보다 세지 않게) */
+.end .btn--main{background:var(--lamp);color:#1B1A24}
+.end .btn--main:hover{background:color-mix(in srgb,var(--lamp) 86%,#fff)}
 .end .btn--line{background:transparent;border-color:rgba(255,255,255,.28);color:var(--room-ink)}
 .end .btn--line:hover{border-color:rgba(255,255,255,.6)}
 .bcard{margin-top:40px;width:min(100%,340px);padding:24px 24px 22px;text-align:left;background:var(--lit);color:var(--lit-ink);border-radius:18px;
@@ -218,7 +306,7 @@
 }
 
 /* ---------- 움직임 ----------
-   첫 화면 글은 차례로 떠오르지 않고 처음부터 보인다(흔한 템플릿 움직임을 빼고, 도구 계산으로 칸이 켜지는 것 하나만 남김) */
+   첫 화면 글은 차례로 떠오르지 않고 처음부터 보인다(흔한 템플릿 움직임을 빼고, 창에 불이 켜지는 것과 내릴 때 창 안으로 다가가는 것만 남김) */
 .anim .brand .mark .core{transform-origin:11px 11px;transform:scale(.35);transition:transform .7s var(--ease) .15s}
 .anim .brand .mark .glow{opacity:0;transition:opacity .9s ease .35s}
 .anim .top.on .brand .mark .core{transform:none}

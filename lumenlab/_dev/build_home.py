@@ -3,7 +3,7 @@
 # 2026-10-18: 홈 = 루멘랩 랜딩 + 만든 것 전부(큰 아이콘 칸, gen:wall). 예전 '만든 것'(/works/)·'가이드 모음'(/guides/) 페이지는 이 홈으로 합쳤다(주소 이동은 _redirects).
 #   아이콘을 누르면 assets/store.js 가 소개 창을 띄우고, 창 내용은 소개 페이지 /works/<id>/ 를 그대로 쓴다(build_store.py 가 만듦).
 #   그래서 새 앱·도구는 catalog.json 한 줄 + showcase.json 한 항목(+ 도구면 assets/try/<id>.js)만 더하고 이 스크립트를 돌린다.
-#   첫 화면 문장(gen:now)도 여기서: 빛나는 칸은 도구 넷의 계산 파일이 방문자 기기에서 채운다(아래 NOW, 계산은 assets/landing.js).
+#   첫 화면(불 켜진 작업실 그림과 글)은 index.html 에 손으로 둔다(생성 칸 아님, 움직임은 assets/landing.js).
 # 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
 # sitemap.xml 도 여기서 만든다: 홈 + 소개·개인정보 처리방침 + 소개 페이지 15개(한·영) + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
 # 소개(/about/)·방침(/privacy/)과 영어판은 build_info.py, 소개 페이지는 build_store.py 가 만든다(이 파일 끝에서 부름). 도구 사이트의 글을 읽으니 도구 폴더(catalog.json 의 dir)가 옆에 있어야 한다.
@@ -35,7 +35,6 @@ def put(src, name, body):
 
 idx = os.path.join(site, 'index.html')
 html = open(idx).read()
-nall = len(games) + len(apps) + len(tools)
 
 # 바닥글: 첫 줄은 루멘랩 자체(만든 것·소개·사이트 전체 방침·문의). 어느 페이지에서든 누가 운영하는지와 방침을 찾게
 pv = ''.join(f'<a href="{h}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it in games + apps for h in ([it['privacy']['ko']] if it.get('privacy') else []) + [l['href'] for l in it['links'] if l['href'].endswith('/privacy/')])
@@ -51,84 +50,6 @@ html, n = re.subn(r'(data-i18n="wlTitle">).*?(</h2>)', lambda m: m.group(1) + wt
 html, n = re.subn(r'(data-i18n="wlLead">).*?(</p>)', lambda m: m.group(1) + wl + m.group(2), html, flags=re.S); assert n == 1, '아이콘 칸 설명을 못 찾음'
 html = put(html, 'foot', FOOT)
 
-# 첫 화면 문장(gen:now): 빛나는 칸은 도구 넷(며칠 계산기·한바퀴·체크벤치·칸칸)의 진짜 계산 파일이 방문자 기기에서 채운다(assets/landing.js).
-#   칸 = {이름}. 색·아이콘·이름은 showcase.json·catalog.json 에서, 계산 파일 주소는 소개 창과 같은 것(내용 지문 붙음, 창을 열 때 캐시를 같이 씀).
-#   칸 이름과 도구: date 오늘, left 올해 남은 날, time 다른 도시 지금 시각, hz 이 페이지 주사율, count 이 글 글자 수(마침표까지).
-#   계산 전 칸은 값 길이만 한 빈 막대(--w, 그 언어에서 흔한 값의 폭)라 켜질 때 줄이 덜 흔들린다. 칸과 붙은 글은 .nw 로 한 줄에.
-#   data-part = 그 도구의 문장(도구 하나에 하나). 계산 파일을 제때 못 받거나 주사율을 끝내 못 재면 그 문장만 뺀다. 문장 밑 도구 줄 = 계산한 도구 넷(누르면 소개 창)
-NOW_TOOL = {'date': 'daycount', 'left': 'daycount', 'time': 'oneturn', 'hz': 'checkbench', 'count': 'kankan'}
-NOW_CORE = [('daycount', '/assets/dates.js'), ('oneturn', '/assets/core.js'), ('checkbench', '/assets/ck-measure.js'), ('kankan', '/assets/lc-core.js')]
-NOW = {
-    'ko': ('<span data-part="date">오늘은 {date}, 올해가 {left} 남았어요.</span> '
-           '<span data-part="time"><span data-city>뉴욕</span>은 지금 <span class="nw">{time}이에요.</span></span> '
-           '<span data-part="hz">이 브라우저는 화면을 1초에 <span class="nw">{hz} 그려요.</span></span> '
-           '<span data-part="count">이 글은 마침표까지 <span class="nw">{count}예요.</span></span>',
-           {'date': 6.9, 'left': 2.3, 'time': 5.6, 'hz': 2.3, 'count': 2.3}),
-    'en': ('<span data-part="date">Today is <span class="nw">{date},</span> with {left} left this year.</span> '
-           '<span data-part="time">It’s <span class="nw">{time} in</span> <span data-city>Seoul</span>.</span> '
-           '<span data-part="hz">Your browser draws <span class="nw">{hz} a</span> second.</span> '
-           '<span data-part="count">This paragraph is <span class="nw">{count} long.</span></span>',
-           {'date': 8.4, 'left': 3.6, 'time': 4.6, 'hz': 3.9, 'count': 6.4}),
-}
-_tool = {it['id']: it for it in tools}
-def now_line(lang):
-    tpl, w = NOW[lang]
-    def tok(m):
-        k = m.group(1); tid = NOW_TOOL[k]; it = _tool[tid]; sc = build_store.SC['tools'][tid]
-        return (f'<a class="nt" data-nt="{k}" href="/works/{tid}/" data-show="{tid}" aria-haspopup="dialog" aria-label="{escape(it["name"][lang])}" '
-                f'aria-describedby="nw-{k}" style="--tc:{sc["color"]};--w:{w[k]}em">'
-                f'<img class="nt__i" src="{it["icon"]}" width="24" height="24" alt=""><b class="nt__v"></b></a>')
-    return re.sub(r'\{(\w+)\}', tok, tpl)
-def now_tools(lang):
-    seen = []
-    for t, _ in NOW_CORE:
-        it = _tool[t]; sc = build_store.SC['tools'][t]
-        seen.append(f'<a class="ntool" data-tool="{t}" href="/works/{t}/" data-show="{t}" aria-haspopup="dialog" style="--tc:{sc["color"]}">'
-                    f'<img src="{it["icon"]}" width="22" height="22" alt=""><span>{escape(it["name"][lang])}</span></a>')
-    return ''.join(seen)
-core = [build_info.core_url(_tool[t], f) for t, f in NOW_CORE]
-EN['nowLine'] = now_line('en'); EN['nowTools'] = now_tools('en')
-# 풀이 목록: 칸마다 무엇으로 어떻게 셌는지(landing.js 가 채움). 칸의 aria-describedby 도 이 줄. 손가락 화면엔 hover 가 없어 펼쳐 보게 둔다
-ALLS = {'ko': '숫자마다 어떻게 셌는지 보기', 'en': 'How each number was worked out'}
-ALLW = {'ko': '도구 계산 파일을 불러오는 중이에요.', 'en': 'Loading the tools’ code.'}
-EN['nowAllS'] = ALLS['en']; EN['nowAllW'] = ALLW['en']
-why = ''.join(f'<li id="nw-{k}"></li>' for k in NOW_TOOL)
-# 칸 자리 잡기: 계산 파일이 오기 전(첫 그림 전)에 브라우저 기본 날짜 함수로 값을 어림해 칸 폭만 잡는다(글자는 숨김, CSS).
-#   켜지는 값은 도구 계산 파일이 다시 센 것(landing.js)이고, 어림과 같으면 켜질 때 줄이 하나도 안 움직인다. 주사율은 흔한 60으로 어림하되
-#   칸 폭은 세 자리(120)만큼 잡아 둔다. landing.js 가 6초 안에 시작하지 않으면(파일을 못 받음) 칸 없는 글로
-# (스크립트 안에는 한국어 글자를 쓰지 않는다: 영어 페이지 검사가 화면 요소 속 한국어를 찾는다. 그래서 \u 로)
-GUESS = '''<!-- 칸 자리만 어림(값은 숨김). 켜지는 값은 도구 계산 파일이 센 것(landing.js) -->
-<script>
-(function(l){try{var en=document.documentElement.lang==='en',L=en?'en-US':'ko-KR',n=new Date(),y=n.getFullYear(),
-v=function(k,t){var e=l.querySelector('[data-nt="'+k+'"] .nt__v');if(e)e.textContent=t},
-f=function(z,o){var x={};for(var i in o)x[i]=o[i];if(z)x.timeZone=z;return n.toLocaleString(en?'en-US':'ko-KR',x)},
-left=Math.round((Date.UTC(y,11,31)-Date.UTC(y,n.getMonth(),n.getDate()))/864e5),
-c=en?[['Asia/Seoul','Seoul'],['America/New_York','New York']]:[['America/New_York','\\ub274\\uc695'],['Asia/Seoul','\\uc11c\\uc6b8']],D={day:'numeric',hour:'numeric',minute:'numeric'};
-if(f(c[0][0],D)===f(null,D))c[0]=c[1];
-var z=c[0][0],t=f(z,{hour:'numeric',minute:'2-digit'}).replace(/[\\u202f\\u00a0]/g,' ');
-if(f(z,{day:'numeric'})!==f(null,{day:'numeric'}))t=f(z,{weekday:'long'})+' '+t;
-l.querySelector('[data-city]').textContent=c[0][1];
-v('date',n.toLocaleDateString(L,{weekday:'long',month:'long',day:'numeric'}));
-v('left',en?(left?left+(left===1?' day':' days'):'just today'):(left?left+'\\uc77c':'\\uc624\\ub298 \\ud558\\ub8e8'));
-v('time',t);
-var h=l.querySelector('[data-nt="hz"] .nt__v');if(h){h.textContent=en?'120 frames':'120\\ubc88';h.style.minWidth=(h.getBoundingClientRect().width/parseFloat(getComputedStyle(h).fontSize)).toFixed(3)+'em'}
-v('hz',en?'60 frames':'60\\ubc88');
-for(var i=0,m=0,k;i<6;i++){v('count',en?m+' characters':m+'\\uc790');k=Array.from(l.textContent.replace(/\\s+/g,' ').trim()).length;if(k===m)break;m=k}
-}catch(e){}
-setTimeout(function(){if(!window.__nowOn)l.parentNode.classList.add('is-plain')},6000);
-})(document.querySelector('[data-now]'));
-</script>'''
-html = put(html, 'now', f'        <p class="now__line" data-now data-core="{escape(json.dumps(core))}" data-i18n="nowLine">{now_line("ko")}</p>\n'
-                        + GUESS)
-html = put(html, 'nowall', f'        <details class="now__all"><summary data-i18n="nowAllS">{ALLS["ko"]}</summary>'
-                           f'<ul class="now__list"><li class="now__list-wait" data-i18n="nowAllW">{ALLW["ko"]}</li>{why}</ul></details>')
-html = put(html, 'nowtools', f'          <p class="now__tools"><span class="now__tools-h" data-i18n="nowToolsH">이 문장을 채우는 도구</span>'
-                             f'<span class="now__tools-l" data-i18n="nowTools">{now_tools("ko")}</span></p>')
-# 머리말에서 계산 파일을 미리 받아 둔다(landing.js 가 실행되기 전에 받기 시작). 주소는 위 core 와 같아야 쓸모가 있다
-html = put(html, 'nowpre', '\n'.join(f'<link rel="preload" as="script" href="{escape(u)}">' for u in core))
-
-EN['ctaWorks'] = f"See all {nall} things we make"
-html, n = re.subn(r'(data-i18n="ctaWorks">)[^<]*', lambda m: m.group(1) + f'만든 것 {nall}개 둘러보기', html); assert n >= 1, "'만든 것 N개' 단추를 못 찾음"
 open(idx, 'w').write(html)
 for f in ['404.html', 'owlight/privacy/index.html', 'owlight/support/index.html']:
     f = os.path.join(site, f); src = open(f).read(); open(f, 'w').write(put(src, 'foot', FOOT))
