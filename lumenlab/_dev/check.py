@@ -130,8 +130,8 @@ with sync_playwright() as p:
     ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄')
     c.close()
 
-    # 첫 화면(불 켜진 작업실): 여러 화면 크기에서 글(머리·제목·설명·단추 둘)이 불 켜진 창·창 위 간판과 겹치지 않고, 창이 화면 안에 다 보이고, 글이 무대 밖으로 잘리지 않음
-    LAY = r"""()=>{const vis=[...document.querySelectorAll('.hero [data-win],.hero .n-board')].filter(e=>e.getBoundingClientRect().width>0).map(e=>e.getBoundingClientRect());
+    # 첫 화면(불 켜진 작업실): 여러 화면 크기에서 글(머리·제목·설명·단추 둘)이 그림 속 불 켜진 창·창 위 간판(표시 칸 [data-win]·[data-sign], 그림에서 잰 자리)과 겹치지 않고, 창이 화면 안에 다 보이고, 글이 무대 밖으로 잘리지 않음
+    LAY = r"""()=>{const vis=[...document.querySelectorAll('.hero [data-win],.hero [data-sign]')].filter(e=>e.getBoundingClientRect().width>0).map(e=>e.getBoundingClientRect());
       const st=document.querySelector('.hero__stage').getBoundingClientRect(),hit=[];
       for(const c of document.querySelectorAll('.hero__kick,.hero__h1,.hero__sub,.hero__cta,.hero__more'))for(const r of c.getClientRects())for(const v of vis)
         if(r.left<v.right&&r.right>v.left&&r.top<v.bottom&&r.bottom>v.top)hit.push(c.className);
@@ -147,27 +147,30 @@ with sync_playwright() as p:
             c.close()
     # 내리면 창 안으로: 스크롤 위치를 따라 커지고(글은 흐려지고) 끝에 종이색이 덮이며 머리말이 원래대로, 되돌리면 처음 그대로, '만든 것' 제목이 곧 올라옴
     Z = r"""(p)=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');scrollTo({top:H.getBoundingClientRect().top+scrollY+p*(H.offsetHeight-S.offsetHeight),behavior:'instant'})}"""
-    # aim = 모니터 화면(방 안 .r-scr, SVG 그대로 읽음) 가운데가 화면 가운데에서 얼마나 떨어졌나(화면 폭·높이에 대한 비율). 확대가 다 됐을 때 0 근처여야 한다
-    ZS = r"""()=>{const n=document.querySelector('.night__near'),m=getComputedStyle(n).transform,c=document.querySelector('.hero__copy'),t=document.getElementById('works-title').getBoundingClientRect();
-      const g=[...document.querySelectorAll('.hero [data-win]')].map(e=>e.getBoundingClientRect()).find(r=>r.width>0),sc=document.querySelector('#n-room .r-scr'),vb=document.querySelector('#n-room').getAttribute('viewBox').split(' ').map(Number);
-      const ax=g.left+g.width*(+sc.getAttribute('x')+sc.getAttribute('width')/2)/vb[2],ay=g.top+g.height*(+sc.getAttribute('y')+sc.getAttribute('height')/2)/vb[3],wa=document.querySelector('.hero__wash'),st=document.querySelector('.hero__stage').getBoundingClientRect();
-      return{s:m==='none'?1:new DOMMatrix(m).a,copy:+getComputedStyle(c).opacity,wash:getComputedStyle(wa).display==='none'?0:+getComputedStyle(wa).opacity,
+    # aim = 다가가는 곳(영상이면 영상 끝 장의 모니터 화면 [data-scr], 영상이 없으면 창 [data-win]) 가운데가 화면 가운데에서 얼마나 떨어졌나(화면 폭·높이에 대한 비율). 확대가 다 됐을 때 0 근처여야 한다
+    # rv = 보이는 영상이 ride면 그 재생 위치(길이에 대한 비율), 아니면 -1. 영상 구간(p 0~0.5)에선 스크롤 위치대로 ride를 되감아 보인다
+    ZS = r"""()=>{const n=document.querySelector('.night__cam'),m=getComputedStyle(n).transform,c=document.querySelector('.hero__copy'),t=document.getElementById('works-title').getBoundingClientRect();
+      const v=document.querySelector('.n-v--ride.on'),g=document.querySelector(v?'.hero [data-scr]':'.hero [data-win]').getBoundingClientRect();
+      const ax=g.left+g.width/2,ay=g.top+g.height/2,wa=document.querySelector('.hero__wash'),st=document.querySelector('.hero__stage').getBoundingClientRect();
+      return{s:m==='none'?1:new DOMMatrix(m).a,copy:+getComputedStyle(c).opacity,wash:getComputedStyle(wa).display==='none'?0:+getComputedStyle(wa).opacity,rv:v?v.currentTime/v.duration:-1,
         aim:Math.max(Math.abs(ax-st.left-st.width/2)/st.width,Math.abs(ay-st.top-st.height/2)/st.height),
         night:document.documentElement.classList.contains('top-night'),theme:document.querySelector('meta[name=theme-color]').content,title:t.top<innerHeight&&t.bottom>64,
         mid:t.top>innerHeight*.2&&t.bottom<innerHeight*.75,wo:+getComputedStyle(document.getElementById('works')).opacity,wp:getComputedStyle(document.getElementById('works')).pointerEvents}}"""
-    for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
+    for pre, w, h, novid in (('', 390, 844, False), ('/en', 1366, 860, False), ('', 390, 844, True)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+        if novid: pg.route(re.compile(r'.*/img/hero/.*\.(webm|mp4)$'), lambda r: r.abort())
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
         z0 = pg.evaluate(ZS); pg.evaluate(Z, 0.3); pg.wait_for_timeout(250); zh = pg.evaluate(ZS)
         pg.evaluate(Z, 0.45); pg.wait_for_timeout(250); zm = pg.evaluate(ZS)
         pg.evaluate(Z, 0.72); pg.wait_for_timeout(250); za = pg.evaluate(ZS)
         pg.evaluate(Z, 1); pg.wait_for_timeout(250); z1 = pg.evaluate(ZS)
         pg.evaluate(Z, 0); pg.wait_for_timeout(250); zb = pg.evaluate(ZS)
-        good = (z0['s'] == 1 and z0['copy'] == 1 and z0['night'] and zm['s'] > 2 and zm['copy'] < .05 and za['aim'] < .03 and z1['wash'] == 1 and not z1['night'] and z1['title']
+        mid = zm['rv'] == -1 and zm['s'] > 2 if novid else abs(zm['rv'] - .9) < .03 and zm['s'] == 1   # p 0.45: 영상이면 ride 90% 자리(상자는 아직 그대로), 영상이 없으면 그림이 창 쪽으로 커지는 중
+        good = (z0['s'] == 1 and z0['copy'] == 1 and z0['night'] and mid and zm['copy'] < .05 and za['aim'] < .03 and z1['wash'] == 1 and not z1['night'] and z1['title']
                 and zh['wo'] == 0 and zh['wp'] == 'none' and za['wo'] == 1 and za['wp'] != 'none' and za['mid'] and za['wash'] == 1
                 and z1['theme'] != z0['theme'] and zb['s'] == 1 and zb['copy'] == 1 and zb['night'] and zb['theme'] == z0['theme'] and not errs)
-        ok(good, f"{pre}/ {w}px 내리면 창 안으로: 배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목 가운데 {za['mid']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' 제목 {'보임' if z1['title'] else '안 보임'}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
-        pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(4600)   # 장면을 끝까지 보여 주며(약 3.8초) 내려감
+        ok(good, f"{pre}/ {w}px{' 영상을 못 받으면' if novid else ''} 내리면 창 안으로: p 0.45 영상 {zm['rv']:.2f}·배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목 가운데 {za['mid']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' 제목 {'보임' if z1['title'] else '안 보임'}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
+        pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(5600)   # 장면을 끝까지 보여 주며(약 4.2초) 내려감
         st = pg.evaluate(ZS)
         wt = pg.evaluate("Math.round(document.getElementById('works').getBoundingClientRect().top)")
         ok(st['title'] and not st['night'] and st['wo'] == 1 and abs(wt - 80) < 12 and pg.evaluate('location.hash') == '#works', f"{pre}/ {w}px '작업실 구경하기'를 누르면 만든 것이 머리말 밑 제자리로 (위 {wt}px, 제목 {'보임' if st['title'] else '안 보임'})")
@@ -195,26 +198,29 @@ with sync_playwright() as p:
         if how == 'touch': swipe(cdp, 600, 250)
         elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 120)
         else: pg.keyboard.press('PageDown')
-        pg.wait_for_timeout(1200); p1 = pg.evaluate(PP); pg.wait_for_timeout(3000); p2 = pg.evaluate(PP); st = pg.evaluate(ZS)
+        pg.wait_for_timeout(1200); p1 = pg.evaluate(PP); pg.wait_for_timeout(3800); p2 = pg.evaluate(PP); st = pg.evaluate(ZS)
         if how == 'touch': swipe(cdp, 300, 650)
         elif how == 'wheel': pg.mouse.wheel(0, -120)
         else: pg.keyboard.press('PageUp')
-        pg.wait_for_timeout(2800); p3 = pg.evaluate(PP); zb = pg.evaluate(ZS)
+        pg.wait_for_timeout(3400); p3 = pg.evaluate(PP); zb = pg.evaluate(ZS)
         ok(.15 < p1 < .6 and abs(p2 - .72) < .01 and st['wo'] == 1 and st['mid'] and abs(p3) < .005 and zb['copy'] == 1 and zb['s'] == 1 and not errs
            and pg.evaluate("document.documentElement.style.overflow") == '',
-           f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 4.2초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
+           f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 5초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
         c.close()
     # (위: p 0.3엔 '만든 것'이 가려져 누를 수 없고, p 0.72엔 모니터 화면이 가운데에서 다 덮고 종이색 위로 '만든 것' 제목이 화면 위쪽 1/3쯤에 드러남(아이콘 셋은 p 0.7에 다 앉음))
     # 확대하지 않을 때: 동작 줄이기, 낮은 화면, landing.js를 못 받음(3초 뒤 확대 풀림), JS 꺼짐 → 첫 화면은 화면 한 장, 글이 보이고 불은 켜진 채
-    ONE = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');return{one:Math.abs(H.offsetHeight-S.offsetHeight)<2,copy:+getComputedStyle(document.querySelector('.hero__copy')).opacity,
-      lit:[...document.querySelectorAll('.n-lit')].filter(e=>e.getBoundingClientRect().width>0).every(e=>+getComputedStyle(e).opacity===1)}}"""
-    # (낮은 화면은 움직임이 켜져 있어 들어올 때 불이 차례로 켜지는 2.5초를 기다린 뒤 본다)
+    # lit = 불 켜진 그림이 보이고(불 꺼진 그림은 걷힘) 들어올 때 장면(.intro)이 끝남
+    ONE = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage'),im=document.querySelector('.night__still img');return{one:Math.abs(H.offsetHeight-S.offsetHeight)<2,copy:+getComputedStyle(document.querySelector('.hero__copy')).opacity,
+      lit:!document.documentElement.classList.contains('intro')&&im.complete&&im.naturalWidth>0&&im.getBoundingClientRect().width>0&&getComputedStyle(im).visibility==='visible'&&+getComputedStyle(document.querySelector('.night__dark')).opacity===0}}"""
+    # (낮은 화면은 움직임이 켜져 있어 들어올 때 영상(5초)이 끝나 불 켜진 그림이 될 때까지 기다린 뒤 본다)
     for name, opt, h, block in (('동작 줄이기', {'reduced_motion': 'reduce'}, 844, False), ('낮은 화면', {}, 500, False), ('landing.js를 못 받음', {}, 844, True), ('JS 꺼짐', {'java_script_enabled': False}, 844, False)):
         c = br.new_context(viewport={'width': 390, 'height': h}, **opt); pg = c.new_page()
         if block: pg.route(re.compile(r'.*/assets/landing\.js.*'), lambda r: r.abort())
-        pg.goto(BASE + '/'); pg.wait_for_timeout(3600 if block else 3000 if h == 500 else 1800)
+        vids = []; pg.on('request', lambda q: '/img/hero/' in q.url and q.url.endswith(('.webm', '.mp4')) and vids.append(q.url))
+        pg.goto(BASE + '/'); pg.wait_for_timeout(4400 if block else 6200 if h == 500 else 1800)   # (못 받으면 3초에 .intro를 떼고 불 꺼진 그림이 1.1초 동안 걷힘)
         st = pg.evaluate(ONE)
-        ok(st['one'] and st['copy'] == 1 and st['lit'], f"{name}이면 첫 화면은 그림 한 장(확대 없음 {st['one']}), 글 보임, 불 켜짐")
+        ok(st['one'] and st['copy'] == 1 and st['lit'], f"{name}이면 첫 화면은 그림 한 장(확대 없음 {st['one']}), 글 보임, 불 켜진 그림 {st['lit']}")
+        if opt.get('reduced_motion'): ok(not vids, f'동작 줄이기면 첫 화면 영상을 받지 않음 {vids[:1]}')
         if opt.get('reduced_motion'):
             pg.evaluate('scrollTo(0, document.getElementById("works").offsetTop)'); pg.wait_for_timeout(300)
             ok(not pg.evaluate("document.documentElement.classList.contains('top-night')"), '동작 줄이기: 첫 화면을 지나면 머리말이 원래대로')
