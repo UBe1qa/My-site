@@ -52,6 +52,9 @@
     --lit:#F6E7C4;
     --lit-line:#D9BC80;
     --n-screen:#1E1B36;      /* 어두운 화면 설정: 방 안 모니터도 어두운 화면(확대 끝이 어두운 종이로 바로 이어지게) */
+    --n-warm-1:#F6DCA6;      /* 방 벽도 한 톤 진한 호박색: 확대 끝에 불빛을 낮출 때 회갈색이 아니라 어두운 갈색으로 */
+    --n-warm-2:#EDBD6E;
+    --n-warm-3:#DE9C47;
   }
 }
 
@@ -143,12 +146,14 @@
   :lang(en) .hero__h1{font-size:clamp(28px,7.6vw,46px)}
   .hero__sub{margin-top:14px;font-size:clamp(15px,4vw,19px);line-height:1.62}
   .hero__act{margin-top:20px}
-  .hero__act{gap:6px 20px}
+  .hero__act{gap:6px 18px}
   .hero__cta{min-height:48px;padding:0 22px;font-size:16px}
   .hero__more{font-size:15px}
   .hero__kick{margin-bottom:10px;font-size:14px}
 }
 /* 낮은 세로 화면: 글과 건물을 줄여 겹치지 않게 */
+/* 좁은 폰: 단추 둘이 한 줄에 들어가게 */
+@media (max-width:400px){.hero__act{gap:6px 14px}.hero__cta{padding:0 17px;font-size:15px}.hero__more{font-size:14.5px;gap:6px}}
 /* 큰 세운 태블릿: 글 밑이 비지 않게 건물을 더 키운다 */
 @media (max-aspect-ratio:5/4) and (min-width:700px) and (min-height:1200px){.night .night__bld--tall{max-height:56%}}
 @media (max-aspect-ratio:5/4) and (max-height:700px),(max-width:640px) and (max-height:700px){

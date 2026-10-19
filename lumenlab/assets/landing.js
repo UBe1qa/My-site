@@ -6,13 +6,13 @@
       스크롤을 붙잡거나 속도를 바꾸지 않고 위치만 따라간다(되돌리면 그대로 되돌아옴). 창 자리는 그림(SVG, 화면 모양에 따라 둘 중 하나)에서 잰다.
       머리말은 밤 장면 위에서 밤색(html.top-night, 처음엔 head 스크립트가 붙임)이고, 다가가며 창 윗변이 머리말 밑을 지나 방 안(밝은 곳)이 그 밑에 오면 원래 머리말.
       확대하지 않을 때(동작 줄이기, 낮은 화면)는 첫 화면이 머리말 밑에 있는 동안만 밤색 머리말.
-   2) 만든 것 칸: 줄(.shelf)이 처음 보일 때 한 번 .in → CSS가 그 줄 아이콘을 하나씩 켠다(꺼진 전구 → 켜진 불). 1)이 '만든 것'을 가린 동안엔 미룬다.
+   2) 만든 것 칸: 줄(.shelf)이 처음 보일 때 한 번 .in → CSS가 그 줄 아이콘을 하나씩 켠다(꺼진 전구 → 켜진 불). 1)이 '만든 것'을 다 가린 동안엔 미루고, 드러나기 시작하면 켠다.
       아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
   var d = document.documentElement;
   var calm = matchMedia('(prefers-reduced-motion: reduce)');
   var moving = function () { return d.classList.contains('anim') && !calm.matches; };
-  var veiled = false, wake = function () {};   // 1)이 '만든 것'을 가리는 중인가, 다 드러나면 2)를 깨움
+  var veiled = false, hush = false, wake = function () {};   // 1)이 '만든 것'을 가리는 중인가(다 드러나기 전), 아직 하나도 안 보이나(보이기 시작하면 2)를 깨워 선반 불을 켬)
 
   /* ---------- 1) 첫 화면 ---------- */
   var hero = document.querySelector('[data-hero]');
@@ -36,13 +36,14 @@
       [].forEach.call(metas, function (m, i) { m.content = v ? sky : day[i]; });
     }
     function veil(o) {
-      var v = o < 0.99;
+      // 흐리기만 한다(밀어 올리지 않음): 위치를 옮기면 #works·#tools 로 가는 링크가 옮겨진 자리를 재서 덜 내려간다
+      var v = o < 0.99, h = o <= 0;
       if (works) {
         works.style.opacity = v ? o.toFixed(3) : '';
-        works.style.transform = v ? 'translateY(' + (36 * (1 - o)).toFixed(1) + 'px)' : '';
         works.style.pointerEvents = v ? 'none' : '';
       }
-      if (v !== veiled) { veiled = v; if (!v) wake(); }
+      veiled = v;
+      if (h !== hush) { hush = h; if (!h) wake(); }
     }
     function clear() {
       night.style.transform = night.style.transformOrigin = night.style.filter = '';
@@ -83,7 +84,8 @@
       copy.style.opacity = a ? (1 - a).toFixed(3) : '';
       copy.style.transform = a ? 'translateY(' + (-48 * a).toFixed(1) + 'px)' : '';   // 숨기지는 않는다(제목이 읽기 도구에서 빠지지 않게, 단추에 포커스가 오면 CSS가 다시 보임)
       // 어두운 화면 설정: 종이(어두운 색)가 덮기 전에 방 불빛을 먼저 낮춘다(밝은 방과 어두운 종이가 섞여 회색이 되지 않게)
-      night.style.filter = dim.matches && p > 0.36 ? 'brightness(' + (1 - 0.75 * clamp((p - 0.36) / 0.16)).toFixed(3) + ')' : '';
+      var k = dim.matches ? clamp((p - 0.4) / 0.12) : 0;
+      night.style.filter = k ? 'brightness(' + (1 - 0.8 * k).toFixed(3) + ') saturate(' + (1 + 0.6 * k).toFixed(3) + ')' : '';
       var f = clamp((p - 0.48) / 0.1);   // 종이색: 모니터 화면에 닿은 뒤 다 덮인다(p 0.58)
       wash.style.opacity = f.toFixed(3);
       hero.style.setProperty('--f', f.toFixed(3));
@@ -95,6 +97,10 @@
       topNight(below && f < 0.5 && gt > (bar ? bar.offsetHeight : 64));
     }
     addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(frame); }, { passive: true });
+    // 키보드로 첫 화면 단추에 돌아오면(Shift+Tab) 첫 화면 처음으로 올려 준다(단추가 종이·'만든 것' 밑에 묻히지 않게). 마우스로 누를 땐 그대로
+    copy.addEventListener('focusin', function (e) {
+      if (on && scrollY > start + 2 && e.target.matches && e.target.matches(':focus-visible')) scrollTo({ top: start, behavior: 'instant' });
+    });
     // 가려진 '만든 것' 안으로 포커스가 오면(탭 키) 드러나는 곳까지 내려 준다
     if (works) works.addEventListener('focusin', function (e) {
       if (!veiled || !on) return;
@@ -126,7 +132,7 @@
     es.forEach(function (e) {
       var i = seen.indexOf(e.target);
       if (!e.isIntersecting) { if (i >= 0) seen.splice(i, 1); return; }
-      if (veiled) { if (i < 0) seen.push(e.target); } else light(e.target);
+      if (hush) { if (i < 0) seen.push(e.target); } else light(e.target);
     });
   }, { rootMargin: '0px 0px -12% 0px' });
   wake = function () { seen.splice(0).forEach(light); };

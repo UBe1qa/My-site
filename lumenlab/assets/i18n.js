@@ -16,7 +16,7 @@
     h1: 'Games, apps and web tools, made by one person',
     heroSub: 'Games for phones, apps for Mac and the browser. The free web tools need no sign-up or install, and what you put in never goes to a Lumen Lab server.',
     heroTry: 'Try the free web tools',
-    heroCta: 'Look around the workshop',
+    heroCta: 'Step inside',
     wlKick: 'Inside the workshop',
     mailBtn: 'Email us',
     enTitle: 'Found a mistake? <span class="nw">One email and we fix it</span>',
