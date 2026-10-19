@@ -205,6 +205,7 @@
 .intro .night__dusk{opacity:1}
 .intro .night{--st:0}
 .intro .night__bld .n-lit{opacity:0}
+.intro .n-glass{fill:var(--n-dark)}   /* 불 켜지기 전 방 창도 위층 창처럼 어둡게 */
 .intro .night__far .n-farwin:nth-child(4n+1){fill:var(--lamp);opacity:.3}
 /* 내릴 때 잠깐 지나가는 빛(간판 빛 번짐, 유리 반사, 방 안 따뜻한 빛)과 '만든 것'으로 날아가는 아이콘(landing.js가 만듦) */
 .hero__fx{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
