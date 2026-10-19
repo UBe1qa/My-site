@@ -101,8 +101,8 @@ with sync_playwright() as p:
     ok(not pg.evaluate("document.documentElement.classList.contains('anim')"), '동작 줄이기면 움직임 꺼짐')
     c.close()
 
-    # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝에 드러나니 그 구간은 아래 따로 확인)
-    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.66)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
+    # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝(END p 0.72)에 드러나며 그동안 날아가는 아이콘 자리는 비어 있으니 그 구간은 아래 따로 확인)
+    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
     for w, h in [(390, 844), (1366, 860)]:
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + '/')
         pg.wait_for_timeout(1500)
@@ -167,7 +167,7 @@ with sync_playwright() as p:
                 and zh['wo'] == 0 and zh['wp'] == 'none' and za['wo'] == 1 and za['wp'] != 'none' and za['mid'] and za['wash'] == 1
                 and z1['theme'] != z0['theme'] and zb['s'] == 1 and zb['copy'] == 1 and zb['night'] and zb['theme'] == z0['theme'] and not errs)
         ok(good, f"{pre}/ {w}px 내리면 창 안으로: 배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목 가운데 {za['mid']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' 제목 {'보임' if z1['title'] else '안 보임'}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
-        pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(2500)
+        pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(4600)   # 장면을 끝까지 보여 주며(약 3.8초) 내려감
         st = pg.evaluate(ZS)
         wt = pg.evaluate("Math.round(document.getElementById('works').getBoundingClientRect().top)")
         ok(st['title'] and not st['night'] and st['wo'] == 1 and abs(wt - 80) < 12 and pg.evaluate('location.hash') == '#works', f"{pre}/ {w}px '작업실 구경하기'를 누르면 만든 것이 머리말 밑 제자리로 (위 {wt}px, 제목 {'보임' if st['title'] else '안 보임'})")
@@ -181,6 +181,28 @@ with sync_playwright() as p:
         pg.keyboard.press('Shift+Tab'); pg.wait_for_timeout(500)
         bk = pg.evaluate("(()=>{const a=document.activeElement,H=document.querySelector('[data-hero]');return a.classList.contains('hero__more')&&Math.abs(scrollY-(H.getBoundingClientRect().top+scrollY))<3&&+getComputedStyle(document.querySelector('.hero__copy')).opacity===1})()")
         ok(bk, f"{pre}/ {w}px Shift+Tab으로 첫 화면 단추에 돌아오면 첫 화면 처음으로(단추 보임)")
+        c.close()
+    # 한 번 튕겨도 장면을 끝까지: 맨 위에서 휠 한 칸·손가락 한 번·PageDown이면 장면이 정해진 빠르기로 END(p 0.72)까지 가서 멈추고, 거기서 위로 한 번이면 맨 위까지
+    PP = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');return (scrollY-(H.getBoundingClientRect().top+scrollY))/(H.offsetHeight-S.offsetHeight)}"""
+    def swipe(cdp, y0, y1):
+        cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': 200, 'y': y0}]})
+        for i in range(1, 5): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': 200, 'y': y0 + (y1 - y0) * i / 4}]})
+        cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []})
+    for pre, w, h, how in (('', 390, 844, 'touch'), ('/en', 1280, 800, 'wheel'), ('', 1280, 800, 'key')):
+        c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=how == 'touch', has_touch=how == 'touch'); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(2800)
+        cdp = c.new_cdp_session(pg)
+        if how == 'touch': swipe(cdp, 600, 250)
+        elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 120)
+        else: pg.keyboard.press('PageDown')
+        pg.wait_for_timeout(1200); p1 = pg.evaluate(PP); pg.wait_for_timeout(3000); p2 = pg.evaluate(PP); st = pg.evaluate(ZS)
+        if how == 'touch': swipe(cdp, 300, 650)
+        elif how == 'wheel': pg.mouse.wheel(0, -120)
+        else: pg.keyboard.press('PageUp')
+        pg.wait_for_timeout(2800); p3 = pg.evaluate(PP); zb = pg.evaluate(ZS)
+        ok(.15 < p1 < .6 and abs(p2 - .72) < .01 and st['wo'] == 1 and st['mid'] and abs(p3) < .005 and zb['copy'] == 1 and zb['s'] == 1 and not errs
+           and pg.evaluate("document.documentElement.style.overflow") == '',
+           f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 4.2초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
         c.close()
     # (위: p 0.3엔 '만든 것'이 가려져 누를 수 없고, p 0.72엔 모니터 화면이 가운데에서 다 덮고 종이색 위로 '만든 것' 제목이 화면 위쪽 1/3쯤에 드러남(아이콘 셋은 p 0.7에 다 앉음))
     # 확대하지 않을 때: 동작 줄이기, 낮은 화면, landing.js를 못 받음(3초 뒤 확대 풀림), JS 꺼짐 → 첫 화면은 화면 한 장, 글이 보이고 불은 켜진 채
