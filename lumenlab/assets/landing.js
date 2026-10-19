@@ -4,11 +4,16 @@
       그 자리에서 방 불이 가장자리부터 부드럽게 번지고(흰 빛무리는 조금 늦게), 간판 점이 한 번 깜빡이고 글자가 한 자씩 켜진다.
       머무는 동안: 방 안 사람이 타자를 치고(모니터에 글줄과 커서), 머그잔에서 김이 오르고, 먼 창이 가끔 하나 켜졌다 꺼진다. 별 반짝임은 CSS.
       마우스(PC): 층(먼 지붕, 거리와 건물)이 조금씩 다르게 움직여 깊이가 생기고, 마우스가 지나가는 위층 창이 잠깐 켜진다. 단추 불빛은 CSS(:hover).
-      내릴 때(html.zoom, 화면 높이 560px 이상, 첫 화면이 화면 두 장): 스크롤 위치(p 0~1)를 따라 카메라가 다섯 박자로 들어간다.
+      폰(마우스 없음): 위층 창에 이웃이 드나들듯 하나씩 불이 켜졌다 꺼지고, 손가락이 닿은 곳 가까운 창이 켜진다. 기울이면(안드로이드, 허락 없이 되는 곳만) 층 깊이.
+      내릴 때(html.zoom, 화면 높이 560px 이상, 첫 화면이 화면 두 장): 장면 위치(p 0~1)를 따라 카메라가 다섯 박자로 들어간다.
         ① 건물 앞으로 옆걸음(글은 걷힘) ② 창으로 다가가며 간판 빛이 번짐 ③ 유리를 지나며 반사 빛줄기·따뜻한 빛 ④ 방 안에서 일하는 사람 어깨 쪽으로
         (가까운 사람은 많이, 먼 벽은 반대로 조금) ⑤ 모니터 화면이 화면을 덮고 그 화면 자리에서 종이색이 넓어진다.
+        세로 화면은 박자를 세운 화면에 맞춰 따로 잡는다: ② 위층 창·간판·방 창을 한 화면에 ③ 유리를 지나면 방이 화면 높이를 다 채운 채 어깨 너머 ④⑤ 모니터.
         화면 속 아이콘 셋은 종이색이 덮이기 시작하면 떠올라 '만든 것'의 제 칸으로 날아가 앉고, '만든 것' 글은 그 끝에 드러난다(SHOW).
-        박자 마디는 한 곡선(단조 3차)으로 이어서 멈칫하는 구간이 없다. 스크롤을 붙잡거나 속도를 바꾸지 않고 위치만 따라간다(되돌리면 그대로 되돌아옴).
+        박자 마디는 한 곡선(단조 3차)으로 이어서 멈칫하는 구간이 없다.
+        한 번 튕긴 스크롤에 장면이 0.5초 만에 지나가지 않게, 맨 위에서 내리려 하면(휠·손가락·키·'작업실 구경하기') 장면을 정해진 빠르기(FWD)로
+        끝(END, '만든 것'이 드러난 자리)까지 보여 주고 멈춘다. 그동안 같은 쪽으로 또 밀면 빨라지고, 반대로 밀면 되돌아간다. END에서 올리려 하면
+        거꾸로(BWD) 맨 위까지. 손가락의 관성이나 휠로 그 사이에 들어와도 같은 쪽 끝까지. 스크립트가 옮긴 스크롤(시험, #tools 링크 등)은 건드리지 않는다.
       '만든 것'은 둘째 장과 겹쳐 있고(CSS) 드러나기 전엔 투명·누를 수 없음. 그 안으로 포커스가 오면 드러나는 곳까지 내려 준다.
       머리말은 밤 장면 위에서 밤색(html.top-night, 처음엔 head 스크립트가 붙임)이고, 다가가며 창 윗변이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말.
       확대하지 않을 때(낮은 화면)는 첫 화면이 머리말 밑에 있는 동안만 밤색 머리말. 첫 화면이 화면 밖이거나 종이색이 다 덮으면 매 프레임 그리기를 쉰다.
@@ -103,8 +108,8 @@
       }).filter(Boolean);
     }
 
-    /* 들어올 때 */
-    var t0 = performance.now(), INTRO = 2500, introing = false;
+    /* 들어올 때(it = 들어올 때 시계: 그동안 내리기 시작하면 2.5배로 빨리 끝냄) */
+    var t0 = performance.now(), last = t0, it = 0, INTRO = 2500, introing = false;
     function introAt(t) {
       dusk.style.opacity = (1 - ease(k(t, 0, 1400))).toFixed(3);
       night.style.setProperty('--st', k(t, 300, 1400).toFixed(3));
@@ -171,22 +176,38 @@
       farOn = null; pmx = pmy = 0;
     }
 
-    /* 마우스(PC만): 층 깊이, 지나가는 위층 창 불 */
-    var mx = -1, my = -1, pmx = 0, pmy = 0;
+    /* 마우스(PC): 층 깊이, 지나가는 위층 창 불. 폰: 이웃 창이 하나씩, 닿은 곳 가까운 창, 기울기로 층 깊이 */
+    var mx = -1, my = -1, pmx = 0, pmy = 0, tap = null, slot = -1, tilt = null;
     addEventListener('pointermove', function (e) { if (e.pointerType !== 'mouse') return; mx = e.clientX; my = e.clientY; kick(); }, { passive: true });
+    addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') { tap = { x: e.clientX, y: e.clientY }; kick(); } }, { passive: true });
     d.addEventListener('mouseleave', function () { mx = my = -1; kick(); });
-    function pointerAt(now, m, b) {   // m: 첫 화면이 그대로인 정도(내리기 시작하면 0으로). 아직 움직이는 중이면 true
-      var aim = fine.matches && mx >= 0, tx = aim ? mx / innerWidth - .5 : 0, ty = aim ? my / innerHeight - .5 : 0;
+    // 기울기: 허락을 묻지 않고 되는 곳(안드로이드 크롬 등)만. 처음 든 자세를 가운데로 두고 천천히 다시 가운데로 돌아간다
+    if (!fine.matches && window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function')
+      addEventListener('deviceorientation', function (e) {
+        if (e.gamma == null || e.beta == null) return;
+        if (!tilt) tilt = { g: e.gamma, b: e.beta, x: 0, y: 0 };
+        tilt.g += (e.gamma - tilt.g) * .02; tilt.b += (e.beta - tilt.b) * .02;
+        tilt.x = clamp((e.gamma - tilt.g) / 24 + .5) - .5; tilt.y = clamp((e.beta - tilt.b) / 24 + .5) - .5;
+      });
+    var NEXT = [0, 1, 2, 1, 0, 2];   // 폰에서 이웃 창이 켜지는 차례(처음 켜지는 칸 = 1번, 가운데부터)
+    function pointerAt(now, t, m, ml, b) {   // m: 첫 화면이 그대로인 정도(내리기 시작하면 0으로), ml: 위층 창 불이 보이는 정도. 아직 움직이는 중이면 true
+      var aim = fine.matches && mx >= 0, tx = aim ? mx / innerWidth - .5 : tilt ? tilt.x : 0, ty = aim ? my / innerHeight - .5 : tilt ? tilt.y : 0;
       pmx += (tx - pmx) * .08; pmy += (ty - pmy) * .08;
       var busy = Math.abs(tx - pmx) > .001 || Math.abs(ty - pmy) > .001;
       if (!busy) { pmx = tx; pmy = ty; }
+      if (!fine.matches && !introing && t > 2600) {   // 폰: 2.6초마다 위층 창 하나에 1.6초 불
+        var s = Math.floor(t / 2600), w0 = b.ups[NEXT[s % NEXT.length] % b.ups.length];
+        if (s !== slot && w0) { slot = s; w0.at = Math.max(w0.at, now + 400); }
+      }
       b.ups.forEach(function (w) {
         if (aim && m > .5) { var dx = mx - w.cx, dy = my - w.cy; if (dx * dx + dy * dy < 150 * 150) w.at = now; }
+        if (tap && ml > .5) { var ex = tap.x - w.cx, ey = tap.y - w.cy; if (ex * ex + ey * ey < 130 * 130) w.at = now + 600; }
         var to = now - w.at < 1200 ? 1 : 0;   // 가까이 오면 켜지고 1.2초 뒤 천천히 꺼짐
         w.v += (to - w.v) * .1; if (Math.abs(to - w.v) < .01) w.v = to; else busy = true;
-        w.el.setAttribute('opacity', (w.v * .85 * m).toFixed(3));
+        w.el.setAttribute('opacity', (w.v * .85 * ml).toFixed(3));
       });
-      return busy;
+      tap = null;
+      return busy || !!tilt;
     }
 
     /* 내릴 때: 카메라 박자(마디 p, 초점=그림의 한 점, 배율, 그 점이 올 화면 자리)를 단조 3차 곡선으로 잇는다(처음과 끝은 천천히) */
@@ -220,7 +241,7 @@
       rig.streak.style.opacity = sk ? (sk * .7).toFixed(3) : '';
       if (sk) rig.streak.style.transform = 'translateX(' + lerp(-55, 55, k(p, .28, .37)).toFixed(1) + '%)';
       rig.bloom.style.opacity = bl ? (bl * .5).toFixed(3) : '';
-      var ar = eio(k(p, .36, .5));   // ④ 방 안: 가까운 사람은 많이, 스탠드는 조금, 먼 벽은 반대로 → 어깨 쪽으로 돌아 들어감
+      var ar = eio(k(p, .36, .5)) * (B.wide ? 1 : .4);   // ④ 방 안: 가까운 사람은 많이, 스탠드는 조금, 먼 벽은 반대로 → 어깨 쪽으로 돌아 들어감(세로 화면은 방이 크게 잡혀 덜)
       tf(B.man, -34 * ar, 16 * ar); tf(B.lamp, -10 * ar, 0); tf(B.back, 12 * ar, 0);
       var wo = k(p, .47, .5), we = eo(k(p, .5, .58));   // ⑤ 모니터 화면 자리에 종이색이 앉고, 거기서 화면 가득 넓어짐
       wash.style.opacity = wo.toFixed(3);
@@ -299,9 +320,18 @@
         var G = rn(162, 82), RC = rn(226, 84), M = rn(252, 64), o = rn(0, 0), bd = B.board;
         var gw = rn(324, 0).x - o.x, sw = rn(286, 0).x - rn(218, 0).x, sh = rn(0, 84).y - rn(0, 44).y;
         var s2 = Math.max(1.6, .82 * W / gw), s3 = Math.max(s2 * 1.6, 1.55 * W / gw), s5 = 1.1 * Math.max(W / sw, Math.min(H / sh, 1.3 * W / sw)), s4 = Math.max(.72 * W / sw, s3 * 1.2);
-        var mid = { x: W / 2, y: H / 2 };
-        // ① 옆걸음(세로 화면은 그 자리에서 조금) ② 창 ③ 유리 너머 사람과 모니터 사이 ④ 모니터 화면 ⑤ 모니터 화면이 화면을 덮음(끝까지 그대로)
-        var keys = [[G, 1, G], [G, B.wide ? 1.3 : 1.2, B.wide ? { x: W * .58, y: H * .62 } : G], [G, s2, { x: W / 2, y: H * .58 }], [RC, s3, { x: W / 2, y: H * .55 }], [M, s4, mid], [M, s5, mid], [M, s5, mid]];
+        var mid = { x: W / 2, y: H / 2 }, keys;
+        // ① 옆걸음 ② 창 ③ 유리 너머 사람과 모니터 사이 ④ 모니터 화면 ⑤ 모니터 화면이 화면을 덮음(끝까지 그대로)
+        if (B.wide) keys = [[G, 1, G], [G, 1.3, { x: W * .58, y: H * .62 }], [G, s2, { x: W / 2, y: H * .58 }], [RC, s3, { x: W / 2, y: H * .55 }], [M, s4, mid], [M, s5, mid], [M, s5, mid]];
+        else {
+          // 세로 화면: ① 글이 걷힌 자리로 건물이 조금 올라오며 커짐 ② 위층 창·간판·방 창을 한 화면에(방 창 폭 = 화면 94%, 창 아래가 화면 84%)
+          // ③ 방이 화면 높이를 다 채운 채 사람과 모니터 사이(창틀·바깥이 안 보이게) ④ 모니터(방이 화면을 다 덮는 배율 이상) ⑤ 같은 끝
+          var gh = rn(0, 164).y - o.y, e = rn(324, 164);
+          var cover = function (q) { return Math.max(W / 2 / (q.x - o.x), W / 2 / (e.x - q.x), H / 2 / (q.y - o.y), H / 2 / (e.y - q.y)); };   // q를 화면 가운데에 둘 때 방이 화면을 다 덮는 배율
+          var t2 = .94 * W / gw, C3 = rn(250, 82), t3 = Math.max(1.04 * H / gh, cover(C3)), t4 = Math.max(W / sw, t3 * 1.15, cover(M) * 1.02);
+          s5 = Math.max(s5, t4 * 1.2);
+          keys = [[G, 1, G], [G, 1.15, { x: W / 2, y: G.y - H * .05 }], [G, t2, { x: W / 2, y: H * .84 - gh * t2 / 2 }], [C3, t3, mid], [M, t4, mid], [M, s5, mid], [M, s5, mid]];
+        }
         var col = function (f) { return curve(keys.map(f)); };
         cam = { ls: col(function (q) { return Math.log(q[1]); }), fx: col(function (q) { return q[0].x; }), fy: col(function (q) { return q[0].y; }),
           tx: col(function (q) { return q[2].x; }), ty: col(function (q) { return q[2].y; }) };
@@ -311,20 +341,109 @@
       cancelAnimationFrame(raf); raf = 0; frame();
     }
 
+    /* 장면을 끝까지(위 머리 설명): ride = { dir, a → b(p), p 지금, u 0~1, dur, rate } */
+    var END = SHOW + .02, FWD = 3400, BWD = 2200, ride = null, coast = 0, free = 0, lastIn = -1e9, lastY = scrollY, lastWheel = 0;
+    var can = function () { return on && !!B && moving() && !d.classList.contains('is-sheet'); };
+    var yTop = function () { return Math.max(0, start); }, yEnd = function () { return start + travel * END; };
+    function go(dir, to) {   // dir 1 = 내림, -1 = 올림. to: 멈출 p(없으면 END나 맨 위)
+      var now = performance.now();
+      if (ride && ride.dir === dir && to == null) { if (now - ride.sped > 250) { ride.rate = Math.min(4, ride.rate * 2); ride.sped = now; } return; }   // 같은 쪽으로 또: 빨리
+      var a = ride ? ride.p : (scrollY - start) / travel, b = to != null ? to : dir > 0 ? END : (yTop() - start) / travel;
+      var span = Math.abs(Math.min(b, END) - Math.min(a, END)) / END, dur = (dir > 0 ? FWD : BWD) * span + (Math.max(a, b) > END + .01 ? 400 : 0);
+      if (dur < 80) return;
+      ride = { dir: dir, a: a, b: b, p: a, u: 0, dur: dur, rate: 1, sped: now };
+      if (!fine.matches) d.style.overflow = 'hidden';   // 폰: 손가락 관성을 멈춘다(스크립트 스크롤은 그대로 됨). PC는 스크롤 막대 폭이 바뀌지 않게 휠·키만 막는다
+      kick();
+    }
+    function stop(jump) {
+      if (!ride) return;
+      var y = start + travel * ride.b; ride = null; d.style.overflow = '';
+      if (jump) scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+      lastY = scrollY; coast = performance.now() + 1200;
+    }
+    function intent(dir) {   // 사람이 내리거나 올리려 함: 맨 위에서 내림, END에서 올림, 그 사이 어디서든이면 받아서 true
+      if (!can()) return false;
+      if (ride) { go(dir); return true; }
+      var y = scrollY, a = yTop(), z = yEnd();
+      if ((dir > 0 && y <= a + 2) || (dir < 0 && Math.abs(y - z) <= 3) || (y > a + 2 && y < z - 3)) { go(dir); return true; }
+      return false;
+    }
+    var inSheet = function (e) { return e.target && e.target.closest && e.target.closest('dialog'); };
+    addEventListener('wheel', function (e) {
+      if (e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY) || inSheet(e)) return;
+      var now = performance.now(), fresh = now - lastWheel > 200; lastWheel = lastIn = now;
+      if (ride) { e.preventDefault(); if (fresh) go(e.deltaY > 0 ? 1 : -1); return; }
+      if (now < coast && !fresh) { e.preventDefault(); return; }   // 끝난 바로 뒤, 같은 손짓의 관성(트랙패드)은 버린다
+      if (intent(e.deltaY > 0 ? 1 : -1)) e.preventDefault();
+    }, { passive: false });
+    var ty0 = null, tx0 = 0, tDone = false;
+    addEventListener('touchstart', function (e) {
+      lastIn = performance.now();
+      if (e.touches.length !== 1 || inSheet(e)) { ty0 = null; return; }
+      ty0 = e.touches[0].clientY; tx0 = e.touches[0].clientX; tDone = false;
+    }, { passive: true });
+    addEventListener('touchmove', function (e) {
+      lastIn = performance.now();
+      if (ty0 === null) return;
+      var dy = e.touches[0].clientY - ty0, dx = e.touches[0].clientX - tx0;
+      if (ride) { if (e.cancelable) e.preventDefault(); if (!tDone && Math.abs(dy) > 10) { tDone = true; go(dy < 0 ? 1 : -1); } return; }
+      if (tDone || Math.abs(dy) < 3 || Math.abs(dx) > Math.abs(dy)) return;
+      if (intent(dy < 0 ? 1 : -1)) { tDone = true; if (e.cancelable) e.preventDefault(); }
+    }, { passive: false });
+    addEventListener('touchend', function () { lastIn = performance.now(); }, { passive: true });
+    addEventListener('keydown', function (e) {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || (e.target.closest && e.target.closest('input, textarea, select, button, [contenteditable], dialog'))) return;
+      var q = e.key, dir = q === 'ArrowDown' || q === 'PageDown' || (q === ' ' && !e.shiftKey) ? 1 : q === 'ArrowUp' || q === 'PageUp' || (q === ' ' && e.shiftKey) ? -1 : 0;
+      if (dir && intent(dir)) e.preventDefault();
+    });
+    // '작업실 구경하기'·머리말 '만든 것'(#works): 장면을 보여 주며 '만든 것' 제자리까지. 다른 # 링크(웹 도구 등)는 브라우저가 부드럽게 옮기니 그동안 손대지 않는다
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="#"]');
+      if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var u = new URL(a.href, location.href);
+      if (u.pathname !== location.pathname || !u.hash) return;
+      if (u.hash === '#works' && works && can() && scrollY < yEnd() - 3) {
+        e.preventDefault();
+        var y = works.getBoundingClientRect().top + scrollY - (parseFloat(getComputedStyle(d).scrollPaddingTop) || 0);
+        go(1, (y - start) / travel);
+        if (location.hash !== '#works') history.pushState(null, '', '#works');
+        return;
+      }
+      free = performance.now() + 2500;
+    });
+    addEventListener('mousedown', function (e) { if (e.target === d || e.clientX >= d.clientWidth) free = Infinity; });   // 스크롤 막대를 끄는 중
+    addEventListener('mouseup', function () { if (free === Infinity) free = 0; });
+    // 손가락 관성·휠로 그 사이에 들어오면(사람이 막 움직인 뒤에만) 같은 쪽 끝까지
+    addEventListener('scroll', function () {
+      var y = scrollY, now = performance.now();
+      if (!ride && y !== lastY && now - lastIn < 3000 && now > free && can() && y > yTop() + 2 && y < yEnd() - 3) go(y > lastY ? 1 : -1);
+      lastY = y; kick();
+    }, { passive: true });
+
     /* 매 프레임: 장면이 보이는 동안만(첫 화면이 화면 밖, 종이색이 다 덮음, 움직임 꺼짐이면 쉰다. 스크롤·마우스가 다시 깨움) */
     var raf = 0, vis = true, seen = '';
     function kick() { if (!raf) raf = requestAnimationFrame(frame); }
     function frame() {
       raf = 0;
-      var now = performance.now(), t = now - t0, below = start + hh - scrollY > 64;
+      var now = performance.now(), t = now - t0, dt = Math.min(250, now - last), below = start + hh - scrollY > 64;
+      last = now;
+      if (!rig || !moving() || !B || !on) stop(false);
       if (!rig || !moving() || !B) return topNight(below);
-      var p = on ? clamp((scrollY - start) / travel) : 0, more = false;
-      if (introing && p > .02) finishIntro();   // 들어오는 중에 내리면 바로 다 켠 그림으로
-      if (introing) { if (t >= INTRO) finishIntro(); else { introAt(t); more = true; } }
-      var m = on ? 1 - k(p, 0, .12) : 1, awake = vis && (!on || p < .58);
-      if (awake && fine.matches && mx >= 0) B.ups.forEach(function (w) { var r = w.r.getBoundingClientRect(); w.cx = r.left + r.width / 2; w.cy = r.top + r.height / 2; });   // 그리기 전에 잰다
+      var p, more = false;
+      if (ride) {
+        ride.u = Math.min(1, ride.u + dt * ride.rate / ride.dur);
+        p = ride.p = lerp(ride.a, ride.b, .5 * ride.u + .5 * ease(ride.u));
+        scrollTo({ top: Math.max(0, start + travel * p), behavior: 'instant' }); lastY = scrollY;
+        if (ride.u >= 1) stop(true);
+        p = clamp(p); more = true;
+      } else p = on ? clamp((scrollY - start) / travel) : 0;
+      if (introing && p > .02 && !ride) finishIntro();   // 장면을 끝까지 보여 주는 중이 아닌데 내려와 있으면 바로 다 켠 그림으로
+      if (introing) { it += dt * (ride ? 2.5 : 1); if (it >= INTRO) finishIntro(); else { introAt(it); more = true; } }
+      var m = on ? 1 - k(p, 0, .12) : 1, ml = on ? 1 - k(p, B.wide ? 0 : .3, B.wide ? .12 : .38) : 1, awake = vis && (!on || p < .58);
+      if (awake && ((fine.matches && mx >= 0) || tap)) B.ups.forEach(function (w) { var r = w.r.getBoundingClientRect(); w.cx = r.left + r.width / 2; w.cy = r.top + r.height / 2; });   // 그리기 전에 잰다
       if (awake) { idleAt(t, B); more = true; }
-      if (awake && pointerAt(now, m, B)) more = true;
+      if (awake && pointerAt(now, t, m, ml, B)) more = true;
+      tap = null;
       if (on) {
         var key = p + ':' + pmx.toFixed(4) + ':' + pmy.toFixed(4);
         if (key !== seen) {   // 스크롤도 마우스도 그대로면 다시 그리지 않음
@@ -341,16 +460,15 @@
       }
       if (more) kick();
     }
-    addEventListener('scroll', kick, { passive: true });
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { vis = es[es.length - 1].isIntersecting; if (vis) kick(); }).observe(hero);
     // 키보드로 첫 화면 단추에 돌아오면(Shift+Tab) 첫 화면 처음으로 올려 준다(단추가 종이·'만든 것' 밑에 묻히지 않게). 마우스로 누를 땐 그대로
     copy.addEventListener('focusin', function (e) {
-      if (on && scrollY > start + 2 && e.target.matches && e.target.matches(':focus-visible')) scrollTo({ top: start, behavior: 'instant' });
+      if (on && scrollY > start + 2 && e.target.matches && e.target.matches(':focus-visible')) { stop(false); scrollTo({ top: start, behavior: 'instant' }); lastY = scrollY; }
     });
-    // 가려진 '만든 것' 안으로 포커스가 오면(탭 키) 드러나는 곳까지 내려 준다
+    // 가려진 '만든 것' 안으로 포커스가 오면(탭 키) 드러나는 곳(END)까지 내려 준다
     if (works) works.addEventListener('focusin', function (e) {
-      if (!veiled || !on) return;
-      scrollTo({ top: start + travel * SHOW + 1, behavior: 'instant' });
+      if (!veiled || !on || ride) return;
+      scrollTo({ top: yEnd(), behavior: 'instant' }); lastY = scrollY;
       e.target.scrollIntoView({ block: 'nearest', behavior: 'instant' });
     });
     var re = 0, size = '';
