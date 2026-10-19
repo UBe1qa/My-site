@@ -65,17 +65,26 @@
 /* ---------- 첫 화면: 불 켜진 작업실 ----------
    밤거리에 불 켜진 창 하나(루멘랩 작업실, 창 위에 가로 간판, 방 안에 일하는 사람). 넓은 화면은 글이 왼쪽, 건물이 오른쪽 아래(화면 높이에 맞춰 키우고
    글 뒤까지 벽이 올 수 있지만 창·간판은 글과 겹치지 않음: check.py), 세로 화면은 글이 위, 건물이 아래(양옆으로 넘치고 높이 상한). 하늘·별은 CSS, 먼 지붕 띠·건물은 SVG(index.html). 머리말 밑까지 깔리게 위로 65px 당긴다.
+   그림은 층 셋: 하늘(배경·별·노을 막 .night__dusk), 먼 지붕(.night__back), 거리와 건물(.night__near). 움직일 때 층마다 따로 옮긴다(landing.js).
+   움직임(.anim)이면 들어올 때 해 질 녘(.intro)에서 밤이 되며 스탠드 → 방 → 간판 순서로 불이 켜지고, 머무는 동안 방 안 사람이 일한다(타자·모니터 글줄·머그잔 김).
    .zoom(움직임 켜짐, landing.js가 시작함)이고 화면 높이 560px 이상이면 첫 화면이 화면 두 장 높이가 되고 무대가 붙어 있는 동안
-   landing.js가 스크롤 위치대로 창 안 모니터 화면 쪽으로 키우고(.night transform), 글을 흐리고, 종이색(.hero__wash, --f)을 덮는다.
-   불은 처음 한 번 깜빡이며 켜진다(.anim .n-lit). 동작 줄이기·JS 없음이면 켜진 채 그림 한 장 */
+   landing.js가 스크롤 위치대로 창 → 방 안 → 어깨 너머 모니터 화면으로 들어가고, 글을 흐리고, 모니터 화면에서 종이색(.hero__wash, --f)이 넓어진다.
+   동작 줄이기·JS 없음이면 불 켜진 채 그림 한 장 */
 .hero{--street-h:clamp(26px,4.4vh,44px);--copy-w:min(560px,calc(50vw - 48px));position:relative;margin-top:-65px;background:var(--n-street)}
 .hero__stage{position:relative;isolation:isolate;overflow:hidden;height:100vh;height:100svh;min-height:560px;color:var(--n-ink)}
 .night{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,var(--n-sky-1) 0%,var(--n-sky-2) 50%,var(--n-sky-3) 100%)}
-.night::before{content:"";position:absolute;inset:0 0 45% 0;opacity:.6;pointer-events:none;
+.night::before{content:"";position:absolute;inset:0 0 45% 0;opacity:calc(.6 * var(--st,1));pointer-events:none;
   background-image:radial-gradient(1.3px 1.3px at 12% 18%,#fff 60%,transparent),radial-gradient(1px 1px at 33% 30%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 47% 10%,#fff 60%,transparent),
     radial-gradient(1px 1px at 61% 24%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 79% 8%,#fff 60%,transparent),radial-gradient(1px 1px at 91% 28%,#fff 60%,transparent),
     radial-gradient(1px 1px at 4% 36%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 69% 40%,#fff 60%,transparent)}
 .night svg{position:absolute;display:block;overflow:visible}
+.night__back,.night__near{position:absolute;inset:0;transform-origin:0 0}
+.night__dusk{position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(40,24,80,0) 0%,rgba(84,44,110,.55) 52%,rgba(233,140,90,.6) 82%,rgba(255,190,120,.55) 100%)}
+.night__sky{position:absolute;inset:0 0 45% 0;pointer-events:none;opacity:var(--st,1)}
+.n-tw{position:absolute;inset:0;animation:nTw var(--d,4s) ease-in-out var(--dl,0s) infinite alternate}
+.n-tw i{position:absolute;border-radius:50%;background:#fff}
+@keyframes nTw{from{opacity:.25}to{opacity:.9}}
 .night__defs{left:0;top:0}
 .night__far{left:0;right:0;bottom:var(--street-h);width:100%;height:30%}
 .night__street{position:absolute;left:0;right:0;bottom:0;height:var(--street-h);background:var(--n-street);border-top:3px solid var(--n-band)}
@@ -119,6 +128,8 @@
 .r-leg{fill:var(--n-wood)}
 .r-leaf{fill:var(--n-leaf)}
 .r-pot{fill:var(--n-pot)}
+.r-hdl{fill:none;stroke:var(--n-o2);stroke-width:1.6}
+.r-steam{fill:none;stroke:#fff;stroke-width:1.2;stroke-linecap:round;opacity:0}
 /* 글 */
 .hero__copy{position:relative;z-index:2;padding-top:calc(65px + clamp(36px,13vh,140px))}
 .hero__kick{margin:0 0 14px;max-width:var(--copy-w);color:var(--n-cta);font-weight:700;font-size:clamp(15px,1.3vw,17px);letter-spacing:-.01em}
@@ -181,7 +192,6 @@
   .zoom .hero{height:200vh;height:200svh;background:color-mix(in srgb,var(--paper) calc(var(--f,0) * 100%),color-mix(in srgb,var(--n-warm-3) calc(var(--g,0) * 100%),var(--n-street)))}
   .zoom .hero__stage{position:sticky;top:0}
   .zoom .hero__wash{display:block}
-  .zoom .night{transform-origin:50% 75%}
 }
 /* 머리말: 밤 장면 위에선 밤색, 종이색이 덮이면 원래대로(landing.js) */
 .top-night .top{background:color-mix(in srgb,var(--n-sky-1) 72%,transparent)}
@@ -191,9 +201,22 @@
 .top-night .top nav a{color:var(--n-sub)}
 .top-night .top nav a:hover{background:rgba(255,255,255,.08);color:var(--n-ink)}
 .top-night .top .lang{border-color:rgba(255,255,255,.22)}
-/* 불 켜기: 처음 한 번 */
-.anim .n-lit{animation:nOn 1.3s .35s backwards}   /* backwards: 끝나면 애니메이션이 남지 않아 그리기 층이 늘지 않는다 */
-@keyframes nOn{0%{opacity:0}30%{opacity:1}40%{opacity:.35}58%,100%{opacity:1}}
+/* 들어올 때(.intro): 해 질 녘, 먼 창 몇 개는 아직 켜짐, 방·간판 불은 꺼짐. landing.js가 이 자리에서 이어 받아 차례로 켜고 .intro 를 뗀다 */
+.intro .night__dusk{opacity:1}
+.intro .night{--st:0}
+.intro .night__bld .n-lit{opacity:0}
+.intro .night__far .n-farwin:nth-child(4n+1){fill:var(--lamp);opacity:.3}
+/* 내릴 때 잠깐 지나가는 빛(간판 빛 번짐, 유리 반사, 방 안 따뜻한 빛)과 '만든 것'으로 날아가는 아이콘(landing.js가 만듦) */
+.hero__fx{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.hero__fx i{position:absolute;opacity:0}
+.n-flare{left:0;top:0;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,226,160,.8),rgba(255,190,90,.3) 40%,rgba(255,190,90,0))}
+.n-streak{inset:-50%;background:linear-gradient(115deg,rgba(255,255,255,0) 44%,rgba(255,244,220,.38) 49%,rgba(255,255,255,.1) 51%,rgba(255,255,255,0) 56%)}
+.n-bloom{inset:0;background:radial-gradient(closest-side,rgba(255,226,170,.9),rgba(255,200,120,.5) 60%,rgba(255,190,110,.2))}
+.hero-ghost{position:fixed;left:0;top:0;z-index:4;pointer-events:none;border-radius:22%;opacity:0;box-shadow:0 8px 24px rgba(27,26,36,.18)}
+.wall-wait .shelf .wi.landed .wi__icon{opacity:1;filter:none;animation:none}
+.wall-wait .shelf .wi.landed::before{opacity:.22;animation:none}
+/* 단추에 마우스를 올리면 단추가 불빛처럼 */
+@media (hover:hover){.anim .hero__cta{transition:filter .2s,box-shadow .4s}.anim .hero__cta:hover{box-shadow:0 0 0 5px rgba(255,210,122,.2),0 0 36px 10px rgba(255,186,84,.45)}}
 /* 글이 흐려진 뒤에도 단추에 포커스가 오면 다시 보인다 */
 .hero__copy:focus-within{opacity:1!important;transform:none!important}
 /* 인쇄: 그림·확대 없이 글만 종이 위에 */
