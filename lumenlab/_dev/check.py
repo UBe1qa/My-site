@@ -154,7 +154,7 @@ with sync_playwright() as p:
       return{s:m==='none'?1:new DOMMatrix(m).a,copy:+getComputedStyle(c).opacity,wash:getComputedStyle(wa).display==='none'?0:+getComputedStyle(wa).opacity,
         aim:Math.max(Math.abs(ax-st.left-st.width/2)/st.width,Math.abs(ay-st.top-st.height/2)/st.height),
         night:document.documentElement.classList.contains('top-night'),theme:document.querySelector('meta[name=theme-color]').content,title:t.top<innerHeight&&t.bottom>64,
-        mid:t.top>innerHeight*.2&&t.bottom<innerHeight*.75,wo:+getComputedStyle(document.getElementById('works')).opacity,wp:getComputedStyle(document.getElementById('works')).pointerEvents}}"""
+        top:t.top>64&&t.bottom<innerHeight*.5,wo:+getComputedStyle(document.getElementById('works')).opacity,wp:getComputedStyle(document.getElementById('works')).pointerEvents}}"""
     for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
@@ -163,14 +163,14 @@ with sync_playwright() as p:
         pg.evaluate(Z, 0.72); pg.wait_for_timeout(250); za = pg.evaluate(ZS)
         pg.evaluate(Z, 1); pg.wait_for_timeout(250); z1 = pg.evaluate(ZS)
         pg.evaluate(Z, 0); pg.wait_for_timeout(250); zb = pg.evaluate(ZS)
-        good = (z0['s'] == 1 and z0['copy'] == 1 and z0['night'] and zm['s'] > 2 and zm['copy'] < .05 and za['aim'] < .03 and z1['wash'] == 1 and not z1['night'] and z1['title']
-                and zh['wo'] == 0 and zh['wp'] == 'none' and za['wo'] == 1 and za['wp'] != 'none' and za['mid'] and za['wash'] == 1
+        good = (z0['s'] == 1 and z0['copy'] == 1 and z0['night'] and zm['s'] > 2 and zm['copy'] < .05 and za['aim'] < .03 and z1['wash'] == 1 and not z1['night'] and z1['wo'] == 1
+                and zh['wo'] == 0 and zh['wp'] == 'none' and za['wo'] == 1 and za['wp'] != 'none' and za['top'] and za['wash'] == 1
                 and z1['theme'] != z0['theme'] and zb['s'] == 1 and zb['copy'] == 1 and zb['night'] and zb['theme'] == z0['theme'] and not errs)
-        ok(good, f"{pre}/ {w}px 내리면 창 안으로: 배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목 가운데 {za['mid']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' 제목 {'보임' if z1['title'] else '안 보임'}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
+        ok(good, f"{pre}/ {w}px 내리면 창 안으로: 배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목이 머리말 바로 밑 {za['top']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' {z1['wo']}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
         pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(4600)   # 장면을 끝까지 보여 주며(약 3.8초) 내려감
         st = pg.evaluate(ZS)
         wt = pg.evaluate("Math.round(document.getElementById('works').getBoundingClientRect().top)")
-        ok(st['title'] and not st['night'] and st['wo'] == 1 and abs(wt - 80) < 12 and pg.evaluate('location.hash') == '#works', f"{pre}/ {w}px '작업실 구경하기'를 누르면 만든 것이 머리말 밑 제자리로 (위 {wt}px, 제목 {'보임' if st['title'] else '안 보임'})")
+        ok(st['top'] and not st['night'] and st['wo'] == 1 and abs(wt) < 12 and pg.evaluate('location.hash') == '#works', f"{pre}/ {w}px '작업실 구경하기'를 누르면 만든 것이 화면 맨 위 제자리로(제목은 머리말 바로 밑) (위 {wt}px, 제목 {'머리말 밑' if st['top'] else '딴 데'})")
         pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__cta'); pg.wait_for_timeout(2500)
         tl = pg.evaluate("(()=>{const r=document.getElementById('tools').getBoundingClientRect();return Math.abs(r.top-80)<12&&+getComputedStyle(document.getElementById('works')).opacity===1})()")
         ok(tl and pg.evaluate('location.hash') == '#tools', f"{pre}/ {w}px '무료 웹 도구 써 보기'를 누르면 웹 도구 줄로 ({tl})")
@@ -200,11 +200,38 @@ with sync_playwright() as p:
         elif how == 'wheel': pg.mouse.wheel(0, -120)
         else: pg.keyboard.press('PageUp')
         pg.wait_for_timeout(2800); p3 = pg.evaluate(PP); zb = pg.evaluate(ZS)
-        ok(.15 < p1 < .6 and abs(p2 - .72) < .01 and st['wo'] == 1 and st['mid'] and abs(p3) < .005 and zb['copy'] == 1 and zb['s'] == 1 and not errs
+        ok(.15 < p1 < .6 and abs(p2 - .72) < .01 and st['wo'] == 1 and st['top'] and abs(p3) < .005 and zb['copy'] == 1 and zb['s'] == 1 and not errs
            and pg.evaluate("document.documentElement.style.overflow") == '',
            f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 4.2초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
         c.close()
-    # (위: p 0.3엔 '만든 것'이 가려져 누를 수 없고, p 0.72엔 모니터 화면이 가운데에서 다 덮고 종이색 위로 '만든 것' 제목이 화면 위쪽 1/3쯤에 드러남(아이콘 셋은 p 0.7에 다 앉음))
+    # 모니터 화면 = '만든 것'으로 가는 창: 화면이 넓어지는 중(p 0.53)엔 '만든 것'이 그 화면 안에 보이고(옮김·자름), END에 제자리(옮김 없음).
+    # 그 뒤 줄이 보이면 줄 등이 켜지고 불빛이 날아가 아이콘이 다 켜짐, 끝 칸은 명함이 떨어져 보임
+    PT = r"""()=>{const w=document.getElementById('works'),cs=getComputedStyle(w);return{o:+cs.opacity,tf:cs.transform!=='none',clip:cs.clipPath!=='none'}}"""
+    LIT = r"""(id)=>{const s=document.getElementById(id);return{in:s.classList.contains('in'),off:[...s.querySelectorAll('.wi')].filter(a=>!a.classList.contains('on')&&!a.classList.contains('landed')).length}}"""
+    for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
+        c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
+        pg.evaluate(Z, 0.53); pg.wait_for_timeout(250); mid = pg.evaluate(PT)
+        pg.evaluate(Z, 0.72); pg.wait_for_timeout(1800); end = pg.evaluate(PT); g = pg.evaluate(LIT, 'games')
+        pg.evaluate("document.getElementById('g-play').scrollIntoView()"); pg.wait_for_timeout(2000); t = pg.evaluate(LIT, 'g-play')
+        pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1700)
+        e = pg.evaluate("(()=>{const e=document.querySelector('.end'),b=document.querySelector('.bcard');return e.classList.contains('in')&&+getComputedStyle(b).opacity===1})()")
+        fxn = pg.evaluate("document.querySelectorAll('.page-fx g').length")
+        ok(mid['o'] == 1 and mid['tf'] and mid['clip'] and end['o'] == 1 and not end['tf'] and not end['clip'] and g['in'] and g['off'] == 0 and t['in'] and t['off'] == 0 and e and fxn == 0 and not errs,
+           f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 명함 {e}, 남은 불빛 {fxn} {errs[:1]}")
+        c.close()
+    # 첫 화면 이야기 더하기: 거리의 사람이 휴대폰으로 불빛을 받고(10초 안), 간판을 누르면 글자가 톡 뜀, 사람을 누르면 손을 흔듦(오류 없이)
+    c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True); pg = c.new_page(); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.add_init_script("""window.__wk=0;(function f(){const s=[...document.querySelectorAll('.wk-scr')].find(e=>e.getBoundingClientRect().width>0);if(s&&+s.getAttribute('opacity')>.9)__wk=1;requestAnimationFrame(f)})()""")
+    pg.goto(BASE + '/'); pg.wait_for_timeout(11000)
+    wk = pg.evaluate('__wk')
+    sp = pg.evaluate("(()=>{const r=[...document.querySelectorAll('.night__bld')].find(e=>e.getBoundingClientRect().width>0).querySelector('.n-board').getBoundingClientRect();return[r.left+r.width*.6,r.top+r.height/2]})()")
+    pg.touchscreen.tap(sp[0], sp[1]); pg.wait_for_timeout(200)
+    hop = pg.evaluate("[...document.querySelectorAll('.n-name tspan')].some(t=>t.hasAttribute('y'))")
+    ok(wk == 1 and hop and not errs, f"첫 화면: 거리의 사람 휴대폰에 불빛 {wk}, 간판 누르면 글자 톡 {hop} {errs[:1]}")
+    c.close()
+    # (위: p 0.3엔 '만든 것'이 가려져 누를 수 없고, p 0.72엔 모니터 화면이 넓어져 된 '만든 것'이 화면 맨 위에 놓이고 제목이 머리말 바로 밑(아이콘 셋은 p 0.7에 다 앉음))
     # 확대하지 않을 때: 동작 줄이기, 낮은 화면, landing.js를 못 받음(3초 뒤 확대 풀림), JS 꺼짐 → 첫 화면은 화면 한 장, 글이 보이고 불은 켜진 채
     ONE = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');return{one:Math.abs(H.offsetHeight-S.offsetHeight)<2,copy:+getComputedStyle(document.querySelector('.hero__copy')).opacity,
       lit:[...document.querySelectorAll('.n-lit')].filter(e=>e.getBoundingClientRect().width>0).every(e=>+getComputedStyle(e).opacity===1)}}"""
