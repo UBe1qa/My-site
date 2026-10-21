@@ -65,8 +65,9 @@
 /* ---------- 첫 화면: 불 켜진 작업실 ----------
    밤거리에 불 켜진 창 하나(루멘랩 작업실, 창 위에 가로 간판, 방 안에 일하는 사람). 넓은 화면은 글이 왼쪽, 건물이 오른쪽 아래(화면 높이에 맞춰 키우고
    글 뒤까지 벽이 올 수 있지만 창·간판은 글과 겹치지 않음: check.py), 세로 화면은 글이 위, 건물이 아래(양옆으로 넘치고 높이 상한). 하늘·별은 CSS, 먼 지붕 띠·건물은 SVG(index.html). 머리말 밑까지 깔리게 위로 65px 당긴다.
-   그림은 층 셋: 하늘(배경·별·노을 막 .night__dusk), 먼 지붕(.night__back), 거리와 건물(.night__near). 움직일 때 층마다 따로 옮긴다(landing.js).
-   움직임(.anim)이면 들어올 때 해 질 녘(.intro)에서 밤이 되며 스탠드 → 방 → 간판 순서로 불이 켜지고, 머무는 동안 방 안 사람이 일한다(타자·모니터 글줄·머그잔 김).
+   그림은 층 셋: 하늘(배경·별), 먼 지붕(.night__back), 거리와 건물(.night__near). 움직일 때 층마다 따로 옮긴다(landing.js).
+   움직임(.anim)이면 들어올 때(.intro) 모니터 빛만 있던 방에서 사람이 스탠드를 당겨 켜고, 간판 네온이 들어오고, 머무는 동안 사람이 만든 것이
+   불빛이 되어 창밖으로 날아가 위층 이웃 창(넓은 화면은 먼 도시 창에도)에 불을 켠다(이야기: landing.js).
    .zoom(움직임 켜짐, landing.js가 시작함)이고 화면 높이 560px 이상이면 첫 화면이 화면 두 장 높이가 되고 무대가 붙어 있는 동안
    landing.js가 스크롤 위치대로 창 → 방 안 → 어깨 너머 모니터 화면으로 들어가고, 글을 흐리고, 모니터 화면에서 종이색(.hero__wash, --f)이 넓어진다.
    동작 줄이기·JS 없음이면 불 켜진 채 그림 한 장 */
@@ -79,8 +80,6 @@
     radial-gradient(1px 1px at 4% 36%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 69% 40%,#fff 60%,transparent)}
 .night svg{position:absolute;display:block;overflow:visible}
 .night__back,.night__near{position:absolute;inset:0;transform-origin:0 0}
-.night__dusk{position:absolute;inset:0;opacity:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(40,24,80,0) 0%,rgba(84,44,110,.55) 52%,rgba(233,140,90,.6) 82%,rgba(255,190,120,.55) 100%)}
 .night__sky{position:absolute;inset:0 0 45% 0;pointer-events:none;opacity:var(--st,1)}
 .n-tw{position:absolute;inset:0;animation:nTw var(--d,4s) ease-in-out var(--dl,0s) infinite alternate}
 .n-tw i{position:absolute;border-radius:50%;background:#fff}
@@ -130,6 +129,23 @@
 .r-pot{fill:var(--n-pot)}
 .r-hdl{fill:none;stroke:var(--n-o2);stroke-width:1.6}
 .r-steam{fill:none;stroke:#fff;stroke-width:1.2;stroke-linecap:round;opacity:0}
+.r-limb{fill:none;stroke:var(--n-man);stroke-width:6.4;stroke-linecap:round;stroke-linejoin:round}   /* 방 안 사람 팔(landing.js가 그림) */
+/* 위층 이웃 창 안(landing.js가 그림): 불빛 앞 실루엣, 가구, 화면 */
+.n-nb{fill:#4A3420}
+.n-nb2{fill:#8C6B3F}
+.n-nbp{fill:#6F8A55}
+.n-nbs{fill:#FFFBEA}
+.n-nbl{fill:none;stroke:#4A3420;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.nb-tail{stroke-width:2}
+/* 날아가는 불빛·꼬리·닿을 때 고리 */
+.n-bead{fill:#FFF8E4}
+.n-trail{stroke:var(--lamp);stroke-linecap:round}
+.n-spark{fill:var(--n-cta)}
+/* 불 켜기 전 방(landing.js .pre): 모니터 빛 앞 사람·스탠드는 검은 실루엣 */
+.pre .r-man,.pre .rg-lamp .r-desk,.pre .r-leg{fill:#22180F}
+.pre .r-limb,.pre .r-arm{stroke:#22180F}
+.pre .r-chair{fill:#3A2B1B}
+.n-ring{fill:none;stroke:var(--n-cta)}
 /* 글 */
 .hero__copy{position:relative;z-index:2;padding-top:calc(65px + clamp(36px,13vh,140px))}
 .hero__kick{margin:0 0 14px;max-width:var(--copy-w);color:var(--n-cta);font-weight:700;font-size:clamp(15px,1.3vw,17px);letter-spacing:-.01em}
@@ -144,6 +160,8 @@
 .hero__more::after{content:"↓";content:"↓"/"";font-weight:700;transition:transform .2s}
 .hero__more:hover{text-decoration:underline;text-underline-offset:4px}
 .hero__more:hover::after{transform:translateY(3px)}
+.anim .hero__more::after{display:inline-block;animation:nNudge 4.6s ease-in-out 3.4s infinite}
+@keyframes nNudge{0%,18%,100%{transform:none}6%{transform:translateY(5px)}12%{transform:translateY(-1px)}}
 .hero__cta:focus-visible,.hero__more:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
 .hero__wash{display:none;position:absolute;inset:0;z-index:3;background:var(--paper);opacity:0;pointer-events:none}
 /* 세로 화면(폰·세운 태블릿): 글 위, 건물 아래 가운데 */
@@ -201,9 +219,7 @@
 .top-night .top nav a{color:var(--n-sub)}
 .top-night .top nav a:hover{background:rgba(255,255,255,.08);color:var(--n-ink)}
 .top-night .top .lang{border-color:rgba(255,255,255,.22)}
-/* 들어올 때(.intro): 해 질 녘, 먼 창 몇 개는 아직 켜짐, 방·간판 불은 꺼짐. landing.js가 이 자리에서 이어 받아 차례로 켜고 .intro 를 뗀다 */
-.intro .night__dusk{opacity:1}
-.intro .night{--st:0}
+/* 들어올 때(.intro): 밤, 먼 창 몇 개는 아직 켜짐, 방·간판 불은 꺼짐. landing.js가 이 자리에서 이어 받아(모니터 빛 → 스탠드 → 간판) 켜고 .intro 를 뗀다 */
 .intro .night__bld .n-lit{opacity:0}
 .intro .n-glass{fill:var(--n-dark)}   /* 불 켜지기 전 방 창도 위층 창처럼 어둡게 */
 .intro .night__far .n-farwin:nth-child(4n+1){fill:var(--lamp);opacity:.3}
