@@ -48,30 +48,36 @@
 <article class="sh-doc" id="sheet" data-id="oneturn" data-ui="{&quot;close&quot;: &quot;Close&quot;, &quot;open&quot;: &quot;Open&quot;, &quot;loading&quot;: &quot;Loading&quot;, &quot;fail&quot;: &quot;The preview didn’t load. Try it on the tool’s own site.&quot;, &quot;yours&quot;: &quot;Your turn&quot;, &quot;auto&quot;: &quot;Playing a demo&quot;, &quot;replay&quot;: &quot;Replay&quot;, &quot;play&quot;: &quot;Play video&quot;, &quot;pause&quot;: &quot;Pause video&quot;, &quot;home&quot;: &quot;https://time.lumenlab.page/&quot;, &quot;icon&quot;: &quot;/img/time.svg&quot;}" style="--tc:#0d7068;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/time.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/time.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">Oneturn</h1>
       <p class="sh__what">Timer, stopwatch and world clock</p>
+      <p class="sh__status is-proof">Each city checked with zoneinfo</p>
       <a class="btn btn--lamp sh__open" href="https://time.lumenlab.page/">Open <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city&#x27;s next daylight saving change.</p>
   <ul class="sh__facts"><li><b>122</b><span>world clock cities</span></li><li><b>8</b><span>timers at once</span></li><li><b>1/100 s</b><span>stopwatch precision</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
-    <div class="stage is-loading" data-tool="oneturn" data-core="[&quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="oneturn" data-core="[&quot;https://time.lumenlab.page/assets/core.js?v=302abdc683&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">Drag the dial to set the minutes. Once it runs, one turn of the dial matches the time you set.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://time.lumenlab.page/stopwatch/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 13l3-3M10 2h4"/></svg></span><b>Stopwatch</b><span>Laps and CSV export</span></a></li><li><a href="https://time.lumenlab.page/alarm/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 9v4l2 2M4 6l3-3M20 6l-3-3"/></svg></span><b>Alarm clock</b><span>Snooze for five minutes</span></a></li><li><a href="https://time.lumenlab.page/world-clock/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><b>World clock</b><span>With daylight saving dates</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <p class="sh__check">City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python&#x27;s zoneinfo.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python&#x27;s zoneinfo.</p></div>
     <p class="sh__links"><a href="https://time.lumenlab.page/about/">More in About Oneturn <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">3 guides</h2>
     <ol class="sh__guides"><li><a href="https://time.lumenlab.page/guide/timer-in-background-tab/">Why online timers run late in a background tab</a></li><li><a href="https://time.lumenlab.page/guide/daylight-saving-time-2026/">Daylight saving time 2026–2027: when clocks change and how time differences shift</a></li><li><a href="https://time.lumenlab.page/guide/lap-vs-split-time/">Lap time vs split time on a stopwatch</a></li></ol>
     <p class="sh__links"><a href="https://time.lumenlab.page/guide/">All guides <span aria-hidden="true">→</span></a></p>

@@ -225,14 +225,122 @@
     vids.forEach(function (v) { io.observe(v); });
     return function () { io.disconnect(); vids.forEach(function (v) { v.pause(); }); };
   }
-  function start(root, UI, isLive, seed) {
-    var stops = [mountDemo(root, UI, isLive, seed), wireVideos(root)].filter(Boolean);
+  /* 작업대(머리와 그 아래 물건들). 불 켜기·튀기·꼬리표 흔들림은 Web Animations 로(소개 페이지 첫 켜짐만 store.css 가 한다).
+     - 스탠드: o.at(ms) 뒤에 딸깍 켜지고(깜빡 한 번) 꼬리표가 흔들린다. 스탠드를 누르면 끄고 켠다. 물건(아이콘)을 누르면 통 튄다.
+       컴퓨터 마우스면 물건이 마우스 쪽으로 살짝 기운다(빛은 따라가지 않는다).
+     - 칸(더 알아보기·확인한 것·가이드)이 보이면 .in, 벗어나면 지운다: 다시 들어오면 또 걸리고 그어진다.
+     - 사실 숫자는 보일 때마다 0부터 센다(쉼표 그대로, 5 아래·범위·소수·값이 둘인 건 세지 않는다). 글에는 늘 최종 값이 있다.
+     - 미리 보기: 가운데 온 화면만 밝고 크게(--f). 모니터: 처음 보일 때 한 번 켜진다.
+     o.scroller = 창이면 .sh__body, 페이지면 null(화면). o.drop = 물건이 위에서 떨어져 앉는다(창 안에서 바뀔 때) */
+  var FINE = matchMedia('(hover:hover) and (pointer:fine)');
+  var FLICK = [{ '--lit': 0 }, { '--lit': 1, offset: .09 }, { '--lit': .1, offset: .17 }, { '--lit': 1, offset: .27 }, { '--lit': 1 }];
+  var SWING = ['-30', '6', '-14', '-3', '-9', '-7'].map(function (d, i, a) { return { transform: 'rotate(' + d + 'deg)', offset: [0, .22, .42, .62, .8, 1][i] }; });
+  var HOP = [{ transform: 'scale(1.06,.9)' }, { transform: 'translateY(-26px) scale(.96,1.05)', offset: .3 }, { transform: 'none', offset: .6 }, { transform: 'scale(1.04,.95)', offset: .75 }, { transform: 'none' }];
+  var DROP = [{ transform: 'translateY(-70px)', opacity: 0 }, { transform: 'none', opacity: 1, offset: .55 }, { transform: 'scale(1.05,.93)', offset: .72 }, { transform: 'none', opacity: 1 }];
+  var NUM = /^(\d{1,3}(?:,\d{3})+|\d+)(\D*)$/;
+  function bench(root, o) {
+    if (!root.querySelector('.sh__spot')) return null;
+    var spot = root.querySelector('.sh__spot'), icon = spot.querySelector('.sh__icon'), lamp = spot.querySelector('.sh__lamp'), tag = root.querySelector('.sh__status');
+    var offs = [], timers = [], rafs = {};
+    function on(el, ev, f, opt) { el.addEventListener(ev, f, opt); offs.push(function () { el.removeEventListener(ev, f, opt); }); }
+    function play(el, kf, opt) { if (!reduced && el && el.animate) try { return el.animate(kf, opt); } catch (e) {} return null; }
+    function light() {
+      spot.classList.remove('off');
+      play(spot, FLICK, { duration: 800 });
+      play(tag, SWING, { duration: 1400, delay: 120, easing: 'cubic-bezier(.3,.6,.4,1)' });
+    }
+    if (o.at != null && !reduced) { spot.classList.add('off'); timers.push(setTimeout(light, o.at)); }
+    if (o.drop) play(icon, DROP, { duration: 550, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    if (lamp) on(lamp, 'click', function () { if (spot.classList.contains('off')) light(); else spot.classList.add('off'); });
+    if (icon) on(icon, 'click', function () { play(icon, HOP, { duration: 620, easing: 'cubic-bezier(.3,.7,.4,1)', composite: 'add' }); });
+    if (icon && !reduced) {
+      on(spot, 'pointermove', function (e) {
+        if (e.pointerType !== 'mouse' || !FINE.matches) return;
+        var r = spot.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        icon.style.setProperty('--ry', (x * 24).toFixed(1) + 'deg');
+        icon.style.setProperty('--rx', (-y * 16).toFixed(1) + 'deg');
+      });
+      on(spot, 'pointerleave', function () { icon.style.removeProperty('--rx'); icon.style.removeProperty('--ry'); });
+    }
+    $$(root, '.sh__cards > li, .sh__guides > li').forEach(function (li) { li.style.setProperty('--i', Array.prototype.indexOf.call(li.parentNode.children, li)); });
+
+    var io = 'IntersectionObserver' in window && !reduced;
+    // 칸 드러내기: 아래 10%를 뺀 화면에 들어오면
+    if (io) {
+      var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('in', e.isIntersecting); }); }, { root: o.scroller, rootMargin: '0px 0px -10% 0px' });
+      $$(root, '.sh__more, .sh__log, .sh__books').forEach(function (s) { rio.observe(s); });
+      offs.push(function () { rio.disconnect(); });
+    }
+    // 사실 숫자 세기
+    var nums = $$(root, '.sh__facts b').filter(function (b) {
+      var m = NUM.exec(b.textContent.trim());
+      return m && +m[1].replace(/,/g, '') >= 5;
+    });
+    if (io && nums.length) {
+      nums.forEach(function (b) { b.setAttribute('data-v', b.textContent.trim()); });
+      var count = function (b, i) {
+        var m = NUM.exec(b.getAttribute('data-v')), v = +m[1].replace(/,/g, ''), comma = m[1].indexOf(',') > 0, t0 = performance.now();
+        if (!rafs['n' + i]) b.style.minWidth = b.getBoundingClientRect().width + 'px';
+        cancelAnimationFrame(rafs['n' + i]);
+        (function step(now) {
+          var k = Math.min(1, ((now || t0) - t0) / 900), n = Math.round(v * (1 - Math.pow(1 - k, 3)));
+          b.textContent = (comma ? n.toLocaleString('en-US') : n) + m[2];
+          if (k < 1) rafs['n' + i] = requestAnimationFrame(step);
+          else { rafs['n' + i] = 0; b.textContent = b.getAttribute('data-v'); b.style.minWidth = ''; }
+        })();
+      };
+      var fio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) nums.forEach(count); });
+      }, { root: o.scroller, threshold: .6 });
+      fio.observe(root.querySelector('.sh__facts'));
+      offs.push(function () { fio.disconnect(); nums.forEach(function (b) { b.textContent = b.getAttribute('data-v'); b.style.minWidth = ''; }); });
+    }
+    // 미리 보기: 가운데 온 화면에 불빛
+    var shots = root.querySelector('.shots');
+    if (shots && !reduced) {
+      var items = Array.prototype.slice.call(shots.children);
+      var focus = function () {
+        rafs.shots = 0;
+        var r = shots.getBoundingClientRect(), cx = r.left + r.width / 2;
+        items.forEach(function (li) {
+          var b = li.getBoundingClientRect(), d = Math.abs(b.left + b.width / 2 - cx) / (li.offsetWidth + 16);
+          li.style.setProperty('--f', Math.max(0, 1 - d).toFixed(3));
+        });
+      };
+      var soon = function () { if (!rafs.shots) rafs.shots = requestAnimationFrame(focus); };
+      on(shots, 'scroll', soon, { passive: true });
+      on(window, 'resize', soon);
+      soon();
+    }
+    // 모니터 켜짐(한 번)
+    var mon = root.querySelector('.mon');
+    if (mon && io) {
+      var mio = new IntersectionObserver(function (es) {
+        if (!es.some(function (e) { return e.isIntersecting; })) return;
+        mio.disconnect();
+        play(mon.querySelector('.stage'), [
+          { clipPath: 'inset(49% 3% 49% 3% round 12px)', filter: 'brightness(2.6)' },
+          { clipPath: 'inset(0 0 0 0 round 12px)', filter: 'brightness(1.7)', offset: .35 },
+          { clipPath: 'inset(0 0 0 0 round 12px)', filter: 'none' }], { duration: 700, easing: EASE });
+      }, { root: o.scroller, threshold: .35 });
+      mio.observe(mon);
+      offs.push(function () { mio.disconnect(); });
+    }
+    return function () {
+      timers.forEach(clearTimeout);
+      for (var k in rafs) cancelAnimationFrame(rafs[k]);
+      offs.forEach(function (f) { f(); });
+    };
+  }
+
+  function start(root, UI, isLive, seed, o) {
+    var stops = [mountDemo(root, UI, isLive, seed), wireVideos(root), bench(root, o || {})].filter(Boolean);
     return function () { stops.forEach(function (f) { f(); }); };
   }
 
   /* ---------- 1) 소개 페이지 ---------- */
   var doc = document.querySelector('article.sh-doc');
-  if (doc) { start(doc, JSON.parse(doc.getAttribute('data-ui')), function () { return true; }); return; }
+  if (doc) { start(doc, JSON.parse(doc.getAttribute('data-ui')), function () { return true; }, null, { scroller: null }); return; }
 
   /* ---------- 2) 홈의 소개 창 ---------- */
   if (!document.querySelector('a[data-show]') || typeof HTMLDialogElement !== 'function' || !window.fetch || !window.DOMParser) return;
@@ -301,14 +409,17 @@
     panel.removeAttribute('style');
     panel.textContent = '';
     panel.appendChild(bar({ close: BASE_UI.close }));
-    var icon = h('img', { class: 'sh__icon', src: img ? img.getAttribute('src') : '', width: 96, height: 96, alt: '' });
+    var icon = h('img', { class: 'sh__icon', src: img ? img.getAttribute('src') : '', width: 112, height: 112, alt: '' });
     var nm = (trigger && trigger.querySelector('.wi__n')) || document.querySelector('.works a[data-show="' + id + '"] .wi__n');   // 첫 화면 단추·앞으로 가기면 칸의 이름
-    panel.appendChild(h('div', { class: 'sh__body' }, [h('header', { class: 'sh__head' }, [icon, h('div', { class: 'sh__id' }, [
+    // 불 꺼진 작업대에 물건만(스탠드는 받은 본문과 함께 와서 켜진다). 그림 칸 크기가 같아 아이콘 자리도 같다
+    var spot = h('div', { class: 'sh__spot off' }, [h('div', { class: 'sh__rig' }, [icon])]);
+    panel.appendChild(h('div', { class: 'sh__body' }, [h('header', { class: 'sh__head' }, [spot, h('div', { class: 'sh__id' }, [
       h('h2', { class: 'sh__name', id: 'sh-name', tabindex: '-1', text: nm ? nm.textContent.trim() : '' }),
       h('p', { class: 'stage__msg sh__wait', text: BASE_UI.loading })])])]));
     return icon;
   }
-  function fill(art) {
+  // o.at = 스탠드가 켜질 때(아이콘이 날아와 앉은 뒤), o.drop = 창 안에서 바뀔 때 물건이 떨어져 앉는다
+  function fill(art, o) {
     var UI = JSON.parse(art.getAttribute('data-ui'));
     panel.setAttribute('style', art.getAttribute('style') || '');
     var body = document.importNode(art.querySelector('.sh__body'), true);
@@ -327,7 +438,7 @@
     if (watchOpen) watchOpen.observe(openBtn);
     panel.classList.remove('is-past');
     var my = ++token;
-    stopNow = start(body, UI, function () { return my === token && !!cur; }, seed);
+    stopNow = start(body, UI, function () { return my === token && !!cur; }, seed, { scroller: body, at: o.at, drop: o.drop });
     return body;
   }
   function setTitle(id) { if (cur === id && titles[id]) document.title = titles[id]; }
@@ -395,14 +506,18 @@
     if (gap > 0) document.documentElement.style.paddingRight = gap + 'px';
     document.documentElement.classList.add('is-sheet');
     var target = ready[id] ? null : skeleton(trigger, id);
-    var body = ready[id] ? fill(ready[id]) : null;
+    var body = ready[id] ? fill(ready[id], { at: 330 }) : null;
     dlg.showModal();
     var b = panel.querySelector('.sh__body'); if (b) b.scrollTop = 0;
     flyAnim = fly(homeIcon(id, trigger), target || body.querySelector('.sh__icon'), 360);
     panelIn();
     if (push !== false) history.pushState({ sheet: id }, '', urlOf(id));
     if (body) { setTitle(id); focusName(); }
-    else get(id).then(function (art) { if (cur === id) { fill(art); setTitle(id); focusName(); } }, function () { if (cur === id) location.href = urlOf(id); });
+    else get(id).then(function (art) {
+      if (cur !== id) return;
+      var left = flyAnim && flyAnim.playState === 'running' ? 360 - (flyAnim.currentTime || 0) : 0;
+      fill(art, { at: Math.max(60, left - 30) }); setTitle(id); focusName();
+    }, function () { if (cur === id) location.href = urlOf(id); });
   }
   // 창 안의 '다른 것도 둘러보기': 창은 그대로 두고 내용만 바꾼다
   function swap(id) {
@@ -413,7 +528,7 @@
     get(id).then(function (art) {
       if (cur !== id) return;
       var go = function () {
-        fill(art); setTitle(id);
+        fill(art, { at: 200, drop: true }); setTitle(id);
         var b = panel.querySelector('.sh__body'); if (b) b.scrollTop = 0;
         if (!reduced) panel.querySelector('.sh__body').animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: EASE });
         focusName();
@@ -443,6 +558,7 @@
   function animateClose(fromY) {
     if (!cur || closing) return;
     closing = true;
+    var sp = panel.querySelector('.sh__spot'); if (sp) sp.classList.add('off');   // 스탠드를 끄고 물건을 선반에 돌려놓는다
     flyBack(panel.querySelector('.sh__icon'), homeIcon(cur, opener));
     panelOut(fromY).addEventListener('finish', finishClose);
   }

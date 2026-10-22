@@ -48,30 +48,36 @@
 <article class="sh-doc" id="sheet" data-id="pickboard" data-ui="{&quot;close&quot;: &quot;Close&quot;, &quot;open&quot;: &quot;Open&quot;, &quot;loading&quot;: &quot;Loading&quot;, &quot;fail&quot;: &quot;The preview didn’t load. Try it on the tool’s own site.&quot;, &quot;yours&quot;: &quot;Your turn&quot;, &quot;auto&quot;: &quot;Playing a demo&quot;, &quot;replay&quot;: &quot;Replay&quot;, &quot;play&quot;: &quot;Play video&quot;, &quot;pause&quot;: &quot;Pause video&quot;, &quot;home&quot;: &quot;https://pick.lumenlab.page/&quot;, &quot;icon&quot;: &quot;/img/pick.svg&quot;}" style="--tc:#e23a3f;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/pick.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/pick.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">Pickboard</h1>
       <p class="sh__what">Wheel, ladder and team picker</p>
+      <p class="sh__status is-proof">Chi-square tested on 100,000 draws</p>
       <a class="btn btn--lamp sh__open" href="https://pick.lumenlab.page/">Open <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">Wheel spinner, ladder game, name picker and team generator from one list, with a replay link for every result.</p>
   <ul class="sh__facts"><li><b>5,000</b><span>names per list</span></li><li><b>Result link</b><span>reopens to the same draw</span></li><li><b>500+</b><span>automated tests</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
-    <div class="stage is-loading" data-tool="pickboard" data-core="[]" data-mod="[&quot;https://pick.lumenlab.page/assets/core/rng.js?v=0f45ba1529&quot;, &quot;https://pick.lumenlab.page/assets/core/pick.js?v=4addbe57ad&quot;]"><p class="stage__msg">Loading</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="pickboard" data-core="[]" data-mod="[&quot;https://pick.lumenlab.page/assets/core/rng.js?v=0f45ba1529&quot;, &quot;https://pick.lumenlab.page/assets/core/pick.js?v=4addbe57ad&quot;]"><p class="stage__msg">Loading</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">The result is decided first with your browser’s cryptographic randomness, then the wheel spins to land on it.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://pick.lumenlab.page/ladder/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M8 7h8M8 12h8M8 17h8"/></svg></span><b>Ladder game</b><span>2 to 30 players</span></a></li><li><a href="https://pick.lumenlab.page/name-picker/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 9h.01M15 15h.01M12 12h.01"/></svg></span><b>Name picker</b><span>Several winners, no repeats</span></a></li><li><a href="https://pick.lumenlab.page/team-generator/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a5 5 0 0 1 10 0M11 20a5 5 0 0 1 10 0"/></svg></span><b>Team generator</b><span>Sizes differ by one at most</span></a></li><li><a href="https://pick.lumenlab.page/random-number/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h10M5 18h6M19 15v6M16 18h6"/></svg></span><b>Random number</b><span>Any range, no repeats</span></a></li><li><a href="https://pick.lumenlab.page/coin-flip/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8v8M9.5 10h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg></span><b>Coin flip</b><span>Up to 1,000 flips</span></a></li><li><a href="https://pick.lumenlab.page/dice/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 9h.01M15 15h.01M12 12h.01"/></svg></span><b>Dice roller</b><span>Up to 100 dice, 2–1,000 sides</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <p class="sh__check">Every pick starts from a fresh seed from the browser&#x27;s crypto.getRandomValues(), and more than 500 automated tests, including chi-square checks over 100,000 draws, confirm that results come out even. A result link lets anyone recompute the same result.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">Every pick starts from a fresh seed from the browser&#x27;s crypto.getRandomValues(), and more than 500 automated tests, including chi-square checks over 100,000 draws, confirm that results come out even. A result link lets anyone recompute the same result.</p></div>
     <p class="sh__links"><a href="https://pick.lumenlab.page/about/">More in About Pickboard <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">3 guides</h2>
     <ol class="sh__guides"><li><a href="https://pick.lumenlab.page/guide/is-wheel-spinner-random/">Is an online wheel spinner really random?</a></li><li><a href="https://pick.lumenlab.page/guide/pick-winners-without-repeats/">How to pick winners from a list without repeats</a></li><li><a href="https://pick.lumenlab.page/guide/ladder-lottery-fairness/">Ladder lottery (Ghost Leg): how it works and how fair it is</a></li></ol>
     <p class="sh__links"><a href="https://pick.lumenlab.page/guide/">All guides <span aria-hidden="true">→</span></a></p>

@@ -47,30 +47,36 @@
 <article class="sh-doc" id="sheet" data-id="kankan" data-ui="{&quot;close&quot;: &quot;닫기&quot;, &quot;open&quot;: &quot;열기&quot;, &quot;loading&quot;: &quot;불러오는 중&quot;, &quot;fail&quot;: &quot;미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.&quot;, &quot;yours&quot;: &quot;직접 해 보세요&quot;, &quot;auto&quot;: &quot;자동으로 보여 주는 중&quot;, &quot;replay&quot;: &quot;다시 보기&quot;, &quot;play&quot;: &quot;영상 재생&quot;, &quot;pause&quot;: &quot;영상 멈춤&quot;, &quot;home&quot;: &quot;https://count.lumenlab.page/ko/&quot;, &quot;icon&quot;: &quot;/img/count.svg&quot;}" style="--tc:#1e3a6e;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/count.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/count.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">칸칸 <span lang="en">Kankan</span></h1>
       <p class="sh__what">글자 수 세기</p>
+      <p class="sh__status is-proof">자동 테스트 3만 5천여 개</p>
       <a class="btn btn--lamp sh__open" href="https://count.lumenlab.page/ko/">열기 <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">글자수를 공백·줄바꿈·바이트 기준별로 나란히 세어요. 자소서, 나이스 생기부, SNS 한도, 원고지까지.</p>
   <ul class="sh__facts"><li><b>3만 5천여 개</b><span>자동 테스트</span></li><li><b>0·1·2자</b><span>줄바꿈 세는 법</span></li><li><b>이 기기 안</b><span>글이 밖으로 안 나감</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
-    <div class="stage is-loading" data-tool="kankan" data-core="[&quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;, &quot;https://count.lumenlab.page/assets/lc-cp949.js?v=e6919a067b&quot;, &quot;https://count.lumenlab.page/assets/lc-wongoji.js?v=33e2d01273&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="kankan" data-core="[&quot;https://count.lumenlab.page/assets/lc-core.js?v=8a2631531c&quot;, &quot;https://count.lumenlab.page/assets/lc-cp949.js?v=e6919a067b&quot;, &quot;https://count.lumenlab.page/assets/lc-wongoji.js?v=33e2d01273&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">아래 원고지는 칸칸이 200자 원고지에 놓는 방식 그대로 첫 장을 그려요.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://count.lumenlab.page/ko/jasoseo/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 13h5M10 17h5"/></svg></span><b>자소서 글자수</b><span>문항마다 남은 글자</span></a></li><li><a href="https://count.lumenlab.page/ko/byte/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h10M5 18h6M19 15v6M16 18h6"/></svg></span><b>바이트 계산기</b><span>UTF-8·EUC-KR 나란히</span></a></li><li><a href="https://count.lumenlab.page/ko/neis/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>나이스 생기부</b><span>기재요령 최대 바이트로</span></a></li><li><a href="https://count.lumenlab.page/ko/sns/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4zM8 10h8"/></svg></span><b>SNS 글자수</b><span>X·인스타·스레드 한도</span></a></li><li><a href="https://count.lumenlab.page/ko/wongoji/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg></span><b>원고지</b><span>200자 원고지 몇 장</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
-    <p class="sh__check">세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요.</p></div>
     <p class="sh__links"><a href="https://count.lumenlab.page/ko/about/">칸칸 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 4편</h2>
     <ol class="sh__guides"><li><a href="https://count.lumenlab.page/ko/guide/geulja-su-dareun-iyu/">같은 글인데 글자 수가 다르게 나오는 이유</a></li><li><a href="https://count.lumenlab.page/ko/guide/neis-500ja-1500byte/">나이스 500자는 왜 1,500바이트일까</a></li><li><a href="https://count.lumenlab.page/ko/guide/emoji-myeot-geulja/">이모지 하나는 몇 글자일까</a></li><li><a href="https://count.lumenlab.page/ko/guide/hangul-byte-utf8-euckr/">한글은 왜 2바이트이기도 하고 3바이트이기도 할까</a></li></ol>
     <p class="sh__links"><a href="https://count.lumenlab.page/ko/guide/">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>

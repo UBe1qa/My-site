@@ -159,6 +159,23 @@ def media_ok(src):
     assert os.path.isfile(f), f'미리 보기 파일이 없음 {src} ({f})'
 
 # ---------- 소개 본문(창과 페이지가 같이 쓰는 .sh__body) ----------
+# 작업대(.sh__spot): 선반에서 집어 든 물건(아이콘)이 스탠드 불빛 아래 작업대에 놓인다. 스탠드 모양은 첫 화면 방 안 스탠드와 같은 꼴(받침·팔 둘·갓).
+# 그림 좌표는 .sh__rig(420×230, 아래 끝 = 작업대 윗면) 기준. 불빛 줄기·바닥 빛·벽 빛은 store.css 가 그 자리에 둔다
+LAMP = ('<svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false">'
+        '<circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/>'
+        '<defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs>'
+        '<rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/>'
+        '<circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/>'
+        '<path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/>'
+        '<ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg>')
+
+# 작업대 뒤 벽의 창: 첫 화면과 같은 밤 도시(달, 건물, 불 켜진 창 몇 개). 그림만이라 읽기 프로그램에선 숨긴다
+WIN = ('<svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false">'
+       '<rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/>'
+       '<path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/>'
+       '<path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/>'
+       '<path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg>')
+
 def body(kind, it, lang, gdata, cat):
     T = KO if lang == 'ko' else EN
     s = sc_of(kind, it); L = lambda v: v[lang] if isinstance(v, dict) and lang in v else v
@@ -167,10 +184,14 @@ def body(kind, it, lang, gdata, cat):
     if kind == 'tools': op_href, op_t = home_url(kind, it, lang), T['open']
     elif s.get('open'): op_href, op_t = L(s['open']['href']), L(s['open']['t'])
     else: op_href, op_t = home_url(kind, it, lang), it['links'][0][lang]
-    status = f'\n      <p class="sh__status">{esc(plain(it["status"][lang]))}</p>' if it.get('status') else ''
+    # 꼬리표(물건에 달린 작은 표): 게임·앱은 지금 상태, 도구는 선반 칸의 ✓ 줄과 같은 '확인한 것'
+    if it.get('status'): status = f'\n      <p class="sh__status">{esc(plain(it["status"][lang]))}</p>'
+    elif kind == 'tools': status = f'\n      <p class="sh__status is-proof">{esc(s["proof"][lang])}</p>'
+    else: status = ''
     full_what = it['what'][lang] if kind == 'tools' else plain(it['kind'][lang])
     out = [f'''<header class="sh__head">
-    <img class="sh__icon" src="{it['icon']}" width="96" height="96" alt="">
+    <div class="sh__spot">{WIN}<div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i>{LAMP}<i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="{it['icon']}" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">{esc(name)}{sub}</h1>
       <p class="sh__what">{esc(full_what)}</p>{status}
@@ -186,8 +207,12 @@ def body(kind, it, lang, gdata, cat):
         core = [BI.core_url(it, f) for f in d['core']]; mod = [BI.core_url(it, f) for f in d.get('mod', [])]
         assert os.path.isfile(os.path.join(os.path.dirname(here), 'assets', 'try', it['id'] + '.js')), f"{it['id']}: assets/try/{it['id']}.js 없음"
         out.append(f'''<section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">{T['try']}</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>{T['ui']['replay']}</button></div>
-    <div class="stage is-loading" data-tool="{it['id']}" data-core="{esc(json.dumps(core))}" data-mod="{esc(json.dumps(mod))}"><p class="stage__msg">{T['ui']['loading']}</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">{T['try']}</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="{it['id']}" data-core="{esc(json.dumps(core))}" data-mod="{esc(json.dumps(mod))}"><p class="stage__msg">{T['ui']['loading']}</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>{T['ui']['replay']}</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">{esc(L(d['cap']))}</p>
   </section>''')
     else:
@@ -220,14 +245,14 @@ def body(kind, it, lang, gdata, cat):
   </section>''')
     if kind == 'tools':
         tp = BI.tool_pages(it, lang)
-        out.append(f'''<section class="sh__sec" aria-labelledby="sh-check">
+        out.append(f'''<section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">{T['check']}</h2>
-    <p class="sh__check">{esc(it['check'][lang])}</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(it['check'][lang])}</p></div>
     <p class="sh__links"><a href="{esc(tp['about'])}">{esc(T['about'](name))} <span aria-hidden="true">→</span></a></p>
   </section>''')
         index, items = gdata
         rows = ''.join(f'<li><a href="{esc(a["url"])}">{esc(a["title"])}</a></li>' for a in items)
-        out.append(f'''<section class="sh__sec" aria-labelledby="sh-gd">
+        out.append(f'''<section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">{T['guides'](len(items))}</h2>
     <ol class="sh__guides">{rows}</ol>
     <p class="sh__links"><a href="{esc(index['url'])}">{T['guide_all']} <span aria-hidden="true">→</span></a></p>
@@ -238,9 +263,9 @@ def body(kind, it, lang, gdata, cat):
         links += [(l['href'], l[lang]) for l in it['links'][1:] if l['href'] != op_href]
         if it.get('privacy'): links.append((it['privacy'][lang], T['privacy']))
         chips = ''.join(f'<a href="{esc(en_link(hr, lang))}">{esc(t)} <span aria-hidden="true">→</span></a>' for hr, t in links)
-        out.append(f'''<section class="sh__sec" aria-labelledby="sh-check">
+        out.append(f'''<section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">{T['note']}</h2>
-    <p class="sh__check">{esc(L(s['note']))}</p>{f'{chr(10)}    <p class="sh__links">{chips}</p>' if chips else ''}
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(L(s['note']))}</p></div>{f'{chr(10)}    <p class="sh__links">{chips}</p>' if chips else ''}
   </section>''')
     # 다른 것: 같은 칸(같은 묶음)이 먼저, 그다음 나머지 순서대로. 창 안에서 누르면 창 내용만 바뀐다(store.js)
     all_ = order(cat)

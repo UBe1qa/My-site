@@ -48,30 +48,36 @@
 <article class="sh-doc" id="sheet" data-id="todok" data-ui="{&quot;close&quot;: &quot;Close&quot;, &quot;open&quot;: &quot;Open&quot;, &quot;loading&quot;: &quot;Loading&quot;, &quot;fail&quot;: &quot;The preview didn’t load. Try it on the tool’s own site.&quot;, &quot;yours&quot;: &quot;Your turn&quot;, &quot;auto&quot;: &quot;Playing a demo&quot;, &quot;replay&quot;: &quot;Replay&quot;, &quot;play&quot;: &quot;Play video&quot;, &quot;pause&quot;: &quot;Pause video&quot;, &quot;home&quot;: &quot;https://typing.lumenlab.page/&quot;, &quot;icon&quot;: &quot;/img/typing.svg&quot;}" style="--tc:#5b3fa6;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/typing.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/typing.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">Todok</h1>
       <p class="sh__what">Korean and English typing practice</p>
+      <p class="sh__status is-proof">Publishes how speed is counted</p>
       <a class="btn btn--lamp sh__open" href="https://typing.lumenlab.page/">Open <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">Typing test and practice in English and Korean that shows which keys you missed and where you slowed down.</p>
   <ul class="sh__facts"><li><b>200+</b><span>original practice sentences</span></li><li><b>15–120 s</b><span>test lengths</span></li><li><b>51.56 WPM</b><span>average in a 2018 study</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
-    <div class="stage is-loading" data-tool="todok" data-core="[&quot;https://typing.lumenlab.page/assets/tj-core.js?v=5d7880ff5a&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="todok" data-core="[&quot;https://typing.lumenlab.page/assets/tj-core.js?v=5d7880ff5a&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">WPM is correct characters ÷ 5 ÷ minutes, the same formula the site shows with every result.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://typing.lumenlab.page/practice/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3zM6 10h1M9 10h1M12 10h1M15 10h1M18 10h1M7 14h10"/></svg></span><b>Typing practice</b><span>Home row to full keyboard</span></a></li><li><a href="https://typing.lumenlab.page/sentences/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3zM6 10h2M10 10h2M14 10h2M18 10h0M8 14h8"/></svg></span><b>Sentence practice</b><span>One line at a time, no timer</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <p class="sh__check">The way speed and WPM are counted is published (five characters per word, as defined in Dhakal et al., CHI 2018), and the practice texts contain no books, articles or lyrics.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">The way speed and WPM are counted is published (five characters per word, as defined in Dhakal et al., CHI 2018), and the practice texts contain no books, articles or lyrics.</p></div>
     <p class="sh__links"><a href="https://typing.lumenlab.page/about/">More in About Todok <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">3 guides</h2>
     <ol class="sh__guides"><li><a href="https://typing.lumenlab.page/guide/how-wpm-is-calculated/">How WPM is calculated</a></li><li><a href="https://typing.lumenlab.page/guide/touch-typing-home-row/">Touch typing basics: the home row and finger chart</a></li><li><a href="https://typing.lumenlab.page/guide/accuracy-before-speed/">Why accuracy first makes you faster</a></li></ol>
     <p class="sh__links"><a href="https://typing.lumenlab.page/guide/">All guides <span aria-hidden="true">→</span></a></p>

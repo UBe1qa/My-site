@@ -48,30 +48,36 @@
 <article class="sh-doc" id="sheet" data-id="scicalc" data-ui="{&quot;close&quot;: &quot;Close&quot;, &quot;open&quot;: &quot;Open&quot;, &quot;loading&quot;: &quot;Loading&quot;, &quot;fail&quot;: &quot;The preview didn’t load. Try it on the tool’s own site.&quot;, &quot;yours&quot;: &quot;Your turn&quot;, &quot;auto&quot;: &quot;Playing a demo&quot;, &quot;replay&quot;: &quot;Replay&quot;, &quot;play&quot;: &quot;Play video&quot;, &quot;pause&quot;: &quot;Pause video&quot;, &quot;home&quot;: &quot;https://calc.lumenlab.page/en/&quot;, &quot;icon&quot;: &quot;/img/sci-calc.svg&quot;}" style="--tc:#f25c05;--tcp:78%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/sci-calc.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/sci-calc.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">Scientific Calculator</h1>
       <p class="sh__what">Scientific functions and physical constants</p>
+      <p class="sh__status is-proof">Checked against 3,700+ answers</p>
       <a class="btn btn--lamp sh__open" href="https://calc.lumenlab.page/en/">Open <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n.</p>
   <ul class="sh__facts"><li><b>√2/2</b><span>exact answers</span></li><li><b>23</b><span>physical constants (CODATA 2022)</span></li><li><b>3,700+</b><span>answers checked in tests</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
-    <div class="stage is-loading" data-tool="scicalc" data-core="[&quot;https://calc.lumenlab.page/assets/engine.js?v=2117e4251d&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="scicalc" data-core="[&quot;https://calc.lumenlab.page/assets/engine.js?v=2117e4251d&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">Answers come out exact, like √2/2, and S⇔D switches to the decimal.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://calc.lumenlab.page/en/stats/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V11M10 19V6M15 19v-9M20 19V9M3 19h19"/></svg></span><b>Statistics</b><span>Mean, standard deviation, regression</span></a></li><li><a href="https://calc.lumenlab.page/en/distribution/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l4-8 4 5 4-9 4 12"/></svg></span><b>Distributions</b><span>Normal, binomial and Poisson</span></a></li><li><a href="https://calc.lumenlab.page/en/equation/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20c2 0 2-3 3-8s1-8 3-8M8 11h7"/></svg></span><b>Equations</b><span>Quadratic to quartic, 2–4 unknowns</span></a></li><li><a href="https://calc.lumenlab.page/en/matrix/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4H5v16h2M17 4h2v16h-2M9 9h.01M12 9h.01M15 9h.01M9 15h.01M12 15h.01M15 15h.01"/></svg></span><b>Matrix &amp; vector</b><span>Inverse and determinant up to 4×4</span></a></li><li><a href="https://calc.lumenlab.page/en/base/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h3v10H5zM11 7h2M11 12h2M11 17h2M16 7l3 5-3 5"/></svg></span><b>Base-N</b><span>Binary, octal, decimal, hex</span></a></li><li><a href="https://calc.lumenlab.page/en/table/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>Table of values</b><span>Up to 200 rows of f(x)</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <p class="sh__check">Results are compared automatically with about 3,700 answers computed separately in Python (sympy, mpmath, scipy and numpy), and the physical constants were checked digit by digit against the NIST table.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">Results are compared automatically with about 3,700 answers computed separately in Python (sympy, mpmath, scipy and numpy), and the physical constants were checked digit by digit against the NIST table.</p></div>
     <p class="sh__links"><a href="https://calc.lumenlab.page/en/about/">More in About Scientific Calculator <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">5 guides</h2>
     <ol class="sh__guides"><li><a href="https://calc.lumenlab.page/en/guide/order-of-operations/">6÷2(1+2) = 1 or 9? Order of operations on a calculator</a></li><li><a href="https://calc.lumenlab.page/en/guide/standard-deviation/">σ vs s: population or sample standard deviation?</a></li><li><a href="https://calc.lumenlab.page/en/guide/degrees-radians/">Degrees vs radians: why sin 30 gives −0.988 on your calculator</a></li><li><a href="https://calc.lumenlab.page/en/guide/equations/">Solving quadratic and simultaneous equations</a></li><li><a href="https://calc.lumenlab.page/en/guide/permutations-combinations/">Permutations vs combinations: nPr and nCr explained</a></li></ol>
     <p class="sh__links"><a href="https://calc.lumenlab.page/en/guide/">All guides <span aria-hidden="true">→</span></a></p>

@@ -1,7 +1,8 @@
 /* 루멘랩 홈(랜딩) 전용. 라이브러리 없음.
    1) 첫 화면(불 켜진 작업실). 움직임(html.anim, 동작 줄이기 아님)일 때만 움직이고, 아니면 불 켜진 그림 한 장 그대로. 글과 단추는 처음부터 보인다.
       움직임은 투명도가 아니라 자리·모양이 바뀌게 한다(폰에서 방 창이 폭 200~300px뿐이라 작은 흔들림은 안 보임: 팔을 드는 실루엣, 화면을 가로지르는 불빛).
-      들어올 때(html.intro, #로 들어오거나 이미 내려와 있으면 건너뜀, 1.8초): 밤. 꺼진 방 창에 모니터 빛과 그 앞 사람 실루엣만 → 사람이 팔을 뻗어 스탠드 갓을
+      들어올 때(html.intro, #로 들어오거나 이미 내려와 있으면 건너뜀, 2.3초): 밤. 카메라는 방 창 앞에 바짝(확대할 때, html.dolly) 있다가 불이 켜지면 2.7초까지 물러난다.
+      꺼진 방 창에 모니터 빛과 그 앞 사람 실루엣만 → 사람이 팔을 뻗어 스탠드 갓을
       당기면 딸깍, 방 불이 한 번 깜빡이고 스탠드 자리에서 번지며 갓은 튕기다 멈춘다 → 간판 네온 글자가 띄엄띄엄 들어온다(먼 창은 하나씩 꺼짐).
       이야기(머무는 동안, 2.3초에 처음, 4.6초마다): 사람이 다 만들면 모니터가 번쩍하고 아이콘 하나가 톡 튀며 불빛이 되어 방 창 유리를 뚫고 나와(유리 반사)
       휘어 솟았다가 위층 이웃 창으로 쏙 들어간다 → 그 창에 불이 켜지고(번쩍·고리) 안의 사람이 들썩인다(앱: 노트북, 게임: 소파의 휴대폰, 웹 도구: 휴대폰과 창턱 고양이).
@@ -175,9 +176,17 @@
        0       방 창은 꺼져 있고 모니터 빛만. 그 빛에 일하는 사람 뒷모습과 스탠드가 보인다(먼 창은 하나씩 꺼짐)
        .15~.55초 사람이 왼팔을 뻗어 스탠드 갓을 잡고, .55~.7초 아래로 당긴다
        .7초    딸깍: 전구가 번쩍, 방 불이 한 번 깜빡였다가 스탠드 자리에서 번지고(.84~1.4초), 놓은 갓은 튕기다 제자리
-       1~1.7초 간판 네온: 점이 깜빡이고 글자가 띄엄띄엄 들어옴(몇 글자는 한 번 끊김)
-       1.1초~  타자. 첫 불빛은 2.3초에 모니터에서 나간다(아래 '이야기') */
-    var t0 = performance.now(), last = t0, it = 0, INTRO = 1800, introing = false, CLICK = 700, PIV = [186, 62];
+       .9~2.7초 카메라가 방 창 앞에서 물러난다(DOLLY)
+       1.5~2.2초 간판 네온: 점이 깜빡이고 글자가 띄엄띄엄 들어옴(몇 글자는 한 번 끊김). 카메라가 물러나 간판이 글 밑으로 온 뒤
+       1.1초~  타자. 첫 불빛은 2.3초에 모니터에서 나간다(아래 '이야기'). 그 창 종류의 제목 낱말이 같이 켜진다 */
+    var t0 = performance.now(), last = t0, it = 0, INTRO = 2300, introing = false, CLICK = 700, PIV = [186, 62];
+    // 들어올 때 카메라(확대할 때만): 방 창에 바짝 다가가 있다가(dz, measure가 글 옆·아래 빈 자리에 맞춰 잡음) 스탠드가 켜지고 나면(DOLLY[0]ms)
+    // 뒤로 물러나며(DOLLY[1]ms까지) 간판·위층 창·건물·하늘·달이 차례로 화면에 들어온다. 그동안 html.dolly. 글은 처음부터 그대로 보인다(카메라만 움직임)
+    var DOLLY = [900, 2700], dolly = false, dz = null;
+    function endDolly() { if (dolly) { dolly = false; d.classList.remove('dolly'); seen = ''; } }
+    // 제목 낱말(.hw[data-k] = 이웃 창 종류: 0 앱, 1 게임, 2 웹 도구)은 그 종류의 이웃 창에 불이 켜져 있는 동안 같이 켜진다(색만 바뀜)
+    var words = [].slice.call(copy.querySelectorAll('.hw[data-k]'));
+    function word(kind, v) { words.forEach(function (e) { if (+e.getAttribute('data-k') === kind) e.classList.toggle('lit', v); }); }
     var NEON = [0, 5, 2, 7, 1, 8, 4, 6, 3];   // 간판 글자가 들어오는 차례(L U M E N _ L A B)
     function lampRot(t) {   // 스탠드 갓 각도: 손이 당김 → 딸깍 뒤 놓으면 튕기다 멈춤
       if (t < 550) return 0;
@@ -196,14 +205,14 @@
         b.hot.style.opacity = (t < CLICK ? 0 : t < CLICK + 140 ? 1 : eo(k(t, CLICK + 300, CLICK + 900))).toFixed(3);   // 전구 번쩍 → 흰 빛무리는 조금 늦게
         b.tint.setAttribute('opacity', (t < CLICK + 140 ? 0 : (1 - on) * .55).toFixed(3));
         b.lit.forEach(function (e) { e.style.opacity = on.toFixed(3); });
-        var dot = t < 1000 ? 0 : t < 1060 ? 1 : t < 1130 ? .15 : 1;   // 간판 점: 한 번 깜빡이고 켜짐
+        var dot = t < 1500 ? 0 : t < 1560 ? 1 : t < 1630 ? .15 : 1;   // 간판 점: 한 번 깜빡이고 켜짐(카메라가 물러나 간판이 글 밑으로 온 뒤)
         b.core.style.opacity = b.dot.style.opacity = dot;
         b.name.style.opacity = '1';
         b.letters.forEach(function (e, i) {   // 네온: 차례가 오면 켜지고, 짝수 차례 글자는 한 번 끊겼다 다시
-          var a = 1150 + NEON[i] * 60, v = t < a ? 0 : NEON[i] % 2 === 0 && t >= a + 50 && t < a + 110 ? .12 : 1;
+          var a = 1650 + NEON[i] * 60, v = t < a ? 0 : NEON[i] % 2 === 0 && t >= a + 50 && t < a + 110 ? .12 : 1;
           e.style.fillOpacity = v;
         });
-        b.glow.style.opacity = k(t, 1500, 1800).toFixed(3);
+        b.glow.style.opacity = k(t, 2000, 2300).toFixed(3);
       });
     }
     function finishIntro() {
@@ -331,7 +340,7 @@
     }
     function land(b, f, t) {
       var to = f.to;
-      if (to.w) { to.w.on = true; to.w.aim = false; to.w.pop = t; to.w.off = t + STAY; ring(b, f.p3[0], f.p3[1], 48, t, f.px); }
+      if (to.w) { to.w.on = true; to.w.aim = false; to.w.pop = t; to.w.off = t + STAY; ring(b, f.p3[0], f.p3[1], 48, t, f.px); word(to.w.kind, true); }
       else if (to.p) { to.p.lit = t; to.p.mode = 'lit'; to.p.at = t; ring(b, f.p3[0], f.p3[1], 30, t, f.px); }
       else if (to.far) {
         to.far.style.fill = 'var(--lamp)'; to.far.style.opacity = '.55'; rig.farLit.push(to.far);
@@ -458,7 +467,7 @@
       }
       // 이웃 창: 켜지면 번쩍하고 안의 사람이 두 번 반 들썩, 화면 빛이 일렁이고 고양이 꼬리가 흔들림. 9초 뒤 꺼짐
       b.nb.forEach(function (w) {
-        if (w.on && t > w.off) w.on = false;
+        if (w.on && t > w.off) { w.on = false; word(w.kind, false); }
         w.g.setAttribute('opacity', w.on ? ml.toFixed(3) : 0);
         if (!w.on) return;
         var pa = t - w.pop;
@@ -479,7 +488,7 @@
         b.l1.setAttribute('width', 30); b.l2.setAttribute('width', 20); b.caret.setAttribute('x', 248.6); b.caret.setAttribute('y', 77.6); b.caret.setAttribute('opacity', 0);
         b.flash.setAttribute('opacity', 0); b.sheen.setAttribute('opacity', 0); b.re = null;
         b.fl.concat(b.bits).forEach(function (f) { b.fx.removeChild(f.g || f.e); }); b.fl = []; b.bits = [];
-        b.nb.forEach(function (w) { w.on = w.aim = false; w.g.setAttribute('opacity', 0); });
+        b.nb.forEach(function (w) { w.on = w.aim = false; w.g.setAttribute('opacity', 0); word(w.kind, false); });
         b.wk.mode = ''; b.wk.next = 0; b.wk.g.setAttribute('opacity', 0);
         b.letters.forEach(function (e) { e.removeAttribute('y'); }); b.sign = b.wave = b.flick = null; roomOff(b, false);
       });
@@ -529,8 +538,12 @@
       };
     }
     var on = false, W = 0, H = 0, start = 0, travel = 1, hh = 0, barH = 64, cam = null, pt = null;
-    function shoot(p, m) {   // 그림과 지나가는 빛, 글, 종이색. 아이콘은 fly()
+    function shoot(p, m, pc) {   // 그림과 지나가는 빛, 글, 종이색. 아이콘은 fly(). pc = 들어올 때 카메라의 무게(내리는 카메라와 섞음: 그동안 내려도 튀지 않게)
       var s = Math.exp(cam.ls(p)), fx = cam.fx(p), fy = cam.fy(p), tx = cam.tx(p), ty = cam.ty(p);
+      if (pc > 0) {   // 화면 = o + 점 × s 꼴로 두 카메라를 섞는다(배율은 로그로)
+        var ox = lerp(tx - fx * s, dz.T.x - dz.F.x * dz.s, pc), oy = lerp(ty - fy * s, dz.T.y - dz.F.y * dz.s, pc);
+        s = Math.exp(lerp(Math.log(s), Math.log(dz.s), pc)); fx = lerp(fx, dz.F.x, pc); fy = lerp(fy, dz.F.y, pc); tx = ox + fx * s; ty = oy + fy * s;
+      }
       var X = function (q) { return tx + (q.x - fx) * s; }, Y = function (q) { return ty + (q.y - fy) * s; };
       lay(near, s, fx, fy, tx - 16 * pmx * m, ty - 8 * pmy * m, p);
       lay(back, Math.pow(s, .3), fx, fy, tx - 7 * pmx * m, ty - 4 * pmy * m, p);
@@ -639,7 +652,7 @@
         var rn = function (x, y) { return toN(B.rx + x * B.rw / 324, B.ry + y * B.rh / 164); };
         W = nr.width; H = nr.height;
         var G = rn(162, 82), RC = rn(226, 84), M = rn(252, 64), o = rn(0, 0), bd = B.board;
-        var gw = rn(324, 0).x - o.x, sw = rn(286, 0).x - rn(218, 0).x, sh = rn(0, 84).y - rn(0, 44).y;
+        var gw = rn(324, 0).x - o.x, gh0 = rn(0, 164).y - o.y, sw = rn(286, 0).x - rn(218, 0).x, sh = rn(0, 84).y - rn(0, 44).y;
         var s2 = Math.max(1.6, .82 * W / gw), s3 = Math.max(s2 * 1.6, 1.55 * W / gw), s5 = 1.1 * Math.max(W / sw, Math.min(H / sh, 1.3 * W / sw)), s4 = Math.max(.72 * W / sw, s3 * 1.2);
         var mid = { x: W / 2, y: H / 2 }, keys;
         // ① 옆걸음 ② 창 ③ 유리 너머 사람과 모니터 사이 ④ 모니터 화면 ⑤ 모니터 화면이 화면을 덮음(끝까지 그대로)
@@ -656,6 +669,15 @@
         var col = function (f) { return curve(keys.map(f)); };
         cam = { ls: col(function (q) { return Math.log(q[1]); }), fx: col(function (q) { return q[0].x; }), fy: col(function (q) { return q[0].y; }),
           tx: col(function (q) { return q[2].x; }), ty: col(function (q) { return q[2].y; }) };
+        // 들어올 때 카메라: 넓은 화면은 글 오른쪽 빈 자리를 방 창이 채우게, 세로 화면은 방 창이 화면 폭보다 조금 넓게 단추 줄 바로 밑에
+        var cr = 0, cb = 0, rg = document.createRange();   // 글이 실제로 차지한 오른쪽 끝·아래 끝(칸 폭이 아니라 글자)
+        [].forEach.call(copy.querySelectorAll('.hero__h1, .hero__sub, .hero__act a'), function (e) {
+          rg.selectNodeContents(e); var r = rg.getBoundingClientRect(); cr = Math.max(cr, r.right - nr.left); cb = Math.max(cb, r.bottom - nr.top);
+        });
+        var z0, T0;
+        if (B.wide) { z0 = Math.max(1.3, Math.min(2.8, (W - cr - 40) / gw)); T0 = { x: Math.max(cr + 24 + gw * z0 / 2, W - gw * z0 * .42), y: Math.min(H * .56, H - gh0 * z0 / 2 - 12) }; }
+        else { z0 = 1.12 * W / gw; T0 = { x: W / 2, y: Math.min(cb + 14 + gh0 * z0 / 2, H - gh0 * z0 * .4) }; }
+        dz = { F: G, s: z0, T: T0 };
         pt = { o: o, s0: rn(218, 44), s1: rn(286, 84), ic: [rn(230, 58), rn(246, 58), rn(262, 58)], ru: rn(1, 0).x - o.x,
           sg: toN(+bd.getAttribute('x') + bd.getAttribute('width') / 2, +bd.getAttribute('y') + bd.getAttribute('height') / 2) };
       } else on = false;
@@ -759,18 +781,20 @@
       } else p = on ? clamp((scrollY - start) / travel) : 0;
       if (introing && p > .02 && !ride) finishIntro();   // 장면을 끝까지 보여 주는 중이 아닌데 내려와 있으면 바로 다 켠 그림으로
       if (introing) { it += dt * (ride ? 2.5 : 1); if (it >= INTRO) finishIntro(); else { introAt(it); more = true; } }
+      var pc = 0;   // 들어올 때 카메라의 무게(1 = 방 창 앞, 0 = 원래 자리)
+      if (dolly) { if (!on || !dz || t >= DOLLY[1]) endDolly(); else { pc = 1 - eio(k(t, DOLLY[0], DOLLY[1])); more = true; } }
       var m = on ? 1 - k(p, 0, .12) : 1, ml = on ? 1 - k(p, B.wide ? 0 : .3, B.wide ? .12 : .38) : 1, awake = vis && (!on || p < .58);
       if (awake) { idleAt(t, B); story(now, t, B, m, ml); more = true; }
       if (awake && pointerAt()) more = true;
       if (on) {
-        var key = p + ':' + pmx.toFixed(4) + ':' + pmy.toFixed(4);
+        var key = p + ':' + pc.toFixed(5) + ':' + pmx.toFixed(4) + ':' + pmy.toFixed(4);
         if (key !== seen) {   // 스크롤도 마우스도 그대로면 다시 그리지 않음
           seen = key;
           var live = p >= .47 && p < SHOW, sr = live && stage.getBoundingClientRect(), rs = live && rig.ghosts.map(function (g) { return g.icon.getBoundingClientRect(); });
-          var c = shoot(p, m);
+          var c = shoot(p, m, pc);
           fly(p, c, sr, rs);
-          // 머리말: 창 윗변(키운 뒤 화면 위치)이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말
-          topNight(below && c.we < .5 && c.gt > barH);
+          // 머리말: 창 윗변(키운 뒤 화면 위치)이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말(들어올 때 카메라는 밖에 있으니 밤색 그대로)
+          topNight(below && c.we < .5 && (pc > 0 || c.gt > barH));
         }
       } else {
         lay(near, 1, 0, 0, -16 * pmx, -8 * pmy, 0); lay(back, 1, 0, 0, -7 * pmx, -4 * pmy, 0);
@@ -802,7 +826,7 @@
     setTimeout(again, 3100);   // head 스크립트가 3초에 움직임을 껐을 수 있다(site.js가 안 옴)
     if (moving()) build();
     introing = d.classList.contains('intro') && !!rig && scrollY < 2;
-    if (introing) { rig.blds.forEach(function (b) { b.all.setAttribute('mask', b.mask); }); introAt(0); }
+    if (introing) { rig.blds.forEach(function (b) { b.all.setAttribute('mask', b.mask); }); introAt(0); dolly = true; d.classList.add('dolly'); }
     else finishIntro();
     measure();
   })();

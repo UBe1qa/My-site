@@ -48,30 +48,36 @@
 <article class="sh-doc" id="sheet" data-id="daycount" data-ui="{&quot;close&quot;: &quot;Close&quot;, &quot;open&quot;: &quot;Open&quot;, &quot;loading&quot;: &quot;Loading&quot;, &quot;fail&quot;: &quot;The preview didn’t load. Try it on the tool’s own site.&quot;, &quot;yours&quot;: &quot;Your turn&quot;, &quot;auto&quot;: &quot;Playing a demo&quot;, &quot;replay&quot;: &quot;Replay&quot;, &quot;play&quot;: &quot;Play video&quot;, &quot;pause&quot;: &quot;Pause video&quot;, &quot;home&quot;: &quot;https://date.lumenlab.page/en/&quot;, &quot;icon&quot;: &quot;/img/daycount.svg&quot;}" style="--tc:#c2512b;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/daycount.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/daycount.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">Daycount</h1>
       <p class="sh__what">Days between dates, age and business days</p>
+      <p class="sh__status is-proof">Checked against 3,200+ answers</p>
       <a class="btn btn--lamp sh__open" href="https://date.lumenlab.page/en/">Open <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">Days between dates, countdowns, business days excluding holidays, age and anniversaries.</p>
   <ul class="sh__facts"><li><b>11</b><span>date calculators</span></li><li><b>2015–2035</b><span>holiday table</span></li><li><b>3,200+</b><span>answers checked in tests</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
-    <div class="stage is-loading" data-tool="daycount" data-core="[&quot;https://date.lumenlab.page/assets/holidays.js?v=52fbc70955&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="daycount" data-core="[&quot;https://date.lumenlab.page/assets/holidays.js?v=52fbc70955&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">Each square is one day, and holidays come from Daycount’s US federal holiday table for 2015–2035.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://date.lumenlab.page/en/#dday"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 5h16v14H4zM8 3v4M16 3v4M8 11h2M12 11h2M16 11h2M8 15h2M12 15h2"/></svg></span><b>Countdown</b><span>Days left until a date</span></a></li><li><a href="https://date.lumenlab.page/en/#workdays"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>Business days</b><span>Weekends and holidays left out</span></a></li><li><a href="https://date.lumenlab.page/en/#age"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 20a6 6 0 0 1 12 0"/></svg></span><b>Exact age</b><span>Years, months and days</span></a></li><li><a href="https://date.lumenlab.page/en/#add"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><b>Add or subtract</b><span>What date is 100 days later</span></a></li><li><a href="https://date.lumenlab.page/en/#anniv"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg></span><b>Anniversaries</b><span>Day 100, day 1,000 and more</span></a></li><li><a href="https://date.lumenlab.page/en/#week"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg></span><b>Week number</b><span>ISO week and day of the year</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <p class="sh__check">It is tested automatically against more than 3,200 answers worked out separately with Python’s date library.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">It is tested automatically against more than 3,200 answers worked out separately with Python’s date library.</p></div>
     <p class="sh__links"><a href="https://date.lumenlab.page/en/about/">More in About Daycount <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">6 guides</h2>
     <ol class="sh__guides"><li><a href="https://date.lumenlab.page/en/guide/days-between-dates/">How to count the days between two dates (and when to add 1)</a></li><li><a href="https://date.lumenlab.page/en/guide/business-days/">How to count business days and find a deadline</a></li><li><a href="https://date.lumenlab.page/en/guide/federal-holidays-observed/">US federal holidays on a weekend: which day is observed</a></li><li><a href="https://date.lumenlab.page/en/guide/adding-months/">Adding months to a date: what happens to January 31</a></li><li><a href="https://date.lumenlab.page/en/guide/exact-age/">How to calculate your exact age in years, months and days</a></li><li><a href="https://date.lumenlab.page/en/guide/iso-week-numbers/">ISO week numbers: why January 1 can be in week 53</a></li></ol>
     <p class="sh__links"><a href="https://date.lumenlab.page/en/guide/">All guides <span aria-hidden="true">→</span></a></p>
