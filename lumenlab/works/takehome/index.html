@@ -47,30 +47,36 @@
 <article class="sh-doc" id="sheet" data-id="takehome" data-ui="{&quot;close&quot;: &quot;닫기&quot;, &quot;open&quot;: &quot;열기&quot;, &quot;loading&quot;: &quot;불러오는 중&quot;, &quot;fail&quot;: &quot;미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.&quot;, &quot;yours&quot;: &quot;직접 해 보세요&quot;, &quot;auto&quot;: &quot;자동으로 보여 주는 중&quot;, &quot;replay&quot;: &quot;다시 보기&quot;, &quot;play&quot;: &quot;영상 재생&quot;, &quot;pause&quot;: &quot;영상 멈춤&quot;, &quot;home&quot;: &quot;https://salary.lumenlab.page/&quot;, &quot;icon&quot;: &quot;/img/salary.svg&quot;}" style="--tc:#9b2743;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/salary.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/salary.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">떼고얼마 <span lang="en">Takehome Korea</span></h1>
       <p class="sh__what">월급 실수령액·퇴직금 계산</p>
+      <p class="sh__status is-proof">노동부 예제와 31전까지 같음</p>
       <a class="btn btn--lamp sh__open" href="https://salary.lumenlab.page/">열기 <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">연봉 실수령액을 급여명세서처럼 한 줄씩 계산해요. 퇴직금, 주휴수당, 실업급여, 연차까지. 요율 기준일과 출처를 같이 보여 줘요.</p>
   <ul class="sh__facts"><li><b>6가지</b><span>떼는 돈을 식과 함께</span></li><li><b>2026년 3월</b><span>시행 간이세액표 그대로</span></li><li><b>가입 없음</b><span>브라우저 안에서 계산</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
-    <div class="stage is-loading" data-tool="takehome" data-core="[&quot;https://salary.lumenlab.page/assets/pay-data.js?v=582b44596b&quot;, &quot;https://salary.lumenlab.page/assets/gani-2026.js?v=b11adcc99a&quot;, &quot;https://salary.lumenlab.page/assets/pay-core.js?v=e7cb1da03d&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="takehome" data-core="[&quot;https://salary.lumenlab.page/assets/pay-data.js?v=582b44596b&quot;, &quot;https://salary.lumenlab.page/assets/gani-2026.js?v=b11adcc99a&quot;, &quot;https://salary.lumenlab.page/assets/pay-core.js?v=e7cb1da03d&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">소득세는 근로소득 간이세액표에서 찾고, 보험료와 세금의 10원 미만은 버려요.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://salary.lumenlab.page/table/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>연봉 실수령액 표</b><span>2,000만~2억 원 한눈에</span></a></li><li><a href="https://salary.lumenlab.page/severance/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM6 10v4M18 10v4"/></svg></span><b>퇴직금</b><span>고용노동부와 같은 식으로</span></a></li><li><a href="https://salary.lumenlab.page/hourly/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/></svg></span><b>시급·주휴수당</b><span>최저임금과 견줘 보기</span></a></li><li><a href="https://salary.lumenlab.page/unemployment/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM7 10a2 2 0 1 0 0 .01M6 15h4M13 10h5M13 13h5"/></svg></span><b>실업급여</b><span>하루 받는 돈과 받는 날 수</span></a></li><li><a href="https://salary.lumenlab.page/annual-leave/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V5M5 5h11l-2 4 2 4H5"/></svg></span><b>연차</b><span>입사일로 연차 날짜까지</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
-    <p class="sh__check">요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요.</p></div>
     <p class="sh__links"><a href="https://salary.lumenlab.page/about/">떼고얼마 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 6편</h2>
     <ol class="sh__guides"><li><a href="https://salary.lumenlab.page/guide/myeongseseo-dareun-iyu/">급여명세서 금액이 실수령액 계산기와 다른 이유</a></li><li><a href="https://salary.lumenlab.page/guide/2026-4dae-boheom-yoyul/">2026년 4대 보험 요율과 2027년에 바뀌는 것</a></li><li><a href="https://salary.lumenlab.page/guide/juhyu-sudang-gyesan/">주휴수당 계산법: 주 15시간 기준과 시간별 계산 예</a></li><li><a href="https://salary.lumenlab.page/guide/toejikgeum-gyesan-yeje/">퇴직금 계산을 고용노동부 예제로 따라가 보기</a></li><li><a href="https://salary.lumenlab.page/guide/choejeoimgeum-209sigan/">최저임금 월급 환산의 209시간은 어디서 나오나</a></li><li><a href="https://salary.lumenlab.page/guide/sileopgeupyeo-haru-geumaek/">2026년 실업급여 하루 금액이 66,048~68,100원에 모이는 이유</a></li></ol>
     <p class="sh__links"><a href="https://salary.lumenlab.page/guide/">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>

@@ -47,30 +47,36 @@
 <article class="sh-doc" id="sheet" data-id="pickboard" data-ui="{&quot;close&quot;: &quot;닫기&quot;, &quot;open&quot;: &quot;열기&quot;, &quot;loading&quot;: &quot;불러오는 중&quot;, &quot;fail&quot;: &quot;미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.&quot;, &quot;yours&quot;: &quot;직접 해 보세요&quot;, &quot;auto&quot;: &quot;자동으로 보여 주는 중&quot;, &quot;replay&quot;: &quot;다시 보기&quot;, &quot;play&quot;: &quot;영상 재생&quot;, &quot;pause&quot;: &quot;영상 멈춤&quot;, &quot;home&quot;: &quot;https://pick.lumenlab.page/ko/&quot;, &quot;icon&quot;: &quot;/img/pick.svg&quot;}" style="--tc:#e23a3f;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/pick.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/pick.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">공평뽑기 <span lang="en">Pickboard</span></h1>
       <p class="sh__what">돌림판·사다리타기·팀 나누기</p>
+      <p class="sh__status is-proof">10만 번 뽑아 카이제곱 검정</p>
       <a class="btn btn--lamp sh__open" href="https://pick.lumenlab.page/ko/">열기 <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 몇 명이든 넣고 결과는 링크로 다시 보여 줘요.</p>
   <ul class="sh__facts"><li><b>5,000명</b><span>명단에 넣는 수</span></li><li><b>결과 링크</b><span>누가 열어도 같은 결과</span></li><li><b>500개 넘게</b><span>자동 시험</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
-    <div class="stage is-loading" data-tool="pickboard" data-core="[]" data-mod="[&quot;https://pick.lumenlab.page/assets/core/rng.js?v=0f45ba1529&quot;, &quot;https://pick.lumenlab.page/assets/core/pick.js?v=4addbe57ad&quot;]"><p class="stage__msg">불러오는 중</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="pickboard" data-core="[]" data-mod="[&quot;https://pick.lumenlab.page/assets/core/rng.js?v=0f45ba1529&quot;, &quot;https://pick.lumenlab.page/assets/core/pick.js?v=4addbe57ad&quot;]"><p class="stage__msg">불러오는 중</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">돌리기 전에 브라우저 암호 난수로 결과를 먼저 정하고, 판은 그 칸에 멈추도록 돌아요.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://pick.lumenlab.page/ko/ladder/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M8 7h8M8 12h8M8 17h8"/></svg></span><b>사다리타기</b><span>2명부터 30명까지</span></a></li><li><a href="https://pick.lumenlab.page/ko/draw/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 9h.01M15 15h.01M12 12h.01"/></svg></span><b>제비뽑기</b><span>겹치지 않게 여러 명</span></a></li><li><a href="https://pick.lumenlab.page/ko/teams/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a5 5 0 0 1 10 0M11 20a5 5 0 0 1 10 0"/></svg></span><b>팀 나누기</b><span>인원 차이 한 명까지만</span></a></li><li><a href="https://pick.lumenlab.page/ko/number/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h10M5 18h6M19 15v6M16 18h6"/></svg></span><b>랜덤 숫자</b><span>범위·개수·중복 없이</span></a></li><li><a href="https://pick.lumenlab.page/ko/coin/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8v8M9.5 10h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg></span><b>동전 던지기</b><span>1,000번까지 한 번에</span></a></li><li><a href="https://pick.lumenlab.page/ko/dice/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 9h.01M15 15h.01M12 12h.01"/></svg></span><b>주사위</b><span>100개까지, 2~1,000면</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
-    <p class="sh__check">뽑을 때마다 브라우저의 crypto.getRandomValues()로 새 씨앗을 받아 쓰고, 10만 번씩 뽑아 보는 카이제곱 검정을 포함한 자동 테스트 500여 개로 고르게 나오는지 확인해요. 결과 링크로 누구나 같은 결과를 다시 계산할 수 있어요.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">뽑을 때마다 브라우저의 crypto.getRandomValues()로 새 씨앗을 받아 쓰고, 10만 번씩 뽑아 보는 카이제곱 검정을 포함한 자동 테스트 500여 개로 고르게 나오는지 확인해요. 결과 링크로 누구나 같은 결과를 다시 계산할 수 있어요.</p></div>
     <p class="sh__links"><a href="https://pick.lumenlab.page/ko/about/">공평뽑기 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 4편</h2>
     <ol class="sh__guides"><li><a href="https://pick.lumenlab.page/ko/guide/ladder-fairness/">사다리타기는 정말 공평할까: 직접 돌려 본 숫자</a></li><li><a href="https://pick.lumenlab.page/ko/guide/wheel-many-names/">돌림판에 30명 넘게 넣는 법, 뽑힌 사람 빼고 다시 돌리기</a></li><li><a href="https://pick.lumenlab.page/ko/guide/share-draw-result/">단톡방에서 제비뽑기 결과를 믿게 하는 법</a></li><li><a href="https://pick.lumenlab.page/ko/guide/split-teams/">팀을 고르게 나누는 법: 팀 수로, 한 팀 인원으로</a></li></ol>
     <p class="sh__links"><a href="https://pick.lumenlab.page/ko/guide/">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>

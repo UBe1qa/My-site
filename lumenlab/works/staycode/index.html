@@ -47,30 +47,36 @@
 <article class="sh-doc" id="sheet" data-id="staycode" data-ui="{&quot;close&quot;: &quot;닫기&quot;, &quot;open&quot;: &quot;열기&quot;, &quot;loading&quot;: &quot;불러오는 중&quot;, &quot;fail&quot;: &quot;미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.&quot;, &quot;yours&quot;: &quot;직접 해 보세요&quot;, &quot;auto&quot;: &quot;자동으로 보여 주는 중&quot;, &quot;replay&quot;: &quot;다시 보기&quot;, &quot;play&quot;: &quot;영상 재생&quot;, &quot;pause&quot;: &quot;영상 멈춤&quot;, &quot;home&quot;: &quot;https://qr.lumenlab.page/ko/&quot;, &quot;icon&quot;: &quot;/img/qr.svg&quot;}" style="--tc:#2f6b4f;--tcp:82%">
 <div class="sh__body">
   <header class="sh__head">
-    <img class="sh__icon" src="/img/qr.svg" width="96" height="96" alt="">
+    <div class="sh__spot"><svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable="false"><rect class="sw-sky" width="160" height="130"/><circle class="sw-moon" cx="118" cy="32" r="11"/><circle class="sw-sky" cx="123" cy="28" r="9.5"/><path class="sw-city" d="M0 130V74h22V60h18v26h14V50h20v36h12V68h22v24h14V80h20v18h18v32z"/><path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/><path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg><div class="sh__rig"><i class="sh__glow" aria-hidden="true"></i><svg class="sh__lamp" viewBox="0 0 200 230" aria-hidden="true" focusable="false"><circle class="sb-halo" cx="128" cy="94" r="46" fill="url(#sb-dot)"/><defs><radialGradient id="sb-dot"><stop offset="0" class="sb-l" stop-opacity=".7"/><stop offset=".45" class="sb-l" stop-opacity=".2"/><stop offset="1" class="sb-l" stop-opacity="0"/></radialGradient></defs><rect class="sb-wood" x="14" y="221" width="48" height="10" rx="4"/><path class="sb-arm" d="M38 222L22 120L108 66"/><circle class="sb-wood" cx="22" cy="120" r="6"/><circle class="sb-wood" cx="38" cy="219" r="6"/><path class="sb-wood" d="M101.8 71L114.2 61L145.9 77.5L110.1 106.5z"/><circle class="sb-wood" cx="108" cy="66" r="9"/><ellipse class="sb-bulb" cx="126" cy="90" rx="9" ry="6" transform="rotate(-39 126 90)"/></svg><i class="sh__cone" aria-hidden="true"></i><i class="sh__pool" aria-hidden="true"></i>
+      <img class="sh__icon" src="/img/qr.svg" width="112" height="112" alt=""></div></div>
     <div class="sh__id">
       <h1 class="sh__name" id="sh-name" tabindex="-1">오래QR <span lang="en">Staycode</span></h1>
       <p class="sh__what">QR코드 만들기</p>
+      <p class="sh__status is-proof">만든 그림을 다시 읽어 확인</p>
       <a class="btn btn--lamp sh__open" href="https://qr.lumenlab.page/ko/">열기 <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <p class="sh__lead">가입 없이 로고·틀까지 넣은 QR코드를 만들어요. 이 사이트를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요.</p>
   <ul class="sh__facts"><li><b>만료 없음</b><span>정적 QR이라 계속 찍힘</span></li><li><b>1,000개</b><span>목록&#8288;·&#8288;CSV로 한 번에</span></li><li><b>워터마크 없음</b><span>상업용도 무료</span></li></ul>
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
-    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
-    <div class="stage is-loading" data-tool="staycode" data-core="[&quot;https://qr.lumenlab.page/assets/qr.js?v=506fb1a27b&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+    <div class="sh__try-h"><h2 id="sh-try">바로 써 보기</h2></div>
+    <div class="mon">
+      <div class="stage is-loading" data-tool="staycode" data-core="[&quot;https://qr.lumenlab.page/assets/qr.js?v=506fb1a27b&quot;]" data-mod="[]"><p class="stage__msg">불러오는 중</p></div>
+      <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>다시 보기</button></div>
+    </div>
+    <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">오류 복원을 높이면 칸이 촘촘해지는 대신 일부가 가려져도 읽혀요.</p>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://qr.lumenlab.page/ko/wifi/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a12 12 0 0 1 16 0M7 12.5a7.5 7.5 0 0 1 10 0M10 16a3 3 0 0 1 4 0M12 19h.01"/></svg></span><b>와이파이 QR</b><span>찍으면 바로 연결</span></a></li><li><a href="https://qr.lumenlab.page/ko/vcard/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM7 10a2 2 0 1 0 0 .01M6 15h4M13 10h5M13 13h5"/></svg></span><b>연락처(명함) QR</b><span>찍자마자 연락처 저장</span></a></li><li><a href="https://qr.lumenlab.page/ko/bulk/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4zM4 12l8 4 8-4M4 16l8 4 8-4"/></svg></span><b>대량 만들기</b><span>1,000개를 ZIP으로</span></a></li><li><a href="https://qr.lumenlab.page/ko/scan/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M4 12h16"/></svg></span><b>QR 스캐너</b><span>열기 전에 주소 확인</span></a></li></ul>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-check">
+  <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
-    <p class="sh__check">정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 이 사이트가 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.</p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 이 사이트가 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.</p></div>
     <p class="sh__links"><a href="https://qr.lumenlab.page/ko/about/">오래QR 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
   </section>
-  <section class="sh__sec" aria-labelledby="sh-gd">
+  <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 7편</h2>
     <ol class="sh__guides"><li><a href="https://qr.lumenlab.page/ko/guide/qr-manryo/">QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</a></li><li><a href="https://qr.lumenlab.page/ko/guide/wifi-qr/">와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</a></li><li><a href="https://qr.lumenlab.page/ko/guide/qr-inswae-keugi/">QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</a></li><li><a href="https://qr.lumenlab.page/ko/guide/qr-logo/">QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</a></li><li><a href="https://qr.lumenlab.page/ko/guide/myeongham-qr/">명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</a></li><li><a href="https://qr.lumenlab.page/ko/guide/qr-daeryang/">QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</a></li><li><a href="https://qr.lumenlab.page/ko/guide/qr-ssing/">큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</a></li></ol>
     <p class="sh__links"><a href="https://qr.lumenlab.page/ko/guide/">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
