@@ -1,8 +1,7 @@
 /* 루멘랩 홈(랜딩) 전용. 라이브러리 없음.
    1) 첫 화면(불 켜진 작업실). 움직임(html.anim, 동작 줄이기 아님)일 때만 움직이고, 아니면 불 켜진 그림 한 장 그대로. 글과 단추는 처음부터 보인다.
       움직임은 투명도가 아니라 자리·모양이 바뀌게 한다(폰에서 방 창이 폭 200~300px뿐이라 작은 흔들림은 안 보임: 팔을 드는 실루엣, 화면을 가로지르는 불빛).
-      들어올 때(html.intro, #로 들어오거나 이미 내려와 있으면 건너뜀, 2.3초): 밤. 카메라는 방 창 앞에 바짝(확대할 때, html.dolly) 있다가 불이 켜지면 2.7초까지 물러난다.
-      꺼진 방 창에 모니터 빛과 그 앞 사람 실루엣만 → 사람이 팔을 뻗어 스탠드 갓을
+      들어올 때(html.intro, #로 들어오거나 이미 내려와 있으면 건너뜀, 1.8초): 밤. 꺼진 방 창에 모니터 빛과 그 앞 사람 실루엣만 → 사람이 팔을 뻗어 스탠드 갓을
       당기면 딸깍, 방 불이 한 번 깜빡이고 스탠드 자리에서 번지며 갓은 튕기다 멈춘다 → 간판 네온 글자가 띄엄띄엄 들어온다(먼 창은 하나씩 꺼짐).
       이야기(머무는 동안, 2.3초에 처음, 4.6초마다): 사람이 다 만들면 모니터가 번쩍하고 아이콘 하나가 톡 튀며 불빛이 되어 방 창 유리를 뚫고 나와(유리 반사)
       휘어 솟았다가 위층 이웃 창으로 쏙 들어간다 → 그 창에 불이 켜지고(번쩍·고리) 안의 사람이 들썩인다(앱: 노트북, 게임: 소파의 휴대폰, 웹 도구: 휴대폰과 창턱 고양이).
@@ -24,7 +23,8 @@
       '만든 것'은 첫 화면과 겹쳐 있고(CSS, END에 맨 위가 화면 맨 위) 제자리에 오기 전엔 누를 수 없음. 그 안으로 포커스가 오면 END까지 내려 준다.
       머리말은 밤 장면 위에서 밤색(html.top-night, 처음엔 head 스크립트가 붙임)이고, 다가가며 창 윗변이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말.
       확대하지 않을 때(낮은 화면)는 첫 화면이 머리말 밑에 있는 동안만 밤색 머리말. 첫 화면이 화면 밖이거나 종이색이 다 덮으면 매 프레임 그리기를 쉰다.
-   2) 만든 것 칸(작업실 안 선반): 줄이 보이면 줄 이름 앞 등이 켜지고 첫 화면과 같은 불빛이 아이콘마다 날아가 꽂혀 켠다(아래 2) 설명). 끝 칸은 명함이 떨어진다.
+   2) 만든 것 칸(작업실 안 선반): 줄이 보이면 줄 이름 앞 등이 켜지고 첫 화면과 같은 불빛이 아이콘마다 날아가 꽂혀 켠다(아래 2) 설명).
+   3) 끝 칸(작업실 창으로 돌아온 늦은 밤): 도시가 잠들고, '메일 쓰기'에서 편지가 창으로 들어가면 답장 불빛이 명함에 와 ✓ 도장(아래 3) 설명).
       첫 화면으로 다시 올라가 '만든 것'이 다 가려지면 처음 상태로 돌아가, 내려올 때마다 또 켜진다.
       아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
@@ -79,6 +79,73 @@
       '<g class="nb-cat"><path class="n-nbl nb-tail" d="M53.5 55.4c5.4 0 7-4.6 5.2-9"/><path class="n-nb" d="M43.4 56c-2-6.6-.4-12 4.6-13.6 5 1.6 6.6 7 4.6 13.6z"/><circle class="n-nb" cx="48" cy="40" r="3.8"/><path class="n-nb" d="M44.6 38.4l.2-4.6 2.6 3zM51.4 38.4l-.2-4.6-2.6 3z"/></g>'
     ];
     var ICON = [1, 0, 2];   // 이웃 창마다 받는 것 = 모니터 속 아이콘 자리(0 병아리 구조대, 1 Owlight, 2 며칠 계산기): 앱 창 ← Owlight, 게임 창 ← 병아리, 웹 도구 창 ← 며칠 계산기
+    /* 거리를 지나는 사람들: 그림 단위, 발 가운데가 (0,0), 오른쪽을 봄. 팔다리는 매 프레임 관절로 그린다(walk()).
+       .wf = 몸(칠), .wl = 팔다리·자전거(선), .w2 = 몸 뒤쪽(조금 어둡게). .up = 엉덩이 위 몸(엉덩이에서 기울임), .hd = 머리.
+       .bd = 그림자·테두리로 다시 쓰는 몸(불빛·화면은 밖에 둔다). 색은 CSS 변수(--wk 몸, --wk2 뒤쪽) */
+    var CAST = ['kid', 'dog', 'ph', 'bike'];
+    var FIG = {
+      // 풍선을 든 아이: 큰 머리, 뒤로 묶은 머리(뛸 때 출렁), 나팔 원피스. 풍선은 줄 끝에서 따로 움직인다
+      kid: '<g class="bd"><path class="wl w2 lg" stroke-width="2.2"/><path class="wl w2 am" stroke-width="1.9"/>' +
+        '<g class="up"><path class="wf" d="M-2.6 -8.8Q-2.6 -10.3-1 -10.3H1.6Q3.2 -10.3 3.2 -8.8L4.9 2.6Q.4 3.7-4.3 2.6Z"/>' +
+        '<g class="hd"><g class="pt"><path class="wf" d="M-3.2 -15.6Q-6.6 -16.4-7.2 -13.2Q-5.2 -14.2-3.4 -13.4Z"/></g><circle class="wf" cx=".9" cy="-14.4" r="4.2"/></g></g>' +
+        '<path class="wl lg" stroke-width="2.2"/><path class="wl am" stroke-width="1.9"/></g>',
+      // 개와 산책하는 사람: 털모자(방울), 짧은 패딩. 개는 따로(.dg)
+      dog: '<g class="bd"><path class="wl w2 lg" stroke-width="2.8"/><path class="wl w2 am" stroke-width="2.3"/>' +
+        '<g class="up"><path class="wf" d="M-3.9 -11.6Q-4.1 -14.7-1.2 -14.8H2.2Q5 -14.7 4.7 -11.6L4.3 .4Q.3 1.8-3.9 .4Z"/>' +
+        '<g class="hd"><circle class="wf" cx="1" cy="-18.4" r="3.8"/><path class="wf" d="M-3 -19.2Q-2.8 -23.6 1.1 -23.5Q5 -23.4 5.1 -19Z"/><circle class="wf" cx=".9" cy="-24.2" r="1.3"/></g></g>' +
+        '<path class="wl lg" stroke-width="2.8"/><path class="wl am" stroke-width="2.3"/></g>',
+      // 휴대폰을 보며 걷는 사람: 무릎까지 오는 코트, 뒤쪽 어깨에 멘 가방(걸음에 흔들림)
+      ph: '<g class="bd"><path class="wl w2 lg" stroke-width="2.8"/><path class="wl w2 am" stroke-width="2.3"/>' +
+        '<g class="up"><g class="bag"><path class="wl w2" d="M0 0L-1.6 8.6" stroke-width=".9"/><rect class="wf w2" x="-5" y="8.2" width="6" height="6.4" rx="1.1"/></g>' +
+        '<path class="wf" d="M-3.4 -12.2Q-3.5 -14.3-1.3 -14.4H2Q4.1 -14.3 4 -12.2L5.3 3.2Q.3 4.5-4.8 3.2Z"/>' +
+        '<g class="hd"><circle class="wf" cx="1" cy="-18.6" r="3.8"/><path class="wf" d="M-2.8 -18.2Q-3.4 -22.9 1.2 -22.8Q5 -22.7 4.9 -19.6Q3 -20.7.7 -20.2Q-.9 -19.8-1.2 -17.4Z"/></g></g>' +
+        '<path class="wl lg" stroke-width="2.8"/><path class="wl am" stroke-width="2.3"/>' +
+        '<g class="phn"><rect class="wx" x="-1.3" y="-2.1" width="2.6" height="4.2" rx=".7"/><rect class="scr" x="-.85" y="-1.65" width="1.7" height="3.3" rx=".3" opacity="0"/></g></g>' +
+        '<circle class="glow" r="7" fill="url(#n-dot)" opacity="0"/>',
+      // 자전거: 헬멧·배낭. 바퀴살·페달이 달린 거리만큼 돈다. 앞등은 불빛을 받으면 켜져 길을 비춘다
+      bike: '<path class="beam" d="M9.6 -20.6L64 -1.6L70 2.6L15 2.6Z" fill="url(#n-beam)" opacity="0"/>' +
+        '<g class="bd"><path class="wl w2 lg" stroke-width="2.6"/>' +
+        '<g class="wh" transform="translate(-10 -7)"><circle class="wl" r="7" stroke-width="1.5"/><path class="wl sp" d="M-7 0H7M-3.5 -6.06L3.5 6.06M-3.5 6.06L3.5 -6.06" stroke-width=".5"/></g>' +
+        '<g class="wh" transform="translate(10.4 -7)"><circle class="wl" r="7" stroke-width="1.5"/><path class="wl sp" d="M-7 0H7M-3.5 -6.06L3.5 6.06M-3.5 6.06L3.5 -6.06" stroke-width=".5"/></g>' +
+        '<path class="wl" d="M-10 -7L-1.2 -7L6 -18.2L-4.4 -19.6ZM-1.2 -7L-4.4 -19.6M6 -18.2L10.4 -7" stroke-width="1.5"/>' +
+        '<path class="wl" d="M-7 -20.6H-2.6" stroke-width="2"/><path class="wl" d="M6 -18.2L6.8 -21.8L4.6 -22.2" stroke-width="1.5"/>' +
+        '<path class="wl w2 am" stroke-width="2.2"/>' +
+        '<g class="up"><path class="wf" d="M-3.6 -12.6H-6.8Q-7.8 -12.6-7.8 -11.6V-4.6Q-7.8 -3.6-6.8 -3.6H-3.6Z"/><path class="wf" d="M-3.4 -12.2Q-3.5 -14.3-1.3 -14.4H2Q4.1 -14.3 4 -12.2L4.2 .4Q.3 1.4-3.6 .4Z"/>' +
+        '<g class="hd"><circle class="wf" cx="1" cy="-18.4" r="3.7"/><path class="wf" d="M-3.2 -18.8Q-3 -23.3 1.2 -23.2Q5.1 -23 5.4 -19.1Z"/></g></g>' +
+        '<path class="wl lg" stroke-width="2.6"/><path class="wl am" stroke-width="2.2"/><rect class="wx lamp" x="6.8" y="-21.4" width="2.6" height="2" rx=".7"/></g>' +
+        '<circle class="glow" cx="8.4" cy="-20.4" r="8" fill="url(#n-bulb)" opacity="0"/>'
+    };
+    // 개(산책하는 사람과 따로 움직임): 몸·목·머리(늘어진 귀), 꼬리, 다리 넷. 앉으면 뒤가 내려간다
+    var DOG = '<g class="bd"><path class="wl w2 dl" stroke-width="1.7"/><path class="wl w2 dl" stroke-width="1.7"/>' +
+      '<g class="db"><g class="tl"><path class="wl" d="M-6.2 -9.2Q-9.4 -10.4-9.6 -14.6" stroke-width="1.6"/></g><ellipse class="wf" cx="0" cy="-7.8" rx="6.6" ry="3.3"/>' +
+      '<g class="dh"><path class="wf" d="M3.4 -9.8L6 -12.8L8.6 -10.8L6 -6.6Z"/><circle class="wf" cx="7.2" cy="-12.4" r="2.8"/><path class="wf" d="M8.6 -13.4H11.2Q12.2 -13.4 12.2 -12.3T11.2 -11.2H8.6Z"/>' +
+      '<path class="wf w2" d="M5.8 -14.2Q4.3 -13-4.7 -10.2Z"/></g></g>' +
+      '<path class="wl dl" stroke-width="1.7"/><path class="wl dl" stroke-width="1.7"/></g>';
+    function cast(svg, n) {
+      var root = el('g', { 'class': 'n-cast', opacity: 0 }, svg), shade = el('g', { 'class': 'n-shade' }, root), o = { g: root, figs: {} };
+      var mk = function (kind, html, parent) {
+        var g = el('g', { 'class': 'n-fig', style: 'display:none' }, parent || root); g.innerHTML = html;
+        var bd = g.querySelector('.bd'), id = 'n-wk' + n + kind; bd.id = id;
+        var sh = el('use', { href: '#' + id, 'class': 'n-shd', opacity: 0 }, shade);
+        var rim = el('use', { href: '#' + id, 'class': 'n-rimu', transform: 'translate(0 -.8)', opacity: 0 }); g.insertBefore(rim, bd);   // 창 불빛을 등진 테두리: 등불 색 몸을 조금 위로 비켜 뒤에 깖
+        var q = function (s) { return [].slice.call(g.querySelectorAll(s)); }, f = { g: g, sh: sh, rim: rim, lg: q('.lg'), am: q('.am'), up: g.querySelector('.up'), hd: g.querySelector('.hd') };
+        ['pt', 'bag', 'phn', 'scr', 'glow', 'beam', 'lamp', 'db', 'dh', 'tl'].forEach(function (c) { f[c] = g.querySelector('.' + c); });
+        f.wh = q('.wh'); f.sp = q('.sp'); f.dl = q('.dl');
+        return f;
+      };
+      CAST.forEach(function (k) { o.figs[k] = mk(k, FIG[k]); });
+      o.dog = mk('dg', DOG);
+      // 풍선(아이 손에 든 줄 끝, 따로 흔들림), 개 줄, 길에 튀는 불빛 공
+      o.str = el('path', { 'class': 'n-str', style: 'display:none' }, root);
+      o.bln = el('g', { style: 'display:none' }, root);
+      o.blnG = el('circle', { r: 16, fill: 'url(#n-bulb)', opacity: 0 }, o.bln);
+      o.blnB = el('path', { 'class': 'n-bln', d: 'M0 -7.4C4.4 -7.4 5.9 -3.6 5.4 -.6 4.9 2.6 2 4.8 0 5.2-2 4.8-4.9 2.6-5.4 -.6-5.9 -3.6-4.4 -7.4 0 -7.4ZM-.9 5.1L.9 5.1 1.3 6.4H-1.3Z' }, o.bln);
+      o.blnS = el('ellipse', { cx: -2, cy: -3.4, rx: 1.3, ry: 2, fill: '#fff', opacity: .18 }, o.bln);
+      o.lsh = el('path', { 'class': 'n-str', style: 'display:none' }, root);
+      o.ballE = el('g', { style: 'display:none' }, root);
+      el('circle', { r: 11, fill: 'url(#n-dot)' }, o.ballE); el('circle', { 'class': 'n-bead', r: 2.4 }, o.ballE);
+      return o;
+    }
     function build() {
       var sym = document.getElementById('n-room'), seed = 7;
       var rnd = function () { seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646; };
@@ -99,6 +166,8 @@
       // 유리 반사(불빛이 방 창 유리를 뚫고 나올 때 한 번 훑음)
       var sh = el('linearGradient', { id: 'n-sheen', x1: 0, y1: 0, x2: 1, y2: .6 }, document.querySelector('.night__defs defs'));
       [[.36, 0], [.5, .6], [.64, 0]].forEach(function (s) { el('stop', { offset: s[0], 'stop-color': '#fff', 'stop-opacity': s[1] }, sh); });
+      var bm = el('linearGradient', { id: 'n-beam', x1: 0, y1: 0, x2: 1, y2: 0 }, sh.parentNode);   // 자전거 앞등이 길을 비추는 빛
+      [[0, .6], [.55, .22], [1, 0]].forEach(function (s) { el('stop', { offset: s[0], 'stop-color': '#FFD98C', 'stop-opacity': s[1] }, bm); });
       [].forEach.call(near.querySelectorAll('.night__bld'), function (svg, n) {
         // 방을 창마다 펼쳐 넣는다(<use> 안은 따로 움직일 수 없음). 불 켜기 전에 보이는 모니터 둘레와 스탠드 자리에서 퍼지는 불빛을 가림(mask)으로
         var u = svg.querySelector('use[href="#n-room"]'), at = function (a) { return +u.getAttribute(a); };
@@ -136,13 +205,8 @@
             flash: el('rect', { x: x, y: y, width: w, height: h, fill: '#fff', opacity: 0 }, g),
             cx: x + w / 2, cy: y + h / 2, w: w, h: h, kind: i % NB.length, on: false, pop: -1e9, off: 0, aim: false };
         });
-        // 거리를 지나는 사람(건물 앞, 길 위). 발이 (0,0), 오른쪽을 봄. 휴대폰을 든 손(.wk-ph)은 불빛을 받으면 화면이 켜진다
-        var vb = svg.getAttribute('viewBox').split(' ').map(Number), wg = el('g', { opacity: 0 }, svg);
-        wg.innerHTML = '<circle class="wk-glow" cx="4" cy="-23" r="15" fill="url(#n-bulb)" opacity="0"/>' +
-          '<path class="n-wkl wk-leg"/><path class="n-wkl wk-leg"/><path class="n-wkl wk-arm"/>' +
-          '<path class="n-wk" d="M-3.8 -21.4q0-1.8 1.8-1.8h4q1.8 0 1.8 1.8l.7 11.6h-9z"/><circle class="n-wk wk-head" cx=".5" cy="-26.4" r="3.5"/>' +
-          '<path class="n-wkl wk-arm"/><g class="wk-ph"><rect class="n-wkp" x="-1.2" y="-2" width="2.4" height="3.8" rx=".6"/><rect class="wk-scr" x="-.8" y="-1.6" width="1.6" height="3" fill="#FFF3D2" opacity="0"/></g>';
-        var wq = function (s) { return [].slice.call(wg.querySelectorAll(s)); };
+        // 거리를 지나는 사람들(건물 앞 길 위, 아래 '거리'). 그림자 층 → 사람 층. 불빛 층(fx)보다 아래
+        var vb = svg.getAttribute('viewBox').split(' ').map(Number), wk = cast(svg, n);
         // 맨 위 층: 날아가는 불빛·고리·불꽃, 방 창 유리 반사
         var fx = el('g', {}, svg), glass = svg.querySelector('[data-win]'), gx = +glass.getAttribute('x'), gy = +glass.getAttribute('y'), gw = +glass.getAttribute('width'), gh = +glass.getAttribute('height');
         el('rect', { x: gx, y: gy, width: gw, height: gh }, el('clipPath', { id: 'n-gc' + n }, defs));
@@ -156,8 +220,7 @@
           lit: [].filter.call(svg.querySelectorAll('.n-lit'), function (e) { return e !== room && e !== name && !e.matches('.n-core, ellipse, circle[fill="url(#n-dot)"]'); }),
           nb: nb, fx: fx, sheen: sheen, gx: gx, gw: gw, sheenAt: -1e9, fl: [], bits: [], re: null,
           bx: +svg.querySelector('.n-bld').getAttribute('x'), ny: +name.getAttribute('y'), nfs: +name.getAttribute('font-size'), sign: null, wave: null, flick: null, dk: false,
-          wk: { g: wg, legs: wq('.wk-leg'), arms: wq('.wk-arm'), head: wq('.wk-head')[0], ph: wq('.wk-ph')[0], scr: wq('.wk-scr')[0], glow: wq('.wk-glow')[0],
-            gnd: vb[1] + vb[3], stop: gx + gw * .3, mode: '', next: 0, n: 0, x: 0, dir: 1, dist: 0, at: 0, last: 0, lit: -1e9, hop: -1e9 } });
+          wk: Object.assign(wk, { gnd: vb[1] + vb[3], mode: '', next: 0, n: 0, x: 0, dir: 1, dist: 0, at: 0, last: 0, lit: -1e9, hop: -1e9 }) });
       });
       var star = document.createElement('i'); star.className = 'n-shoot'; skyEl.appendChild(star);   // 별똥별(CSS, 가끔)
       var fx = document.createElement('div'); fx.className = 'hero__fx'; stage.insertBefore(fx, copy);
@@ -176,14 +239,9 @@
        0       방 창은 꺼져 있고 모니터 빛만. 그 빛에 일하는 사람 뒷모습과 스탠드가 보인다(먼 창은 하나씩 꺼짐)
        .15~.55초 사람이 왼팔을 뻗어 스탠드 갓을 잡고, .55~.7초 아래로 당긴다
        .7초    딸깍: 전구가 번쩍, 방 불이 한 번 깜빡였다가 스탠드 자리에서 번지고(.84~1.4초), 놓은 갓은 튕기다 제자리
-       .9~2.7초 카메라가 방 창 앞에서 물러난다(DOLLY)
-       1.5~2.2초 간판 네온: 점이 깜빡이고 글자가 띄엄띄엄 들어옴(몇 글자는 한 번 끊김). 카메라가 물러나 간판이 글 밑으로 온 뒤
+       1~1.7초 간판 네온: 점이 깜빡이고 글자가 띄엄띄엄 들어옴(몇 글자는 한 번 끊김)
        1.1초~  타자. 첫 불빛은 2.3초에 모니터에서 나간다(아래 '이야기'). 그 창 종류의 제목 낱말이 같이 켜진다 */
-    var t0 = performance.now(), last = t0, it = 0, INTRO = 2300, introing = false, CLICK = 700, PIV = [186, 62];
-    // 들어올 때 카메라(확대할 때만): 방 창에 바짝 다가가 있다가(dz, measure가 글 옆·아래 빈 자리에 맞춰 잡음) 스탠드가 켜지고 나면(DOLLY[0]ms)
-    // 뒤로 물러나며(DOLLY[1]ms까지) 간판·위층 창·건물·하늘·달이 차례로 화면에 들어온다. 그동안 html.dolly. 글은 처음부터 그대로 보인다(카메라만 움직임)
-    var DOLLY = [900, 2700], dolly = false, dz = null;
-    function endDolly() { if (dolly) { dolly = false; d.classList.remove('dolly'); seen = ''; } }
+    var t0 = performance.now(), last = t0, it = 0, INTRO = 1800, introing = false, CLICK = 700, PIV = [186, 62];
     // 제목 낱말(.hw[data-k] = 이웃 창 종류: 0 앱, 1 게임, 2 웹 도구)은 그 종류의 이웃 창에 불이 켜져 있는 동안 같이 켜진다(색만 바뀜)
     var words = [].slice.call(copy.querySelectorAll('.hw[data-k]'));
     function word(kind, v) { words.forEach(function (e) { if (+e.getAttribute('data-k') === kind) e.classList.toggle('lit', v); }); }
@@ -205,14 +263,14 @@
         b.hot.style.opacity = (t < CLICK ? 0 : t < CLICK + 140 ? 1 : eo(k(t, CLICK + 300, CLICK + 900))).toFixed(3);   // 전구 번쩍 → 흰 빛무리는 조금 늦게
         b.tint.setAttribute('opacity', (t < CLICK + 140 ? 0 : (1 - on) * .55).toFixed(3));
         b.lit.forEach(function (e) { e.style.opacity = on.toFixed(3); });
-        var dot = t < 1500 ? 0 : t < 1560 ? 1 : t < 1630 ? .15 : 1;   // 간판 점: 한 번 깜빡이고 켜짐(카메라가 물러나 간판이 글 밑으로 온 뒤)
+        var dot = t < 1000 ? 0 : t < 1060 ? 1 : t < 1130 ? .15 : 1;   // 간판 점: 한 번 깜빡이고 켜짐
         b.core.style.opacity = b.dot.style.opacity = dot;
         b.name.style.opacity = '1';
         b.letters.forEach(function (e, i) {   // 네온: 차례가 오면 켜지고, 짝수 차례 글자는 한 번 끊겼다 다시
-          var a = 1650 + NEON[i] * 60, v = t < a ? 0 : NEON[i] % 2 === 0 && t >= a + 50 && t < a + 110 ? .12 : 1;
+          var a = 1150 + NEON[i] * 60, v = t < a ? 0 : NEON[i] % 2 === 0 && t >= a + 50 && t < a + 110 ? .12 : 1;
           e.style.fillOpacity = v;
         });
-        b.glow.style.opacity = k(t, 2000, 2300).toFixed(3);
+        b.glow.style.opacity = k(t, 1500, 1800).toFixed(3);
       });
     }
     function finishIntro() {
@@ -341,7 +399,7 @@
     function land(b, f, t) {
       var to = f.to;
       if (to.w) { to.w.on = true; to.w.aim = false; to.w.pop = t; to.w.off = t + STAY; ring(b, f.p3[0], f.p3[1], 48, t, f.px); word(to.w.kind, true); }
-      else if (to.p) { to.p.lit = t; to.p.mode = 'lit'; to.p.at = t; ring(b, f.p3[0], f.p3[1], 30, t, f.px); }
+      else if (to.p) { to.p.lit = t; ring(b, f.p3[0], f.p3[1], to.p.kind === 'dog' ? 22 : 30, t, f.px); }
       else if (to.far) {
         to.far.style.fill = 'var(--lamp)'; to.far.style.opacity = '.55'; rig.farLit.push(to.far);
         if (rig.farLit.length > 7) { var o = rig.farLit.shift(); o.style.fill = o.style.opacity = ''; }
@@ -359,49 +417,205 @@
       var c = cand[(turnN * 7919) % cand.length], p = toSvg(b, c[1], c[2]);
       return { far: c[0], x: p[0], y: p[1] };
     }
-    /* 거리의 사람: 화면 밖에서 걸어와 방 창 아래(왼쪽에서 오면 왼쪽 1/3, 오른쪽에서 오면 오른쪽 1/3)에 서서 휴대폰을 들어 올리면, 방에서 불빛이 내려와 그 화면이 켜진다
-       → 두 번 깡충, 화면을 보며 가던 쪽으로 걸어 나간다. 처음은 들어온 지 6초, 그 뒤 10~14초마다(방향은 번갈아). 내리기 시작하면 불빛 없이 그냥 지나간다. 누르면 깡충 */
-    var WALK = 40, WS = 1.2;   // 걷는 빠르기(건물 그림 단위/초, 폰에서 초당 40px쯤), 사람 크기(그림 단위로 키 36쯤)
+    /* 거리: 지나가는 사람 넷이 차례로(방향은 번갈아) 방 창 앞을 지나며, 저마다 다른 방법으로 작업실 불빛을 받는다.
+       ① 풍선을 든 아이: 깡충깡충 와서 창을 가리키면 불빛이 풍선에 들어가 등불이 되고 위로 당김 → 두 번 뛰고 깡충깡충 나감
+       ② 개와 산책: 개가 창 불빛 앞에 앉아 올려다보며 꼬리를 흔들면, 불빛이 길에 떨어져 공처럼 튀어 굴러가고 개가 쫓아 달리며 사람을 끌고 감
+       ③ 휴대폰을 보며 걷는 사람: 창 앞에 서서 휴대폰을 들어 올리면 불빛이 내려와 화면이 켜지고 한 팔을 번쩍 → 밝아진 얼굴로 화면을 보며 감
+       ④ 자전거: 창 앞에 서서 한 발을 땅에 짚고 창을 올려다보면 불빛이 앞등에 들어가 길을 비춤 → 따릉(고리) 하고 일어서서 페달을 밟아 나감
+       걸음 = 앞뒤로 흔드는 넓적다리 + 앞으로 내딛을 때 굽는 무릎, 디딘 발이 땅에 붙게 엉덩이 높이를 맞춘다. 팔은 다리와 반대로 흔들고, 들거나 가리키면 손 자리로(두 마디 IK).
+       방 창 불빛 앞에 들면 몸은 더 어둡게(역광) 테두리는 등불 색, 길에는 창 반대쪽으로 그림자가 진다(지나가며 그림자가 돈다).
+       처음은 들어온 지 3.2초, 한 사람이 나가면 2.6~4.4초 뒤 다음. 내리기 시작하면 불빛 없이 그냥 지나간다. 누르면 아이·사람은 깡충, 개는 펄쩍, 자전거는 따릉 */
+    var SPD = { kid: 44, dog: 36, ph: 32, bike: 72 }, SEND = { kid: 560, dog: 900, ph: 760, bike: 640 }, STAY = { kid: 1500, dog: 240, ph: 1150, bike: 800 };
+    var R2 = function (p, a) { var c = Math.cos(a), s = Math.sin(a); return [p[0] * c - p[1] * s, p[0] * s + p[1] * c]; };
+    var add = function (a, b2) { return [a[0] + b2[0], a[1] + b2[1]]; };
+    var pl = function (a) { return 'M' + a.map(function (p) { return p[0].toFixed(2) + ' ' + p[1].toFixed(2); }).join('L'); };
+    function leg(ph, ga, Lt, Ls, kn) {   // 엉덩이 기준 [무릎, 발목, 발끝]. ga = 걸음 크기(0 = 섬), kn = 내딛을 때 무릎 굽힘
+      var th = ga * .46 * Math.sin(ph), c = Math.cos(ph), k2 = ga * (.1 + kn * (c > 0 ? c * c : 0));
+      var K = [Lt * Math.sin(th), Lt * Math.cos(th)], A = [K[0] + Ls * Math.sin(th - k2), K[1] + Ls * Math.cos(th - k2)];
+      return [K, A, [A[0] + 2.2, A[1] + .1]];
+    }
+    function gait(ph, ga, Lt, Ls, kn) {   // 다리 둘(뒤쪽, 앞쪽)과 디딘 발이 땅에 닿는 엉덩이 높이
+      var L = [leg(ph + Math.PI, ga, Lt, Ls, kn), leg(ph, ga, Lt, Ls, kn)];
+      return { L: L, hy: -Math.max(L[0][1][1], L[1][1][1]) - 1.2 };
+    }
+    function arm(sw, La, Lf, bend) { var E = [La * Math.sin(sw), La * Math.cos(sw)]; return [E, [E[0] + Lf * Math.sin(sw + bend), E[1] + Lf * Math.cos(sw + bend)]]; }
+    function ik(S, T, a, b2, s) {   // 두 마디 S→T의 가운데 관절. s = +1이면 S→T 방향에서 시계 반대쪽(아래로 뻗을 때 앞)으로 굽음
+      var dx = T[0] - S[0], dy = T[1] - S[1], d = Math.max(.001, Math.min(Math.hypot(dx, dy), (a + b2) * .999));
+      var j = Math.atan2(dy, dx) - s * Math.acos(Math.max(-1, Math.min(1, (a * a + d * d - b2 * b2) / (2 * a * d))));
+      return [S[0] + a * Math.cos(j), S[1] + a * Math.sin(j)];
+    }
+    function reach(S, T, a, b2, s) { return [ik(S, T, a, b2, s), T]; }
+    function pose(f, o) {   // o = { hip, lean, sh(엉덩이→어깨), hd, L(다리 둘, 엉덩이 기준), A(팔 둘, 그림 좌표 [팔꿈치, 손]) }
+      f.up.setAttribute('transform', 'translate(' + o.hip[0].toFixed(2) + ' ' + o.hip[1].toFixed(2) + ') rotate(' + (o.lean * 57.3).toFixed(2) + ')');
+      tf(f.hd, o.hd[0], o.hd[1]);
+      f.lg.forEach(function (e, i) { e.setAttribute('d', pl([o.hip].concat(o.L[i].map(function (p) { return add(o.hip, p); })))); });
+      f.am.forEach(function (e, i) { e.setAttribute('d', pl([o.S].concat(o.A[i]))); });
+    }
+    function place(e, x, y, s, dir) { e.setAttribute('transform', 'translate(' + x.toFixed(2) + ' ' + y.toFixed(2) + ') scale(' + (dir * s).toFixed(3) + ' ' + s.toFixed(3) + ')'); }
+    function shadow(f, x, y, s, dir, cx, gw, sp) {   // 길에 진 그림자: 몸을 뒤집어 납작하게, 창 반대쪽으로 기울임
+      var sh = Math.max(-1.4, Math.min(1.4, (x - cx) / (gw * .5))) * .75;
+      f.sh.setAttribute('transform', 'matrix(' + (dir * s).toFixed(3) + ' 0 ' + (-sh * s).toFixed(3) + ' ' + (-.3 * s).toFixed(3) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ')');
+      f.sh.setAttribute('opacity', (.5 * sp).toFixed(3)); f.rim.setAttribute('opacity', (.95 * sp).toFixed(3));
+    }
     function walk(b, t, live, m) {
-      var w = b.wk, dt = Math.min(100, t - (w.last || t)), step = WALK * dt / 1000;
+      var w = b.wk, dt = Math.min(100, t - (w.last || t)) / 1000;
       w.last = t;
       if (!w.mode) {
-        if (!w.next) w.next = t + (introing ? 4200 - it : 2500);
+        if (!w.next) w.next = t + (introing ? 3200 - it : 2500);
         if (!live || t < w.next) { w.g.setAttribute('opacity', 0); return; }
         var cm = ctm(b), px = Math.sqrt(cm.a * cm.a + cm.b * cm.b) || 1, sr = stage.getBoundingClientRect(), L = toSvg(b, sr.left, 0)[0], R = toSvg(b, sr.right, 0)[0];
-        var edge = Math.max(L - 16 / px, b.bx - 70);   // 넓은 화면은 글 밑 거리를 비워 두고 건물 왼쪽 끝 조금 앞에서 나타남
-        w.dir = w.n % 2 ? -1 : 1; w.n++;
-        w.from = w.dir > 0 ? edge : R + 16 / px; w.to = w.dir > 0 ? R + 16 / px : edge;
-        w.stop = b.gx + b.gw * (w.dir > 0 ? .3 : .7); w.x = w.from; w.dist = 0; w.mode = 'in'; w.at = t; w.lit = -1e9;
-        w.feet = Math.min(16, (street ? street.offsetHeight : 30) * .58 / px);
+        var edge = Math.max(L - 34 / px, b.bx - 90);   // 넓은 화면은 글 밑 거리를 비워 두고 건물 왼쪽 끝 조금 앞에서 나타남
+        w.kind = CAST[w.n % CAST.length]; w.dir = w.n % 2 ? -1 : 1; w.n++;
+        w.S = b.wide ? 1.15 : 1.35; w.px = px;
+        w.from = w.dir > 0 ? edge : R + 34 / px; w.to = w.dir > 0 ? R + 40 / px : edge - 10;
+        w.cx = b.gx + b.gw / 2;
+        w.stop = w.cx - b.gw * (w.kind === 'dog' ? .1 : .14) * w.dir;   // 창 가운데 조금 못 미친 자리(개는 개가 창 가운데쯤 오게)
+        w.x = w.from; w.dist = 0; w.mode = 'in'; w.at = t; w.lit = -1e9; w.hop = -1e9; w.v = SPD[w.kind]; w.ga = 1; w.sent = false;
+        w.y = w.gnd + Math.min(24, (street ? street.offsetHeight : 30) * .48 / px);
+        w.bp = null; w.bv = [0, 0]; w.ball = null; w.sit = 0; w.look = 0; w.aim = [w.x, w.y];
+        CAST.forEach(function (k) { var f = w.figs[k], on = k === w.kind; f.g.style.display = f.sh.style.display = on ? '' : 'none'; });
+        var dg = w.kind === 'dog', kd = w.kind === 'kid';
+        w.dog.g.style.display = w.dog.sh.style.display = w.lsh.style.display = dg ? '' : 'none';
+        w.str.style.display = w.bln.style.display = kd ? '' : 'none'; w.ballE.style.display = 'none';
+        w.blnB.classList.remove('on'); w.blnG.setAttribute('opacity', 0);
+        var fp = w.figs.ph, fb = w.figs.bike;
+        fp.scr.setAttribute('opacity', 0); fp.glow.setAttribute('opacity', 0); fb.lamp.classList.remove('on'); fb.glow.setAttribute('opacity', 0); fb.beam.setAttribute('opacity', 0);
       }
-      var md = w.mode, a = t - w.at, up = 0, read = 0;
-      if (md === 'in' || md === 'out') {
-        w.x += w.dir * step; w.dist += step;
-        if (md === 'in' && w.dir * (w.x - w.stop) >= 0) { w.x = w.stop; w.mode = 'stop'; w.at = t; }
-        if (md === 'out' && w.dir * (w.x - w.to) >= 0) { w.mode = ''; w.next = t + 9000 + (w.n % 3) * 2000; w.g.setAttribute('opacity', 0); return; }
-      } else if (md === 'stop') { up = ease(k(a, 300, 650)); if (a > 700) { if (live && b.fl.length < 3) { launch(b, t, { p: w, x: w.x + w.dir * 4.6 * WS, y: w.gnd + w.feet - 31.6 * WS }); w.mode = 'wait'; } else w.mode = 'out'; w.at = t; } }
-      else if (md === 'wait') { up = 1; if (a > 2600) { w.mode = 'out'; w.at = t; } }
-      else if (md === 'lit') { up = 1 - ease(k(a, 300, 650)); if (a > 1050) { w.mode = 'out'; w.at = t; } }
-      if (w.lit > 0 && (md === 'lit' || md === 'out')) read = ease(k(t - w.lit, 300, 650));
-      var ph = w.dist / 4.6, walking = w.mode === 'in' || w.mode === 'out', sw = walking ? Math.sin(ph) : 0;
-      var hopA = Math.max(md === 'lit' ? a : -1, t - w.hop), hy = hopA >= 0 && hopA < 760 ? -Math.abs(Math.sin(hopA / 380 * Math.PI)) * 5 * (1 - hopA / 900) : 0;
-      var by = walking ? -Math.abs(Math.cos(ph)) * .5 : 0, f = function (p) { return p[0].toFixed(2) + ' ' + p[1].toFixed(2); };
-      w.legs[0].setAttribute('d', 'M0 ' + (-10.4 + by).toFixed(2) + 'L' + f([sw * 4.4, -Math.max(0, Math.cos(ph)) * (walking ? 1.3 : 0)]));
-      w.legs[1].setAttribute('d', 'M0 ' + (-10.4 + by).toFixed(2) + 'L' + f([-sw * 4.4, -Math.max(0, -Math.cos(ph)) * (walking ? 1.3 : 0)]));
-      var sh = [.4, -20.4 + by], hand = [sw * 3.2, -12.6 + by], elb = [sw * 1.4 + .4, -16.4 + by];
-      w.arms[0].setAttribute('d', 'M' + f(sh) + 'L' + f([-sw * 1.4, -16.4 + by]) + 'L' + f([-sw * 3.2, -12.6 + by]));
-      if (up) { elb = mix(elb, [3.2, -25], up); hand = mix(hand, [4.6, -31.6], up); }
-      if (read) { elb = mix(elb, [3.4, -15.4 + by], read); hand = mix(hand, [5.4, -19.6 + by], read); }
-      w.arms[1].setAttribute('d', 'M' + f(sh) + 'L' + f(elb) + 'L' + f(hand));
-      var held = up > 0 || read > 0 || md === 'wait';
-      w.ph.setAttribute('transform', 'translate(' + f(hand) + ')'); w.ph.setAttribute('opacity', held ? 1 : 0);
-      var on = w.lit > 0 && held ? k(t - w.lit, 0, 120) : 0;
-      w.scr.setAttribute('opacity', on); w.glow.setAttribute('opacity', (on * (.75 + .15 * Math.sin(t / 170))).toFixed(3));
-      tf(w.head, up * .6, by - up * .5);
+      var a = t - w.at, S = w.S, dir = w.dir, f = w.figs[w.kind], la = w.lit > 0 ? t - w.lit : -1, kind = w.kind;
+      if (w.mode === 'in') {
+        var rem = (w.stop - w.x) * dir;
+        if (kind === 'bike') w.v = Math.max(5, Math.min(SPD.bike, rem * 2.2));   // 자전거는 창 앞에서 천천히 선다
+        var st = Math.min(rem, w.v * dt); w.x += dir * st; w.dist += st;
+        if (rem - st <= .01) { w.mode = 'act'; w.at = t; a = 0; }
+      } else if (w.mode === 'out') {
+        var run = kind === 'dog' && la >= 0, top = kind === 'bike' ? 150 : run ? 112 : SPD[kind] * (kind === 'kid' ? 1.15 : 1);
+        w.v = Math.min(top, w.v + (kind === 'bike' ? 150 : run ? 220 : 60) * dt);
+        w.x += dir * w.v * dt; w.dist += w.v * dt;
+        if (dir * (w.x - w.to) >= 0 && (!w.ball || dir * (w.ball.x - w.to) >= 0)) {
+          w.mode = ''; w.next = t + 2600 + (w.n % 3) * 900; w.g.setAttribute('opacity', 0); return;
+        }
+      } else {   // 'act': 창 앞에 서서 불빛을 부름 → 받으면 반응 → 나감
+        if (!w.sent && a >= SEND[kind]) {
+          w.sent = true;
+          if (live && b.fl.length < 3) launch(b, t, { p: w, x: w.aim[0], y: w.aim[1] });
+          else { w.mode = 'out'; w.at = t; }
+        }
+        if ((la < 0 && a > SEND[kind] + 2800) || la >= STAY[kind]) { w.mode = 'out'; w.at = t; }
+      }
+      w.ga += ((w.mode === 'act' ? 0 : 1) - w.ga) * Math.min(1, dt * 8);
+      var ga = w.ga, hp = t - w.hop, hop = hp >= 0 && hp < 520 ? Math.sin(Math.PI * hp / 520) * 5 : 0, jy = -hop, o, sw, Sh;
+      var sp = clamp(1 - Math.abs(w.x - w.cx) / (b.gw * .62)), sm = sp * sp * (3 - 2 * sp);
+      var W = function (p, y0) { return [w.x + dir * S * p[0], (y0 == null ? w.y + jy * S : y0) + S * p[1]]; };   // 그림 좌표 → 건물 좌표
+      if (kind === 'kid') {
+        var ph = w.dist * .42, G = gait(ph, ga, 5, 5.2, 1.25), up = la >= 150 && la < 990;
+        jy -= ga * 2 * Math.pow(Math.abs(Math.sin(ph)), 1.6);   // 깡충깡충(한 발마다 뜸)
+        if (up) jy -= Math.abs(Math.sin(Math.PI * (la - 150) / 420)) * 6.5;   // 풍선이 켜지면 두 번 뜀
+        var hip = [0, G.hy], lean = .06 * ga; Sh = add(hip, R2([.3, -9.2], lean));
+        var point = w.mode === 'act' && la < 0 ? ease(k(a, 120, 420)) : 0, cheer = up ? 1 : la >= 0 && la < 1200 ? 1 - k(la, 990, 1200) : 0;
+        sw = .5 * ga * Math.sin(ph);
+        var A1 = arm(-sw, 3.9, 3.7, .5), H0 = add(Sh, [2.2, 3.4]);   // 뒤쪽 손은 앞으로 내밀어 풍선 줄을 쥠
+        A1 = [add(Sh, A1[0]), add(Sh, A1[1])];
+        if (point) A1 = [mix(A1[0], add(Sh, [2.8, -2.2]), point), mix(A1[1], add(Sh, [4.6, -5.8]), point)];   // 창을 가리킴
+        if (cheer) A1 = [mix(A1[0], add(Sh, [1.4, -3.4]), cheer), mix(A1[1], add(Sh, [2.4, -7.2]), cheer)];
+        var A0 = reach(Sh, cheer ? mix(H0, add(Sh, [-.6, -7]), cheer) : H0, 3.9, 3.7, -1);
+        o = { hip: hip, lean: lean, hd: [0, point * -.6 - cheer * .8], L: G.L, S: Sh, A: [A0, A1] };
+        pose(f, o);
+        f.pt.setAttribute('transform', 'rotate(' + (Math.sin(t / 140) * 8 * ga + (hop + (up ? 6 : 0)) * 3).toFixed(1) + ' -3.4 -14.6)');
+        // 풍선: 손을 따라가는 용수철(뜨는 힘 + 바람에 조금 흔들림). 불빛을 받으면 등불이 되어 줄이 팽팽하게 더 높이
+        var hand = W(A0[1]), lit = la >= 0, T = [hand[0] - dir * 2.4 * S + Math.sin(t / 900) * 1.2 * S, hand[1] - (lit ? 30 : 24) * S];
+        if (!w.bp) w.bp = T.slice();
+        w.bv[0] += (34 * (T[0] - w.bp[0]) - 6 * w.bv[0]) * dt; w.bv[1] += (34 * (T[1] - w.bp[1]) - 6 * w.bv[1]) * dt;
+        w.bp[0] += w.bv[0] * dt; w.bp[1] += w.bv[1] * dt;
+        var tilt = Math.max(-25, Math.min(25, -w.bv[0] * .5 / S));
+        w.bln.setAttribute('transform', 'translate(' + w.bp[0].toFixed(2) + ' ' + w.bp[1].toFixed(2) + ') rotate(' + tilt.toFixed(1) + ') scale(' + S.toFixed(3) + ')');
+        var knot = add(w.bp, R2([0, 6.4 * S], tilt / 57.3)), mid = [(hand[0] + knot[0]) / 2 - w.bv[0] * .05, (hand[1] + knot[1]) / 2 + (lit ? 0 : 1.5 * S)];
+        w.str.setAttribute('d', 'M' + hand[0].toFixed(2) + ' ' + hand[1].toFixed(2) + 'Q' + mid[0].toFixed(2) + ' ' + mid[1].toFixed(2) + ' ' + knot[0].toFixed(2) + ' ' + knot[1].toFixed(2));
+        if (lit && !w.blnB.classList.contains('on')) w.blnB.classList.add('on');
+        w.blnG.setAttribute('opacity', lit ? (Math.min(1, la / 160) * (.85 + .1 * Math.sin(t / 130))).toFixed(3) : 0);
+        w.aim = w.bp.slice();
+      } else if (kind === 'dog') {
+        var running = la >= 0, ph2 = w.dist * (running ? .3 : .26), G2 = gait(ph2, ga * (running ? 1.2 : 1), 8, 8.2, running ? 1.2 : .9);
+        var lean2 = running ? .26 * k(la, 150, 450) : .05 * ga, hip2 = [0, G2.hy]; Sh = add(hip2, R2([.5, -12.8], lean2));
+        sw = .42 * ga * Math.sin(ph2);
+        var Af = arm(sw, 6.2, 5.8, .35); Af = [add(Sh, Af[0]), add(Sh, Af[1])];
+        var Hn = running ? add(Sh, [9, 3.4]) : add(Sh, [4.6, 6.4]), An = reach(Sh, Hn, 6.2, 5.8, -1);   // 앞쪽 손은 개 줄(끌려가면 쭉 뻗음)
+        // 개: 사람 앞 줄 길이만큼. 창 앞에서는 앉아 창을 올려다보고 꼬리를 흔듦 → 불빛 공이 떨어지면 일어나 쫓아 달림
+        w.sit += ((w.mode === 'act' && la < 0 && a > 200 ? 1 : 0) - w.sit) * Math.min(1, dt * (la >= 0 ? 14 : 6));
+        w.look += ((w.mode === 'act' && la < 0 ? 1 : 0) - w.look) * Math.min(1, dt * 6);
+        var dxo = (running ? 24 : 19 + Math.sin(t / 650) * 1.5 * ga) * S, dX = w.x + dir * dxo, dph = w.dist * (running ? .62 : .52), dga = Math.max(ga, running ? 1 : 0) * (running ? 1.5 : 1);
+        var dhop = hp >= 0 && hp < 420 ? Math.sin(Math.PI * hp / 420) * 4 : 0, D = w.dog, si = w.sit;
+        place(D.g, dX, w.y - dhop * S, S, dir);
+        D.db.setAttribute('transform', 'rotate(' + (-26 * si + (running ? 4 * Math.sin(dph * 2) : 0)).toFixed(1) + ' 4.2 -6.6)');
+        D.dh.setAttribute('transform', 'rotate(' + (26 * si - 24 * w.look * si).toFixed(1) + ' 5 -9.6)');
+        D.tl.setAttribute('transform', 'rotate(' + (Math.sin(t / (si > .5 ? 60 : 150)) * (si > .5 ? 24 : 12) + (running ? -20 : 0)).toFixed(1) + ' -6.2 -9.2)');
+        var rh = add(R2([-8.4, 0], -26 * si / 57.3), [4.2, -6.6]);
+        D.dl.forEach(function (e, i) {   // 다리 넷: [뒤쪽 앞다리, 뒤쪽 뒷다리, 앞쪽 앞다리, 앞쪽 뒷다리], 대각선끼리 같이
+          var front = i % 2 === 0, base = front ? [4.2, -6.6] : rh, q = dph + (i === 0 || i === 3 ? 0 : Math.PI);
+          var an = dga * .5 * Math.sin(q), kn2 = dga * .5 * Math.max(0, Math.cos(q)) * (front ? -1 : 1);
+          var Kp = add(base, [3.3 * Math.sin(an), 3.3 * Math.cos(an)]), F = add(Kp, [3.4 * Math.sin(an + kn2), 3.4 * Math.cos(an + kn2)]);
+          if (!front) { Kp = mix(Kp, add(rh, [2.8, 2.4]), si); F = mix(F, [rh[0] + 5, 0], si); }
+          e.setAttribute('d', pl([base, Kp, F]));
+        });
+        var col = add(R2([6.2 - 4.2, -10.4 + 6.6], -26 * si / 57.3), [4.2, -6.6]), cw = [dX + dir * S * col[0], w.y - dhop * S + S * col[1]];
+        o = { hip: hip2, lean: lean2, hd: [0, w.mode === 'act' && la < 0 ? .5 : 0], L: G2.L, S: Sh, A: [[Af[0], Af[1]], An] };
+        pose(f, o);
+        var hw = W(An[1]), sag = running ? 0 : 3.5 * S;
+        w.lsh.setAttribute('d', 'M' + hw[0].toFixed(2) + ' ' + hw[1].toFixed(2) + 'Q' + ((hw[0] + cw[0]) / 2).toFixed(2) + ' ' + ((hw[1] + cw[1]) / 2 + sag).toFixed(2) + ' ' + cw[0].toFixed(2) + ' ' + cw[1].toFixed(2));
+        w.aim = [dX + dir * 30 * S, w.y - 2.6 * S];
+        if (la >= 0 && !w.ball) w.ball = { x0: w.aim[0], at: t, x: w.aim[0] };
+        if (w.ball) {   // 불빛 공: 길에 튀며(점점 낮게) 굴러감
+          var s2 = (t - w.ball.at) / 1000; w.ball.x = w.ball.x0 + dir * 128 * S * s2;
+          var by = w.y - 2.6 * S - Math.abs(Math.sin(Math.PI * s2 * 2.4)) * 11 * S * Math.exp(-1.7 * s2);
+          w.ballE.style.display = ''; w.ballE.setAttribute('transform', 'translate(' + w.ball.x.toFixed(2) + ' ' + by.toFixed(2) + ') scale(' + S.toFixed(3) + ')');
+        }
+        shadow(D, dX, w.y, S, dir, w.cx, b.gw, sm);
+      } else if (kind === 'ph') {
+        var ph3 = w.dist * .25, G3 = gait(ph3, ga, 8, 8.2, .9), hip3 = [0, G3.hy], lean3 = .04 * ga; Sh = add(hip3, R2([.5, -12.8], lean3));
+        sw = .42 * ga * Math.sin(ph3);
+        var lit3 = la >= 0, raise = w.mode === 'act' ? ease(k(a, 260, 700)) * (lit3 ? 1 - ease(k(la, 700, 1050)) : 1) : 0, pump = lit3 ? bell(la, 100, 320, 950) : 0;
+        var Hp = mix(add(Sh, [5.6, 6.2]), add(Sh, [4.4, -7.2]), raise), A3 = reach(Sh, Hp, 6.2, 5.8, -1);   // 앞쪽 손 = 휴대폰(보며 걸음 → 창 쪽으로 들어 올림)
+        var B3 = arm(-sw, 6.2, 5.8, .3); B3 = [add(Sh, B3[0]), add(Sh, B3[1])];
+        if (pump) B3 = [mix(B3[0], add(Sh, [-1.4, -5.4]), pump), mix(B3[1], add(Sh, [.6, -11.2]), pump)];
+        if (lit3 && pump) jy -= Math.sin(Math.PI * k(la, 200, 620)) * 3.5;
+        o = { hip: hip3, lean: lean3, hd: [raise * .2 + (1 - raise) * .7, raise * -.8 + (1 - raise) * .8], L: G3.L, S: Sh, A: [B3, A3] };
+        pose(f, o);
+        f.bag.setAttribute('transform', 'translate(-.6 -12.6) rotate(' + (6 + 12 * ga * Math.sin(ph3 * 2 + .8) - (raise ? 4 : 0)).toFixed(1) + ')');
+        f.phn.setAttribute('transform', 'translate(' + A3[1][0].toFixed(2) + ' ' + A3[1][1].toFixed(2) + ') rotate(' + (-20 + 40 * raise).toFixed(1) + ')');
+        var on = lit3 ? k(la, 0, 120) : 0, face = add(Sh, [2.6, -5.4]);   // 화면 빛이 얼굴에(그림 좌표)
+        f.scr.setAttribute('opacity', on);
+        f.glow.setAttribute('cx', face[0].toFixed(2)); f.glow.setAttribute('cy', face[1].toFixed(2));
+        f.glow.setAttribute('opacity', (on * (.85 + .15 * Math.sin(t / 170))).toFixed(3));
+        w.aim = W(A3[1]);
+      } else {   // bike
+        var cr = w.dist / 3.4, C = [-1.2, -7], P1 = [C[0] + 3.1 * Math.cos(cr), C[1] + 3.1 * Math.sin(cr)], P0 = [C[0] - 3.1 * Math.cos(cr), C[1] - 3.1 * Math.sin(cr)];
+        var stand = w.mode === 'act' ? ease(k(a, 0, 300)) * (la >= 0 ? 1 - ease(k(la, 450, 700)) : 1) : 0, rise = w.mode === 'out' && la >= 0 ? bell(t - w.at, 0, 300, 1500) : 0;
+        var hip4 = add(mix([-4.6, -21.8], [-3.4, -20.2], stand), [rise * 2.4, -rise * 2.2]), lean4 = .52 + rise * .2 - stand * .14;
+        Sh = add(hip4, R2([.4, -12.6], lean4));
+        var Fn = stand ? mix(P1, [1.2, -1.2], stand) : P1;   // 서면 앞쪽 발을 땅에 짚음
+        var grip = [4.8, -22.2];
+        o = { hip: hip4, lean: lean4, hd: [stand * .4, stand * -.7], L: [[ik(hip4, P0, 9.6, 9.8, 1), P0, add(P0, [2, 0])].map(function (p) { return add(p, [-hip4[0], -hip4[1]]); }),
+          [ik(hip4, Fn, 9.6, 9.8, 1), Fn, add(Fn, [2, 0])].map(function (p) { return add(p, [-hip4[0], -hip4[1]]); })],
+          S: Sh, A: [reach(Sh, add(grip, [-.6, .2]), 6.4, 6, -1), reach(Sh, grip, 6.4, 6, -1)] };
+        pose(f, o);
+        var deg = (w.dist / 7 * 57.3 % 360).toFixed(1);
+        f.sp.forEach(function (e) { e.setAttribute('transform', 'rotate(' + deg + ')'); });
+        var lon = la >= 0 ? k(la, 0, 160) : 0;
+        if (lon && !f.lamp.classList.contains('on')) f.lamp.classList.add('on');
+        f.glow.setAttribute('opacity', (lon * .9).toFixed(3)); f.beam.setAttribute('opacity', (lon * (.8 + .1 * Math.sin(t / 90))).toFixed(3));
+        if (la >= 300 && !w.rang) { w.rang = true; var gw0 = W([5.6, -23.4]); ring(b, gw0[0], gw0[1], 16, t, w.px); }
+        if (la < 0) w.rang = false;
+        if (hp >= 0 && hp < 40 && !w.dinged) { w.dinged = true; var gw1 = W([5.6, -23.4]); ring(b, gw1[0], gw1[1], 16, t, w.px); }
+        if (hp >= 40) w.dinged = false;
+        jy = 0;
+        w.aim = W([8.1, -20.4]);
+      }
+      place(f.g, w.x, w.y + jy * S, S, dir);
+      shadow(f, w.x, w.y, S, dir, w.cx, b.gw, sm);
+      // 방 창 불빛을 등지면(창 앞) 몸은 더 어둡게(테두리는 shadow()가 켬)
+      w.g.style.setProperty('--wk', 'rgb(' + Math.round(74 - 36 * sm) + ',' + Math.round(70 - 36 * sm) + ',' + Math.round(131 - 58 * sm) + ')');
+      w.g.style.setProperty('--wk2', 'rgb(' + Math.round(58 - 30 * sm) + ',' + Math.round(54 - 30 * sm) + ',' + Math.round(108 - 50 * sm) + ')');
       var fade = Math.min(1, Math.abs(w.x - w.from) / 20, Math.abs(w.to - w.x) / 20);
-      w.g.setAttribute('opacity', (fade * m).toFixed(3));
-      w.g.setAttribute('transform', 'translate(' + w.x.toFixed(2) + ',' + (w.gnd + w.feet + hy).toFixed(2) + ') scale(' + w.dir * WS + ',' + WS + ')');
+      w.g.setAttribute('opacity', ((w.mode === 'out' && w.ball ? 1 : fade) * m).toFixed(3));
     }
     function pickWin(b) { for (var i = 0; i < 3; i++) { var w = b.nb[ORDER[(turnN + i) % 3] % b.nb.length]; if (w && !w.on && !w.aim) return w; } return null; }
     function story(now, t, b, m, ml) {
@@ -421,7 +635,7 @@
         if (inRoom && inb(qx, 186, 244) && qy > 56) b.wave = t;
         else if (inRoom && inb(qx, 146, 186) && inb(qy, 44, 112)) b.flick = t;
         else if (inb(pt[0], bx - 8, bx + +bd.getAttribute('width') + 8) && inb(pt[1], byy - 10, byy + +bd.getAttribute('height') + 10)) b.sign = t;
-        else if (wk.mode && inb(pt[0], wk.x - 16, wk.x + 16) && inb(pt[1], wk.gnd - 30, wk.gnd + 30)) wk.hop = t;
+        else if (wk.mode && Math.abs(pt[0] - wk.x - (wk.kind === 'dog' ? wk.dir * 10 * wk.S : 0)) < 22 * wk.S && inb(pt[1], wk.y - 46 * wk.S, wk.y + 8)) wk.hop = t;
         else if (t - lastGo > 280 && b.fl.length < 4) {
           b.nb.forEach(function (w) { var dx = (pt[0] - w.cx) / w.w, dy = (pt[1] - w.cy) / w.h, dd = dx * dx + dy * dy; if (dd < best) { best = dd; hit = w; } });
           if (pt[1] < b.roof - 10) launch(b, t, { x: pt[0], y: pt[1] });
@@ -455,7 +669,7 @@
           c.setAttribute('x1', h0[0].toFixed(1)); c.setAttribute('y1', h0[1].toFixed(1)); c.setAttribute('x2', h1[0].toFixed(1)); c.setAttribute('y2', h1[1].toFixed(1));
           c.setAttribute('stroke-width', (6 * sz * (1 - n / 10) / f.px).toFixed(2)); c.setAttribute('opacity', (.7 * (1 - n / 9)).toFixed(3));
         });
-        if (s >= 1 || !live) { b.fx.removeChild(f.g); b.fl.splice(i, 1); if (live) land(b, f, t); else if (f.to.w) f.to.w.aim = false; else if (f.to.p) { f.to.p.mode = 'out'; f.to.p.at = t; } }
+        if (s >= 1 || !live) { b.fx.removeChild(f.g); b.fl.splice(i, 1); if (live) land(b, f, t); else if (f.to.w) f.to.w.aim = false; else if (f.to.p && f.to.p.mode === 'act') { f.to.p.mode = 'out'; f.to.p.at = t; } }
       }
       var sa = k(t - b.sheenAt, 0, 520);
       b.sheen.setAttribute('opacity', (sa > 0 && sa < 1 ? Math.sin(sa * Math.PI) : 0).toFixed(3));
@@ -538,12 +752,8 @@
       };
     }
     var on = false, W = 0, H = 0, start = 0, travel = 1, hh = 0, barH = 64, cam = null, pt = null;
-    function shoot(p, m, pc) {   // 그림과 지나가는 빛, 글, 종이색. 아이콘은 fly(). pc = 들어올 때 카메라의 무게(내리는 카메라와 섞음: 그동안 내려도 튀지 않게)
+    function shoot(p, m) {   // 그림과 지나가는 빛, 글, 종이색. 아이콘은 fly()
       var s = Math.exp(cam.ls(p)), fx = cam.fx(p), fy = cam.fy(p), tx = cam.tx(p), ty = cam.ty(p);
-      if (pc > 0) {   // 화면 = o + 점 × s 꼴로 두 카메라를 섞는다(배율은 로그로)
-        var ox = lerp(tx - fx * s, dz.T.x - dz.F.x * dz.s, pc), oy = lerp(ty - fy * s, dz.T.y - dz.F.y * dz.s, pc);
-        s = Math.exp(lerp(Math.log(s), Math.log(dz.s), pc)); fx = lerp(fx, dz.F.x, pc); fy = lerp(fy, dz.F.y, pc); tx = ox + fx * s; ty = oy + fy * s;
-      }
       var X = function (q) { return tx + (q.x - fx) * s; }, Y = function (q) { return ty + (q.y - fy) * s; };
       lay(near, s, fx, fy, tx - 16 * pmx * m, ty - 8 * pmy * m, p);
       lay(back, Math.pow(s, .3), fx, fy, tx - 7 * pmx * m, ty - 4 * pmy * m, p);
@@ -652,7 +862,7 @@
         var rn = function (x, y) { return toN(B.rx + x * B.rw / 324, B.ry + y * B.rh / 164); };
         W = nr.width; H = nr.height;
         var G = rn(162, 82), RC = rn(226, 84), M = rn(252, 64), o = rn(0, 0), bd = B.board;
-        var gw = rn(324, 0).x - o.x, gh0 = rn(0, 164).y - o.y, sw = rn(286, 0).x - rn(218, 0).x, sh = rn(0, 84).y - rn(0, 44).y;
+        var gw = rn(324, 0).x - o.x, sw = rn(286, 0).x - rn(218, 0).x, sh = rn(0, 84).y - rn(0, 44).y;
         var s2 = Math.max(1.6, .82 * W / gw), s3 = Math.max(s2 * 1.6, 1.55 * W / gw), s5 = 1.1 * Math.max(W / sw, Math.min(H / sh, 1.3 * W / sw)), s4 = Math.max(.72 * W / sw, s3 * 1.2);
         var mid = { x: W / 2, y: H / 2 }, keys;
         // ① 옆걸음 ② 창 ③ 유리 너머 사람과 모니터 사이 ④ 모니터 화면 ⑤ 모니터 화면이 화면을 덮음(끝까지 그대로)
@@ -669,15 +879,6 @@
         var col = function (f) { return curve(keys.map(f)); };
         cam = { ls: col(function (q) { return Math.log(q[1]); }), fx: col(function (q) { return q[0].x; }), fy: col(function (q) { return q[0].y; }),
           tx: col(function (q) { return q[2].x; }), ty: col(function (q) { return q[2].y; }) };
-        // 들어올 때 카메라: 넓은 화면은 글 오른쪽 빈 자리를 방 창이 채우게, 세로 화면은 방 창이 화면 폭보다 조금 넓게 단추 줄 바로 밑에
-        var cr = 0, cb = 0, rg = document.createRange();   // 글이 실제로 차지한 오른쪽 끝·아래 끝(칸 폭이 아니라 글자)
-        [].forEach.call(copy.querySelectorAll('.hero__h1, .hero__sub, .hero__act a'), function (e) {
-          rg.selectNodeContents(e); var r = rg.getBoundingClientRect(); cr = Math.max(cr, r.right - nr.left); cb = Math.max(cb, r.bottom - nr.top);
-        });
-        var z0, T0;
-        if (B.wide) { z0 = Math.max(1.3, Math.min(2.8, (W - cr - 40) / gw)); T0 = { x: Math.max(cr + 24 + gw * z0 / 2, W - gw * z0 * .42), y: Math.min(H * .56, H - gh0 * z0 / 2 - 12) }; }
-        else { z0 = 1.12 * W / gw; T0 = { x: W / 2, y: Math.min(cb + 14 + gh0 * z0 / 2, H - gh0 * z0 * .4) }; }
-        dz = { F: G, s: z0, T: T0 };
         pt = { o: o, s0: rn(218, 44), s1: rn(286, 84), ic: [rn(230, 58), rn(246, 58), rn(262, 58)], ru: rn(1, 0).x - o.x,
           sg: toN(+bd.getAttribute('x') + bd.getAttribute('width') / 2, +bd.getAttribute('y') + bd.getAttribute('height') / 2) };
       } else on = false;
@@ -781,20 +982,18 @@
       } else p = on ? clamp((scrollY - start) / travel) : 0;
       if (introing && p > .02 && !ride) finishIntro();   // 장면을 끝까지 보여 주는 중이 아닌데 내려와 있으면 바로 다 켠 그림으로
       if (introing) { it += dt * (ride ? 2.5 : 1); if (it >= INTRO) finishIntro(); else { introAt(it); more = true; } }
-      var pc = 0;   // 들어올 때 카메라의 무게(1 = 방 창 앞, 0 = 원래 자리)
-      if (dolly) { if (!on || !dz || t >= DOLLY[1]) endDolly(); else { pc = 1 - eio(k(t, DOLLY[0], DOLLY[1])); more = true; } }
       var m = on ? 1 - k(p, 0, .12) : 1, ml = on ? 1 - k(p, B.wide ? 0 : .3, B.wide ? .12 : .38) : 1, awake = vis && (!on || p < .58);
       if (awake) { idleAt(t, B); story(now, t, B, m, ml); more = true; }
       if (awake && pointerAt()) more = true;
       if (on) {
-        var key = p + ':' + pc.toFixed(5) + ':' + pmx.toFixed(4) + ':' + pmy.toFixed(4);
+        var key = p + ':' + pmx.toFixed(4) + ':' + pmy.toFixed(4);
         if (key !== seen) {   // 스크롤도 마우스도 그대로면 다시 그리지 않음
           seen = key;
           var live = p >= .47 && p < SHOW, sr = live && stage.getBoundingClientRect(), rs = live && rig.ghosts.map(function (g) { return g.icon.getBoundingClientRect(); });
-          var c = shoot(p, m, pc);
+          var c = shoot(p, m);
           fly(p, c, sr, rs);
-          // 머리말: 창 윗변(키운 뒤 화면 위치)이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말(들어올 때 카메라는 밖에 있으니 밤색 그대로)
-          topNight(below && c.we < .5 && (pc > 0 || c.gt > barH));
+          // 머리말: 창 윗변(키운 뒤 화면 위치)이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말
+          topNight(below && c.we < .5 && c.gt > barH);
         }
       } else {
         lay(near, 1, 0, 0, -16 * pmx, -8 * pmy, 0); lay(back, 1, 0, 0, -7 * pmx, -4 * pmy, 0);
@@ -826,16 +1025,91 @@
     setTimeout(again, 3100);   // head 스크립트가 3초에 움직임을 껐을 수 있다(site.js가 안 옴)
     if (moving()) build();
     introing = d.classList.contains('intro') && !!rig && scrollY < 2;
-    if (introing) { rig.blds.forEach(function (b) { b.all.setAttribute('mask', b.mask); }); introAt(0); dolly = true; d.classList.add('dolly'); }
+    if (introing) { rig.blds.forEach(function (b) { b.all.setAttribute('mask', b.mask); }); introAt(0); }
     else finishIntro();
     measure();
   })();
 
 
+  /* ---------- 3) 끝 칸: 첫 화면의 작업실 창으로 돌아온 늦은 밤 ----------
+     보일 때마다(35% 넘게): 먼 도시와 위층 창 불이 하나씩 꺼지고(도시가 잠듦) 작업실 창만 남는다 → '메일 쓰기' 단추에서 편지 한 통이 날아가
+     창으로 쏙 들어가면 모니터가 번쩍 → 창에서 답장 불빛이 나와 명함에 닿으면 불빛 테가 퍼지고 ✓ 도장이 찍힌다(.got). 다 가려지면 처음으로.
+     PC 마우스가 '메일 쓰기'에 올라가거나 창을 누르면 편지가 한 번 더. 움직임은 transform만, 다 끝나면 그리기 없음.
+     동작 줄이기·JS 없음이면 다 잠든 도시와 도장 찍힌 명함 그대로(CSS) */
+  (function () {
+    var end = document.querySelector('.end'), sc = end && end.querySelector('.end__scene');
+    if (!sc || !moving() || !('IntersectionObserver' in window)) return;
+    var ws = [].slice.call(sc.querySelectorAll('.es-w')), flash = sc.querySelector('.es-flash'), win = sc.querySelector('.es-win'),
+      card = end.querySelector('.bcard'), btn = end.querySelector('.btn--main'), mark = card.querySelector('.mark'), fx = document.createElement('div');
+    fx.className = 'end__fx'; end.appendChild(fx); end.classList.add('end-anim');
+    var ENV = '<svg viewBox="0 0 28 20"><rect x="1" y="1" width="26" height="18" rx="2.5" fill="#FFF6E2" stroke="#E8CF9C"/><path d="M2 2.6l12 9 12-9" fill="none" stroke="#C9932F" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+    var timers = [], rafs = [], busy = false, shown = false;
+    var order = ws.map(function (w, i) { return [(i * 7919) % ws.length, w]; }).sort(function (a, b) { return a[0] - b[0]; }).map(function (p) { return p[1]; });
+    function later(ms, f) { timers.push(setTimeout(f, ms)); }
+    function mk(c, html) { var e = document.createElement('i'); e.className = c; if (html) e.innerHTML = html; fx.appendChild(e); return e; }
+    function pt(el, fx2, fy2) { var r = el.getBoundingClientRect(), o = end.getBoundingClientRect(); return [r.left - o.left + r.width * (fx2 == null ? .5 : fx2), r.top - o.top + r.height * (fy2 == null ? .5 : fy2)]; }
+    function move(e, x, y, rot, sc2, op) { e.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' + (rot ? ' rotate(' + rot.toFixed(1) + 'deg)' : '') + (sc2 != null ? ' scale(' + sc2.toFixed(3) + ')' : ''); if (op != null) e.style.opacity = op.toFixed(3); }
+    function arc(A, B, lift, dur, step, done) {   // A → B 2차 곡선(가운데가 lift만큼 위로). step(e, x, y, 기울기)
+      var C = [(A[0] + B[0]) / 2, Math.min(A[1], B[1]) - lift], t0 = performance.now();
+      (function tick(now) {
+        var s = Math.min(1, (now - t0) / dur), e = s < .5 ? 2 * s * s : 1 - 2 * (1 - s) * (1 - s), z = 1 - e;
+        var x = z * z * A[0] + 2 * z * e * C[0] + e * e * B[0], y = z * z * A[1] + 2 * z * e * C[1] + e * e * B[1];
+        var dx = 2 * z * (C[0] - A[0]) + 2 * e * (B[0] - C[0]), dy = 2 * z * (C[1] - A[1]) + 2 * e * (B[1] - C[1]);
+        step(e, x, y, Math.atan2(dy, dx));
+        if (s < 1) rafs.push(requestAnimationFrame(tick)); else done();
+      })(t0);
+    }
+    function ring(x, y, R) { var e = mk('ef-ring'); e.animate([{ transform: 'translate(' + x + 'px,' + y + 'px) scale(.4)', opacity: 1 }, { transform: 'translate(' + x + 'px,' + y + 'px) scale(' + R / 10 + ')', opacity: 0 }], { duration: 650, easing: 'ease-out' }).onfinish = function () { e.remove(); }; }
+    function mail() {   // 편지: '메일 쓰기' 단추 → 작업실 모니터. 기울어 날다가 창에 닿으며 작아짐
+      busy = true;
+      var A = pt(btn, .5, .2), B = pt(flash), e = mk('ef-env', ENV);
+      arc(A, B, 70, 950, function (s, x, y, a) {
+        var r = Math.max(-24, Math.min(24, a * 57.3 * .35)) + Math.sin(s * 9) * 6 * (1 - s);
+        move(e, x, y, r, 1 - .7 * Math.max(0, (s - .7) / .3), s > .9 ? (1 - s) * 10 : 1);
+      }, function () {
+        e.remove();
+        flash.animate([{ opacity: 0 }, { opacity: .9, offset: .25 }, { opacity: 0 }], { duration: 420 });
+        ring(B[0], B[1], 34);
+        later(380, reply);
+      });
+    }
+    function reply() {   // 답장 불빛: 모니터 → 명함 로고 점. 꼬리 다섯
+      var A = pt(flash), B = pt(mark), e = mk('ef-bead'), tails = [0, 1, 2, 3, 4].map(function () { return mk('ef-tail'); }), hist = [];
+      arc(A, B, 46, 820, function (s, x, y) {
+        hist.unshift([x, y]); if (hist.length > 12) hist.pop();
+        move(e, x, y, 0, 1 + .5 * Math.sin(Math.PI * s), 1);
+        tails.forEach(function (tl, i) { var h = hist[(i + 1) * 2] || hist[hist.length - 1]; move(tl, h[0], h[1], 0, 1 - i * .17, .6 * (1 - i / 5)); });
+      }, function () {
+        e.remove(); tails.forEach(function (tl) { tl.remove(); });
+        card.classList.remove('got'); void card.offsetWidth; card.classList.add('got');
+        ring(B[0], B[1], 30);
+        busy = false;
+      });
+    }
+    function play() {   // 도시가 잠들고(0.25~1.5초) → 편지(1.1초~)
+      busy = true;
+      order.forEach(function (w, i) { later(250 + i * 52 + (i % 3) * 30, function () { w.classList.remove('on'); }); });
+      later(1100, mail);
+    }
+    function reset() {
+      timers.splice(0).forEach(clearTimeout); rafs.splice(0).forEach(cancelAnimationFrame); fx.textContent = '';
+      ws.forEach(function (w) { w.classList.add('on'); }); card.classList.remove('got'); busy = false;
+    }
+    reset();
+    new IntersectionObserver(function (es) {
+      var e = es[es.length - 1];
+      if (e.intersectionRatio >= .35 && !shown) { shown = true; play(); }
+      else if (!e.isIntersecting && shown) { shown = false; reset(); }
+    }, { threshold: [0, .35] }).observe(sc);
+    var again = function () { if (shown && !busy && card.classList.contains('got')) mail(); };
+    btn.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') again(); });
+    win.addEventListener('click', again);
+  })();
+
   /* ---------- 2) 만든 것 칸 ----------
      첫 화면과 같은 불빛으로 켠다: 줄(.shelf)이 보이면 그 줄 이름 앞 등(.shelf__h 점)이 딸깍 켜지고(.in), 거기서 불빛이 아이콘마다 하나씩
      휘어 솟았다가 내려 꽂히면 그 아이콘이 켜지며 톡 튀고(.on) 고리가 퍼진다. 1)이 '만든 것'을 제자리에 놓기 전엔 미루고, 놓이면 켠다.
-     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채. 끝 칸은 보이면 스탠드 불이 켜지고 명함이 그 불빛 속으로 떨어진다(.end.in).
+     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채.
      첫 화면으로 돌아가 '만든 것'이 안 보이게 되면(1)이 다 가렸거나, 낮은 화면에서 첫 줄이 켜지는 자리 밑으로 내려감) 불을 다 끄고 처음으로(wipe) */
   var shelves = [].slice.call(document.querySelectorAll('.works .shelf'));
   shelves.forEach(function (sh) { [].forEach.call(sh.querySelectorAll('.wi'), function (a, i) { a.style.setProperty('--i', i); }); });
@@ -915,11 +1189,7 @@
   }, { rootMargin: '0px 0px -12% 0px' });
   wake = function () { seen.splice(0).forEach(light); };
   shelves.forEach(function (el) { io.observe(el); });
-  var end = document.querySelector('.end'), eo2 = end && new IntersectionObserver(function (es) {
-    if (es[es.length - 1].isIntersecting) { end.classList.add('in'); eo2.unobserve(end); used = true; }
-  }, { rootMargin: '0px 0px -25% 0px' });
-  if (end) { end.classList.add('end-wait'); eo2.observe(end); }
-  // 처음으로: 날던 불빛·고리를 걷고, 등·아이콘·명함을 끄고, 줄과 끝 칸을 다시 지켜본다(지켜보기 시작하면 지금 보이는지 바로 알려 줌)
+  // 처음으로: 날던 불빛·고리를 걷고, 등·아이콘을 끄고, 줄을 다시 지켜본다(지켜보기 시작하면 지금 보이는지 바로 알려 줌)
   wipe = function () {
     if (!used) return;
     used = false;
@@ -932,7 +1202,6 @@
       [].forEach.call(sh.querySelectorAll('.wi'), function (a) { a.classList.remove('on', 'landed'); });
       io.unobserve(sh); io.observe(sh);
     });
-    if (end) { end.classList.remove('in'); eo2.unobserve(end); eo2.observe(end); }
   };
   // 낮은 화면(첫 화면이 확대 없이 한 장): 첫 줄이 켜지는 자리(화면 아래 12% 위) 밑으로 내려가면 처음으로
   addEventListener('scroll', function () { if (used && shelves[0].getBoundingClientRect().top > innerHeight * .88) wipe(); }, { passive: true });
