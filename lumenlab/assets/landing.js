@@ -23,13 +23,14 @@
       '만든 것'은 첫 화면과 겹쳐 있고(CSS, END에 맨 위가 화면 맨 위) 제자리에 오기 전엔 누를 수 없음. 그 안으로 포커스가 오면 END까지 내려 준다.
       머리말은 밤 장면 위에서 밤색(html.top-night, 처음엔 head 스크립트가 붙임)이고, 다가가며 창 윗변이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말.
       확대하지 않을 때(낮은 화면)는 첫 화면이 머리말 밑에 있는 동안만 밤색 머리말. 첫 화면이 화면 밖이거나 종이색이 다 덮으면 매 프레임 그리기를 쉰다.
-   2) 만든 것 칸(작업실 안 선반): 줄이 처음 보이면 줄 이름 앞 등이 켜지고 첫 화면과 같은 불빛이 아이콘마다 날아가 꽂혀 켠다(아래 2) 설명). 끝 칸은 명함이 떨어진다.
+   2) 만든 것 칸(작업실 안 선반): 줄이 보이면 줄 이름 앞 등이 켜지고 첫 화면과 같은 불빛이 아이콘마다 날아가 꽂혀 켠다(아래 2) 설명). 끝 칸은 명함이 떨어진다.
+      첫 화면으로 다시 올라가 '만든 것'이 다 가려지면 처음 상태로 돌아가, 내려올 때마다 또 켜진다.
       아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
   var d = document.documentElement;
   var calm = matchMedia('(prefers-reduced-motion: reduce)');
   var moving = function () { return d.classList.contains('anim') && !calm.matches; };
-  var veiled = false, hush = false, wake = function () {};   // 1)이 '만든 것'을 가리는 중인가(다 드러나기 전), 아직 하나도 안 보이나(보이기 시작하면 2)를 깨워 선반 불을 켬)
+  var veiled = false, hush = false, wake = function () {}, wipe = function () {};   // 1)이 '만든 것'을 가리는 중인가(다 드러나기 전), 아직 하나도 안 보이나(보이기 시작하면 2)를 깨워 선반 불을 켬), 다 가려졌을 때 2)를 처음으로
 
   /* ---------- 1) 첫 화면 ---------- */
   var hero = document.querySelector('[data-hero]');
@@ -589,12 +590,18 @@
       if (!works) return;
       var o = k(p, .47, .5);
       works.style.opacity = o < 1 ? o.toFixed(3) : '';
+      if (!o) wipe();   // 첫 화면으로 돌아와 '만든 것'이 다 사라짐: 다시 내려오면 선반 불이 처음처럼 또 켜지게
       var sc = (R[2] - R[0]) / W, now = wTop - scrollY, end = wTop - start - travel * END;
       if (o > 0 && p < END && (sc < .999 || R[0] > .5 || R[3] < H - .5 || Math.abs(R[1] + end * sc - now) > 1.5)) {   // 화면을 다 덮고 1px 안쪽이면 제자리로 둔다(스크롤은 정수 px)
         works.style.transformOrigin = '0 0';
         works.style.transform = 'translate(' + R[0].toFixed(1) + 'px,' + (R[1] + end * sc - now).toFixed(1) + 'px) scale(' + sc.toFixed(4) + ')';
         works.style.clipPath = 'inset(' + Math.max(0, -end).toFixed(1) + 'px 0 ' + Math.max(0, wH - (R[3] - R[1]) / sc + end).toFixed(1) + 'px 0 round ' + (rad / sc).toFixed(1) + 'px)';
-      } else works.style.transform = works.style.clipPath = works.style.transformOrigin = '';
+      } else {
+        works.style.transform = works.style.transformOrigin = '';
+        // 다 숨었을 땐 아예 그리지 않게 잘라 둔다: 투명한 채 첫 화면 아래쪽(72%부터)을 덮고 있으면 폰 브라우저가 그 자리를 옛 장면(커진 방 창)으로 남겨 둘 때가 있다.
+        // 옮기지는 않는다(# 링크 자리가 그대로, 탭 키로 들어가면 END로 내려 줌)
+        works.style.clipPath = o ? '' : 'inset(0 0 100% 0)';
+      }
       settle(p >= SHOW);
     }
     function settle(v) {   // '만든 것'이 제자리에 다 왔나: 그 전엔 누를 수 없고(포커스가 오면 END로 내려 줌) 선반 불은 기다린다
@@ -802,9 +809,10 @@
 
 
   /* ---------- 2) 만든 것 칸 ----------
-     첫 화면과 같은 불빛으로 켠다: 줄(.shelf)이 처음 보이면 그 줄 이름 앞 등(.shelf__h 점)이 딸깍 켜지고(.in), 거기서 불빛이 아이콘마다 하나씩
+     첫 화면과 같은 불빛으로 켠다: 줄(.shelf)이 보이면 그 줄 이름 앞 등(.shelf__h 점)이 딸깍 켜지고(.in), 거기서 불빛이 아이콘마다 하나씩
      휘어 솟았다가 내려 꽂히면 그 아이콘이 켜지며 톡 튀고(.on) 고리가 퍼진다. 1)이 '만든 것'을 제자리에 놓기 전엔 미루고, 놓이면 켠다.
-     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채. 끝 칸은 보이면 스탠드 불이 켜지고 명함이 그 불빛 속으로 떨어진다(.end.in) */
+     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채. 끝 칸은 보이면 스탠드 불이 켜지고 명함이 그 불빛 속으로 떨어진다(.end.in).
+     첫 화면으로 돌아가 '만든 것'이 안 보이게 되면(1)이 다 가렸거나, 낮은 화면에서 첫 줄이 켜지는 자리 밑으로 내려감) 불을 다 끄고 처음으로(wipe) */
   var shelves = [].slice.call(document.querySelectorAll('.works .shelf'));
   shelves.forEach(function (sh) { [].forEach.call(sh.querySelectorAll('.wi'), function (a, i) { a.style.setProperty('--i', i); }); });
   if (!shelves.length || !moving() || !('IntersectionObserver' in window)) return;
@@ -862,7 +870,7 @@
     }
     if (flights.length || rings.length) go();
   }
-  var on = function (a) { a.classList.add('on'); };
+  var on = function (a) { a.classList.add('on'); }, timers = [], used = false;
   function light(sh) {
     sh.classList.add('in'); io.unobserve(sh);
     var from = lamp(sh), n = 0;
@@ -870,7 +878,8 @@
       if (a.classList.contains('landed')) return on(a);
       send(from, a, 200 + n * 120, 640 + n * 40); n++;
     });
-    setTimeout(function () { [].forEach.call(sh.querySelectorAll('.wi'), on); }, 3200);   // 탭이 숨어 그리기가 멈춰도 결국 켜짐
+    timers.push(setTimeout(function () { [].forEach.call(sh.querySelectorAll('.wi'), on); }, 3200));   // 탭이 숨어 그리기가 멈춰도 결국 켜짐
+    used = true;
   }
   var seen = [];   // 가려진 동안 화면에 들어온 줄: 드러나면 켠다
   var io = new IntersectionObserver(function (es) {
@@ -882,10 +891,25 @@
   }, { rootMargin: '0px 0px -12% 0px' });
   wake = function () { seen.splice(0).forEach(light); };
   shelves.forEach(function (el) { io.observe(el); });
-  var end = document.querySelector('.end');
-  if (end) {
-    end.classList.add('end-wait');
-    var eo2 = new IntersectionObserver(function (es) { if (es[es.length - 1].isIntersecting) { end.classList.add('in'); eo2.disconnect(); } }, { rootMargin: '0px 0px -25% 0px' });
-    eo2.observe(end);
-  }
+  var end = document.querySelector('.end'), eo2 = end && new IntersectionObserver(function (es) {
+    if (es[es.length - 1].isIntersecting) { end.classList.add('in'); eo2.unobserve(end); used = true; }
+  }, { rootMargin: '0px 0px -25% 0px' });
+  if (end) { end.classList.add('end-wait'); eo2.observe(end); }
+  // 처음으로: 날던 불빛·고리를 걷고, 등·아이콘·명함을 끄고, 줄과 끝 칸을 다시 지켜본다(지켜보기 시작하면 지금 보이는지 바로 알려 줌)
+  wipe = function () {
+    if (!used) return;
+    used = false;
+    timers.splice(0).forEach(clearTimeout);
+    flights.splice(0).forEach(function (f) { fx.removeChild(f.g); });
+    rings.splice(0).forEach(function (q) { fx.removeChild(q.e); });
+    seen.length = 0;
+    shelves.forEach(function (sh) {
+      sh.classList.remove('in');
+      [].forEach.call(sh.querySelectorAll('.wi'), function (a) { a.classList.remove('on', 'landed'); });
+      io.unobserve(sh); io.observe(sh);
+    });
+    if (end) { end.classList.remove('in'); eo2.unobserve(end); eo2.observe(end); }
+  };
+  // 낮은 화면(첫 화면이 확대 없이 한 장): 첫 줄이 켜지는 자리(화면 아래 12% 위) 밑으로 내려가면 처음으로
+  addEventListener('scroll', function () { if (used && shelves[0].getBoundingClientRect().top > innerHeight * .88) wipe(); }, { passive: true });
 })();

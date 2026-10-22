@@ -220,6 +220,23 @@ with sync_playwright() as p:
         ok(mid['o'] == 1 and mid['tf'] and mid['clip'] and end['o'] == 1 and not end['tf'] and not end['clip'] and g['in'] and g['off'] == 0 and t['in'] and t['off'] == 0 and e and fxn == 0 and not errs,
            f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 명함 {e}, 남은 불빛 {fxn} {errs[:1]}")
         c.close()
+    # 다시 내려와도 또: '만든 것'까지 내렸다 첫 화면 맨 위로 올리면 줄 등·아이콘·명함이 꺼져 처음으로 돌아가고, 다시 내리면 불빛이 또 날아가 켬
+    FX = r"""()=>({fx:document.querySelectorAll('.page-fx g').length,gin:document.getElementById('games').classList.contains('in'),
+      on:document.querySelectorAll('.works .wi.on').length,end:document.querySelector('.end').classList.contains('in'),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
+    for pre, w, h in (('', 412, 780), ('/en', 1366, 800)):
+        c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
+        rounds = []
+        for rnd in range(2):
+            pg.evaluate(Z, 0.72); bead = 0
+            for i in range(10): pg.wait_for_timeout(120); bead = max(bead, pg.evaluate(FX)['fx'])
+            pg.wait_for_timeout(1400); a = pg.evaluate(FX)
+            pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1500); e = pg.evaluate(FX)['end']
+            pg.evaluate(Z, 0); pg.wait_for_timeout(400); b = pg.evaluate(FX)
+            rounds.append((bead, a['gin'], e, b['gin'] or b['on'] > 0 or b['end'], b['out']))
+        ok(all(r[0] > 0 and r[1] and r[2] and not r[3] and r[4] for r in rounds) and not errs,
+           f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 명함이 떨어짐, 맨 위에선 다 꺼져 처음으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·명함·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
+        c.close()
     # 첫 화면 이야기 더하기: 거리의 사람이 휴대폰으로 불빛을 받고(10초 안), 간판을 누르면 글자가 톡 뜀, 사람을 누르면 손을 흔듦(오류 없이)
     c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True); pg = c.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
