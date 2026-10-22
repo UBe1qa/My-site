@@ -19,6 +19,7 @@
     heroCta: 'Step inside',
     wlKick: 'Inside the workshop',
     mailBtn: 'Email us',
+    enKick: 'By the workshop window',
     enTitle: 'Found a mistake? <span class="nw">One email and we fix it</span>',
     enLead: 'Tell us which tool, your device and browser, and what you entered, and we can check it quickly.',
     enAbout: 'About Lumen Lab',

@@ -298,3 +298,5 @@ textarea.tr-in{min-height:96px;padding:10px 12px;line-height:1.6;resize:vertical
   .sh__icon,.sh__guides a,.sh__cards a,.shots li{transition:none}
   .sh__guides a:hover,.sh__guides a:focus-visible,.sh__cards a:hover{transform:none}
 }
+/* 창을 열 때 아래 칸(더 알아보기·작업 일지·책·다른 것)은 내려가 보일 때 그린다: 여는 순간 글자 모양 잡기·배치가 한꺼번에 몰려 멈칫하지 않게 */
+.sheet .sh__more,.sheet .sh__log,.sheet .sh__books,.sheet .sh__oth{content-visibility:auto;contain-intrinsic-size:auto 420px}
