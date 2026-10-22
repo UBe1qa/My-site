@@ -52,7 +52,7 @@ window.LLTry.daycount = function (stage, c) {
       legend.appendChild(h('li', { class: 'dc-k dc-k--' + k[0] }, [h('i'), h('span', { text: T[k[0]] + ' ' }), h('b', { text: nf.format(k[1]) })]));
     });
   }
-  var lastKey = '';
+  var lastKey = '', wiped = -1e9;
   function run(pop, fin) {
     var a = read(fromIn, fin), b = read(toIn, fin);
     if (a.n == null || b.n == null) {
@@ -100,10 +100,14 @@ window.LLTry.daycount = function (stage, c) {
         if (n === hi) cls += ' is-b';
       }
       var col = Math.floor((n - first) / 7);
-      var cell = h('i', { class: cls, style: 'grid-column:' + (col + 2) + ';grid-row:' + (DC.weekday(n) + 1) + (pop && !c.reduced ? ';animation-delay:' + Math.min(260, col * 9) + 'ms' : '') });
-      strip.appendChild(cell);
+      strip.appendChild(h('i', { class: cls, style: 'grid-column:' + (col + 2) + ';grid-row:' + (DC.weekday(n) + 1) }));
     }
-    strip.classList.toggle('is-pop', !!pop && !c.reduced);
+    // 칸 띠는 통째로 왼쪽부터 쓸어 나타난다(칸마다 따로 튀게 하면 칸 수백 개가 저마다 움직여 느린 폰에서 끊김). 치는 동안 잇따른 글자엔 다시 안 쓸음
+    var now = performance.now();
+    if (pop && !c.reduced && now - wiped > 700 && strip.animate) {
+      wiped = now;
+      strip.animate([{ clipPath: 'inset(0 100% 0 0)', opacity: .4 }, { clipPath: 'inset(0 0 0 0)', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    }
     fillHols(bd.holidays, clip);
   }
   [fromIn, toIn].forEach(function (el) {
@@ -121,8 +125,6 @@ window.LLTry.daycount = function (stage, c) {
     '.dc-d.is-out{background:none}.dc-d.is-work{background:color-mix(in srgb,var(--tc) 55%,var(--card))}' +
     '.dc-d.is-off{background:color-mix(in srgb,var(--muted) 30%,var(--card))}.dc-d.is-hol{background:var(--tc);box-shadow:inset 0 0 0 2px color-mix(in srgb,#fff 55%,transparent)}' +
     '.dc-d.is-a,.dc-d.is-b{outline:2px solid var(--ink);outline-offset:1px}.dc-d.is-skip{opacity:.35}' +
-    '.dc-strip.is-pop .dc-d:not(.is-out){animation:dcin .32s cubic-bezier(.2,.8,.2,1) both}' +
-    '@keyframes dcin{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}' +
     '.dc-legend{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;line-height:22px;min-height:22px;color:var(--ink-2)}' +
     '.dc-k{display:flex;align-items:center;gap:6px}.dc-k i{width:13px;height:13px;border-radius:3px}.dc-k b{color:var(--ink);font-variant-numeric:tabular-nums}' +
     '.dc-k--work i{background:color-mix(in srgb,var(--tc) 55%,var(--card))}.dc-k--off i{background:color-mix(in srgb,var(--muted) 30%,var(--card))}.dc-k--hol i{background:var(--tc)}' +

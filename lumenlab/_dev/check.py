@@ -102,7 +102,7 @@ with sync_playwright() as p:
     c.close()
 
     # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(명함 ✓ 도장은 답장 불빛이 닿아야 찍히니 아래 끝 칸 시험이 따로 봄, 끝 칸 모니터 번쩍 판은 늘 0, 첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝(END p 0.72)에 드러나며 그동안 날아가는 아이콘 자리는 비어 있으니 그 구간은 아래 따로 확인)
-    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero,.bcard__stamp,.es-flash'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
+    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero,.bcard__stamp,.end__stage'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
     for w, h in [(390, 844), (1366, 860)]:
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + '/')
         pg.wait_for_timeout(1500)
@@ -215,14 +215,14 @@ with sync_playwright() as p:
         pg.evaluate(Z, 0.72); pg.wait_for_timeout(1800); end = pg.evaluate(PT); g = pg.evaluate(LIT, 'games')
         pg.evaluate("document.getElementById('g-play').scrollIntoView()"); pg.wait_for_timeout(2000); t = pg.evaluate(LIT, 'g-play')
         pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1700)
-        e = pg.evaluate("(()=>{const b=document.querySelector('.bcard');return !!document.querySelector('.end-anim')&&[...document.querySelectorAll('.end__scene .es-w')].some(w=>!w.classList.contains('on'))&&+getComputedStyle(b).opacity===1})()")
-        fxn = pg.evaluate("document.querySelectorAll('.page-fx g').length")
+        e = pg.evaluate("(()=>{const b=document.querySelector('.bcard');return !!document.querySelector('.end-anim.dawn')&&+getComputedStyle(b).opacity===1})()")
+        fxn = pg.evaluate("document.querySelectorAll('.page-fx .pf-b').length")
         ok(mid['o'] == 1 and mid['tf'] and mid['clip'] and end['o'] == 1 and not end['tf'] and not end['clip'] and g['in'] and g['off'] == 0 and t['in'] and t['off'] == 0 and e and fxn == 0 and not errs,
-           f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 도시가 잠들기 시작·명함 보임 {e}, 남은 불빛 {fxn} {errs[:1]}")
+           f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 창밖에 날이 밝기 시작·명함 보임 {e}, 남은 불빛 {fxn} {errs[:1]}")
         c.close()
     # 다시 내려와도 또: '만든 것'까지 내렸다 첫 화면 맨 위로 올리면 줄 등·아이콘이 꺼지고 끝 칸 도시 불이 다시 켜져 처음으로 돌아가고, 다시 내리면 불빛이 또 날아가 켬
-    FX = r"""()=>({fx:document.querySelectorAll('.page-fx g').length,gin:document.getElementById('games').classList.contains('in'),
-      on:document.querySelectorAll('.works .wi.on').length,end:[...document.querySelectorAll('.end__scene .es-w')].some(w=>!w.classList.contains('on')),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
+    FX = r"""()=>({fx:document.querySelectorAll('.page-fx .pf-b').length,gin:document.getElementById('games').classList.contains('in'),
+      on:document.querySelectorAll('.works .wi.on').length,end:document.querySelector('.end').classList.contains('dawn'),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
     for pre, w, h in (('', 412, 780), ('/en', 1366, 800)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
@@ -235,7 +235,7 @@ with sync_playwright() as p:
             pg.evaluate(Z, 0); pg.wait_for_timeout(400); b = pg.evaluate(FX)
             rounds.append((bead, a['gin'], e, b['gin'] or b['on'] > 0 or b['end'], b['out']))
         ok(all(r[0] > 0 and r[1] and r[2] and not r[3] and r[4] for r in rounds) and not errs,
-           f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 끝 칸 도시가 잠듦, 맨 위에선 다 꺼져 처음으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·끝 칸 잠듦·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
+           f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 끝 칸 창밖에 날이 밝음, 맨 위에선 다 꺼지고 끝 칸은 다시 밤으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·끝 칸 새벽·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
         c.close()
     # 첫 화면 이야기 더하기: 거리의 셋째 손님(휴대폰)이 불빛을 받아 화면이 켜지고(45초 안, 아이·개 다음), 간판을 누르면 글자가 톡 뜀(오류 없이)
     c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True); pg = c.new_page(); errs = []
@@ -416,7 +416,8 @@ with sync_playwright() as p:
         ok(st['figs'] == 5 and st['shd'] == 5 and st['rim'] == 5 and st['op'] > .9 and not errs, f"{w}px 거리: 그림 {st['figs']}(넷+개)·그림자 {st['shd']}·테두리 {st['rim']}, 아이 풍선이 불빛을 받아 켜짐 {errs[:2]}")
         c.close()
 
-    # 끝 칸: 명함 종이가 칠해져 글씨가 보이고(배경 ≠ 투명, 글자 대비 4.5 이상), 보이면 도시가 잠들고 편지 → 답장 불빛 → ✓ 도장(.got). 다 가렸다 다시 보이면 또
+    # 끝 칸: 명함 종이가 칠해져 글씨가 보이고(배경 ≠ 투명, 글자 대비 4.5 이상), 창이 보이면 날이 밝아 건너편 창 불이 다 꺼지고 아이가 던진 종이비행기가
+    # 명함에 내려앉아 ✓ 도장(.got). 다 가렸다 다시 보이면 밤부터 또
     LUM = "(c)=>{const v=c.match(/[\\d.]+/g).map(Number).slice(0,3).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*v[0]+.7152*v[1]+.0722*v[2]}"
     for scheme in ('light', 'dark'):
         c = br.new_context(viewport={'width': 390, 'height': 844}, color_scheme=scheme); pg = c.new_page(); errs = []
@@ -424,16 +425,17 @@ with sync_playwright() as p:
         st = pg.evaluate("(()=>{const L=" + LUM + ",cd=document.querySelector('.bcard'),bg=getComputedStyle(cd).backgroundColor,a=getComputedStyle(cd.querySelector('.bcard__rows a')).color,l1=L(bg),l2=L(a);return{bg,ratio:(Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05)}})()")
         ok(st['bg'] not in ('rgba(0, 0, 0, 0)', 'transparent') and st['ratio'] >= 4.5, f"{scheme} 끝 칸 명함: 종이 {st['bg']}, 메일 글자 대비 {st['ratio']:.1f}")
         pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
-        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=6000)
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=9000)
         lit = pg.evaluate("document.querySelectorAll('.end__scene .es-w.on').length")
-        pg.evaluate("scrollTo(0,0)"); pg.wait_for_timeout(400)
-        off = pg.evaluate("!document.querySelector('.bcard.got') && document.querySelectorAll('.end__scene .es-w.on').length > 10")
+        pl = pg.evaluate("(()=>{const p=document.querySelector('.end__fx .ef-plane'),c=document.querySelector('.bcard');if(!p)return 9e9;const a=p.getBoundingClientRect(),b=c.getBoundingClientRect();return Math.hypot(a.left+a.width/2-(b.right-22),a.top+a.height/2-b.top)})()")
+        pg.evaluate("scrollTo({top:0,behavior:'instant'})"); pg.wait_for_timeout(400)
+        off = pg.evaluate("!document.querySelector('.bcard.got') && !document.querySelector('.end.dawn') && !document.querySelector('.end__fx .ef-plane') && document.querySelectorAll('.end__scene .es-w.on').length > 10")
         pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
-        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=6000)
-        ok(lit == 0 and off and not errs, f"{scheme} 끝 칸: 도시가 다 잠들고({lit}) 답장 불빛에 도장, 올라갔다 다시 오면 처음부터 다시 {errs[:2]}")
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=9000)
+        ok(lit == 0 and pl < 24 and off and not errs, f"{scheme} 끝 칸: 날이 밝아 건너편 창 불이 다 꺼지고({lit}) 종이비행기가 명함 귀퉁이에(떨어진 거리 {pl:.0f}px) 내려앉아 도장, 올라갔다 다시 오면 밤부터 다시 {errs[:2]}")
         c.close()
     c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
-    ok(pg.evaluate("!document.querySelector('.end-anim') && getComputedStyle(document.querySelector('.bcard__stamp')).opacity > .5 && !document.querySelector('.end__scene .es-w.on')"), '동작 줄이기: 끝 칸은 잠든 도시와 도장 찍힌 명함 그대로')
+    ok(pg.evaluate("!document.querySelector('.end-anim') && getComputedStyle(document.querySelector('.bcard__stamp')).opacity > .5 && !document.querySelector('.end__scene .es-w.on') && +getComputedStyle(document.querySelector('.es-dawn')).opacity === 1 && +getComputedStyle(document.querySelector('.es-lampg')).opacity === 0"), '동작 줄이기: 끝 칸은 해 뜬 아침(건너편 불·스탠드 꺼짐)과 도장 찍힌 명함 그대로')
     c.close()
 
     # '만든 것' 줄마다 매단 등: 줄이 켜지면 벽에 등불(::before 보임), 등 줄(::after)이 위 선까지

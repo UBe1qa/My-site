@@ -6,7 +6,8 @@
       이야기(머무는 동안, 2.3초에 처음, 4.6초마다): 사람이 다 만들면 모니터가 번쩍하고 아이콘 하나가 톡 튀며 불빛이 되어 방 창 유리를 뚫고 나와(유리 반사)
       휘어 솟았다가 위층 이웃 창으로 쏙 들어간다 → 그 창에 불이 켜지고(번쩍·고리) 안의 사람이 들썩인다(앱: 노트북, 게임: 소파의 휴대폰, 웹 도구: 휴대폰과 창턱 고양이).
       아래층 사람은 그때 팔을 든다(만세·한 팔·쭉 펴기 차례로). 이웃 창은 9초 뒤 꺼진다. 넓은 화면은 사이사이 먼 도시 창으로도 보내 도시가 조금씩 밝아진다.
-      거리: 지나가던 사람이 방 창 아래에 서서 휴대폰을 들면 방에서 불빛이 내려와 그 화면이 켜지고, 깡충 뛰고 화면을 보며 걸어간다(4.2초에 처음, 9~13초마다).
+      거리: 지나가던 사람(풍선 든 아이·개 산책·휴대폰·자전거 차례)이 방 창 아래에 서면 방에서 불빛이 내려와 풍선·화면·앞등이 켜지고 깡충 뛰고 걸어간다.
+        첫 손님은 들어오자마자 뛰어와(첫 불빛이 그 아이에게), 그다음부터는 둘이 번갈아 양쪽에서 와 엇갈린다.
       그 밖에: 타자(팔꿈치·어깨), 모니터 글줄·커서, 머그 김, 별 반짝임·별똥별(CSS). 누르면(폰 손가락·PC 클릭) 방 안 사람은 돌아보며 손을 흔들고,
       스탠드는 딸깍 꺼졌다 켜지고, 간판은 글자가 차례로 톡 뛰고, 거리의 사람은 깡충. 그 밖의 자리는 그리로 불빛(창 근처면 그 창, 지붕 위면 불꽃).
       PC 마우스가 꺼진 위층 창에 다가가도 그 창으로. 마우스(PC)·기울기(안드로이드, 허락 없이 되는 곳만)로 층 깊이.
@@ -24,7 +25,7 @@
       머리말은 밤 장면 위에서 밤색(html.top-night, 처음엔 head 스크립트가 붙임)이고, 다가가며 창 윗변이 머리말 밑을 지나 방 안이 그 밑에 오면 원래 머리말.
       확대하지 않을 때(낮은 화면)는 첫 화면이 머리말 밑에 있는 동안만 밤색 머리말. 첫 화면이 화면 밖이거나 종이색이 다 덮으면 매 프레임 그리기를 쉰다.
    2) 만든 것 칸(작업실 안 선반): 줄이 보이면 줄 이름 앞 등이 켜지고 첫 화면과 같은 불빛이 아이콘마다 날아가 꽂혀 켠다(아래 2) 설명).
-   3) 끝 칸(작업실 창으로 돌아온 늦은 밤): 도시가 잠들고, '메일 쓰기'에서 편지가 창으로 들어가면 답장 불빛이 명함에 와 ✓ 도장(아래 3) 설명).
+   3) 끝 칸(작업실 창가, 날이 밝음): 방 안에서 창밖을 보면 해가 뜨고 건너편 불이 꺼지고, 풍선 든 아이가 던진 종이비행기가 명함에 내려앉아 ✓ 도장(아래 3) 설명).
       첫 화면으로 다시 올라가 '만든 것'이 다 가려지면 처음 상태로 돌아가, 내려올 때마다 또 켜진다.
       아이콘을 누르면 뜨는 소개 창은 assets/store.js. */
 (function () {
@@ -125,7 +126,7 @@
       var root = el('g', { 'class': 'n-cast', opacity: 0 }, svg), shade = el('g', { 'class': 'n-shade' }, root), o = { g: root, figs: {} };
       var mk = function (kind, html, parent) {
         var g = el('g', { 'class': 'n-fig', style: 'display:none' }, parent || root); g.innerHTML = html;
-        var bd = g.querySelector('.bd'), id = 'n-wk' + n + kind; bd.id = id;
+        var bd = g.querySelector('.bd'), id = 'n-wk' + n + kind; bd.id = id;   // n = 건물 번호 + 자리(a·b)
         var sh = el('use', { href: '#' + id, 'class': 'n-shd', opacity: 0 }, shade);
         var rim = el('use', { href: '#' + id, 'class': 'n-rimu', transform: 'translate(0 -.8)', opacity: 0 }); g.insertBefore(rim, bd);   // 창 불빛을 등진 테두리: 등불 색 몸을 조금 위로 비켜 뒤에 깖
         var q = function (s) { return [].slice.call(g.querySelectorAll(s)); }, f = { g: g, sh: sh, rim: rim, lg: q('.lg'), am: q('.am'), up: g.querySelector('.up'), hd: g.querySelector('.hd') };
@@ -206,7 +207,7 @@
             cx: x + w / 2, cy: y + h / 2, w: w, h: h, kind: i % NB.length, on: false, pop: -1e9, off: 0, aim: false };
         });
         // 거리를 지나는 사람들(건물 앞 길 위, 아래 '거리'). 그림자 층 → 사람 층. 불빛 층(fx)보다 아래
-        var vb = svg.getAttribute('viewBox').split(' ').map(Number), wk = cast(svg, n);
+        var vb = svg.getAttribute('viewBox').split(' ').map(Number), wks = ['a', 'b'].map(function (k) { return cast(svg, n + k); });   // 자리 둘: 나가는 사람과 들어오는 사람이 엇갈림
         // 맨 위 층: 날아가는 불빛·고리·불꽃, 방 창 유리 반사
         var fx = el('g', {}, svg), glass = svg.querySelector('[data-win]'), gx = +glass.getAttribute('x'), gy = +glass.getAttribute('y'), gw = +glass.getAttribute('width'), gh = +glass.getAttribute('height');
         el('rect', { x: gx, y: gy, width: gw, height: gh }, el('clipPath', { id: 'n-gc' + n }, defs));
@@ -220,7 +221,7 @@
           lit: [].filter.call(svg.querySelectorAll('.n-lit'), function (e) { return e !== room && e !== name && !e.matches('.n-core, ellipse, circle[fill="url(#n-dot)"]'); }),
           nb: nb, fx: fx, sheen: sheen, gx: gx, gw: gw, sheenAt: -1e9, fl: [], bits: [], re: null,
           bx: +svg.querySelector('.n-bld').getAttribute('x'), ny: +name.getAttribute('y'), nfs: +name.getAttribute('font-size'), sign: null, wave: null, flick: null, dk: false,
-          wk: Object.assign(wk, { gnd: vb[1] + vb[3], mode: '', next: 0, n: 0, x: 0, dir: 1, dist: 0, at: 0, last: 0, lit: -1e9, hop: -1e9 }) });
+          wks: wks.map(function (w) { return Object.assign(w, { gnd: vb[1] + vb[3], mode: '', go: false, n: 0, x: 0, dir: 1, dist: 0, at: 0, last: 0, lit: -1e9, hop: -1e9 }); }), st: { n: 0, next: 0 } });
       });
       var star = document.createElement('i'); star.className = 'n-shoot'; skyEl.appendChild(star);   // 별똥별(CSS, 가끔)
       var fx = document.createElement('div'); fx.className = 'hero__fx'; stage.insertBefore(fx, copy);
@@ -365,7 +366,7 @@
        그 창에 불이 켜지고(번쩍·고리) 안의 사람이 들썩인다. 아래층 사람은 그때 팔을 든다. 4.6초마다 한 번(처음은 2.3초), 이웃 창은 9초 뒤 꺼진다.
        위층 창 차례: 가운데(게임) → 왼쪽(앱) → 오른쪽(웹 도구). 넓은 화면은 사이사이 먼 도시의 창으로도 보낸다(켜진 채 남아 도시가 조금씩 밝아짐).
        누르면(폰 손가락·PC 클릭) 그 자리로: 창 근처면 그 창, 지붕 위 하늘이면 거기서 불꽃. PC 마우스가 꺼진 위층 창에 다가가도 그 창으로 */
-    var FIRST = 2300, EVERY = 4600, STAY = 9000, ORDER = [1, 0, 2];
+    var FIRST = 3600, EVERY = 4600, STAY = 9000, ORDER = [1, 0, 2];   // 처음(2.6초쯤)은 길의 첫 손님에게, 위층 이웃 창은 그다음
     var next = -1, turnN = 0, poke = null, lastGo = -1e9, hoverAt = -1e9;
     function ctm(b) { var m = b.svg.getScreenCTM(); return m; }
     function toSvg(b, x, y) { var m = ctm(b).inverse(); return [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]; }
@@ -383,7 +384,7 @@
       var side = (dx < 0 ? 1 : -1) * Math.max(Math.abs(dx) * .45, 70 / px);   // 목표 반대쪽으로 크게 휘었다가 위에서 내려 꽂힘
       var c1 = [p0[0] + side, top - 20 / px], c2 = [p3[0] - side * .55, top - 60 / px];
       if (to.p) { c1 = [p0[0] + dx * .2, p0[1] - 50 / px]; c2 = [p3[0] - dx * .08, p3[1] - 120 / px]; }   // 길의 사람: 유리를 나와 살짝 솟았다가 들어 올린 휴대폰으로 떨어짐
-      b.fl.push({ at: t, dur: to.w || to.far ? 1300 : to.p ? 1150 : 1000, p0: p0, c1: c1, c2: c2, p3: p3,
+      b.fl.push({ at: t, dur: to.w || to.far ? 1300 : to.p ? 950 : 1000, p0: p0, c1: c1, c2: c2, p3: p3,
         to: to, g: g, tail: tail, core: core, px: px, hist: [], out: false });
       if (to.w) to.w.aim = true;
       b.re = { at: t, kind: KINDS[turnN % KINDS.length], j: j };
@@ -424,8 +425,10 @@
        ④ 자전거: 창 앞에 서서 한 발을 땅에 짚고 창을 올려다보면 불빛이 앞등에 들어가 길을 비춤 → 따릉(고리) 하고 일어서서 페달을 밟아 나감
        걸음 = 앞뒤로 흔드는 넓적다리 + 앞으로 내딛을 때 굽는 무릎, 디딘 발이 땅에 붙게 엉덩이 높이를 맞춘다. 팔은 다리와 반대로 흔들고, 들거나 가리키면 손 자리로(두 마디 IK).
        방 창 불빛 앞에 들면 몸은 더 어둡게(역광) 테두리는 등불 색, 길에는 창 반대쪽으로 그림자가 진다(지나가며 그림자가 돈다).
-       처음은 들어온 지 3.2초, 한 사람이 나가면 2.6~4.4초 뒤 다음. 내리기 시작하면 불빛 없이 그냥 지나간다. 누르면 아이·사람은 깡충, 개는 펄쩍, 자전거는 따릉 */
-    var SPD = { kid: 44, dog: 36, ph: 32, bike: 72 }, SEND = { kid: 560, dog: 900, ph: 760, bike: 640 }, STAY = { kid: 1500, dog: 240, ph: 1150, bike: 800 };
+       첫 손님(아이)은 페이지가 열리자마자 길 끝에서 뛰어와 스탠드가 켜질 무렵 창 앞에 닿고, 첫 불빛이 그 풍선으로 내려간다(위층 이웃 창보다 먼저:
+       눈이 불빛을 따라 길로 내려가 손님이 있는 줄 안다). 그 뒤로는 한 사람이 창 앞을 떠나면 0.5초 뒤 다음 사람이 반대쪽에서 들어와 엇갈린다(자리 둘).
+       내리기 시작하면 불빛 없이 그냥 지나간다. 누르면 아이·사람은 깡충, 개는 펄쩍, 자전거는 따릉. 빈 길을 누르면 다음 손님이 바로 온다 */
+    var SPD = { kid: 44, dog: 36, ph: 32, bike: 72 }, SEND = { kid: 560, dog: 900, ph: 760, bike: 640 }, LINGER = { kid: 1500, dog: 240, ph: 1150, bike: 800 };   // LINGER = 불빛을 받고 창 앞에 더 머무는 시간(위 STAY는 이웃 창이 켜져 있는 시간)
     var R2 = function (p, a) { var c = Math.cos(a), s = Math.sin(a); return [p[0] * c - p[1] * s, p[0] * s + p[1] * c]; };
     var add = function (a, b2) { return [a[0] + b2[0], a[1] + b2[1]]; };
     var pl = function (a) { return 'M' + a.map(function (p) { return p[0].toFixed(2) + ' ' + p[1].toFixed(2); }).join('L'); };
@@ -457,20 +460,32 @@
       f.sh.setAttribute('transform', 'matrix(' + (dir * s).toFixed(3) + ' 0 ' + (-sh * s).toFixed(3) + ' ' + (-.3 * s).toFixed(3) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ')');
       f.sh.setAttribute('opacity', (.5 * sp).toFixed(3)); f.rim.setAttribute('opacity', (.95 * sp).toFixed(3));
     }
-    function walk(b, t, live, m) {
-      var w = b.wk, dt = Math.min(100, t - (w.last || t)) / 1000;
+    function passers(b, t, live, m) {   // 다음 손님 차례: 창 앞에 서 있거나 오는 사람이 없을 때 빈 자리로
+      var st = b.st, busy = b.wks.some(function (w) { return w.mode === 'in' || w.mode === 'act'; });
+      if (!st.next) st.next = t + (introing ? 150 - it : 600);
+      if (st.next === Infinity && !busy) st.next = t + 500;
+      if (live && !busy && t >= st.next) {
+        var free = b.wks.filter(function (w) { return !w.mode; })[0];
+        if (free) { free.go = st.n === 0 ? 'run' : true; free.n = st.n++; st.next = Infinity; }
+      }
+      b.wks.forEach(function (w) { walk(b, w, t, live, m); });
+    }
+    function walk(b, w, t, live, m) {
+      var dt = Math.min(100, t - (w.last || t)) / 1000;
       w.last = t;
       if (!w.mode) {
-        if (!w.next) w.next = t + (introing ? 3200 - it : 2500);
-        if (!live || t < w.next) { w.g.setAttribute('opacity', 0); return; }
+        if (!live || !w.go) { w.go = false; w.g.setAttribute('opacity', 0); return; }
         var cm = ctm(b), px = Math.sqrt(cm.a * cm.a + cm.b * cm.b) || 1, sr = stage.getBoundingClientRect(), L = toSvg(b, sr.left, 0)[0], R = toSvg(b, sr.right, 0)[0];
         var edge = Math.max(L - 34 / px, b.bx - 90);   // 넓은 화면은 글 밑 거리를 비워 두고 건물 왼쪽 끝 조금 앞에서 나타남
-        w.kind = CAST[w.n % CAST.length]; w.dir = w.n % 2 ? -1 : 1; w.n++;
-        w.S = b.wide ? 1.15 : 1.35; w.px = px;
+        w.kind = CAST[w.n % CAST.length]; w.dir = w.n % 2 ? -1 : 1;
+        w.S = b.wide ? 1.3 : 1.6; w.px = px;
         w.from = w.dir > 0 ? edge : R + 34 / px; w.to = w.dir > 0 ? R + 40 / px : edge - 10;
         w.cx = b.gx + b.gw / 2;
         w.stop = w.cx - b.gw * (w.kind === 'dog' ? .1 : .14) * w.dir;   // 창 가운데 조금 못 미친 자리(개는 개가 창 가운데쯤 오게)
         w.x = w.from; w.dist = 0; w.mode = 'in'; w.at = t; w.lit = -1e9; w.hop = -1e9; w.v = SPD[w.kind]; w.ga = 1; w.sent = false;
+        w.first = w.go === 'run';
+        if (w.first) w.v = Math.min(SPD[w.kind] * 2.8, Math.max(SPD[w.kind], Math.abs(w.stop - w.from) / 1.45));   // 첫 손님: 간판이 켜질 무렵 창 앞에 닿게 뛰어옴
+        w.go = false;
         w.y = w.gnd + Math.min(24, (street ? street.offsetHeight : 30) * .48 / px);
         w.bp = null; w.bv = [0, 0]; w.ball = null; w.sit = 0; w.look = 0; w.aim = [w.x, w.y];
         CAST.forEach(function (k) { var f = w.figs[k], on = k === w.kind; f.g.style.display = f.sh.style.display = on ? '' : 'none'; });
@@ -492,15 +507,15 @@
         w.v = Math.min(top, w.v + (kind === 'bike' ? 150 : run ? 220 : 60) * dt);
         w.x += dir * w.v * dt; w.dist += w.v * dt;
         if (dir * (w.x - w.to) >= 0 && (!w.ball || dir * (w.ball.x - w.to) >= 0)) {
-          w.mode = ''; w.next = t + 2600 + (w.n % 3) * 900; w.g.setAttribute('opacity', 0); return;
+          w.mode = ''; w.g.setAttribute('opacity', 0); return;
         }
       } else {   // 'act': 창 앞에 서서 불빛을 부름 → 받으면 반응 → 나감
-        if (!w.sent && a >= SEND[kind]) {
+        if (!w.sent && a >= (w.first ? 220 : SEND[kind])) {
           w.sent = true;
           if (live && b.fl.length < 3) launch(b, t, { p: w, x: w.aim[0], y: w.aim[1] });
           else { w.mode = 'out'; w.at = t; }
         }
-        if ((la < 0 && a > SEND[kind] + 2800) || la >= STAY[kind]) { w.mode = 'out'; w.at = t; }
+        if ((la < 0 && a > SEND[kind] + 2800) || la >= LINGER[kind]) { w.mode = 'out'; w.at = t; }
       }
       w.ga += ((w.mode === 'act' ? 0 : 1) - w.ga) * Math.min(1, dt * 8);
       var ga = w.ga, hp = t - w.hop, hop = hp >= 0 && hp < 520 ? Math.sin(Math.PI * hp / 520) * 5 : 0, jy = -hop, o, sw, Sh;
@@ -629,13 +644,14 @@
         next = t + EVERY;
       }
       if (live && poke && !introing) {   // 누른 자리: 방 안 사람·스탠드, 간판, 지나가는 사람은 그 자리에서 반응. 그 밖엔 불빛을 보낸다
-        var pt = toSvg(b, poke.x, poke.y), hit = null, best = 1e9, wk = b.wk;
+        var pt = toSvg(b, poke.x, poke.y), hit = null, best = 1e9, wk = b.wks.filter(function (w) { return w.mode && Math.abs(pt[0] - w.x - (w.kind === 'dog' ? w.dir * 10 * w.S : 0)) < 22 * w.S && pt[1] >= w.y - 46 * w.S && pt[1] <= w.y + 8; })[0];
         var qx = (pt[0] - b.rx) * 324 / b.rw, qy = (pt[1] - b.ry) * 164 / b.rh, bd = b.board, bx = +bd.getAttribute('x'), byy = +bd.getAttribute('y');
         var inRoom = qx >= 0 && qx <= 324 && qy >= 0 && qy <= 164, inb = function (a, lo, hi) { return a >= lo && a <= hi; };
         if (inRoom && inb(qx, 186, 244) && qy > 56) b.wave = t;
         else if (inRoom && inb(qx, 146, 186) && inb(qy, 44, 112)) b.flick = t;
         else if (inb(pt[0], bx - 8, bx + +bd.getAttribute('width') + 8) && inb(pt[1], byy - 10, byy + +bd.getAttribute('height') + 10)) b.sign = t;
-        else if (wk.mode && Math.abs(pt[0] - wk.x - (wk.kind === 'dog' ? wk.dir * 10 * wk.S : 0)) < 22 * wk.S && inb(pt[1], wk.y - 46 * wk.S, wk.y + 8)) wk.hop = t;
+        else if (wk) wk.hop = t;
+        else if (pt[1] > b.wks[0].gnd - 34 && b.st.next !== Infinity) b.st.next = Math.min(b.st.next, t);   // 빈 길: 다음 손님이 바로
         else if (t - lastGo > 280 && b.fl.length < 4) {
           b.nb.forEach(function (w) { var dx = (pt[0] - w.cx) / w.w, dy = (pt[1] - w.cy) / w.h, dd = dx * dx + dy * dy; if (dd < best) { best = dd; hit = w; } });
           if (pt[1] < b.roof - 10) launch(b, t, { x: pt[0], y: pt[1] });
@@ -644,7 +660,7 @@
         }
       }
       poke = null;
-      walk(b, t, live, m);
+      passers(b, t, live, m);
       if (live && fine.matches && mx >= 0 && t - lastGo > 1100 && t - hoverAt > 300 && b.fl.length < 2) {   // PC: 마우스가 꺼진 위층 창 가까이
         hoverAt = t;
         b.nb.forEach(function (w) {
@@ -703,7 +719,7 @@
         b.flash.setAttribute('opacity', 0); b.sheen.setAttribute('opacity', 0); b.re = null;
         b.fl.concat(b.bits).forEach(function (f) { b.fx.removeChild(f.g || f.e); }); b.fl = []; b.bits = [];
         b.nb.forEach(function (w) { w.on = w.aim = false; w.g.setAttribute('opacity', 0); word(w.kind, false); });
-        b.wk.mode = ''; b.wk.next = 0; b.wk.g.setAttribute('opacity', 0);
+        b.wks.forEach(function (w) { w.mode = ''; w.go = false; w.g.setAttribute('opacity', 0); }); b.st = { n: 0, next: 0 };
         b.letters.forEach(function (e) { e.removeAttribute('y'); }); b.sign = b.wave = b.flick = null; roomOff(b, false);
       });
       rig.farLit.forEach(function (r) { r.style.fill = r.style.opacity = ''; }); rig.farLit = [];
@@ -846,7 +862,7 @@
     }
     /* 화면 크기가 바뀔 때마다: 확대할지, 보이는 건물, 그림의 점들(무대 좌표), 박자별 배율, 붙어 있는 거리 */
     function measure() {
-      rest(); seen = '';
+      rest(); seen = ''; d.classList.remove('hero-hid');
       // 확대를 못 하게 되면(동작 줄이기를 켬, site.js가 안 와서 head 스크립트가 움직임을 끔) .zoom 을 떼어 첫 화면을 화면 한 장으로
       d.classList.toggle('zoom', want && moving());
       if (moving() && !rig) build();
@@ -882,7 +898,7 @@
         pt = { o: o, s0: rn(218, 44), s1: rn(286, 84), ic: [rn(230, 58), rn(246, 58), rn(262, 58)], ru: rn(1, 0).x - o.x,
           sg: toN(+bd.getAttribute('x') + bd.getAttribute('width') / 2, +bd.getAttribute('y') + bd.getAttribute('height') / 2) };
       } else on = false;
-      cancelAnimationFrame(raf); raf = 0; frame();
+      cancelAnimationFrame(raf); raf = 0; frame(); hold();
     }
 
     /* 장면을 끝까지(위 머리 설명): ride = { dir, a → b(p), p 지금, u 0~1, dur, rate } */
@@ -896,12 +912,13 @@
       var span = Math.abs(Math.min(b, END) - Math.min(a, END)) / END, dur = (dir > 0 ? FWD : BWD) * span + (Math.max(a, b) > END + .01 ? 400 : 0);
       if (dur < 80) return;
       ride = { dir: dir, a: a, b: b, p: a, u: 0, dur: dur, rate: 1, sped: now };
+      veil(false); hold();
       if (!fine.matches) d.style.overflow = 'hidden';   // 폰: 손가락 관성을 멈춘다(스크립트 스크롤은 그대로 됨). PC는 스크롤 막대 폭이 바뀌지 않게 휠·키만 막는다
       kick();
     }
     function stop(jump) {
       if (!ride) return;
-      var y = start + travel * ride.b; ride = null; d.style.overflow = '';
+      var y = start + travel * ride.b; ride = null; d.style.overflow = ''; hold();
       if (jump) scrollTo({ top: Math.max(0, y), behavior: 'instant' });
       lastY = scrollY; coast = performance.now() + 1200;
     }
@@ -913,28 +930,38 @@
       return false;
     }
     var inSheet = function (e) { return e.target && e.target.closest && e.target.closest('dialog'); };
-    addEventListener('wheel', function (e) {
+    function onWheel(e) {
       if (e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY) || inSheet(e)) return;
       var now = performance.now(), fresh = now - lastWheel > 200; lastWheel = lastIn = now;
       if (ride) { e.preventDefault(); if (fresh) go(e.deltaY > 0 ? 1 : -1); return; }
       if (now < coast && !fresh) { e.preventDefault(); return; }   // 끝난 바로 뒤, 같은 손짓의 관성(트랙패드)은 버린다
       if (intent(e.deltaY > 0 ? 1 : -1)) e.preventDefault();
-    }, { passive: false });
+    }
     var ty0 = null, tx0 = 0, tDone = false;
     addEventListener('touchstart', function (e) {
       lastIn = performance.now();
       if (e.touches.length !== 1 || inSheet(e)) { ty0 = null; return; }
       ty0 = e.touches[0].clientY; tx0 = e.touches[0].clientX; tDone = false;
     }, { passive: true });
-    addEventListener('touchmove', function (e) {
-      lastIn = performance.now();
+    function onTouch(e) {
       if (ty0 === null) return;
       var dy = e.touches[0].clientY - ty0, dx = e.touches[0].clientX - tx0;
       if (ride) { if (e.cancelable) e.preventDefault(); if (!tDone && Math.abs(dy) > 10) { tDone = true; go(dy < 0 ? 1 : -1); } return; }
       if (tDone || Math.abs(dy) < 3 || Math.abs(dx) > Math.abs(dy)) return;
       if (intent(dy < 0 ? 1 : -1)) { tDone = true; if (e.cancelable) e.preventDefault(); }
-    }, { passive: false });
+    }
+    addEventListener('touchmove', function () { lastIn = performance.now(); }, { passive: true });
     addEventListener('touchend', function () { lastIn = performance.now(); }, { passive: true });
+    // 막을 수 있는(passive 아닌) 휠·손가락 듣기는 장면 안(맨 위 ~ END 조금 밑)에서만 단다. 그 밑('만든 것'부터)에선 떼어 둬서
+    // 브라우저가 스크립트를 기다리지 않고 바로 스크롤한다(폰에서 끊김 줄이기)
+    var grab = false;
+    function hold() {
+      var want2 = !!ride || (can() && scrollY <= yEnd() + 40);
+      if (want2 === grab) return;
+      grab = want2;
+      (grab ? addEventListener : removeEventListener)('wheel', onWheel, { passive: false });
+      (grab ? addEventListener : removeEventListener)('touchmove', onTouch, { passive: false });
+    }
     addEventListener('keydown', function (e) {
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || (e.target.closest && e.target.closest('input, textarea, select, button, [contenteditable], dialog'))) return;
       var q = e.key, dir = q === 'ArrowDown' || q === 'PageDown' || (q === ' ' && !e.shiftKey) ? 1 : q === 'ArrowUp' || q === 'PageUp' || (q === ' ' && e.shiftKey) ? -1 : 0;
@@ -960,12 +987,14 @@
     addEventListener('scroll', function () {
       var y = scrollY, now = performance.now();
       if (!ride && y !== lastY && now - lastIn < 3000 && now > free && can() && y > yTop() + 2 && y < yEnd() - 3) go(y > lastY ? 1 : -1);
-      lastY = y; kick();
+      lastY = y; hold(); kick();
     }, { passive: true });
 
     /* 매 프레임: 장면이 보이는 동안만(첫 화면이 화면 밖, 종이색이 다 덮음, 움직임 꺼짐이면 쉰다. 스크롤·마우스가 다시 깨움) */
     var raf = 0, vis = true, seen = '';
     function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+    // '만든 것'이 첫 화면을 다 덮었거나 첫 화면이 화면 밖이면 밤 그림을 아예 안 그린다(html.hero-hid: 별 반짝임·별똥별도 멈추고, 그 위 칸이 따로 그려지지 않음)
+    function veil(h) { h = h || !vis; if (h !== d.classList.contains('hero-hid')) d.classList.toggle('hero-hid', h); }
     function frame() {
       raf = 0;
       var now = performance.now(), t = now - t0, dt = Math.min(250, now - last), below = start + hh - scrollY > 64;
@@ -980,6 +1009,7 @@
         if (ride.u >= 1) stop(true);
         p = clamp(p); more = true;
       } else p = on ? clamp((scrollY - start) / travel) : 0;
+      veil(on && !ride && p >= END - .002);
       if (introing && p > .02 && !ride) finishIntro();   // 장면을 끝까지 보여 주는 중이 아닌데 내려와 있으면 바로 다 켠 그림으로
       if (introing) { it += dt * (ride ? 2.5 : 1); if (it >= INTRO) finishIntro(); else { introAt(it); more = true; } }
       var m = on ? 1 - k(p, 0, .12) : 1, ml = on ? 1 - k(p, B.wide ? 0 : .3, B.wide ? .12 : .38) : 1, awake = vis && (!on || p < .58);
@@ -1001,7 +1031,7 @@
       }
       if (more) kick();
     }
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { vis = es[es.length - 1].isIntersecting; if (vis) kick(); }).observe(hero);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { vis = es[es.length - 1].isIntersecting; if (vis) kick(); else veil(true); }).observe(hero);
     // 키보드로 첫 화면 단추에 돌아오면(Shift+Tab) 첫 화면 처음으로 올려 준다(단추가 종이·'만든 것' 밑에 묻히지 않게). 마우스로 누를 땐 그대로
     copy.addEventListener('focusin', function (e) {
       if (on && scrollY > start + 2 && e.target.matches && e.target.matches(':focus-visible')) { stop(false); scrollTo({ top: start, behavior: 'instant' }); lastY = scrollY; }
@@ -1031,69 +1061,82 @@
   })();
 
 
-  /* ---------- 3) 끝 칸: 첫 화면의 작업실 창으로 돌아온 늦은 밤 ----------
-     보일 때마다(35% 넘게): 먼 도시와 위층 창 불이 하나씩 꺼지고(도시가 잠듦) 작업실 창만 남는다 → '메일 쓰기' 단추에서 편지 한 통이 날아가
-     창으로 쏙 들어가면 모니터가 번쩍 → 창에서 답장 불빛이 나와 명함에 닿으면 불빛 테가 퍼지고 ✓ 도장이 찍힌다(.got). 다 가려지면 처음으로.
-     PC 마우스가 '메일 쓰기'에 올라가거나 창을 누르면 편지가 한 번 더. 움직임은 transform만, 다 끝나면 그리기 없음.
-     동작 줄이기·JS 없음이면 다 잠든 도시와 도장 찍힌 명함 그대로(CSS) */
+  /* ---------- 3) 끝 칸: 작업실 창가, 날이 밝는다 ----------
+     '만든 것'(작업실 안 벽 선반)과 같은 벽의 창. 첫 화면과 거꾸로 방 안에서 거리를 내다본다(첫 화면 = 밖에서 본 밤의 창, 만든 것 = 방 안, 끝 = 방 안에서 본 아침).
+     창이 보일 때마다(35% 넘게) .dawn: 해가 건너편 건물 사이로 떠오르며 하늘이 밤에서 새벽으로(CSS) → 건너편 창 불·가로등이 하나씩 꺼지고, 빵집 셔터가 올라가고,
+     새 세 마리가 지나가고, 창턱 스탠드(첫 화면에서 사람이 당겨 켠 그 스탠드)가 딸깍 꺼진다 → 명함이 화면에 들어와 있으면 건너편의 풍선 든 아이
+     (첫 화면 거리의 첫 손님, 풍선엔 그 밤의 불빛)가 종이비행기를 던진다: 해 앞을 지나 솟았다가 창으로 들어오며 커지고(가까워짐) 커튼이 펄럭,
+     명함 귀퉁이에 내려앉으면 고리가 퍼지고 ✓ 도장(.got). 다 가려지면 처음(밤)으로. 창을 누르거나 PC 마우스가 '메일 쓰기'에 올라가면 한 번 더 던진다.
+     내릴 때 창밖 먼 층(해·별 .es-deep, 먼 도시 .es-mid)이 창틀보다 덜 움직여 창 너머 깊이가 보인다.
+     움직임은 transform·투명도(창 불 끄기만 칠 바꿈), 다 끝나면 그리기 없음. 동작 줄이기·JS 없음이면 해 뜬 아침과 도장 찍힌 명함 그대로(CSS) */
   (function () {
-    var end = document.querySelector('.end'), sc = end && end.querySelector('.end__scene');
-    if (!sc || !moving() || !('IntersectionObserver' in window)) return;
-    var ws = [].slice.call(sc.querySelectorAll('.es-w')), flash = sc.querySelector('.es-flash'), win = sc.querySelector('.es-win'),
-      card = end.querySelector('.bcard'), btn = end.querySelector('.btn--main'), mark = card.querySelector('.mark'), fx = document.createElement('div');
+    var end = document.querySelector('.end'), stage = end && end.querySelector('.end__stage');
+    if (!stage || !moving() || !('IntersectionObserver' in window)) return;
+    var sc = stage.querySelector('.end__scene'), view = sc.querySelector('.es-view'), q = function (s) { return sc.querySelector(s); },
+      ws = [].slice.call(sc.querySelectorAll('.es-w')), sl = q('.es-sl'), kid = q('.es-kidb'), arm = q('.es-arm'), hp = q('.es-hp'), head = q('.es-head'),
+      flock = q('.es-flock'), cur = q('.es-cur'), deep = q('.es-deep'), mid = q('.es-mid'),
+      card = end.querySelector('.bcard'), btn = end.querySelector('.btn--main'), fx = document.createElement('div');
     fx.className = 'end__fx'; end.appendChild(fx); end.classList.add('end-anim');
-    var ENV = '<svg viewBox="0 0 28 20"><rect x="1" y="1" width="26" height="18" rx="2.5" fill="#FFF6E2" stroke="#E8CF9C"/><path d="M2 2.6l12 9 12-9" fill="none" stroke="#C9932F" stroke-width="1.4" stroke-linejoin="round"/></svg>';
-    var timers = [], rafs = [], busy = false, shown = false;
-    var order = ws.map(function (w, i) { return [(i * 7919) % ws.length, w]; }).sort(function (a, b) { return a[0] - b[0]; }).map(function (p) { return p[1]; });
+    var PLANE = '<svg viewBox="0 0 56 30"><path d="M1 13L55 1L21 29Z" fill="#FFFDF7"/><path d="M55 1L21 29L19 17Z" fill="#E4D9C3"/><path d="M1 13L19 17L55 1" fill="none" stroke="#CDBE9F" stroke-width=".8" stroke-linejoin="round"/></svg>';
+    var lit = ws.filter(function (w, i) { return (i * 7) % 10 < 7; }),   // 밤에 켜져 있는 창(열에 일곱)
+      order = lit.map(function (w, i) { return [(i * 7919) % lit.length, w]; }).sort(function (a, b) { return a[0] - b[0]; }).map(function (p) { return p[1]; });
+    var timers = [], anims = [], shown = false, ready = false, cardIn = false, tossed = false, busy = false, plane = null;
     function later(ms, f) { timers.push(setTimeout(f, ms)); }
-    function mk(c, html) { var e = document.createElement('i'); e.className = c; if (html) e.innerHTML = html; fx.appendChild(e); return e; }
-    function pt(el, fx2, fy2) { var r = el.getBoundingClientRect(), o = end.getBoundingClientRect(); return [r.left - o.left + r.width * (fx2 == null ? .5 : fx2), r.top - o.top + r.height * (fy2 == null ? .5 : fy2)]; }
-    function move(e, x, y, rot, sc2, op) { e.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' + (rot ? ' rotate(' + rot.toFixed(1) + 'deg)' : '') + (sc2 != null ? ' scale(' + sc2.toFixed(3) + ')' : ''); if (op != null) e.style.opacity = op.toFixed(3); }
-    function arc(A, B, lift, dur, step, done) {   // A → B 2차 곡선(가운데가 lift만큼 위로). step(e, x, y, 기울기)
-      var C = [(A[0] + B[0]) / 2, Math.min(A[1], B[1]) - lift], t0 = performance.now();
-      (function tick(now) {
-        var s = Math.min(1, (now - t0) / dur), e = s < .5 ? 2 * s * s : 1 - 2 * (1 - s) * (1 - s), z = 1 - e;
-        var x = z * z * A[0] + 2 * z * e * C[0] + e * e * B[0], y = z * z * A[1] + 2 * z * e * C[1] + e * e * B[1];
-        var dx = 2 * z * (C[0] - A[0]) + 2 * e * (B[0] - C[0]), dy = 2 * z * (C[1] - A[1]) + 2 * e * (B[1] - C[1]);
-        step(e, x, y, Math.atan2(dy, dx));
-        if (s < 1) rafs.push(requestAnimationFrame(tick)); else done();
-      })(t0);
+    function an(el, kf, o) { var a = el.animate(kf, o); anims.push(a); return a; }
+    function rel(r, fx2, fy2) { var o = end.getBoundingClientRect(); return [r.left - o.left + r.width * fx2, r.top - o.top + r.height * fy2]; }
+    function ring(x, y, R) { var e = document.createElement('i'); e.className = 'ef-ring'; fx.appendChild(e);
+      e.animate([{ transform: 'translate(' + x + 'px,' + y + 'px) scale(.4)', opacity: 1 }, { transform: 'translate(' + x + 'px,' + y + 'px) scale(' + R / 10 + ')', opacity: 0 }], { duration: 700, easing: 'ease-out' }).onfinish = function () { e.remove(); }; }
+    function birds() {
+      flock.classList.add('fly');
+      var a = an(flock, [{ transform: 'none' }, { transform: 'translate(' + (view.clientWidth * 1.3) + 'px,' + (view.clientHeight * .05) + 'px)' }], { duration: 3600, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'forwards' });
+      a.onfinish = function () { flock.classList.remove('fly'); };   // 창 밖으로 나가면 날갯짓도 멈춤(그리기 없음)
     }
-    function ring(x, y, R) { var e = mk('ef-ring'); e.animate([{ transform: 'translate(' + x + 'px,' + y + 'px) scale(.4)', opacity: 1 }, { transform: 'translate(' + x + 'px,' + y + 'px) scale(' + R / 10 + ')', opacity: 0 }], { duration: 650, easing: 'ease-out' }).onfinish = function () { e.remove(); }; }
-    function mail() {   // 편지: '메일 쓰기' 단추 → 작업실 모니터. 기울어 날다가 창에 닿으며 작아짐
-      busy = true;
-      var A = pt(btn, .5, .2), B = pt(flash), e = mk('ef-env', ENV);
-      arc(A, B, 70, 950, function (s, x, y, a) {
-        var r = Math.max(-24, Math.min(24, a * 57.3 * .35)) + Math.sin(s * 9) * 6 * (1 - s);
-        move(e, x, y, r, 1 - .7 * Math.max(0, (s - .7) / .3), s > .9 ? (1 - s) * 10 : 1);
-      }, function () {
-        e.remove();
-        flash.animate([{ opacity: 0 }, { opacity: .9, offset: .25 }, { opacity: 0 }], { duration: 420 });
-        ring(B[0], B[1], 34);
-        later(380, reply);
-      });
+    function toss() {   // 아이가 팔을 휘둘러 던지고(0.27초에 손을 떠남) 손을 흔든다
+      if (busy) return; busy = true; tossed = true;
+      if (plane) { var old = plane; plane = null; old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, fill: 'forwards' }).onfinish = function () { old.remove(); }; }
+      an(kid, [{ transform: 'none' }, { transform: 'translateY(-3px)', offset: .3 }, { transform: 'none', offset: .5 }, { transform: 'none' }], { duration: 900 });
+      an(arm, [{ transform: 'rotate(0)' }, { transform: 'rotate(-175deg)', offset: .16 }, { transform: 'rotate(-128deg)', offset: .3 }, { transform: 'rotate(-150deg)', offset: .45 },
+        { transform: 'rotate(-128deg)', offset: .6 }, { transform: 'rotate(-150deg)', offset: .75 }, { transform: 'rotate(0)' }], { duration: 1900, easing: 'ease-in-out' });
+      later(260, fly);
     }
-    function reply() {   // 답장 불빛: 모니터 → 명함 로고 점. 꼬리 다섯
-      var A = pt(flash), B = pt(mark), e = mk('ef-bead'), tails = [0, 1, 2, 3, 4].map(function () { return mk('ef-tail'); }), hist = [];
-      arc(A, B, 46, 820, function (s, x, y) {
-        hist.unshift([x, y]); if (hist.length > 12) hist.pop();
-        move(e, x, y, 0, 1 + .5 * Math.sin(Math.PI * s), 1);
-        tails.forEach(function (tl, i) { var h = hist[(i + 1) * 2] || hist[hist.length - 1]; move(tl, h[0], h[1], 0, 1 - i * .17, .6 * (1 - i / 5)); });
-      }, function () {
-        e.remove(); tails.forEach(function (tl) { tl.remove(); });
+    function fly() {   // 아이 손 → 해 앞(작게, 멀리) → 창 안으로 들어오며 커짐 → 명함 오른쪽 위 귀퉁이에 내려앉음
+      hp.style.opacity = 0;
+      var h = head.getBoundingClientRect(), v = view.getBoundingClientRect(), c = card.getBoundingClientRect();
+      var P = [rel(h, 1.3, -.4), rel(v, .5, .4), rel(v, .78, .72), rel(c, 1, 0)];
+      P[3][0] -= 22; P[3][1] -= 4;
+      P[1][1] = Math.min(P[1][1], P[0][1] - v.height * .2);
+      var pts = [P[0]].concat(P, [P[3]]), N = 36, kf = [], prev = null, S = [.2, .32, .86, 1];
+      for (var i = 0; i <= N; i++) {
+        var u = i / N * 3, k = Math.min(2, Math.floor(u)), t = u - k, p0 = pts[k], p1 = pts[k + 1], p2 = pts[k + 2], p3 = pts[k + 3];
+        var t2 = t * t, t3 = t2 * t, xy = [0, 1].map(function (j) { return .5 * (2 * p1[j] + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2 + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3); });
+        var s = S[k] + (S[k + 1] - S[k]) * (t * t * (3 - 2 * t)), r = prev ? Math.atan2(xy[1] - prev[1], xy[0] - prev[0]) * 57.3 : -40;
+        r = Math.max(-55, Math.min(62, r)) + Math.sin(i / N * 9) * 7 * (1 - i / N);
+        if (i === N) r = -10;
+        kf.push({ transform: 'translate(' + xy[0].toFixed(1) + 'px,' + xy[1].toFixed(1) + 'px) rotate(' + r.toFixed(1) + 'deg) scale(' + s.toFixed(3) + ')' });
+        prev = xy;
+      }
+      var e = document.createElement('i'); e.className = 'ef-plane'; e.innerHTML = PLANE; fx.appendChild(e); plane = e;
+      var a = an(e, kf, { duration: 1750, easing: 'linear', fill: 'forwards' });
+      later(1000, function () { an(cur, [{ transform: 'none' }, { transform: 'skewX(-7deg) scaleX(.9)', offset: .3 }, { transform: 'skewX(3deg)', offset: .65 }, { transform: 'none' }], { duration: 900, easing: 'ease-out' }); });
+      a.onfinish = function () {
         card.classList.remove('got'); void card.offsetWidth; card.classList.add('got');
-        ring(B[0], B[1], 30);
-        busy = false;
-      });
+        ring(P[3][0], P[3][1], 34);
+        later(500, function () { hp.style.opacity = ''; busy = false; });
+      };
     }
-    function play() {   // 도시가 잠들고(0.25~1.5초) → 편지(1.1초~)
-      busy = true;
-      order.forEach(function (w, i) { later(250 + i * 52 + (i % 3) * 30, function () { w.classList.remove('on'); }); });
-      later(1100, mail);
+    function maybe() { if (shown && ready && cardIn && !tossed) toss(); }
+    function play() {
+      end.classList.add('dawn');
+      for (var i = 0; i < order.length; i += 3) later(500 + i / 3 * 170, function (g) { g.forEach(function (w) { w.classList.remove('on'); }); }.bind(null, order.slice(i, i + 3)));   // 셋씩(칠 바꿈을 묶어 그리기 횟수를 줄임)
+      later(1000, function () { sl.classList.remove('on'); });
+      later(900, birds);
+      later(2300, function () { ready = true; maybe(); });
     }
     function reset() {
-      timers.splice(0).forEach(clearTimeout); rafs.splice(0).forEach(cancelAnimationFrame); fx.textContent = '';
-      ws.forEach(function (w) { w.classList.add('on'); }); card.classList.remove('got'); busy = false;
+      timers.splice(0).forEach(clearTimeout); anims.splice(0).forEach(function (a) { a.cancel(); });
+      fx.textContent = ''; plane = null; hp.style.opacity = ''; flock.classList.remove('fly');
+      end.classList.remove('dawn'); lit.forEach(function (w) { w.classList.add('on'); }); sl.classList.add('on');
+      card.classList.remove('got'); ready = tossed = busy = false;
     }
     reset();
     new IntersectionObserver(function (es) {
@@ -1101,9 +1144,18 @@
       if (e.intersectionRatio >= .35 && !shown) { shown = true; play(); }
       else if (!e.isIntersecting && shown) { shown = false; reset(); }
     }, { threshold: [0, .35] }).observe(sc);
-    var again = function () { if (shown && !busy && card.classList.contains('got')) mail(); };
+    new IntersectionObserver(function (es) { cardIn = es[es.length - 1].intersectionRatio >= .6; maybe(); }, { threshold: [0, .6] }).observe(card);
+    // 창 너머 깊이: 창이 화면 아래에서 위로 지나가는 동안 먼 층은 창틀보다 덜 움직임(위치 r −1~1에 따라 옮김). 가까울 때만
+    var near = false, rq = 0;
+    function depth() {
+      rq = 0; var b = sc.getBoundingClientRect(), H = innerHeight, r = Math.max(-1, Math.min(1, (b.top + b.height / 2 - H / 2) / H));
+      deep.style.transform = 'translate3d(0,' + (-r * 20).toFixed(1) + 'px,0)'; mid.style.transform = 'translate3d(0,' + (-r * 9).toFixed(1) + 'px,0)';
+    }
+    new IntersectionObserver(function (es) { near = es[es.length - 1].isIntersecting; end.classList.toggle('near', near); if (near) depth(); }, { rootMargin: '30% 0px' }).observe(sc);
+    addEventListener('scroll', function () { if (near && !rq) rq = requestAnimationFrame(depth); }, { passive: true });
+    var again = function () { if (shown && ready && !busy) toss(); };
     btn.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') again(); });
-    win.addEventListener('click', again);
+    sc.addEventListener('click', again);
   })();
 
   /* ---------- 2) 만든 것 칸 ----------
@@ -1115,25 +1167,29 @@
   shelves.forEach(function (sh) { [].forEach.call(sh.querySelectorAll('.wi'), function (a, i) { a.style.setProperty('--i', i); }); });
   if (!shelves.length || !moving() || !('IntersectionObserver' in window)) return;
   d.classList.add('wall-wait');
-  var NS = 'http://www.w3.org/2000/svg', fx = document.createElementNS(NS, 'svg'), flights = [], rings = [], raf = 0;
-  fx.setAttribute('class', 'page-fx'); fx.setAttribute('aria-hidden', 'true'); fx.setAttribute('focusable', 'false');
-  fx.innerHTML = '<defs><radialGradient id="pf-dot"><stop offset="0" class="ns-lamp" stop-opacity=".6"/><stop offset=".45" class="ns-lamp" stop-opacity=".22"/><stop offset="1" class="ns-lamp" stop-opacity="0"/></radialGradient></defs>';
+  // 불빛은 HTML 조각(i)을 옮기기만 한다(transform): 매 프레임 다시 그리지 않아 느린 폰에서도 스크롤이 안 끊긴다
+  var fx = document.createElement('div'), flights = [], raf = 0;
+  fx.className = 'page-fx'; fx.setAttribute('aria-hidden', 'true');
   document.body.appendChild(fx);
-  var mk = function (tag, at, parent) { var e = document.createElementNS(NS, tag); for (var n in at) e.setAttribute(n, at[n]); (parent || fx).appendChild(e); return e; };
+  var mk = function (c) { var e = document.createElement('i'); e.className = c; fx.appendChild(e); return e; };
+  var put = function (e, x, y, sc, op) { e.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + sc.toFixed(3) + ')'; if (op != null) e.style.opacity = op.toFixed(3); };
   var cl = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
   var at2 = function (e) { var r = e.getBoundingClientRect(); return [r.left + r.width / 2 + scrollX, r.top + r.height / 2 + scrollY]; };
   function lamp(sh) {   // 줄 이름 앞 등(::before, 왼쪽 끝 점)의 문서 좌표
     var h = sh.querySelector('.shelf__h'), r = h.getBoundingClientRect(), lh = parseFloat(getComputedStyle(h).lineHeight) || 28;
     return [r.left + 6 + scrollX, r.top + lh / 2 + scrollY];
   }
-  function send(from, a, delay, dur) {   // 불빛 하나: from → 아이콘 a(떠날 때 아이콘 자리를 잰다)
-    var g = mk('g', { opacity: 0 }), tail = [];
-    var halo = mk('circle', { r: 18, fill: 'url(#pf-dot)' }, g);
-    for (var i = 0; i < 8; i++) tail.push(mk('line', { 'class': 'pf-trail' }, g));
-    flights.push({ a: a, at: performance.now() + delay, dur: dur, p0: from, p3: null, g: g, halo: halo, core: mk('circle', { 'class': 'pf-core', r: 4 }, g), tail: tail, hist: [] });
+  function send(from, a, delay, dur) {   // 불빛 하나: from → 아이콘 a(떠날 때 아이콘 자리를 잰다). 꼬리 = 지난 자리를 따라오는 작아지는 점들
+    var tail = [];
+    for (var i = 0; i < 5; i++) tail.push(mk('pf-t'));
+    flights.push({ a: a, at: performance.now() + delay, dur: dur, p0: from, p3: null, b: mk('pf-b'), tail: tail, hist: [] });
     go();
   }
-  function ring(x, y, R) { rings.push({ e: mk('circle', { 'class': 'pf-ring', cx: x, cy: y, r: 0 }), at: performance.now(), R: R }); }
+  function ring(x, y, R) {   // 고리: 퍼지며 흐려짐(WAAPI, transform·opacity만)
+    var e = mk('pf-r'), at = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) ';
+    var an = e.animate([{ transform: at + 'scale(.05)', opacity: 1 }, { transform: at + 'scale(' + (R / 50).toFixed(3) + ')', opacity: 0 }], { duration: 620, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    an.onfinish = an.oncancel = function () { e.remove(); };
+  }
   function go() { if (!raf) raf = requestAnimationFrame(tick); }
   function tick(now) {
     raf = 0;
@@ -1144,29 +1200,21 @@
         f.p3 = at2(f.a.querySelector('.wi__icon'));
         var dx = f.p3[0] - f.p0[0], top = Math.min(f.p0[1], f.p3[1]);
         f.c1 = [f.p0[0] + dx * .15 - 30, top - 70]; f.c2 = [f.p3[0] - dx * .12, top - 95];
-        f.g.setAttribute('opacity', 1);
       }
       s = cl(s);
       var e = s < .5 ? 2 * s * s : 1 - 2 * (1 - s) * (1 - s), z = 1 - e, P = [0, 1].map(function (q) {
         return z * z * z * f.p0[q] + 3 * z * z * e * f.c1[q] + 3 * z * e * e * f.c2[q] + e * e * e * f.p3[q];
       });
       var sz = 1 + .5 * Math.sin(Math.PI * e);
-      f.hist.unshift(P); if (f.hist.length > 9) f.hist.pop();
-      f.core.setAttribute('cx', P[0].toFixed(1)); f.core.setAttribute('cy', P[1].toFixed(1)); f.core.setAttribute('r', (3.6 * sz).toFixed(2));
-      f.halo.setAttribute('cx', P[0].toFixed(1)); f.halo.setAttribute('cy', P[1].toFixed(1)); f.halo.setAttribute('r', (18 * sz).toFixed(2));
+      f.hist.unshift(P); if (f.hist.length > 13) f.hist.pop();
+      put(f.b, P[0], P[1], sz, 1);
       f.tail.forEach(function (c, n) {
-        var h0 = f.hist[n], h1 = f.hist[n + 1]; if (!h1) { c.setAttribute('stroke-width', 0); return; }
-        c.setAttribute('x1', h0[0].toFixed(1)); c.setAttribute('y1', h0[1].toFixed(1)); c.setAttribute('x2', h1[0].toFixed(1)); c.setAttribute('y2', h1[1].toFixed(1));
-        c.setAttribute('stroke-width', (5.4 * sz * (1 - n / 9)).toFixed(2)); c.setAttribute('opacity', (.75 * (1 - n / 8)).toFixed(3));
+        var hp = f.hist[(n + 1) * 2] || f.hist[f.hist.length - 1];
+        put(c, hp[0], hp[1], sz * (1 - n * .15), f.hist.length > (n + 1) * 2 ? .7 * (1 - n / 5) : 0);
       });
-      if (s >= 1) { fx.removeChild(f.g); flights.splice(i, 1); on(f.a); ring(f.p3[0], f.p3[1], 46); }
+      if (s >= 1) { f.b.remove(); f.tail.forEach(function (c) { c.remove(); }); flights.splice(i, 1); on(f.a); ring(f.p3[0], f.p3[1], 46); }
     }
-    for (i = rings.length - 1; i >= 0; i--) {
-      var q = rings[i], r = cl((now - q.at) / 620), eo = 1 - Math.pow(1 - r, 3);
-      q.e.setAttribute('r', (q.R * eo + 2).toFixed(2)); q.e.setAttribute('stroke-width', (2.6 * (1 - r) + .2).toFixed(2)); q.e.setAttribute('opacity', (1 - r).toFixed(3));
-      if (r >= 1) { fx.removeChild(q.e); rings.splice(i, 1); }
-    }
-    if (flights.length || rings.length) go();
+    if (flights.length) go();
   }
   var on = function (a) { a.classList.add('on'); }, timers = [], used = false;
   function light(sh) {
@@ -1194,8 +1242,8 @@
     if (!used) return;
     used = false;
     timers.splice(0).forEach(clearTimeout);
-    flights.splice(0).forEach(function (f) { fx.removeChild(f.g); });
-    rings.splice(0).forEach(function (q) { fx.removeChild(q.e); });
+    flights.splice(0);
+    fx.textContent = '';
     seen.length = 0;
     shelves.forEach(function (sh) {
       sh.classList.remove('in');
