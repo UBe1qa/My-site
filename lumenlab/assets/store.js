@@ -233,7 +233,7 @@
      - 미리 보기: 가운데 온 화면만 밝고 크게(--f). 모니터: 처음 보일 때 한 번 켜진다.
      o.scroller = 창이면 .sh__body, 페이지면 null(화면). o.drop = 물건이 위에서 떨어져 앉는다(창 안에서 바뀔 때) */
   var FINE = matchMedia('(hover:hover) and (pointer:fine)');
-  var FLICK = [{ '--lit': 0 }, { '--lit': 1, offset: .09 }, { '--lit': .1, offset: .17 }, { '--lit': 1, offset: .27 }, { '--lit': 1 }];
+  var FLICK = [{ '--sb-lit': 0 }, { '--sb-lit': 1, offset: .09 }, { '--sb-lit': .1, offset: .17 }, { '--sb-lit': 1, offset: .27 }, { '--sb-lit': 1 }];
   var SWING = ['-30', '6', '-14', '-3', '-9', '-7'].map(function (d, i, a) { return { transform: 'rotate(' + d + 'deg)', offset: [0, .22, .42, .62, .8, 1][i] }; });
   var HOP = [{ transform: 'scale(1.06,.9)' }, { transform: 'translateY(-26px) scale(.96,1.05)', offset: .3 }, { transform: 'none', offset: .6 }, { transform: 'scale(1.04,.95)', offset: .75 }, { transform: 'none' }];
   var DROP = [{ transform: 'translateY(-70px)', opacity: 0 }, { transform: 'none', opacity: 1, offset: .55 }, { transform: 'scale(1.05,.93)', offset: .72 }, { transform: 'none', opacity: 1 }];

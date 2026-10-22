@@ -101,8 +101,8 @@ with sync_playwright() as p:
     ok(not pg.evaluate("document.documentElement.classList.contains('anim')"), '동작 줄이기면 움직임 꺼짐')
     c.close()
 
-    # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝(END p 0.72)에 드러나며 그동안 날아가는 아이콘 자리는 비어 있으니 그 구간은 아래 따로 확인)
-    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
+    # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(명함 ✓ 도장은 답장 불빛이 닿아야 찍히니 아래 끝 칸 시험이 따로 봄, 끝 칸 모니터 번쩍 판은 늘 0, 첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝(END p 0.72)에 드러나며 그동안 날아가는 아이콘 자리는 비어 있으니 그 구간은 아래 따로 확인)
+    HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero,.bcard__stamp,.es-flash'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
     for w, h in [(390, 844), (1366, 860)]:
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + '/')
         pg.wait_for_timeout(1500)
@@ -141,7 +141,6 @@ with sync_playwright() as p:
     for pre in ('', '/en'):
         for w, h in ((320, 568), (360, 740), (375, 667), (390, 844), (430, 932), (768, 1024), (844, 390), (1024, 768), (1280, 800), (1366, 768), (1440, 900), (1920, 1080), (2560, 1080)):
             c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(500)
-            pg.wait_for_function("!document.documentElement.classList.contains('dolly')", timeout=6000)   # 들어올 때 카메라가 제자리로 온 뒤
             st = pg.evaluate(LAY)
             ok(st['n'] == 2 and not st['hit'] and st['win'] and not st['cut'] and st['sw'] <= w,
                f"{pre}/ {w}x{h} 첫 화면: 글이 창·간판과 겹침 {st['hit'] or '없음'}, 창 {'다 보임' if st['win'] else '잘림'}, 단추 {'잘림' if st['cut'] else '보임'}, 가로 {st['sw']}")
@@ -159,7 +158,6 @@ with sync_playwright() as p:
     for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
-        pg.wait_for_function("!document.documentElement.classList.contains('dolly')", timeout=6000)   # 들어올 때 카메라가 제자리로 온 뒤
         z0 = pg.evaluate(ZS); pg.evaluate(Z, 0.3); pg.wait_for_timeout(250); zh = pg.evaluate(ZS)
         pg.evaluate(Z, 0.45); pg.wait_for_timeout(250); zm = pg.evaluate(ZS)
         pg.evaluate(Z, 0.72); pg.wait_for_timeout(250); za = pg.evaluate(ZS)
@@ -193,7 +191,6 @@ with sync_playwright() as p:
     for pre, w, h, how in (('', 390, 844, 'touch'), ('/en', 1280, 800, 'wheel'), ('', 1280, 800, 'key')):
         c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=how == 'touch', has_touch=how == 'touch'); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(2800)
-        pg.wait_for_function("!document.documentElement.classList.contains('dolly')", timeout=6000)
         cdp = c.new_cdp_session(pg)
         if how == 'touch': swipe(cdp, 600, 250)
         elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 120)
@@ -208,7 +205,7 @@ with sync_playwright() as p:
            f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 4.2초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
         c.close()
     # 모니터 화면 = '만든 것'으로 가는 창: 화면이 넓어지는 중(p 0.53)엔 '만든 것'이 그 화면 안에 보이고(옮김·자름), END에 제자리(옮김 없음).
-    # 그 뒤 줄이 보이면 줄 등이 켜지고 불빛이 날아가 아이콘이 다 켜짐, 끝 칸은 명함이 떨어져 보임
+    # 그 뒤 줄이 보이면 줄 등이 켜지고 불빛이 날아가 아이콘이 다 켜짐, 끝 칸은 도시가 잠들기 시작하고 명함은 보임
     PT = r"""()=>{const w=document.getElementById('works'),cs=getComputedStyle(w);return{o:+cs.opacity,tf:cs.transform!=='none',clip:cs.clipPath!=='none'}}"""
     LIT = r"""(id)=>{const s=document.getElementById(id);return{in:s.classList.contains('in'),off:[...s.querySelectorAll('.wi')].filter(a=>!a.classList.contains('on')&&!a.classList.contains('landed')).length}}"""
     for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
@@ -218,14 +215,14 @@ with sync_playwright() as p:
         pg.evaluate(Z, 0.72); pg.wait_for_timeout(1800); end = pg.evaluate(PT); g = pg.evaluate(LIT, 'games')
         pg.evaluate("document.getElementById('g-play').scrollIntoView()"); pg.wait_for_timeout(2000); t = pg.evaluate(LIT, 'g-play')
         pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1700)
-        e = pg.evaluate("(()=>{const e=document.querySelector('.end'),b=document.querySelector('.bcard');return e.classList.contains('in')&&+getComputedStyle(b).opacity===1})()")
+        e = pg.evaluate("(()=>{const b=document.querySelector('.bcard');return !!document.querySelector('.end-anim')&&[...document.querySelectorAll('.end__scene .es-w')].some(w=>!w.classList.contains('on'))&&+getComputedStyle(b).opacity===1})()")
         fxn = pg.evaluate("document.querySelectorAll('.page-fx g').length")
         ok(mid['o'] == 1 and mid['tf'] and mid['clip'] and end['o'] == 1 and not end['tf'] and not end['clip'] and g['in'] and g['off'] == 0 and t['in'] and t['off'] == 0 and e and fxn == 0 and not errs,
-           f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 명함 {e}, 남은 불빛 {fxn} {errs[:1]}")
+           f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 도시가 잠들기 시작·명함 보임 {e}, 남은 불빛 {fxn} {errs[:1]}")
         c.close()
-    # 다시 내려와도 또: '만든 것'까지 내렸다 첫 화면 맨 위로 올리면 줄 등·아이콘·명함이 꺼져 처음으로 돌아가고, 다시 내리면 불빛이 또 날아가 켬
+    # 다시 내려와도 또: '만든 것'까지 내렸다 첫 화면 맨 위로 올리면 줄 등·아이콘이 꺼지고 끝 칸 도시 불이 다시 켜져 처음으로 돌아가고, 다시 내리면 불빛이 또 날아가 켬
     FX = r"""()=>({fx:document.querySelectorAll('.page-fx g').length,gin:document.getElementById('games').classList.contains('in'),
-      on:document.querySelectorAll('.works .wi.on').length,end:document.querySelector('.end').classList.contains('in'),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
+      on:document.querySelectorAll('.works .wi.on').length,end:[...document.querySelectorAll('.end__scene .es-w')].some(w=>!w.classList.contains('on')),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
     for pre, w, h in (('', 412, 780), ('/en', 1366, 800)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
@@ -238,13 +235,15 @@ with sync_playwright() as p:
             pg.evaluate(Z, 0); pg.wait_for_timeout(400); b = pg.evaluate(FX)
             rounds.append((bead, a['gin'], e, b['gin'] or b['on'] > 0 or b['end'], b['out']))
         ok(all(r[0] > 0 and r[1] and r[2] and not r[3] and r[4] for r in rounds) and not errs,
-           f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 명함이 떨어짐, 맨 위에선 다 꺼져 처음으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·명함·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
+           f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 끝 칸 도시가 잠듦, 맨 위에선 다 꺼져 처음으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·끝 칸 잠듦·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
         c.close()
-    # 첫 화면 이야기 더하기: 거리의 사람이 휴대폰으로 불빛을 받고(10초 안), 간판을 누르면 글자가 톡 뜀, 사람을 누르면 손을 흔듦(오류 없이)
+    # 첫 화면 이야기 더하기: 거리의 셋째 손님(휴대폰)이 불빛을 받아 화면이 켜지고(45초 안, 아이·개 다음), 간판을 누르면 글자가 톡 뜀(오류 없이)
     c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True); pg = c.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.add_init_script("""window.__wk=0;(function f(){const s=[...document.querySelectorAll('.wk-scr')].find(e=>e.getBoundingClientRect().width>0);if(s&&+s.getAttribute('opacity')>.9)__wk=1;requestAnimationFrame(f)})()""")
-    pg.goto(BASE + '/'); pg.wait_for_timeout(11000)
+    pg.add_init_script("""window.__wk=0;(function f(){const s=[...document.querySelectorAll('.n-cast .scr')].find(e=>e.getBoundingClientRect().width>0);if(s&&+s.getAttribute('opacity')>.9)__wk=1;requestAnimationFrame(f)})()""")
+    pg.goto(BASE + '/')
+    try: pg.wait_for_function('__wk === 1', timeout=45000)
+    except Exception: pass
     wk = pg.evaluate('__wk')
     sp = pg.evaluate("(()=>{const r=[...document.querySelectorAll('.night__bld')].find(e=>e.getBoundingClientRect().width>0).querySelector('.n-board').getBoundingClientRect();return[r.left+r.width*.6,r.top+r.height/2]})()")
     pg.touchscreen.tap(sp[0], sp[1]); pg.wait_for_timeout(200)
@@ -389,22 +388,52 @@ with sync_playwright() as p:
         ok(pg.evaluate('location.pathname+location.hash') == '/', f'{frag} 창을 닫으면 주소가 홈')
         c.close()
 
-    # 첫 화면 들어올 때 카메라: 방 창 앞에 바짝 있다가(배율 1.5 이상) 2.7초 안에 제자리(변환 없음). 제목 낱말 셋이 있고 위층 이웃 창에 불이 켜지면 그 낱말도 켜짐
+    # 첫 화면 들어올 때 카메라는 움직이지 않음(처음부터 배율 1, 사용자가 '과하다'고 뺌). 제목 낱말 셋이 있고 위층 이웃 창에 불이 켜지면 그 낱말도 켜짐
     NEAR = "(()=>{const m=getComputedStyle(document.querySelector('.night__near')).transform;return m==='none'?1:new DOMMatrix(m).a})()"
     for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
         c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(250)
-        s0 = pg.evaluate(NEAR); pg.wait_for_function("!document.documentElement.classList.contains('dolly')", timeout=6000); s1 = pg.evaluate(NEAR)
-        ok(s0 > 1.5 and abs(s1 - 1) < .001 and not errs, f'{pre}/ {w}px 들어올 때 카메라: 처음 배율 {s0:.2f} → 끝 {s1:.2f} {errs[:2]}')
+        s0 = pg.evaluate(NEAR); pg.wait_for_timeout(900); s1 = pg.evaluate(NEAR)
+        ok(abs(s0 - 1) < .001 and abs(s1 - 1) < .001 and not errs, f'{pre}/ {w}px 들어올 때 카메라 그대로: 배율 {s0:.2f} → {s1:.2f} {errs[:2]}')
         n = pg.evaluate("document.querySelectorAll('.hero__h1 .hw[data-k]').length")
         pg.wait_for_function("document.querySelector('.hero__h1 .hw.lit')", timeout=9000)
         lit = pg.evaluate("[...document.querySelectorAll('.hero__h1 .hw.lit')].map(e=>e.dataset.k)")
         col = pg.evaluate("getComputedStyle(document.querySelector('.hero__h1 .hw.lit')).color!==getComputedStyle(document.querySelector('.hero__h1')).color")
         ok(n == 3 and lit and col, f'{pre}/ {w}px 제목 낱말 {n}개, 이웃 창 불과 같이 켜진 낱말 {lit}')
         c.close()
-    # 동작 줄이기: 카메라·낱말 불 없이 그대로
+    # 동작 줄이기: 그림 그대로
     c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
-    ok(pg.evaluate(NEAR) == 1 and not pg.evaluate("document.documentElement.classList.contains('dolly')"), '동작 줄이기: 들어올 때 카메라 없음')
+    ok(pg.evaluate(NEAR) == 1, '동작 줄이기: 첫 화면 그림 그대로')
+    c.close()
+
+    # 거리를 지나는 사람들: 넷(아이·개 산책·휴대폰·자전거)과 개, 그림자·테두리. 첫 사람(풍선 든 아이)이 창 앞에서 불빛을 받으면 풍선이 등불(.on)
+    for w, h in ((390, 844), (1366, 768)):
+        c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/')
+        pg.wait_for_function("[...document.querySelectorAll('.night__bld')].some(s=>s.getBoundingClientRect().width>0&&s.querySelector('.n-bln.on'))", timeout=20000)
+        st = pg.evaluate("""()=>{const s=[...document.querySelectorAll('.night__bld')].find(s=>s.getBoundingClientRect().width>0),c=s.querySelector('.n-cast');
+          return{figs:c.querySelectorAll('.n-fig').length,shd:c.querySelectorAll('.n-shd').length,rim:c.querySelectorAll('.n-rimu').length,op:+c.getAttribute('opacity')}}""")
+        ok(st['figs'] == 5 and st['shd'] == 5 and st['rim'] == 5 and st['op'] > .9 and not errs, f"{w}px 거리: 그림 {st['figs']}(넷+개)·그림자 {st['shd']}·테두리 {st['rim']}, 아이 풍선이 불빛을 받아 켜짐 {errs[:2]}")
+        c.close()
+
+    # 끝 칸: 명함 종이가 칠해져 글씨가 보이고(배경 ≠ 투명, 글자 대비 4.5 이상), 보이면 도시가 잠들고 편지 → 답장 불빛 → ✓ 도장(.got). 다 가렸다 다시 보이면 또
+    LUM = "(c)=>{const v=c.match(/[\\d.]+/g).map(Number).slice(0,3).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*v[0]+.7152*v[1]+.0722*v[2]}"
+    for scheme in ('light', 'dark'):
+        c = br.new_context(viewport={'width': 390, 'height': 844}, color_scheme=scheme); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(600)
+        st = pg.evaluate("(()=>{const L=" + LUM + ",cd=document.querySelector('.bcard'),bg=getComputedStyle(cd).backgroundColor,a=getComputedStyle(cd.querySelector('.bcard__rows a')).color,l1=L(bg),l2=L(a);return{bg,ratio:(Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05)}})()")
+        ok(st['bg'] not in ('rgba(0, 0, 0, 0)', 'transparent') and st['ratio'] >= 4.5, f"{scheme} 끝 칸 명함: 종이 {st['bg']}, 메일 글자 대비 {st['ratio']:.1f}")
+        pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=6000)
+        lit = pg.evaluate("document.querySelectorAll('.end__scene .es-w.on').length")
+        pg.evaluate("scrollTo(0,0)"); pg.wait_for_timeout(400)
+        off = pg.evaluate("!document.querySelector('.bcard.got') && document.querySelectorAll('.end__scene .es-w.on').length > 10")
+        pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=6000)
+        ok(lit == 0 and off and not errs, f"{scheme} 끝 칸: 도시가 다 잠들고({lit}) 답장 불빛에 도장, 올라갔다 다시 오면 처음부터 다시 {errs[:2]}")
+        c.close()
+    c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
+    ok(pg.evaluate("!document.querySelector('.end-anim') && getComputedStyle(document.querySelector('.bcard__stamp')).opacity > .5 && !document.querySelector('.end__scene .es-w.on')"), '동작 줄이기: 끝 칸은 잠든 도시와 도장 찍힌 명함 그대로')
     c.close()
 
     # '만든 것' 줄마다 매단 등: 줄이 켜지면 벽에 등불(::before 보임), 등 줄(::after)이 위 선까지
@@ -437,7 +466,7 @@ with sync_playwright() as p:
            f'{w}px 작업대: 처음 꺼짐 {off0}, 켜짐 {on1}, 숫자 끝 {facts}, 스탠드 끄기·켜기 {tog1}·{tog2}, 닫을 때 꺼짐 {dark}, 모니터 안 무대 {mon} {errs[:2]}')
         c.close()
     c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/en/works/oneturn/'); pg.wait_for_timeout(1600)
-    ok(pg.evaluate("!document.querySelector('.sh__spot.off') && getComputedStyle(document.querySelector('.sh__spot')).getPropertyValue('--lit').trim()==='1'"), '소개 페이지: 작업대 스탠드가 켜진 채')
+    ok(pg.evaluate("!document.querySelector('.sh__spot.off') && getComputedStyle(document.querySelector('.sh__spot')).getPropertyValue('--sb-lit').trim()==='1'"), '소개 페이지: 작업대 스탠드가 켜진 채')
     c.close()
     br.close()
 
