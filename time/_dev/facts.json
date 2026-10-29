@@ -81,10 +81,14 @@
     "label": "IANA Time Zone Database"
   },
   "tz_2026": {
-    "checked": "2026-10-14",
+    "checked": "2026-10-29",
     "url": "https://data.iana.org/time-zones/tzdb/NEWS",
-    "label": "IANA Time Zone Database NEWS (2026b–2026e)",
+    "label": "IANA Time Zone Database NEWS (2026b–2026f)",
     "links": [
+      [
+        "IANA tz 2026f release",
+        "https://www.iana.org/time-zones/releases/2026f"
+      ],
       [
         "IANA tz 2026e release",
         "https://www.iana.org/time-zones/releases/2026e"
@@ -107,11 +111,13 @@
       "앨버타(캘거리·에드먼턴): 늘 UTC−6(2026c, 법으로 2026-06-18).",
       "노스웨스트 준주(이누빅): 늘 UTC−6(2026d).",
       "매니토바(위니펙): 늘 UTC−5(2026e, 법으로 2026-10-31).",
-      "모로코(카사블랑카): 2026-09-20 02:00에 서머타임을 끝내고 늘 UTC+0(2026c)."
+      "모로코(카사블랑카): 2026-09-20 02:00에 서머타임을 끝내고 늘 UTC+0(2026c).",
+      "쿠바(아바나): 2026-11-01에 시계를 되돌리지 않고 2027-11-07 01:00(UTC 05:00)까지 UTC−4(2026f). 그 뒤 UTC−5, 2028-03-12 00:00부터 다시 UTC−4(예전 규칙과 같음). 2026f를 zic으로 컴파일해 확인."
     ],
-    "use": "core.js OT.PATCH. 브라우저의 시간대 자료가 낡았으면(이 다섯 곳의 2027년 오프셋이 다르면) 세계 시간 화면에 알리고 표 값으로 계산한다.",
+    "use": "core.js OT.PATCH. 브라우저의 시간대 자료가 낡았으면(이 여섯 곳의 2027-01-15 12:00 UTC 오프셋이 다르면) 세계 시간 화면에 알리고 표 값으로 계산한다.",
     "not_verified": [
-      "온타리오(토론토)·퀘벡(몬트리올)은 tz 자료에 바뀜이 없다(2026e까지). 정부 발표는 따로 보지 않았다."
+      "온타리오(토론토)·퀘벡(몬트리올)은 tz 자료에 바뀜이 없다(2026f까지). 정부 발표는 따로 보지 않았다.",
+      "쿠바 정부 발표 원문은 따로 보지 않았다(IANA NEWS와 tz 자료만)."
     ]
   },
   "lap_split": {
