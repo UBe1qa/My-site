@@ -254,7 +254,7 @@ with sync_playwright() as p:
     pg.select_option('#o-country', 'KR')
     ok('Seollal holiday' in pg.inner_html(T + '.paper') and '설' not in pg.inner_html(T + '.paper'), '영어 화면 + 한국 공휴일은 영어 이름')
     ok(not re.search('[가-힣]', pg.inner_text('main')), '영어 화면 본문에 한글 없음(설정을 바꾼 뒤에도)')
-    ok(pg.get_attribute(T + '[data-basis] a', 'href') == '/guide/south-korea-public-holidays-2027/' and 'Chuseok' in pg.inner_text('.up') + pg.inner_html(T + '.paper'), '영어 + 한국: 링크와 종이가 한국 공휴일')
+    ok(pg.get_attribute(T + '[data-basis] a', 'href') == 'https://lumenlab.page/en/guides/calendar/south-korea-public-holidays-2027/' and 'Chuseok' in pg.inner_text('.up') + pg.inner_html(T + '.paper'), '영어 + 한국: 링크(가이드는 2026-10-29 루트로 옮김)와 종이가 한국 공휴일')
     ok('Hangeul Day' in pg.inner_text('.up') or 'Christmas' in pg.inner_text('.up'), f"영어 + 한국: 다가오는 공휴일도 한국 것 {pg.inner_text('.up')[:50]!r}")
     html_ = pg.inner_html(T + '.paper')
     ok('+1 more' not in html_ and 'Substitute holiday (Labor Day)' in html_ and "Buddha's Birthday" in html_, "영어 + 한국 + Letter: '+1 more' 없이 이름이 다 나온다")

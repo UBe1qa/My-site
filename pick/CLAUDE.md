@@ -20,9 +20,10 @@
 - `assets/style.css` 색 이름은 `:root`에. 강조색은 바늘 빨강 `--pick` 하나(뽑는 행동과 뽑힌 것), 여러 색 `--s1`~`--s8`은 돌림판·팀 표시 안에서만.
 - `assets/fonts/` 화면 글자만 담은 조각 글꼴 `pk-en-<지문>.woff2`·`pk-ko-<지문>.woff2`(= `_dev/font.py`가 만든 것)와 라이선스 전문 `OFL.txt`. `_headers`가 이 폴더를 1년 저장하게 한다(이름에 지문이 있어 바뀌면 이름도 바뀐다).
 - `assets/ads-config.js` 애드센스: client 있음(자동 광고 코드는 도구·글 `<head>`), 수동 자리 번호 `slots`는 비어 있음. 자리 2곳(mid = 도구 설명 글 다음, bottom = 가이드 목록 다음). localhost나 `?adpreview`면 빗금 상자로만 보인다.
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html을 만든다.** 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html을 만든다.** 만든 파일은 손으로 고치지 않는다.
   - `_dev/content.json` 화면 글자(`ui`·`toolUi`), 화면 코드가 쓰는 글자(`js`), 도구별 제목·설명·본문·FAQ(`tools`).
   - `_dev/pages.json` 가이드 목록·소개·방침의 제목·설명, `_dev/pages/<언어>-<about|privacy>.html` 소개·방침 본문. `_dev/articles.json` 글 목록(주소·제목·설명·짝 `pair`·연결 도구) + `_dev/articles/<언어>-<주소>.html` 본문.
+  - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 2026-10-29부터 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 글 속 숫자는 `{{이름}}` 자리에 build.py가 `_dev/sim_ladder.json`(시뮬레이션)과 `tests/fixtures.json`(정확한 계산)에서 넣는다. 사다리 글의 표(`{{stay_rows}}`, 빨간 숫자 = 공평할 때의 1.5배 초과)와 그림(`{{ladder_fig}}`, 길은 코드가 따라가서 그린다)도 build.py가 만든다. 모르는 이름이 있으면 빌드가 멈춘다.
   - `_dev/fonts.json` 조각 글꼴의 파일 이름·글자 범위(build.py가 `<head>`에 preload와 `@font-face`를 넣는 데 쓴다).
 - `_dev/font.py` 조각 글꼴 만들기(fonttools·brotli 필요). `_dev/sim_ladder.mjs` 사다리 치우침 시뮬레이션(씨앗 고정, 약 6분) → `_dev/sim_ladder.json`.

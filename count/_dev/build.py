@@ -3,8 +3,10 @@
 
 - 화면 글 = _dev/content.json, 가이드 글 = _dev/articles.json, 공식 출처에서 확인한 값 = _dev/limits.json
   (나이스 항목·문자 한 통 기준·SNS 한도·읽기 속도·원고지 관행·취업 사이트 측정값. verified=true 인 것만 쓰고 출처 링크와 확인한 날을 화면에 같이 싣는다).
-- 만드는 것: 영어 / , 한국어 /ko/ 의 도구·가이드·소개·방침·오픈소스 고지, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 만드는 것: 영어 / , 한국어 /ko/ 의 도구·가이드·소개·방침·오픈소스 고지, 404.html, sitemap.xml.
   만든 파일은 손으로 고치지 않는다.
+- 가이드 HTML 은 루트 빌드(lumenlab/_dev/build_home.py)가 읽어 lumenlab.page/guides/count/ 로 내는 원본이다(2026-10-29). 이 사이트에는 올리지 않고
+  (.assetsignore) 옛 주소는 _redirects 가 301 로 보낸다. 그래서 sitemap 에 넣지 않고 rss.xml 도 만들지 않는다(한국어 글 RSS 는 루트가 낸다).
 - lastmod 는 본문·구조화 데이터·링크가 실제로 바뀐 날만 적는다(lastmod()). 배치·CSS만 바뀐 페이지는 그대로 둔다.
 """
 import html
@@ -12,8 +14,6 @@ import json
 import re
 import sys
 import unicodedata
-from datetime import datetime, timezone
-from email.utils import format_datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -841,21 +841,15 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in A['ko']:
-        link_ = f'{SITE}/ko/guide/{a["slug"]}/'
-        full = f'<p>{a["answer"]}</p>' + expand(a['body'], 'ko').replace('<!--ad-->', '')
-        y, mo, d = (int(x) for x in a.get('published', FIRST).split('-'))
-        pub = format_datetime(datetime(y, mo, d, tzinfo=timezone.utc), usegmt=True)
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link_}</link><guid>{link_}</guid>'
-                  f'<pubDate>{pub}</pubDate><description>{esc(a["desc"])}</description>'
-                  f'<content:encoded><![CDATA[{full}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>칸칸 가이드</title><link>{SITE}/ko/guide/</link><description>글자 수와 바이트를 세는 법</description><language>ko</language>
-{items}</channel></rss>
-'''
+GUIDE_HOME = {'ko': 'https://lumenlab.page/guides/', 'en': 'https://lumenlab.page/en/guides/'}
+
+
+def guide_links(text):
+    # 2026-10-29 가이드는 lumenlab.page/guides/count/<slug>/(영어 /en/guides/…)로 옮겼다: /guide/·/ko/guide/ 링크를 새 주소로(목록은 #count, 글의 #조각은 그대로)
+    def to(m):
+        root, slug, frag = GUIDE_HOME['ko' if m.group(1) else 'en'], m.group(2) or '', m.group(3) or ''
+        return f'href="{root}#count"' if slug in ('', 'index.html') else f'href="{root}count/{slug}{frag}"'
+    return re.sub(r'href="/(ko/)?guide(?:/([^"#]*))?(#[^"]*)?"', to, text)
 
 
 def build():
@@ -875,15 +869,16 @@ def build():
                 add(lang, *tool_page(lang, key))
             elif key == 'jasoseo':
                 add(lang, *jasoseo_page())
-        add(lang, *guide_index(lang))
+        # 가이드 주소는 이 사이트가 301 로 넘기므로 sitemap 에 넣지 않는다(index=False)
+        add(lang, *guide_index(lang), index=False)
         for a in A[lang]:
-            add(lang, *article_page(lang, a))
+            add(lang, *article_page(lang, a), index=False)
         for key in ('about', 'privacy'):
             add(lang, *doc_page(lang, key))
         add(lang, *licenses_page(lang))
     out['404.html'] = not_found()
+    out = {rel: guide_links(text) for rel, text in out.items()}
     out['sitemap.xml'] = sitemap(paths)
-    out['rss.xml'] = rss()
     return out, paths
 
 

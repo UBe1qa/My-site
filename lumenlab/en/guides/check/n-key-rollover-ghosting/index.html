@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Key Rollover and Ghosting: How Many Keys at Once? | Checkbench</title>
+<meta name="description" content="Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/check/dongsi-ipryeok-rollover/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Key Rollover and Ghosting: How Many Keys at Once? | Checkbench">
+<meta property="og:description" content="Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Key rollover and ghosting: test how many keys register at once", "description": "Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.", "inLanguage": "en", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Checkbench", "url": "https://check.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Checkbench", "item": "https://lumenlab.page/en/guides/#check"}, {"@type": "ListItem", "position": 3, "name": "Key rollover and ghosting: test how many keys register at once", "item": "https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/check/dongsi-ipryeok-rollover/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#check">Checkbench</a></nav>
+<article class="gd__doc" style="--tc:#17b3c4;--tcp:70%">
+  <header class="gd__head">
+    <h1 class="gd__title">Key rollover and ghosting: test how many keys register at once</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-10">Oct 10, 2026</time></p>
+    <a class="gd__tool" href="https://check.lumenlab.page/"><img src="/img/check.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Checkbench</b><span>Keyboard, mouse and mic tests</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>Rollover is how many keys a keyboard can report while they are all held down. You do not need a spec sheet to find out. Hold keys in the <a href="https://check.lumenlab.page/keyboard-test/">keyboard tester</a> and read “Most keys held at once”: that number is what your keyboard, cable and browser actually delivered.</p>
+<h2>How the tester counts</h2>
+<p>Every key that is down at the same moment counts, including Shift, Ctrl and the other modifiers. The tester remembers the largest number it has seen, and lists the keys in that group under Details and settings. A key you let go before pressing the next one does not count. Caps Lock is the one exception: it counts as a press but never as held, because some systems send only half of its signal.</p>
+<div class="tbl tbl--tight"><table><thead><tr><th>What you do</th><th>Held at that moment</th><th>Most keys held at once</th></tr></thead><tbody>
+<tr><td data-th="What you do">Hold A, S, D, F one after another</td><td data-th="Held at that moment">A S D F</td><td data-th="Most keys held at once">4</td></tr>
+<tr><td data-th="What you do">Let go of A, then also hold G</td><td data-th="Held at that moment">S D F G</td><td data-th="Most keys held at once">still 4</td></tr>
+<tr><td data-th="What you do">Hold A and S, release A, then hold D, F, J</td><td data-th="Held at that moment">S D F J</td><td data-th="Most keys held at once">4</td></tr>
+</tbody></table></div>
+<h2>Test the combinations you actually use</h2>
+<ol>
+<li>Press Start over so old presses do not count.</li>
+<li>Hold the keys you use together, for example W, A, Shift and Space for a game, or a chord from your editor.</li>
+<li>Check that every held key is drawn dark on the diagram and that “Held down now” lists them all.</li>
+<li>Add one more key at a time until a new key no longer shows. The number before that is your limit for that group of keys.</li>
+</ol>
+<p>Try several groups. A keyboard can handle one combination and not another, so the result for one group of keys does not tell you about the next.</p>
+
+<h2>What ghosting and blocking look like</h2>
+<ul>
+<li><b>A key you pressed does not light up</b> while others are held. That combination did not arrive, so for now treat it as one your keyboard cannot report.</li>
+<li><b>A key you did not press lights up.</b> People call this ghosting. Let go of everything and try the same combination again to be sure it was not a stray finger.</li>
+</ul>
+<p>Either way the tester is only the messenger: it shows what arrived. It cannot add keys the keyboard never sent.</p>
+<h2>Where a limit of six keys comes from</h2>
+<p>If your keyboard stops at six ordinary keys while Shift, Ctrl or Alt still add on top, that number has a likely source. The USB specification for keyboards defines a basic report, the one a computer’s BIOS reads at start-up: one byte for the eight modifier keys (left and right Ctrl, Shift, Alt and GUI) and room for six other keys. The specification puts the limit at six non-modifier keys when a keyboard uses that report layout, and has the keyboard report a rollover error when more are held. It says this about that layout, not about every USB keyboard.</p>
+<p class="src">Source: <a href="https://www.usb.org/sites/default/files/hid1_11.pdf" rel="noopener">USB-IF, Device Class Definition for Human Interface Devices (HID) 1.11</a>, Appendix B and Appendix C (PDF, checked 2026-10-10).</p>
+<h2>Limits of testing in a browser</h2>
+<p>Some combinations belong to the system or the browser and may never reach a web page, for example shortcuts that switch windows. If a combination fails here, try a different group of keys before you conclude the keyboard is the limit. While the tester is capturing keys it holds on to Tab and most shortcuts so the page does not jump around. Press Esc twice to release them.</p>
+<p class="cta"><a class="btn btn--lamp" href="https://check.lumenlab.page/keyboard-test/">Open the keyboard tester</a></p>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#17b3c4;--tcp:70%">
+  <h2 id="gd-more">More Checkbench guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/check/keyboard-double-typing/"><b>Keyboard typing double letters: how to confirm chattering</b><span>One press, two letters? Confirm double-typing (chattering) with the keyboard tester, see how the 30 ms rule decides and rule out other causes.</span></a></li><li><a href="/en/guides/check/microphone-not-working-browser/"><b>Microphone not working in the browser: a permission checklist</b><span>Mic silent in a browser call? Run the mic test, read its message and follow the matching fix: site permission, system setting, device or another app.</span></a></li><li><a href="/en/guides/check/check-new-monitor-dead-pixels/"><b>How to check a new monitor for dead pixels and the right refresh rate</b><span>A ten-minute check for a new monitor or laptop screen: full-screen colors to find bad pixels, what to note down and the refresh rate it really runs at.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

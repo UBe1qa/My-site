@@ -9,6 +9,7 @@
     skip: 'Skip to content',
     navLabel: 'Site',
     navWorks: 'Work',
+    navGuides: 'Guides',
     navContact: 'Contact',
     navAbout: 'About',
     /* 홈(랜딩) */
@@ -34,6 +35,7 @@
     /* gen:start */
     ftLumen: "Lumen Lab",
     ftWorks: "Everything we make",
+    ftGuides: "Guides",
     ftAbout: "About",
     ftPrivacy: "Privacy Policy",
     ftContact: "Contact",

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to count the days between two dates (and when to add 1) | Daycount</title>
+<meta name="description" content="Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/date/days-between-dates/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="How to count the days between two dates (and when to add 1) | Daycount">
+<meta property="og:description" content="Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/date/days-between-dates/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "How to count the days between two dates (and when to add 1)", "description": "Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://lumenlab.page/en/guides/date/days-between-dates/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Daycount", "url": "https://date.lumenlab.page/en/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Daycount", "item": "https://lumenlab.page/en/guides/#date"}, {"@type": "ListItem", "position": 3, "name": "How to count the days between two dates (and when to add 1)", "item": "https://lumenlab.page/en/guides/date/days-between-dates/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#date">Daycount</a></nav>
+<article class="gd__doc" style="--tc:#c2512b;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">How to count the days between two dates (and when to add 1)</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-05">Oct 5, 2026</time></p>
+    <a class="gd__tool" href="https://date.lumenlab.page/en/"><img src="/img/daycount.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Daycount</b><span>Days between dates, age and business days</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>Subtract the earlier date from the later one. From October 5 to December 25, 2026 that gives <b>81 days</b>. That's the plain subtraction answer, and it's what "how many days until Christmas?" means. Add 1 only when both the first and the last day should be counted, as in "October 5 through December 25": that's <b>82 days</b>.</p>
+
+<h2>Pick the count that fits the question</h2>
+<p>The two answers differ by whether the start date is day 0 or day 1. Using June 1 to June 5 as the example:</p>
+<div class="tbl"><table>
+<thead><tr><th>Question</th><th>How to count</th><th>June 1 to June 5</th></tr></thead>
+<tbody>
+<tr><td>How many days until June 5?</td><td>Subtract</td><td>4 days</td></tr>
+<tr><td>How many nights is the hotel stay?</td><td>Subtract</td><td>4 nights</td></tr>
+<tr><td>How long ago did it start?</td><td>Subtract</td><td>4 days</td></tr>
+<tr><td>How many days does the trip last?</td><td>Subtract, then add 1</td><td>5 days</td></tr>
+<tr><td>How many days did I work, June 1 through June 5?</td><td>Subtract, then add 1</td><td>5 days</td></tr>
+</tbody>
+</table></div>
+<p>It's the same trap as counting fence posts: a fence with 4 sections has 5 posts. Subtraction counts the gaps between dates, and the inclusive count counts the dates themselves.</p>
+
+<h2>Counting down to a date</h2>
+<p>A countdown is plain subtraction, so it reaches 0 on the day itself. On October 5, 2026 there are 81 days left until Friday, December 25. On December 24 there is 1 day left, and on December 25 the count is 0. If a countdown shows 82 on October 5, it is counting today as well. The <a href="https://date.lumenlab.page/en/#dday">countdown calculator</a> uses subtraction.</p>
+<p>81 days is also 11 weeks and 4 days, or 2 months and 20 days. The months are counted from date to date (October 5 to December 5 is two months), not by dividing by 30.</p>
+
+<h2>Why dividing by 30 goes wrong</h2>
+<p>Months have 28 to 31 days, so one division can't turn days into months. March 1 to April 15, 2026 is 45 days. Divided by 30 that looks like a month and a half, but on the calendar it is <b>1 month and 14 days</b>: March 1 to April 1 is one month, then 14 more days. Month ends cause the biggest surprises, which is covered in <a href="/en/guides/date/adding-months/">what happens when you add a month to January 31</a>.</p>
+
+<h2>Leap years add a day</h2>
+<p>February 1 to March 1 is 28 days in 2026 and 29 days in 2028. A whole year, January 1 to December 31, is 364 days by subtraction in 2026 (365 counting both ends) and 365 days in 2028 (366 counting both ends). A year is a leap year when it divides by 4, except century years that don't divide by 400: 2000 was a leap year and 2100 won't be.</p>
+
+<h2>In a spreadsheet</h2>
+<p>Excel stores dates as serial numbers, so <code>=B2-A2</code> gives the subtraction count and <code>=B2-A2+1</code> the inclusive one. The <code>DAYS</code> function does the same subtraction; in Microsoft's example, <code>=DAYS("15-MAR-2021","1-FEB-2021")</code> returns 42.</p>
+<p>If you need working days rather than calendar days, see <a href="/en/guides/date/business-days/">how to count business days</a>.</p>
+    <p class="cta"><a class="btn btn--lamp" href="https://date.lumenlab.page/en/#period">Count the days between two dates →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://support.microsoft.com/en-us/office/days-function-57740535-d549-4395-8728-0f07bff0b9df">Microsoft Support: DAYS function</a></li></ul>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#c2512b;--tcp:82%">
+  <h2 id="gd-more">More Daycount guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/date/business-days/"><b>How to count business days and find a deadline</b><span>A business day is a weekday that isn&#x27;t a holiday. How to find the date 5 or 10 business days away, whether today counts, and which US holidays are skipped.</span></a></li><li><a href="/en/guides/date/federal-holidays-observed/"><b>US federal holidays on a weekend: which day is observed</b><span>A federal holiday on a Saturday is observed the Friday before; on a Sunday, the Monday after. Observed dates for 2026 to 2028, including New Year&#x27;s Day 2028 on Dec 31, 2027.</span></a></li><li><a href="/en/guides/date/adding-months/"><b>Adding months to a date: what happens to January 31</b><span>January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.</span></a></li><li><a href="/en/guides/date/exact-age/"><b>How to calculate your exact age in years, months and days</b><span>Count whole years to the last birthday, then whole months, then the days left. A worked example, birthdays at the end of a month, February 29 birthdays and age in days.</span></a></li><li><a href="/en/guides/date/iso-week-numbers/"><b>ISO week numbers: why January 1 can be in week 53</b><span>ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

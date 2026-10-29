@@ -9,6 +9,7 @@ hreflang 짝·자기 자신·x-default(영어) / <html lang> / 영어 페이지�
 첫 HTML에 제목·본문·내부 링크 / 공개 페이지에 noindex 없음 / .html 링크 없음 / 화면 글에 줄표(—) 없음 /
 돈·법 사실: 출처 링크와 확인한 날이 화면에 있음, 인용문이 원문 그대로(확인된 사실 파일이 있으면 대조), 확인 못 한 것(외국인 단일세율 등)이 없음,
 2027년 확정·의결·미정 표시, texts.py·articles.py 에 손으로 적은 숫자가 없음.
+가이드(2026-10-29 lumenlab.page/guides/salary/ 로 옮김): sitemap·rss.xml·이 사이트 /guide/ 로 가는 링크가 없고, 가이드 링크는 그 주소로 간다. 가이드 HTML(그쪽 빌드가 읽는 원본)도 같이 검사한다.
 """
 import ast
 import json
@@ -183,20 +184,23 @@ def main():
     sm = [u.text for u in ET.parse(ROOT / 'sitemap.xml').getroot().iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
     paths = [u[len(SITE):] for u in sm]
     ok(len(paths) == len(set(paths)), 'sitemap에 같은 주소가 두 번')
-    docs, raw = {}, {}
-    for p in paths:
-        f = ROOT / p.lstrip('/') / 'index.html'
-        ok(f.exists(), f'sitemap 주소에 파일이 없음: {p}')
-        if f.exists():
-            raw[p] = f.read_text(encoding='utf-8')
-            docs[p] = Doc(raw[p])
     built = set()
     for f in ROOT.rglob('index.html'):
         if '_dev' in f.parts or 'tests' in f.parts:
             continue
         rel = str(f.parent.relative_to(ROOT))
         built.add('/' if rel == '.' else '/' + rel + '/')
-    ok(built == set(paths), f'sitemap과 만든 페이지가 다름: {sorted(built ^ set(paths))}')
+    # 가이드는 sitemap 에 없다(lumenlab.page/guides/salary/ 로 301). HTML 은 그쪽 빌드가 읽는 원본으로 계속 만들므로 아래 검사에 같이 넣는다
+    guides = sorted(p for p in built if '/guide/' in p)
+    ok(not [p for p in paths if '/guide/' in p], f'sitemap에 옮긴 가이드 주소: {[p for p in paths if "/guide/" in p][:3]}')
+    ok(built - set(guides) == set(paths), f'sitemap과 만든 페이지(가이드 뺀)가 다름: {sorted((built - set(guides)) ^ set(paths))}')
+    docs, raw = {}, {}
+    for p in paths + guides:
+        f = ROOT / p.lstrip('/') / 'index.html'
+        ok(f.exists(), f'sitemap 주소에 파일이 없음: {p}')
+        if f.exists():
+            raw[p] = f.read_text(encoding='utf-8')
+            docs[p] = Doc(raw[p])
     vis = {p: re.sub(r'\s+', ' ', ''.join(d.visible)) for p, d in docs.items()}
     hrefs = {p: {h for h, _ in d.links} for p, d in docs.items()}
 
@@ -227,6 +231,7 @@ def main():
             elif h.startswith('/'):
                 path, _, frag = h.partition('#')
                 ok('.html' not in path, f'{p}: .html 링크 {h}')
+                ok(not re.match(r'(/en)?/guide(/|$)', path), f'{p}: 옮긴 가이드 주소로 링크 {h} (lumenlab.page/guides/salary/ 로 가야 함)')
                 ok(path in docs, f'{p}: 깨진 내부 링크 {h}')
                 if frag and path in docs and not frag.startswith('a='):
                     ok(frag in docs[path].ids, f'{p}: 없는 #해시 {h}')
@@ -311,15 +316,19 @@ def main():
     ok((ROOT / 'googlea614029e84d58498.html').read_text().strip() == 'google-site-verification: googlea614029e84d58498.html', '구글 확인 파일')
     rb = (ROOT / 'robots.txt').read_text()
     ok(f'Sitemap: {SITE}/sitemap.xml' in rb and 'Disallow' not in rb, 'robots.txt: Sitemap 줄이 있고 막는 줄이 없음')
-    for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', 'rss.xml', 'CLAUDE.md'):
+    for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', '_redirects', 'CLAUDE.md'):
         ok((ROOT / f).exists(), f'{f} 없음')
     wr = (ROOT / 'wrangler.jsonc').read_text(encoding='utf-8')
     ok('"name": "salary"' in wr and '"workers_dev": false' in wr and '"pattern": "salary.lumenlab.page", "custom_domain": true' in wr and '"not_found_handling": "404-page"' in wr, 'wrangler.jsonc')
     ig = (ROOT / '.assetsignore').read_text().split()
-    ok(all(x in ig for x in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions')), '.assetsignore')
-    rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
-    ok(rss.count('<item>') == sum(1 for p in paths if p.startswith('/guide/') and p != '/guide/') >= 4, 'rss.xml 글 수 = 한국어 글 수(4편 이상)')
-    ok(sum(1 for p in paths if p.startswith('/en/guide/') and p != '/en/guide/') >= 3, '영어 글 3편 이상')
+    ok(all(x in ig for x in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', 'guide/')), '.assetsignore(가이드 HTML 은 올리지 않는다)')
+    # 가이드·RSS 는 lumenlab.page 로 301: 딱 맞는 주소(목록·RSS)가 위, 글(*)이 맨 아래(_redirects 는 위 규칙이 이긴다)
+    rules = [ln.split() for ln in (ROOT / '_redirects').read_text(encoding='utf-8').splitlines() if ln.strip() and not ln.startswith('#')] if (ROOT / '_redirects').exists() else []
+    ok(['/guide/', 'https://lumenlab.page/guides/#salary', '301'] in rules and ['/en/guide/', 'https://lumenlab.page/en/guides/#salary', '301'] in rules and ['/rss.xml', 'https://lumenlab.page/guides/rss.xml', '301'] in rules
+       and rules[-2:] == [['/guide/*', 'https://lumenlab.page/guides/salary/:splat', '301'], ['/en/guide/*', 'https://lumenlab.page/en/guides/salary/:splat', '301']], '_redirects: 가이드·RSS 를 lumenlab.page 로 301')
+    ok(not (ROOT / 'rss.xml').exists(), 'rss.xml 이 남아 있음(가이드 RSS 는 lumenlab.page/guides/rss.xml)')
+    ok(sum(1 for p in guides if p.startswith('/guide/') and p != '/guide/') >= 4, '한국어 글 4편 이상')
+    ok(sum(1 for p in guides if p.startswith('/en/guide/') and p != '/en/guide/') >= 3, '영어 글 3편 이상')
     for junk in ('node_modules', '__pycache__', '.wrangler'):
         ok(not list(ROOT.rglob(junk)), f'폴더 안에 {junk}가 남아 있음')
     # 글꼴 조각(_dev/font.py): 파일이 있고, 페이지마다 자기 언어의 조각을 먼저 받고, 화면 글자를 전부 담고 있다
@@ -394,6 +403,10 @@ def main():
     # 모든 바깥 링크는 자료 파일의 출처이거나 정해 둔 곳
     known = {link(k) for k in S} | {'https://lumenlab.page/', 'https://lumenlab.page/en/', 'https://www.cloudflare.com/web-analytics/', 'https://www.google.com/settings/ads',
                                     'https://policies.google.com/technologies/partner-sites', 'https://policies.google.com/technologies/partner-sites?hl=ko', 'mailto:contact@lumenlab.page'}
+    # 가이드 링크: 만든 글마다 lumenlab.page/guides/salary/<글>/, 목록은 lumenlab.page/guides/#salary (영어는 /en/guides/…)
+    for g in guides:
+        en, slug = ('/en', g[len('/en/guide/'):]) if g.startswith('/en/') else ('', g[len('/guide/'):])
+        known.add(f'https://lumenlab.page{en}/guides/salary/{slug}' if slug else f'https://lumenlab.page{en}/guides/#salary')
     for p in docs:
         ext = {h for h in hrefs[p] if not h.startswith(('/', '#'))}
         ok(ext <= known, f'{p}: 자료 파일에 없는 바깥 링크 {sorted(ext - known)[:2]}')

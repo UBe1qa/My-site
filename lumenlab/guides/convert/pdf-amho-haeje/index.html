@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDF 암호 해제 방법: 열기 암호와 권한 암호 차이 | 인플레이스</title>
+<meta name="description" content="카드 명세서처럼 암호를 아는 PDF의 암호를 푸는 방법, 열기 암호와 권한 암호(인쇄·복사 제한)의 차이, 잊어버린 열기 암호는 왜 풀 수 없는지 정리했어요.">
+<link rel="canonical" href="https://lumenlab.page/guides/convert/pdf-amho-haeje/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/convert/pdf-amho-haeje/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/convert/remove-pdf-password/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/convert/remove-pdf-password/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="PDF 암호 해제 방법: 열기 암호와 권한 암호 차이 | 인플레이스">
+<meta property="og:description" content="카드 명세서처럼 암호를 아는 PDF의 암호를 푸는 방법, 열기 암호와 권한 암호(인쇄·복사 제한)의 차이, 잊어버린 열기 암호는 왜 풀 수 없는지 정리했어요.">
+<meta property="og:url" content="https://lumenlab.page/guides/convert/pdf-amho-haeje/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "PDF 암호 해제하는 법: 암호를 알 때와 모를 때", "description": "카드 명세서처럼 암호를 아는 PDF의 암호를 푸는 방법, 열기 암호와 권한 암호(인쇄·복사 제한)의 차이, 잊어버린 열기 암호는 왜 풀 수 없는지 정리했어요.", "inLanguage": "ko", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "mainEntityOfPage": "https://lumenlab.page/guides/convert/pdf-amho-haeje/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "인플레이스", "url": "https://convert.lumenlab.page/ko/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://lumenlab.page/guides/"}, {"@type": "ListItem", "position": 2, "name": "인플레이스", "item": "https://lumenlab.page/guides/#convert"}, {"@type": "ListItem", "position": 3, "name": "PDF 암호 해제하는 법: 암호를 알 때와 모를 때", "item": "https://lumenlab.page/guides/convert/pdf-amho-haeje/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/#works" data-i18n="navWorks">만든 것</a>
+      <a class="nav-guides" href="/guides/" aria-current="true" data-i18n="navGuides">가이드</a>
+      <a class="nav-about" href="/about/" data-i18n="navAbout">소개</a>
+      <a class="nav-contact" href="/#contact" data-i18n="navContact">문의</a>
+      <a class="lang" href="/en/guides/convert/remove-pdf-password/" hreflang="en" lang="en" data-other-lang>English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="위치"><a href="/guides/">가이드</a><span aria-hidden="true">›</span><a href="/guides/#convert">인플레이스</a></nav>
+<article class="gd__doc" style="--tc:#e0a800;--tcp:62%">
+  <header class="gd__head">
+    <h1 class="gd__title">PDF 암호 해제하는 법: 암호를 알 때와 모를 때</h1>
+    <p class="gd__meta">루멘랩 · 마지막 확인 <time datetime="2026-10-06">2026. 10. 6.</time></p>
+    <a class="gd__tool" href="https://convert.lumenlab.page/ko/"><img src="/img/convert.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>인플레이스</b><span>이미지·영상·PDF 파일 변환</span></span><span class="gd__tool-go">열기 <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>메일로 받은 카드 이용대금 명세서, 급여명세서, 보험 서류 PDF는 열 때마다 암호를 넣어야 하는 경우가 있어요. 암호를 알고 있다면 암호를 푸는 건 금방이에요. 그 암호로 파일을 풀어서 암호 없이 열리는 사본을 저장하면 돼요. 반대로 열기 암호를 잊어버렸다면 지름길은 없어요. 암호가 곧 파일을 여는 열쇠이기 때문이에요. 이 글에서는 내가 가진 PDF가 어떤 암호인지 구분하는 법, <a href="https://convert.lumenlab.page/ko/unlock-pdf/">PDF 암호 풀기</a>로 푸는 순서, 풀 수 없는 경우를 차례로 정리했어요.</p><h2>PDF 암호는 두 가지예요</h2><ul><li><strong>열기 암호(사용자 암호)</strong>: 파일을 열 때부터 묻는 암호예요. 이 암호가 없으면 내용이 암호화된 채로 남아서 볼 수 없어요.</li><li><strong>권한 암호(소유자 암호)</strong>: 파일은 그냥 열리지만 인쇄, 글자 복사, 편집 같은 기능이 막혀 있어요. 이 제한을 푸는 게 권한 암호예요.</li></ul><p>PDF 도구 qpdf의 문서를 보면 두 암호의 관계를 알 수 있어요. 두 암호는 모두 같은 암호화 키를 꺼내는 데 쓰여서, 어느 쪽 암호로도 키를 얻을 수 있어요. 또 사용자 암호를 빈칸으로 두고 암호화할 수도 있는데, 이 경우 빈 문자열로 키가 풀리니 암호 없이 열리고 제한만 남아요. qpdf 문서는 이런 파일을 '암호화는 됐지만 암호로 보호되지는 않은 파일'이라고 설명해요. 흔히 '인쇄가 안 되는 PDF'라고 부르는 파일이 대부분 이 경우예요.</p><h2>내 PDF는 어떤 경우일까요</h2><div class="tbl"><table><thead><tr><th>열어 보면</th><th>뜻</th><th>풀 때 필요한 것</th></tr></thead><tbody><tr><td>내용이 보이기 전에 암호부터 물어요</td><td>열기 암호</td><td>그 암호</td></tr><tr><td>열리긴 하는데 인쇄·복사 메뉴가 흐리게 막혀 있어요</td><td>권한 암호(제한만 걸림)</td><td>필요 없음</td></tr><tr><td>그냥 열리고 다 돼요</td><td>보호 없음</td><td>풀 게 없음</td></tr></tbody></table></div><p>직접 구분하지 않아도 괜찮아요. PDF 암호 풀기에 파일을 넣으면 먼저 파일을 살펴보고 '이 PDF는 열 때 암호가 필요해요', '암호 없이 열리지만 인쇄나 복사가 막힌 PDF예요', '이 PDF에는 암호나 제한이 없어요' 중 하나로 알려 줘요. 암호 입력칸은 열기 암호가 걸린 파일일 때만 나와요.</p><h2>아는 암호로 푸는 순서</h2><ol><li><a href="https://convert.lumenlab.page/ko/unlock-pdf/">PDF 암호 풀기</a>에서 파일을 골라요.</li><li>암호를 물으면 PDF 뷰어에서 열 때 넣는 암호를 입력해요. 권한 암호를 받았다면 그 암호로도 돼요. 어느 쪽으로도 같은 키가 풀리기 때문이에요.</li><li>'암호 풀기'를 누르고 저장해요. 파일 이름 끝에 <em>-unlocked</em>가 붙어서 원본과 헷갈리지 않아요.</li></ol><p>쪽 내용은 그대로 두고 암호화만 벗겨요. 암호가 틀리면 '이 암호로는 열리지 않아요'라고 알려 주고 아무것도 저장하지 않아요. 어느 경우든 원본 파일은 바뀌지 않아요.</p><p>이럴 때 많이 풀어요.</p><ul><li><strong>명세서를 모아 둘 때</strong>: 지난 명세서를 다시 볼 때마다 암호를 넣기 번거롭다면 암호 없는 사본을 만들어 안전한 곳에 보관해요.</li><li><strong>다른 도구에 넣어야 할 때</strong>: <a href="https://convert.lumenlab.page/ko/merge-pdf/">PDF 합치기</a>, <a href="https://convert.lumenlab.page/ko/split-pdf/">PDF 나누기</a>, <a href="https://convert.lumenlab.page/ko/pdf-to-jpg/">PDF JPG 변환</a> 같은 도구는 열기 암호가 걸린 파일을 열지 못해요. 여러 달 치 명세서를 한 파일로 합치려면 먼저 하나씩 풀어야 해요.</li><li><strong>제출처가 암호 없는 파일을 달라고 할 때</strong>: 받는 쪽에서 암호를 모르면 파일을 열 수 없으니까요.</li></ul><h2>인쇄·복사만 막힌 PDF</h2><p>암호 없이 열리는데 인쇄가 안 되거나 글자를 선택할 수 없다면 권한 암호로 제한이 걸린 파일이에요. 빈 사용자 암호로 이미 풀 수 있는 파일이라, PDF 암호 풀기는 아무것도 묻지 않고 제한을 없애요.</p><p>이 제한이 생각보다 약하다는 점도 알아 두면 좋아요. qpdf 문서는 PDF의 제한이 오로지 소프트웨어가 지켜 주는 것이고, 프로그램이 제한을 무시하지 못하게 막을 방법은 근본적으로 없다고 설명해요. 제한은 규칙을 따르는 뷰어가 지켜 주는 약속이지 자물쇠가 아니에요.</p><p>그래서 두 가지를 기억하세요. 문서를 남이 못 보게 하려면 제한이 아니라 열기 암호를 걸어야 해요. 그리고 제한은 바꿀 권리가 있는 파일에서만 푸세요. qpdf 문서도 암호를 푸는 기능이 저작권 보호나 만든 사람이 걸어 둔 제한을 우회하려는 용도가 아니라고 밝혀요. 출판사나 회사, 학교가 이유가 있어서 걸어 둔 제한일 수 있어요.</p><h2>잊어버린 열기 암호는 풀 수 없어요</h2><p>열기 암호는 멀쩡한 파일 위에 붙여 둔 스티커가 아니에요. 내용 자체가 암호화되어 있고, 그걸 풀 키를 얻으려면 암호가 있어야 해요. 암호가 없으면 PDF 뷰어도, 변환 도구도, 암호 해제 도구도 뒤섞인 데이터밖에 볼 수 없어요. qpdf 문서는 요즘 쓰는 AES-256 방식에서는 소유자 암호로 사용자 암호를 알아낼 방법도 없다고 설명해요.</p><p>PDF 암호 풀기는 암호를 추측하거나 하나씩 대입해 보지 않아요. 열기 암호를 모르면 PDF 뷰어에서 열 수 없는 것처럼 여기서도 풀 수 없어요. 대신 이렇게 해 보세요.</p><ul><li>파일과 함께 온 메일 본문이나 안내문을 다시 확인하세요. 보낸 곳이 암호나 암호를 만드는 규칙을 적어 두는 곳이 거기예요.</li><li>보낸 곳(카드사, 은행, 회사 담당 부서 등)에 문의해서 암호를 확인하거나 다시 받으세요.</li><li>내가 암호를 걸었던 파일이라면 암호를 걸기 전 원본이 남아 있는지 찾아보세요.</li></ul><p>'모든 PDF 암호를 찾아 준다'는 서비스도 결국 추측하는 방식이고, 그러려면 내 문서를 남에게 넘겨야 해요.</p><h2>푼 다음에는 이렇게 보관하세요</h2><p>암호를 푼 사본은 누구든 열 수 있어요. 개인 폴더처럼 안전한 곳에 두고, 다 쓰면 지우고, 원래 암호 걸린 파일 대신 남에게 그대로 전달하지 마세요.</p><p>다시 잠가야 한다면, 예를 들어 여러 달 명세서를 합친 파일을 보관할 때는 <a href="https://convert.lumenlab.page/ko/protect-pdf/">PDF 암호 걸기</a>를 쓰세요. AES-256으로 암호화하고, 원하면 인쇄와 복사도 막을 수 있어요. 새 암호는 꼭 적어 두세요. 저희를 포함해 누구도 되찾아 드릴 수 없어요. 암호를 바꾸고 싶을 때도 같아요. 지금 암호로 푼 다음 새 암호로 다시 걸면 돼요.</p><h2>브라우저 안에서 푸는 이유</h2><p>암호를 풀어야 하는 파일은 대개 명세서, 급여명세서, 세금 서류처럼 민감한 문서예요. 온라인 도구 상당수는 파일을, 때로는 암호까지 서버로 보내서 처리해요. 인플레이스의 PDF 암호 풀기는 qpdf를 웹어셈블리로 만들어 지금 보고 있는 브라우저 탭 안에서 돌리기 때문에, 파일과 암호가 기기 밖으로 나가지 않고 어디에도 저장되지 않아요.</p><h2>출처</h2><ul><li><a href="https://qpdf.readthedocs.io/en/stable/encryption.html">qpdf 문서: PDF 암호화(사용자 암호와 소유자 암호, 보안 제한)</a></li><li><a href="https://qpdf.readthedocs.io/en/stable/cli.html">qpdf 문서: --decrypt·--password 옵션</a></li></ul>
+  </div>
+  <p class="gd__fix">글에 틀린 곳이 있거나 바뀐 기준을 아시면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 확인해서 고치고, 고친 날을 이 글에 적어요.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#e0a800;--tcp:62%">
+  <h2 id="gd-more">인플레이스 가이드 더 보기</h2>
+  <ol class="gbooks"><li><a href="/guides/convert/iphone-heic-jpg/"><b>아이폰 사진 HEIC를 JPG로 바꾸는 법</b><span>아이폰 사진이 HEIC인 이유, JPG로 바꿔야 하는 경우, 설정 › 카메라 › 포맷 › 높은 호환성과 &#x27;Mac 또는 PC로 전송&#x27; 설정, 이미 찍은 사진을 변환하는 방법까지 정리했어요.</span></a></li><li><a href="/guides/convert/csv-excel-hangul/"><b>CSV를 엑셀에서 열면 한글이 깨지는 이유와 해결법</b><span>CSV를 엑셀에서 열면 한글이 깨지는 이유(BOM 없는 UTF-8을 코드 페이지 949로 읽음)와, UTF-8 BOM 저장·&#x27;텍스트/CSV에서&#x27; 가져오기로 해결하는 방법을 정리했어요.</span></a></li><li><a href="/guides/convert/youtube-mp3-legal/"><b>유튜브 영상을 MP3로 바꿔도 될까요?</b><span>유튜브 약관이 다운로드에 대해 정한 내용, 저작권법 제104조의2·제136조·제30조 조문, 프리미엄 오프라인 저장과 유튜브 스튜디오 다운로드 같은 합법적인 대안을 정리했어요.</span></a></li><li><a href="/guides/convert/pdf-yongryang-julgi/"><b>PDF 용량 줄이기: 스캔 PDF가 큰 이유와 줄이는 법</b><span>제출 서류나 메일 첨부가 용량 제한에 걸릴 때 PDF를 줄이는 방법. 스캔 PDF가 큰 이유, 압축 단계 고르는 법, Gmail 25MB 제한, 압축으로 안 줄어드는 경우를 정리했어요.</span></a></li><li><a href="/guides/convert/dongyeongsang-yongryang-julgi/"><b>동영상 용량 줄이기: 메일로 보낼 수 있게 만드는 법</b><span>동영상 용량을 정하는 해상도·비트레이트·길이, Gmail 25MB·Outlook 20MB 같은 첨부 한도, 자르고 압축하는 순서, 링크로 보내는 편이 나은 경우를 정리했어요.</span></a></li><li><a href="/guides/convert/pdf-hapchigi/"><b>PDF 합치기: 기기별로 여러 PDF를 하나로 묶는 법</b><span>맥 미리보기와 Finder의 PDF 생성, 아이폰 미리보기 앱의 파일에서 삽입, 윈도우·안드로이드에서 브라우저로 PDF를 합치는 방법과 합치기 전 쪽 정리·압축 요령을 정리했어요.</span></a></li><li><a href="/guides/convert/pdf-markdown-ai-token/"><b>PDF를 마크다운으로 바꿔서 AI에 넣기</b><span>많은 AI 서비스가 PDF 쪽마다 글과 그림을 함께 읽어요. 마크다운으로 바꾸면 쪽 그림 몫이 빠져요. OpenAI·앤트로픽·구글 문서의 비용 구조, 직접 재 본 결과, PDF 그대로 넣는 게 나은 경우를 정리했어요.</span></a></li></ol>
+  <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
+      <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
+      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
+      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

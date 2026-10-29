@@ -292,7 +292,7 @@
           : b === 'table' ? 'Holidays: South Korea’s confirmed public holidays for ' + y + ', including the one-off holiday and the election day.'
           : 'Holidays: South Korea’s public holiday rules as amended in April 2026' + (b === 'provisional' ? ' (the official ' + y + ' almanac notice is not out yet).' : '.');
         if (KO && (y === 2026 || y === 2027)) link = a('/ko/' + y + '/holidays/', y + '년 공휴일 보기');
-        else if (!KO && y === 2027) link = a('/guide/south-korea-public-holidays-2027/', 'See South Korea’s 2027 holidays');
+        else if (!KO && y === 2027) link = a('https://lumenlab.page/en/guides/calendar/south-korea-public-holidays-2027/', 'See South Korea’s 2027 holidays');   // 가이드는 2026-10-29 lumenlab.page 로 옮겼다
         else if (!KO && y === 2026) link = a('/ko/2026/holidays/', 'See the 2026 list (in Korean)', 'ko');
       } else if (S.country === 'US') {
         s = KO ? '공휴일 기준: 미국 연방 공휴일(5 U.S.C. 6103). 주말과 겹치면 대신 쉬는 날까지 표시해요.' : 'Holidays: US federal holidays under 5 U.S.C. 6103, with the observed weekday when one falls on a weekend.';

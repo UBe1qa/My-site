@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법 | 공학용 계산기</title>
+<meta name="description" content="모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.">
+<link rel="canonical" href="https://lumenlab.page/guides/calc/standard-deviation/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/calc/standard-deviation/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/calc/standard-deviation/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/calc/standard-deviation/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법 | 공학용 계산기">
+<meta property="og:description" content="모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.">
+<meta property="og:url" content="https://lumenlab.page/guides/calc/standard-deviation/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법", "description": "모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.", "inLanguage": "ko", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "mainEntityOfPage": "https://lumenlab.page/guides/calc/standard-deviation/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "공학용 계산기", "url": "https://calc.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://lumenlab.page/guides/"}, {"@type": "ListItem", "position": 2, "name": "공학용 계산기", "item": "https://lumenlab.page/guides/#calc"}, {"@type": "ListItem", "position": 3, "name": "표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법", "item": "https://lumenlab.page/guides/calc/standard-deviation/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/#works" data-i18n="navWorks">만든 것</a>
+      <a class="nav-guides" href="/guides/" aria-current="true" data-i18n="navGuides">가이드</a>
+      <a class="nav-about" href="/about/" data-i18n="navAbout">소개</a>
+      <a class="nav-contact" href="/#contact" data-i18n="navContact">문의</a>
+      <a class="lang" href="/en/guides/calc/standard-deviation/" hreflang="en" lang="en" data-other-lang>English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="위치"><a href="/guides/">가이드</a><span aria-hidden="true">›</span><a href="/guides/#calc">공학용 계산기</a></nav>
+<article class="gd__doc" style="--tc:#f25c05;--tcp:78%">
+  <header class="gd__head">
+    <h1 class="gd__title">표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법</h1>
+    <p class="gd__meta">루멘랩 · 마지막 확인 <time datetime="2026-10-06">2026. 10. 6.</time></p>
+    <a class="gd__tool" href="https://calc.lumenlab.page/"><img src="/img/sci-calc.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>공학용 계산기</b><span>공학 함수·물리 상수 계산</span></span><span class="gd__tool-go">열기 <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.</p><div class="answer"><p>자료가 알고 싶은 집단 <b>전체</b>면 σ(n으로 나눔), 전체에서 <b>일부를 뽑은 표본</b>으로 전체를 짐작하는 거면 s(n−1로 나눔)를 써요. 예를 들어 2, 4, 4, 4, 5, 5, 7, 9 의 σ는 2, s는 약 2.138 이에요.</p></div>
+<h2>두 공식</h2>
+<p>표준편차는 자료가 평균에서 얼마나 퍼져 있는지를 나타내요. 각 값에서 평균을 뺀 편차를 제곱해 더한 뒤, 무엇으로 나누느냐만 달라요.</p>
+<ul>
+<li><b>모표준편차 σ</b> = √( Σ(x − x̄)² ÷ n )</li>
+<li><b>표본표준편차 s</b> = √( Σ(x − x̄)² ÷ (n − 1) )</li>
+</ul>
+<p>계산기에서는 보통 σx 와 sx 로 표시해요. 엑셀에서는 STDEV.P 가 σ, STDEV.S(예전 이름 STDEV)가 s 예요.</p>
+<h2>직접 계산해 보기</h2>
+<p>자료 2, 4, 4, 4, 5, 5, 7, 9 (n = 8)의 평균은 40 ÷ 8 = 5 예요.</p>
+<div class="tbl"><table><thead><tr><th>x</th><th>x − 5</th><th>(x − 5)²</th></tr></thead><tbody>
+<tr><td>2</td><td>−3</td><td>9</td></tr>
+<tr><td>4 (3개)</td><td>−1</td><td>1 × 3 = 3</td></tr>
+<tr><td>5 (2개)</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>2</td><td>4</td></tr>
+<tr><td>9</td><td>4</td><td>16</td></tr>
+<tr><td colspan="2">합</td><td>32</td></tr>
+</tbody></table></div>
+<ul>
+<li>σ² = 32 ÷ 8 = 4 이라서 <b>σ = 2</b></li>
+<li>s² = 32 ÷ 7 ≈ 4.571428571 이라서 <b>s = √(32/7) ≈ 2.138089935</b></li>
+</ul>
+<p><a class="try" href="https://calc.lumenlab.page/stats/?x=2,4,4,4,5,5,7,9">통계 화면에서 이 자료 열기 ▸</a></p>
+<h2>왜 n − 1 로 나누나요</h2>
+<p>표본의 평균 x̄ 는 표본 값들에 가장 가깝게 잡히는 값이라, 표본으로 구한 편차 제곱합은 진짜 모집단 평균으로 구했을 때보다 조금 작게 나오는 경향이 있어요. 그래서 n 대신 조금 작은 n − 1 로 나눠 모집단의 분산을 치우치지 않게 짐작해요. 이것을 베셀 보정이라고 불러요.</p>
+<h2>어느 것을 쓰나요</h2>
+<ul>
+<li><b>σ</b>: 우리 반 30명 전체의 시험 점수, 올해 열두 달의 매출처럼 알고 싶은 대상을 빠짐없이 다 가진 경우</li>
+<li><b>s</b>: 공장에서 매일 10개를 뽑아 검사하거나 설문에서 1,000명에게 물어 전체를 짐작하는 경우</li>
+<li>교과서 문제는 대부분 σ, 실험 보고서와 통계 검정은 대부분 s 를 써요. 헷갈리면 문제나 과제에서 “표본”이라는 말이 있는지 보세요.</li>
+</ul>
+<p>자료가 많아지면 두 값의 차이는 작아져요. n = 100 이면 s 는 σ 의 √(100/99) ≈ 1.005 배라서 0.5% 정도만 커요.</p>
+  </div>
+  <p class="gd__fix">글에 틀린 곳이 있거나 바뀐 기준을 아시면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 확인해서 고치고, 고친 날을 이 글에 적어요.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#f25c05;--tcp:78%">
+  <h2 id="gd-more">공학용 계산기 가이드 더 보기</h2>
+  <ol class="gbooks"><li><a href="/guides/calc/order-of-operations/"><b>6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</b><span>6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.</span></a></li><li><a href="/guides/calc/degrees-radians/"><b>도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때</b><span>공학용 계산기에서 sin 30이 0.5가 아니라 −0.988이 나오는 이유, 도와 라디안의 뜻과 환산 공식, 자주 쓰는 각도 환산표, 어떤 단위를 언제 쓰는지 정리했어요.</span></a></li><li><a href="/guides/calc/equations/"><b>이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</b><span>이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.</span></a></li><li><a href="/guides/calc/permutations-combinations/"><b>순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</b><span>순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.</span></a></li><li><a href="/guides/calc/exact-vs-decimal/"><b>계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</b><span>공학용 계산기 답이 √2/2, 1/3, π/4처럼 분수·루트로 나오는 이유와 S⇔D로 소수로 바꾸는 법, 소수점 자리 고정(Fix)·유효숫자(Sci) 설정, 0.1+0.2 반올림 오차 이야기를 정리했어요.</span></a></li></ol>
+  <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
+      <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
+      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
+      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

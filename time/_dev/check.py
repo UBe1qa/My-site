@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""한바퀴 정적 검사(만든 HTML·코드): python3 time/_dev/check.py"""
+"""한바퀴 정적 검사(만든 HTML·코드): python3 time/_dev/check.py
+2026-10-29 가이드를 루멘랩 홈으로 옮긴 것도 본다: sitemap·RSS에 가이드 없음, 가이드 링크는 홈 주소, _redirects·.assetsignore."""
 import html as H
 import json
 import re
@@ -18,6 +19,10 @@ def bad(msg):
 
 htmls = sorted(p for p in ROOT.rglob('index.html') if '_dev' not in p.parts and 'tests' not in p.parts)
 sitemap = re.findall(r'<loc>([^<]+)</loc>', (ROOT / 'sitemap.xml').read_text(encoding='utf-8'))
+# 2026-10-29 가이드 목록·글(guide/)은 루멘랩 홈(lumenlab.page/guides/time/)으로 옮겼다: 파일은 홈이 읽는 원본이라 그대로 만들어 같이 보지만 sitemap에는 없다
+GUIDE = re.compile(r'/(ko/)?guide/')
+OLD_LINK = re.compile(r'<a [^>]*href="((?:https://time\.lumenlab\.page)?/(?:ko/)?guide(?:[/#?][^"]*)?)"')
+listed = []
 titles, descs = Counter(), Counter()
 for p in htmls:
     h = p.read_text(encoding='utf-8')
@@ -31,8 +36,11 @@ for p in htmls:
     canon = re.search(r'<link rel="canonical" href="([^"]+)"', h)
     if not canon or canon.group(1) != url:
         bad(f'canonical {rel}: {canon and canon.group(1)}')
-    if url not in sitemap:
-        bad(f'사이트맵에 없음 {rel}')
+    is_guide = bool(GUIDE.match(rel))
+    if not is_guide:
+        listed.append(rel)
+    if (url in sitemap) == is_guide:
+        bad(f'사이트맵에 가이드가 있음(루멘랩 홈으로 옮김) {rel}' if is_guide else f'사이트맵에 없음 {rel}')
     if 'noindex' in h:
         bad(f'공개 페이지에 noindex {rel}')
     lang = 'ko' if rel.startswith('/ko/') else 'en'
@@ -64,6 +72,16 @@ for p in htmls:
         f = ROOT / target.lstrip('/')
         if not (f.is_file() or (f / 'index.html').is_file()):
             bad(f'깨진 내부 링크 {rel} → {target}')
+    # 가이드 링크는 루멘랩 홈 주소로: 옛 주소(/guide/·/ko/guide/) 링크 없음, 메뉴·꼬리말은 홈 가이드 모음의 이 사이트 칸, 글 링크는 여기서 만든 원본(#조각까지)이 있다
+    for m in OLD_LINK.finditer(h):
+        bad(f'옛 가이드 주소 링크 {rel} → {m.group(1)}')
+    if f'href="https://lumenlab.page/{"" if lang == "ko" else "en/"}guides/#time"' not in h:
+        bad(f'메뉴·꼬리말 가이드 링크가 루멘랩 홈 가이드 모음이 아님 {rel}')
+    for m in re.finditer(r'<a [^>]*href="(https://lumenlab\.page/(?:en/)?guides/[^"]*)"', h):
+        g = re.fullmatch(r'https://lumenlab\.page/(en/)?guides/(?:#time|time/([^/#]+)/(?:#(.+))?)', m.group(1))
+        src = g and g.group(2) and ROOT / ('guide' if g.group(1) else 'ko/guide') / g.group(2) / 'index.html'
+        if not g or (src and (not src.is_file() or (g.group(3) and f' id="{g.group(3)}"' not in src.read_text(encoding='utf-8')))):
+            bad(f'루멘랩 홈 가이드 링크에 여기서 만든 원본 글이 없음 {rel} → {m.group(1)}')
     if len(t) > (65 if lang == 'en' else 60) or len(d) > 160:
         bad(f'제목·설명 길이 {rel}')
 for k, v in titles.items():
@@ -72,13 +90,31 @@ for k, v in titles.items():
 for k, v in descs.items():
     if v > 1:
         bad(f'같은 설명 {k[:30]}')
-if len(sitemap) != len(htmls):
-    bad(f'사이트맵 {len(sitemap)} ≠ 페이지 {len(htmls)}')
+if len(sitemap) != len(listed):
+    bad(f'사이트맵 {len(sitemap)} ≠ 페이지(가이드 빼고) {len(listed)}')
+if [u for u in sitemap if '/guide/' in u]:
+    bad(f'사이트맵에 가이드 주소 {[u for u in sitemap if "/guide/" in u]}')
 
 # 404: 광고 없음, noindex
 nf = (ROOT / '404.html').read_text(encoding='utf-8')
 if 'adsbygoogle' in nf or 'noindex' not in nf:
     bad('404 광고·noindex')
+if OLD_LINK.search(nf) or 'href="https://lumenlab.page/en/guides/#time"' not in nf:
+    bad('404 가이드 링크가 루멘랩 홈 주소가 아님')
+
+# 2026-10-29 가이드를 루멘랩 홈으로 옮김: rss.xml 없음, 가이드 HTML은 올리지 않고(.assetsignore), 옛 주소는 _redirects가 홈의 같은 글로 301
+if (ROOT / 'rss.xml').exists():
+    bad('rss.xml이 남아 있음(한국어 가이드 RSS는 루멘랩 홈이 낸다)')
+ign = [x.strip() for x in (ROOT / '.assetsignore').read_text(encoding='utf-8').splitlines() if x.strip() and not x.startswith('#')]
+if 'guide/' not in ign or '_redirects' in ign or '_headers' in ign:
+    bad(f'.assetsignore: guide/는 빼고 _redirects·_headers는 올려야 함 {ign}')
+HOME_KO, HOME_EN = 'https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/'
+want = [['/ko/guide/', HOME_KO + '#time'], ['/ko/guide', HOME_KO + '#time'], ['/ko/guide/index.html', HOME_KO + '#time'],
+        ['/guide/', HOME_EN + '#time'], ['/guide', HOME_EN + '#time'], ['/guide/index.html', HOME_EN + '#time'],
+        ['/rss.xml', HOME_KO + 'rss.xml'], ['/ko/guide/*', HOME_KO + 'time/:splat'], ['/guide/*', HOME_EN + 'time/:splat']]
+rules = [x.split() for x in (ROOT / '_redirects').read_text(encoding='utf-8').splitlines() if x.strip() and not x.startswith('#')]
+if rules != [w + ['301'] for w in want]:
+    bad(f'_redirects 규칙(고정 주소 먼저, * 규칙 뒤): {rules}')
 
 # 저장 키 = 방침
 app = (ROOT / 'assets/app.js').read_text(encoding='utf-8') + (ROOT / '_dev/build.py').read_text(encoding='utf-8')

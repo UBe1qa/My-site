@@ -5,20 +5,15 @@
 /setnote/index.html https://setnote.lumenlab.page/app/ 301
 /setnote/manifest.webmanifest https://setnote.lumenlab.page/app/manifest.webmanifest 301
 
-# 2026-10-18 가이드 모음(/guides/)과 만든 것 목록(/works/)을 홈의 '만든 것' 칸 하나로 합쳤다(아이콘을 누르면 뜨는 소개 창 = 소개 페이지 /works/<id>/).
-# 옛 목록 주소는 홈의 그 칸으로 영구 이동. /guides/ 는 조각 없이 홈으로 보내, 옛 /guides/#try-<도구> 링크가 조각을 단 채 도착해 홈이 그 소개 창을 열게 한다.
+# 2026-10-18 만든 것 목록(/works/)을 홈의 '만든 것' 칸 하나로 합쳤다(아이콘을 누르면 뜨는 소개 창 = 소개 페이지 /works/<id>/).
+# 옛 목록 주소는 홈의 그 칸으로 영구 이동.
+# (/guides/ 도 그때 홈으로 넘겼는데, 2026-10-29 도구 사이트의 가이드 글을 옮겨 오며 진짜 페이지가 됐다. 그래서 여기서 뺀다)
 /works/ /#works 301
 /works /#works 301
 /works/index.html /#works 301
 /en/works/ /en/#works 301
 /en/works /en/#works 301
 /en/works/index.html /en/#works 301
-/guides/ / 301
-/guides / 301
-/guides/index.html / 301
-/en/guides/ /en/ 301
-/en/guides /en/ 301
-/en/guides/index.html /en/ 301
 # 더 옛 전체 목록 주소(홈이 랜딩이 되기 전)
 /tools/ /#tools 301
 /en/tools/ /en/#tools 301

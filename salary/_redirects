@@ -1,0 +1,11 @@
+# 가이드 글은 2026-10-29 루멘랩 본 사이트로 옮겼다(애드센스가 lumenlab.page 를 글이 적다고 반려해서 글을 그쪽에 모음). 글 이름은 그대로라 옛 주소·링크가 같은 글로 영구 이동.
+# guide/ 폴더는 lumenlab 빌드가 읽는 원본이라 남기지만 .assetsignore 로 올리지 않는다. 목록·RSS 처럼 딱 맞는 주소를 위에, 글(*)을 아래에 둔다(위 규칙이 이긴다)
+/guide/ https://lumenlab.page/guides/#salary 301
+/guide https://lumenlab.page/guides/#salary 301
+/guide/index.html https://lumenlab.page/guides/#salary 301
+/en/guide/ https://lumenlab.page/en/guides/#salary 301
+/en/guide https://lumenlab.page/en/guides/#salary 301
+/en/guide/index.html https://lumenlab.page/en/guides/#salary 301
+/rss.xml https://lumenlab.page/guides/rss.xml 301
+/guide/* https://lumenlab.page/guides/salary/:splat 301
+/en/guide/* https://lumenlab.page/en/guides/salary/:splat 301

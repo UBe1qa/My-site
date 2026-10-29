@@ -134,7 +134,7 @@ def ko_weekly():
 
 
 def ko_severance():
-    body = f'''<p class="lede">퇴직금은 1일 평균임금 × {SV['payDays']}일 × 재직일수 ÷ {SV['daysPerYear']}예요. 고용노동부 '퇴직금 계산' 화면의 예제를 그대로 따라가면 1일 평균임금은 {c(E['avgWon'])}원 {E['avgJeon']}전이 나와요. 같은 조건을 이 사이트 계산기에 넣으면 퇴직금은 {c(sv['amount'])}원이에요.</p>
+    body = f'''<p class="lede">퇴직금은 1일 평균임금 × {SV['payDays']}일 × 재직일수 ÷ {SV['daysPerYear']}예요. 고용노동부 '퇴직금 계산' 화면의 예제를 그대로 따라가면 1일 평균임금은 {c(E['avgWon'])}원 {E['avgJeon']}전이 나와요. 같은 조건을 떼고얼마 계산기에 넣으면 퇴직금은 {c(sv['amount'])}원이에요.</p>
 <h2>먼저, 누가 받나요</h2>
 {quote('sev8')}
 <p>빠지는 경우는 같은 법 제4조에 있어요. {q('sev4')} ({src('sevLaw4')})</p>
@@ -155,7 +155,7 @@ def ko_severance():
 {quote('avg_ordinary')}
 <h2>4단계: 퇴직금</h2>
 <p class="calc">{c(sv['avg']['won'])}원 {sv['avg']['jeon']}전 × {SV['payDays']}일 × {c(sv['serviceDays'])}일 ÷ {SV['daysPerYear']} = <b>{c(sv['amount'])}원</b></p>
-<p>이 금액은 고용노동부 예제 조건을 이 사이트 계산기에 넣은 값이에요. 고용노동부 화면의 예제 설명에는 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 고용노동부 계산기처럼 반올림했어요.</p>
+<p>이 금액은 고용노동부 예제 조건을 떼고얼마 계산기에 넣은 값이에요. 고용노동부 화면의 예제 설명에는 최종 퇴직금 숫자가 적혀 있지 않아요. 원 미만은 고용노동부 계산기처럼 반올림했어요.</p>
 <h2>알아 둘 것</h2>
 {li('세전 금액이에요. 퇴직소득세는 따로 계산돼요.', f'퇴직금은 퇴직한 날부터 {SV["payWithinDays"]}일 안에 줘야 해요. 당사자끼리 합의하면 늦출 수 있어요(근로자퇴직급여 보장법 제9조).', '회사 내규에 따라 실제 지급액과 다를 수 있어요.', f'퇴직 전 3개월은 3개월 전 같은 날부터 세어요. 그 날짜가 없으면 그 달 말일부터, 3개월 전이 2월이면 3월 1일부터 세어요({date_ko(F["threeMonthsEx"]["leave"])}에 퇴직하면 {date_ko(F["threeMonthsEx"]["start"])}부터 {F["threeMonthsEx"]["days"]}일). 고용노동부 계산기와 같은 방식이에요.')}'''
     return dict(slug='toejikgeum-gyesan-yeje', short='퇴직금 계산, 고용노동부 예제로 따라가기', h1='퇴직금 계산을 고용노동부 예제로 따라가 보기',
@@ -182,7 +182,7 @@ def ko_209():
 {mw_table('ko')}
 <p class="calc">{Y0}년: {c(mw0['hourly'])}원 × {MH} = <b>{c(mw0['monthly209'])}원</b><br>{Y1}년: {c(mw1['hourly'])}원 × {MH} = <b>{c(mw1['monthly209'])}원</b></p>
 <h2>주 {FULL}시간보다 짧게 일하면</h2>
-<p>같은 식에 내 시간을 넣으면 돼요. 유급 주휴 시간은 주 소정근로시간 ÷ {FULL} × {DAYH}이에요(근로기준법 시행령 별표 2의 방식으로 풀면). 이 사이트 계산기는 식 그대로 계산하고 소수 첫째 자리까지 보여 줘요.</p>
+<p>같은 식에 내 시간을 넣으면 돼요. 유급 주휴 시간은 주 소정근로시간 ÷ {FULL} × {DAYH}이에요(근로기준법 시행령 별표 2의 방식으로 풀면). 떼고얼마 계산기는 식 그대로 계산하고 소수 첫째 자리까지 보여 줘요.</p>
 {table(['주 소정근로시간', '유급 주휴 시간', '월 환산 시간'], rows, cls='')}
 <p>주 {FULL}시간만 고시의 값이고 나머지는 식으로 계산한 값이에요.</p>
 <h2>월급을 시급으로 바꿀 때도 같은 숫자를 써요</h2>
@@ -256,7 +256,7 @@ def en_deductions():
 <h2>The two taxes</h2>
 <p><b>Income tax</b> is withheld every month from a table in the Enforcement Decree of the Income Tax Act, the simplified withholding table ({kospan("근로소득 간이세액표")}). You find your pay bracket and your number of dependents, counting yourself and your spouse as one each. The table in force since {EFF_EN} has {c(G['count'])} rows. For the example, taxable pay of {wn(n4['taxable'])} with one dependent gives {wn(ln['incomeTax'])}.</p>
 <p>Dependents matter. At {wn(fam[0]['taxable'])} of taxable monthly pay the table gives {wn(fam[0]['line']['incomeTax'])} for one dependent, {wn(fam[1]['line']['incomeTax'])} for two and {wn(fam[3]['line']['incomeTax'])} for four. Children aged {N['childAgeFrom']} to {N['childAgeTo']} reduce it further: {wn(CH['one'])} for one child and {wn(CH['two'])} for two.</p>
-<p>You may ask your employer to withhold {N['ratios'][0]}% or {N['ratios'][2]}% of the table amount instead ({src('ganiRatio', 'en')}). The monthly amount is an advance. The tax for the whole year is worked out again in the year-end tax settlement, which this site does not calculate.</p>
+<p>You may ask your employer to withhold {N['ratios'][0]}% or {N['ratios'][2]}% of the table amount instead ({src('ganiRatio', 'en')}). The monthly amount is an advance. The tax for the whole year is worked out again in the year-end tax settlement, which Takehome Korea does not calculate.</p>
 <p><b>Local income tax</b> is {NOW['localTax']['ratePct']}% of the income tax, collected together with it.</p>
 <p>This calculator uses the standard monthly withholding table that applies to residents.</p>
 <h2>Why your payslip can differ from a calculator</h2>
@@ -264,7 +264,7 @@ def en_deductions():
 <li>The National Pension Service sets the income figure for the pension once a year, so it may not match this month’s pay.</li>
 <li>Your employer may treat different items as non-taxable.</li>
 <li>The number of dependents on file with your employer may differ from what you typed.</li>
-<li>Rounding. This site rounds each premium and tax down to {wn(R['pension'])}, following the rounding rule of the {src('treasury47', 'en')}. An employer’s figures can differ by a few tens of won.</li>
+<li>Rounding. Takehome Korea rounds each premium and tax down to {wn(R['pension'])}, following the rounding rule of the {src('treasury47', 'en')}. An employer’s figures can differ by a few tens of won.</li>
 </ul>
 <h2>What changes in {Y1}</h2>
 <p>The National Pension rate becomes {NXT['pension']['ratePct']}%, which costs the {wn(n4['annual'])} example {wn(-cmp4['netDiff'])} a month. The health insurance rate was approved to stay at {NXT['health']['totalPct']}%. The long-term care rate for {Y1} had not been decided when we checked on {date_en(CHECKED)}.</p>'''
@@ -276,7 +276,7 @@ def en_deductions():
 
 
 def en_severance():
-    body = f'''<p class="lede">Severance pay ({kospan("퇴직금")}) in Korea is at least {SV['payDays']} days of average wages for every year of continuous service. In practice: average daily wage × {SV['payDays']} × days of service ÷ {SV['daysPerYear']}. The Ministry of Employment and Labor’s own sample case gives an average daily wage of {wn(E['avgWon'])}.{E['avgJeon']}, and this site’s calculator turns the same inputs into {wn(sv['amount'])}.</p>
+    body = f'''<p class="lede">Severance pay ({kospan("퇴직금")}) in Korea is at least {SV['payDays']} days of average wages for every year of continuous service. In practice: average daily wage × {SV['payDays']} × days of service ÷ {SV['daysPerYear']}. The Ministry of Employment and Labor’s own sample case gives an average daily wage of {wn(E['avgWon'])}.{E['avgJeon']}, and Takehome Korea’s calculator turns the same inputs into {wn(sv['amount'])}.</p>
 <h2>Who qualifies</h2>
 <p>The Act on the Guarantee of Employees’ Retirement Benefits requires employers to pay it to workers who leave, with two exclusions written into Article 4 ({src('sevLaw4', 'en')}):</p>
 <ul>
@@ -296,13 +296,13 @@ def en_severance():
 {table(['Input', 'Value'], [('Start date', date_en(E['join'])), ('Leaving date', date_en(E['leave'])), ('Days of service', c(E['serviceDays'])), ('Base pay a month', wn(E['monthlyBase'])), ('Other allowances a month', wn(E['monthlyAllowance'])), ('Bonus for the year', wn(E['annualBonus'])), ('Unused-leave pay', f'{wn(E["leaveUnit"])} × {E["leaveDays"]} days')], cls='')}
 <p>The leaving date is the day after the last working day. The three months before {date_en(E['leave'])} run from {date_en(sv['periodStart'])} to {date_en(sv['periodEnd'])}, which is {sv['periodDays']} days. Depending on the months involved it is between {SV['periodDaysMin']} and {SV['periodDaysMax']}.</p>
 <p class="calc">A: ({wn(E['monthlyBase'])} + {wn(E['monthlyAllowance'])}) × 3 = {wn(E['wages3m'])}<br>B: {wn(E['annualBonus'])} × 3/12 = {wn(E['bonusPart'])}<br>C: {wn(E['leaveUnit'])} × {E['leaveDays']} × 3/12 = {wn(E['leavePart'])}<br>A + B + C = {wn(sv['total'])}<br>{wn(sv['total'])} ÷ {sv['periodDays']} = <b>{wn(sv['avg']['won'])}.{sv['avg']['jeon']}</b> a day<br>{wn(sv['avg']['won'])}.{sv['avg']['jeon']} × {SV['payDays']} × {c(sv['serviceDays'])} ÷ {SV['daysPerYear']} = <b>{wn(sv['amount'])}</b></p>
-<p>The ministry’s worked example states the average daily wage and stops there. The final {wn(sv['amount'])} is what this site’s calculator returns for the same inputs, rounded to the nearest won as the ministry’s calculator does.</p>
+<p>The ministry’s worked example states the average daily wage and stops there. The final {wn(sv['amount'])} is what Takehome Korea’s calculator returns for the same inputs, rounded to the nearest won as the ministry’s calculator does.</p>
 <h2>Things to know</h2>
 <ul>
 <li>The result is before tax. Retirement income tax is calculated separately and is not covered here.</li>
 <li>Severance pay must be paid within {SV['payWithinDays']} days of leaving, unless both sides agree to extend ({src('sevLaw9', 'en')}).</li>
 <li>Company rules can make the actual amount differ, as the ministry’s calculator itself notes.</li>
-<li>This site counts the last three months the way the ministry’s calculator does: from the same calendar day three months earlier, from the last day of that month if that day does not exist, and from 1 March when that month is February (leaving on {date_en(F['threeMonthsEx']['leave'])} gives {F['threeMonthsEx']['days']} days from {date_en(F['threeMonthsEx']['start'])}).</li>
+<li>Takehome Korea counts the last three months the way the ministry’s calculator does: from the same calendar day three months earlier, from the last day of that month if that day does not exist, and from 1 March when that month is February (leaving on {date_en(F['threeMonthsEx']['leave'])} gives {F['threeMonthsEx']['days']} days from {date_en(F['threeMonthsEx']['start'])}).</li>
 </ul>'''
     return dict(slug='severance-pay-korea', short='Severance pay in Korea', h1='Severance pay in Korea: who qualifies and how it is calculated',
                 title='Severance pay in Korea: who qualifies and the formula | Takehome Korea',
@@ -332,7 +332,7 @@ def en_minwage():
 {table(['Hours a week', 'Paid holiday hours', 'Allowance a week', 'Weekly pay with allowance'], rows, cls='wide')}
 <p>The weekly holiday also applies to workplaces with {L['minWorkers'] - 1} or fewer workers.</p>
 <h2>Checking a monthly salary against the minimum wage</h2>
-<p>Divide the monthly pay by the hours per month. {wn(F['m2h']['monthly'])} a month for a {FULL}-hour week is {wn(F['m2h']['monthly'])} ÷ {MH} = {wn(F['m2h']['hourly'])} an hour. This is a simple comparison on base pay, the wage fixed and paid every month. Which allowances and bonuses count toward the minimum wage is a separate question that this site does not judge.</p>'''
+<p>Divide the monthly pay by the hours per month. {wn(F['m2h']['monthly'])} a month for a {FULL}-hour week is {wn(F['m2h']['monthly'])} ÷ {MH} = {wn(F['m2h']['hourly'])} an hour. This is a simple comparison on base pay, the wage fixed and paid every month. Which allowances and bonuses count toward the minimum wage is a separate question that Takehome Korea does not judge.</p>'''
     return dict(slug='minimum-wage-weekly-holiday-allowance', short=f'Minimum wage {Y0} and {Y1}, weekly holiday allowance', h1=f'Korea minimum wage {Y0} and {Y1}, and the weekly holiday allowance',
                 title=f'Korea minimum wage {Y0} and {Y1}, weekly holiday allowance | Takehome Korea',
                 desc=f'Korea’s minimum wage is {wn(mw0["hourly"])} an hour in {Y0} and {wn(mw1["hourly"])} in {Y1}. Why the monthly figure uses {MH} hours, and how the weekly holiday allowance is worked out for part-time hours.',

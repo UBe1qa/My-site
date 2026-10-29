@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDF to Markdown for AI Chats: When It Saves Tokens and When It Doesn’t | Inplace</title>
+<meta name="description" content="Many AI services read each PDF page as text plus an image. Converting to Markdown drops the page images. What OpenAI, Anthropic and Google document, what we measured, and when to keep the PDF.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/convert/pdf-markdown-ai-token/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="PDF to Markdown for AI Chats: When It Saves Tokens and When It Doesn’t | Inplace">
+<meta property="og:description" content="Many AI services read each PDF page as text plus an image. Converting to Markdown drops the page images. What OpenAI, Anthropic and Google document, what we measured, and when to keep the PDF.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Turn a PDF into Markdown before giving it to an AI", "description": "Many AI services read each PDF page as text plus an image. Converting to Markdown drops the page images. What OpenAI, Anthropic and Google document, what we measured, and when to keep the PDF.", "inLanguage": "en", "datePublished": "2026-10-07", "dateModified": "2026-10-07", "mainEntityOfPage": "https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Inplace", "url": "https://convert.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Inplace", "item": "https://lumenlab.page/en/guides/#convert"}, {"@type": "ListItem", "position": 3, "name": "Turn a PDF into Markdown before giving it to an AI", "item": "https://lumenlab.page/en/guides/convert/pdf-to-markdown-for-ai/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/convert/pdf-markdown-ai-token/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#convert">Inplace</a></nav>
+<article class="gd__doc" style="--tc:#e0a800;--tcp:62%">
+  <header class="gd__head">
+    <h1 class="gd__title">Turn a PDF into Markdown before giving it to an AI</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-07">Oct 7, 2026</time></p>
+    <a class="gd__tool" href="https://convert.lumenlab.page/"><img src="/img/convert.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Inplace</b><span>Image, video and PDF converter</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>When you give a PDF to an AI chat or agent, many services use every page twice: they read the extracted text, and they also look at an image of the page so they can follow charts and layout. If the PDF is mostly words, you can skip the second part by converting it to Markdown first and pasting the text instead, whether you use ChatGPT, Claude, Gemini or another tool. Markdown is plain text, so every AI can read it. How many tokens that saves depends on how the service counts a PDF, and with some it saves nothing.</p>
+<h2>How AI services count a PDF</h2>
+<p>Three providers publish how their APIs handle PDFs. The chat apps built on them may work differently and mostly don’t say.</p>
+<div class="tbl"><table><thead><tr><th>API</th><th>What each page becomes</th><th>Cost per page</th></tr></thead><tbody><tr><td>OpenAI (GPT-4o and later)</td><td>Extracted text and a page image</td><td>Not given as one number; the docs say page images “can increase token usage”</td></tr><tr><td>Anthropic Claude</td><td>Extracted text and a page image</td><td>Text about 1,500–3,000 tokens, plus the image (an A4 page at most about 1,551 tokens, or about 4,756 on Claude 4.7 and later, by the image formula)</td></tr><tr><td>Google Gemini</td><td>Page read with vision; on Gemini 3 the PDF’s own text is not charged</td><td>Gemini 3: about 560 tokens by default (280 low, 1,120 high resolution). Earlier models: 258 tokens</td></tr></tbody></table></div>
+<p>So converting helps most where text and page images are both counted. Anthropic gives one measured example, for Amazon Bedrock: a 3-page PDF used about 1,000 tokens with text extraction only and about 7,000 tokens with full visual understanding. On the Gemini API it can go the other way, because a dense page of pasted text can cost more than the 258 to 560 tokens a page costs there.</p>
+<h2>What we measured</h2>
+<p>We ran four public or self-made PDFs through <a href="https://convert.lumenlab.page/pdf-to-markdown/">PDF to Markdown</a> with the default settings and counted what came out. We didn’t send them to any AI, so there are no measured token counts here. The last column uses Anthropic’s published image formula, the one service with a formula, to show the most the page images could have cost there.</p>
+<div class="tbl"><table><thead><tr><th>PDF</th><th>Pages · size</th><th>Markdown</th><th>Claude page images, at most</th></tr></thead><tbody><tr><td>Research paper, single column (Attention Is All You Need)</td><td>15 · 2.2 MB</td><td>39,909 characters (40 KB), 6 tables</td><td>about 22,000 tokens, or 71,000 on Claude 4.7+</td></tr><tr><td>Research paper, two columns (Deep Residual Learning, ResNet)</td><td>12 · 819 KB</td><td>62,294 characters (63 KB)</td><td>about 18,000 tokens, or 57,000 on Claude 4.7+</td></tr><tr><td>Tax form (IRS Form W-4, 2026)</td><td>5 · 209 KB</td><td>27,926 characters (28 KB), 12 tables</td><td>about 7,500 tokens, or 24,000 on Claude 4.7+</td></tr><tr><td>Korean guide saved as PDF</td><td>3 · 123 KB</td><td>3,179 characters (5.7 KB), 4 tables</td><td>about 4,700 tokens, or 14,000 on Claude 4.7+</td></tr></tbody></table></div>
+<p>The paper’s Markdown is under 2% of the PDF’s file size, but no AI service charges by file size; the point is that all the text is there in a much smaller package. A page with little text saves the most in proportion where page images are charged, because its image costs as much as a full page.</p>
+<h2>When converting helps</h2>
+<ul><li><strong>Text-heavy documents:</strong> reports, contracts, terms, papers, manuals, meeting notes.</li><li><strong>Long documents:</strong> the more pages, the more page images you avoid. Some apps already switch to text only for long files; claude.ai, for example, analyzes visuals only in PDFs of 100 pages or fewer.</li><li><strong>Long chats and agents:</strong> the document is part of every turn, so a smaller version keeps each request lighter.</li><li><strong>Tools that don’t take PDFs:</strong> plain text works anywhere, including local models and older APIs.</li></ul>
+<h2>When to keep the PDF</h2>
+<ul><li><strong>Charts, graphs and diagrams</strong> carry information the text doesn’t. Converting drops them.</li><li><strong>Scans and photos of pages</strong> have no text layer, so there is nothing to convert. The tool tells you which pages came out empty.</li><li><strong>Layout-heavy pages</strong> such as forms with checkboxes, slides, or tables with merged cells can come out shifted. Check the preview before you rely on a table.</li><li><strong>Services that bill a PDF page at a flat rate</strong>, such as the Gemini API, where the PDF can already be the cheaper option.</li></ul>
+<h2>How to do it</h2>
+<ol><li>Open <a href="https://convert.lumenlab.page/pdf-to-markdown/">PDF to Markdown</a> and drop in the PDF. It is read on your device; nothing is uploaded.</li><li>Leave the page markers on if you want to ask about specific pages, and leave repeated headers and footers removed.</li><li>Press <strong>Convert to Markdown</strong>, read the preview, then <strong>Copy text</strong> or download the .md file.</li><li>Paste it into your AI chat (or attach the .md file) and ask your question. If one chart matters, attach just that page as an image alongside the text.</li></ol>
+<h2>On the command line: MarkItDown</h2>
+<p>Microsoft’s free, open-source MarkItDown does the same job from a terminal and also handles Word, PowerPoint and Excel files. With Python installed, <code>pip install 'markitdown[all]'</code> installs it and <code>markitdown report.pdf -o report.md</code> converts a file. It is a good fit for converting many files at once; the page here needs no install and keeps headings, lists and tables from the page layout.</p>
+<h2>Sources</h2><ul><li><a href="https://developers.openai.com/api/docs/guides/pdf-files">OpenAI API docs: File inputs, PDF files (text and page images)</a></li><li><a href="https://platform.claude.com/docs/en/build-with-claude/pdf-support">Claude Docs: PDF support (per-page text and image costs, Bedrock example)</a></li><li><a href="https://platform.claude.com/docs/en/build-with-claude/vision">Claude Docs: Vision (image token formula and size limits)</a></li><li><a href="https://ai.google.dev/gemini-api/docs/document-processing">Gemini API docs: Document understanding (258 tokens per page, Gemini 3 native text not charged)</a></li><li><a href="https://ai.google.dev/gemini-api/docs/media-resolution">Gemini API docs: Media resolution (Gemini 3 PDF tokens per page)</a></li><li><a href="https://support.claude.com/en/articles/8241126-upload-files-to-claude">Claude Help Center: Upload files to Claude (100-page visual limit)</a></li><li><a href="https://github.com/microsoft/markitdown">Microsoft MarkItDown on GitHub</a></li><li><a href="https://arxiv.org/abs/1706.03762">Vaswani et al., Attention Is All You Need (arXiv 1706.03762), used as a test file</a></li><li><a href="https://arxiv.org/abs/1512.03385">He et al., Deep Residual Learning for Image Recognition (arXiv 1512.03385), used as a two-column test file</a></li><li><a href="https://www.irs.gov/forms-pubs/about-form-w-4">IRS: About Form W-4, used as a test file</a></li></ul>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#e0a800;--tcp:62%">
+  <h2 id="gd-more">More Inplace guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/convert/heic-vs-jpg/"><b>HEIC vs JPG: what&#x27;s the difference, and should you convert?</b><span>What HEIC is, why iPhones use it, where it doesn&#x27;t open, and three ways to get JPGs: the Most Compatible camera setting, automatic conversion on transfer, or converting files.</span></a></li><li><a href="/en/guides/convert/mp3-bitrate/"><b>128 vs 192 vs 320 kbps: which MP3 bitrate should you use?</b><span>MP3 size per minute at 128, 192, 256 and 320 kbps with the exact math, why 320 kbps is the ceiling, and why re-encoding a low-bitrate file at 320 adds nothing.</span></a></li><li><a href="/en/guides/convert/youtube-to-mp3-legal/"><b>Is it legal to convert YouTube videos to MP3?</b><span>What YouTube&#x27;s Terms of Service actually say about downloading, how copyright law differs from the Terms, and the ways YouTube does let you save audio and video.</span></a></li><li><a href="/en/guides/convert/compress-pdf-without-upload/"><b>How to compress a PDF without uploading it</b><span>Why scanned PDFs get so big, what PDF compression changes (image resolution and JPEG quality) and leaves alone (text), how to fit Gmail&#x27;s 25 MB limit, and when compressing won&#x27;t help.</span></a></li><li><a href="/en/guides/convert/remove-pdf-password/"><b>How to remove a password from a PDF</b><span>Take the open password or the printing and copying restrictions off a PDF you&#x27;re allowed to open, why a forgotten open password can&#x27;t be removed, and how to protect the file again.</span></a></li><li><a href="/en/guides/convert/reduce-video-size-for-email/"><b>How to make a video small enough to email</b><span>What decides a video’s file size (resolution, bitrate, length), the attachment limits in Gmail and Outlook, how to trim and compress a video to fit, and when sending a link works better.</span></a></li><li><a href="/en/guides/convert/webp-vs-jpg-vs-png/"><b>WebP vs JPG vs PNG: which image format to use</b><span>How JPG, PNG and WebP differ in compression, transparency and file size, which suits photos, screenshots and logos, where WebP can still cause trouble, and how to convert between them.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

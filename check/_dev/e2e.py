@@ -31,6 +31,8 @@ BASE = 'http://localhost:8444'
 SHOTS = sys.argv[1] if len(sys.argv) > 1 else None
 EXE = sorted(Path('/opt/pw-browsers').glob('chromium-*/chrome-linux/chrome'))
 PATHS = [u.text.replace('https://check.lumenlab.page', '') for u in ET.parse(ROOT / 'sitemap.xml').getroot().iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
+# 2026-10-29 가이드 목록·글은 sitemap 에서 빠졌다(루멘랩 홈으로 옮김). 만든 원본은 그대로라 글을 보는 시험은 전처럼 글 목록(_dev/articles.json) 차례로 고른다
+GUIDES = [pre + 'guide/' + s for pre, lang in (('/', 'en'), ('/ko/', 'ko')) for s in [''] + [a['slug'] + '/' for a in json.loads((ROOT / '_dev' / 'articles.json').read_text(encoding='utf-8')).get(lang, [])]]
 fails, passed, notes = [], 0, []
 OUTSIDE = []
 WAIT = 20000
@@ -959,7 +961,7 @@ def others(b):
     pg = page_of(c)
     worst = (9999, '')
     cta_worst = (9999, '')
-    for path in PATHS:
+    for path in PATHS + GUIDES:
         if path.rstrip('/').split('/')[-1] in ('about', 'privacy', 'guide'):
             continue
         go(pg, path + '?adpreview', 200)
@@ -983,7 +985,7 @@ def others(b):
         worst = min(worst, (r['hot'], path))
     notes.append(f'광고 자리와 도구 단추 사이 가장 가까운 곳 {worst[0]:.0f}px ({worst[1]})')
     notes.append(f'글의 테스트 열기 단추와 광고 자리 사이 가장 가까운 곳 {cta_worst[0]:.0f}px ({cta_worst[1]})')
-    go(pg, [x for x in PATHS if '/guide/' in x and not x.endswith('/guide/')][0] + '?adpreview', 300)
+    go(pg, [x for x in GUIDES if not x.endswith('/guide/')][0] + '?adpreview', 300)
     shot(pg, 'final3-article-adpreview', full=True)
     go(pg, '/mic-test/?adpreview', 300)
     shot(pg, 'final-adpreview', full=True)
@@ -997,7 +999,7 @@ def others(b):
     resp = pg.goto(BASE + '/_dev/build.py', wait_until='load')
     ok(resp.status == 404, '개발 파일(_dev)은 로컬 서버에서도 404')
     # 글·소개·방침
-    arts = [p_ for p_ in PATHS if '/guide/' in p_ and not p_.endswith('/guide/')]
+    arts = [p_ for p_ in GUIDES if not p_.endswith('/guide/')]
     if arts:
         en = [a for a in arts if not a.startswith('/ko/')][0]
         go(pg, en, 400); shot(pg, 'final-article-en-desktop', full=True)
@@ -1013,12 +1015,12 @@ def others(b):
     c = ctx_of(b, True, locale='ko-KR')
     pg = page_of(c)
     go(pg, '/ko/', 2600); shot(pg, 'final-home-ko-mobile')
-    arts_ko = [a for a in PATHS if a.startswith('/ko/guide/') and not a.endswith('/guide/')]
+    arts_ko = [a for a in GUIDES if a.startswith('/ko/guide/') and not a.endswith('/guide/')]
     if arts_ko:
         go(pg, arts_ko[0], 400); shot(pg, 'final-article-ko-mobile', full=True)
         over = pg.evaluate("[...document.querySelectorAll('.tbl')].filter(t => t.getBoundingClientRect().right > innerWidth + 1).length")
         ok(over == 0, '글(휴대폰): 표를 감싼 칸이 화면 밖으로 나가지 않음')
-    for a in [x for x in PATHS if '/guide/' in x and not x.endswith('/guide/')]:      # 표: 휴대폰 390에서도 모든 칸이 보인다(긴 글 표는 줄 카드)
+    for a in [x for x in GUIDES if not x.endswith('/guide/')]:      # 표: 휴대폰 390에서도 모든 칸이 보인다(긴 글 표는 줄 카드)
         go(pg, a, 200)
         r = pg.evaluate("({ cut: [...document.querySelectorAll('.tbl')].map(t => t.scrollWidth - t.clientWidth).filter(d => d > 1), cards: [...document.querySelectorAll('.tbl--cards td')].every(td => getComputedStyle(td).display === 'block'), th: [...document.querySelectorAll('.tbl td')].every(td => td.dataset.th) })")
         ok(not r['cut'] and r['cards'] and r['th'], f'{a}: 표(휴대폰) 넘침 {r["cut"]}, 줄 카드 {r["cards"]}, 칸 이름 {r["th"]}')

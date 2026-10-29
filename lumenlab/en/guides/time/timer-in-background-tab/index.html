@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why Online Timers Run Late in a Background Tab | Oneturn</title>
+<meta name="description" content="Why a web timer can ring up to a minute late in another tab or stop when a phone screen turns off, explained from Chrome&#x27;s documentation, and how to avoid it.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/time/timer-in-background-tab/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/time/timer-background/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/time/timer-in-background-tab/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/time/timer-in-background-tab/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Why Online Timers Run Late in a Background Tab | Oneturn">
+<meta property="og:description" content="Why a web timer can ring up to a minute late in another tab or stop when a phone screen turns off, explained from Chrome&#x27;s documentation, and how to avoid it.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/time/timer-in-background-tab/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Why online timers run late in a background tab", "description": "Why a web timer can ring up to a minute late in another tab or stop when a phone screen turns off, explained from Chrome's documentation, and how to avoid it.", "inLanguage": "en", "datePublished": "2026-10-14", "dateModified": "2026-10-14", "mainEntityOfPage": "https://lumenlab.page/en/guides/time/timer-in-background-tab/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Oneturn", "url": "https://time.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Oneturn", "item": "https://lumenlab.page/en/guides/#time"}, {"@type": "ListItem", "position": 3, "name": "Why online timers run late in a background tab", "item": "https://lumenlab.page/en/guides/time/timer-in-background-tab/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/time/timer-background/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#time">Oneturn</a></nav>
+<article class="gd__doc" style="--tc:#0d7068;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">Why online timers run late in a background tab</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-14">Oct 14, 2026</time></p>
+    <a class="gd__tool" href="https://time.lumenlab.page/"><img src="/img/time.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Oneturn</b><span>Timer, stopwatch and world clock</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p class="answer">Browsers slow down repeating timers in hidden tabs (Chrome can drop them to once a minute) and may freeze pages when a phone screen turns off. A web timer that subtracts one second at a time can then ring late or stop. Working from the end time and setting a single alarm for the moment it ends keeps it on time in a hidden tab, but no web timer can ring once the tab is closed or the device sleeps.</p>
+  <h2>Chrome's rules for timers in hidden tabs</h2>
+<p>Chrome's developer documentation describes three levels for page timers (setTimeout and setInterval) when a tab is hidden (2026-10-14):</p>
+<ul><li>If the page is visible, or has played sound in the last 30 seconds, timers are barely slowed. A silent audio track does not count.</li>
+<li>Otherwise timers are checked in batches <b>once per second</b>.</li>
+<li>If the page has been hidden for more than 5 minutes, the timer has been chained five or more times, and the page has been silent for 30 seconds, timers are checked only <b>once per minute</b> (since Chrome 88).</li></ul>
+<p>A countdown that re-arms itself every second falls into that last group. Its numbers jump a minute at a time and the end sound can be close to a minute late. The documentation does not give figures for Safari or Firefox, so they are not stated here.</p>
+<h2>Phones can pause the page completely</h2>
+<p>The same documentation explains that browsers "freeze" pages to save CPU and battery, and that JavaScript timers do not run while a page is frozen. This can happen when you switch apps or the screen turns off. How soon each browser freezes a page was not checked.</p>
+
+
+
+
+<h2>How to keep a web timer on time</h2>
+<ol><li><b>Work from the end time.</b> Recalculate "time left = end time − now" on every update, so a late redraw never shows a wrong number.</li>
+<li><b>Set one alarm for the end.</b> A single, unchained timer is not subject to the once-a-minute rule and fires within about a second in a hidden tab.</li>
+<li><b>Save the end time.</b> After a refresh the timer can carry on, or say how long ago it finished.</li>
+<li><b>Keep the phone screen on.</b> The Screen Wake Lock API works in Chrome 84, Safari 16.4, Safari on iOS 18.4 and Firefox 126 or later (MDN compatibility data).</li></ol>
+<p>The <a href="https://time.lumenlab.page/">Oneturn timer</a> does the first three, and the fourth is a switch under Screen and sound settings.</p>
+<h2>What still will not work</h2>
+<p>Once you close the tab, quit the browser or the computer sleeps, a web page cannot make a sound. For a wake-up alarm you cannot miss, use your phone's clock app.</p><div class="try"><p>Switch to another tab and see it ring on time.</p><a class="btn btn--lamp" href="https://time.lumenlab.page/">Open the timer</a></div><div class="src"><h2>Sources</h2><ul><li><a href="https://developer.chrome.com/blog/timer-throttling-in-chrome-88">Chrome for Developers: Heavy throttling of chained JS timers beginning in Chrome 88</a></li><li><a href="https://developer.chrome.com/docs/web-platform/page-lifecycle-api">Chrome for Developers: Page Lifecycle API</a></li><li><a href="https://github.com/mdn/browser-compat-data/blob/main/api/WakeLock.json">MDN browser-compat-data: WakeLock</a></li></ul></div>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#0d7068;--tcp:82%">
+  <h2 id="gd-more">More Oneturn guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/time/daylight-saving-time-2026/"><b>Daylight saving time 2026–2027: when clocks change and how time differences shift</b><span>When clocks change in 2026 and 2027 in the US, UK, EU, Australia and New Zealand, how the gaps between cities shift for a few weeks, and who stopped changing.</span></a></li><li><a href="/en/guides/time/lap-vs-split-time/"><b>Lap time vs split time on a stopwatch</b><span>Lap time is how long one lap took; split time is the total from the start to that point. How to read the same laps both ways and spot your fastest lap.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

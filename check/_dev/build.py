@@ -3,7 +3,9 @@
 
 - 화면 글자 = _dev/content.json(공통·첫 화면·도구 8개·소개·방침), 글 = _dev/articles.json.
 - 자판 그림은 assets/ck-keys.js 의 배열 표를 node로 읽어 SVG로 그려 첫 HTML에 넣는다(배포 때는 빌드 없음. 이 스크립트는 만들 때만 돈다).
-- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 화면·도구 8개·가이드 목록·글·소개·방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 화면·도구 8개·가이드 목록·글·소개·방침, 404.html, sitemap.xml.
+- 가이드 목록·글(guide/)은 2026-10-29부터 루멘랩 홈(lumenlab.page/guides/check/<주소>/)이 읽어 싣는 원본이다. 여기서는 만들기만 하고
+  sitemap 에 넣지 않으며 배포하지 않는다(.assetsignore). 옛 주소는 _redirects 가 홈으로 보내고, 한국어 가이드 RSS 도 홈이 낸다.
 - 글꼴: _dev/fonts.json(= _dev/font.py 가 만든 조각 글꼴의 파일 이름과 글자 범위)이 있으면 <head>에 preload 와 @font-face('CK Sans')를 넣는다.
   화면 글자를 고쳤으면 python3 check/_dev/font.py 를 다시 돌린다(끝에 이 스크립트도 돌린다). 빠진 글자는 check.py 가 알려 준다.
 - 만든 파일은 손으로 고치지 않는다. lastmod 는 UPDATED 에 실제로 고친 날만 적는다.
@@ -609,17 +611,17 @@ def sitemap(paths):
     return '\n'.join(out + ['</urlset>']) + '\n'
 
 
-def rss():
-    items = ''
-    for a in A['ko']:
-        link = f'{SITE}/ko/guide/{a["slug"]}/'
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link}</link><guid>{link}</guid><pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>'
-                  f'<description>{esc(a["desc"])}</description><content:encoded><![CDATA[{a["body_html"]}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>체크벤치 가이드</title><link>{SITE}/ko/</link><description>키보드·마이크·모니터 테스트 가이드</description><language>ko</language>
-{items}</channel></rss>
-'''
+# 2026-10-29 가이드를 루멘랩 홈으로 옮겼다: 모든 HTML 의 가이드 링크(<a href>)를 홈 주소로 바꾼다(글의 canonical·hreflang·JSON-LD 는 그대로. 홈 빌드가 읽는다)
+GUIDE_LINK = re.compile(r'(<a\b[^>]*?\shref=")(?:https://check\.lumenlab\.page)?/(ko/)?guide/([^"#]*)(#[^"]*)?"')
+
+
+def moved_guides(text):
+    """/ko/guide/<주소>/ → https://lumenlab.page/guides/check/<주소>/, /guide/<주소>/ → …/en/guides/check/<주소>/ (#조각은 그대로). 목록은 홈 가이드 모음의 이 사이트 칸(#check)."""
+    def rep(m):
+        home = 'https://lumenlab.page/' + ('' if m.group(2) else 'en/') + 'guides/'
+        slug = m.group(3)
+        return m.group(1) + (home + '#check' if slug in ('', 'index.html') else home + 'check/' + slug + (m.group(4) or '')) + '"'
+    return GUIDE_LINK.sub(rep, text)
 
 
 def screen_chars(files=None):
@@ -643,23 +645,24 @@ def screen_chars(files=None):
 def build():
     files, paths = {}, []
 
-    def add(lang, rel, text):
+    def add(lang, rel, text, index=True):
         files[(prefix(lang) + rel).lstrip('/') + 'index.html'] = text
-        paths.append(prefix(lang) + rel)
+        if index:
+            paths.append(prefix(lang) + rel)
 
     for lang in ('en', 'ko'):
         add(lang, '', home_page(lang))
         for k in TOOLS:
             add(lang, SLUG[k] + '/', tool_page(lang, k))
-        add(lang, 'guide/', guide_index(lang))
+        # 가이드 목록·글은 홈이 읽는 원본이라 만들기만 한다(sitemap 에 넣지 않는다)
+        add(lang, 'guide/', guide_index(lang), index=False)
         for a in A[lang]:
-            add(lang, f'guide/{a["slug"]}/', article_page(lang, a))
+            add(lang, f'guide/{a["slug"]}/', article_page(lang, a), index=False)
         add(lang, 'about/', about_page(lang))
         add(lang, 'privacy/', privacy_page(lang))
     files['404.html'] = not_found()
     files['sitemap.xml'] = sitemap(paths)
-    if A['ko']:
-        files['rss.xml'] = rss()
+    files = {f: moved_guides(t) if f.endswith('.html') else t for f, t in files.items()}
     return files, paths
 
 
@@ -674,7 +677,7 @@ def main():
         p.parent.mkdir(parents=True, exist_ok=True)
         if not p.exists() or p.read_text(encoding='utf-8') != t:
             p.write_text(t, encoding='utf-8')
-    print(f'built {len(paths)} pages')
+    print(f'built {len(paths)} pages + 가이드 {sum(1 for f in files if "guide/" in f)}쪽(sitemap 밖)')
 
 
 if __name__ == '__main__':

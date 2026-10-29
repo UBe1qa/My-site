@@ -16,8 +16,9 @@
 - `assets/app.js` 화면 연결. 페이지 언어는 `<html lang>`으로 정한다(저장값·브라우저 언어로 바꾸지 않음). 머리의 언어 버튼은 다른 언어 페이지로 가는 보통 링크(#해시 유지). 브라우저 언어가 페이지 언어와 다르면 위에 닫을 수 있는 작은 띠('English version →' / '한국어로 보기 →')만 띄우고 자동으로 넘기지 않는다.
 - `assets/ads-config.js` 애드센스 설정. **켜져 있다**: client(pub-9496167591465154)가 들어 있고 각 페이지 `<head>`의 adsbygoogle.js로 자동 광고가 돈다. 수동 광고 단위 번호(slots)만 비어 있다. 광고 자리 3곳(top, below-tool, bottom). localhost나 `?adpreview`면 점선 상자로 자리만 보여 줌(영어 페이지는 'Ad slot').
 - `guide/*/index.html`(가이드 글 6편), `guide/index.html`, `about/index.html`, `sitemap.xml` 은 `tools/build_guides.py` 가 만든다. 글은 그 파일 안에서 고치고 다시 돌린다. 글 속 예시 숫자는 tests/run.js '가이드:' 묶음이 검산한다(글을 고치면 시험도 같이).
-- `404.html`(한국어·영어 두 줄, `/`·`/en/` 링크, 광고 없음·noindex)과 `rss.xml`(한국어 가이드 글 본문 전체, 네이버 서치어드바이저 제출용. 영어 RSS는 없음)도 `tools/build_guides.py`가 만든다. sitemap은 영어 주소까지 넣는다. lastmod는 `LASTMOD`(한국어)·`build_en.UPDATED`(영어)에 실제로 고친 페이지·날짜만 적는다.
-- **한 명령으로 전부 다시 만든다**: `python3 tools/build_guides.py` (한국어 가이드·목록·소개·404·sitemap·rss + `build_en.py`의 영어판 전부). 영어 페이지에 `lang="ko"` 밖 한글이 있으면 빌드가 멈춘다.
+- **가이드 HTML(`guide/`·`en/guide/`)은 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/date/ 에 싣는 원본이다**(2026-10-29). 이 사이트는 가이드 주소·`/rss.xml`을 그리로 301한다(`worker.js`, `guide/`는 `.assetsignore`로 안 올림). 가이드를 고치면 이 도구를 다시 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
+- `404.html`(한국어·영어 두 줄, `/`·`/en/` 링크, 광고 없음·noindex)도 `tools/build_guides.py`가 만든다(`rss.xml`은 2026-10-29부터 안 만든다). sitemap은 영어 주소까지 넣고 가이드 주소는 뺀다. lastmod는 `LASTMOD`(한국어)·`build_en.UPDATED`(영어)에 실제로 고친 페이지·날짜만 적는다.
+- **한 명령으로 전부 다시 만든다**: `python3 tools/build_guides.py` (한국어 가이드·목록·소개·404·sitemap + `build_en.py`의 영어판 전부). 영어 페이지에 `lang="ko"` 밖 한글이 있으면 빌드가 멈춘다.
 - `worker.js` 예전 workers.dev 주소 → 새 주소 같은 경로로 301(`/en/…`도 그대로 넘어감). `wrangler.jsonc`의 `run_worker_first: ["/*", "!/assets/*"]`라 **새 주소의 페이지 조회도 하나하나 Worker 요청 1건으로 센다**(계정 전체 무료 한도 하루 10만 건, 넘으면 요청이 실패). 즉 예전 주소 넘기기의 값 = 페이지 조회마다 Worker 요청 1건. `/assets/` 파일은 Worker를 안 거친다.
 - 공유 사진 `og.png`(한국어)·`og-en.png`(영어) 1200×630: `python3 tools/og.py`가 `tools/og.html`을 찍는다. 사이트 CSS와 따로라 디자인을 바꿔도 다시 안 찍어도 된다. 머리말 태그는 index.html·build_guides.py·build_en.py에 있다(2026-10-06).
 - `privacy.html` 개인정보 처리방침(한·영, 제3자 쿠키·웹 비콘 문장과 구글 파트너 사이트 링크 포함 = 애드센스 게시자 정책). 두 칸에 `id="ko"`·`id="en"`, 영어 페이지는 `/privacy#en`으로 링크한다. `tools/` `tests/` `worker.js` 는 `.assetsignore`로 배포에서 뺌.
@@ -63,7 +64,7 @@
 - 광고 코드가 있는 실제 주소를 Playwright로 열 땐 `googlesyndication.com`·`doubleclick.net` 요청을 막는다(가짜 노출 = 무효 트래픽). **글롭 `**/*googlesyndication*`은 안 막힌다**(2026-10-06 발견) → `re.compile(r"googlesyndication|doubleclick|adservice|fundingchoices")`.
 
 ## 미완성
-- RSS(`https://date.lumenlab.page/rss.xml`) 네이버 서치어드바이저 제출은 사용자가 할 일(2026-10-05 만듦).
+- RSS(`https://date.lumenlab.page/rss.xml`) 네이버 서치어드바이저 제출은 사용자가 할 일(2026-10-05 만듦. 2026-10-29부터 lumenlab.page/guides/rss.xml로 301).
 - 애드센스: pub-9496167591465154, ads.txt는 메인(lumenlab 폴더)과 이 폴더 둘 다. 사이트 심사(lumenlab.page)는 2026-10-03 신청 대기. 수동 광고 단위 번호 아직 없음(자동 광고만).
 - 임시공휴일은 라이브러리 업데이트 후 표를 다시 만들어야 반영(예: 2026 제헌절 공휴일 재지정 여부 확인 필요). 미국 행정명령 휴무(예: 2025-12-24·26, EO 14371)는 법정 공휴일이 아니라 표에 없다.
 - 영어판(2026-10-05): 서치 콘솔에 sitemap 다시 제출·/en/ 색인 요청은 사용자가 할 일.

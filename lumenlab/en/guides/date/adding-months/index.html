@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adding months to a date: what happens to January 31 | Daycount</title>
+<meta name="description" content="January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/date/adding-months/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Adding months to a date: what happens to January 31 | Daycount">
+<meta property="og:description" content="January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/date/adding-months/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Adding months to a date: what happens to January 31", "description": "January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://lumenlab.page/en/guides/date/adding-months/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Daycount", "url": "https://date.lumenlab.page/en/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Daycount", "item": "https://lumenlab.page/en/guides/#date"}, {"@type": "ListItem", "position": 3, "name": "Adding months to a date: what happens to January 31", "item": "https://lumenlab.page/en/guides/date/adding-months/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#date">Daycount</a></nav>
+<article class="gd__doc" style="--tc:#c2512b;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">Adding months to a date: what happens to January 31</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-05">Oct 5, 2026</time></p>
+    <a class="gd__tool" href="https://date.lumenlab.page/en/"><img src="/img/daycount.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Daycount</b><span>Days between dates, age and business days</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>If the target month is too short, the date moves back to that month's last day. January 31, 2026 plus one month is <b>February 28, 2026</b>, and in a leap year it's February 29. Daycount works this way, and so do Python's dateutil library and the EDATE function in Microsoft's DAX formula language. JavaScript's built-in <code>Date</code> behaves differently, as shown further down.</p>
+
+<h2>Examples</h2>
+<div class="tbl"><table>
+<thead><tr><th>Start</th><th>Change</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Jan 31, 2026</td><td>+1 month</td><td>Feb 28, 2026</td></tr>
+<tr><td>Jan 31, 2028</td><td>+1 month</td><td>Feb 29, 2028</td></tr>
+<tr><td>Mar 31, 2026</td><td>+1 month</td><td>Apr 30, 2026</td></tr>
+<tr><td>Aug 31, 2026</td><td>+6 months</td><td>Feb 28, 2027</td></tr>
+<tr><td>Feb 29, 2028</td><td>+12 months</td><td>Feb 28, 2029</td></tr>
+<tr><td>Mar 31, 2026</td><td>−1 month</td><td>Feb 28, 2026</td></tr>
+</tbody>
+</table></div>
+<p>Days 1 to 28 exist in every month, so they never move.</p>
+
+<h2>Adding one month twice isn't adding two months</h2>
+<p>Once a date has been pulled back to the 28th, it stays there. January 31 plus one month is February 28, and February 28 plus one month is March 28. But January 31 plus two months is March 31. For anything that repeats monthly, like a bill, a subscription or a payment plan, work out each date from the original start date rather than from the previous due date.</p>
+<div class="tbl"><table>
+<thead><tr><th>Payment</th><th>Jan 31, 2026 + n months</th><th>Previous date + 1 month</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Feb 28</td><td>Feb 28</td></tr>
+<tr><td>2</td><td>Mar 31</td><td>Mar 28</td></tr>
+<tr><td>3</td><td>Apr 30</td><td>Apr 28</td></tr>
+<tr><td>4</td><td>May 31</td><td>May 28</td></tr>
+<tr><td>5</td><td>Jun 30</td><td>Jun 28</td></tr>
+</tbody>
+</table></div>
+<p>Going backwards has the same catch. March 31 minus one month is February 28, and adding the month back gives March 28, not March 31.</p>
+
+<h2>One month isn't 30 days</h2>
+<p>Thirty days after January 31, 2026 is March 2. One month after it is February 28. When a contract says "30 days", put 30 in the Days field of the <a href="https://date.lumenlab.page/en/#add">date calculator</a>; when it says "one month", use the Months field. Mixing them up can move the date by up to two days.</p>
+
+<h2>Counting the months between two dates</h2>
+<p>The same rule decides how many months lie between two dates. Daycount treats a month as complete when the date reaches the same day of the month, or the last day of a shorter month. That makes January 28, 29, 30 and 31, 2026 all exactly one month before February 28, 2026. <a href="/en/guides/date/exact-age/">Exact age in years, months and days</a> is counted the same way.</p>
+
+<h2>How other tools handle it</h2>
+<ul>
+<li><b>Python (dateutil)</b>: its documentation says that if the result falls after the last day of the month, the last day is used, and shows January 31, 2003 plus one month as February 28, 2003.</li>
+<li><b>Power BI (DAX)</b>: Microsoft documents that <code>EDATE("2009-01-31", 1)</code> returns February 28, 2009.</li>
+<li><b>JavaScript</b>: <code>setMonth</code> on a <code>Date</code> carries the extra days into the next month. Starting from January 31, 2026 and setting the month to February gives <b>March 3, 2026</b>. MDN's documentation shows the same effect, with January 31, 2016 becoming March 2, 2016.</li>
+</ul>
+<p>When two systems disagree by a few days around the end of a month, this difference is the usual reason.</p>
+    <p class="cta"><a class="btn btn--lamp" href="https://date.lumenlab.page/en/#add">Add or subtract months from a date →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://dateutil.readthedocs.io/en/stable/relativedelta.html">dateutil documentation: relativedelta</a></li><li><a href="https://learn.microsoft.com/en-us/dax/edate-function-dax">Microsoft Learn: EDATE function (DAX)</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setMonth">MDN Web Docs: Date.prototype.setMonth()</a></li></ul>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#c2512b;--tcp:82%">
+  <h2 id="gd-more">More Daycount guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/date/days-between-dates/"><b>How to count the days between two dates (and when to add 1)</b><span>Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.</span></a></li><li><a href="/en/guides/date/business-days/"><b>How to count business days and find a deadline</b><span>A business day is a weekday that isn&#x27;t a holiday. How to find the date 5 or 10 business days away, whether today counts, and which US holidays are skipped.</span></a></li><li><a href="/en/guides/date/federal-holidays-observed/"><b>US federal holidays on a weekend: which day is observed</b><span>A federal holiday on a Saturday is observed the Friday before; on a Sunday, the Monday after. Observed dates for 2026 to 2028, including New Year&#x27;s Day 2028 on Dec 31, 2027.</span></a></li><li><a href="/en/guides/date/exact-age/"><b>How to calculate your exact age in years, months and days</b><span>Count whole years to the last birthday, then whole months, then the days left. A worked example, birthdays at the end of a month, February 29 birthdays and age in days.</span></a></li><li><a href="/en/guides/date/iso-week-numbers/"><b>ISO week numbers: why January 1 can be in week 53</b><span>ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

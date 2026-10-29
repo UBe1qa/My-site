@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""공학용 계산기 페이지 만들기: 한국어(/)와 영어(/en/) HTML, sitemap.xml, rss.xml 을 이 폴더에 쓴다.
+"""공학용 계산기 페이지 만들기: 한국어(/)와 영어(/en/) HTML, sitemap.xml 을 이 폴더에 쓴다.
 
 쓰는 법: python3 tools/build.py   (sci-calc 폴더 안에서든 밖에서든)
 글 내용은 tools/articles.py, 모드 페이지 설명은 tools/content.py 에 있다. 이 파일은 틀(머리·꼬리·계산기 판)만.
+가이드 글 HTML(guide/·en/guide/)은 lumenlab.page/guides/calc/ 에 싣는 원본이다(2026-10-29부터 lumenlab/_dev/build_home.py 가 읽는다. 이 사이트는 배포하지 않고 sitemap 에도 넣지 않는다).
 """
 import datetime
 import html
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -60,8 +62,6 @@ def head(lang, path, title, desc, *, alt=True, ads=True, jsonld=(), noindex=Fals
                 '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
                 '<meta property="og:image:alt" content="%s">' % T(lang, '공학용 계산기: 분수·루트가 교과서처럼 보이는 무료 계산기', 'Scientific Calculator: fractions and roots shown like a textbook'),
                 '<meta name="twitter:card" content="summary_large_image">']
-        if lang == 'ko':
-            out.append('<link rel="alternate" type="application/rss+xml" title="공학용 계산기 가이드" href="%s/rss.xml">' % SITE)
     out += ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
             '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
             '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>',
@@ -502,10 +502,24 @@ def not_found():
 
 
 # ------------------------------------------------------------------ 쓰기
+# 2026-10-29 가이드 글을 lumenlab.page/guides/calc/ 로 옮겼다(이 사이트의 /guide/… 는 _redirects 가 301): 만드는 HTML 의 가이드 링크를 새 주소로 바꿔 쓴다
+GUIDE_HREF = re.compile(r'href="(/en)?/guide(?:/([^"#]*))?(#[^"]*)?"')
+
+
+def root_guides(text):
+    """목록 /guide/ → https://lumenlab.page/guides/#calc, 글 /guide/<slug>/#조각 → https://lumenlab.page/guides/calc/<slug>/#조각 (영어는 /en/guides/…)"""
+    def to(m):
+        en, slug, frag = m.group(1) or '', m.group(2) or '', m.group(3) or ''
+        return ('href="https://lumenlab.page%s/guides/calc/%s%s"' % (en, slug, frag)) if slug else ('href="https://lumenlab.page%s/guides/#calc"' % en)
+    return GUIDE_HREF.sub(to, text)
+
+
 def write(path, text):
     full = os.path.join(ROOT, path.lstrip('/'))
     if full.endswith('/'):
         full += 'index.html'
+    if full.endswith('.html'):
+        text = root_guides(text)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, 'w', encoding='utf-8') as f:
         f.write(text)
@@ -527,28 +541,14 @@ def main():
         for p, k in (('/about/', 'about'), ('/privacy/', 'privacy')):
             write(url(lang, p), simple_page(lang, p, k)); pages.append((url(lang, p), content.UPDATED[k]))
     write('/404.html', not_found())
-    # sitemap: 실제로 고친 날을 lastmod 로
+    # sitemap: 실제로 고친 날을 lastmod 로. 가이드(/guide/…)는 lumenlab.page/guides/calc/ 로 옮겨 넣지 않는다
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for p, d in pages:
-        sm.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>' % (SITE, p, d))
+        if '/guide/' not in p:
+            sm.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>' % (SITE, p, d))
     sm.append('</urlset>')
     write('/sitemap.xml', '\n'.join(sm) + '\n')
-    # RSS: 한국어 글만, 본문 전체
-    items = []
-    for a in sorted(articles.list_for('ko'), key=lambda a: a['date'], reverse=True):
-        link = SITE + '/guide/%s/' % a['slug']
-        d = datetime.date.fromisoformat(a['date'])
-        pub = datetime.datetime(d.year, d.month, d.day, 9, 0).strftime('%a, %d %b %Y %H:%M:%S +0900')
-        full = '<p>%s</p>%s' % (a['answer'], articles.render_body(a, 'ko', url, absolute=SITE))
-        items.append('<item><title>%s</title><link>%s</link><guid isPermaLink="true">%s</guid><pubDate>%s</pubDate>'
-                     '<description>%s</description><content:encoded><![CDATA[%s]]></content:encoded></item>'
-                     % (esc(strip(a['title'])), link, link, pub, esc(a['desc']), full))
-    rss = ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" '
-           'xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>공학용 계산기 가이드</title><link>%s/guide/</link>'
-           '<atom:link href="%s/rss.xml" rel="self" type="application/rss+xml"/>'
-           '<description>공학용 계산기를 쓰다 헷갈리는 것들을 예시와 함께 풀어요.</description><language>ko</language>%s</channel></rss>\n'
-           % (SITE, SITE, ''.join(items)))
-    write('/rss.xml', rss)
+    # rss.xml 은 만들지 않는다: 가이드 RSS 는 2026-10-29부터 lumenlab.page/guides/rss.xml (예전 /rss.xml 은 _redirects 가 301)
     # 글의 예시 계산을 테스트가 확인하도록 꺼내 둔다
     cases = []
     for lang in ('ko', 'en'):

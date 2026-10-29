@@ -9,3 +9,4 @@ wrangler.jsonc
 .DS_Store
 *.py
 __pycache__
+guide/

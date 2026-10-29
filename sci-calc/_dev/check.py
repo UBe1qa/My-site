@@ -32,9 +32,12 @@ for p, h in pages.items():
         elif ('hreflang="%s" href="%s"' % (lang, SITE + p)) not in pages[op]: err(p + ' hreflang 짝이 되돌아오지 않음')
         if alts.get('x-default', '').startswith(SITE + '/en/') is False: err(p + ' x-default 가 영어판 아님')
     if 'adsbygoogle.js' not in h: err(p + ' 광고 코드 없음')
+    # 가이드는 2026-10-29 lumenlab.page/guides/calc/ 로 옮겼다: 이 사이트의 /guide/ 로 링크하지 않고, RSS 링크도 없다
+    if re.search(r'href="(/en)?/guide[/"#]', h): err(p + ' 옮긴 가이드 주소(/guide/)로 링크')
+    if 'application/rss+xml' in h: err(p + ' RSS 링크가 남아 있음')
     for m in re.finditer(r'href="(/[^"#?]*)', h):
         u = m.group(1)
-        if u.startswith('/assets/') or u in ('/favicon.ico', '/favicon.svg', '/apple-touch-icon.png', '/rss.xml'):
+        if u.startswith('/assets/') or u in ('/favicon.ico', '/favicon.svg', '/apple-touch-icon.png'):
             if not os.path.exists(os.path.join(ROOT, u.lstrip('/').split('?')[0])): err(p + ' 없는 파일 ' + u)
             continue
         if u not in pages: err(p + ' 내부 링크 깨짐 ' + u)
@@ -49,11 +52,14 @@ for p in ('/privacy/', '/en/privacy/'):
 sm = ET.parse(os.path.join(ROOT, 'sitemap.xml')).getroot()
 ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
 locs = [u.find('s:loc', ns).text for u in sm.findall('s:url', ns)]
-if sorted(l[len(SITE):] for l in locs) != sorted(pages): err('sitemap 과 페이지 목록이 다름')
-# RSS 는 한국어 글만
-rss = open(os.path.join(ROOT, 'rss.xml'), encoding='utf-8').read()
-if '/en/' in re.sub(r'<content:encoded>.*?</content:encoded>', '', rss, flags=re.S): err('RSS 에 영어 글')
-ET.fromstring(rss.encode('utf-8'))
+# sitemap = 가이드를 뺀 페이지 전부(가이드 HTML 은 lumenlab.page 가 읽는 원본으로 계속 만들지만 여기 싣지 않는다)
+if sorted(l[len(SITE):] for l in locs) != sorted(p for p in pages if '/guide/' not in p): err('sitemap 과 페이지 목록(가이드 뺀)이 다름')
+if any('/guide/' in l for l in locs): err('sitemap 에 옮긴 가이드 주소')
+# 첫 화면의 가이드 목록은 lumenlab.page/guides/calc/ 로
+for p, pre in (('/', ''), ('/en/', '/en')):
+    if 'href="https://lumenlab.page%s/guides/calc/' % pre not in pages[p]: err(p + ' 가이드 목록이 lumenlab.page%s/guides/calc/ 로 안 감' % pre)
+# RSS 는 lumenlab.page/guides/rss.xml 이 낸다(예전 /rss.xml 은 _redirects 가 301)
+if os.path.exists(os.path.join(ROOT, 'rss.xml')): err('rss.xml 이 남아 있음')
 for f in ('robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'ads.txt', 'favicon.svg'):
     if not os.path.exists(os.path.join(ROOT, f)): err(f + ' 없음')
 if bad:

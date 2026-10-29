@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Is an Online Wheel Spinner Really Random? | Pickboard</title>
+<meta name="description" content="Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/pick/is-wheel-spinner-random/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Is an Online Wheel Spinner Really Random? | Pickboard">
+<meta property="og:description" content="Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/pick/is-wheel-spinner-random/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Is an online wheel spinner really random?", "description": "Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://lumenlab.page/en/guides/pick/is-wheel-spinner-random/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Pickboard", "url": "https://pick.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Pickboard", "item": "https://lumenlab.page/en/guides/#pick"}, {"@type": "ListItem", "position": 3, "name": "Is an online wheel spinner really random?", "item": "https://lumenlab.page/en/guides/pick/is-wheel-spinner-random/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#pick">Pickboard</a></nav>
+<article class="gd__doc" style="--tc:#e23a3f;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">Is an online wheel spinner really random?</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-10">Oct 10, 2026</time></p>
+    <a class="gd__tool" href="https://pick.lumenlab.page/"><img src="/img/pick.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Pickboard</b><span>Wheel, ladder and team picker</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>It depends on three things: where the wheel gets its random numbers, how it turns a number into a slot, and whether the spinning animation decides the result or only shows it. You can ask these questions of any wheel. Below is how the Pickboard <a href="https://pick.lumenlab.page/">wheel</a> answers each one.</p>
+
+<h2>1. Where the randomness comes from</h2>
+<p>Browsers offer two sources. <code>Math.random()</code> is fast and fine for animations, but MDN states that it does not provide cryptographically secure random numbers (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random">MDN: Math.random()</a>, checked 2026-10-10). The other is <code>crypto.getRandomValues()</code>, which MDN describes as giving cryptographically strong random values. MDN adds that browsers do not use a truly random generator for it, but a pseudo-random one seeded with enough entropy (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues">MDN: Crypto.getRandomValues()</a>, checked 2026-10-10). So we do not describe this wheel as “truly random”.</p>
+<p>Pickboard asks <code>crypto.getRandomValues()</code> for a fresh 32-byte seed on every spin and never calls <code>Math.random()</code>. The seed starts a deterministic calculation, xoshiro256**, that supplies the numbers for that one spin. Its authors, David Blackman and Sebastiano Vigna, present it as an all-purpose generator and state that it is not a cryptographically secure one (<a href="https://prng.di.unimi.it/">prng.di.unimi.it</a>, checked 2026-10-10). That suits its job here: it is not there to keep secrets, only to rebuild the same result from the same seed. Our code is tested against ten published reference outputs of xoshiro256**.</p>
+
+<h2>2. How a number becomes a slot</h2>
+<p>A common shortcut is to take a large random number and keep the remainder after dividing by the number of slots. Unless the number of slots divides the range evenly, some slots end up very slightly more likely than others.</p>
+<p>Pickboard avoids that. For a wheel with n slots it reads only as many random bits as n needs, and if the value is n or more it throws the value away and reads again. Every slot gets exactly the same chance. Our tests feed the picker every possible bit pattern for wheels of 2 to 256 slots and confirm that each slot comes out exactly once.</p>
+
+<h2>3. Whether the spin decides anything</h2>
+<p>Some wheels simulate a spin with a random speed and read the result from wherever the wheel stops. That ties fairness to animation timing. Pickboard works the other way round: the winner is chosen first, then the wheel is turned by exactly the angle that brings that slot under the pointer. The animation is only a display. Our tests check, for wheels of 1 to 5,000 slots, that the stopping angle always puts the chosen slot under the pointer.</p>
+<p>The spin also runs to the end with the list as it was when you pressed Spin. The list is locked while the wheel turns, so the highlighted slot, the name shown and the result link cannot drift apart.</p>
+
+<h2>What we measured</h2>
+<p>For wheels with 2, 8, 30 and 500 slots, the tests run at least 100,000 spins each, every spin with its own seed as on the site, and count how often each slot wins. A chi-square test compares the counts with an even split. All four pass at the 0.1% level. The same test is also pointed at a deliberately biased picker to confirm that it catches bias when there is some.</p>
+
+<h2>What random does not promise</h2>
+<ul>
+<li><strong>No memory.</strong> With 8 names, the name that just won has the same 1 in 8 chance on the next spin. Use Remove and spin again if a winner should not come up twice.</li>
+<li><strong>Streaks happen.</strong> A fair wheel will sometimes favour one side of a list for a while. Over many spins the counts even out.</li>
+<li><strong>Duplicates count.</strong> A name entered twice has two slots. That is visible on the wheel and is the only kind of weighting there is.</li>
+</ul>
+
+<h2>Can it be rigged?</h2>
+<p>There is no setting, hidden or otherwise, that makes a chosen name come up. After a spin you can copy a result link that holds the list and the seed; anyone who opens it gets the same winner recalculated. The pick works from the names in a fixed sorted order, so rearranging the names inside a link does not change who wins.</p>
+<p>A link has limits. It does not show how many times someone spun before sharing, and it cannot show that the list is the one everybody agreed on unless that list was posted first. For anything that matters, post the list, agree on a single spin in advance, or spin where everyone can watch.</p>
+
+  <div class="try"><p>Try it with your own list</p><a class="btn btn--lamp" href="https://pick.lumenlab.page/">Spin the Wheel</a></div>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#e23a3f;--tcp:82%">
+  <h2 id="gd-more">More Pickboard guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/pick/pick-winners-without-repeats/"><b>How to pick winners from a list without repeats</b><span>A short, checkable way to draw several winners from a list: clean the list, draw once, keep alternates, and share a link that replays the result.</span></a></li><li><a href="/en/guides/pick/ladder-lottery-fairness/"><b>Ladder lottery (Ghost Leg): how it works and how fair it is</b><span>A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

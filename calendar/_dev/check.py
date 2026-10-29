@@ -15,6 +15,12 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://calendar.lumenlab.page'
 SKIP = {'_dev', 'tests', 'assets', 'files'}
 fails, passes = [], 0
+# 가이드는 2026-10-29 lumenlab.page/guides/calendar/ 로 옮겼다: 가이드 HTML 은 계속 만들어 여기서도 보지만(루트가 읽는 원본) sitemap·rss 에는 없고 링크는 새 주소로
+GUIDE_URL = re.compile(r'https://lumenlab\.page/(en/)?guides/(?:calendar/([^/#?]+)/)?(#.*)?')
+
+
+def is_guide(url):
+    return url.startswith(('/guide/', '/ko/guide/'))
 
 
 def check(cond, msg):
@@ -118,7 +124,8 @@ def main():
         pages[url] = d
     sitemap = re.findall(r'<loc>(.*?)</loc>', (ROOT / 'sitemap.xml').read_text(encoding='utf-8'))
     check(len(pages) == 60, f'페이지 수 60이어야 함: {len(pages)}')
-    check(sorted(sitemap) == sorted(SITE + u for u in pages), 'sitemap 주소 = 페이지 주소')
+    check(sorted(sitemap) == sorted(SITE + u for u in pages if not is_guide(u)), 'sitemap 주소 = 페이지 주소(가이드 빼고)')
+    check(not any('/guide' in u for u in sitemap), 'sitemap 에 가이드 주소가 있음')
 
     titles, descs = {}, {}
     for url, d in pages.items():
@@ -141,6 +148,12 @@ def main():
         for h in d.links:
             if h.startswith(('http', 'mailto:')):
                 check(not h.startswith(SITE), f'{url} 내부 링크는 경로로: {h}')
+                if h.startswith('https://lumenlab.page/') and '/guides' in h:   # 가이드 = 루트의 새 주소: 목록은 #calendar, 글은 그 언어에 있는 글
+                    m = GUIDE_URL.fullmatch(h)
+                    target = m and m.group(2) and pages.get(('/guide/' if m.group(1) else '/ko/guide/') + m.group(2) + '/')
+                    check(m and (target or (not m.group(2) and m.group(3) == '#calendar')), f'{url} 가이드 링크가 없는 글·목록 {h}')
+                    if target and m.group(3):
+                        check(m.group(3)[1:] in target.ids, f'{url} 가이드 링크의 없는 #해시 {h}')
                 continue
             path, _, frag = h.partition('#')
             path = path.partition('?')[0]
@@ -151,6 +164,7 @@ def main():
                 check((ROOT / path.lstrip('/')).exists(), f'{url} 없는 파일 {path}')
                 continue
             check(path in pages, f'{url} 깨진 내부 링크 {h}')
+            check(not is_guide(path), f'{url} 옛 가이드 주소 링크 {h}')
             check('.html' not in path, f'{url} .html 링크 {h}')
             if frag:
                 check(path in pages and frag in pages[path].ids, f'{url} 없는 #해시 {h}')
@@ -234,13 +248,23 @@ def main():
     nf = (ROOT / '404.html').read_text(encoding='utf-8')
     check('adsbygoogle' not in nf and 'noindex' in nf, '404: 광고 없음, noindex')
     # 꼭 있어야 하는 파일
-    for f in ('ads.txt', 'robots.txt', 'googlea614029e84d58498.html', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png', 'rss.xml',
-              'wrangler.jsonc', '.assetsignore', '.deploy-actions', 'assets/ads-config.js'):
+    for f in ('ads.txt', 'robots.txt', 'googlea614029e84d58498.html', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png',
+              'wrangler.jsonc', '.assetsignore', '.deploy-actions', '_redirects', 'assets/ads-config.js'):
         check((ROOT / f).exists(), f'파일 없음: {f}')
     check((ROOT / 'ads.txt').read_text().strip() == 'google.com, pub-9496167591465154, DIRECT, f08c47fec0942fa0', 'ads.txt 내용')
     check(f'Sitemap: {SITE}/sitemap.xml' in (ROOT / 'robots.txt').read_text(), 'robots.txt Sitemap 줄')
-    rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
-    check(rss.count('<item>') == sum(1 for u in pages if u.startswith('/ko/guide/') and u != '/ko/guide/'), 'rss = 한국어 글 수')
+    # rss: 2026-10-29부터 한국어 글 RSS 는 루트가 낸다(lumenlab.page/guides/rss.xml). 여기에는 파일도, 머리의 rss 링크도 없다
+    check(not (ROOT / 'rss.xml').exists(), 'rss.xml 이 남아 있음(루트가 낸다)')
+    check(not any('application/rss+xml' in d.raw for d in pages.values()), '머리에 rss 링크가 남아 있음')
+    # 옛 가이드 주소 → 루트. 가이드 HTML 은 올리지 않고(.assetsignore), Worker 가 먼저 돌지 않아야 _redirects 가 먹는다. 위에서부터 먼저 맞는 줄이 이기므로 목록·rss 줄이 /* 줄보다 위
+    check('guide/' in (ROOT / '.assetsignore').read_text().split(), '.assetsignore 에 guide/')
+    w = (ROOT / 'wrangler.jsonc').read_text()
+    check('run_worker_first' not in w and '"main"' not in w, 'wrangler.jsonc: Worker 가 먼저 돌면 _redirects 가 안 먹는다')
+    red = [ln.split() for ln in (ROOT / '_redirects').read_text(encoding='utf-8').splitlines() if ln.strip() and not ln.startswith('#')]
+    K, E = 'https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/'
+    want = ([[s, K + '#calendar', '301'] for s in ('/ko/guide/', '/ko/guide', '/ko/guide/index.html')] + [[s, E + '#calendar', '301'] for s in ('/guide/', '/guide', '/guide/index.html')]
+            + [['/rss.xml', K + 'rss.xml', '301'], ['/ko/guide/*', K + 'calendar/:splat', '301'], ['/guide/*', E + 'calendar/:splat', '301']])
+    check([r for r in red if r in want] == want, f'_redirects 가이드 줄(순서까지) {red}')
     pdfs = sorted((ROOT / 'files').glob('*.pdf'))
     check(len(pdfs) == 27 and len(list((ROOT / 'files').glob('*.xlsx'))) == 3, '받는 파일 PDF 27 + 엑셀 3')
     for f in pdfs:   # 문서 정보에 만든 프로그램 이름(HeadlessChrome·Skia)이 남지 않고 사이트 이름과 제목이 들어 있다

@@ -149,7 +149,7 @@ ARTICLES = {
         dict(slug='a4-han-jang-inswae', pair='print-calendar-on-one-page', title='달력을 A4 한 장에 맞게 인쇄하는 법',
              desc='달력이 두 장으로 나뉘거나 한쪽이 잘릴 때 볼 인쇄 설정이에요. 용지 크기, 배율, 여백, 머리글과 바닥글, 가로세로를 차례로 짚어요.',
              lead='가장 확실한 방법은 PDF로 받아서 인쇄하는 거예요. 브라우저에서 바로 인쇄할 때는 용지 크기와 배율 두 가지만 보면 대부분 해결돼요.',
-             body='''<h2>이 사이트에서 인쇄할 때</h2>
+             body='''<h2>한장달력에서 인쇄할 때</h2>
 <p>인쇄 단추를 누르면 고른 용지(A4 또는 Letter)와 방향(가로·세로)을 인쇄 창에 넘겨요. 브라우저에 따라 인쇄 창에서 용지 크기를 다시 골라야 할 수 있어요. 달력 한 장만 인쇄되고 머리글, 메뉴, 광고는 인쇄되지 않아요.</p>
 <h2>한 장에 안 맞을 때 볼 곳 (크롬 기준)</h2>
 <p>크롬 인쇄 창에서 ‘설정 더보기’를 펼치면 아래 항목이 나와요. 브라우저와 버전에 따라 이름이 조금 달라요.</p>
@@ -181,7 +181,7 @@ ARTICLES = {
 <p>윤달이 든 해는 음력 한 해가 383일이나 384일로 길어져요. 그래서 2025년 추석은 10월 6일로 늦었고, 2028년 추석도 10월 3일이에요.</p>
 <h2>윤달은 어떻게 정하나요</h2>
 <p>음력 달은 달이 해와 같은 방향에 오는 날(합삭)에 시작해요. 24절기 가운데 한 달에 하나씩 드는 열두 절기를 중기라고 하는데, 중기가 들지 않는 달이 생기면 그 달을 앞 달의 윤달로 삼아요. 이렇게 하면 19년에 일곱 번쯤 윤달이 들어가요.</p>
-<p>이 사이트의 음력 표는 한국천문연구원 자료를 따른 표예요. 같은 규칙을 천문 계산으로 따로 돌려 1912년부터 2049년까지 모든 달의 시작일이 표와 같은지 맞춰 봤고, 2025~2028년은 천문연구원이 낸 달력자료와 직접 대조했어요.</p>
+<p>한장달력의 음력 표는 한국천문연구원 자료를 따른 표예요. 같은 규칙을 천문 계산으로 따로 돌려 1912년부터 2049년까지 모든 달의 시작일이 표와 같은지 맞춰 봤고, 2025~2028년은 천문연구원이 낸 달력자료와 직접 대조했어요.</p>
 <p><a class="btn btn-main cta" href="{P}lunar/">양력·음력 바꿔 보기</a></p>
 <h2>설날과 추석은 양력으로 언제인가요</h2>
 <table><thead><tr><th>해</th><th>설날 (음력 1월 1일)</th><th>추석 (음력 8월 15일)</th></tr></thead><tbody>
@@ -197,7 +197,7 @@ ARTICLES = {
         dict(slug='print-calendar-on-one-page', pair='a4-han-jang-inswae', title='How to Print a Calendar on One Page (Letter vs A4)',
              desc='Why a calendar spills onto a second page or gets cut off, and the print settings that fix it: paper size, scale, margins, headers and footers.',
              lead='The surest way is to download the PDF and print that. If you print straight from the browser, two settings solve most problems: paper size and scale.',
-             body='''<h2>Printing from this site</h2>
+             body='''<h2>Printing from Onesheet</h2>
 <p>When you press Print, the paper size (Letter or A4) and orientation you picked are passed to the print dialog. Some browsers still ask you to choose the paper size there. Only the calendar sheet is printed. The page header, menus and ads are left out.</p>
 <h2>What to check when it does not fit (Chrome)</h2>
 <p>In Chrome’s print dialog, open “More settings”. The names vary a little between browsers and versions.</p>
@@ -262,7 +262,7 @@ ARTICLES = {
 <p><a class="btn btn-main cta" href="{P}?wk=1">Make a calendar with week numbers</a></p>
 <h2>Which one to use</h2>
 <p>Use ISO week numbers when you share schedules across countries or with software that says “ISO week”. Use the US style when your calendar starts on Sunday and you want week 1 to begin with January 1. What matters is that everyone reading the calendar uses the same rule.</p>
-<h2>On this site</h2>
+<h2>In Onesheet</h2>
 <p>Turn on “Week numbers” under “Change settings”. A Monday-start calendar is numbered by ISO 8601 and a Sunday-start calendar by the US style, so the numbers always match the rows you see.</p>''',
              sources=[]),
         dict(slug='south-korea-public-holidays-2027', title='South Korea Public Holidays in 2027 (in English)',

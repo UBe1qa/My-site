@@ -2,8 +2,10 @@
 """인플레이스(convert.lumenlab.page) 페이지 전부 만들기: python3 convert/_dev/build.py
 
 - 도구 목록·설정 = 아래 TOOLS, 글 = _dev/content.json(도구·첫 페이지·소개) + _dev/articles.json(가이드 글).
-- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 25개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml, rss.xml(한국어 글),
+- 만드는 것: 영어 / , 한국어 /ko/ 의 첫 페이지·도구 25개·가이드·소개·방침·오픈소스 고지, 404, sitemap.xml,
   assets/tools.js(화면 코드가 쓰는 도구 목록). 만든 파일은 손으로 고치지 않는다.
+- 가이드 HTML 은 루트 빌드(lumenlab/_dev/build_home.py)가 읽어 lumenlab.page/guides/convert/ 로 내는 원본이다(2026-10-29).
+  이 사이트에는 올리지 않고(.assetsignore) 옛 주소는 _redirects 가 301 로 보낸다. 그래서 sitemap 에 넣지 않고 rss.xml 도 만들지 않는다.
 - lastmod는 UPDATED에 실제로 고친 날만 적는다.
 """
 import json, html, re, os, sys
@@ -470,7 +472,20 @@ def not_found():
 
 
 # ---------------- 쓰기 ----------------
+GUIDE_HOME = {'ko': 'https://lumenlab.page/guides/', 'en': 'https://lumenlab.page/en/guides/'}
+
+
+def guide_links(text):
+    # 2026-10-29 가이드는 lumenlab.page/guides/convert/<slug>/(영어 /en/guides/…)로 옮겼다: /guide/·/ko/guide/ 링크를 새 주소로(목록은 #convert, 글의 #조각은 그대로)
+    def to(m):
+        root, slug, frag = GUIDE_HOME['ko' if m.group(1) else 'en'], m.group(2) or '', m.group(3) or ''
+        return f'href="{root}#convert"' if slug in ('', 'index.html') else f'href="{root}convert/{slug}{frag}"'
+    return re.sub(r'href="/(ko/)?guide(?:/([^"#]*))?(#[^"]*)?"', to, text)
+
+
 def write(rel, text):
+    if rel.endswith('.html'):
+        text = guide_links(text)
     p = ROOT / rel
     p.parent.mkdir(parents=True, exist_ok=True)
     old = p.read_text(encoding='utf-8') if p.exists() else None
@@ -498,20 +513,6 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in ARTICLES.get('ko', []):
-        link = f'{SITE}/ko/guide/{a["slug"]}/'
-        items += (f'<item><title>{esc(a["title"])}</title><link>{link}</link><guid>{link}</guid>'
-                  f'<pubDate>Tue, 06 Oct 2026 00:00:00 GMT</pubDate><description>{esc(a["desc"])}</description>'
-                  f'<content:encoded><![CDATA[{a["body_html"]}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>인플레이스 가이드</title><link>{SITE}/ko/</link><description>파일 형식과 변환 가이드</description><language>ko</language>
-{items}</channel></rss>
-'''
-
-
 def main():
     paths = []
     for lang in ('en', 'ko'):
@@ -527,9 +528,8 @@ def main():
         write(f'{p.lstrip("/")}licenses/index.html', licenses_page(lang)); paths.append(f'{p}licenses/')
     write('404.html', not_found())
     write('assets/tools.js', tools_js())
-    write('sitemap.xml', sitemap(paths))
-    if ARTICLES.get('ko'):
-        write('rss.xml', rss())
+    # 가이드 주소는 이 사이트가 301 로 넘기므로 sitemap 에 넣지 않는다(한국어 글 RSS 도 루트가 lumenlab.page/guides/rss.xml 로 낸다)
+    write('sitemap.xml', sitemap([x for x in paths if not x.startswith(('/guide/', '/ko/guide/'))]))
     print(f'built {len(paths)} pages')
 
 

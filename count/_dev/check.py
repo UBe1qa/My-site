@@ -20,6 +20,12 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://count.lumenlab.page'
 NO_ADS = ('/about/', '/privacy/', '/licenses/', '/guide/', '/ko/about/', '/ko/privacy/', '/ko/licenses/', '/ko/guide/')
 fails, passed = [], 0
+# 가이드는 2026-10-29 lumenlab.page/guides/count/ 로 옮겼다: 가이드 HTML 은 계속 만들어 여기서도 보지만(루트가 읽는 원본) sitemap·rss 에는 없고 링크는 새 주소로
+GUIDE_URL = re.compile(r'https://lumenlab\.page/(en/)?guides/(?:count/([^/#?]+)/)?(#.*)?')
+
+
+def is_guide(path):
+    return path.startswith(('/guide/', '/ko/guide/'))
 
 
 def ok(cond, msg):
@@ -121,16 +127,19 @@ def main():
     sm = [u.text for u in ET.parse(ROOT / 'sitemap.xml').getroot().iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
     paths = [u[len(SITE):] for u in sm]
     ok(len(paths) == len(set(paths)), 'sitemap에 같은 주소가 두 번')
+    ok(not any('/guide' in p for p in paths), 'sitemap 에 가이드 주소가 있음')
+    arts = json.loads((ROOT / '_dev' / 'articles.json').read_text(encoding='utf-8'))
+    guides = ['/guide/', '/ko/guide/'] + [('/ko/' if lang == 'ko' else '/') + f'guide/{a["slug"]}/' for lang in ('en', 'ko') for a in arts[lang]]
     docs = {}
-    for p in paths:
+    for p in paths + guides:
         f = ROOT / p.lstrip('/') / 'index.html'
-        ok(f.exists(), f'sitemap 주소에 파일이 없음: {p}')
+        ok(f.exists(), f'sitemap 주소·가이드 글에 파일이 없음: {p}')
         if f.exists():
             docs[p] = Doc(f.read_text(encoding='utf-8'))
     built = {'/' + str(f.parent.relative_to(ROOT)).replace('.', '').strip('/') + ('/' if str(f.parent.relative_to(ROOT)) != '.' else '')
              for f in ROOT.rglob('index.html') if '_dev' not in f.parts}
     built = {b if b != '//' else '/' for b in built}
-    ok(built == set(paths), f'sitemap과 만든 페이지가 다름: {sorted(built ^ set(paths))}')
+    ok(built == set(paths) | set(guides), f'sitemap(+가이드)과 만든 페이지가 다름: {sorted(built ^ (set(paths) | set(guides)))}')
 
     titles, descs = {}, {}
     for p, d in docs.items():
@@ -152,10 +161,21 @@ def main():
                 path, _, frag = h.partition('#')
                 ok('.html' not in path, f'{p}: .html 링크 {h}')
                 ok(path in docs, f'{p}: 깨진 내부 링크 {h}')
+                ok(not is_guide(path), f'{p}: 옛 가이드 주소 링크 {h}')
                 if frag and path in docs:
                     ok(frag in docs[path].ids, f'{p}: 없는 #해시 {h}')
                 if not ko and path.startswith('/ko/'):
                     ok(lang == 'ko', f'{p}: 한국어 페이지로 가는 링크에 lang="ko" 없음 {h}')
+            elif h.startswith('https://lumenlab.page/') and '/guides' in h:
+                # 가이드 = 루트의 새 주소: 목록은 #count, 글은 그 언어에 실제로 있는 글(#해시는 그 글에 있는 id)
+                m = GUIDE_URL.fullmatch(h)
+                gl = 'en' if m and m.group(1) else 'ko'
+                target = m and m.group(2) and docs.get(('/guide/' if gl == 'en' else '/ko/guide/') + m.group(2) + '/')
+                ok(m and (target or (not m.group(2) and m.group(3) == '#count')), f'{p}: 가이드 링크가 없는 글·목록 {h}')
+                if target and m.group(3):
+                    ok(m.group(3)[1:] in target.ids, f'{p}: 가이드 링크의 없는 #해시 {h}')
+                if not ko and gl == 'ko':
+                    ok(lang == 'ko', f'{p}: 한국어 가이드로 가는 링크에 lang="ko" 없음 {h}')
         # hreflang
         if d.alts:
             ok(set(d.alts) == {'en', 'ko', 'x-default'}, f'{p}: hreflang 묶음 {sorted(d.alts)}')
@@ -217,10 +237,20 @@ def main():
     ok((ROOT / 'ads.txt').read_text().strip() == 'google.com, pub-9496167591465154, DIRECT, f08c47fec0942fa0', 'ads.txt')
     ok((ROOT / 'googlea614029e84d58498.html').read_text().strip() == 'google-site-verification: googlea614029e84d58498.html', '구글 확인 파일')
     ok('Sitemap: https://count.lumenlab.page/sitemap.xml' in (ROOT / 'robots.txt').read_text(), 'robots.txt Sitemap 줄')
-    for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', 'rss.xml'):
+    for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', '_redirects'):
         ok((ROOT / f).exists(), f'{f} 없음')
-    rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
-    ok(rss.count('<item>') == sum(1 for p in paths if p.startswith('/ko/guide/') and p != '/ko/guide/'), 'rss.xml 글 수 = 한국어 글 수')
+    # rss: 2026-10-29부터 한국어 글 RSS 는 루트가 낸다(lumenlab.page/guides/rss.xml). 여기에는 파일도, 머리의 rss 링크도 없다
+    ok(not (ROOT / 'rss.xml').exists(), 'rss.xml 이 남아 있음(루트가 낸다)')
+    ok(not any('application/rss+xml' in (ROOT / p.lstrip('/') / 'index.html').read_text(encoding='utf-8') for p in docs), '머리에 rss 링크가 남아 있음')
+    # 옛 가이드 주소 → 루트. 가이드 HTML 은 올리지 않고(.assetsignore), Worker 가 먼저 돌지 않아야 _redirects 가 먹는다. 위에서부터 먼저 맞는 줄이 이기므로 목록·rss 줄이 /* 줄보다 위
+    ok('guide/' in (ROOT / '.assetsignore').read_text().split(), '.assetsignore 에 guide/ 없음')
+    w = (ROOT / 'wrangler.jsonc').read_text()
+    ok('run_worker_first' not in w and '"main"' not in w, 'wrangler.jsonc: Worker 가 먼저 돌면 _redirects 가 안 먹는다')
+    red = [ln.split() for ln in (ROOT / '_redirects').read_text(encoding='utf-8').splitlines() if ln.strip() and not ln.startswith('#')]
+    K, E = 'https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/'
+    want = ([[s, K + '#count', '301'] for s in ('/ko/guide/', '/ko/guide', '/ko/guide/index.html')] + [[s, E + '#count', '301'] for s in ('/guide/', '/guide', '/guide/index.html')]
+            + [['/rss.xml', K + 'rss.xml', '301'], ['/ko/guide/*', K + 'count/:splat', '301'], ['/guide/*', E + 'count/:splat', '301']])
+    ok([r for r in red if r in want] == want, f'_redirects 가이드 줄(순서까지) {red}')
     for junk in ('node_modules', '__pycache__', '.wrangler'):
         ok(not list(ROOT.rglob(junk)), f'폴더 안에 {junk}가 남아 있음')
     # ── 확인된 사실(_dev/limits.json): 확인된 것만, 출처 링크와 확인한 날을 화면에 같이 ──

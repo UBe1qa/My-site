@@ -4,6 +4,7 @@
 - 주소: https://salary.lumenlab.page (Worker `salary`, workers.dev 끔). **한국어 `/`, 영어 `/en/`**(한국에서 일하는 외국인용. 계산 기준은 둘 다 한국). hreflang의 x-default는 영어.
 - 계산기: 한국어 = 실수령액(`/`), 연봉 표(`/table/`), 퇴직금(`/severance/`), 시급·주휴수당(`/hourly/`), 실업급여(`/unemployment/`), 연차(`/annual-leave/`). 영어 = `/en/`, `/en/table/`, `/en/severance/`, `/en/hourly/`.
 - 가이드 글: 한국어 6편, 영어 3편(번역이 아니라 따로 고른 주제. 퇴직금 글 한 쌍만 hreflang으로 잇는다). 소개(계산 기준 전체 표)·방침은 두 언어.
+- **가이드 HTML(`guide/`·`en/guide/`)은 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/salary/ 에 싣는 원본이다**(2026-10-29). 이 사이트는 가이드 주소·`/rss.xml`을 그리로 301한다(`_redirects`, `guide/`는 `.assetsignore`로 안 올림). 글을 고치면 이 도구를 다시 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
 - 돈·법 주제다. **숫자는 공식 출처에서 확인한 것만** 넣는다. 값마다 출처·시행일·확인한 날을 `assets/pay-data.js`에 같이 둔다.
 - 2026-10-10 제3자 평가(높음 1·중간 4·낮음 17)를 3단계에서 반영했다. 무엇을 왜 바꿨는지는 구조 문서(`context/knowledge/4-내-사이트/salary-사이트-구조.md`)에 있다.
 
@@ -18,7 +19,7 @@
 - `assets/pay-view.js` **결과(명세서)를 HTML 글자로 그리는 곳**(`PayView(PAY, 'ko'|'en')`). DOM을 모른다. 같은 함수를 빌드(예시 결과를 첫 HTML에 미리 넣음)와 브라우저(값이 바뀔 때)가 같이 쓴다 → 처음 그림과 스크립트가 붙은 뒤의 그림이 같아 화면이 밀리지 않는다. 화면 글자(두 언어)와 예시 값(`EXAMPLE`·`STEP`·`UB_EX`)도 여기 있다. **금액 칸은 전부 `field(글자, 칸 이름)` 하나로 읽는다**(읽은 값 한 줄, 칸 옆 단위, 오류·알림).
 - `assets/app.js` 화면 연결(입력 읽기, 조건 칸, 연봉 ↔ 월급 바꾸기, 앞뒤 금액, 휴대폰 붙박이 줄, 연출 셋, 다른 언어 안내 띠, 표에서 내 줄 찾기, 입력 유지, `aria-invalid`). 페이지 언어는 `<html lang>`으로만 정한다.
 - `assets/style.css` 모양(토큰은 `:root`. 3단계에서 더한 것은 파일 끝), `assets/fonts/tk-<언어>-<지문>.woff2` 화면 글자만 담은 글꼴 조각(자동 생성: `_dev/font.py`)과 `OFL.txt`, `assets/ads-config.js` 광고 설정. `_headers` = 글꼴 조각을 오래 저장하라는 Cloudflare 설정.
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html을 만든다**(`--check`는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html을 만든다**(`--check`는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
   - `_dev/calc.mjs` 빌드가 쓰는 계산값(JSON): 자료 파일 + 로직으로 구한 예시·표·글 숫자 + 미리 그린 명세서(지금 기준과, 해가 바뀐 뒤에 끼울 다음 기준). `_dev/ctx.py`가 이걸 읽어 `D`(자료)·`F`(계산값)·`G`(간이세액표)로 내준다. 원문 인용(`Q`)과 출처의 영어 이름(`SRC_EN`), 출처 링크(`src`·`srcs`. 새 탭으로 연다)도 ctx.py에 있다.
   - `_dev/texts.py` 페이지 제목·설명·입력칸 이름, 첫 화면 아래 칸(계산 기준, 출처 표), 소개, 방침. `_dev/articles.py` 가이드 글.
   - **texts.py·articles.py에 금액·요율·날짜를 손으로 적지 않는다.** 전부 `D`·`F`·`G`에서 꺼낸다(check.py가 손으로 적은 숫자를 찾는다). 법령·공단 문장은 `Q`(원문 그대로)만 인용한다.
@@ -31,7 +32,7 @@
 - 페이지 다시 만들기: `python3 -B salary/_dev/build.py` (node가 있어야 한다. calc.mjs를 돌린다)
 - 로직 시험만: `node salary/tests/run.mjs` · 일부러 틀리게 바꿔 보기: `node salary/tests/mutate.mjs`(전부 '잡힘'이어야 한다) · 페이지 숫자: `node salary/tests/site.mjs`
 - 화면 확인을 묶음만: 서버를 띄우고 `SEC=2,3 python3 -B salary/_dev/e2e.py`(1 모든 페이지 · 2 실수령액(한국어) · 3 영어·해가 바뀐 뒤·휴대폰 · 4 퇴직금 · 5 시급 · 6 실업급여·연차 · 7 연봉 표 · 8 글·광고 자리·인쇄·동작 줄이기·연출 · 9 제3자 평가에서 고친 것·글꼴)
-- 로컬 보기: `node salary/_dev/serve.mjs` → http://localhost:8446 (폴더 → index.html, 없는 주소 → 404.html, `_dev`·`tests`·`_headers` 막음)
+- 로컬 보기: `node salary/_dev/serve.mjs` → http://localhost:8446 (폴더 → index.html, 없는 주소 → 404.html, `_dev`·`tests`·`_headers`·`_redirects` 막음)
 - 조회표 다시 만들기 / 최신인지: `python3 -B salary/_dev/gen_gani.py` / `… --check` · 표 전체를 주석 식으로 다시 계산해 보기: `python3 -B salary/tests/gani_formula_check.py`
 - 기준값 다시 만들기: `python3 -B salary/tests/gen_dates.py`(퇴직 전 3개월·재직일수, 고용노동부 계산기의 날짜 규칙) · `python3 -B salary/tests/gen_ub.py`(구직급여, 분수 계산)
 - 글꼴 조각: `python3 -B salary/_dev/font.py`(fonttools·brotli 필요. 원본은 `TK_FONT_SRC`로 주거나 jsDelivr에서 받는다). **글을 고쳐 새 글자가 생기면 check.py가 알려 준다 → 다시 돌린다.**

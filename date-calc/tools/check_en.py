@@ -8,6 +8,7 @@
 - 사이트 안 링크·#해시가 실제 파일·id로 이어지고, 영어 페이지는 lang="ko" 표시 없이 한국어 페이지로 링크하지 않는다
 - 광고: 영어 계산기 = 한국어 계산기와 같은 광고 코드·자리, 404엔 광고 코드 없음 + noindex
 - sitemap: 영어 주소가 다 있고, 모든 주소가 실제 파일로 이어진다
+- 가이드는 2026-10-29 lumenlab.page/guides/date/ 로 옮겼다: 어느 페이지도 이 사이트의 /guide/·/en/guide/ 로 링크하지 않고, sitemap에 가이드 주소가 없고, rss.xml이 없다
 """
 import html, json, os, re, sys
 from html.parser import HTMLParser
@@ -15,7 +16,7 @@ from urllib.parse import urljoin, urlsplit
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_en  # noqa: E402
-from build_guides import AD_HEAD, BASE, ROOT  # noqa: E402
+from build_guides import AD_HEAD, BASE, ROOT, root_guides  # noqa: E402
 
 bad = []
 
@@ -148,7 +149,7 @@ for rel, want in generated.items():
     full = os.path.join(ROOT, rel)
     if not os.path.isfile(full):
         fail(f"{rel} 없음 → python3 tools/build_guides.py")
-    elif rd(rel) != want:
+    elif rd(rel) != root_guides(want):  # write()가 가이드 링크를 lumenlab.page 주소로 바꿔 쓴다
         fail(f"{rel} 가 낡음(index.html·i18n.js·build_en.py가 바뀜) → python3 tools/build_guides.py")
 on_disk = {os.path.relpath(os.path.join(d, f), ROOT) for d, _, fs in os.walk(os.path.join(ROOT, "en")) for f in fs}
 for extra in sorted(on_disk - set(generated)):
@@ -244,6 +245,9 @@ for rel in EN_PAGES + KO_PAGES:
         u = urlsplit(urljoin("https://date.lumenlab.page" + path, href))
         if u.netloc != "date.lumenlab.page" or u.scheme not in ("http", "https"):
             continue
+        if tag == "a" and not href.startswith("#") and re.match(r"(/en)?/guide(/|$)", u.path):
+            fail(f"{rel}: 옮긴 가이드 주소로 링크 {href} (lumenlab.page/guides/date/ 로 가야 함)")
+            continue
         target = file_for(u.path)
         if target is None:
             fail(f"{rel}: 없는 주소로 링크 {href}")
@@ -274,8 +278,12 @@ for u in build_en.urls():
 for loc in locs:
     if not loc.startswith(BASE) or file_for(loc[len(BASE):]) is None:
         fail(f"sitemap 주소가 파일로 안 이어짐: {loc}")
+    if re.match(r"(/en)?/guide(/|$)", loc[len(BASE):]):
+        fail(f"sitemap에 옮긴 가이드 주소: {loc}")
 if len(set(locs)) != len(locs):
     fail("sitemap에 같은 주소가 두 번")
+if os.path.exists(os.path.join(ROOT, "rss.xml")):
+    fail("rss.xml이 남아 있음(가이드 RSS는 lumenlab.page/guides/rss.xml, /rss.xml은 worker.js가 301)")
 
 print(("✗ 영어판 검사 %d개 문제" % len(bad)) if bad else "✅ 영어판 검사 통과 (영어 %d쪽, 한국어 %d쪽, sitemap %d개)" % (len(EN_PAGES), len(KO_PAGES), len(locs)))
 sys.exit(1 if bad else 0)

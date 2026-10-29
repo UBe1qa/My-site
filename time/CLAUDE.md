@@ -6,8 +6,9 @@
 - 설계·결정·남은 일: My-site-private `context/knowledge/4-내-사이트/time-사이트-구조.md`.
 
 ## 폴더
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html을 만든다**: `python3 time/_dev/build.py` (`--check`는 낡았는지만). 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html을 만든다**: `python3 time/_dev/build.py` (`--check`는 낡았는지만). 만든 파일은 손으로 고치지 않는다.
   - 화면 글 = `_dev/content.py`(UI·PAGES·FACTS·FAQ·소개·방침), 글 = `_dev/articles.py`(시차 표는 파이썬 zoneinfo로 계산해 넣는다), 공식 사실 = `_dev/facts.json`(값·출처·확인한 날·확인 못 한 것).
+  - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 2026-10-29부터 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 시계판 SVG는 build.py `dial_svg()`가 첫 HTML에 미리 그리고(화면 밀림 0), app.js `drawFace()`가 같은 기하로 다시 그린다. 둘을 같이 고친다(반지름: 테두리 198·판 186·눈금 178/171/164·숫자 145·띠 126~100·가운데 96).
 - `assets/core.js` 시간 로직(DOM 모름): 숫자 칸 읽기, 시계판 한 바퀴 단위(`scaleFor`·`faceLabels`), 판 돌리기(`dragMinutes`), 타이머·스톱워치 상태, 알람 다음 시각, 시간대(`offset`·`parts`·`fromLocal`·`nextChange`·`meeting`), **`OT.PATCH`(2026년 캐나다 세 주·모로코 규칙. 브라우저 tz 자료가 낡아도 맞게)**.
 - `assets/tz.js` 도시 목록(id·IANA 시간대·영어·한국어·나라·찾기 별칭). `assets/app.js` 화면 연결. `assets/style.css` 모양(토큰 `:root`, 어둡게 `[data-theme=dark]`).

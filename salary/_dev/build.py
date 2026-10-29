@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """떼고얼마 / Takehome Korea(salary.lumenlab.page) 페이지 전부 만들기: python3 salary/_dev/build.py   (--check 는 낡았는지만 본다)
 
-- 만드는 것: 한국어 / , 영어 /en/ 의 계산기·연봉 표·가이드·소개·방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 만드는 것: 한국어 / , 영어 /en/ 의 계산기·연봉 표·가이드·소개·방침, 404.html, sitemap.xml.
+- 가이드 글 HTML(guide/·en/guide/)은 lumenlab.page/guides/salary/ 에 싣는 원본이다(2026-10-29부터 lumenlab/_dev/build_home.py 가 읽는다). 이 사이트는 배포하지 않고(.assetsignore) sitemap 에도 넣지 않는다.
 - 화면·글의 숫자는 전부 `node _dev/calc.mjs`(자료 파일 + 계산 로직)가 낸 값이다(ctx.py). 이 파일과 texts.py·articles.py 에 금액·요율을 손으로 적지 않는다.
 - 결과 칸의 첫 모습(예시)은 화면 코드(assets/pay-view.js)가 빌드 때 미리 그린 것이다. 브라우저가 같은 함수로 다시 그리므로 화면이 밀리지 않는다.
 - 글꼴: _dev/fonts.json(= _dev/font.py 가 만든 조각 글꼴의 파일 이름과 글자 범위)대로 <head> 에 preload 와 @font-face(TK Sans)를 넣는다.
@@ -9,9 +10,8 @@
 - 만든 파일은 손으로 고치지 않는다. lastmod 는 UPDATED 에 실제로 고친 날만 적는다.
 """
 import json
+import re
 import sys
-from email.utils import format_datetime
-from datetime import datetime, timezone
 
 sys.dont_write_bytecode = True
 from ctx import *  # noqa: E402,F401,F403
@@ -518,7 +518,21 @@ def not_found():
 
 
 # ───────── 쓰기 ─────────
+# 2026-10-29 가이드 글을 lumenlab.page/guides/salary/ 로 옮겼다(이 사이트의 /guide/… 는 _redirects 가 301): 만드는 HTML 의 가이드 링크를 새 주소로 바꿔 쓴다
+GUIDE_HREF = re.compile(r'href="(/en)?/guide(?:/([^"#]*))?(#[^"]*)?"')
+
+
+def root_guides(text):
+    """목록 /guide/ → https://lumenlab.page/guides/#salary, 글 /guide/<slug>/#조각 → https://lumenlab.page/guides/salary/<slug>/#조각 (영어는 /en/guides/…)"""
+    def to(m):
+        en, slug, frag = m.group(1) or '', m.group(2) or '', m.group(3) or ''
+        return f'href="https://lumenlab.page{en}/guides/salary/{slug}{frag}"' if slug else f'href="https://lumenlab.page{en}/guides/#salary"'
+    return GUIDE_HREF.sub(to, text)
+
+
 def write(rel, text):
+    if rel.endswith('.html'):
+        text = root_guides(text)
     p = ROOT / rel
     old = p.read_text(encoding='utf-8') if p.exists() else None
     if old != text:
@@ -535,21 +549,6 @@ def sitemap(paths):
         out.append(f'  <url><loc>{SITE}{path}</loc><lastmod>{lastmod(path)}</lastmod></url>')
     out.append('</urlset>')
     return '\n'.join(out) + '\n'
-
-
-def rss():
-    items = ''
-    for a in articles.ARTICLES['ko']:
-        link = f'{SITE}/guide/{a["slug"]}/'
-        y, m, d = (int(x) for x in lastmod(f'/guide/{a["slug"]}/').split('-'))
-        pub = format_datetime(datetime(y, m, d, tzinfo=timezone.utc)).replace('+0000', 'GMT')
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link}</link><guid>{link}</guid><pubDate>{pub}</pubDate>'
-                  f'<description>{esc(a["desc"])}</description><content:encoded><![CDATA[{a["body"]}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>떼고얼마 가이드</title><link>{SITE}/</link><description>급여명세서, 4대 보험, 퇴직금, 주휴수당, 실업급여를 공식 출처와 계산 예로 풀어 쓴 글</description><language>ko</language>
-{items}</channel></rss>
-'''
 
 
 def main():
@@ -573,8 +572,8 @@ def main():
         put(lang, 'about/', doc_page(lang, 'about', 'about/', texts.about(lang)))
         put(lang, 'privacy/', doc_page(lang, 'privacy', 'privacy/', texts.privacy(lang)))
     write('404.html', not_found())
-    write('sitemap.xml', sitemap(paths))
-    write('rss.xml', rss())
+    # 가이드(/guide/…·/en/guide/…)는 lumenlab.page/guides/salary/ 로 옮겨 sitemap 에 넣지 않는다. rss.xml 도 만들지 않는다(가이드 RSS 는 lumenlab.page/guides/rss.xml)
+    write('sitemap.xml', sitemap([p for p in paths if '/guide/' not in p]))
     if CHECK:
         if stale:
             print('실패  빌드 결과가 낡았어요: ' + ', '.join(stale[:8]))

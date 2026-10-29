@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WiFi QR Code: Format, Symbols and Hidden Networks | Staycode</title>
+<meta name="description" content="A WiFi QR code holds one line like WIFI:T:WPA;S:name;P:pass;; How password symbols are escaped, hidden and open networks, iPhone and Android, and sign tips.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/qr/wifi-qr-code/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/qr/wifi-qr/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/qr/wifi-qr-code/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/qr/wifi-qr-code/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="WiFi QR Code: Format, Symbols and Hidden Networks | Staycode">
+<meta property="og:description" content="A WiFi QR code holds one line like WIFI:T:WPA;S:name;P:pass;; How password symbols are escaped, hidden and open networks, iPhone and Android, and sign tips.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/qr/wifi-qr-code/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "WiFi QR codes: format, special characters and hidden networks", "description": "A WiFi QR code holds one line like WIFI:T:WPA;S:name;P:pass;; How password symbols are escaped, hidden and open networks, iPhone and Android, and sign tips.", "inLanguage": "en", "datePublished": "2026-10-14", "dateModified": "2026-10-14", "mainEntityOfPage": "https://lumenlab.page/en/guides/qr/wifi-qr-code/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Staycode", "url": "https://qr.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Staycode", "item": "https://lumenlab.page/en/guides/#qr"}, {"@type": "ListItem", "position": 3, "name": "WiFi QR codes: format, special characters and hidden networks", "item": "https://lumenlab.page/en/guides/qr/wifi-qr-code/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/qr/wifi-qr/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#qr">Staycode</a></nav>
+<article class="gd__doc" style="--tc:#2f6b4f;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">WiFi QR codes: format, special characters and hidden networks</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-14">Oct 14, 2026</time></p>
+    <a class="gd__tool" href="https://qr.lumenlab.page/"><img src="/img/qr.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Staycode</b><span>QR code maker</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<div class="lead"><p>A WiFi QR code is a single line of text such as <code>WIFI:T:WPA;S:Cafe Staycode;P:sun\:rise\;42;;</code> stored in the image. When guests point their camera at it, the phone offers to join that network with that password. Enter the name and password in the <a href="https://qr.lumenlab.page/wifi/">WiFi QR code generator</a> and the escaping is done for you. Because the password sits inside the image, changing it on your router means making and printing a new code.</p></div>
+  
+<h2>What goes inside a WiFi QR code?</h2>
+<p>Four fields separated by semicolons. The format is documented on the ZXing wiki, and Staycode follows it exactly.</p>
+<div class="tbl"><table>
+<thead><tr><th>Field</th><th>Meaning</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>T:</code></td><td>Security type: <code>WPA</code>, <code>WEP</code> or <code>nopass</code></td><td><code>T:WPA</code></td></tr>
+<tr><td><code>S:</code></td><td>Network name (SSID). Required</td><td><code>S:Cafe Staycode</code></td></tr>
+<tr><td><code>P:</code></td><td>Password. Left out for <code>nopass</code></td><td><code>P:sun\:rise\;42</code></td></tr>
+<tr><td><code>H:</code></td><td><code>true</code> for a hidden network</td><td><code>H:true</code></td></tr>
+</tbody>
+</table></div><p class="tbl-hint">Swipe the table sideways</p>
+<p>The line ends with two semicolons (<code>;;</code>). In this generator, routers using WPA, WPA2 or WPA3 are stored as <code>WPA</code>, and very old routers as <code>WEP</code>. The format also defines <code>WPA2-EAP</code> for enterprise networks where each person has their own login, but this tool does not create those.</p>
+
+<h2>What if the password has ; or : in it?</h2>
+<p>A backslash goes in front. Five characters, <code>\ ; , : "</code>, have a special meaning in the format, and left alone they would make a phone cut the password short. Here is what Staycode actually stores:</p>
+<div class="tbl"><table>
+<thead><tr><th>Router password</th><th>Stored in the code</th></tr></thead>
+<tbody>
+<tr><td><code>sun:rise;42</code></td><td><code>P:sun\:rise\;42;</code></td></tr>
+<tr><td><code>abc;123</code></td><td><code>P:abc\;123;</code></td></tr>
+<tr><td><code>moon,light</code></td><td><code>P:moon\,light;</code></td></tr>
+<tr><td><code>say"hi"</code></td><td><code>P:say\"hi\";</code></td></tr>
+<tr><td><code>p@ss,word\1</code></td><td><code>P:p@ss\,word\\1;</code></td></tr>
+</tbody>
+</table></div><p class="tbl-hint">Swipe the table sideways</p>
+<p>Type the password exactly as it is on your router and do not add backslashes yourself. The same rule applies to network names. If a WPA password is not 8 to 63 characters, or the name is longer than 32 bytes, the generator asks you to double-check it against the router.</p>
+
+<h2>Hidden networks and open networks</h2>
+<p>Tick "Hidden network" and <code>H:true;</code> is added. It tells the phone to look for that name even though it does not appear in the list.</p>
+<figure><code>WIFI:T:WPA;S:Back Office;P:p@ss\,word\\1;H:true;;</code></figure>
+<p>For a network with no password, set Security to "None" and the <code>P:</code> field disappears.</p>
+<figure><code>WIFI:T:nopass;S:Guest;;</code></figure>
+
+<h2>How do iPhone and Android phones connect?</h2>
+<p>According to the ZXing wiki, the built-in cameras on Android and on iOS 11 and later read this format. Usually a "Join network" prompt appears when the camera sees the code, and tapping it connects without typing the password. The exact prompt can look different by model and version. On a phone whose camera cannot read it, use a QR app or the <a href="https://qr.lumenlab.page/scan/">QR code scanner</a> to read the code and copy the password.</p>
+
+<h2>Do I need a new code after changing the password?</h2>
+<p>Yes. A WiFi code is a static code, so the password lives in the image. Once you change it on the router, the old code will not connect. A separate guest network helps here: put only the guest password in the code, and you can change it without touching your own devices.</p>
+
+<h2>Tips for a sign at your venue</h2>
+<ul>
+<li><strong>Size:</strong> using the rule of thumb that a code scans from about 10 times its own width, a code on a table scanned from 30 to 50 cm (12 to 20 in) needs a pattern about 3 to 5 cm (1.2 to 2 in) wide, and one on the wall behind a counter, scanned from about 1 m (3 ft), about 10 cm (4 in). See <a href="/en/guides/qr/qr-code-print-size/">QR code print size</a> for the full table.</li>
+<li><strong>Label it:</strong> pick the "JOIN WI-FI" frame text so people know what the code is for.</li>
+<li><strong>Print the details too:</strong> write the network name and password next to the code for guests whose camera cannot read it.</li>
+<li><strong>Test before you print:</strong> name and password must match the router exactly, including capitals and spaces. Scan the code with your own phone and join once.</li>
+</ul>
+<p>The password is processed in your browser only. It is not sent anywhere, not put in the page address, and WiFi codes are never kept in "Recent QR codes".</p>
+
+  <p class="cta"><a class="btn btn--lamp" href="https://qr.lumenlab.page/wifi/">Make a WiFi QR code</a></p>
+  <section class="sources"><h2>Sources</h2><ul><li><a href="https://github.com/zxing/zxing/wiki/Barcode-Contents" rel="noopener">ZXing wiki: Barcode Contents (WiFi format)</a> <span class="chk-d">(Last checked October 14, 2026)</span></li><li><a href="https://www.qr-code-generator.com/blog/minimum-qr-code-size/" rel="noopener">QR Code Generator blog: Minimum QR code size (rule of thumb)</a> <span class="chk-d">(Last checked October 14, 2026)</span></li></ul></section>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#2f6b4f;--tcp:82%">
+  <h2 id="gd-more">More Staycode guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/qr/do-qr-codes-expire/"><b>Do QR codes expire? Static vs dynamic codes</b><span>The QR image never expires; dynamic codes that route through a provider can stop. How trials switch codes off, how to spot one, and what to do if printed.</span></a></li><li><a href="/en/guides/qr/qr-code-print-size/"><b>QR code print size: how big should it be?</b><span>Close-up QR codes: at least 2 cm (0.8 in) wide, scanning from about 10 times their width. A size table, dense codes, quiet zone and sticker sheets.</span></a></li><li><a href="/en/guides/qr/qr-code-with-logo/"><b>QR code with a logo: error correction, size and contrast</b><span>A logo works thanks to error correction and uses up part of it. Error correction levels, logo size, and the 2:1 and 4:1 contrast rules of our scan check.</span></a></li><li><a href="/en/guides/qr/vcard-qr-code/"><b>vCard QR codes: what goes inside and how it saves</b><span>A vCard QR code stores contact details as text; phones offer to add the contact when scanned. The lines stored, how fields add density, and print tips.</span></a></li><li><a href="/en/guides/qr/scan-qr-code-safely/"><b>How to scan a QR code safely: check the link before you open it</b><span>QR scams send people to fake login or payment pages. Read the real domain before opening a scanned link: where to look and the warning signs.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

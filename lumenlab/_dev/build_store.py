@@ -2,10 +2,11 @@
 #   1) 홈의 큰 아이콘 칸(gen:wall): 누르면 assets/store.js 가 같은 페이지에 소개 창을 띄운다.
 #   2) 소개 페이지 /works/<id>/ · /en/works/<id>/: 소개 창과 같은 내용. 창은 이 페이지를 불러 그 안의 .sh__body 를 그대로 옮겨 담는다
 #      (글은 여기 한 곳에서만 만든다). 주소를 공유하거나 새로 고치면 이 페이지가 열리고, 검색엔진·애드센스도 이 페이지로 읽는다.
-# 사실은 catalog.json(이름·하는 일·확인한 것·링크)과 showcase.json(창에만 쓰는 사실 줄·미리 보기·카드), 가이드 목록은 도구 사이트의 글(build_info.read_guides).
+# 사실은 catalog.json(이름·하는 일·확인한 것·링크)과 showcase.json(창에만 쓰는 사실 줄·미리 보기·카드), 가이드 목록은 도구 사이트의 글(build_info.read_guides), 링크는 이 사이트의 가이드 글(build_guides).
 import os, re, json, hashlib, html as H
 from urllib.parse import urlparse
 import build_info as BI
+import build_guides as BG
 
 here = os.path.dirname(os.path.abspath(__file__)); mono = os.path.dirname(os.path.dirname(here))
 SC = json.load(open(os.path.join(here, 'showcase.json')))
@@ -250,12 +251,12 @@ def body(kind, it, lang, gdata, cat):
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(it['check'][lang])}</p></div>
     <p class="sh__links"><a href="{esc(tp['about'])}">{esc(T['about'](name))} <span aria-hidden="true">→</span></a></p>
   </section>''')
-        index, items = gdata
-        rows = ''.join(f'<li><a href="{esc(a["url"])}">{esc(a["title"])}</a></li>' for a in items)
+        index, items = gdata   # 글은 2026-10-29부터 이 사이트 /guides/ 에 있다(build_guides.py)
+        rows = ''.join(f'<li><a href="{BG.root_path(it, lang, a["slug"])}">{esc(a["title"])}</a></li>' for a in items)
         out.append(f'''<section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">{T['guides'](len(items))}</h2>
     <ol class="sh__guides">{rows}</ol>
-    <p class="sh__links"><a href="{esc(index['url'])}">{T['guide_all']} <span aria-hidden="true">→</span></a></p>
+    <p class="sh__links"><a href="{BG.root_path(it, lang)}">{T['guide_all']} <span aria-hidden="true">→</span></a></p>
   </section>''')
     else:
         links = []

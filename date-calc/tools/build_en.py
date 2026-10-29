@@ -661,8 +661,8 @@ def pages():
 
 
 def urls():
-    """sitemap에 넣을 영어 주소(대표 주소만)."""
-    return ["/en/", "/en/guide/"] + [f"/en/guide/{g['slug']}/" for g in GUIDES] + ["/en/about/"]
+    """sitemap에 넣을 영어 주소(대표 주소만). 영어 가이드(/en/guide/…)는 lumenlab.page/en/guides/date/ 로 옮겨 넣지 않는다."""
+    return ["/en/", "/en/about/"]
 
 
 def build_all():

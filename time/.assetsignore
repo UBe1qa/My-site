@@ -7,3 +7,5 @@ wrangler.jsonc
 .wrangler
 .DS_Store
 __pycache__
+# 2026-10-29 가이드 HTML(guide/·ko/guide/)은 루멘랩 홈이 읽는 원본이라 올리지 않는다
+guide/

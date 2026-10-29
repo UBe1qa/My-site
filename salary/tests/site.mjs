@@ -191,8 +191,10 @@ const net = (o) => P.netPay(o);
   delete all.pre;
   (JSON.stringify(all).match(/\d+/g) || []).forEach((s) => add(+s));
   GANI.rows.forEach((r) => r.forEach(add));
+  // 가이드 글은 2026-10-29 lumenlab.page/guides/salary/ 로 옮겨 sitemap 에 없다(HTML 은 그쪽 빌드가 읽는 원본으로 계속 만든다) → 글은 폴더에서 찾는다
+  const arts = ['guide', 'en/guide'].flatMap((g) => fs.readdirSync(path.join(ROOT, g)).filter((s) => fs.existsSync(path.join(ROOT, g, s, 'index.html'))).map((s) => `${g}/${s}/`));
   const pages = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').match(/<loc>[^<]+<\/loc>/g).map((s) => s.replace(/<\/?loc>/g, '').replace('https://salary.lumenlab.page/', ''))
-    .filter((p) => /guide\/.+|about\/$/.test(p));
+    .filter((p) => /about\/$/.test(p)).concat(arts);
   let orphans = 0;
   for (const p of pages) {
     const t = text(read(p + 'index.html'));

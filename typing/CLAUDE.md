@@ -6,8 +6,9 @@
 - 가이드 글: 한국어 4편, 영어 3편(번역이 아니라 따로 고른 주제. '속도를 어떻게 계산하나' 한 쌍만 hreflang 으로 잇는다). 페이지는 20쪽 + 404(한 장에 두 언어 틀).
 
 ## 폴더
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html 을 만든다**: `python3 typing/_dev/build.py` (`--check` 는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html 을 만든다**: `python3 typing/_dev/build.py` (`--check` 는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
   - 화면 글 = `_dev/content.py`(`JS` = app.js 문구, `TX` = HTML 틀 문구, `TOOLS` = 도구 페이지, `BASIS` = 계산 기준, `FAQ`, `ABOUT`, `PRIVACY`), 가이드 글 = `_dev/articles.py`.
+  - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 2026-10-29부터 `lumenlab/_dev/build_home.py` 가 읽어 lumenlab.page/guides/ 에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 배치는 도구마다 다르다: `layout_a`(종이 한 장: 속도 측정·영타), `layout_c`(화면 자판: 자리 연습), `layout_b`(보고 치는 글 + 내가 친 글: 문장 연습).
 - `assets/tj-core.js` 핵심 로직(DOM 을 모른다): 한글 → 두벌식 글쇠(`TJ.hangul`), 목표 글과 친 글 비교(`TJ.compare`, 낱말 단위 편집 거리. 터치 자판에서 미룰 꼬리는 `TJ.heldTail`), 한/영 반대 알아채기(`TJ.layoutZone`·`TJ.layoutHint`, 낱말 단위), 식(`TJ.calc`), 화면 표시 값(`TJ.report`), 한 판(`TJ.Session`), 시간(`TJ.Timer`), 글 고르기(`TJ.pick`), 자판 자리·손가락(`TJ.board`, `TJ.keyPlace`).
 - `assets/tj-store.js` 기록 저장(DOM 을 모른다, 저장소를 넘겨받는다). `assets/tj-lessons.js` 자리 연습 다섯 단계(배운 키만으로 칠 수 있는 글만 낸다)와 통과 기준(`pass`).

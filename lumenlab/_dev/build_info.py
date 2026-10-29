@@ -1,4 +1,4 @@
-# 루트의 소개·개인정보 처리방침(한국어 /about/ /privacy/, 영어 /en/…)을 만든다. (가이드 모음 /guides/ 는 2026-10-18 홈의 소개 창으로 합쳤다)
+# 루트의 소개·개인정보 처리방침(한국어 /about/ /privacy/, 영어 /en/…)을 만든다. 가이드 /guides/ 는 build_guides.py(2026-10-29 도구 사이트에서 옮겨 옴).
 # 혼자 돌리지 않고 build_home.py 가 홈·영어 홈을 만든 뒤 불러 쓴다(머리말·꼬리말을 그 두 페이지에서 그대로 가져온다).
 # 가이드 목록은 손으로 적지 않는다: catalog.json 도구마다 dir(이 저장소의 폴더)의 guide/ 아래 글을 읽어서
 #   제목(h1)·설명(meta description)·쓴 날·고친 날(JSON-LD)·주소(canonical)를 가져오고, 순서는 그 도구의 가이드 목록 페이지 순서를 따른다.
@@ -11,7 +11,7 @@ ROOT = 'https://lumenlab.page'
 MAIL = 'contact@lumenlab.page'
 TEL = '070-8098-5263'           # 사용자가 가입한 070 번호(2026-10-17), 사이트·방침에 쓰는 공개 전화
 TEL_INTL = '+82-70-8098-5263'
-EFFECTIVE = ('2026년 10월 18일', 'October 18, 2026')
+EFFECTIVE = ('2026년 10월 29일', 'October 29, 2026')   # 바꾸면 11번 '처리방침 변경'에 무엇이 바뀌었는지 한 줄
 esc = lambda s: H.escape(s, quote=True)
 
 
@@ -72,9 +72,16 @@ def fdate(d, lang):
 
 
 # ---------- 페이지 틀 ----------
-def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js='', css=('/assets/site.css', '/assets/info.css')):
-    ko_path = path[3:] if lang == 'en' else path
-    en_path = '/en' + ko_path
+def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js='', css=('/assets/site.css', '/assets/info.css'), alt=None, other=None, extra=''):
+    """alt: 한국어·영어 짝 {'ko': 주소, 'en': 주소}. 안 주면 /en 을 붙이고 뗀 주소, 짝이 없는 글이면 False(hreflang 안 씀).
+    other: 언어 단추가 갈 주소(안 주면 짝). extra: <head> 끝에 더할 것(가이드 글의 광고 코드)."""
+    if alt is None:
+        ko_ = path[3:] if lang == 'en' else path
+        alt = {'ko': ko_, 'en': '/en' + ko_}
+    if other is None:
+        assert alt, f'{path}: 짝이 없는 페이지는 언어 단추 주소(other)를 줘야 함'
+        other = alt['en' if lang == 'ko' else 'ko']
+    ko_path, en_path = (path, other) if lang == 'ko' else (other, path)
     hdr = head_src[head_src.index('<a class="skip"'):head_src.index('<main')]
     ftr = head_src[head_src.index('<footer'):head_src.index('</footer>') + len('</footer>')]
     # 언어 단추는 같은 페이지의 다른 언어로, 머리말에서 지금 페이지 표시
@@ -87,6 +94,7 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''
     site_name = 'Lumen Lab 루멘랩' if lang == 'ko' else 'Lumen Lab'
     locale = '' if lang == 'ko' else '<meta property="og:locale" content="en_US">\n'
     ldj = f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>\n' if ld else ''
+    alts = ''.join(f'<link rel="alternate" hreflang="{h}" href="{ROOT}{alt[k]}">\n' for h, k in (('ko', 'ko'), ('en', 'en'), ('x-default', 'en'))) if alt else ''
     return f'''<!doctype html>
 <html lang="{lang}" data-lang="{lang}">
 <head>
@@ -95,10 +103,7 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{ROOT}{path}">
-<link rel="alternate" hreflang="ko" href="{ROOT}{ko_path}">
-<link rel="alternate" hreflang="en" href="{ROOT}{en_path}">
-<link rel="alternate" hreflang="x-default" href="{ROOT}{en_path}">
-<meta property="og:type" content="{kind}">
+{alts}<meta property="og:type" content="{kind}">
 <meta property="og:site_name" content="{site_name}">
 {locale}<meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
@@ -110,7 +115,7 @@ def page(lang, path, title, desc, main, head_src, kind='article', ld=None, js=''
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-{''.join(f'<link rel="stylesheet" href="{c}">' + chr(10) for c in css)}{ldj}</head>
+{''.join(f'<link rel="stylesheet" href="{c}">' + chr(10) for c in css)}{ldj}{extra}</head>
 <body>
 {hdr}<main id="main">
 {main}
@@ -207,7 +212,7 @@ KO = {
     'about_jumps': [('who', '누가 만드나요'), ('rules', '만드는 기준'), ('check', '확인하고 밝혀 둔 것'), ('upkeep', '계속 고치는 일'), ('ads', '광고와 운영비'), ('contact', '연락처')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 둘러보기</a></li>
-  <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 각 도구 사이트에 있고, 도구마다 소개 창에 목록을 모아 두었어요.</li>
+  <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 모두 이 사이트의 <a href="/guides/">가이드</a>에 모아 두었어요.</li>
   <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/#games">게임 보기</a></li>
   <li><b>앱 {na}개</b> {apps}. <a href="/#games">앱 보기</a></li>
 </ul>''',
@@ -258,8 +263,8 @@ KO = {
 <section id="ads" aria-labelledby="ads-t">
 <h2 id="ads-t">광고와 운영비</h2>
 <ul class="ilist">
-  <li>웹 도구 사이트는 Google 애드센스 광고로 운영비를 내요. 도구와 글은 모두 무료예요.</li>
-  <li>이 사이트(lumenlab.page)와 앱의 지원·개인정보 처리방침 페이지에는 광고를 넣지 않아요.</li>
+  <li>웹 도구 사이트와 이 사이트의 가이드 글은 Google 애드센스 광고로 운영비를 내요. 도구와 글은 모두 무료예요.</li>
+  <li>이 사이트의 홈, 만든 것 소개, 가이드 모음, 루멘랩 소개, 개인정보 처리방침과 앱의 지원·방침 페이지에는 광고를 넣지 않아요.</li>
   <li>광고와 쿠키, 방문 통계가 어떻게 동작하는지는 <a href="/privacy/">개인정보 처리방침</a>에 있어요.</li>
 </ul>
 </section>
@@ -281,7 +286,7 @@ KO = {
   <li>회원 가입과 로그인이 없어요. 루멘랩은 사이트에서 이름, 이메일, 전화번호 같은 개인정보를 받지 않아요.</li>
   <li>도구에 넣은 글, 숫자, 날짜, 명단, 파일과 마이크 소리, 카메라 영상은 이용자 브라우저 안에서만 처리하고 루멘랩 서버로 보내지 않아요.</li>
   <li>루멘랩이 직접 받는 개인정보는 이용자가 보낸 문의 메일(메일 주소와 내용)뿐이에요.</li>
-  <li>웹 도구 사이트에는 Google 애드센스 광고가 나와요. 이때 Google 같은 광고 업체가 쿠키를 쓸 수 있어요(<a href="#p-ads">4번</a>). lumenlab.page에는 광고가 없어요.</li>
+  <li>웹 도구 사이트와 lumenlab.page의 가이드 글에는 Google 애드센스 광고가 나와요. 이때 Google 같은 광고 업체가 쿠키를 쓸 수 있어요(<a href="#p-ads">4번</a>). lumenlab.page의 다른 페이지에는 광고가 없어요.</li>
   <li>맞춤 광고는 <a href="https://adssettings.google.com/">Google 광고 설정</a>에서 끌 수 있어요.</li>
   <li>모든 사이트에 쿠키를 쓰지 않는 방문 통계(Cloudflare Web Analytics)가 있어요(<a href="#p-auto">3번</a>).</li>
 </ul>
@@ -290,7 +295,7 @@ KO = {
 <section id="p-scope" aria-labelledby="p-scope-t">
 <h2 id="p-scope-t">1. 이 방침이 다루는 곳</h2>
 <ul class="ilist">
-  <li><b>lumenlab.page</b> 루멘랩 홈과 만든 것 소개 페이지, 루멘랩 소개, 앱 지원 페이지</li>
+  <li><b>lumenlab.page</b> 루멘랩 홈과 만든 것 소개 페이지, 가이드 글, 루멘랩 소개, 앱 지원 페이지</li>
   <li><b>웹 도구 사이트</b> 아래 도구들이에요. 각 도구의 방침은 이 방침에 그 도구에만 해당하는 내용(이 기기에 남기는 항목 등)을 더한 것이에요.</li>
   <li><b>세트노트(setnote.lumenlab.page)</b> 운동 기록 웹 앱이에요. 기록과 설정은 이 기기의 브라우저 저장소에만 남고 서버로 보내지 않아요. 광고가 없어요.</li>
   <li><b>캐슬업! 소개 사이트(castle-up.lumenlab.page)</b> 아직 출시 전인 게임의 소개 페이지예요. 광고가 없고 이 기기에 남기는 것도 없어요. 방문 통계(3번)만 있어요.</li>
@@ -331,8 +336,8 @@ KO = {
 </section>
 
 <section id="p-ads" aria-labelledby="p-ads-t">
-<h2 id="p-ads-t">4. 광고와 쿠키(웹 도구 사이트)</h2>
-<p>웹 도구 사이트는 Google 애드센스로 광고를 보여 줘요. lumenlab.page와 앱의 지원·방침 페이지에는 광고가 없어요.</p>
+<h2 id="p-ads-t">4. 광고와 쿠키(웹 도구 사이트와 가이드 글)</h2>
+<p>웹 도구 사이트와 lumenlab.page의 가이드 글(/guides/ 아래 글)은 Google 애드센스로 광고를 보여 줘요. lumenlab.page의 홈, 만든 것 소개, 가이드 모음, 루멘랩 소개, 이 방침과 앱의 지원·방침 페이지에는 광고가 없어요.</p>
 <ul class="ilist">
   <li>Google을 비롯한 제3자 광고 업체는 쿠키를 써서 이용자가 이 사이트나 다른 사이트에 방문한 기록을 바탕으로 광고를 보여 줄 수 있어요.</li>
   <li>광고 때문에 Google 같은 제3자가 이용자 브라우저에 쿠키를 넣거나 읽을 수 있고, 웹 비콘(눈에 보이지 않는 작은 이미지) 같은 기술로 정보를 모을 수 있어요.</li>
@@ -342,7 +347,7 @@ KO = {
 <dl class="ifacts ifacts--rows">
   <div><dt>모으는 곳</dt><dd>Google(애드센스)</dd></div>
   <div><dt>항목</dt><dd>광고 쿠키 식별자, 본 페이지 주소와 방문 시각, 광고를 보거나 누른 기록, 브라우저·기기 정보 같은 웹 이용 기록</dd></div>
-  <div><dt>방법</dt><dd>웹 도구 페이지가 열릴 때 광고 코드가 쿠키와 웹 비콘으로 자동으로 모아요.</dd></div>
+  <div><dt>방법</dt><dd>웹 도구 페이지나 가이드 글이 열릴 때 광고 코드가 쿠키와 웹 비콘으로 자동으로 모아요.</dd></div>
   <div><dt>목적</dt><dd>광고를 보여 주고, 관심사에 맞는 광고를 고르고, 광고 성과를 재요.</dd></div>
   <div><dt>보유 기간</dt><dd>Google 개인정보처리방침을 따라요.</dd></div>
 </dl>
@@ -413,7 +418,11 @@ KO = {
 
 <section id="p-change" aria-labelledby="p-change-t">
 <h2 id="p-change-t">11. 처리방침 변경</h2>
-<p>이 처리방침이 바뀌면 이 페이지에 시행일과 함께 알려요. 이 방침은 lumenlab.page 전체를 다루는 첫 판이라 이전 판은 없어요.</p>
+<p>이 처리방침이 바뀌면 이 페이지에 시행일과 함께 알려요.</p>
+<ul class="ilist">
+  <li><b>2026년 10월 29일</b> 가이드 글을 각 도구 사이트에서 lumenlab.page로 옮기면서 광고가 나오는 곳(1번, 4번)에 lumenlab.page의 가이드 글을 더했어요. 처리하는 정보의 종류는 그대로예요.</li>
+  <li><b>2026년 10월 18일</b> lumenlab.page 전체를 다루는 첫 판</li>
+</ul>
 </section>''',
 }
 
@@ -427,7 +436,7 @@ EN = {
     'about_jumps': [('who', 'Who we are'), ('rules', 'How we build'), ('check', 'What each tool checks'), ('upkeep', 'Keeping things current'), ('ads', 'Ads'), ('contact', 'Contact')],
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
-  <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They live on each tool’s site, and each tool’s preview lists them.</li>
+  <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They are all collected in this site’s <a href="/en/guides/">Guides</a>.</li>
   <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/#games">See the games</a></li>
   <li><b>{na} apps</b> {apps}. <a href="/en/#games">See the apps</a></li>
 </ul>''',
@@ -478,8 +487,8 @@ EN = {
 <section id="ads" aria-labelledby="ads-t">
 <h2 id="ads-t">Ads and running costs</h2>
 <ul class="ilist">
-  <li>The web tool sites are paid for by Google AdSense ads. The tools and guides are free.</li>
-  <li>This site (lumenlab.page) and the app support and privacy pages carry no ads.</li>
+  <li>The web tool sites and this site’s guides are paid for by Google AdSense ads. The tools and guides are free.</li>
+  <li>This site’s home, product pages, guide index, About and Privacy pages, and the app support and privacy pages carry no ads.</li>
   <li>How ads, cookies and visit statistics work is explained in the <a href="/en/privacy/">privacy policy</a>.</li>
 </ul>
 </section>
@@ -501,7 +510,7 @@ EN = {
   <li>There are no accounts or logins. Lumen Lab does not collect your name, email address or phone number on these sites.</li>
   <li>Text, numbers, dates, name lists, files, microphone audio and camera video you use in the tools are processed in your browser only and are never sent to a Lumen Lab server.</li>
   <li>The only personal information Lumen Lab receives directly is an email you choose to send us (your address and the message).</li>
-  <li>The web tool sites show Google AdSense ads, and ad companies such as Google may use cookies (<a href="#p-ads">section 4</a>). lumenlab.page itself has no ads.</li>
+  <li>The web tool sites and the guides on lumenlab.page show Google AdSense ads, and ad companies such as Google may use cookies (<a href="#p-ads">section 4</a>). The other pages of lumenlab.page have no ads.</li>
   <li>You can turn off personalized ads in <a href="https://adssettings.google.com/">Google Ad Settings</a>.</li>
   <li>Every site has cookie-free visit statistics (Cloudflare Web Analytics, <a href="#p-auto">section 3</a>).</li>
 </ul>
@@ -510,7 +519,7 @@ EN = {
 <section id="p-scope" aria-labelledby="p-scope-t">
 <h2 id="p-scope-t">1. Where this policy applies</h2>
 <ul class="ilist">
-  <li><b>lumenlab.page</b> the Lumen Lab home and product pages, About Lumen Lab and the app support pages</li>
+  <li><b>lumenlab.page</b> the Lumen Lab home and product pages, the guides, About Lumen Lab and the app support pages</li>
   <li><b>The web tool sites</b> listed below. Each tool’s own policy adds what applies to that tool only, such as what it saves on your device.</li>
   <li><b>SetNote (setnote.lumenlab.page)</b> a workout log web app. Your log and settings stay in your browser’s storage on this device and are never sent to a server. It has no ads.</li>
   <li><b>Castle Up! (castle-up.lumenlab.page)</b> the page for a game that is not out yet. It has no ads and saves nothing on your device; only the visit statistics in section 3 apply.</li>
@@ -551,8 +560,8 @@ EN = {
 </section>
 
 <section id="p-ads" aria-labelledby="p-ads-t">
-<h2 id="p-ads-t">4. Advertising and cookies (web tool sites)</h2>
-<p>The web tool sites show ads through Google AdSense. lumenlab.page and the app support and privacy pages have no ads.</p>
+<h2 id="p-ads-t">4. Advertising and cookies (web tool sites and guides)</h2>
+<p>The web tool sites and the guides on lumenlab.page (the articles under /guides/) show ads through Google AdSense. The home, product pages, guide index, About page, this policy, and the app support and privacy pages of lumenlab.page have no ads.</p>
 <ul class="ilist">
   <li>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
   <li>Because of ads, third parties such as Google may place and read cookies on your browser and may use web beacons (tiny invisible images) to collect information.</li>
@@ -562,7 +571,7 @@ EN = {
 <dl class="ifacts ifacts--rows">
   <div><dt>Collected by</dt><dd>Google (AdSense)</dd></div>
   <div><dt>What</dt><dd>Browsing data such as ad cookie IDs, the pages viewed and when, ads seen or clicked, and browser and device details</dd></div>
-  <div><dt>How</dt><dd>Collected automatically by the ad code, through cookies and web beacons, when a web tool page opens</dd></div>
+  <div><dt>How</dt><dd>Collected automatically by the ad code, through cookies and web beacons, when a web tool page or a guide opens</dd></div>
   <div><dt>Why</dt><dd>To show ads, choose ads that match your interests and measure how ads perform</dd></div>
   <div><dt>How long</dt><dd>As set out in Google’s Privacy Policy</dd></div>
 </dl>
@@ -626,7 +635,11 @@ EN = {
 
 <section id="p-change" aria-labelledby="p-change-t">
 <h2 id="p-change-t">11. Changes</h2>
-<p>If this policy changes, this page will show the new effective date. This is the first version covering all of lumenlab.page, so there is no earlier one.</p>
+<p>If this policy changes, this page will show the new effective date.</p>
+<ul class="ilist">
+  <li><b>October 29, 2026</b> The guides moved from each tool’s site to lumenlab.page, so the places that show ads (sections 1 and 4) now include the guides on lumenlab.page. The kinds of information processed are unchanged.</li>
+  <li><b>October 18, 2026</b> First version covering all of lumenlab.page</li>
+</ul>
 </section>''',
 }
 

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""한바퀴(Oneturn) 모든 HTML·sitemap.xml·rss.xml·404.html을 만든다: python3 time/_dev/build.py  (--check 는 낡았는지만 본다)
-화면 글 = _dev/content.py(UI·PAGES), 가이드 글 = _dev/articles.py, 확인된 사실 = _dev/facts.json. 만든 파일은 손으로 고치지 않는다."""
+"""한바퀴(Oneturn) 모든 HTML·sitemap.xml·404.html을 만든다: python3 time/_dev/build.py  (--check 는 낡았는지만 본다)
+화면 글 = _dev/content.py(UI·PAGES), 가이드 글 = _dev/articles.py, 확인된 사실 = _dev/facts.json. 만든 파일은 손으로 고치지 않는다.
+가이드 목록·글(guide/)은 2026-10-29부터 루멘랩 홈(lumenlab.page/guides/time/<주소>/)이 읽어 싣는 원본이다. 여기서는 만들기만 하고 sitemap에 넣지 않으며 배포하지 않는다(.assetsignore).
+옛 주소는 _redirects 가 홈으로 보내고, 한국어 가이드 RSS도 홈이 낸다."""
 import json
 import math
+import re
 import sys
-from datetime import datetime, timezone
-from email.utils import format_datetime
 from html import escape as esc
 from pathlib import Path
 
@@ -588,21 +589,17 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in ARTICLES['ko']:
-        link_ = f'{SITE}/ko/guide/{a["slug"]}/'
-        full = f'<p>{a["answer"]}</p>' + a['body'].replace('<!--ad-->', '')
-        y, mo, d = (int(x) for x in a.get('published', FIRST).split('-'))
-        pub = format_datetime(datetime(y, mo, d, tzinfo=timezone.utc), usegmt=True)
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link_}</link><guid>{link_}</guid>'
-                  f'<pubDate>{pub}</pubDate><description>{esc(a["desc"])}</description>'
-                  f'<content:encoded><![CDATA[{full}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>한바퀴 가이드</title><link>{SITE}/ko/guide/</link><description>타이머·스톱워치·알람·세계 시간을 제대로 쓰는 법</description><language>ko</language>
-{items}</channel></rss>
-'''
+# 2026-10-29 가이드를 루멘랩 홈으로 옮겼다: 모든 HTML의 가이드 링크(<a href>)를 홈 주소로 바꾼다(글의 canonical·hreflang·JSON-LD는 그대로. 홈 빌드가 읽는다)
+GUIDE_LINK = re.compile(r'(<a\b[^>]*?\shref=")(?:https://time\.lumenlab\.page)?/(ko/)?guide/([^"#]*)(#[^"]*)?"')
+
+
+def moved_guides(text):
+    """/ko/guide/<주소>/ → https://lumenlab.page/guides/time/<주소>/, /guide/<주소>/ → …/en/guides/time/<주소>/ (#조각은 그대로). 목록은 홈 가이드 모음의 이 사이트 칸(#time)."""
+    def rep(m):
+        home = 'https://lumenlab.page/' + ('' if m.group(2) else 'en/') + 'guides/'
+        slug = m.group(3)
+        return m.group(1) + (home + '#time' if slug in ('', 'index.html') else home + 'time/' + slug + (m.group(4) or '')) + '"'
+    return GUIDE_LINK.sub(rep, text)
 
 
 def build():
@@ -619,14 +616,15 @@ def build():
         add(lang, *watch_page(lang))
         add(lang, *alarm_page(lang))
         add(lang, *world_page(lang))
-        add(lang, *guide_index(lang))
+        # 가이드 목록·글은 홈이 읽는 원본이라 만들기만 한다(sitemap에 넣지 않는다)
+        add(lang, *guide_index(lang), index=False)
         for a in ARTICLES[lang]:
-            add(lang, *article_page(lang, a))
+            add(lang, *article_page(lang, a), index=False)
         for key in ('about', 'privacy'):
             add(lang, *doc_page(lang, key))
     out['404.html'] = not_found()
     out['sitemap.xml'] = sitemap(paths)
-    out['rss.xml'] = rss()
+    out = {rel: moved_guides(text) if rel.endswith('.html') else text for rel, text in out.items()}
     return out, paths
 
 

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""가이드 글 페이지(guide/*/index.html), 가이드 목록, 소개 페이지, 404 페이지, sitemap.xml, rss.xml을 만든다.
+"""가이드 글 페이지(guide/*/index.html), 가이드 목록, 소개 페이지, 404 페이지, sitemap.xml을 만든다.
 영어판(en/: 계산기·영어 글·목록·소개)도 같은 명령으로 tools/build_en.py가 만든다.
 
 글 내용은 이 파일의 GUIDES에 있다(영어 글은 build_en.py). 고친 뒤 `python3 date-calc/tools/build_guides.py` 를 돌리고 결과를 커밋한다.
+가이드 HTML은 lumenlab.page/guides/date/ 에 싣는 원본이다(2026-10-29부터 lumenlab/_dev/build_home.py가 읽는다. 이 사이트는 배포하지 않고 sitemap에도 넣지 않는다).
 예시 숫자는 assets/dates.js로 검산한 값이다(tests/run.js의 '가이드 예시' 묶음이 같은 값을 시험한다).
 """
-import html, json, os
+import html, json, os, re
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 BASE = "https://date.lumenlab.page"
@@ -311,7 +312,21 @@ def crumbs(items):
         {"@type": "ListItem", "position": i + 1, "name": n, "item": BASE + p} for i, (n, p) in enumerate(items)]}
 
 
+# 2026-10-29 가이드 글을 lumenlab.page/guides/date/ 로 옮겼다(이 사이트의 /guide/…는 worker.js가 301): 만드는 HTML의 가이드 링크를 새 주소로 바꿔 쓴다
+GUIDE_HREF = re.compile(r'href="(/en)?/guide(?:/([^"#]*))?(#[^"]*)?"')
+
+
+def root_guides(text):
+    """목록 /guide/ → https://lumenlab.page/guides/#date, 글 /guide/<slug>/#조각 → https://lumenlab.page/guides/date/<slug>/#조각 (영어는 /en/guides/…)"""
+    def to(m):
+        en, slug, frag = m.group(1) or "", m.group(2) or "", m.group(3) or ""
+        return f'href="https://lumenlab.page{en}/guides/date/{slug}{frag}"' if slug else f'href="https://lumenlab.page{en}/guides/#date"'
+    return GUIDE_HREF.sub(to, text)
+
+
 def write(path, text):
+    if path.endswith(".html"):
+        text = root_guides(text)
     full = os.path.join(ROOT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, "w", encoding="utf-8") as f:
@@ -406,39 +421,10 @@ def about_page():
 
 
 def sitemap(en_urls=(), en_updated=UPDATED):
-    urls = ["/", "/guide/"] + [f"/guide/{g['slug']}/" for g in GUIDES] + ["/about/", "/privacy"]
+    urls = ["/", "/about/", "/privacy"]  # 가이드(/guide/…)는 lumenlab.page/guides/date/ 로 옮겨 넣지 않는다
     rows = "\n".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{LASTMOD.get(u, UPDATED)}</lastmod></url>" for u in urls)
     rows += "".join(f"\n  <url><loc>{BASE}{u}</loc><lastmod>{en_updated}</lastmod></url>" for u in en_urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}\n</urlset>\n'
-
-
-def rss():
-    """네이버 서치어드바이저에 내는 RSS. 글마다 본문 전체, 링크는 전부 이 도메인의 전체 주소로."""
-    import datetime
-    d = datetime.date.fromisoformat(UPDATED)
-    pub = d.strftime("%a, %d %b %Y 00:00:00 +0900")
-    items = []
-    for g in GUIDES:
-        url = f"{BASE}/guide/{g['slug']}/"
-        body = g["body"].strip().replace('href="/', f'href="{BASE}/')
-        items.append(f"""  <item>
-    <title>{E(g['title'])}</title>
-    <link>{url}</link>
-    <guid isPermaLink="true">{url}</guid>
-    <pubDate>{pub}</pubDate>
-    <description><![CDATA[{body}]]></description>
-  </item>""")
-    return f"""<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-<channel>
-  <title>며칠 계산기 가이드</title>
-  <link>{BASE}/guide/</link>
-  <description>날짜 사이 기간, 디데이, 만 나이, 영업일, 대체공휴일, 기념일을 정확하게 세는 법</description>
-  <language>ko</language>
-{chr(10).join(items)}
-</channel>
-</rss>
-"""
 
 
 def not_found_page():
@@ -477,5 +463,5 @@ if __name__ == "__main__":
     write("about/index.html", about_page())
     write("404.html", not_found_page())
     write("sitemap.xml", sitemap(build_en.urls(), build_en.UPDATED))
-    write("rss.xml", rss())
-    print("가이드 %d편 + 목록 + 소개 + 404 + sitemap + rss 만듦, 영어판(/en/: 계산기 + 글 %d편 + 목록 + 소개) 만듦" % (len(GUIDES), n_en))
+    # rss.xml은 만들지 않는다: 가이드 RSS는 2026-10-29부터 lumenlab.page/guides/rss.xml (예전 /rss.xml은 worker.js가 301)
+    print("가이드 %d편 + 목록 + 소개 + 404 + sitemap 만듦, 영어판(/en/: 계산기 + 글 %d편 + 목록 + 소개) 만듦" % (len(GUIDES), n_en))

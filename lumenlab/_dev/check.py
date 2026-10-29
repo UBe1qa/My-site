@@ -11,8 +11,9 @@ here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here);
 cat = json.load(open(os.path.join(here, 'catalog.json')))
 ITEMS = [(k, it['id']) for k in ('games', 'apps') for it in cat.get(k, [])] + [('tools', it['id']) for g in cat['groups'] for it in cat['tools'] if it['group'] == g['id']]
 PAGES = ['/', '/en/', '/works/daycount/', '/en/works/pickboard/', '/works/castleup/', '/en/works/chickrescue/', '/works/owlight/', '/works/setnote/',
-         '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/']
-PAIRS = [('/', '/en/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/')] + [(f'/works/{i}/', f'/en/works/{i}/') for _, i in ITEMS]  # 한국어·영어가 따로 된 페이지
+         '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/',
+         '/guides/', '/en/guides/', '/guides/date/d-day/', '/guides/salary/juhyu-sudang-gyesan/', '/guides/count/emoji-myeot-geulja/', '/en/guides/pick/ladder-lottery-fairness/']
+PAIRS = [('/', '/en/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/'), ('/guides/', '/en/guides/')] + [(f'/works/{i}/', f'/en/works/{i}/') for _, i in ITEMS]  # 한국어·영어가 따로 된 페이지
 ORIG = '/home/claude/ube1qa/lumenlab-site/setnote'  # 세트노트는 2026-10-06 setnote.lumenlab.page 로 옮김 → 아래 비교는 하지 않음
 fails = []
 def ok(c, msg):
@@ -35,9 +36,41 @@ for pg in ['owlight/privacy', 'owlight/support']:
     o = os.path.join(os.path.dirname(ORIG), pg, 'index.html')
     if os.path.exists(o): ok(body_text(o) == body_text(os.path.join(site, pg, 'index.html')), f'{pg} 본문이 원래 문구 그대로')
 
-# lumenlab.page 의 어떤 페이지에도 광고 코드가 없음(광고는 도구 사이트에만)
-ads = [os.path.relpath(os.path.join(r, f), site) for r, ds, fs in os.walk(site) if '/_dev' not in r for f in fs if f.endswith('.html') and re.search(r'adsbygoogle|pagead2\.googlesyndication', open(os.path.join(r, f)).read())]
-ok(not ads, f'lumenlab.page 페이지에 광고 코드 없음 {ads[:3]}')
+# 광고 코드는 가이드 글(/guides/<도구>/<글>/, /en/guides/<도구>/<글>/)에만, 글마다 하나. 홈·만든 것·가이드 모음·소개·방침·앱 지원엔 없음(2026-10-29 가이드를 옮기며)
+GUIDE_ART = re.compile(r'^(en/)?guides/[a-z]+/[a-z0-9-]+/index\.html$')
+ad_pages = {os.path.relpath(os.path.join(r, f), site): open(os.path.join(r, f)).read().count('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154')
+            for r, ds, fs in os.walk(site) if '/_dev' not in r for f in fs if f.endswith('.html')}
+wrong = [f for f, n in ad_pages.items() if n != (1 if GUIDE_ART.match(f) else 0)]
+ok(not wrong and sum(1 for f in ad_pages if GUIDE_ART.match(f)) > 100, f'광고 코드는 가이드 글에만 하나씩({sum(1 for f in ad_pages if GUIDE_ART.match(f))}편) {wrong[:3]}')
+ok(not [f for f in ad_pages if not GUIDE_ART.match(f) and 'adsbygoogle' in open(os.path.join(site, f)).read()], '가이드 글 밖엔 adsbygoogle 글자도 없음')
+
+# 가이드(2026-10-29 도구 사이트에서 옮김): 도구 글 하나하나가 이 사이트 글로 있고, canonical = 자기 주소, 사이트맵에 있고,
+# hreflang 짝은 서로 가리키고, 글 안 링크는 이 사이트 주소(파일 있음)나 https 주소뿐, 영어 글은 영어 쪽으로만, RSS 는 한국어 글 전부
+sys.path.insert(0, here); sys.dont_write_bytecode = True; import build_info as BI, build_guides as BG
+sm_txt = open(os.path.join(site, 'sitemap.xml')).read()
+gfound = BG.find(site, cat); gbad = []
+ALT = re.compile(r'<link rel="alternate" hreflang="([^"]+)" href="https://lumenlab\.page([^"]*)"')
+for a in gfound:
+    pth = BG.root_path(a['it'], a['lang'], a['slug']); f = os.path.join(site, pth.strip('/'), 'index.html')
+    if not os.path.isfile(f): gbad.append(f'{pth} 없음'); continue
+    h = open(f).read(); body = h[h.index('<main'):h.index('</main>')]
+    if f'<link rel="canonical" href="https://lumenlab.page{pth}">' not in h: gbad.append(f'{pth} canonical')
+    if f'<loc>https://lumenlab.page{pth}</loc>' not in sm_txt: gbad.append(f'{pth} 사이트맵')
+    alts = dict(ALT.findall(h))
+    if alts:
+        o = alts.get('en' if a['lang'] == 'ko' else 'ko'); of = os.path.join(site, (o or '').strip('/'), 'index.html')
+        if alts.get(a['lang']) != pth or not o or not os.path.isfile(of) or dict(ALT.findall(open(of).read())) != alts: gbad.append(f'{pth} hreflang 짝 {alts}')
+    for k, v in re.findall(r'\s(href|src|poster)="([^"]*)"', body):
+        if v.startswith(('https://', '#', 'mailto:', 'tel:', 'data:')): continue
+        q = v.split('#')[0]; t = os.path.join(site, q.lstrip('/'))
+        if not v.startswith('/') or v.startswith('//') or not (os.path.isfile(t) or os.path.isfile(os.path.join(t, 'index.html'))): gbad.append(f'{pth} 링크 {v}')
+        elif k == 'href' and (a['lang'] == 'en') != v.startswith('/en/') and v != '/': gbad.append(f'{pth} 다른 언어 쪽 링크 {v}')
+ok(len(gfound) > 100 and not gbad, f'가이드 글 {len(gfound)}편: 페이지·canonical·사이트맵·hreflang 짝·글 안 링크 {gbad[:4]}')
+rss = open(os.path.join(site, 'guides', 'rss.xml')).read()
+import xml.dom.minidom
+try: xml.dom.minidom.parseString(rss.encode()); rss_ok = True
+except Exception as e: rss_ok = False
+ok(rss_ok and rss.count('<item>') == sum(1 for a in gfound if a['lang'] == 'ko') and not re.search(r'\s(href|src)="/', rss), f"가이드 RSS: XML 맞음, 한국어 글 {rss.count('<item>')}편, 주소는 다 https")
 
 # 소개 페이지·소개·방침이 가리키는 도구·앱 사이트 주소가 이 저장소의 실제 파일과 맞음(옆 폴더 = 그 사이트)
 hostdir = {urlparse(it['url']).netloc: it['dir'] for it in cat['tools']}
@@ -305,7 +338,7 @@ with sync_playwright() as p:
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
     ok(all(h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not (h.startswith(("/en/", "#", "http", "mailto:", "tel:")) or h == "/")]}')
     pg.route(SUB, sub_file)
-    for path in ('/en/about/', '/en/privacy/') + tuple(f'/en/works/{i}/' for _, i in ITEMS):
+    for path in ('/en/about/', '/en/privacy/', '/en/guides/', '/en/guides/pick/ladder-lottery-fairness/', '/en/guides/salary/severance-pay-korea/') + tuple(f'/en/works/{i}/' for _, i in ITEMS):
         pg.goto(BASE + path); pg.wait_for_timeout(200 if '/works/' not in path else 600)
         left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
         ok(not left, f'{path} 화면에 한국어가 남지 않음 {left}')
@@ -387,6 +420,19 @@ with sync_playwright() as p:
         pg.keyboard.press('Escape'); pg.wait_for_timeout(500)
         ok(pg.evaluate('location.pathname+location.hash') == '/', f'{frag} 창을 닫으면 주소가 홈')
         c.close()
+    # /guides/ 는 2026-10-29부터 진짜 페이지(가이드 모음): 예전에 퍼진 /guides/#try-…, /en/guides/#t-… 는 홈의 그 창으로 넘김
+    for pre, frag in (('', '#try-' + tools[2]), ('/en', '#t-' + tools[3])):
+        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
+        pg.goto(BASE + pre + '/guides/' + frag); pg.wait_for_timeout(1800)
+        tid = frag.split('-', 1)[1]
+        ok(pg.evaluate("!!document.querySelector('dialog.sheet') && document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname') == f'{pre}/works/{tid}/' and not errs,
+           f'예전 {pre}/guides/{frag} 로 와도 홈의 소개 창이 뜸 ({pg.evaluate("location.pathname")}) {errs[:2]}')
+        c.close()
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/guides/#qr'); pg.wait_for_timeout(1800)   # 사이트 전체 scroll-behavior:smooth 라 그 칸까지 부드럽게 내려감(약 1초)
+    top = pg.evaluate("document.querySelector('#qr').getBoundingClientRect().top")
+    ok(pg.evaluate('location.pathname+location.hash') == '/guides/#qr' and 0 <= top < 220, f'가이드 모음 #도구 로 오면 그 도구 칸에서 멈춤(넘기지 않음, 칸 위 {round(top)}px)')
+    c.close()
 
     # 첫 화면 들어올 때 카메라는 움직이지 않음(처음부터 배율 1, 사용자가 '과하다'고 뺌). 제목 낱말 셋이 있고 위층 이웃 창에 불이 켜지면 그 낱말도 켜짐
     NEAR = "(()=>{const m=getComputedStyle(document.querySelector('.night__near')).transform;return m==='none'?1:new DOMMatrix(m).a})()"

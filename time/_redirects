@@ -1,0 +1,11 @@
+# 2026-10-29 가이드 글을 루멘랩 홈(lumenlab.page/guides/)으로 옮겼다(홈에 글을 모아 애드센스 '가치가 낮은 콘텐츠' 거절을 풀려고). 옛 가이드 주소는 홈의 같은 글로 영구 이동.
+# 목록은 홈 가이드 모음의 이 사이트 칸(#time)으로, 한국어 RSS는 홈의 것으로. 고정 주소를 먼저, * 규칙을 뒤에 둔다(위에 있는 규칙이 먼저 걸린다).
+/ko/guide/ https://lumenlab.page/guides/#time 301
+/ko/guide https://lumenlab.page/guides/#time 301
+/ko/guide/index.html https://lumenlab.page/guides/#time 301
+/guide/ https://lumenlab.page/en/guides/#time 301
+/guide https://lumenlab.page/en/guides/#time 301
+/guide/index.html https://lumenlab.page/en/guides/#time 301
+/rss.xml https://lumenlab.page/guides/rss.xml 301
+/ko/guide/* https://lumenlab.page/guides/time/:splat 301
+/guide/* https://lumenlab.page/en/guides/time/:splat 301
