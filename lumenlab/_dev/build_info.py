@@ -163,7 +163,7 @@ def sub_page_ok(it, href):
 # ---------- 소개 ----------
 def about_main(lang, cat, tools, groups, counts):
     T = KO if lang == 'ko' else EN
-    games, apps = cat.get('games', []), cat['apps']
+    games, apps = [[it for it in cat.get(k, []) if not it.get('hold')] for k in ('games', 'apps')]   # 출시 전(hold)은 빼고
     def nm(it): return esc(it['name'][lang])
     def st(it): return f" ({esc(_text(it['status'][lang]))})" if it.get('status') else ''
     what = T['what'](len(tools), counts[lang], ', '.join(nm(i) + st(i) for i in games), ', '.join(nm(i) + st(i) for i in apps), len(games), len(apps))
@@ -214,7 +214,7 @@ KO = {
   <li><b>웹 도구 {t}개</b> 날짜·숫자·월급 계산, 글자수 세기, 파일 변환, 달력 인쇄, QR코드, 기기 테스트, 타이머, 타자 연습, 뽑기. 모두 무료이고 가입이 없어요. <a href="/#tools">웹 도구 둘러보기</a></li>
   <li><b>가이드 {n}편</b> 도구를 쓰다 막히는 곳과 계산 기준을 풀어 쓴 글이에요. 모두 이 사이트의 <a href="/guides/">가이드</a>에 모아 두었어요.</li>
   <li><b>게임 {ng}개</b> {games}. 안드로이드 먼저 준비하고 있어요. <a href="/#games">게임 보기</a></li>
-  <li><b>앱 {na}개</b> {apps}. <a href="/#games">앱 보기</a></li>
+  <li><b>앱 {na}개</b> {apps}. <a href="/#apps">앱 보기</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">누가 만드나요</h2>
@@ -437,8 +437,8 @@ EN = {
     'what': lambda t, n, games, apps, ng, na: f'''<ul class="ilist">
   <li><b>{t} web tools</b> Date, number and pay calculators, a character counter, file conversion, printable calendars, QR codes, device tests, timers, typing practice and fair picks. All free, no sign-up. <a href="/en/#tools">See the tools</a></li>
   <li><b>{n} English guides</b> Explainers on the tricky parts of each tool and the rules behind the numbers. They are all collected in this site’s <a href="/en/guides/">Guides</a>.</li>
-  <li><b>{ng} games</b> {games}. Android comes first. <a href="/en/#games">See the games</a></li>
-  <li><b>{na} apps</b> {apps}. <a href="/en/#games">See the apps</a></li>
+  <li><b>{ng} game{'s' * (ng != 1)}</b> {games}. Android comes first. <a href="/en/#games">See the game{'s' * (ng != 1)}</a></li>
+  <li><b>{na} app{'s' * (na != 1)}</b> {apps}. <a href="/en/#apps">See the app{'s' * (na != 1)}</a></li>
 </ul>''',
     'about_body': lambda what, checks: f'''<section id="who" aria-labelledby="who-t">
 <h2 id="who-t">Who we are</h2>

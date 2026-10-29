@@ -21,3 +21,10 @@
 /en/apps/ /en/#apps 301
 /games/ /#games 301
 /en/games/ /en/#games 301
+
+# 2026-10-29 출시 전인 캐슬업!·Owlight 를 홈 칸·소개 페이지에서 뺐다(catalog.json hold). 출시되면 hold 와 함께 이 네 줄을 지운다.
+# 그 소개 사이트(castle-up·owlight.lumenlab.page)와 /owlight/privacy/·/owlight/support/ 는 그대로
+/works/castleup/ /#games 302
+/en/works/castleup/ /en/#games 302
+/works/owlight/ /#apps 302
+/en/works/owlight/ /en/#apps 302

@@ -39,10 +39,13 @@ idx = os.path.join(site, 'index.html')
 html = open(idx).read()
 
 # 바닥글: 첫 줄은 루멘랩 자체(만든 것·소개·사이트 전체 방침·문의). 어느 페이지에서든 누가 운영하는지와 방침을 찾게
-pv = ''.join(f'<a href="{h}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it in games + apps for h in ([it['privacy']['ko']] if it.get('privacy') else []) + [l['href'] for l in it['links'] if l['href'].endswith('/privacy/')])
+pvs = [(it, h) for it in games + apps for h in ([it['privacy']['ko']] if it.get('privacy') else []) + [l['href'] for l in it['links'] if l['href'].endswith('/privacy/')]]
+pv = ''.join(f'<a href="{h}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it, h in pvs)
 for k, v in (('ftLumen', 'Lumen Lab'), ('ftWorks', 'Everything we make'), ('ftGuides', 'Guides'), ('ftAbout', 'About'), ('ftPrivacy', 'Privacy Policy'), ('ftContact', 'Contact'), ('ftAppPrivacy', 'App privacy policies')): EN[k] = v
 FOOT = '      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>\n'
-FOOT += (f'      <div><b data-i18n="ftGames">게임</b>{foot(games)}</div>\n' if games else '') + f'      <div><b data-i18n="ftApps">앱</b>{foot(apps)}</div>\n      <div><b data-i18n="ftTools">웹 도구</b>{foot(tools)}</div>'
+sg, sa = build_store.shown(games), build_store.shown(apps)   # 출시 전이라 숨긴 것(hold)은 제품 줄에서만 뺀다
+FOOT += (f'      <div><b data-i18n="ftGames">게임</b>{foot(sg)}</div>\n' if sg else '') + f'      <div><b data-i18n="ftApps">앱</b>{foot(sa)}</div>\n      <div><b data-i18n="ftTools">웹 도구</b>{foot(tools)}</div>'
+for it, _ in pvs: EN.setdefault(f"f_{it['id']}", it['name']['en'])   # 제품 줄에서 뺀 것(hold)도 앱 방침 줄엔 남으니 영어 이름을 따로 넣는다
 if pv: FOOT += f'\n      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b>{pv}</div>'
 
 # 홈: 큰 아이콘 칸(누르면 소개 창)·바닥글·숫자
