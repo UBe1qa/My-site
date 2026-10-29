@@ -793,7 +793,7 @@
     ],
     "cap": {
      "ko": "아래 원고지는 칸칸이 200자 원고지에 놓는 방식 그대로 첫 장을 그려요.",
-     "en": "The grid below shows the first sheet of 200-square manuscript paper, filled the way Kankan lays it out."
+     "en": "The counts below come from the same counting files Kankan runs. Change how a line break counts and watch the totals move."
     }
    },
    "proof": {

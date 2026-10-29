@@ -84,7 +84,7 @@ KO = {
     'about': lambda n: f'{n} 소개에서 자세히', 'others': '다른 것도 둘러보기', 'crumb': '만든 것', 'crumb_label': '위치',
     'privacy': '개인정보 처리방침',
     'basis_full': lambda n: f'전체 기준은 {n} 소개에서', 'checked': lambda d: f'확인 {d}', 'rc_title': lambda n: f'{n} 기준표',
-    'day': lambda d: f'{d.year}. {d.month}. {d.day}.', 'stamp': lambda d: (f'{d.month}.{d.day:02d}', f'{d.year}'),
+    'day': lambda d: f'{d.year}. {d.month}. {d.day}.',
     'title': lambda n, w: f'{n}: {w} · Lumen Lab 루멘랩',
     'ui': {'close': '닫기', 'open': '열기', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
            'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'play': '영상 재생', 'pause': '영상 멈춤'},
@@ -100,7 +100,7 @@ EN = {
     'about': lambda n: f'More in About {n}', 'others': 'More from Lumen Lab', 'crumb': 'Work', 'crumb_label': 'Breadcrumb',
     'privacy': 'Privacy Policy',
     'basis_full': lambda n: f'All rules in About {n}', 'checked': lambda d: f'Checked {d}', 'rc_title': lambda n: f'{n} rule sheet',
-    'day': lambda d: f'{MON[d.month - 1]} {d.day}, {d.year}', 'stamp': lambda d: (f'{MON[d.month - 1]} {d.day}', f'{d.year}'),
+    'day': lambda d: f'{MON[d.month - 1]} {d.day}, {d.year}',
     'title': lambda n, w: f'{n}: {w} · Lumen Lab',
     'ui': {'close': 'Close', 'open': 'Open', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
            'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'play': 'Play video', 'pause': 'Pause video'},
@@ -200,9 +200,9 @@ _TEXT = {}
 def _href_ok(it, href):
     """출처 주소는 지어내지 않는다: 그 도구(앱) 자기 사이트의 실제 페이지이거나, 그 폴더의 페이지·코드 어딘가에 그대로 있는 주소"""
     d = it.get('dir') or FOLDER[it['id']]; u = urlparse(href)
-    if u.netloc == urlparse(it['url']).netloc:
-        f = os.path.join(mono, d, u.path.strip('/'))
-        return os.path.isfile(f) or os.path.isfile(os.path.join(f, 'index.html'))
+    if u.netloc in (urlparse(it['url']).netloc, 'lumenlab.page'):
+        f = os.path.join(mono, d if u.netloc != 'lumenlab.page' else 'lumenlab', u.path.strip('/'))
+        return os.path.isfile(f) or os.path.isfile(os.path.join(f, 'index.html')) or os.path.isfile(f + '.html')   # /privacy = privacy.html
     if d not in _TEXT:
         parts = []
         for r, _, fs in os.walk(os.path.join(mono, d)):
@@ -222,7 +222,8 @@ def wt_of(it):
         _two(b['h'], f'{k}.basis.h'); assert 4 <= len(b['rows']) <= 6, f'{k}: 기준은 4~6줄'
         for i, r in enumerate(b['rows']):
             _two(r['k'], f'{k}.basis.{i}.k'); _two(r['v'], f'{k}.basis.{i}.v'); _two(r['src']['t'], f'{k}.basis.{i}.src')
-            assert r['src']['href'].startswith('https://') and _href_ok(it, r['src']['href']), f'{k}.basis.{i}: 그 도구 쪽에 없는 출처 주소 {r["src"]["href"]}'
+            hs = r['src']['href']; hs = [hs] if isinstance(hs, str) else [hs['ko'], hs['en']]
+            for h_ in hs: assert h_.startswith('https://') and _href_ok(it, h_), f'{k}.basis.{i}: 그 도구 쪽에 없는 출처 주소 {h_}'
             if r.get('on'): _day(r['on'], f'{k}.basis.{i}.on')
         if b.get('note'): _two(b['note'], f'{k}.basis.note')
     g = w['log']; _two(g['h'], f'{k}.log.h'); assert 4 <= len(g['items']) <= 8, f'{k}: 고친 기록은 4~8줄'
@@ -231,42 +232,56 @@ def wt_of(it):
     for i, x in enumerate(g['items']): _two(x['t'], f'{k}.log.{i}')
     return w
 
+def tie(t):
+    """좁은 폰에서 '41만~659만', '7.19%의' 가 중간에서 갈리지 않게, 셈 기호는 뒤 숫자와 붙여 줄이 기호 앞에서만 바뀌게(이미 HTML로 바꾼 글에 쓴다)"""
+    t = re.sub(r' ([×÷]) ', ' \\1\u00a0', t)
+    t = re.sub(r'(?<=\S)~(?=\S)', '\u2060~\u2060', t)
+    return re.sub(r'%(?=[가-힣])', '%\u2060', t)
+
 def how_sec(w, lang):
-    steps = ''.join(f'<li><b>{esc(s["t"][lang])}</b><span>{esc(s["d"][lang])}</span></li>' for s in w['how']['steps'])
+    """쓰는 법: '확인하고 밝혀 둔 것'과 같은 작업 일지 종이, 여백 선 왼쪽에 순서 번호(보이면 하나씩 적힌다, store.js 의 .in)"""
+    steps = ''.join(f'<li><b>{esc(s["t"][lang])}</b><span>{tie(esc(s["d"][lang]))}</span></li>' for s in w['how']['steps'])
     return f'''<section class="sh__sec sh__how" aria-labelledby="sh-how">
     <h2 id="sh-how">{esc(w['how']['h'][lang])}</h2>
-    <div class="clip"><i class="clip__clamp" aria-hidden="true"></i><ol class="sh__steps">{steps}</ol></div>
+    <ol class="sh__steps">{steps}</ol>
   </section>'''
 
+def src_href(it, href, lang):
+    """출처 주소: 언어마다 다르면 글 파일에 {ko, en} 짝으로, 그 도구 자기 시작·소개·방침 페이지면 한국어 주소 하나만 적어도 영어판은 영어 페이지로"""
+    if isinstance(href, dict): return href[lang]
+    if lang == 'en' and it.get('dir'):
+        ko, en = BI.tool_pages(it, 'ko'), BI.tool_pages(it, 'en')
+        for k in ('about', 'privacy', 'home'):
+            if href == ko[k]: return en[k]
+    return href
+
 def basis_sec(it, w, lang, about):
-    """영수증: 작업대 프린터 틈(.rc__slot)에서 보이면 한 번 밀려 나온다(store.js 의 .in)"""
+    """기준표: 같은 종이, 맨 위 줄에 확인한 날(모든 줄이 같은 날일 때), 줄마다 여백에 ✓"""
     T = KO if lang == 'ko' else EN; b = w['basis']; rows = []
     ons = {r.get('on') for r in b['rows']}
     one = ons.pop() if len(ons) == 1 and None not in ons else None   # 모든 줄을 같은 날 확인했으면 날짜는 머리에 한 번
     for r in b['rows']:
         on = f' · {T["checked"](T["day"](datetime.date.fromisoformat(r["on"])))}' if r.get('on') and not one else ''
-        rows.append(f'<div class="rc__row"><dt>{esc(r["k"][lang])}</dt><dd><span class="rc__v">{esc(r["v"][lang])}</span>'
-                    f'<span class="rc__src"><a href="{esc(r["src"]["href"])}">{esc(r["src"]["t"][lang])}</a>{on}</span></dd></div>')
-    note = f'\n      <p class="rc__note">{esc(b["note"][lang])}</p>' if b.get('note') else ''
+        rows.append(f'<div class="rc__row"><dt>{esc(r["k"][lang])}</dt><dd><span class="rc__v">{tie(esc(r["v"][lang]))}</span>'
+                    f'<span class="rc__src"><a href="{esc(src_href(it, r["src"]["href"], lang))}">{esc(r["src"]["t"][lang])}</a>{on}</span></dd></div>')
+    note = f'\n      <p class="rc__note">{tie(esc(b["note"][lang]))}</p>' if b.get('note') else ''
     link = f'\n    <p class="sh__links"><a href="{esc(about)}">{esc(T["basis_full"](it["name"][lang]))} <span aria-hidden="true">→</span></a></p>' if about else ''
+    day = f'<span>{esc(T["checked"](T["day"](datetime.date.fromisoformat(one))))}</span>' if one else ''
     return f'''<section class="sh__sec sh__basis" aria-labelledby="sh-basis">
     <h2 id="sh-basis">{esc(b['h'][lang])}</h2>
-    <div class="rc"><i class="rc__slot" aria-hidden="true"></i><div class="rc__feed"><div class="rc__paper">
-      <p class="rc__title">{esc(T['rc_title'](it['name'][lang]))}{f'<span>{esc(T["checked"](T["day"](datetime.date.fromisoformat(one))))}</span>' if one else ''}</p>
+    <div class="rc">
+      <p class="rc__title">{esc(T['rc_title'](it['name'][lang]))}{day}</p>
       <dl class="rc__rows">{''.join(rows)}</dl>{note}
-    </div></div></div>{link}
+    </div>{link}
   </section>'''
 
 def log_sec(w, lang):
-    """수첩: 여백에 날짜 도장(보이면 하나씩 찍힌다), 줄마다 고친 것 하나"""
-    T = KO if lang == 'ko' else EN; li = []
-    for x in w['log']['items']:
-        d = datetime.date.fromisoformat(x['d']); a, y = T['stamp'](d)
-        li.append(f'<li><time datetime="{x["d"]}"><span class="sh__vh">{T["day"](d)}</span><b aria-hidden="true">{a}</b><small aria-hidden="true">{y}</small></time>'
-                  f'<p>{esc(x["t"][lang])}</p></li>')
+    """고친 기록: 같은 종이, 여백 선이 시간 줄(줄마다 점, 가장 최근 것은 켜진 점), 날짜 아래에 고친 것 하나"""
+    T = KO if lang == 'ko' else EN
+    li = ''.join(f'<li><time datetime="{x["d"]}">{T["day"](datetime.date.fromisoformat(x["d"]))}</time><p>{tie(esc(x["t"][lang]))}</p></li>' for x in w['log']['items'])
     return f'''<section class="sh__sec sh__changes" aria-labelledby="sh-log">
     <h2 id="sh-log">{esc(w['log']['h'][lang])}</h2>
-    <ol class="sh__days">{''.join(li)}</ol>
+    <ol class="sh__days">{li}</ol>
   </section>'''
 
 def body(kind, it, lang, gdata, cat):

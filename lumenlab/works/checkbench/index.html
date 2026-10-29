@@ -68,6 +68,10 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">위 숫자는 지금 보고 있는 이 화면의 주사율이고, 키보드는 같은 키를 뗀 뒤 30ms 안에 다시 눌리면 채터링 의심으로 알려요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">아무 키나 누르면 키보드 칸부터 바로 채워져요</h2>
+    <ol class="sh__steps"><li><b>아무 키나 누르기</b><span>아무 키나 누르면 그림 자판에서 그 키에 불이 들어오고, 키보드 칸에 ‘키가 들어와요’가 떠요.</span></li><li><b>마우스 누르고 굴리기</b><span>단추를 누르고 휠을 굴리면 ‘마우스가 들어와요’가 뜨고, 빠르게 움직이면 ‘1초에 알려 주는 횟수(추정)’에 숫자가 나와요.</span></li><li><b>마이크·카메라 허용하기</b><span>‘마이크 확인하기’를 눌러 허용한 뒤 말하면 ‘소리를 잡아요’가, ‘카메라 확인하기’를 눌러 허용하면 ‘카메라가 돼요’가 떠요.</span></li><li><b>스피커 한쪽씩 듣기</b><span>‘왼쪽’이나 ‘오른쪽’을 누르면 그쪽으로 작은 소리가 1.2초 나고, 끝나면 ‘소리를 냈어요’가 떠요.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://check.lumenlab.page/ko/keyboard-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3zM6 10h1M9 10h1M12 10h1M15 10h1M18 10h1M7 14h10"/></svg></span><b>키보드 테스트</b><span>안 눌리는 키·채터링</span></a></li><li><a href="https://check.lumenlab.page/ko/mouse-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v6a5 5 0 0 0 10 0V8a5 5 0 0 0-5-5zM12 3v6"/></svg></span><b>마우스 테스트</b><span>단추·휠·더블클릭</span></a></li><li><a href="https://check.lumenlab.page/ko/mic-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM6 11a6 6 0 0 0 12 0M12 17v4"/></svg></span><b>마이크 테스트</b><span>녹음해서 바로 듣기</span></a></li><li><a href="https://check.lumenlab.page/ko/webcam-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3v12H4zM12 10a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></span><b>웹캠 테스트</b><span>해상도와 초당 장 수</span></a></li><li><a href="https://check.lumenlab.page/ko/speaker-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10zM16 9a4 4 0 0 1 0 6"/></svg></span><b>스피커 테스트</b><span>왼쪽·오른쪽 소리</span></a></li><li><a href="https://check.lumenlab.page/ko/dead-pixel-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM10 10h4v4h-4z"/></svg></span><b>불량화소 테스트</b><span>전체 화면 단색</span></a></li><li><a href="https://check.lumenlab.page/ko/refresh-rate-test/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l4-8 4 5 4-9 4 12"/></svg></span><b>주사율 테스트</b><span>내 모니터 Hz</span></a></li><li><a href="https://check.lumenlab.page/ko/gamepad-tester/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9h12a3 3 0 0 1 3 3v2a3 3 0 0 1-5 2l-1-1H9l-1 1a3 3 0 0 1-5-2v-2a3 3 0 0 1 3-3zM8 11v3M6.5 12.5h3M16 12h.01M18 13h.01"/></svg></span><b>게임패드 테스트</b><span>스틱 쏠림·떨림</span></a></li></ul>
@@ -75,12 +79,24 @@
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">판정마다 기준(키보드 채터링 30ms, 마우스 더블클릭 50ms 등)을 결과 옆에 밝히고, 웹페이지로는 알 수 없는 것(마우스의 실제 USB 폴링레이트 등)은 알 수 없다고 적어 둬요.</p></div>
-    <p class="sh__links"><a href="https://check.lumenlab.page/ko/about/">체크벤치 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">마이크 소리는 소음 억제와 자동 음량을 꺼 달라고 한 채로 재요</h2>
+    <div class="rc">
+      <p class="rc__title">체크벤치 기준표</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>마이크·카메라 권한</dt><dd><span class="rc__v">단추를 누를 때만 getUserMedia로 권한을 물어요. 막히면 브라우저가 준 오류를 보고 사이트 권한이 막혔는지, 운영체제 설정이 막았는지, 장치가 없는지 나눠 알려 줘요.</span><span class="rc__src"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MDN: MediaDevices.getUserMedia()</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>마이크 소리 크기</dt><dd><span class="rc__v">울림 제거·소음 억제·자동 음량을 꺼 달라고 한 채로 재요. 0 dBFS가 가장 큰 눈금에서 -45 dBFS를 넘으면 ‘소리를 잡아요’, 꼭대기에서 잘리면 ‘너무 커요(잘림)’이 떠요.</span><span class="rc__src"><a href="https://check.lumenlab.page/ko/about/">체크벤치 소개</a></span></dd></div><div class="rc__row"><dt>주사율</dt><dd><span class="rc__v">requestAnimationFrame으로 화면 120장 간격을 재서 중앙값을 써요. 흔한 값과 1% 안이면 ‘약’을 붙이고, 제때 온 화면이 75%⁠보다 적으면 값을 말하지 않아요.</span><span class="rc__src"><a href="https://check.lumenlab.page/ko/about/">체크벤치 소개</a></span></dd></div><div class="rc__row"><dt>동시에 눌린 키</dt><dd><span class="rc__v">같은 순간 눌려 있는 키를 Shift·Ctrl까지 모두 세요. USB 키보드의 기본 보고 형식은 조합 키 말고 6개까지라, 6개에서 멈추면 그 형식 때문일 수 있어요.</span><span class="rc__src"><a href="https://www.usb.org/sites/default/files/hid1_11.pdf">USB-IF, HID 장치 규격 1.11</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>게임패드 스틱</dt><dd><span class="rc__v">가만히 둔 위치의 평균이 5% 미만이면 가운데, 15% 이상이면 쏠림으로 봐요. Gamepad API 값을 거르지 않고 쓰니, 작은 쏠림을 무시하는 게임에선 안 느껴질 수 있어요.</span><span class="rc__src"><a href="https://learn.microsoft.com/en-us/windows/win32/xinput/getting-started-with-xinput">마이크로소프트 문서: XInput 시작하기의 Dead Zone 칸</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>기기에 남는 것</dt><dd><span class="rc__v">마이크 소리, 녹음, 카메라 영상, 사진은 탭 안에서만 처리하고 어디에도 보내지 않아요. 브라우저에는 자판 배열과 채터링·더블클릭 기준 같은 설정만 남겨요.</span><span class="rc__src"><a href="https://check.lumenlab.page/ko/privacy/">체크벤치 개인정보 처리방침</a></span></dd></div></dl>
+      <p class="rc__note">판정 기준은 공식 표준이 아니라 체크벤치가 정한 값이고, 화상회의 프로그램은 소리를 따로 다듬어서 거기서 들리는 소리와 다를 수 있어요.</p>
+    </div>
+    <p class="sh__links"><a href="https://check.lumenlab.page/ko/about/">전체 기준은 체크벤치 소개에서 <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 4편</h2>
     <ol class="sh__guides"><li><a href="/guides/check/keyboard-chattering/">키보드 채터링 확인하는 법</a></li><li><a href="/guides/check/maikeu-an-japil-ttae/">마이크가 안 잡힐 때 브라우저·윈도우·맥에서 볼 곳</a></li><li><a href="/guides/check/bulryang-hwaso-hwagin/">새 모니터 불량화소 확인 순서</a></li><li><a href="/guides/check/dongsi-ipryeok-rollover/">동시 입력(롤오버)이 뭔가요: 몇 키까지 눌리는지 확인하기</a></li></ol>
     <p class="sh__links"><a href="/guides/#check">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">웹캠 테스트가 640×480에 묶여 있던 것을 공개한 날 고쳤어요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-29">2026. 10. 29.</time><p>가이드 4편을 lumenlab.page/guides/로 옮겼고, 옛 주소로 열어도 새 글이 떠요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>웹캠 테스트가 640×480 대신 카메라가 낼 수 있는 가장 큰 화면을 요청해요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>마이크 크기를 울림 제거·소음 억제·자동 음량을 끈 소리로 재게 바꿨어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>맥에서 Caps Lock을 누르면 키가 걸렸다고 잘못 알리던 것을 고쳤어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>테스트 8가지를 한국어·영어로 열고, 가이드를 언어마다 4편씩 올렸어요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

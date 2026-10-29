@@ -67,7 +67,11 @@
       <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
     </div>
     <i class="mon__stand" aria-hidden="true"></i>
-    <p class="sh__cap">The grid below shows the first sheet of 200-square manuscript paper, filled the way Kankan lays it out.</p>
+    <p class="sh__cap">The counts below come from the same counting files Kankan runs. Change how a line break counts and watch the totals move.</p>
+  </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">Paste your text and eight numbers update at once</h2>
+    <ol class="sh__steps"><li><b>Paste your text</b><span>Type, paste or press ‘Try a sample text’, and ‘Words’ and ‘Characters’ change as you write.</span></li><li><b>Read the six figures below</b><span>Under them, ‘Without spaces’, ‘Words’ (Unicode rules), ‘Sentences’, ‘Paragraphs’, ‘Reading time’ and ‘Reading aloud’ follow along.</span></li><li><b>Match the line-break rule</b><span>Open ‘Line breaks count as 1’ with ‘change’ and pick ‘0’, ‘1’ or ‘2’ to match the form you are filling in.</span></li><li><b>Set a goal</b><span>Press ‘Set a goal’, enter a number and choose ‘Words’, ‘Characters’ or ‘Without spaces’ to see how many are left or over.</span></li></ol>
   </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
@@ -76,12 +80,24 @@
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">The counting code is covered by about 35,000 automated tests, with expected values taken from Python&#x27;s codecs and Unicode libraries, the twitter-text package and three independent SMS calculators.</p></div>
-    <p class="sh__links"><a href="https://count.lumenlab.page/about/">More in About Kankan <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">All 10 social media limits were checked against each service&#x27;s own docs on Oct 10, 2026</h2>
+    <div class="rc">
+      <p class="rc__title">Kankan rule sheet</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>One character</dt><dd><span class="rc__v">One character is what a reader sees as one, split into grapheme clusters by the browser&#x27;s Intl.Segmenter.</span><span class="rc__src"><a href="https://unicode.org/reports/tr29/">Unicode Standard Annex UAX #29</a></span></dd></div><div class="rc__row"><dt>UTF-8 bytes</dt><dd><span class="rc__v">1 byte for ASCII, 2 for most accented Latin letters, 3 for Korean, Chinese and Japanese, and 4 for most emoji, with no byte-order mark counted.</span><span class="rc__src"><a href="https://www.rfc-editor.org/rfc/rfc3629">RFC 3629: UTF-8</a></span></dd></div><div class="rc__row"><dt>X posts</dt><dd><span class="rc__v">A weighted 280: CJK characters and emoji count 2, any link counts 23, and the tests are compared with npm twitter-text 3.1.0.</span><span class="rc__src"><a href="https://docs.x.com/fundamentals/counting-characters">X documentation: Counting characters</a> · Checked Oct 10, 2026</span></dd></div><div class="rc__row"><dt>YouTube descriptions</dt><dd><span class="rc__v">The limit is 5,000 UTF-8 bytes, not 5,000 characters.</span><span class="rc__src"><a href="https://developers.google.com/youtube/v3/docs/videos">YouTube documentation</a> · Checked Oct 10, 2026</span></dd></div><div class="rc__row"><dt>Bluesky posts</dt><dd><span class="rc__v">300 graphemes and 3,000 UTF-8 bytes both apply, and the row is marked over if either one is passed.</span><span class="rc__src"><a href="https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json">Bluesky documentation</a> · Checked Oct 10, 2026</span></dd></div></dl>
+      <p class="rc__note">For the 6 limits whose documentation does not say what is counted, Kankan counts UTF-16 units and marks them ‘unit not documented’.</p>
+    </div>
+    <p class="sh__links"><a href="https://count.lumenlab.page/about/">All rules in About Kankan <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">3 guides</h2>
     <ol class="sh__guides"><li><a href="/en/guides/count/how-x-counts-characters/">How X counts characters: emoji, links and the 280 limit</a></li><li><a href="/en/guides/count/why-161-characters-is-two-sms/">Why a 161-character text costs two messages</a></li><li><a href="/en/guides/count/characters-code-points-bytes/">Characters, code points, bytes: why 👨‍👩‍👧 is 1, 5 or 18</a></li></ol>
     <p class="sh__links"><a href="/en/guides/#count">All guides <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">The day after launch we fixed counts dropping to 0 when you came back with the Back button</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-29">Oct 29, 2026</time><p>The 3 English guides moved to lumenlab.page/en/guides/, and their old addresses forward to the new pages.</p></li><li><time datetime="2026-10-10">Oct 10, 2026</time><p>Fixed counts showing 0 when you came back to a page with your text still in the box.</p></li><li><time datetime="2026-10-10">Oct 10, 2026</time><p>Number boxes now flag anything that is not a whole number instead of quietly reading it another way.</p></li><li><time datetime="2026-10-10">Oct 10, 2026</time><p>The line-break rule and your goal are now kept until you close the tab.</p></li><li><time datetime="2026-10-09">Oct 9, 2026</time><p>Kankan first went online.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">More from Lumen Lab</h2>

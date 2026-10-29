@@ -64,6 +64,10 @@
     <ul class="shots is-tall" style="--ar:600/1298"><li><img src="/img/setnote/workout-ko.webp" width="600" height="1298" alt="운동 중: 세트마다 지난번 무게와 횟수가 옆에 있고, 끝낸 세트는 칠해져요" loading="lazy" decoding="async"></li><li><img src="/img/setnote/routines-ko.webp" width="600" height="1298" alt="루틴: 저장해 둔 루틴을 한 번에 불러와 시작해요" loading="lazy" decoding="async"></li><li><img src="/img/setnote/done-ko.webp" width="600" height="1298" alt="운동을 끝내면 총 볼륨, 신기록, 지난번과 비교한 변화가 나와요" loading="lazy" decoding="async"></li><li><img src="/img/setnote/history-ko.webp" width="600" height="1298" alt="기록: 끝낸 운동이 날짜별로 쌓이고 이번 주 볼륨과 연속 운동이 보여요" loading="lazy" decoding="async"></li></ul>
     <p class="sh__cap">실제 앱 화면이에요. 예시로 이틀 운동을 적어 보고 찍었어요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">지난번과 같으면 세트마다 체크 한 번이면 돼요</h2>
+    <ol class="sh__steps"><li><b>추천 루틴 고르기</b><span>처음 열면 나오는 ‘푸시 데이’·‘풀 데이’·‘레그 데이’ 가운데 하나에서 ‘바로 시작’을 누르면 그 루틴으로 운동이 바로 열려요.</span></li><li><b>무게·횟수 적고 체크</b><span>세트마다 ‘kg’과 ‘회’ 칸에 적고 오른쪽 체크를 누르면 기록되고, 칸을 비워 두면 흐리게 보이는 값으로 들어가요.</span></li><li><b>쉬는 시간 재기</b><span>체크하면 ‘휴식’ 타이머가 기본 90초로 흐르고, ‘−15’·‘+15’로 15초씩 바꾸거나 ‘건너뛰기’로 넘겨요.</span></li><li><b>저장하고 끝내기</b><span>위의 ‘완료’에 이어 ‘저장하고 끝내기’를 누르면 ‘총 볼륨’과 ‘지난번과 비교’가 나오고, 다음엔 ‘지난번’ 칸에 오늘 값이 떠요.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">더 알아보기</h2>
     <ul class="sh__cards"><li><a href="https://setnote.lumenlab.page/#features"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></span><b>루틴 저장</b><span>자주 하는 운동 순서를 한 번에</span></a></li><li><a href="https://setnote.lumenlab.page/#features"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4M6 7.5v9M18 7.5v9M21 10v4M6 12h12"/></svg></span><b>지난번과 바로 비교</b><span>세트마다 지난번 무게와 횟수</span></a></li><li><a href="https://setnote.lumenlab.page/#features"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/></svg></span><b>세트 사이 쉬는 시간</b><span>끝날 때 소리로 알려 줘요</span></a></li><li><a href="https://setnote.lumenlab.page/#features"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V11M10 19V6M15 19v-9M20 19V9M3 19h19"/></svg></span><b>쌓이는 기록</b><span>최고 무게, 추정 1RM, 이번 주 볼륨</span></a></li></ul>
@@ -72,6 +76,18 @@
     <h2 id="sh-check">밝혀 둔 것</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">기록은 이 기기에만 저장되고 서버로 보내지 않아요. 다른 기기로 옮길 땐 백업 파일로 내보내고 가져와요. 위 화면은 실제 앱에 예시 운동 두 번을 적어 넣고 찍은 거예요.</p></div>
     <p class="sh__links"><a href="https://setnote.lumenlab.page/">어떤 앱인지 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">추정 1RM 계산식과 저장 위치를 앱이 직접 밝혀요</h2>
+    <div class="rc">
+      <p class="rc__title">세트노트 기준표</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>기록이 지워지는 때</dt><dd><span class="rc__v">설정의 ‘저장 위치’에 ‘이 브라우저에만 저장 중’이라고 떠요. 브라우저 데이터를 지우면 기록도 사라지고, 홈 화면에 설치한 앱은 앱을 지울 때 사라져요.</span><span class="rc__src"><a href="https://setnote.lumenlab.page/app/">세트노트 설정: ‘저장 위치’</a></span></dd></div><div class="rc__row"><dt>백업 파일</dt><dd><span class="rc__v">‘백업 내보내기’는 루틴과 모든 기록을 JSON 파일 하나로 받아요. ‘백업 가져오기’ 때 같은 항목이 이미 있으면 백업 내용으로 바뀌어요.</span><span class="rc__src"><a href="https://setnote.lumenlab.page/app/">세트노트 설정: ‘백업’</a></span></dd></div><div class="rc__row"><dt>추정 1RM</dt><dd><span class="rc__v">Epley 공식, 무게 × (1 + 횟수/30)로 계산해요. 1회만 했으면 그 무게를 그대로 써요.</span><span class="rc__src"><a href="https://setnote.lumenlab.page/app/">세트노트 앱의 ‘추정 1RM’ 설명</a></span></dd></div><div class="rc__row"><dt>신기록</dt><dd><span class="rc__v">운동마다 이번에 가장 높은 추정 1RM이 지금까지 최고보다 높으면 끝 화면에 신기록으로 떠요. 맨몸 운동과 처음 한 운동은 빼요.</span><span class="rc__src"><a href="https://setnote.lumenlab.page/app/">세트노트 앱</a></span></dd></div><div class="rc__row"><dt>볼륨</dt><dd><span class="rc__v">체크한 세트의 무게 × 횟수를 모두 더해요. 체크하지 않은 세트는 저장되지 않아요.</span><span class="rc__src"><a href="https://setnote.lumenlab.page/app/">세트노트 앱</a></span></dd></div><div class="rc__row"><dt>광고</dt><dd><span class="rc__v">세트노트에는 광고가 없어요.</span><span class="rc__src"><a href="https://lumenlab.page/privacy/">루멘랩 개인정보 처리방침</a></span></dd></div></dl>
+      <p class="rc__note">휴식 끝 소리는 휴대폰 무음 모드에서는 안 날 수 있어요.</p>
+    </div>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">2026년 10월 6일 지금 주소로 옮겼고, 18일에 처리방침을 올렸어요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-18">2026. 10. 18.</time><p>세트노트를 함께 다루는 개인정보 처리방침을 lumenlab.page/privacy/에 올렸어요.</p></li><li><time datetime="2026-10-06">2026. 10. 6.</time><p>브라우저에서 앱 왼쪽 위 로고를 누르면 소개 페이지가 열려요.</p></li><li><time datetime="2026-10-06">2026. 10. 6.</time><p>소개 페이지 끝에 루멘랩의 다른 앱과 도구로 가는 ‘다음 세트’ 줄을 넣었어요.</p></li><li><time datetime="2026-10-06">2026. 10. 6.</time><p>주소를 setnote.lumenlab.page로 옮겼고, 옛 주소는 새 앱으로 이어져요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

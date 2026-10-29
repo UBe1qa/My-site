@@ -202,65 +202,45 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
 .sh__books.in .sh__guides li{animation:bookIn .55s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 60ms)}
 @keyframes bookIn{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
 
-/* 쓰는 법 = 나무 클립보드에 끼운 작업 순서. 번호는 그 도구 색 도장(보이면 하나씩 찍힌다) */
-.clip{position:relative;margin:30px 0 0;padding:14px 14px 16px;border-radius:16px;
-  background:linear-gradient(160deg,var(--pl-top),var(--pl-front));box-shadow:0 18px 30px -24px rgba(0,0,0,.55)}
-.clip__clamp{position:absolute;z-index:2;left:50%;top:-13px;width:118px;height:30px;margin-left:-59px;border-radius:8px 8px 13px 13px;
-  background:linear-gradient(#DCD6CA,#9E9583);box-shadow:0 3px 0 rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.55)}
-.clip__clamp::after{content:"";position:absolute;left:50%;top:7px;width:30px;height:8px;margin-left:-15px;border-radius:4px;background:var(--pl-front)}
-.sh__steps{list-style:none;counter-reset:st;margin:0;padding:22px 22px 6px;border-radius:8px;background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.14)}
-.sh__steps li{--r:-7deg;counter-increment:st;position:relative;display:grid;gap:3px;padding:14px 0 16px 60px;border-top:1px dashed color-mix(in srgb,var(--ink) 18%,transparent)}
-.sh__steps li:nth-child(2n){--r:5deg}
-.sh__steps li:first-child{border-top:0}
-.sh__steps li::before{content:counter(st);position:absolute;left:0;top:11px;width:40px;height:40px;border:2px solid var(--tct);border-radius:50%;
-  display:grid;place-items:center;color:var(--tct);font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;transform:rotate(var(--r))}
+/* 쓰는 법·기준표·고친 기록 = 위 '확인한 것'(.sh__note)과 같은 줄 친 작업 일지 종이. 여백 선(--ml) 왼쪽 칸엔 번호·✓·점을 적는다.
+   보이면(store.js 의 .in) 번호와 ✓·점이 하나씩 적힌다. 움직이는 건 transform·opacity 뿐 */
+.sh__steps,.rc,.sh__days{--ml:43px;--pl:calc(var(--ml) + 13px);position:relative;margin:18px 0 0;border-radius:12px;background-color:var(--card);box-shadow:0 0 0 1px var(--line);
+  background-image:linear-gradient(90deg,transparent var(--ml),color-mix(in srgb,var(--lamp) 45%,transparent) var(--ml) calc(var(--ml) + 2px),transparent calc(var(--ml) + 2px));
+  background-repeat:no-repeat;padding:4px 20px 4px var(--pl)}
+.sh__steps li,.rc__title,.rc__row,.rc__note,.sh__days li{border-top:1px solid color-mix(in srgb,var(--line) 85%,transparent)}
+.sh__steps li:first-child,.rc__title,.sh__days li:first-child{border-top:0}
+.sh__steps{list-style:none;counter-reset:st}
+.sh__steps li{counter-increment:st;position:relative;display:grid;gap:2px;padding:12px 0 13px}
+.sh__steps li::before{content:counter(st);position:absolute;left:calc(0px - var(--pl));top:11px;width:var(--ml);text-align:center;
+  color:var(--lamp-ink);font-size:19px;font-weight:800;line-height:1.45;font-variant-numeric:tabular-nums}
 .sh__steps b{font-size:17px;line-height:1.45}
 .sh__steps span{font-size:16px;line-height:1.65;color:var(--ink-2)}
-.sh__how.in .sh__steps li::before{animation:stamp .42s cubic-bezier(.3,.7,.4,1) backwards;animation-delay:calc(.15s + var(--i,0) * 140ms)}
-@keyframes stamp{from{opacity:0;transform:scale(1.7) rotate(calc(var(--r) - 14deg))}to{opacity:1;transform:rotate(var(--r))}}
-
-/* 기준과 출처 = 작업대 프린터에서 나온 영수증: 틈(.rc__slot) 밑으로 처음 보일 때 한 번 밀려 나온다. 아래 끝은 뜯은 톱니 */
-.rc{position:relative;max-width:600px;margin:30px auto 0;padding-top:8px}
-.rc__slot{position:absolute;z-index:2;left:-10px;right:-10px;top:0;height:16px;border-radius:8px;
-  background:linear-gradient(var(--mon-2),var(--mon));box-shadow:0 6px 12px -6px rgba(0,0,0,.55)}
-.rc__feed{overflow:hidden;margin:0 8px;padding-bottom:2px}
-.rc__paper{position:relative;padding:28px 26px 34px;background:var(--card);box-shadow:inset 1px 0 0 var(--line),inset -1px 0 0 var(--line);
-  -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/18px 100%;
-  mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/18px 100%}
-.rc__title{margin:0 0 6px;padding-bottom:14px;border-bottom:2px dashed color-mix(in srgb,var(--ink) 24%,transparent);
-  text-align:center;font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
-.rc__title span{display:block;margin-top:2px;font-weight:600;letter-spacing:0}
+.rc{padding-bottom:6px}
+.rc__title{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;margin:0;padding:12px 0;font-size:15px;font-weight:800;line-height:1.5;color:var(--ink)}
+.rc__title span{font-weight:700;color:var(--lamp-ink);font-variant-numeric:tabular-nums}
 .rc__rows{margin:0}
-.rc__row{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 18px;padding:14px 0;border-bottom:1px dashed color-mix(in srgb,var(--ink) 16%,transparent)}
-.rc__row dt{font-size:15px;line-height:1.55;font-weight:700;color:var(--muted)}
-.rc__row dd{margin:0;display:grid;gap:5px}
-.rc__v{font-size:17px;line-height:1.5;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
-.rc__src{font-size:15px;line-height:1.55;color:var(--muted)}
-.rc__src a{color:var(--ink-2);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--tc) 70%,transparent);text-underline-offset:3px}
+.rc__row{position:relative;display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:3px 22px;padding:12px 0 13px}
+.rc__row::before{content:"";position:absolute;left:calc(var(--ml) / 2 - 7px - var(--pl));top:17px;width:13px;height:7px;border:solid var(--lamp-ink);border-width:0 0 2.5px 2.5px;
+  transform:rotate(-45deg);transform-origin:50% 50%}
+.rc__row dt{font-size:15.5px;line-height:1.6;font-weight:800;color:var(--ink)}
+.rc__row dd{margin:0;display:grid;gap:4px}
+.rc__v{font-size:16.5px;line-height:1.6;color:var(--ink);font-variant-numeric:tabular-nums}
+.rc__src{font-size:14.5px;line-height:1.55;color:var(--muted)}
+.rc__src a{color:var(--ink-2);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--lamp) 75%,transparent);text-underline-offset:3px}
 .rc__src a:hover{color:var(--ink)}
-.rc__note{margin:16px 0 0;font-size:15px;line-height:1.65;color:var(--ink-2)}
-.sh__basis .sh__links{justify-content:center}
-.sh__basis.in .rc__paper{animation:feed 1.15s cubic-bezier(.35,.6,.35,1) backwards}
-.sh__basis.in .rc__slot{animation:hum 1.15s linear}
-@keyframes feed{from{transform:translateY(-100%)}to{transform:none}}
-@keyframes hum{0%,100%{transform:none}10%,30%,50%,70%,90%{transform:translateX(-.6px)}20%,40%,60%,80%{transform:translateX(.6px)}}
-
-/* 고친 기록 = 스프링 수첩: 위에 고리, 줄 친 종이, 여백에 날짜 도장(보이면 하나씩 찍힌다) */
-.sh__days{list-style:none;position:relative;margin:30px 0 0;padding:22px 22px 8px 18px;border-radius:6px 6px 14px 14px;background-color:var(--card);
-  box-shadow:0 0 0 1px var(--line),0 16px 26px -24px rgba(0,0,0,.45);
-  background-image:linear-gradient(90deg,transparent 113px,color-mix(in srgb,var(--lamp) 45%,transparent) 113px 115px,transparent 115px)}
-.sh__days::before{content:"";position:absolute;left:16px;right:16px;top:-10px;height:22px;pointer-events:none;
-  background:radial-gradient(circle at 50% 62%,transparent 4px,var(--hook) 4.5px 6.5px,transparent 7px) 0 0/22px 22px repeat-x}
-.sh__days li{--r:-4deg;display:grid;grid-template-columns:84px minmax(0,1fr);gap:28px;align-items:start;padding:12px 0 13px;border-bottom:1px solid color-mix(in srgb,var(--line) 85%,transparent)}
-.sh__days li:last-child{border-bottom:0}
-.sh__days li:nth-child(2n){--r:3deg}
-.sh__days time{display:grid;justify-items:center;padding:5px 4px 4px;border:2px solid var(--tct);border-radius:8px;color:var(--tct);line-height:1.15;
-  background:color-mix(in srgb,var(--tc) 6%,var(--card));transform:rotate(var(--r))}
-.sh__days time b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
-.sh__days time small{font-size:15px;font-weight:600;opacity:.85}
-.sh__days p{margin:0;padding-top:8px;font-size:16.5px;line-height:1.6;color:var(--ink)}
-.sh__changes.in .sh__days time{animation:stamp .4s cubic-bezier(.3,.7,.4,1) backwards;animation-delay:calc(.1s + var(--i,0) * 110ms)}
-.sh__vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.rc__note{margin:0;padding:12px 0 10px;font-size:15px;line-height:1.65;color:var(--ink-2)}
+.sh__days{list-style:none}
+.sh__days li{position:relative;padding:12px 0 13px}
+.sh__days li::before{content:"";position:absolute;left:calc(var(--ml) - 3.5px - var(--pl));top:18px;width:9px;height:9px;border-radius:50%;
+  box-shadow:inset 0 0 0 2px var(--lamp-ink);background:var(--card)}
+.sh__days li:first-child::before{background:var(--lamp);box-shadow:inset 0 0 0 2px var(--lamp-ink),0 0 0 4px color-mix(in srgb,var(--lamp) 28%,transparent)}
+.sh__days time{display:block;font-size:14.5px;font-weight:800;line-height:1.55;color:var(--lamp-ink);font-variant-numeric:tabular-nums}
+.sh__days li:first-child time{display:inline-block;padding:0 9px;border-radius:999px;background:var(--lamp-soft)}
+.sh__days p{margin:2px 0 0;font-size:16.5px;line-height:1.6;color:var(--ink)}
+.sh__how.in .sh__steps li::before,.sh__basis.in .rc__row::before,.sh__changes.in .sh__days li::before{animation:jot .38s cubic-bezier(.3,.7,.4,1) backwards;animation-delay:calc(.12s + var(--i,0) * 110ms)}
+.sh__basis.in .rc__row::before{animation-name:jotTick}
+@keyframes jot{from{opacity:0;transform:translateY(5px) scale(.7)}}
+@keyframes jotTick{from{opacity:0;transform:rotate(-45deg) scale(.4)}}
 
 /* 다른 것 = 선반: 아이콘이 나무 판 위에(누르면 창 안에서 그것으로 바뀐다) */
 .sh__oth{padding-top:28px;border-top:1px solid var(--line)}
@@ -312,15 +292,10 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
   .shots.is-tall{--sw:calc(340px * var(--ar))}
   .shots.is-wide{--sw:86vw}
   .sh__guides a{padding:11px 36px 11px 42px;font-size:15.5px}
-  .clip{padding:12px 10px 12px}
-  .sh__steps{padding:18px 16px 4px}
-  .sh__steps li{padding:13px 0 14px 54px}
-  .rc__feed{margin:0 4px}
-  .rc__paper{padding:24px 18px 32px}
+  .sh__steps,.rc,.sh__days{padding-right:16px}
+  .rc,.sh__days{--ml:13px;--pl:29px}   /* 폰: 기준표·고친 기록은 여백 선을 왼쪽 끝으로 붙여 글 줄을 넓힌다(✓는 빼고, 점은 그대로 선 위에) */
   .rc__row{grid-template-columns:minmax(0,1fr)}
-  .sh__days{padding:20px 14px 6px 12px;background-image:linear-gradient(90deg,transparent 93px,color-mix(in srgb,var(--lamp) 45%,transparent) 93px 95px,transparent 95px)}
-  .sh__days li{grid-template-columns:72px minmax(0,1fr);gap:22px}
-  .sh__days time b{font-size:17px}
+  .rc__row::before{display:none}
   .pp{padding-top:16px;padding-bottom:56px}
   .sh-doc{padding:0 18px 30px;border-radius:22px}
 }
@@ -363,10 +338,10 @@ textarea.tr-in{min-height:96px;padding:10px 12px;line-height:1.6;resize:vertical
   .sh__pill,.sh.is-past .sh__pill{transition:opacity .15s,visibility 0s;transform:none}
   .sh__others img,.sh__others a:hover img{transition:none;transform:none}
   .sh-doc .sh__spot,.sh-doc .sh__icon,.sh-doc .sh__status,.sh__more.in .sh__cards a,.sh__log.in .sh__tick,.sh__books.in .sh__guides li,
-  .sh__how.in .sh__steps li::before,.sh__basis.in .rc__paper,.sh__basis.in .rc__slot,.sh__changes.in .sh__days time{animation:none}
+  .sh__how.in .sh__steps li::before,.sh__basis.in .rc__row::before,.sh__changes.in .sh__days li::before{animation:none}
   .sh__spot{transition:none}
   .sh__icon,.sh__guides a,.sh__cards a,.shots li{transition:none}
   .sh__guides a:hover,.sh__guides a:focus-visible,.sh__cards a:hover{transform:none}
 }
-/* 창을 열 때 아래 칸(쓰는 법·더 알아보기·작업 일지·영수증·책·수첩·다른 것)은 내려가 보일 때 그린다: 여는 순간 글자 모양 잡기·배치가 한꺼번에 몰려 멈칫하지 않게 */
+/* 창을 열 때 아래 칸(쓰는 법·더 알아보기·작업 일지·기준표·책·고친 기록·다른 것)은 내려가 보일 때 그린다: 여는 순간 글자 모양 잡기·배치가 한꺼번에 몰려 멈칫하지 않게 */
 .sheet .sh__how,.sheet .sh__more,.sheet .sh__log,.sheet .sh__basis,.sheet .sh__books,.sheet .sh__changes,.sheet .sh__oth{content-visibility:auto;contain-intrinsic-size:auto 420px}
