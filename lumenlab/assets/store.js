@@ -262,13 +262,16 @@
       });
       on(spot, 'pointerleave', function () { icon.style.removeProperty('--rx'); icon.style.removeProperty('--ry'); });
     }
-    $$(root, '.sh__cards > li, .sh__guides > li').forEach(function (li) { li.style.setProperty('--i', Array.prototype.indexOf.call(li.parentNode.children, li)); });
+    $$(root, '.sh__cards > li, .sh__guides > li, .sh__steps > li, .sh__days > li').forEach(function (li) { li.style.setProperty('--i', Array.prototype.indexOf.call(li.parentNode.children, li)); });
 
     var io = 'IntersectionObserver' in window && !reduced;
     // 칸 드러내기: 아래 10%를 뺀 화면에 들어오면
     if (io) {
-      var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('in', e.isIntersecting); }); }, { root: o.scroller, rootMargin: '0px 0px -10% 0px' });
-      $$(root, '.sh__more, .sh__log, .sh__books').forEach(function (s) { rio.observe(s); });
+      // 영수증은 한 번만 밀려 나온다(긴 종이가 되돌아올 때마다 다시 나오면 읽던 줄을 놓친다)
+      var rio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (!(e.target.classList.contains('sh__basis') && e.target.classList.contains('in'))) e.target.classList.toggle('in', e.isIntersecting); });
+      }, { root: o.scroller, rootMargin: '0px 0px -10% 0px' });
+      $$(root, '.sh__how, .sh__more, .sh__log, .sh__basis, .sh__books, .sh__changes').forEach(function (s) { rio.observe(s); });
       offs.push(function () { rio.disconnect(); });
     }
     // 사실 숫자 세기

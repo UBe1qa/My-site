@@ -3,13 +3,15 @@
 #   2) 소개 페이지 /works/<id>/ · /en/works/<id>/: 소개 창과 같은 내용. 창은 이 페이지를 불러 그 안의 .sh__body 를 그대로 옮겨 담는다
 #      (글은 여기 한 곳에서만 만든다). 주소를 공유하거나 새로 고치면 이 페이지가 열리고, 검색엔진·애드센스도 이 페이지로 읽는다.
 # 사실은 catalog.json(이름·하는 일·확인한 것·링크)과 showcase.json(창에만 쓰는 사실 줄·미리 보기·카드), 가이드 목록은 도구 사이트의 글(build_info.read_guides), 링크는 이 사이트의 가이드 글(build_guides).
-import os, re, json, hashlib, html as H
+import os, re, json, hashlib, datetime, html as H
 from urllib.parse import urlparse
 import build_info as BI
 import build_guides as BG
 
 here = os.path.dirname(os.path.abspath(__file__)); mono = os.path.dirname(os.path.dirname(here))
 SC = json.load(open(os.path.join(here, 'showcase.json')))
+# 소개 본문에 더하는 글 칸 셋(2026-10-29~): 쓰는 법(how) · 기준과 출처(basis) · 고친 기록(log). 항목마다 그 도구의 화면·소개 페이지·작업 기록에서 확인한 것만
+WT = json.load(open(os.path.join(here, 'works_text.json')))
 esc = BI.esc
 KO_WORD = {'games': '게임', 'apps': '앱', 'tools': '웹 도구'}
 
@@ -81,6 +83,8 @@ KO = {
     'check': '확인하고 밝혀 둔 것', 'note': '밝혀 둔 것', 'guides': lambda n: f'가이드 {n}편', 'guide_all': '가이드 목록 보기',
     'about': lambda n: f'{n} 소개에서 자세히', 'others': '다른 것도 둘러보기', 'crumb': '만든 것', 'crumb_label': '위치',
     'privacy': '개인정보 처리방침',
+    'basis_full': lambda n: f'전체 기준은 {n} 소개에서', 'checked': lambda d: f'확인 {d}', 'rc_title': lambda n: f'{n} 기준표',
+    'day': lambda d: f'{d.year}. {d.month}. {d.day}.', 'stamp': lambda d: (f'{d.month}.{d.day:02d}', f'{d.year}'),
     'title': lambda n, w: f'{n}: {w} · Lumen Lab 루멘랩',
     'ui': {'close': '닫기', 'open': '열기', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
            'yours': '직접 해 보세요', 'auto': '자동으로 보여 주는 중', 'replay': '다시 보기', 'play': '영상 재생', 'pause': '영상 멈춤'},
@@ -89,11 +93,14 @@ KO = {
     'games_line': '휴대폰 게임이에요. 안드로이드부터 출시를 준비하고 있어요.',
     'apps_line': '맥과 브라우저에서 쓰는 앱이에요.',
 }
+MON = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split()
 EN = {
     'open': 'Open', 'try': 'Try it here', 'shots': 'Preview', 'more': 'It can also', 'more_w': 'Learn more',
     'check': 'What it checks and discloses', 'note': 'What we disclose', 'guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'), 'guide_all': 'All guides',
     'about': lambda n: f'More in About {n}', 'others': 'More from Lumen Lab', 'crumb': 'Work', 'crumb_label': 'Breadcrumb',
     'privacy': 'Privacy Policy',
+    'basis_full': lambda n: f'All rules in About {n}', 'checked': lambda d: f'Checked {d}', 'rc_title': lambda n: f'{n} rule sheet',
+    'day': lambda d: f'{MON[d.month - 1]} {d.day}, {d.year}', 'stamp': lambda d: (f'{MON[d.month - 1]} {d.day}', f'{d.year}'),
     'title': lambda n, w: f'{n}: {w} · Lumen Lab',
     'ui': {'close': 'Close', 'open': 'Open', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
            'yours': 'Your turn', 'auto': 'Playing a demo', 'replay': 'Replay', 'play': 'Play video', 'pause': 'Pause video'},
@@ -177,9 +184,95 @@ WIN = ('<svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable=
        '<path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/>'
        '<path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg>')
 
+# ---------- 글 칸 셋(works_text.json): 쓰는 법 = 클립보드, 기준과 출처 = 영수증, 고친 기록 = 수첩 ----------
+# 칸 제목은 손님이 망설이는 것에 대한 그 도구만의 답(일이 많나 / 믿을 만한가 / 손보고 있나). 글은 항목마다 그 도구의 화면·소개·작업 기록에서 확인한 것만
+def _two(v, where):
+    assert isinstance(v, dict) and all(isinstance(v.get(l), str) and v[l].strip() for l in ('ko', 'en')), f'{where}: 한·영 글이 비었음'
+    for l in ('ko', 'en'): assert '—' not in v[l], f'{where}: 긴 줄표(—)'
+
+def _day(s, where):
+    d = datetime.date.fromisoformat(s)
+    assert d <= datetime.date.today() + datetime.timedelta(days=1), f'{where}: 앞날 {s}'
+    return d
+
+FOLDER = {'chickrescue': 'chick-rescue', 'castleup': 'castle-up', 'owlight': 'owlight', 'setnote': 'setnote'}
+_TEXT = {}
+def _href_ok(it, href):
+    """출처 주소는 지어내지 않는다: 그 도구(앱) 자기 사이트의 실제 페이지이거나, 그 폴더의 페이지·코드 어딘가에 그대로 있는 주소"""
+    d = it.get('dir') or FOLDER[it['id']]; u = urlparse(href)
+    if u.netloc == urlparse(it['url']).netloc:
+        f = os.path.join(mono, d, u.path.strip('/'))
+        return os.path.isfile(f) or os.path.isfile(os.path.join(f, 'index.html'))
+    if d not in _TEXT:
+        parts = []
+        for r, _, fs in os.walk(os.path.join(mono, d)):
+            if '/node_modules' in r or '/.git' in r: continue
+            parts += [open(os.path.join(r, f), errors='ignore').read() for f in fs if f.endswith(('.html', '.js', '.json', '.py', '.md'))]
+        _TEXT[d] = '\n'.join(parts)
+    return href in _TEXT[d] or href.replace('&', '&amp;') in _TEXT[d]
+
+def wt_of(it):
+    """그 항목의 글 칸 셋(없으면 None). 모양이 틀리면 빌드를 멈춘다."""
+    w = WT.get(it['id']); k = it['id']
+    if not w: return None
+    h = w['how']; _two(h['h'], f'{k}.how.h'); assert 3 <= len(h['steps']) <= 4, f'{k}: 쓰는 법은 3~4단계'
+    for i, s in enumerate(h['steps']): _two(s['t'], f'{k}.how.{i}.t'); _two(s['d'], f'{k}.how.{i}.d')
+    b = w.get('basis')
+    if b:
+        _two(b['h'], f'{k}.basis.h'); assert 4 <= len(b['rows']) <= 6, f'{k}: 기준은 4~6줄'
+        for i, r in enumerate(b['rows']):
+            _two(r['k'], f'{k}.basis.{i}.k'); _two(r['v'], f'{k}.basis.{i}.v'); _two(r['src']['t'], f'{k}.basis.{i}.src')
+            assert r['src']['href'].startswith('https://') and _href_ok(it, r['src']['href']), f'{k}.basis.{i}: 그 도구 쪽에 없는 출처 주소 {r["src"]["href"]}'
+            if r.get('on'): _day(r['on'], f'{k}.basis.{i}.on')
+        if b.get('note'): _two(b['note'], f'{k}.basis.note')
+    g = w['log']; _two(g['h'], f'{k}.log.h'); assert 4 <= len(g['items']) <= 8, f'{k}: 고친 기록은 4~8줄'
+    ds = [_day(x['d'], f'{k}.log') for x in g['items']]
+    assert ds == sorted(ds, reverse=True), f'{k}: 고친 기록은 최근부터'
+    for i, x in enumerate(g['items']): _two(x['t'], f'{k}.log.{i}')
+    return w
+
+def how_sec(w, lang):
+    steps = ''.join(f'<li><b>{esc(s["t"][lang])}</b><span>{esc(s["d"][lang])}</span></li>' for s in w['how']['steps'])
+    return f'''<section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">{esc(w['how']['h'][lang])}</h2>
+    <div class="clip"><i class="clip__clamp" aria-hidden="true"></i><ol class="sh__steps">{steps}</ol></div>
+  </section>'''
+
+def basis_sec(it, w, lang, about):
+    """영수증: 작업대 프린터 틈(.rc__slot)에서 보이면 한 번 밀려 나온다(store.js 의 .in)"""
+    T = KO if lang == 'ko' else EN; b = w['basis']; rows = []
+    ons = {r.get('on') for r in b['rows']}
+    one = ons.pop() if len(ons) == 1 and None not in ons else None   # 모든 줄을 같은 날 확인했으면 날짜는 머리에 한 번
+    for r in b['rows']:
+        on = f' · {T["checked"](T["day"](datetime.date.fromisoformat(r["on"])))}' if r.get('on') and not one else ''
+        rows.append(f'<div class="rc__row"><dt>{esc(r["k"][lang])}</dt><dd><span class="rc__v">{esc(r["v"][lang])}</span>'
+                    f'<span class="rc__src"><a href="{esc(r["src"]["href"])}">{esc(r["src"]["t"][lang])}</a>{on}</span></dd></div>')
+    note = f'\n      <p class="rc__note">{esc(b["note"][lang])}</p>' if b.get('note') else ''
+    link = f'\n    <p class="sh__links"><a href="{esc(about)}">{esc(T["basis_full"](it["name"][lang]))} <span aria-hidden="true">→</span></a></p>' if about else ''
+    return f'''<section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">{esc(b['h'][lang])}</h2>
+    <div class="rc"><i class="rc__slot" aria-hidden="true"></i><div class="rc__feed"><div class="rc__paper">
+      <p class="rc__title">{esc(T['rc_title'](it['name'][lang]))}{f'<span>{esc(T["checked"](T["day"](datetime.date.fromisoformat(one))))}</span>' if one else ''}</p>
+      <dl class="rc__rows">{''.join(rows)}</dl>{note}
+    </div></div></div>{link}
+  </section>'''
+
+def log_sec(w, lang):
+    """수첩: 여백에 날짜 도장(보이면 하나씩 찍힌다), 줄마다 고친 것 하나"""
+    T = KO if lang == 'ko' else EN; li = []
+    for x in w['log']['items']:
+        d = datetime.date.fromisoformat(x['d']); a, y = T['stamp'](d)
+        li.append(f'<li><time datetime="{x["d"]}"><span class="sh__vh">{T["day"](d)}</span><b aria-hidden="true">{a}</b><small aria-hidden="true">{y}</small></time>'
+                  f'<p>{esc(x["t"][lang])}</p></li>')
+    return f'''<section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">{esc(w['log']['h'][lang])}</h2>
+    <ol class="sh__days">{''.join(li)}</ol>
+  </section>'''
+
 def body(kind, it, lang, gdata, cat):
     T = KO if lang == 'ko' else EN
     s = sc_of(kind, it); L = lambda v: v[lang] if isinstance(v, dict) and lang in v else v
+    wt = wt_of(it)
     name = it['name'][lang]; what = short_what(kind, it, lang) if kind != 'tools' else it['what'][lang]
     sub = f' <span lang="en">{esc(it["sub"])}</span>' if lang == 'ko' and it.get('sub') else ''
     if kind == 'tools': op_href, op_t = home_url(kind, it, lang), T['open']
@@ -232,6 +325,7 @@ def body(kind, it, lang, gdata, cat):
     <ul class="shots {shape}" style="--ar:{w}/{hh}">{''.join(cells)}</ul>
     <p class="sh__cap">{esc(L(sh['cap']))}</p>
   </section>''')
+    if wt: out.append(how_sec(wt, lang))
     more = []
     for m in s['more']:
         href = L(m['href'])
@@ -246,11 +340,14 @@ def body(kind, it, lang, gdata, cat):
   </section>''')
     if kind == 'tools':
         tp = BI.tool_pages(it, lang)
+        # 기준 영수증이 있으면 소개 페이지 링크는 영수증 밑에 한 번만
+        about = '' if wt and wt.get('basis') else f'''
+    <p class="sh__links"><a href="{esc(tp['about'])}">{esc(T['about'](name))} <span aria-hidden="true">→</span></a></p>'''
         out.append(f'''<section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">{T['check']}</h2>
-    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(it['check'][lang])}</p></div>
-    <p class="sh__links"><a href="{esc(tp['about'])}">{esc(T['about'](name))} <span aria-hidden="true">→</span></a></p>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(it['check'][lang])}</p></div>{about}
   </section>''')
+        if wt and wt.get('basis'): out.append(basis_sec(it, wt, lang, tp['about']))
         index, items = gdata   # 글은 2026-10-29부터 이 사이트 /guides/ 에 있다(build_guides.py)
         rows = ''.join(f'<li><a href="{BG.root_path(it, lang, a["slug"])}">{esc(a["title"])}</a></li>' for a in items)
         out.append(f'''<section class="sh__sec sh__books" aria-labelledby="sh-gd">
@@ -258,6 +355,7 @@ def body(kind, it, lang, gdata, cat):
     <ol class="sh__guides">{rows}</ol>
     <p class="sh__links"><a href="{BG.root_path(it, lang)}">{T['guide_all']} <span aria-hidden="true">→</span></a></p>
   </section>''')
+        if wt: out.append(log_sec(wt, lang))
     else:
         links = []
         if s.get('open'): links.append((it['url'], it['links'][0][lang]))
@@ -268,6 +366,8 @@ def body(kind, it, lang, gdata, cat):
     <h2 id="sh-check">{T['note']}</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">{esc(L(s['note']))}</p></div>{f'{chr(10)}    <p class="sh__links">{chips}</p>' if chips else ''}
   </section>''')
+        if wt and wt.get('basis'): out.append(basis_sec(it, wt, lang, None))
+        if wt: out.append(log_sec(wt, lang))
     # 다른 것: 같은 칸(같은 묶음)이 먼저, 그다음 나머지 순서대로. 창 안에서 누르면 창 내용만 바뀐다(store.js)
     all_ = order(cat)
     same = lambda k, x: k == kind and (kind != 'tools' or x['group'] == it['group'])
@@ -331,6 +431,8 @@ def build(site, cat, ko_src, en_src):
     for k in ('games', 'apps', 'tools'):
         extra = set(SC.get(k, {})) - {it['id'] for it in cat.get(k, [])}
         assert not extra, f'showcase.json {k} 에만 있는 항목 {extra}'
+    extra = {k for k in WT if not k.startswith('_')} - {it['id'] for k in ('games', 'apps', 'tools') for it in cat.get(k, [])}
+    assert not extra, f'works_text.json 에만 있는 항목 {extra}'
     keep = set(); paths = []
     for kind, it in order(cat):
         for lang, src in (('ko', ko_src), ('en', en_src)):

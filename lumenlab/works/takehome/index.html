@@ -68,6 +68,10 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">소득세는 근로소득 간이세액표에서 찾고, 보험료와 세금의 10원 미만은 버려요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">연봉 한 칸이면 한 달 실수령액이 나와요</h2>
+    <div class="clip"><i class="clip__clamp" aria-hidden="true"></i><ol class="sh__steps"><li><b>연봉 넣기</b><span>프로토타입 문장이에요. 세전 연봉을 넣으면 바로 계산해요.</span></li><li><b>조건 고르기</b><span>프로토타입 문장이에요. 비과세 식대와 부양가족 수를 바꿀 수 있어요.</span></li><li><b>떼는 돈 한 줄씩 보기</b><span>프로토타입 문장이에요. 국민연금부터 지방소득세까지 식과 함께 나와요.</span></li></ol></div>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://salary.lumenlab.page/table/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>연봉 실수령액 표</b><span>2,000만~2억 원 한눈에</span></a></li><li><a href="https://salary.lumenlab.page/severance/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM6 10v4M18 10v4"/></svg></span><b>퇴직금</b><span>고용노동부와 같은 식으로</span></a></li><li><a href="https://salary.lumenlab.page/hourly/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/></svg></span><b>시급·주휴수당</b><span>최저임금과 견줘 보기</span></a></li><li><a href="https://salary.lumenlab.page/unemployment/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM7 10a2 2 0 1 0 0 .01M6 15h4M13 10h5M13 13h5"/></svg></span><b>실업급여</b><span>하루 받는 돈과 받는 날 수</span></a></li><li><a href="https://salary.lumenlab.page/annual-leave/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V5M5 5h11l-2 4 2 4H5"/></svg></span><b>연차</b><span>입사일로 연차 날짜까지</span></a></li></ul>
@@ -75,12 +79,24 @@
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">요율과 상한·하한은 법령과 공단·부처 자료를 직접 열어 확인한 것만 쓰고, 항목마다 출처와 확인한 날을 표로 공개해요. 퇴직금은 고용노동부 예제의 1일 평균임금 88,641원 31전까지 같게 나와요.</p></div>
-    <p class="sh__links"><a href="https://salary.lumenlab.page/about/">떼고얼마 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">요율과 세액표는 공단·부처 원문에서 가져와요</h2>
+    <div class="rc"><i class="rc__slot" aria-hidden="true"></i><div class="rc__feed"><div class="rc__paper">
+      <p class="rc__title">떼고얼마 기준표</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>국민연금(근로자 몫)</dt><dd><span class="rc__v">4.75%</span><span class="rc__src"><a href="https://salary.lumenlab.page/about/">국민연금공단 「보험료 금액 및 보험료율」</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>건강보험(근로자 몫)</dt><dd><span class="rc__v">3.595% (합계 7.19%의 절반)</span><span class="rc__src"><a href="https://salary.lumenlab.page/about/">국민건강보험공단 「2026년도 보험료율 인상 안내」</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>소득세(매달 떼는 금액)</dt><dd><span class="rc__v">근로소득 간이세액표 647줄, 2026년 3월 1일 시행</span><span class="rc__src"><a href="https://salary.lumenlab.page/about/">소득세법 시행령 별표 2</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>지방소득세</dt><dd><span class="rc__v">소득세의 10%</span><span class="rc__src"><a href="https://salary.lumenlab.page/about/">지방세법 제103조의13</a></span></dd></div></dl>
+      <p class="rc__note">프로토타입 문장이에요. 끝수 처리가 회사 급여 프로그램과 달라 몇십 원 차이가 날 수 있어요.</p>
+    </div></div></div>
+    <p class="sh__links"><a href="https://salary.lumenlab.page/about/">전체 기준은 떼고얼마 소개에서 <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 6편</h2>
     <ol class="sh__guides"><li><a href="/guides/salary/myeongseseo-dareun-iyu/">급여명세서 금액이 실수령액 계산기와 다른 이유</a></li><li><a href="/guides/salary/2026-4dae-boheom-yoyul/">2026년 4대 보험 요율과 2027년에 바뀌는 것</a></li><li><a href="/guides/salary/juhyu-sudang-gyesan/">주휴수당 계산법: 주 15시간 기준과 시간별 계산 예</a></li><li><a href="/guides/salary/toejikgeum-gyesan-yeje/">퇴직금 계산을 고용노동부 예제로 따라가 보기</a></li><li><a href="/guides/salary/choejeoimgeum-209sigan/">최저임금 월급 환산의 209시간은 어디서 나오나</a></li><li><a href="/guides/salary/sileopgeupyeo-haru-geumaek/">2026년 실업급여 하루 금액이 66,048~68,100원에 모이는 이유</a></li></ol>
     <p class="sh__links"><a href="/guides/#salary">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">프로토타입 제목이에요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-29"><span class="sh__vh">2026. 10. 29.</span><b aria-hidden="true">10.29</b><small aria-hidden="true">2026</small></time><p>가이드 6편을 루멘랩 가이드로 옮겼어요.</p></li><li><time datetime="2026-10-16"><span class="sh__vh">2026. 10. 16.</span><b aria-hidden="true">10.16</b><small aria-hidden="true">2026</small></time><p>프로토타입 기록 줄이에요.</p></li><li><time datetime="2026-10-10"><span class="sh__vh">2026. 10. 10.</span><b aria-hidden="true">10.10</b><small aria-hidden="true">2026</small></time><p>프로토타입 기록 줄이에요. 조금 더 긴 문장으로 줄바꿈을 봐요.</p></li><li><time datetime="2026-10-09"><span class="sh__vh">2026. 10. 9.</span><b aria-hidden="true">10.09</b><small aria-hidden="true">2026</small></time><p>프로토타입 기록 줄이에요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

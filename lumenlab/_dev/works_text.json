@@ -1,0 +1,163 @@
+{
+ "_설명": "만든 것 소개 페이지의 글 칸 셋(build_store.py 가 읽음): how 쓰는 법 3~4단계, basis 기준과 출처 4~6줄(src.href 는 그 도구 소개·가이드에 실제로 있는 주소), log 고친 기록 4~8줄(최근부터). 칸 제목 h 는 손님 망설임에 대한 그 도구만의 답.",
+ "takehome": {
+  "how": {
+   "h": {
+    "ko": "연봉 한 칸이면 한 달 실수령액이 나와요",
+    "en": "One salary box gives you the monthly take-home"
+   },
+   "steps": [
+    {
+     "t": {
+      "ko": "연봉 넣기",
+      "en": "Enter the salary"
+     },
+     "d": {
+      "ko": "프로토타입 문장이에요. 세전 연봉을 넣으면 바로 계산해요.",
+      "en": "Prototype line. Type your gross salary and it calculates right away."
+     }
+    },
+    {
+     "t": {
+      "ko": "조건 고르기",
+      "en": "Pick the details"
+     },
+     "d": {
+      "ko": "프로토타입 문장이에요. 비과세 식대와 부양가족 수를 바꿀 수 있어요.",
+      "en": "Prototype line. Change the meal allowance and dependents."
+     }
+    },
+    {
+     "t": {
+      "ko": "떼는 돈 한 줄씩 보기",
+      "en": "Read each deduction"
+     },
+     "d": {
+      "ko": "프로토타입 문장이에요. 국민연금부터 지방소득세까지 식과 함께 나와요.",
+      "en": "Prototype line. Each deduction shows its formula."
+     }
+    }
+   ]
+  },
+  "basis": {
+   "h": {
+    "ko": "요율과 세액표는 공단·부처 원문에서 가져와요",
+    "en": "Rates and tax tables come from the official texts"
+   },
+   "rows": [
+    {
+     "k": {
+      "ko": "국민연금(근로자 몫)",
+      "en": "National Pension (employee)"
+     },
+     "v": {
+      "ko": "4.75%",
+      "en": "4.75%"
+     },
+     "src": {
+      "t": {
+       "ko": "국민연금공단 「보험료 금액 및 보험료율」",
+       "en": "NPS contribution rates"
+      },
+      "href": "https://salary.lumenlab.page/about/"
+     },
+     "on": "2026-10-10"
+    },
+    {
+     "k": {
+      "ko": "건강보험(근로자 몫)",
+      "en": "Health insurance (employee)"
+     },
+     "v": {
+      "ko": "3.595% (합계 7.19%의 절반)",
+      "en": "3.595% (half of 7.19%)"
+     },
+     "src": {
+      "t": {
+       "ko": "국민건강보험공단 「2026년도 보험료율 인상 안내」",
+       "en": "NHIS 2026 rate notice"
+      },
+      "href": "https://salary.lumenlab.page/about/"
+     },
+     "on": "2026-10-10"
+    },
+    {
+     "k": {
+      "ko": "소득세(매달 떼는 금액)",
+      "en": "Income tax withheld"
+     },
+     "v": {
+      "ko": "근로소득 간이세액표 647줄, 2026년 3월 1일 시행",
+      "en": "Simplified withholding table, 647 rows, in force from Mar 1, 2026"
+     },
+     "src": {
+      "t": {
+       "ko": "소득세법 시행령 별표 2",
+       "en": "Income Tax Act Enforcement Decree, Table 2"
+      },
+      "href": "https://salary.lumenlab.page/about/"
+     },
+     "on": "2026-10-10"
+    },
+    {
+     "k": {
+      "ko": "지방소득세",
+      "en": "Local income tax"
+     },
+     "v": {
+      "ko": "소득세의 10%",
+      "en": "10% of income tax"
+     },
+     "src": {
+      "t": {
+       "ko": "지방세법 제103조의13",
+       "en": "Local Tax Act Art. 103-13"
+      },
+      "href": "https://salary.lumenlab.page/about/"
+     },
+     "on": null
+    }
+   ],
+   "note": {
+    "ko": "프로토타입 문장이에요. 끝수 처리가 회사 급여 프로그램과 달라 몇십 원 차이가 날 수 있어요.",
+    "en": "Prototype line. Rounding may differ from your payroll by a few dozen won."
+   }
+  },
+  "log": {
+   "h": {
+    "ko": "프로토타입 제목이에요",
+    "en": "Prototype heading"
+   },
+   "items": [
+    {
+     "d": "2026-10-29",
+     "t": {
+      "ko": "가이드 6편을 루멘랩 가이드로 옮겼어요.",
+      "en": "Moved the six guides to Lumen Lab Guides."
+     }
+    },
+    {
+     "d": "2026-10-16",
+     "t": {
+      "ko": "프로토타입 기록 줄이에요.",
+      "en": "Prototype log line."
+     }
+    },
+    {
+     "d": "2026-10-10",
+     "t": {
+      "ko": "프로토타입 기록 줄이에요. 조금 더 긴 문장으로 줄바꿈을 봐요.",
+      "en": "Prototype log line, a little longer to see wrapping."
+     }
+    },
+    {
+     "d": "2026-10-09",
+     "t": {
+      "ko": "프로토타입 기록 줄이에요.",
+      "en": "Prototype log line."
+     }
+    }
+   ]
+  }
+ }
+}
