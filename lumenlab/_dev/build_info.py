@@ -255,7 +255,7 @@ KO = {
 <ul class="ilist">
   <li><b>떼고얼마</b> 4대 보험 요율과 상한·하한, 근로소득 간이세액표가 새로 나오면 반영해요. 2027년 몫은 지금도 확정된 것, 의결된 것, 아직 안 정해진 것으로 나눠 보여 줘요.</li>
   <li><b>한장달력</b> 다음 해 월력요항이 발표되면(해마다 6월 말쯤) 그해 공휴일을 공식 자료로 바꿔요. 발표 전인 해는 ‘공식 발표 전 자료’라고 표시해요.</li>
-  <li><b>한바퀴</b> 나라나 지역이 서머타임과 시간대 규칙을 바꾸면 반영해요. 2026년에 바뀐 캐나다와 모로코가 그 예예요.</li>
+  <li><b>한바퀴</b> 나라나 지역이 서머타임과 시간대 규칙을 바꾸면 반영해요. 2026년에 바뀐 캐나다·모로코·쿠바가 그 예예요.</li>
   <li><b>모든 도구</b> 틀린 결과를 알려 주시면 확인해서 고치고, 글을 고치면 그 글에 고친 날을 적어요.</li>
 </ul>
 </section>
@@ -479,7 +479,7 @@ EN = {
 <ul class="ilist">
   <li><b>Takehome Korea</b> New social insurance rates, contribution limits and the withholding table are added when they are published. For 2027 it already separates what is set, what is approved and what is not decided yet.</li>
   <li><b>Onesheet</b> Korean holidays are switched to the official almanac once it is published each year (around late June). Until it is out, that year is marked “not yet official”.</li>
-  <li><b>Oneturn</b> Changes to daylight saving or time zone rules are added as countries make them, like the 2026 changes in Canada and Morocco.</li>
+  <li><b>Oneturn</b> Changes to daylight saving or time zone rules are added as countries make them, like the 2026 changes in Canada, Morocco and Cuba.</li>
   <li><b>All tools</b> If you report a wrong result, we check it and fix it. When a guide changes, it shows the date it was updated.</li>
 </ul>
 </section>

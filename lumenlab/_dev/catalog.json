@@ -221,7 +221,7 @@
       "find": {"ko": "타이머 스톱워치 알람 세계 시간 시차 서머타임 시계", "en": "timer stopwatch alarm world clock time zone"},
       "sub": "Oneturn",
       "line": {"ko": "남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요.", "en": "A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change."},
-      "check": {"ko": "도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.", "en": "City times come from the IANA time zone database, with the 2026 rule changes for Canada and Morocco applied separately, and the tests compare every city with Python's zoneinfo."}
+      "check": {"ko": "도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다·모로코·쿠바 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.", "en": "City times come from the IANA time zone database, with the 2026 rule changes for Canada, Morocco and Cuba applied separately, and the tests compare every city with Python's zoneinfo."}
     },
     {
       "id": "checkbench",
