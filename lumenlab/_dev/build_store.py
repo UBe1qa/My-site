@@ -91,7 +91,7 @@ KO = {
     'wall_title': lambda n: f'만든 것 {n}개, <span class="nw">눌러서 바로 써 보세요</span>',
     'wall_lead': '웹 도구는 창 안에서 그 도구의 계산이 그대로 돌고, 게임과 앱은 실제 화면을 보여 드려요. 도구 아이콘 밑 ✓ 줄은 그 도구가 확인하고 밝혀 둔 것이에요.',
     'games_line': '휴대폰 게임이에요. 안드로이드부터 출시를 준비하고 있어요.',
-    'apps_line': '맥과 브라우저에서 쓰는 앱이에요.',
+    'apps_line': lambda mac: '맥과 브라우저에서 쓰는 앱이에요.' if mac else '브라우저에서 바로 쓰는 앱이에요.',   # 맥 앱(Owlight)이 출시 전이라 숨으면 브라우저 앱만 남는다
 }
 MON = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split()
 EN = {
@@ -107,7 +107,7 @@ EN = {
     'wall_title': lambda n: f'{n} things we make. <span class="nw">Open one to try it</span>',
     'wall_lead': 'The web tools run their real calculations right in the window, and the games and apps show real screens. The ✓ line under each tool is what it checks and discloses.',
     'games_line': 'Games for your phone, getting ready for Android first.',
-    'apps_line': 'Apps for the Mac and the browser.',
+    'apps_line': lambda mac: 'Apps for the Mac and the browser.' if mac else 'Apps you use right in the browser.',
 }
 
 def text_mix(hex_):
@@ -123,9 +123,13 @@ def text_mix(hex_):
 def plain(h):
     return re.sub(r'\s+', ' ', H.unescape(re.sub(r'<[^>]+>', '', h))).strip()
 
+def shown(items):
+    """출시 전이라 숨긴 항목(catalog hold)을 뺀 목록: 홈 칸·소개 페이지·바닥글 제품 줄·/about/ 목록이 이걸 쓴다"""
+    return [it for it in items if not it.get('hold')]
+
 def order(cat):
     """홈 아이콘 칸 순서: 게임 → 앱 → 웹 도구(묶음 순서). [(kind, it), …]"""
-    out = [('games', it) for it in cat.get('games', [])] + [('apps', it) for it in cat['apps']]
+    out = [('games', it) for it in shown(cat.get('games', []))] + [('apps', it) for it in shown(cat['apps'])]
     for g in cat['groups']: out += [('tools', it) for it in cat['tools'] if it['group'] == g['id']]
     return out
 
@@ -459,10 +463,11 @@ def wall(cat, EN_OUT):
         if kick: k = f'<p class="shelf__kick" data-i18n="wl_kick">{kick}</p>'
         return (f'      <div class="shelf" id="{id_}">\n        <div class="shelf__label">{k}<h3 class="shelf__h" data-i18n="wl_{key}_h">{head_ko}</h3>'
                 f'<p class="shelf__line" data-i18n="wl_{key}_l">{line_ko}</p></div>\n        <ul class="wall">{"".join(cells)}</ul>\n      </div>')
-    games, apps = cat.get('games', []), cat['apps']
+    games, apps = shown(cat.get('games', [])), shown(cat['apps'])
     # 게임과 앱은 따로 한 선반씩(2026-10-18 사용자 요청). 웹 도구 선반과 같은 모양이라 칸이 둘뿐이어도 줄이 맞는다
     out = [shelf('games', '게임', 'Games', KO['games_line'], EN['games_line'], [cell('games', it) for it in games])] if games else []
-    out.append(shelf('apps', '앱', 'Apps', KO['apps_line'], EN['apps_line'], [cell('apps', it) for it in apps]))
+    mac = any(it['id'] == 'owlight' for it in apps)
+    out.append(shelf('apps', '앱', 'Apps', KO['apps_line'](mac), EN['apps_line'](mac), [cell('apps', it) for it in apps]))
     EN_OUT['wl_kick'] = 'Web tools'
     tg = [shelf(f'g-{g["id"]}', esc(g['name']['ko']), g['name']['en'], esc(g['line']['ko']), g['line']['en'],
                 [cell('tools', it) for it in cat['tools'] if it['group'] == g['id']], kick='웹 도구' if i == 0 else None) for i, g in enumerate(cat['groups'])]

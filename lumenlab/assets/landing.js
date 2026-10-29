@@ -79,7 +79,7 @@
       '<path class="n-nbl" d="M20.5 30l5.6 3.4-1-8.6"/><rect class="n-nbs" x="22.4" y="17" width="4.6" height="8" rx="1.2"/></g>' +
       '<g class="nb-cat"><path class="n-nbl nb-tail" d="M53.5 55.4c5.4 0 7-4.6 5.2-9"/><path class="n-nb" d="M43.4 56c-2-6.6-.4-12 4.6-13.6 5 1.6 6.6 7 4.6 13.6z"/><circle class="n-nb" cx="48" cy="40" r="3.8"/><path class="n-nb" d="M44.6 38.4l.2-4.6 2.6 3zM51.4 38.4l-.2-4.6-2.6 3z"/></g>'
     ];
-    var ICON = [1, 0, 2];   // 이웃 창마다 받는 것 = 모니터 속 아이콘 자리(0 병아리 구조대, 1 Owlight, 2 며칠 계산기): 앱 창 ← Owlight, 게임 창 ← 병아리, 웹 도구 창 ← 며칠 계산기
+    var ICON = [1, 0, 2];   // 이웃 창마다 받는 것 = 모니터 속 아이콘 자리(0 병아리 구조대, 1 세트노트, 2 며칠 계산기): 앱 창 ← 세트노트, 게임 창 ← 병아리, 웹 도구 창 ← 며칠 계산기
     /* 거리를 지나는 사람들: 그림 단위, 발 가운데가 (0,0), 오른쪽을 봄. 팔다리는 매 프레임 관절로 그린다(walk()).
        .wf = 몸(칠), .wl = 팔다리·자전거(선), .w2 = 몸 뒤쪽(조금 어둡게). .up = 엉덩이 위 몸(엉덩이에서 기울임), .hd = 머리.
        .bd = 그림자·테두리로 다시 쓰는 몸(불빛·화면은 밖에 둔다). 색은 CSS 변수(--wk 몸, --wk2 뒤쪽) */
@@ -227,7 +227,7 @@
       var fx = document.createElement('div'); fx.className = 'hero__fx'; stage.insertBefore(fx, copy);
       ['flare', 'streak', 'bloom'].forEach(function (c) { var e = document.createElement('i'); e.className = 'n-' + c; fx.appendChild(e); rig[c] = e; });
       // 화면 속 아이콘 셋(방 안 모니터의 왼쪽부터) → '만든 것'의 그 칸. 날아가는 그림은 그 칸 아이콘과 같은 파일
-      rig.ghosts = ['chickrescue', 'owlight', 'daycount'].map(function (id, j) {
+      rig.ghosts = ['chickrescue', 'setnote', 'daycount'].map(function (id, j) {
         var wi = works && works.querySelector('.wi[data-show="' + id + '"]'), ic = wi && wi.querySelector('.wi__icon');
         if (!ic) return null;
         var g = document.createElement('img'); g.className = 'hero-ghost'; g.alt = ''; g.decoding = 'async'; g.src = ic.getAttribute('src');
@@ -1161,7 +1161,8 @@
   /* ---------- 2) 만든 것 칸 ----------
      첫 화면과 같은 불빛으로 켠다: 줄(.shelf)이 보이면 그 줄 이름 앞 등(.shelf__h 점)이 딸깍 켜지고(.in), 거기서 불빛이 아이콘마다 하나씩
      휘어 솟았다가 내려 꽂히면 그 아이콘이 켜지며 톡 튀고(.on) 고리가 퍼진다. 1)이 '만든 것'을 제자리에 놓기 전엔 미루고, 놓이면 켠다.
-     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채.
+     1)에서 날아와 앉은 아이콘(.landed)은 이미 켜진 채라 등 불빛이 닿아도 꺼졌다 켜지지 않고 톡 튀기만 한다(.hi).
+     그래서 그런 아이콘 하나뿐인 줄(출시 전 것을 숨겨 게임·앱이 하나씩일 때)에서도 등에서 불빛이 나간다.
      첫 화면으로 돌아가 '만든 것'이 안 보이게 되면(1)이 다 가렸거나, 낮은 화면에서 첫 줄이 켜지는 자리 밑으로 내려감) 불을 다 끄고 처음으로(wipe) */
   var shelves = [].slice.call(document.querySelectorAll('.works .shelf'));
   shelves.forEach(function (sh) { [].forEach.call(sh.querySelectorAll('.wi'), function (a, i) { a.style.setProperty('--i', i); }); });
@@ -1212,17 +1213,17 @@
         var hp = f.hist[(n + 1) * 2] || f.hist[f.hist.length - 1];
         put(c, hp[0], hp[1], sz * (1 - n * .15), f.hist.length > (n + 1) * 2 ? .7 * (1 - n / 5) : 0);
       });
-      if (s >= 1) { f.b.remove(); f.tail.forEach(function (c) { c.remove(); }); flights.splice(i, 1); on(f.a); ring(f.p3[0], f.p3[1], 46); }
+      if (s >= 1) { f.b.remove(); f.tail.forEach(function (c) { c.remove(); }); flights.splice(i, 1); on(f.a); if (f.a.classList.contains('landed')) f.a.classList.add('hi'); ring(f.p3[0], f.p3[1], 46); }
     }
     if (flights.length) go();
   }
   var on = function (a) { a.classList.add('on'); }, timers = [], used = false;
   function light(sh) {
     sh.classList.add('in'); io.unobserve(sh);
-    var from = lamp(sh), n = 0;
-    [].forEach.call(sh.querySelectorAll('.wi'), function (a) {
-      if (a.classList.contains('landed')) return on(a);
-      send(from, a, 200 + n * 120, 640 + n * 40); n++;
+    var from = lamp(sh);
+    [].forEach.call(sh.querySelectorAll('.wi'), function (a, n) {
+      if (a.classList.contains('landed')) on(a);
+      send(from, a, 200 + n * 120, 640 + n * 40);
     });
     timers.push(setTimeout(function () { [].forEach.call(sh.querySelectorAll('.wi'), on); }, 3200));   // 탭이 숨어 그리기가 멈춰도 결국 켜짐
     used = true;
@@ -1247,7 +1248,7 @@
     seen.length = 0;
     shelves.forEach(function (sh) {
       sh.classList.remove('in');
-      [].forEach.call(sh.querySelectorAll('.wi'), function (a) { a.classList.remove('on', 'landed'); });
+      [].forEach.call(sh.querySelectorAll('.wi'), function (a) { a.classList.remove('on', 'landed', 'hi'); });
       io.unobserve(sh); io.observe(sh);
     });
   };

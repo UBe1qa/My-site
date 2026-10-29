@@ -9,8 +9,9 @@ BASE = os.environ.get('BASE', 'http://localhost:8765')
 import json
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here); mono = os.path.dirname(site)
 cat = json.load(open(os.path.join(here, 'catalog.json')))
-ITEMS = [(k, it['id']) for k in ('games', 'apps') for it in cat.get(k, [])] + [('tools', it['id']) for g in cat['groups'] for it in cat['tools'] if it['group'] == g['id']]
-PAGES = ['/', '/en/', '/works/daycount/', '/en/works/pickboard/', '/works/castleup/', '/en/works/chickrescue/', '/works/owlight/', '/works/setnote/',
+HOLD = [it['id'] for k in ('games', 'apps') for it in cat.get(k, []) if it.get('hold')]   # 출시 전이라 숨긴 것(홈 칸·소개 페이지 없음)
+ITEMS = [(k, it['id']) for k in ('games', 'apps') for it in cat.get(k, []) if not it.get('hold')] + [('tools', it['id']) for g in cat['groups'] for it in cat['tools'] if it['group'] == g['id']]
+PAGES = ['/', '/en/', '/works/daycount/', '/en/works/pickboard/', '/works/kankan/', '/en/works/chickrescue/', '/en/works/setnote/', '/works/setnote/',
          '/about/', '/en/about/', '/privacy/', '/en/privacy/', '/owlight/privacy/', '/owlight/support/', '/nope/',
          '/guides/', '/en/guides/', '/guides/date/d-day/', '/guides/salary/juhyu-sudang-gyesan/', '/guides/count/emoji-myeot-geulja/', '/en/guides/pick/ladder-lottery-fairness/']
 PAIRS = [('/', '/en/'), ('/about/', '/en/about/'), ('/privacy/', '/en/privacy/'), ('/guides/', '/en/guides/')] + [(f'/works/{i}/', f'/en/works/{i}/') for _, i in ITEMS]  # 한국어·영어가 따로 된 페이지
@@ -71,6 +72,17 @@ import xml.dom.minidom
 try: xml.dom.minidom.parseString(rss.encode()); rss_ok = True
 except Exception as e: rss_ok = False
 ok(rss_ok and rss.count('<item>') == sum(1 for a in gfound if a['lang'] == 'ko') and not re.search(r'\s(href|src)="/', rss), f"가이드 RSS: XML 맞음, 한국어 글 {rss.count('<item>')}편, 주소는 다 https")
+
+# 출시 전이라 숨긴 것(catalog hold, 2026-10-29): 홈 칸·소개 페이지·사이트맵·바닥글 제품 줄·/about/ 목록에 없고, 옛 소개 페이지 주소는 _redirects 가 302로 홈에
+red = open(os.path.join(site, '_redirects')).read()
+shown_txt = {p: open(os.path.join(site, p)).read() for p in ('index.html', 'en/index.html', 'about/index.html', 'en/about/index.html', '404.html')}
+for i in HOLD:
+    it = next(x for k in ('games', 'apps') for x in cat.get(k, []) if x['id'] == i)
+    left = [p for p in (f'works/{i}/index.html', f'en/works/{i}/index.html') if os.path.exists(os.path.join(site, p))] + (['sitemap'] if f'/works/{i}/' in sm_txt else [])
+    left += [p for p, h in shown_txt.items() if f'data-show="{i}"' in h or any(f'data-i18n="f_{i}"' in row for row in re.findall(r'data-i18n="ft(?:Games|Apps)">.*?</div>', h))]
+    left += [p for p in ('about/index.html', 'en/about/index.html') if it['name']['ko' if p[:3] != 'en/' else 'en'] in shown_txt[p][shown_txt[p].index('<main'):shown_txt[p].index('</main>')]]
+    left += [p for p in (f'/works/{i}/', f'/en/works/{i}/') if not re.search(rf'^{re.escape(p)} /(en/)?#(games|apps) 302$', red, re.M)]
+    ok(not left, f'{i}: 출시 전이라 홈 칸·소개 페이지·사이트맵·바닥글 제품 줄·소개 목록에 없고 옛 주소는 302 {left}')
 
 # 소개 페이지·소개·방침이 가리키는 도구·앱 사이트 주소가 이 저장소의 실제 파일과 맞음(옆 폴더 = 그 사이트)
 hostdir = {urlparse(it['url']).netloc: it['dir'] for it in cat['tools']}
