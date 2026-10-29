@@ -202,6 +202,46 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
 .sh__books.in .sh__guides li{animation:bookIn .55s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 60ms)}
 @keyframes bookIn{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
 
+/* 쓰는 법·기준표·고친 기록 = 위 '확인한 것'(.sh__note)과 같은 줄 친 작업 일지 종이. 여백 선(--ml) 왼쪽 칸엔 번호·✓·점을 적는다.
+   보이면(store.js 의 .in) 번호와 ✓·점이 하나씩 적힌다. 움직이는 건 transform·opacity 뿐 */
+.sh__steps,.rc,.sh__days{--ml:43px;--pl:calc(var(--ml) + 13px);position:relative;margin:18px 0 0;border-radius:12px;background-color:var(--card);box-shadow:0 0 0 1px var(--line);
+  background-image:linear-gradient(90deg,transparent var(--ml),color-mix(in srgb,var(--lamp) 45%,transparent) var(--ml) calc(var(--ml) + 2px),transparent calc(var(--ml) + 2px));
+  background-repeat:no-repeat;padding:4px 20px 4px var(--pl)}
+.sh__steps li,.rc__title,.rc__row,.rc__note,.sh__days li{border-top:1px solid color-mix(in srgb,var(--line) 85%,transparent)}
+.sh__steps li:first-child,.rc__title,.sh__days li:first-child{border-top:0}
+.sh__steps{list-style:none;counter-reset:st}
+.sh__steps li{counter-increment:st;position:relative;display:grid;gap:2px;padding:12px 0 13px}
+.sh__steps li::before{content:counter(st);position:absolute;left:calc(0px - var(--pl));top:11px;width:var(--ml);text-align:center;
+  color:var(--lamp-ink);font-size:19px;font-weight:800;line-height:1.45;font-variant-numeric:tabular-nums}
+.sh__steps b{font-size:17px;line-height:1.45}
+.sh__steps span{font-size:16px;line-height:1.65;color:var(--ink-2)}
+.rc{padding-bottom:6px}
+.rc__title{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;margin:0;padding:12px 0;font-size:15px;font-weight:800;line-height:1.5;color:var(--ink)}
+.rc__title span{font-weight:700;color:var(--lamp-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rc__rows{margin:0}
+.rc__row{position:relative;display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:3px 22px;padding:12px 0 13px}
+.rc__row::before{content:"";position:absolute;left:calc(var(--ml) / 2 - 7px - var(--pl));top:17px;width:13px;height:7px;border:solid var(--lamp-ink);border-width:0 0 2.5px 2.5px;
+  transform:rotate(-45deg);transform-origin:50% 50%}
+.rc__row dt{font-size:15.5px;line-height:1.6;font-weight:800;color:var(--ink)}
+.rc__row dd{margin:0;display:grid;gap:4px}
+.rc__v{font-size:16.5px;line-height:1.6;color:var(--ink);font-variant-numeric:tabular-nums}
+.rc__src{font-size:14.5px;line-height:1.55;color:var(--muted)}
+.rc__src a{color:var(--ink-2);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--lamp) 75%,transparent);text-underline-offset:3px}
+.rc__src a:hover{color:var(--ink)}
+.rc__note{margin:0;padding:12px 0 10px;font-size:15px;line-height:1.65;color:var(--ink-2)}
+.sh__days{list-style:none}
+.sh__days li{position:relative;padding:12px 0 13px}
+.sh__days li::before{content:"";position:absolute;left:calc(var(--ml) - 3.5px - var(--pl));top:18px;width:9px;height:9px;border-radius:50%;
+  box-shadow:inset 0 0 0 2px var(--lamp-ink);background:var(--card)}
+.sh__days li:first-child::before{background:var(--lamp);box-shadow:inset 0 0 0 2px var(--lamp-ink),0 0 0 4px color-mix(in srgb,var(--lamp) 28%,transparent)}
+.sh__days time{display:block;font-size:14.5px;font-weight:800;line-height:1.55;color:var(--lamp-ink);font-variant-numeric:tabular-nums}
+.sh__days li:first-child time{display:inline-block;padding:0 9px;border-radius:999px;background:var(--lamp-soft)}
+.sh__days p{margin:2px 0 0;font-size:16.5px;line-height:1.6;color:var(--ink)}
+.sh__how.in .sh__steps li::before,.sh__basis.in .rc__row::before,.sh__changes.in .sh__days li::before{animation:jot .38s cubic-bezier(.3,.7,.4,1) backwards;animation-delay:calc(.12s + var(--i,0) * 110ms)}
+.sh__basis.in .rc__row::before{animation-name:jotTick}
+@keyframes jot{from{opacity:0;transform:translateY(5px) scale(.7)}}
+@keyframes jotTick{from{opacity:0;transform:rotate(-45deg) scale(.4)}}
+
 /* 다른 것 = 선반: 아이콘이 나무 판 위에(누르면 창 안에서 그것으로 바뀐다) */
 .sh__oth{padding-top:28px;border-top:1px solid var(--line)}
 .sh__others{list-style:none;margin:0 -40px;padding:2px 40px 6px;display:grid;grid-auto-flow:column;grid-auto-columns:86px;gap:6px;
@@ -252,7 +292,12 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
   .shots.is-tall{--sw:calc(340px * var(--ar))}
   .shots.is-wide{--sw:86vw}
   .sh__guides a{padding:11px 36px 11px 42px;font-size:15.5px}
-  .pp{padding-top:16px;padding-bottom:56px}
+  .sh__steps,.rc,.sh__days{padding-right:14px}
+  .sh__steps{--ml:32px;--pl:44px}   /* 폰: 순서 번호 칸을 좁혀 단계 글 줄을 넓힌다 */
+  .rc,.sh__days{--ml:13px;--pl:29px}   /* 폰: 기준표·고친 기록은 여백 선을 왼쪽 끝으로 붙여 글 줄을 넓힌다(✓는 빼고, 점은 그대로 선 위에) */
+  .rc__row{grid-template-columns:minmax(0,1fr)}
+  .rc__row::before{display:none}
+  .pp{padding:16px 12px 56px}   /* 폰: 소개 페이지는 종이 바깥 여백을 줄여 글 줄을 창(소개 창)과 비슷하게 */
   .sh-doc{padding:0 18px 30px;border-radius:22px}
 }
 @media (max-width:370px){.sh__status{left:calc(50% + 34px);max-width:calc(50% - 24px)}}
@@ -293,10 +338,11 @@ textarea.tr-in{min-height:96px;padding:10px 12px;line-height:1.6;resize:vertical
   .tr-pop{animation:none}.touch{transition:opacity .15s}.touch.is-press::after{animation:none}
   .sh__pill,.sh.is-past .sh__pill{transition:opacity .15s,visibility 0s;transform:none}
   .sh__others img,.sh__others a:hover img{transition:none;transform:none}
-  .sh-doc .sh__spot,.sh-doc .sh__icon,.sh-doc .sh__status,.sh__more.in .sh__cards a,.sh__log.in .sh__tick,.sh__books.in .sh__guides li{animation:none}
+  .sh-doc .sh__spot,.sh-doc .sh__icon,.sh-doc .sh__status,.sh__more.in .sh__cards a,.sh__log.in .sh__tick,.sh__books.in .sh__guides li,
+  .sh__how.in .sh__steps li::before,.sh__basis.in .rc__row::before,.sh__changes.in .sh__days li::before{animation:none}
   .sh__spot{transition:none}
   .sh__icon,.sh__guides a,.sh__cards a,.shots li{transition:none}
   .sh__guides a:hover,.sh__guides a:focus-visible,.sh__cards a:hover{transform:none}
 }
-/* 창을 열 때 아래 칸(더 알아보기·작업 일지·책·다른 것)은 내려가 보일 때 그린다: 여는 순간 글자 모양 잡기·배치가 한꺼번에 몰려 멈칫하지 않게 */
-.sheet .sh__more,.sheet .sh__log,.sheet .sh__books,.sheet .sh__oth{content-visibility:auto;contain-intrinsic-size:auto 420px}
+/* 창을 열 때 아래 칸(쓰는 법·더 알아보기·작업 일지·기준표·책·고친 기록·다른 것)은 내려가 보일 때 그린다: 여는 순간 글자 모양 잡기·배치가 한꺼번에 몰려 멈칫하지 않게 */
+.sheet .sh__how,.sheet .sh__more,.sheet .sh__log,.sheet .sh__basis,.sheet .sh__books,.sheet .sh__changes,.sheet .sh__oth{content-visibility:auto;contain-intrinsic-size:auto 420px}

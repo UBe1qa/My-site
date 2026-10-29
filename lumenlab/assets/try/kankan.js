@@ -1,5 +1,6 @@
 /* 칸칸 바로 써 보기: 칸칸 사이트의 세는 파일(lc-core.js·lc-cp949.js·lc-wongoji.js, 전역 LC)을 그대로 불러
-   글자를 칠 때마다 센다. 아래 원고지는 LC.wongoji.layout(칸칸의 원고지 놓기)이 놓은 그대로 첫 장을 그린다. */
+   글자를 칠 때마다 센다. 아래 원고지는 LC.wongoji.layout(칸칸의 원고지 놓기)이 놓은 그대로 첫 장을 그린다.
+   EUC-KR 바이트와 원고지는 칸칸 한국어판에만 있어서 영어판은 그 대신 문장·문단 수를 보인다. */
 window.LLTry.kankan = function (stage, c) {
   var h = c.h, ko = c.lang === 'ko', LC = window.LC;
   var nf = new Intl.NumberFormat(ko ? 'ko-KR' : 'en-US');
@@ -7,14 +8,14 @@ window.LLTry.kankan = function (stage, c) {
     ? { label: '세어 볼 글', ph: '글을 쓰거나 붙여 넣어 보세요', chars: '글자(공백 포함)', nospace: '공백 제외', utf8: '바이트(UTF-8)', euckr: '바이트(EUC-KR)', words: '단어',
         nl: '줄바꿈 한 번을', nlv: ['안 셈', '1자', '2자'], sheet: function (n) { return '200자 원고지 ' + n + '장'; }, more: function (n) { return '첫 장만 보여요 · ' + n + '장'; },
         sample: ['자기소개서 첫 문장을 써 볼게요.', '저는 맡은 일을 끝까지 해내는 사람입니다.'] }
-    : { label: 'Text to count', ph: 'Type or paste some text', chars: 'Characters', nospace: 'No spaces', utf8: 'Bytes (UTF-8)', euckr: 'Bytes (EUC-KR)', words: 'Words',
-        nl: 'Count a line break as', nlv: ['0', '1', '2'], sheet: function (n) { return n + (n === 1 ? ' sheet' : ' sheets') + ' of 200-square manuscript paper'; }, more: function (n) { return 'Showing sheet 1 of ' + n; },
+    : { label: 'Text to count', ph: 'Type or paste some text', chars: 'Characters', nospace: 'No spaces', utf8: 'Bytes (UTF-8)', words: 'Words', sentences: 'Sentences', paragraphs: 'Paragraphs',
+        nl: 'Count a line break as', nlv: ['0', '1', '2'],
         sample: ['Here is the first line of my essay.', 'Every space and line break counts.'] };
   var nl = 1;
   var ta = h('textarea', { class: 'tr-in', rows: 3, placeholder: T.ph, 'aria-label': T.label, spellcheck: 'false' });
   var big = h('p', { class: 'tr-big', 'aria-live': 'polite' });
   var tiles = {};
-  var stats = h('ul', { class: 'tr-stats' }, ['nospace', 'utf8', 'euckr', 'words'].map(function (k) {
+  var stats = h('ul', { class: 'tr-stats' }, (ko ? ['nospace', 'utf8', 'euckr', 'words'] : ['nospace', 'utf8', 'words', 'sentences', 'paragraphs']).map(function (k) {
     tiles[k] = h('b', { text: '0' });
     return h('li', null, [tiles[k], h('span', { text: T[k] })]);
   }));
@@ -35,8 +36,9 @@ window.LLTry.kankan = function (stage, c) {
     if (pop) big.classList.remove('tr-pop'), void big.offsetWidth, big.classList.add('tr-pop');
     tiles.nospace.textContent = nf.format(r.charsNoSpace);
     tiles.utf8.textContent = nf.format(r.bytes.utf8);
-    tiles.euckr.textContent = r.bytes.euckr ? nf.format(r.bytes.euckr.bytes) : '–';
     tiles.words.textContent = nf.format(r.words);
+    if (!ko) { tiles.sentences.textContent = nf.format(r.sentences); tiles.paragraphs.textContent = nf.format(r.paragraphs); return; }
+    tiles.euckr.textContent = r.bytes.euckr ? nf.format(r.bytes.euckr.bytes) : '–';
     var lay = LC.wongoji.layout(t), k = 0;
     for (var y = 0; y < 10; y++) {
       var row = lay.rows[y] || [];
@@ -61,9 +63,8 @@ window.LLTry.kankan = function (stage, c) {
     '.wg-nl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.wg-nl p{margin:0;font-size:15px;font-weight:600;color:var(--muted)}' }));
   stage.appendChild(h('div', { class: 'tr' }, [
     ta, big, stats,
-    h('div', { class: 'wg-nl' }, [h('p', { text: T.nl })].concat(nlBtns)),
-    paper, sheetNote
-  ]));
+    h('div', { class: 'wg-nl' }, [h('p', { text: T.nl })].concat(nlBtns))
+  ].concat(ko ? [paper, sheetNote] : [])));
   count(false);
   return {
     auto: function (A) {
