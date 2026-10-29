@@ -207,7 +207,7 @@
       "find": {"ko": "타자 연습 타수 타자 속도 한글 영어 wpm", "en": "typing test typing practice speed wpm"},
       "sub": "Todok",
       "line": {"ko": "한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.", "en": "Typing test and practice in English and Korean that shows which keys you missed and where you slowed down."},
-      "check": {"ko": "타수와 WPM을 세는 기준을 공개하고(‘다섯 글자 = 한 단어’는 타자 연구에서 쓰는 정의로, Dhakal 외, CHI 2018에 적혀 있어요), 책·기사·노래 가사 같은 남의 글은 연습 글에 넣지 않았어요.", "en": "The way speed and WPM are counted is published (five characters per word, the definition used in typing research and stated in Dhakal et al., CHI 2018), and the practice texts contain no books, articles or lyrics."}
+      "check": {"ko": "타수와 WPM을 세는 기준을 공개하고, 책·기사·노래 가사 같은 남의 글은 연습 글에 넣지 않았어요.", "en": "The way speed and WPM are counted is published, and the practice texts contain no books, articles or lyrics."}
     },
     {
       "id": "oneturn",
@@ -221,7 +221,7 @@
       "find": {"ko": "타이머 스톱워치 알람 세계 시간 시차 서머타임 시계", "en": "timer stopwatch alarm world clock time zone"},
       "sub": "Oneturn",
       "line": {"ko": "남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요.", "en": "A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change."},
-      "check": {"ko": "도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다 세 주·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.", "en": "City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python's zoneinfo."}
+      "check": {"ko": "도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.", "en": "City times come from the IANA time zone database, with the 2026 rule changes for Canada and Morocco applied separately, and the tests compare every city with Python's zoneinfo."}
     },
     {
       "id": "checkbench",

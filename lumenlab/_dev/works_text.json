@@ -14,7 +14,7 @@
      },
      "d": {
       "ko": "옮길 튜브를 누른 뒤 빈 튜브나 맨 위가 같은 친구인 튜브를 누르면 맨 위 친구가 옮겨 가고, 한 튜브엔 4칸까지 들어가요.",
-      "en": "Tap a tube, then an empty tube or one with the same critter on top, and the top critter moves over; each tube holds 4."
+      "en": "Tap a tube, then an empty tube or one with the same friend on top, and the top friend moves over; each tube holds 4."
      }
     },
     {
@@ -24,7 +24,7 @@
      },
      "d": {
       "ko": "병아리 위 친구들을 치워 병아리가 맨 위로 나오면 둥지로 날아가고, 판을 깨면 이동 수와 별이 나와요.",
-      "en": "Clear the critters sitting on the chick; once it reaches the top it flies to the nest, and a cleared level shows your moves and stars."
+      "en": "Clear the friends sitting on the chick; once it reaches the top it flies to the nest, and a cleared level shows your moves and stars."
      }
     },
     {
@@ -51,8 +51,8 @@
   },
   "basis": {
    "h": {
-    "ko": "지금 정한 규칙으로 판 사이 광고는 많아야 3판에 한 번이에요",
-    "en": "Under the current plan, ads between levels come at most once every 3 levels"
+    "ko": "위치·연락처·사진·카메라·마이크 권한을 묻지 않아요",
+    "en": "It never asks for location, contacts, photos, camera or microphone access"
    },
    "rows": [
     {
@@ -61,8 +61,8 @@
       "en": "Ads between levels"
      },
      "v": {
-      "ko": "처음 쓰는 날과 첫 15판엔 없고, 그 뒤에도 많아야 3판에 한 번이에요. 광고 제거는 결제로 열어요.",
-      "en": "None on your first day or in your first 15 levels, then at most one every 3 levels. Removing ads is a paid option."
+      "ko": "처음 쓰는 날과 첫 15판엔 없고, 그 뒤에도 많아야 3판에 한 번이에요. 자주 묻는 질문에 ‘지금 정한 규칙’으로 적힌 값이고, 광고 제거는 결제로 열어요.",
+      "en": "None on your first day or in your first 15 levels, then at most one every 3 levels, as the FAQ gives the current plan. Removing ads is a paid option."
      },
      "src": {
       "t": {
@@ -124,8 +124,8 @@
       "en": "Game progress"
      },
      "v": {
-      "ko": "깬 판과 별, 설정, 산 상품 표시는 휴대폰 안에만 두고 개발자에게 보내지 않아요. 앱이나 앱 데이터를 지우면 함께 지워져요.",
-      "en": "Cleared levels, stars, settings and purchased items stay on your phone and are never sent to the developer. Deleting the app or its data deletes them."
+      "ko": "깬 판과 별, 설정, 산 상품 표시는 휴대폰에 두고 개발자에게 보내지 않아요. 기기 백업(Android 자동 백업, iCloud 백업)이 켜져 있으면 거기에도 함께 저장될 수 있어요.",
+      "en": "Cleared levels, stars, settings and purchased items stay on your phone and are never sent to the developer. If Android auto backup or iCloud Backup is on, they can be saved there too."
      },
      "src": {
       "t": {
@@ -162,12 +162,12 @@
     },
     {
      "k": {
-      "ko": "권한과 광고 ID",
-      "en": "Permissions and ad ID"
+      "ko": "광고 ID",
+      "en": "Advertising ID"
      },
      "v": {
-      "ko": "위치·연락처·사진·카메라·마이크 권한은 쓰지 않아요. 광고 ID 같은 기기 정보는 개발자가 아니라 광고를 보여 주는 Google이 직접 모아요.",
-      "en": "The app does not use location, contacts, photos, camera or microphone permissions. Device data such as the advertising ID is collected directly by Google, which serves the ads, not by the developer."
+      "ko": "광고 ID 같은 기기 정보는 개발자가 아니라 광고를 보여 주는 Google이 직접 모아요.",
+      "en": "Device data such as the advertising ID is collected directly by Google, which serves the ads, not by the developer."
      },
      "src": {
       "t": {
@@ -182,15 +182,12 @@
      "on": null
     }
    ],
-   "note": {
-    "ko": "광고 횟수는 자주 묻는 질문에 ‘지금 정한 규칙’으로 적힌 값이에요.",
-    "en": "The ad limits are given in the FAQ as the current plan."
-   }
+   "note": null
   },
   "log": {
    "h": {
-    "ko": "소개 사이트를 2026년 10월 16일에 열고 이튿날까지 네 번 손봤어요",
-    "en": "Site opened Oct 16, 2026, with four updates by the next day"
+    "ko": "소개 사이트에서 친구 12마리의 능력을 하나씩 풀어 볼 수 있게 했어요",
+    "en": "On the site, each of the 12 friends now has a small level to try"
    },
    "items": [
     {
@@ -255,7 +252,7 @@
      },
      "d": {
       "ko": "세트마다 ‘kg’과 ‘회’ 칸에 적고 오른쪽 체크를 누르면 기록되고, 칸을 비워 두면 흐리게 보이는 값으로 들어가요.",
-      "en": "Type the weight and reps in the ‘kg’ and ‘Reps’ boxes and tap the check on the right to log the set; an empty box takes the faded value shown in it."
+      "en": "Type the weight (kg only) and reps in the ‘kg’ and ‘Reps’ boxes, then tap the check on the right to log the set; an empty box takes the faded value shown in it."
      }
     },
     {
@@ -264,8 +261,8 @@
       "en": "Time your rest"
      },
      "d": {
-      "ko": "체크하면 ‘휴식’ 타이머가 기본 90초로 흐르고, ‘−15’·‘+15’로 15초씩 바꾸거나 ‘건너뛰기’로 넘겨요.",
-      "en": "Checking a set starts the ‘Rest’ timer at 90 seconds by default; ‘−15’ and ‘+15’ change it by 15 seconds and ‘Skip’ ends it."
+      "ko": "체크하면 ‘휴식’ 타이머가 기본 90초로 흐르고, ‘−15’·‘+15’로 15초씩 바꾸거나 ‘건너뛰기’로 넘겨요. 휴대폰이 무음이면 끝 소리가 안 날 수 있어요.",
+      "en": "Checking a set starts the ‘Rest’ timer at 90 seconds; ‘−15’ and ‘+15’ change it by 15 seconds and ‘Skip’ ends it. On silent, the end sound may not play."
      }
     },
     {
@@ -282,8 +279,8 @@
   },
   "basis": {
    "h": {
-    "ko": "추정 1RM 계산식과 저장 위치를 앱이 직접 밝혀요",
-    "en": "The app spells out its 1RM formula and where your log is saved"
+    "ko": "추정 1RM은 무게 × (1 + 횟수/30)로 계산해요",
+    "en": "Estimated 1RM is weight × (1 + reps/30)"
    },
    "rows": [
     {
@@ -297,8 +294,8 @@
      },
      "src": {
       "t": {
-       "ko": "세트노트 설정: ‘저장 위치’",
-       "en": "SetNote settings: ‘Where records are saved’"
+       "ko": "세트노트 앱 › 설정 › ‘저장 위치’",
+       "en": "SetNote app › Settings › ‘Where records are saved’"
       },
       "href": "https://setnote.lumenlab.page/app/"
      },
@@ -315,8 +312,8 @@
      },
      "src": {
       "t": {
-       "ko": "세트노트 설정: ‘백업’",
-       "en": "SetNote settings: ‘Backup’"
+       "ko": "세트노트 앱 › 설정 › ‘백업’",
+       "en": "SetNote app › Settings › ‘Backup’"
       },
       "href": "https://setnote.lumenlab.page/app/"
      },
@@ -328,13 +325,13 @@
       "en": "Estimated 1RM"
      },
      "v": {
-      "ko": "Epley 공식, 무게 × (1 + 횟수/30)로 계산해요. 1회만 했으면 그 무게를 그대로 써요.",
-      "en": "Uses the Epley formula, weight × (1 + reps/30). A single rep counts as the weight itself."
+      "ko": "Epley 공식이에요. 1회만 했으면 그 무게를 그대로 써요.",
+      "en": "This is the Epley formula. A single rep counts as the weight itself."
      },
      "src": {
       "t": {
-       "ko": "세트노트 앱의 ‘추정 1RM’ 설명",
-       "en": "SetNote app: ‘Est. 1RM’ note"
+       "ko": "세트노트 앱 › 운동을 누르면 나오는 기록 화면",
+       "en": "SetNote app › an exercise’s history screen"
       },
       "href": "https://setnote.lumenlab.page/app/"
      },
@@ -351,8 +348,8 @@
      },
      "src": {
       "t": {
-       "ko": "세트노트 앱",
-       "en": "SetNote app"
+       "ko": "세트노트 앱 › 운동을 끝낸 뒤 요약 화면",
+       "en": "SetNote app › the summary after a workout"
       },
       "href": "https://setnote.lumenlab.page/app/"
      },
@@ -369,8 +366,8 @@
      },
      "src": {
       "t": {
-       "ko": "세트노트 앱",
-       "en": "SetNote app"
+       "ko": "세트노트 앱 › 운동을 끝낸 뒤 ‘총 볼륨’",
+       "en": "SetNote app › ‘Total volume’ after a workout"
       },
       "href": "https://setnote.lumenlab.page/app/"
      },
@@ -398,15 +395,12 @@
      "on": null
     }
    ],
-   "note": {
-    "ko": "휴식 끝 소리는 휴대폰 무음 모드에서는 안 날 수 있어요.",
-    "en": "The rest-end sound may stay quiet when your phone is on silent."
-   }
+   "note": null
   },
   "log": {
    "h": {
-    "ko": "2026년 10월 6일 지금 주소로 옮겼고, 18일에 처리방침을 올렸어요",
-    "en": "Moved to its own address on Oct 6, 2026, with a privacy policy added on Oct 18"
+    "ko": "개인정보 처리방침을 따로 올리고, 앱 로고에서 소개 페이지로 가는 길을 냈어요",
+    "en": "Added a privacy policy for SetNote, and the app logo now opens the intro page"
    },
    "items": [
     {
@@ -492,29 +486,22 @@
   "basis": null,
   "log": {
    "h": {
-    "ko": "공개하고 사흘 안에 영어판을 열고 계산기를 네 묶음으로 나눴어요",
-    "en": "Within three days of launch it gained an English edition and a four-group layout"
+    "ko": "2월 29일생 생일 규칙을 정하고, 날짜 칸을 숫자로 치게 바꿨어요",
+    "en": "Set a rule for Feb 29 birthdays and made every date box take typed digits"
    },
    "items": [
     {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 6편을 lumenlab.page/guides/에 모았고, 옛 글 주소는 새 주소로 바로 넘어가요.",
-      "en": "The 6 English guides moved to lumenlab.page/en/guides/, and old guide links forward there."
-     }
-    },
-    {
      "d": "2026-10-06",
      "t": {
-      "ko": "날짜 칸마다 2004.3.15처럼 숫자로 치는 칸을 앞에 두고, 달력은 오른쪽 단추로 열게 했어요.",
-      "en": "Every date box now takes typed digits, like 03/15/2004, with the calendar on a button to its right."
+      "ko": "날짜 칸마다 숫자로 치는 칸을 앞에 두고, 달력은 오른쪽 단추로 열게 했어요.",
+      "en": "Every date box now takes typed digits first, with the calendar on a button to its right."
      }
     },
     {
      "d": "2026-10-06",
      "t": {
       "ko": "디데이·생일·기념일 당일엔 색종이가 날리고, 결과 날짜가 공휴일이면 ‘공휴일’ 도장이 찍혀요.",
-      "en": "Reaching D-day, a birthday or an anniversary sets off confetti, and a holiday result gets a ‘Holiday’ stamp."
+      "en": "On a countdown date, a birthday or an anniversary, confetti flies, and a holiday result gets a ‘Holiday’ stamp."
      }
     },
     {
@@ -551,8 +538,8 @@
  "scicalc": {
   "how": {
    "h": {
-    "ko": "키보드로 1/2+1/3을 치면 5/6이 나와요",
-    "en": "Type 1/2+1/3 on your keyboard and you get 5/6"
+    "ko": "키보드로 칠 땐 /가 분수 칸, Enter가 =예요",
+    "en": "On a keyboard, / makes a fraction and Enter means ="
    },
    "steps": [
     {
@@ -571,8 +558,8 @@
       "en": "Fractions with □/□"
      },
      "d": {
-      "ko": "‘□/□’ 키를 누르면 위아래 칸이 생기고, 1 □/□ 3 ▶ + 1 □/□ 6 =을 누르면 1/2이 나와요.",
-      "en": "Press ‘□/□’ for a top and bottom box, and 1 □/□ 3 ▶ + 1 □/□ 6 = gives 1/2."
+      "ko": "‘□/□’ 키를 누르면 위아래 칸이 생기고, `1 □/□ 3 ▶ + 1 □/□ 6 =`을 누르면 1/2이 나와요.",
+      "en": "Press ‘□/□’ for a top and bottom box, and `1 □/□ 3 ▶ + 1 □/□ 6 =` gives 1/2."
      }
     },
     {
@@ -581,8 +568,8 @@
       "en": "More with SHIFT"
      },
      "d": {
-      "ko": "키 위 주황 글자는 ‘SHIFT’ 다음에 그 키를 눌러 쓰고, SHIFT sin 0.5 =를 누르면 30이 나와요.",
-      "en": "The orange label above a key works after ‘SHIFT’, so SHIFT sin 0.5 = gives 30."
+      "ko": "키 위 주황 글자는 ‘SHIFT’ 다음에 그 키를 눌러 쓰고, `SHIFT sin 0.5 =`를 누르면 30이 나와요.",
+      "en": "The orange label above a key works after ‘SHIFT’, so `SHIFT sin 0.5 =` gives 30."
      }
     },
     {
@@ -599,8 +586,8 @@
   },
   "basis": {
    "h": {
-    "ko": "생략된 곱을 × ÷보다 먼저 하는 순서는 카시오 설명서를 따랐어요",
-    "en": "Implied multiplication goes before × and ÷, as in Casio’s fx-570ES PLUS manual"
+    "ko": "6÷2(1+2)는 카시오 설명서의 계산 순서대로 1이 나와요",
+    "en": "6÷2(1+2) gives 1, following the order in Casio’s manual"
    },
    "rows": [
     {
@@ -609,8 +596,8 @@
       "en": "Exact values"
      },
      "v": {
-      "ko": "분수는 큰 정수 분수로, 루트와 π는 기호 그대로 계산해서 0.1+0.2−0.3이 0으로 나와요. 정확값이 안 되면 배정밀도 소수로 계산해요.",
-      "en": "Fractions are kept as big-integer fractions and roots and π as symbols, so 0.1+0.2−0.3 gives 0; anything with no exact form uses double-precision decimals."
+      "ko": "분수와 루트, π를 소수로 바꾸지 않고 그대로 계산해서 0.1+0.2−0.3이 0으로 나와요. 그렇게 계산할 수 없는 식은 보통 소수(유효숫자 약 16자리)로 해요.",
+      "en": "Fractions, roots and π are kept exact instead of being turned into decimals, so 0.1+0.2−0.3 gives 0; anything with no exact form uses ordinary decimals (about 16 significant digits)."
      },
      "src": {
       "t": {
@@ -627,8 +614,8 @@
       "en": "Order of operations"
      },
      "v": {
-      "ko": "괄호 → 함수 → 거듭제곱(왼쪽부터) → 곱하기 기호를 생략한 곱 → × ÷ → + − 순서라서 6÷2(1+2) = 1, −2² = −4예요.",
-      "en": "Brackets, functions, powers (left to right), products without a × sign, then × ÷ and + −, so 6÷2(1+2) = 1 and −2² = −4."
+      "ko": "괄호 → 함수 → 거듭제곱(왼쪽부터) → × 없이 붙여 쓴 곱 → × ÷ → + − 순서예요. 그래서 −2²는 −4예요.",
+      "en": "Brackets, functions, powers (left to right), products written without a × sign, then × ÷ and + −. So −2² is −4."
      },
      "src": {
       "t": {
@@ -663,13 +650,13 @@
       "en": "Integrals and derivatives"
      },
      "v": {
-      "ko": "적분은 가우스-크론로드(7-15) 적응 적분, 미분은 리더스 방법으로 계산해요.",
-      "en": "Integrals use adaptive Gauss–Kronrod (7-15) quadrature and derivatives use Ridders’ method."
+      "ko": "∫와 d/dx 키는 정적분 값과 한 점의 미분값을 숫자로 구해요. 적분은 오차가 충분히 작아질 때까지 구간을 잘게 나눠 다시 계산해요.",
+      "en": "The ∫ and d/dx keys give numeric values for definite integrals and for a derivative at a point; integrals keep splitting the interval until the error estimate is small."
      },
      "src": {
       "t": {
-       "ko": "공학용 계산기 소개",
-       "en": "About this calculator"
+       "ko": "공학용 계산기 소개(가우스-크론로드 7-15, 리더스 방법)",
+       "en": "About this calculator (Gauss–Kronrod 7-15, Ridders’ method)"
       },
       "href": "https://calc.lumenlab.page/about/"
      },
@@ -686,32 +673,25 @@
      },
      "src": {
       "t": {
-       "ko": "미국 표준기술연구소(NIST) CODATA 2022 권고값",
-       "en": "CODATA 2022 recommended values from NIST"
+       "ko": "미국 표준기술연구소(NIST) 기본 물리 상수, CODATA 2022",
+       "en": "NIST Fundamental Physical Constants, CODATA 2022"
       },
-      "href": "https://physics.nist.gov/cuu/Constants/Table/allascii.txt"
+      "href": "https://physics.nist.gov/cuu/Constants/index.html"
      },
      "on": null
     }
    ],
    "note": {
-    "ko": "그래프를 크게 그리는 그래핑 계산기 기능은 없어요.",
-    "en": "It is not a graphing calculator."
+    "ko": "함수표 아래 작은 그래프만 있고, 그래핑 계산기처럼 크게 그리진 않아요.",
+    "en": "There is a small graph under the table of values, but it is not a graphing calculator."
    }
   },
   "log": {
    "h": {
-    "ko": "공개한 날 키판이 흔들려 엉뚱한 키가 눌리던 것부터 고쳤어요",
-    "en": "On launch day we first fixed the keypad jumping and catching the wrong key"
+    "ko": "식을 칠 때 키판이 흔들리던 것과 기록의 괄호 문제를 고쳤어요",
+    "en": "Fixed the keypad shifting as you type and nested brackets in history"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 6편이 lumenlab.page/guides/로 이사했고, 옛 링크도 같은 글로 이어져요.",
-      "en": "The 5 English guides moved to lumenlab.page/en/guides/, and old links still reach the same articles."
-     }
-    },
     {
      "d": "2026-10-06",
      "t": {
@@ -753,8 +733,8 @@
  "takehome": {
   "how": {
    "h": {
-    "ko": "연봉 한 칸만 넣으면 급여명세서가 바로 나와요",
-    "en": "Type your salary in one box and the payslip updates as you type"
+    "ko": "4000이라고만 쳐도 4,000만 원으로 읽어요",
+    "en": "Type 40m and it reads ₩40 million"
    },
    "steps": [
     {
@@ -763,8 +743,8 @@
       "en": "Enter your pay"
      },
      "d": {
-      "ko": "‘연봉’이나 ‘월급’을 고른 뒤 4000처럼 숫자만 쓰면 4,000만 원으로 읽고, ‘바로 넣기’의 ‘5,000만’ 같은 단추를 눌러도 돼요.",
-      "en": "Choose ‘Annual’ or ‘Monthly’ and type the amount before tax in won, such as 40m, or tap a ‘Try’ amount like ‘₩50M’."
+      "ko": "‘연봉’이나 ‘월급’을 고르고 세전 금액을 넣거나, ‘바로 넣기’의 ‘5,000만’ 같은 단추를 눌러요.",
+      "en": "Choose ‘Annual’ or ‘Monthly’ and enter the amount before tax, or tap a ‘Try’ amount like ‘₩50M’."
      }
     },
     {
@@ -801,8 +781,8 @@
   },
   "basis": {
    "h": {
-    "ko": "2026년 10월 10일에 확인한 4대 보험 요율과 간이세액표로 계산해요",
-    "en": "Calculated with insurance rates and the withholding table checked on October 10, 2026"
+    "ko": "소득세는 공식 간이세액표 647줄에서 그대로 찾아요",
+    "en": "Income tax comes straight from the 647 rows of the official withholding table"
    },
    "rows": [
     {
@@ -817,7 +797,7 @@
      "src": {
       "t": {
        "ko": "국민연금공단 「보험료 금액 및 보험료율」",
-       "en": "National Pension Service: contribution amounts and rates"
+       "en": "National Pension Service: contribution amounts and rates (Korean)"
       },
       "href": "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do"
      },
@@ -835,7 +815,7 @@
      "src": {
       "t": {
        "ko": "국민건강보험공단 「2026년도 보험료율 인상 안내」",
-       "en": "National Health Insurance Service: notice of the 2026 contribution rates"
+       "en": "National Health Insurance Service: notice of the 2026 contribution rates (Korean)"
       },
       "href": "https://edi.nhis.or.kr/portal/images/popup/20251204_pop01longdesc.html"
      },
@@ -850,13 +830,22 @@
       "ko": "0.9%예요. 65세 이후에 새로 고용된 사람은 떼지 않아요.",
       "en": "0.9%, not collected from people hired after turning 65."
      },
-     "src": {
-      "t": {
-       "ko": "고용산재보험료징수법 시행령 제12조",
-       "en": "Enforcement Decree of the Insurance Premium Collection Act, Article 12"
+     "src": [
+      {
+       "t": {
+        "ko": "고용산재보험료징수법 시행령 제12조(요율)",
+        "en": "Insurance Premium Collection Act decree, Article 12 (rate, Korean)"
+       },
+       "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C12%EC%A1%B0"
       },
-      "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C12%EC%A1%B0"
-     },
+      {
+       "t": {
+        "ko": "같은 법 제13조(65세)",
+        "en": "the Act, Article 13 (age 65, Korean)"
+       },
+       "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B3%A0%EC%9A%A9%EB%B3%B4%ED%97%98%EB%B0%8F%EC%82%B0%EC%97%85%EC%9E%AC%ED%95%B4%EB%B3%B4%EC%83%81%EB%B3%B4%ED%97%98%EC%9D%98%EB%B3%B4%ED%97%98%EB%A3%8C%EC%A7%95%EC%88%98%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0/%EC%A0%9C13%EC%A1%B0"
+      }
+     ],
      "on": "2026-10-10"
     },
     {
@@ -865,13 +854,13 @@
       "en": "Income tax"
      },
      "v": {
-      "ko": "월 77만~1,000만 원은 간이세액표 647줄에서 찾고, 그 위는 표 주석의 계산식으로 구해요.",
-      "en": "Looked up in the 647 rows of the simplified withholding table for ₩770,000 to ₩10,000,000 a month, and above that with the formula in the table notes."
+      "ko": "월 77만~1,000만 원은 표에서 찾고, 1,000만 원이 넘으면 표 주석의 계산식으로 구해요.",
+      "en": "Monthly pay from ₩770,000 to ₩10,000,000 is looked up in the table, and above that the formula in the table notes is used."
      },
      "src": {
       "t": {
        "ko": "소득세법 시행령 별표 2 근로소득 간이세액표",
-       "en": "Enforcement Decree of the Income Tax Act, Table 2: simplified withholding table for earned income"
+       "en": "Enforcement Decree of the Income Tax Act, Table 2: simplified withholding table (Korean)"
       },
       "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9%EB%B3%84%ED%91%9C%EC%84%9C%EC%8B%9D/(%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9,%EB%B3%84%ED%91%9C2)"
      },
@@ -889,7 +878,7 @@
      "src": {
       "t": {
        "ko": "지방세법 제103조의13",
-       "en": "Local Tax Act, Article 103-13"
+       "en": "Local Tax Act, Article 103-13 (Korean)"
       },
       "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95/%EC%A0%9C103%EC%A1%B0%EC%9D%9813"
      },
@@ -901,13 +890,13 @@
       "en": "Tax-free meal allowance"
      },
      "v": {
-      "ko": "식사를 제공받지 않으면 월 20만 원까지 비과세이고, 보험료도 이 금액을 뺀 월급에 매겨요.",
-      "en": "Up to ₩200,000 a month for workers who are not given meals, and premiums are charged on pay minus this amount."
+      "ko": "식사를 제공받지 않으면 식대는 월 20만 원까지 비과세예요.",
+      "en": "A meal allowance is tax-free up to ₩200,000 a month for workers who are not given meals."
      },
      "src": {
       "t": {
        "ko": "소득세법 제12조 제3호 러목",
-       "en": "Income Tax Act, Article 12, subparagraph 3"
+       "en": "Income Tax Act, Article 12, subparagraph 3 (Korean)"
       },
       "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%86%8C%EB%93%9D%EC%84%B8%EB%B2%95/%EC%A0%9C12%EC%A1%B0"
      },
@@ -921,17 +910,10 @@
   },
   "log": {
    "h": {
-    "ko": "공개한 날 65세 조건과 퇴직금 날짜 세기를 바로 고쳤어요",
-    "en": "On launch day we fixed the age-65 option and the severance day count"
+    "ko": "퇴직금 날짜 세기를 노동부 계산기와 맞췄고, 요율은 해마다 1월에 다시 봐요",
+    "en": "Severance days now match the Labor Ministry’s calculator, and rates are rechecked every January"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 6편을 lumenlab.page/guides/로 옮겼고, 옛 주소로 와도 같은 글이 열려요.",
-      "en": "The 3 English guides moved to lumenlab.page/en/guides/, and old links open the same articles."
-     }
-    },
     {
      "d": "2026-10-10",
      "t": {
@@ -1021,8 +1003,8 @@
   },
   "basis": {
    "h": {
-    "ko": "코덱이 맞으면 다시 압축하지 않고 그대로 옮겨 담아요",
-    "en": "When the codecs fit, the streams are copied without re-encoding"
+    "ko": "압축한 PDF가 원본보다 작지 않으면 원본을 그대로 돌려줘요",
+    "en": "If a compressed PDF isn’t smaller, you get your original back"
    },
    "rows": [
     {
@@ -1031,8 +1013,8 @@
       "en": "Changing video formats"
      },
      "v": {
-      "ko": "코덱이 새 형식에 맞으면 다시 압축하지 않고 옮겨 담아요. MP4·MOV로 바꿀 땐 아이폰·맥에서 열리게 VP9·AV1은 H.264(안 되면 HEVC)로, Opus·Vorbis는 AAC로 다시 만들어요.",
-      "en": "When the codecs fit the new container, the streams are copied without re-encoding. For MP4 or MOV, VP9 or AV1 video becomes H.264 (or HEVC) and Opus or Vorbis audio becomes AAC, so the file plays on iPhone and Mac."
+      "ko": "새 형식에 그대로 담을 수 있는 영상과 소리는 다시 압축하지 않고 옮겨 담아서 화질이 그대로예요. MP4·MOV로 바꿀 땐 아이폰·맥에서 열리게 VP9·AV1 영상은 H.264(안 되면 HEVC)로, Opus·Vorbis 소리는 AAC로 다시 만들어요.",
+      "en": "Video and audio the new format can hold as they are get copied over without re-encoding, so quality stays the same. For MP4 or MOV, VP9 or AV1 video becomes H.264 (or HEVC) and Opus or Vorbis audio becomes AAC, so the file plays on iPhone and Mac."
      },
      "src": {
       "t": {
@@ -1049,13 +1031,13 @@
       "en": "MP3 quality"
      },
      "v": {
-      "ko": "웹어셈블리로 만든 LAME 3.100으로 128·192·320kbps 가운데 하나로 만들어요. 동영상에서 뽑을 땐 192kbps가 기본이고, 320kbps가 MP3 규격에서 가장 높은 값이에요.",
-      "en": "MP3s are encoded by LAME 3.100 compiled to WebAssembly at 128, 192 or 320 kbps. From a video the default is 192 kbps, and 320 kbps is the highest bitrate the MP3 format allows."
+      "ko": "LAME 3.100으로 128·192·320kbps 가운데 하나로 만들어요. 동영상에서 뽑을 땐 192kbps가 기본이고, 오디오 파일은 원본이 150kbps보다 낮으면 128kbps로 시작해요.",
+      "en": "MP3s are made with LAME 3.100 at 128, 192 or 320 kbps. From a video the default is 192 kbps, and an audio file under 150 kbps starts at 128 kbps."
      },
      "src": {
       "t": {
-       "ko": "@mediabunny/mp3-encoder (LAME 3.100)",
-       "en": "@mediabunny/mp3-encoder (LAME 3.100)"
+       "ko": "LAME 프로젝트",
+       "en": "The LAME Project"
       },
       "href": "https://lame.sourceforge.io/"
      },
@@ -1067,8 +1049,8 @@
       "en": "HEIC photos"
      },
      "v": {
-      "ko": "사파리에선 브라우저가 직접 읽고, 크롬·엣지·파이어폭스에선 웹어셈블리로 만든 libheif로 풀어요. 촬영 날짜와 GPS 위치는 새 파일에 옮기지 않아요.",
-      "en": "Safari decodes HEIC itself, and in Chrome, Edge and Firefox the page uses libheif compiled to WebAssembly. The capture date and GPS location are not copied to the new file."
+      "ko": "사파리에선 브라우저가 직접 읽고, 크롬·엣지·파이어폭스에선 페이지에 든 libheif로 풀어요. 촬영 날짜와 GPS 위치는 새 파일에 옮기지 않아요.",
+      "en": "Safari decodes HEIC itself, and in Chrome, Edge and Firefox the page uses its own copy of libheif. The capture date and GPS location are not copied to the new file."
      },
      "src": {
       "t": {
@@ -1085,8 +1067,8 @@
       "en": "PDF compression"
      },
      "v": {
-      "ko": "사진과 스캔 그림만 JPEG로 다시 저장하고(기본 ‘균형’: 긴 변 약 1600픽셀, 품질 70) 파일 구조는 객체 스트림으로 묶어요. 결과가 원본보다 작지 않으면 원본을 그대로 돌려줘요.",
-      "en": "Only photos and scans are re-saved as JPEG (default ‘Balanced’: about 1600 pixels on the long side, quality 70), and the file structure is packed into object streams. If the result isn’t smaller, you get the original back."
+      "ko": "사진과 스캔 그림만 JPEG로 다시 저장하고(기본 ‘균형’: 긴 변 약 1600픽셀, 품질 70), 파일 구조도 더 작게 묶어요.",
+      "en": "Only photos and scans are re-saved as JPEG (default ‘Balanced’: about 1600 pixels on the long side, quality 70), and the file structure is packed more tightly."
      },
      "src": {
       "t": {
@@ -1103,8 +1085,8 @@
       "en": "PDF passwords"
      },
      "v": {
-      "ko": "PDF 2.0 규격에 나오는 AES-256으로 걸어서 PDF 1.7 확장 레벨 8 이상을 읽는 뷰어에서 열려요. ‘인쇄와 복사도 막기’는 뷰어가 지켜 주는 제한이라, 내용을 지키는 건 열기 암호예요.",
-      "en": "Files are encrypted with AES-256 as described in the PDF 2.0 specification, so a viewer needs PDF 1.7 extension level 8 support to open them. ‘Also block printing and copying’ is enforced by the viewer, so it is the open password that keeps the content private."
+      "ko": "PDF 암호 가운데 가장 강한 AES-256으로 걸어요. ‘인쇄와 복사도 막기’는 뷰어가 지켜 주는 제한이라, 내용을 지키는 건 열기 암호예요.",
+      "en": "Files are locked with AES-256, the strongest PDF encryption. ‘Also block printing and copying’ depends on the viewer honoring it, so it is the open password that keeps the content private."
      },
      "src": {
       "t": {
@@ -1121,37 +1103,34 @@
       "en": "CSV for Excel"
      },
      "v": {
-      "ko": "엑셀은 파일 맨 앞에 BOM(EF BB BF 세 바이트)이 있어야 UTF-8로 알아봐서, ‘엑셀에서 한글 안 깨지게 (UTF-8 BOM)’가 처음부터 켜져 있어요.",
-      "en": "Excel reads a CSV as UTF-8 only when it starts with a byte order mark (the bytes EF BB BF), so ‘Excel-friendly (UTF-8 with BOM)’ is on from the start."
+      "ko": "엑셀은 파일 맨 앞에 BOM이라는 표시가 있어야 한글을 UTF-8로 알아봐서, ‘엑셀에서 한글 안 깨지게 (UTF-8 BOM)’가 처음부터 켜져 있어요.",
+      "en": "Excel reads a CSV as UTF-8 only when it starts with a byte order mark, so ‘Excel-friendly (UTF-8 with BOM)’ is on from the start."
      },
      "src": {
       "t": {
        "ko": "Microsoft 지원: Excel에서 CSV UTF-8 파일을 올바르게 열기",
-       "en": "Microsoft Support: Opening CSV UTF-8 files correctly in Excel (Korean page)"
+       "en": "Microsoft Support: Opening CSV UTF-8 files correctly in Excel"
       },
-      "href": "https://support.microsoft.com/ko-kr/office/excel%EC%97%90%EC%84%9C-csv-utf-8-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%98%AC%EB%B0%94%EB%A5%B4%EA%B2%8C-%EC%97%B4%EA%B8%B0-8a935af5-3416-4edd-ba7e-3dfd2bc4a032"
+      "href": {
+       "ko": "https://support.microsoft.com/ko-kr/office/excel%EC%97%90%EC%84%9C-csv-utf-8-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%98%AC%EB%B0%94%EB%A5%B4%EA%B2%8C-%EC%97%B4%EA%B8%B0-8a935af5-3416-4edd-ba7e-3dfd2bc4a032",
+       "en": "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032"
+      }
      },
      "on": "2026-10-06"
     }
    ],
    "note": {
     "ko": "실제 한계는 기기 메모리라 아주 큰 영상은 휴대폰에서 실패할 수 있고, 워드·한글(HWP)·파워포인트를 PDF로 바꾸기와 글자 인식(OCR)은 아직 없어요.",
-    "en": "The practical limit is your device’s memory, so very large videos can fail on phones, and Word, HWP or PowerPoint to PDF and OCR aren’t available yet."
-   }
+    "en": "The practical limit is your device’s memory, so very large videos can fail on phones, and Word or PowerPoint to PDF and OCR aren’t available yet."
+   },
+   "more": null
   },
   "log": {
    "h": {
-    "ko": "공개 다음 날까지 PDF 도구 8개를 더했어요",
-    "en": "Eight PDF tools were added by the day after launch"
+    "ko": "PDF를 AI에 넣기 좋은 글로 바꾸는 도구를 더하고 두 단 논문 문제도 고쳤어요",
+    "en": "Added PDF to Markdown for AI tools, then fixed how it reads two-column papers"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드를 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 넘어가게 했어요.",
-      "en": "Guides moved to lumenlab.page/en/guides/, and old guide links forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-07",
      "t": {
@@ -1200,8 +1179,8 @@
  "staycode": {
   "how": {
    "h": {
-    "ko": "주소 한 칸만 채우면 QR이 바로 나와요",
-    "en": "Fill in one link field and your code appears"
+    "ko": "꾸밈 세트 하나로 모양·색·틀이 한꺼번에 바뀌어요",
+    "en": "One design preset changes the shape, colors and frame at once"
    },
    "steps": [
     {
@@ -1220,8 +1199,8 @@
       "en": "Pick a design preset"
      },
      "d": {
-      "ko": "‘꾸밈 세트’ 10가지 가운데 하나를 누르면 모양·색·틀이 한꺼번에 바뀌고, ‘로고’ 탭의 ‘내 파일에서 고르기’로 로고도 얹어요.",
-      "en": "Tap one of the 10 ‘Design presets’ to change shape, colors and frame at once, or add a logo with ‘Choose a file’ in the ‘Logo’ tab."
+      "ko": "‘꾸밈 세트’ 10가지 가운데 하나를 고르고, 로고를 넣으려면 ‘로고’ 탭의 ‘내 파일에서 고르기’를 눌러요.",
+      "en": "Pick one of the 10 ‘Design presets’, and to add a logo use ‘Choose a file’ in the ‘Logo’ tab."
      }
     },
     {
@@ -1231,7 +1210,7 @@
      },
      "d": {
       "ko": "고칠 때마다 도장이 ‘확인 중’으로 바뀌고, 0.5초 동안 그대로 두면 그림을 다시 읽어 ‘통과’·‘주의’·‘안 읽힘’으로 찍혀요.",
-      "en": "After each change the stamp says ‘Checking’, and half a second after you stop it reads the image back and shows ‘Scans’, ‘Check’ or ‘No scan’."
+      "en": "After each change the stamp says ‘Checking’; half a second after you stop, it reads the image back and shows ‘Scans’, ‘Check’ or ‘No scan’."
      }
     },
     {
@@ -1248,8 +1227,8 @@
   },
   "basis": {
    "h": {
-    "ko": "다시 읽어서 넣은 내용과 글자 하나까지 같아야 ‘통과’를 찍어요",
-    "en": "‘Scans’ appears only when the code reads back exactly what you typed"
+    "ko": "로고를 넣으면 오류 복원을 H(약 30%)로 올려요",
+    "en": "Add a logo and error correction goes up to H, about 30%"
    },
    "rows": [
     {
@@ -1279,8 +1258,8 @@
       "en": "Error correction"
      },
      "v": {
-      "ko": "L 약 7%, M 약 15%, Q 약 25%, H 약 30%까지 가려져도 읽히고, 로고를 넣으면 H로 올린 뒤 그렇게 알려 줘요.",
-      "en": "A code still reads with about 7% (L), 15% (M), 25% (Q) or 30% (H) of it covered, and adding a logo switches to H and tells you so."
+      "ko": "L 약 7%, M 약 15%, Q 약 25%, H 약 30%까지 가려져도 읽혀요.",
+      "en": "A code still reads with about 7% (L), 15% (M), 25% (Q) or 30% (H) of it covered."
      },
      "src": {
       "t": {
@@ -1297,8 +1276,8 @@
       "en": "WiFi format"
      },
      "v": {
-      "ko": "WIFI: 형식으로 담고 \\ ; , : \" 다섯 글자 앞에는 역슬래시(\\)를 붙이며, 숨긴 네트워크에는 H:true를 더해요.",
-      "en": "Networks are stored in the WIFI: format, with a backslash added before any of the five characters \\ ; , : \" and H:true added for a hidden network."
+      "ko": "WIFI: 형식으로 담고 `\\ ; , : \"` 다섯 글자 앞에는 역슬래시(\\)를 붙이며, 숨긴 네트워크에는 H:true를 더해요.",
+      "en": "Networks are stored in the WIFI: format, with a backslash added before any of the five characters `\\ ; , : \"` and H:true added for a hidden network."
      },
      "src": {
       "t": {
@@ -1333,8 +1312,8 @@
       "en": "Scan check"
      },
      "v": {
-      "ko": "점과 바탕의 밝기 대비가 2:1 미만이면 그림을 읽기 전에 ‘안 읽힘’, 4:1 미만이면 ‘주의’예요. ‘통과’는 읽은 내용이 넣은 내용과 글자 하나까지 같고 다른 규칙에도 걸리지 않을 때만 나와요.",
-      "en": "Contrast between dots and background under 2:1 is ‘No scan’ before the image is even read, and under 4:1 is ‘Check’. ‘Scans’ appears only when what was read matches your content character for character and no other rule is triggered."
+      "ko": "점과 바탕의 밝기 대비가 2:1 미만이면 그림을 읽기 전에 ‘안 읽힘’, 4:1 미만이면 ‘주의’예요. ‘통과’는 읽은 내용이 넣은 내용과 글자 하나까지 같을 때만 나와요.",
+      "en": "Contrast between dots and background under 2:1 is ‘No scan’ before the image is even read, and under 4:1 is ‘Check’. ‘Scans’ appears only when what was read matches your content character for character."
      },
      "src": {
       "t": {
@@ -1370,26 +1349,29 @@
    "note": {
     "ko": "찍힘 확인은 이 브라우저 안에서 그림을 다시 읽는 것이라, 인쇄 상태·조명·카메라에 따라 실제 결과는 다를 수 있어요.",
     "en": "The scan check reads the image again inside your browser, so real results also depend on print quality, light and camera."
+   },
+   "more": {
+    "href": {
+     "ko": "https://qr.lumenlab.page/ko/#std-h",
+     "en": "https://qr.lumenlab.page/#std-h"
+    },
+    "t": {
+     "ko": "오래QR ‘기준’ 전체 보기",
+     "en": "All of Staycode’s standards"
+    }
    }
   },
   "log": {
    "h": {
-    "ko": "공개 전 점검에서 나온 문제 10개를 고치고 열었어요",
-    "en": "Ten problems found in a pre-launch review were fixed before it opened"
+    "ko": "공개 전에 와이파이·연락처 코드는 최근 목록에 안 남게 고쳤어요",
+    "en": "Before launch, WiFi and contact codes were kept out of the recent list"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드를 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 넘어가게 했어요.",
-      "en": "Guides moved to lumenlab.page/en/guides/, and old guide links forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-14",
      "t": {
       "ko": "가이드 13편(한국어 7편, 영어 6편)을 함께 냈어요.",
-      "en": "Six guides were published the same day."
+      "en": "Published 6 English guides on launch day."
      }
     },
     {
@@ -1412,8 +1394,8 @@
  "onesheet": {
   "how": {
    "h": {
-    "ko": "첫 화면에서 ‘PDF 받기’만 누르면 돼요",
-    "en": "On the first screen, ‘Download PDF’ is all it takes"
+    "ko": "10월부터는 첫 화면에 내년 달력이 먼저 나와요",
+    "en": "From October on, it opens on next year’s calendar"
    },
    "steps": [
     {
@@ -1422,8 +1404,8 @@
       "en": "Pick the year"
      },
      "d": {
-      "ko": "10~12월에 열면 다음 해 달력이 먼저 나오고, 연도 옆 화살표로 2025~2030년을 오가요.",
-      "en": "From October to December the next year opens first, and the arrows beside the year move between 2025 and 2030."
+      "ko": "연도 옆 화살표로 2025년부터 2030년까지 오가요.",
+      "en": "Use the arrows beside the year to move between 2025 and 2030."
      }
     },
     {
@@ -1461,17 +1443,17 @@
   "basis": {
    "h": {
     "ko": "2026년부터 공휴일이 된 노동절·제헌절까지 넣었어요",
-    "en": "Holiday rules were checked against the official sources on October 9 and 10, 2026"
+    "en": "New Year’s Day 2028 is marked on Friday, Dec 31, 2027"
    },
    "rows": [
     {
      "k": {
       "ko": "한국 공휴일 규칙",
-      "en": "South Korean holiday rules"
+      "en": "South Korea: holiday rules"
      },
      "v": {
-      "ko": "관공서의 공휴일에 관한 규정(대통령령 제36290호)대로 계산해서 2026년부터 공휴일이 된 노동절(5월 1일)·제헌절(7월 17일)도 들어 있고, 2026·2027년은 공식 발표와 날짜마다 맞춰 봤어요.",
-      "en": "Computed from the Regulations on Holidays of Government Offices as amended on April 30, 2026, which made Labor Day (May 1) and Constitution Day (July 17) public holidays from 2026, and checked date by date against the official tables for 2026 and 2027."
+      "ko": "관공서의 공휴일에 관한 규정(대통령령 제36290호)의 공휴일과 대체공휴일 규칙대로 계산해요.",
+      "en": "Computed from the Regulations on Holidays of Government Offices as amended on April 30, 2026, substitute holidays included. That amendment made Labor Day (May 1) and Constitution Day (July 17) public holidays from 2026."
      },
      "src": {
       "t": {
@@ -1485,11 +1467,11 @@
     {
      "k": {
       "ko": "2027년 쉬는 날 수",
-      "en": "Days off in 2027"
+      "en": "South Korea: days off in 2027"
      },
      "v": {
       "ko": "일요일을 포함한 2027년 공휴일은 72일이고, 토요일까지 쉬는 주5일 근무로는 119일이에요.",
-      "en": "2027 has 72 public holidays counting Sundays, or 119 days off for a five-day work week."
+      "en": "72 public holidays counting Sundays, or 119 days off for a five-day work week."
      },
      "src": {
       "t": {
@@ -1503,7 +1485,7 @@
     {
      "k": {
       "ko": "2028년 공휴일",
-      "en": "2028 holidays"
+      "en": "South Korea: 2028 holidays"
      },
      "v": {
       "ko": "한국천문연구원 달력자료로 넣었고, 월력요항이 아직 나오지 않아 종이에 ‘공식 발표 전 자료’라고 적어요.",
@@ -1521,7 +1503,7 @@
     {
      "k": {
       "ko": "음력·24절기·손 없는 날",
-      "en": "Lunar dates and solar terms"
+      "en": "Korean lunar dates and solar terms"
      },
      "v": {
       "ko": "음력은 한국천문연구원 자료를 따른 표(양력 1912년 2월 18일~2050년 1월 22일)를 천문 계산으로 검산했어요. 24절기는 2025~2028년만 보여 주고, 손 없는 날은 음력 끝자리가 9·0인 날이에요.",
@@ -1543,7 +1525,7 @@
      },
      "v": {
       "ko": "5 U.S.C. 6103의 연방 공휴일에 주말과 겹칠 때 대신 쉬는 날까지 넣어서, 2028년 새해 첫날은 2027년 12월 31일 금요일에 표시돼요.",
-      "en": "Federal holidays under 5 U.S.C. 6103 include the observed weekday, so New Year’s Day 2028 shows on Friday, December 31, 2027."
+      "en": "Federal holidays under 5 U.S.C. 6103, plus the weekday off when one falls on a weekend, as in the OPM schedule."
      },
      "src": {
       "t": {
@@ -1558,33 +1540,26 @@
    "note": {
     "ko": "2029·2030년은 규정으로 계산한 예상이라, 선거일과 임시공휴일은 정해지면 더해요.",
     "en": "2029 and 2030 are projected from the rules, so election days and one-off holidays are added once they are announced."
-   }
+   },
+   "order_en": [
+    4,
+    0,
+    1,
+    2,
+    3
+   ]
   },
   "log": {
    "h": {
-    "ko": "공개 다음 날 받는 PDF와 인쇄 배치를 고쳤어요",
-    "en": "PDFs and the print layout were fixed the day after launch"
+    "ko": "해마다 6월 말 월력요항이 나오면 다음 해 공휴일을 넣어요",
+    "en": "PDFs made with your own settings now keep sharp, real text"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드를 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 넘어가게 했어요.",
-      "en": "Guides moved to lumenlab.page/en/guides/, and old guide links forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-10",
      "t": {
       "ko": "받은 파일 이름에 바꾼 설정이 -mon·-bw 같은 꼬리표로 붙어요.",
       "en": "File names now show changed settings with tags such as -mon and -bw."
-     }
-    },
-    {
-     "d": "2026-10-10",
-     "t": {
-      "ko": "‘4명 이하 사업장’ 안내 뒤에 노동절은 사업장 크기와 상관없다는 문장을 더했어요.",
-      "en": "The note on workplaces with four or fewer employees now adds that Labor Day is a paid holiday at any size."
      }
     },
     {
@@ -1611,8 +1586,8 @@
     {
      "d": "2026-10-10",
      "t": {
-      "ko": "설정을 바꿔 받은 PDF도 200ppi 그림이 아니라 글자 그대로 담겨요.",
-      "en": "PDFs made with your own settings now keep real text instead of a 200 ppi image."
+      "ko": "설정을 바꿔 받은 PDF도 흐릿한 그림이 아니라 글자 그대로 담겨요.",
+      "en": "PDFs made with your own settings now keep real text instead of a blurry image."
      }
     },
     {
@@ -1676,8 +1651,8 @@
   },
   "basis": {
    "h": {
-    "ko": "SNS 글자 수 한도 10가지를 2026년 10월 10일에 서비스마다 공식 문서로 확인했어요",
-    "en": "All 10 social media limits were checked against each service's own docs on Oct 10, 2026"
+    "ko": "유튜브 설명 5,000바이트엔 한글이 1,666자쯤 들어가요",
+    "en": "A YouTube description holds 5,000 bytes, not 5,000 characters"
    },
    "rows": [
     {
@@ -1686,13 +1661,13 @@
       "en": "One character"
      },
      "v": {
-      "ko": "사람이 보는 한 글자를 1자로 세어요. 브라우저의 Intl.Segmenter가 글자 묶음을 나눠요.",
-      "en": "One character is what a reader sees as one, split into grapheme clusters by the browser's Intl.Segmenter."
+      "ko": "눈에 보이는 한 글자를 1자로 세서, 피부색을 바꾼 이모지도 1자예요.",
+      "en": "Each character you see counts once, even if it is built from several pieces, like an emoji with a skin tone."
      },
      "src": {
       "t": {
-       "ko": "유니코드 표준 부속서 UAX #29",
-       "en": "Unicode Standard Annex UAX #29"
+       "ko": "유니코드 표준 부속서 UAX #29(브라우저 Intl.Segmenter)",
+       "en": "Unicode Standard Annex UAX #29 (the browser’s Intl.Segmenter)"
       },
       "href": "https://unicode.org/reports/tr29/"
      },
@@ -1722,8 +1697,8 @@
       "en": "X posts"
      },
      "v": {
-      "ko": "가중치로 280까지예요. 한글과 이모지는 2, 주소는 길이와 상관없이 23으로 세고, 테스트는 npm twitter-text 3.1.0과 견줬어요.",
-      "en": "A weighted 280: CJK characters and emoji count 2, any link counts 23, and the tests are compared with npm twitter-text 3.1.0."
+      "ko": "280자까지인데 한글과 이모지는 1자를 2로, 주소는 길이와 상관없이 23으로 세요. X가 내놓은 twitter‑text 3.1.0과 결과를 견줘 시험해요.",
+      "en": "280, but Chinese, Japanese and Korean characters and emoji count as 2 and any link counts as 23; the tests compare results with X’s own twitter‑text 3.1.0."
      },
      "src": {
       "t": {
@@ -1740,13 +1715,13 @@
       "en": "YouTube descriptions"
      },
      "v": {
-      "ko": "글자 수가 아니라 UTF-8 5,000바이트까지예요. 한글만 쓰면 계산으로는 1,666자쯤 들어가요.",
-      "en": "The limit is 5,000 UTF-8 bytes, not 5,000 characters."
+      "ko": "글자 수가 아니라 UTF-8 바이트로 세는 한도예요.",
+      "en": "The limit is counted in UTF-8 bytes, so accented letters and emoji use up more than one each."
      },
      "src": {
       "t": {
-       "ko": "유튜브 공식 문서",
-       "en": "YouTube documentation"
+       "ko": "유튜브 Data API: videos",
+       "en": "YouTube Data API: videos"
       },
       "href": "https://developers.google.com/youtube/v3/docs/videos"
      },
@@ -1758,37 +1733,30 @@
       "en": "Bluesky posts"
      },
      "v": {
-      "ko": "300 글자소이고, UTF-8로 3,000바이트 안이어야 해요. 둘 중 하나만 넘어도 넘었다고 표시해요.",
-      "en": "300 graphemes and 3,000 UTF-8 bytes both apply, and the row is marked over if either one is passed."
+      "ko": "300자(이모지 하나도 1자)이면서 UTF-8로 3,000바이트 안이어야 해요. 둘 중 하나만 넘어도 넘었다고 표시해요.",
+      "en": "300 characters as you see them (one emoji counts as one) and 3,000 UTF-8 bytes both apply, and the row is marked over if either one is passed."
      },
      "src": {
       "t": {
-       "ko": "블루스카이 공식 문서",
-       "en": "Bluesky documentation"
+       "ko": "블루스카이 게시물 규격(app.bsky.feed.post)",
+       "en": "Bluesky post lexicon (app.bsky.feed.post)"
       },
-      "href": "https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json"
+      "href": "https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json"
      },
      "on": "2026-10-10"
     }
    ],
    "note": {
-    "ko": "공식 문서에 세는 단위가 없는 한도 6가지는 UTF-16 단위로 세어서, 이모지가 많은 글은 실제 화면과 조금 다를 수 있어요.",
-    "en": "For the 6 limits whose documentation does not say what is counted, Kankan counts UTF-16 units and marks them ‘unit not documented’."
+    "ko": "공식 문서에 무엇을 세는지 안 적힌 한도 6가지는 이모지 대부분을 2자로 세는 방식(UTF-16)으로 세서, 이모지가 많은 글은 그 서비스와 조금 다를 수 있어요.",
+    "en": "For the 6 limits whose documentation does not say what is counted, Kankan counts the way JavaScript does (most emoji as 2) and marks them ‘unit not documented’."
    }
   },
   "log": {
    "h": {
-    "ko": "올린 다음 날, 뒤로 가기로 돌아오면 숫자가 0이 되던 문제를 고쳤어요",
-    "en": "The day after launch we fixed counts dropping to 0 when you came back with the Back button"
+    "ko": "SNS 한도는 반기마다, 나이스 기준은 해마다 2~3월에 다시 확인해요",
+    "en": "Social media limits are rechecked every six months"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 4편을 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 이어지게 했어요.",
-      "en": "The 3 English guides moved to lumenlab.page/en/guides/, and their old addresses forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-10",
      "t": {
@@ -1823,8 +1791,8 @@
  "pickboard": {
   "how": {
    "h": {
-    "ko": "이름을 붙여 넣고 ‘돌리기’ 한 번이면 돼요",
-    "en": "Paste your names and press ‘Spin’ once"
+    "ko": "엑셀 이름 칸을 그대로 붙여 넣어도 한 줄에 한 명씩 들어가요",
+    "en": "A pasted spreadsheet column goes in as one name per line"
    },
    "steps": [
     {
@@ -1833,8 +1801,8 @@
       "en": "Paste your list"
      },
      "d": {
-      "ko": "‘내 명단 넣기’의 예시 8명을 ‘지우기’로 비우고, 한 줄에 한 명씩 붙여 넣어요(엑셀 이름 칸도 돼요).",
-      "en": "Clear the 8 sample names under ‘Your list’ with ‘Clear’, then paste one name per line (a spreadsheet column works too)."
+      "ko": "‘내 명단 넣기’의 예시 8명을 ‘지우기’로 비우고, 한 줄에 한 명씩 붙여 넣어요.",
+      "en": "Clear the 8 sample names under ‘Your list’ with ‘Clear’, then paste one name per line."
      }
     },
     {
@@ -1871,8 +1839,8 @@
   },
   "basis": {
    "h": {
-    "ko": "누를 때마다 브라우저 암호 난수로 새 씨앗을 받아 뽑아요",
-    "en": "Every press starts from a fresh seed from your browser's cryptographic random generator"
+    "ko": "8명 사다리도 아래 칸을 먼저 섞어서 어느 칸이든 12.5% 안팎이에요",
+    "en": "An 8-person ladder shuffles its bottom row first, so every outcome stays near 12.5%"
    },
    "rows": [
     {
@@ -1881,8 +1849,8 @@
       "en": "Seed"
      },
      "v": {
-      "ko": "누를 때마다 crypto.getRandomValues()로 32바이트짜리 새 씨앗을 받아요. MDN은 브라우저가 충분한 엔트로피로 씨앗을 준 의사 난수 생성기를 쓴다고 적고 있어요.",
-      "en": "Every press asks crypto.getRandomValues() for a fresh 32-byte seed. MDN notes that browsers use a pseudo-random generator seeded with enough entropy."
+      "ko": "누를 때마다 브라우저의 암호용 난수로 새 시작값(씨앗)을 받아서, 앞의 결과로 다음 결과를 짐작할 수 없어요.",
+      "en": "Every press takes a fresh starting value (seed) from your browser’s cryptographic random generator, so one result says nothing about the next."
      },
      "src": {
       "t": {
@@ -1899,7 +1867,7 @@
       "en": "Math.random()"
      },
      "v": {
-      "ko": "쓰지 않아요. MDN은 이 함수가 암호학적으로 안전한 난수를 주지 않는다고 적고 있어요.",
+      "ko": "쓰지 않아요. MDN은 이 함수가 암호에 쓸 만큼 안전한 난수를 주지 않는다고 적고 있어요.",
       "en": "Never used, because MDN says it does not provide cryptographically secure random numbers."
      },
      "src": {
@@ -1913,12 +1881,12 @@
     },
     {
      "k": {
-      "ko": "xoshiro256**",
-      "en": "xoshiro256**"
+      "ko": "같은 결과 다시 만들기",
+      "en": "Rebuilding a result"
      },
      "v": {
-      "ko": "같은 씨앗에서 같은 결과를 다시 만드는 데만 써요. 암호용 생성기가 아니라서, 비밀번호나 암호 키를 만드는 데는 이 사이트를 쓰지 말라고 안내해요.",
-      "en": "Used only to rebuild the same result from the same seed. It is not a cryptographically secure generator, so the about page asks you not to use the site for passwords or keys."
+      "ko": "씨앗이 같으면 xoshiro256** 계산식으로 늘 같은 결과가 나와요. 암호용이 아니라서 비밀번호나 암호 키를 만드는 데는 이 사이트를 쓰지 말라고 안내해요.",
+      "en": "The same seed always gives the same result through the xoshiro256** generator. It is not meant for cryptography, so the about page asks you not to use the site for passwords or keys."
      },
      "src": {
       "t": {
@@ -1935,13 +1903,13 @@
       "en": "Reference check"
      },
      "v": {
-      "ko": "xoshiro256** 구현이 공개된 기준값 10개와 숫자 하나까지 같은지 대조해요.",
-      "en": "The xoshiro256** code is compared digit for digit with 10 published reference outputs."
+      "ko": "그 계산식이 공개된 기준값 10개와 숫자 하나까지 같은지 시험해요.",
+      "en": "That generator is tested digit for digit against 10 published reference outputs."
      },
      "src": {
       "t": {
-       "ko": "Rust rand_xoshiro의 xoshiro256starstar.rs",
-       "en": "xoshiro256starstar.rs in Rust's rand_xoshiro"
+       "ko": "Rust rand_xoshiro 코드의 기준값(xoshiro256starstar.rs)",
+       "en": "Reference values in Rust’s rand_xoshiro (xoshiro256starstar.rs)"
       },
       "href": "https://raw.githubusercontent.com/rust-random/rngs/master/rand_xoshiro/src/xoshiro256starstar.rs"
      },
@@ -1953,13 +1921,13 @@
       "en": "Shuffles and whole numbers"
      },
      "v": {
-      "ko": "순서 정하기, 팀 나누기, 여러 명 뽑기는 피셔–예이츠 섞기를 써요. n개 중 하나는 n 이상이 나오면 버리고 다시 뽑아서 나머지 방식의 치우침을 피해요.",
-      "en": "Orders, teams and multi-name draws use the Fisher–Yates shuffle. A one-of-n pick throws away values of n or more and draws again instead of keeping a remainder."
+      "ko": "순서 정하기, 팀 나누기, 여러 명 뽑기는 피셔–예이츠 섞기를 써요. 10명 중 한 명이면 0~15에서 뽑고 10 이상이 나오면 다시 뽑아서, 어느 번호도 더 잘 나오지 않아요.",
+      "en": "Orders, teams and multi-name draws use the Fisher–Yates shuffle. For one name out of 10, a number from 0 to 15 is drawn and anything 10 or above is drawn again, so no position is favored."
      },
      "src": {
       "t": {
-       "ko": "더스텐펠드(1964), 커누스 『The Art of Computer Programming』 2권 알고리즘 P",
-       "en": "Durstenfeld (1964); Knuth, The Art of Computer Programming, vol. 2, Algorithm P"
+       "ko": "공평뽑기 소개(더스텐펠드 1964·커누스 인용)",
+       "en": "About Pickboard (cites Durstenfeld 1964 and Knuth)"
       },
       "href": "https://pick.lumenlab.page/ko/about/"
      },
@@ -1971,8 +1939,8 @@
       "en": "Ladder game"
      },
      "v": {
-      "ko": "8명·14층 사다리를 그냥 두면 1번 줄이 바로 아래 칸에 24.8% 가요(공평하면 12.5%). 그래서 아래 칸을 먼저 섞고, 그러면 12.4%에서 12.6% 사이예요.",
-      "en": "Left alone, an 8-person, 14-level ladder sends line 1 straight down 24.8% of the time instead of 12.5%. So the bottom row is shuffled first, which keeps every result between 12.4% and 12.6%."
+      "ko": "8명·14층 사다리를 그대로 두면 1번 줄이 바로 아래 칸에 24.8% 가요(공평하면 12.5%). 아래 칸을 섞은 뒤엔 결과마다 12.4%에서 12.6% 사이예요.",
+      "en": "Left alone, an 8-person, 14-level ladder sends line 1 straight down 24.8% of the time instead of 12.5%. With the bottom row shuffled, every result lands between 12.4% and 12.6%."
      },
      "src": {
       "t": {
@@ -1994,17 +1962,10 @@
   },
   "log": {
    "h": {
-    "ko": "올린 다음 날, 돌리는 동안 명단을 잠그고 확인 코드를 더했어요",
-    "en": "The day after launch the list started locking during a spin, and a check code was added"
+    "ko": "돌리는 동안 명단을 잠그고, 적은 순서와 상관없이 뽑게 바꿨어요",
+    "en": "The list now locks during a spin, and the order you type names in no longer matters"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 4편을 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 이어지게 했어요.",
-      "en": "The 3 English guides moved to lumenlab.page/en/guides/, and their old addresses forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-10",
      "t": {
@@ -2046,8 +2007,8 @@
  "todok": {
   "how": {
    "h": {
-    "ko": "첫 글자를 치면 30초 재기가 바로 시작해요",
-    "en": "Type the first letter and the 30-second test starts"
+    "ko": "시작 단추 없이 첫 글자를 치면 30초 재기가 시작돼요",
+    "en": "No start button: your first key starts the 30-second test"
    },
    "steps": [
     {
@@ -2066,8 +2027,8 @@
       "en": "Start typing"
      },
      "d": {
-      "ko": "‘보고 치는 글’을 따라 치면 바로 시간이 가고, ‘타/분’, ‘정확도’, ‘남은 초’, ‘콤보’가 치는 대로 바뀌어요.",
-      "en": "Copy the ‘Text to copy’ line and the clock starts on your first key, with ‘WPM’, ‘Accuracy’, ‘Sec left’ and ‘Combo’ updating as you go."
+      "ko": "‘보고 치는 글’을 따라 치는 동안 ‘타/분’, ‘정확도’, ‘남은 초’, ‘콤보’가 치는 대로 바뀌어요.",
+      "en": "Type the line under ‘Text to copy’; ‘WPM’, ‘Accuracy’, ‘Sec left’ and ‘Combo’ update as you go."
      }
     },
     {
@@ -2076,8 +2037,8 @@
       "en": "Read your result"
      },
      "d": {
-      "ko": "끝나면 맞게 친 타수를 걸린 초로 나눠 60을 곱한 식이 내 숫자 그대로 나오고, 누른 키 중 몇 개가 맞았는지도 나와요.",
-      "en": "When time is up, you get your WPM with the formula in your own numbers and how many of your key presses were correct."
+      "ko": "끝나면 내 숫자를 넣은 계산식과, 누른 키 중 몇 개가 맞았는지가 나와요.",
+      "en": "When time is up, you see your WPM worked out with your own numbers, and how many of your key presses were correct."
      }
     },
     {
@@ -2109,10 +2070,13 @@
      },
      "src": {
       "t": {
-       "ko": "토독 소개 · 계산 기준",
-       "en": "About Todok · How scores are calculated"
+       "ko": "토독 ‘계산 기준’",
+       "en": "Todok: ‘How the numbers are calculated’"
       },
-      "href": "https://typing.lumenlab.page/ko/about/"
+      "href": {
+       "ko": "https://typing.lumenlab.page/ko/#basis",
+       "en": "https://typing.lumenlab.page/#basis"
+      }
      },
      "on": null
     },
@@ -2145,10 +2109,13 @@
      },
      "src": {
       "t": {
-       "ko": "토독 소개 · 계산 기준",
-       "en": "About Todok · How scores are calculated"
+       "ko": "토독 ‘계산 기준’",
+       "en": "Todok: ‘How the numbers are calculated’"
       },
-      "href": "https://typing.lumenlab.page/ko/about/"
+      "href": {
+       "ko": "https://typing.lumenlab.page/ko/#basis",
+       "en": "https://typing.lumenlab.page/#basis"
+      }
      },
      "on": null
     },
@@ -2164,9 +2131,12 @@
      "src": {
       "t": {
        "ko": "토독 ‘계산 기준’",
-       "en": "Todok, ‘How the numbers are calculated’"
+       "en": "Todok: ‘How the numbers are calculated’"
       },
-      "href": "https://typing.lumenlab.page/ko/about/"
+      "href": {
+       "ko": "https://typing.lumenlab.page/ko/#basis",
+       "en": "https://typing.lumenlab.page/#basis"
+      }
      },
      "on": null
     },
@@ -2182,9 +2152,12 @@
      "src": {
       "t": {
        "ko": "토독 ‘계산 기준’",
-       "en": "Todok, ‘How the numbers are calculated’"
+       "en": "Todok: ‘How the numbers are calculated’"
       },
-      "href": "https://typing.lumenlab.page/ko/about/"
+      "href": {
+       "ko": "https://typing.lumenlab.page/ko/#basis",
+       "en": "https://typing.lumenlab.page/#basis"
+      }
      },
      "on": null
     }
@@ -2192,21 +2165,24 @@
    "note": {
     "ko": "타수를 세는 방법은 프로그램마다 다를 수 있어서, 토독의 숫자가 다른 곳과 같다고 하지 않아요.",
     "en": "Typing sites do not all count the same way, and Todok does not claim its numbers match anyone else's."
+   },
+   "more": {
+    "href": {
+     "ko": "https://typing.lumenlab.page/ko/#basis",
+     "en": "https://typing.lumenlab.page/#basis"
+    },
+    "t": {
+     "ko": "계산 기준 전체 보기(콤보·총 타수·휴대폰 자판)",
+     "en": "All counting rules (combo, raw speed, touch keyboards)"
+    }
    }
   },
   "log": {
    "h": {
-    "ko": "공개 다음 날 직접 쓴 긴 글 30편과 콤보 칸을 더했어요",
-    "en": "The day after launch it gained 28 paragraphs written for the site, 80 proverbs and a combo counter"
+    "ko": "직접 쓴 긴 글 30편을 더했고, 연습 문장은 분기마다 늘려요",
+    "en": "Added 28 original paragraphs, with new practice sentences every quarter"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 4편을 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 이어지게 했어요.",
-      "en": "The 3 English guides moved to lumenlab.page/en/guides/, and their old addresses forward to the new pages."
-     }
-    },
     {
      "d": "2026-10-12",
      "t": {
@@ -2303,8 +2279,8 @@
   },
   "basis": {
    "h": {
-    "ko": "IANA 자료와 크롬 문서를 2026년 10월 14일에 확인했어요",
-    "en": "Checked against IANA data and Chrome docs on Oct 14, 2026"
+    "ko": "다른 탭에 가 있어도 제때 울리게, 끝나는 시각에 한 번만 맞춰 둬요",
+    "en": "In a background tab it still rings on time, because it sets one timer for the end"
    },
    "rows": [
     {
@@ -2313,8 +2289,8 @@
       "en": "City times"
      },
      "v": {
-      "ko": "브라우저에 든 IANA 시간대 자료로 계산해요. 2026년에 바뀐 캐나다·모로코 규칙은 브라우저 자료가 예전 것이어도 맞게 따로 넣어 뒀고, 자료가 예전이면 세계 시간 화면에 알려요.",
-      "en": "Uses the IANA time zone data in your browser. The 2026 rule changes for Canada and Morocco are built in, so those cities stay right on older browsers, and the world clock tells you when your browser's data is out of date."
+      "ko": "브라우저에 든 IANA 시간대 자료로 계산해요. 2026년에 바뀐 캐나다·모로코 규칙은 브라우저 자료가 예전 것이어도 맞게 따로 넣어 뒀고, 그럴 땐 세계 시간 화면에 알려요.",
+      "en": "Uses the IANA time zone data in your browser. The 2026 rule changes for Canada and Morocco are built in, so those cities stay right on older browsers, and the world clock says when your browser's data is out of date."
      },
      "src": {
       "t": {
@@ -2331,8 +2307,8 @@
       "en": "Ringing in a background tab"
      },
      "v": {
-      "ko": "크롬은 숨은 지 5분 넘은 탭에서 이어 건 타이머를 1분에 한 번만 확인하기도 해요. 그래서 끝나는 순간에 알람을 한 번만 걸고, 남은 시간은 끝나는 시각으로 계산해요.",
-      "en": "Chrome may check chained timers only once a minute in a tab hidden for over 5 minutes. So Oneturn sets a single alarm for the end and works out the time left from the end time."
+      "ko": "크롬은 숨은 지 5분 넘은 탭에서, 타이머를 짧게 여러 번 이어 거는 방식은 1분에 한 번만 확인하기도 해요. 그래서 남은 시간은 끝나는 시각에서 거꾸로 계산해요.",
+      "en": "In a tab hidden for over 5 minutes, Chrome may check timers that keep re-arming themselves only once a minute, so Oneturn works out the time left from the end time."
      },
      "src": {
       "t": {
@@ -2367,15 +2343,15 @@
       "en": "Keep screen on"
      },
      "v": {
-      "ko": "‘화면 켜 두기’는 Screen Wake Lock을 써요. 크롬 84, 사파리 16.4, iOS 사파리 18.4, 파이어폭스 126부터 되고, 안 되는 브라우저에선 ‘이 브라우저는 화면 켜 두기를 못 해요’라고 떠요.",
-      "en": "‘Keep screen on’ uses the Screen Wake Lock API, which works from Chrome 84, Safari 16.4, Safari on iOS 18.4 and Firefox 126. Other browsers show ‘This browser cannot keep the screen on’."
+      "ko": "‘화면 켜 두기’는 크롬 84, 사파리 16.4, iOS 사파리 18.4, 파이어폭스 126부터 되고, 안 되는 브라우저에선 ‘이 브라우저는 화면 켜 두기를 못 해요’라고 떠요.",
+      "en": "‘Keep screen on’ works from Chrome 84, Safari 16.4, Safari on iOS 18.4 and Firefox 126. Other browsers show ‘This browser cannot keep the screen on’."
      },
      "src": {
       "t": {
-       "ko": "MDN browser-compat-data: WakeLock",
-       "en": "MDN browser-compat-data: WakeLock"
+       "ko": "MDN: Screen Wake Lock API 브라우저 지원",
+       "en": "MDN: Screen Wake Lock API, browser compatibility"
       },
-      "href": "https://github.com/mdn/browser-compat-data/blob/main/api/WakeLock.json"
+      "href": "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility"
      },
      "on": "2026-10-14"
     },
@@ -2385,13 +2361,13 @@
       "en": "What stays on your device"
      },
      "v": {
-      "ko": "타이머 이름과 끝나는 시각, 스톱워치 랩, 알람, 도시 목록, 설정을 브라우저 저장소(localStorage) 키 6개에만 적고 서버로 보내지 않아요.",
-      "en": "Timer names and end times, stopwatch laps, alarms, cities and settings go into six localStorage keys in your browser and are never sent to a server."
+      "ko": "타이머 이름과 끝나는 시각, 스톱워치 랩, 알람, 도시 목록, 설정은 이 브라우저에만 적고 서버로 보내지 않아요.",
+      "en": "Timer names and end times, stopwatch laps, alarms, cities and settings are kept in this browser only and never sent to a server."
      },
      "src": {
       "t": {
-       "ko": "한바퀴 개인정보 처리방침",
-       "en": "Oneturn Privacy Policy"
+       "ko": "한바퀴 개인정보 처리방침(저장하는 것 6가지)",
+       "en": "Oneturn Privacy Policy (the six things it stores)"
       },
       "href": "https://time.lumenlab.page/ko/privacy/"
      },
@@ -2401,21 +2377,15 @@
    "note": {
     "ko": "창을 닫거나 기기가 잠들면 울리지 않으니, 놓치면 안 되는 알람은 휴대폰 기본 알람 앱을 쓰세요.",
     "en": "It cannot ring once the tab is closed or the device sleeps, so use your phone's clock app for an alarm you cannot miss."
-   }
+   },
+   "more": null
   },
   "log": {
    "h": {
-    "ko": "2026년에 바뀐 캐나다·모로코 시간 규칙을 넣고 열었어요",
-    "en": "It launched with the 2026 time rule changes for Canada and Morocco built in"
+    "ko": "10월 14일, 네 가지 도구를 시차 가이드와 함께 열었어요",
+    "en": "Launched on Oct 14 with all four tools and the time zone guides"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 글을 lumenlab.page/guides/로 옮겼고, 옛 주소는 새 글로 이어져요.",
-      "en": "The guides moved to lumenlab.page/en/guides/, and old links forward to them."
-     }
-    },
     {
      "d": "2026-10-14",
      "t": {
@@ -2443,8 +2413,8 @@
  "checkbench": {
   "how": {
    "h": {
-    "ko": "아무 키나 누르면 키보드 칸부터 바로 채워져요",
-    "en": "Press any key and the keyboard check fills in right away"
+    "ko": "첫 화면에서 키보드부터 스피커까지 7가지를 하나씩 확인해요",
+    "en": "One screen checks seven devices, from keyboard to speakers"
    },
    "steps": [
     {
@@ -2491,8 +2461,8 @@
   },
   "basis": {
    "h": {
-    "ko": "마이크 소리는 소음 억제와 자동 음량을 꺼 달라고 한 채로 재요",
-    "en": "Mic levels are measured with noise suppression and auto volume requested off"
+    "ko": "동시에 눌린 키가 6개에서 멈추면 USB 기본 보고 형식 때문일 수 있어요",
+    "en": "If your count stops at six keys, the basic USB report format may be why"
    },
    "rows": [
     {
@@ -2519,7 +2489,7 @@
       "en": "Mic level"
      },
      "v": {
-      "ko": "울림 제거·소음 억제·자동 음량을 꺼 달라고 한 채로 재요. 0 dBFS가 가장 큰 눈금에서 -45 dBFS를 넘으면 ‘소리를 잡아요’, 꼭대기에서 잘리면 ‘너무 커요(잘림)’이 떠요.",
+      "ko": "울림 제거·소음 억제·자동 음량을 꺼 달라고 한 채로 재요. 가장 큰 소리를 0 dBFS로 두는 눈금에서 −45 dBFS를 넘으면 ‘소리를 잡아요’, 꼭대기에서 잘리면 ‘너무 커요(잘림)’이 떠요.",
       "en": "Measured with echo cancelling, noise suppression and auto volume switched off on request. On a scale where 0 dBFS is the loudest value, passing −45 dBFS counts as picking up sound, and a signal cut off at the top is flagged as too loud."
      },
      "src": {
@@ -2555,8 +2525,8 @@
       "en": "Keys held at once"
      },
      "v": {
-      "ko": "같은 순간 눌려 있는 키를 Shift·Ctrl까지 모두 세요. USB 키보드의 기본 보고 형식은 조합 키 말고 6개까지라, 6개에서 멈추면 그 형식 때문일 수 있어요.",
-      "en": "Every key down at the same moment counts, modifiers included. The basic USB keyboard report holds six keys besides the modifiers, so a stop at six may come from that layout."
+      "ko": "같은 순간 눌려 있는 키를 Shift·Ctrl까지 모두 세요. USB 키보드의 기본 보고 형식은 조합 키 말고 6개까지 담아요.",
+      "en": "Every key down at the same moment counts, modifiers included. The basic USB keyboard report holds six keys besides the modifiers."
      },
      "src": {
       "t": {
@@ -2611,17 +2581,10 @@
   },
   "log": {
    "h": {
-    "ko": "웹캠 테스트가 640×480에 묶여 있던 것을 공개한 날 고쳤어요",
-    "en": "On launch day we stopped the webcam test from being stuck at 640×480"
+    "ko": "맥의 Caps Lock 오탐과 웹캠 640×480 제한을 고쳤어요",
+    "en": "Fixed a false stuck-key alert on Mac and the 640×480 webcam cap"
    },
    "items": [
-    {
-     "d": "2026-10-29",
-     "t": {
-      "ko": "가이드 4편을 lumenlab.page/guides/로 옮겼고, 옛 주소로 열어도 새 글이 떠요.",
-      "en": "The 4 guides moved to lumenlab.page/en/guides/, and old links open the new pages."
-     }
-    },
     {
      "d": "2026-10-10",
      "t": {
@@ -2652,5 +2615,11 @@
     }
    ]
   }
+ },
+ "_확인한_주소": {
+  "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032": "2026-10-29 열림(200). 인플레이스가 적은 한국어 도움말의 영어판(같은 글 번호 8a935af5)",
+  "https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json": "2026-10-29 열림(200), maxGraphemes 300·maxLength 3000. 칸칸이 적은 atproto 저장소 주소는 404(블루스카이 규격이 bsky 저장소로 옮겨 감)",
+  "https://physics.nist.gov/cuu/Constants/index.html": "2026-10-29 열림(200), CODATA 2022 권고값 안내 첫 페이지. 공학용 계산기가 적은 allascii.txt 표의 사람이 읽는 쪽",
+  "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility": "2026-10-29 열림(200). 한바퀴가 적은 browser-compat-data WakeLock.json 을 표로 보여 주는 MDN 페이지"
  }
 }

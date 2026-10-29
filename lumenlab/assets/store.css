@@ -217,7 +217,7 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
 .sh__steps span{font-size:16px;line-height:1.65;color:var(--ink-2)}
 .rc{padding-bottom:6px}
 .rc__title{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;margin:0;padding:12px 0;font-size:15px;font-weight:800;line-height:1.5;color:var(--ink)}
-.rc__title span{font-weight:700;color:var(--lamp-ink);font-variant-numeric:tabular-nums}
+.rc__title span{font-weight:700;color:var(--lamp-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 .rc__rows{margin:0}
 .rc__row{position:relative;display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:3px 22px;padding:12px 0 13px}
 .rc__row::before{content:"";position:absolute;left:calc(var(--ml) / 2 - 7px - var(--pl));top:17px;width:13px;height:7px;border:solid var(--lamp-ink);border-width:0 0 2.5px 2.5px;
@@ -292,11 +292,12 @@ html.is-sheet{overflow:hidden}   /* 막대 있는 스크롤바가 사라지는 �
   .shots.is-tall{--sw:calc(340px * var(--ar))}
   .shots.is-wide{--sw:86vw}
   .sh__guides a{padding:11px 36px 11px 42px;font-size:15.5px}
-  .sh__steps,.rc,.sh__days{padding-right:16px}
+  .sh__steps,.rc,.sh__days{padding-right:14px}
+  .sh__steps{--ml:32px;--pl:44px}   /* 폰: 순서 번호 칸을 좁혀 단계 글 줄을 넓힌다 */
   .rc,.sh__days{--ml:13px;--pl:29px}   /* 폰: 기준표·고친 기록은 여백 선을 왼쪽 끝으로 붙여 글 줄을 넓힌다(✓는 빼고, 점은 그대로 선 위에) */
   .rc__row{grid-template-columns:minmax(0,1fr)}
   .rc__row::before{display:none}
-  .pp{padding-top:16px;padding-bottom:56px}
+  .pp{padding:16px 12px 56px}   /* 폰: 소개 페이지는 종이 바깥 여백을 줄여 글 줄을 창(소개 창)과 비슷하게 */
   .sh-doc{padding:0 18px 30px;border-radius:22px}
 }
 @media (max-width:370px){.sh__status{left:calc(50% + 34px);max-width:calc(50% - 24px)}}

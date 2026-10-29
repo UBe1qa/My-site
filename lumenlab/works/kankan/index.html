@@ -81,13 +81,13 @@
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요.</p></div>
   </section>
   <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
-    <h2 id="sh-basis">SNS 글자 수 한도 10가지를 2026년 10월 10일에 서비스마다 공식 문서로 확인했어요</h2>
+    <h2 id="sh-basis">유튜브 설명 5,000바이트엔 한글이 1,666자쯤 들어가요</h2>
     <div class="rc">
       <p class="rc__title">칸칸 기준표</p>
-      <dl class="rc__rows"><div class="rc__row"><dt>한 글자</dt><dd><span class="rc__v">사람이 보는 한 글자를 1자로 세어요. 브라우저의 Intl.Segmenter가 글자 묶음을 나눠요.</span><span class="rc__src"><a href="https://unicode.org/reports/tr29/">유니코드 표준 부속서 UAX #29</a></span></dd></div><div class="rc__row"><dt>UTF-8 바이트</dt><dd><span class="rc__v">영문과 숫자는 1바이트, 한글은 1자에 3바이트로 세어요.</span><span class="rc__src"><a href="https://www.rfc-editor.org/rfc/rfc3629">RFC 3629: UTF-8</a></span></dd></div><div class="rc__row"><dt>X 게시물</dt><dd><span class="rc__v">가중치로 280까지예요. 한글과 이모지는 2, 주소는 길이와 상관없이 23으로 세고, 테스트는 npm twitter-text 3.1.0과 견줬어요.</span><span class="rc__src"><a href="https://docs.x.com/fundamentals/counting-characters">X 공식 문서 ‘Counting characters’</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>유튜브 설명</dt><dd><span class="rc__v">글자 수가 아니라 UTF-8 5,000바이트까지예요. 한글만 쓰면 계산으로는 1,666자쯤 들어가요.</span><span class="rc__src"><a href="https://developers.google.com/youtube/v3/docs/videos">유튜브 공식 문서</a> · 확인 2026. 10. 10.</span></dd></div><div class="rc__row"><dt>블루스카이 게시물</dt><dd><span class="rc__v">300 글자소이고, UTF-8로 3,000바이트 안이어야 해요. 둘 중 하나만 넘어도 넘었다고 표시해요.</span><span class="rc__src"><a href="https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json">블루스카이 공식 문서</a> · 확인 2026. 10. 10.</span></dd></div></dl>
-      <p class="rc__note">공식 문서에 세는 단위가 없는 한도 6가지는 UTF-16 단위로 세어서, 이모지가 많은 글은 실제 화면과 조금 다를 수 있어요.</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>한 글자</dt><dd><span class="rc__v">눈에 보이는 한 글자를 1자로 세서, 피부색을 바꾼 이모지도 1자예요.</span><span class="rc__src"><a href="https://unicode.org/reports/tr29/">유니코드 표준 부속서 UAX #29(브라우저 Intl.Segmenter)</a></span></dd></div><div class="rc__row"><dt>UTF-8 바이트</dt><dd><span class="rc__v">영문과 숫자는 1바이트, 한글은 1자에 3바이트로 세어요.</span><span class="rc__src"><a href="https://www.rfc-editor.org/rfc/rfc3629">RFC 3629: UTF-8</a></span></dd></div><div class="rc__row"><dt>X 게시물</dt><dd><span class="rc__v">280자까지인데 한글과 이모지는 1자를 2로, 주소는 길이와 상관없이 23으로 세요. X가 내놓은 twitter‑text 3.1.0과 결과를 견줘 시험해요.</span><span class="rc__src"><a href="https://docs.x.com/fundamentals/counting-characters">X 공식 문서 ‘Counting characters’</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div><div class="rc__row"><dt>유튜브 설명</dt><dd><span class="rc__v">글자 수가 아니라 UTF-8 바이트로 세는 한도예요.</span><span class="rc__src"><a href="https://developers.google.com/youtube/v3/docs/videos">유튜브 Data API: videos</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div><div class="rc__row"><dt>블루스카이 게시물</dt><dd><span class="rc__v">300자(이모지 하나도 1자)이면서 UTF-8로 3,000바이트 안이어야 해요. 둘 중 하나만 넘어도 넘었다고 표시해요.</span><span class="rc__src"><a href="https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json">블루스카이 게시물 규격(app.bsky.feed.post)</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div></dl>
+      <p class="rc__note">공식 문서에 무엇을 세는지 안 적힌 한도 6가지는 이모지 대부분을 2자로 세는 방식(UTF-16)으로 세서, 이모지가 많은 글은 그 서비스와 조금 다를 수 있어요.</p>
     </div>
-    <p class="sh__links"><a href="https://count.lumenlab.page/ko/about/">전체 기준은 칸칸 소개에서 <span aria-hidden="true">→</span></a></p>
+    <p class="sh__links"><a href="https://count.lumenlab.page/ko/about/">칸칸 소개에서 기준 더 보기 <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 4편</h2>
@@ -95,8 +95,8 @@
     <p class="sh__links"><a href="/guides/#count">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__changes" aria-labelledby="sh-log">
-    <h2 id="sh-log">올린 다음 날, 뒤로 가기로 돌아오면 숫자가 0이 되던 문제를 고쳤어요</h2>
-    <ol class="sh__days"><li><time datetime="2026-10-29">2026. 10. 29.</time><p>가이드 4편을 lumenlab.page/guides/로 옮기고, 옛 주소는 새 글로 이어지게 했어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>뒤로 가기로 돌아오면 글은 있는데 숫자가 0으로 나오던 문제를 고쳤어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>숫자 칸에 잘못된 값을 넣으면 조용히 바꿔 읽지 않고 알려 줘요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>줄바꿈 기준과 목표를 탭을 닫을 때까지 기억하게 했어요.</p></li><li><time datetime="2026-10-09">2026. 10. 9.</time><p>칸칸을 처음 올렸어요.</p></li></ol>
+    <h2 id="sh-log">SNS 한도는 반기마다, 나이스 기준은 해마다 2~3월에 다시 확인해요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-10">2026. 10. 10.</time><p>뒤로 가기로 돌아오면 글은 있는데 숫자가 0으로 나오던 문제를 고쳤어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>숫자 칸에 잘못된 값을 넣으면 조용히 바꿔 읽지 않고 알려 줘요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>줄바꿈 기준과 목표를 탭을 닫을 때까지 기억하게 했어요.</p></li><li><time datetime="2026-10-09">2026. 10. 9.</time><p>칸칸을 처음 올렸어요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

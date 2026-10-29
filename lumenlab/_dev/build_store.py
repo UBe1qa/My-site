@@ -83,7 +83,7 @@ KO = {
     'check': '확인하고 밝혀 둔 것', 'note': '밝혀 둔 것', 'guides': lambda n: f'가이드 {n}편', 'guide_all': '가이드 목록 보기',
     'about': lambda n: f'{n} 소개에서 자세히', 'others': '다른 것도 둘러보기', 'crumb': '만든 것', 'crumb_label': '위치',
     'privacy': '개인정보 처리방침',
-    'basis_full': lambda n: f'전체 기준은 {n} 소개에서', 'checked': lambda d: f'확인 {d}', 'rc_title': lambda n: f'{n} 기준표',
+    'basis_full': lambda n: f'{n} 소개에서 기준 더 보기', 'checked': lambda d: f'확인 {d}', 'rc_title': lambda n: f'{n} 기준표',
     'day': lambda d: f'{d.year}. {d.month}. {d.day}.',
     'title': lambda n, w: f'{n}: {w} · Lumen Lab 루멘랩',
     'ui': {'close': '닫기', 'open': '열기', 'loading': '불러오는 중', 'fail': '미리보기를 불러오지 못했어요. 도구에서 바로 써 보세요.',
@@ -99,7 +99,7 @@ EN = {
     'check': 'What it checks and discloses', 'note': 'What we disclose', 'guides': lambda n: f'{n} guide' + ('' if n == 1 else 's'), 'guide_all': 'All guides',
     'about': lambda n: f'More in About {n}', 'others': 'More from Lumen Lab', 'crumb': 'Work', 'crumb_label': 'Breadcrumb',
     'privacy': 'Privacy Policy',
-    'basis_full': lambda n: f'All rules in About {n}', 'checked': lambda d: f'Checked {d}', 'rc_title': lambda n: f'{n} rule sheet',
+    'basis_full': lambda n: f'More rules in About {n}', 'checked': lambda d: f'Checked {d}', 'rc_title': lambda n: 'Rules and sources',
     'day': lambda d: f'{MON[d.month - 1]} {d.day}, {d.year}',
     'title': lambda n, w: f'{n}: {w} · Lumen Lab',
     'ui': {'close': 'Close', 'open': 'Open', 'loading': 'Loading', 'fail': 'The preview didn’t load. Try it on the tool’s own site.',
@@ -184,11 +184,14 @@ WIN = ('<svg class="sh__win" viewBox="0 0 160 130" aria-hidden="true" focusable=
        '<path class="sw-lit" d="M27 66h4v5h-4zM45 92h4v5h-4zM60 56h4v5h-4zM66 66h4v5h-4zM60 86h4v5h-4zM93 74h4v5h-4zM101 98h4v5h-4zM127 88h4v5h-4zM143 104h4v5h-4zM10 82h4v5h-4z"/>'
        '<path class="sw-frame" d="M3 3h154v124H3zM80 3v124M3 66h154"/></svg>')
 
-# ---------- 글 칸 셋(works_text.json): 쓰는 법 = 클립보드, 기준과 출처 = 영수증, 고친 기록 = 수첩 ----------
-# 칸 제목은 손님이 망설이는 것에 대한 그 도구만의 답(일이 많나 / 믿을 만한가 / 손보고 있나). 글은 항목마다 그 도구의 화면·소개·작업 기록에서 확인한 것만
+# ---------- 글 칸 셋(works_text.json): 쓰는 법 · 기준과 출처 · 고친 기록, 셋 다 '확인하고 밝혀 둔 것'과 같은 작업 일지 종이 ----------
+# 칸 제목은 손님이 망설이는 것에 대한 그 도구만의 답(일이 많나 / 믿을 만한가 / 손보고 있나). 글은 항목마다 그 도구의 화면·소개·작업 기록에서 확인한 것만.
+# 글 안의 `…`는 한 덩어리로 줄이 안 바뀌는 조각(키 순서, 글자 목록)
 def _two(v, where):
     assert isinstance(v, dict) and all(isinstance(v.get(l), str) and v[l].strip() for l in ('ko', 'en')), f'{where}: 한·영 글이 비었음'
-    for l in ('ko', 'en'): assert '—' not in v[l], f'{where}: 긴 줄표(—)'
+    for l in ('ko', 'en'):
+        assert '—' not in v[l], f'{where}: 긴 줄표(—)'
+        assert v[l].count('`') % 2 == 0, f'{where}: ` 짝이 안 맞음'
 
 def _day(s, where):
     d = datetime.date.fromisoformat(s)
@@ -198,11 +201,14 @@ def _day(s, where):
 FOLDER = {'chickrescue': 'chick-rescue', 'castleup': 'castle-up', 'owlight': 'owlight', 'setnote': 'setnote'}
 _TEXT = {}
 def _href_ok(it, href):
-    """출처 주소는 지어내지 않는다: 그 도구(앱) 자기 사이트의 실제 페이지이거나, 그 폴더의 페이지·코드 어딘가에 그대로 있는 주소"""
+    """출처 주소는 지어내지 않는다: 그 도구(앱) 자기 사이트의 실제 페이지(#칸까지)이거나, 그 폴더의 페이지·코드 어딘가에 그대로 있는 주소이거나,
+    works_text.json '_확인한_주소'에 확인한 날과 함께 적은 주소(그 도구가 적어 둔 주소가 죽었거나 영어판이 따로 있을 때)"""
     d = it.get('dir') or FOLDER[it['id']]; u = urlparse(href)
     if u.netloc in (urlparse(it['url']).netloc, 'lumenlab.page'):
         f = os.path.join(mono, d if u.netloc != 'lumenlab.page' else 'lumenlab', u.path.strip('/'))
-        return os.path.isfile(f) or os.path.isfile(os.path.join(f, 'index.html')) or os.path.isfile(f + '.html')   # /privacy = privacy.html
+        f = next((x for x in (f, os.path.join(f, 'index.html'), f + '.html') if os.path.isfile(x)), None)   # /privacy = privacy.html
+        return bool(f) and (not u.fragment or f'id="{u.fragment}"' in open(f).read())
+    if href in WT.get('_확인한_주소', {}): return True
     if d not in _TEXT:
         parts = []
         for r, _, fs in os.walk(os.path.join(mono, d)):
@@ -221,19 +227,35 @@ def wt_of(it):
     if b:
         _two(b['h'], f'{k}.basis.h'); assert 4 <= len(b['rows']) <= 6, f'{k}: 기준은 4~6줄'
         for i, r in enumerate(b['rows']):
-            _two(r['k'], f'{k}.basis.{i}.k'); _two(r['v'], f'{k}.basis.{i}.v'); _two(r['src']['t'], f'{k}.basis.{i}.src')
-            hs = r['src']['href']; hs = [hs] if isinstance(hs, str) else [hs['ko'], hs['en']]
-            for h_ in hs: assert h_.startswith('https://') and _href_ok(it, h_), f'{k}.basis.{i}: 그 도구 쪽에 없는 출처 주소 {h_}'
+            _two(r['k'], f'{k}.basis.{i}.k'); _two(r['v'], f'{k}.basis.{i}.v')
+            for s in srcs(r):
+                _two(s['t'], f'{k}.basis.{i}.src')
+                hs = s['href']; hs = [hs] if isinstance(hs, str) else [hs['ko'], hs['en']]
+                for h_ in hs: assert h_.startswith('https://') and _href_ok(it, h_), f'{k}.basis.{i}: 그 도구 쪽에 없는 출처 주소 {h_}'
+                # 영어판 손님에게 한국어로만 된 출처(정부·공단·연구원 사이트)라는 걸 알린다
+                en = urlparse(hs[-1])
+                if en.netloc.endswith(('.go.kr', '.or.kr', '.re.kr')) or '/ko-kr/' in en.path: assert 'Korean' in s['t']['en'], f'{k}.basis.{i}: 한국어 출처인데 영어 이름에 (Korean)이 없음'
             if r.get('on'): _day(r['on'], f'{k}.basis.{i}.on')
         if b.get('note'): _two(b['note'], f'{k}.basis.note')
-    g = w['log']; _two(g['h'], f'{k}.log.h'); assert 4 <= len(g['items']) <= 8, f'{k}: 고친 기록은 4~8줄'
+        if b.get('order_en'): assert sorted(b['order_en']) == list(range(len(b['rows']))), f'{k}: order_en 은 줄 번호를 모두 한 번씩'
+        m = b.get('more')
+        if m:
+            _two(m['t'], f'{k}.basis.more')
+            for h_ in ([m['href']] if isinstance(m['href'], str) else [m['href']['ko'], m['href']['en']]): assert _href_ok(it, h_), f'{k}.basis.more: 없는 주소 {h_}'
+    g = w['log']; _two(g['h'], f'{k}.log.h'); assert 3 <= len(g['items']) <= 8, f'{k}: 고친 기록은 3~8줄'
     ds = [_day(x['d'], f'{k}.log') for x in g['items']]
     assert ds == sorted(ds, reverse=True), f'{k}: 고친 기록은 최근부터'
     for i, x in enumerate(g['items']): _two(x['t'], f'{k}.log.{i}')
     return w
 
+def srcs(r):
+    """기준 한 줄의 출처: 하나({t, href}) 또는 둘 이상([{t, href}, …])"""
+    return r['src'] if isinstance(r['src'], list) else [r['src']]
+
 def tie(t):
-    """좁은 폰에서 '41만~659만', '7.19%의' 가 중간에서 갈리지 않게, 셈 기호는 뒤 숫자와 붙여 줄이 기호 앞에서만 바뀌게(이미 HTML로 바꾼 글에 쓴다)"""
+    """좁은 폰에서 '41만~659만', '7.19%의' 가 중간에서 갈리지 않게, 셈 기호는 뒤 숫자와 붙여 줄이 기호 앞에서만 바뀌게,
+    `…` 조각은 통째로(이미 HTML로 바꾼 글에 쓴다)"""
+    t = re.sub(r'`([^`]+)`', r'<span class="nw">\1</span>', t)
     t = re.sub(r' ([×÷]) ', ' \\1\u00a0', t)
     t = re.sub(r'(?<=\S)~(?=\S)', '\u2060~\u2060', t)
     return re.sub(r'%(?=[가-힣])', '%\u2060', t)
@@ -255,17 +277,27 @@ def src_href(it, href, lang):
             if href == ko[k]: return en[k]
     return href
 
+def basis_link(it, b, lang, about):
+    """기준표 밑 링크 (주소, 글): more 가 있으면 그 주소, more 가 null 이면 없음, more 가 없으면 그 도구 소개 페이지"""
+    T = KO if lang == 'ko' else EN
+    if 'more' in b: return (src_href(it, b['more']['href'], lang), b['more']['t'][lang]) if b['more'] else None
+    return (about, T['basis_full'](it['name'][lang])) if about else None
+
 def basis_sec(it, w, lang, about):
-    """기준표: 같은 종이, 맨 위 줄에 확인한 날(모든 줄이 같은 날일 때), 줄마다 여백에 ✓"""
-    T = KO if lang == 'ko' else EN; b = w['basis']; rows = []
+    """기준표: 같은 종이, 맨 위 줄에 확인한 날(모든 줄이 같은 날일 때), 줄마다 여백에 ✓.
+    영어판은 order_en 순서로(영어판 기본값이 앞에 오게), 표 밑 링크는 more 가 있으면 그 주소, more 가 null 이면 없음(소개 페이지에 기준이 없는 도구)"""
+    T = KO if lang == 'ko' else EN; b = w['basis']
     ons = {r.get('on') for r in b['rows']}
     one = ons.pop() if len(ons) == 1 and None not in ons else None   # 모든 줄을 같은 날 확인했으면 날짜는 머리에 한 번
-    for r in b['rows']:
-        on = f' · {T["checked"](T["day"](datetime.date.fromisoformat(r["on"])))}' if r.get('on') and not one else ''
+    rows = []
+    for r in [b['rows'][i] for i in b['order_en']] if lang == 'en' and b.get('order_en') else b['rows']:
+        on = f' · <span class="nw">{esc(T["checked"](T["day"](datetime.date.fromisoformat(r["on"]))))}</span>' if r.get('on') and not one else ''
+        a = ' · '.join(f'<a href="{esc(src_href(it, s["href"], lang))}">{esc(s["t"][lang])}</a>' for s in srcs(r))
         rows.append(f'<div class="rc__row"><dt>{esc(r["k"][lang])}</dt><dd><span class="rc__v">{tie(esc(r["v"][lang]))}</span>'
-                    f'<span class="rc__src"><a href="{esc(src_href(it, r["src"]["href"], lang))}">{esc(r["src"]["t"][lang])}</a>{on}</span></dd></div>')
+                    f'<span class="rc__src">{a}{on}</span></dd></div>')
     note = f'\n      <p class="rc__note">{tie(esc(b["note"][lang]))}</p>' if b.get('note') else ''
-    link = f'\n    <p class="sh__links"><a href="{esc(about)}">{esc(T["basis_full"](it["name"][lang]))} <span aria-hidden="true">→</span></a></p>' if about else ''
+    more = basis_link(it, b, lang, about)
+    link = f'\n    <p class="sh__links"><a href="{esc(more[0])}">{esc(more[1])} <span aria-hidden="true">→</span></a></p>' if more else ''
     day = f'<span>{esc(T["checked"](T["day"](datetime.date.fromisoformat(one))))}</span>' if one else ''
     return f'''<section class="sh__sec sh__basis" aria-labelledby="sh-basis">
     <h2 id="sh-basis">{esc(b['h'][lang])}</h2>
@@ -355,8 +387,9 @@ def body(kind, it, lang, gdata, cat):
   </section>''')
     if kind == 'tools':
         tp = BI.tool_pages(it, lang)
-        # 기준 영수증이 있으면 소개 페이지 링크는 영수증 밑에 한 번만
-        about = '' if wt and wt.get('basis') else f'''
+        # 기준표 밑 링크가 소개 페이지로 가면 소개 링크는 거기 한 번만(기준표 밑이 다른 곳이거나 없으면 여기에 둔다)
+        ln = basis_link(it, wt['basis'], lang, tp['about']) if wt and wt.get('basis') else None
+        about = '' if ln and ln[0].split('#')[0] == tp['about'] else f'''
     <p class="sh__links"><a href="{esc(tp['about'])}">{esc(T['about'](name))} <span aria-hidden="true">→</span></a></p>'''
         out.append(f'''<section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">{T['check']}</h2>

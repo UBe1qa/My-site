@@ -2087,8 +2087,8 @@
     }
    ],
    "note": {
-    "ko": "기록은 이 기기에만 저장되고 서버로 보내지 않아요. 다른 기기로 옮길 땐 백업 파일로 내보내고 가져와요. 위 화면은 실제 앱에 예시 운동 두 번을 적어 넣고 찍은 거예요.",
-    "en": "Your log is saved on this device only and never sent to a server. To move it to another device, export and import a backup file. The screens above are the real app after logging two sample workouts."
+    "ko": "기록은 이 기기에만 저장되고 서버로 보내지 않아요. 위 화면은 실제 앱에 예시 운동 두 번을 적어 넣고 찍은 거예요.",
+    "en": "Your log is saved on this device only and never sent to a server. The screens above are the real app after logging two sample workouts."
    }
   }
  }
