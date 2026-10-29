@@ -1,5 +1,5 @@
 {
-  "_설명": "만든 것 전부의 목록. 홈의 '만든 것' 큰 아이콘 칸(게임 → 앱 → 웹 도구 묶음 순서)과 소개 창·소개 페이지(/works/<id>/), 바닥글, /about/·/privacy/ 가 여기서 나온다. 소개 창에만 쓰는 자료(색, 사실 줄, 미리 보기, 확인한 한 줄)는 showcase.json 에 따로 있고 항목마다 둘 다 있어야 한다. 도구의 dir = 이 저장소의 폴더(소개 창의 가이드 목록이 그 폴더 글을 읽는다), what = 그 도구가 하는 일을 몇 마디로(아이콘 밑, 이름만으론 뭘 하는지 모르니), check = 그 도구의 결과를 어떻게 확인했는지(도구 소개 페이지에 이미 적힌 사실만, 소개 창과 /about/ 에 나옴). 게임·앱의 links 첫째 = 그 사이트 소개('어떤 앱인지', 주소 = url), 그다음 열기·지원·방침. privacy = 방침 주소가 links 에 없을 때 한국어·영어 주소(바닥글 '앱 개인정보 처리방침'과 /privacy/ 목록). 도구의 영어 주소가 다르면 url_en. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 새 앱이나 새 도구를 만들면 여기와 showcase.json 에 항목을 하나씩 더하고(도구는 assets/try/<id>.js 도) python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저).",
+  "_설명": "만든 것 전부의 목록. 홈의 '만든 것' 큰 아이콘 칸(게임 → 앱 → 웹 도구 묶음 순서)과 소개 창·소개 페이지(/works/<id>/), 바닥글, /about/·/privacy/ 가 여기서 나온다. 소개 창에만 쓰는 자료(색, 사실 줄, 미리 보기, 확인한 한 줄)는 showcase.json 에 따로 있고 항목마다 둘 다 있어야 한다. 도구의 dir = 이 저장소의 폴더(소개 창의 가이드 목록이 그 폴더 글을 읽는다), what = 그 도구가 하는 일을 몇 마디로(아이콘 밑, 이름만으론 뭘 하는지 모르니), check = 그 도구의 결과를 어떻게 확인했는지(도구 소개 페이지에 이미 적힌 사실만, 소개 창과 /about/ 에 나옴). 게임·앱의 links 첫째 = 그 사이트 소개('어떤 앱인지', 주소 = url), 그다음 열기·지원·방침. privacy = 방침 주소가 links 에 없을 때 한국어·영어 주소(바닥글 '앱 개인정보 처리방침'과 /privacy/ 목록). 도구의 영어 주소가 다르면 url_en. 웹 도구는 groups(묶음)별로 나눠 보여 주고, 도구마다 group 칸에 묶음 id를 적는다(새 도구는 가까운 묶음에, 어디에도 안 맞는 도구가 둘 이상 생기면 묶음을 새로 만든다). 새 앱이나 새 도구를 만들면 여기와 showcase.json 에 항목을 하나씩 더하고(도구는 assets/try/<id>.js 도) python3 _dev/build_home.py 를 돌린다. 순서 = 화면 순서(앞이 먼저). hold: true 는 출시 전이라 홈 칸·소개 페이지(/works/<id>/)·바닥글 제품 줄·/about/ 목록·사이트맵에서 빠진다(그 소개 사이트·방침 링크·/privacy/ 목록은 그대로, 옛 소개 페이지 주소는 _redirects 가 302로 홈에). 출시되면 hold 를 지우고 _redirects 네 줄도 지운다.",
   "groups": [
     {
       "id": "calc",
@@ -36,6 +36,7 @@
     },
     {
       "id": "castleup",
+      "hold": true,
       "icon": "/img/castle-up.webp",
       "name": {"ko": "캐슬업!", "en": "Castle Up!"},
       "find": {"ko": "게임 디펜스 방치형 성 보스 휴대폰 게임", "en": "game idle defense castle tower boss phone game"},
@@ -53,6 +54,7 @@
   "apps": [
     {
       "id": "owlight",
+      "hold": true,
       "icon": "/img/owlight.webp",
       "name": {"ko": "Owlight", "en": "Owlight"},
       "find": {"ko": "맥 메뉴 막대 잠자기 방지 바탕화면 가리기 창 강조 발표 화면 공유", "en": "mac menu bar keep awake hide desktop focus window presentation screen share"},

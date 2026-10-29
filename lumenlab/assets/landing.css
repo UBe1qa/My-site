@@ -270,6 +270,8 @@
 .hero-ghost{position:fixed;left:0;top:0;z-index:4;pointer-events:none;border-radius:22%;opacity:0;box-shadow:0 8px 24px rgba(27,26,36,.18)}
 .wall-wait .shelf .wi.landed .wi__icon{opacity:1;filter:none;animation:none}
 .wall-wait .shelf .wi.landed::before{opacity:.22;animation:none}
+.wall-wait .shelf .wi.landed.hi .wi__icon{animation:wiOn .8s linear;transform-origin:50% 100%}   /* 날아와 앉은 아이콘에 줄 등 불빛이 닿으면 톡 튀기만 */
+.wall-wait .shelf .wi.landed.hi::before{animation:wiGlow 1s ease}
 /* 단추에 마우스를 올리면 단추가 불빛처럼 */
 @media (hover:hover){.anim .hero__cta{transition:filter .2s,box-shadow .4s}.anim .hero__cta:hover{box-shadow:0 0 0 5px rgba(255,210,122,.2),0 0 36px 10px rgba(255,186,84,.45)}}
 /* 글이 흐려진 뒤에도 단추에 포커스가 오면 다시 보인다 */

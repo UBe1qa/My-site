@@ -2,6 +2,7 @@
 #   1) lumenlab.page 의 가이드 글·모음·RSS 가 200
 #   2) 도구 사이트의 옛 가이드 주소(글·목록, 끝 / 있고 없고)가 이 사이트의 같은 글로 301 한 번에
 #   3) 도구 사이트맵에 옛 /guide/ 주소가 없음
+#   4) 출시 전이라 숨긴 것(catalog hold)의 옛 소개 페이지 주소가 홈의 그 선반으로 302
 import os, sys, json, re, ssl, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
@@ -38,12 +39,15 @@ for (iid, lang) in sorted({(a['it']['id'], a['lang']) for a in found}):
     jobs.append((a['index_url'], 301, (ROOT + BG.root_path(a['it'], lang),)))
 for p in ('/guides/', '/en/guides/', '/guides/rss.xml'):
     jobs.append((ROOT + p, 200, None))
+for k in ('games', 'apps'):
+    for pre in ('', '/en'):
+        jobs += [(f'{ROOT}{pre}/works/{it["id"]}/', 302, (f'{pre}/#{k}', f'{ROOT}{pre}/#{k}')) for it in cat.get(k, []) if it.get('hold')]
 
 with ThreadPoolExecutor(12) as ex:
     res = list(ex.map(lambda j: (j, head(j[0])), jobs))
 bad = [(u, got, loc, want) for (u, st, want), (got, loc, _) in res if got != st or (want and loc not in want)]
 for b in bad[:15]: print('다름:', b)
-print(f'가이드 주소 {len(jobs)}개 중 맞음 {len(jobs) - len(bad)}개')
+print(f'가이드·숨긴 소개 페이지 주소 {len(jobs)}개 중 맞음 {len(jobs) - len(bad)}개')
 
 # 도구 사이트맵에 옛 /guide/ 주소가 남지 않음
 hosts = sorted({re.match(r'https://[^/]+', a['src_url']).group(0) for a in found})
