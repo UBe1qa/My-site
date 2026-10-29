@@ -6,9 +6,10 @@
 - 페이지: 만들기 `/` · 와이파이 `/wifi/` · 명함 `/vcard/` · 대량 `/bulk/` · 스캐너 `/scan/` · 가이드 `/guide/<slug>/` · 소개 · 방침 (두 언어 짝, hreflang) + `404.html`(두 언어 틀).
 
 ## 폴더
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html 을 만든다**: `python3 qr/_dev/build.py` (`--check` 는 낡았는지만). 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html 을 만든다**: `python3 qr/_dev/build.py` (`--check` 는 낡았는지만). 만든 파일은 손으로 고치지 않는다.
   - 화면 글 = `_dev/content.py`(TX 틀 글, UI 도구 글, M 스크립트 문구·알림 코드, FIELDS 입력 칸, PAGES 제목·설명, FAQ, ABOUT, PRIVACY, STORE_KEYS).
   - 가이드 글 = `_dev/articles.py`(**글 담당 에이전트가 쓴다. 없으면 빈 목록**). 형식: `ARTICLES = [{lang, slug, title, description, h1, lead, body, pair, tool, checked, sources:[{label,url,checked}]}]`. 주소 `/guide/<slug>/`·`/ko/guide/<slug>/`, 짝(`pair`)이 다른 언어에 있으면 hreflang.
+  - 2026-10-29부터 이 가이드 HTML 은 `lumenlab/_dev/build_home.py` 가 읽어 lumenlab.page/guides/qr/(영어 /en/guides/qr/)에 싣는 원본일 뿐이다: 이 사이트는 올리지 않고(`.assetsignore`) sitemap 에도 안 넣으며 옛 주소는 301(`_redirects`), 링크는 새 주소(`guide_links()`). 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 인쇄 크기 안내 = `_dev/facts.md` 에 `print_tip_ko: …`·`print_tip_en: …` 줄이 있으면 그 문장(없으면 content.py 의 '…쯤' 문장).
   - 첫 HTML 의 예시 QR·모양 그림은 `_dev/render.mjs`(node)가 브라우저와 같은 `assets/qr-render.js` 로 그린다(화면 밀림 0). 꾸밈 세트 그림은 화면이 뜬 뒤 app.js 가 그린다(첫 HTML 을 가볍게).
 - 로직(DOM 을 모른다, 노드 시험과 브라우저가 같이 쓴다):
@@ -27,7 +28,7 @@
 ## 명령어
 - 빠른 확인: `qr/_dev/check.sh` (빌드 최신 → 정적 검사 → JS 문법 → 로직 시험 빠른 묶음, 1분쯤).
 - 전부: `qr/_dev/check.sh full` (로직 전부: 디자인 판독 290개·PDF/EPS/시트/ZIP·2단계 + 화면 확인 14묶음(13 = 판정 vs zxing 148개, 14 = 저장 막대·틀 글자·크기·예시·스캐너). 20분쯤). 화면만: `qr/_dev/check.sh e2e [폴더]`. 묶음 하나: 서버를 띄우고 `SEC=5,6 python3 qr/_dev/e2e.py`.
-- 배포 뒤: `qr/_dev/check.sh live` (실제 주소 = 저장소, 404·개발 파일 404·머리말). 지휘자가 돌린다.
+- 배포 뒤: `qr/_dev/check.sh live` (실제 주소 = 저장소, 404·개발 파일 404·머리말, 옛 가이드 주소 301). 지휘자가 돌린다.
 - 로컬 보기: `node qr/_dev/serve.mjs` → http://localhost:8471 (폴더 → index.html, 없는 주소 → 404.html, `_dev`·`tests` 막음).
 - 시험에 필요한 것: `pip install segno qrcode zxing-cpp cairosvg vobject icalendar pillow playwright`, `apt install ghostscript poppler-utils qpdf`.
 - 배포: `.deploy-actions` 가 있어 main 에 푸시하면 GitHub Actions 가 wrangler 로 배포.

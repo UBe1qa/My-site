@@ -15,6 +15,13 @@ if [ "$1" = "live" ]; then
   [ $diffs = 0 ] && echo "실제 주소 = 저장소" || echo "아직 다름($diffs)"
   for f in _dev/build.py tests/run.mjs CLAUDE.md wrangler.jsonc; do echo "$f $(curl -s -o /dev/null -w '%{http_code}' https://time.lumenlab.page/$f)"; done
   echo "없는 주소 $(curl -s -o /dev/null -w '%{http_code}' https://time.lumenlab.page/nope/)"
+  # 2026-10-29 가이드는 루멘랩 홈으로 옮겼다: 옛 가이드 주소·rss.xml은 파일과 비교하지 않고, 홈의 같은 글로 301이어야 한다(_redirects)
+  for pair in "guide/ en/guides/#time" "ko/guide/ guides/#time" "guide/lap-vs-split-time/ en/guides/time/lap-vs-split-time/" "ko/guide/korea-time-difference/ guides/time/korea-time-difference/" "rss.xml guides/rss.xml"; do
+    read -r f to <<< "$pair"
+    h=$(curl -s -D - -o /dev/null "https://time.lumenlab.page/$f" | tr -d '\r')
+    got="$(echo "$h" | sed -n '1s/^HTTP[^ ]* \([0-9]*\).*/\1/p') $(echo "$h" | sed -n 's/^[Ll]ocation: //p')"
+    [ "$got" = "301 https://lumenlab.page/$to" ] && echo "301 $f → https://lumenlab.page/$to" || echo "아직 다름 $f: $got"
+  done
   exit 0
 fi
 if [ "$1" = "og" ]; then python3 _dev/og.py; exit $?; fi

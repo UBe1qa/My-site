@@ -2,7 +2,9 @@
 """오래QR / Staycode(qr.lumenlab.page) 페이지 전부 만들기: python3 qr/_dev/build.py   (--check 는 낡았는지만 본다)
 
 - 화면 글 = _dev/content.py, 가이드 글 = _dev/articles.py(다른 에이전트가 쓴다. 없으면 빈 목록), 인쇄 크기 사실 = _dev/facts.md(있으면).
-- 만드는 것: 영어 / (x-default)·한국어 /ko/ 의 도구 다섯(만들기·와이파이·명함·대량·스캐너), 가이드 목록·글, 소개, 방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 만드는 것: 영어 / (x-default)·한국어 /ko/ 의 도구 다섯(만들기·와이파이·명함·대량·스캐너), 가이드 목록·글, 소개, 방침, 404.html, sitemap.xml.
+- 가이드 HTML 은 루트 빌드(lumenlab/_dev/build_home.py)가 읽어 lumenlab.page/guides/qr/ 로 내는 원본이다(2026-10-29). 이 사이트에는 올리지 않고
+  (.assetsignore) 옛 주소는 _redirects 가 301 로 보낸다. 그래서 sitemap 에 넣지 않고 rss.xml 도 만들지 않는다(한국어 글 RSS 는 루트가 낸다).
 - 첫 HTML 에 예시 QR·꾸밈 세트 그림·모양 그림을 미리 그려 넣는다(_dev/render.mjs: 브라우저와 같은 assets/qr-render.js). 화면 밀림 0.
 - lastmod 는 본문·구조화 데이터·링크가 실제로 바뀐 날만(UPDATED). 만든 파일은 손으로 고치지 않는다.
 """
@@ -13,8 +15,6 @@ import html
 import json
 import re
 import subprocess
-from datetime import datetime, timezone
-from email.utils import format_datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -733,22 +733,19 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in arts('ko'):
-        link_ = f'{SITE}/ko/guide/{a["slug"]}/'
-        lead = a['lead'] if a['lead'].lstrip().startswith('<') else f'<p>{a["lead"]}</p>'
-        full = lead + expand(a['body'], 'ko')
-        y, mo, d = (int(x) for x in a.get('published', a.get('checked', FIRST)).split('-'))
-        pub = format_datetime(datetime(y, mo, d, tzinfo=timezone.utc), usegmt=True)
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link_}</link><guid>{link_}</guid>'
-                  f'<pubDate>{pub}</pubDate><description>{esc(a["description"])}</description>'
-                  f'<content:encoded><![CDATA[{full}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>오래QR 가이드</title><link>{SITE}/ko/guide/</link><description>QR코드 만료, 인쇄 크기, 와이파이·명함 QR</description><language>ko</language>
-{items}</channel></rss>
-'''
+GUIDE_HOME = {'ko': 'https://lumenlab.page/guides/', 'en': 'https://lumenlab.page/en/guides/'}
+
+
+def guide_links(text):
+    # 2026-10-29 가이드는 lumenlab.page/guides/qr/<slug>/(영어 /en/guides/…)로 옮겼다: /guide/·/ko/guide/ 링크를 새 주소로(목록은 #qr, 글의 #조각은 그대로)
+    def to(m):
+        root, slug, frag = GUIDE_HOME['ko' if m.group(1) else 'en'], m.group(2) or '', m.group(3) or ''
+        return f'href="{root}#qr"' if slug in ('', 'index.html') else f'href="{root}qr/{slug}{frag}"'
+    return re.sub(r'href="/(ko/)?guide(?:/([^"#]*))?(#[^"]*)?"', to, text)
+
+
+def is_guide(path):
+    return path.startswith(('/guide/', '/ko/guide/'))
 
 
 # ---------- 꾸밈 세트(assets/qr-presets.js 를 그대로 읽는다) ----------
@@ -803,8 +800,9 @@ def build():
             add(lang, *doc_page(lang, key))
     out['404.html'] = not_found()
     out = run_render(out)
-    out['sitemap.xml'] = sitemap(paths)
-    out['rss.xml'] = rss()
+    out = {rel: guide_links(text) for rel, text in out.items()}
+    # 가이드 주소는 이 사이트가 301 로 넘기므로 sitemap 에 넣지 않는다(paths 에는 남겨 check.py 가 가이드 HTML 도 본다)
+    out['sitemap.xml'] = sitemap([p for p in paths if not is_guide(p)])
     return out, paths
 
 
@@ -840,7 +838,7 @@ def main():
             sys.exit(1)
         print(f'빌드 결과 최신({len(out)}개 파일)')
         return
-    print(f'built {len(paths)} pages + 404, sitemap, rss')
+    print(f'built {len(paths)} pages + 404, sitemap')
 
 
 if __name__ == '__main__':

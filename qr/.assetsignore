@@ -9,3 +9,4 @@ wrangler.jsonc
 node_modules
 __pycache__
 *.py
+guide/

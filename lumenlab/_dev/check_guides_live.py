@@ -5,7 +5,7 @@
 import os, sys, json, re, ssl, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
-sys.path.insert(0, here)
+sys.path.insert(0, here); sys.dont_write_bytecode = True
 import build_guides as BG
 cat = json.load(open(os.path.join(here, 'catalog.json')))
 ROOT = 'https://lumenlab.page'

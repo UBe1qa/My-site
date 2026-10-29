@@ -4,9 +4,10 @@
 - 주소: https://count.lumenlab.page (Worker `count`, workers.dev 끔). 영어 `/`(x-default), 한국어 `/ko/`.
 - 도구: 영어 = Word Counter(`/`), Character Counter(`/character-counter/`, X 가중 글자 수 + SNS 한도), SMS Counter(`/sms/`). 한국어 = 글자수 세기(`/ko/`), 자소서(`/ko/jasoseo/`), 바이트 계산기(`/ko/byte/`, 문자 한 통 기준), 나이스 생기부 바이트 계산기(`/ko/neis/`), SNS 글자수 세기(`/ko/sns/`), 원고지(`/ko/wongoji/`).
 - 가이드 글: 한국어 4편, 영어 3편(번역이 아니라 따로 고른 주제. 이모지 글 한 쌍만 hreflang으로 잇는다).
+  - 2026-10-29부터 가이드 HTML(`guide/`·`ko/guide/`)은 `lumenlab/_dev/build_home.py` 가 읽어 lumenlab.page/guides/count/(영어 /en/guides/count/)에 싣는 원본일 뿐이다: 이 사이트는 올리지 않고(`.assetsignore`) sitemap 에도 안 넣으며 옛 주소는 301(`_redirects`), 링크는 새 주소(`guide_links()`). 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
 
 ## 폴더
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml·404.html을 만든다**: `python3 count/_dev/build.py` (`--check`는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html을 만든다**: `python3 count/_dev/build.py` (`--check`는 낡았는지만 본다). 만든 파일은 손으로 고치지 않는다.
   - 화면 글 = `_dev/content.json`(ui·t·sample·pages), 가이드 글 = `_dev/articles.json`, 도구 구성(큰 숫자·줄·목표 기준·불러올 스크립트) = build.py의 `TOOLS`·`M`·`GOAL`·`NAV`.
   - `_dev/limits.json` **공식 출처에서 확인한 값**(나이스 항목·바이트 규칙, 문자 한 통 기준, SNS 한도와 세는 단위, 읽기 속도, 원고지 관행, 취업 사이트에 직접 넣어 본 값). 묶음마다 `verified`·`checked`(확인한 날)·출처 주소·`not_verified`(확인 못 해 싣지 않은 것)가 있다. build.py가 여기서 표·목록·출처 링크를 만든다.
   - 글 본문의 자리 표시 `<!--neis-table-->`, `<!--jobsites-measured-->`, `<!--jobsites-rules-->`는 limits.json으로 만든 표로 바뀐다. `<table class="wide">`는 휴대폰에서 옆으로 미는 넓은 표.

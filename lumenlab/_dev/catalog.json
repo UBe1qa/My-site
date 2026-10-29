@@ -150,8 +150,8 @@
       "name": {"ko": "오래QR", "en": "Staycode"},
       "find": {"ko": "qr코드 qr 큐알 만들기 로고 와이파이", "en": "qr code qr maker logo wifi"},
       "sub": "Staycode",
-      "line": {"ko": "가입 없이 로고·틀까지 넣은 QR코드를 만들어요. 이 사이트를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요.", "en": "Free QR code generator with logos, frames and print files. No sign-up, never expires, and it checks that your code scans."},
-      "check": {"ko": "정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 이 사이트가 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.", "en": "It makes static codes only, so the link lives inside the image and keeps working even if this site stops. Every code is read back right away to check that it scans."}
+      "line": {"ko": "가입 없이 로고·틀까지 넣은 QR코드를 만들어요. 오래QR 서버를 거치지 않아 만료가 없고, 찍히는지 바로 확인해요.", "en": "Free QR code generator with logos, frames and print files. No sign-up, never expires, and it checks that your code scans."},
+      "check": {"ko": "정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 오래QR이 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.", "en": "It makes static codes only, so the link lives inside the image and keeps working even if Staycode stops. Every code is read back right away to check that it scans."}
     },
     {
       "id": "onesheet",

@@ -6,8 +6,9 @@
 - **유튜브 주소를 받는 기능, 다운로드 기능은 넣지 않는다.** 넣으면 애드센스 계정 전체가 위험해진다.
 
 ## 폴더
-- `_dev/build.py` **모든 HTML을 만든다**: `python3 convert/_dev/build.py` (→ "built N pages"). 도구 목록·분류·받는 파일 = `TOOLS`, 화면 글자 = `UI`, 방침·오픈소스 고지 = `PRIVACY`·`LICENSES`. 만든 HTML·`sitemap.xml`·`rss.xml`(한국어 글)·`assets/tools.js`는 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML을 만든다**: `python3 convert/_dev/build.py` (→ "built N pages"). 도구 목록·분류·받는 파일 = `TOOLS`, 화면 글자 = `UI`, 방침·오픈소스 고지 = `PRIVACY`·`LICENSES`. 만든 HTML·`sitemap.xml`·`assets/tools.js`는 손으로 고치지 않는다.
 - `_dev/content.json` 도구마다 영어·한국어 이름·제목·설명·본문·FAQ, 첫 페이지·소개 글. `_dev/articles.json` 가이드 글(영어·한국어 따로 고른 주제, 같은 주제만 `ARTICLE_PAIRS`로 hreflang 짝). 글을 고치면 build.py를 다시 돌리고, 실제로 고친 주소·날짜를 `UPDATED`에 적는다(sitemap lastmod).
+  - 2026-10-29부터 가이드 HTML(`guide/`·`ko/guide/`)은 `lumenlab/_dev/build_home.py` 가 읽어 lumenlab.page/guides/convert/(영어 /en/guides/convert/)에 싣는 원본일 뿐이다: 이 사이트는 올리지 않고(`.assetsignore`) sitemap 에도 안 넣으며 옛 주소는 301(`_redirects`), 링크는 새 주소(`guide_links()`). 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
 - `assets/app.js` 화면 전부(파일 넣기, 도구별 옵션 `RUNNERS`, 시간 띠 `timeline`, 결과·ZIP·공유, 첫 페이지의 '파일 먼저 넣고 도구 고르기'). 페이지 언어는 `<html lang>`으로만 정한다. 브라우저 언어가 다르면 닫을 수 있는 띠만 띄운다(자동으로 안 넘김).
 - `assets/engines/` 변환 엔진(DOM을 거의 모름): `media.js`(Mediabunny = WebCodecs, MP3는 LAME wasm, AAC는 wasm 인코더), `image.js`(캔버스, HEIC는 libheif wasm), `pdf.js`(pdf-lib + PDF.js 4.10 legacy + qpdf wasm: 암호 풀기·걸기, 구조 압축), `pdfmd.js`(PDF → 마크다운: PDF.js 글자 조각 위치만 보고 제목·문단·목록·표·두 단을 다시 짬), `data.js`(CSV·JSON 직접 구현, 엑셀은 SheetJS).
 - `assets/vendor/` 라이브러리 원본(손으로 안 고침). 버전·라이선스는 `/licenses/` 페이지(build.py `LICENSES`).

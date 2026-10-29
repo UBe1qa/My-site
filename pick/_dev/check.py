@@ -3,7 +3,8 @@
 빌드가 최신인지, 제목·설명, canonical·sitemap·내부 링크, hreflang 짝, <html lang>, 영어 페이지의 한글,
 JSON-LD가 화면 글자와 같은지, 방침 문구(방문 통계 포함), 광고 코드가 있어야 할 곳·없어야 할 곳, 글 길이와 빈 숫자 자리,
 "제한 없음"·옛 이름 같은 틀린 말이 남지 않았는지, 조각 글꼴이 화면 글자를 다 담고 있는지,
-방침의 글꼴 설명이 실제와 같은지, 첫 HTML의 확인 코드가 맞는지, 화면 코드에 보이지 않는 글자가 박혀 있지 않은지."""
+방침의 글꼴 설명이 실제와 같은지, 첫 HTML의 확인 코드가 맞는지, 화면 코드에 보이지 않는 글자가 박혀 있지 않은지,
+가이드를 루멘랩 홈으로 옮긴 것(2026-10-29: sitemap·RSS에 가이드 없음, 가이드 링크는 홈 주소, _redirects·.assetsignore)."""
 import json
 import re
 import subprocess
@@ -162,13 +163,18 @@ def main():
     locs = re.findall(r'<loc>(.*?)</loc>', sm)
     paths = [u[len(SITE):] for u in locs]
     ok(all(u.startswith(SITE + '/') and u.endswith('/') for u in locs), 'sitemap 주소가 전부 이 사이트의 폴더 주소')
-    ok(len(paths) == len(set(paths)) and len(paths) >= 27, f'sitemap 주소 {len(paths)}개, 겹침 없음')
+    ok(len(paths) == len(set(paths)) and len(paths) >= 18, f'sitemap 주소 {len(paths)}개, 겹침 없음')
+    # 2026-10-29 가이드 목록·글은 루멘랩 홈(lumenlab.page/guides/pick/)으로 옮겼다: sitemap에는 없고, 파일은 홈이 읽는 원본이라 그대로 만들어 같이 본다
+    ok(not [x for x in paths if '/guide/' in x], 'sitemap에 가이드 주소(목록·글)가 없음(루멘랩 홈으로 옮김)', ', '.join(x for x in paths if '/guide/' in x))
+    guides = sorted('/' + f.parent.relative_to(ROOT).as_posix() + '/' for g in ('guide', 'ko/guide') for f in (ROOT / g).glob('**/index.html'))
     pages = {}
     for path in paths:
         rel = file_for(path)
         ok((ROOT / rel).exists(), f'sitemap 주소의 파일이 있음: {path}')
         if (ROOT / rel).exists():
             pages[path] = load(rel)
+    for path in guides:
+        pages[path] = load(file_for(path))
 
     titles, descs = {}, {}
     for path, p in pages.items():
@@ -226,6 +232,19 @@ def main():
                 bad.append(h + ' (없는 #)')
         ok(not bad, f'내부 링크가 전부 있는 폴더 주소: {path}', ', '.join(bad[:4]))
         ok(any(h.startswith('https://lumenlab.page/' + ('' if ko else 'en/')) for h in p.anchors) and not any(h == ('https://lumenlab.page/en/' if ko else 'https://lumenlab.page/') for h in p.anchors), f'루멘랩 링크가 같은 언어 본페이지로: {path}')
+        # 가이드 링크는 루멘랩 홈 주소로(2026-10-29): 옛 주소(/guide/·/ko/guide/)로 가는 링크가 없고, 홈 주소의 글은 여기서 만든 원본(#조각까지)이 있다
+        old = [h for h in p.anchors if re.match(r'(?:https://pick\.lumenlab\.page)?/(?:ko/)?guide(?:[/#?]|$)', h)]
+        ok(not old, f'옛 가이드 주소로 가는 링크 없음: {path}', ', '.join(old[:4]))
+        ok(('https://lumenlab.page/guides/#pick' if ko else 'https://lumenlab.page/en/guides/#pick') in p.anchors, f'머리·꼬리말의 가이드 링크 = 루멘랩 홈 가이드 모음의 이 사이트 칸(같은 언어): {path}')
+        moved = []
+        for h in p.anchors:
+            if not h.startswith(('https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/')):
+                continue
+            m = re.fullmatch(r'https://lumenlab\.page/(en/)?guides/(?:#pick|pick/([^/#]+)/(?:#(.+))?)', h)
+            src = m and m.group(2) and ('/guide/' if m.group(1) else '/ko/guide/') + m.group(2) + '/'
+            if not m or (src and (src not in pages or (m.group(3) and m.group(3) not in pages[src].ids))):
+                moved.append(h)
+        ok(not moved, f'루멘랩 홈의 가이드 링크가 여기서 만든 글(원본)을 가리킴: {path}', ', '.join(moved[:4]))
         # 영어 페이지의 한글
         if not ko:
             leaks = [t.strip()[:30] for t, lang in p.text + p.attr_text if lang != 'ko' and HANGUL.search(t)]
@@ -356,14 +375,26 @@ def main():
     ok((ROOT / 'googlea614029e84d58498.html').read_text().strip() == 'google-site-verification: googlea614029e84d58498.html', '구글 확인 파일')
     ign = (ROOT / '.assetsignore').read_text().split()
     ok(all(x in ign for x in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions')), '.assetsignore에 개발 파일')
+    ok('guide/' in ign and '_redirects' not in ign and '_headers' not in ign, '.assetsignore: 가이드 HTML(guide/·ko/guide/)은 올리지 않고, _redirects·_headers 는 올린다')
+    # 옛 가이드 주소 → 루멘랩 홈(2026-10-29). 고정 주소가 * 규칙보다 먼저
+    red = (ROOT / '_redirects').read_text(encoding='utf-8') if (ROOT / '_redirects').exists() else ''
+    rules = [line.split() for line in red.splitlines() if line.strip() and not line.startswith('#')]
+    want = [[src, dst, '301'] for src, dst in (
+        ('/ko/guide/', 'https://lumenlab.page/guides/#pick'), ('/ko/guide', 'https://lumenlab.page/guides/#pick'), ('/ko/guide/index.html', 'https://lumenlab.page/guides/#pick'),
+        ('/guide/', 'https://lumenlab.page/en/guides/#pick'), ('/guide', 'https://lumenlab.page/en/guides/#pick'), ('/guide/index.html', 'https://lumenlab.page/en/guides/#pick'),
+        ('/rss.xml', 'https://lumenlab.page/guides/rss.xml'),
+        ('/ko/guide/*', 'https://lumenlab.page/guides/pick/:splat'), ('/guide/*', 'https://lumenlab.page/en/guides/pick/:splat'))]
+    ok(rules == want, '_redirects: 옛 가이드 목록·글·RSS 주소를 루멘랩 홈으로 301(고정 주소 먼저, * 규칙 뒤)', str(rules))
+    ok('/assets/core/*' in (ROOT / '_headers').read_text() and 'Access-Control-Allow-Origin: *' in (ROOT / '_headers').read_text(), '_headers: 루멘랩 홈이 부르는 뽑기 파일(/assets/core/*)은 다른 주소에서 불러도 된다')
     ok((ROOT / '.deploy-actions').exists() and '"pick.lumenlab.page"' in (ROOT / 'wrangler.jsonc').read_text() and '"workers_dev": false' in (ROOT / 'wrangler.jsonc').read_text() and '404-page' in (ROOT / 'wrangler.jsonc').read_text(), 'wrangler.jsonc·.deploy-actions')
     for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png'):
         ok((ROOT / f).exists() and (ROOT / f).stat().st_size > 200, f'{f} 있음')
-    rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
-    ko_articles = [p for p in paths if p.startswith('/ko/guide/') and p != '/ko/guide/']
-    ok(rss.count('<item>') == len(ko_articles) >= 3 and all(SITE + p in rss for p in ko_articles), f'rss.xml: 한국어 글 {len(ko_articles)}편')
-    en_articles = [p for p in paths if p.startswith('/guide/') and p != '/guide/']
-    ok(len(en_articles) >= 3, f'영어 글 {len(en_articles)}편')
+    # 한국어 가이드 RSS는 루멘랩 홈(lumenlab.page/guides/rss.xml)이 낸다(2026-10-29). 이 사이트는 rss.xml 을 만들지 않는다
+    ok(not (ROOT / 'rss.xml').exists(), 'rss.xml 없음(한국어 가이드 RSS는 루멘랩 홈으로 옮김)')
+    ko_articles = [p for p in guides if p.startswith('/ko/guide/') and p != '/ko/guide/']
+    ok(len(ko_articles) >= 3, f'한국어 글 {len(ko_articles)}편(루멘랩 홈이 읽는 원본)')
+    en_articles = [p for p in guides if p.startswith('/guide/') and p != '/guide/']
+    ok(len(en_articles) >= 3, f'영어 글 {len(en_articles)}편(루멘랩 홈이 읽는 원본)')
     junk = [str(p.relative_to(ROOT)) for p in ROOT.rglob('*') if p.name in ('node_modules', '__pycache__', '.wrangler', '.DS_Store')]
     ok(not junk, '폴더에 node_modules·__pycache__·.wrangler 없음', ', '.join(junk))
 

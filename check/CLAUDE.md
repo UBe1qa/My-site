@@ -6,9 +6,10 @@
 - 상징은 표시등(작은 불): 아직 안 봄(회색 점) / 반응함(청록 + ✓) / 의심(주황 + !) / 못 엶(빨강 + ×). 색 하나에 뜻 하나(청록 = 반응함).
 
 ## 폴더
-- `_dev/build.py` **모든 HTML을 만든다**: `python3 -B check/_dev/build.py`(→ "built N pages"), `--check`는 낡았는지만 본다. 자판 그림(SVG)은 `assets/ck-keys.js`의 배열 표를 node로 읽어 그려 첫 HTML에 넣는다(그래서 만들 때 node가 필요하다). 만든 HTML·`sitemap.xml`·`rss.xml`·`404.html`은 손으로 고치지 않는다. 설명 글 속 `{thr:kb}`·`{thr:mouse}`는 지금 기준 값이 들어가는 자리다(설정을 바꾸면 화면 코드가 따라 바꾼다). 가이드 글의 가운데 광고 자리는 글 한가운데에 가장 가까운 소제목 앞에 넣는다.
+- `_dev/build.py` **모든 HTML을 만든다**: `python3 -B check/_dev/build.py`(→ "built N pages"), `--check`는 낡았는지만 본다. 자판 그림(SVG)은 `assets/ck-keys.js`의 배열 표를 node로 읽어 그려 첫 HTML에 넣는다(그래서 만들 때 node가 필요하다). 만든 HTML·`sitemap.xml`·`404.html`은 손으로 고치지 않는다. 설명 글 속 `{thr:kb}`·`{thr:mouse}`는 지금 기준 값이 들어가는 자리다(설정을 바꾸면 화면 코드가 따라 바꾼다). 가이드 글의 가운데 광고 자리는 글 한가운데에 가장 가까운 소제목 앞에 넣는다.
 - `_dev/content.json` 화면 글자 전부: `ui`(공통), `t`(화면 코드가 쓰는 문장. 쪽마다 `#ck` JSON으로 들어간다), `home`, `tools`(8개: 제목·설명·순서·설명 글·FAQ), `about`, `privacy`. 도구에 `sources`(label·url·checked)를 적으면 FAQ 아래에 출처 줄이 생기고 `check.py`가 링크와 확인한 날을 본다(공식 출처를 확인한 사실에만 쓴다).
 - `_dev/articles.json` 가이드 글(영어·한국어 따로 쓴 같은 주제 4쌍, `pair`로 hreflang 짝). `sources`에 적은 출처 링크와 확인한 날이 화면에 있는지 `check.py`가 본다. `banned`는 확인하지 못해 화면에 쓰면 안 되는 낱말·문장(사이트 전체 화면 글에서 찾는다).
+  - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 2026-10-29부터 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 글의 표는 `build.py`의 `wrap_tables`가 감싼다: 첫 칸 말고 전부 짧으면 `tbl--tight`(그 칸들은 줄을 안 바꿈), 긴 글 칸이 둘 이상이고 칸이 3개 이하면 `tbl--cards`(휴대폰에서 줄마다 카드, 칸 이름은 `data-th`), 그 밖은 칸 안에서 줄을 바꾼다. 옆으로 넘치면 넘치는 쪽 가장자리에 그림자가 보인다. 글에는 이 도구가 실제로 하는 일, 테스트로 구한 예시, 출처를 확인한 사실만 쓴다(제조사 교환 기준·불량화소 개수 기준·수리 방법은 싣지 않는다).
 - `assets/ck-keys.js` 자판 배열 표(`full` ANSI 104, `iso` 105, `tkl` 87, `mac` 78)와 키 기록기(채터링 의심, 동시에 눌린 최대 수, 눌린 채 있는 키, 안 눌린 키, 누름 없이 뗌만 온 키, 눌린 채로 두지 않는 키). `assets/ck-measure.js` 중앙값, 주사율·폴링 추정과 '프레임이 고른가', 소리 크기(dBFS)와 잘림, 좌우 테스트 음, 주파수 훑기, 스틱 쏠림·떨림, 축의 가만히 둔 값, 해상도 이름, 장치 오류 나누기. **둘 다 화면(DOM)을 모른다.**
 - `assets/app.js` 공통(상태 불, 다른 언어 안내 띠, 광고 자리, 루멘랩 연출) + 권한 없이 되는 것(키보드, 마우스, 주사율, 게임패드). `assets/media.js` 마이크·카메라·스피커. `assets/screen.js` 불량화소 전체 화면. 쪽마다 필요한 파일만 싣는다(`build.py`의 `SCRIPTS`).

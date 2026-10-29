@@ -30,9 +30,10 @@ OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else None
 ONLY = set(os.environ.get('SEC', '').split(',')) - {''}
 fails, passed, notes = [], 0, []
 TMP = Path(tempfile.mkdtemp(prefix='qr-e2e-'))
-PAGES = ['/', '/wifi/', '/vcard/', '/bulk/', '/scan/', '/guide/', '/about/', '/privacy/', '/ko/', '/ko/wifi/', '/ko/vcard/', '/ko/bulk/', '/ko/scan/', '/ko/guide/', '/ko/about/', '/ko/privacy/', '/nope/', '/ko/nope/']
+# 가이드(/guide/·/ko/guide/)는 2026-10-29 lumenlab.page/guides/qr/ 로 옮겨 이 사이트 페이지가 아니다(301, sitemap 에도 없음)
+PAGES = ['/', '/wifi/', '/vcard/', '/bulk/', '/scan/', '/about/', '/privacy/', '/ko/', '/ko/wifi/', '/ko/vcard/', '/ko/bulk/', '/ko/scan/', '/ko/about/', '/ko/privacy/', '/nope/', '/ko/nope/']
 _SM = (ROOT / 'sitemap.xml').read_text()
-PAGES = [p for p in PAGES if 'nope' in p or 'https://qr.lumenlab.page' + p + '<' in _SM]   # 가이드 글이 0편이면 /guide/ 는 없다
+PAGES = [p for p in PAGES if 'nope' in p or 'https://qr.lumenlab.page' + p + '<' in _SM]
 
 
 def ok(cond, msg):

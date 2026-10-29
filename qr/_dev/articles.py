@@ -75,10 +75,10 @@ ARTICLES = [
 <ol>
 <li><strong>동적이면 계정부터 확인해요.</strong> 체험인지, 구독이 언제 끝나는지, 끝나면 코드가 어떻게 되는지 그 업체 도움말을 봐요. 인쇄물을 계속 쓸 동안은 그 QR이 업체에 묶여 있어요.</li>
 <li><strong>다음 인쇄 때는 내가 쥔 주소를 정적 QR에 담아요.</strong> DEV Community의 글은 최종 목적지 대신 내가 관리하는 중간 주소를 가리키라고 권해요. 내 사이트의 <code>/menu</code> 같은 페이지 주소를 담아 두면, 내용이 바뀔 때 QR은 그대로 두고 그 페이지만 고치면 돼요.</li>
-<li><strong>찍힌 수가 필요하면 UTM 꼬리표를 붙여요.</strong> 오래QR은 찍힌 수를 세지 않아요(이 사이트를 거치지 않으니까요). 대신 <a href="/ko/">QR코드 만들기</a>에서 UTM을 켜면 아래처럼 주소 뒤에 꼬리표가 붙고, 찍고 들어온 방문이 내 구글 애널리틱스·네이버 애널리틱스에 따로 보여요.</li>
+<li><strong>찍힌 수가 필요하면 UTM 꼬리표를 붙여요.</strong> 오래QR은 찍힌 수를 세지 않아요(찍어도 오래QR을 거치지 않으니까요). 대신 <a href="/ko/">QR코드 만들기</a>에서 UTM을 켜면 아래처럼 주소 뒤에 꼬리표가 붙고, 찍고 들어온 방문이 내 구글 애널리틱스·네이버 애널리틱스에 따로 보여요.</li>
 </ol>
 <figure><code>https://example.com/menu?utm_source=qr&amp;utm_medium=print&amp;utm_campaign=fall-flyer-2026</code></figure>
-<p>꼬리표를 붙이면 담는 글이 24바이트에서 84바이트로 늘어, 오류 복원 M 기준 무늬가 25×25칸에서 37×37칸이 돼요(이 사이트의 부호기로 만들어 본 값). 칸이 많을수록 작게 인쇄하기 어려우니 <a href="/ko/guide/qr-inswae-keugi/">QR코드 인쇄 크기</a>도 같이 보세요.</p>
+<p>꼬리표를 붙이면 담는 글이 24바이트에서 84바이트로 늘어, 오류 복원 M 기준 무늬가 25×25칸에서 37×37칸이 돼요(오래QR의 부호기로 만들어 본 값). 칸이 많을수록 작게 인쇄하기 어려우니 <a href="/ko/guide/qr-inswae-keugi/">QR코드 인쇄 크기</a>도 같이 보세요.</p>
 ''',
         sources=[S_QRFY_HOME, S_QRFY_TRIAL, S_QRCG_TRIAL, S_QRFY_PRICE, S_ADOBE, S_DEV],
     ),
@@ -90,7 +90,7 @@ ARTICLES = [
         lead=r'와이파이 QR은 <code>WIFI:T:WPA;S:카페오래;P:abc\;123;;</code> 같은 한 줄을 그림에 담은 거예요. 손님이 카메라로 찍으면 휴대폰이 이 이름과 비밀번호로 연결하라고 띄워요. <a href="/ko/wifi/">와이파이 QR코드 만들기</a>에 이름과 비밀번호만 넣으면 기호 처리까지 알아서 해요. 비밀번호가 그림 안에 그대로 들어가서, 공유기 비밀번호를 바꾸면 QR도 다시 만들어 인쇄해야 해요.',
         body=r'''
 <h2>와이파이 QR에는 무엇이 들어가나요?</h2>
-<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 이 사이트도 그대로 만들어요.</p>
+<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 오래QR도 그대로 만들어요.</p>
 <table>
 <thead><tr><th>칸</th><th>뜻</th><th>예</th></tr></thead>
 <tbody>
@@ -100,10 +100,10 @@ ARTICLES = [
 <tr><td><code>H:</code></td><td>숨긴 네트워크면 <code>true</code></td><td><code>H:true</code></td></tr>
 </tbody>
 </table>
-<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 이 사이트에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
+<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 오래QR에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
 
 <h2>비밀번호에 ; 나 : 같은 기호가 있으면요?</h2>
-<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 이 사이트에서 직접 넣어 본 결과예요.</p>
+<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 오래QR에 직접 넣어 본 결과예요.</p>
 <table>
 <thead><tr><th>공유기 비밀번호</th><th>QR에 담기는 값</th></tr></thead>
 <tbody>
@@ -160,7 +160,7 @@ ARTICLES = [
 <p>QR Code Generator 블로그(2026년 10월 14일 확인)는 2×2cm면 약 20cm 거리에서 찍힌다고 하고, 거리와 크기의 비를 10배쯤으로 잡아요. 업체가 소개하는 경험칙이지 표준 규격은 아니에요. 조명이 어둡거나 비스듬히 찍는 곳이면 한 단계 크게 잡으세요.</p>
 
 <h2>내용이 길면 왜 더 크게 해야 하나요?</h2>
-<p>담는 글이 길수록 무늬의 칸 수가 늘어, 같은 크기로 인쇄해도 칸 하나가 작아지기 때문이에요. 이 사이트의 부호기로 오류 복원 M에서 만들어 보면 이래요.</p>
+<p>담는 글이 길수록 무늬의 칸 수가 늘어, 같은 크기로 인쇄해도 칸 하나가 작아지기 때문이에요. 오래QR의 부호기로 오류 복원 M에서 만들어 보면 이래요.</p>
 <table>
 <thead><tr><th>담은 내용</th><th>바이트</th><th>무늬 칸 수</th><th>2cm로 인쇄할 때 한 칸</th></tr></thead>
 <tbody>
@@ -169,11 +169,11 @@ ARTICLES = [
 <tr><td>연락처(이름·전화 2개·이메일·웹·주소·메모)</td><td>317</td><td>69×69</td><td>약 0.29mm</td></tr>
 </tbody>
 </table>
-<p>한 칸 크기는 2cm를 칸 수로 나눠 계산한 값이에요. 같은 2cm라도 마지막 줄은 칸이 첫 줄의 3분의 1 크기라 훨씬 찍기 어려워요. 이 사이트는 무늬가 버전 10(57×57칸)부터 'QR이 촘촘해요' 알림을 띄워요. 줄이는 법은 짧은 주소 쓰기, 오류 복원 한 단계 낮추기, 글 줄이기예요.</p>
+<p>한 칸 크기는 2cm를 칸 수로 나눠 계산한 값이에요. 같은 2cm라도 마지막 줄은 칸이 첫 줄의 3분의 1 크기라 훨씬 찍기 어려워요. 오래QR은 무늬가 버전 10(57×57칸)부터 'QR이 촘촘해요' 알림을 띄워요. 줄이는 법은 짧은 주소 쓰기, 오류 복원 한 단계 낮추기, 글 줄이기예요.</p>
 
 <h2>둘레 여백 4칸은 왜 비워 두나요?</h2>
-<p>휴대폰이 무늬가 어디서 시작하는지 알려면 둘레에 빈 띠가 있어야 해요. 이 사이트는 둘레 여백 4칸을 기본으로 두고, 4칸보다 줄이면 찍힘 확인에서 '주의'로 알려 줘요. 무늬 둘레에 다른 그림이나 글씨가 붙으면 안 읽힐 수 있어서예요. 틀을 넣으면 틀이 무늬에 붙지 않게 여백이 2칸 밑으로 내려가지 않아요.</p>
-<p>이 사이트의 크기(cm)는 <strong>무늬 한 변(여백·틀 빼고)</strong>이에요. 실제 스티커는 여백만큼 더 커요. 25×25칸 무늬에 여백 4칸을 양쪽에 두면 33칸이라, 무늬를 2cm로 잡으면 스티커 한 변은 약 2.64cm가 돼요.</p>
+<p>휴대폰이 무늬가 어디서 시작하는지 알려면 둘레에 빈 띠가 있어야 해요. 오래QR은 둘레 여백 4칸을 기본으로 두고, 4칸보다 줄이면 찍힘 확인에서 '주의'로 알려 줘요. 무늬 둘레에 다른 그림이나 글씨가 붙으면 안 읽힐 수 있어서예요. 틀을 넣으면 틀이 무늬에 붙지 않게 여백이 2칸 밑으로 내려가지 않아요.</p>
+<p>오래QR의 크기(cm)는 <strong>무늬 한 변(여백·틀 빼고)</strong>이에요. 실제 스티커는 여백만큼 더 커요. 25×25칸 무늬에 여백 4칸을 양쪽에 두면 33칸이라, 무늬를 2cm로 잡으면 스티커 한 변은 약 2.64cm가 돼요.</p>
 
 <h2>A4 스티커 시트에는 몇 장 들어가나요?</h2>
 <p>저장 칸의 '스티커 시트 인쇄'는 A4에 여백 10mm, 칸 사이 6mm를 두고 재단선을 그려 같은 QR을 여러 장 놓아요. <code>https://example.com/menu</code>(25×25칸, 여백 4칸, 틀 없음)로 만들어 본 장 수예요.</p>
@@ -201,7 +201,7 @@ ARTICLES = [
     dict(
         lang='ko', slug='qr-logo', pair='qr-code-with-logo', tool='/ko/', checked=CHECKED,
         title='QR코드에 로고 넣기: 오류 복원·로고 크기·색 대비 | 오래QR',
-        description='로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 이 사이트의 찍힘 확인 규칙 그대로.',
+        description='로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 오래QR의 찍힘 확인 규칙 그대로.',
         h1='QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비',
         lead='QR코드 가운데에 로고를 얹어도 찍히는 건 <strong>오류 복원</strong> 덕분이에요. 일부가 가려지거나 더러워져도 남은 칸으로 내용을 되살리는 기능인데, 로고가 가린 칸도 이 여유에서 빠져요. 그래서 로고를 넣을 땐 오류 복원을 H(약 30%)로 올리고, 로고는 작게, 점은 바탕보다 충분히 진하게 해야 해요. 오래QR은 로고를 넣으면 H로 올리고, 점과 바탕의 밝기 대비가 2:1 미만이면 \'안 읽힘\', 4:1 미만이면 \'주의\'로 알려 줘요.',
         body='''
@@ -216,10 +216,10 @@ ARTICLES = [
 <tr><td>H</td><td>약 30%</td><td>더러워지기 쉬운 곳(공장 등)</td></tr>
 </tbody>
 </table>
-<p>퍼센트는 전체 부호어 가운데 되살릴 수 있는 비율이에요. 로고가 가린 칸 하나가 여러 부호어에 걸칠 수 있어서, 로고 넓이가 이 퍼센트에 딱 맞으면 이미 여유가 없는 셈이에요. 이 사이트는 로고를 넣으면 H로 올리고 '오류 복원을 H(30%)로 올렸어요'라고 알려요. 로고를 빼면 원래 단계로 돌아가요.</p>
+<p>퍼센트는 전체 부호어 가운데 되살릴 수 있는 비율이에요. 로고가 가린 칸 하나가 여러 부호어에 걸칠 수 있어서, 로고 넓이가 이 퍼센트에 딱 맞으면 이미 여유가 없는 셈이에요. 오래QR은 로고를 넣으면 H로 올리고 '오류 복원을 H(30%)로 올렸어요'라고 알려요. 로고를 빼면 원래 단계로 돌아가요.</p>
 
 <h2>로고는 얼마나 크게 넣어도 되나요?</h2>
-<p>로고가 비운 넓이가 복원 여유의 3분의 1쯤(H에서 약 10.5%)을 넘지 않을 만큼이에요. 이 사이트의 찍힘 확인은 이 선을 넘으면 '주의'를 띄워요. '로고 크기'(QR 한 변에 대한 비율)를 바꿔 가며 <code>https://example.com/menu</code>를 H로 만들어 본 결과예요.</p>
+<p>로고가 비운 넓이가 복원 여유의 3분의 1쯤(H에서 약 10.5%)을 넘지 않을 만큼이에요. 오래QR의 찍힘 확인은 이 선을 넘으면 '주의'를 띄워요. '로고 크기'(QR 한 변에 대한 비율)를 바꿔 가며 <code>https://example.com/menu</code>를 H로 만들어 본 결과예요.</p>
 <table>
 <thead><tr><th>로고 크기</th><th>비운 넓이(무늬 대비)</th><th>찍힘 확인</th></tr></thead>
 <tbody>
@@ -233,7 +233,7 @@ ARTICLES = [
 <p>'로고 뒤 점 비우기'(기본으로 켜짐)는 로고 둘레 칸을 깨끗이 비워 로고가 점에 섞이지 않게 해요. 로고 가장자리가 투명하면 '로고 뒤 바탕 깔기'를 켜면 또렷해져요.</p>
 
 <h2>색은 어떻게 고르나요? 대비 2:1과 4:1</h2>
-<p>휴대폰 카메라는 색이 아니라 밝기 차이로 점을 구별해요. 이 사이트는 점 색과 바탕색의 밝기 대비를 계산해 2:1 미만이면 그림을 읽기 전에 '안 읽힘', 2~4:1이면 '주의'로 판정해요. 흰 바탕에서 계산한 예예요.</p>
+<p>휴대폰 카메라는 색이 아니라 밝기 차이로 점을 구별해요. 오래QR은 점 색과 바탕색의 밝기 대비를 계산해 2:1 미만이면 그림을 읽기 전에 '안 읽힘', 2~4:1이면 '주의'로 판정해요. 흰 바탕에서 계산한 예예요.</p>
 <table>
 <thead><tr><th>점 색</th><th>바탕</th><th>밝기 대비</th><th>찍힘 확인</th></tr></thead>
 <tbody>
@@ -455,7 +455,7 @@ ARTICLES = [
 <li><strong>Need scan counts? Add UTM tags.</strong> Staycode does not count scans, because scans never pass through it. Turn on UTM tags in the <a href="/">QR code generator</a> and the link gets tags like the one below, so visits from the code show up separately in your own Google Analytics or similar tool.</li>
 </ol>
 <figure><code>https://example.com/menu?utm_source=qr&amp;utm_medium=print&amp;utm_campaign=fall-flyer-2026</code></figure>
-<p>The tags take the content from 24 to 84 bytes, which grows the pattern from 25×25 to 37×37 modules at error correction level M (generated with this site's encoder). More modules make small prints harder to scan, so see <a href="/guide/qr-code-print-size/">QR code print size</a> before you shrink it.</p>
+<p>The tags take the content from 24 to 84 bytes, which grows the pattern from 25×25 to 37×37 modules at error correction level M (generated with Staycode's encoder). More modules make small prints harder to scan, so see <a href="/guide/qr-code-print-size/">QR code print size</a> before you shrink it.</p>
 
 <h2>Is a static code always the right choice?</h2>
 <p>For anything you print and leave in place for years, such as a menu, packaging, a sign or a business card, a static code pointing to a page you own avoids depending on anyone else. The trade-off is that the link inside cannot change, so choose it carefully. If you really need to change destinations without touching your own site, that is what dynamic services sell, and it is worth reading their trial and cancellation terms before you print.</p>
@@ -470,7 +470,7 @@ ARTICLES = [
         lead=r'A WiFi QR code is a single line of text such as <code>WIFI:T:WPA;S:Cafe Staycode;P:sun\:rise\;42;;</code> stored in the image. When guests point their camera at it, the phone offers to join that network with that password. Enter the name and password in the <a href="/wifi/">WiFi QR code generator</a> and the escaping is done for you. Because the password sits inside the image, changing it on your router means making and printing a new code.',
         body=r'''
 <h2>What goes inside a WiFi QR code?</h2>
-<p>Four fields separated by semicolons. The format is documented on the ZXing wiki, and this site follows it exactly.</p>
+<p>Four fields separated by semicolons. The format is documented on the ZXing wiki, and Staycode follows it exactly.</p>
 <table>
 <thead><tr><th>Field</th><th>Meaning</th><th>Example</th></tr></thead>
 <tbody>
@@ -483,7 +483,7 @@ ARTICLES = [
 <p>The line ends with two semicolons (<code>;;</code>). In this generator, routers using WPA, WPA2 or WPA3 are stored as <code>WPA</code>, and very old routers as <code>WEP</code>. The format also defines <code>WPA2-EAP</code> for enterprise networks where each person has their own login, but this tool does not create those.</p>
 
 <h2>What if the password has ; or : in it?</h2>
-<p>A backslash goes in front. Five characters, <code>\ ; , : "</code>, have a special meaning in the format, and left alone they would make a phone cut the password short. Here is what this site actually stores:</p>
+<p>A backslash goes in front. Five characters, <code>\ ; , : "</code>, have a special meaning in the format, and left alone they would make a phone cut the password short. Here is what Staycode actually stores:</p>
 <table>
 <thead><tr><th>Router password</th><th>Stored in the code</th></tr></thead>
 <tbody>
@@ -540,7 +540,7 @@ ARTICLES = [
 <p>The QR Code Generator blog (checked October 14, 2026) puts the minimum for close-up codes at 2×2 cm, readable from about 20 cm, and gives examples of a 2-inch code at about 2 feet and an 8-inch code at about 6 to 7 feet. It presents the 10:1 ratio as a rule of thumb. In dim light or where people scan at an angle, go one size up.</p>
 
 <h2>Why does more content need a bigger print?</h2>
-<p>More data means more modules (the small squares), so at the same printed width each module gets smaller. Generated with this site's encoder at error correction level M:</p>
+<p>More data means more modules (the small squares), so at the same printed width each module gets smaller. Generated with Staycode's encoder at error correction level M:</p>
 <table>
 <thead><tr><th>Content</th><th>Bytes</th><th>Modules</th><th>One module at 2 cm</th></tr></thead>
 <tbody>
@@ -663,7 +663,7 @@ ARTICLES = [
 <p>Add more and you get <code>URL:</code> (website), <code>ADR;TYPE=WORK:</code> (address) and <code>NOTE:</code> lines. "Add another phone" adds work, home or fax numbers as separate lines such as <code>TEL;TYPE=WORK</code>. Commas and semicolons in your text are escaped with a backslash, lines longer than 75 bytes are folded as vCard requires, and accented or non-Latin names are stored as UTF-8.</p>
 
 <h2>How much denser does each field make it?</h2>
-<p>Module count grows with the byte count. Same person, more fields, error correction level M, generated with this site's encoder:</p>
+<p>Module count grows with the byte count. Same person, more fields, error correction level M, generated with Staycode's encoder:</p>
 <table>
 <thead><tr><th>Fields</th><th>Bytes</th><th>Modules</th><th>One module at 2 cm (0.8 in)</th></tr></thead>
 <tbody>

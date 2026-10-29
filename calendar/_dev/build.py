@@ -2,9 +2,11 @@
 """한장달력 / Onesheet(calendar.lumenlab.page) 페이지 전부 만들기: python3 calendar/_dev/build.py
 
 - 계산·그리기는 JS 한 곳(assets/core.js, sheet.js). 이 스크립트는 `node _dev/export.js` 로 값을 받아 HTML만 짠다.
-- 문구·글 = _dev/content.py. 만든 HTML·sitemap.xml·rss.xml·404.html·robots.txt 는 손으로 고치지 않는다.
+- 문구·글 = _dev/content.py. 만든 HTML·sitemap.xml·404.html·robots.txt 는 손으로 고치지 않는다.
 - 만드는 것: 영어 / , 한국어 /ko/ 의 도구(첫 화면), 연간(2026~2028), 월(2026-10~2027-12), 공휴일(2026·2027),
-  음력·손 없는 날(한국어), 가이드, 소개·방침·오픈소스 고지, 404, sitemap, rss(한국어 글).
+  음력·손 없는 날(한국어), 가이드, 소개·방침·오픈소스 고지, 404, sitemap.
+- 가이드 HTML 은 루트 빌드(lumenlab/_dev/build_home.py)가 읽어 lumenlab.page/guides/calendar/ 로 내는 원본이다(2026-10-29). 이 사이트에는 올리지 않고
+  (.assetsignore) 옛 주소는 _redirects 가 301 로 보낸다. 그래서 sitemap 에 넣지 않고 rss.xml 도 만들지 않는다(한국어 글 RSS 는 루트가 낸다).
 - lastmod 는 본문·링크·구조화 데이터가 실제로 바뀐 쪽만 올린다(LASTMOD·UPDATED). 배치·CSS만 바뀐 페이지는 올리지 않는다.
 - 글 속 표는 tables() 가 가로로 밀리는 칸으로 감싸고, class="stack" 표에는 휴대폰용 머리글(data-th)을 단다.
 """
@@ -222,6 +224,17 @@ def put(lang, path, html_text, sitemap=True):
     OUT[(P(lang) + path).lstrip('/') + 'index.html'] = html_text
     if sitemap:
         SITEMAP.append((U(lang, path), lastmod(P(lang) + path)))
+
+
+GUIDE_HOME = {'ko': 'https://lumenlab.page/guides/', 'en': 'https://lumenlab.page/en/guides/'}
+
+
+def guide_links(text):
+    # 2026-10-29 가이드는 lumenlab.page/guides/calendar/<slug>/(영어 /en/guides/…)로 옮겼다: /guide/·/ko/guide/ 링크를 새 주소로(목록은 #calendar, 글의 #조각은 그대로)
+    def to(m):
+        root, slug, frag = GUIDE_HOME['ko' if m.group(1) else 'en'], m.group(2) or '', m.group(3) or ''
+        return f'href="{root}#calendar"' if slug in ('', 'index.html') else f'href="{root}calendar/{slug}{frag}"'
+    return re.sub(r'href="/(ko/)?guide(?:/([^"#]*))?(#[^"]*)?"', to, text)
 
 
 def crumbs_ld(lang, items):
@@ -756,7 +769,7 @@ def article_page(lang, a):
            'dateModified': lastmod(P(lang) + path), 'mainEntityOfPage': U(lang, path), 'image': f'{SITE}/{"og-ko.png" if lang == "ko" else "og.png"}',
            'author': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': LUMEN[lang]}, 'publisher': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': LUMEN[lang]}},
           crumbs_ld(lang, [(u['crumb_home'], U(lang)), (u['guide'], U(lang, 'guide/')), (a['title'], U(lang, path))])]
-    put(lang, path, page(lang, head(lang, a['title'] + ' | ' + u['brand'], a['desc'], path, alt=alt, jsonld=ld, og_type='article'), body, cur='guide/', alt_path=alt, scripts=False))
+    put(lang, path, page(lang, head(lang, a['title'] + ' | ' + u['brand'], a['desc'], path, alt=alt, jsonld=ld, og_type='article'), body, cur='guide/', alt_path=alt, scripts=False), sitemap=False)
 
 
 def guide_index(lang):
@@ -767,7 +780,7 @@ def guide_index(lang):
         title, desc, h1, lead = 'Guides: Printing, Week Numbers, Holidays | Onesheet', 'How to print a calendar on one page, 2027 long weekends, ISO and US week numbers, and South Korea’s 2027 public holidays.', 'Guides', 'Short answers to the questions that come up when you print a calendar.'
     body = f'<section class="doc wrap narrow">{crumb(lang, [(u["crumb_home"], p)])}<h1>{h1}</h1><p class="lead">{lead}</p>{guide_list(lang)}</section>\n{ad_slot(lang, "bottom", True)}'
     ld = [crumbs_ld(lang, [(u['crumb_home'], U(lang)), (u['guide'], U(lang, 'guide/'))])]
-    put(lang, 'guide/', page(lang, head(lang, title, desc, 'guide/', jsonld=ld), body, cur='guide/', scripts=False))
+    put(lang, 'guide/', page(lang, head(lang, title, desc, 'guide/', jsonld=ld), body, cur='guide/', scripts=False), sitemap=False)
 
 
 # ---------------- 소개·방침·고지·404 ----------------
@@ -817,6 +830,9 @@ def main():
     lunar_page()
     son_page()
     not_found()
+    # 가이드 글·목록은 sitemap 에 넣지 않았다(put(sitemap=False)): 이 사이트는 그 주소를 루트로 301 한다. 링크도 새 주소로
+    for rel in OUT:
+        OUT[rel] = guide_links(OUT[rel])
     if '--check' in sys.argv:   # 저장된 HTML이 지금 빌드 결과와 같은지만 본다
         stale = [rel for rel, text in OUT.items() if not (ROOT / rel).exists() or (ROOT / rel).read_text(encoding='utf-8') != text]
         print('빌드 결과가 최신' if not stale else '낡은 파일: ' + ', '.join(stale[:8]))
@@ -828,22 +844,14 @@ def main():
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f'<url><loc>{u}</loc><lastmod>{d}</lastmod></url>' for u, d in SITEMAP]
     (ROOT / 'sitemap.xml').write_text('\n'.join(sm) + '\n</urlset>\n', encoding='utf-8')
-    items = []
-    for a in C.ARTICLES['ko']:
-        link = U('ko', f'guide/{a["slug"]}/')
-        full = re.sub(r'href="/', f'href="{SITE}/', article_body('ko', a)).replace(' class="stack"', '')
-        items.append(f'<item><title>{esc(a["title"])}</title><link>{link}</link><guid isPermaLink="true">{link}</guid><pubDate>Fri, 09 Oct 2026 00:00:00 +0900</pubDate>'
-                     f'<description><![CDATA[<p>{a["lead"]}</p>{full}]]></description></item>')
-    rss = (f'<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>한장달력 가이드</title><link>{SITE}/ko/guide/</link>'
-           f'<description>공휴일, 달력 인쇄, 음력을 정리한 한장달력의 글</description><language>ko</language>\n' + '\n'.join(items) + '\n</channel></rss>\n')
-    (ROOT / 'rss.xml').write_text(rss, encoding='utf-8')
     static = {
         'robots.txt': ('# 검색엔진과 AI 검색·답변 서비스 모두 허용 (AI 답변에 출처로 나오게)\n' + ''.join(
             f'User-agent: {b}\nAllow: /\n\n' for b in ['*', 'Googlebot', 'Yeti', 'Bingbot', 'OAI-SearchBot', 'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'PerplexityBot', 'Google-Extended'])
             + f'Sitemap: {SITE}/sitemap.xml\n'),
         'ads.txt': 'google.com, pub-9496167591465154, DIRECT, f08c47fec0942fa0\n',
         'googlea614029e84d58498.html': 'google-site-verification: googlea614029e84d58498.html',
-        '.assetsignore': '_dev\ntests\nCLAUDE.md\nwrangler.jsonc\n.assetsignore\n.deploy-actions\n.wrangler\n.DS_Store\n',
+        # guide/ = 가이드 HTML(/guide/·/ko/guide/)은 루트 빌드가 읽는 원본이라 만들지만 올리지 않는다(2026-10-29, 옛 주소는 _redirects 가 301)
+        '.assetsignore': '_dev\ntests\nCLAUDE.md\nwrangler.jsonc\n.assetsignore\n.deploy-actions\n.wrangler\n.DS_Store\nguide/\n',
         '.deploy-actions': '',
         'wrangler.jsonc': '''// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'calendar' 하나 (한장달력 / Onesheet, 인쇄용 달력)
 // 주소: https://calendar.lumenlab.page (영어 /, 한국어 /ko/). workers.dev 주소는 켜지 않는다(같은 내용이 두 주소에 생기지 않게).

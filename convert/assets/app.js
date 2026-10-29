@@ -1171,7 +1171,8 @@ const RUNNERS = {
           return {
             items: [{ blob, name: outName(files[0], 'md'), preview: 'text', text: r.text }],
             note: stats, warn: [r.empty.length ? t('mdScan', { list: listPages(r.empty) }) : '', r.sparse && r.sparse.length ? t('mdSparse', { list: listPages(r.sparse) }) : ''].filter(Boolean).join(' '),
-            tip: [t('mdTip'), h('a', { href: BASE + 'guide/' + (LANG === 'ko' ? 'pdf-markdown-ai-token' : 'pdf-to-markdown-for-ai') + '/' }, t('mdGuide'))]
+            // 가이드는 2026-10-29 lumenlab.page/guides/convert/ (영어 /en/guides/convert/)로 옮겼다
+            tip: [t('mdTip'), h('a', { href: 'https://lumenlab.page/' + (LANG === 'ko' ? 'guides/convert/pdf-markdown-ai-token' : 'en/guides/convert/pdf-to-markdown-for-ai') + '/' }, t('mdGuide'))]
           };
         }
       };

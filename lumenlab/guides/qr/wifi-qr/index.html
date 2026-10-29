@@ -57,7 +57,7 @@
 <div class="lead"><p>와이파이 QR은 <code>WIFI:T:WPA;S:카페오래;P:abc\;123;;</code> 같은 한 줄을 그림에 담은 거예요. 손님이 카메라로 찍으면 휴대폰이 이 이름과 비밀번호로 연결하라고 띄워요. <a href="https://qr.lumenlab.page/ko/wifi/">와이파이 QR코드 만들기</a>에 이름과 비밀번호만 넣으면 기호 처리까지 알아서 해요. 비밀번호가 그림 안에 그대로 들어가서, 공유기 비밀번호를 바꾸면 QR도 다시 만들어 인쇄해야 해요.</p></div>
   
 <h2>와이파이 QR에는 무엇이 들어가나요?</h2>
-<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 이 사이트도 그대로 만들어요.</p>
+<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 오래QR도 그대로 만들어요.</p>
 <div class="tbl"><table>
 <thead><tr><th>칸</th><th>뜻</th><th>예</th></tr></thead>
 <tbody>
@@ -67,10 +67,10 @@
 <tr><td><code>H:</code></td><td>숨긴 네트워크면 <code>true</code></td><td><code>H:true</code></td></tr>
 </tbody>
 </table></div><p class="tbl-hint">표는 옆으로 밀어서 보세요</p>
-<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 이 사이트에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
+<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 오래QR에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
 
 <h2>비밀번호에 ; 나 : 같은 기호가 있으면요?</h2>
-<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 이 사이트에서 직접 넣어 본 결과예요.</p>
+<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 오래QR에 직접 넣어 본 결과예요.</p>
 <div class="tbl"><table>
 <thead><tr><th>공유기 비밀번호</th><th>QR에 담기는 값</th></tr></thead>
 <tbody>
@@ -111,7 +111,7 @@
 </article>
 <aside class="gd__more" aria-labelledby="gd-more" style="--tc:#2f6b4f;--tcp:82%">
   <h2 id="gd-more">오래QR 가이드 더 보기</h2>
-  <ol class="gbooks"><li><a href="/guides/qr/qr-manryo/"><b>QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</b><span>QR코드 자체에는 유효기간이 없어요. 멈추는 건 업체 서버를 거치는 동적 QR이에요. 체험이 끝나면 꺼지는 구조, 내 QR이 동적인지 찍어서 확인하는 법, 이미 인쇄했다면 할 일.</span></a></li><li><a href="/guides/qr/qr-inswae-keugi/"><b>QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</b><span>가까이서 찍는 QR은 무늬 한 변 2cm 이상, 찍는 거리는 크기의 10배쯤까지가 경험칙이에요. 명함·테이블·포스터·현수막 크기 표, 둘레 여백 4칸, A4 스티커 시트에 몇 장 들어가는지.</span></a></li><li><a href="/guides/qr/qr-logo/"><b>QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</b><span>로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 이 사이트의 찍힘 확인 규칙 그대로.</span></a></li><li><a href="/guides/qr/myeongham-qr/"><b>명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</b><span>명함 QR은 이름·전화·이메일을 vCard 글로 담아, 찍으면 휴대폰이 연락처 추가를 띄워요. 실제로 담기는 줄, 칸을 많이 넣으면 얼마나 촘촘해지는지, 명함 인쇄 팁.</span></a></li><li><a href="/guides/qr/qr-daeryang/"><b>QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</b><span>목록을 붙여 넣거나 CSV를 올리면 같은 꾸밈으로 한 번에 최대 1,000개를 만들어 ZIP으로 받아요. URL·글·와이파이마다 다른 줄 규칙, 엑셀에서 붙여 넣는 법, 파일 이름 정하기.</span></a></li><li><a href="/guides/qr/qr-ssing/"><b>큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</b><span>큐싱은 QR코드로 가짜 사이트에 보내는 사기예요. 찍은 뒤 바로 열지 말고 실제 도메인부터 보세요. 정부 권고와 통계, 주소에서 볼 곳, 스캐너가 알려 주는 경고 신호를 예시로.</span></a></li></ol>
+  <ol class="gbooks"><li><a href="/guides/qr/qr-manryo/"><b>QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</b><span>QR코드 자체에는 유효기간이 없어요. 멈추는 건 업체 서버를 거치는 동적 QR이에요. 체험이 끝나면 꺼지는 구조, 내 QR이 동적인지 찍어서 확인하는 법, 이미 인쇄했다면 할 일.</span></a></li><li><a href="/guides/qr/qr-inswae-keugi/"><b>QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</b><span>가까이서 찍는 QR은 무늬 한 변 2cm 이상, 찍는 거리는 크기의 10배쯤까지가 경험칙이에요. 명함·테이블·포스터·현수막 크기 표, 둘레 여백 4칸, A4 스티커 시트에 몇 장 들어가는지.</span></a></li><li><a href="/guides/qr/qr-logo/"><b>QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</b><span>로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 오래QR의 찍힘 확인 규칙 그대로.</span></a></li><li><a href="/guides/qr/myeongham-qr/"><b>명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</b><span>명함 QR은 이름·전화·이메일을 vCard 글로 담아, 찍으면 휴대폰이 연락처 추가를 띄워요. 실제로 담기는 줄, 칸을 많이 넣으면 얼마나 촘촘해지는지, 명함 인쇄 팁.</span></a></li><li><a href="/guides/qr/qr-daeryang/"><b>QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</b><span>목록을 붙여 넣거나 CSV를 올리면 같은 꾸밈으로 한 번에 최대 1,000개를 만들어 ZIP으로 받아요. URL·글·와이파이마다 다른 줄 규칙, 엑셀에서 붙여 넣는 법, 파일 이름 정하기.</span></a></li><li><a href="/guides/qr/qr-ssing/"><b>큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</b><span>큐싱은 QR코드로 가짜 사이트에 보내는 사기예요. 찍은 뒤 바로 열지 말고 실제 도메인부터 보세요. 정부 권고와 통계, 주소에서 볼 곳, 스캐너가 알려 주는 경고 신호를 예시로.</span></a></li></ol>
   <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
 </aside>
 </div>

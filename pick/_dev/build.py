@@ -3,8 +3,10 @@
 
 - 화면 글자·도구 설명·FAQ = _dev/content.json, 글 = _dev/articles.json(목록) + _dev/articles/<언어>-<주소>.html(본문),
   소개·방침 = _dev/pages.json.
-- 만드는 것: 영어 / , 한국어 /ko/ 의 도구 7개·가이드 목록·글·소개·방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 만드는 것: 영어 / , 한국어 /ko/ 의 도구 7개·가이드 목록·글·소개·방침, 404.html, sitemap.xml.
   만든 파일은 손으로 고치지 않는다.
+- 가이드 목록·글(guide/)은 2026-10-29부터 루멘랩 홈(lumenlab.page/guides/pick/<주소>/)이 읽어 싣는 원본이다.
+  여기서는 만들기만 하고 sitemap에 넣지 않으며 배포하지 않는다(.assetsignore). 옛 주소는 _redirects 가 홈으로 보낸다.
 - 글 속 숫자는 {{이름}} 자리에 _dev/sim_ladder.json(시뮬레이션)과 tests/fixtures.json(정확한 계산)에서 넣는다(손으로 적지 않는다).
 - 소개·방침 본문 = _dev/pages/<언어>-<about|privacy>.html.
 - 글꼴: _dev/fonts.json(= _dev/font.py가 만든 조각 글꼴의 파일 이름과 글자 범위)이 있으면 <head>에 preload와 @font-face를 넣는다.
@@ -674,6 +676,19 @@ def screen_chars(files=None):
 
 
 # ---------------- 쓰기 ----------------
+# 2026-10-29 가이드를 루멘랩 홈으로 옮겼다: 모든 HTML의 가이드 링크(<a href>)를 홈 주소로 바꾼다(글의 canonical·hreflang·JSON-LD는 그대로. 홈 빌드가 읽는다)
+GUIDE_LINK = re.compile(r'(<a\b[^>]*?\shref=")(?:https://pick\.lumenlab\.page)?/(ko/)?guide/([^"#]*)(#[^"]*)?"')
+
+
+def moved_guides(text):
+    """/ko/guide/<주소>/ → https://lumenlab.page/guides/pick/<주소>/, /guide/<주소>/ → …/en/guides/pick/<주소>/ (#조각은 그대로). 목록은 홈 가이드 모음의 이 사이트 칸(#pick)."""
+    def rep(m):
+        home = 'https://lumenlab.page/' + ('' if m.group(2) else 'en/') + 'guides/'
+        slug = m.group(3)
+        return m.group(1) + (home + '#pick' if slug in ('', 'index.html') else home + 'pick/' + slug + (m.group(4) or '')) + '"'
+    return GUIDE_LINK.sub(rep, text)
+
+
 def write(rel, text):
     p = ROOT / rel
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -690,22 +705,8 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in ARTICLES['ko']:
-        link = f'{SITE}/ko/guide/{a["slug"]}/'
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link}</link><guid>{link}</guid>'
-                  f'<pubDate>Fri, 09 Oct 2026 00:00:00 GMT</pubDate><description>{esc(a["desc"])}</description>'
-                  f'<content:encoded><![CDATA[{article_body(a, "ko")}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>공평뽑기 가이드</title><link>{SITE}/ko/</link><description>돌림판, 사다리타기, 제비뽑기를 공평하게 쓰는 법</description><language>ko</language>
-{items}</channel></rss>
-'''
-
-
 def build():
-    """(경로, 내용) 목록과 sitemap 주소 목록을 돌려준다."""
+    """(경로, 내용) 목록과 sitemap 주소 목록을 돌려준다. 한국어 가이드 RSS는 루멘랩 홈(lumenlab.page/guides/rss.xml)이 낸다(2026-10-29)."""
     files = []
     paths = []
     for lang in LANGS:
@@ -715,17 +716,16 @@ def build():
             path = tool(tid, lang)['path']
             files.append((f'{base}{path}index.html', tool_page(tid, lang)))
             paths.append(p + path)
+        # 가이드 목록·글은 홈이 읽는 원본이라 만들기만 한다(sitemap에 넣지 않는다)
         files.append((f'{base}guide/index.html', guide_index(lang)))
-        paths.append(f'{p}guide/')
         for a in ARTICLES[lang]:
             files.append((f'{base}guide/{a["slug"]}/index.html', article_page(a, lang)))
-            paths.append(f'{p}guide/{a["slug"]}/')
         for kind in ('about', 'privacy'):
             files.append((f'{base}{kind}/index.html', doc_page(kind, lang)))
             paths.append(f'{p}{kind}/')
     files.append(('404.html', not_found()))
     files.append(('sitemap.xml', sitemap(paths)))
-    files.append(('rss.xml', rss()))
+    files = [(rel, moved_guides(text) if rel.endswith('.html') else text) for rel, text in files]
     return files, paths
 
 
@@ -739,7 +739,7 @@ def main():
         return
     for rel, text in files:
         write(rel, text)
-    print(f'built {len(paths)} pages')
+    print(f'built {len(paths)} pages + 가이드 {sum(1 for rel, _ in files if "guide/" in rel)}쪽(sitemap 밖)')
 
 
 if __name__ == '__main__':

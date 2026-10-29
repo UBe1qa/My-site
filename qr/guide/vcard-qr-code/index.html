@@ -34,9 +34,9 @@
 <header class="top">
   <div class="wrap top-in">
     <a class="logo" href="/"><svg class="lg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect class="lg-l" x="1" y="1" width="26" height="26" rx="7"/><path class="lg-s" d="M6 6h16v10l-6 6H6z"/><path class="lg-c" d="M22 16l-6 6v-4.5a1.5 1.5 0 0 1 1.5-1.5z"/><rect class="lg-q" x="8.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="15.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="8.5" y="15.5" width="4" height="4" rx="1"/></svg><span>Staycode</span></a>
-    <nav class="nav" aria-label="Main menu"><a href="/">Generator</a><a href="/wifi/">WiFi</a><a href="/vcard/">vCard</a><a href="/bulk/">Bulk</a><a href="/scan/">Scanner</a><a href="/guide/" aria-current="page">Guides</a></nav>
+    <nav class="nav" aria-label="Main menu"><a href="/">Generator</a><a href="/wifi/">WiFi</a><a href="/vcard/">vCard</a><a href="/bulk/">Bulk</a><a href="/scan/">Scanner</a><a href="https://lumenlab.page/en/guides/#qr" aria-current="page">Guides</a></nav>
     <div class="top-r">
-      <a class="lang" href="/ko/guide/myeongham-qr/" lang="ko" hreflang="ko">한국어</a>
+      <a class="lang" href="https://lumenlab.page/guides/qr/myeongham-qr/" lang="ko" hreflang="ko">한국어</a>
       <details class="setting"><summary aria-label="Display settings" title="Display settings"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8.2 4.6.1-1.1-.1-1.1 2-1.6-2-3.4-2.4 1a8 8 0 0 0-1.9-1.1L15.5 3h-4l-.4 2.7a8 8 0 0 0-1.9 1.1l-2.4-1-2 3.4 2 1.6-.1 1.1.1 1.1-2 1.6 2 3.4 2.4-1a8 8 0 0 0 1.9 1.1l.4 2.7h4l.4-2.7a8 8 0 0 0 1.9-1.1l2.4 1 2-3.4z"/></svg></summary>
         <div class="set-pop"><p class="set-row"><span>Effects</span><span class="seg" role="group" aria-label="Effects" id="set-fx"><button type="button" data-fx="0" aria-pressed="false">Off</button><button type="button" data-fx="1" aria-pressed="false">Light</button><button type="button" data-fx="2" aria-pressed="false">Full</button></span></p>
         <p class="set-row"><span>Theme</span><span class="seg" role="group" aria-label="Theme" id="set-theme"><button type="button" data-theme="light" aria-pressed="false">Light</button><button type="button" data-theme="dark" aria-pressed="false">Dark</button></span></p>
@@ -47,7 +47,7 @@
 </header>
 <main id="main">
 <article class="wrap narrow prose">
-  <nav class="crumbs" aria-label="breadcrumb"><a href="/">Staycode</a><span aria-hidden="true">›</span><a href="/guide/">Guides</a><span aria-hidden="true">›</span><span>vCard QR codes: what goes inside and how it saves</span></nav>
+  <nav class="crumbs" aria-label="breadcrumb"><a href="/">Staycode</a><span aria-hidden="true">›</span><a href="https://lumenlab.page/en/guides/#qr">Guides</a><span aria-hidden="true">›</span><span>vCard QR codes: what goes inside and how it saves</span></nav>
   <h1>vCard QR codes: what goes inside and how it saves</h1>
   <p class="meta">Last checked <time datetime="2026-10-14">October 14, 2026</time></p>
   <div class="lead"><p>A vCard QR code stores contact details such as your name, phone and email as <strong>vCard</strong> text inside the image. When someone scans it, the phone shows an "Add contact" screen and they tap Save. Every field you add makes the code denser, so for a business card, stick to the essentials: name, phone and email.</p></div>
@@ -69,7 +69,7 @@
 <p>Add more and you get <code>URL:</code> (website), <code>ADR;TYPE=WORK:</code> (address) and <code>NOTE:</code> lines. "Add another phone" adds work, home or fax numbers as separate lines such as <code>TEL;TYPE=WORK</code>. Commas and semicolons in your text are escaped with a backslash, lines longer than 75 bytes are folded as vCard requires, and accented or non-Latin names are stored as UTF-8.</p>
 
 <h2>How much denser does each field make it?</h2>
-<p>Module count grows with the byte count. Same person, more fields, error correction level M, generated with this site's encoder:</p>
+<p>Module count grows with the byte count. Same person, more fields, error correction level M, generated with Staycode's encoder:</p>
 <div class="tbl"><table>
 <thead><tr><th>Fields</th><th>Bytes</th><th>Modules</th><th>One module at 2 cm (0.8 in)</th></tr></thead>
 <tbody>
@@ -86,7 +86,7 @@
 
 <h2>Printing it on a business card</h2>
 <ul>
-<li><strong>Size:</strong> a common rule of thumb is at least 2 cm (0.8 in) for close-up scans. Go bigger for a dense card, or cut fields. The full table is in <a href="/guide/qr-code-print-size/">QR code print size</a>.</li>
+<li><strong>Size:</strong> a common rule of thumb is at least 2 cm (0.8 in) for close-up scans. Go bigger for a dense card, or cut fields. The full table is in <a href="https://lumenlab.page/en/guides/qr/qr-code-print-size/">QR code print size</a>.</li>
 <li><strong>Files:</strong> give your printer SVG or PDF so it stays sharp at any size. PDF sizes refer to the pattern itself, without the quiet zone or frame.</li>
 <li><strong>Color:</strong> to match your card, change the dot color and keep the background light. Check that the stamp says it scans.</li>
 <li><strong>Trademark line:</strong> according to DENSO WAVE's FAQ (checked October 14, 2026), you do not need a trademark notice when you only print the code image on a business card, and commercial use needs no fee or license. The notice is only asked for when you use the words "QR Code".</li>
@@ -99,11 +99,11 @@
   <p class="cta"><a class="btn main" href="/vcard/">Make a vCard QR code</a></p>
   <section class="sources"><h2>Sources</h2><ul><li><a href="https://www.qrcode.com/en/faq.html" rel="noopener">DENSO WAVE: QR Code FAQ (trademark and fees)</a> <span class="chk-d">(Last checked October 14, 2026)</span></li><li><a href="https://www.qr-code-generator.com/blog/minimum-qr-code-size/" rel="noopener">QR Code Generator blog: Minimum QR code size (rule of thumb)</a> <span class="chk-d">(Last checked October 14, 2026)</span></li></ul></section>
 </article>
-<div class="wrap narrow"><section class="sec" aria-labelledby="guides-h"><h2 id="guides-h">Read next</h2><ul class="cards"><li><a href="/guide/do-qr-codes-expire/"><b>Do QR codes expire? Static vs dynamic codes</b><span>The QR image never expires; dynamic codes that route through a provider can stop. How trials switch codes off, how to spot one, and what to do if printed.</span></a></li><li><a href="/guide/wifi-qr-code/"><b>WiFi QR codes: format, special characters and hidden networks</b><span>A WiFi QR code holds one line like WIFI:T:WPA;S:name;P:pass;; How password symbols are escaped, hidden and open networks, iPhone and Android, and sign tips.</span></a></li><li><a href="/guide/qr-code-print-size/"><b>QR code print size: how big should it be?</b><span>Close-up QR codes: at least 2 cm (0.8 in) wide, scanning from about 10 times their width. A size table, dense codes, quiet zone and sticker sheets.</span></a></li></ul><p class="more-link"><a href="/guide/">All guides</a></p></section></div>
+<div class="wrap narrow"><section class="sec" aria-labelledby="guides-h"><h2 id="guides-h">Read next</h2><ul class="cards"><li><a href="https://lumenlab.page/en/guides/qr/do-qr-codes-expire/"><b>Do QR codes expire? Static vs dynamic codes</b><span>The QR image never expires; dynamic codes that route through a provider can stop. How trials switch codes off, how to spot one, and what to do if printed.</span></a></li><li><a href="https://lumenlab.page/en/guides/qr/wifi-qr-code/"><b>WiFi QR codes: format, special characters and hidden networks</b><span>A WiFi QR code holds one line like WIFI:T:WPA;S:name;P:pass;; How password symbols are escaped, hidden and open networks, iPhone and Android, and sign tips.</span></a></li><li><a href="https://lumenlab.page/en/guides/qr/qr-code-print-size/"><b>QR code print size: how big should it be?</b><span>Close-up QR codes: at least 2 cm (0.8 in) wide, scanning from about 10 times their width. A size table, dense codes, quiet zone and sticker sheets.</span></a></li></ul><p class="more-link"><a href="https://lumenlab.page/en/guides/#qr">All guides</a></p></section></div>
 </main>
 <footer class="foot"><div class="wrap">
   <a class="lumen" id="lumen" href="https://lumenlab.page/en/"><span class="lsheet" aria-hidden="true"><span class="ls" style="--i:0"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="19" rx="3" class="lk-a"/><rect x="5" y="7" width="22" height="6" rx="3" class="lk-b"/><rect x="10" y="17" width="4" height="4" rx="1" class="lk-b"/></svg></span><span class="ls" style="--i:1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" class="lk-a"/><path d="M16 16V5a11 11 0 0 1 9.5 5.5z" class="lk-b"/><circle cx="16" cy="16" r="2.5" class="lk-c"/></svg></span><span class="ls" style="--i:2"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M9 13h14M9 17h10M9 21h6" class="lk-l"/></svg></span><span class="ls" style="--i:3"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3" class="lk-a"/><rect x="11" y="17" width="10" height="3" rx="1.5" class="lk-b"/></svg></span><span class="ls" style="--i:4"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M10 12l2.5 8 3.5-8 3.5 8 2.5-8M9 15h14" class="lk-l"/></svg></span><span class="ls" style="--i:5"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="16" rx="3" class="lk-a"/><path d="M11 15l3.5 3.5L21 12" class="lk-l"/><path d="M12 27h8" class="lk-l"/></svg></span><span class="ls-gap"></span></span><span class="lumen-t"><b>More free tools from Lumen Lab</b><span>Calendar, picker, typing test, character counter…</span></span><span class="lgo" aria-hidden="true">→</span></a>
-  <p class="foot-links"><a href="/">Generator</a><a href="/wifi/">WiFi</a><a href="/vcard/">vCard</a><a href="/bulk/">Bulk</a><a href="/scan/">Scanner</a><a href="/guide/">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:contact@lumenlab.page">Contact</a></p>
+  <p class="foot-links"><a href="/">Generator</a><a href="/wifi/">WiFi</a><a href="/vcard/">vCard</a><a href="/bulk/">Bulk</a><a href="/scan/">Scanner</a><a href="https://lumenlab.page/en/guides/#qr">Guides</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:contact@lumenlab.page">Contact</a></p>
   <p class="tm">QR Code is a registered trademark of DENSO WAVE INCORPORATED.</p>
   <small>© 2026 Lumen Lab · Staycode</small>
 </div></footer>

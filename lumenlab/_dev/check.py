@@ -46,7 +46,7 @@ ok(not [f for f in ad_pages if not GUIDE_ART.match(f) and 'adsbygoogle' in open(
 
 # 가이드(2026-10-29 도구 사이트에서 옮김): 도구 글 하나하나가 이 사이트 글로 있고, canonical = 자기 주소, 사이트맵에 있고,
 # hreflang 짝은 서로 가리키고, 글 안 링크는 이 사이트 주소(파일 있음)나 https 주소뿐, 영어 글은 영어 쪽으로만, RSS 는 한국어 글 전부
-sys.path.insert(0, here); import build_info as BI, build_guides as BG
+sys.path.insert(0, here); sys.dont_write_bytecode = True; import build_info as BI, build_guides as BG
 sm_txt = open(os.path.join(site, 'sitemap.xml')).read()
 gfound = BG.find(site, cat); gbad = []
 ALT = re.compile(r'<link rel="alternate" hreflang="([^"]+)" href="https://lumenlab\.page([^"]*)"')
@@ -429,8 +429,9 @@ with sync_playwright() as p:
         ok(pg.evaluate("!!document.querySelector('dialog.sheet') && document.querySelector('dialog.sheet').open") and pg.evaluate('location.pathname') == f'{pre}/works/{tid}/' and not errs,
            f'예전 {pre}/guides/{frag} 로 와도 홈의 소개 창이 뜸 ({pg.evaluate("location.pathname")}) {errs[:2]}')
         c.close()
-    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/guides/#qr'); pg.wait_for_timeout(500)
-    ok(pg.evaluate('location.pathname+location.hash') == '/guides/#qr' and pg.evaluate("document.querySelector('#qr').getBoundingClientRect().top") < 200, '가이드 모음 #도구 로 오면 그 도구 칸에서 멈춤(넘기지 않음)')
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/guides/#qr'); pg.wait_for_timeout(1800)   # 사이트 전체 scroll-behavior:smooth 라 그 칸까지 부드럽게 내려감(약 1초)
+    top = pg.evaluate("document.querySelector('#qr').getBoundingClientRect().top")
+    ok(pg.evaluate('location.pathname+location.hash') == '/guides/#qr' and 0 <= top < 220, f'가이드 모음 #도구 로 오면 그 도구 칸에서 멈춤(넘기지 않음, 칸 위 {round(top)}px)')
     c.close()
 
     # 첫 화면 들어올 때 카메라는 움직이지 않음(처음부터 배율 1, 사용자가 '과하다'고 뺌). 제목 낱말 셋이 있고 위층 이웃 창에 불이 켜지면 그 낱말도 켜짐

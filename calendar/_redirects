@@ -1,0 +1,11 @@
+# 2026-10-29 가이드 글을 루멘랩 본 사이트(lumenlab.page/guides/calendar/, 영어 /en/guides/calendar/)로 옮겼다(글을 루트 한곳에 모음). 옛 주소는 같은 글로 영구 이동.
+# 가이드 HTML 은 루트 빌드가 읽는 원본이라 계속 만들지만 올리지 않는다(.assetsignore 의 guide/). 목록 주소가 먼저(아래 /* 보다 위).
+/ko/guide/ https://lumenlab.page/guides/#calendar 301
+/ko/guide https://lumenlab.page/guides/#calendar 301
+/ko/guide/index.html https://lumenlab.page/guides/#calendar 301
+/guide/ https://lumenlab.page/en/guides/#calendar 301
+/guide https://lumenlab.page/en/guides/#calendar 301
+/guide/index.html https://lumenlab.page/en/guides/#calendar 301
+/rss.xml https://lumenlab.page/guides/rss.xml 301
+/ko/guide/* https://lumenlab.page/guides/calendar/:splat 301
+/guide/* https://lumenlab.page/en/guides/calendar/:splat 301

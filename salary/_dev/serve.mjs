@@ -8,7 +8,7 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '
 const port = +process.argv[2] || 8446;
 http.createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  if (p.split('/').some((s) => s === '_dev' || s === 'tests' || s === '..') || p === '/_headers') p = '/__nope';   // _headers 는 Cloudflare 가 읽는 설정이라 주소로 열리지 않는다
+  if (p.split('/').some((s) => s === '_dev' || s === 'tests' || s === '..') || p === '/_headers' || p === '/_redirects') p = '/__nope';   // _headers·_redirects 는 Cloudflare 가 읽는 설정이라 주소로 열리지 않는다
   let f = path.join(ROOT, p);
   if (p.endsWith('/')) f = path.join(f, 'index.html');
   else if (fs.existsSync(f) && fs.statSync(f).isDirectory()) { res.writeHead(307, { Location: p + '/' }); return res.end(); }

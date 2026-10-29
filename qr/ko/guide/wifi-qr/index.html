@@ -34,9 +34,9 @@
 <header class="top">
   <div class="wrap top-in">
     <a class="logo" href="/ko/"><svg class="lg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect class="lg-l" x="1" y="1" width="26" height="26" rx="7"/><path class="lg-s" d="M6 6h16v10l-6 6H6z"/><path class="lg-c" d="M22 16l-6 6v-4.5a1.5 1.5 0 0 1 1.5-1.5z"/><rect class="lg-q" x="8.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="15.5" y="8.5" width="4" height="4" rx="1"/><rect class="lg-q" x="8.5" y="15.5" width="4" height="4" rx="1"/></svg><span>오래QR</span></a>
-    <nav class="nav" aria-label="주요 메뉴"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/">스캐너</a><a href="/ko/guide/" aria-current="page">가이드</a></nav>
+    <nav class="nav" aria-label="주요 메뉴"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/">스캐너</a><a href="https://lumenlab.page/guides/#qr" aria-current="page">가이드</a></nav>
     <div class="top-r">
-      <a class="lang" href="/guide/wifi-qr-code/" lang="en" hreflang="en">English</a>
+      <a class="lang" href="https://lumenlab.page/en/guides/qr/wifi-qr-code/" lang="en" hreflang="en">English</a>
       <details class="setting"><summary aria-label="화면 설정" title="화면 설정"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8.2 4.6.1-1.1-.1-1.1 2-1.6-2-3.4-2.4 1a8 8 0 0 0-1.9-1.1L15.5 3h-4l-.4 2.7a8 8 0 0 0-1.9 1.1l-2.4-1-2 3.4 2 1.6-.1 1.1.1 1.1-2 1.6 2 3.4 2.4-1a8 8 0 0 0 1.9 1.1l.4 2.7h4l.4-2.7a8 8 0 0 0 1.9-1.1l2.4 1 2-3.4z"/></svg></summary>
         <div class="set-pop"><p class="set-row"><span>이펙트</span><span class="seg" role="group" aria-label="이펙트" id="set-fx"><button type="button" data-fx="0" aria-pressed="false">끔</button><button type="button" data-fx="1" aria-pressed="false">가볍게</button><button type="button" data-fx="2" aria-pressed="false">화려하게</button></span></p>
         <p class="set-row"><span>화면</span><span class="seg" role="group" aria-label="화면" id="set-theme"><button type="button" data-theme="light" aria-pressed="false">밝게</button><button type="button" data-theme="dark" aria-pressed="false">어둡게</button></span></p>
@@ -47,13 +47,13 @@
 </header>
 <main id="main">
 <article class="wrap narrow prose">
-  <nav class="crumbs" aria-label="breadcrumb"><a href="/ko/">오래QR</a><span aria-hidden="true">›</span><a href="/ko/guide/">가이드</a><span aria-hidden="true">›</span><span>와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</span></nav>
+  <nav class="crumbs" aria-label="breadcrumb"><a href="/ko/">오래QR</a><span aria-hidden="true">›</span><a href="https://lumenlab.page/guides/#qr">가이드</a><span aria-hidden="true">›</span><span>와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</span></nav>
   <h1>와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</h1>
   <p class="meta">마지막 확인 <time datetime="2026-10-14">2026년 10월 14일</time></p>
   <div class="lead"><p>와이파이 QR은 <code>WIFI:T:WPA;S:카페오래;P:abc\;123;;</code> 같은 한 줄을 그림에 담은 거예요. 손님이 카메라로 찍으면 휴대폰이 이 이름과 비밀번호로 연결하라고 띄워요. <a href="/ko/wifi/">와이파이 QR코드 만들기</a>에 이름과 비밀번호만 넣으면 기호 처리까지 알아서 해요. 비밀번호가 그림 안에 그대로 들어가서, 공유기 비밀번호를 바꾸면 QR도 다시 만들어 인쇄해야 해요.</p></div>
   
 <h2>와이파이 QR에는 무엇이 들어가나요?</h2>
-<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 이 사이트도 그대로 만들어요.</p>
+<p>세미콜론(;)으로 나눈 칸 네 개예요. ZXing 위키에 정리된 형식이고, 오래QR도 그대로 만들어요.</p>
 <div class="tbl"><table>
 <thead><tr><th>칸</th><th>뜻</th><th>예</th></tr></thead>
 <tbody>
@@ -63,10 +63,10 @@
 <tr><td><code>H:</code></td><td>숨긴 네트워크면 <code>true</code></td><td><code>H:true</code></td></tr>
 </tbody>
 </table></div><p class="tbl-hint">표는 옆으로 밀어서 보세요</p>
-<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 이 사이트에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
+<p>끝은 세미콜론 두 개(<code>;;</code>)로 닫아요. 오래QR에서 '보안'은 WPA/WPA2/WPA3 공유기면 <code>WPA</code>, 아주 오래된 공유기면 <code>WEP</code>로 담아요. 형식에는 회사용 <code>WPA2-EAP</code>(사람마다 아이디가 따로 있는 방식)도 있지만, 이 도구는 그 방식은 만들지 않아요.</p>
 
 <h2>비밀번호에 ; 나 : 같은 기호가 있으면요?</h2>
-<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 이 사이트에서 직접 넣어 본 결과예요.</p>
+<p>앞에 역슬래시(\)를 붙여 담아요. 형식에서 <code>\ ; , : "</code> 다섯 글자는 칸을 나누는 뜻이 있어서, 그대로 두면 휴대폰이 비밀번호를 중간에서 끊어 읽어요. 오래QR에 직접 넣어 본 결과예요.</p>
 <div class="tbl"><table>
 <thead><tr><th>공유기 비밀번호</th><th>QR에 담기는 값</th></tr></thead>
 <tbody>
@@ -93,7 +93,7 @@
 
 <h2>가게 안내판으로 붙일 때</h2>
 <ul>
-<li><strong>크기:</strong> 찍는 거리가 QR 크기의 10배쯤까지라는 경험칙으로 계산하면, 테이블에서 30~50cm 떨어져 찍으면 무늬 한 변 3~5cm, 계산대 뒤 벽처럼 1m 떨어지면 10cm쯤이에요. 자세한 표는 <a href="/ko/guide/qr-inswae-keugi/">QR코드 인쇄 크기</a>에 있어요.</li>
+<li><strong>크기:</strong> 찍는 거리가 QR 크기의 10배쯤까지라는 경험칙으로 계산하면, 테이블에서 30~50cm 떨어져 찍으면 무늬 한 변 3~5cm, 계산대 뒤 벽처럼 1m 떨어지면 10cm쯤이에요. 자세한 표는 <a href="https://lumenlab.page/guides/qr/qr-inswae-keugi/">QR코드 인쇄 크기</a>에 있어요.</li>
 <li><strong>문구:</strong> 틀에서 '와이파이 연결' 문구를 고르면 무엇을 찍는 QR인지 바로 보여요.</li>
 <li><strong>글자도 같이:</strong> 카메라가 못 읽는 손님을 위해 와이파이 이름과 비밀번호를 QR 옆에 글자로도 적어 두면 좋아요.</li>
 <li><strong>붙이기 전에:</strong> 이름·비밀번호는 대소문자와 빈칸까지 공유기와 같아야 해요. 인쇄하기 전에 휴대폰으로 한 번 찍어 연결해 보세요.</li>
@@ -103,11 +103,11 @@
   <p class="cta"><a class="btn main" href="/ko/wifi/">와이파이 QR 만들러 가기</a></p>
   <section class="sources"><h2>출처</h2><ul><li><a href="https://github.com/zxing/zxing/wiki/Barcode-Contents" rel="noopener">ZXing 위키: Barcode Contents(와이파이 형식)</a> <span class="chk-d">(마지막 확인 2026년 10월 14일)</span></li><li><a href="https://www.qr-code-generator.com/blog/minimum-qr-code-size/" rel="noopener">QR Code Generator 블로그: QR코드 최소 크기(경험칙)</a> <span class="chk-d">(마지막 확인 2026년 10월 14일)</span></li></ul></section>
 </article>
-<div class="wrap narrow"><section class="sec" aria-labelledby="guides-h"><h2 id="guides-h">더 읽을거리</h2><ul class="cards"><li><a href="/ko/guide/qr-manryo/"><b>QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</b><span>QR코드 자체에는 유효기간이 없어요. 멈추는 건 업체 서버를 거치는 동적 QR이에요. 체험이 끝나면 꺼지는 구조, 내 QR이 동적인지 찍어서 확인하는 법, 이미 인쇄했다면 할 일.</span></a></li><li><a href="/ko/guide/qr-inswae-keugi/"><b>QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</b><span>가까이서 찍는 QR은 무늬 한 변 2cm 이상, 찍는 거리는 크기의 10배쯤까지가 경험칙이에요. 명함·테이블·포스터·현수막 크기 표, 둘레 여백 4칸, A4 스티커 시트에 몇 장 들어가는지.</span></a></li><li><a href="/ko/guide/qr-logo/"><b>QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</b><span>로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 이 사이트의 찍힘 확인 규칙 그대로.</span></a></li></ul><p class="more-link"><a href="/ko/guide/">가이드 전체 보기</a></p></section></div>
+<div class="wrap narrow"><section class="sec" aria-labelledby="guides-h"><h2 id="guides-h">더 읽을거리</h2><ul class="cards"><li><a href="https://lumenlab.page/guides/qr/qr-manryo/"><b>QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</b><span>QR코드 자체에는 유효기간이 없어요. 멈추는 건 업체 서버를 거치는 동적 QR이에요. 체험이 끝나면 꺼지는 구조, 내 QR이 동적인지 찍어서 확인하는 법, 이미 인쇄했다면 할 일.</span></a></li><li><a href="https://lumenlab.page/guides/qr/qr-inswae-keugi/"><b>QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</b><span>가까이서 찍는 QR은 무늬 한 변 2cm 이상, 찍는 거리는 크기의 10배쯤까지가 경험칙이에요. 명함·테이블·포스터·현수막 크기 표, 둘레 여백 4칸, A4 스티커 시트에 몇 장 들어가는지.</span></a></li><li><a href="https://lumenlab.page/guides/qr/qr-logo/"><b>QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</b><span>로고를 넣어도 찍히는 건 오류 복원 덕분이에요. 로고는 가린 만큼 복원 여유를 써요. 오류 복원 단계, 로고 크기별 판정, 대비 2:1·4:1 기준까지 오래QR의 찍힘 확인 규칙 그대로.</span></a></li></ul><p class="more-link"><a href="https://lumenlab.page/guides/#qr">가이드 전체 보기</a></p></section></div>
 </main>
 <footer class="foot"><div class="wrap">
   <a class="lumen" id="lumen" href="https://lumenlab.page/"><span class="lsheet" aria-hidden="true"><span class="ls" style="--i:0"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="19" rx="3" class="lk-a"/><rect x="5" y="7" width="22" height="6" rx="3" class="lk-b"/><rect x="10" y="17" width="4" height="4" rx="1" class="lk-b"/></svg></span><span class="ls" style="--i:1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" class="lk-a"/><path d="M16 16V5a11 11 0 0 1 9.5 5.5z" class="lk-b"/><circle cx="16" cy="16" r="2.5" class="lk-c"/></svg></span><span class="ls" style="--i:2"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M9 13h14M9 17h10M9 21h6" class="lk-l"/></svg></span><span class="ls" style="--i:3"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3" class="lk-a"/><rect x="11" y="17" width="10" height="3" rx="1.5" class="lk-b"/></svg></span><span class="ls" style="--i:4"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="3" class="lk-a"/><path d="M10 12l2.5 8 3.5-8 3.5 8 2.5-8M9 15h14" class="lk-l"/></svg></span><span class="ls" style="--i:5"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="16" rx="3" class="lk-a"/><path d="M11 15l3.5 3.5L21 12" class="lk-l"/><path d="M12 27h8" class="lk-l"/></svg></span><span class="ls-gap"></span></span><span class="lumen-t"><b>루멘랩의 다른 무료 도구</b><span>달력, 뽑기, 글자수, 타자, 급여 계산…</span></span><span class="lgo" aria-hidden="true">→</span></a>
-  <p class="foot-links"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/">스캐너</a><a href="/ko/guide/">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page">문의</a></p>
+  <p class="foot-links"><a href="/ko/">만들기</a><a href="/ko/wifi/">와이파이</a><a href="/ko/vcard/">명함</a><a href="/ko/bulk/">대량</a><a href="/ko/scan/">스캐너</a><a href="https://lumenlab.page/guides/#qr">가이드</a><a href="/ko/about/">소개</a><a href="/ko/privacy/">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page">문의</a></p>
   <p class="tm">QR 코드는 (주)덴소웨이브의 등록 상표입니다.</p>
   <small>© 2026 Lumen Lab · 오래QR</small>
 </div></footer>

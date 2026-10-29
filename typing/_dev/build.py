@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """토독(typing.lumenlab.page) 페이지 전부 만들기: python3 typing/_dev/build.py   (--check 는 낡았는지만 본다)
 
-- 화면 글 = _dev/content.py, 가이드 글 = _dev/articles.py. 만든 HTML·sitemap.xml·rss.xml·404.html 은 손으로 고치지 않는다.
-- 만드는 것: 영어 / (x-default), 한국어 /ko/ 의 도구(속도 측정·자리 연습·문장 연습·영타 연습), 가이드 목록과 글, 소개, 방침, 404.html, sitemap.xml, rss.xml(한국어 글).
+- 화면 글 = _dev/content.py, 가이드 글 = _dev/articles.py. 만든 HTML·sitemap.xml·404.html 은 손으로 고치지 않는다.
+- 만드는 것: 영어 / (x-default), 한국어 /ko/ 의 도구(속도 측정·자리 연습·문장 연습·영타 연습), 가이드 목록과 글, 소개, 방침, 404.html, sitemap.xml.
+- 가이드 목록·글(guide/)은 2026-10-29부터 루멘랩 홈(lumenlab.page/guides/typing/<주소>/)이 읽어 싣는 원본이다.
+  여기서는 만들기만 하고 sitemap 에 넣지 않으며 배포하지 않는다(.assetsignore). 옛 주소는 _redirects 가 홈으로 보낸다. 한국어 가이드 RSS 도 홈이 낸다.
 - 배치는 도구마다 다르다: 속도 측정·영타 = A(종이 한 장), 자리 연습 = C(화면 자판), 문장 연습 = B(보고 치는 글 + 내가 친 글).
 - lastmod 는 본문·구조화 데이터·링크가 실제로 바뀐 날만 적는다(UPDATED). 배치·CSS만 바뀐 페이지는 그대로 둔다.
 - 글꼴: _dev/fonts.json(= _dev/font.py 가 만든 조각 글꼴의 파일 이름과 담은 글자)이 있으면 <head> 에 preload 와 @font-face(Todok Sans)를 넣는다.
@@ -13,8 +15,6 @@ sys.dont_write_bytecode = True  # 폴더에 __pycache__ 를 남기지 않는다
 import html
 import json
 import re
-from datetime import datetime, timezone
-from email.utils import format_datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -768,21 +768,17 @@ def sitemap(paths):
     return '\n'.join(out) + '\n'
 
 
-def rss():
-    items = ''
-    for a in A.ARTICLES['ko']:
-        link_ = f'{SITE}/ko/guide/{a["slug"]}/'
-        full = f'<p>{a["answer"]}</p>' + expand(a['body'], 'ko').replace('<!--ad-->', '')
-        y, mo, d = (int(x) for x in a.get('published', FIRST).split('-'))
-        pub = format_datetime(datetime(y, mo, d, tzinfo=timezone.utc), usegmt=True)
-        items += (f'<item><title>{esc(a["h1"])}</title><link>{link_}</link><guid>{link_}</guid>'
-                  f'<pubDate>{pub}</pubDate><description>{esc(a["desc"])}</description>'
-                  f'<content:encoded><![CDATA[{full}]]></content:encoded></item>\n')
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel><title>토독 타자 연습 가이드</title><link>{SITE}/ko/guide/</link><description>타수 계산, 자리 익히기, 한글 조합 입력</description><language>ko</language>
-{items}</channel></rss>
-'''
+# 2026-10-29 가이드를 루멘랩 홈으로 옮겼다: 모든 HTML 의 가이드 링크(<a href>)를 홈 주소로 바꾼다(글의 canonical·hreflang·JSON-LD 는 그대로. 홈 빌드가 읽는다)
+GUIDE_LINK = re.compile(r'(<a\b[^>]*?\shref=")(?:https://typing\.lumenlab\.page)?/(ko/)?guide/([^"#]*)(#[^"]*)?"')
+
+
+def moved_guides(text):
+    """/ko/guide/<주소>/ → https://lumenlab.page/guides/typing/<주소>/, /guide/<주소>/ → …/en/guides/typing/<주소>/ (#조각은 그대로). 목록은 홈 가이드 모음의 이 사이트 칸(#typing)."""
+    def rep(m):
+        home = 'https://lumenlab.page/' + ('' if m.group(2) else 'en/') + 'guides/'
+        slug = m.group(3)
+        return m.group(1) + (home + '#typing' if slug in ('', 'index.html') else home + 'typing/' + slug + (m.group(4) or '')) + '"'
+    return GUIDE_LINK.sub(rep, text)
 
 
 def build():
@@ -799,14 +795,15 @@ def build():
         for _, _, key in NAV[lang]:
             if (lang, key) in TOOLS:
                 add(lang, *tool_page(lang, key))
-        add(lang, *guide_index(lang))
+        # 가이드 목록·글은 홈이 읽는 원본이라 만들기만 한다(sitemap 에 넣지 않는다)
+        add(lang, *guide_index(lang), index=False)
         for a in A.ARTICLES[lang]:
-            add(lang, *article_page(lang, a))
+            add(lang, *article_page(lang, a), index=False)
         for key in ('about', 'privacy'):
             add(lang, *doc_page(lang, key))
     out['404.html'] = not_found()
     out['sitemap.xml'] = sitemap(paths)
-    out['rss.xml'] = rss()
+    out = {rel: moved_guides(text) if rel.endswith('.html') else text for rel, text in out.items()}
     return out, paths
 
 
@@ -891,7 +888,7 @@ def main():
             sys.exit(1)
         print(f'빌드 결과 최신({len(out)}개 파일)')
         return
-    print(f'built {len(paths)} pages + 404, sitemap, rss')
+    print(f'built {len(paths)} pages + 가이드 {sum(1 for rel in out if "guide/" in rel)}쪽(sitemap 밖) + 404, sitemap')
 
 
 if __name__ == '__main__':

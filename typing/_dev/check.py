@@ -6,6 +6,7 @@ hreflang 짝·자기 자신·x-default / <html lang> / 영어 페이지의 lang=
 방침: 웹 비콘 문장·partner-sites 링크·Cloudflare Web Analytics·저장 키 이름이 코드와 같음 / 광고 코드가 있어야 할 곳·없어야 할 곳 /
 첫 HTML 에 제목·본문·내부 링크 / 확인된 사실(연구 값)에는 출처 링크와 확인한 날 / 화면 말('글쇠'·'낱말' 대신 '키'·'단어') / 배포 파일 /
 3단계에 더한 것: 조각 글꼴이 화면 글자·연습 글을 전부 담는지, 404 가 두 언어 틀을 담는지, 결과의 총 속도 줄·화면 읽기용 문단, 통과 기준·터치 자판 문구.
+2026-10-29: 가이드를 루멘랩 홈으로 옮긴 것(sitemap·RSS 에 가이드 없음, 가이드 링크는 홈 주소이고 원본 글이 있음, _redirects·.assetsignore).
 """
 import sys
 sys.dont_write_bytecode = True
@@ -112,7 +113,10 @@ def main():
     ign = (ROOT / '.assetsignore').read_text().split()
     sm = (ROOT / 'sitemap.xml').read_text(encoding='utf-8')
     sm_paths = re.findall(r'<loc>' + re.escape(SITE) + r'([^<]*)</loc>', sm)
-    ok(sorted(sm_paths) == sorted(pages), f'sitemap 주소와 만든 페이지가 다르다: {sorted(set(sm_paths) ^ set(pages))}')
+    # 2026-10-29 가이드 목록·글은 루멘랩 홈(lumenlab.page/guides/typing/)으로 옮겼다: sitemap 에는 없고, 파일은 홈이 읽는 원본이라 그대로 만들어 같이 본다
+    listed = sorted(p for p in pages if not re.match(r'/(ko/)?guide/', p))
+    ok(sorted(sm_paths) == listed, f'sitemap 주소와 만든 페이지(가이드 빼고)가 다르다: {sorted(set(sm_paths) ^ set(listed))}')
+    ok(not [p for p in sm_paths if '/guide/' in p], f'sitemap 에 가이드 주소가 있다(루멘랩 홈으로 옮김): {[p for p in sm_paths if "/guide/" in p]}')
     ok(len(sm_paths) == len(set(sm_paths)), 'sitemap 에 겹치는 주소')
     ok(all(re.search(r'<lastmod>\d{4}-\d\d-\d\d</lastmod>', l) for l in sm.split('\n') if '<loc>' in l), 'sitemap lastmod')
     titles, descs, parsed = {}, {}, {}
@@ -161,6 +165,18 @@ def main():
                 if tp is None and target in pages:
                     tp = Text(); tp.feed(pages[target]); parsed[target] = tp
                 ok(tp is not None and frag in tp.ids, f'{path} 없는 #해시 {h}')
+        # 가이드 링크는 루멘랩 홈 주소로(2026-10-29): 옛 주소(/guide/·/ko/guide/)로 가는 링크가 없고, 홈 주소의 글은 여기서 만든 원본(#해시까지)이 있다
+        old = [h for h in p.links if re.match(r'(?:https://typing\.lumenlab\.page)?/(?:ko/)?guide(?:[/#?]|$)', h)]
+        ok(not old, f'{path} 옛 가이드 주소로 가는 링크 {old[:3]}')
+        ok(('https://lumenlab.page/guides/#typing' if lang == 'ko' else 'https://lumenlab.page/en/guides/#typing') in p.links, f'{path} 메뉴·꼬리말의 가이드 링크가 루멘랩 홈 가이드 모음(같은 언어)이 아니다')
+        for h in p.links:
+            if not h.startswith(('https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/')):
+                continue
+            m = re.fullmatch(r'https://lumenlab\.page/(en/)?guides/(?:#typing|typing/([^/#]+)/(?:#(.+))?)', h)
+            orig = m and m.group(2) and ('/guide/' if m.group(1) else '/ko/guide/') + m.group(2) + '/'
+            if orig and orig in pages and orig not in parsed:
+                tp = Text(); tp.feed(pages[orig]); parsed[orig] = tp
+            ok(m and (not orig or (orig in pages and (not m.group(3) or m.group(3) in parsed[orig].ids))), f'{path} 루멘랩 홈의 가이드 링크에 여기서 만든 원본 글이 없다 {h}')
         # 영어 페이지: lang="ko" 밖 한글 0 (속성·구조화 데이터·설정 JSON 포함. tj-site 의 한국어 안내 두 줄은 화면에 lang="ko" 로 들어간다)
         if lang == 'en':
             vis = ''.join(p.text) + ' '.join(p.attrs_ko)
@@ -274,8 +290,10 @@ def main():
     ok(nf.count('data-l="en"') == 3 and nf.count('data-l="ko" lang="ko"') == 3, '404: 머리·본문·꼬리마다 두 언어 틀')
     ok("location.pathname" in nf.split('</head>')[0] and "h.lang='ko'" in nf.split('</head>')[0], '404: 주소를 보고 언어를 고르는 스크립트가 <head> 에 있다')
     ok(nf.count('id="lumen"') == 1 and nf.count('<main') == 1 and len(re.findall(r'<nav class="nav', nf)) == 2, '404: id 가 겹치지 않고 메뉴는 언어마다 하나씩')
-    for navlink in ('/ko/practice/', '/ko/sentences/', '/ko/english/', '/ko/guide/', '/practice/', '/sentences/', '/guide/'):
+    # 메뉴의 가이드는 루멘랩 홈 가이드 모음의 이 사이트 칸으로(2026-10-29)
+    for navlink in ('/ko/practice/', '/ko/sentences/', '/ko/english/', 'https://lumenlab.page/guides/#typing', '/practice/', '/sentences/', 'https://lumenlab.page/en/guides/#typing'):
         ok(f'href="{navlink}"' in nf, f'404 메뉴에 {navlink}')
+    ok(not re.search(r'href="(?:https://typing\.lumenlab\.page)?/(?:ko/)?guide', nf), '404 에 옛 가이드 주소로 가는 링크')
 
     # 방침: 웹 비콘 문장, partner-sites 링크, 방문 통계, 저장 키
     js_keys = set()
@@ -299,10 +317,8 @@ def main():
     for path, src in pages.items():
         ok(not re.search(r'아무것도 보내지 않|어떤 정보도 보내지|sends nothing|nothing leaves', src, re.I), f'{path} 너무 넓게 쓴 안심 문구')
 
-    # rss: 한국어 글만
-    rss = (ROOT / 'rss.xml').read_text(encoding='utf-8')
-    ko_articles = sorted(p for p in pages if re.fullmatch(r'/ko/guide/[^/]+/', p))
-    ok(sorted(re.findall(r'<guid>' + re.escape(SITE) + r'([^<]+)</guid>', rss)) == ko_articles, 'rss.xml 은 한국어 글 전부, 그것만')
+    # rss: 한국어 가이드 RSS 는 루멘랩 홈(lumenlab.page/guides/rss.xml)이 낸다(2026-10-29). 이 사이트는 rss.xml 을 만들지 않는다
+    ok(not (ROOT / 'rss.xml').exists(), 'rss.xml 이 남아 있다(한국어 가이드 RSS 는 루멘랩 홈으로 옮김)')
 
     # 배포 파일
     ok((ROOT / 'ads.txt').read_text().strip() == 'google.com, pub-9496167591465154, DIRECT, f08c47fec0942fa0', 'ads.txt')
@@ -312,6 +328,16 @@ def main():
     wr = (ROOT / 'wrangler.jsonc').read_text(encoding='utf-8')
     ok('"name": "typing"' in wr and '"workers_dev": false' in wr and '"pattern": "typing.lumenlab.page", "custom_domain": true' in wr and '"not_found_handling": "404-page"' in wr, 'wrangler.jsonc')
     ok(all(x in ign for x in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions')), '.assetsignore')
+    ok('guide/' in ign and '_redirects' not in ign, '.assetsignore: 가이드 HTML(guide/·ko/guide/)은 올리지 않고 _redirects 는 올린다')
+    # 옛 가이드 주소 → 루멘랩 홈(2026-10-29). 고정 주소가 * 규칙보다 먼저
+    red = (ROOT / '_redirects').read_text(encoding='utf-8') if (ROOT / '_redirects').exists() else ''
+    rules = [line.split() for line in red.splitlines() if line.strip() and not line.startswith('#')]
+    want = [[src, dst, '301'] for src, dst in (
+        ('/ko/guide/', 'https://lumenlab.page/guides/#typing'), ('/ko/guide', 'https://lumenlab.page/guides/#typing'), ('/ko/guide/index.html', 'https://lumenlab.page/guides/#typing'),
+        ('/guide/', 'https://lumenlab.page/en/guides/#typing'), ('/guide', 'https://lumenlab.page/en/guides/#typing'), ('/guide/index.html', 'https://lumenlab.page/en/guides/#typing'),
+        ('/rss.xml', 'https://lumenlab.page/guides/rss.xml'),
+        ('/ko/guide/*', 'https://lumenlab.page/guides/typing/:splat'), ('/guide/*', 'https://lumenlab.page/en/guides/typing/:splat'))]
+    ok(rules == want, f'_redirects: 옛 가이드 목록·글·RSS 주소를 루멘랩 홈으로 301(고정 주소 먼저, * 규칙 뒤): {rules}')
     ok((ROOT / '.deploy-actions').exists() and (ROOT / '.deploy-actions').stat().st_size == 0, '.deploy-actions(빈 파일)')
     for f in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ko.png'):
         ok((ROOT / f).exists() and (ROOT / f).stat().st_size > 200, f'{f} 없음')

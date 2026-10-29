@@ -58,7 +58,7 @@
 <div class="lead"><p>A WiFi QR code is a single line of text such as <code>WIFI:T:WPA;S:Cafe Staycode;P:sun\:rise\;42;;</code> stored in the image. When guests point their camera at it, the phone offers to join that network with that password. Enter the name and password in the <a href="https://qr.lumenlab.page/wifi/">WiFi QR code generator</a> and the escaping is done for you. Because the password sits inside the image, changing it on your router means making and printing a new code.</p></div>
   
 <h2>What goes inside a WiFi QR code?</h2>
-<p>Four fields separated by semicolons. The format is documented on the ZXing wiki, and this site follows it exactly.</p>
+<p>Four fields separated by semicolons. The format is documented on the ZXing wiki, and Staycode follows it exactly.</p>
 <div class="tbl"><table>
 <thead><tr><th>Field</th><th>Meaning</th><th>Example</th></tr></thead>
 <tbody>
@@ -71,7 +71,7 @@
 <p>The line ends with two semicolons (<code>;;</code>). In this generator, routers using WPA, WPA2 or WPA3 are stored as <code>WPA</code>, and very old routers as <code>WEP</code>. The format also defines <code>WPA2-EAP</code> for enterprise networks where each person has their own login, but this tool does not create those.</p>
 
 <h2>What if the password has ; or : in it?</h2>
-<p>A backslash goes in front. Five characters, <code>\ ; , : "</code>, have a special meaning in the format, and left alone they would make a phone cut the password short. Here is what this site actually stores:</p>
+<p>A backslash goes in front. Five characters, <code>\ ; , : "</code>, have a special meaning in the format, and left alone they would make a phone cut the password short. Here is what Staycode actually stores:</p>
 <div class="tbl"><table>
 <thead><tr><th>Router password</th><th>Stored in the code</th></tr></thead>
 <tbody>

@@ -15,8 +15,9 @@
 - `assets/style.css` 색·글꼴은 `:root` 토큰. 진초록(`--brand`)은 받기·인쇄·고른 것에만, 빨강·파랑은 종이와 달력 표 안에서만.
 - `assets/ads-config.js` 애드센스: client 있음(자동 광고 켜짐), 수동 자리 번호(`mid`·`bottom`)는 비어 있어 자리가 숨는다. localhost나 `?adpreview`면 빗금 상자, `?noadpreview`면 localhost에서도 끈다(화면 밀림 잴 때).
 - `files/` 미리 만든 받기 파일: PDF 27개(연도 3 × [한국어 A4: 가로·세로·월별] + [영어 Letter·A4: 가로·세로·월별]) + 한국어 엑셀 3개(일요일 시작 기본판. 달력 시트의 칸에는 '대체공휴일 / (노동절)'처럼 괄호 앞에서 줄을 나눠 적는다). `_dev/make_files.py`가 만든다(크로미움이 글자 PDF를 만들고 pypdf로 제목·만든 곳을 적는다).
-- `_dev/build.py` **모든 HTML·sitemap.xml·rss.xml(한국어 글)·404.html·robots.txt·ads.txt·wrangler.jsonc·.assetsignore를 만든다.** `node _dev/export.js`로 계산값·SVG를 받아 HTML만 짠다(계산·그리기 코드는 JS 한 곳). 문구·글 = `_dev/content.py`. 만든 HTML은 손으로 고치지 않는다.
+- `_dev/build.py` **모든 HTML·sitemap.xml·404.html·robots.txt·ads.txt·wrangler.jsonc·.assetsignore를 만든다.** `node _dev/export.js`로 계산값·SVG를 받아 HTML만 짠다(계산·그리기 코드는 JS 한 곳). 문구·글 = `_dev/content.py`. 만든 HTML은 손으로 고치지 않는다.
 - `_dev/content.py` 화면 문구와 글. `MAY1` = 노동절 예외 문장(두 언어): "4명 이하 사업장에는 이 조항이 적용되지 않아요"가 나오는 곳마다 바로 뒤에 붙인다(`check.py`가 지킨다).
+  - 가이드 글(`ARTICLES`)로 만든 `guide/`·`ko/guide/` HTML 은 2026-10-29부터 `lumenlab/_dev/build_home.py` 가 읽어 lumenlab.page/guides/calendar/(영어 /en/guides/calendar/)에 싣는 원본일 뿐이다: 이 사이트는 올리지 않고(`.assetsignore`) sitemap 에도 안 넣으며 옛 주소는 301(`_redirects`), 링크는 새 주소(`guide_links()`). 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
 - `_dev/ref/kasi.json` 공식 참조 자료(한국천문연구원 달력자료, 우주항공청 월력요항, 규정 요지). **이 파일이 기준.**
 - `_dev/gen_data.py` → data.js / `gen_cases.py` → tests/cases.json / `verify_astro.py` → tests/astro.json / `make_files.py` → files/·아이콘·og / `make_fonts.py` → assets/fonts / `sheets.js`·`export.js` = 파이썬이 부르는 노드 쪽.
 - `tests/run.js` 로직·배치·글 속 숫자·PDF 쓰기 테스트. `_dev/check.py` HTML 검사. `_dev/e2e.py` 화면을 실제로 눌러 보는 확인.

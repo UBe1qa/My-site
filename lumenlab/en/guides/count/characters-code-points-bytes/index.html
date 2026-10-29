@@ -61,7 +61,7 @@
 <p><span class="cellrow" aria-hidden="true"><i>👨</i><i class="inv">ZWJ</i><i>👩</i><i class="inv">ZWJ</i><i>👧</i></span></p>
 <p>That is 5 code points. Written in UTF-16 they take 8 units, and in UTF-8 they take 18 bytes. On screen it fills one space, so to a reader it is 1 character.</p>
 <h2>Counted four ways</h2>
-<p>Counted with the “taken apart” panel on this site.</p>
+<p>Counted with the “taken apart” panel in Kankan.</p>
 <div class="tbl wide" data-hint="Swipe the table sideways →"><table>
 <tr><th>Text</th><th class="r">Characters</th><th class="r">Code points</th><th class="r">UTF-16 units</th><th class="r">UTF-8 bytes</th></tr>
 <tr><td>a</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="r">1</td></tr>
@@ -79,7 +79,7 @@
 
 <h2>What each number measures</h2>
 <ul>
-<li><b>Characters</b> are what a reader would point at and call one letter or one emoji. Unicode calls them grapheme clusters, and the rules are in UAX #29. This is what the counters on this site report.</li>
+<li><b>Characters</b> are what a reader would point at and call one letter or one emoji. Unicode calls them grapheme clusters, and the rules are in UAX #29. This is what the Kankan counters report.</li>
 <li><b>Code points</b> are the numbered entries in Unicode. Combining accents, skin tones and joiners are code points of their own, which is how one visible character becomes several.</li>
 <li><b>UTF-16 units</b> are what JavaScript and several other languages count when you ask for the length of a string. A form that validates length that way sees 👨‍👩‍👧 as 8.</li>
 <li><b>Bytes</b> are what gets stored or sent. UTF-8 uses 1 to 4 bytes per code point.</li>

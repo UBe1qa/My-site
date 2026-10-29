@@ -102,7 +102,10 @@ for path in paths:
     pages[path] = parse(rel)
 titles, descs = {}, {}
 sitemap = re.findall(r'<loc>(.*?)</loc>', (ROOT / 'sitemap.xml').read_text())
-ok(sorted(sitemap) == sorted(SITE + p for p in paths), 'sitemap = 만든 페이지')
+# 가이드는 2026-10-29 lumenlab.page/guides/qr/ 로 옮겼다: 가이드 HTML 은 계속 만들어 여기서도 보지만(루트가 읽는 원본) sitemap 에는 없다
+ok(sorted(sitemap) == sorted(SITE + p for p in paths if not B.is_guide(p)), 'sitemap = 만든 페이지(가이드 빼고)')
+ok(not any('/guide' in u for u in sitemap), 'sitemap 에 가이드 주소가 있음')
+GUIDE_URL = re.compile(r'https://lumenlab\.page/(en/)?guides/(?:qr/([^/#?]+)/)?(#[^"]*)?')
 NOADS = {'/guide/', '/ko/guide/', '/about/', '/ko/about/', '/privacy/', '/ko/privacy/'}
 for lang, pre in (('en', '/'), ('ko', '/ko/')):
     ok(B.has_guide(lang) == ((pre + 'guide/') in paths), f'{lang} 가이드 페이지는 글이 있을 때만')
@@ -143,6 +146,15 @@ for path, (p, txt) in pages.items():
             ok(hp.endswith('/') or '.' in hp.rsplit('/', 1)[-1], f'{path} 링크가 폴더 주소가 아님 {h}')
             ok(hp in pages or (ROOT / hp.lstrip('/')).exists(), f'{path} 깨진 내부 링크 {h}')
             ok('.html' not in hp, f'{path} .html 링크 {h}')
+            ok(not B.is_guide(hp), f'{path} 옛 가이드 주소 링크 {h}')
+        # 가이드 링크 = 루트의 새 주소: 목록은 #qr, 글은 그 언어에 실제로 있는 글(#조각은 그 글에 있는 id)
+        if h.startswith('https://lumenlab.page/') and '/guides' in h:
+            m = GUIDE_URL.fullmatch(h)
+            gl = 'en' if m and m.group(1) else 'ko'
+            target = m and m.group(2) and pages.get(('/guide/' if gl == 'en' else '/ko/guide/') + m.group(2) + '/')
+            ok(m and (target or (not m.group(2) and m.group(3) == '#qr')), f'{path} 가이드 링크가 없는 글·목록 {h}')
+            if target and m.group(3):
+                ok(m.group(3)[1:] in target[0].ids, f'{path} 가이드 링크의 없는 #조각 {h}')
     # 광고
     ads = 'adsbygoogle.js' in txt
     if path in NOADS:
@@ -224,9 +236,16 @@ ok(len(C.UI['ko']['dots']) == len(B.C_DOTS) == len(C.UI['en']['dots']) and len(C
 w = (ROOT / 'wrangler.jsonc').read_text()
 for s in ('"name": "qr"', '"workers_dev": false', '"pattern": "qr.lumenlab.page"', '"custom_domain": true', '"not_found_handling": "404-page"', '"html_handling": "auto-trailing-slash"'):
     ok(s in w, f'wrangler.jsonc {s}')
+ok('run_worker_first' not in w and '"main"' not in w, 'wrangler.jsonc: Worker 가 먼저 돌면 _redirects 가 안 먹는다')
 ign = (ROOT / '.assetsignore').read_text().split()
-for s in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions'):
+for s in ('_dev', 'tests', 'CLAUDE.md', 'wrangler.jsonc', '.assetsignore', '.deploy-actions', 'guide/'):
     ok(s in ign, f'.assetsignore {s}')
+# 옛 가이드 주소 → 루트(2026-10-29). 위에서부터 먼저 맞는 줄이 이기므로 목록·rss 줄이 /* 줄보다 위
+red = [ln.split() for ln in (ROOT / '_redirects').read_text().splitlines() if ln.strip() and not ln.startswith('#')]
+K, E = 'https://lumenlab.page/guides/', 'https://lumenlab.page/en/guides/'
+want = ([[s, K + '#qr', '301'] for s in ('/ko/guide/', '/ko/guide', '/ko/guide/index.html')] + [[s, E + '#qr', '301'] for s in ('/guide/', '/guide', '/guide/index.html')]
+        + [['/rss.xml', K + 'rss.xml', '301'], ['/ko/guide/*', K + 'qr/:splat', '301'], ['/guide/*', E + 'qr/:splat', '301']])
+ok([r for r in red if r in want] == want, f'_redirects 가이드 줄(순서까지) {red}')
 ok((ROOT / '.deploy-actions').exists() and (ROOT / '.deploy-actions').stat().st_size == 0, '.deploy-actions 빈 파일')
 ok((ROOT / 'ads.txt').read_text() == (ROOT.parent / 'typing' / 'ads.txt').read_text(), 'ads.txt = typing')
 ok((ROOT / 'googlea614029e84d58498.html').read_text().strip() == 'google-site-verification: googlea614029e84d58498.html', '구글 확인 파일')
@@ -238,9 +257,9 @@ from PIL import Image
 for f in ('og.png', 'og-ko.png'):
     ok(Image.open(ROOT / f).size == (1200, 630), f'{f} 1200×630')
 ok(Image.open(ROOT / 'apple-touch-icon.png').size == (180, 180), 'apple-touch-icon 180')
-# rss: 한국어 글만
-rss = (ROOT / 'rss.xml').read_text()
-ok('/guide/' not in rss.replace('/ko/guide/', ''), 'rss 에 영어 글')
+# rss: 2026-10-29부터 한국어 글 RSS 는 루트가 낸다(lumenlab.page/guides/rss.xml). 여기에는 파일도, 머리의 rss 링크도 없다
+ok(not (ROOT / 'rss.xml').exists(), 'rss.xml 이 남아 있음(루트가 낸다)')
+ok(not any('application/rss+xml' in txt for _, txt in pages.values()), '머리에 rss 링크가 남아 있음')
 # 글: 출처·확인 날짜
 for a in B.ARTICLES:
     ok(a.get('checked') and re.fullmatch(r'\d{4}-\d{2}-\d{2}', a['checked']), f'글 {a.get("slug")} checked')

@@ -2,7 +2,7 @@
 # 오래QR 확인 한 번에: qr/_dev/check.sh            → 빌드 최신·정적 검사·JS 문법·로직 시험(빠른 묶음)
 #                     qr/_dev/check.sh full       → + 로직 시험 전부(디자인 판독·PDF/EPS/ZIP) + 화면 확인 전부(e2e, 10분쯤)
 #                     qr/_dev/check.sh e2e [폴더]  → 화면 확인만(스크린샷 폴더를 주면 거기에)
-#                     qr/_dev/check.sh live       → 배포 뒤 실제 주소가 저장소 파일과 같은지(지휘자가 돌림. 광고 코드가 있는 페이지는 curl 로만 받는다)
+#                     qr/_dev/check.sh live       → 배포 뒤 실제 주소가 저장소 파일과 같은지, 옛 가이드 주소가 루트로 301 인지(지휘자가 돌림. 광고 코드가 있는 페이지는 curl 로만 받는다)
 # 로컬 서버(8471)가 이미 떠 있으면 그대로 쓰고, 없으면 띄웠다가 끈다(남이 띄운 서버는 끄지 않는다).
 cd "$(dirname "$0")/.." || exit 1
 export PYTHONDONTWRITEBYTECODE=1
@@ -32,6 +32,23 @@ if [ "$1" = "live" ]; then
   curl -sI --max-time 20 "$SITE/" | grep -qi '^x-robots-tag' && { echo "  실패 X-Robots-Tag 가 붙어 있음"; fail=1; }
   curl -sI --max-time 20 "$SITE/" | grep -qi 'x-content-type-options: nosniff' || { echo "  실패 nosniff 머리말 없음"; fail=1; }
   curl -sI --max-time 20 "$SITE/assets/app.js" | grep -qi 'max-age=31536000' || { echo "  실패 JS 오래 저장 머리말 없음"; fail=1; }
+  # 3) 가이드는 2026-10-29 루멘랩(lumenlab.page/guides/qr/)으로 옮겼다: 옛 주소는 파일 대신 301 로 새 주소(목록·rss + 저장소의 가이드 글마다)
+  moved() {
+    # 마지막 응답의 상태·Location(프록시를 거치면 맨 앞에 'HTTP/1.1 200 Connection Established' 묶음이 먼저 온다)
+    got=$(curl -s -o /dev/null -D - --max-time 20 "$SITE$1" | tr -d '\r' | awk '/^HTTP\// { c = $2; l = "" } tolower($1) == "location:" { l = $2 } END { print c, l }')
+    [ "$got" = "301 $2" ] || { echo "  실패 $1 → $got (301 $2 여야 함)"; fail=1; }
+  }
+  moved /guide/ https://lumenlab.page/en/guides/#qr
+  moved /ko/guide/ https://lumenlab.page/guides/#qr
+  moved /rss.xml https://lumenlab.page/guides/rss.xml
+  for f in guide/*/index.html ko/guide/*/index.html; do
+    [ -f "$f" ] || continue
+    s=${f%/index.html}; s=${s##*/}
+    case "$f" in
+      ko/*) moved "/ko/guide/$s/" "https://lumenlab.page/guides/qr/$s/" ;;
+      *) moved "/guide/$s/" "https://lumenlab.page/en/guides/qr/$s/" ;;
+    esac
+  done
   [ $fail = 0 ] && echo "live 전부 통과" || echo "live 실패가 있어요"
   exit $fail
 fi
