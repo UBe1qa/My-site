@@ -68,6 +68,10 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">오류 복원을 높이면 칸이 촘촘해지는 대신 일부가 가려져도 읽혀요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">꾸밈 세트 하나로 모양·색·틀이 한꺼번에 바뀌어요</h2>
+    <ol class="sh__steps"><li><b>주소 넣기</b><span>처음부터 ‘URL’이 골라져 있어서 ‘주소(URL)’ 칸에 주소를 넣으면 ‘예시’ 자리에 내 QR이 바로 나와요.</span></li><li><b>꾸밈 세트 고르기</b><span>‘꾸밈 세트’ 10가지 가운데 하나를 고르고, 로고를 넣으려면 ‘로고’ 탭의 ‘내 파일에서 고르기’를 눌러요.</span></li><li><b>도장 확인하기</b><span>고칠 때마다 도장이 ‘확인 중’으로 바뀌고, 0.5초 동안 그대로 두면 그림을 다시 읽어 ‘통과’·‘주의’·‘안 읽힘’으로 찍혀요.</span></li><li><b>파일로 받기</b><span>‘PNG 저장’은 기본 1024px로 받고, ‘다른 파일’에서 JPG·SVG·PDF·EPS를 고르거나 ‘스티커 시트 인쇄 (A4에 여러 장)’로 한 장에 여러 개를 뽑아요.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://qr.lumenlab.page/ko/wifi/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a12 12 0 0 1 16 0M7 12.5a7.5 7.5 0 0 1 10 0M10 16a3 3 0 0 1 4 0M12 19h.01"/></svg></span><b>와이파이 QR</b><span>찍으면 바로 연결</span></a></li><li><a href="https://qr.lumenlab.page/ko/vcard/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM7 10a2 2 0 1 0 0 .01M6 15h4M13 10h5M13 13h5"/></svg></span><b>연락처(명함) QR</b><span>찍자마자 연락처 저장</span></a></li><li><a href="https://qr.lumenlab.page/ko/bulk/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4zM4 12l8 4 8-4M4 16l8 4 8-4"/></svg></span><b>대량 만들기</b><span>1,000개를 ZIP으로</span></a></li><li><a href="https://qr.lumenlab.page/ko/scan/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M4 12h16"/></svg></span><b>QR 스캐너</b><span>열기 전에 주소 확인</span></a></li></ul>
@@ -77,10 +81,23 @@
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">정적 QR만 만들어서 넣은 주소가 그림 안에 그대로 들어가고, 오래QR이 멈춰도 코드는 멈추지 않아요. 만든 그림은 바로 다시 읽어 찍히는지 확인해요.</p></div>
     <p class="sh__links"><a href="https://qr.lumenlab.page/ko/about/">오래QR 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
   </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">로고를 넣으면 오류 복원을 H(약 30%)로 올려요</h2>
+    <div class="rc">
+      <p class="rc__title">오래QR 기준표</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>QR 규격</dt><dd><span class="rc__v">ISO/IEC 18004 모델 2, 버전 1⁠~⁠40에 바이트 모드(UTF-8)로 담아서 한글·이모지도 그대로 들어가요.</span><span class="rc__src"><a href="https://qr.lumenlab.page/ko/#std-h">오래QR ‘기준’</a></span></dd></div><div class="rc__row"><dt>오류 복원</dt><dd><span class="rc__v">L 약 7%, M 약 15%, Q 약 25%, H 약 30%⁠까지 가려져도 읽혀요.</span><span class="rc__src"><a href="https://www.qrcode.com/en/about/error_correction.html">DENSO WAVE: 오류 복원 기능</a> · <span class="nw">확인 2026. 10. 14.</span></span></dd></div><div class="rc__row"><dt>와이파이 형식</dt><dd><span class="rc__v">WIFI: 형식으로 담고 <span class="nw">\ ; , : &quot;</span> 다섯 글자 앞에는 역슬래시(\)를 붙이며, 숨긴 네트워크에는 H:true를 더해요.</span><span class="rc__src"><a href="https://github.com/zxing/zxing/wiki/Barcode-Contents">ZXing 위키: Barcode Contents(와이파이 형식)</a> · <span class="nw">확인 2026. 10. 14.</span></span></dd></div><div class="rc__row"><dt>인쇄 크기</dt><dd><span class="rc__v">가까이서 찍는 QR은 무늬 한 변을 2cm 이상으로, 찍는 거리는 QR 크기의 10배쯤까지로 잡아요. PDF·EPS의 cm는 여백·틀을 뺀 무늬 크기예요.</span><span class="rc__src"><a href="https://www.qr-code-generator.com/blog/minimum-qr-code-size/">QR Code Generator 블로그: QR코드 최소 크기(경험칙)</a> · <span class="nw">확인 2026. 10. 14.</span></span></dd></div><div class="rc__row"><dt>찍힘 확인</dt><dd><span class="rc__v">점과 바탕의 밝기 대비가 2:1 미만이면 그림을 읽기 전에 ‘안 읽힘’, 4:1 미만이면 ‘주의’예요. ‘통과’는 읽은 내용이 넣은 내용과 글자 하나까지 같을 때만 나와요.</span><span class="rc__src"><a href="https://lumenlab.page/guides/qr/qr-logo/">오래QR 가이드: QR코드에 로고 넣기</a> · <span class="nw">확인 2026. 10. 14.</span></span></dd></div><div class="rc__row"><dt>상업 이용</dt><dd><span class="rc__v">QR코드 무늬는 상업적으로 써도 사용료나 라이선스 계약이 필요 없고, 상표 문구는 ‘QR Code’라는 낱말을 쓸 때만 넣으면 돼요.</span><span class="rc__src"><a href="https://www.qrcode.com/en/faq.html">DENSO WAVE: QR코드 자주 묻는 질문(상표·사용료)</a> · <span class="nw">확인 2026. 10. 14.</span></span></dd></div></dl>
+      <p class="rc__note">찍힘 확인은 이 브라우저 안에서 그림을 다시 읽는 것이라, 인쇄 상태·조명·카메라에 따라 실제 결과는 다를 수 있어요.</p>
+    </div>
+    <p class="sh__links"><a href="https://qr.lumenlab.page/ko/#std-h">오래QR ‘기준’ 전체 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 7편</h2>
     <ol class="sh__guides"><li><a href="/guides/qr/qr-manryo/">QR코드 유효기간과 만료: 멈추는 QR과 안 멈추는 QR</a></li><li><a href="/guides/qr/wifi-qr/">와이파이 QR코드 만들기: 형식, 특수문자, 숨긴 네트워크</a></li><li><a href="/guides/qr/qr-inswae-keugi/">QR코드 인쇄 크기: 명함부터 현수막까지 몇 cm가 좋을까</a></li><li><a href="/guides/qr/qr-logo/">QR코드에 로고 넣기: 오류 복원, 로고 크기, 색 대비</a></li><li><a href="/guides/qr/myeongham-qr/">명함 QR코드(연락처 vCard): 무엇이 들어가고 어떻게 저장되나</a></li><li><a href="/guides/qr/qr-daeryang/">QR코드 대량으로 만들기: 엑셀·CSV 줄 규칙과 ZIP 받기</a></li><li><a href="/guides/qr/qr-ssing/">큐싱 피하기: QR코드 찍기 전에 주소부터 확인하는 법</a></li></ol>
     <p class="sh__links"><a href="/guides/#qr">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">공개 전에 와이파이·연락처 코드는 최근 목록에 안 남게 고쳤어요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-14">2026. 10. 14.</time><p>가이드 13편(한국어 7편, 영어 6편)을 함께 냈어요.</p></li><li><time datetime="2026-10-14">2026. 10. 14.</time><p>오래QR을 한국어·영어로 공개했어요.</p></li><li><time datetime="2026-10-14">2026. 10. 14.</time><p>공개 전, 틀을 넣어도 여백은 2칸 이상 두고 연락처·와이파이는 최근 목록에 안 남기게 고쳤어요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

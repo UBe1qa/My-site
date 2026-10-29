@@ -69,19 +69,35 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">Drag the dial to set the minutes. Once it runs, one turn of the dial matches the time you set.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">One tap on ‘5 min’ starts the timer</h2>
+    <ol class="sh__steps"><li><b>Tap a preset</b><span>Tap one of the 8 buttons under ‘Tap to start’, from ‘1 min’ to ‘1 hour’, and the timer starts right away.</span></li><li><b>Type an exact time</b><span>Enter hours, minutes and seconds under ‘Set exactly’ and press ‘Start’; the teal band on the dial shows the time left and shrinks back toward 12.</span></li><li><b>Test the sound</b><span>Pick ‘Bell’, ‘Beep’ or ‘Soft’ under ‘Sound’ and press ‘Test sound’ to hear it before the timer ends.</span></li><li><b>Name and add timers</b><span>Give a timer a name and use ‘Add a timer’ to run more; when one ends, the alert shows its name.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">It can also</h2>
     <ul class="sh__cards"><li><a href="https://time.lumenlab.page/stopwatch/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 13l3-3M10 2h4"/></svg></span><b>Stopwatch</b><span>Laps and CSV export</span></a></li><li><a href="https://time.lumenlab.page/alarm/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 9v4l2 2M4 6l3-3M20 6l-3-3"/></svg></span><b>Alarm clock</b><span>Snooze for five minutes</span></a></li><li><a href="https://time.lumenlab.page/world-clock/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><b>World clock</b><span>With daylight saving dates</span></a></li></ul>
   </section>
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
-    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">City times come from the IANA time zone database, with the 2026 rule changes for three Canadian provinces and Morocco applied separately, and the tests compare every city with Python&#x27;s zoneinfo.</p></div>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">City times come from the IANA time zone database, with the 2026 rule changes for Canada and Morocco applied separately, and the tests compare every city with Python&#x27;s zoneinfo.</p></div>
     <p class="sh__links"><a href="https://time.lumenlab.page/about/">More in About Oneturn <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">In a background tab it still rings on time, because it sets one timer for the end</h2>
+    <div class="rc">
+      <p class="rc__title">Rules and sources<span>Checked Oct 14, 2026</span></p>
+      <dl class="rc__rows"><div class="rc__row"><dt>City times</dt><dd><span class="rc__v">Uses the IANA time zone data in your browser. The 2026 rule changes for Canada and Morocco are built in, so those cities stay right on older browsers, and the world clock says when your browser&#x27;s data is out of date.</span><span class="rc__src"><a href="https://data.iana.org/time-zones/tzdb/NEWS">IANA change log</a></span></dd></div><div class="rc__row"><dt>Ringing in a background tab</dt><dd><span class="rc__v">In a tab hidden for over 5 minutes, Chrome may check timers that keep re-arming themselves only once a minute, so Oneturn works out the time left from the end time.</span><span class="rc__src"><a href="https://developer.chrome.com/blog/timer-throttling-in-chrome-88">Chrome for Developers: Heavy throttling of chained JS timers beginning in Chrome 88</a></span></dd></div><div class="rc__row"><dt>Screen off or another app</dt><dd><span class="rc__v">When the screen turns off or you switch apps, the browser may freeze the page, and no timer runs while it is frozen.</span><span class="rc__src"><a href="https://developer.chrome.com/docs/web-platform/page-lifecycle-api">Chrome for Developers: Page Lifecycle API</a></span></dd></div><div class="rc__row"><dt>Keep screen on</dt><dd><span class="rc__v">‘Keep screen on’ works from Chrome 84, Safari 16.4, Safari on iOS 18.4 and Firefox 126. Other browsers show ‘This browser cannot keep the screen on’.</span><span class="rc__src"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility">MDN: Screen Wake Lock API, browser compatibility</a></span></dd></div><div class="rc__row"><dt>What stays on your device</dt><dd><span class="rc__v">Timer names and end times, stopwatch laps, alarms, cities and settings are kept in this browser only and never sent to a server.</span><span class="rc__src"><a href="https://time.lumenlab.page/privacy/">Oneturn Privacy Policy (the six things it stores)</a></span></dd></div></dl>
+      <p class="rc__note">It cannot ring once the tab is closed or the device sleeps, so use your phone&#x27;s clock app for an alarm you cannot miss.</p>
+    </div>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">3 guides</h2>
     <ol class="sh__guides"><li><a href="/en/guides/time/timer-in-background-tab/">Why online timers run late in a background tab</a></li><li><a href="/en/guides/time/daylight-saving-time-2026/">Daylight saving time 2026–2027: when clocks change and how time differences shift</a></li><li><a href="/en/guides/time/lap-vs-split-time/">Lap time vs split time on a stopwatch</a></li></ol>
     <p class="sh__links"><a href="/en/guides/#time">All guides <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">Launched on Oct 14 with all four tools and the time zone guides</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-14">Oct 14, 2026</time><p>From day one, the world clock follows the Canada and Morocco changes up to IANA release 2026e.</p></li><li><time datetime="2026-10-14">Oct 14, 2026</time><p>Published three guides: background-tab timers, daylight saving in 2026 and 2027, and lap vs split time.</p></li><li><time datetime="2026-10-14">Oct 14, 2026</time><p>Launched the timer, stopwatch, alarm and world clock in English and Korean.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">More from Lumen Lab</h2>

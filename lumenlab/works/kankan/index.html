@@ -68,6 +68,10 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">아래 원고지는 칸칸이 200자 원고지에 놓는 방식 그대로 첫 장을 그려요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">글을 붙여 넣으면 숫자 8개가 한꺼번에 바뀌어요</h2>
+    <ol class="sh__steps"><li><b>글 붙여 넣기</b><span>글을 붙여 넣거나 ‘예시 글 넣어 보기’를 누르면 ‘공백 포함’과 ‘공백 제외’ 글자 수가 바로 나와요.</span></li><li><b>바이트와 원고지 보기</b><span>그 아래에서 ‘바이트’(UTF-8, EUC-KR), ‘단어’, ‘문장’, ‘줄’, ‘원고지’ 장 수도 같이 바뀌어요.</span></li><li><b>줄바꿈 기준 맞추기</b><span>‘줄바꿈은 1자로 셈’ 옆 ‘바꾸기’를 눌러 ‘0자’, ‘1자’, ‘2자’ 중 글을 낼 곳과 같은 것을 고르면 다시 세어요.</span></li><li><b>목표 글자 수 넣기</b><span>‘목표 글자 수 넣기’에 숫자를 넣고 ‘공백 포함’, ‘공백 제외’, ‘UTF-8 바이트’ 중 기준을 고르면 얼마나 남았는지, 넘었는지 알려 줘요.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://count.lumenlab.page/ko/jasoseo/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 13h5M10 17h5"/></svg></span><b>자소서 글자수</b><span>문항마다 남은 글자</span></a></li><li><a href="https://count.lumenlab.page/ko/byte/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h10M5 18h6M19 15v6M16 18h6"/></svg></span><b>바이트 계산기</b><span>UTF-8·EUC-KR 나란히</span></a></li><li><a href="https://count.lumenlab.page/ko/neis/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"/></svg></span><b>나이스 생기부</b><span>기재요령 최대 바이트로</span></a></li><li><a href="https://count.lumenlab.page/ko/sns/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4zM8 10h8"/></svg></span><b>SNS 글자수</b><span>X·인스타·스레드 한도</span></a></li><li><a href="https://count.lumenlab.page/ko/wongoji/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg></span><b>원고지</b><span>200자 원고지 몇 장</span></a></li></ul>
@@ -75,12 +79,24 @@
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">세는 로직을 자동 테스트 3만 5천여 개로 확인해요. 기준값은 파이썬 표준 코덱·유니코드 라이브러리, twitter-text, 서로 다른 SMS 계산기 세 가지로 따로 구했어요.</p></div>
-    <p class="sh__links"><a href="https://count.lumenlab.page/ko/about/">칸칸 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">유튜브 설명 5,000바이트엔 한글이 1,666자쯤 들어가요</h2>
+    <div class="rc">
+      <p class="rc__title">칸칸 기준표</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>한 글자</dt><dd><span class="rc__v">눈에 보이는 한 글자를 1자로 세서, 피부색을 바꾼 이모지도 1자예요.</span><span class="rc__src"><a href="https://unicode.org/reports/tr29/">유니코드 표준 부속서 UAX #29(브라우저 Intl.Segmenter)</a></span></dd></div><div class="rc__row"><dt>UTF-8 바이트</dt><dd><span class="rc__v">영문과 숫자는 1바이트, 한글은 1자에 3바이트로 세어요.</span><span class="rc__src"><a href="https://www.rfc-editor.org/rfc/rfc3629">RFC 3629: UTF-8</a></span></dd></div><div class="rc__row"><dt>X 게시물</dt><dd><span class="rc__v">280자까지인데 한글과 이모지는 1자를 2로, 주소는 길이와 상관없이 23으로 세요. X가 내놓은 twitter‑text 3.1.0과 결과를 견줘 시험해요.</span><span class="rc__src"><a href="https://docs.x.com/fundamentals/counting-characters">X 공식 문서 ‘Counting characters’</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div><div class="rc__row"><dt>유튜브 설명</dt><dd><span class="rc__v">글자 수가 아니라 UTF-8 바이트로 세는 한도예요.</span><span class="rc__src"><a href="https://developers.google.com/youtube/v3/docs/videos">유튜브 Data API: videos</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div><div class="rc__row"><dt>블루스카이 게시물</dt><dd><span class="rc__v">300자(이모지 하나도 1자)이면서 UTF-8로 3,000바이트 안이어야 해요. 둘 중 하나만 넘어도 넘었다고 표시해요.</span><span class="rc__src"><a href="https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json">블루스카이 게시물 규격(app.bsky.feed.post)</a> · <span class="nw">확인 2026. 10. 10.</span></span></dd></div></dl>
+      <p class="rc__note">공식 문서에 무엇을 세는지 안 적힌 한도 6가지는 이모지 대부분을 2자로 세는 방식(UTF-16)으로 세서, 이모지가 많은 글은 그 서비스와 조금 다를 수 있어요.</p>
+    </div>
+    <p class="sh__links"><a href="https://count.lumenlab.page/ko/about/">칸칸 소개에서 기준 더 보기 <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 4편</h2>
     <ol class="sh__guides"><li><a href="/guides/count/geulja-su-dareun-iyu/">같은 글인데 글자 수가 다르게 나오는 이유</a></li><li><a href="/guides/count/neis-500ja-1500byte/">나이스 500자는 왜 1,500바이트일까</a></li><li><a href="/guides/count/emoji-myeot-geulja/">이모지 하나는 몇 글자일까</a></li><li><a href="/guides/count/hangul-byte-utf8-euckr/">한글은 왜 2바이트이기도 하고 3바이트이기도 할까</a></li></ol>
     <p class="sh__links"><a href="/guides/#count">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">SNS 한도는 반기마다, 나이스 기준은 해마다 2~3월에 다시 확인해요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-10">2026. 10. 10.</time><p>뒤로 가기로 돌아오면 글은 있는데 숫자가 0으로 나오던 문제를 고쳤어요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>숫자 칸에 잘못된 값을 넣으면 조용히 바꿔 읽지 않고 알려 줘요.</p></li><li><time datetime="2026-10-10">2026. 10. 10.</time><p>줄바꿈 기준과 목표를 탭을 닫을 때까지 기억하게 했어요.</p></li><li><time datetime="2026-10-09">2026. 10. 9.</time><p>칸칸을 처음 올렸어요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>

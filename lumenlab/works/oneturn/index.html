@@ -68,19 +68,35 @@
     <i class="mon__stand" aria-hidden="true"></i>
     <p class="sh__cap">판을 끌어 1분 단위로 맞추고, 돌기 시작하면 판 한 바퀴가 맞춘 시간에 맞춰 바뀌어요.</p>
   </section>
+  <section class="sh__sec sh__how" aria-labelledby="sh-how">
+    <h2 id="sh-how">‘5분’ 단추 하나만 누르면 바로 돌아요</h2>
+    <ol class="sh__steps"><li><b>시간 단추 누르기</b><span>‘누르면 바로 시작’ 아래 ‘1분’부터 ‘1시간’까지 단추 8개 가운데 하나를 누르면 그 시간으로 바로 돌아요.</span></li><li><b>시·분·초 직접 넣기</b><span>‘직접 맞추기’에 시간·분·초를 넣고 ‘시작’을 누르면, 청록 부채꼴이 남은 시간을 보여 주며 12시 쪽으로 줄어들어요.</span></li><li><b>끝날 소리 미리 듣기</b><span>‘소리’에서 ‘종’·‘삐삐’·‘부드럽게’ 가운데 하나를 고르고 ‘미리 듣기’를 누르면 끝날 때 날 소리를 먼저 들어 봐요.</span></li><li><b>이름 붙여 여러 개</b><span>이름 칸에 이름을 적고 ‘타이머 더하기’로 더 돌리면, 끝날 때 어느 타이머인지 이름으로 띄워 줘요.</span></li></ol>
+  </section>
   <section class="sh__sec sh__more" aria-labelledby="sh-more">
     <h2 id="sh-more">이런 것도 돼요</h2>
     <ul class="sh__cards"><li><a href="https://time.lumenlab.page/ko/stopwatch/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 13l3-3M10 2h4"/></svg></span><b>스톱워치</b><span>랩 기록·CSV 저장</span></a></li><li><a href="https://time.lumenlab.page/ko/alarm/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM12 9v4l2 2M4 6l3-3M20 6l-3-3"/></svg></span><b>알람</b><span>5분 뒤 다시 울리기</span></a></li><li><a href="https://time.lumenlab.page/ko/world-clock/"><span class="sh__gly"><svg class="gly" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><b>세계 시간·시차</b><span>서머타임 바뀌는 날까지</span></a></li></ul>
   </section>
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">확인하고 밝혀 둔 것</h2>
-    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다 세 주·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.</p></div>
+    <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">도시 시각은 IANA 시간대 자료로 계산하고, 2026년에 바뀐 캐나다·모로코 규칙은 따로 반영했어요. 시험에서는 도시마다 파이썬 zoneinfo 값과 대조해요.</p></div>
     <p class="sh__links"><a href="https://time.lumenlab.page/ko/about/">한바퀴 소개에서 자세히 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">다른 탭에 가 있어도 제때 울리게, 끝나는 시각에 한 번만 맞춰 둬요</h2>
+    <div class="rc">
+      <p class="rc__title">한바퀴 기준표<span>확인 2026. 10. 14.</span></p>
+      <dl class="rc__rows"><div class="rc__row"><dt>도시 시각</dt><dd><span class="rc__v">브라우저에 든 IANA 시간대 자료로 계산해요. 2026년에 바뀐 캐나다·모로코 규칙은 브라우저 자료가 예전 것이어도 맞게 따로 넣어 뒀고, 그럴 땐 세계 시간 화면에 알려요.</span><span class="rc__src"><a href="https://data.iana.org/time-zones/tzdb/NEWS">IANA 변경 기록</a></span></dd></div><div class="rc__row"><dt>다른 탭에서 울리는 때</dt><dd><span class="rc__v">크롬은 숨은 지 5분 넘은 탭에서, 타이머를 짧게 여러 번 이어 거는 방식은 1분에 한 번만 확인하기도 해요. 그래서 남은 시간은 끝나는 시각에서 거꾸로 계산해요.</span><span class="rc__src"><a href="https://developer.chrome.com/blog/timer-throttling-in-chrome-88">Chrome for Developers: Heavy throttling of chained JS timers beginning in Chrome 88</a></span></dd></div><div class="rc__row"><dt>화면 꺼짐·다른 앱</dt><dd><span class="rc__v">화면이 꺼지거나 다른 앱으로 가면 브라우저가 페이지를 얼릴 수 있고, 얼어 있는 동안에는 타이머가 돌지 않아요.</span><span class="rc__src"><a href="https://developer.chrome.com/docs/web-platform/page-lifecycle-api">Chrome for Developers: Page Lifecycle API</a></span></dd></div><div class="rc__row"><dt>화면 켜 두기</dt><dd><span class="rc__v">‘화면 켜 두기’는 크롬 84, 사파리 16.4, iOS 사파리 18.4, 파이어폭스 126부터 되고, 안 되는 브라우저에선 ‘이 브라우저는 화면 켜 두기를 못 해요’라고 떠요.</span><span class="rc__src"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility">MDN: Screen Wake Lock API 브라우저 지원</a></span></dd></div><div class="rc__row"><dt>이 기기에 남는 것</dt><dd><span class="rc__v">타이머 이름과 끝나는 시각, 스톱워치 랩, 알람, 도시 목록, 설정은 이 브라우저에만 적고 서버로 보내지 않아요.</span><span class="rc__src"><a href="https://time.lumenlab.page/ko/privacy/">한바퀴 개인정보 처리방침(저장하는 것 6가지)</a></span></dd></div></dl>
+      <p class="rc__note">창을 닫거나 기기가 잠들면 울리지 않으니, 놓치면 안 되는 알람은 휴대폰 기본 알람 앱을 쓰세요.</p>
+    </div>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">가이드 3편</h2>
     <ol class="sh__guides"><li><a href="/guides/time/korea-time-difference/">한국과 나라별 시차 표: 2026·2027 서머타임 바뀌는 날까지</a></li><li><a href="/guides/time/timer-background/">다른 탭·화면 꺼짐에서 타이머가 늦거나 안 울리는 이유</a></li><li><a href="/guides/time/lap-split/">스톱워치 랩 타임과 스플릿 타임, 무엇이 다를까</a></li></ol>
     <p class="sh__links"><a href="/guides/#time">가이드 목록 보기 <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__changes" aria-labelledby="sh-log">
+    <h2 id="sh-log">10월 14일, 네 가지 도구를 시차 가이드와 함께 열었어요</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-14">2026. 10. 14.</time><p>세계 시간이 IANA 2026e판까지 바뀐 캐나다·모로코 규칙을 처음부터 따라요.</p></li><li><time datetime="2026-10-14">2026. 10. 14.</time><p>나라별 시차 표, 숨은 탭 타이머, 랩과 스플릿 가이드 3편을 올렸어요.</p></li><li><time datetime="2026-10-14">2026. 10. 14.</time><p>타이머·스톱워치·알람·세계 시간을 한국어와 영어로 열었어요.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">다른 것도 둘러보기</h2>
