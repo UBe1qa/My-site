@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>키보드 채터링 확인하는 법: 한 번 눌렀는데 두 번 눌릴 때 | 체크벤치</title>
+<meta name="description" content="한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.">
+<link rel="canonical" href="https://lumenlab.page/guides/check/keyboard-chattering/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/check/keyboard-chattering/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/check/keyboard-double-typing/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/check/keyboard-double-typing/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="키보드 채터링 확인하는 법: 한 번 눌렀는데 두 번 눌릴 때 | 체크벤치">
+<meta property="og:description" content="한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.">
+<meta property="og:url" content="https://lumenlab.page/guides/check/keyboard-chattering/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "키보드 채터링 확인하는 법", "description": "한 번 눌렀는데 글자가 두 번 찍히나요? 키보드 테스트로 채터링을 1분 만에 확인하는 순서와, 30ms 기준이 어떻게 판정하는지를 예시로 보여 드려요.", "inLanguage": "ko", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": "https://lumenlab.page/guides/check/keyboard-chattering/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "체크벤치", "url": "https://check.lumenlab.page/ko/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://lumenlab.page/guides/"}, {"@type": "ListItem", "position": 2, "name": "체크벤치", "item": "https://lumenlab.page/guides/#check"}, {"@type": "ListItem", "position": 3, "name": "키보드 채터링 확인하는 법", "item": "https://lumenlab.page/guides/check/keyboard-chattering/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/#works" data-i18n="navWorks">만든 것</a>
+      <a class="nav-guides" href="/guides/" aria-current="true" data-i18n="navGuides">가이드</a>
+      <a class="nav-about" href="/about/" data-i18n="navAbout">소개</a>
+      <a class="nav-contact" href="/#contact" data-i18n="navContact">문의</a>
+      <a class="lang" href="/en/guides/check/keyboard-double-typing/" hreflang="en" lang="en" data-other-lang>English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="위치"><a href="/guides/">가이드</a><span aria-hidden="true">›</span><a href="/guides/#check">체크벤치</a></nav>
+<article class="gd__doc" style="--tc:#17b3c4;--tcp:70%">
+  <header class="gd__head">
+    <h1 class="gd__title">키보드 채터링 확인하는 법</h1>
+    <p class="gd__meta">루멘랩 · 마지막 확인 <time datetime="2026-10-10">2026. 10. 10.</time></p>
+    <a class="gd__tool" href="https://check.lumenlab.page/ko/"><img src="/img/check.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>체크벤치</b><span>키보드·마우스·마이크 테스트</span></span><span class="gd__tool-go">열기 <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>키를 한 번 눌렀는데 글자가 두 번 찍힌다면 1분이면 확인할 수 있어요. <a href="https://check.lumenlab.page/ko/keyboard-test/">키보드 테스트</a>를 열고 의심되는 키를 천천히 서른 번 눌러 본 뒤 '채터링' 칸을 보세요. '없음'이면 그 키는 멀쩡했던 거예요. 키 이름이 나오면, 사람이 누르기에는 너무 빨리 두 번째 눌림이 들어온 거예요.</p>
+<h2>무엇을 채터링으로 세나요</h2>
+<p>테스트는 키를 뗀 순간부터 같은 키가 다시 눌릴 때까지의 간격을 재요. 그 간격이 30ms(0.03초)보다 짧으면 채터링 의심 1번으로 세요. 30ms는 이 사이트가 정한 기준이고 공식 표준이 아니에요. '자세히 보기와 설정'에서 바꿀 수 있어요.</p>
+<p>누름과 누름 사이가 아니라 뗌과 다음 누름 사이를 재는 이유가 있어요. 고장 난 키는 손을 떼는 바로 그 순간에 한 번 더 눌릴 수 있어요. 내가 누른 두 번 사이가 멀어도요.</p>
+<div class="tbl tbl--tight"><table><thead><tr><th>한 키에서 일어난 일</th><th>간격</th><th>기준 30ms</th><th>기준 10ms</th></tr></thead><tbody>
+<tr><td data-th="한 키에서 일어난 일">눌렀다가 60ms에 떼고 72ms에 다시 눌림</td><td data-th="간격">12ms</td><td data-th="기준 30ms">의심</td><td data-th="기준 10ms">정상</td></tr>
+<tr><td data-th="한 키에서 일어난 일">150ms 동안 누르다 떼고 155ms에 다시 눌림</td><td data-th="간격">5ms</td><td data-th="기준 30ms">의심</td><td data-th="기준 10ms">의심</td></tr>
+<tr><td data-th="한 키에서 일어난 일">60ms에 떼고 90ms에 다시 눌림</td><td data-th="간격">30ms</td><td data-th="기준 30ms">정상</td><td data-th="기준 10ms">정상</td></tr>
+<tr><td data-th="한 키에서 일어난 일">일부러 두 번 누름(뗀 뒤 120ms에 다시 누름)</td><td data-th="간격">120ms</td><td data-th="기준 30ms">정상</td><td data-th="기준 10ms">정상</td></tr>
+</tbody></table></div>
+<p>둘째 줄은 두 눌림 사이가 155ms라 평범한 타자처럼 보여요. 뗀 뒤 5ms 만에 다시 눌렸다는 점에서만 드러나요. 이 표의 네 가지는 저희 자동 테스트가 그대로 돌려 보는 사례예요.</p>
+
+<h2>1분 확인 순서</h2>
+<ol>
+<li>키보드 테스트를 열고 내 키보드와 닮은 배열을 골라요.</li>
+<li>의심되는 키를 1초에 한 번쯤, 서른 번 눌러요. 서두르지 마세요. 두 번 눌림이 전부 키보드 탓이어야 하니까요.</li>
+<li>'채터링' 칸을 봐요. '1개 의심'이라고 나오고 그 키가 주황색이면 한 번 이상 두 번 눌린 거예요.</li>
+<li>'자세히 보기와 설정'의 최근 누름에서 누름마다 뗀 뒤 몇 ms 만에 들어왔는지 볼 수 있어요.</li>
+<li>멀쩡한 키로도 똑같이 해 봐요. 그 키가 깨끗하면 내 타자 습관이 아니라 그 키의 문제예요.</li>
+</ol>
+<h2>채터링처럼 보이지만 아닌 것</h2>
+<ul>
+<li><b>키를 누르고 있을 때.</b> 누르고 있으면 글자가 계속 찍히는 것은 운영체제의 반복 입력이에요. 테스트는 이 반복을 세지 않아요.</li>
+<li><b>입력 보조 프로그램.</b> 매크로, 상용구, 키 바꾸기 프로그램이 키를 더 보낼 수 있어요. 끄고 테스트해 보세요.</li>
+<li><b>한 프로그램에서만.</b> 테스트에서는 깨끗한데 특정 프로그램에서만 두 번 찍히면 그 프로그램 설정부터 보세요.</li>
+</ul>
+<h2>채터링이 맞다면</h2>
+<p>키보드를 다른 컴퓨터나 다른 USB 단자에 꽂고 같은 테스트를 해 보세요. 거기서도 같은 키가 두 번 눌리면 키보드 쪽 문제예요. 어느 키가 서른 번 중 몇 번 그랬는지 적어 두세요. 판매처나 제조사에 문의할 때 쓸 수 있어요.</p>
+<p>기준 시간을 바꾼다고 키보드가 고쳐지지는 않아요. 이 화면이 무엇을 셀지만 달라져요.</p>
+<p class="cta"><a class="btn btn--lamp" href="https://check.lumenlab.page/ko/keyboard-test/">키보드 테스트 열기</a></p>
+  </div>
+  <p class="gd__fix">글에 틀린 곳이 있거나 바뀐 기준을 아시면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 확인해서 고치고, 고친 날을 이 글에 적어요.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#17b3c4;--tcp:70%">
+  <h2 id="gd-more">체크벤치 가이드 더 보기</h2>
+  <ol class="gbooks"><li><a href="/guides/check/maikeu-an-japil-ttae/"><b>마이크가 안 잡힐 때 브라우저·윈도우·맥에서 볼 곳</b><span>화상회의에서 마이크가 안 될 때, 마이크 테스트가 알려 주는 안내 문장별로 어디를 고치면 되는지 정리했어요. 사이트 권한, 운영체제 설정, 다른 장치, 다른 앱 순서예요.</span></a></li><li><a href="/guides/check/bulryang-hwaso-hwagin/"><b>새 모니터 불량화소 확인 순서</b><span>새 모니터나 노트북을 받으면 10분 안에 확인할 것. 전체 화면 단색으로 불량화소를 찾는 순서, 적어 둘 것, 주사율이 사양대로 나오는지 보는 법이에요.</span></a></li><li><a href="/guides/check/dongsi-ipryeok-rollover/"><b>동시 입력(롤오버)이 뭔가요: 몇 키까지 눌리는지 확인하기</b><span>키보드가 한 번에 몇 키까지 받는지 직접 확인하는 법이에요. 키보드 테스트의 &#x27;동시에 눌린 키&#x27;가 어떻게 세는지와, 안 눌리는 조합(고스팅)을 찾는 순서를 적었어요.</span></a></li></ol>
+  <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
+      <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
+      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
+      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

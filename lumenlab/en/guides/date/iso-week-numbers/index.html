@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO week numbers: why January 1 can be in week 53 | Daycount</title>
+<meta name="description" content="ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/date/iso-week-numbers/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="ISO week numbers: why January 1 can be in week 53 | Daycount">
+<meta property="og:description" content="ISO weeks start on Monday and week 1 holds the year&#x27;s first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel&#x27;s WEEKNUM differs.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/date/iso-week-numbers/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "ISO week numbers: why January 1 can be in week 53", "description": "ISO weeks start on Monday and week 1 holds the year's first Thursday, so January 1, 2027 is in week 53 of 2026. The rule, 53-week years, and why Excel's WEEKNUM differs.", "inLanguage": "en", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "mainEntityOfPage": "https://lumenlab.page/en/guides/date/iso-week-numbers/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Daycount", "url": "https://date.lumenlab.page/en/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Daycount", "item": "https://lumenlab.page/en/guides/#date"}, {"@type": "ListItem", "position": 3, "name": "ISO week numbers: why January 1 can be in week 53", "item": "https://lumenlab.page/en/guides/date/iso-week-numbers/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#date">Daycount</a></nav>
+<article class="gd__doc" style="--tc:#c2512b;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">ISO week numbers: why January 1 can be in week 53</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-05">Oct 5, 2026</time></p>
+    <a class="gd__tool" href="https://date.lumenlab.page/en/"><img src="/img/daycount.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Daycount</b><span>Days between dates, age and business days</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>In the ISO 8601 system, weeks run from Monday to Sunday and week 1 is the week that contains the year's first Thursday. The first days of January can therefore belong to the last week of the previous year. January 1, 2027 is a Friday and falls in <b>week 53 of 2026</b>; week 1 of 2027 starts on Monday, January 4.</p>
+
+<h2>The rule</h2>
+<ul>
+<li>A week starts on Monday.</li>
+<li>Week 1 is the week with the year's first Thursday in it, which is the same as the week that contains January 4.</li>
+<li>A week belongs to the year its Thursday is in, so a week is never split between two years.</li>
+</ul>
+
+<h2>Around New Year</h2>
+<div class="tbl"><table>
+<thead><tr><th>Date</th><th>ISO week</th></tr></thead>
+<tbody>
+<tr><td>Mon, Dec 29, 2025</td><td><span class="nw">2026-W01</span></td></tr>
+<tr><td>Thu, Jan 1, 2026</td><td><span class="nw">2026-W01</span></td></tr>
+<tr><td>Mon, Dec 28, 2026</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Fri, Jan 1, 2027</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Sun, Jan 3, 2027</td><td><span class="nw">2026-W53</span></td></tr>
+<tr><td>Mon, Jan 4, 2027</td><td><span class="nw">2027-W01</span></td></tr>
+<tr><td>Mon, Dec 31, 2029</td><td><span class="nw">2030-W01</span></td></tr>
+</tbody>
+</table></div>
+<p>2026-W53 means week 53 of ISO year 2026. Use the ISO year, not the calendar year, when you label or sort by week, because the two can differ for up to three days at either end of the year. Python's documentation gives a similar case: 2004 began on a Thursday, so ISO week 1 of 2004 started on Monday, December 29, 2003.</p>
+
+<h2>Which years have 53 weeks</h2>
+<p>A year has 53 ISO weeks when it starts on a Thursday, or when it's a leap year that starts on a Wednesday. Between 2015 and 2040 that happens in 2015, 2020, 2026, 2032 and 2037. December 28 is always in the last week of its ISO year, so its week number tells you whether a year has 52 or 53 weeks.</p>
+
+<h2>Why a spreadsheet can show a different number</h2>
+<p>Excel's <code>WEEKNUM</code> function uses another system by default: the week containing January 1 is week 1, and weeks begin on Sunday. So <code>WEEKNUM</code> puts January 1, 2027 in week 1, while ISO puts it in week 53 of 2026. Microsoft's documentation says <code>WEEKNUM(date, 21)</code> follows ISO 8601 instead and calls it the method "commonly known as the European week numbering system". When you share week numbers with other teams, say which system you mean.</p>
+
+<h2>Week of the month</h2>
+<p>The <a href="https://date.lumenlab.page/en/#week">week number calculator</a> also shows the week of the month. ISO 8601 numbers weeks within a year, not within a month, so Daycount uses a simple convention for this: the week containing the 1st is week 1, and weeks start on Sunday. Monday, October 5, 2026 is in the 2nd week of October and in ISO week 41.</p>
+<p>For the number of days between two dates rather than weeks, see <a href="/en/guides/date/days-between-dates/">how to count the days between two dates</a>.</p>
+    <p class="cta"><a class="btn btn--lamp" href="https://date.lumenlab.page/en/#week">Look up the ISO week of any date →</a></p>
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://docs.python.org/3/library/datetime.html#datetime.date.isocalendar">Python documentation: date.isocalendar() and the ISO calendar</a></li><li><a href="https://support.microsoft.com/en-us/office/weeknum-function-e5c43a03-b4ab-426c-b411-b18c13c75340">Microsoft Support: WEEKNUM function</a></li></ul>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#c2512b;--tcp:82%">
+  <h2 id="gd-more">More Daycount guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/date/days-between-dates/"><b>How to count the days between two dates (and when to add 1)</b><span>Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.</span></a></li><li><a href="/en/guides/date/business-days/"><b>How to count business days and find a deadline</b><span>A business day is a weekday that isn&#x27;t a holiday. How to find the date 5 or 10 business days away, whether today counts, and which US holidays are skipped.</span></a></li><li><a href="/en/guides/date/federal-holidays-observed/"><b>US federal holidays on a weekend: which day is observed</b><span>A federal holiday on a Saturday is observed the Friday before; on a Sunday, the Monday after. Observed dates for 2026 to 2028, including New Year&#x27;s Day 2028 on Dec 31, 2027.</span></a></li><li><a href="/en/guides/date/adding-months/"><b>Adding months to a date: what happens to January 31</b><span>January 31 plus one month is February 28 (29 in a leap year). How the end-of-month rule works, why adding a month twice differs from adding two, and how JavaScript differs.</span></a></li><li><a href="/en/guides/date/exact-age/"><b>How to calculate your exact age in years, months and days</b><span>Count whole years to the last birthday, then whole months, then the days left. A worked example, birthdays at the end of a month, February 29 birthdays and age in days.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

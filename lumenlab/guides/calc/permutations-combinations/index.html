@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법 | 공학용 계산기</title>
+<meta name="description" content="순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.">
+<link rel="canonical" href="https://lumenlab.page/guides/calc/permutations-combinations/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/calc/permutations-combinations/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/calc/permutations-combinations/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/calc/permutations-combinations/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법 | 공학용 계산기">
+<meta property="og:description" content="순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.">
+<meta property="og:url" content="https://lumenlab.page/guides/calc/permutations-combinations/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법", "description": "순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.", "inLanguage": "ko", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "mainEntityOfPage": "https://lumenlab.page/guides/calc/permutations-combinations/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "공학용 계산기", "url": "https://calc.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://lumenlab.page/guides/"}, {"@type": "ListItem", "position": 2, "name": "공학용 계산기", "item": "https://lumenlab.page/guides/#calc"}, {"@type": "ListItem", "position": 3, "name": "순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법", "item": "https://lumenlab.page/guides/calc/permutations-combinations/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/#works" data-i18n="navWorks">만든 것</a>
+      <a class="nav-guides" href="/guides/" aria-current="true" data-i18n="navGuides">가이드</a>
+      <a class="nav-about" href="/about/" data-i18n="navAbout">소개</a>
+      <a class="nav-contact" href="/#contact" data-i18n="navContact">문의</a>
+      <a class="lang" href="/en/guides/calc/permutations-combinations/" hreflang="en" lang="en" data-other-lang>English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="위치"><a href="/guides/">가이드</a><span aria-hidden="true">›</span><a href="/guides/#calc">공학용 계산기</a></nav>
+<article class="gd__doc" style="--tc:#f25c05;--tcp:78%">
+  <header class="gd__head">
+    <h1 class="gd__title">순열과 조합 차이 — nPr, nCr 공식과 계산기 사용법</h1>
+    <p class="gd__meta">루멘랩 · 마지막 확인 <time datetime="2026-10-06">2026. 10. 6.</time></p>
+    <a class="gd__tool" href="https://calc.lumenlab.page/"><img src="/img/sci-calc.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>공학용 계산기</b><span>공학 함수·물리 상수 계산</span></span><span class="gd__tool-go">열기 <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>순열 nPr 과 조합 nCr 의 차이와 공식, 공학용 계산기에서 nPr·nCr 입력하는 법, 로또 당첨 확률·비밀번호 경우의 수 같은 예제를 정리했어요.</p><div class="answer"><p>뽑는 <b>순서가 중요하면 순열</b> nPr = n!/(n−r)!, <b>순서가 상관없으면 조합</b> nCr = n!/(r!(n−r)!) 이에요. 5명 중 회장·부회장을 뽑는 경우는 5P2 = 20가지, 대표 2명을 뽑는 경우는 5C2 = 10가지예요.</p></div>
+<h2>순서가 있나 없나</h2>
+<p>5명(가, 나, 다, 라, 마) 중 2명을 뽑는다고 해 볼게요.</p>
+<ul>
+<li><b>회장과 부회장</b>을 뽑으면 (가 회장, 나 부회장)과 (나 회장, 가 부회장)이 달라요. 순서가 있으니 순열: 5 × 4 = <b>20</b>가지</li>
+<li><b>대표 2명</b>을 뽑으면 {가, 나}와 {나, 가}가 같아요. 순서가 없으니 조합: 20 ÷ 2 = <b>10</b>가지</li>
+</ul>
+<p>조합은 순열을 “뽑힌 사람끼리 줄 세우는 경우의 수 r!”로 나눈 거예요. 그래서 nCr = nPr ÷ r! 이에요.</p>
+<h2>공식</h2>
+<ul>
+<li>nPr = n! / (n − r)! = n × (n−1) × … × (n−r+1)</li>
+<li>nCr = n! / (r! × (n − r)!)</li>
+<li>n! = 1 × 2 × … × n, 0! = 1</li>
+<li>nCr = nC(n−r): 45개 중 6개를 고르는 수는 39개를 남기는 수와 같아요.</li>
+</ul>
+<h2>계산기에서 넣는 법</h2>
+<p>n 을 누르고 <b>SHIFT ×</b>(nPr) 또는 <b>SHIFT ÷</b>(nCr), 그다음 r 을 누르고 = 예요. 키보드로는 <code>5P2</code>, <code>5C2</code> 처럼 대문자 P, C 를 써요. 팩토리얼은 <b>SHIFT x⁻¹</b>(x!) 이에요.</p>
+<p><a class="try" href="https://calc.lumenlab.page/?e=5P2">5P2 계산해 보기 ▸</a> <a class="try" href="https://calc.lumenlab.page/?e=5C2">5C2 계산해 보기 ▸</a></p>
+<h2>예제</h2>
+<div class="tbl"><table><thead><tr><th>상황</th><th>식</th><th>경우의 수</th></tr></thead><tbody>
+<tr><td>로또 6/45 번호 고르기</td><td>45C6</td><td>8,145,060</td></tr>
+<tr><td>카드 52장 중 5장 받기</td><td>52C5</td><td>2,598,960</td></tr>
+<tr><td>서로 다른 숫자 4자리 비밀번호</td><td>10P4</td><td>5,040</td></tr>
+<tr><td>숫자 4자리 비밀번호(같은 숫자 허용)</td><td>10⁴</td><td>10,000</td></tr>
+<tr><td>10명을 한 줄로 세우기</td><td>10!</td><td>3,628,800</td></tr>
+</tbody></table></div>
+<p>로또 1등 확률은 1 ÷ 45C6 = 1/8145060 ≈ 0.000000123 이에요. 계산기에서는 1.22773804×10⁻⁷ 처럼 지수 표기로 보여 줘요.</p>
+<p><a class="try" href="https://calc.lumenlab.page/?e=1%C3%B745C6">1÷45C6 계산해 보기 ▸</a></p>
+<h2>큰 수</h2>
+<p>팩토리얼은 금방 커져요. 70! 은 약 1.197857167×10¹⁰⁰ 이에요. 이 계산기는 정수 팩토리얼을 3000! 까지 계산해요. 너무 크면 지수 표기로 보여 줘요.</p>
+  </div>
+  <p class="gd__fix">글에 틀린 곳이 있거나 바뀐 기준을 아시면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 확인해서 고치고, 고친 날을 이 글에 적어요.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#f25c05;--tcp:78%">
+  <h2 id="gd-more">공학용 계산기 가이드 더 보기</h2>
+  <ol class="gbooks"><li><a href="/guides/calc/order-of-operations/"><b>6÷2(1+2)는 1일까 9일까? 계산기 계산 순서 정리</b><span>6÷2(1+2)가 계산기마다 1 또는 9로 다르게 나오는 이유와 공학용 계산기의 계산 순서(괄호, 함수, 거듭제곱, 생략된 곱, 곱셈·나눗셈)를 예시로 정리했어요.</span></a></li><li><a href="/guides/calc/standard-deviation/"><b>표준편차 σ와 s 차이 — 모표준편차와 표본표준편차 고르는 법</b><span>모표준편차 σ와 표본표준편차 s가 무엇이 다른지, 언제 무엇을 써야 하는지 예제 자료 2, 4, 4, 4, 5, 5, 7, 9로 직접 계산하며 설명해요. 엑셀 STDEV.P, STDEV.S와의 관계도 정리했어요.</span></a></li><li><a href="/guides/calc/degrees-radians/"><b>도(DEG)와 라디안(RAD) — sin 30이 이상하게 나올 때</b><span>공학용 계산기에서 sin 30이 0.5가 아니라 −0.988이 나오는 이유, 도와 라디안의 뜻과 환산 공식, 자주 쓰는 각도 환산표, 어떤 단위를 언제 쓰는지 정리했어요.</span></a></li><li><a href="/guides/calc/equations/"><b>이차방정식·연립방정식 푸는 법 — 근의 공식, 판별식, 계산기 사용법</b><span>이차방정식 근의 공식과 판별식으로 실근·중근·허근을 구분하는 법, 연립일차방정식의 해가 없거나 무수히 많은 경우, 방정식 계산기로 푸는 법을 예제로 정리했어요.</span></a></li><li><a href="/guides/calc/exact-vs-decimal/"><b>계산기 답이 분수·루트로 나올 때 — S⇔D로 소수 바꾸기</b><span>공학용 계산기 답이 √2/2, 1/3, π/4처럼 분수·루트로 나오는 이유와 S⇔D로 소수로 바꾸는 법, 소수점 자리 고정(Fix)·유효숫자(Sci) 설정, 0.1+0.2 반올림 오차 이야기를 정리했어요.</span></a></li></ol>
+  <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
+      <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
+      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
+      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ladder Lottery (Ghost Leg): How Fair Is It? | Pickboard</title>
+<meta name="description" content="A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.">
+<link rel="canonical" href="https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/guides/pick/ladder-fairness/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ladder Lottery (Ghost Leg): How Fair Is It? | Pickboard">
+<meta property="og:description" content="A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.">
+<meta property="og:url" content="https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Ladder lottery (Ghost Leg): how it works and how fair it is", "description": "A ladder lottery always gives everyone one result, but with a normal number of rungs people tend to land near where they started. We measured how much, and what fixes it.", "inLanguage": "en", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "Pickboard", "url": "https://pick.lumenlab.page/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Guides", "item": "https://lumenlab.page/en/guides/"}, {"@type": "ListItem", "position": 2, "name": "Pickboard", "item": "https://lumenlab.page/en/guides/#pick"}, {"@type": "ListItem", "position": 3, "name": "Ladder lottery (Ghost Leg): how it works and how fair it is", "item": "https://lumenlab.page/en/guides/pick/ladder-lottery-fairness/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/en/" aria-label="Lumen Lab home" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="Site" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/en/#works" data-i18n="navWorks">Work</a>
+      <a class="nav-guides" href="/en/guides/" aria-current="true" data-i18n="navGuides">Guides</a>
+      <a class="nav-about" href="/en/about/" data-i18n="navAbout">About</a>
+      <a class="nav-contact" href="/en/#contact" data-i18n="navContact">Contact</a>
+      <a class="lang" href="/guides/pick/ladder-fairness/" hreflang="ko" lang="ko" data-other-lang>한국어</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="Breadcrumb"><a href="/en/guides/">Guides</a><span aria-hidden="true">›</span><a href="/en/guides/#pick">Pickboard</a></nav>
+<article class="gd__doc" style="--tc:#e23a3f;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">Ladder lottery (Ghost Leg): how it works and how fair it is</h1>
+    <p class="gd__meta">Lumen Lab · Last checked <time datetime="2026-10-10">Oct 10, 2026</time></p>
+    <a class="gd__tool" href="https://pick.lumenlab.page/"><img src="/img/pick.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>Pickboard</b><span>Wheel, ladder and team picker</span></span><span class="gd__tool-go">Open <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p>A ladder lottery is fair in one sense and unfair in another. It always hands every person exactly one result. But with the number of rungs people normally draw, you are much more likely to land near the place you started. That is why the Pickboard <a href="https://pick.lumenlab.page/ladder/">ladder game</a> shuffles the bottom row before it builds the ladder. The numbers below are the reason.</p>
+
+<h2>How a ladder lottery works</h2>
+<figure class="fig"><svg viewBox="0 0 360 268" role="img" aria-label="A ladder for four people with six levels. B, on the second line, crosses every rung on the way down and ends at place 3 (Winner)."><line class="fig-line" x1="60" y1="44" x2="60" y2="224"/><line class="fig-line" x1="140" y1="44" x2="140" y2="224"/><line class="fig-line" x1="220" y1="44" x2="220" y2="224"/><line class="fig-line" x1="300" y1="44" x2="300" y2="224"/><line class="fig-line" x1="60" y1="69.7" x2="140" y2="69.7"/><line class="fig-line" x1="220" y1="95.4" x2="300" y2="95.4"/><line class="fig-line" x1="140" y1="121.1" x2="220" y2="121.1"/><line class="fig-line" x1="60" y1="146.9" x2="140" y2="146.9"/><line class="fig-line" x1="220" y1="172.6" x2="300" y2="172.6"/><line class="fig-line" x1="140" y1="198.3" x2="220" y2="198.3"/><path class="fig-path" d="M140 44 L140 69.7 L60 69.7 L60 146.9 L140 146.9 L140 198.3 L220 198.3 L220 224"/><text class="fig-t" x="60" y="26">A</text><text class="fig-t" x="60" y="250">No luck</text><text class="fig-t on" x="140" y="26">B</text><text class="fig-t" x="140" y="250">No luck</text><text class="fig-t" x="220" y="26">C</text><text class="fig-t on" x="220" y="250">Winner</text><text class="fig-t" x="300" y="26">D</text><text class="fig-t" x="300" y="250">No luck</text></svg><figcaption>Every rung you meet must be crossed. B ends at place 3.</figcaption></figure>
+<p>The game goes by several names: Ghost Leg in English, Amidakuji (<span lang="ja">あみだくじ</span>) in Japan and sadaritagi (<span lang="ko">사다리타기</span>) in Korea. Draw one vertical line per person, write the names along the top and the results along the bottom, then add horizontal rungs between neighbouring lines. Each person travels down their line and must cross every rung they meet. Where they come out is their result. In the picture, four people share a ladder with six levels, and the red path belongs to the person who started on the second line.</p>
+<p>This guide uses four words. A <strong>line</strong> is one person’s vertical line. A <strong>rung</strong> joins two neighbouring lines. A <strong>level</strong> is one height at which rungs can be placed. A <strong>place</strong> is a position along the bottom, where a result is written.</p>
+<p>As long as no two rungs touch the same line on the same level, each path is unambiguous and no two people can end at the same place. Our tests check this on thousands of generated ladders by comparing the traced paths with a second method that simply swaps neighbouring lines rung by rung.</p>
+
+<h2>Where does the person on the end land?</h2>
+<p>We built 400,000 ladders for 8 people with a medium number of rungs (14 levels, about 4.7 rungs between each pair of lines) and recorded where the person starting on the far left came out. A fair draw would give 12.5% for each of the eight places.</p>
+<div class="bars" role="img" aria-label="Share of ladders in which the person starting on line 1 finished at places 1 to 8: 24.8%, 22.8%, 18.7%, 13.8%, 9.3%, 5.6%, 3.1%, 1.9%">
+<div class="a"><span>Place 1</span><i style="--v:24.8*3"></i><b>24.8%</b></div>
+<div><span>Place 2</span><i style="--v:22.8*3"></i><b>22.8%</b></div>
+<div><span>Place 3</span><i style="--v:18.7*3"></i><b>18.7%</b></div>
+<div><span>Place 4</span><i style="--v:13.8*3"></i><b>13.8%</b></div>
+<div><span>Place 5</span><i style="--v:9.3*3"></i><b>9.3%</b></div>
+<div><span>Place 6</span><i style="--v:5.6*3"></i><b>5.6%</b></div>
+<div><span>Place 7</span><i style="--v:3.1*3"></i><b>3.1%</b></div>
+<div><span>Place 8</span><i style="--v:1.9*3"></i><b>1.9%</b></div>
+</div>
+<p class="tbl-note">Plain ladder, bottom row not shuffled. Start on line 1, medium rungs (14 levels). The red bar is the place straight below the start.</p>
+<p>Landing straight below the start happened 24.8% of the time, and reaching the far end only 1.9%. That is about 13 times less likely. If the forfeit sits at the far right, the person on the far left is almost safe.</p>
+
+<h2>More levels help, until the group gets large</h2>
+<p>This table shows how often the person on the end line lands straight below their start. The Few, Medium and Many settings in the tool are 8, 14 and 24 levels.</p>
+<div class="tbl-wrap wide"><div class="tbl"><table>
+<thead><tr><th>People</th><th>If fair</th><th>8 levels</th><th>14 levels</th><th>24 levels</th><th>48 levels</th><th>100 levels</th><th>400 levels</th></tr></thead>
+<tbody>
+<tr><td>4</td><td>25.0%</td><td>27.8%</td><td>26.5%</td><td>25.2%</td><td>25.0%</td><td>25.0%</td><td>24.9%</td></tr>
+<tr><td>8</td><td>12.5%</td><td class="hot">27.6%</td><td class="hot">24.8%</td><td class="hot">19.4%</td><td>14.4%</td><td>12.6%</td><td>12.3%</td></tr>
+<tr><td>15</td><td>6.7%</td><td class="hot">27.6%</td><td class="hot">24.7%</td><td class="hot">19.5%</td><td class="hot">14.0%</td><td>10.0%</td><td>6.7%</td></tr>
+<tr><td>30</td><td>3.3%</td><td class="hot">27.6%</td><td class="hot">24.7%</td><td class="hot">19.2%</td><td class="hot">13.7%</td><td class="hot">9.5%</td><td>4.9%</td></tr>
+</tbody>
+</table></div><p class="tbl-hint">Swipe the table sideways to see the rest.</p></div>
+<p class="tbl-note">Red numbers are more than 1.5 times the fair share.</p>
+<p>Four people mix well with only a few levels. The cost grows quickly with the size of the group. Take this as the test for “close to even”: whichever line a person starts on, add up how far each place’s chance sits above the even chance (12.5% per place for 8 people), and the total must stay within 5 percentage points. To pass it, a ladder for 4 needs 12 levels, for 8 it needs 49, for 15 it needs 173, and for 30 it needs 696, which is roughly 6,728 rungs in total. Nobody can draw or follow that.</p>
+<p>The cause is simple. A rung only swaps two neighbouring lines, so each level moves you one line sideways at most. Getting from one edge to the other takes many lucky rungs in a row, with rungs pulling you back along the way.</p>
+
+<h2>What shuffling the bottom row does</h2>
+<p>With the same 8-person, 14-level ladder but the bottom row shuffled first, the person on line 1 received each of the eight results between 12.4% and 12.6% of the time, which is the size of difference chance alone produces. A row that is already in a uniformly random order stays uniformly random whatever ladder you put on top of it, so the number of levels no longer matters.</p>
+<p>The same idea works on paper. Write the bottom row out of sight, and let people choose their line at random or draw lots for it. If the starting lines are random, the result is fair even when the ladder mixes poorly.</p>
+
+<h2>How these numbers were produced</h2>
+<ul>
+<li>We generated between 20,000 and 400,000 ladders for each group size and number of levels using the same code the site runs, with fixed seeds, so rerunning gives the same numbers.</li>
+<li>Ladder rule: call the space between two neighbouring lines a gap. On any level, each gap has the same one-in-three chance of holding a rung. Two gaps side by side never both get a rung on the same level, because two rungs would then touch one line at the same height and the path would fork. A gap that ends up with no rung at all gets one added.</li>
+<li>For 24 levels and above, where that last rule is rarely used, the measured values agree with an exact calculation to within 0.5 percentage points.</li>
+<li>Hand-drawn ladders follow looser rules, so their numbers will differ a little. The direction is the same: fewer levels and more people favour nearby places.</li>
+</ul>
+
+<h2>Result links, the order of the lines and the bottom row</h2>
+<p>A ladder result link holds the names in their order, the bottom row and the value the ladder was built from. In a ladder, who stands on which line is part of the result, so the same ladder with the lines in a different order gives different results. The same goes for the bottom row: swap the order of two prizes and the people who get them swap too. When you check a ladder link, compare the order of the names and of the bottom-row items, as well as the names themselves, with what was agreed. The ladder check code under the list covers both orders, so if it was posted before the draw you only need to compare codes. If you would rather draw in a way that does not depend on order, use the slips in the <a href="https://pick.lumenlab.page/name-picker/">name picker</a>: there the same people get the same slips whatever order the list is in.</p>
+
+  <div class="try"><p>Try it with your own list</p><a class="btn btn--lamp" href="https://pick.lumenlab.page/ladder/">Ladder game</a></div>
+  </div>
+  <p class="gd__fix">Found a mistake, or a rule that has changed? Email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. We check it, fix it and put the new date on this guide.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#e23a3f;--tcp:82%">
+  <h2 id="gd-more">More Pickboard guides</h2>
+  <ol class="gbooks"><li><a href="/en/guides/pick/is-wheel-spinner-random/"><b>Is an online wheel spinner really random?</b><span>Three things decide whether a wheel spinner is fair: where its random numbers come from, how they are turned into a slot, and whether the animation decides anything. Here is how Pickboard handles each.</span></a></li><li><a href="/en/guides/pick/pick-winners-without-repeats/"><b>How to pick winners from a list without repeats</b><span>A short, checkable way to draw several winners from a list: clean the list, draw once, keep alternates, and share a link that replays the result.</span></a></li></ol>
+  <p class="gd__all"><a href="/en/guides/">All guides <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/en/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab (<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">Sole proprietorship</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">Lumen Lab</b><a href="/en/#works" data-i18n="ftWorks">Everything we make</a><a href="/en/guides/" data-i18n="ftGuides">Guides</a><a href="/en/about/" data-i18n="ftAbout">About</a><a href="/en/privacy/" data-i18n="ftPrivacy">Privacy Policy</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">Contact</a></div>
+      <div><b data-i18n="ftGames">Games</b><a href="https://chick-rescue.lumenlab.page/en/" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://castle-up.lumenlab.page/en/" data-i18n="f_castleup">Castle Up!</a></div>
+      <div><b data-i18n="ftApps">Apps</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">SetNote</a></div>
+      <div><b data-i18n="ftTools">Web tools</b><a href="https://date.lumenlab.page/en/" data-i18n="f_daycount">Daycount</a><a href="https://calc.lumenlab.page/en/" data-i18n="f_scicalc">Scientific Calculator</a><a href="https://salary.lumenlab.page/en/" data-i18n="f_takehome">Takehome Korea</a><a href="https://convert.lumenlab.page/" data-i18n="f_inplace">Inplace</a><a href="https://qr.lumenlab.page/" data-i18n="f_staycode">Staycode</a><a href="https://calendar.lumenlab.page/" data-i18n="f_onesheet">Onesheet</a><a href="https://count.lumenlab.page/" data-i18n="f_kankan">Kankan</a><a href="https://pick.lumenlab.page/" data-i18n="f_pickboard">Pickboard</a><a href="https://typing.lumenlab.page/" data-i18n="f_todok">Todok</a><a href="https://time.lumenlab.page/" data-i18n="f_oneturn">Oneturn</a><a href="https://check.lumenlab.page/" data-i18n="f_checkbench">Checkbench</a></div>
+      <div><b data-i18n="ftAppPrivacy">App privacy policies</b><a href="https://chick-rescue.lumenlab.page/en/privacy" data-i18n="f_chickrescue">Chick Rescue</a><a href="https://owlight.lumenlab.page/privacy/#en" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>한글은 왜 2바이트이기도 하고 3바이트이기도 할까 | 칸칸</title>
+<meta name="description" content="한글 한 자는 EUC-KR에서 2바이트, UTF-8에서 3바이트예요. 인코딩마다 글자별 바이트 수를 표로 비교하고, 바이트 제한을 글자 수로 바꾸는 법을 적었어요.">
+<link rel="canonical" href="https://lumenlab.page/guides/count/hangul-byte-utf8-euckr/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="한글은 왜 2바이트이기도 하고 3바이트이기도 할까 | 칸칸">
+<meta property="og:description" content="한글 한 자는 EUC-KR에서 2바이트, UTF-8에서 3바이트예요. 인코딩마다 글자별 바이트 수를 표로 비교하고, 바이트 제한을 글자 수로 바꾸는 법을 적었어요.">
+<meta property="og:url" content="https://lumenlab.page/guides/count/hangul-byte-utf8-euckr/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121121" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/guides.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "한글은 왜 2바이트이기도 하고 3바이트이기도 할까", "description": "한글 한 자는 EUC-KR에서 2바이트, UTF-8에서 3바이트예요. 인코딩마다 글자별 바이트 수를 표로 비교하고, 바이트 제한을 글자 수로 바꾸는 법을 적었어요.", "inLanguage": "ko", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "mainEntityOfPage": "https://lumenlab.page/guides/count/hangul-byte-utf8-euckr/", "image": "https://lumenlab.page/og.png", "author": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "publisher": {"@type": "Organization", "name": "Lumen Lab", "alternateName": "루멘랩", "url": "https://lumenlab.page/", "email": "contact@lumenlab.page"}, "about": {"@type": "WebApplication", "name": "칸칸", "url": "https://count.lumenlab.page/ko/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "가이드", "item": "https://lumenlab.page/guides/"}, {"@type": "ListItem", "position": 2, "name": "칸칸", "item": "https://lumenlab.page/guides/#count"}, {"@type": "ListItem", "position": 3, "name": "한글은 왜 2바이트이기도 하고 3바이트이기도 할까", "item": "https://lumenlab.page/guides/count/hangul-byte-utf8-euckr/"}]}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로" data-i18n-aria="brandLabel">
+      <svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg>
+      <span>Lumen Lab <small lang="ko">루멘랩</small></span>
+    </a>
+    <nav aria-label="사이트" data-i18n-aria="navLabel">
+      <a class="nav-works" href="/#works" data-i18n="navWorks">만든 것</a>
+      <a class="nav-guides" href="/guides/" aria-current="true" data-i18n="navGuides">가이드</a>
+      <a class="nav-about" href="/about/" data-i18n="navAbout">소개</a>
+      <a class="nav-contact" href="/#contact" data-i18n="navContact">문의</a>
+      <a class="lang" href="/en/guides/" hreflang="en" lang="en" data-other-lang>English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap gd">
+<nav class="gd__crumb" aria-label="위치"><a href="/guides/">가이드</a><span aria-hidden="true">›</span><a href="/guides/#count">칸칸</a></nav>
+<article class="gd__doc" style="--tc:#1e3a6e;--tcp:82%">
+  <header class="gd__head">
+    <h1 class="gd__title">한글은 왜 2바이트이기도 하고 3바이트이기도 할까</h1>
+    <p class="gd__meta">루멘랩 · 마지막 확인 <time datetime="2026-10-10">2026. 10. 10.</time></p>
+    <a class="gd__tool" href="https://count.lumenlab.page/ko/"><img src="/img/count.svg" width="44" height="44" alt=""><span class="gd__tool-t"><b>칸칸</b><span>글자 수 세기</span></span><span class="gd__tool-go">열기 <span aria-hidden="true">↗</span></span></a>
+  </header>
+  <div class="gd__body">
+<p class="answer">글자를 숫자로 적는 방식(인코딩)이 달라서예요. EUC-KR은 한글 한 자를 2바이트로, UTF-8은 3바이트로, UTF-16은 2바이트로 적어요. 같은 '가'인데 적는 법만 다른 거예요.</p>
+  <h2>글자별 바이트 수</h2>
+<p>이 사이트의 바이트 계산기로 한 글자씩 넣어 센 값이에요.</p>
+<div class="tbl"><table>
+<tr><th>글자</th><th class="r">UTF-8</th><th class="r">EUC-KR</th><th class="r">UTF-16</th></tr>
+<tr><td>A (영문)</td><td class="r">1</td><td class="r">1</td><td class="r">2</td></tr>
+<tr><td>띄어쓰기</td><td class="r">1</td><td class="r">1</td><td class="r">2</td></tr>
+<tr><td>가 (한글)</td><td class="r">3</td><td class="r">2</td><td class="r">2</td></tr>
+<tr><td>漢 (한자)</td><td class="r">3</td><td class="r">2</td><td class="r">2</td></tr>
+<tr><td>€</td><td class="r">3</td><td class="r">2</td><td class="r">2</td></tr>
+<tr><td>😀</td><td class="r">4</td><td class="r">못 담음</td><td class="r">4</td></tr>
+</table></div>
+<p>영문과 숫자만 쓴 글은 UTF-8과 EUC-KR의 바이트 수가 같아요. 차이는 한글과 한자에서 생겨요.</p>
+<h2>EUC-KR과 한글 2,350자</h2>
+<p>EUC-KR의 바탕인 국가표준 KS X 1001에는 한글이 2,350자, 한자가 4,888자 들어 있어요. 그런데 초성, 중성, 종성을 조합해 만들 수 있는 현대 한글은 11,172자예요. 나머지 8,822자는 이 표에 없어요.</p>
+<p>윈도우가 쓰는 확장판(CP949)은 빠진 8,822자까지 모두 2바이트로 넣었어요. 브라우저가 EUC-KR이라고 부르는 것도 이 확장판이에요. 이 사이트는 확장판 표를 한 글자씩 대조해서, 2바이트로 담기는 글자가 17,048자이고 그 가운데 한글이 11,172자인 것을 확인했어요.</p>
+<p>예를 들어 '똠'은 2,350자에 없는 글자예요. 확장판으로는 2바이트로 적을 수 있지만, 옛 완성형만 받는 곳에서는 적을 수 없어요. 바이트 계산기는 이런 글자가 글에 몇 자 있는지 따로 알려 줘요.</p>
+
+
+
+
+<h2>바이트 제한을 글자 수로 바꾸면</h2>
+<p>한글만 쓴다고 하면 계산은 단순해요.</p>
+<ul>
+<li>UTF-8로 1,000바이트 제한이면 한글 333자까지 들어가요. 333자는 999바이트이고, 334자는 1,002바이트라서 넘어요.</li>
+<li>EUC-KR로 1,000바이트 제한이면 한글 500자까지 들어가요.</li>
+</ul>
+<p>실제 글에는 띄어쓰기와 영문, 숫자가 섞여 있고 이것들은 1바이트라서, 쓸 수 있는 글자 수는 이보다 조금 많아요. 정확한 값은 글을 직접 넣어 세어 보는 게 빨라요.</p>
+<p>학교생활기록부를 적는 나이스(교육정보시스템)도 한글 1자를 3Byte로 세어요. 그래서 한글 기준 500자인 항목의 한도가 1,500Byte예요. 항목별 숫자는 <a href="/guides/count/neis-500ja-1500byte/">나이스 500자는 왜 1,500바이트일까</a>에 있어요.</p>
+<h2>줄바꿈도 바이트를 써요</h2>
+<p>줄바꿈 한 번은 저장하는 방식에 따라 1바이트(LF)이기도 하고 2바이트(CR과 LF)이기도 해요. 바이트로 제한하는 곳에서 줄을 자주 바꾸면 그만큼 쓸 수 있는 글자가 줄어요. 바이트 계산기에서는 줄바꿈을 0, 1, 2 가운데 골라 맞춰 볼 수 있어요.</p>
+<h2>어느 방식인지 모를 때</h2>
+<p>글을 낼 곳의 입력창에 '가' 한 자만 넣어 보세요. 2가 올라가면 EUC-KR 방식이고 3이 올라가면 UTF-8 방식이에요. 1이 올라간다면 바이트가 아니라 글자 수로 세는 곳이에요.</p><div class="try"><p>UTF-8과 EUC-KR 바이트를 나란히 볼 수 있어요.</p><a class="btn btn--lamp" href="https://count.lumenlab.page/ko/byte/">바이트 계산기 열기</a></div><div class="src"><h2>출처</h2><ul><li><a href="https://www.rfc-editor.org/rfc/rfc3629">RFC 3629: UTF-8</a></li><li><a href="https://encoding.spec.whatwg.org/#euc-kr">WHATWG Encoding Standard: EUC-KR</a></li><li><a href="https://www.unicode.org/charts/PDF/UAC00.pdf">유니코드 한글 음절 부호표(U+AC00~U+D7A3)</a></li><li>KS X 1001: 정보 교환용 부호계(한글 및 한자)</li></ul></div>
+  </div>
+  <p class="gd__fix">글에 틀린 곳이 있거나 바뀐 기준을 아시면 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 확인해서 고치고, 고친 날을 이 글에 적어요.</p>
+</article>
+<aside class="gd__more" aria-labelledby="gd-more" style="--tc:#1e3a6e;--tcp:82%">
+  <h2 id="gd-more">칸칸 가이드 더 보기</h2>
+  <ol class="gbooks"><li><a href="/guides/count/geulja-su-dareun-iyu/"><b>같은 글인데 글자 수가 다르게 나오는 이유</b><span>같은 글을 넣어도 도구마다 글자 수가 다른 건 공백, 줄바꿈, 이모지, 바이트를 세는 기준이 달라서예요. 사람인, 잡코리아, 인크루트, 네이버 검색에 2026년 10월에 직접 넣어 본 값을 표로 실었어요.</span></a></li><li><a href="/guides/count/neis-500ja-1500byte/"><b>나이스 500자는 왜 1,500바이트일까</b><span>나이스는 학교생활기록부 글을 바이트로 세어요. 2026학년도 고등학교 기재요령의 바이트 규칙(한글 3Byte, 영문·숫자 1Byte, 엔터 1Byte)과 항목별 최대 글자 수를 표로 정리했어요.</span></a></li><li><a href="/guides/count/emoji-myeot-geulja/"><b>이모지 하나는 몇 글자일까</b><span>👨‍👩‍👧 하나가 세는 방식에 따라 1, 5, 8, 18이 되는 이유를 조각으로 뜯어 보고, 자주 쓰는 이모지와 한글 자모를 네 가지 방식으로 센 표를 실었어요.</span></a></li></ol>
+  <p class="gd__all"><a href="/guides/">가이드 전부 보기 <span aria-hidden="true">→</span></a></p>
+</aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="/"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab(<span lang="ko">루멘랩</span>)</span></a>
+      <p><span data-i18n="sole">개인사업자</span> <span aria-hidden="true">·</span> <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>
+      <p>© 2026 Lumen Lab</p>
+    </div>
+    <div class="foot__links">
+      <!-- gen:foot -->
+      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>
+      <div><b data-i18n="ftGames">게임</b><a href="https://chick-rescue.lumenlab.page/" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://castle-up.lumenlab.page/" data-i18n="f_castleup">캐슬업!</a></div>
+      <div><b data-i18n="ftApps">앱</b><a href="https://owlight.lumenlab.page/" data-i18n="f_owlight">Owlight</a><a href="https://setnote.lumenlab.page/" data-i18n="f_setnote">세트노트</a></div>
+      <div><b data-i18n="ftTools">웹 도구</b><a href="https://date.lumenlab.page/" data-i18n="f_daycount">며칠 계산기</a><a href="https://calc.lumenlab.page/" data-i18n="f_scicalc">공학용 계산기</a><a href="https://salary.lumenlab.page/" data-i18n="f_takehome">떼고얼마</a><a href="https://convert.lumenlab.page/ko/" data-i18n="f_inplace">인플레이스</a><a href="https://qr.lumenlab.page/ko/" data-i18n="f_staycode">오래QR</a><a href="https://calendar.lumenlab.page/ko/" data-i18n="f_onesheet">한장달력</a><a href="https://count.lumenlab.page/ko/" data-i18n="f_kankan">칸칸</a><a href="https://pick.lumenlab.page/ko/" data-i18n="f_pickboard">공평뽑기</a><a href="https://typing.lumenlab.page/ko/" data-i18n="f_todok">토독</a><a href="https://time.lumenlab.page/ko/" data-i18n="f_oneturn">한바퀴</a><a href="https://check.lumenlab.page/ko/" data-i18n="f_checkbench">체크벤치</a></div>
+      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b><a href="https://chick-rescue.lumenlab.page/privacy" data-i18n="f_chickrescue">병아리 구조대</a><a href="https://owlight.lumenlab.page/privacy/" data-i18n="f_owlight">Owlight</a></div>
+      <!-- /gen:foot -->
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

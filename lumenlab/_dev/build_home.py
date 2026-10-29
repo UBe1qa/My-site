@@ -1,17 +1,19 @@
 # 홈(랜딩) 칸을 _dev/catalog.json 에서 다시 만든다: python3 lumenlab/_dev/build_home.py
 # index.html 의 <!-- gen:이름 --> ~ <!-- /gen:이름 --> 사이와 assets/i18n.js 의 /* gen:start */ ~ /* gen:end */ 사이만 바꾼다(손으로 고치지 말 것).
-# 2026-10-18: 홈 = 루멘랩 랜딩 + 만든 것 전부(큰 아이콘 칸, gen:wall). 예전 '만든 것'(/works/)·'가이드 모음'(/guides/) 페이지는 이 홈으로 합쳤다(주소 이동은 _redirects).
+# 2026-10-18: 홈 = 루멘랩 랜딩 + 만든 것 전부(큰 아이콘 칸, gen:wall). 예전 '만든 것'(/works/) 목록은 이 홈으로 합쳤다(주소 이동은 _redirects).
+# 2026-10-29: 가이드 /guides/ 를 다시 둔다. 이번엔 목록이 아니라 도구 사이트에서 옮겨 온 글 자체(build_guides.py, 이 파일 끝에서 부름).
 #   아이콘을 누르면 assets/store.js 가 소개 창을 띄우고, 창 내용은 소개 페이지 /works/<id>/ 를 그대로 쓴다(build_store.py 가 만듦).
 #   그래서 새 앱·도구는 catalog.json 한 줄 + showcase.json 한 항목(+ 도구면 assets/try/<id>.js)만 더하고 이 스크립트를 돌린다.
 #   첫 화면(불 켜진 작업실 그림과 글)은 index.html 에 손으로 둔다(생성 칸 아님, 움직임은 assets/landing.js).
 # 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
-# sitemap.xml 도 여기서 만든다: 홈 + 소개·개인정보 처리방침 + 소개 페이지 15개(한·영) + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것. lastmod = 그 파일을 마지막으로 바꾼 날(git).
+# sitemap.xml 도 여기서 만든다: 홈 + 소개·개인정보 처리방침 + 소개 페이지 15개(한·영) + 가이드 모음·글 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것.
+#   lastmod = 그 파일을 마지막으로 바꾼 날(git). 가이드 글은 글의 마지막 확인 날(dateModified), 모음은 그중 가장 늦은 날.
 # 소개(/about/)·방침(/privacy/)과 영어판은 build_info.py, 소개 페이지는 build_store.py 가 만든다(이 파일 끝에서 부름). 도구 사이트의 글을 읽으니 도구 폴더(catalog.json 의 dir)가 옆에 있어야 한다.
 import json, os, re, shutil, subprocess, datetime, sys
 from html import escape
 
 here = os.path.dirname(os.path.abspath(__file__)); site = os.path.dirname(here)
-sys.path.insert(0, here); import build_info, build_store
+sys.path.insert(0, here); import build_info, build_store, build_guides
 cat = json.load(open(os.path.join(here, 'catalog.json')))
 apps = cat['apps']; games = cat.get('games', []); tools = cat['tools']; groups = cat['groups']
 _gid = [g['id'] for g in groups]
@@ -38,8 +40,8 @@ html = open(idx).read()
 
 # 바닥글: 첫 줄은 루멘랩 자체(만든 것·소개·사이트 전체 방침·문의). 어느 페이지에서든 누가 운영하는지와 방침을 찾게
 pv = ''.join(f'<a href="{h}" data-i18n="f_{it["id"]}">{it["name"]["ko"]}</a>' for it in games + apps for h in ([it['privacy']['ko']] if it.get('privacy') else []) + [l['href'] for l in it['links'] if l['href'].endswith('/privacy/')])
-for k, v in (('ftLumen', 'Lumen Lab'), ('ftWorks', 'Everything we make'), ('ftAbout', 'About'), ('ftPrivacy', 'Privacy Policy'), ('ftContact', 'Contact'), ('ftAppPrivacy', 'App privacy policies')): EN[k] = v
-FOOT = '      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>\n'
+for k, v in (('ftLumen', 'Lumen Lab'), ('ftWorks', 'Everything we make'), ('ftGuides', 'Guides'), ('ftAbout', 'About'), ('ftPrivacy', 'Privacy Policy'), ('ftContact', 'Contact'), ('ftAppPrivacy', 'App privacy policies')): EN[k] = v
+FOOT = '      <div><b data-i18n="ftLumen">루멘랩</b><a href="/#works" data-i18n="ftWorks">만든 것 전부</a><a href="/guides/" data-i18n="ftGuides">가이드</a><a href="/about/" data-i18n="ftAbout">소개</a><a href="/privacy/" data-i18n="ftPrivacy">개인정보 처리방침</a><a href="mailto:contact@lumenlab.page" data-i18n="ftContact">문의</a></div>\n'
 FOOT += (f'      <div><b data-i18n="ftGames">게임</b>{foot(games)}</div>\n' if games else '') + f'      <div><b data-i18n="ftApps">앱</b>{foot(apps)}</div>\n      <div><b data-i18n="ftTools">웹 도구</b>{foot(tools)}</div>'
 if pv: FOOT += f'\n      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b>{pv}</div>'
 
@@ -54,8 +56,8 @@ open(idx, 'w').write(html)
 for f in ['404.html', 'owlight/privacy/index.html', 'owlight/support/index.html']:
     f = os.path.join(site, f); src = open(f).read(); open(f, 'w').write(put(src, 'foot', FOOT))
 
-# 합친 옛 페이지(/apps/·/tools/·/games/, /works/ 목록, /guides/)는 지운다(주소 이동은 _redirects). /works/<id>/ 소개 페이지는 build_store.py 가 쓴다
-for x in ['games', 'apps', 'tools', 'guides', 'en/games', 'en/apps', 'en/tools', 'en/guides']:
+# 합친 옛 페이지(/apps/·/tools/·/games/, /works/ 목록)는 지운다(주소 이동은 _redirects). /works/<id>/ 소개 페이지는 build_store.py, /guides/ 는 build_guides.py 가 쓴다
+for x in ['games', 'apps', 'tools', 'en/games', 'en/apps', 'en/tools']:
     if os.path.isdir(os.path.join(site, x)): shutil.rmtree(os.path.join(site, x))
 for x in ['works/index.html', 'en/works/index.html', 'assets/home.css', 'assets/guides.js']:
     if os.path.isfile(os.path.join(site, x)): os.remove(os.path.join(site, x))
@@ -105,7 +107,7 @@ def to_en(page, path):
     page = re.sub(r'(rel="canonical" href="https://lumenlab\.page/)', r'\1en/', page)
     page = re.sub(r'(property="og:url" content="https://lumenlab\.page/)', r'\1en/', page)
     # 사이트 안 이동은 영어 쪽으로(루트의 만든 것·가이드·소개·방침은 /en/… 영어판이 따로 있음), 앱 방침·지원(한 주소에 두 언어)은 #en 으로, 도구는 영어 주소로
-    page = re.sub(r'href="/((?:works/[a-z0-9]+/|about/|privacy/)?(?:#[^"]*)?)"', lambda m: f'href="/en/{m.group(1)}"', page)
+    page = re.sub(r'href="/((?:works/[a-z0-9]+/|about/|privacy/|guides/)?(?:#[^"]*)?)"', lambda m: f'href="/en/{m.group(1)}"', page)
     page = re.sub(r'href="((?:https://[a-z0-9-]+\.lumenlab\.page/(?:[a-z]+/)?|/(?!en/)[a-z]+/)(?:privacy|support)/)"', r'href="\1#en"', page)  # 앱 주소의 방침·지원도(owlight.lumenlab.page/support/)
     for it in tools + apps + games:
         if it.get('url_en'): page = page.replace(f'href="{it["url"]}"', f'href="{it["url_en"]}"')
@@ -116,7 +118,7 @@ def to_en(page, path):
 
 LEFT = re.compile(r'\\[0-9]|\{\{|\$\{|\{[a-z_]+\[')  # 치환·템플릿 자리표시자가 글자로 남은 것(예: \\1, {{, ${)
 def no_left(page, where):
-    body = re.sub(r'<script\b.*?</script>', '', page, flags=re.S)
+    body = re.sub(r'<script\b.*?</script>|<code\b.*?</code>|<pre\b.*?</pre>', '', page, flags=re.S)   # 가이드의 코드 보기(예: 와이파이 QR 의 p@ss\,word\\1)는 진짜 글자
     m = LEFT.search(body); assert not m, f'{where}: 자리표시자가 그대로 남음 {body[max(0, m.start()-40):m.end()+20]!r}'
 
 def write_en(path, page):
@@ -130,7 +132,8 @@ write_en('en/', open(idx).read())
 # 소개·개인정보 처리방침(한·영)과 소개 페이지 /works/<id>/(한·영): 방금 만든 홈·영어 홈의 머리말·꼬리말을 그대로 쓴다
 info_paths, _ = build_info.build(site, cat, groups, tools)
 work_paths = build_store.build(site, cat, open(idx).read(), open(os.path.join(site, 'en', 'index.html')).read())
-for q in [q for p in info_paths for q in (p, '/en' + p)] + work_paths: no_left(open(os.path.join(site, q.strip('/'), 'index.html')).read(), q)
+guide_paths, guide_meta = build_guides.build(site, cat, open(idx).read(), open(os.path.join(site, 'en', 'index.html')).read(), build_store.SC)
+for q in [q for p in info_paths for q in (p, '/en' + p)] + work_paths + guide_paths: no_left(open(os.path.join(site, q.strip('/'), 'index.html')).read(), q)
 
 # sitemap.xml: 서브도메인 사이트는 각자 사이트맵이 있어서 여기엔 lumenlab.page 주소만 넣는다.
 # canonical이 다른 주소인 페이지(예: 앱스토어에 적힌 옛 주소를 canonical로 둔 방침·지원)는 빼서 사이트맵 = canonical을 지킨다.
@@ -142,6 +145,7 @@ def lastmod(f):
 # 한국어·영어 짝이 있는 주소(/ ↔ /en/, /works/daycount/ ↔ /en/works/daycount/ …)는 xhtml:link 로 서로를 알린다.
 home = ['/'] + info_paths + [p for p in work_paths if not p.startswith('/en/')]
 paths = [q for p in home for q in (p, '/en' + p)]
+paths += guide_paths
 paths += [l['href'] for it in games + apps + tools for l in it.get('links', []) if l['href'].startswith('/') and l['href'] not in paths]
 urls = []
 for pth in paths:
@@ -151,10 +155,13 @@ for pth in paths:
     if not m or m.group(1) != 'https://lumenlab.page' + pth: continue
     ko = pth[3:] if pth.startswith('/en/') else pth
     alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="https://lumenlab.page{p}"/>' for h, p in (('ko', ko), ('en', '/en' + ko), ('x-default', '/en' + ko))) if ko in home else ''
-    urls.append(f'  <url><loc>https://lumenlab.page{pth}</loc><lastmod>{lastmod(f)}</lastmod>{alt}</url>')
+    gm = guide_meta.get(pth)
+    if gm:   # 가이드: 짝은 도구 글이 이어 둔 것만, 날짜는 글의 마지막 확인 날
+        alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="https://lumenlab.page{gm["alt"][k]}"/>' for h, k in (('ko', 'ko'), ('en', 'en'), ('x-default', 'en'))) if gm['alt'] else ''
+    urls.append(f'  <url><loc>https://lumenlab.page{pth}</loc><lastmod>{gm["lastmod"] if gm else lastmod(f)}</lastmod>{alt}</url>')
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n'
 smf = os.path.join(site, 'sitemap.xml')
 if not os.path.isfile(smf) or open(smf).read().split('<url>')[1:] != sm.split('<url>')[1:]:
     open(smf, 'w').write(sm)
 print(f'sitemap.xml: 주소 {len(urls)}개')
-print('영어 페이지:', ', '.join(['/en/'] + ['/en' + p for p in info_paths]) + f' + 소개 페이지 {len(work_paths) // 2}개')
+print('영어 페이지:', ', '.join(['/en/'] + ['/en' + p for p in info_paths]) + f' + 소개 페이지 {len(work_paths) // 2}개 + 가이드')
