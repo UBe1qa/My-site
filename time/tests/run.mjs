@@ -204,6 +204,9 @@ G('tz', () => {
   for (const [z, ts, o] of C.offset) eq(`off ${z} ${new Date(ts).toISOString()}`, OT.offset(z, ts), o);
   for (const [z, ts, n] of C.next) eq(`next ${z} ${new Date(ts).toISOString()}`, OT.nextChange(z, ts), n);
   for (const [z, y, mo, d, h, mi, ts, gap] of C.local) eq(`local ${z} ${y}-${mo}-${d} ${h}:${mi}`, OT.fromLocal(z, y, mo, d, h, mi), { ts, gap });
+  // 낡은 자료 알림: 한 순간(2027-01-15 12:00 UTC)에 보므로, 노드의 tz 자료가 표의 판(src)보다 예전이면 그 시간대가 모두 나와야 한다(쿠바는 2026-11-01~2027-03-14만 다르다)
+  const nodeTz = process.versions.tz || '';
+  eq('stale zones', OT.staleZones().sort(), Object.keys(OT.PATCH).filter((z) => nodeTz < OT.PATCH[z].src).sort());
   // 회의 띠: 서울 기준 2026-10-14(수), 뉴욕·런던. 모두 근무인 시간은 없다(서울 밤 = 뉴욕 아침, 런던 오후)
   const mt = OT.meeting('Asia/Seoul', ['Asia/Seoul', 'America/New_York', 'Europe/London'], 2026, 10, 14);
   eq('meet rows', mt.hours.length, 24);

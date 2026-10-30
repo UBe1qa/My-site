@@ -19,7 +19,11 @@ from articles import ARTICLES  # noqa: E402
 SITE = 'https://time.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 FIRST = '2026-10-14'          # 처음 올린 날
-UPDATED = {}                  # 본문·구조화 데이터·링크가 바뀐 페이지: {'/ko/stopwatch/': '2026-10-20'}
+UPDATED = {                   # 본문·구조화 데이터·링크가 바뀐 페이지: {'/ko/stopwatch/': '2026-10-20'}
+    # 2026-10-29 쿠바(IANA tz 2026f)
+    '/world-clock/': '2026-10-29', '/ko/world-clock/': '2026-10-29', '/about/': '2026-10-29', '/ko/about/': '2026-10-29',
+    '/guide/daylight-saving-time-2026/': '2026-10-29', '/ko/guide/korea-time-difference/': '2026-10-29',
+}
 F = json.loads((DEV / 'facts.json').read_text(encoding='utf-8'))
 
 TOOLS = ['timer', 'stopwatch', 'alarm', 'world']
@@ -146,9 +150,9 @@ def clock_face():
 
 
 # ---------- 세계 시간: 도시 이름(tz.js에서), 낡은 시간대 자료 알림(첫 그림 전에) ----------
-STALE_CITIES = ['vancouver', 'calgary', 'winnipeg', 'casablanca']
-# 2027-01-15 12:00 UTC의 현지 시: 새 자료(2026b~e)면 밴쿠버 5시(UTC-7)·캘거리 6시·위니펙 7시·카사블랑카 12시
-STALE_BOOT = ("<script>(function(){try{var t=Date.UTC(2027,0,15,12),z={'America/Vancouver':5,'America/Edmonton':6,'America/Winnipeg':7,'Africa/Casablanca':12},k;"
+STALE_CITIES = ['vancouver', 'calgary', 'winnipeg', 'casablanca', 'havana']
+# 2027-01-15 12:00 UTC의 현지 시: 새 자료(2026b~f)면 밴쿠버 5시(UTC-7)·캘거리 6시·위니펙 7시·카사블랑카 12시·아바나 8시(UTC-4, 예전 자료는 7시)
+STALE_BOOT = ("<script>(function(){try{var t=Date.UTC(2027,0,15,12),z={'America/Vancouver':5,'America/Edmonton':6,'America/Winnipeg':7,'Africa/Casablanca':12,'America/Havana':8},k;"
               "for(k in z){var h=+new Intl.DateTimeFormat('en-US',{timeZone:k,hour:'numeric',hourCycle:'h23'}).format(t);if(h!==z[k]){document.getElementById('stale').hidden=false;break}}}catch(e){}})()</script>")
 
 

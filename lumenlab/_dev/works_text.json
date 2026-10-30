@@ -2289,8 +2289,8 @@
       "en": "City times"
      },
      "v": {
-      "ko": "브라우저에 든 IANA 시간대 자료로 계산해요. 2026년에 바뀐 캐나다·모로코 규칙은 브라우저 자료가 예전 것이어도 맞게 따로 넣어 뒀고, 그럴 땐 세계 시간 화면에 알려요.",
-      "en": "Uses the IANA time zone data in your browser. The 2026 rule changes for Canada and Morocco are built in, so those cities stay right on older browsers, and the world clock says when your browser's data is out of date."
+      "ko": "브라우저에 든 IANA 시간대 자료로 계산해요. 2026년에 바뀐 캐나다·모로코·쿠바 규칙은 브라우저 자료가 예전 것이어도 맞게 따로 넣어 뒀고, 그럴 땐 세계 시간 화면에 알려요.",
+      "en": "Uses the IANA time zone data in your browser. The 2026 rule changes for Canada, Morocco and Cuba are built in, so those cities stay right on older browsers, and the world clock says when your browser's data is out of date."
      },
      "src": {
       "t": {
@@ -2299,7 +2299,7 @@
       },
       "href": "https://data.iana.org/time-zones/tzdb/NEWS"
      },
-     "on": "2026-10-14"
+     "on": "2026-10-29"
     },
     {
      "k": {
@@ -2382,10 +2382,17 @@
   },
   "log": {
    "h": {
-    "ko": "10월 14일, 네 가지 도구를 시차 가이드와 함께 열었어요",
-    "en": "Launched on Oct 14 with all four tools and the time zone guides"
+    "ko": "IANA가 10월 27일에 낸 시간대 자료를 바뀌는 날(11월 1일) 전에 넣었어요",
+    "en": "IANA’s Oct 27 time zone update went in before the Nov 1 change"
    },
    "items": [
+    {
+     "d": "2026-10-30",
+     "t": {
+      "ko": "쿠바가 11월 1일에 시계를 되돌리지 않기로 한 것(IANA 2026f판)을 세계 시간에 넣었어요.",
+      "en": "The world clock now follows Cuba’s decision to skip the November 1 clock change (IANA release 2026f)."
+     }
+    },
     {
      "d": "2026-10-14",
      "t": {
