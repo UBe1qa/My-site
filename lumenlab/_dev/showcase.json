@@ -1509,8 +1509,8 @@
      }
     ],
     "cap": {
-     "ko": "실제 게임 화면이에요. 개발 중인 게임이라 출시 전에 바뀔 수 있어요.",
-     "en": "Real game screens. The game is still in development, so they may change before launch."
+     "ko": "개발하면서 찍은 실제 게임 화면이라 스토어에 나온 0.1.2판과 조금 다를 수 있어요.",
+     "en": "Real game screens captured during development, so the 0.1.2 store version may look a little different."
     }
    },
    "more": [
@@ -1570,14 +1570,14 @@
       "en": "Questions"
      },
      "d": {
-      "ko": "출시, 광고, 결제 계획",
-      "en": "Launch, ads and payment plans"
+      "ko": "받는 곳, 광고, 결제",
+      "en": "Where to get it, ads and payments"
      }
     }
    ],
    "note": {
-    "ko": "화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요. 로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요. 메인 1,440판은 끝까지 무료이고, 돈을 내고 무작위로 뽑는 아이템은 없어요.",
-    "en": "Screens and numbers reflect the game in development and may change before launch. The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code. All 1,440 main levels stay free, and there are no paid random draws."
+    "ko": "화면과 숫자는 개발하면서 찍고 잰 것이라 스토어에 나온 0.1.2판과 조금 다를 수 있어요. 로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요. 메인 1,440판은 끝까지 무료이고, 돈을 내고 무작위로 뽑는 아이템은 없어요.",
+    "en": "Screens and numbers were captured during development and may differ a little from the 0.1.2 store version. The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code. All 1,440 main levels stay free, and there are no paid random draws."
    }
   },
   "castleup": {

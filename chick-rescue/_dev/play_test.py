@@ -2,6 +2,7 @@
 한국어(움직임 켬)·영어(움직임 줄이기) 둘 다:
   맛보기  틀린 수 안내 두 가지, 힌트 출발·도착 표시, 1판 풀기 → 둥지, 완료 창, 2판 꾹 눌러 능력, 되돌리기, 2판 풀기
   완료 창  주 단추(말·주소가 build.CTA와 같음), '다음 판'은 글자 링크, 창이 보이는 동안 하단 줄 숨김
+  스토어  끝 칸 배지 둘이 보이면 하단 줄 숨김, 안드로이드·아이폰에선 주 단추가 그 스토어 주소로
   친구 무대  앞뒤 단추로 넘기기, 12마리 줄에서 고르면 그 무대가 가운데로(능력 한 줄·영상)
   질문  접고 펴기
   첫 화면  360×640·390×700에서 되돌리기·힌트·다시 하기와 주 단추가 보임
@@ -38,7 +39,7 @@ with sync_playwright() as p:
         round_text = pg.evaluate(ROUND_TEXT)
         # 주 단추: 모든 자리의 말·주소가 build.CTA 상수
         hrefs = pg.eval_on_selector_all('[data-cta]', 'es => es.map(e => [e.getAttribute("href"), e.textContent.trim()])')
-        check(len(hrefs) == 4 and all(h == href and t == label for h, t in hrefs), f'{path} 주 단추 4곳이 상수 말·주소 ({len(hrefs)})')
+        check(len(hrefs) == 3 and all(h == href and t == label for h, t in hrefs), f'{path} 주 단추 3곳이 상수 말·주소 ({len(hrefs)})')
         check(pg.is_visible('#dock .cta'), f'{path} 첫 화면 하단 줄 주 단추 보임')
         # 틀린 수: 꽉 찬 튜브(1)로, 맨 위가 다른 튜브(3)로
         tap(0); tap(1)
@@ -114,7 +115,8 @@ with sync_playwright() as p:
         check(pg.evaluate("document.querySelector('.qa details').open") is False, f'{path} 질문 접기')
         # 끝 칸 단추가 보이면 하단 줄은 숨김
         pg.locator('.end-cta').scroll_into_view_if_needed(); pg.wait_for_timeout(1800)
-        check(pg.is_visible('.end-cta .cta') and 'is-off' in (pg.get_attribute('#dock', 'class') or ''), f'{path} 끝 칸에서는 하단 줄 숨김')
+        check(pg.locator('.end-cta .store').count() == 2 and all(pg.locator('.end-cta .store').nth(n).is_visible() for n in range(2))
+              and 'is-off' in (pg.get_attribute('#dock', 'class') or ''), f'{path} 끝 칸 배지 둘이 보이고 하단 줄 숨김')
         round_text += pg.evaluate(ROUND_TEXT)
         # 판이 화면 밖이면 rAF 0(이 페이지 장식은 rAF를 쓰지 않는다)
         pg.wait_for_timeout(800); pg.evaluate('window.__raf = 0; window.__rafBoard = 0'); pg.wait_for_timeout(1000)
@@ -134,6 +136,14 @@ with sync_playwright() as p:
                 return {ctrl: Math.round(c.bottom), dock: Math.round(d.top), w: document.documentElement.scrollWidth}; }""")
             check(r['ctrl'] <= r['dock'] <= vh and pg.is_visible('#dock .cta') and r['w'] == vw, f'{path} {vw}×{vh} 첫 화면에 판 단추 줄(아래 {r["ctrl"]})과 주 단추(위 {r["dock"]})')
             pg.close()
+        # 휴대폰 스토어: 안드로이드는 Google Play, 아이폰은 App Store로 주 단추 셋이 바로 간다
+        for ua, k in (('Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile Safari/537.36', 'play'),
+                      ('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1', 'ios')):
+            ctx = b.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, user_agent=ua, reduced_motion=motion)
+            pg = ctx.new_page(); pg.goto(BASE + path, wait_until='networkidle')
+            hs = pg.eval_on_selector_all('[data-cta]', 'es => es.map(e => e.getAttribute("href"))')
+            check(len(hs) == 3 and all(h == build.STORE[k] for h, in zip(hs)), f'{path} {k} 휴대폰 주 단추 셋 → {build.STORE[k]}')
+            ctx.close()
     b.close()
 print('실패', len(fails))
 sys.exit(1 if fails else 0)

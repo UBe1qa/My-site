@@ -22,11 +22,11 @@ for k, f in pages.items():
     h = read(f)
     body = re.sub(r'<script\b.*?</script>', '', h, flags=re.S)
     ok(not re.search(r'__[A-Z]+__|\{[a-z_]+\}', body), f'{k} 자리표시자 없음')
-    # 출시 전: 가격·스토어 단추·확인 안 된 말 금지
+    # 가격(나라·때마다 달라 스토어에 맡김)·확인 안 된 말 금지
     vis = re.sub(r'<head\b.*?</head>|<style\b.*?</style>', '', body, flags=re.S)
     vis = re.sub(r'<[^>]+>', ' ', vis)
-    hit = re.search(r'₩|\$\d|\d+원|App Store에서|Google Play에서 받기|Get it on|지금 받기|다운로드 \d|별점|1위|최고의|best-selling|#1\b|\d+만 명', vis)
-    ok(not hit, f'{k} 가격·스토어 단추·과장 없음' + (f' ({hit.group(0)})' if hit else ''))
+    hit = re.search(r'₩|\$\d|\d+원|다운로드 \d|별점|1위|최고의|best-selling|#1\b|\d+만 명|출시 준비|launch', vis)
+    ok(not hit, f'{k} 가격·과장·출시 전 말 없음' + (f' ({hit.group(0)})' if hit else ''))
     ok(len(re.findall(r'\sid="([^"]+)"', h)) == len(set(re.findall(r'\sid="([^"]+)"', h))), f'{k} id 겹침 없음')
     for src in re.findall(r'(?:src|href|poster)="(/[^"#?]*)', h):
         p = os.path.join(SITE, src.lstrip('/'))
@@ -40,11 +40,14 @@ for k, f in pages.items():
         ok('chick-rescue.lumenlab.page' in h and 'workers.dev' not in h, f'{k} 대표 주소')
         ok(h.count('hreflang=') >= 3, f'{k} hreflang')
         ok('noindex' not in h, f'{k} noindex 없음')
-        # 주 단추: build.CTA 한 곳에서 온 말·주소가 모든 자리(머리말·완료 창·끝 칸·하단 줄)에
+        # 주 단추: build.CTA 한 곳에서 온 말·주소가 모든 자리(머리말·완료 창·하단 줄)에, 끝 칸은 공식 배지 둘(site.js가 휴대폰에서 이 주소를 옮겨 씀)
         ctas = re.findall(r'<a class="cta[^"]*" href="([^"]+)" data-cta>([^<]+)</a>', h)
-        ok(len(ctas) == 4, f'{k} 주 단추 자리 4곳 ({len(ctas)})')
-        ok(all(x[0].replace('&amp;', '&') == build.CTA['href'][i] and x[1] == build.CTA['label'][i] for x in ctas), f'{k} 주 단추 말·주소가 상수와 같음')
-        ok(h.count(build.CTA['note'][i]) >= 2, f'{k} 주 단추 아래 안내')
+        ok(len(ctas) == 3, f'{k} 주 단추 자리 3곳 ({len(ctas)})')
+        ok(all(x[0] == build.CTA['href'][i] and x[1] == build.CTA['label'][i] for x in ctas), f'{k} 주 단추 말·주소가 상수와 같음')
+        ok(h.count(build.CTA['note'][i]) == 1, f'{k} 주 단추 아래 안내')
+        end = h[h.index('<section class="end"'):h.index('</section>', h.index('<section class="end"'))]
+        ok(all(f'<a class="store" href="{build.STORE[s]}" data-store="{s}"><img src="{build.BADGE[s][i][0]}"' in end for s in ('ios', 'play')), f'{k} 끝 칸 배지 둘(App Store·Google Play, 이 언어 그림)')
+        ok(all(h.count(f'href="{u}"') >= 2 for u in build.STORE.values()), f'{k} 질문에도 두 스토어 링크')
         foot = h[h.index('<footer'):h.index('</footer>')]
         ok('© 2026 Lumen Lab' in foot and f'mailto:{build.MAIL}' in foot and build.S['lumen_url'][i] in foot, f'{k} 꼬리말(©·메일·lumenlab.page)')
         ok('Higgsfield' in foot and build.S['foot_dev'][i] in foot, f'{k} 꼬리말 AI 그림 표시·개발 중 안내')
@@ -78,7 +81,7 @@ for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html
 ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', read('en/privacy.html'))), '영어 방침에 한글 없음(한국어 링크 빼고)')
 ok('/privacy</loc>' in read('sitemap.xml') and '/en/privacy</loc>' in read('sitemap.xml'), 'sitemap에 방침 두 주소')
 ko = read('index.html')
-ok(not re.search(r'[A-Za-z]{4,}', re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|contact@lumenlab\.page|lumenlab\.page|English|iOS', '', re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', ko, flags=re.S))), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)')
+ok(not re.search(r'[A-Za-z]{4,}', re.sub(r'<[^>]+>|Lumen Lab|Higgsfield|contact@lumenlab\.page|lumenlab\.page|English|iOS|Google.Play|App.Store', '', re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', ko, flags=re.S))), '한국어판 화면 글에 영어 낱말 없음(이름 빼고)')
 en = re.sub(r'<script\b.*?</script>|<head>.*?</head>', '', read('en/index.html'), flags=re.S)
 ok(not re.search(r'[가-힣]', re.sub(r'<a [^>]*lang="ko"[^>]*>[^<]*</a>', '', en)), '영어판 화면에 한글 없음(한국어 링크 빼고)')
 ok(not re.search(r'[가-힣]', re.sub(r'"names".*', '', read('en/index.html').split('id="demo-text">')[1].split('</script>')[0])), '영어판 맛보기 글(demo-text)에 한글 없음')

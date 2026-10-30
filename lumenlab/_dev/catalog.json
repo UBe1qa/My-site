@@ -24,14 +24,16 @@
       "name": {"ko": "병아리 구조대", "en": "Chick Rescue"},
       "find": {"ko": "게임 퍼즐 정렬 병아리 한 판 휴대폰 게임", "en": "game puzzle sort chick phone game"},
       "sub": "Chick Rescue",
-      "kind": {"ko": "휴대폰 퍼즐 게임 <span aria-hidden=\"true\">·</span> <span class=\"nw\">안드로이드 먼저</span>", "en": "Puzzle game for phones <span aria-hidden=\"true\">·</span> <span class=\"nw\">Android first</span>"},
-      "status": {"ko": "출시 준비 중", "en": "Getting ready for launch"},
+      "kind": {"ko": "휴대폰 퍼즐 게임 <span aria-hidden=\"true\">·</span> <span class=\"nw\">안드로이드·아이폰</span>", "en": "Puzzle game for phones <span aria-hidden=\"true\">·</span> <span class=\"nw\">Android and iPhone</span>"},
+      "status": {"ko": "지금 받을 수 있어요", "en": "Out now"},
       "line": {"ko": "튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요.", "en": "A sort puzzle: move animal friends between tubes, hold them to use abilities, and send the buried chicks home."},
       "url": "https://chick-rescue.lumenlab.page/",
       "url_en": "https://chick-rescue.lumenlab.page/en/",
       "privacy": {"ko": "https://chick-rescue.lumenlab.page/privacy", "en": "https://chick-rescue.lumenlab.page/en/privacy"},
       "links": [
-        {"href": "https://chick-rescue.lumenlab.page/", "go": true, "ko": "어떤 게임인지", "en": "What it is"}
+        {"href": "https://chick-rescue.lumenlab.page/", "go": true, "ko": "어떤 게임인지", "en": "What it is"},
+        {"href": "https://play.google.com/store/apps/details?id=com.ube1qa.crittershuffle", "ko": "Google Play", "en": "Google Play"},
+        {"href": "https://apps.apple.com/app/id6824218676", "ko": "App Store", "en": "App Store"}
       ]
     },
     {
