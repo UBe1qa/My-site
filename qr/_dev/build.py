@@ -30,7 +30,7 @@ except ImportError:
 SITE = 'https://qr.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
 FIRST = '2026-10-14'
-UPDATED = {}
+UPDATED = {'/about/': '2026-10-30', '/ko/about/': '2026-10-30'}   # 2026-10-30: 소개에 쓴 공개 코드(jsQR)와 글꼴(주아·Fredoka)
 TX, UI, M = C.TX, C.UI, C.M
 esc = lambda s: html.escape(str(s), quote=True)
 

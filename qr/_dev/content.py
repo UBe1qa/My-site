@@ -544,6 +544,8 @@ ABOUT = {
 <ul><li>URL·글·와이파이·연락처·이메일·문자·전화·위치·일정·WhatsApp QR</li><li>점·눈 모양, 그라데이션, 로고, 틀(스티커 모양)과 문구, 오류 복원 단계, 여백</li><li>PNG·JPG·SVG·PDF·EPS 저장, A4 스티커 시트 인쇄</li><li>목록·CSV로 최대 1,000개 대량 만들기</li><li>만든 그림을 바로 다시 읽는 \'찍힘 확인\'</li><li>열기 전에 주소를 확인하는 스캐너</li></ul>
 <h2>못 하는 것</h2>
 <p>인쇄한 뒤 주소 바꾸기와 찍힌 수 세기는 하지 않아요. 둘 다 이 사이트 서버를 거치게 해야 해서, 이 사이트가 멈추면 코드도 멈추기 때문이에요. 찍힌 수는 UTM 꼬리표로 내 분석 도구에서 볼 수 있어요.</p>
+<h2>쓴 공개 코드와 글꼴</h2>
+<ul><li><a href="https://github.com/cozmo/jsQR">jsQR</a> 1.4.0(Apache-2.0, <a href="/assets/vendor/jsQR-LICENSE.txt">라이선스</a>): \'찍힘 확인\'에서 만든 그림을 다시 읽고, 스캐너에선 브라우저의 QR 읽기 기능이 없거나 못 읽을 때 읽어요.</li><li>배달의민족 주아체(BM JUA)와 Fredoka(SIL OFL 1.1, <a href="/assets/glyphs/OFL-Jua.txt">주아</a>·<a href="/assets/glyphs/OFL-Fredoka.txt">Fredoka</a> 라이선스): 틀 문구의 글자 모양</li></ul>
 <h2>운영</h2>
 <p>루멘랩(Lumen Lab)이 만들고 광고로 운영해요. 문의: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
     'en': dict(title='About Staycode — A Free QR Code Generator That Never Expires', h1='About Staycode', desc='Staycode is a free QR code generator by Lumen Lab. It makes static codes only, so they never expire, with design, print files, bulk and scan check, no sign-up.',
@@ -554,6 +556,8 @@ ABOUT = {
 <ul><li>URL, text, WiFi, contact, email, SMS, phone, location, event and WhatsApp codes</li><li>Dot and eye shapes, gradients, logo, frames with text, error correction level and quiet zone</li><li>PNG, JPG, SVG, PDF and EPS downloads, and A4 sticker sheets</li><li>Bulk generation of up to 1,000 codes from a list or CSV</li><li>A scan check that reads back the image you just made</li><li>A scanner that shows the address before opening it</li></ul>
 <h2>What it does not do</h2>
 <p>It does not change links after printing or count scans. Both would require every scan to pass through this site, so the code would stop if the site did. You can count scans in your own analytics with UTM tags.</p>
+<h2>Open-source code and fonts</h2>
+<ul><li><a href="https://github.com/cozmo/jsQR">jsQR</a> 1.4.0 (Apache-2.0, <a href="/assets/vendor/jsQR-LICENSE.txt">license</a>): reads back the image you made for the scan check, and reads codes in the scanner when the browser's built-in QR reader is missing or can't read one.</li><li>BM JUA and Fredoka (SIL OFL 1.1, <a href="/assets/glyphs/OFL-Jua.txt">Jua</a> and <a href="/assets/glyphs/OFL-Fredoka.txt">Fredoka</a> licenses): the letter shapes for frame text</li></ul>
 <h2>Who runs it</h2>
 <p>Made by Lumen Lab and paid for by ads. Contact: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''),
 }
