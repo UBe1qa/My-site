@@ -67,7 +67,7 @@ for i, (f, home) in enumerate((('privacy.html', 'index.html'), ('en/privacy.html
     ok(not re.search(r'\[(officer|phone|inquiry_keep|사이트에서 채울|정할 것|이름을 넣을|Site to fill|Name to fill|To decide)', h) and not re.search(r'__[A-Z]+__', h), f'{url} 빈칸·자리표시자 없음')
     ok(all(build.PRIVACY['officer']) and all(build.PRIVACY['phone']) and build.PRIVACY['phone'][0] in read('privacy.html'), '개인정보 보호 담당·전화번호가 있음')
     ok(f'<link rel="canonical" href="{url}">' in h and h.count('hreflang=') >= 4 and 'noindex' not in h, f'{url} canonical·hreflang')
-    ok(('시행일: 2026년 10월 18일', 'Effective date: October 18, 2026')[i] in h, f'{url} 맨 위 시행일')
+    ok(('시행일: 2026년 10월 30일', 'Effective date: October 30, 2026')[i] in h, f'{url} 맨 위 시행일')
     ok(f'mailto:{build.MAIL}' in h and h.count(build.MAIL) >= 3, f'{url} 문의 메일')
     ok(h.count('<table>') == 4, f'{url} 표 4개(처리 항목·위탁·Android 권한·iOS 권한)')
     for src in re.findall(r'(?:src|href)="(/[^"#?]*)', h):
