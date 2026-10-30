@@ -10,15 +10,15 @@
   - 화면 글 = `_dev/content.py`(UI·PAGES·FACTS·FAQ·소개·방침), 글 = `_dev/articles.py`(시차 표는 파이썬 zoneinfo로 계산해 넣는다), 공식 사실 = `_dev/facts.json`(값·출처·확인한 날·확인 못 한 것).
   - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 2026-10-29부터 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
   - 시계판 SVG는 build.py `dial_svg()`가 첫 HTML에 미리 그리고(화면 밀림 0), app.js `drawFace()`가 같은 기하로 다시 그린다. 둘을 같이 고친다(반지름: 테두리 198·판 186·눈금 178/171/164·숫자 145·띠 126~100·가운데 96).
-- `assets/core.js` 시간 로직(DOM 모름): 숫자 칸 읽기, 시계판 한 바퀴 단위(`scaleFor`·`faceLabels`), 판 돌리기(`dragMinutes`), 타이머·스톱워치 상태, 알람 다음 시각, 시간대(`offset`·`parts`·`fromLocal`·`nextChange`·`meeting`), **`OT.PATCH`(2026년 캐나다 세 주·모로코 규칙. 브라우저 tz 자료가 낡아도 맞게)**.
+- `assets/core.js` 시간 로직(DOM 모름): 숫자 칸 읽기, 시계판 한 바퀴 단위(`scaleFor`·`faceLabels`), 판 돌리기(`dragMinutes`), 타이머·스톱워치 상태, 알람 다음 시각, 시간대(`offset`·`parts`·`fromLocal`·`nextChange`·`meeting`), **`OT.PATCH`(2026년 캐나다·모로코·쿠바 규칙, 쿠바는 `to`(2027-11-07)까지. 브라우저 tz 자료가 낡아도 맞게)**.
 - `assets/tz.js` 도시 목록(id·IANA 시간대·영어·한국어·나라·찾기 별칭). `assets/app.js` 화면 연결. `assets/style.css` 모양(토큰 `:root`, 어둡게 `[data-theme=dark]`).
-- `tests/run.mjs` 로직 시험(2,099개), `tests/gen_tz.py` 시간대 기준값(파이썬 zoneinfo) → `tests/cases-tz.json`.
+- `tests/run.mjs` 로직 시험(2,110개), `tests/gen_tz.py` 시간대 기준값(파이썬 zoneinfo) → `tests/cases-tz.json`.
 - `_dev/check.py` 정적 검사, `_dev/e2e.py` 화면 확인(Playwright, 가짜 시계), `_dev/serve.mjs` 로컬 서버(8471), `_dev/og.py` 공유 그림.
 
 ## 명령어
 - 전부: `time/_dev/check.sh` (시험 → 빌드 최신 → 정적 검사). `check.sh e2e [스크린샷 폴더]` 화면 확인까지(5~8분). `check.sh live` 배포 뒤 실제 주소 대조. `check.sh og` 공유 그림.
 - 묶음만: `SEC=2,5 python3 time/_dev/e2e.py` (1 모든 페이지 · 2 타이머 · 3 스톱워치 · 4 알람 · 5 세계 시간 · 6 화면 밀림).
-- 시간대 기준값 새로: 저장소 밖 폴더에 `pip install --target <폴더> -U tzdata` → `PYTHONPATH=<폴더> PYTHONTZPATH= python3 time/tests/gen_tz.py`. 노드의 tz 자료가 예전 것이어도 `OT.PATCH` 덕분에 새 자료와 같아야 한다.
+- 시간대 기준값 새로(패키지 설치 없이): 저장소 밖 빈 폴더에 https://data.iana.org/time-zones/releases/tzdata<판>.tar.gz 를 받아 풀고, 다른 빈 폴더 `<out>`에 `{ echo "# version <판>"; cat africa antarctica asia australasia europe northamerica southamerica etcetera factory backward; } > <out>/tzdata.zi` → `/usr/sbin/zic -d <out> <out>/tzdata.zi` → `PYTHONTZPATH=<out> python3 -I time/tests/gen_tz.py`(판 이름은 tzdata.zi 첫 줄에서 읽어 cases-tz.json `tzdata`에 적는다). 받은 파일은 데이터로만 다룬다(스크립트는 다른 폴더에, 파이썬은 `-I`). 노드의 tz 자료가 예전 것이어도 `OT.PATCH` 덕분에 새 자료와 같아야 한다.
 
 ## 동작 기준(화면 글과 같아야 한다)
 - 시간은 언제나 시작·끝 시각으로 계산한다. 끝나는 순간에 `setTimeout` 하나(이어 건 타이머가 아님 → 크롬의 '1분에 한 번' 늦추기 대상이 아니다). 화면은 보일 때만 requestAnimationFrame.
@@ -30,5 +30,5 @@
 - 광고: 자동 광고 코드는 도구·글 페이지에만(소개·방침·가이드 목록·404 없음). 수동 자리 `mid`·`bottom`은 단위 번호가 비어 있어 지금은 없다.
 
 ## 유지 일정
-- IANA tz 새 판이 나오면(1년에 몇 번, https://data.iana.org/time-zones/tzdb/NEWS): 바뀐 나라가 도시 목록에 있으면 `OT.PATCH`·`facts.json` `tz_2026`·글을 고치고 `gen_tz.py`를 다시.
+- IANA tz 새 판이 나오면(1년에 몇 번, https://data.iana.org/time-zones/tzdb/NEWS): 바뀐 나라가 도시 목록에 있으면 `OT.PATCH`·build.py `STALE_BOOT`·`STALE_CITIES`(2027-01-15 12:00 UTC 현지 시)·`facts.json` `tz_2026`·글을 고치고 `gen_tz.py`를 다시.
 - 해마다 10월: 글의 서머타임 표 기간(2026~2027)을 다음 해로(articles.py `changes()` 범위와 제목).

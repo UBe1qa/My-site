@@ -9,6 +9,8 @@ LIFE = _F['page_lifecycle']['url']
 NIST = _F['dst_us']['url']
 IANA = _F['tz_2026']['url']
 CHK = {'ko': '2026년 10월 14일 확인', 'en': 'checked Oct 14, 2026'}
+_ty, _tm, _td = map(int, _F['tz_2026']['checked'].split('-'))  # 시간대 사실은 따로 확인한 날
+CHK_TZ = {'ko': f'{_ty}년 {_tm}월 {_td}일 확인', 'en': f'checked {"JanFebMarAprMayJunJulAugSepOctNovDec"[_tm * 3 - 3:_tm * 3]} {_td}, {_ty}'}
 
 NAV = {
     'ko': {'timer': '타이머', 'stopwatch': '스톱워치', 'alarm': '알람', 'world': '세계 시간'},
@@ -57,7 +59,7 @@ UI = {
             'a_max': '알람은 12개까지예요', 'a_dup': '같은 시각에 켜진 알람이 이미 있어요', 'a_filled': '{t}로 채웠어요. \'알람 맞추기\'를 눌러 주세요',
             'a_missed_bar': '기기가 쉬는 동안 지나간 알람: {list}', 'a_on': '켜기', 'today': '오늘', 'tomorrow': '내일', 'yesterday': '어제', 'me': '내 기기', 'you': '내 시간',
             'dst_next': '{date} {time}에 {what} → {diff}', 'dst_start': '서머타임 시작', 'dst_end': '서머타임 끝', 'dst_change': '시차 바뀜', 'dst_none': '1년 안에 바뀌는 날 없음',
-            'stale': '이 브라우저의 시간대 자료가 예전 것이에요({cities}). 2026년에 바뀐 규칙은 이 사이트가 고친 값으로 계산해요. 다른 사이트·앱에서는 1시간 틀릴 수 있으니 브라우저를 업데이트해 주세요.',
+            'stale': '이 브라우저의 시간대 자료가 예전 것이에요({cities}). 2026년에 바뀐 규칙은 이 사이트가 고친 값으로 계산해요. 다른 사이트·앱에서는 1시간 틀릴 수 있어요. 브라우저 업데이트로 새 자료가 들어오면 이 알림은 사라져요.',
             'all_none': '이 날은 모두 근무 시간인 때가 없어요. 가장 가까운 칸을 눌러 보세요.', 'all_some': '모두 근무 시간: {list}', 'city_dup': '이미 있는 도시예요', 'city_none': '찾는 도시가 없어요. 같은 나라의 큰 도시를 넣어 보세요',
             'city_max': '도시는 12개까지예요', 'remove': '빼기', 'base_me': '내 기기 시간대 ({zone})', 'pick_line': '{list}', 'gap': '(그날 없는 시각)',
             'weekday': ['일', '월', '화', '수', '목', '금', '토'], 'date_fmt': '{m}월 {d}일 ({w})', 'full_exit': '전체 화면 닫기',
@@ -104,7 +106,7 @@ UI = {
             'a_max': 'You can have up to 12 alarms', 'a_dup': 'An alarm is already on for that time', 'a_filled': 'Filled in {t}. Press Set alarm',
             'a_missed_bar': 'Missed while the device was asleep: {list}', 'a_on': 'Turn on', 'today': 'Today', 'tomorrow': 'Tomorrow', 'yesterday': 'Yesterday', 'me': 'This device', 'you': 'you',
             'dst_next': '{what} on {date} at {time} → {diff}', 'dst_start': 'Clocks go forward', 'dst_end': 'Clocks go back', 'dst_change': 'Offset changes', 'dst_none': 'No clock change in the next year',
-            'stale': 'This browser has old time zone data ({cities}). This site applies the 2026 rule changes itself, but other sites and apps on this device may be an hour off. Updating the browser fixes it.',
+            'stale': 'This browser has old time zone data ({cities}). This site applies the 2026 rule changes itself, but other sites and apps on this device may be an hour off. This notice goes away once a browser update brings the new data.',
             'all_none': 'No hour has everyone at work on this day. Tap the closest cell.', 'all_some': 'Everyone at work: {list}', 'city_dup': 'That city is already here', 'city_none': 'City not found. Try a larger city in the same country',
             'city_max': 'Up to 12 cities', 'remove': 'Remove', 'base_me': 'This device ({zone})', 'pick_line': '{list}', 'gap': '(skipped that day)',
             'weekday': ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], 'date_fmt': '{w}, {mon} {d}', 'full_exit': 'Exit full screen',
@@ -129,7 +131,7 @@ PAGES = {
         'world': {'title': '세계 시간·시차 계산 - 서머타임 바뀌는 날까지 | 한바퀴',
                   'desc': '나라별 현재 시각과 시차를 한 화면에. 서머타임이 바뀌는 날과 바뀐 뒤 시차, 모두 근무 시간인 회의 시각까지 찾아 줘요.',
                   'h1': '세계 시간·시차 계산', 'card': '시차·서머타임·회의 시간 찾기',
-                  'why': '도시마다 <b>다음 서머타임 바뀌는 날과 바뀐 뒤 시차</b>까지 보여 줘요. 2026년에 바뀐 캐나다·모로코 시간도 반영했어요.'},
+                  'why': '도시마다 <b>다음 서머타임 바뀌는 날과 바뀐 뒤 시차</b>까지 보여 줘요. 2026년에 바뀐 캐나다·모로코·쿠바 시간도 반영했어요.'},
         'guide': {'title': '타이머·스톱워치·시차 가이드 | 한바퀴', 'desc': '타이머가 늦게 울리는 이유, 랩과 스플릿의 차이, 나라별 시차와 서머타임 바뀌는 날을 실제 계산으로 정리했어요.',
                   'h1': '가이드', 'lead': '시간 도구를 쓰다 생기는 질문을, 이 사이트의 계산과 공식 자료로 답했어요.'},
         'about': {'title': '한바퀴 소개 | 루멘랩', 'desc': '한바퀴는 시계판 하나로 타이머·스톱워치·알람·세계 시간을 쓰는 무료 도구예요. 무엇을 하고 무엇을 못 하는지 적었어요.', 'body': ''},
@@ -151,7 +153,7 @@ PAGES = {
         'world': {'title': 'World Clock & Time Zone Converter with DST Dates | Oneturn',
                   'desc': 'Current time and time difference for cities worldwide, the next daylight saving change for each, and the hours when everyone is at work.',
                   'h1': 'World Clock and Time Zone Converter', 'card': 'Time differences, DST dates, meeting hours',
-                  'why': 'Every city shows <b>its next clock change and the new difference</b>. Includes the 2026 changes in Canada and Morocco.'},
+                  'why': 'Every city shows <b>its next clock change and the new difference</b>. Includes the 2026 changes in Canada, Morocco and Cuba.'},
         'guide': {'title': 'Timer, Stopwatch and Time Zone Guides | Oneturn', 'desc': 'Why web timers run late, lap versus split time, and how daylight saving moves time differences, worked out with real numbers.',
                   'h1': 'Guides', 'lead': 'Answers to the questions that come up when you time things, checked against official sources.'},
         'about': {'title': 'About Oneturn | Lumen Lab', 'desc': 'Oneturn is a free set of time tools built around one dial: timer, stopwatch, alarm and world clock. What it does and what it cannot do.', 'body': ''},
@@ -191,7 +193,7 @@ FACTS = {
         ]},
         'world': {'h2': '시차를 믿고 쓸 수 있게', 'items': [
             ('서머타임 바뀌는 날까지 적어요', [f'도시마다 다음에 시계가 바뀌는 날과 바뀐 뒤 시차를 적어요. 예를 들어 뉴욕은 2026년 11월 1일 새벽 2시에 서머타임이 끝나고, 계산하면 서울과의 시차가 13시간에서 14시간이 돼요({L(NIST, "NIST")}).']),
-            ('2026년에 바뀐 시간대도 반영했어요', [f'캐나다 브리티시컬럼비아·앨버타·매니토바는 2026년부터 시계를 더 바꾸지 않고, 모로코는 9월 20일부터 늘 UTC+0이에요({L(IANA, "IANA 시간대 자료")}, {CHK["ko"]}). 브라우저의 시간대 자료가 그보다 예전 것이면 이 사이트가 고친 값으로 계산하고 알려 줘요.']),
+            ('2026년에 바뀐 시간대도 반영했어요', [f'캐나다 브리티시컬럼비아·앨버타·노스웨스트 준주·매니토바는 2026년부터 시계를 더 바꾸지 않고, 모로코는 9월 20일부터 늘 UTC+0이에요. 쿠바는 2026년 11월 1일에 시계를 되돌리지 않고 2027년 11월 7일까지 UTC−4를 써요({L(IANA, "IANA 시간대 자료")}, {CHK_TZ["ko"]}). 브라우저의 시간대 자료가 그보다 예전 것이면 이 사이트가 고친 값으로 계산하고 알려 줘요.']),
             ('모두 근무 시간인 때를 찾아요', ['도시마다 현지 월~금 9시~18시를 근무 시간으로 보고, 그 시각에 시작한 한 시간이 모두 근무 시간 안이면 칠해요. 공휴일은 반영하지 않아요.']),
             ('기준은 이 기기 시간대', ['처음 기준은 기기에 설정된 시간대예요. 위의 \'기준 도시\'에서 다른 도시로 바꿀 수 있어요.']),
         ]},
@@ -222,7 +224,7 @@ FACTS = {
         ]},
         'world': {'h2': 'Time differences you can trust', 'items': [
             ('The next clock change for every city', [f'Each city shows when its clocks change next and the difference afterwards. New York, for example, falls back at 2:00 a.m. on November 1, 2026 ({L(NIST, "NIST")}).']),
-            ('The 2026 changes are included', [f'British Columbia, Alberta and Manitoba stopped changing their clocks in 2026, and Morocco moved to UTC+0 for good on September 20 ({L(IANA, "IANA time zone data")}, {CHK["en"]}). If your browser\'s data is older, this site uses the corrected values and tells you.']),
+            ('The 2026 changes are included', [f'British Columbia, Alberta, the Northwest Territories and Manitoba stopped changing their clocks in 2026, and Morocco moved to UTC+0 for good on September 20. Cuba skips its November 1, 2026 clock change and stays on UTC−4 until November 7, 2027 ({L(IANA, "IANA time zone data")}, {CHK_TZ["en"]}). If your browser\'s data is older, this site uses the corrected values and tells you.']),
             ('Find hours when everyone is at work', ['Work hours are 9:00 to 18:00 local time, Monday to Friday. A cell is filled when an hour-long meeting starting then fits everyone\'s work hours. Public holidays are not included.']),
             ('Your device sets the reference', ['The comparison starts from your device time zone. Pick another city under Compare with to change it.']),
         ]},
@@ -283,7 +285,7 @@ FAQ = {
         ],
         'world': [
             ('Why does the time difference change during the year?', 'Daylight saving time. Many places move their clocks an hour forward in summer, so the gap to places without it changes by an hour. Each city shows its next change.'),
-            ('Which places stopped changing their clocks in 2026?', f'According to the {L(IANA, "IANA time zone data")}, British Columbia, Alberta, the Northwest Territories and Manitoba in Canada stay on one time all year from 2026, and Morocco is on UTC+0 all year from September 20, 2026.'),
+            ('Which places stopped changing their clocks in 2026?', f'According to the {L(IANA, "IANA time zone data")}, British Columbia, Alberta, the Northwest Territories and Manitoba in Canada stay on one time all year from 2026, and Morocco is on UTC+0 all year from September 20, 2026. Cuba skips its November 1, 2026 clock change and stays on UTC−4 until November 7, 2027.'),
             ('My city is not in the list.', 'Try a larger city in the same country. Cities in the same time zone show the same time, so Osaka matches Tokyo.'),
             ('What counts as work hours in the meeting planner?', '9:00 to 18:00 local time, Monday to Friday. A cell is filled when an hour-long meeting starting then fits everyone\'s work hours. Public holidays are not included.'),
         ],
@@ -303,7 +305,7 @@ def _about(lang):
 <h2>못 하는 것</h2>
 <p>웹페이지라서 창을 닫거나 기기가 잠들면 울리지 않아요. 휴대폰은 화면이 꺼지면 브라우저가 페이지를 멈출 수 있어요. 놓치면 안 되는 알람은 휴대폰의 기본 알람 앱을 쓰세요.</p>
 <h2>시간대 자료</h2>
-<p>도시별 시각은 브라우저에 들어 있는 시간대 자료(IANA)로 계산해요. 2026년에 바뀐 캐나다 세 주와 모로코의 규칙은 브라우저 자료가 예전 것이어도 맞게 계산하도록 이 사이트가 따로 고쳐 넣었어요({L(IANA, "IANA 변경 기록")}, {CHK['ko']}). 시험할 때는 파이썬 zoneinfo로 구한 값과 도시 시간대마다 대조해요.</p>
+<p>도시별 시각은 브라우저에 들어 있는 시간대 자료(IANA)로 계산해요. 2026년에 바뀐 캐나다·모로코·쿠바의 규칙은 브라우저 자료가 예전 것이어도 맞게 계산하도록 이 사이트가 따로 고쳐 넣었어요({L(IANA, "IANA 변경 기록")}, {CHK_TZ['ko']}). 시험할 때는 파이썬 zoneinfo로 구한 값과 도시 시간대마다 대조해요.</p>
 <h2>만든 곳</h2>
 <p>루멘랩(Lumen Lab)이 만들었어요. 틀린 곳이나 바라는 기능은 <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>로 알려 주세요. 다른 도구는 <a href="https://lumenlab.page/">lumenlab.page</a>에 있어요.</p>'''
     return f'''<h1>About Oneturn</h1>
@@ -316,7 +318,7 @@ def _about(lang):
 <h2>What it cannot do</h2>
 <p>It is a web page, so it cannot ring after you close the tab or the device sleeps. Phones may pause the page when the screen turns off. Use your phone's clock app for an alarm you cannot miss.</p>
 <h2>Time zone data</h2>
-<p>City times come from the time zone database built into your browser (IANA). The 2026 rule changes for three Canadian provinces and Morocco are applied by this site even if your browser's data is older ({L(IANA, "IANA change log")}, {CHK['en']}). The tests compare every city's time zone with Python's zoneinfo.</p>
+<p>City times come from the time zone database built into your browser (IANA). The 2026 rule changes in Canada, Morocco and Cuba are applied by this site even if your browser's data is older ({L(IANA, "IANA change log")}, {CHK_TZ['en']}). The tests compare every city's time zone with Python's zoneinfo.</p>
 <h2>Who makes it</h2>
 <p>Made by Lumen Lab. Found a mistake or want a feature? Write to <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>. More tools at <a href="https://lumenlab.page/en/">lumenlab.page</a>.</p>'''
 

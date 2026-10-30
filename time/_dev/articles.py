@@ -149,7 +149,7 @@ ARTICLES = {'ko': [], 'en': []}
 ARTICLES['ko'].append({
     'slug': 'korea-time-difference', 'pair': None, 'published': '2026-10-14',
     'title': '한국과 나라별 시차 표 - 2026·2027 서머타임 바뀌는 날 | 한바퀴',
-    'desc': '미국·영국·유럽·호주·뉴질랜드와 한국의 시차가 언제 1시간 바뀌는지, 서머타임이 없는 나라의 시차, 2026년에 규칙이 바뀐 캐나다·모로코까지 계산해 정리했어요.',
+    'desc': '미국·영국·유럽·호주·뉴질랜드와 한국의 시차가 언제 1시간 바뀌는지, 서머타임이 없는 나라의 시차, 2026년에 규칙이 바뀐 캐나다·모로코·쿠바까지 계산해 정리했어요.',
     'h1': '한국과 나라별 시차 표: 2026·2027 서머타임 바뀌는 날까지',
     'answer': ko_answer(),
     'body': f'''<p>시차는 나라마다 하나로 정해져 있지 않아요. 미국·유럽·호주처럼 서머타임을 하는 곳은 여름에 시계를 1시간 앞당기고, 한국은 서머타임이 없어서 그날부터 시차가 1시간 줄었다가 시계를 되돌리는 날 다시 늘어나요. 아래 숫자는 모두 IANA 시간대 자료로 계산했고, 미국·영국·호주 시드니·뉴질랜드의 바뀌는 날은 각 정부 안내와 맞춰 봤어요(출처는 맨 아래).</p>
@@ -161,13 +161,14 @@ ARTICLES['ko'].append({
 <h2>서머타임이 없는 곳: 1년 내내 같은 시차</h2>
 {ko_fixed_table()}
 <p>호주는 주마다 달라요. 시드니·멜버른은 서머타임을 하지만 브리즈번(퀸즐랜드)은 하지 않아서, 10월부터 4월 사이에는 시드니가 브리즈번보다 1시간 빨라요.</p>
-<h2>2026년에 규칙이 바뀐 곳: 캐나다 서부·중부와 모로코</h2>
-<p>캐나다 브리티시컬럼비아(밴쿠버)는 2026년 3월에 시계를 앞당긴 뒤로 더 바꾸지 않기로 했고, 앨버타(캘거리)와 매니토바(위니펙)도 같은 길을 갔어요. 모로코는 2026년 9월 20일에 서머타임을 끝내고 1년 내내 UTC+0을 써요. 그래서 2026년 11월 1일부터는 밴쿠버와 로스앤젤레스가 1시간 차이가 나요. 밴쿠버는 서울보다 계속 16시간 늦고, 로스앤젤레스는 17시간 늦어져요(계산하면).</p>
-<p>이 변경은 IANA 시간대 자료 2026b~2026e판에 들어갔어요. 브라우저나 앱의 시간대 자료가 그보다 예전 것이면 이 도시들의 시각이 1시간 틀릴 수 있어요. <a href="/ko/world-clock/">세계 시간</a> 화면은 예전 자료를 쓰는 브라우저에서도 바뀐 규칙으로 계산하고, 그런 브라우저라는 것을 알려 줘요.</p>
+<h2>2026년에 규칙이 바뀐 곳: 캐나다·모로코·쿠바</h2>
+<p>캐나다 브리티시컬럼비아(밴쿠버)는 2026년 3월에 시계를 앞당긴 뒤로 더 바꾸지 않기로 했고, 앨버타(캘거리)·노스웨스트 준주·매니토바(위니펙)도 같은 길을 갔어요. 모로코는 2026년 9월 20일에 서머타임을 끝내고 1년 내내 UTC+0을 써요. 그래서 2026년 11월 1일부터는 밴쿠버와 로스앤젤레스가 1시간 차이가 나요. 밴쿠버는 서울보다 계속 16시간 늦고, 로스앤젤레스는 17시간 늦어져요(계산하면).</p>
+<p>쿠바(아바나)는 2026년 11월 1일에 시계를 되돌리지 않고 2027년 11월 7일까지 UTC−4를 써요. 그래서 이번 겨울에도 아바나는 서울보다 13시간 늦어요(계산하면).</p>
+<p>이 변경은 IANA 시간대 자료 2026b~2026f판에 들어갔어요. 브라우저나 앱의 시간대 자료가 그보다 예전 것이면 이 도시들의 시각이 1시간 틀릴 수 있어요. <a href="/ko/world-clock/">세계 시간</a> 화면은 예전 자료를 쓰는 브라우저에서도 바뀐 규칙으로 계산하고, 그런 브라우저라는 것을 알려 줘요.</p>
 <h2>시차를 직접 계산하는 법</h2>
 <p>한국 시각은 UTC+9예요. 상대 도시의 UTC 기준 시각을 빼면 시차가 나와요. 뉴욕이 서머타임 중(UTC−4)이면 9 − (−4) = 13시간, 서머타임이 끝나면(UTC−5) 9 − (−5) = 14시간이에요. 서울 오후 10시는 뉴욕 서머타임 중 같은 날 오전 9시, 겨울에는 오전 8시예요.</p>
 <p>바뀌는 날 근처에 약속을 잡을 때는 날짜를 넣어 확인하는 게 안전해요. <a href="/ko/world-clock/">세계 시간</a>의 '회의 시간 찾기'에서 날짜를 고르면 그날의 시차로 모두 근무 시간인 때를 칠해 줘요.</p>''',
-    'sources': [S['dst_us'], S['dst_uk'], S['dst_nsw'], S['dst_nz'], S['tz_2026'], ('IANA tz 2026e 발표', 'https://www.iana.org/time-zones/releases/2026e')],
+    'sources': [S['dst_us'], S['dst_uk'], S['dst_nsw'], S['dst_nz'], S['tz_2026'], ('IANA tz 2026f 발표', 'https://www.iana.org/time-zones/releases/2026f')],
     'try': ('도시를 더해 지금 시차와 다음 바뀌는 날을 바로 보세요.', 'world-clock/', '세계 시간 열기'),
 })
 
@@ -257,7 +258,7 @@ ARTICLES['en'].append({
     'title': 'Daylight Saving Time 2026–2027: Dates and Shifting Gaps | Oneturn',
     'desc': 'When clocks change in 2026 and 2027 in the US, UK, EU, Australia and New Zealand, how the gaps between cities shift for a few weeks, and who stopped changing.',
     'h1': 'Daylight saving time 2026–2027: when clocks change and how time differences shift',
-    'answer': 'In 2026 the US falls back on November 1 and springs forward again on March 14, 2027; the UK and EU fall back on October 25, 2026 and go forward on March 28, 2027. Because these dates differ, the gap between New York and London is 4 hours instead of 5 for two weeks in March and one week around the start of November. British Columbia, Alberta and Manitoba no longer change their clocks, and Morocco is on UTC+0 all year.',
+    'answer': 'In 2026 the US falls back on November 1 and springs forward again on March 14, 2027; the UK and EU fall back on October 25, 2026 and go forward on March 28, 2027. Because these dates differ, the gap between New York and London is 4 hours instead of 5 for two weeks in March and one week around the start of November. British Columbia, Alberta, the Northwest Territories and Manitoba no longer change their clocks, and Morocco is on UTC+0 all year. Cuba skips its November 1, 2026 clock change and stays on UTC−4 until November 7, 2027.',
     'body': f'''<h2>When the clocks change</h2>
 <p>The times are local, as shown on the clock just before the change. In the US the rule covers most states; Hawaii and most of Arizona do not change. They are worked out from the IANA time zone database and match the official notices for the US, the UK, New South Wales and New Zealand (sources at the end).</p>
 {en_dst_table()}
@@ -266,12 +267,13 @@ ARTICLES['en'].append({
 {en_pairs_table()}
 <!--ad-->
 <p>If you schedule a call across these weeks, check the date, not just the usual gap. The <a href="/world-clock/">meeting planner</a> works on the exact date you pick.</p>
-<h2>Places that stopped changing their clocks in 2026</h2>
+<h2>Places whose clock rules changed in 2026</h2>
 <p>According to the IANA time zone database change log, British Columbia (Vancouver) has stayed on UTC−7 since its March 2026 spring forward, Alberta (Calgary, Edmonton) and the Northwest Territories on UTC−6, and Manitoba (Winnipeg) on UTC−5. Morocco ended daylight saving time on September 20, 2026 and stays on UTC+0. From November 1, 2026, Vancouver is therefore an hour ahead of Los Angeles for the winter.</p>
-<p>These rules arrived in IANA releases 2026b to 2026e. Devices and browsers with older time zone data can show these places an hour off. The <a href="/world-clock/">world clock</a> applies the new rules even in older browsers and tells you when your browser is behind.</p>
+<p>Cuba skips its November 1, 2026 clock change and stays on UTC−4 until November 7, 2027. From November 1, 2026 to March 14, 2027, Havana is therefore an hour ahead of New York.</p>
+<p>These rules arrived in IANA releases 2026b to 2026f. Devices and browsers with older time zone data can show these places an hour off. The <a href="/world-clock/">world clock</a> applies the new rules even in older browsers and tells you when your browser is behind.</p>
 <h2>Working it out yourself</h2>
 <p>Write each city as an offset from UTC, then subtract. New York in winter is UTC−5 and London UTC+0, so London is 5 hours ahead. On March 20, 2026 New York is already on UTC−4 while London is still on UTC+0, so the gap is 4 hours.</p>''',
-    'sources': [S['dst_us'], S['dst_uk'], S['dst_nsw'], S['dst_nz'], S['tz_2026'], ('IANA tz 2026e release', 'https://www.iana.org/time-zones/releases/2026e')],
+    'sources': [S['dst_us'], S['dst_uk'], S['dst_nsw'], S['dst_nz'], S['tz_2026'], ('IANA tz 2026f release', 'https://www.iana.org/time-zones/releases/2026f')],
     'try': ('Add the cities you work with and see their next clock change.', 'world-clock/', 'Open the world clock'),
 })
 

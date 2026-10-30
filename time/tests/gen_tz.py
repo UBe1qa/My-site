@@ -1,5 +1,6 @@
 """세계 시간 시험의 기준값을 파이썬 zoneinfo(IANA tz 자료)로 만든다.
-최신 tz 자료로: pip install --target <저장소 밖 폴더> -U tzdata 뒤 PYTHONPATH=<그 폴더> PYTHONTZPATH= python3 time/tests/gen_tz.py
+최신 tz 자료로: IANA tzdata<판>.tar.gz를 zic으로 컴파일한 폴더를 가리켜 PYTHONTZPATH=<그 폴더> python3 -I time/tests/gen_tz.py
+(만드는 법은 time/CLAUDE.md '명령어'). 판 이름은 그 폴더의 tzdata.zi 첫 줄(# version …)에서 읽는다.
 OT.offset / OT.nextChange / OT.fromLocal / OT.meeting 을 이 값과 대조한다(tests/run.mjs 'tz' 묶음)."""
 import json, re
 from datetime import datetime, timedelta, timezone
@@ -33,10 +34,12 @@ def next_change(z, ts, days=400):
 
 starts = [datetime(2026, 1, 1, tzinfo=UTC), datetime(2026, 3, 1, tzinfo=UTC), datetime(2026, 10, 14, 5, tzinfo=UTC), datetime(2027, 6, 1, tzinfo=UTC)]
 import zoneinfo
-try:
+# 판 이름: zoneinfo가 먼저 찾는 폴더(TZPATH)의 tzdata.zi 첫 줄. 그런 폴더가 없을 때만(PYTHONTZPATH=) pip tzdata 패키지
+ZI = [Path(d) / 'tzdata.zi' for d in zoneinfo.TZPATH if (Path(d) / 'tzdata.zi').is_file()]
+if ZI:
+    VER = open(ZI[0], encoding='utf-8').readline().split()[-1]
+else:
     import tzdata; VER = tzdata.IANA_VERSION
-except ImportError:
-    VER = open('/usr/share/zoneinfo/tzdata.zi').readline().split()[-1]
 cases = {'offset': [], 'next': [], 'local': [], 'zones': zones, 'tzdata': VER}
 for z in zones:
     for d in [datetime(2026, m, 15, 12, tzinfo=UTC) for m in range(1, 13)] + [datetime(2027, 1, 15, tzinfo=UTC), datetime(2027, 7, 15, tzinfo=UTC)]:

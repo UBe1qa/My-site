@@ -203,21 +203,25 @@
   }
   OT.validZone = function (zone) { try { fmtFor(zone); return true; } catch (e) { return false; } };
   var WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-  // 2026년에 정해진 '시계 안 바꾸기'(IANA tz 2026b~2026e). 브라우저의 시간대 자료가 그보다 낡았으면 틀리므로
-  // 이 표로 덮는다: from(UTC ms) 뒤로는 늘 offset(분). 새 tz 자료와 값이 같다(tests 'tz' 묶음이 2026e와 대조).
+  // 2026년에 정해진 '시계 안 바꾸기'(IANA tz 2026b~2026f). 브라우저의 시간대 자료가 그보다 낡았으면 틀리므로
+  // 이 표로 덮는다: from(UTC ms)부터(to가 있으면 to 앞까지) 늘 offset(분). 새 tz 자료와 값이 같다(tests 'tz' 묶음이 2026f와 대조).
   OT.PATCH = {
     'America/Vancouver': { from: Date.UTC(2026, 2, 8, 10), offset: -420, src: '2026b' },
     'America/Edmonton': { from: Date.UTC(2026, 2, 8, 9), offset: -360, src: '2026c' },
     'America/Inuvik': { from: Date.UTC(2026, 2, 8, 9), offset: -360, src: '2026d' },
     'America/Winnipeg': { from: Date.UTC(2026, 2, 8, 8), offset: -300, src: '2026e' },
     'Africa/Casablanca': { from: Date.UTC(2026, 8, 20, 1), offset: 0, src: '2026c' },
-    'Africa/El_Aaiun': { from: Date.UTC(2026, 8, 20, 1), offset: 0, src: '2026c' }
+    'Africa/El_Aaiun': { from: Date.UTC(2026, 8, 20, 1), offset: 0, src: '2026c' },
+    // 쿠바: 2026-11-01에 되돌리지 않고 2027-11-07 01:00(UTC 05:00)까지 UTC−4. 그 뒤는 예전 자료와 같다(UTC−5, 2028-03-12부터 UTC−4)
+    'America/Havana': { from: Date.UTC(2026, 10, 1, 5), to: Date.UTC(2027, 10, 7, 5), offset: -240, src: '2026f' }
   };
-  function patchOf(zone, ts) { var p = OT.PATCH[zone]; return p && ts >= p.from ? p : null; }
-  // 이 브라우저의 시간대 자료가 위 표보다 낡았나(표의 시간대 가운데 하나라도 다르면 true)
+  function patchOf(zone, ts) { var p = OT.PATCH[zone]; return p && ts >= p.from && (!p.to || ts < p.to) ? p : null; }
+  // 이 브라우저의 시간대 자료가 위 표보다 낡았나(표와 값이 다른 시간대 목록). 2027-01-15 12:00 UTC 한 순간에 본다:
+  // 표의 모든 줄이 덮고 예전 자료와 값이 다른 때다(쿠바는 2026-11-01~2027-03-14만 다르다). build.py STALE_BOOT와 같은 순간.
+  var STALE_AT = Date.UTC(2027, 0, 15, 12);
   OT.staleZones = function () {
     var out = [];
-    for (var z in OT.PATCH) { var p = OT.PATCH[z], t = p.from + 300 * OT.DAY; try { if (rawOffset(z, t) !== p.offset) out.push(z); } catch (e) {} }
+    for (var z in OT.PATCH) { try { if (rawOffset(z, STALE_AT) !== OT.PATCH[z].offset) out.push(z); } catch (e) {} }
     return out;
   };
   function rawOffset(zone, ts) {
