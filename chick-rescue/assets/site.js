@@ -1,4 +1,4 @@
-/* 병아리 구조대 소개 사이트 — 나타나기, 영상, 말풍선, 친구 무대 넘기기, 하단 줄. 외부 라이브러리 없음.
+/* 병아리 구조대 소개 사이트 — 나타나기, 영상, 말풍선, 친구 무대 넘기기, 주 단추 스토어, 하단 줄. 외부 라이브러리 없음.
    맛보기 판은 /assets/demo.js(게임 세션이 준 그대로)가 맡는다. 이 파일은 requestAnimationFrame을 쓰지 않는다:
    모든 연출은 CSS 애니메이션(보일 때 한 번)이고, 말풍선은 판이 바뀔 때만, 무대는 넘길 때만 계산한다. */
 (function () {
@@ -43,6 +43,12 @@
       es.forEach(function (e) { if (e.isIntersecting) playSafe(v); else v.pause(); });
     }, { threshold: .35 }).observe(v);
   });
+
+  /* 주 단추 주소: 안드로이드는 Google Play, 아이폰·아이패드는 App Store로 바로(끝 칸 배지 주소를 옮겨 씀). 그 밖(컴퓨터)은 그대로 끝 칸(#end) */
+  var ua = navigator.userAgent || '';
+  var store = /Android/i.test(ua) ? 'play' : (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) ? 'ios' : '';
+  var storeLink = store && $('.end-cta [data-store="' + store + '"]');
+  if (storeLink) $$('[data-cta]').forEach(function (a) { a.href = storeLink.href; });
 
   /* 주 단추 누름: 공처럼 찌그러졌다 펴짐 */
   $$('.cta').forEach(function (b) {
