@@ -490,13 +490,156 @@
     }
    ]
   },
-  "basis": null,
+  "basis": {
+   "h": {
+    "ko": "파이썬으로 따로 구한 정답 3,200여 개와 맞춰 보고 배포해요",
+    "en": "Every release is checked against 3,200+ answers worked out separately in Python"
+   },
+   "rows": [
+    {
+     "k": {
+      "ko": "두 날짜 사이",
+      "en": "Days between dates"
+     },
+     "v": {
+      "ko": "종료일에서 시작일을 빼고, ‘시작일 포함’을 켜면 하루를 더해요.",
+      "en": "The later date minus the earlier one, plus one day with ‘Include start date’ on."
+     },
+     "src": {
+      "t": {
+       "ko": "며칠 계산기 소개",
+       "en": "About Daycount"
+      },
+      "href": "https://date.lumenlab.page/about/"
+     },
+     "on": null
+    },
+    {
+     "k": {
+      "ko": "개월 계산",
+      "en": "Adding months"
+     },
+     "v": {
+      "ko": "같은 날짜끼리 세고, 그 달에 같은 날이 없으면 말일로 맞춰요. 1월 31일에 1개월을 더하면 2월 28일(윤년은 29일)이에요.",
+      "en": "Counted date to date, using the month’s last day when it is too short, so January 31 plus one month is February 28 (29 in a leap year)."
+     },
+     "src": {
+      "t": {
+       "ko": "며칠 계산기 소개",
+       "en": "About Daycount"
+      },
+      "href": "https://date.lumenlab.page/about/"
+     },
+     "on": null
+    },
+    {
+     "k": {
+      "ko": "영업일",
+      "en": "Business days"
+     },
+     "v": {
+      "ko": "토·일요일과 고른 나라의 공휴일을 빼요. 대체 휴일과 선거일도 공휴일로 쳐요.",
+      "en": "Saturdays, Sundays and the selected calendar’s holidays are skipped, on the days they are observed."
+     },
+     "src": {
+      "t": {
+       "ko": "며칠 계산기 소개",
+       "en": "About Daycount"
+      },
+      "href": "https://date.lumenlab.page/about/"
+     },
+     "on": null
+    },
+    {
+     "k": {
+      "ko": "한국 공휴일",
+      "en": "South Korea: public holidays"
+     },
+     "v": {
+      "ko": "2015~2035년 표는 공개 라이브러리 holidays 0.83으로 만들고, 2026년부터 공휴일이 된 노동절·제헌절과 그 대체공휴일은 규정대로 더했어요.",
+      "en": "2015 to 2035 come from the open-source holidays library (0.83), plus Labor Day (May 1) and Constitution Day (July 17), public holidays from 2026, with their substitute days under the regulation."
+     },
+     "src": [
+      {
+       "t": {
+        "ko": "공개 라이브러리 holidays",
+        "en": "holidays, an open-source library"
+       },
+       "href": "https://github.com/vacanza/holidays"
+      },
+      {
+       "t": {
+        "ko": "관공서의 공휴일에 관한 규정 (국가법령정보센터)",
+        "en": "Regulations on Holidays of Government Offices (Korean, National Law Information Center)"
+       },
+       "href": "https://www.law.go.kr/법령/관공서의공휴일에관한규정"
+      }
+     ],
+     "on": "2026-10-30"
+    },
+    {
+     "k": {
+      "ko": "미국 공휴일",
+      "en": "US holidays"
+     },
+     "v": {
+      "ko": "연방 공휴일 11개를 연방 기관이 쉬는 날로 빼요. 토요일이면 앞 금요일, 일요일이면 다음 월요일이에요.",
+      "en": "The 11 federal holidays in 5 U.S.C. 6103, skipped on the day federal offices observe them: the Friday before a Saturday holiday, the Monday after a Sunday one."
+     },
+     "src": {
+      "t": {
+       "ko": "미국 인사관리처(OPM) 연방 공휴일 안내",
+       "en": "U.S. Office of Personnel Management: Federal Holidays"
+      },
+      "href": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+     },
+     "on": null
+    },
+    {
+     "k": {
+      "ko": "만 나이",
+      "en": "Age"
+     },
+     "v": {
+      "ko": "2023년 6월 28일부터 한국 법·행정이 쓰는 만 나이로 세고, 2월 29일생은 평년에 3월 1일을 생일로 봐요.",
+      "en": "Whole years since the last birthday, then months and days; people born on February 29 have their birthday on March 1 in other years."
+     },
+     "src": {
+      "t": {
+       "ko": "며칠 계산기 소개",
+       "en": "About Daycount"
+      },
+      "href": "https://date.lumenlab.page/about/"
+     },
+     "on": null
+    }
+   ],
+   "note": {
+    "ko": "정부가 나중에 정하는 임시공휴일은 표에 미리 들어 있지 않아서 반영이 늦을 수 있어요.",
+    "en": "One-off days off announced later, such as those given by executive order, aren’t included."
+   },
+   "order_en": [
+    0,
+    1,
+    2,
+    4,
+    3,
+    5
+   ]
+  },
   "log": {
    "h": {
-    "ko": "2월 29일생 생일 규칙을 정하고, 날짜 칸을 숫자로 치게 바꿨어요",
-    "en": "Set a rule for Feb 29 birthdays and made every date box take typed digits"
+    "ko": "2026년에 바뀐 공휴일을 넣고, 날짜 칸을 숫자로 치게 바꿨어요",
+    "en": "Added Korea’s 2026 holiday changes and made every date box take typed digits"
    },
    "items": [
+    {
+     "d": "2026-10-30",
+     "t": {
+      "ko": "노동절(5월 1일)과 제헌절(7월 17일)이 2026년부터 공휴일이 돼서 한국 공휴일 표와 영업일 계산에 넣었어요. 2027년엔 둘 다 토요일이라 5월 3일과 7월 19일이 대체 휴일이에요.",
+      "en": "Labor Day (May 1) and Constitution Day (July 17), public holidays in South Korea from 2026, are now in the Korean holiday list and business-day counts; in 2027 both fall on a Saturday, so May 3 and July 19 are days off instead."
+     }
+    },
     {
      "d": "2026-10-06",
      "t": {
@@ -2632,7 +2775,6 @@
  },
  "_확인한_주소": {
   "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032": "2026-10-29 열림(200). 인플레이스가 적은 한국어 도움말의 영어판(같은 글 번호 8a935af5)",
-  "https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json": "2026-10-29 열림(200), maxGraphemes 300·maxLength 3000. 칸칸이 적은 atproto 저장소 주소는 404(블루스카이 규격이 bsky 저장소로 옮겨 감)",
   "https://physics.nist.gov/cuu/Constants/index.html": "2026-10-29 열림(200), CODATA 2022 권고값 안내 첫 페이지. 공학용 계산기가 적은 allascii.txt 표의 사람이 읽는 쪽",
   "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility": "2026-10-29 열림(200). 한바퀴가 적은 browser-compat-data WakeLock.json 을 표로 보여 주는 MDN 페이지"
  }

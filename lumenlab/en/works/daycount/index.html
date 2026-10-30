@@ -63,7 +63,7 @@
   <section class="sh__sec sh__try" aria-labelledby="sh-try">
     <div class="sh__try-h"><h2 id="sh-try">Try it here</h2></div>
     <div class="mon">
-      <div class="stage is-loading" data-tool="daycount" data-core="[&quot;https://date.lumenlab.page/assets/holidays.js?v=52fbc70955&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
+      <div class="stage is-loading" data-tool="daycount" data-core="[&quot;https://date.lumenlab.page/assets/holidays.js?v=4f4bbf3d78&quot;, &quot;https://date.lumenlab.page/assets/dates.js?v=00387aef43&quot;]" data-mod="[]"><p class="stage__msg">Loading</p></div>
       <div class="mon__chin"><p class="stage__badge" aria-live="polite"></p><button type="button" class="stage__replay" hidden>Replay</button></div>
     </div>
     <i class="mon__stand" aria-hidden="true"></i>
@@ -80,7 +80,15 @@
   <section class="sh__sec sh__log" aria-labelledby="sh-check">
     <h2 id="sh-check">What it checks and discloses</h2>
     <div class="sh__note"><svg class="sh__tick" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5l5 5L20 6"/></svg><p class="sh__check">It is tested automatically against more than 3,200 answers worked out separately with Python’s date library.</p></div>
-    <p class="sh__links"><a href="https://date.lumenlab.page/en/about/">More in About Daycount <span aria-hidden="true">→</span></a></p>
+  </section>
+  <section class="sh__sec sh__basis" aria-labelledby="sh-basis">
+    <h2 id="sh-basis">Every release is checked against 3,200+ answers worked out separately in Python</h2>
+    <div class="rc">
+      <p class="rc__title">Rules and sources</p>
+      <dl class="rc__rows"><div class="rc__row"><dt>Days between dates</dt><dd><span class="rc__v">The later date minus the earlier one, plus one day with ‘Include start date’ on.</span><span class="rc__src"><a href="https://date.lumenlab.page/en/about/">About Daycount</a></span></dd></div><div class="rc__row"><dt>Adding months</dt><dd><span class="rc__v">Counted date to date, using the month’s last day when it is too short, so January 31 plus one month is February 28 (29 in a leap year).</span><span class="rc__src"><a href="https://date.lumenlab.page/en/about/">About Daycount</a></span></dd></div><div class="rc__row"><dt>Business days</dt><dd><span class="rc__v">Saturdays, Sundays and the selected calendar’s holidays are skipped, on the days they are observed.</span><span class="rc__src"><a href="https://date.lumenlab.page/en/about/">About Daycount</a></span></dd></div><div class="rc__row"><dt>US holidays</dt><dd><span class="rc__v">The 11 federal holidays in 5 U.S.C. 6103, skipped on the day federal offices observe them: the Friday before a Saturday holiday, the Monday after a Sunday one.</span><span class="rc__src"><a href="https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/">U.S. Office of Personnel Management: Federal Holidays</a></span></dd></div><div class="rc__row"><dt>South Korea: public holidays</dt><dd><span class="rc__v">2015 to 2035 come from the open-source holidays library (0.83), plus Labor Day (May 1) and Constitution Day (July 17), public holidays from 2026, with their substitute days under the regulation.</span><span class="rc__src"><a href="https://github.com/vacanza/holidays">holidays, an open-source library</a> · <a href="https://www.law.go.kr/법령/관공서의공휴일에관한규정">Regulations on Holidays of Government Offices (Korean, National Law Information Center)</a> · <span class="nw">Checked Oct 30, 2026</span></span></dd></div><div class="rc__row"><dt>Age</dt><dd><span class="rc__v">Whole years since the last birthday, then months and days; people born on February 29 have their birthday on March 1 in other years.</span><span class="rc__src"><a href="https://date.lumenlab.page/en/about/">About Daycount</a></span></dd></div></dl>
+      <p class="rc__note">One-off days off announced later, such as those given by executive order, aren’t included.</p>
+    </div>
+    <p class="sh__links"><a href="https://date.lumenlab.page/en/about/">More rules in About Daycount <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__books" aria-labelledby="sh-gd">
     <h2 id="sh-gd">6 guides</h2>
@@ -88,8 +96,8 @@
     <p class="sh__links"><a href="/en/guides/#date">All guides <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="sh__sec sh__changes" aria-labelledby="sh-log">
-    <h2 id="sh-log">Set a rule for Feb 29 birthdays and made every date box take typed digits</h2>
-    <ol class="sh__days"><li><time datetime="2026-10-06">Oct 6, 2026</time><p>Every date box now takes typed digits first, with the calendar on a button to its right.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>On a countdown date, a birthday or an anniversary, confetti flies, and a holiday result gets a ‘Holiday’ stamp.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>The 11 calculators were sorted into four groups: ‘Spans &amp; countdowns’, ‘Move a date’, ‘Age &amp; anniversaries’ and ‘Calendar’.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>People born on February 29 now have their birthday on March 1 in other years.</p></li><li><time datetime="2026-10-05">Oct 5, 2026</time><p>The English edition, Daycount, opened with 6 guides of its own.</p></li><li><time datetime="2026-10-03">Oct 3, 2026</time><p>Daycount first went live in Korean, with 6 Korean guides.</p></li></ol>
+    <h2 id="sh-log">Added Korea’s 2026 holiday changes and made every date box take typed digits</h2>
+    <ol class="sh__days"><li><time datetime="2026-10-30">Oct 30, 2026</time><p>Labor Day (May 1) and Constitution Day (July 17), public holidays in South Korea from 2026, are now in the Korean holiday list and business-day counts; in 2027 both fall on a Saturday, so May 3 and July 19 are days off instead.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>Every date box now takes typed digits first, with the calendar on a button to its right.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>On a countdown date, a birthday or an anniversary, confetti flies, and a holiday result gets a ‘Holiday’ stamp.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>The 11 calculators were sorted into four groups: ‘Spans &amp; countdowns’, ‘Move a date’, ‘Age &amp; anniversaries’ and ‘Calendar’.</p></li><li><time datetime="2026-10-06">Oct 6, 2026</time><p>People born on February 29 now have their birthday on March 1 in other years.</p></li><li><time datetime="2026-10-05">Oct 5, 2026</time><p>The English edition, Daycount, opened with 6 guides of its own.</p></li><li><time datetime="2026-10-03">Oct 3, 2026</time><p>Daycount first went live in Korean, with 6 Korean guides.</p></li></ol>
   </section>
   <section class="sh__sec sh__oth" aria-labelledby="sh-oth">
     <h2 id="sh-oth">More from Lumen Lab</h2>

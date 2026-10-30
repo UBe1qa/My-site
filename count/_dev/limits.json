@@ -179,7 +179,7 @@
     "unit": "grapheme",
     "limit2": 3000,
     "unit2": "utf8",
-    "src": "https://raw.githubusercontent.com/bluesky-social/atproto/main/lexicons/app/bsky/feed/post.json"
+    "src": "https://raw.githubusercontent.com/bluesky-social/bsky/main/lexicons/app/bsky/feed/post.json"
    },
    {
     "id": "ytt",

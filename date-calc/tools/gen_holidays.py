@@ -5,6 +5,7 @@
   python3 -m venv /tmp/hv && /tmp/hv/bin/pip install holidays && /tmp/hv/bin/python date-calc/tools/gen_holidays.py
 """
 import json, os, holidays
+import kr_2026
 
 YEARS = range(2015, 2036)
 US_KO = {
@@ -20,6 +21,8 @@ kr_en = holidays.KR(years=YEARS, language="en_US")
 # 라이브러리 한국어 이름 중 어색한 것만 바꾼다
 KO_FIX = {"신정연휴": "신정"}
 kr = {d.isoformat(): ["; ".join(KO_FIX.get(n, n) for n in kr_ko[d].split("; ")), kr_en[d]] for d in sorted(kr_en)}
+# 2026년부터 공휴일인 노동절·제헌절과 그 대체공휴일(라이브러리에 아직 없음)
+kr = kr_2026.add(kr, YEARS)
 
 us_en = holidays.US(years=YEARS, language="en_US")
 us = {}
@@ -36,6 +39,7 @@ for d in sorted(us_en):
 
 head = (
     "// 공휴일 표 (%d–%d). 자동 생성: python holidays %s, tools/gen_holidays.py\n"
+    "// 한국 노동절·제헌절(2026년부터 공휴일)과 그 대체공휴일은 라이브러리에 없어서 tools/kr_2026.py가 더해요.\n"
     "// 손으로 고치지 말고 스크립트로 다시 만들어요. 나중에 정부가 정하는 임시공휴일은 미리 들어 있지 않아요.\n"
     "// 형식: 'YYYY-MM-DD': [한국어 이름, 영어 이름]\n"
 ) % (YEARS[0], YEARS[-1], holidays.__version__)

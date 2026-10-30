@@ -13,10 +13,10 @@ BASE = "https://date.lumenlab.page"
 UPDATED = "2026-10-03"
 # sitemap lastmod: 본문·구조화 데이터·링크가 실제로 바뀐 날만 적는다(배포 날짜를 일괄로 찍지 않는다). 없으면 UPDATED
 # 영어 페이지(/en/…)는 build_en.UPDATED. /about/은 영어 소개와 hreflang으로 이어서 2026-10-05
-LASTMOD = {"/": "2026-10-06", "/privacy": "2026-10-05", "/about/": "2026-10-06", "/guide/korean-age/": "2026-10-06"}
+LASTMOD = {"/": "2026-10-06", "/privacy": "2026-10-05", "/about/": "2026-10-30", "/guide/korean-age/": "2026-10-06"}
 AD_HEAD = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9496167591465154" crossorigin="anonymous"></script>'
 
-# slug, 제목(h1), 짧은 제목(목록·링크), 설명(meta), 계산기 해시, 본문 HTML, 이어서 볼 글
+# slug, (고친 날 mod), 제목(h1), 짧은 제목(목록·링크), 설명(meta), 계산기 해시, 본문 HTML, 이어서 볼 글
 GUIDES = [
     {
         "slug": "days-between",
@@ -132,6 +132,7 @@ GUIDES = [
     },
     {
         "slug": "business-days",
+        "mod": "2026-10-30",  # 노동절 공휴일(2026)
         "title": "영업일 계산법 — 주말·공휴일을 빼고 세는 방법",
         "short": "영업일 계산법",
         "desc": "영업일은 토·일요일과 공휴일(대체 휴일 포함)을 뺀 날이에요. '5영업일 이내' 기한 계산, 기간 안 영업일 수 세기를 실제 2026년 달력 예시로 설명해요.",
@@ -165,7 +166,7 @@ GUIDES = [
 
 <h2>4. 주의할 점</h2>
 <ul>
-<li>회사·은행마다 '영업일'에 토요일을 넣기도 하고, 근로자의 날(5월 1일)처럼 법정 공휴일은 아니지만 쉬는 날이 있어요. 중요한 기한은 상대 기관의 기준을 확인하세요.</li>
+<li>회사·은행마다 '영업일'에 토요일을 넣기도 해요. 5월 1일 노동절(옛 근로자의 날)은 2026년부터 관공서도 쉬는 공휴일이 돼서 계산기도 영업일에서 빼요. 중요한 기한은 상대 기관의 기준을 확인하세요.</li>
 <li>선거일, 정부가 따로 정하는 임시공휴일은 발표 뒤에 반영돼요.</li>
 </ul>
 """,
@@ -173,9 +174,10 @@ GUIDES = [
     },
     {
         "slug": "substitute-holidays",
+        "mod": "2026-10-30",  # 노동절·제헌절 공휴일(2026)
         "title": "대체공휴일 규칙 정리 — 언제, 어떤 공휴일이 대신 쉬나",
         "short": "대체공휴일 규칙",
-        "desc": "설·추석은 일요일이나 다른 공휴일과 겹칠 때, 어린이날·국경일·부처님오신날·성탄절은 토·일요일과 겹칠 때 대체공휴일이 생겨요. 2026·2027년 실제 예시로 정리했어요.",
+        "desc": "설·추석은 일요일이나 다른 공휴일과 겹칠 때, 국경일·부처님오신날·노동절·어린이날·성탄절은 토·일요일이나 다른 공휴일과 겹칠 때 대체공휴일이 생겨요. 2026·2027년 실제 예시로 정리했어요.",
         "tool": "holidays",
         "body": """
 <p>공휴일이 주말과 겹쳐 쉬는 날이 사라지는 걸 막으려고 생긴 게 <b>대체공휴일</b>이에요. 다만 모든 공휴일이 대상은 아니고, 공휴일마다 조건이 달라요(관공서의 공휴일에 관한 규정).</p>
@@ -185,13 +187,11 @@ GUIDES = [
 <thead><tr><th>공휴일</th><th>대체공휴일이 생기는 경우</th></tr></thead>
 <tbody>
 <tr><td>설날·추석 연휴(3일)</td><td><b>일요일</b> 또는 다른 공휴일과 겹칠 때 (토요일은 해당 없음)</td></tr>
-<tr><td>어린이날</td><td>토요일·일요일 또는 다른 공휴일과 겹칠 때</td></tr>
-<tr><td>삼일절·광복절·개천절·한글날</td><td>토요일·일요일과 겹칠 때 (2021년부터)</td></tr>
-<tr><td>부처님오신날·기독탄신일(성탄절)</td><td>토요일·일요일과 겹칠 때 (2023년부터)</td></tr>
+<tr><td>국경일(삼일절·제헌절·광복절·개천절·한글날), 부처님오신날, 노동절, 어린이날, 기독탄신일(성탄절)</td><td><b>토요일·일요일</b> 또는 다른 공휴일과 겹칠 때</td></tr>
 <tr><td>신정·현충일</td><td>대체공휴일 없음</td></tr>
 </tbody>
 </table>
-<p>대체공휴일은 겹친 날 <b>다음의 첫 번째 평일(비공휴일)</b>이에요.</p>
+<p>대체공휴일은 겹친 날 <b>다음의 첫 번째 평일(비공휴일)</b>이에요. 삼일절·광복절·개천절·한글날은 2021년, 부처님오신날·성탄절은 2023년부터 대상이 됐고, 노동절(5월 1일)과 제헌절(7월 17일)은 2026년에 공휴일이 되면서(제헌절은 2008년에 빠졌다가 다시) 바로 대상이 됐어요.</p>
 
 <h2>2. 2026년 실제 예시</h2>
 <ul>
@@ -201,15 +201,17 @@ GUIDES = [
 <li>개천절 10월 3일(토) → <b>10월 5일(월)</b></li>
 <li>추석 연휴 9월 24~26일 중 26일이 <b>토요일</b>이지만, 설·추석은 일요일과 겹칠 때만 대상이라 <b>대체 휴일이 없어요.</b></li>
 <li>현충일 6월 6일(토)은 대체공휴일 대상이 아니라 그대로 지나가요.</li>
+<li>노동절 5월 1일과 제헌절 7월 17일은 둘 다 <b>금요일</b>이라 대체 휴일 없이 주말과 이어 사흘을 쉬어요.</li>
 </ul>
 
 <h2>3. 2027년 미리 보기</h2>
 <ul>
 <li>설 연휴 2월 6일(토)~8일(월) 중 7일이 일요일 → <b>2월 9일(화)</b> 대체 휴일</li>
+<li>노동절 5월 1일(토) → <b>5월 3일(월)</b>, 제헌절 7월 17일(토) → <b>7월 19일(월)</b></li>
 <li>광복절 8월 15일(일) → 8월 16일(월), 개천절 10월 3일(일) → 10월 4일(월)</li>
 <li>한글날 10월 9일(토) → 10월 11일(월), 성탄절 12월 25일(토) → 12월 27일(월)</li>
 </ul>
-<p class="tip">2027년 이후 날짜는 현재 규정으로 계산한 값이에요. 정부가 임시공휴일을 지정하거나 규정을 바꾸면 달라질 수 있어요.</p>
+<p class="tip">2027년 날짜는 우주항공청이 2026년 6월에 낸 「2027년 월력요항」과 같아요. 그 뒤 해는 지금 규정으로 계산한 값이라, 정부가 임시공휴일을 지정하거나 규정을 바꾸면 달라질 수 있어요.</p>
 
 <h2>4. 선거일과 임시공휴일</h2>
 <p>대통령·국회의원·지방선거일은 법정 공휴일이에요(2026년 6월 3일 지방선거). 정부가 따로 정하는 임시공휴일은 보통 몇 주 전에 발표돼서, 그 전엔 어떤 달력에도 없어요.</p>
@@ -337,7 +339,7 @@ def guide_page(g):
     path = f"/guide/{g['slug']}/"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "Article", "headline": g["title"], "description": g["desc"], "inLanguage": "ko",
-         "datePublished": UPDATED, "dateModified": UPDATED, "mainEntityOfPage": BASE + path,
+         "datePublished": UPDATED, "dateModified": g.get("mod", UPDATED), "mainEntityOfPage": BASE + path,
          "author": {"@type": "Organization", "name": "루멘랩(Lumen Lab)", "url": "https://lumenlab.page/"},
          "publisher": {"@type": "Organization", "name": "루멘랩(Lumen Lab)", "url": "https://lumenlab.page/"}},
         crumbs([("며칠 계산기", "/"), ("가이드", "/guide/"), (g["short"], path)])]}
@@ -347,7 +349,7 @@ def guide_page(g):
   <nav class="crumbs" aria-label="현재 위치"><a href="/">며칠 계산기</a> › <a href="/guide/">가이드</a> › <span>{E(g['short'])}</span></nav>
   <article class="doc article">
     <h1>{E(g['title'])}</h1>
-    <p class="meta">루멘랩 · {UPDATED} 작성</p>
+    <p class="meta">루멘랩 · {UPDATED} 작성{' · ' + g['mod'] + ' 고침' if g.get('mod') else ''}</p>
     {g['body'].strip()}
     <p class="cta"><a class="btn" href="/#{g['tool']}">계산기로 바로 계산하기 →</a></p>
   </article>
@@ -407,7 +409,7 @@ def about_page():
     </ul>
 
     <h2>공휴일 데이터와 정확도</h2>
-    <p>한국·미국 공휴일 2015~2035년은 공개 라이브러리 <a href="https://github.com/vacanza/holidays">holidays</a>의 데이터로 만들었어요. 계산 로직은 다른 방식(파이썬 표준 날짜 라이브러리)으로 따로 구한 3,200여 개의 정답과 대조하는 자동 시험을 통과해야 배포돼요. 정부가 나중에 정하는 임시공휴일은 발표 뒤에 반영돼요.</p>
+    <p>한국·미국 공휴일 2015~2035년은 공개 라이브러리 <a href="https://github.com/vacanza/holidays">holidays</a>의 데이터로 만들었어요. 2026년부터 공휴일이 된 노동절·제헌절과 그 대체공휴일은 라이브러리에 아직 없어서 <a href="https://www.law.go.kr/법령/관공서의공휴일에관한규정">관공서의 공휴일에 관한 규정</a>대로 더했어요. 계산 로직은 다른 방식(파이썬 표준 날짜 라이브러리)으로 따로 구한 3,200여 개의 정답과 대조하는 자동 시험을 통과해야 배포돼요. 정부가 나중에 정하는 임시공휴일은 발표 뒤에 반영돼요.</p>
     <p>계산 결과는 참고용이에요. 법적 기한, 계약, 급여처럼 중요한 날짜는 해당 기관의 기준을 꼭 함께 확인하세요.</p>
 
     <h2>광고</h2>
@@ -420,10 +422,10 @@ def about_page():
 """ + FOOT
 
 
-def sitemap(en_urls=(), en_updated=UPDATED):
+def sitemap(en_urls=(), en_updated=UPDATED, en_lastmod={}):
     urls = ["/", "/about/", "/privacy"]  # 가이드(/guide/…)는 lumenlab.page/guides/date/ 로 옮겨 넣지 않는다
     rows = "\n".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{LASTMOD.get(u, UPDATED)}</lastmod></url>" for u in urls)
-    rows += "".join(f"\n  <url><loc>{BASE}{u}</loc><lastmod>{en_updated}</lastmod></url>" for u in en_urls)
+    rows += "".join(f"\n  <url><loc>{BASE}{u}</loc><lastmod>{en_lastmod.get(u, en_updated)}</lastmod></url>" for u in en_urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}\n</urlset>\n'
 
 
@@ -462,6 +464,6 @@ if __name__ == "__main__":
     write("guide/index.html", guide_index())
     write("about/index.html", about_page())
     write("404.html", not_found_page())
-    write("sitemap.xml", sitemap(build_en.urls(), build_en.UPDATED))
+    write("sitemap.xml", sitemap(build_en.urls(), build_en.UPDATED, build_en.LASTMOD))
     # rss.xml은 만들지 않는다: 가이드 RSS는 2026-10-29부터 lumenlab.page/guides/rss.xml (예전 /rss.xml은 worker.js가 301)
     print("가이드 %d편 + 목록 + 소개 + 404 + sitemap 만듦, 영어판(/en/: 계산기 + 글 %d편 + 목록 + 소개) 만듦" % (len(GUIDES), n_en))

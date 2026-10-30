@@ -2,7 +2,7 @@
 FAQ 를 바꾸면 화면의 질문과 FAQPage JSON-LD 가 같이 바뀐다(build.py 가 같은 목록으로 만든다).
 """
 
-UPDATED = {'home': '2026-10-06', 'modes': '2026-10-06', 'about': '2026-10-06', 'privacy': '2026-10-06'}
+UPDATED = {'home': '2026-10-06', 'modes': '2026-10-06', 'about': '2026-10-30', 'privacy': '2026-10-06'}
 
 
 def webapp(lang, path, site, name=None, desc=None):
@@ -229,7 +229,7 @@ PAGES = {
 <ul>
 <li><b>정확값</b>: 분수는 큰 정수 분수로, 루트와 π 는 기호 그대로 계산해서 반올림 오차가 없어요. 정확값으로 나타낼 수 없으면 소수(배정밀도)로 계산해요.</li>
 <li><b>계산 순서</b>: 괄호 → 함수 → 거듭제곱(왼쪽부터) → 곱하기 기호를 생략한 곱 → × ÷ → + − 순서예요. 그래서 6÷2(1+2) = 1, −2² = −4 예요.</li>
-<li><b>표시</b>: 보통 표시는 유효숫자 10자리, 10¹⁰ 이상이나 10⁻⁹ 미만은 지수 표기예요. 반올림은 사사오입이에요.</li>
+<li><b>표시</b>: 보통 표시는 유효숫자 10자리예요. 10¹⁰ 이상이나 10⁻⁹ 미만, 그리고 소수로 쓰면 숫자가 12개를 넘는 작은 수(0.000123456789 → 1.23456789×10⁻⁴)는 지수 표기예요. 반올림은 사사오입이에요.</li>
 <li><b>적분·미분</b>: 적분은 가우스-크론로드(7-15) 적응 적분, 미분은 리더스 방법으로 계산해요.</li>
 <li><b>통계</b>: 사분위수는 학생용 공학용 계산기 방식이 기본이고, 엑셀 QUARTILE.INC 방식도 고를 수 있어요.</li>
 <li><b>물리 상수</b>: 미국 표준기술연구소(NIST)의 CODATA 2022 권고값이에요.</li>
@@ -250,7 +250,7 @@ PAGES = {
 <ul>
 <li><b>Exact values</b>: fractions are kept as big-integer fractions and roots and π as symbols, so there is no rounding error. When an exact form is not possible it switches to double-precision decimals.</li>
 <li><b>Order of operations</b>: brackets → functions → powers (left to right) → products without a × sign → × ÷ → + −. So 6÷2(1+2) = 1 and −2² = −4.</li>
-<li><b>Display</b>: normal display shows 10 significant digits and switches to scientific notation at 10¹⁰ and above or below 10⁻⁹. Rounding is half up.</li>
+<li><b>Display</b>: normal display shows 10 significant digits and switches to scientific notation at 10¹⁰ and above, below 10⁻⁹, or when a small number would take more than 12 digits to write out (0.000123456789 shows as 1.23456789×10⁻⁴). Rounding is half up.</li>
 <li><b>Calculus</b>: integrals use adaptive Gauss–Kronrod (7-15) quadrature; derivatives use Ridders’ method.</li>
 <li><b>Statistics</b>: quartiles use the scientific calculator method by default, with Excel’s QUARTILE.INC as an option.</li>
 <li><b>Physical constants</b>: CODATA 2022 recommended values from NIST.</li>

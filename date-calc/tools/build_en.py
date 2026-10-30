@@ -15,6 +15,8 @@ from build_guides import ROOT, BASE, AD_HEAD, crumbs, write
 E = html.escape
 UPDATED = "2026-10-05"
 UPDATED_TEXT = "October 5, 2026"
+# sitemap lastmod가 UPDATED와 다른 영어 페이지(실제로 고친 날)
+LASTMOD = {"/en/about/": "2026-10-30"}
 ORG = {"@type": "Organization", "name": "Lumen Lab", "url": "https://lumenlab.page/"}
 FONT = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media=\'all\'">'
 HANGUL = re.compile("[ᄀ-ᇿ㄰-㆏가-힯]")
@@ -506,7 +508,7 @@ def about_page():
     </ul>
 
     <h2>Holiday data and accuracy</h2>
-    <p>US federal holidays and Korean public holidays for 2015 to 2035 come from the open-source <a href="https://github.com/vacanza/holidays">holidays</a> library. Outside those years only weekends are skipped, and the calculator shows a warning. One-off closures announced later, such as extra days off given by executive order, are not included.</p>
+    <p>US federal holidays and Korean public holidays for 2015 to 2035 come from the open-source <a href="https://github.com/vacanza/holidays">holidays</a> library. South Korea made Labor Day (May 1) and Constitution Day (July 17) public holidays from 2026, and since the library doesn't have them yet, they are added with their substitute days under Korea's regulation on public holidays. Outside those years only weekends are skipped, and the calculator shows a warning. One-off closures announced later, such as extra days off given by executive order, are not included.</p>
     <p>The date logic is checked by automated tests against more than 3,200 answers computed separately in Python (datetime, dateutil and the holidays library). Results are for planning. For legal deadlines, contracts or payroll, confirm the rule with the organization involved.</p>
 
     <h2>Advertising</h2>

@@ -59,7 +59,11 @@ eq("가이드: 기념일 표", an, ["2026-04-10", "2026-07-19", "2026-10-27", "2
 eq("가이드: 빼기 방식 100일", DC.iso(DC.anniversaries(P("2026-01-01"), false)[0].day), "2026-04-11");
 eq("가이드: 대체공휴일 2026", ["2026-03-02", "2026-05-25", "2026-08-17", "2026-10-05"].map(function (d) { return !!DC.holidayName(P(d), "KR", 0); }), [true, true, true, true]);
 eq("가이드: 추석·현충일 토요일엔 대체 없음", [DC.holidayName(P("2026-09-28"), "KR", 0), DC.holidayName(P("2026-06-08"), "KR", 0)], [null, null]);
-eq("가이드: 2027 대체공휴일", ["2027-02-09", "2027-08-16", "2027-10-04", "2027-10-11", "2027-12-27"].map(function (d) { return !!DC.holidayName(P(d), "KR", 0); }), [true, true, true, true, true]);
+eq("가이드: 2027 대체공휴일", ["2027-02-09", "2027-05-03", "2027-07-19", "2027-08-16", "2027-10-04", "2027-10-11", "2027-12-27"].map(function (d) { return !!DC.holidayName(P(d), "KR", 0); }), [true, true, true, true, true, true, true]);
+// 노동절·제헌절(2026년부터 공휴일, tools/kr_2026.py): 2026년엔 금요일이라 대체 없음, 2027년은 토요일이라 월요일이 대체 휴일(우주항공청 2027년 월력요항)
+eq("가이드: 2026 노동절·제헌절은 금요일, 대체 없음", [DC.holidayName(P("2026-05-01"), "KR", 0), DC.holidayName(P("2026-07-17"), "KR", 0), DC.weekday(P("2026-05-01")), DC.weekday(P("2026-07-17")), DC.holidayName(P("2026-05-04"), "KR", 0), DC.holidayName(P("2026-07-20"), "KR", 0)], ["노동절", "제헌절", 5, 5, null, null]);
+eq("2027 노동절·제헌절 대체 휴일 이름", [DC.holidayName(P("2027-05-03"), "KR", 0), DC.holidayName(P("2027-07-19"), "KR", 1)], ["노동절 대체 휴일", "Alternative holiday for Constitution Day"]);
+eq("2025년까지 5월 1일·7월 17일은 공휴일 아님", [DC.holidayName(P("2025-05-01"), "KR", 0), DC.holidayName(P("2025-07-17"), "KR", 0)], [null, null]);
 
 
 // 영어 가이드 글(tools/build_en.py)에 적은 예시 숫자. 글을 고치면 여기도 같이 고친다
