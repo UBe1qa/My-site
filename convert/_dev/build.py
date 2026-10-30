@@ -20,6 +20,9 @@ UPDATED = {  # 주소: 'YYYY-MM-DD' (처음 판은 TODAY)
     '/': '2026-10-07', '/ko/': '2026-10-07', '/pdf-to-markdown/': '2026-10-07', '/ko/pdf-to-markdown/': '2026-10-07',
     '/guide/': '2026-10-07', '/ko/guide/': '2026-10-07', '/licenses/': '2026-10-07', '/ko/licenses/': '2026-10-07',
     '/guide/pdf-to-markdown-for-ai/': '2026-10-07', '/ko/guide/pdf-markdown-ai-token/': '2026-10-07',
+    # 2026-10-30: 화면 이름과 맞춤(CSV 두 옵션), 암호 걸기의 제한 목록, 소개의 qpdf 쓰임
+    '/csv-json/': '2026-10-30', '/ko/csv-json/': '2026-10-30', '/ko/guide/csv-excel-hangul/': '2026-10-30',
+    '/protect-pdf/': '2026-10-30', '/ko/protect-pdf/': '2026-10-30', '/about/': '2026-10-30', '/ko/about/': '2026-10-30',
 }
 
 # 도구: id, 분류, 받는 파일, 여러 개, 순서 바꾸기, 글자판 짝(보여 주기용)
