@@ -1,6 +1,6 @@
 # Chick Rescue Privacy Policy
 
-Effective date: October 18, 2026
+Effective date: October 30, 2026
 
 LUMEN LAB ("we") makes the mobile game Chick Rescue (Android and iOS, "the app") and runs the website chick-rescue.lumenlab.page ("the site"). This policy explains what information is handled and how.
 
@@ -25,7 +25,6 @@ LUMEN LAB ("we") makes the mobile game Chick Rescue (Android and iOS, "the app")
 |---|---|---|
 | Confirming purchases and handling refunds | Order details that Google Play and the App Store show us (order number, item, payment status) | As kept in Google Play Console and App Store Connect under each company's policies. We do not copy them elsewhere |
 | Answering your emails | Your email address and message | {inquiry_keep} |
-| Launch news | The email address you send from (and anything you write in the email) | Deleted right after we send the launch email, or right away if you ask us to delete it |
 
 ## 3. Ads (Google AdMob) and automatically collected data
 
@@ -64,7 +63,6 @@ The app shows ads with Google AdMob (Google Mobile Ads SDK). Google collects and
 
 - The demo board's sound and vibration settings are saved only in your browser (localStorage) and never sent to us.
 - Visit statistics: Cloudflare, which hosts the site, adds a small script to each page for visit statistics (Cloudflare Web Analytics). It collects things like the page address, the previous page address, how long the page took to load and the browser type, and it does not use cookies. We only see aggregated numbers (visits, most viewed pages and so on) in Cloudflare.
-- Launch news email: "Get launch news by email" opens a new message with the subject filled in, in the mail app on your phone or computer. The site itself stores and sends nothing when you tap it. We only get your email address if you send that message. We use it only to tell you about the launch; see the table in section 2 for how long we keep it.
 - Other services: the site is hosted by Cloudflare, which processes connection data such as your IP address to deliver the pages ([Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/)). The site has no cookies, sign-in or ads, and the demo boards do not send your results anywhere.
 
 ## 6. Sharing
@@ -76,9 +74,9 @@ The app shows ads with Google AdMob (Google Mobile Ads SDK). Google collects and
 | Service | What it does for us | Information involved |
 |---|---|---|
 | Cloudflare, Inc. | Hosts the site and its visit statistics; forwards email sent to contact@lumenlab.page to our mailbox | Connection data, visit statistics (section 5), the address and content of emails you send |
-| Google LLC | Keeps our mailbox (Gmail), where your questions and launch news emails are stored | The address and content of emails you send |
+| Google LLC | Keeps our mailbox (Gmail), where your questions are stored | The address and content of emails you send |
 
-- This information travels encrypted over the internet when you open the site or send us an email, and is kept as described in section 2. If you do not want your email to be transferred this way, do not email us; we then cannot answer you or send you launch news.
+- This information travels encrypted over the internet when you open the site or send us an email, and is kept as described in section 2. If you do not want your email to be transferred this way, do not email us; we then cannot answer you.
 
 ## 7. Your rights
 
@@ -119,4 +117,7 @@ Privacy contact: {officer} — contact@lumenlab.page — {phone}
 
 ## 12. Changes
 
-If this policy changes, we will post the new version on this page with its effective date. This is our first privacy policy, so there are no previous versions.
+If this policy changes, we will post the new version on this page with its effective date.
+
+- October 30, 2026: the game is out on Google Play and the App Store, so we removed the site's "Get launch news by email" button and the launch news parts of this policy (sections 2, 5 and 6). We received no emails through that button, so there is nothing to delete. Everything else is unchanged.
+- October 18, 2026: first version
