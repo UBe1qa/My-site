@@ -26,6 +26,8 @@ KO_ALL = '2026-10-10'     # 2026-10-10: 메뉴에 나이스(생기부)·SNS가 �
 UPDATED = {p: '2026-10-10' for p in (
     '/', '/character-counter/', '/sms/', '/guide/', '/about/', '/privacy/',
     '/guide/how-x-counts-characters/', '/guide/why-161-characters-is-two-sms/')}
+# 2026-10-30: 블루스카이 한도의 출처 링크(규격 파일이 atproto 저장소에서 bsky 저장소로 옮겨 감)
+UPDATED.update({'/character-counter/': '2026-10-30', '/ko/sns/': '2026-10-30'})
 # 그대로인 영어 페이지: /guide/characters-code-points-bytes/(표를 감싼 칸과 날짜 이름만 바뀜), /licenses/
 
 C = json.loads((DEV / 'content.json').read_text(encoding='utf-8'))
