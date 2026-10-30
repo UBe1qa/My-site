@@ -15,18 +15,23 @@ FONT_SRC = os.path.join(HERE, 'var2', 'fonts', 'Jua-Regular.ttf')  # OFL 원본(
 FONT_NAME = 'CR Round'  # 조각 글꼴 이름(OFL: 원래 이름을 쓰지 않는다)
 
 
-def _pct(s):
-    return re.sub(r'[^A-Za-z0-9]', lambda m: ''.join('%%%02X' % b for b in m.group().encode()), s)
+# ── 스토어(2026-10-30 사용자: 두 곳 모두 0.1.2 공개 확인): 나라·언어가 없는 주소라 방문자 기기에 맞는 스토어·언어로 열린다 ──
+STORE = {
+    'ios': 'https://apps.apple.com/app/id6824218676',
+    'play': 'https://play.google.com/store/apps/details?id=com.ube1qa.crittershuffle',
+}
+# 끝 칸 공식 배지(Apple은 developer.apple.com, Google Play는 배지 생성기 PNG의 투명 여백만 잘라냄). 그림은 고치지 않고 높이만 CSS로 맞춘다
+BADGE = {
+    'ios': (('/img/badge-appstore-ko.svg', 'App Store에서 다운로드하기', 130, 40), ('/img/badge-appstore-en.svg', 'Download on the App Store', 120, 40)),
+    'play': (('/img/badge-play-ko.png', 'Google Play에서 다운로드', 646, 192), ('/img/badge-play-en.png', 'Get it on Google Play', 564, 168)),
+}
 
-
-# ── 주 단추(목표 행동): 말·주소·안내를 여기 한 곳에서 바꾸면 머리말·하단 줄·맛보기 완료 창·끝 칸이 다 같이 바뀐다 ──
-# 구글 플레이 사전 등록으로 바꿀 때: 'href'를 스토어 주소로, 'label'을 ('구글 플레이 사전 등록', 'Pre-register on Google Play')로,
-# 'note'를 사전 등록 안내로 바꾼다. 사이트 안 메일 신청 칸으로 바꿀 때는 'href'를 '#signup' 같은 칸 주소로.
+# ── 주 단추(목표 행동): 머리말·맛보기 완료 창·하단 줄의 같은 단추. 주소는 끝 칸(#end, 배지 둘)이고,
+# 안드로이드·아이폰에서는 site.js가 끝 칸 배지 주소를 옮겨 써서 그 휴대폰 스토어로 바로 간다 ──
 CTA = {
-    'label': ('출시 소식 메일로 받기', 'Get launch news by email'),
-    'href': ('mailto:' + MAIL + '?subject=' + _pct('병아리 구조대 출시 알림 신청'),
-             'mailto:' + MAIL + '?subject=' + _pct('Chick Rescue launch alert')),
-    'note': ('메일 앱이 열리면 그대로 보내 주세요.', 'Your mail app opens with the note ready. Just send it.'),
+    'label': ('무료로 받기', 'Get it free'),
+    'href': ('#end', '#end'),
+    'note': ('안드로이드는 Google Play, 아이폰은 App Store로 바로 열려요.', 'Opens Google Play on Android and the App Store on iPhone.'),
 }
 
 # ── 개인정보 처리방침(/privacy, /en/privacy): 본문은 _dev/privacy/privacy_ko.md·privacy_en.md ──
@@ -49,8 +54,8 @@ PRIVACY = {
 S = {
   'lang': ('ko', 'en'),
   'title': ('병아리 구조대 — 튜브를 옮겨 갇힌 병아리를 구하는 정렬 퍼즐', 'Chick Rescue — a sort puzzle where you free trapped chicks'),
-  'desc': ('튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. 안드로이드 출시 준비 중.',
-           'Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Coming to Android.'),
+  'desc': ('튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 퍼즐 게임. 메인 1,440판 무료, 인터넷 없이. Google Play·App Store에서 무료로 받아요.',
+           'Move animal friends between tubes, hold to use their abilities, and send the buried chicks home. 1,440 main levels free, works offline. Free on Google Play and the App Store.'),
   'skip': ('맛보기 판으로 건너뛰기', 'Skip to the playable level'),
   'name': ('병아리 구조대', 'Chick Rescue'),
   'other_lang': ('English', '한국어'),
@@ -64,7 +69,7 @@ S = {
   # 지금 사이트 '막혔을 때' 칸(help1~3)을 한 줄로
   'help': ('막혀도 괜찮아요. 판마다 첫 힌트와 되돌리기·다시 하기는 무료, 막히면 막히기 직전으로 한 번에 돌아가요.',
            'Stuck? The first hint on every level is free, undo and restart always are, and one tap takes you back to just before you got stuck.'),
-  'status': ('안드로이드 출시 준비 중 · 웹으로 옮긴 맛보기 두 판', 'Coming to Android · two levels to try on the web'),
+  'status': ('<span>Google Play·App Store에 나왔어요</span> · <span>웹으로 옮긴 맛보기 두 판</span>', '<span>Out now on Google Play and the App Store</span> · <span>two levels to try on the web</span>'),
 
   # 2. 둥지 나무(판을 깨면 병아리가 사는 곳)
   'nest_h2': ('구한 병아리는<br>둥지 나무에서 살아요', 'Every chick you save<br>moves into the nest tree'),
@@ -96,22 +101,24 @@ S = {
   # 5. 자주 묻는 질문(넷)
   'faq_h2': ('자주 묻는 질문', 'Questions'),
   'faq': ([
-    ('언제, 어디서 받을 수 있나요?', '안드로이드(구글 플레이)부터 준비하고 있어요. 지금은 휴대폰에서 테스트하는 중이고, 출시일은 아직 정하지 않았어요.'),
-    ('아이폰에서도 되나요?', '준비 중이에요. 아이폰용(iOS 15 이상)으로도 만들고 있지만 실제 아이폰에서 확인하기 전이에요.'),
+    ('어디서 받을 수 있나요?', f'안드로이드 휴대폰은 <a href="{STORE["play"]}">Google Play</a>, 아이폰은 <a href="{STORE["ios"]}">App Store</a>에서 무료로 받을 수 있어요. '
+                       '웹에서는 이 페이지의 맛보기 두 판만 할 수 있어요.'),
+    ('아이폰에서도 되나요?', f'네. iOS 17 이상 아이폰에서 돼요. <a href="{STORE["ios"]}">App Store</a>에서 무료로 받아요.'),
     ('돈을 써야 하나요? 광고는요?', '메인 1,440판은 끝까지 무료예요. 지금 정한 규칙으로는 처음 쓰는 날과 첫 15판엔 판 사이 광고가 없고, 그 뒤에도 많아야 3판에 한 번이에요. '
-                            '광고 제거와 퍼즐 모음은 결제로 열고, 가격은 출시 때 정해요. 돈을 내고 무작위로 뽑는 아이템은 없어요.'),
+                            '광고 제거와 퍼즐 모음 팩은 결제로 열고, 가격은 스토어에서 볼 수 있어요. 돈을 내고 무작위로 뽑는 아이템은 없어요.'),
     ('퍼즐을 잘 못해도 할 수 있나요?', '네. 능력 없는 클래식부터 시작하면 돼요. 섞인 튜브가 없으면 남은 정리는 게임이 알아서 끝내 줘요.'),
   ], [
-    ('When and where can I get it?', 'Android (Google Play) comes first. The game is being play-tested on phones now, and there is no release date yet.'),
-    ('Will it work on iPhone?', 'It is in the works. An iPhone build (iOS 15 or later) exists but has not been checked on a real iPhone yet.'),
+    ('Where can I get it?', f'It’s free on <a href="{STORE["play"]}">Google Play</a> for Android phones and on the <a href="{STORE["ios"]}">App Store</a> for iPhone. '
+                            'On the web, you can play just the two levels on this page.'),
+    ('Will it work on iPhone?', f'Yes, on iPhones with iOS 17 or later. Get it free on the <a href="{STORE["ios"]}">App Store</a>.'),
     ('Do I have to pay? What about ads?', 'All 1,440 main levels are free to the end. Under the current plan there are no ads between levels on your first day or your first 15 levels, '
-                                          'and after that at most one every 3 levels. Removing ads and the puzzle packs are paid, with prices set at launch. There are no paid random draws.'),
+                                          'and after that at most one every 3 levels. Removing ads and the Puzzle Collection Pack are paid; the store page shows the prices. There are no paid random draws.'),
     ('I’m not great at puzzles. Can I still play?', 'Yes. Start with Classic, which has no abilities. Once no tube is mixed, the game finishes the tidy-up for you.'),
   ]),
 
   # 6. 끝 칸
-  'end_h2': ('나오면 제일 먼저<br>알려 드릴게요', 'Be the first to know<br>when it launches'),
-  'end_note': ('안드로이드부터 나와요.', 'Android comes first.'),
+  'end_h2': ('이제 휴대폰에서<br>병아리를 구해요', 'Out now on phones.<br>Go free the chicks'),
+  'end_note': ('무료로 받고, 앱 안 결제와 광고가 있어요.<br>아이폰은 iOS 17 이상이에요.', 'Free to download, with in-app purchases and ads.<br>iPhone needs iOS 17 or later.'),
 
   # 공유 그림(og.jpg·og-en.jpg) 한 줄: _dev/og.html이 data-og로 읽는다
   'og': ('튜브 속 병아리를 구해요', 'Free the trapped chick'),
@@ -125,7 +132,7 @@ S = {
   'lumen_url': ('https://lumenlab.page/', 'https://lumenlab.page/en/'),
   'foot_ai': ('로고·배경·둥지 나무·집 그림은 AI 도구(Higgsfield)로, 동물 친구와 효과는 게임 코드로 그렸어요.',
               'The logo, backgrounds, nest tree and houses were made with an AI tool (Higgsfield); the animal friends and effects are drawn by the game’s own code.'),
-  'foot_dev': ('화면과 숫자는 개발 중인 게임 기준이라 출시 전에 바뀔 수 있어요.', 'Screens and numbers reflect the game in development and may change before launch.'),
+  'foot_dev': ('화면과 숫자는 개발하면서 찍고 잰 것이라 지금 스토어 판(0.1.2)과 조금 다를 수 있어요.', 'Screens and numbers were captured during development and may differ a little from the current store version (0.1.2).'),
 }
 
 FRIENDS = ['squirrel', 'frog', 'otter', 'bat', 'octopus', 'turtle', 'penguin', 'mole', 'owl', 'elephant', 'lion', 'whale']
@@ -220,6 +227,8 @@ def page(i):
     e = lambda k: html.escape(L(k, i), quote=True)
     cta_href = html.escape(CTA['href'][i], quote=True)
     cta = lambda cls='': f'<a class="cta{(" " + cls) if cls else ""}" href="{cta_href}" data-cta>{j(CTA["label"][i])}</a>'
+    badges = ''.join(f'<a class="store" href="{STORE[k]}" data-store="{k}"><img src="{BADGE[k][i][0]}" width="{BADGE[k][i][2]}" height="{BADGE[k][i][3]}" alt="{BADGE[k][i][1]}"></a>'
+                     for k in ('ios', 'play'))
     # 친구 무대(옆으로 넘기기) + 12마리 줄
     slides, picks = [], []
     for n, k in enumerate(FRIENDS):
@@ -251,7 +260,7 @@ def page(i):
     j({'ko': '완성!콤보 x', 'en': 'Done!Combo x'}[lang])  # demo.js 떠오르는 글자(판 글꼴로 그린다)
     demo_json = json.dumps(demo, ensure_ascii=False)
     game_ld = json.dumps({'@context': 'https://schema.org', '@type': 'VideoGame', 'name': t('name'), 'url': url,
-                          'description': t('desc'), 'genre': 'Puzzle', 'gamePlatform': 'Android',
+                          'description': t('desc'), 'genre': 'Puzzle', 'gamePlatform': ['Android', 'iOS'], 'sameAs': [STORE['play'], STORE['ios']],
                           'inLanguage': ['ko', 'en', 'ja'], 'image': BASE + ('/og.jpg' if i == 0 else '/og-en.jpg'),
                           'author': {'@type': 'Organization', 'name': 'Lumen Lab', 'url': 'https://lumenlab.page/'}}, ensure_ascii=False)
     return f'''<!doctype html>
@@ -400,7 +409,7 @@ def page(i):
     <h2 class="h2" id="end-h">{j(t('end_h2'))}</h2>
     <div class="end-stack">
       <div class="end-cta">
-        {cta('cta-end')}
+        <p class="stores">{badges}</p>
         <img class="end-chick" src="/img/c-chick.webp" width="160" height="160" alt="" aria-hidden="true">
       </div>
       <div class="big-tube" aria-hidden="true">
@@ -410,7 +419,7 @@ def page(i):
       </div>
       <div class="end-shelf" aria-hidden="true"></div>
     </div>
-    <p class="end-note">{t('end_note')} {CTA['note'][i]}</p>
+    <p class="end-note">{t('end_note')}</p>
   </div>
 </section>
 </main>

@@ -191,6 +191,13 @@
    },
    "items": [
     {
+     "d": "2026-10-30",
+     "t": {
+      "ko": "Google Play·App Store에 0.1.2판이 나와, 받기 단추가 휴대폰에 맞는 스토어로 바로 가요.",
+      "en": "With 0.1.2 out on Google Play and the App Store, the get button now opens the right store for your phone."
+     }
+    },
+    {
      "d": "2026-10-17",
      "t": {
       "ko": "모드 칸을 클래식·능력·구출 휴대폰 화면 셋으로 나눴어요.",

@@ -3,7 +3,7 @@
    개성 2(칸마다 한 장치): 햇살 판에 말풍선 병아리 / 병아리가 떨어져 앉는 둥지 나무 + 나무 팻말 / 시험관 모양 무대를 넘기고 공을 들어 올려 고르는 친구 줄 /
    기울어진 휴대폰 두 대 전후 비교 / 큰 튜브에서 공처럼 올라오는 마지막 단추. 단추는 게임 공처럼 둥글고 반짝인다.
    밝은 얼굴 고정(color-scheme: only light). 밤 남색은 게임 화면 창문 안에만. */
-@font-face{font-family:"CR Round";src:url(/assets/head.woff2?v=a0b9b679) format("woff2");font-display:swap}
+@font-face{font-family:"CR Round";src:url(/assets/head.woff2?v=97283a0f) format("woff2");font-display:swap}
 
 :root{
   --paper:#FFF8EC;      /* 알 껍데기 크림 */
@@ -84,6 +84,7 @@ h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;lett
 .hero-sub b{font-weight:700;color:var(--ink)}
 .hero-help{margin:16px auto 0;max-width:30em;font-size:15px;line-height:1.5;color:var(--ink)}
 .hero-status{margin-top:8px;font-size:14px;color:var(--ink-2)}
+.hero-status span{display:inline-block}  /* 좁으면 · 자리에서 줄을 바꾼다 */
 .spill{position:absolute;inset:0;pointer-events:none;z-index:-1}
 .spill img{position:absolute;display:none;width:112px;height:112px}
 
@@ -238,15 +239,18 @@ h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;lett
 .qa details[open] summary::after{rotate:45deg}
 .qa details p{padding:0 2px 18px;color:var(--ink-2);font-size:16px}
 
-/* ── 6. 끝: 큰 튜브에서 단추가 맨 위 공처럼 올라와요 ── */
+/* ── 6. 끝: 큰 튜브에서 스토어 배지 둘이 맨 위 공처럼 올라와요(배지 그림은 공식 그대로, 높이만) ── */
 .end{padding:36px 0 64px;text-align:center;overflow:hidden}
 .end .h2{font-size:clamp(28px,7.6vw,44px)}
 .end-stack{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;margin-top:26px}
 .end-stack::before{content:"";position:absolute;left:50%;top:-30px;width:420px;height:420px;margin-left:-210px;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(255,216,77,.6),rgba(255,216,77,0))}
 .end-shelf{width:230px;height:14px;margin-top:-6px;border-radius:8px;background:linear-gradient(#D69A5A,#B0773D);box-shadow:0 4px 0 #84531F}
 .end-cta{position:relative;z-index:2}
-.end-cta .cta{min-height:64px;font-size:22px;padding:0 30px 3px}
-.end-chick{position:absolute;right:-6px;top:-34px;width:52px;height:52px;rotate:10deg}
+.stores{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px;margin:0}
+.store{display:block;border-radius:9px;-webkit-tap-highlight-color:transparent}
+.store img{display:block;width:auto;height:50px}
+.store:focus-visible{outline:3px solid var(--cta-deep);outline-offset:3px}
+.end-chick{position:absolute;right:6px;top:-49px;width:52px;height:52px;rotate:6deg}  /* 배지 위에 서 있기만(배지를 가리지 않게) */
 .big-tube{position:relative;width:132px;margin-top:-8px;padding:22px 0 18px;display:flex;flex-direction:column-reverse;align-items:center;gap:6px;
   background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,255,255,.6) 45%,rgba(255,255,255,.85));
   border-radius:12px 12px 50% 50% / 12px 12px 56px 56px;box-shadow:inset 0 0 0 4px var(--glass-line),inset 0 -12px 20px rgba(255,216,77,.25)}
@@ -409,6 +413,8 @@ h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;lett
   .ph-rescue{width:280px}
   .faq{padding:90px 0 50px}
   .end{padding:60px 0 100px}
+  .store img{height:60px}
+  .stores{gap:16px}
   .dock{display:none}
 }
 @media (max-width:999px){ .foot{padding-bottom:96px} }
@@ -419,7 +425,7 @@ h1,h2,h3{font-family:var(--round);font-weight:400;line-height:1.25;margin:0;lett
   .stage{padding-left:14px;padding-right:14px}
   .verb{font-size:38px}
   .dock .cta{font-size:16px}
-  .end-cta .cta{font-size:19px;padding:0 20px 3px}
+  .store img{height:44px}
   .picker{margin-left:-12px;margin-right:-12px}
   .pick-tube{gap:0;padding:6px 6px 4px}
 }
