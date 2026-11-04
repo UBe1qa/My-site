@@ -1,0 +1,18 @@
+{
+ "games": 17395175,
+ "positions": 66859,
+ "moves": 217573,
+ "names": 3865,
+ "source": "https://database.lichess.org/ lichess_db_standard_rated_2026-10.pgn.zst (first part)",
+ "license": "CC0 (Lichess game database), CC0 (lichess-org/chess-openings)",
+ "bands": [
+  "<1200",
+  "1200-1599",
+  "1600-1999",
+  "2000+"
+ ],
+ "rating": "average of both players, Lichess ratings",
+ "speeds": "blitz, rapid, classical (bullet, ultrabullet and correspondence left out)",
+ "max_ply": 24,
+ "made": "2026-11-04"
+}

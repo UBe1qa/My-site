@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About Fewmoves | Fewmoves</title>
+<meta name="description" content="Where the Fewmoves numbers come from: rated Lichess games, rating levels, opening names, how practice picks moves, and limits.">
+<meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://chess.lumenlab.page/about/">
+<link rel="alternate" hreflang="en" href="https://chess.lumenlab.page/about/">
+<link rel="alternate" hreflang="ko" href="https://chess.lumenlab.page/ko/about/">
+<link rel="alternate" hreflang="x-default" href="https://chess.lumenlab.page/about/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About Fewmoves | Fewmoves">
+<meta property="og:description" content="Where the Fewmoves numbers come from: rated Lichess games, rating levels, opening names, how practice picks moves, and limits.">
+<meta property="og:url" content="https://chess.lumenlab.page/about/">
+<meta property="og:site_name" content="Fewmoves">
+<meta property="og:image" content="https://chess.lumenlab.page/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/pieces.css">
+<link rel="stylesheet" href="/assets/style.css">
+<script>(function(h){try{var n=(navigator.language||'').slice(0,2).toLowerCase();if(!localStorage.getItem('fm.lang')&&(h.lang==='ko'?n!=='ko':n==='ko'))h.classList.add('lb')}catch(e){}})(document.documentElement)</script>
+</head>
+<body>
+<div class="langbar" lang="ko"><span>이 페이지는 한국어로도 있어요.</span><a href="/ko/about/" hreflang="ko">한국어로 보기</a><button type="button" aria-label="닫기">✕</button></div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in wrap">
+  <a class="brand" href="/"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="var(--sq-d)"/><path d="M0 7a7 7 0 0 1 7-7h7v14H0zM14 14h14v7a7 7 0 0 1-7 7h-7z" fill="var(--sq-l)"/><path d="M7 21L19.5 8.5" stroke="var(--acc)" stroke-width="4.6" stroke-linecap="round"/><path d="M12.5 7.2h8.3v8.3" fill="none" stroke="var(--acc)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 21l13.5-3" stroke="var(--acc)" stroke-width="1.8" stroke-linecap="round" opacity=".75"/></svg>Fewmoves</a>
+  <nav class="nav" aria-label="Main"><a href="/">Explorer</a><a href="/openings/">Openings</a><a href="/practice/">Practice</a></nav>
+  <span class="sp"></span>
+  <div class="aux"><a href="/ko/about/" lang="ko" hreflang="ko">한국어</a></div>
+</div></header>
+<main id="main">
+<div class="wrap sec prose doc"><h1>About Fewmoves</h1>
+<p class="lead">Fewmoves helps you learn chess openings starting from <b>the moves your opponents actually play</b>, not from a whole book. It is free and made by Lumen Lab.</p>
+<h2>Where the numbers come from</h2>
+<p>We downloaded the first part of the October 2026 rated games file that Lichess publishes and counted it ourselves. Only blitz, rapid and classical games are counted; bullet, ultrabullet and correspondence are left out. The first 12 moves (24 plies) of the remaining 17,395,175 games are grouped by position. Rating levels use the average of both players' ratings (under 1200, 1200–1599, 1600–1999, 2000 and up). Positions with fewer than 60 games and moves with fewer than 6 games are left out.</p>
+<p>Lichess ratings usually run higher than Chess.com ratings for the same player. There is no exact conversion, so every rating on this site is a Lichess rating.</p>
+<h2>Opening names</h2>
+<p>Names and ECO codes come from the <a href="https://github.com/lichess-org/chess-openings">chess-openings</a> list that Lichess publishes (3,865 entries, CC0).</p>
+<h2>How the guide lines are checked</h2>
+<p>Every main line, variation and trap in the guides is played move by move with a chess rules library (chess.js) each time the site is built. If any move is illegal, the build stops. Traps marked "ends in mate" are also checked to end in checkmate.</p>
+<h2>How practice picks moves</h2>
+<p>In practice, your moves follow the guide's main line, then the move players rated 2000+ chose most often in that position. Your opponent's moves are drawn from the replies played more than 5% of the time at the rating you picked, in their real proportions. Wrong answers and hints come back the same day; right answers come back after 1, 3, 7, 16, 35 and 90 days. Your progress stays in this browser only.</p>
+<h2>Limits</h2>
+<ul><li>The most played move is not always the best move. Win rates are results between players at that level, which can differ from an engine evaluation.</li>
+<li>This is the first part of one month of games, so very rare lines have no numbers.</li>
+<li>The guides are written explanations, not engine analysis. If you spot a mistake, write to <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.</li></ul>
+<h2>Credits</h2>
+<ul><li>Games: <a href="https://database.lichess.org/">Lichess game database</a> (CC0)</li>
+<li>Opening names: <a href="https://github.com/lichess-org/chess-openings">lichess-org/chess-openings</a> (CC0)</li>
+<li>Move rules: <a href="https://github.com/jhlywa/chess.js">chess.js</a> (BSD-2-Clause, <a href="/assets/chess.js-LICENSE.txt">license</a>)</li>
+<li>Piece set: Cburnett, Wikimedia Commons (used under the BSD-3-Clause license)</li>
+<li>Font: Pretendard (SIL Open Font License 1.1)</li></ul>
+<h2>Contact</h2>
+<p>Lumen Lab: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p></div>
+</main>
+<footer class="foot"><div class="wrap">
+  <a class="lumen" href="https://lumenlab.page/en/"><span class="lmini" aria-hidden="true"><span class="lsq"></span><svg class="lpath" viewBox="0 0 96 96"><path pathLength="1" d="M60 60V12H84"/></svg><i class="pc wn"></i></span><span class="lumen-t"><b>Made by Lumen Lab</b><small>More free tools and games</small></span><span class="lumen-go" aria-hidden="true">→</span></a>
+  <p class="foot-links"><a href="/">Explorer</a><a href="/openings/">Openings</a><a href="/practice/">Practice</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="mailto:contact@lumenlab.page">Contact</a></p>
+  <p class="foot-note">Rated blitz, rapid and classical games on Lichess, October 2026. Bullet is left out. Rating = average of both players.</p>
+  <small>© 2026 Lumen Lab</small>
+</div></footer>
+<script type="application/json" id="fmc">{"lang":"en","t":{"band_all":"all ratings","name_start":"Starting position","name_none":"Unnamed position","mate":"Checkmate. The game ends here.","drawn":"The game is drawn here.","ml_empty":"Play a move on the board, or pick one from the table.","sum":"Games from this position ({band}): {n}","sum_none":"No games from this position ({band}) in our data.","rows_none":"Not enough games from here. Go back a move or pick another rating.","load_fail":"Could not load the numbers. Check your connection and try again.","wdl_aria":"White wins {w}, draws {d}, Black wins {b}","white":"White","black":"Black","custom_line":"your line from the explorer","setup_msg":"You will play <b>{side}<\/b> in {name}. Your opponent answers with the moves people at your rating really play.","your_move":"Your move.","right":"<b>{san}<\/b> is the move. Keep going.","fixed":"That is it. This position goes into your review.","wrong":"<b>{san}<\/b> is not the move here. Play <b>{want}<\/b> (green arrow).","playable":"Strong players also play <b>{san}<\/b>, but this line trains a different move. Try again.","hint_msg":"The move is <b>{want}<\/b>. This position goes into your review.","opp_played":"Your opponent played <b>{san}<\/b> ({p} of games {band}).","end":"Line finished: {ok} right, {bad} to review. <span class=\"san\">{line}<\/span>","end_review":"Review done: {ok} right, {bad} to look at again.","again":"Play another line","review_again":"Review again","change":"Change opening","review_q":"Review: what do you play here? ({left} left)","due":"{n} of {total} saved moves are due today.","due_none":"No saved moves yet. Wrong answers come back on a schedule."},"practiceUrl":"/practice/","guides":{"italian-game":{"u":"/openings/italian-game/","n":"Italian Game"},"ruy-lopez":{"u":"/openings/ruy-lopez/","n":"Ruy Lopez"},"scotch-game":{"u":"/openings/scotch-game/","n":"Scotch Game"},"petrovs-defense":{"u":"/openings/petrovs-defense/","n":"Petrov’s Defense"},"philidor-defense":{"u":"/openings/philidor-defense/","n":"Philidor Defense"},"vienna-game":{"u":"/openings/vienna-game/","n":"Vienna Game"},"kings-gambit":{"u":"/openings/kings-gambit/","n":"King’s Gambit"},"four-knights-game":{"u":"/openings/four-knights-game/","n":"Four Knights Game"},"bishops-opening":{"u":"/openings/bishops-opening/","n":"Bishop’s Opening"},"center-game":{"u":"/openings/center-game/","n":"Center Game and Danish Gambit"},"sicilian-defense":{"u":"/openings/sicilian-defense/","n":"Sicilian Defense"},"sicilian-najdorf":{"u":"/openings/sicilian-najdorf/","n":"Sicilian Najdorf"},"sicilian-dragon":{"u":"/openings/sicilian-dragon/","n":"Sicilian Dragon"},"smith-morra-gambit":{"u":"/openings/smith-morra-gambit/","n":"Smith-Morra Gambit"},"alapin-sicilian":{"u":"/openings/alapin-sicilian/","n":"Alapin Sicilian"},"french-defense":{"u":"/openings/french-defense/","n":"French Defense"},"caro-kann-defense":{"u":"/openings/caro-kann-defense/","n":"Caro-Kann Defense"},"scandinavian-defense":{"u":"/openings/scandinavian-defense/","n":"Scandinavian Defense"},"pirc-defense":{"u":"/openings/pirc-defense/","n":"Pirc and Modern Defense"},"alekhine-defense":{"u":"/openings/alekhine-defense/","n":"Alekhine Defense"},"queens-gambit":{"u":"/openings/queens-gambit/","n":"Queen’s Gambit"},"queens-gambit-declined":{"u":"/openings/queens-gambit-declined/","n":"Queen’s Gambit Declined"},"queens-gambit-accepted":{"u":"/openings/queens-gambit-accepted/","n":"Queen’s Gambit Accepted"},"slav-defense":{"u":"/openings/slav-defense/","n":"Slav and Semi-Slav"},"london-system":{"u":"/openings/london-system/","n":"London System"},"kings-indian-defense":{"u":"/openings/kings-indian-defense/","n":"King’s Indian Defense"},"nimzo-indian-defense":{"u":"/openings/nimzo-indian-defense/","n":"Nimzo-Indian Defense"},"dutch-defense":{"u":"/openings/dutch-defense/","n":"Dutch Defense"},"englund-gambit":{"u":"/openings/englund-gambit/","n":"Englund Gambit"},"english-opening":{"u":"/openings/english-opening/","n":"English Opening"},"reti-opening":{"u":"/openings/reti-opening/","n":"Réti Opening (1.Nf3)"}}}</script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

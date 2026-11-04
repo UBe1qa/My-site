@@ -14,7 +14,7 @@
     {
       "id": "play",
       "name": {"ko": "모임·연습·시간·기기", "en": "Groups, practice, time and devices"},
-      "line": {"ko": "뽑기로 정하고, 타자를 연습하고, 시간을 재고, 기기를 점검해요.", "en": "Pick fairly, practice typing, time things and test your gear."}
+      "line": {"ko": "뽑기로 정하고, 타자와 체스 오프닝을 연습하고, 시간을 재고, 기기를 점검해요.", "en": "Pick fairly, practice typing and chess openings, time things and test your gear."}
     }
   ],
   "games": [
@@ -240,6 +240,20 @@
       "sub": "Checkbench",
       "line": {"ko": "키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요.", "en": "Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded."},
       "check": {"ko": "판정마다 기준(키보드 채터링 30ms, 마우스 더블클릭 50ms 등)을 결과 옆에 밝히고, 웹페이지로는 알 수 없는 것(마우스의 실제 USB 폴링레이트 등)은 알 수 없다고 적어 둬요.", "en": "Each verdict shows its threshold (30 ms for keyboard chatter, 50 ms for double-clicks and so on), and what a web page cannot see, such as a mouse's true USB polling rate, is stated plainly."}
+    },
+    {
+      "id": "fewmoves",
+      "what": {"ko": "레이팅별 체스 오프닝 탐색기·연습", "en": "Chess openings by rating, with a trainer"},
+      "dir": "chess",
+      "group": "play",
+      "url": "https://chess.lumenlab.page/ko/",
+      "url_en": "https://chess.lumenlab.page/",
+      "icon": "/img/chess.svg",
+      "name": {"ko": "외울수", "en": "Fewmoves"},
+      "find": {"ko": "체스 오프닝 탐색기 레이팅 리체스 이탈리안 시실리안 런던 연습 외우기 함정", "en": "chess opening explorer by rating lichess trainer repertoire italian sicilian london traps"},
+      "sub": "Fewmoves",
+      "line": {"ko": "내 레이팅대 사람들이 실제로 두는 수와 승률을 리체스 1,740만 판으로 보여 주고, 오프닝 31개 해설과 간격 반복 연습까지 있어요.", "en": "See the moves and win rates at your rating from 17.4 million Lichess games, with 31 opening guides and a spaced-repetition trainer."},
+      "check": {"ko": "리체스가 공개한 2026년 10월 레이팅 대국을 직접 세었고, 해설의 모든 수순은 사이트를 만들 때 체스 규칙 프로그램(chess.js)으로 둬 보고 메이트라고 적은 함정은 실제 체크메이트인지 확인해요.", "en": "The numbers are our own count of the October 2026 rated games Lichess publishes, and every line in the guides is played through with chess.js when the site is built, with traps marked as mate checked to be checkmate."}
     }
   ]
 }

@@ -2777,5 +2777,221 @@
   "https://support.microsoft.com/en-us/office/opening-csv-utf-8-files-correctly-in-excel-8a935af5-3416-4edd-ba7e-3dfd2bc4a032": "2026-10-29 열림(200). 인플레이스가 적은 한국어 도움말의 영어판(같은 글 번호 8a935af5)",
   "https://physics.nist.gov/cuu/Constants/index.html": "2026-10-29 열림(200), CODATA 2022 권고값 안내 첫 페이지. 공학용 계산기가 적은 allascii.txt 표의 사람이 읽는 쪽",
   "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API#browser_compatibility": "2026-10-29 열림(200). 한바퀴가 적은 browser-compat-data WakeLock.json 을 표로 보여 주는 MDN 페이지"
+ },
+ "fewmoves": {
+  "how": {
+   "h": {
+    "ko": "레이팅만 고르면 내 상대가 실제로 두는 수가 보여요",
+    "en": "Pick your rating and see the moves your opponents really play"
+   },
+   "steps": [
+    {
+     "t": {
+      "ko": "레이팅대 고르기",
+      "en": "Pick your rating"
+     },
+     "d": {
+      "ko": "판 위 ‘리체스 레이팅’에서 내 레이팅대를 누르면 표와 화살표가 그 레이팅대 사람들이 둔 수와 비율로 바뀌어요.",
+      "en": "Tap your level under ‘Lichess rating’ above the board, and the table and arrows switch to the moves players at that level chose, with how often."
+     }
+    },
+    {
+     "t": {
+      "ko": "수 두기",
+      "en": "Play a move"
+     },
+     "d": {
+      "ko": "판에서 말을 움직이거나 표에서 수를 누르면 다음 국면으로 가고, 이름 있는 국면이면 오프닝 이름과 해설 링크가 떠요.",
+      "en": "Move a piece or tap a move in the table to go to the next position; named positions show the opening name and a link to its guide."
+     }
+    },
+    {
+     "t": {
+      "ko": "해설 읽기",
+      "en": "Read a guide"
+     },
+     "d": {
+      "ko": "‘오프닝’에서 31개 가운데 하나를 열면 주요 수순, 양쪽 계획, 갈래, 함정과 레이팅대별 응수 표가 있어요.",
+      "en": "Open one of the 31 guides under ‘Openings’ for the main line, plans for both sides, variations, traps and a table of replies by rating."
+     }
+    },
+    {
+     "t": {
+      "ko": "연습하기",
+      "en": "Practice"
+     },
+     "d": {
+      "ko": "해설 끝의 ‘백으로 연습’이나 ‘흑으로 연습’을 누르면 상대가 내 레이팅대에서 실제로 나온 수로 받아치고, 틀린 수는 복습에 들어가요.",
+      "en": "Press ‘Practice as White’ or ‘Practice as Black’ at the end of a guide; your opponent answers with moves really played at your rating, and wrong answers go into your review."
+     }
+    }
+   ]
+  },
+  "basis": {
+   "h": {
+    "ko": "숫자는 리체스가 공개한 기보를 직접 센 거예요",
+    "en": "The numbers are our own count of the games Lichess publishes"
+   },
+   "rows": [
+    {
+     "k": {
+      "ko": "기보",
+      "en": "Games"
+     },
+     "v": {
+      "ko": "리체스가 공개한 2026년 10월 레이팅 대국 기록의 앞부분에서 블리츠·래피드·클래식 17,395,175판을 셌어요. 불릿·초불릿·통신 대국은 뺐어요.",
+      "en": "We counted 17,395,175 blitz, rapid and classical games from the first part of the October 2026 rated games file Lichess publishes. Bullet, ultrabullet and correspondence are left out."
+     },
+     "src": {
+      "t": {
+       "ko": "Lichess 대국 데이터베이스(CC0)",
+       "en": "Lichess game database (CC0)"
+      },
+      "href": "https://database.lichess.org/"
+     },
+     "on": "2026-11-04"
+    },
+    {
+     "k": {
+      "ko": "레이팅대",
+      "en": "Rating levels"
+     },
+     "v": {
+      "ko": "두 사람 레이팅의 평균으로 1200 미만, 1200–1599, 1600–1999, 2000 이상으로 나눠요. 리체스 레이팅이라 같은 사람의 체스닷컴 레이팅보다 대체로 높아요.",
+      "en": "Games are grouped by the average of both ratings: under 1200, 1200–1599, 1600–1999 and 2000+. These are Lichess ratings, which usually run higher than Chess.com ratings for the same player."
+     },
+     "src": {
+      "t": {
+       "ko": "외울수 소개",
+       "en": "About Fewmoves"
+      },
+      "href": {
+       "ko": "https://chess.lumenlab.page/ko/about/",
+       "en": "https://chess.lumenlab.page/about/"
+      }
+     },
+     "on": "2026-11-04"
+    },
+    {
+     "k": {
+      "ko": "싣는 기준",
+      "en": "What is shown"
+     },
+     "v": {
+      "ko": "첫 12수(24수순)까지, 60판 이상 나온 국면과 6판 이상 나온 수만 실어요.",
+      "en": "The first 12 moves (24 plies), positions reached in at least 60 games and moves played in at least 6."
+     },
+     "src": {
+      "t": {
+       "ko": "외울수 소개",
+       "en": "About Fewmoves"
+      },
+      "href": {
+       "ko": "https://chess.lumenlab.page/ko/about/",
+       "en": "https://chess.lumenlab.page/about/"
+      }
+     },
+     "on": "2026-11-04"
+    },
+    {
+     "k": {
+      "ko": "오프닝 이름",
+      "en": "Opening names"
+     },
+     "v": {
+      "ko": "이름과 ECO 분류는 리체스가 공개한 chess-openings 목록(3,865개, CC0)을 써요.",
+      "en": "Names and ECO codes come from the chess-openings list Lichess publishes (3,865 entries, CC0)."
+     },
+     "src": {
+      "t": {
+       "ko": "lichess-org/chess-openings",
+       "en": "lichess-org/chess-openings"
+      },
+      "href": "https://github.com/lichess-org/chess-openings"
+     },
+     "on": "2026-11-04"
+    },
+    {
+     "k": {
+      "ko": "해설 수순",
+      "en": "Guide lines"
+     },
+     "v": {
+      "ko": "해설의 주요 수순·갈래·함정은 사이트를 만들 때마다 chess.js로 한 수씩 둬 보고, ‘메이트까지’라고 적은 함정은 실제 체크메이트인지 확인해요.",
+      "en": "Every main line, variation and trap in the guides is played move by move with chess.js each time the site is built, and traps marked ‘ends in mate’ are checked to end in checkmate."
+     },
+     "src": {
+      "t": {
+       "ko": "chess.js",
+       "en": "chess.js"
+      },
+      "href": "https://github.com/jhlywa/chess.js"
+     },
+     "on": "2026-11-04"
+    },
+    {
+     "k": {
+      "ko": "이 기기에 남는 것",
+      "en": "What stays on your device"
+     },
+     "v": {
+      "ko": "고른 레이팅대와 연습 기록은 이 브라우저에만 적고 서버로 보내지 않아요. 회원 가입이나 로그인은 없어요.",
+      "en": "Your rating level and practice record are kept in this browser only and never sent to a server. There is no sign-up or login."
+     },
+     "src": {
+      "t": {
+       "ko": "외울수 개인정보 처리방침(저장하는 것 3가지)",
+       "en": "Fewmoves Privacy Policy (the three things it stores)"
+      },
+      "href": {
+       "ko": "https://chess.lumenlab.page/ko/privacy/",
+       "en": "https://chess.lumenlab.page/privacy/"
+      }
+     },
+     "on": "2026-11-04"
+    }
+   ],
+   "note": {
+    "ko": "많이 두는 수가 꼭 좋은 수는 아니에요. 승률은 그 레이팅대 사람들끼리 둔 결과라 엔진 평가와 다를 수 있어요.",
+    "en": "The most played move is not always the best move. Win rates are results between players at that level and can differ from an engine evaluation."
+   },
+   "more": null
+  },
+  "log": {
+   "h": {
+    "ko": "열기 전에 해설의 빈도·승률 문장을 직접 센 숫자와 다시 맞췄어요",
+    "en": "Before launch, the guide sentences about popularity and results were checked against our own counts"
+   },
+   "items": [
+    {
+     "d": "2026-11-04",
+     "t": {
+      "ko": "해설에서 승률·빈도를 말한 문장을 직접 센 숫자에 맞춰 고쳤어요(나이도르프 6수째, 잉글룬드 성적 등).",
+      "en": "Rewrote the guide sentences about win rates and popularity to match our own counts, such as the Najdorf’s 6th move and how the Englund scores."
+     }
+    },
+    {
+     "d": "2026-11-04",
+     "t": {
+      "ko": "이탈리안 해설에서 4.Ng5가 통하는 때와 3...Nd4 함정 설명을 바로잡았어요.",
+      "en": "Corrected the Italian guide on when 4.Ng5 works and on the 3...Nd4 trap."
+     }
+    },
+    {
+     "d": "2026-11-04",
+     "t": {
+      "ko": "레이팅이 오르면 어떤 오프닝이 늘고 주는지 정리한 가이드 1편을 올렸어요.",
+      "en": "Published a guide on which openings rise and fall as ratings go up."
+     }
+    },
+    {
+     "d": "2026-11-04",
+     "t": {
+      "ko": "탐색기, 오프닝 해설 31개, 간격 반복 연습을 한국어와 영어로 열었어요.",
+      "en": "Launched the explorer, 31 opening guides and the spaced-repetition trainer in English and Korean."
+     }
+    }
+   ]
+  }
  }
 }

@@ -1398,6 +1398,103 @@
     "ko": "도시마다 zoneinfo와 대조",
     "en": "Each city checked with zoneinfo"
    }
+  },
+  "fewmoves": {
+   "color": "#2c47c9",
+   "facts": [
+    {
+     "v": {
+      "ko": "1,740만 판",
+      "en": "17.4M"
+     },
+     "l": {
+      "ko": "리체스 레이팅 대국",
+      "en": "rated Lichess games"
+     }
+    },
+    {
+     "v": {
+      "ko": "31개",
+      "en": "31"
+     },
+     "l": {
+      "ko": "오프닝 해설",
+      "en": "opening guides"
+     }
+    },
+    {
+     "v": {
+      "ko": "4곳",
+      "en": "4"
+     },
+     "l": {
+      "ko": "레이팅대",
+      "en": "rating levels"
+     }
+    }
+   ],
+   "more": [
+    {
+     "g": "table",
+     "href": {
+      "ko": "https://chess.lumenlab.page/ko/",
+      "en": "https://chess.lumenlab.page/"
+     },
+     "t": {
+      "ko": "오프닝 탐색기",
+      "en": "Opening explorer"
+     },
+     "d": {
+      "ko": "레이팅대별 수·승률",
+      "en": "Moves and results by rating"
+     }
+    },
+    {
+     "g": "list",
+     "href": {
+      "ko": "https://chess.lumenlab.page/ko/openings/",
+      "en": "https://chess.lumenlab.page/openings/"
+     },
+     "t": {
+      "ko": "오프닝 해설 31개",
+      "en": "31 opening guides"
+     },
+     "d": {
+      "ko": "계획·갈래·함정",
+      "en": "Plans, variations, traps"
+     }
+    },
+    {
+     "g": "stack",
+     "href": {
+      "ko": "https://chess.lumenlab.page/ko/practice/",
+      "en": "https://chess.lumenlab.page/practice/"
+     },
+     "t": {
+      "ko": "오프닝 연습",
+      "en": "Opening trainer"
+     },
+     "d": {
+      "ko": "틀린 수는 정해진 날 다시",
+      "en": "Mistakes come back on a schedule"
+     }
+    }
+   ],
+   "demo": {
+    "core": [
+     "/assets/chess.min.js",
+     "/assets/core.js",
+     "/assets/board.js"
+    ],
+    "cap": {
+     "ko": "화살표 굵기가 그 레이팅대에서 그 수를 두는 비율이에요. 숫자는 외울수 사이트의 리체스 1,740만 판 자료를 그대로 읽어요.",
+     "en": "Arrow thickness is how often players at that rating choose the move, read from the same 17.4 million Lichess games as Fewmoves."
+    }
+   },
+   "proof": {
+    "ko": "모든 수순을 체스 규칙으로 검사",
+    "en": "Every line checked by the rules"
+   }
   }
  },
  "games": {
