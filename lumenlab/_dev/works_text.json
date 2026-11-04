@@ -2811,8 +2811,8 @@
       "en": "Read a guide"
      },
      "d": {
-      "ko": "‘오프닝’에서 31개 가운데 하나를 열면 주요 수순, 양쪽 계획, 갈래, 함정과 레이팅대별 응수 표가 있어요.",
-      "en": "Open one of the 31 guides under ‘Openings’ for the main line, plans for both sides, variations, traps and a table of replies by rating."
+      "ko": "‘오프닝’에서 81개 가운데 하나를 열면 주요 수순, 양쪽 계획, 갈래, 함정과 레이팅대별 응수 표가 있어요.",
+      "en": "Open one of the 81 guides under ‘Openings’ for the main line, plans for both sides, variations, traps and a table of replies by rating."
      }
     },
     {
@@ -2959,10 +2959,17 @@
   },
   "log": {
    "h": {
-    "ko": "열기 전에 해설의 빈도·승률 문장을 직접 센 숫자와 다시 맞췄어요",
-    "en": "Before launch, the guide sentences about popularity and results were checked against our own counts"
+    "ko": "오프닝 해설을 31개에서 81개로 늘렸어요",
+    "en": "The opening guides grew from 31 to 81"
    },
    "items": [
+    {
+     "d": "2026-11-04",
+     "t": {
+      "ko": "카탈란, 그륀펠트, 버드, 그롭 같은 오프닝 50개에 해설을 더하고, 리체스에서 판이 있는 오프닝 계열은 모두 어느 해설엔가 속하게 했어요.",
+      "en": "Added 50 guides, such as the Catalan, Grünfeld, Bird and Grob, so every opening family with games on Lichess now has a guide."
+     }
+    },
     {
      "d": "2026-11-04",
      "t": {

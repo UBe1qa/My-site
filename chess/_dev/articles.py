@@ -9,10 +9,10 @@ PUBLISHED = '2026-11-04'
 META = {
     'en': {'title': 'Chess Openings by Rating: What 17.4M Lichess Games Show',
            'h1': 'Which chess openings do players use at each rating?',
-           'desc': 'How the openings people play change from under 1200 to 2000+, counted from 17.4 million rated Lichess games: first moves, 31 openings, results and draws.'},
+           'desc': 'How the openings people play change from under 1200 to 2000+, counted from 17.4 million rated Lichess games: first moves, each opening, results and draws.'},
     'ko': {'title': '레이팅별로 많이 두는 체스 오프닝: 리체스 1,740만 판',
            'h1': '레이팅마다 어떤 체스 오프닝을 둘까?',
-           'desc': '1200 미만부터 2000 이상까지 레이팅에 따라 두는 오프닝이 어떻게 바뀌는지, 리체스 레이팅 대국 1,740만 판으로 셌어요. 첫 수, 오프닝 31개, 결과와 무승부.'},
+           'desc': '1200 미만부터 2000 이상까지 레이팅에 따라 두는 오프닝이 어떻게 바뀌는지, 리체스 레이팅 대국 1,740만 판으로 셌어요. 첫 수, 해설이 있는 오프닝 모두, 결과와 무승부.'},
 }
 INDEX = {
     'en': {'title': 'Chess Opening Guides | Fewmoves', 'h1': 'Guides',
@@ -25,7 +25,7 @@ INDEX = {
 
 
 def body(lang, D):
-    """D = build.py가 계산한 숫자: games, bands, first(수별 4칸 비율), first_white, rows(오프닝 31개), rise, fall, score_gap, draws, top_low."""
+    """D = build.py가 계산한 숫자: games, bands, first(수별 4칸 비율), first_white, rows(해설이 있는 오프닝, 길잡이 페이지 제외), rise, fall, score_gap, draws, top_low."""
     p, pct, n_ = D['prefix'], D['pct'], D['count']
     B = D['bands']
     th = ''.join(f'<th scope="col">{esc(b)}</th>' for b in B)
@@ -55,8 +55,8 @@ def body(lang, D):
 <h2>첫 수: 레이팅이 오를수록 1.e4가 줄어요</h2>
 <div class="tbl"><table><thead><tr><th scope="col">첫 수</th>{th}</tr></thead><tbody>{first_rows}</tbody></table></div>
 <p>1.e4는 {pct(e4[0])} → {pct(e4[3])}로 줄고, 1.d4는 {pct(d4[0])} → {pct(d4[3])}로 늘어요. 1.Nf3·1.c4처럼 바로 중앙 폰을 밀지 않는 수도 2000 이상에서 눈에 띄게 많아져요. 레이팅이 낮을수록 상대가 1.e4를 둘 가능성이 크니, 흑으로는 1.e4 대비부터 하는 게 시간을 아끼는 길이에요.</p>
-<h2>오프닝 31개, 레이팅대별 비율</h2>
-<p>외울수 해설이 있는 오프닝 31개가 각 레이팅대 판에서 얼마나 나오는지예요(전체에서 많이 나온 순). 오프닝 이름을 누르면 해설과 탐색기가 열려요.</p>
+<h2>오프닝 {len(D['rows'])}개, 레이팅대별 비율</h2>
+<p>외울수 해설이 있는 오프닝 {len(D['rows'])}개가 각 레이팅대 판에서 얼마나 나오는지예요(전체에서 많이 나온 순). 오프닝 이름을 누르면 해설과 탐색기가 열려요.</p>
 <div class="tbl"><table><thead><tr><th scope="col">오프닝</th>{th}</tr></thead><tbody>{o_rows}</tbody></table></div>
 <h2>레이팅이 오를수록 많아지는 오프닝</h2>
 <ul>{''.join(li_r(r) for r in rise)}</ul>
@@ -86,8 +86,8 @@ def body(lang, D):
 <h2>First moves: less 1.e4 as ratings rise</h2>
 <div class="tbl"><table><thead><tr><th scope="col">First move</th>{th}</tr></thead><tbody>{first_rows}</tbody></table></div>
 <p>1.e4 drops from {pct(e4[0])} to {pct(e4[3])} and 1.d4 rises from {pct(d4[0])} to {pct(d4[3])}. Quieter first moves such as 1.Nf3 and 1.c4 also become much more common at 2000+. The lower your rating, the more likely your opponent opens 1.e4, so as Black your time is best spent on your answer to 1.e4 first.</p>
-<h2>31 openings at each rating</h2>
-<p>How often each of the 31 openings with a Fewmoves guide comes up at each level, most played first. Click a name to open its guide and explorer.</p>
+<h2>{len(D['rows'])} openings at each rating</h2>
+<p>How often each of the {len(D['rows'])} openings with a Fewmoves guide comes up at each level, most played first. Click a name to open its guide and explorer.</p>
 <div class="tbl"><table><thead><tr><th scope="col">Opening</th>{th}</tr></thead><tbody>{o_rows}</tbody></table></div>
 <h2>Openings that grow with rating</h2>
 <ul>{''.join(li_r(r) for r in rise)}</ul>
