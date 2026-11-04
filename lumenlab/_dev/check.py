@@ -96,17 +96,17 @@ ok(nlinks > 100 and not missing, f'정보 페이지의 도구·앱 사이트 링
 
 # 도구·게임·앱 사이트 주소(https://*.lumenlab.page/…)는 이 저장소의 옆 폴더 파일로 돌려준다(바로 써 보기 계산 파일, 미리 보기 사진·영상).
 # 공평뽑기 모듈은 실제 사이트처럼 허락 머리말을 붙인다
-TYPES = {'.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.mp4': 'video/mp4', '.webm': 'video/webm', '.json': 'application/json'}
+TYPES = {'.js': 'application/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.mp4': 'video/mp4', '.webm': 'video/webm', '.json': 'application/json'}
 def sub_file(r):
     u = urlparse(r.request.url); f = os.path.join(mono, hostdir.get(u.netloc, u.netloc.split('.')[0]), u.path.lstrip('/'))
     if not os.path.isfile(f): return r.fulfill(status=404, body='')
     hd = {'content-type': TYPES.get(os.path.splitext(f)[1], 'application/octet-stream')}
-    if u.netloc.startswith('pick.') and u.path.startswith('/assets/core/'): hd['access-control-allow-origin'] = '*'
+    if (u.netloc.startswith('pick.') and u.path.startswith('/assets/core/')) or (u.netloc.startswith('chess.') and u.path.startswith('/data/')): hd['access-control-allow-origin'] = '*'  # 두 사이트 _headers와 같게
     r.fulfill(path=f, headers=hd)
 SUB = re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*')
 
 with sync_playwright() as p:
-    br = p.chromium.launch(executable_path='/opt/pw-browsers/chromium-1194/chrome-linux/chrome')
+    br = p.chromium.launch(executable_path=next((x for x in ('/opt/pw-browsers/chromium-1194/chrome-linux/chrome', '/opt/pw-browsers/chromium') if os.path.exists(x)), None))  # 작업 공간마다 브라우저 자리가 다름
     seen = set()
     for path in PAGES:
         for w in (320, 390, 1366):

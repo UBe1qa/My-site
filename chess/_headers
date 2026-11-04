@@ -1,0 +1,9 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 루멘랩 홈의 소개 창과 소개 페이지(lumenlab.page/works/fewmoves/)의 '바로 써 보기'가 이 통계 조각을 fetch로 읽는다.
+# fetch는 다른 주소에서 읽으려면 이 허락이 있어야 한다. 공개 자료라 주소를 가리지 않는다.
+/data/*
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *

@@ -1,0 +1,10 @@
+# 2026-11-04 가이드 글은 루멘랩 홈(lumenlab.page/guides/chess/)에 싣는다(도구 사이트의 글을 홈에 모아 애드센스 심사를 받는 방식, time 등과 같다).
+# 이 사이트의 /guide/ 주소는 홈의 같은 글로 영구 이동. 고정 주소를 먼저, * 규칙을 뒤에 둔다.
+/ko/guide/ https://lumenlab.page/guides/#chess 301
+/ko/guide https://lumenlab.page/guides/#chess 301
+/ko/guide/index.html https://lumenlab.page/guides/#chess 301
+/guide/ https://lumenlab.page/en/guides/#chess 301
+/guide https://lumenlab.page/en/guides/#chess 301
+/guide/index.html https://lumenlab.page/en/guides/#chess 301
+/ko/guide/* https://lumenlab.page/guides/chess/:splat 301
+/guide/* https://lumenlab.page/en/guides/chess/:splat 301
