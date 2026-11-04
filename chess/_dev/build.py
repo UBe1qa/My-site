@@ -601,8 +601,12 @@ def crumbs_ld(lang, items):
             'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': url(lang, p)} for i, (n, p) in enumerate(items)]}
 
 
+def by_played(lst):
+    return sorted(lst, key=lambda o: -played(o['_r']['epd'][-1])['n'])
+
+
 def popular(n=8):
-    return sorted(OPENINGS, key=lambda o: -played(o['_r']['epd'][-1])['n'])[:n]
+    return by_played([o for o in OPENINGS if not o['hub']])[:n]
 
 
 def home_page(lang, tops):
@@ -644,7 +648,7 @@ def list_page(lang):
     P, t = PAGES[lang]['openings'], TX[lang]
     groups = ''
     for g, names in GROUPS:
-        cards = ''.join(card(lang, o) for o in OPENINGS if o['group'] == g)
+        cards = ''.join(card(lang, o) for o in by_played([o for o in OPENINGS if o['group'] == g]))
         groups += f'<h2 class="group-h" id="{g}">{esc(names[lang])}</h2><ul class="cards">{cards}</ul>\n'
     body = f'''<div class="wrap sec">
   <h1>{P['h1']}</h1>
@@ -705,7 +709,7 @@ def opening_page(lang, o, kids):
         tline = fmt(t['trap_n'], n=count(tn, lang)) if tn else t['trap_rare']
         traps += (f'<div class="trap"><h3>{esc(tr[lang]["title"])}</h3><p>{esc(tr[lang]["text"])}</p><p class="vst">{esc(tline)}</p>'
                   f'<a class="line-btn" href="{prefix(lang)}?m={".".join(tr_r["uci"])}" data-goto="{".".join(tr_r["uci"])}">{t["show_board"]}: {esc(numbered(tr_r["san"]))}{mate}</a></div>')
-    rel = ''.join(card(lang, x) for x in OPENINGS if x['group'] == o['group'] and x is not o)
+    rel = ''.join(card(lang, x) for x in by_played([x for x in OPENINGS if x['group'] == o['group'] and x is not o])[:6])
     pr = prefix(lang) + 'practice/?o=' + o['slug']
     sidename = t['white'] if o['side'] == 'w' else t['black']
     other = 'b' if o['side'] == 'w' else 'w'
@@ -836,6 +840,8 @@ def article_data(tops):
     fs = dict(first)
     rows = []
     for o in OPENINGS:
+        if o['hub']:
+            continue
         e = o['_r']['epd'][-1]
         rb = [played(e, b) for b in range(4)]
         rows.append({'slug': o['slug'], 'name': {l: o[l]['name'] for l in ('en', 'ko')}, 'n': played(e)['n'],
@@ -855,7 +861,7 @@ def article_data(tops):
     want(fs['Nf3'][3] > fs['Nf3'][0] * 1.8 and fs['c4'][3] > fs['c4'][0] * 1.8, '1.Nf3·1.c4가 2000+에서 크게 는다')
     want(by['sicilian-defense']['share'][3] > by['sicilian-defense']['share'][0] * 2, '시실리안이 는다')
     want(all(by[k]['share'][0] < 0.001 for k in ('sicilian-najdorf', 'kings-indian-defense', 'nimzo-indian-defense')), '깊은 갈래는 1200 미만에서 거의 없다')
-    want(fall[0]['slug'] == 'bishops-opening', '가장 줄어드는 것 = 비숍스 오프닝(글의 "일찍 비숍" 문장)')
+    want(fall[0]['slug'] in ('bishops-opening', 'wayward-queen-attack'), '가장 줄어드는 것 = 일찍 비숍이나 퀸을 꺼내는 오프닝(글의 "일찍 비숍이나 퀸" 문장)')
     want(by['kings-gambit']['score'][0] > by['kings-gambit']['score'][3] and by['smith-morra-gambit']['score'][0] > by['smith-morra-gambit']['score'][3], '갬빗 점수가 낮은 레이팅에서 높다')
     want(all(draws[i] < draws[i + 1] for i in range(3)) or (draws[0] < draws[3] and draws[2] < draws[3]), '무승부가 는다')
     want(all(ratio(r) > 1.5 for r in rise) and all(ratio(r) < 0.67 for r in fall), '오르내림 목록')
