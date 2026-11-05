@@ -8,7 +8,7 @@ UI = {
         'about': 'About', 'privacy': 'Privacy', 'contact': 'Contact', 'ad': 'Advertisement',
         'lumen_b': 'Made by Lumen Lab', 'lumen_s': 'More free tools and games',
         'band_lbl': 'Lichess rating', 'band_all': 'All',
-        'first': 'Start position', 'prev': 'Previous move', 'next': 'Next move', 'last': 'Last move', 'flip': 'Flip board',
+        'first': 'Start position', 'prev': 'Previous move', 'next': 'Next move', 'last': 'Last move', 'flip': 'Flip board', 'sound': 'Sound effects on or off',
         'th_move': 'Move', 'th_share': 'Played', 'th_games': 'Games', 'th_wdl': 'White · Draw · Black',
         'practice_w': 'Practice as White', 'practice_b': 'Practice as Black', 'guide_read': 'Read the guide:',
         'data_note': 'Rated blitz, rapid and classical games on Lichess, October 2026. Bullet is left out. Rating = average of both players.',
@@ -41,7 +41,7 @@ UI = {
         'about': '소개', 'privacy': '개인정보 처리방침', 'contact': '문의', 'ad': '광고',
         'lumen_b': '루멘랩이 만들었어요', 'lumen_s': '다른 무료 도구와 게임 보기',
         'band_lbl': '리체스 레이팅', 'band_all': '전체',
-        'first': '처음 국면', 'prev': '한 수 뒤로', 'next': '한 수 앞으로', 'last': '마지막 수', 'flip': '판 뒤집기',
+        'first': '처음 국면', 'prev': '한 수 뒤로', 'next': '한 수 앞으로', 'last': '마지막 수', 'flip': '판 뒤집기', 'sound': '효과음 켜기·끄기',
         'th_move': '수', 'th_share': '비율', 'th_games': '판 수', 'th_wdl': '백 승 · 무 · 흑 승',
         'practice_w': '백으로 연습', 'practice_b': '흑으로 연습', 'guide_read': '해설 읽기:',
         'data_note': '리체스 2026년 10월 레이팅 대국(블리츠·래피드·클래식, 불릿 제외). 레이팅은 두 사람 평균.',
@@ -164,18 +164,19 @@ def about(lang, meta):
 <p>Lumen Lab: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''
 
 
-STORE_KEYS = ['fm.band', 'fm.cards', 'fm.lang']
+STORE_KEYS = ['fm.band', 'fm.cards', 'fm.lang', 'fm.sound']
 
 
 def privacy(lang):
     if lang == 'ko':
         return '''<h1>개인정보 처리방침</h1>
-<p>마지막 확인: 2026년 11월 4일</p>
+<p>마지막 확인: 2026년 11월 5일</p>
 <h2>이 사이트가 이 기기에 남기는 것</h2>
-<p>고른 레이팅대와 연습 기록을 다음에도 쓰도록 이 기기의 브라우저 저장소(localStorage)에만 적어요. 서버로 보내지 않아요. 키는 다음 세 개예요.</p>
+<p>고른 레이팅대, 연습 기록, 효과음 설정을 다음에도 쓰도록 이 기기의 브라우저 저장소(localStorage)에만 적어요. 서버로 보내지 않아요. 키는 다음 네 개예요.</p>
 <ul><li><code>fm.band</code>: 고른 레이팅대</li>
 <li><code>fm.cards</code>: 연습한 국면마다 다음에 볼 날짜, 간격, 맞힌·틀린 횟수, 그 국면까지의 수순</li>
-<li><code>fm.lang</code>: 다른 언어 안내를 닫았는지</li></ul>
+<li><code>fm.lang</code>: 다른 언어 안내를 닫았는지</li>
+<li><code>fm.sound</code>: 효과음을 껐는지</li></ul>
 <p>브라우저 설정에서 이 사이트의 데이터를 지우면 모두 사라져요. 회원 가입이나 로그인은 없어요.</p>
 <h2>받아 오는 것</h2>
 <p>수 통계는 이 사이트(chess.lumenlab.page)의 파일에서 읽어요. 판에서 둔 수는 어디에도 보내지 않아요. 글꼴은 jsDelivr에서 받아요.</p>
@@ -186,12 +187,13 @@ def privacy(lang):
 <h2>문의</h2>
 <p>루멘랩: <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></p>'''
     return '''<h1>Privacy Policy</h1>
-<p>Last checked: November 4, 2026</p>
+<p>Last checked: November 5, 2026</p>
 <h2>What this site keeps on your device</h2>
-<p>So your rating choice and practice progress are there next time, they are saved in this browser's storage (localStorage) only. Nothing is sent to a server. These are the three keys:</p>
+<p>So your rating choice, practice progress and sound setting are there next time, they are saved in this browser's storage (localStorage) only. Nothing is sent to a server. These are the four keys:</p>
 <ul><li><code>fm.band</code>: the rating level you picked</li>
 <li><code>fm.cards</code>: for each practiced position, the next review date, the interval, right and wrong counts, and the moves that led there</li>
-<li><code>fm.lang</code>: whether you closed the language suggestion</li></ul>
+<li><code>fm.lang</code>: whether you closed the language suggestion</li>
+<li><code>fm.sound</code>: whether you turned sound effects off</li></ul>
 <p>Clearing this site's data in your browser settings removes all of it. There are no accounts or logins.</p>
 <h2>What the site loads</h2>
 <p>Move statistics are read from files on this site (chess.lumenlab.page). The moves you play on the board are not sent anywhere. The font is loaded from jsDelivr.</p>

@@ -114,6 +114,8 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .ctrls button:disabled { opacity: .35; cursor: default; }
 .ctrls svg { width: 20px; height: 20px; }
 @media (max-width: 520px) { .ctrls { margin-top: 8px; } }
+.ctrls-1 { justify-content: flex-end; }
+.ctrls-1 button { flex: 0 0 64px; }
 
 /* 판 */
 .bd { position: relative; width: 100%; aspect-ratio: 1 / 1; touch-action: none; user-select: none; -webkit-user-select: none;
@@ -127,8 +129,9 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .bd-hl .ck { background: radial-gradient(circle, rgba(230, 30, 30, .85) 0, rgba(230, 30, 30, .45) 35%, transparent 70%); }
 .bd-hl .tg::after { content: ''; position: absolute; inset: 37%; border-radius: 50%; background: rgba(20, 30, 60, .28); }
 .bd-hl .tg.cap::after { inset: 4%; background: none; border: 6px solid rgba(20, 30, 60, .26); }
-.bd-hl .hn { box-shadow: inset 0 0 0 4px var(--warn); }
-.pc { background-size: 100% 100%; background-repeat: no-repeat; transition: transform .16s cubic-bezier(.2, .7, .3, 1); will-change: transform; cursor: grab; }
+.bd-hl .hn { box-shadow: inset 0 0 0 4px var(--warn); animation: hn 1.1s ease-in-out infinite; }
+@keyframes hn { 50% { box-shadow: inset 0 0 0 8px var(--warn); } }
+.pc { background-size: 100% 100%; background-repeat: no-repeat; transition: translate .2s cubic-bezier(.22, 1, .36, 1), scale .12s ease-out; will-change: translate; cursor: grab; }
 .pc.drag { transition: none; z-index: 5; cursor: grabbing; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .3)); scale: 1.1; }
 .bd-co span { position: absolute; font: 700 clamp(9px, 1.7vw, 11px)/1 var(--font); color: var(--sq-l); pointer-events: none; }
 .bd-co span.dk { color: var(--sq-d); }   /* 칸과 반대 색(어두운 칸엔 밝은 글자) */
@@ -147,6 +150,41 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .bd > .fl { z-index: 3; pointer-events: none; animation: fl .8s ease-out forwards; }
 .fl.ok { background: rgba(29, 138, 77, .55); } .fl.bad { background: rgba(194, 59, 42, .6); } .fl.warn { background: rgba(200, 140, 20, .55); }
 @keyframes fl { to { opacity: 0; } }
+/* 손맛(board.js feel, fx.js): 미끄러지는 동안 그림자 → 닿으면 살짝 눌림, 잡힌 말은 튕겨 나감, 체크는 왕이 움찔 */
+.pc.lift { scale: 1.08; z-index: 3; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .25)); }
+.pc.mv { z-index: 3; filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .26)); }
+.pc.land { z-index: 2; animation: land .24s cubic-bezier(.3, .7, .4, 1); }
+@keyframes land { 0% { scale: 1.1; } 45% { scale: .93; } 100% { scale: 1; } }
+.pc.out { z-index: 1; pointer-events: none; animation: out .3s cubic-bezier(.4, 0, .7, .2) forwards; }
+@keyframes out { 0% { transform: none; } 25% { scale: 1.08; opacity: 1; } 100% { transform: translate(var(--dx, 0%), var(--dy, 0%)); scale: .3; opacity: 0; rotate: var(--rot, 25deg); } }
+.pc.wait { opacity: 0; }
+.pc.pop { animation: pop .38s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes pop { 0% { scale: .3; opacity: 0; } 100% { scale: 1; opacity: 1; } }
+.pc.rise { animation: rise .22s ease-out both; }
+@keyframes rise { from { opacity: 0; scale: .85; } }
+.pc.jolt { animation: jolt .4s ease-in-out; }
+@keyframes jolt { 20% { rotate: -10deg; } 45% { rotate: 8deg; } 70% { rotate: -4deg; } 100% { rotate: 0deg; } }
+.pc.wob { animation: wob .4s ease-in-out; }
+@keyframes wob { 15%, 55% { rotate: -8deg; scale: 1.05; } 35%, 75% { rotate: 8deg; } 100% { rotate: 0deg; scale: 1; } }
+.bd.shk { animation: shk .2s ease-out; }
+@keyframes shk { 25% { translate: 0 1.5px; } 50% { translate: 1px -1px; } 75% { translate: -1px .5px; } 100% { translate: 0 0; } }
+.bd > .spark { position: absolute; z-index: 6; pointer-events: none; border-radius: 2px; }
+.bd > .spark.conf { z-index: 9; border-radius: 1px; }
+.bd > .ring { position: absolute; left: 0; top: 0; width: 12.5%; height: 12.5%; z-index: 6; pointer-events: none; border-radius: 50%;
+  animation: ring .55s cubic-bezier(.2, .7, .3, 1) forwards; }
+.ring.ok { box-shadow: inset 0 0 0 4px var(--ok); }
+.ring.ck { box-shadow: inset 0 0 0 4px rgba(230, 30, 30, .9); }
+@keyframes ring { from { scale: .55; opacity: 1; } to { scale: 1.9; opacity: 0; } }
+.bd > .combo { position: absolute; z-index: 7; pointer-events: none; translate: -50% -40%; font: 800 clamp(16px, 3.4vw, 22px)/1 var(--font);
+  color: var(--ok); text-shadow: 0 1px 0 var(--paper), 0 0 8px var(--paper); animation: combo .85s ease-out forwards; }
+@keyframes combo { 0% { opacity: 0; translate: -50% 0; scale: .6; } 20% { opacity: 1; scale: 1.18; } 100% { opacity: 0; translate: -50% -110%; scale: 1; } }
+/* 화살표가 시작 칸에서 자라 나온다 */
+.arw line { stroke-dasharray: 1 1; animation: grow .26s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 30ms); }
+@keyframes grow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+/* 효과음 단추: 켜짐/꺼짐 그림을 aria-pressed로 바꾼다 */
+[data-sound] .snd-off { display: none; }
+[data-sound][aria-pressed="false"] .snd-on { display: none; }
+[data-sound][aria-pressed="false"] .snd-off { display: inline; }
 
 /* 옆 칸 */
 .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; min-width: 0; }

@@ -110,7 +110,7 @@ for f in pages + [ROOT / '404.html']:
         errs.append(f'{rel}: 채우지 않은 {{자리}}')
 if len(locs) != len([p for p in pages]):
     errs.append(f'사이트맵 {len(locs)}개, 페이지 {len(pages)}개')
-js = ''.join((ROOT / 'assets' / n).read_text(encoding='utf-8') for n in ('app.js', 'core.js', 'board.js'))
+js = ''.join((ROOT / 'assets' / n).read_text(encoding='utf-8') for n in ('app.js', 'core.js', 'board.js', 'fx.js'))
 used = set(re.findall(r"'(fm\.[a-z]+)'", js))
 if used != set(STORE_KEYS):
     errs.append(f'저장 키 {sorted(used)} ≠ 방침 {STORE_KEYS}')

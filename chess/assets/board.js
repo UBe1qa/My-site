@@ -1,5 +1,7 @@
 /* 체스판 (직접 그림, 라이브러리 없음). 끌기·누르기 두 방식, 화살표(굵기 = 많이 두는 비율), 승진 고르기, 움직임.
-   규칙 판단은 밖(chess.js)이 하고, 이 판은 보여 주기와 손 입력만 한다. */
+   규칙 판단은 밖(chess.js)이 하고, 이 판은 보여 주기와 손 입력만 한다.
+   손맛(fx.js가 있으면): 바뀐 말을 보고 수의 종류(보통·잡기·캐슬링·승진·체크)를 알아내 말이 닿는 순간 소리와 효과를 낸다.
+   말 자리는 CSS translate 속성으로 둔다(transform이 아니라). 그래야 scale·rotate 효과가 말 제자리를 중심으로 걸린다. */
 (function (g) {
   'use strict';
   var FM = g.FM || (g.FM = {});
@@ -63,7 +65,7 @@
   };
   Board.prototype.place = function (node, sq) {
     var p = this.xy(sq);
-    node.style.transform = 'translate(' + (p[0] * 100) + '%,' + (p[1] * 100) + '%)';
+    node.style.translate = (p[0] * 100) + '% ' + (p[1] * 100) + '%';
   };
   function parse(fen) {
     var out = {}, rows = fen.split(' ')[0].split('/');
@@ -80,9 +82,12 @@
     return out;
   }
   // fen 으로 말 놓기. 바뀐 말만 옮겨서 움직임이 보이게 한다.
-  Board.prototype.set = function (fen, last, check, instant) {
+  // quiet: 소리·효과 없이 옮긴다(틀린 수를 되돌릴 때 등)
+  Board.prototype.set = function (fen, last, check, instant, quiet) {
     this.clearSel();
     var next = parse(fen), old = this.pieces, keep = {}, gone = [], self = this;
+    var movers = [], born = [], feel = !instant && !quiet && this.fen && FM.Sfx;
+    var dropped = this.dropped; this.dropped = null;
     Object.keys(old).forEach(function (sq) {
       if (next[sq] === old[sq].dataset.p) keep[sq] = old[sq];
       else gone.push({ sq: sq, node: old[sq] });
@@ -98,7 +103,7 @@
         if (d < bd) { bd = d; best = i; }
       });
       var node;
-      if (best >= 0 && !instant) { node = gone[best].node; gone[best].node = null; }
+      if (best >= 0 && !instant) { node = gone[best].node; movers.push({ node: node, from: gone[best].sq, to: sq }); gone[best].node = null; }
       else {
         node = document.createElement('i');
         node.className = 'pc ' + next[sq];
@@ -108,16 +113,94 @@
         self.place(node, sq);
         void node.offsetWidth;            // 놓인 자리를 먼저 그리게 하고 전환을 되살린다(움16)
         node.style.transition = '';
+        if (!instant) born.push({ node: node, sq: sq });
       }
       self.place(node, sq);
       fresh[sq] = node;
     });
-    gone.forEach(function (gp) { if (gp.node) gp.node.remove(); });
+    var lost = gone.filter(function (gp) { return gp.node; });
+    if (feel && last) this.feel(movers, born, lost, check, dropped && dropped === last[1] ? 0 : 95, next, last);
+    else lost.forEach(function (gp) { gp.node.remove(); });
     this.pieces = fresh;
     this.fen = fen;
     this.last = last || null;
     this.check = check || null;
     this.paintHl();
+  };
+  // ---- 손맛: 수의 종류를 알아내 닿는 순간(ms 뒤) 소리·효과 ----
+  var CHIPS = { w: ['#fffdf8', '#efe6d2', '#d2c6ac'], b: ['#2b2d33', '#4b4f59', '#17181c'] };
+  var GOLD = ['#f5a300', '#ffcf3f', '#e0661a', '#fff3b3'];
+  function after(ms, fn) { if (ms > 0) setTimeout(fn, ms); else fn(); }
+  function once(node, cls, ms) {
+    node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls);
+    setTimeout(function () { node.classList.remove(cls); }, ms);
+  }
+  Board.prototype.feel = function (movers, born, lost, check, ms, next, last) {
+    var self = this, fx = FM.fxOK, mover = next[last[1]] || '', color = mover[0];
+    var capt = lost.filter(function (gp) { return gp.node.dataset.p[0] !== color; });
+    var promo = born.length === 1 && born[0].sq === last[1] && lost.some(function (gp) { return gp.node.dataset.p === color + 'p'; });
+    var kind = 'move';
+    if (movers.length + born.length > 2 || lost.length > 2) kind = 'shuffle';
+    else if (promo) kind = 'promote';
+    else if (movers.length === 2 && movers.some(function (m) { return m.node.dataset.p[1] === 'k'; })) kind = 'castle';
+    else if (capt.length) kind = 'capture';
+    else if (born.length) kind = 'back';
+    FM.Sfx.play(kind, { delay: ms / 1000 });
+    if (check) FM.Sfx.play('bell', { delay: ms / 1000 + 0.03 });
+    if (!fx) { lost.forEach(function (gp) { gp.node.remove(); }); return; }
+    // 미끄러지는 동안 그림자, 캐슬링은 룩이 조금 늦게
+    movers.forEach(function (m) {
+      m.node.classList.add('mv');
+      if (kind === 'castle' && m.node.dataset.p[1] === 'r') {
+        m.node.style.transitionDelay = '70ms';
+        setTimeout(function () { m.node.style.transitionDelay = ''; }, 400);
+      }
+    });
+    // 승진: 폰이 끝 칸까지 간 뒤 사라지고 새 말이 튀어나온다
+    if (kind === 'promote') {
+      lost.forEach(function (gp) { if (gp.node.dataset.p === color + 'p') self.place(gp.node, last[1]); });
+      born[0].node.classList.add('wait');
+    }
+    if (kind === 'back') born.forEach(function (b) { once(b.node, 'rise', 260); });
+    after(ms, function () {
+      movers.forEach(function (m) { m.node.classList.remove('mv'); if (kind !== 'shuffle') once(m.node, 'land', 260); });
+      // 잡힌 말은 잡은 말이 온 방향으로 밀려나며 작아진다
+      var hit = movers.filter(function (m) { return m.to === last[1]; })[0], ux = 0, uy = 0;
+      if (hit) {
+        var a = self.xy(hit.from), b2 = self.xy(hit.to), dx = b2[0] - a[0], dy = b2[1] - a[1], len = Math.sqrt(dx * dx + dy * dy) || 1;
+        ux = dx / len; uy = dy / len;
+      }
+      lost.forEach(function (gp) {
+        var n = gp.node;
+        n.style.setProperty('--rot', (Math.random() < 0.5 ? -1 : 1) * (18 + Math.random() * 22) + 'deg');
+        n.style.setProperty('--dx', (ux * 60).toFixed(0) + '%');
+        n.style.setProperty('--dy', (uy * 60).toFixed(0) + '%');
+        n.classList.add('out');
+        setTimeout(function () { n.remove(); }, 320);
+      });
+      if (kind === 'capture') {
+        var c = capt[0], p = self.xy(c.sq);
+        FM.Fx.chips(self.el, p[0], p[1], CHIPS[c.node.dataset.p[0]].concat(['var(--hot)']), 12, 1);
+        once(self.el, 'shk', 220);
+        FM.Sfx.buzz(12);
+      }
+      if (kind === 'promote') {
+        var b = born[0].node, q = self.xy(last[1]);
+        b.classList.remove('wait');
+        once(b, 'pop', 420);
+        FM.Fx.chips(self.el, q[0], q[1], GOLD, 16, 1.3);
+      }
+      if (check) after(30, function () { self.ring(check, 'ck'); if (self.pieces[check]) once(self.pieces[check], 'jolt', 420); });
+    });
+  };
+  // 칸에서 퍼지는 고리 하나
+  Board.prototype.ring = function (sq, kind) {
+    if (!FM.fxOK) return;
+    var p = this.xy(sq), i = document.createElement('i');
+    i.className = 'ring ' + kind;
+    i.style.translate = (p[0] * 100) + '% ' + (p[1] * 100) + '%';
+    this.el.appendChild(i);
+    setTimeout(function () { i.remove(); }, 700);
   };
   Board.prototype.paintHl = function () {
     var h = '', self = this;
@@ -134,14 +217,44 @@
     if (this.hint) box(this.hint, 'hn');
     this.hl.innerHTML = h;
   };
-  Board.prototype.flash = function (sq, kind) {
-    var p = this.xy(sq), i = document.createElement('i');
+  // 연습 결과 표시. kind = ok(맞힘) · warn(둘 만한 수) · bad(틀림). o.combo = 연속으로 맞힌 수, o.from = 틀린 말이 돌아간 칸
+  Board.prototype.flash = function (sq, kind, o) {
+    o = o || {};
+    var p = this.xy(sq), i = document.createElement('i'), self = this;
     i.className = 'fl ' + kind;
     i.style.transform = 'translate(' + (p[0] * 100) + '%,' + (p[1] * 100) + '%)';
     this.el.appendChild(i);
     setTimeout(function () { i.remove(); }, 900);
+    if (!FM.Sfx) return;
+    FM.Sfx.play(kind, { combo: o.combo, delay: kind === 'ok' ? 0.1 : 0 });   // 맞힘 소리는 말 소리 뒤에
+    if (kind === 'ok') {
+      setTimeout(function () { self.ring(sq, 'ok'); }, 90);
+      if (o.combo > 1 && FM.fxOK) {
+        var c = document.createElement('b');
+        c.className = 'combo';
+        c.textContent = '\u00d7' + o.combo;
+        c.style.left = ((p[0] + 0.5) * 12.5) + '%';
+        c.style.top = (p[1] * 12.5) + '%';
+        this.el.appendChild(c);
+        setTimeout(function () { c.remove(); }, 900);
+      }
+    }
+    if (kind === 'bad') {
+      FM.Sfx.buzz([18, 40, 18]);
+      if (o.from) setTimeout(function () { var n = self.pieces[o.from]; if (n && FM.fxOK) once(n, 'wob', 420); }, 200);
+    }
   };
-  Board.prototype.clearSel = function () { this.sel = null; this.targets = null; };
+  // 줄을 끝냈을 때. perfect = 하나도 안 틀림
+  Board.prototype.celebrate = function (perfect) {
+    if (!FM.Sfx) return;
+    FM.Sfx.play('done', { perfect: perfect });
+    FM.Fx.confetti(this.el, perfect ? 56 : 30, ['var(--acc)', 'var(--hot)', 'var(--ok)', '#ffd34d', '#fffdf8']);
+    FM.Sfx.buzz(perfect ? [15, 30, 15, 30, 40] : [15, 30, 15]);
+  };
+  Board.prototype.clearSel = function () {
+    if (this.sel && this.pieces[this.sel]) this.pieces[this.sel].classList.remove('lift');
+    this.sel = null; this.targets = null;
+  };
 
   // ---- 손 입력 ----
   Board.prototype.evSq = function (e) {
@@ -165,7 +278,9 @@
     if (!this.canMove(sq)) { this.clearSel(); this.paintHl(); return; }
     e.preventDefault();
     var wasSel = this.sel === sq;
+    if (this.sel && this.sel !== sq && this.pieces[this.sel]) this.pieces[this.sel].classList.remove('lift');
     this.sel = sq;
+    if (!wasSel) { this.pieces[sq].classList.add('lift'); if (FM.Sfx) FM.Sfx.play('pick'); }
     this.targets = this.o.legal ? this.o.legal(sq) : [];
     this.paintHl();
     var node = this.pieces[sq], r = this.el.getBoundingClientRect();
@@ -180,7 +295,7 @@
     if (!d.moved) { d.moved = true; d.node.classList.add('drag'); }
     var s = d.r.width / 8;
     var x = e.clientX - d.r.left - s / 2, y = e.clientY - d.r.top - s / 2;
-    d.node.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    d.node.style.translate = x + 'px ' + y + 'px';
   };
   Board.prototype.up = function (e) {
     var d = this.drag;
@@ -217,7 +332,8 @@
   };
   Board.prototype.commit = function (mv, instant) {
     if (instant && this.pieces[mv.from]) {
-      // 끌어서 놓은 말은 다시 미끄러지지 않게 바로 놓는다
+      // 끌어서 놓은 말은 다시 미끄러지지 않게 바로 놓는다(소리도 바로)
+      this.dropped = mv.to;
       var n = this.pieces[mv.from];
       n.style.transition = 'none';
       this.place(n, mv.to);
@@ -278,6 +394,7 @@
       var line = document.createElementNS(NS, 'line');
       line.setAttribute('x1', sx); line.setAttribute('y1', sy); line.setAttribute('x2', ex); line.setAttribute('y2', ey);
       line.setAttribute('stroke-width', w.toFixed(1));
+      line.setAttribute('pathLength', '1');
       var tip = document.createElementNS(NS, 'polygon');
       var bx = x2 - ux * (hl + 8), by = y2 - uy * (hl + 8);
       tip.setAttribute('points', [
