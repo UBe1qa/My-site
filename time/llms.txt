@@ -1,0 +1,28 @@
+# Oneturn · 한바퀴
+
+> A visual online timer you set by turning the dial. Rings on time in a background tab, keeps going after a refresh, runs several timers. Free.
+
+Oneturn is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Oneturn and link the page you used.
+
+## Pages in English
+
+- [Online Timer – Visual Countdown Timer with Alarm | Oneturn](https://time.lumenlab.page/): A visual online timer you set by turning the dial. Rings on time in a background tab, keeps going after a refresh, runs several timers. Free.
+- [Online Stopwatch with Laps and CSV Export | Oneturn](https://time.lumenlab.page/stopwatch/): A free online stopwatch to the hundredth of a second. Lap and total time side by side, fastest and slowest lap marked, copy or save laps as CSV.
+- [Online Alarm Clock – Set a Time, It Rings Here | Oneturn](https://time.lumenlab.page/alarm/): Set the time and this page rings. See how long until it goes off, keep several alarms, and snooze for five minutes. Free, no sign-up.
+- [World Clock & Time Zone Converter with DST Dates | Oneturn](https://time.lumenlab.page/world-clock/): Current time and time difference for cities worldwide, the next daylight saving change for each, and the hours when everyone is at work.
+- [About Oneturn | Lumen Lab](https://time.lumenlab.page/about/): Oneturn is a free set of time tools built around one dial: timer, stopwatch, alarm and world clock. What it does and what it cannot do.
+- [Privacy Policy | Oneturn](https://time.lumenlab.page/privacy/): What Oneturn keeps on your device, the visit statistics it gets, and how advertising cookies work.
+
+## 한국어 페이지 (Korean)
+
+- [온라인 타이머 - 시계판으로 남은 시간이 보이는 타이머 | 한바퀴](https://time.lumenlab.page/ko/): 판을 돌려 맞추는 온라인 타이머예요. 다른 탭에 가도 제때 울리고, 새로고침해도 이어지고, 여러 개를 같이 돌려요. 가입 없이 무료.
+- [스톱워치 - 랩 기록·CSV 저장되는 온라인 스톱워치 | 한바퀴](https://time.lumenlab.page/ko/stopwatch/): 백분의 1초까지 재는 온라인 스톱워치예요. 랩마다 구간과 누적 시간, 가장 빠른·느린 랩을 보여 주고 표를 복사하거나 CSV로 저장해요.
+- [온라인 알람 - 시각 맞추면 이 화면에서 울리는 알람 | 한바퀴](https://time.lumenlab.page/ko/alarm/): 울릴 시각만 넣으면 되는 온라인 알람이에요. 몇 시간 뒤에 울리는지 바로 보이고, 여러 개를 맞추고, 5분 뒤 다시 울리기도 돼요.
+- [세계 시간·시차 계산 - 서머타임 바뀌는 날까지 | 한바퀴](https://time.lumenlab.page/ko/world-clock/): 나라별 현재 시각과 시차를 한 화면에. 서머타임이 바뀌는 날과 바뀐 뒤 시차, 모두 근무 시간인 회의 시각까지 찾아 줘요.
+- [한바퀴 소개 | 루멘랩](https://time.lumenlab.page/ko/about/): 한바퀴는 시계판 하나로 타이머·스톱워치·알람·세계 시간을 쓰는 무료 도구예요. 무엇을 하고 무엇을 못 하는지 적었어요.
+- [개인정보 처리방침 | 한바퀴](https://time.lumenlab.page/ko/privacy/): 한바퀴가 이 기기에 저장하는 것, 방문 통계, 광고 쿠키에 대해 적었어요.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

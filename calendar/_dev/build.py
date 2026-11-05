@@ -2,7 +2,7 @@
 """한장달력 / Onesheet(calendar.lumenlab.page) 페이지 전부 만들기: python3 calendar/_dev/build.py
 
 - 계산·그리기는 JS 한 곳(assets/core.js, sheet.js). 이 스크립트는 `node _dev/export.js` 로 값을 받아 HTML만 짠다.
-- 문구·글 = _dev/content.py. 만든 HTML·sitemap.xml·404.html·robots.txt 는 손으로 고치지 않는다.
+- 문구·글 = _dev/content.py. 만든 HTML·sitemap.xml·404.html 은 손으로 고치지 않는다(robots.txt·llms.txt 는 lumenlab/_dev/build_llms.py).
 - 만드는 것: 영어 / , 한국어 /ko/ 의 도구(첫 화면), 연간(2026~2028), 월(2026-10~2027-12), 공휴일(2026·2027),
   음력·손 없는 날(한국어), 가이드, 소개·방침·오픈소스 고지, 404, sitemap.
 - 가이드 HTML 은 루트 빌드(lumenlab/_dev/build_home.py)가 읽어 lumenlab.page/guides/calendar/ 로 내는 원본이다(2026-10-29). 이 사이트에는 올리지 않고
@@ -845,9 +845,7 @@ def main():
     sm += [f'<url><loc>{u}</loc><lastmod>{d}</lastmod></url>' for u, d in SITEMAP]
     (ROOT / 'sitemap.xml').write_text('\n'.join(sm) + '\n</urlset>\n', encoding='utf-8')
     static = {
-        'robots.txt': ('# 검색엔진과 AI 검색·답변 서비스 모두 허용 (AI 답변에 출처로 나오게)\n' + ''.join(
-            f'User-agent: {b}\nAllow: /\n\n' for b in ['*', 'Googlebot', 'Yeti', 'Bingbot', 'OAI-SearchBot', 'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'PerplexityBot', 'Google-Extended'])
-            + f'Sitemap: {SITE}/sitemap.xml\n'),
+        # robots.txt·llms.txt 는 루멘랩 모든 사이트를 함께 맞추는 lumenlab/_dev/build_llms.py 가 쓴다(2026-11-05, AI 손님 모두 허용)
         'ads.txt': 'google.com, pub-9496167591465154, DIRECT, f08c47fec0942fa0\n',
         'googlea614029e84d58498.html': 'google-site-verification: googlea614029e84d58498.html',
         # guide/ = 가이드 HTML(/guide/·/ko/guide/)은 루트 빌드가 읽는 원본이라 만들지만 올리지 않는다(2026-10-29, 옛 주소는 _redirects 가 301)

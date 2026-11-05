@@ -8,6 +8,14 @@ export default {
     if (url.hostname.endsWith(".workers.dev")) {
       return Response.redirect(HOME + url.pathname + url.search, 301);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    // 한국어가 섞인 글 파일(llms.txt·robots.txt)은 글자 인코딩을 밝힌다(AI 도구가 한글을 깨뜨리지 않게, 2026-11-05).
+    // Worker 가 먼저 받는 사이트라 _headers 가 안 붙을 때를 대비해 여기서도 한다(이미 붙었으면 그대로).
+    if (url.pathname.endsWith(".txt") && res.headers.get("content-type") === "text/plain") {
+      const out = new Response(res.body, res);
+      out.headers.set("content-type", "text/plain; charset=utf-8");
+      return out;
+    }
+    return res;
   },
 };

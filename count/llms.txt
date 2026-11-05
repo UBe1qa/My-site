@@ -1,0 +1,31 @@
+# Kankan · 칸칸
+
+> Paste text to count words, characters with and without spaces, sentences, paragraphs and reading time as you type. An emoji counts as one character. The text you paste never leaves your device.
+
+Kankan is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Kankan and link the page you used.
+
+## Pages in English
+
+- [Word Counter - words, characters, sentences, reading time | Kankan](https://count.lumenlab.page/): Paste text to count words, characters with and without spaces, sentences, paragraphs and reading time as you type. An emoji counts as one character. The text you paste never leaves your device.
+- [Character Counter - with and without spaces, bytes, X limit | Kankan](https://count.lumenlab.page/character-counter/): Count characters with and without spaces, UTF-8 and UTF-16 bytes and code points as you type, and check your text against the limits of X, Instagram, Threads, Bluesky, YouTube, TikTok and LinkedIn.
+- [SMS Character Counter - message parts for GSM-7 and Unicode | Kankan](https://count.lumenlab.page/sms/): See how many SMS parts your text needs. A GSM-7 text fits 160 characters, or 153 per part when split. One emoji or a letter outside GSM-7 drops the limit to 70, or 67 per part.
+- [About Kankan - what it counts and where the rules come from | Kankan](https://count.lumenlab.page/about/): What Kankan counts, the standards behind each rule, how the results are tested, and who makes it.
+- [Privacy policy | Kankan](https://count.lumenlab.page/privacy/): Kankan counts your text inside the browser and never sends it to a server. What is stored on your device, how ads use cookies, and visit statistics.
+- [Open-source licenses | Kankan](https://count.lumenlab.page/licenses/): Open-source work that Kankan builds on, and its licenses.
+
+## 한국어 페이지 (Korean)
+
+- [글자수 세기 - 공백 포함·제외, 바이트, 원고지 | 칸칸](https://count.lumenlab.page/ko/): 글을 붙여 넣으면 공백 포함·제외 글자 수와 UTF-8·EUC-KR 바이트, 단어, 문장, 원고지 장수를 바로 세어 드려요. 줄바꿈을 0·1·2자로 바꿔 볼 수 있고, 붙여 넣은 글은 이 기기 밖으로 나가지 않아요.
+- [자소서 글자수 세기 - 문항별 목표 글자 수와 남은 글자 | 칸칸](https://count.lumenlab.page/ko/jasoseo/): 자기소개서 문항마다 목표 글자 수를 정하고 공백 포함, 공백 제외, 바이트 기준으로 남은 글자를 바로 확인해요. 사람인, 잡코리아, 인크루트가 세는 법을 직접 넣어 본 표도 있어요.
+- [바이트 계산기 - UTF-8·EUC-KR·UTF-16 바이트 수 세기 | 칸칸](https://count.lumenlab.page/ko/byte/): 글을 붙여 넣으면 UTF-8, EUC-KR(CP949), UTF-16 바이트 수를 바로 세어 드려요. 한글 3바이트와 2바이트 기준을 나란히 보고, 문자 한 통 기준(140byte)에 들어가는지도 볼 수 있어요.
+- [나이스 생기부 바이트 계산기 - 2026학년도 고등학교 글자수 | 칸칸](https://count.lumenlab.page/ko/neis/): 학교생활기록부 항목을 고르면 2026학년도 고등학교 기재요령의 최대 글자 수를 바이트로 바꿔 남은 바이트를 보여 드려요. 한글 3Byte, 영문·숫자 1Byte, 엔터 1Byte로 세어요.
+- [SNS 글자수 세기 - 인스타·X·유튜브·스레드 한도 | 칸칸](https://count.lumenlab.page/ko/sns/): 글을 붙여 넣으면 X, 인스타그램, 스레드, 블루스카이, 유튜브, 틱톡, 링크드인 한도에 맞는지 한꺼번에 보여 드려요. 서비스마다 다른 세는 단위(가중치, 바이트, UTF-16, 글자소)를 그대로 적용했어요.
+- [원고지 글자수 세기 - 200자 원고지 몇 장인지 계산 | 칸칸](https://count.lumenlab.page/ko/wongoji/): 글을 붙여 넣으면 200자 원고지로 몇 장인지 두 가지로 계산해요. 글자 수를 200으로 나눈 장수와, 20칸 10줄 원고지에 한 칸씩 놓아 본 장수를 함께 보여 줘요.
+- [칸칸 소개 - 세는 기준과 출처 | 칸칸](https://count.lumenlab.page/ko/about/): 칸칸이 글자, 공백, 바이트, 원고지를 어떤 기준으로 세는지, 그 기준의 출처와 확인 방법, 만든 곳을 적었어요.
+- [개인정보 처리방침 | 칸칸](https://count.lumenlab.page/ko/privacy/): 칸칸은 글을 브라우저 안에서만 세고 서버로 보내지 않아요. 기기에 남는 것, 광고 쿠키, 방문 통계에 대해 적었어요.
+- [오픈소스 고지 | 칸칸](https://count.lumenlab.page/ko/licenses/): 칸칸이 가져다 쓴 오픈소스와 라이선스예요.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

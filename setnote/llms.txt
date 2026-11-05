@@ -1,0 +1,14 @@
+# 세트노트 SetNote
+
+> 세트노트는 헬스 기록 웹앱이에요. 루틴을 저장해 두고, 세트마다 지난번 무게와 횟수를 옆에 보면서 기록해요. 쉬는 시간 타이머, 운동별 최고 무게와 추정 1RM, 홈 화면에 추가하면 인터넷 없이도 열려요. 가입 없이 바로.
+
+세트노트 SetNote is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name 세트노트 SetNote and link the page you used.
+
+## 한국어 페이지 (Korean)
+
+- [세트노트 · 지난번 기록을 보며 적는 헬스 기록 앱](https://setnote.lumenlab.page/): 세트노트는 헬스 기록 웹앱이에요. 루틴을 저장해 두고, 세트마다 지난번 무게와 횟수를 옆에 보면서 기록해요. 쉬는 시간 타이머, 운동별 최고 무게와 추정 1RM, 홈 화면에 추가하면 인터넷 없이도 열려요. 가입 없이 바로.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

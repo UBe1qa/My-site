@@ -11,3 +11,9 @@
 # 파일 종류를 브라우저가 짐작해서 바꾸지 않게
 /*
   X-Content-Type-Options: nosniff
+
+# AI 안내서(llms.txt)·robots.txt 는 한국어가 섞여 있어 글자 인코딩을 밝힌다(lumenlab/_dev/build_llms.py, 2026-11-05)
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/robots.txt
+  Content-Type: text/plain; charset=utf-8

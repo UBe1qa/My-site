@@ -1,0 +1,30 @@
+# 떼고얼마 · Takehome Korea
+
+> 연봉이나 월급을 넣으면 국민연금·건강보험·장기요양·고용보험과 소득세를 한 줄씩 식과 함께 계산해요. 2026년 10월 기준이고, 2027년에 바뀌는 금액도 같이 보여 줘요.
+
+Takehome Korea is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Takehome Korea and link the page you used.
+
+## 한국어 페이지 (Korean)
+
+- [연봉 실수령액 계산기: 2026년 4대 보험·소득세 떼고 얼마 | 떼고얼마](https://salary.lumenlab.page/): 연봉이나 월급을 넣으면 국민연금·건강보험·장기요양·고용보험과 소득세를 한 줄씩 식과 함께 계산해요. 2026년 10월 기준이고, 2027년에 바뀌는 금액도 같이 보여 줘요.
+- [2026년 연봉 실수령액 표: 2,000만~2억 원 | 떼고얼마](https://salary.lumenlab.page/table/): 연봉 2,000만 원부터 2억 원까지 월 실수령액과 4대 보험·소득세를 한 표로 봐요. 2026년 10월 기준, 부양가족 1명·비과세 20만 원으로 계산했어요.
+- [퇴직금 계산기: 입사일·퇴직일로 세전 퇴직금 계산 | 떼고얼마](https://salary.lumenlab.page/severance/): 입사일과 퇴직일, 퇴직 전 3개월 임금을 넣으면 1일 평균임금과 세전 퇴직금을 계산해요. 고용노동부 계산기와 같은 식·같은 끝수로, 줄마다 식을 보여 줘요.
+- [시급 계산기: 주휴수당·월급 환산, 2026년 최저임금 10,320원 | 떼고얼마](https://salary.lumenlab.page/hourly/): 시급과 주 근로시간을 넣으면 주휴수당, 주급, 월급을 계산하고 2026년 최저임금 10,320원과 견줘요. 월급을 시급으로 바꿀 수도 있어요.
+- [실업급여 계산기: 2026년 구직급여 하루 금액과 받는 날 수 | 떼고얼마](https://salary.lumenlab.page/unemployment/): 퇴직 전 3개월 임금과 나이, 고용보험 가입 기간을 넣으면 2026년 기준 하루 구직급여(하한 66,048원, 상한 68,100원)와 받는 날 수를 계산해요.
+- [연차 계산기: 입사일 기준 연차 발생일과 일수 | 떼고얼마](https://salary.lumenlab.page/annual-leave/): 입사일을 넣으면 1년 미만은 다달이 1일(최대 11일), 1년을 채우면 15일, 그 뒤로 2년마다 1일씩 느는 연차를 날짜와 함께 표로 보여 줘요. 근로기준법 제60조 기준이에요.
+- [떼고얼마 소개와 계산 기준(출처 전체 표)](https://salary.lumenlab.page/about/): 떼고얼마가 무엇을 계산하고 누가 만들었는지, 어떤 법령·공단 자료의 어느 값을 언제 확인해 쓰는지 한 표로 적었어요.
+- [개인정보 처리방침 | 떼고얼마](https://salary.lumenlab.page/privacy/): 떼고얼마는 입력한 금액과 날짜를 브라우저 안에서만 계산하고 어디로도 보내지 않아요. 이 탭과 기기에 남는 것, 광고 쿠키, 방문 통계에 대해 적었어요.
+
+## Pages in English
+
+- [Korea Net Salary Calculator: take-home pay after tax, 2026 | Takehome Korea](https://salary.lumenlab.page/en/): Enter an annual or monthly salary in won to see your take-home pay in Korea after National Pension, health, long-term care and employment insurance and income tax, with the math for every line. Rules as of October 2026.
+- [Korea Net Salary Table 2026: ₩20,000,000 to ₩200,000,000 | Takehome Korea](https://salary.lumenlab.page/en/table/): Monthly take-home pay in Korea for annual salaries from ₩20,000,000 to ₩200,000,000, with each insurance premium and tax. Rules as of October 2026, one dependent, ₩200,000 non-taxable.
+- [Korea Severance Pay Calculator: from start and end dates | Takehome Korea](https://salary.lumenlab.page/en/severance/): Enter your start date, leaving date and the wages of your last three months to get the average daily wage and severance pay in Korea before tax, using the Ministry of Employment and Labor formula.
+- [Korea Hourly Wage and Weekly Holiday Pay Calculator, 2026 | Takehome Korea](https://salary.lumenlab.page/en/hourly/): Turn an hourly wage in Korea into weekly and monthly pay with the weekly holiday allowance, and compare it with the 2026 minimum wage of ₩10,320. Works from monthly pay too.
+- [About Takehome Korea and where every number comes from](https://salary.lumenlab.page/en/about/): What Takehome Korea calculates, who runs it, and a full table of the laws and agency notices behind every rate, with effective dates and the day we checked.
+- [Privacy policy | Takehome Korea](https://salary.lumenlab.page/en/privacy/): Takehome Korea calculates inside your browser and does not send the amounts or dates you enter. What is stored, how ads use cookies, and visit statistics.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list
