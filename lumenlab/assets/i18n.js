@@ -14,10 +14,10 @@
     navAbout: 'About',
     /* 홈(랜딩) */
     heroKick: 'Lumen Lab, a workshop with the lights on',
-    h1: '<span class="hw" data-k="1">Games</span>, <span class="hw" data-k="0">apps</span> and <span class="hw" data-k="2">web tools</span>, made by one person',   // .hw = 첫 화면 이웃 창(0 앱, 1 게임, 2 웹 도구)에 불이 켜지면 같이 켜지는 낱말
-    heroSub: 'Games for phones, apps for Mac and the browser. The free web tools need no sign-up or install, and what you put in never goes to a Lumen Lab server.',
+    h1: '<span>Small, and each one</span> <span>made with care.</span>',   // 첫 화면 한 줄: 조각(span)마다 캔버스가 그 자리에 써 넣는다(hero-lake.js)
+    heroSub: 'Lumen Lab is a one-person studio making games, apps and web tools.',
     heroTry: 'Try the free web tools',
-    heroCta: 'Step inside',
+    heroCta: 'Scroll to see the work',
     wlKick: 'Inside the workshop',
     mailBtn: 'Email us',
     enKick: 'By the workshop window',
