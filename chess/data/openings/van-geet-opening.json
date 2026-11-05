@@ -92,7 +92,7 @@
  "next_moves": [
   {
    "san": "e5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 18,
    "games": 226842,
    "share": 0.29495,

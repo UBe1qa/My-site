@@ -189,7 +189,7 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 /* 옆 칸 */
 .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; min-width: 0; }
 @media (max-width: 899px) { .panel { padding: 12px; } }
-.loading .st tbody { opacity: .55; transition: opacity .2s .15s; }
+.loading .st tbody, .loading [data-name], .loading [data-sum], .loading [data-crumb], .loading [data-pass], .loading [data-tree-svg] { opacity: .35; transition: opacity .2s .12s; }
 .bands { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
 .bands .lbl { font-size: 13px; color: var(--mute); margin-right: 2px; }
 .chip { border: 1px solid var(--line2); background: transparent; border-radius: 999px; padding: 0 12px; min-height: 36px; font-size: 14px; cursor: pointer; position: relative; }
@@ -398,7 +398,10 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .tbl th { overflow-wrap: normal; }
 @media (max-width: 520px) { .tbl.sh-t .shb { display: none; } .tbl.sh-t td, .tbl.sh-t th { padding: 8px 4px; } .tbl.sh-t thead th { white-space: normal; }
   .card .mini { width: 50px; } .card .meta { gap: 8px; } .card .meta > span:last-child { white-space: nowrap; }
-  .drill[data-state="setup"] .panel { order: -1; } }
+ }
+/* 연습: 마크업은 설정 칸이 먼저(폰에서 읽는 순서 그대로라 늦게 받아도 판이 밀리지 않는다), 넓은 화면은 칸 자리를 정해 둔다 */
+@media (min-width: 900px) { .drill .grid > .bcol { grid-column: 1; grid-row: 1; } .drill .grid > .panel { grid-column: 2; grid-row: 1; } }
+@media (max-width: 899px) { .drill:not([data-state="setup"]) .grid > .bcol { order: -1; } }
 .tree .rt { fill: var(--ink); }
 .tree .rtt { fill: var(--bg); font: 700 14px var(--mono); }
 .vn { font-weight: 680; }
@@ -482,7 +485,7 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .st tr.why:hover { background: none; }
 .st tr:has(+ tr.why) > * { border-bottom: 0; }
 .st tr.c4 .mv, .st tr.c3 .mv { color: var(--mute); }
-@media (max-width: 440px) { .cl { font-size: 10px; padding: 2px 4px; margin-left: 4px; } .tp { font-size: 10px; } .st .ev { width: 40px; font-size: 12px; } }
+@media (max-width: 440px) { .cl { font-size: 10px; padding: 2px 4px; margin-left: 4px; } .tp { display: table; font-size: 10px; margin: 3px 0 0; } .st .ev { width: 40px; font-size: 12px; } }
 
 /* 가지 그림: 굵기 = 비율, 색 = 분류 */
 .tree-h { font-size: 14px; font-weight: 650; margin: 0 0 4px; }
@@ -591,6 +594,7 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .q-score { margin: 6px 0 4px; font-size: 20px; font-weight: 700; }
 .q-ld { margin: 0 0 4px; color: var(--ink); }
 .q-like { margin: 0 0 12px; color: var(--mute); font-size: 15px; }
+.q-note { margin: 4px 0 0; min-height: 1.4em; color: var(--ok); font-weight: 600; }
 .q-card { display: block; width: min(100%, 300px); height: auto; border-radius: 12px; border: 1px solid var(--line); margin: 8px 0 4px; }
 .q-miss { list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
 .q-miss li { padding: 8px 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }

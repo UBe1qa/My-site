@@ -116,8 +116,10 @@ class Data:
         tot = sum(sum(row[3:]) for row in e[2])
         return ({row[0]: sum(row[3:]) / tot for row in e[2]} if tot else {}), 'all'
 
-    def classify(self, epd, book=()):
-        """이 판의 수마다 분류를 정해 행의 두 번째 칸에 쓴다. book = 메인으로 고정할 수(SAN)들."""
+    def classify(self, epd, book=(), theory=()):
+        """이 판의 수마다 분류를 정해 행의 두 번째 칸에 쓴다. book = 메인으로 고정할 수(SAN)들,
+        theory = 해설의 오프닝·갈래를 정하는 수(SAN)들: 사이드(2)로 나오면 대안(1)으로 올린다(프렌치 1...e6이 '사이드'로 보이던 것, 평가 2026-11-05 M4).
+        의심(3)·나쁨(4)은 그대로 둔다(엔진이 크게 싫어하는 갬빗은 해설이 있어도 그렇게 보인다)."""
         e = self.E[epd]
         rows = e[2]
         if not rows:
@@ -163,6 +165,9 @@ class Data:
                 r[1] = 1 if (sh >= 0.10 and (c == 'sound' or sh >= 0.25)) else 2
             else:
                 r[1] = c
+        for r in rows:
+            if r[0] in theory and r[1] == 2:
+                r[1] = 1
         for i, r in enumerate(rows):
             if r[0] in book:
                 if r[1] != 0:

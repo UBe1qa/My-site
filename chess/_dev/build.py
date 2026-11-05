@@ -264,9 +264,61 @@ def book_moves():
     return book
 
 
+def theory_moves():
+    """해설의 정의 수순과 갈래 수순에 있는 수 {판: {수}}. 함정 수순과 길잡이(hub) 해설은 넣지 않는다
+    (길잡이 '드문 첫 수'의 1.a3 같은 갈래까지 대안이 되지 않게)."""
+    th = {}
+    for o in OPENINGS:
+        if o['hub']:
+            continue
+        for r in [o['_r']] + [v['_r'] for v in o['vars']]:
+            epds = [START_EPD] + r['epd']
+            for i, san in enumerate(r['san']):
+                th.setdefault(epds[i], set()).add(san)
+    return th
+
+
 def classify_all(book):
+    th = theory_moves()
     for epd in E:
-        DATA.classify(epd, book.get(epd, ()))
+        DATA.classify(epd, book.get(epd, ()), th.get(epd, ()))
+
+
+MARK_RE = re.compile(r'(\d+)\.(\.\.)?((?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?)(\?\?|\?!|!\?|\?|!!|!)?')
+
+
+def check_marks():
+    """해설 글의 수 기호(?·??·?!·!)가 지도 분류와 맞는지 본다(평가 2026-11-05 M3). 글의 수는 같은 수순(함정·갈래·메인라인)에서 찾고,
+    자료가 없는 판은 건너뛴다. ? = 의심 이상, ?? = 나쁨, ?! = 사이드 이상, ! = 메인·대안."""
+    def flat(v):
+        if isinstance(v, str):
+            return [v]
+        if isinstance(v, dict):
+            return [z for w in v.values() for z in flat(w)]
+        if isinstance(v, (list, tuple)):
+            return [z for w in v for z in flat(w)]
+        return []
+    bad = []
+    for o in OPENINGS:
+        items = [(t['_r'], flat(t['en']) + flat(t['ko'])) for t in o['traps']] + [(v['_r'], flat(v['en']) + flat(v['ko'])) for v in o['vars']]
+        items.append((o['_m'], flat(o['en']) + flat(o['ko'])))
+        for r, texts in items:
+            for t in texts:
+                for m in MARK_RE.finditer(t):
+                    num, black, san, mark = int(m.group(1)), bool(m.group(2)), m.group(3), m.group(4)
+                    k = (num - 1) * 2 + (1 if black else 0)
+                    if not mark or mark == '!?' or k >= len(r['san']) or r['san'][k].rstrip('+#') != san.rstrip('+#'):
+                        continue
+                    st = stats(START_EPD if k == 0 else r['epd'][k - 1], -1, True)
+                    mv = next((q for q in st['moves'] if q['san'] == r['san'][k]), None) if st else None
+                    if not mv or mv['cls'] is None or mv['cls'] < 0:
+                        continue
+                    c = mv['cls']
+                    ok = {'?': c >= 3, '??': c == 4, '?!': c >= 2, '!': c <= 1, '!!': c <= 1}[mark]
+                    if not ok:
+                        bad.append(f"{o['slug']}: {m.group(0)} 인데 지도는 {trail.CLS_NAMES[c] if hasattr(trail, 'CLS_NAMES') else c}")
+    if bad:
+        sys.exit('해설 글의 수 기호가 지도 분류와 다름:\n  ' + '\n  '.join(sorted(set(bad))))
 
 
 def write_slugs():
@@ -435,7 +487,7 @@ GUIDES = {lang: {o['slug']: {'u': prefix(lang) + 'openings/' + o['slug'] + '/', 
 def page(lang, head_html, body, path, current=None, cfg=None, scripts=True):
     u = UI[lang]
     base = {'lang': lang, 't': u['js'], 'practiceUrl': prefix(lang) + 'practice/', 'mapUrl': prefix(lang) + 'map/', 'testUrl': prefix(lang) + 'test/',
-            'guides': GUIDES[lang], 'find': {'none': u['search_none'], 'page': u['search_page'], 'line': u['search_line'], 'src': '/data/find.json'},
+            'guides': GUIDES[lang], 'find': {'none': u['search_none'], 'page': u['search_page'], 'line': u['search_line'], 'moves': u['search_moves'], 'src': '/data/find.json'},
             'fm': {m: prefix(lang) + 'openings/' + k + '/' for k, m in FIRST_MOVES},
             'clsTip': u['cls_tip'], 'startN': START_N, 'covers': COVERS}
     base.update(cfg or {})
@@ -455,6 +507,15 @@ def page(lang, head_html, body, path, current=None, cfg=None, scripts=True):
 
 # ---------------------------------------------------------------- 판(첫 HTML에 미리 그린다)
 FILES = 'abcdefgh'
+
+
+FIT_JS = ("(function(){var d=document.documentElement,w=d.clientWidth,h=innerHeight,b=document.currentScript.previousElementSibling,m,k;"
+          "function set(){d.style.setProperty('--bd-max',Math.round(m)+'px')}"
+          "if(w<900){m=Math.max(260,Math.min(w,h-230));set();return}"
+          "m=Math.min(620,Math.max(360,h-190));set();"
+          "for(k=0;k<2;k++){var c=b.closest('.bcol')||b.parentNode,t=b.getBoundingClientRect().top+pageYOffset,ct=c.getBoundingClientRect().top+pageYOffset,"
+          "a=ct<Math.min(h*.4,260)?t:t-ct+16;m=Math.min(620,Math.max(360,h-a-66));set()}})();")
+# 판 크기를 첫 그림 전에 정한다(app.js fitBoards와 같은 셈). 느린 망에서 판이 560→440으로 줄며 화면이 밀리던 것(평가 2026-11-05 L12)
 
 
 def xy(sq, orient):
@@ -647,12 +708,12 @@ def tree_svg(kids, ply, root_label, lang):
         yc = yi + nleaf * RH / 2
         sw = 2 + k['share'] * 20
         paths.append(f'<path class="br c{k["cls"]}" d="M{x0 + 76} {y0:.0f}C{x0 + 116} {y0:.0f} {x1 - 40} {yc:.0f} {x1 - 6} {yc:.0f}" stroke-width="{sw:.1f}"/>')
-        texts.append(f'<g class="tn" data-t="{i}"><text x="{x1}" y="{yc + 5:.0f}">{esc(numbered([k["san"]], ply))}</text><text class="tp" x="{x1 + 104}" y="{yc + 5:.0f}" text-anchor="end">{pct(k["share"])}</text></g>')
+        texts.append(f'<g class="tn" data-t="{i}" data-s="{esc(k["san"])}"><text x="{x1}" y="{yc + 5:.0f}">{esc(numbered([k["san"]], ply))}</text><text class="tp" x="{x1 + 104}" y="{yc + 5:.0f}" text-anchor="end">{pct(k["share"])}</text></g>')
         for j, g in enumerate(k['kids']):
             yg = yi + j * RH + RH / 2
             sw2 = 1.5 + g['share'] * 16
             paths.append(f'<path class="br c{g["cls"]}" d="M{x1 + 110} {yc:.0f}C{x1 + 136} {yc:.0f} {x2 - 32} {yg:.0f} {x2 - 6} {yg:.0f}" stroke-width="{sw2:.1f}" opacity=".85"/>')
-            texts.append(f'<g class="tn" data-t="{i}.{j}"><text x="{x2}" y="{yg + 5:.0f}">{esc(numbered([g["san"]], ply + 1))}</text><text class="tp" x="{W - 4}" y="{yg + 5:.0f}" text-anchor="end">{pct(g["share"])}</text></g>')
+            texts.append(f'<g class="tn" data-t="{i}.{j}" data-s="{esc(k["san"])} {esc(g["san"])}"><text x="{x2}" y="{yg + 5:.0f}">{esc(numbered([g["san"]], ply + 1))}</text><text class="tp" x="{W - 4}" y="{yg + 5:.0f}" text-anchor="end">{pct(g["share"])}</text></g>')
         yi += nleaf * RH
     texts.append(f'<rect class="rt" x="{x0}" y="{y0 - 15:.0f}" width="72" height="30" rx="8"/><text class="rtt" x="{x0 + 36}" y="{y0 + 5:.0f}" text-anchor="middle">{esc(root_label)}</text>')
     alt = ', '.join(f'{numbered([k["san"]], ply)} {pct(k["share"])}' for k in kids)
@@ -691,7 +752,7 @@ def explorer(lang, r=None, orient='w', sync=False, head_html='', slug='', tree=T
 <div class="bcol">
   {band_chips(lang)}
   <p class="namel" data-name>{name}</p>
-  <div class="bwrap">{board_html(fen, orient, last)}</div>
+  <div class="bwrap">{board_html(fen, orient, last)}</div><script>{FIT_JS}</script>
   <div class="ctrls">{ctrls}</div>
 </div>
 <div class="panel">
@@ -1019,11 +1080,12 @@ def pawns(epd):
 
 
 def auto_traps(o, lang):
-    """메인라인 판들에서: 아래 레이팅대가 8% 넘게 두지만 의심스러운·나쁜 수 + 엔진 최선 응수"""
+    """메인라인 판들에서: 아래 레이팅대가 8% 넘게 두지만 의심스러운·나쁜 수 + 엔진 최선 응수.
+    오프닝이 정해진 뒤의 판만 본다(1.d4 해설 28개에 똑같이 1...e5가 나오던 것, 평가 2026-11-05 L14)."""
     m = o['_m']
     epds = [START_EPD] + m['epd']
     cand = []
-    for i in range(len(m['san'])):
+    for i in range(min(len(o['_r']['san']), len(m['san'])), len(m['san'])):
         epd = epds[i]
         for b in (0, 1):
             s = stats(epd, b)
@@ -1224,7 +1286,6 @@ def opening_page(lang, o, pawn_index):
     <li><a class="btn ghost" href="{p}test/?o={o['slug']}">{t['cont_test']}</a></li>
     <li><a class="btn ghost" href="{pr}">{fmt(t['cont_practice'], side=sidename)}</a></li>
     <li><a class="btn ghost" href="{pr2}">{fmt(t['cont_practice'], side=t['black'] if other == 'b' else t['white'])}</a></li>
-    <li><button type="button" class="btn ghost" disabled>{t['cont_rep']}</button></li>
     <li><a class="btn ghost" href="/data/openings/{o['slug']}.json">{t['cont_json']}</a></li>
   </ul>
   <h2>{t['related_h']}</h2>
@@ -1286,7 +1347,6 @@ def practice_page(lang):
     body = f'''<section class="tool drill" data-drill data-state="setup"><div class="wrap">
 <div class="tool-head"><h1>{P['h1']}</h1><p class="why">{P['why']}</p></div>
 <div class="grid">
-<div class="bcol"><div class="bwrap">{board_html(first['fen'], 'w', [first['uci'][-1][:2], first['uci'][-1][2:4]])}</div><div class="ctrls ctrls-1">{sound_btn(lang)}</div></div>
 <div class="panel">
   <div class="row2 setup-only">
     <label class="field">{t['opening_lbl']}<select data-pick>{opts}</select></label>
@@ -1302,6 +1362,7 @@ def practice_page(lang):
   </div>
   <p class="due" data-due></p>
 </div>
+<div class="bcol"><div class="bwrap">{board_html(first['fen'], 'w', [first['uci'][-1][:2], first['uci'][-1][2:4]])}</div><script>{FIT_JS}</script><div class="ctrls ctrls-1">{sound_btn(lang)}</div></div>
 </div></div></section>
 <section class="sec"><div class="wrap prose">
   <h2>{t['pr_how_h']}</h2>
@@ -1312,7 +1373,7 @@ def practice_page(lang):
   <h2>{t['pr_list_h']}</h2>
   <ul class="cols">{lst}</ul>
 </div></section>'''
-    cfg = {'openings': [{'slug': o['slug'], 'name': o[lang]['name'], 'side': o['side'], 'line': o['_m']['uci']} for o in OPENINGS]}
+    cfg = {'openings': [{'slug': o['slug'], 'name': o[lang]['name'], 'side': o['side'], 'line': o['_m']['uci'], 'def': len(o['_r']['uci'])} for o in OPENINGS]}
     h = head(lang, titled(lang, P['title']), P['desc'], 'practice/', [app_ld(lang, P['h1'] + ' · ' + u['brand'], P['desc'], 'practice/')])
     return 'practice/', page(lang, h, body, 'practice/', 'practice', cfg)
 
@@ -1375,7 +1436,7 @@ def test_page(lang):
     body = f'''<section class="tool quiz" data-quiz data-state="intro"><div class="wrap">
 <div class="tool-head"><h1>{P['h1']}</h1><p class="why">{P['why']}</p></div>
 <div class="grid">
-<div class="bcol"><div class="bwrap">{board_html(START_FEN, 'w')}</div><div class="qbar" data-qbar aria-hidden="true">{''.join('<i></i>' for _ in range(10))}</div></div>
+<div class="bcol"><div class="bwrap">{board_html(START_FEN, 'w')}</div><script>{FIT_JS}</script><div class="qbar" data-qbar aria-hidden="true">{''.join('<i></i>' for _ in range(10))}</div></div>
 <div class="panel">
   <div class="q-intro">
     <label class="field">{esc(TX[lang]['opening_lbl'])}<select data-qo><option value="">{esc(TT['all'])}</option>{opts}</select></label>
@@ -1397,6 +1458,7 @@ def test_page(lang):
     <p class="q-like" data-qlike></p>
     <canvas class="q-card" data-qcard width="1080" height="1350" aria-hidden="true"></canvas>
     <div class="pfoot"><button type="button" class="btn" data-qa="share">{esc(TT['share'])}</button><button type="button" class="btn ghost" data-qa="save">{esc(TT['save'])}</button><button type="button" class="btn ghost" data-qa="again">{esc(TT['again'])}</button></div>
+    <p class="q-note" data-qnote role="status"></p>
     <h3>{esc(TT['miss_h'])}</h3>
     <ul class="q-miss" data-qmiss></ul>
   </div>
@@ -1548,6 +1610,7 @@ def build():
     names = name_lines()
     book = book_moves()
     classify_all(book)
+    check_marks()
     write_slugs()
     write_reasons()
     changed = DATA.save()

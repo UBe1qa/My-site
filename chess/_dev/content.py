@@ -5,7 +5,7 @@ UI = {
         'brand': 'Opening Trail', 'skip': 'Skip to content', 'nav_label': 'Main',
         'nav': {'map': 'Map', 'openings': 'Openings', 'test': 'Test', 'practice': 'Practice', 'best': 'Best by rating'},
         'search_ph': 'Search openings: Najdorf, London, e4…', 'search_lbl': 'Search openings', 'search_none': 'No opening by that name.',
-        'search_page': 'Guide', 'search_line': 'Map',
+        'search_page': 'Guide', 'search_line': 'Map', 'search_moves': 'Moves on the map',
         'lang_other': '한국어', 'close': 'Close',
         'about': 'About', 'privacy': 'Privacy', 'data': 'Data & sources', 'contact': 'Contact', 'ad': 'Advertisement',
         'lumen_b': 'Made by Lumen Lab', 'lumen_s': 'More free tools and games',
@@ -49,7 +49,7 @@ UI = {
         'brand': '오프닝 트레일', 'skip': '본문으로 건너뛰기', 'nav_label': '주요 메뉴',
         'nav': {'map': '지도', 'openings': '오프닝', 'test': '테스트', 'practice': '연습', 'best': '레이팅별 추천'},
         'search_ph': '오프닝 찾기: 나이도르프, 런던, e4…', 'search_lbl': '오프닝 찾기', 'search_none': '그 이름의 오프닝이 없어요.',
-        'search_page': '해설', 'search_line': '지도',
+        'search_page': '해설', 'search_line': '지도', 'search_moves': '지도에서 이 수순',
         'lang_other': 'English', 'close': '닫기',
         'about': '소개', 'privacy': '개인정보 처리방침', 'data': '자료와 출처', 'contact': '문의', 'ad': '광고',
         'lumen_b': '루멘랩이 만들었어요', 'lumen_s': '다른 무료 도구와 게임 보기',
@@ -223,7 +223,7 @@ def data_doc(lang, meta):
 <ol><li>엔진 점수를 승리 확률로 바꾸고(리체스와 같은 식), 이 판에서 둘 수 있는 가장 좋은 수보다 둔 쪽의 승리 확률이 몇 %p 떨어지는지 봐요.</li>
 <li>3.5%p 미만이면 건전한 수예요. 그 가운데 고수가 가장 많이 두는 수가 <b>메인</b>, 고수의 10% 넘게 두는 수는 <b>대안</b>이에요. 고수는 대회 2400 이상(그 판이 대회에서 30판 넘게 나왔을 때), 아니면 리체스 2000 이상이에요.</li>
 <li>3.5~8%p는 <b>사이드</b>, 8~15%p는 <b>의심스러운 수</b>(?!), 15%p 넘게 떨어지면 <b>나쁜 수</b>(?)예요.</li>
-<li>해설에 적은 메인라인은 이름난 이론을 따라 메인으로 둡니다. 엔진 점수가 없는 수는 고수 비율로만 나눠요.</li></ol>
+<li>해설의 메인라인에서 오프닝 이름이 정해진 뒤의 수는 이름난 이론을 따라 <b>메인</b>으로 둡니다. 오프닝·갈래를 정하는 수(프렌치의 1...e6 같은)는 엔진이 크게 나쁘다고 하지 않으면(8%p 미만) 적어도 <b>대안</b>으로 둬요. 엔진 점수가 없는 수는 고수 비율로만 나눠요.</li></ol>
 <p>많이 두는 수가 꼭 좋은 수는 아니에요. 그래서 레이팅대에서 많이 두지만 엔진이 싫어하는 수에는 '인기 함정수' 표시를 달아요.</p>
 <h2>이름</h2>
 <p>오프닝 이름과 ECO 분류는 리체스가 공개한 <a href="https://github.com/lichess-org/chess-openings">chess-openings</a> 목록({nm:,}개)을 써요. 한국어 이름은 우리 용어표로 옮겼어요.</p>
@@ -247,7 +247,7 @@ def data_doc(lang, meta):
 <ol><li>Engine scores are turned into winning chances (the same formula Lichess uses), and we look at how many percentage points the side to move gives up compared with the best move in that position.</li>
 <li>Less than 3.5 points: a sound move. Among sound moves, the one strong players choose most is the <b>main</b> move; others chosen in more than 10% of strong players’ games are <b>alternatives</b>. Strong players means masters rated 2400+ in events (when the position appears in more than 30 such games), otherwise Lichess players rated 2000+.</li>
 <li>3.5 to 8 points: <b>side line</b>. 8 to 15: <b>dubious</b> (?!). More than 15: <b>mistake</b> (?).</li>
-<li>Main lines written in the guides follow established theory and are always marked main. Moves without an engine score are sorted by how often strong players choose them.</li></ol>
+<li>In a guide’s main line, the moves after the opening is named follow established theory and are marked <b>main</b>. The moves that define an opening or variation (like 1...e6 for the French) are marked at least <b>alternative</b> unless the engine gives up 8 points or more. Moves without an engine score are sorted by how often strong players choose them.</li></ol>
 <p>The most played move is not always a good move, so moves that are popular at a rating level but disliked by the engine get a “popular trap” mark.</p>
 <h2>Names</h2>
 <p>Opening names and ECO codes come from the <a href="https://github.com/lichess-org/chess-openings">chess-openings</a> list that Lichess publishes ({nm:,} entries).</p>

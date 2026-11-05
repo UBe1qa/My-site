@@ -141,7 +141,7 @@
   },
   {
    "san": "Be2",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 27,
    "games": 15416,
    "share": 0.0883,

@@ -103,7 +103,7 @@
   },
   {
    "san": "Bc4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 1736235,
    "share": 0.10207,
@@ -113,7 +113,7 @@
   },
   {
    "san": "Nc3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 27,
    "games": 1577007,
    "share": 0.09271,
@@ -123,7 +123,7 @@
   },
   {
    "san": "d4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 7,
    "games": 1427184,
    "share": 0.0839,
@@ -133,7 +133,7 @@
   },
   {
    "san": "c3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 1130909,
    "share": 0.06649,
@@ -143,7 +143,7 @@
   },
   {
    "san": "f4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": -3,
    "games": 823633,
    "share": 0.04842,
@@ -173,7 +173,7 @@
   },
   {
    "san": "b4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": -34,
    "games": 170933,
    "share": 0.01005,

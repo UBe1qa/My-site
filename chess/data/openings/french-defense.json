@@ -97,7 +97,7 @@
   },
   {
    "san": "exd5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 18,
    "games": 1075986,
    "share": 0.28622,

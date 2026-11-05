@@ -109,7 +109,7 @@
   },
   {
    "san": "f4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 76324,
    "share": 0.15022,
@@ -119,7 +119,7 @@
   },
   {
    "san": "f3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 26,
    "games": 70117,
    "share": 0.138,

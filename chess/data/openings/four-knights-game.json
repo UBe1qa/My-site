@@ -97,7 +97,7 @@
  "next_moves": [
   {
    "san": "Bc4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 758521,
    "share": 0.3694,

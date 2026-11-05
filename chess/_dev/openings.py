@@ -67,8 +67,8 @@ O('italian-game', 'w', 'e4e5', 'e4 e5 Nf3 Nc6 Bc4', ['Italian Game'],
         V('e4 e5 Nf3 Nc6 Bc4 f5 d3 Nf6 Nc3', 'Rousseau Gambit, 3...f5', 'A reversed King’s Gambit idea. The calm 4.d3 is best: e4 is held and Black’s king side is loose.',
           '루소 갬빗, 3...f5', '킹스 갬빗을 뒤집은 생각이에요. 차분한 4.d3가 가장 좋아요. e4를 지키고, 흑 킹 쪽은 허술해져요.')],
   traps=[TR('e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5 Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3#', 'The 3...Nd4 trick',
-            '3...Nd4 seems to drop e5, and 4.Nxe5 is a fine move, but only if you follow 4...Qg5 with 5.Ng4 or 5.Bxf7+. The greedy 5.Nxf7? loses: 5...Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3 is mate. The quiet 4.Nxd4 exd4 5.O-O is also good.',
-            '3...Nd4 속임수', '3...Nd4는 e5를 내주는 것 같고, 4.Nxe5도 좋은 수예요. 다만 4...Qg5에는 5.Ng4나 5.Bxf7+로 받아야 해요. 욕심내서 5.Nxf7?을 두면 5...Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3로 메이트예요. 조용히 4.Nxd4 exd4 5.O-O도 좋아요.', end='mate')])
+            '3...Nd4 seems to drop e5, but taking it is the trap. After 4.Nxe5? Qg5 White is already worse, and only 5.O-O or 5.Bxf7+ keeps the damage small. The greedy 5.Nxf7? loses to 5...Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3 mate. The calm 4.Nxd4 exd4 5.O-O leaves White clearly better.',
+            '3...Nd4 속임수', '3...Nd4는 e5를 내주는 것 같지만, 잡는 게 함정이에요. 4.Nxe5? Qg5 뒤에는 백이 벌써 나빠지고, 5.O-O나 5.Bxf7+로 손해를 줄이는 게 최선이에요. 욕심내서 5.Nxf7?을 두면 5...Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3로 메이트예요. 조용히 4.Nxd4 exd4 5.O-O로 두면 백이 확실히 좋아요.', end='mate')])
 
 O('ruy-lopez', 'w', 'e4e5', 'e4 e5 Nf3 Nc6 Bb5', ['Ruy Lopez'],
   en=dict(name='Ruy Lopez', title='Ruy Lopez (Spanish Opening): Plans, Lines and Stats by Rating',
@@ -109,9 +109,9 @@ O('ruy-lopez', 'w', 'e4e5', 'e4 e5 Nf3 Nc6 Bb5', ['Ruy Lopez'],
           '딜레이드 익스체인지, 6.Bxc6', '흑이 ...Be7를 둔 뒤에 바꿔요. 이제 Nxe5가 진짜 위협이에요. ...Qd4 포크가 통하지 않기 때문이에요.'),
         V('e4 e5 Nf3 Nc6 Bb5 d6', 'Steinitz Defense', 'Solid but passive: Black defends e5 directly and gives White a free hand in the center.',
           '슈타이니츠 디펜스', '단단하지만 수동적이에요. 흑이 e5를 바로 지키고 백에게 중앙을 내줘요.')],
-  traps=[TR('e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nxe5 Qd4 Nf3 Qxe4+', 'Exchange Variation: 5.Nxe5? Qd4',
-            'After 4.Bxc6 dxc6 the e5 pawn looks free, but 5.Nxe5? Qd4! attacks the knight and e4 at once, and Black wins the pawn back with a good game.',
-            '익스체인지 변화: 5.Nxe5? Qd4', '4.Bxc6 dxc6 뒤 e5 폰이 공짜 같지만, 5.Nxe5?에는 5...Qd4!가 나이트와 e4를 함께 공격해 흑이 폰을 되찾고 판도 좋아져요.'),
+  traps=[TR('e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nxe5 Qd4 Nf3 Qxe4+', 'Exchange Variation: 5.Nxe5 Qd4!',
+            'After 4.Bxc6 dxc6 the e5 pawn looks free, but after 5.Nxe5 Qd4! the queen attacks the knight and e4 at once, and Black wins the pawn back with a good game.',
+            '익스체인지 변화: 5.Nxe5 Qd4!', '4.Bxc6 dxc6 뒤 e5 폰이 공짜 같지만, 5.Nxe5에는 5...Qd4!가 나이트와 e4를 함께 공격해 흑이 폰을 되찾고 판도 좋아져요.'),
          TR('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 d4 b5 Bb3 Nxd4 Nxd4 exd4 Qxd4 c5 Qd5 Be6 Qc6+ Bd7 Qd5 c4', 'Noah’s Ark trap',
             'If White takes the pawn back with 8.Qxd4?, Black plays ...c5 and ...c4, and the bishop on b3 has no way out. To avoid it, prepare d4 with 5.c3 instead of playing 5.d4 at once.',
             '노아의 방주 함정', '백이 8.Qxd4?로 폰을 되찾으면 흑이 ...c5와 ...c4로 b3 비숍을 가둬 버려요. 피하려면 5.d4를 바로 두지 말고 5.c3로 d4를 준비해요.')])
@@ -176,9 +176,9 @@ O('petrovs-defense', 'b', 'e4e5', 'e4 e5 Nf3 Nf6', ["Petrov's Defense"],
           '스태퍼드 갬빗', '흑이 폰을 주고 빠른 전개와 함정을 노려요. 백은 d3, Be2 같은 침착한 수면 괜찮아요.'),
         V('e4 e5 Nf3 Nf6 d4 Nxe4', 'Steinitz (Modern) Attack, 3.d4', 'White opens the center at once. Black takes on e4 and plays ...d5.',
           '슈타이니츠 어택(모던 어택), 3.d4', '백이 바로 중앙을 열어요. 흑은 e4를 먹고 ...d5.')],
-  traps=[TR('e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Nf6 Nc6+', '3...Nxe4? 4.Qe2!',
-            'Copying White with 3...Nxe4? runs into 4.Qe2. If the knight retreats with 4...Nf6??, 5.Nc6+ is a discovered check that wins the queen. Even 4...Qe7 5.Qxe4 d6 6.d4 leaves Black a pawn down.',
-            '3...Nxe4? 4.Qe2!', '백을 따라 3...Nxe4?를 두면 4.Qe2에 걸려요. 4...Nf6??로 물러나면 5.Nc6+가 디스커버드 체크로 퀸을 잡아요. 4...Qe7 5.Qxe4 d6 6.d4로 버텨도 흑은 폰 하나가 모자라요.')])
+  traps=[TR('e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Nf6 Nc6+', 'Copying with 3...Nxe4: 4.Qe2!',
+            'Copying White with 3...Nxe4 runs into 4.Qe2. If the knight retreats with 4...Nf6??, 5.Nc6+ is a discovered check that wins the queen. The best 4...Qe7 5.Qxe4 d6 6.d4 dxe5 7.dxe5 wins the pawn back, but White keeps the easier game.',
+            '따라 두는 3...Nxe4: 4.Qe2!', '백을 따라 3...Nxe4를 두면 4.Qe2에 걸려요. 4...Nf6??로 물러나면 5.Nc6+가 디스커버드 체크로 퀸을 잡아요. 가장 좋은 4...Qe7 5.Qxe4 d6 6.d4 dxe5 7.dxe5로 폰은 되찾지만, 백이 두기 편한 판이에요.')])
 
 O('philidor-defense', 'b', 'e4e5', 'e4 e5 Nf3 d6', ['Philidor Defense'],
   en=dict(name='Philidor Defense', title='Philidor Defense: Plans, Legal’s Mate and Stats by Rating',
@@ -409,8 +409,8 @@ O('two-knights-defense', 'b', 'e4e5', 'e4 e5 Nf3 Nc6 Bc4 Nf6', ['Italian Game: T
           '모던 비숍스 오프닝, 4.d3', '조용하고, 강한 사람들이 가장 많이 두는 수예요. 백은 e4를 지키며 천천히 쌓고, 흑은 ...Be7나 ...Bc5로 전개해 캐슬링한 뒤 ...d6나 ...d5를 둬요.'),
         V('e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3', 'Scotch Gambit, 4.d4 exd4 5.O-O', 'White gives the d-pawn for development. In the old main line 5...Nxe4 6.Re1 d5 7.Bxd5, the pin on the e-file wins the material back.',
           '스카치 갬빗, 4.d4 exd4 5.O-O', '백이 d폰을 주고 전개를 앞서요. 옛 주요 수순 5...Nxe4 6.Re1 d5 7.Bxd5에서는 e파일 핀으로 말을 되찾아요.')],
-  traps=[TR('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3', 'Fried Liver: 5...Nxd5?', 'After 6.Nxf7! Kxf7 7.Qf3+ the black king must go to e6 to keep the d5 knight, and White piles up on the pinned knight with Nc3 and d4, then brings a rook to e1 against the exposed king. Over the board it is very hard to defend.',
-            '프라이드 리버: 5...Nxd5?', '6.Nxf7! Kxf7 7.Qf3+ 뒤 흑 킹은 d5 나이트를 지키려고 e6로 나와야 해요. 백은 Nc3와 d4로 묶인 나이트를 겹겹이 노리고, 룩을 e1로 가져와 드러난 킹을 쳐요. 실전에서 막기 아주 어려워요.')])
+  traps=[TR('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3', 'Fried Liver: 5...Nxd5', 'After 5...Nxd5 6.Nxf7! Kxf7 7.Qf3+ the black king must go to e6 to keep the d5 knight, and White piles up on the pinned knight with Nc3 and d4, then brings a rook to e1 against the exposed king. Over the board it is very hard to defend.',
+            '프라이드 리버: 5...Nxd5', '5...Nxd5 6.Nxf7! Kxf7 7.Qf3+ 뒤 흑 킹은 d5 나이트를 지키려고 e6로 나와야 해요. 백은 Nc3와 d4로 묶인 나이트를 겹겹이 노리고, 룩을 e1로 가져와 드러난 킹을 쳐요. 실전에서 막기 아주 어려워요.')])
 
 O('evans-gambit', 'w', 'e4e5', 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4', ['Italian Game: Evans Gambit', 'Italian Game: Evans Gambit Accepted', 'Italian Game: Evans Gambit Declined'],
   en=dict(name='Evans Gambit', title='Evans Gambit: Accepted and Declined Lines, Plans and Stats',
@@ -1511,8 +1511,8 @@ O('queens-gambit', 'w', 'd4', 'd4 d5 c4', ["Queen's Gambit", "Queen's Gambit Dec
         V('d4 d5 c4 e5 dxe5 d4', 'Albin Countergambit', 'Black gives a pawn for a cramping pawn on d4. Know the Lasker trap (...Bb4+ and exf2).',
           '알빈 카운터갬빗', '흑이 폰을 주고 d4에 답답한 폰을 세워요. 라스커 함정(...Bb4+와 exf2)을 알아 둬요.')],
   traps=[TR('d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+', 'Albin: the Lasker trap',
-            'In the Albin Countergambit, 4.e3? is a natural mistake. After 4...Bb4+ 5.Bd2 dxe3! 6.Bxb4 exf2+ 7.Ke2 fxg1=N+ Black promotes to a knight with check and wins. Play 4.Nf3 instead.',
-            '알빈: 라스커 함정', '알빈 카운터갬빗에서 4.e3?는 자연스러운 실수예요. 4...Bb4+ 5.Bd2 dxe3! 6.Bxb4 exf2+ 7.Ke2 fxg1=N+로 흑이 체크하며 나이트로 승진해 이겨요. 대신 4.Nf3.')])
+            'In the Albin Countergambit, 4.e3 Bb4+ 5.Bd2 dxe3! sets the trap. The natural 6.Bxb4?? loses to 6...exf2+ 7.Ke2 fxg1=N+: Black promotes to a knight with check and wins. Take back with 6.fxe3, or avoid it all with 4.Nf3.',
+            '알빈: 라스커 함정', '알빈 카운터갬빗에서 4.e3 Bb4+ 5.Bd2 dxe3!이 함정이에요. 자연스러운 6.Bxb4??는 6...exf2+ 7.Ke2 fxg1=N+로 흑이 체크하며 나이트로 승진해 이겨요. 6.fxe3로 되잡거나, 처음부터 4.Nf3로 피하세요.')])
 
 O('queens-gambit-declined', 'b', 'd4', 'd4 d5 c4 e6', ["Queen's Gambit Declined"],
   en=dict(name='Queen’s Gambit Declined', title='Queen’s Gambit Declined: Plans, Elephant Trap and Stats by Rating',
@@ -1578,9 +1578,9 @@ O('queens-gambit-accepted', 'b', 'd4', 'd4 d5 c4 dxc4', ["Queen's Gambit Accepte
           '클래시컬 주요 수순', '흑이 ...c5, ...a6를 두고, 고립 폰 국면으로 자주 가요.'),
         V('d4 d5 c4 dxc4 e3 e5', '3.e3 e5', 'A direct way for Black to free the game.',
           '3.e3 e5', '흑이 판을 트는 곧은 방법이에요.')],
-  traps=[TR('d4 d5 c4 dxc4 e3 b5 a4 c6 axb5 cxb5 Qf3', 'Holding the pawn with 3...b5?',
-            'After 3...b5 4.a4 c6 5.axb5 cxb5, 6.Qf3! hits the rook on a8 along the long diagonal and Black loses material. Do not defend c4 with pawns.',
-            '3...b5?로 폰 지키기', '3...b5 4.a4 c6 5.axb5 cxb5 뒤 6.Qf3!이 긴 대각선으로 a8 룩을 쳐서 흑이 말을 잃어요. c4를 폰으로 지키지 말아요.')])
+  traps=[TR('d4 d5 c4 dxc4 e3 b5 a4 c6 axb5 cxb5 Qf3', 'Holding the pawn with ...b5',
+            'After 3...b5 4.a4 c6 5.axb5 cxb5?, 6.Qf3! hits the rook on a8 along the long diagonal and Black loses material. Do not defend c4 with pawns.',
+            '...b5로 폰 지키기', '3...b5 4.a4 c6 5.axb5 cxb5? 뒤 6.Qf3!이 긴 대각선으로 a8 룩을 쳐서 흑이 말을 잃어요. c4를 폰으로 지키지 말아요.')])
 
 O('slav-defense', 'b', 'd4', 'd4 d5 c4 c6', ['Slav Defense', 'Semi-Slav Defense', 'Semi-Slav Defense Accepted'],
   en=dict(name='Slav and Semi-Slav', title='Slav Defense and Semi-Slav: Main Lines and Stats by Rating',

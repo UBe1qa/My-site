@@ -106,7 +106,7 @@
   },
   {
    "san": "d6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 39,
    "games": 814010,
    "share": 0.21912,

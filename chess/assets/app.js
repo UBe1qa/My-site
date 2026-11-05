@@ -177,12 +177,9 @@
     }
     if (this.treeEl) {
       this.treeEl.addEventListener('click', function (e) {
-        var g = e.target.closest('[data-t]');
-        if (!g || !self.kids) return;
-        var ix = g.getAttribute('data-t').split('.'), k = self.kids[+ix[0]];
-        if (!k) return;
-        self.playSan(k.san);
-        if (ix.length > 1 && k.kids[+ix[1]]) self.playSan(k.kids[+ix[1]].san);
+        var g = e.target.closest('[data-s]');
+        if (!g) return;
+        g.getAttribute('data-s').split(' ').forEach(function (san) { self.playSan(san); });
       });
       this.treeEl.addEventListener('mouseover', function (e) {
         var g = e.target.closest('[data-t]');
@@ -308,17 +305,22 @@
     var last = this.ply ? [this.line[this.ply - 1].from, this.line[this.ply - 1].to] : null;
     this.board.set(fen, last, kingSq(this.ch), instant);
     this.renderMoves();
-    this.renderName();
-    var epd = FM.epd(fen), seq = (this.seq = (this.seq || 0) + 1);
-    var sync = FM.entrySync(epd);
-    if (sync !== undefined) this.renderStats(sync);
+    var epd = FM.epd(fen), seq = (this.seq = (this.seq || 0) + 1), list = this.epds();
+    // 이름은 지나온 판들의 조각에서 찾으니, 빠진 조각을 모두 받은 뒤 이름·표를 함께 바꾼다
+    var missing = list.filter(function (e) { return FM.entrySync(e) === undefined; });
+    if (!missing.length) { this.renderName(); this.renderStats(FM.entrySync(epd)); }
     else {
+      // 받는 동안: 옛 판의 화살표는 바로 지우고, 표·이름은 흐리게(평가 M2: 판과 표가 다른 국면을 보여 줌)
+      this.cur = null;
+      this.board.drawArrows([]);
       this.root.classList.add('loading');
-      FM.entry(epd).then(function (en) {
+      this.root.setAttribute('aria-busy', 'true');
+      Promise.all(missing.map(function (e) { return FM.entry(e).catch(function () { return null; }); })).then(function () {
         if (seq !== self.seq) return;
         self.renderName();
-        self.renderStats(en);
-      }, function () { if (seq === self.seq) self.renderStats(null, true); });
+        var en = FM.entrySync(epd);
+        self.renderStats(en === undefined ? null : en, en === undefined);
+      });
     }
     this.syncUrl();
   };
@@ -395,6 +397,7 @@
   };
   Explorer.prototype.renderStats = function (entry, failed) {
     this.root.classList.remove('loading');
+    this.root.removeAttribute('aria-busy');
     var s = FM.stats(entry, this.band), tb = this.tbody, epd = FM.epd(this.fenAt(this.ply));
     if (s && !s.moves.length) {
       var sa = FM.stats(entry, -1, true);
@@ -479,11 +482,11 @@
       var nleaf = Math.max(1, k.kids.length), yc = yi + nleaf * RH / 2, sw = 2 + k.share * 20;
       alt.push(numbered([k.san], ply) + ' ' + FM.pct(k.share));
       paths += '<path class="br c' + k.cls + '" d="M' + (x0 + 76) + ' ' + y0.toFixed(0) + 'C' + (x0 + 116) + ' ' + y0.toFixed(0) + ' ' + (x1 - 40) + ' ' + yc.toFixed(0) + ' ' + (x1 - 6) + ' ' + yc.toFixed(0) + '" stroke-width="' + sw.toFixed(1) + '"/>';
-      texts += '<g class="tn" data-t="' + i + '"><text x="' + x1 + '" y="' + (yc + 5).toFixed(0) + '">' + esc(numbered([k.san], ply)) + '</text><text class="tp" x="' + (x1 + 104) + '" y="' + (yc + 5).toFixed(0) + '" text-anchor="end">' + FM.pct(k.share) + '</text></g>';
+      texts += '<g class="tn" data-t="' + i + '" data-s="' + esc(k.san) + '"><text x="' + x1 + '" y="' + (yc + 5).toFixed(0) + '">' + esc(numbered([k.san], ply)) + '</text><text class="tp" x="' + (x1 + 104) + '" y="' + (yc + 5).toFixed(0) + '" text-anchor="end">' + FM.pct(k.share) + '</text></g>';
       k.kids.forEach(function (g, j) {
         var yg = yi + j * RH + RH / 2, sw2 = 1.5 + g.share * 16;
         paths += '<path class="br c' + g.cls + '" d="M' + (x1 + 110) + ' ' + yc.toFixed(0) + 'C' + (x1 + 136) + ' ' + yc.toFixed(0) + ' ' + (x2 - 32) + ' ' + yg.toFixed(0) + ' ' + (x2 - 6) + ' ' + yg.toFixed(0) + '" stroke-width="' + sw2.toFixed(1) + '" opacity=".85"/>';
-        texts += '<g class="tn" data-t="' + i + '.' + j + '"><text x="' + x2 + '" y="' + (yg + 5).toFixed(0) + '">' + esc(numbered([g.san], ply + 1)) + '</text><text class="tp" x="' + (W - 4) + '" y="' + (yg + 5).toFixed(0) + '" text-anchor="end">' + FM.pct(g.share) + '</text></g>';
+        texts += '<g class="tn" data-t="' + i + '.' + j + '" data-s="' + esc(k.san + ' ' + g.san) + '"><text x="' + x2 + '" y="' + (yg + 5).toFixed(0) + '">' + esc(numbered([g.san], ply + 1)) + '</text><text class="tp" x="' + (W - 4) + '" y="' + (yg + 5).toFixed(0) + '" text-anchor="end">' + FM.pct(g.share) + '</text></g>';
       });
       yi += nleaf * RH;
     });
@@ -559,13 +562,56 @@
     if (FIND) return Promise.resolve(FIND);
     if (!FINDP) FINDP = fetch(C.find.src).then(function (r) { return r.json(); }).then(function (j) {
       FIND = j.map(function (x) {
-        return { k: x[0], en: x[1], ko: x[2], eco: x[3], tail: x[4], hay: norm(x[1] + ' ' + x[2] + ' ' + x[3] + ' ' + (x[5] || '')) };
+        var hay = norm(x[1] + ' ' + x[2] + ' ' + x[3] + ' ' + (x[5] || ''));
+        return { k: x[0], en: x[1], ko: x[2], eco: x[3], tail: x[4], hay: hay, hayC: hay.replace(/ /g, ''), words: hay.split(' ') };
       });
       return FIND;
     });
     return FINDP;
   }
-  function norm(s) { return String(s).toLowerCase().replace(/[’'`´.,:;()\-–—_/]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  // 아포스트로피는 붙여 지우고(king's → kings), 한국어 '퀸즈·킹즈'는 '퀸스·킹스'로 같이 본다
+  function norm(s) {
+    return String(s).toLowerCase().replace(/[’'`´]/g, '').replace(/[.,:;()\-–—_/]+/g, ' ').replace(/즈(?=\s|$)/g, '스').replace(/\s+/g, ' ').trim();
+  }
+  // 한 글자 틀림·뒤바뀜(najdrof → najdorf)까지 같은 말로 본다
+  function near(a, b) {
+    if (Math.abs(a.length - b.length) > 1) return false;
+    var m = a.length, n = b.length, d = [], i, j;
+    for (i = 0; i <= m; i++) { d[i] = [i]; }
+    for (j = 0; j <= n; j++) d[0][j] = j;
+    for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) {
+      var c = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + c);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+    return d[m][n] <= 1;
+  }
+  function wordHit(x, w) {
+    if (x.hay.indexOf(w) >= 0) return 2;
+    if (w.length < 5) return 0;
+    for (var i = 0; i < x.words.length; i++) {
+      var h = x.words[i];
+      if (near(w, h) || (h.length > w.length && near(w, h.slice(0, w.length)))) return 1;
+    }
+    return 0;
+  }
+  // 수 입력(e4 c5, 1.e4 e5 2.Nf3)이면 처음 판부터 둬 보고 SAN 목록을 돌려준다(아니면 null)
+  function movesOf(raw) {
+    var toks = String(raw).replace(/\d+\s*\.(\.\.)?/g, ' ').replace(/[,;]/g, ' ').split(/\s+/).filter(Boolean);
+    if (!toks.length || toks.length > 40) return null;
+    var c = new Chess(), out = [];
+    for (var i = 0; i < toks.length; i++) {
+      var t = toks[i].replace(/[!?]+$/, ''), mv = null;
+      if (!/^(?:[KQRBNkqrbn]?[a-h]?[1-8]?x?[a-h][1-8](?:=?[QRBNqrbn])?|[Oo0]-[Oo0](?:-[Oo0])?)[+#]?$/.test(t)) return null;
+      t = t.replace(/^[Oo0]-[Oo0]-[Oo0]/, 'O-O-O').replace(/^[Oo0]-[Oo0]/, 'O-O');
+      if (/^[kqrn]/.test(t)) t = t[0].toUpperCase() + t.slice(1);
+      try { mv = c.move(t); } catch (e) { mv = null; }
+      if (!mv && /^b/.test(t)) { try { mv = c.move('B' + t.slice(1)); } catch (e) { mv = null; } }   // bc4 = Bc4
+      if (!mv) return null;
+      out.push(mv.san);
+    }
+    return out;
+  }
   function Find(root) {
     var self = this;
     this.input = $('[data-find-in]', root);
@@ -591,24 +637,37 @@
     });
   }
   Find.prototype.href = function (r) {
+    if (r.k === 'm') return C.mapUrl + '#' + r.tail;
     if (r.k === 'p' || r.k === 'f') return PREFIX + 'openings/' + r.tail + '/';
     return C.mapUrl + '#' + r.tail;
   };
   Find.prototype.search = function () {
-    var self = this, q = norm(this.input.value);
+    var self = this, raw = this.input.value, q = norm(raw);
     if (!q) { this.close(); return; }
     findData().then(function (data) {
       if (norm(self.input.value) !== q) return;
-      var words = q.split(' '), hits = [];
+      var words = q.split(' '), qc = q.replace(/ /g, ''), hits = [];
+      // 수 입력: 그 수순의 판을 지도에서 연다(이름이 있는 수순이면 그 이름과 함께 맨 위)
+      var mv = /[a-h][1-8]|o-o/i.test(raw) ? movesOf(raw) : null, top = [];
+      if (mv && mv.length) {
+        var h = FM.sanToHash(mv), named = data.filter(function (x) { return x.k === 'n' && x.tail === h; })[0];
+        top.push(named || { k: 'm', en: numbered(mv), ko: numbered(mv), eco: '', tail: h });
+      }
       data.forEach(function (x) {
-        var ok = true;
-        for (var i = 0; i < words.length; i++) if (x.hay.indexOf(words[i]) < 0) { ok = false; break; }
+        var ok = true, fuzzy = false;
+        if (x.hayC.indexOf(qc) < 0) {
+          for (var i = 0; i < words.length; i++) {
+            var w = wordHit(x, words[i]);
+            if (!w) { ok = false; break; }
+            if (w === 1) fuzzy = true;
+          }
+        }
         if (!ok) return;
-        var name = norm(L === 'ko' ? x.ko : x.en), score = (x.k === 'p' ? 0 : x.k === 'f' ? 1 : 2) * 10 + (name.indexOf(q) === 0 ? 0 : x.hay.indexOf(q) >= 0 ? 3 : 6) + Math.min(name.length / 40, 3);
+        var name = norm(L === 'ko' ? x.ko : x.en), score = (x.k === 'p' ? 0 : x.k === 'f' ? 1 : 2) * 10 + (name.indexOf(q) === 0 ? 0 : x.hay.indexOf(q) >= 0 ? 3 : 6) + Math.min(name.length / 40, 3) + (fuzzy ? 4 : 0);
         hits.push({ x: x, s: score });
       });
       hits.sort(function (a, b) { return a.s - b.s; });
-      self.res = hits.slice(0, 8).map(function (h) { return h.x; });
+      self.res = top.concat(hits.map(function (h) { return h.x; }).filter(function (x) { return top.indexOf(x) < 0; })).slice(0, 8);
       self.act = -1;
       self.draw();
     }, function () { self.res = []; self.draw(); });
@@ -619,7 +678,7 @@
       this.out.innerHTML = '<li class="find-none">' + esc(C.find.none) + '</li>';
     } else {
       this.out.innerHTML = this.res.map(function (r, i) {
-        var nm = L === 'ko' ? r.ko : r.en, kind = r.k === 'n' ? C.find.line : C.find.page;
+        var nm = L === 'ko' ? r.ko : r.en, kind = r.k === 'm' ? C.find.moves : r.k === 'n' ? C.find.line : C.find.page;
         return '<li role="option" id="find-' + i + '"' + (i === self.act ? ' aria-selected="true"' : '') + '><a href="' + esc(self.href(r)) + '">' +
           '<span class="fn">' + esc(nm) + '</span><small>' + (r.eco ? esc(r.eco) + ' · ' : '') + esc(kind) + '</small></a></li>';
       }).join('');
@@ -658,6 +717,7 @@
   function Drill(root) {
     var self = this;
     this.root = root;
+    root._drill = this;   // 시험(자동 클릭)용
     this.ch = new Chess();
     this.state = 'setup';
     this.band = store.get('fm.band', 2);
@@ -675,7 +735,11 @@
     this.bindUI();
     var q = new URLSearchParams(location.search);
     var custom = FM.paramToLine(q.get('m'));
-    if (q.get('o') && this.sel) this.sel.value = q.get('o');
+    if (q.get('o') && this.sel) {
+      this.sel.value = q.get('o');
+      var o0 = this.opening();
+      if (o0 && this.sideSel) this.sideSel.value = q.get('side') === 'b' ? 'b' : q.get('side') === 'w' ? 'w' : o0.side;
+    }
     if (custom.length) {
       this.custom = custom;
       if (this.sel) {
@@ -709,6 +773,7 @@
       if (o && self.sideSel) self.sideSel.value = o.side;
       self.showSetup();
     });
+    if (this.sideSel) this.sideSel.addEventListener('change', function () { if (self.state === 'setup' || self.state === 'end') self.showSetup(); });
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
       if (!b) return;
@@ -745,6 +810,7 @@
   };
   Drill.prototype.showSetup = function () {
     this.setState('setup');
+    this.updateDue();
     this.ch.reset();
     var o = this.opening();
     var line = this.custom || (o ? o.line : []);
@@ -773,6 +839,8 @@
     }
     var o = this.opening();
     this.main = this.custom || (o ? o.line : []);
+    // 상대가 그대로 따라 두는 길이: 지도에서 고른 수순은 전부, 오프닝은 그 오프닝이 되는 수순(정의 수순)까지만
+    this.fixed = this.custom ? this.main.length : (o ? Math.min(o.def || 0, this.main.length) : 0);
     this.board.set(this.ch.fen(), null, null, true);
     this.board.drawArrows([]);
     this.step();
@@ -796,14 +864,19 @@
     this.say(fmt(T.review_q, { left: this.queue.length + 1 }), '');
   };
   // 다음 할 일 정하기: 정해진 수순 → 그다음은 실제 통계(상대) / 2000+ 최다 수(나)
+  Drill.prototype.onMain = function () {
+    var main = this.main;
+    return this.ch.history({ verbose: true }).every(function (m, i) { return uciOf(m) === main[i]; });
+  };
   Drill.prototype.step = function () {
     var self = this, ply = this.ch.history().length, turn = this.ch.turn();
     if (this.ch.isGameOver()) { this.finish(); return; }
     var mine = turn === this.side;
-    if (ply < this.main.length) {
+    var onMain = ply < this.main.length && this.onMain();
+    if (onMain && (mine || ply < this.fixed)) {
       var u = this.main[ply];
       var t = new Chess(this.ch.fen()), m = t.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
-      if (mine) { this.expect = m.san; this.wrongHere = false; this.setState('you'); this.say(T.your_move, ''); }
+      if (mine) { this.expect = m.san; this.wrongHere = false; this.setState('you'); this.say(T.your_move, ''); FM.entry(FM.epd(this.ch.fen())).catch(function () {}); }
       else this.oppPlay(m.san);
       return;
     }
@@ -831,15 +904,15 @@
     setTimeout(function () {
       if (self.state !== 'opp') return;
       var m = self.ch.move(san);
-      if (self.ch.history().length > self.main.length) self.extra++;
+      if (self.ch.history().length > self.main.length || !self.onMain()) self.extra++;
       self.board.set(self.ch.fen(), [m.from, m.to], kingSq(self.ch));
       self.board.drawArrows([]);
       if (p != null) self.say(fmt(T.opp_played, { san: esc(m.san), p: FM.pct(p), band: esc(bandName(self.band)) }), 'info');
-      setTimeout(function () { if (self.state === 'opp') self.step(); }, reduce ? 0 : 160);
-    }, reduce ? 60 : 420);
+      setTimeout(function () { if (self.state === 'opp') self.step(); }, reduce ? 0 : 120);
+    }, reduce ? 60 : 260);
   };
   Drill.prototype.cardKey = function () { return this.key() + '|' + FM.epd(this.ch.fen()); };
-  Drill.prototype.userMove = function (mv) {
+  Drill.prototype.userMove = function (mv, loaded) {
     if (this.state !== 'you') return;
     var before = this.ch.fen(), m;
     try { m = this.ch.move(mv); } catch (e) { m = null; }
@@ -858,7 +931,7 @@
       }
       this.ch.move(mv);
       if (!this.wrongHere) { this.ok++; this.combo = (this.combo || 0) + 1; }
-      if (this.ch.history().length > this.main.length) this.extra++;
+      if (this.ch.history().length > this.main.length || !this.onMain()) this.extra++;
       this.board.set(this.ch.fen(), [m.from, m.to], kingSq(this.ch));
       this.board.setHint(null);
       this.board.drawArrows([]);
@@ -866,13 +939,19 @@
       this.say(this.wrongHere ? T.fixed : fmt(T.right, { san: esc(m.san) }), 'ok');
       if (this.reviewMode) { this.setState('next'); setTimeout(function () { self.nextReview(); }, reduce ? 200 : 700); return; }
       this.setState('opp');
-      setTimeout(function () { self.step(); }, reduce ? 60 : 380);
+      setTimeout(function () { self.step(); }, reduce ? 60 : 200);
       return;
     }
-    // 틀림: 2000+가 15% 넘게 두는 수면 '둘 만한 수', 아니면 오답
+    // 틀림: 메인·대안이거나 2000+가 15% 넘게 두는 수면 '둘 만한 수', 아니면 오답
     this.ch.undo();
     var epd = FM.epd(this.ch.fen()), en = FM.entrySync(epd), san = m.san;
     this.board.set(this.ch.fen(), null, kingSq(this.ch), false, true);
+    if (en === undefined && !loaded) {
+      this.setState('wait');
+      var again = function () { self.setState('you'); self.userMove(mv, true); };
+      FM.entry(epd).then(again, again);
+      return;
+    }
     if (en && FM.playable(en, san)) {
       this.board.flash(m.to, 'warn');
       this.say(fmt(T.playable, { san: esc(san), want: esc(this.expect) }), 'warn');
@@ -1144,11 +1223,12 @@
     x.fillStyle = '#1c2130'; x.font = '800 128px ' + font; x.fillText(TT.levels[r.lv][0], 72, 470);
     x.font = '700 60px ' + font; x.fillText(fmt(TT.score, { k: r.k, n: r.n }), 80, 570);
     x.fillStyle = '#5b6271'; x.font = '500 36px ' + font; x.fillText(fmt(TT.like, { band: FM.BANDS[r.band] }), 80, 640);
-    // 길: 왼쪽 아래에서 오른쪽 위로 굽이치는 선 위에 점 10개
-    var pts = [];
+    // 길: 문제 하나 = 점 하나, 맞히면 한 칸 오르고 틀리면 그 높이로 간다(오른쪽 끝 높이 = 맞힌 수)
+    var pts = [], up = 0;
     for (i = 0; i < res.length; i++) {
       var tt = res.length > 1 ? i / (res.length - 1) : 0;
-      pts.push([120 + tt * 840, 1110 - tt * 260 + Math.sin(tt * Math.PI * 2) * 90]);
+      if (res[i].ok) up++;
+      pts.push([120 + tt * 840, 1150 - up * 36]);
     }
     x.strokeStyle = '#d4ccbb'; x.lineWidth = 18; x.lineCap = 'round'; x.lineJoin = 'round';
     x.beginPath();
@@ -1172,7 +1252,7 @@
       var f = b && typeof File !== 'undefined' ? new File([b], 'opening-trail-test.png', { type: 'image/png' }) : null;
       if (f && navigator.canShare && navigator.canShare({ files: [f] })) return navigator.share({ files: [f], text: text + ' ' + url });
       if (navigator.share) return navigator.share({ text: text, url: url });
-      return navigator.clipboard.writeText(text + ' ' + url).then(function () { $('[data-qmsg]', self.root).textContent = TT.copied; });
+      return navigator.clipboard.writeText(text + ' ' + url).then(function () { var n = $('[data-qnote]', self.root); if (n) n.textContent = TT.copied; });
     }).catch(function () {});
   };
   Quiz.prototype.save = function () {

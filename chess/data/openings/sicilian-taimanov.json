@@ -139,7 +139,7 @@
   },
   {
    "san": "Nb5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 26,
    "games": 16399,
    "share": 0.04374,

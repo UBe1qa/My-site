@@ -194,7 +194,7 @@
   FM.hashToSan = function (h) {
     if (!h) return [];
     h = decodeURIComponent(h.replace(/^#/, ''));
-    return h.split(/[.\s,]+/).filter(function (s) { return /^(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?|O-O(?:-O)?)$/.test(s); }).slice(0, 80);
+    return h.split(/[.\s,]+/).map(function (s) { return s.replace(/[+#!?]+$/, ''); }).filter(function (s) { return /^(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?|O-O(?:-O)?)$/.test(s); }).slice(0, 80);
   };
   FM.lineToParam = function (ucis) { return ucis.join('.'); };
   FM.paramToLine = function (p) {

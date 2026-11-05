@@ -97,7 +97,7 @@
  "next_moves": [
   {
    "san": "Bg5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 14,
    "games": 10947,
    "share": 0.23596,
@@ -117,7 +117,7 @@
   },
   {
    "san": "Be2",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 25,
    "games": 4820,
    "share": 0.10389,
