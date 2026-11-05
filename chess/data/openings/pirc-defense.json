@@ -107,7 +107,7 @@
   },
   {
    "san": "Bg5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 49,
    "games": 108357,
    "share": 0.16975,
@@ -157,7 +157,7 @@
   },
   {
    "san": "f3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 37,
    "games": 27633,
    "share": 0.04329,
@@ -167,7 +167,7 @@
   },
   {
    "san": "Bf4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 54,
    "games": 23288,
    "share": 0.03648,

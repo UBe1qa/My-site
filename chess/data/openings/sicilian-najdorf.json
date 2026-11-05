@@ -141,7 +141,7 @@
   },
   {
    "san": "Bd3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 6,
    "games": 41239,
    "share": 0.08555,
@@ -151,7 +151,7 @@
   },
   {
    "san": "f3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 14,
    "games": 38824,
    "share": 0.08054,
@@ -191,7 +191,7 @@
   },
   {
    "san": "g3",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 16,
    "games": 7128,
    "share": 0.01479,
@@ -211,7 +211,7 @@
   },
   {
    "san": "Rg1",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 5798,
    "share": 0.01203,

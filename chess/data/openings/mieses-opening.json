@@ -100,7 +100,7 @@
   },
   {
    "san": "Nf6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 75501,
    "share": 0.078,
@@ -130,7 +130,7 @@
   },
   {
    "san": "g6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 9,
    "games": 38824,
    "share": 0.04011,

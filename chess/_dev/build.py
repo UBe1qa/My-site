@@ -81,7 +81,7 @@ def pct(x, d=0):
     v = x * 100
     if 0 < v < 0.1:
         return '<0.1%'
-    if 0 < v < 1:
+    if 0 < v < 1 or (d == 0 and 99.5 <= v < 100):
         return tofixed(v, 1) + '%'
     return tofixed(v, d) + '%'
 
@@ -106,8 +106,9 @@ def ev_text(v):
     if isinstance(v, str):
         return '#' + v[1:]
     p = v / 100
-    sign = '+' if p > 0 else ('−' if p < 0 else '')
-    return sign + tofixed(abs(p), 0 if abs(p) >= 10 else 1)
+    t = tofixed(abs(p), 0 if abs(p) >= 10 else 1)
+    sign = '' if float(t) == 0 else ('+' if p > 0 else ('−' if p < 0 else ''))
+    return sign + t
 
 
 def fmt(s, **k):
@@ -116,7 +117,7 @@ def fmt(s, **k):
 
 def games_text(lang):
     g = META['games']
-    return f'{g / 1e8:.4f}'.rstrip('0') if False else (f'{math.floor(g / 10000 + 0.5):,}만' if lang == 'ko' else f'{g / 1e6:.1f} million')
+    return count_ko_full(g) if lang == 'ko' else f'{g / 1e6:.1f} million'
 
 
 # ---------------------------------------------------------------- 자료
@@ -290,8 +291,9 @@ MARK_RE = re.compile(r'(\d+)\.(\.\.)?((?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][
 
 
 def check_marks():
-    """해설 글의 수 기호(?·??·?!·!)가 지도 분류와 맞는지 본다(평가 2026-11-05 M3). 글의 수는 같은 수순(함정·갈래·메인라인)에서 찾고,
-    자료가 없는 판은 건너뛴다. ? = 의심 이상, ?? = 나쁨, ?! = 사이드 이상, ! = 메인·대안."""
+    """해설 글의 수 기호(?·??·?!·!)가 지도 분류와 맞는지 본다(평가 2026-11-05 M3·재평가). ? = 의심 이상, ?? = 나쁨, ?! = 사이드 이상, ! = 메인·대안.
+    글의 수는 그 오프닝의 수순(메인라인·함정·갈래) 가운데 같은 자리에 같은 수가 있는 곳에서 찾는다. 수순에 없는 다른 수(5...Na5 자리의 5...Nxd5?)는
+    메인라인 수마다 붙는 이유 글이거나, 글에 바로 앞 수(5.exd5)가 적혀 있을 때만 그 자리에서 찾는다. 자료가 없는 판은 건너뛴다."""
     def flat(v):
         if isinstance(v, str):
             return [v]
@@ -300,25 +302,44 @@ def check_marks():
         if isinstance(v, (list, tuple)):
             return [z for w in v for z in flat(w)]
         return []
+
+    def cls_at(r, k, san):
+        st = stats(START_EPD if k == 0 else r['epd'][k - 1], -1, True)
+        mv = next((q for q in st['moves'] if q['san'].rstrip('+#') == san.rstrip('+#')), None) if st else None
+        return mv['cls'] if mv and mv['cls'] is not None and mv['cls'] >= 0 else None
+
+    def tok(r, k):
+        return f"{k // 2 + 1}.{'..' if k % 2 else ''}{r['san'][k]}".replace('...', '...') if k % 2 == 0 else f"{k // 2 + 1}...{r['san'][k]}"
+
     bad = []
     for o in OPENINGS:
-        items = [(t['_r'], flat(t['en']) + flat(t['ko'])) for t in o['traps']] + [(v['_r'], flat(v['en']) + flat(v['ko'])) for v in o['vars']]
-        items.append((o['_m'], flat(o['en']) + flat(o['ko'])))
-        for r, texts in items:
-            for t in texts:
-                for m in MARK_RE.finditer(t):
-                    num, black, san, mark = int(m.group(1)), bool(m.group(2)), m.group(3), m.group(4)
-                    k = (num - 1) * 2 + (1 if black else 0)
-                    if not mark or mark == '!?' or k >= len(r['san']) or r['san'][k].rstrip('+#') != san.rstrip('+#'):
+        M = o['_m']
+        lines = [M] + [t['_r'] for t in o['traps']] + [v['_r'] for v in o['vars']]
+        texts = [(t, None) for x in o['traps'] + o['vars'] for t in flat(x['en']) + flat(x['ko'])] + [(t, None) for t in flat(o['en']) + flat(o['ko'])]
+        # 메인라인 수마다 붙는 이유 글(why·deep): 그 자리의 다른 수도 메인라인에서 찾는다
+        for i, sn in enumerate(M['san']):
+            for lang in LANGS:
+                texts += [(why(START_EPD if i == 0 else M['epd'][i - 1], sn, lang) or '', M), (deep(' '.join(M['san'][:i + 1]), lang) or '', M)]
+        for t, home in texts:
+            for m in MARK_RE.finditer(t):
+                num, black, san, mark = int(m.group(1)), bool(m.group(2)), m.group(3), m.group(4)
+                k = (num - 1) * 2 + (1 if black else 0)
+                if not mark or mark == '!?':
+                    continue
+                found = []
+                for r in lines:
+                    if k >= len(r['san']):
                         continue
-                    st = stats(START_EPD if k == 0 else r['epd'][k - 1], -1, True)
-                    mv = next((q for q in st['moves'] if q['san'] == r['san'][k]), None) if st else None
-                    if not mv or mv['cls'] is None or mv['cls'] < 0:
-                        continue
-                    c = mv['cls']
-                    ok = {'?': c >= 3, '??': c == 4, '?!': c >= 2, '!': c <= 1, '!!': c <= 1}[mark]
-                    if not ok:
-                        bad.append(f"{o['slug']}: {m.group(0)} 인데 지도는 {trail.CLS_NAMES[c] if hasattr(trail, 'CLS_NAMES') else c}")
+                    same = r['san'][k].rstrip('+#') == san.rstrip('+#')
+                    alt_ok = r is home or (k > 0 and tok(r, k - 1) in t)
+                    if same or alt_ok:
+                        c = cls_at(r, k, san)
+                        if c is not None:
+                            found.append(c)
+                if not found:
+                    continue
+                if not any({'?': c >= 3, '??': c == 4, '?!': c >= 2, '!': c <= 1, '!!': c <= 1}[mark] for c in found):
+                    bad.append(f"{o['slug']}: {m.group(0)} 인데 지도는 {found} … {t[max(0, m.start() - 40):m.end() + 20]}")
     if bad:
         sys.exit('해설 글의 수 기호가 지도 분류와 다름:\n  ' + '\n  '.join(sorted(set(bad))))
 
@@ -1035,6 +1056,19 @@ def best_rows():
     return out
 
 
+def line_cls(o):
+    """그 오프닝을 고른 쪽이 정하는 수 가운데 가장 나쁜 분류(추천 목록 표시용)"""
+    r, worst = o['_r'], -1
+    for k, san in enumerate(r['san']):
+        if (k % 2 == 0) != (o['side'] == 'w'):
+            continue
+        st = stats(START_EPD if k == 0 else r['epd'][k - 1], -1, True)
+        mv = next((q for q in st['moves'] if q['san'] == san), None) if st else None
+        if mv and mv['cls'] is not None:
+            worst = max(worst, mv['cls'])
+    return worst
+
+
 def best_page(lang, BR):
     P, t, u = PAGES[lang]['best'], TX[lang], UI[lang]
     p = prefix(lang)
@@ -1043,7 +1077,7 @@ def best_page(lang, BR):
     for b in range(4):
         cols = ''
         for i, side in enumerate(('w', 'b')):
-            rows = ''.join(f'<tr><th scope="row"><a href="{p}openings/{o["slug"]}/">{esc(o[lang]["name"])}</a></th><td class="sc"><b>{pct(sc, 1)}</b></td>'
+            rows = ''.join(f'<tr><th scope="row"><a href="{p}openings/{o["slug"]}/">{esc(o[lang]["name"])}</a>{cls_badge(line_cls(o), lang) if line_cls(o) >= 2 else ""}</th><td class="sc"><b>{pct(sc, 1)}</b></td>'
                            f'<td>{pct(r["n"] / START_N[b], 1)}</td><td class="wdl">{wdl_bar(r["w"], r["d"], r["b"], lang, mini=True)}</td></tr>'
                            for sc, o, r in BR[(b, side)])
             tb = (f'<div class="tblbox"><table class="tbl bs"><thead><tr><th scope="col">{t["crumb"]}</th><th scope="col">{t["best_score"]}</th><th scope="col">{t["best_pop"]}</th>'
@@ -1055,6 +1089,7 @@ def best_page(lang, BR):
   <p class="lead">{P['lead']}</p>
   <div class="bands" role="group" aria-label="{u['band_lbl']}" data-best><span class="lbl">{u['band_lbl']}</span>{tabs}</div>
   {panes}
+  <p class="note">{t['best_mark']}</p>
   <p class="note">{t['best_note']}</p>
 </div>'''
     h = head(lang, P['title'], P['desc'], 'best-openings/', [crumbs_ld(lang, [(u['brand'], ''), (P['h1'], 'best-openings/')])])
@@ -1062,11 +1097,25 @@ def best_page(lang, BR):
 
 
 # ---------------------------------------------------------------- 오프닝 페이지(11칸)
-def learn_band(epd):
-    for b in range(4):
-        if share_at(epd, b) >= 0.005:
-            return b
-    return 3 if share_at(epd, 3) else None
+def learn_bands(epd):
+    """200판에 1판 넘게 이 판에 오는 레이팅대들"""
+    return [b for b in range(4) if share_at(epd, b) >= 0.005]
+
+
+def bands_text(bs, lang):
+    """이어진 레이팅대는 묶어 쓴다: [0, 1] → '1600 아래', [2, 3] → '1600+'"""
+    lo = ['', '1200', '1600', '2000']
+    hi = ['1200', '1600', '2000', '']
+    if len(bs) == 1:
+        return BANDS[bs[0]]
+    if bs == list(range(bs[0], bs[-1] + 1)):
+        a, z = bs[0], bs[-1]
+        if a == 0:
+            return f'{hi[z]} 아래' if lang == 'ko' else f'under {hi[z]}'
+        if z == 3:
+            return f'{lo[a]} 이상' if lang == 'ko' else f'{lo[a]}+'
+        return f'{lo[a]}–{int(hi[z]) - 1}'
+    return ', '.join(BANDS[b] for b in bs)
 
 
 def pawns(epd):
@@ -1254,13 +1303,13 @@ def opening_page(lang, o, pawn_index):
   {f"<div class='idea'><h3>{t['s_same_pawns']}</h3><ul class='orders'>{sl}</ul></div>" if sl else ''}</div>
 </div></section>'''
     # 10. 배울 레이팅대와 검토 상태
-    lb = learn_band(end)
-    if lb == 0:
-        lbt = t['learn_any']
-    elif lb is None:
-        lbt = t['learn_high']
+    lbs = learn_bands(end)
+    if len(lbs) == 4:
+        lbt, lbw = t['learn_any'], t['learn_any_why']
+    elif not lbs:
+        lbt, lbw = t['learn_rare'], t['learn_rare_why']
     else:
-        lbt = fmt(t['learn_band'], band=BANDS[lb])
+        lbt, lbw = fmt(t['learn_band'], band=bands_text(lbs, lang)), t['learn_why']
     status = RS.REVIEW.get(o['slug'], {})
     rv_rows = ''
     for key, base in (('short', (1, 0, 0)), ('main', (1, 1, 0)), ('next', (0, 1, 0)), ('traps', (1, 1, 0)), ('plans', (1, 0, 0)), ('vars', (1, 1, 0)), ('stats', (0, 0, 0))):
@@ -1271,7 +1320,7 @@ def opening_page(lang, o, pawn_index):
     body += f'''
 <section class="sec"><div class="wrap">
   <h2>{t['s_learn']}</h2>
-  <p class="learn"><b>{esc(lbt)}</b> <small>{esc(t['learn_why'])}</small></p>
+  <p class="learn"><b>{esc(lbt)}</b> <small>{esc(lbw)}</small></p>
   <div class="tblbox"><table class="tbl rv"><thead><tr><th scope="col"></th>{rv_head}</tr></thead><tbody>{rv_rows}</tbody></table></div>
   <p class="note">{t['rv_note']}</p>
 </div></section>'''
@@ -1279,7 +1328,7 @@ def opening_page(lang, o, pawn_index):
     sidename = t['white'] if o['side'] == 'w' else t['black']
     other = 'b' if o['side'] == 'w' else 'w'
     pr = p + 'practice/?o=' + o['slug']
-    pr2 = p + 'practice/?m=' + '.'.join(r['uci']) + '&side=' + other
+    pr2 = p + 'practice/?o=' + o['slug'] + '&side=' + other
     body += f'''
 <section class="sec"><div class="wrap">
   <h2>{t['s_cont']}</h2>
@@ -1621,9 +1670,9 @@ def build():
     names = name_lines()
     book = book_moves()
     classify_all(book)
-    check_marks()
     write_slugs()
     write_reasons()
+    check_marks()   # 이유 글(why)은 write_reasons가 조각에 쓴 뒤에 본다
     changed = DATA.save()
     pawn_index = {}
     for o in OPENINGS:

@@ -229,7 +229,7 @@
   },
   {
    "san": "Bf4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 16,
    "games": 1237,
    "share": 0.0033,

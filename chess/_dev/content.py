@@ -221,9 +221,9 @@ def data_doc(lang, meta):
 <p>리체스 평가 데이터베이스(lichess_db_eval)에서 우리 판을 찾아 붙였어요. 판 {ev:,}개에 점수가 있어요. 점수는 백 쪽에서 본 폰 단위(+0.5 = 백이 폰 반 개만큼 좋음)이고, #3은 3수 안에 메이트예요.</p>
 <h2>수를 네 단계로 나누는 법</h2>
 <ol><li>엔진 점수를 승리 확률로 바꾸고(리체스와 같은 식), 이 판에서 둘 수 있는 가장 좋은 수보다 둔 쪽의 승리 확률이 몇 %p 떨어지는지 봐요.</li>
-<li>3.5%p 미만이면 건전한 수예요. 그 가운데 고수가 가장 많이 두는 수가 <b>메인</b>, 고수의 10% 넘게 두는 수는 <b>대안</b>이에요. 고수는 대회 2400 이상(그 판이 대회에서 30판 넘게 나왔을 때), 아니면 리체스 2000 이상이에요.</li>
+<li>3.5%p 미만이면 건전한 수예요. 그 가운데 고수가 가장 많이 두는 수가 <b>메인</b>, 고수의 3% 넘게 두는 수는 <b>대안</b>이에요. 해설이 다루는 오프닝·갈래를 정하는 수(프렌치의 1...e6 같은)는 고수의 0.5%만 둬도 <b>대안</b>이에요. 고수는 대회 2400 이상(그 판이 대회에서 30판 넘게 나왔을 때), 아니면 리체스 2000 이상이에요.</li>
 <li>3.5~8%p는 <b>사이드</b>, 8~15%p는 <b>의심스러운 수</b>(?!), 15%p 넘게 떨어지면 <b>나쁜 수</b>(?)예요.</li>
-<li>해설의 메인라인에서 오프닝 이름이 정해진 뒤의 수는 이름난 이론을 따라 <b>메인</b>으로 둡니다. 오프닝·갈래를 정하는 수(프렌치의 1...e6 같은)는 엔진이 크게 나쁘다고 하지 않으면(8%p 미만) 적어도 <b>대안</b>으로 둬요. 엔진 점수가 없는 수는 고수 비율로만 나눠요.</li></ol>
+<li>해설의 메인라인에서 오프닝 이름이 정해진 뒤의 수는 이름난 이론을 따라 <b>메인</b>으로 둡니다. 건전하지 않은 수(3.5%p 이상)는 해설이 있어도 대안으로 올리지 않아요. 엔진 점수가 없는 수는 고수 비율로만 나눠요.</li></ol>
 <p>많이 두는 수가 꼭 좋은 수는 아니에요. 그래서 레이팅대에서 많이 두지만 엔진이 싫어하는 수에는 '인기 함정수' 표시를 달아요.</p>
 <h2>이름</h2>
 <p>오프닝 이름과 ECO 분류는 리체스가 공개한 <a href="https://github.com/lichess-org/chess-openings">chess-openings</a> 목록({nm:,}개)을 써요. 한국어 이름은 우리 용어표로 옮겼어요.</p>
@@ -245,9 +245,9 @@ def data_doc(lang, meta):
 <p>Taken from the Lichess evaluation database (lichess_db_eval) for our positions: {ev:,} positions have a score. Scores are from White’s side in pawns (+0.5 = White is half a pawn better); #3 means mate in 3.</p>
 <h2>How moves are sorted</h2>
 <ol><li>Engine scores are turned into winning chances (the same formula Lichess uses), and we look at how many percentage points the side to move gives up compared with the best move in that position.</li>
-<li>Less than 3.5 points: a sound move. Among sound moves, the one strong players choose most is the <b>main</b> move; others chosen in more than 10% of strong players’ games are <b>alternatives</b>. Strong players means masters rated 2400+ in events (when the position appears in more than 30 such games), otherwise Lichess players rated 2000+.</li>
+<li>Less than 3.5 points: a sound move. Among sound moves, the one strong players choose most is the <b>main</b> move; others chosen in more than 3% of strong players’ games are <b>alternatives</b>. A move that defines an opening or variation covered by a guide (like 1...e6 for the French) needs only 0.5%. Strong players means masters rated 2400+ in events (when the position appears in more than 30 such games), otherwise Lichess players rated 2000+.</li>
 <li>3.5 to 8 points: <b>side line</b>. 8 to 15: <b>dubious</b> (?!). More than 15: <b>mistake</b> (?).</li>
-<li>In a guide’s main line, the moves after the opening is named follow established theory and are marked <b>main</b>. The moves that define an opening or variation (like 1...e6 for the French) are marked at least <b>alternative</b> unless the engine gives up 8 points or more. Moves without an engine score are sorted by how often strong players choose them.</li></ol>
+<li>In a guide’s main line, the moves after the opening is named follow established theory and are marked <b>main</b>. A move that is not sound (3.5 points or more) is never raised to alternative, even when a guide covers it. Moves without an engine score are sorted by how often strong players choose them.</li></ol>
 <p>The most played move is not always a good move, so moves that are popular at a rating level but disliked by the engine get a “popular trap” mark.</p>
 <h2>Names</h2>
 <p>Opening names and ECO codes come from the <a href="https://github.com/lichess-org/chess-openings">chess-openings</a> list that Lichess publishes ({nm:,} entries).</p>
@@ -317,8 +317,9 @@ TX = {
         's_vars': 'Variations', 's_same': 'Same position, other move orders', 's_same_p': 'Ways players reach the same position, and openings with the same pawn structure.',
         's_same_orders': 'Move orders that reach this position', 's_same_pawns': 'Same pawn structure', 's_same_none': 'Almost everyone reaches this position by the move order above.',
         's_learn': 'Who should learn it, and how this page was checked', 's_cont': 'Keep going',
-        'learn_band': 'Worth learning from: {band}', 'learn_why': 'This is the first rating level where at least 1 in 200 games reaches the position.',
-        'learn_any': 'Common at every level', 'learn_high': 'Mostly seen at 2000+',
+        'learn_band': 'Common at: {band}', 'learn_why': 'At these rating levels at least 1 in 200 games reaches this position.',
+        'learn_any': 'Common at every rating level', 'learn_any_why': 'At every rating level at least 1 in 200 games reaches this position.', 'learn_rare': 'Rare at every rating level',
+        'learn_rare_why': 'Fewer than 1 in 200 games reach this position at any level. Learn the best answer for the day you meet it.',
         'rv': ['Written by AI', 'Played through by the engine', 'Read by a person'],
         'rv_sec': {'short': 'One-line summary', 'main': 'Move reasons', 'next': 'Next-move types', 'traps': 'Traps', 'plans': 'Plans', 'vars': 'Variations', 'stats': 'Numbers'},
         'rv_note': 'Lines and traps are played move by move with chess.js on every build; traps marked mate are checked to be mate. Numbers are counted from games, not written.',
@@ -359,6 +360,7 @@ TX = {
         'fm_first': 'First move', 'fm_cards': 'Openings that start here',
         'list_by_first': 'By first move',
         'best_side': ['For White', 'For Black'], 'best_score': 'Score', 'best_games': 'Games', 'best_pop': 'How often', 'best_none': 'Not enough games at this level.',
+        'best_mark': 'A label after a name means the opening includes a move the map marks as a side line or worse.',
         'best_note': 'Score = (wins + half the draws) ÷ games, for the side that chooses the opening, between players at that level. Only openings reached in at least 1 in 400 games at that level are listed. A high score often means the opening sets problems that players at that level do not solve; it does not mean it is objectively best.',
         'home_map': 'Open the map', 'home_test': 'Take the opening test', 'home_list': 'All openings', 'home_best': 'Best openings at my rating',
         'home_first_h': 'Start from the first move', 'home_popular_h': 'Most played openings', 'home_how_h': 'How it works',
@@ -380,8 +382,9 @@ TX = {
         's_vars': '세부 갈래', 's_same': '같은 판, 다른 수순', 's_same_p': '같은 판에 다른 순서로 오는 길과, 폰 모양이 같은 오프닝이에요.',
         's_same_orders': '이 판에 오는 수순', 's_same_pawns': '폰 모양이 같은 오프닝', 's_same_none': '거의 모두 위 수순으로 이 판에 와요.',
         's_learn': '배울 레이팅대와 검토 상태', 's_cont': '이어 가기',
-        'learn_band': '배우기 좋은 때: {band}', 'learn_why': '200판에 1판 넘게 이 판에 오는 첫 레이팅대예요.',
-        'learn_any': '모든 레이팅대에서 흔해요', 'learn_high': '주로 2000 이상에서 나와요',
+        'learn_band': '자주 나오는 레이팅대: {band}', 'learn_why': '이 레이팅대에서는 200판에 1판 넘게 이 판에 와요.',
+        'learn_any': '모든 레이팅대에서 흔해요', 'learn_any_why': '모든 레이팅대에서 200판에 1판 넘게 이 판에 와요.', 'learn_rare': '어느 레이팅대에서나 드물어요',
+        'learn_rare_why': '어느 레이팅대에서도 200판에 1판이 안 돼요. 만났을 때 둘 가장 좋은 응수만 알아 두세요.',
         'rv': ['AI가 씀', '엔진으로 둬 봄', '사람이 봄'],
         'rv_sec': {'short': '한 줄 설명', 'main': '수마다 이유', 'next': '다음 수 단계', 'traps': '함정', 'plans': '계획', 'vars': '갈래', 'stats': '숫자'},
         'rv_note': '수순과 함정은 빌드할 때마다 chess.js로 한 수씩 둬 보고, 메이트라고 적은 함정은 실제 메이트인지 봐요. 숫자는 쓴 것이 아니라 대국에서 센 것이에요.',
@@ -421,6 +424,7 @@ TX = {
         'fm_first': '첫 수', 'fm_cards': '여기서 시작하는 오프닝',
         'list_by_first': '첫 수별로',
         'best_side': ['백으로', '흑으로'], 'best_score': '점수', 'best_games': '판 수', 'best_pop': '나오는 비율', 'best_none': '이 레이팅대엔 판이 모자라요.',
+        'best_mark': '이름 뒤에 표시가 붙은 오프닝은 지도에서 사이드 라인 이하로 보는 수가 들어 있어요.',
         'best_note': '점수 = (이긴 판 + 비긴 판의 절반) ÷ 판 수, 그 오프닝을 고른 쪽 기준, 같은 레이팅대 사람들끼리. 그 레이팅대 400판에 1판 넘게 오는 오프닝만 올렸어요. 점수가 높다는 건 그 레이팅대 사람들이 잘 못 푸는 문제를 낸다는 뜻이 많고, 객관적으로 가장 좋다는 뜻은 아니에요.',
         'home_map': '지도 열기', 'home_test': '오프닝 실력 테스트', 'home_list': '오프닝 전부', 'home_best': '내 레이팅 추천 오프닝',
         'home_first_h': '첫 수부터 시작', 'home_popular_h': '많이 두는 오프닝', 'home_how_h': '이렇게 돌아가요',

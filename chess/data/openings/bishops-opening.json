@@ -92,7 +92,7 @@
   },
   {
    "san": "Nc6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 20,
    "games": 1651321,
    "share": 0.32218,

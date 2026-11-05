@@ -102,7 +102,7 @@
   },
   {
    "san": "e6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": -17,
    "games": 186559,
    "share": 0.10197,
@@ -112,7 +112,7 @@
   },
   {
    "san": "c5",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": -7,
    "games": 167472,
    "share": 0.09153,
@@ -122,7 +122,7 @@
   },
   {
    "san": "e5",
-   "type": "alternative",
+   "type": "side",
    "engine_eval_white_cp": 42,
    "games": 166300,
    "share": 0.09089,
@@ -142,7 +142,7 @@
   },
   {
    "san": "Nc6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 6,
    "games": 98162,
    "share": 0.05365,
@@ -162,7 +162,7 @@
   },
   {
    "san": "d6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 0,
    "games": 86997,
    "share": 0.04755,
@@ -172,7 +172,7 @@
   },
   {
    "san": "g6",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": -10,
    "games": 69579,
    "share": 0.03803,

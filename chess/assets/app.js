@@ -127,6 +127,7 @@
     this.loadLine(this.initLine(), root.getAttribute('data-ply') ? +root.getAttribute('data-ply') : null);
     if (this.sync) {
       window.addEventListener('hashchange', function () {
+        if (location.hash === '#main') return;
         var u = self.initLine(), cur = self.line.slice(0, self.ply).map(function (m) { return m.uci; });
         if (u.join('.') !== cur.join('.')) self.loadLine(u);
       });
@@ -406,6 +407,7 @@
     this.cur = s;
     if (this.sumEl) {
       if (failed) this.sumEl.textContent = T.load_fail;
+      else if (this.ch.isGameOver() && !(s && s.n)) this.sumEl.textContent = '';
       else if (!s || !(s.played || s.n)) this.sumEl.textContent = fmt(T.sum_none, { band: bandName(this.band) });
       // 이 국면까지 온 판 수(레이팅 표와 같은 숫자). 다음 수가 적힌 판(played)은 대국이 거기서 끝난 판만큼 적다
       else this.sumEl.innerHTML = fmt(T.sum, { n: '<b>' + FM.count(Math.max(s.n || 0, s.played), L) + '</b>', band: esc(bandName(this.band)) });
@@ -563,17 +565,23 @@
     if (FIND) return Promise.resolve(FIND);
     if (!FINDP) FINDP = fetch(C.find.src).then(function (r) { return r.json(); }).then(function (j) {
       FIND = j.map(function (x) {
-        var hay = norm(x[1] + ' ' + x[2] + ' ' + x[3] + ' ' + (x[5] || ''));
-        return { k: x[0], en: x[1], ko: x[2], eco: x[3], tail: x[4], hay: hay, hayC: hay.replace(/ /g, ''), words: hay.split(' ') };
+        var hay = norm(x[1] + ' ' + x[2] + ' ' + x[3] + ' ' + (x[5] || '')), hn = norm(x[1] + ' ' + x[2] + ' ' + (x[5] || ''));
+        // 수처럼 생긴 말(e4, c4)은 ECO 코드(E41, C44)에 걸리지 않게 코드를 뺀 칸(nx)으로 찾는다
+        return { k: x[0], en: x[1], ko: x[2], eco: x[3], tail: x[4], hay: hay, hayC: hay.replace(/ /g, ''), words: hay.split(' '),
+          nx: { hay: hn, hayC: hn.replace(/ /g, ''), words: hn.split(' ') } };
       });
       return FIND;
     });
     return FINDP;
   }
-  // 아포스트로피는 붙여 지우고(king's → kings), 한국어 '퀸즈·킹즈'는 '퀸스·킹스'로 같이 본다
+  // 아포스트로피는 붙여 지우고(king's → kings), 한국어 '즈'는 '스'로 같이 본다(퀸즈갬빗 = 퀸스 갬빗)
   function norm(s) {
-    return String(s).toLowerCase().replace(/[’'`´]/g, '').replace(/[.,:;()\-–—_/]+/g, ' ').replace(/즈(?=\s|$)/g, '스').replace(/\s+/g, ' ').trim();
+    return String(s).toLowerCase().replace(/[’'`´]/g, '').replace(/[.,:;()\-–—_/]+/g, ' ').replace(/즈/g, '스').replace(/\s+/g, ' ').trim();
   }
+  // 이름에서 흔한 꼬리말을 뺀 알맹이: 'sicilian'을 치면 Sicilian Defense 해설이 Sicilian Kan보다 먼저
+  var GENERIC = /\b(defense|defence|opening|game|attack|gambit|system|variation)\b|디펜스|오프닝|게임|어택|갬빗|시스템|변화/g;
+  function core(s) { return s.replace(GENERIC, ' ').replace(/\s+/g, '').trim(); }
+  var MOVE_TOK = /^(?:\d+\.+)?(?:[KQRBNkqrbn]?[a-h]?[1-8]?x?[a-h][1-8](?:=?[QRBNqrbn])?|[Oo0]-[Oo0](?:-[Oo0])?)[+#!?]*$/;
   // 한 글자 틀림·뒤바뀜(najdrof → najdorf)까지 같은 말로 본다
   function near(a, b) {
     if (Math.abs(a.length - b.length) > 1) return false;
@@ -589,7 +597,7 @@
   }
   function wordHit(x, w) {
     if (x.hay.indexOf(w) >= 0) return 2;
-    if (w.length < 5) return 0;
+    if (w.length < (/[가-힣]/.test(w) ? 3 : 5)) return 0;
     for (var i = 0; i < x.words.length; i++) {
       var h = x.words[i];
       if (near(w, h) || (h.length > w.length && near(w, h.slice(0, w.length)))) return 1;
@@ -647,7 +655,8 @@
     if (!q) { this.close(); return; }
     findData().then(function (data) {
       if (norm(self.input.value) !== q) return;
-      var words = q.split(' '), qc = q.replace(/ /g, ''), hits = [];
+      var words = q.split(' '), qc = q.replace(/ /g, ''), hits = [], qcore = core(q);
+      var moveLike = String(raw).trim().split(/\s+/).every(function (t) { return MOVE_TOK.test(t) || /^\d+\.+$/.test(t); });
       // 수 입력: 그 수순의 판을 지도에서 연다(이름이 있는 수순이면 그 이름과 함께 맨 위)
       var mv = /[a-h][1-8]|o-o/i.test(raw) ? movesOf(raw) : null, top = [];
       if (mv && mv.length) {
@@ -655,16 +664,16 @@
         top.push(named || { k: 'm', en: numbered(mv), ko: numbered(mv), eco: '', tail: h });
       }
       data.forEach(function (x) {
-        var ok = true, fuzzy = false;
-        if (x.hayC.indexOf(qc) < 0) {
+        var ok = true, fuzzy = false, H = moveLike ? x.nx : x;
+        if (H.hayC.indexOf(qc) < 0) {
           for (var i = 0; i < words.length; i++) {
-            var w = wordHit(x, words[i]);
+            var w = wordHit(H, words[i]);
             if (!w) { ok = false; break; }
             if (w === 1) fuzzy = true;
           }
         }
         if (!ok) return;
-        var name = norm(L === 'ko' ? x.ko : x.en), score = (x.k === 'p' ? 0 : x.k === 'f' ? 1 : 2) * 10 + (name.indexOf(q) === 0 ? 0 : x.hay.indexOf(q) >= 0 ? 3 : 6) + Math.min(name.length / 40, 3) + (fuzzy ? 4 : 0);
+        var name = norm(L === 'ko' ? x.ko : x.en), score = (x.k === 'p' ? 0 : x.k === 'f' ? 1 : 2) * 10 + (name.indexOf(q) === 0 ? 0 : H.hay.indexOf(q) >= 0 ? 3 : 6) + Math.min(name.length / 40, 3) + (fuzzy ? 4 : 0) - (qcore && core(name) === qcore ? 5 : 0);
         hits.push({ x: x, s: score });
       });
       hits.sort(function (a, b) { return a.s - b.s; });
@@ -1054,7 +1063,7 @@
   Quiz.prototype.set = function (s) { this.state = s; this.root.setAttribute('data-state', s === 'fb' ? 'q' : s); };
   Quiz.prototype.act = function (a) {
     if (a === 'start' || a === 'again') this.start();
-    else if (a === 'next') this.next();
+    else if (a === 'next') { if (this.state === 'fb') this.next(); }
     else if (a === 'share') this.share();
     else if (a === 'save') this.save();
   };
@@ -1300,6 +1309,17 @@
     $$('[data-quiz]').forEach(function (r) { new Quiz(r); });
   }
   $$('[data-best]').forEach(bestTabs);
+  // 본문으로 건너뛰기: 주소에 #main을 붙이지 않는다(지도 주소의 수가 지워지지 않게)
+  $$('.skip').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var m = document.getElementById('main');
+      if (!m) return;
+      e.preventDefault();
+      m.setAttribute('tabindex', '-1');
+      m.focus({ preventScroll: true });
+      m.scrollIntoView();
+    });
+  });
   // 펼치기(움7: 높이 0fr→1fr)
   $$('[data-fold]').forEach(function (b) {
     b.addEventListener('click', function () {

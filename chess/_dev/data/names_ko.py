@@ -176,8 +176,19 @@ PHRASE.update({
     "Smyslov": "스미슬로프", "Keres": "케레스", "Najdorf": "나이도르프", "Scheveningen": "스헤베닝언", "Taimanov": "타이마노프", "Kan": "칸",
     "Paulsen": "파울센", "Morphy": "모피", "Anderssen": "안데르센", "Steinitz": "슈타이니츠", "Lasker": "라스커", "Alekhine": "알레힌", "Nimzowitsch": "님조비치",
 })
+# 재평가(2026-11-05) 뒤 더: 흔한 낱말·땅 이름과, 해설·지도에 자주 나오는 이름
+PHRASE.update({
+    "Anglo-Slav": "앵글로 슬라브", "Slav": "슬라브", "London": "런던", "French": "프렌치", "Caro": "카로", "Wade": "웨이드", "Mate": "메이트",
+    "Fool's Mate": "풀스 메이트", "Three": "스리", "Clam": "클램", "Folly": "폴리", "Drunken": "드렁큰", "Connection": "커넥션", "Arctic": "아크틱",
+    "Canal": "카날", "Stein": "슈타인", "Miles": "마일스", "Fritz": "프리츠", "Bernstein": "베른슈타인", "Myers": "마이어스", "Salvio": "살비오",
+    "Leonhardt": "레온하르트", "Noteboom": "노테봄", "Zilbermints": "질베르민츠", "Pachman": "파흐만", "Harrwitz": "하르비츠",
+    "Czerniak": "체르니아크", "Gurgenidze": "구르게니제", "Berger": "베르거", "Rosenthal": "로젠탈", "Yates": "예이츠", "Showalter": "쇼월터",
+    "Shirov": "시로프", "Mokele Mbembe": "모켈레 음벰베", "El Columpio": "엘 콜룸피오", "Diemer": "디머", "Frankenstein-Dracula": "프랑켄슈타인-드라큘라",
+    "Charousek": "차로우세크", "Gunsberg": "군스베르크", "Basman": "바스만", "Trifunovic": "트리푸노비치", "Svenonius": "스베노니우스",
+    "Cunningham": "커닝엄", "Bardeleben": "바르델레벤", "Kholmov": "홀모프", "Makogonov": "마코고노프", "Stahlberg": "스톨베리", "Ulvestad": "울베스타드",
+})
 # 접두어: Anti-베노니 → 안티 베노니
-PREFIX = {"Franco-": "프랑코 ", "Anti-": "안티 ", "Semi-": "세미 ", "Pseudo-": "유사 ", "Neo-": "네오 ", "Anglo-": "앵글로 ", "Ultra-": "울트라 "}
+PREFIX = {"Nimzo-": "님조 ", "Hamppe-": "함페-", "Franco-": "프랑코 ", "Anti-": "안티 ", "Semi-": "세미 ", "Pseudo-": "유사 ", "Neo-": "네오 ", "Anglo-": "앵글로 ", "Ultra-": "울트라 "}
 
 _PH = sorted(PHRASE.items(), key=lambda kv: -len(kv[0]))
 
@@ -200,6 +211,7 @@ def ko_name(name):
         for en, ko in PREFIX.items():
             p = re.sub(r"(?<![A-Za-zÀ-ž'])" + re.escape(en), ko, p)
         p = ' '.join(WORD.get(w, w) for w in p.split(' ')).strip()
+        p = re.sub(r"(?<=[가-힣])['’]s(?![A-Za-z])", '', p)   # 겔러's 시스템 → 겔러 시스템
         p = ' '.join(p.split())
         parts.append(p)
     return k + ': ' + ', '.join(x for x in parts if x)

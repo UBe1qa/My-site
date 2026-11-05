@@ -310,8 +310,8 @@
   {
    "ply": 10,
    "san": "Na5",
-   "why_en": "Hits the bishop; 5...Nxd5? lets White hit f7 with Nxf7 or d4.",
-   "why_ko": "비숍을 쳐요. 5...Nxd5?는 Nxf7이나 d4로 f7이 위험해요."
+   "why_en": "Hits the bishop; 5...Nxd5?! lets White hit f7 with Nxf7 or d4.",
+   "why_ko": "비숍을 쳐요. 5...Nxd5?!는 Nxf7이나 d4로 f7이 위험해요."
   },
   {
    "ply": 11,

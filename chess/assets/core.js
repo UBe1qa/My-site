@@ -90,7 +90,8 @@
     if (v == null) return '';
     if (typeof v === 'string') return '#' + v.slice(1);
     var p = v / 100;
-    return (p > 0 ? '+' : p < 0 ? '−' : '') + fix(Math.abs(p), Math.abs(p) >= 10 ? 0 : 1);
+    var t = fix(Math.abs(p), Math.abs(p) >= 10 ? 0 : 1);
+    return (+t === 0 ? '' : p > 0 ? '+' : p < 0 ? '−' : '') + t;
   };
   FM.evWin = function (v) {
     if (v == null) return null;
@@ -107,7 +108,7 @@
   FM.pct = function (x, digits) {
     var v = x * 100;
     if (v > 0 && v < 0.1) return '<0.1%';
-    if (v > 0 && v < 1) return fix(v, 1) + '%';
+    if ((v > 0 && v < 1) || (digits == null && v >= 99.5 && v < 100)) return fix(v, 1) + '%';
     return fix(v, digits == null ? 0 : digits) + '%';
   };
   FM.count = function (n, lang) {

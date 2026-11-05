@@ -276,8 +276,8 @@
   {
    "ply": 6,
    "san": "d6",
-   "why_en": "Kicks the knight before taking back on e4; 3...Nxe4? 4.Qe2 is bad for Black.",
-   "why_ko": "e4를 되찾기 전에 나이트부터 쫓아요. 바로 3...Nxe4?는 4.Qe2로 흑이 나빠요."
+   "why_en": "Kicks the knight before taking back on e4; the direct 3...Nxe4 runs into 4.Qe2 and leaves Black the harder game.",
+   "why_ko": "e4를 되찾기 전에 나이트부터 쫓아요. 바로 3...Nxe4는 4.Qe2에 걸려 흑이 두기 어려워요."
   },
   {
    "ply": 7,

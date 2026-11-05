@@ -16,6 +16,7 @@ from pathlib import Path
 
 SHARDS = 4096
 SOUND, SIDE, DUB = 3.5, 8.0, 15.0
+ALT_SHARE, ALT_THEORY = 0.03, 0.005   # 대안이 되는 고수 비율(해설이 정하는 수는 더 낮게)
 
 
 def fnv(s):
@@ -118,8 +119,9 @@ class Data:
 
     def classify(self, epd, book=(), theory=()):
         """이 판의 수마다 분류를 정해 행의 두 번째 칸에 쓴다. book = 메인으로 고정할 수(SAN)들,
-        theory = 해설의 오프닝·갈래를 정하는 수(SAN)들: 사이드(2)로 나오면 대안(1)으로 올린다(프렌치 1...e6이 '사이드'로 보이던 것, 평가 2026-11-05 M4).
-        의심(3)·나쁨(4)은 그대로 둔다(엔진이 크게 싫어하는 갬빗은 해설이 있어도 그렇게 보인다)."""
+        theory = 해설의 오프닝·갈래를 정하는 수(SAN)들.
+        대안(1) = 건전하고(손해 3.5%p 미만) 고수의 3% 넘게 두는 수. 해설이 다루는 오프닝·갈래를 정하는 수는 0.5%면 된다
+        (프렌치 1...e6·피르츠 1...d6은 대안, 오언 1...b6·엘리펀트 2...d5는 엔진 손해가 커서 사이드. 평가 2026-11-05 M4·재평가 N2)."""
         e = self.E[epd]
         rows = e[2]
         if not rows:
@@ -162,12 +164,10 @@ class Data:
                 r[1] = 0
             elif c in ('sound', None):
                 sh = share.get(r[0], 0)
-                r[1] = 1 if (sh >= 0.10 and (c == 'sound' or sh >= 0.25)) else 2
+                need = ALT_THEORY if r[0] in theory else ALT_SHARE
+                r[1] = 1 if ((c == 'sound' and sh >= need) or sh >= 0.25) else 2
             else:
                 r[1] = c
-        for r in rows:
-            if r[0] in theory and r[1] == 2:
-                r[1] = 1
         for i, r in enumerate(rows):
             if r[0] in book:
                 if r[1] != 0:

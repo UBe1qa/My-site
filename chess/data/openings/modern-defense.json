@@ -155,7 +155,7 @@
   },
   {
    "san": "c4",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 55,
    "games": 83622,
    "share": 0.05891,
@@ -165,7 +165,7 @@
   },
   {
    "san": "Bc4",
-   "type": "alternative",
+   "type": "side",
    "engine_eval_white_cp": 24,
    "games": 23881,
    "share": 0.01682,

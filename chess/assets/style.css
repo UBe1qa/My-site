@@ -58,6 +58,7 @@
   }
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font); word-break: keep-all; overflow-wrap: anywhere; }
 a { color: var(--acc); text-underline-offset: 3px; }
@@ -189,7 +190,7 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 /* 옆 칸 */
 .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; min-width: 0; }
 @media (max-width: 899px) { .panel { padding: 12px; } }
-.loading .st tbody, .loading [data-name], .loading [data-sum], .loading [data-crumb], .loading [data-pass], .loading [data-tree-svg] { opacity: .35; transition: opacity .2s .12s; }
+.loading .st tbody, .loading [data-name], .loading [data-sum], .loading [data-crumb], .loading [data-pass], .loading [data-tree-svg], .loading [data-ev] { opacity: .35; transition: opacity .2s .12s; }
 .bands { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
 .bands .lbl { font-size: 13px; color: var(--mute); margin-right: 2px; }
 .chip { border: 1px solid var(--line2); background: transparent; border-radius: 999px; padding: 0 12px; min-height: 36px; font-size: 14px; cursor: pointer; position: relative; }
@@ -229,8 +230,9 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .shb { display: inline-block; width: 26px; height: 6px; border-radius: 3px; background: var(--line); margin-right: 6px; vertical-align: 2px; position: relative; overflow: hidden; }
 .shb::after { content: ''; position: absolute; inset: 0; background: var(--acc); transform-origin: left; transform: scaleX(var(--s)); }
 .st .ng { width: 60px; color: var(--mute); white-space: nowrap; }
-@media (max-width: 440px) { .st .shb { display: none; } .st .sh { width: 48px; } .st td, .st tbody th { padding: 0 4px; } .st .wdl { min-width: 0; width: auto; } }
 .st .wdl { width: 46%; min-width: 130px; }
+/* 폰: 수 표가 카드 안에 들어가게(넓은 화면 규칙보다 뒤에 둬야 이긴다) */
+@media (max-width: 440px) { .st .shb { display: none; } .st .sh { width: 48px; } .st td, .st tbody th { padding: 0 4px; } .st .wdl { min-width: 0; width: auto; } .st .cl { margin-left: 4px; padding: 3px 4px; } }
 .bar { display: flex; height: 22px; border-radius: 5px; overflow: hidden; font-size: 11px; line-height: 22px; font-weight: 650; border: 1px solid var(--line2); }
 .bar i { font-style: normal; text-align: center; overflow: hidden; white-space: nowrap; }
 .bar .w { background: var(--w-seg); color: #222; }
@@ -285,6 +287,12 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .tbl th, .tbl td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .tbl thead th { color: var(--mute); font-weight: 600; font-size: 13px; }
 .tblbox { overflow-x: auto; }
+/* 표가 상자보다 넓으면 오른쪽(또는 왼쪽)에 그림자가 생겨 옆으로 밀 수 있다고 알려 준다 */
+.tblbox { background:
+  linear-gradient(to right, var(--bg) 30%, transparent) left / 28px 100% no-repeat local,
+  linear-gradient(to left, var(--bg) 30%, transparent) right / 28px 100% no-repeat local,
+  radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .22), transparent) left / 12px 100% no-repeat scroll,
+  radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .22), transparent) right / 12px 100% no-repeat scroll; }
 /* 움7: 갈래 펼치기(높이 auto까지) */
 .vars { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
 .var { border-bottom: 1px solid var(--line); }
@@ -389,6 +397,7 @@ code, .san { font-family: var(--mono); font-size: .92em; }
 .cta-b { display: flex; gap: 8px; flex-wrap: wrap; }
 .bcol .bands { margin-bottom: 8px; }
 .st thead th { white-space: nowrap; }
+@media (max-width: 440px) { .st thead th:nth-child(3) { white-space: normal; } }
 .tbl.bt th, .tbl.bt td { white-space: nowrap; }
 .tbl.bt td.wdl { white-space: normal; }
 @media (max-width: 520px) { .tbl.bt th, .tbl.bt td { padding: 8px 4px; } .tbl.bt { font-size: 13px; } .tbl.bt .wdl { min-width: 0; width: auto; } .tbl.bt .bar { font-size: 10px; } .tbl.bt thead small { display: none; } .tbl.bt thead th { white-space: normal; } .bcol .bands { gap: 5px; } .bcol .bands .lbl { width: 100%; margin-bottom: -2px; font-size: 12px; } .bcol .bands .chip { padding: 0 9px; font-size: 13px; } }

@@ -117,7 +117,7 @@
   },
   {
    "san": "Nd2",
-   "type": "side",
+   "type": "alternative",
    "engine_eval_white_cp": 27,
    "games": 172285,
    "share": 0.04074,
