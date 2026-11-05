@@ -13,7 +13,7 @@
   - 만든 가이드 HTML(`guide/`·`ko/guide/`)은 `lumenlab/_dev/build_home.py`가 읽어 lumenlab.page/guides/chess/에 싣는 원본이다. 이 사이트는 가이드 주소를 그리로 301(`_redirects`)하고 sitemap·배포에서 뺀다. 글을 고치면 이 도구를 빌드한 뒤 `python3 -B lumenlab/_dev/build_home.py`.
 - `data/` 통계(배포됨, 18MB): `meta.json`(판 수·레이팅대별 시작 판 수), `p/00.json`~`ff.json`(256조각, 조각 = EPD의 FNV-1a 아래 8비트). 조각 = `{"e": {epd: [둔 수 12칸, 온 판 12칸, [수, 백승·무·흑승 × 레이팅대 4]...]}, "n": {epd: [ECO, 영어, 한국어, slug?]}}`. `_headers`가 `/data/*`에 CORS를 연다(루멘랩 홈 '바로 써 보기'가 읽음).
 - `_dev/data/` 통계 만들기(저장소 밖 빈 폴더에서, python-chess·zstandard 필요): `count.py <lichess .pgn.zst> <counts>` → `make_data.py <counts> chess/data` → `build.py`. 이름 = `_dev/openings/*.tsv`(lichess-org/chess-openings, CC0), 한국어 이름 = `names_ko.py`.
-- `assets/core.js` 숫자 읽기(DOM 모름: 조각 받기·레이팅대 합·비율·이름 찾기, 전역 `FM`), `board.js` 판(끌기·누르기·화살표 굵기 5+40×비율·승격), `app.js` 화면 연결(탐색기·연습 상태 기계·간격 반복), `style.css`, `pieces.css`(`_dev/pieces.py`가 `_dev/pieces/*.svg` Cburnett로 만듦), `ads-config.js`(광고 단위 번호, 지금은 빔).
+- `assets/core.js` 숫자 읽기(DOM 모름: 조각 받기·레이팅대 합·비율·이름 찾기, 전역 `FM`), `board.js` 판(끌기·누르기·화살표 굵기 5+40×비율·승격, 말 자리는 CSS `translate` 속성), `fx.js` 손맛(Web Audio로 합성한 효과음·입자, 전역 `FM.Sfx`·`FM.Fx`, 파일 없음), `app.js` 화면 연결(탐색기·연습 상태 기계·간격 반복), `style.css`, `pieces.css`(`_dev/pieces.py`가 `_dev/pieces/*.svg` Cburnett로 만듦), `ads-config.js`(광고 단위 번호, 지금은 빔).
 - `tests/run.mjs` 로직 시험(41개), `_dev/check.py` 정적 검사(가이드 규칙 포함), `_dev/serve.mjs` 로컬 서버(8472), `_dev/og.cjs` 공유 그림·아이콘(서버를 띄운 뒤).
 
 ## 명령어
@@ -23,7 +23,8 @@
 ## 동작 기준(화면 글과 같아야 한다)
 - 레이팅대 = 두 사람 평균 <1200 / 1200–1599 / 1600–1999 / 2000+, 기본 1600–1999. 60판 미만 국면, 6판 미만 수는 싣지 않는다. 숫자는 2026년 10월 리체스 레이팅 대국(블리츠·래피드·클래식) 앞부분 17,395,175판.
 - 연습: 내 수 = 해설 주요 수순, 그다음은 2000+가 가장 많이 둔 수. 상대 수 = 고른 레이팅대에서 5% 넘는 수를 실제 비율대로. 틀림·힌트 = 그날 다시, 맞힘 = 1·3·7·16·35·90일 뒤.
-- 저장: localStorage `fm.band`·`fm.cards`·`fm.lang`(방침과 같다). 회원 가입·로그인 없음.
+- 저장: localStorage `fm.band`·`fm.cards`·`fm.lang`·`fm.sound`(방침과 같다). 회원 가입·로그인 없음.
+- 손맛: `board.set()`이 바뀐 말을 보고 수 종류(보통·뒤로·잡기·캐슬링·승격·여러 수 건너뛰기 + 체크)를 알아내 말이 닿는 순간(95ms, 끌어 놓으면 0) 소리·효과. `set(..., instant)`·`set(..., false, true)`(quiet)는 조용히. 연습은 `flash(sq, 'ok'|'warn'|'bad', {combo, from})`, 줄 끝 `celebrate(perfect)`. 효과음은 기본 켬(체스 사이트 관례), 판 아래 스피커 단추([data-sound])로 끄고 기억. 움직임 줄이기면 입자·흔들림 없이 색만(`FM.fxOK`). 루멘랩 홈 '바로 써 보기'는 fx.js 없이 board.js만 읽는다(소리·효과 없음, CSS는 `transition: translate`).
 - 광고: 자동 광고 코드는 탐색기·해설·연습 페이지에만(소개·방침·목록·404 없음). 수동 자리 `mid`·`bottom`은 단위 번호가 비어 있어 지금은 없다.
 
 ## 유지

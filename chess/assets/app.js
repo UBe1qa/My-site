@@ -453,7 +453,7 @@
     this.side = this.sideSel ? this.sideSel.value : 'w';
     this.board.setOrient(this.side);
     this.ch.reset();
-    this.done = []; this.ok = 0; this.bad = 0; this.extra = 0;
+    this.done = []; this.ok = 0; this.bad = 0; this.extra = 0; this.combo = 0;
     this.lineSan = [];
     if (review) {
       var today = FM.today(), cards = this.cards;
@@ -534,7 +534,7 @@
     if (this.state !== 'you') return;
     var before = this.ch.fen(), m;
     try { m = this.ch.move(mv); } catch (e) { m = null; }
-    if (!m) { this.board.set(before, null, kingSq(this.ch)); return; }
+    if (!m) { this.board.set(before, null, kingSq(this.ch), false, true); return; }
     var self = this, today = FM.today();
     if (m.san === this.expect) {
       this.ch.undo();
@@ -548,12 +548,12 @@
         store.set('fm.cards', this.cards);
       }
       this.ch.move(mv);
-      if (!this.wrongHere) this.ok++;
+      if (!this.wrongHere) { this.ok++; this.combo = (this.combo || 0) + 1; }
       if (this.ch.history().length > this.main.length) this.extra++;
       this.board.set(this.ch.fen(), [m.from, m.to], kingSq(this.ch));
       this.board.setHint(null);
       this.board.drawArrows([]);
-      this.board.flash(m.to, 'ok');
+      this.board.flash(m.to, 'ok', { combo: this.wrongHere ? 0 : this.combo });
       this.say(this.wrongHere ? T.fixed : fmt(T.right, { san: esc(m.san) }), 'ok');
       if (this.reviewMode) { this.setState('next'); setTimeout(function () { self.nextReview(); }, reduce ? 200 : 700); return; }
       this.setState('opp');
@@ -563,13 +563,14 @@
     // 틀림: 2000+가 15% 넘게 두는 수면 '둘 만한 수', 아니면 오답
     this.ch.undo();
     var epd = FM.epd(this.ch.fen()), en = FM.entrySync(epd), san = m.san;
-    this.board.set(this.ch.fen(), this.ch.history().length ? null : null, kingSq(this.ch));
+    this.board.set(this.ch.fen(), null, kingSq(this.ch), false, true);
     if (en && FM.playable(en, san)) {
       this.board.flash(m.to, 'warn');
       this.say(fmt(T.playable, { san: esc(san), want: esc(this.expect) }), 'warn');
       return;
     }
-    this.board.flash(m.to, 'bad');
+    this.combo = 0;
+    this.board.flash(m.to, 'bad', { from: m.from });
     if (!this.wrongHere) {
       this.bad++;
       this.wrongHere = true;
@@ -588,6 +589,7 @@
   };
   Drill.prototype.hint = function () {
     if (this.state !== 'you') return;
+    this.combo = 0;
     if (!this.wrongHere) {
       this.wrongHere = true; this.bad++;
       var key = this.reviewMode ? this.revKey : this.cardKey(), today = FM.today();
@@ -601,6 +603,7 @@
   };
   Drill.prototype.finish = function () {
     this.setState('end');
+    if (this.ok > 0) this.board.celebrate(this.bad === 0);
     this.updateDue();
     var hist = this.ch.history(), txt = '';
     for (var i = 0; i < hist.length; i++) txt += (i % 2 === 0 ? (i / 2 + 1) + '. ' : '') + hist[i] + ' ';

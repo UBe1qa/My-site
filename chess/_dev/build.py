@@ -43,7 +43,14 @@ IC = {
     'next': '<path d="M9 6l6 6-6 6" />',
     'last': '<path d="M18 5v14M6 6l7 6-7 6" />',
     'flip': '<path d="M8 4v15M4.5 15.5L8 19l3.5-3.5M16 20V5M12.5 8.5L16 5l3.5 3.5" />',
+    # 효과음: 켜짐(소리 물결)·꺼짐(X)을 같이 그리고 CSS가 aria-pressed로 하나만 보인다
+    'sound': '<path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z" /><path class="snd-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /><path class="snd-off" d="M16 9.5l5 5M21 9.5l-5 5" />',
 }
+
+
+def sound_btn(lang):
+    u = UI[lang]
+    return f'<button type="button" data-sound aria-pressed="true" aria-label="{u["sound"]}" title="{u["sound"]}">{icon("sound")}</button>'
 
 
 def icon(k):
@@ -347,7 +354,7 @@ GUIDES = {lang: {o['slug']: {'u': prefix(lang) + 'openings/' + o['slug'] + '/', 
 def page(lang, head_html, body, path, current=None, cfg=None, scripts=True):
     base = {'lang': lang, 't': UI[lang]['js'], 'practiceUrl': prefix(lang) + 'practice/', 'guides': GUIDES[lang]}
     base.update(cfg or {})
-    js = ''.join(f'<script src="/assets/{s}.js"></script>\n' for s in ('chess.min', 'core', 'board', 'app')) if scripts else '<script src="/assets/app.js"></script>\n'
+    js = ''.join(f'<script src="/assets/{s}.js"></script>\n' for s in ('chess.min', 'core', 'fx', 'board', 'app')) if scripts else '<script src="/assets/app.js"></script>\n'
     return f'''{head_html}
 <body>
 {header(lang, path, current)}
@@ -381,7 +388,7 @@ def board_html(fen, orient='w', last=None):
                 continue
             sq = FILES[f] + str(8 - r)
             x, y = xy(sq, orient)
-            pcs.append(f'<i class="pc {"w" if ch.isupper() else "b"}{ch.lower()}" style="transform:translate({x * 100}%,{y * 100}%)"></i>')
+            pcs.append(f'<i class="pc {"w" if ch.isupper() else "b"}{ch.lower()}" style="translate:{x * 100}% {y * 100}%"></i>')
             f += 1
     for sq in (last or []):
         x, y = xy(sq, orient)
@@ -449,7 +456,7 @@ def explorer(lang, r=None, orient='w', sync=False, head_html='', slug=''):
     guide = (f'<a class="guide-link" data-guide href="{g["u"]}">{u["guide_read"]} <b>{esc(g["n"])}</b></a>' if g
              else f'<a class="guide-link" data-guide href="{prefix(lang)}openings/" hidden>{u["guide_read"]} <b></b></a>')
     ctrls = ''.join(f'<button type="button" data-nav="{k}" aria-label="{u[k]}" title="{u[k]}"{" disabled" if (k in ("next", "last")) or (k in ("first", "prev") and not sans) else ""}>{icon(k)}</button>'
-                    for k in ('first', 'prev', 'next', 'last', 'flip'))
+                    for k in ('first', 'prev', 'next', 'last', 'flip')) + sound_btn(lang)
     attrs = f' data-orient="{orient}"' + (f' data-slug="{slug}"' if slug else '') + (f' data-line="{".".join(r["uci"])}"' if r else '') + (' data-url="sync"' if sync else '')
     pr = prefix(lang) + 'practice/' + (f'?o={slug}' if slug else '')
     return f'''<section class="tool" data-explorer{attrs}><div class="wrap">
@@ -760,7 +767,7 @@ def practice_page(lang):
     body = f'''<section class="tool drill" data-drill data-state="setup"><div class="wrap">
 <div class="tool-head"><h1>{P['h1']}</h1><p class="why">{P['why']}</p></div>
 <div class="grid">
-<div class="bcol"><div class="bwrap">{board_html(first['fen'], 'w', [first['uci'][-1][:2], first['uci'][-1][2:4]])}</div></div>
+<div class="bcol"><div class="bwrap">{board_html(first['fen'], 'w', [first['uci'][-1][:2], first['uci'][-1][2:4]])}</div><div class="ctrls ctrls-1">{sound_btn(lang)}</div></div>
 <div class="panel">
   <div class="row2 setup-only">
     <label class="field">{t['opening_lbl']}<select data-pick>{opts}</select></label>
