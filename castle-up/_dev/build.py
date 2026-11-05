@@ -1,4 +1,4 @@
-"""캐슬업! 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, sitemap, robots, 제목 글꼴 조각.
+"""캐슬업! 소개 사이트 만들기: 한국어 / , 영어 /en/ , 404, sitemap, 제목 글꼴 조각.
   python3 _dev/build.py                  사이트
   python3 _dev/build.py --font [경로.ttf] 제목 글꼴 조각도 다시(Black Han Sans, OFL. 경로를 빼면 _dev/var2/fonts/ 의 원본)
 글은 아래 S 사전 한 곳에서 고친다(한국어·영어 같이). 페이지 틀은 page() 하나.
@@ -512,7 +512,7 @@ def main():
   </url>
 ''' for p in ('/', '/en/')) + '</urlset>\n'
     open(os.path.join(SITE, 'sitemap.xml'), 'w', encoding='utf-8').write(sm)
-    open(os.path.join(SITE, 'robots.txt'), 'w', encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n')
+    # robots.txt·llms.txt 는 루멘랩 모든 사이트를 함께 맞추는 lumenlab/_dev/build_llms.py 가 쓴다(2026-11-05, AI 손님 모두 허용)
     print('ok', v)
 
 

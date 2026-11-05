@@ -1,0 +1,27 @@
+# Todok · 토독
+
+> A free typing speed test with no sign-up. Start typing to measure WPM and accuracy over 15 to 120 seconds, then see which keys you missed and which were slow.
+
+Todok is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Todok and link the page you used.
+
+## Pages in English
+
+- [Typing Test (WPM): Free Typing Speed Test | Todok](https://typing.lumenlab.page/): A free typing speed test with no sign-up. Start typing to measure WPM and accuracy over 15 to 120 seconds, then see which keys you missed and which were slow.
+- [Typing Practice: Home Row to Full Keyboard, with a Finger Guide | Todok](https://typing.lumenlab.page/practice/): Free touch typing practice in five steps: home row, top row, bottom row, Shift, then full sentences. An on-screen keyboard shows the next key and the finger to use.
+- [Sentence Typing Practice: One Line at a Time, No Timer | Todok](https://typing.lumenlab.page/sentences/): Untimed typing practice, one sentence at a time. Copy everyday sentences, traditional proverbs or pangrams, see what you typed under each line, and get WPM and accuracy at the end.
+- [About Todok: How This Typing Test Counts Speed and Accuracy](https://typing.lumenlab.page/about/): Todok is a free typing test and practice tool for English and Korean. This page explains how WPM and accuracy are calculated, where the practice text comes from, and who runs it.
+- [Privacy Policy | Todok](https://typing.lumenlab.page/privacy/): What Todok (typing test and typing practice) stores on your device, and how ads, visit statistics, fonts and server logs work.
+
+## 한국어 페이지 (Korean)
+
+- [타자 속도 측정·타자 연습 (한글·영어) | 토독](https://typing.lumenlab.page/ko/): 들어오자마자 치는 무료 타자 속도 측정이에요. 한글 두벌식 타수(타/분)와 정확도를 재고, 끝나면 자주 틀린 키와 느린 키를 자판 그림으로 알려 줘요.
+- [한글 타자 자리 연습: 두벌식 기본 자리부터 다섯 단계 | 토독](https://typing.lumenlab.page/ko/practice/): 두벌식 자판을 기본 자리, 윗줄, 아랫줄, Shift 키, 전체 순서로 익히는 무료 자리 연습이에요. 화면 자판이 다음에 누를 키와 손가락을 알려 줘요.
+- [타자 문장 연습: 짧은 글과 속담 따라 치기 | 토독](https://typing.lumenlab.page/ko/sentences/): 시간 제한 없이 한 문장씩 보고 치는 한글 타자 문장 연습이에요. 일상·계절·음식·일을 쓴 문장 200여 개와 전해 오는 속담을 골라 칠 수 있어요.
+- [영타 연습: 영어 타자 속도 측정 (타수·WPM) | 토독](https://typing.lumenlab.page/ko/english/): 영어 타자 속도를 타수(타/분)와 WPM으로 같이 재는 영타 연습이에요. 흔한 영어 단어와 문장을 치고, 끝나면 틀린 키와 느린 키를 알려 줘요.
+- [토독 소개: 타수를 어떻게 재는지와 만든 곳](https://typing.lumenlab.page/ko/about/): 토독은 한글과 영어 타자 속도를 재고 자주 틀린 키를 알려 주는 무료 도구예요. 타수와 정확도를 계산하는 기준, 연습 글의 출처, 만든 곳을 적었어요.
+- [개인정보 처리방침 | 토독](https://typing.lumenlab.page/ko/privacy/): 토독(타자 속도 측정·타자 연습)이 기기에 저장하는 것, 광고와 방문 통계, 글꼴과 서버 기록에 대한 안내예요.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

@@ -1,0 +1,30 @@
+# Staycode · 오래QR
+
+> Make a free QR code with your logo, colors and a frame, then check that it scans. It points straight to your link, so it never expires. PNG, SVG, PDF and EPS.
+
+Staycode is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Staycode and link the page you used.
+
+## Pages in English
+
+- [Free QR Code Generator — No Sign-up, Never Expires | Staycode](https://qr.lumenlab.page/): Make a free QR code with your logo, colors and a frame, then check that it scans. It points straight to your link, so it never expires. PNG, SVG, PDF and EPS.
+- [WiFi QR Code Generator — Scan to Join, Free | Staycode](https://qr.lumenlab.page/wifi/): Turn your WiFi name and password into a QR code guests scan to join. The password is processed on this device only. Style it as a sticker and print it.
+- [vCard QR Code Generator — Free Business Card QR | Staycode](https://qr.lumenlab.page/vcard/): Put your name, phone, email and company in a QR code that saves straight to contacts when scanned. Download print-ready SVG or PDF for business cards.
+- [Bulk QR Code Generator — CSV to ZIP, Free | Staycode](https://qr.lumenlab.page/bulk/): Paste a list or upload a CSV to make up to 1,000 QR codes at once and download them as a ZIP. Every code is test-scanned. One design for all. Free, no sign-up.
+- [QR Code Scanner Online — Check Links Before Opening | Staycode](https://qr.lumenlab.page/scan/): Scan a QR code with your camera or from a photo. See the real address and warning signs (short links, no encryption, odd domains) before opening anything.
+- [About Staycode — A Free QR Code Generator That Never Expires](https://qr.lumenlab.page/about/): Staycode is a free QR code generator by Lumen Lab. It makes static codes only, so they never expire, with design, print files, bulk and scan check, no sign-up.
+- [Privacy Policy | Staycode](https://qr.lumenlab.page/privacy/): What Staycode (QR code generator and scanner) stores on your device, how your content, logo and camera image are handled, and how ads and visit statistics work.
+
+## 한국어 페이지 (Korean)
+
+- [QR코드 만들기 — 무료, 만료 없는 QR 생성기 | 오래QR](https://qr.lumenlab.page/ko/): 가입 없이 무료로 QR코드를 만들어요. 로고·색·틀까지 꾸미고 찍히는지 바로 확인해요. 만든 QR은 이 사이트를 거치지 않아 멈추지 않아요. PNG·SVG·PDF·EPS 저장.
+- [와이파이 QR코드 만들기 — 찍으면 바로 연결 | 오래QR](https://qr.lumenlab.page/ko/wifi/): 와이파이 이름과 비밀번호를 넣으면 손님이 카메라로 찍어 바로 연결하는 QR코드가 나와요. 비밀번호는 이 기기 안에서만 처리하고, 스티커로 꾸며 인쇄해요.
+- [QR 명함 만들기 — 연락처 QR코드(vCard) 무료 | 오래QR](https://qr.lumenlab.page/ko/vcard/): 이름·전화·이메일·회사를 넣으면 찍자마자 휴대폰 연락처에 저장되는 QR코드가 나와요. 한글 이름도 그대로, 명함 인쇄용 SVG·PDF로 받아요.
+- [QR코드 대량 만들기 — 목록·CSV로 한 번에 ZIP | 오래QR](https://qr.lumenlab.page/ko/bulk/): 주소 목록이나 CSV 파일로 QR코드를 최대 1,000개까지 한 번에 만들어 ZIP으로 받아요. 줄마다 찍히는지 확인하고, 같은 꾸밈을 모두에 입혀요. 가입 없이 무료.
+- [QR코드 스캐너 — 열기 전에 주소부터 확인 | 오래QR](https://qr.lumenlab.page/ko/scan/): 카메라나 사진으로 QR코드를 읽고, 열기 전에 실제 주소와 위험 신호(짧은 주소·암호화 없음·이상한 도메인)를 먼저 보여 줘요. 화면은 이 기기 안에서만 처리해요.
+- [오래QR 소개 — 만료 없는 무료 QR코드 생성기 | 오래QR](https://qr.lumenlab.page/ko/about/): 오래QR은 루멘랩이 만든 무료 QR코드 생성기예요. 정적 QR만 만들어 만료가 없고, 꾸미기·인쇄 파일·대량 만들기·스캔 확인을 가입 없이 쓸 수 있어요.
+- [개인정보 처리방침 | 오래QR](https://qr.lumenlab.page/ko/privacy/): 오래QR(QR코드 만들기·스캐너)이 기기에 저장하는 것, 넣은 내용·로고·카메라 화면의 처리, 광고와 방문 통계에 대한 안내예요.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

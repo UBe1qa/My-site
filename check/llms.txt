@@ -1,0 +1,38 @@
+# Checkbench · 체크벤치
+
+> Test your keyboard, mouse, microphone, webcam, speakers, screen and gamepad on one page. Nothing to install. Mic and camera never leave your device.
+
+Checkbench is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Checkbench and link the page you used.
+
+## Pages in English
+
+- [Device Test: Keyboard, Mouse, Mic, Webcam, Screen | Checkbench](https://check.lumenlab.page/): Test your keyboard, mouse, microphone, webcam, speakers, screen and gamepad on one page. Nothing to install. Mic and camera never leave your device.
+- [Keyboard Tester: Check Every Key Online | Checkbench](https://check.lumenlab.page/keyboard-test/): Press each key and watch it light up. See keys that never register, how many keys work at once, and possible double-typing (chattering).
+- [Mouse Test: Buttons, Wheel and Double-Click Check | Checkbench](https://check.lumenlab.page/mouse-test/): Click each mouse button, roll the wheel and move the pointer. See which buttons respond, catch double-click faults and estimate the report rate.
+- [Mic Test: Check Your Microphone and Hear Yourself | Checkbench](https://check.lumenlab.page/mic-test/): Test your microphone in the browser. Watch the level move as you speak, record a few seconds and play it back. Sound is never uploaded.
+- [Webcam Test: Check Your Camera Online | Checkbench](https://check.lumenlab.page/webcam-test/): Check your webcam before a call: live picture, the resolution and frame rate your browser receives, mirror view and a test photo. Never uploaded.
+- [Speaker Test: Left and Right Sound Check | Checkbench](https://check.lumenlab.page/speaker-test/): Play a short tone on the left speaker, the right speaker or both. Check that your speakers or headphones are the right way round. The test starts quiet.
+- [Dead Pixel Test: Full-Screen Colors for Monitors | Checkbench](https://check.lumenlab.page/dead-pixel-test/): Fill your whole screen with black, white, red, green and blue to look for dots that don’t match. A simple screen test for a new monitor, laptop or phone.
+- [Refresh Rate Test: See Your Screen’s Hz | Checkbench](https://check.lumenlab.page/refresh-rate-test/): Measure how many times per second your screen updates in this browser. Compare the result with 60, 120 or 144 Hz and watch a moving bar for stutter.
+- [Gamepad Tester: Buttons, Sticks, Triggers, Drift | Checkbench](https://check.lumenlab.page/gamepad-tester/): Connect a controller and press any button. See every button, stick and trigger live, check stick drift and jitter at rest, and try vibration.
+- [About Checkbench: What It Tests and How It Judges](https://check.lumenlab.page/about/): Who makes Checkbench, what each device test does in your browser, and the rules it uses to judge double-typing, drift and refresh rate.
+- [Privacy Policy | Checkbench](https://check.lumenlab.page/privacy/): Checkbench tests your mic, camera and other devices inside the browser and uploads none of it. What is stored, visit statistics and ad cookies.
+
+## 한국어 페이지 (Korean)
+
+- [기기 테스트: 키보드·마우스·마이크·웹캠·스피커·모니터 | 체크벤치](https://check.lumenlab.page/ko/): 키보드, 마우스, 마이크, 웹캠, 스피커, 모니터, 게임패드를 한 화면에서 테스트해요. 설치가 없고, 마이크와 카메라는 기기 밖으로 나가지 않아요.
+- [키보드 테스트: 모든 키와 채터링 확인 | 체크벤치](https://check.lumenlab.page/ko/keyboard-test/): 키를 하나씩 누르면 불이 켜져요. 안 눌리는 키, 동시에 눌리는 키 수, 두 번 눌리는 채터링 의심까지 이 키보드 테스트에서 볼 수 있어요.
+- [마우스 테스트: 단추·휠·더블클릭 확인 | 체크벤치](https://check.lumenlab.page/ko/mouse-test/): 마우스 단추를 하나씩 누르고 휠을 돌려 보세요. 어느 단추가 들어오는지, 한 번 눌렀는데 두 번 눌리는 더블클릭 의심, 1초에 알려 주는 횟수(추정)를 보여 줘요.
+- [마이크 테스트: 소리 확인하고 녹음해서 듣기 | 체크벤치](https://check.lumenlab.page/ko/mic-test/): 브라우저에서 마이크를 테스트해요. 말하면 막대가 움직이고, 몇 초 녹음해서 바로 들어 볼 수 있어요. 소리는 기기 안에만 있고 어디에도 올라가지 않아요.
+- [웹캠 테스트: 카메라가 되는지 바로 확인 | 체크벤치](https://check.lumenlab.page/ko/webcam-test/): 화상회의 전에 웹캠이 되는지 확인해요. 실제 화면, 브라우저가 받은 해상도와 초당 장 수를 보여 주고, 좌우 뒤집기와 사진 찍기도 돼요. 영상은 기기 밖으로 나가지 않아요.
+- [스피커 테스트: 왼쪽·오른쪽 소리 확인 | 체크벤치](https://check.lumenlab.page/ko/speaker-test/): 왼쪽, 오른쪽, 양쪽으로 짧은 소리를 내 스피커와 헤드폰의 좌우가 맞는지 확인해요. 처음엔 작은 소리로 시작해요.
+- [불량화소 테스트: 전체 화면 단색으로 모니터 확인 | 체크벤치](https://check.lumenlab.page/ko/dead-pixel-test/): 화면 전체를 검정, 흰색, 빨강, 초록, 파랑으로 채워 색이 다른 점을 찾아요. 새 모니터·노트북·휴대폰 화면 테스트에 쓰세요.
+- [주사율 테스트: 내 모니터 Hz 확인 | 체크벤치](https://check.lumenlab.page/ko/refresh-rate-test/): 이 브라우저에서 화면이 1초에 몇 번 바뀌는지 재요. 결과를 Hz로 보여 주고, 60·120·144Hz와 견줘 볼 수 있어요. 움직이는 막대로 끊김도 확인해요.
+- [게임패드 테스트: 단추·스틱·트리거·쏠림 확인 | 체크벤치](https://check.lumenlab.page/ko/gamepad-tester/): 컨트롤러를 연결하고 아무 단추나 눌러 보세요. 모든 단추, 스틱, 트리거 값을 바로 보여 주고, 가만히 둔 스틱의 쏠림과 떨림을 재요. 브라우저가 지원하면 진동도 테스트해요.
+- [체크벤치 소개: 무엇을 테스트하고 어떻게 판정하나](https://check.lumenlab.page/ko/about/): 체크벤치를 누가 만들었는지, 기기 테스트가 브라우저에서 무엇을 하는지, 채터링·쏠림·주사율을 어떤 기준으로 판정하는지 적었어요.
+- [개인정보 처리방침 | 체크벤치](https://check.lumenlab.page/ko/privacy/): 체크벤치는 마이크·카메라와 그 밖의 기기를 브라우저 안에서 테스트하고 아무것도 올리지 않아요. 기기에 남는 것, 방문 통계, 광고 쿠키를 적었어요.
+
+## Lumen Lab
+
+- [Lumen Lab](https://lumenlab.page/): every game, app and web tool by Lumen Lab, with guides
+- [Lumen Lab for AI](https://lumenlab.page/llms.txt): Lumen Lab's games, apps and web tools in one list

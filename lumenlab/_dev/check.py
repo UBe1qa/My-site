@@ -44,6 +44,10 @@ ad_pages = {os.path.relpath(os.path.join(r, f), site): open(os.path.join(r, f)).
 wrong = [f for f, n in ad_pages.items() if n != (1 if GUIDE_ART.match(f) else 0)]
 ok(not wrong and sum(1 for f in ad_pages if GUIDE_ART.match(f)) > 100, f'광고 코드는 가이드 글에만 하나씩({sum(1 for f in ad_pages if GUIDE_ART.match(f))}편) {wrong[:3]}')
 ok(not [f for f in ad_pages if not GUIDE_ART.match(f) and 'adsbygoogle' in open(os.path.join(site, f)).read()], '가이드 글 밖엔 adsbygoogle 글자도 없음')
+# AI 손님(2026-11-05): 루멘랩 모든 사이트의 robots.txt(모두 허용 + Content-Signal)·llms.txt 가 지금 페이지·sitemap·catalog 와 맞는지
+import subprocess
+_llms = subprocess.run([sys.executable, os.path.join(here, 'build_llms.py'), '--check'], capture_output=True, text=True)
+ok(_llms.returncode == 0, f"robots.txt·llms.txt 최신({_llms.stdout.strip()[-300:]}) → 아니면 python3 lumenlab/_dev/build_llms.py")
 
 # 가이드(2026-10-29 도구 사이트에서 옮김): 도구 글 하나하나가 이 사이트 글로 있고, canonical = 자기 주소, 사이트맵에 있고,
 # hreflang 짝은 서로 가리키고, 글 안 링크는 이 사이트 주소(파일 있음)나 https 주소뿐, 영어 글은 영어 쪽으로만, RSS 는 한국어 글 전부

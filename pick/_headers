@@ -6,3 +6,9 @@
 # 모듈은 다른 주소에서 부르려면 이 허락이 있어야 한다(일반 script 파일은 필요 없음). 공개 파일이라 주소를 가리지 않는다(www·workers.dev 로 열어도 되게).
 /assets/core/*
   Access-Control-Allow-Origin: *
+
+# AI 안내서(llms.txt)·robots.txt 는 한국어가 섞여 있어 글자 인코딩을 밝힌다(lumenlab/_dev/build_llms.py, 2026-11-05)
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
