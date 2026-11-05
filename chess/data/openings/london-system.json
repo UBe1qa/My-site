@@ -1,0 +1,354 @@
+{
+ "name": {
+  "en": "London System",
+  "ko": "런던 시스템"
+ },
+ "eco": "D00",
+ "side": "w",
+ "line_san": [
+  "d4",
+  "d5",
+  "Bf4"
+ ],
+ "position_epd": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/london-system/",
+  "ko": "https://chess.lumenlab.page/ko/openings/london-system/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 890215,
+   "share_of_band": 0.029662,
+   "white_win": 470021,
+   "draw": 34608,
+   "black_win": 385586
+  },
+  {
+   "band": "1200–1599",
+   "games": 1771340,
+   "share_of_band": 0.029726,
+   "white_win": 913100,
+   "draw": 71068,
+   "black_win": 787172
+  },
+  {
+   "band": "1600–1999",
+   "games": 1405804,
+   "share_of_band": 0.021683,
+   "white_win": 708968,
+   "draw": 71206,
+   "black_win": 625630
+  },
+  {
+   "band": "2000+",
+   "games": 243893,
+   "share_of_band": 0.0119,
+   "white_win": 120132,
+   "draw": 16986,
+   "black_win": 106775
+  }
+ ],
+ "masters": {
+  "games": 8931,
+  "white_win": 3609,
+  "draw": 1934,
+  "black_win": 3388,
+  "next_moves": [
+   {
+    "san": "Nf6",
+    "games": 4928
+   },
+   {
+    "san": "c5",
+    "games": 1915
+   },
+   {
+    "san": "e6",
+    "games": 811
+   },
+   {
+    "san": "Bf5",
+    "games": 584
+   },
+   {
+    "san": "Nc6",
+    "games": 366
+   },
+   {
+    "san": "c6",
+    "games": 194
+   },
+   {
+    "san": "h5",
+    "games": 29
+   },
+   {
+    "san": "Bg4",
+    "games": 20
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nf6",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 1100428,
+   "share": 0.25562,
+   "white_win": 560171,
+   "draw": 51099,
+   "black_win": 489158
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 30,
+   "games": 1073216,
+   "share": 0.2493,
+   "white_win": 566426,
+   "draw": 44508,
+   "black_win": 462282
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 5,
+   "games": 747349,
+   "share": 0.1736,
+   "white_win": 381954,
+   "draw": 34581,
+   "black_win": 330814
+  },
+  {
+   "san": "Bf5",
+   "type": "side",
+   "engine_eval_white_cp": 8,
+   "games": 645187,
+   "share": 0.14987,
+   "white_win": 326668,
+   "draw": 29627,
+   "black_win": 288892
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 237021,
+   "share": 0.05506,
+   "white_win": 114201,
+   "draw": 10474,
+   "black_win": 112346
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 33,
+   "games": 206495,
+   "share": 0.04797,
+   "white_win": 103894,
+   "draw": 11230,
+   "black_win": 91371
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 67,
+   "games": 65584,
+   "share": 0.01523,
+   "white_win": 33789,
+   "draw": 2493,
+   "black_win": 29302
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 16,
+   "games": 41273,
+   "share": 0.00959,
+   "white_win": 20851,
+   "draw": 1824,
+   "black_win": 18598
+  },
+  {
+   "san": "Bg4",
+   "type": "side",
+   "engine_eval_white_cp": 54,
+   "games": 35457,
+   "share": 0.00824,
+   "white_win": 17082,
+   "draw": 1405,
+   "black_win": 16970
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 35,
+   "games": 31736,
+   "share": 0.00737,
+   "white_win": 16705,
+   "draw": 1355,
+   "black_win": 13676
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 23366,
+   "share": 0.00543,
+   "white_win": 12172,
+   "draw": 1027,
+   "black_win": 10167
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": 102,
+   "games": 20818,
+   "share": 0.00484,
+   "white_win": 11879,
+   "draw": 769,
+   "black_win": 8170
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 87,
+   "games": 19490,
+   "share": 0.00453,
+   "white_win": 10050,
+   "draw": 896,
+   "black_win": 8544
+  },
+  {
+   "san": "h5",
+   "type": "side",
+   "engine_eval_white_cp": 63,
+   "games": 15135,
+   "share": 0.00352,
+   "white_win": 7037,
+   "draw": 536,
+   "black_win": 7562
+  },
+  {
+   "san": "Nd7",
+   "type": "side",
+   "engine_eval_white_cp": 25,
+   "games": 11155,
+   "share": 0.00259,
+   "white_win": 5967,
+   "draw": 474,
+   "black_win": 4714
+  },
+  {
+   "san": "Na6",
+   "type": "side",
+   "engine_eval_white_cp": 63,
+   "games": 8645,
+   "share": 0.00201,
+   "white_win": 5093,
+   "draw": 315,
+   "black_win": 3237
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Black takes an equal share of the center and stops e4.",
+   "why_ko": "흑도 중앙을 같이 잡고 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "Bf4",
+   "why_en": "Brings the bishop out before e3 locks it in: the start of the London set-up.",
+   "why_ko": "e3로 갇히기 전에 비숍을 꺼내요. 런던 짜임의 시작이에요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "e3",
+   "why_en": "Supports d4 and opens the f1 bishop.",
+   "why_ko": "d4를 받치고 f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 6,
+   "san": "c5",
+   "why_en": "Hits d4.",
+   "why_ko": "d4를 쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 8,
+   "san": "Nc6",
+   "why_en": "Adds pressure on d4.",
+   "why_ko": "d4를 더 눌러요."
+  },
+  {
+   "ply": 9,
+   "san": "Nbd2",
+   "why_en": "Develops the knight to d2 to support e4 or c4.",
+   "why_ko": "나이트를 d2로 꺼내 e4나 c4를 받쳐요."
+  },
+  {
+   "ply": 10,
+   "san": "cxd4",
+   "why_en": "Trades in the center.",
+   "why_ko": "중앙에서 바꿔요."
+  },
+  {
+   "ply": 11,
+   "san": "exd4",
+   "why_en": "Recaptures with the e-pawn.",
+   "why_ko": "e폰으로 다시 잡아요."
+  },
+  {
+   "ply": 12,
+   "san": "Bf5",
+   "why_en": "Develops the light bishop.",
+   "why_ko": "밝은 칸 비숍을 꺼내요."
+  },
+  {
+   "ply": 13,
+   "san": "c3",
+   "why_en": "Supports d4.",
+   "why_ko": "d4를 받쳐요."
+  },
+  {
+   "ply": 14,
+   "san": "e6",
+   "why_en": "Opens the dark bishop.",
+   "why_ko": "어두운 칸 비숍 길을 열어요."
+  },
+  {
+   "ply": 15,
+   "san": "Qb3",
+   "why_en": "The queen hits b7.",
+   "why_ko": "퀸이 b7을 쳐요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

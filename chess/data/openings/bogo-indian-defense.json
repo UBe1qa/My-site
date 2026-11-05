@@ -1,0 +1,209 @@
+{
+ "name": {
+  "en": "Bogo-Indian Defense",
+  "ko": "보고 인디언 디펜스"
+ },
+ "eco": "E11",
+ "side": "b",
+ "line_san": [
+  "d4",
+  "Nf6",
+  "c4",
+  "e6",
+  "Nf3",
+  "Bb4+"
+ ],
+ "position_epd": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/5N2/PP2PPPP/RNBQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/bogo-indian-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/bogo-indian-defense/"
+ },
+ "engine_eval_white_cp": 23,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 1319,
+   "share_of_band": 4.4e-05,
+   "white_win": 679,
+   "draw": 42,
+   "black_win": 598
+  },
+  {
+   "band": "1200–1599",
+   "games": 7516,
+   "share_of_band": 0.000126,
+   "white_win": 3848,
+   "draw": 314,
+   "black_win": 3354
+  },
+  {
+   "band": "1600–1999",
+   "games": 24739,
+   "share_of_band": 0.000382,
+   "white_win": 12345,
+   "draw": 1368,
+   "black_win": 11026
+  },
+  {
+   "band": "2000+",
+   "games": 40842,
+   "share_of_band": 0.001993,
+   "white_win": 19751,
+   "draw": 3261,
+   "black_win": 17830
+  }
+ ],
+ "masters": {
+  "games": 5551,
+  "white_win": 2066,
+  "draw": 1751,
+  "black_win": 1734,
+  "next_moves": [
+   {
+    "san": "Bd2",
+    "games": 3207
+   },
+   {
+    "san": "Nbd2",
+    "games": 2059
+   },
+   {
+    "san": "Nc3",
+    "games": 168
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Bd2",
+   "type": "main",
+   "engine_eval_white_cp": 13,
+   "games": 42349,
+   "share": 0.57411,
+   "white_win": 20608,
+   "draw": 2994,
+   "black_win": 18747
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": -7,
+   "games": 15878,
+   "share": 0.21525,
+   "white_win": 7714,
+   "draw": 777,
+   "black_win": 7387
+  },
+  {
+   "san": "Nbd2",
+   "type": "alternative",
+   "engine_eval_white_cp": 23,
+   "games": 15425,
+   "share": 0.20911,
+   "white_win": 7972,
+   "draw": 1162,
+   "black_win": 6291
+  },
+  {
+   "san": "Nfd2",
+   "type": "side",
+   "engine_eval_white_cp": -32,
+   "games": 62,
+   "share": 0.00084,
+   "white_win": 26,
+   "draw": 5,
+   "black_win": 31
+  },
+  {
+   "san": "Qd2",
+   "type": "mistake",
+   "engine_eval_white_cp": -536,
+   "games": 50,
+   "share": 0.00068,
+   "white_win": 1,
+   "draw": 1,
+   "black_win": 48
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Develops and stops e4 without committing a pawn yet.",
+   "why_ko": "폰을 정하지 않고 전개하며 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "c4",
+   "why_en": "Gains space and fights for d5.",
+   "why_ko": "공간을 얻고 d5를 다퉈요."
+  },
+  {
+   "ply": 4,
+   "san": "e6",
+   "why_en": "Opens the f8 bishop and keeps ...d5 or ...Bb4 in reserve.",
+   "why_ko": "f8 비숍 길을 열고 ...d5나 ...Bb4는 남겨 둬요."
+  },
+  {
+   "ply": 5,
+   "san": "Nf3",
+   "why_en": "Develops and avoids the pin ...Bb4 on the c3 knight.",
+   "why_ko": "전개하고 c3 나이트가 ...Bb4에 묶이는 것을 피해요."
+  },
+  {
+   "ply": 6,
+   "san": "Bb4+",
+   "why_en": "A check that develops the bishop and asks White how to block it.",
+   "why_ko": "체크하면서 비숍을 꺼내, 백에게 어떻게 막을지 물어요."
+  },
+  {
+   "ply": 7,
+   "san": "Bd2",
+   "why_en": "Blocks the check with the bishop.",
+   "why_ko": "비숍으로 체크를 막아요."
+  },
+  {
+   "ply": 8,
+   "san": "Qe7",
+   "why_en": "Protects the bishop and keeps the pin.",
+   "why_ko": "비숍을 지키고 묶음을 이어요."
+  },
+  {
+   "ply": 9,
+   "san": "g3",
+   "why_en": "Prepares Bg2.",
+   "why_ko": "Bg2를 준비해요."
+  },
+  {
+   "ply": 10,
+   "san": "Bxd2+",
+   "why_en": "Trades bishops.",
+   "why_ko": "비숍을 바꿔요."
+  },
+  {
+   "ply": 11,
+   "san": "Qxd2",
+   "why_en": "Recaptures with the queen.",
+   "why_ko": "퀸으로 다시 잡아요."
+  },
+  {
+   "ply": 12,
+   "san": "Nc6",
+   "why_en": "Develops and prepares ...d6 and ...e5.",
+   "why_ko": "전개하며 ...d6·...e5를 준비해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

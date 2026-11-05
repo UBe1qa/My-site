@@ -1,16 +1,23 @@
-# Fewmoves · 외울수
+# Opening Trail · 오프닝 트레일
 
-> See which moves players at your rating really play in every opening, with win rates from millions of Lichess games. Free, no sign-up.
+> Walk every chess opening from move one: why each move is played, what players at your rating answer, which popular moves are really bad. Free.
 
-Fewmoves is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Fewmoves and link the page you used.
+Opening Trail is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Opening Trail and link the page you used.
 
 ## Pages in English
 
-- [Chess Opening Explorer by Rating | Fewmoves](https://chess.lumenlab.page/): See which moves players at your rating really play in every opening, with win rates from millions of Lichess games. Free, no sign-up.
-- [Chess Openings List: Ideas and Stats by Rating | Fewmoves](https://chess.lumenlab.page/openings/): The 81 most played chess openings with main lines, plans for both sides, common traps and win rates at four rating levels.
-- [Italian Game: Main Lines, Plans and Traps by Rating | Fewmoves](https://chess.lumenlab.page/openings/italian-game/): The Italian Game (1.e4 e5 2.Nf3 Nc6 3.Bc4): Giuoco Piano, Pianissimo, Greco Attack, Evans, Two Knights and Rousseau, plans and reply rates by rating.
+- [Opening Trail: Every Chess Opening, Move by Move](https://chess.lumenlab.page/): Walk every chess opening from move one: why each move is played, what players at your rating answer, which popular moves are really bad. Free.
+- [Chess Opening Map: Every Move, Rated and Explained](https://chess.lumenlab.page/map/): An interactive map of chess openings: 377,000 positions from 174.9 million Lichess games, engine scores, main lines and traps at your rating.
+- [Chess Openings List: Lines, Plans and Stats by Rating](https://chess.lumenlab.page/openings/): Every chess opening we cover, grouped by first move: main lines with a reason for every move, plans, traps and win rates at four rating levels.
+- [Answers to 1.e4 | Opening Trail](https://chess.lumenlab.page/openings/e4/): Every reply to 1.e4 in our games, how often each level plays it, how it scores, and where each one leads.
+- [Answers to 1.d4 | Opening Trail](https://chess.lumenlab.page/openings/d4/): Every reply to 1.d4 in our games, how often each level plays it, how it scores, and where each one leads.
+- [Answers to 1.c4 | Opening Trail](https://chess.lumenlab.page/openings/c4/): Every reply to 1.c4 in our games, how often each level plays it, how it scores, and where each one leads.
+- [Answers to 1.Nf3 | Opening Trail](https://chess.lumenlab.page/openings/nf3/): Every reply to 1.Nf3 in our games, how often each level plays it, how it scores, and where each one leads.
+- [Other first moves in Chess | Opening Trail](https://chess.lumenlab.page/openings/other-first-moves/): First moves other than 1.e4, 1.d4, 1.c4 and 1.Nf3: how often they are played and where they lead.
+- [Best Chess Openings by Rating, From 174 Million Games](https://chess.lumenlab.page/best-openings/): Which openings score best for White and Black at under 1200, 1200–1599, 1600–1999 and 2000+, counted from 174.9 million Lichess games.
+- [Italian Game: Main Lines, Plans and Traps by Rating](https://chess.lumenlab.page/openings/italian-game/): The Italian Game (1.e4 e5 2.Nf3 Nc6 3.Bc4): Giuoco Piano, Pianissimo, Greco Attack, Evans, Two Knights and Rousseau, plans and reply rates by rating.
 - [Ruy Lopez (Spanish Opening): Plans, Lines and Stats by Rating](https://chess.lumenlab.page/openings/ruy-lopez/): The Ruy Lopez (1.e4 e5 2.Nf3 Nc6 3.Bb5): Closed and Open lines, Marshall, Chigorin, Berlin, Exchange, plans and what players at your rating answer.
-- [Scotch Game: Main Lines, Ideas and Stats by Rating | Fewmoves](https://chess.lumenlab.page/openings/scotch-game/): The Scotch Game (1.e4 e5 2.Nf3 Nc6 3.d4) explained: Classical, Schmidt and Scotch Gambit lines, plans for both sides and real reply rates.
+- [Scotch Game: Main Lines, Ideas and Stats by Rating](https://chess.lumenlab.page/openings/scotch-game/): The Scotch Game (1.e4 e5 2.Nf3 Nc6 3.d4) explained: Classical, Schmidt and Scotch Gambit lines, plans for both sides and real reply rates.
 - [Petrov’s Defense (Russian Game): Lines, Traps and Stats by Rating](https://chess.lumenlab.page/openings/petrovs-defense/): Petrov’s Defense (1.e4 e5 2.Nf3 Nf6): the main line, the Stafford Gambit, the 3...Nxe4? trap and how often each move is played at your rating.
 - [Philidor Defense: Plans, Legal’s Mate and Stats by Rating](https://chess.lumenlab.page/openings/philidor-defense/): The Philidor Defense (1.e4 e5 2.Nf3 d6): solid setups for Black, White’s best tries, Legal’s mate and what players at your rating play.
 - [Vienna Game and Vienna Gambit: Lines, Traps and Stats by Rating](https://chess.lumenlab.page/openings/vienna-game/): The Vienna Game (1.e4 e5 2.Nc3): the Vienna Gambit, 2...Nf6 and 2...Nc6, a quick trap, plans for both sides and real reply rates by rating.
@@ -25,7 +32,7 @@ Fewmoves is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer 
 - [Latvian Gambit (2...f5): Lines, Traps and Stats by Rating](https://chess.lumenlab.page/openings/latvian-gambit/): The Latvian Gambit (1.e4 e5 2.Nf3 f5) explained: 3.Nxe5, 3.exf5, 3.Bc4, the best answers for White, and how it scores at four rating levels.
 - [Damiano Defense (2...f6): Why It Fails and How to Punish It](https://chess.lumenlab.page/openings/damiano-defense/): The Damiano Defense (1.e4 e5 2.Nf3 f6) explained: why 3.Nxe5! works, the 3...fxe5 4.Qh5+ trap, the safer 3...Qe7, and how it scores at each rating.
 - [Wayward Queen Attack (2.Qh5) and 2.Qf3: Beating the Early Queen](https://chess.lumenlab.page/openings/wayward-queen-attack/): The Wayward Queen Attack (1.e4 e5 2.Qh5) and Napoleon Attack (2.Qf3): the Scholar’s Mate idea, the safe 2...Nc6 and 3...g6, and scores by rating.
-- [1.e4 e5: Every Second Move for White, Main and Rare | Fewmoves](https://chess.lumenlab.page/openings/kings-pawn-game/): 1.e4 e5, the open games: 2.Nf3, 2.Bc4, 2.Nc3, 2.f4, 2.d4 and rare moves like 2.d3, 2.c3, 2.Ne2, 2.Bb5 and 2.Ke2, with how often each is played.
+- [1.e4 e5: Every Second Move for White, Main and Rare](https://chess.lumenlab.page/openings/kings-pawn-game/): 1.e4 e5, the open games: 2.Nf3, 2.Bc4, 2.Nc3, 2.f4, 2.d4 and rare moves like 2.d3, 2.c3, 2.Ne2, 2.Bb5 and 2.Ke2, with how often each is played.
 - [King’s Knight Opening (2.Nf3): Every Reply and Third Move](https://chess.lumenlab.page/openings/kings-knight-opening/): The King’s Knight Opening (1.e4 e5 2.Nf3): Black’s replies, then White’s third moves from 3.Bc4, 3.Bb5 and 3.d4 to the rare 3.g3, 3.c4 and 3.Be2.
 - [Berlin Defense: Berlin Endgame, Anti-Berlin and Stats by Rating](https://chess.lumenlab.page/openings/berlin-defense/): The Berlin Defense (1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6) explained: the Berlin endgame, 4.O-O Nxe4 5.Re1, the Anti-Berlin 4.d3, and how draws rise with rating.
 - [Sicilian Defense: Main Lines Explained with Stats by Rating](https://chess.lumenlab.page/openings/sicilian-defense/): The Sicilian Defense (1.e4 c5): Open Sicilian, Alapin, Closed, Smith-Morra and Rossolimo, what each side wants and how often each line happens.
@@ -49,14 +56,14 @@ Fewmoves is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer 
 - [Modern Defense (1...g6): Lines, Plans and Stats by Rating](https://chess.lumenlab.page/openings/modern-defense/): The Modern Defense (1.e4 g6): 3.Nc3 with Be3 and Qd2, the Three Pawns Attack, the Pterodactyl and the Hippopotamus setup, and how often each is played.
 - [Nimzowitsch Defense (1...Nc6): Lines and Stats by Rating](https://chess.lumenlab.page/openings/nimzowitsch-defense/): The Nimzowitsch Defense (1.e4 Nc6): 2.d4 d5, the Kennedy 2...e5, the Williams 2.Nf3 d6 and transpositions, with how often each is played at your rating.
 - [Owen Defense (1...b6): Lines, Plans and Stats by Rating](https://chess.lumenlab.page/openings/owen-defense/): The Owen Defense (1.e4 b6): the b7 bishop against e4, 2.d4 Bb7 3.Bd3 and 3.Nc3, a mating trap after 3...f5, and how often each reply is played.
-- [St. George Defense (1...a6): Lines and Stats by Rating | Fewmoves](https://chess.lumenlab.page/openings/st-george-defense/): The St. George Defense (1.e4 a6): 2.d4 b5 and the b7 bishop, plans for both sides, and how often each reply is played at your rating.
+- [St. George Defense (1...a6): Lines and Stats by Rating](https://chess.lumenlab.page/openings/st-george-defense/): The St. George Defense (1.e4 a6): 2.d4 b5 and the b7 bishop, plans for both sides, and how often each reply is played at your rating.
 - [Rare Defenses to 1.e4: 1...f5, 1...g5, 1...a5, 1...f6 and More](https://chess.lumenlab.page/openings/rare-defenses-to-e4/): Rare first replies to 1.e4: the Duras Gambit 1...f5, Borg 1...g5, Ware 1...a5, Goldsmith 1...h5, Barnes 1...f6, Carr 1...h6 and Lemming 1...Na6, with stats.
 - [Queen’s Gambit: How to Play It as White, with Stats by Rating](https://chess.lumenlab.page/openings/queens-gambit/): The Queen’s Gambit (1.d4 d5 2.c4) for White: how to meet 2...e6, 2...c6, 2...dxc4 and the Albin, with plans and real reply rates at your rating.
 - [Queen’s Gambit Declined: Plans, Elephant Trap and Stats by Rating](https://chess.lumenlab.page/openings/queens-gambit-declined/): The Queen’s Gambit Declined (1.d4 d5 2.c4 e6): Orthodox, Exchange and Tarrasch lines, the Elephant trap and real reply rates at four rating levels.
 - [Queen’s Gambit Accepted: Main Lines, Traps and Stats by Rating](https://chess.lumenlab.page/openings/queens-gambit-accepted/): The Queen’s Gambit Accepted (1.d4 d5 2.c4 dxc4): 3.e3, 3.e4 and 3.Nf3, why ...b5 fails, plans for both sides and real reply rates by rating.
 - [Slav Defense and Semi-Slav: Main Lines and Stats by Rating](https://chess.lumenlab.page/openings/slav-defense/): The Slav (1.d4 d5 2.c4 c6) and Semi-Slav: main lines, the c8 bishop question, plans for both sides and how often each reply is played at your rating.
-- [London System: Setup, Plans and Stats by Rating | Fewmoves](https://chess.lumenlab.page/openings/london-system/): The London System (1.d4 and Bf4): the standard setup, how to meet ...c5 and ...Qb6, plans for both sides and real reply rates at four rating levels.
-- [1.d4 d5: Every Second Move for White, Main and Rare | Fewmoves](https://chess.lumenlab.page/openings/queens-pawn-game/): 1.d4 d5, the closed games: 2.c4, 2.Bf4, 2.Nf3, 2.e3, 2.Nc3, 2.e4 and rare moves like 2.Bg5 and 2.Qd3, with how often each is played.
+- [London System: Setup, Plans and Stats by Rating | Opening Trail](https://chess.lumenlab.page/openings/london-system/): The London System (1.d4 and Bf4): the standard setup, how to meet ...c5 and ...Qb6, plans for both sides and real reply rates at four rating levels.
+- [1.d4 d5: Every Second Move for White, Main and Rare](https://chess.lumenlab.page/openings/queens-pawn-game/): 1.d4 d5, the closed games: 2.c4, 2.Bf4, 2.Nf3, 2.e3, 2.Nc3, 2.e4 and rare moves like 2.Bg5 and 2.Qd3, with how often each is played.
 - [Colle System and Stonewall Attack: Setups and Stats by Rating](https://chess.lumenlab.page/openings/colle-system/): The Colle System (d4, Nf3, e3, Bd3, c3, Nbd2), the Colle-Zukertort and the Stonewall Attack: setups, the e4 break and how often each is played.
 - [Blackmar-Diemer Gambit: Lines, Plans and Stats by Rating](https://chess.lumenlab.page/openings/blackmar-diemer-gambit/): The Blackmar-Diemer Gambit (1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3): the Teichmann, Euwe and Bogoljubow defenses, declined lines, and how often each is played.
 - [Richter-Veresov Attack (3.Bg5): Lines and Stats by Rating](https://chess.lumenlab.page/openings/richter-veresov-attack/): The Richter-Veresov Attack (1.d4 d5 2.Nc3 Nf6 3.Bg5): 3...e6 4.e4, 3...Bf5, 3...Nbd7, plans for both sides and how often each reply is played.
@@ -89,98 +96,109 @@ Fewmoves is made by Lumen Lab (https://lumenlab.page/). AI agents and AI answer 
 - [Mieses Opening (1.d3): Setups, Transpositions and Stats](https://chess.lumenlab.page/openings/mieses-opening/): The Mieses Opening (1.d3): reversed Pirc and King’s Indian setups, the King’s Indian Attack, what happens after 1...e5 and 1...d5, and reply rates by rating.
 - [Grob Opening (1.g4): Grob Gambit, Traps and Stats by Rating](https://chess.lumenlab.page/openings/grob-opening/): The Grob Opening (1.g4): the Grob Gambit 1...d5 2.Bg2 Bxg4 3.c4, answers to 1...e5, the fastest mate after 2.f4??, and reply rates by rating.
 - [Rare First Moves: 1.c3, 1.a3, 1.f3, 1.h3, 1.h4 and More](https://chess.lumenlab.page/openings/rare-first-moves/): Rare first moves for White: the Saragossa 1.c3, Anderssen 1.a3, Barnes 1.f3, Clemenz 1.h3, Ware 1.a4, Kádas 1.h4, 1.Na3 and 1.Nh3, with reply rates by rating.
-- [Chess Opening Trainer with Spaced Repetition | Fewmoves](https://chess.lumenlab.page/practice/): Drill your openings against the replies people really play at your rating. Mistakes come back on a schedule. Free, works in your browser.
-- [About Fewmoves | Fewmoves](https://chess.lumenlab.page/about/): Where the Fewmoves numbers come from: rated Lichess games, rating levels, opening names, how practice picks moves, and limits.
-- [Privacy Policy | Fewmoves](https://chess.lumenlab.page/privacy/): What Fewmoves keeps on your device, what it loads, visit statistics and advertising.
+- [Chess Opening Trainer with Spaced Repetition | Opening Trail](https://chess.lumenlab.page/practice/): Drill your openings against the replies people really play at your rating. Mistakes come back on a schedule. Free, works in your browser.
+- [Chess Opening Test: 10 Positions, 2 Minutes, Your Level](https://chess.lumenlab.page/test/): Ten real opening positions: pick the move strong players choose. Get your opening level, the rating your choices match and a card to share. Free, no sign-up.
+- [Data and Sources: How Opening Trail Counts Games](https://chess.lumenlab.page/data/): Where the numbers on Opening Trail come from, how moves are sorted into main, alternative, side and dubious, licenses and downloads.
+- [About Opening Trail | Opening Trail](https://chess.lumenlab.page/about/): Opening Trail walks every chess opening from move one, with a reason for every move and numbers from 174.9 million rated Lichess games.
+- [Privacy Policy | Opening Trail](https://chess.lumenlab.page/privacy/): What Opening Trail keeps on your device, what it loads, visit statistics and advertising.
 
 ## 한국어 페이지 (Korean)
 
-- [레이팅별 체스 오프닝 탐색기 | 외울수](https://chess.lumenlab.page/ko/): 오프닝마다 내 레이팅대 사람들이 실제로 두는 수와 승률을 리체스 수백만 판으로 보여 줘요. 무료, 가입 없음.
-- [체스 오프닝 정리: 수순·계획·레이팅별 승률 | 외울수](https://chess.lumenlab.page/ko/openings/): 많이 두는 체스 오프닝 81개의 주요 수순, 양쪽의 계획, 실전에서 자주 걸리는 함정, 레이팅대 네 곳의 승률을 정리했어요.
-- [이탈리안 게임: 주요 수순·계획·함정, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/italian-game/): 이탈리안 게임(1.e4 e5 2.Nf3 Nc6 3.Bc4) 정리: 지우오코 피아노·피아니시모, 그레코 어택, 에반스 갬빗, 투 나이츠, 루소 갬빗, 양쪽 계획과 레이팅별로 많이 두는 응수.
-- [루이 로페즈(스패니시): 계획·주요 수순·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/ruy-lopez/): 루이 로페즈(1.e4 e5 2.Nf3 Nc6 3.Bb5) 정리: 클로즈드·오픈, 마샬 어택, 치고린, 베를린, 익스체인지 변화, 대표 계획과 레이팅별로 많이 두는 응수.
-- [스카치 게임: 주요 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/scotch-game/): 스카치 게임(1.e4 e5 2.Nf3 Nc6 3.d4) 정리: 클래시컬, 슈미트, 스카치 갬빗 갈래와 양쪽 계획, 실제 응수 비율.
-- [페트로프 디펜스(러시안 게임): 수순·함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/petrovs-defense/): 페트로프 디펜스(1.e4 e5 2.Nf3 Nf6) 정리: 주요 수순, 스태퍼드 갬빗, 3...Nxe4? 함정, 레이팅별로 많이 두는 수.
-- [필리도르 디펜스: 계획·레갈 메이트·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/philidor-defense/): 필리도르 디펜스(1.e4 e5 2.Nf3 d6) 정리: 흑의 단단한 배치, 백의 가장 좋은 시도, 레갈 메이트, 레이팅별로 많이 두는 수.
-- [비엔나 게임·비엔나 갬빗: 수순·함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/vienna-game/): 비엔나 게임(1.e4 e5 2.Nc3) 정리: 비엔나 갬빗, 2...Nf6와 2...Nc6, 빠른 함정, 양쪽 계획과 레이팅별 실제 응수 비율.
-- [킹스 갬빗: 수락·거절·함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/kings-gambit/): 킹스 갬빗(1.e4 e5 2.f4) 정리: 수락·거절 갈래, 3.fxe5?? 함정, 양쪽 계획, 각 응수가 얼마나 나오는지.
-- [포 나이츠 게임: 스패니시·스카치·이탈리안 갈래, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/four-knights-game/): 포 나이츠 게임(1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6) 정리: 스패니시·스카치·이탈리안 포 나이츠, 포크 수, 실제 응수 비율.
-- [비숍스 오프닝: 수순·스칼라 메이트 패턴·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/bishops-opening/): 비숍스 오프닝(1.e4 e5 2.Bc4) 정리: 베를린 디펜스, 2...Bc5, 우루소프 갬빗, 스칼라 메이트 패턴, 실제 응수 비율.
-- [센터 게임·데니시 갬빗: 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/center-game/): 센터 게임(1.e4 e5 2.d4 exd4 3.Qxd4)과 데니시 갬빗(3.c3) 정리: 생각, 흔한 응수, 레이팅대 네 곳의 승률.
-- [투 나이츠 디펜스: 프라이드 리버·트랙슬러·4.d3, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/two-knights-defense/): 투 나이츠 디펜스(1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6) 정리: 4.Ng5와 프라이드 리버, 트랙슬러, 4.d3·4.d4, 레이팅별로 많이 두는 수.
-- [에반스 갬빗: 수락·거절 수순, 계획, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/evans-gambit/): 에반스 갬빗(1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.b4) 정리: 5...Ba5, 5...Be7, 라스커 디펜스, 거절 4...Bb6, 레이팅별로 많이 두는 수.
-- [폰치아니 오프닝(3.c3): 수순·계획, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/ponziani-opening/): 폰치아니 오프닝(1.e4 e5 2.Nf3 Nc6 3.c3) 정리: 3...Nf6, 3...d5 4.Qa4, 3...Bc5, c3와 d4의 생각, 레이팅별로 많이 두는 수.
-- [엘리펀트 갬빗(2...d5): 통하는 수일까, 수순과 레이팅별 성적 | 외울수](https://chess.lumenlab.page/ko/openings/elephant-gambit/): 엘리펀트 갬빗(1.e4 e5 2.Nf3 d5) 정리: 3.exd5 e4, 3.Nxe5, 백의 좋은 응수, 레이팅대 네 곳의 성적.
-- [라트비안 갬빗(2...f5): 수순·함정, 레이팅별 성적 | 외울수](https://chess.lumenlab.page/ko/openings/latvian-gambit/): 라트비안 갬빗(1.e4 e5 2.Nf3 f5) 정리: 3.Nxe5, 3.exf5, 3.Bc4, 백의 좋은 응수, 레이팅대 네 곳의 성적.
-- [다미아노 디펜스(2...f6): 왜 나쁜가, 어떻게 응징하나 | 외울수](https://chess.lumenlab.page/ko/openings/damiano-defense/): 다미아노 디펜스(1.e4 e5 2.Nf3 f6) 정리: 3.Nxe5!가 통하는 이유, 3...fxe5 4.Qh5+ 함정, 더 안전한 3...Qe7, 레이팅대별 성적.
-- [웨이워드 퀸 어택(2.Qh5)과 2.Qf3: 일찍 나온 퀸 받아치기 | 외울수](https://chess.lumenlab.page/ko/openings/wayward-queen-attack/): 웨이워드 퀸 어택(1.e4 e5 2.Qh5)과 나폴레옹 어택(2.Qf3) 정리: 스칼라 메이트의 생각, 안전한 2...Nc6·3...g6, 레이팅대별 성적.
-- [1.e4 e5: 백의 둘째 수 모두, 주요 수와 드문 수 | 외울수](https://chess.lumenlab.page/ko/openings/kings-pawn-game/): 1.e4 e5(킹스 폰 게임, 오픈 게임) 정리: 2.Nf3, 2.Bc4, 2.Nc3, 2.f4, 2.d4와 2.d3, 2.c3, 2.Ne2, 2.Bb5, 2.Ke2 같은 드문 수, 레이팅별로 많이 두는 수.
-- [킹스 나이트 오프닝(1.e4 e5 2.Nf3): 흑의 응수와 백의 셋째 수 | 외울수](https://chess.lumenlab.page/ko/openings/kings-knight-opening/): 킹스 나이트 오프닝(1.e4 e5 2.Nf3) 정리: 2...Nc6, 2...Nf6, 2...d6와 드문 응수, 백의 셋째 수 3.Bc4·3.Bb5·3.d4·3.Nc3·3.c3와 드문 3.g3·3.c4·3.Be2.
-- [베를린 디펜스: 베를린 엔드게임, 안티 베를린 4.d3, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/berlin-defense/): 베를린 디펜스(1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6) 정리: 베를린 엔드게임, 4.O-O Nxe4 5.Re1, 안티 베를린 4.d3, 레이팅이 오를수록 늘어나는 무승부.
-- [시실리안 디펜스: 주요 갈래 정리와 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-defense/): 시실리안 디펜스(1.e4 c5) 정리: 오픈 시실리안, 알라핀, 클로즈드, 스미스-모라, 로솔리모, 양쪽이 원하는 것과 각 갈래가 얼마나 나오는지.
-- [시실리안 나이도르프: 주요 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-najdorf/): 나이도르프 시실리안(5...a6) 정리: 잉글리시 어택, 6.Bg5, 6.Be2, 6.Bc4 갈래별 계획과 레이팅별 실제 응수 비율.
-- [시실리안 드래곤: 유고슬라브 어택·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-dragon/): 시실리안 드래곤(5...g6) 정리: 유고슬라브 어택, 가속 드래곤, 6.Be3 Ng4? 수, 레이팅별로 각 갈래가 얼마나 나오는지.
-- [스미스-모라 갬빗: 수순·시베리안 함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/smith-morra-gambit/): 스미스-모라 갬빗(1.e4 c5 2.d4 cxd4 3.c3) 정리: 수락·거절 갈래, 시베리안 함정, 양쪽 계획과 레이팅별 응수 비율.
-- [알라핀 시실리안(2.c3): 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/alapin-sicilian/): 알라핀 시실리안(1.e4 c5 2.c3) 정리: 2...d5, 2...Nf6와 다른 응수, 양쪽 계획, 레이팅별로 많이 두는 수.
-- [시실리안 클래시컬(5...Nc6): 리히터-라우저·소진, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-classical/): 클래시컬 시실리안(5...Nc6) 정리: 리히터-라우저 6.Bg5, 소진 6.Bc4, 6.Be3 Ng4, 6.Be2 e5, 양쪽 계획과 레이팅별로 많이 두는 수.
-- [시실리안 셰베닝겐: 케레스 어택·잉글리시 어택, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-scheveningen/): 셰베닝겐 시실리안(5...e6) 정리: 작은 중앙, 케레스 어택 6.g4, 잉글리시 어택, 조용한 6.Be2, 레이팅별로 많이 두는 수.
-- [시실리안 스베시니코프·칼라시니코프: 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-sveshnikov/): 스베시니코프 시실리안(5...e5)과 칼라시니코프·뢰벤탈(4...e5) 정리: d5 구멍, 9.Bxf6와 9.Nd5, 레이팅별 응수 비율.
-- [시실리안 타이마노프(4...Nc6): 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-taimanov/): 타이마노프 시실리안(2...e6, 4...Nc6) 정리: 5.Nc3 Qc7, 5...a6, 포 나이츠 5...Nf6, 5.Nb5, 양쪽 계획과 레이팅별로 많이 두는 수.
-- [시실리안 칸(4...a6): 마로치 바인드·5.Bd3, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/sicilian-kan/): 칸 시실리안(2...e6, 4...a6) 정리: 5.Nc3 Qc7, 5.Bd3, 5.c4 마로치 바인드와 고슴도치 배치, 레이팅별로 많이 두는 수.
-- [클로즈드 시실리안·그랑프리 어택: 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/closed-sicilian/): 클로즈드 시실리안(2.Nc3)의 g3·Bg2 배치, f4로 가는 그랑프리 어택, 2.f4까지, 양쪽 계획과 레이팅별로 많이 두는 수.
-- [로솔리모 어택(3.Bb5): 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/rossolimo-attack/): 로솔리모(1.e4 c5 2.Nf3 Nc6 3.Bb5) 정리: 3...g6, 3...e6, 3...d6, c6에서 바꿀 때, 양쪽 계획과 레이팅별로 많이 두는 수.
-- [시실리안 모스크바 변화(3.Bb5+): 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/moscow-variation/): 모스크바 변화(1.e4 c5 2.Nf3 d6 3.Bb5+) 정리: 3...Bd7, 3...Nd7, 3...Nc6, 양쪽 계획과 레이팅별로 많이 두는 응수.
-- [프렌치 디펜스: 어드밴스·익스체인지·위나워, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/french-defense/): 프렌치 디펜스(1.e4 e6 2.d4 d5) 정리: 어드밴스, 익스체인지, 타라시, 위나워, 양쪽 계획, 고전 함정, 실제 응수 비율.
-- [카로칸 디펜스: 어드밴스·익스체인지·클래시컬, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/caro-kann-defense/): 카로칸(1.e4 c6 2.d4 d5) 정리: 어드밴스, 익스체인지, 클래시컬, 투 나이츠 갈래, 양쪽 계획, 유명한 스머더드 메이트, 실제 응수 비율.
-- [스칸디나비안 디펜스: Qa5·Qd6·Qd8와 2...Nf6, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/scandinavian-defense/): 스칸디나비안 디펜스(1.e4 d5) 정리: 3...Qa5, 3...Qd6, 3...Qd8 갈래, 모던 2...Nf6, 양쪽 계획, 실제 응수 비율.
-- [피르츠 디펜스: 오스트리안·150 어택·라이언·체코, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/pirc-defense/): 피르츠 디펜스(1.e4 d6 2.d4 Nf6 3.Nc3 g6) 정리: 오스트리안 어택, 150 어택, 클래시컬, 라이언·체코 배치, 레이팅별 응수 비율.
-- [알레힌 디펜스: 포 폰스·모던·익스체인지, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/alekhine-defense/): 알레힌 디펜스(1.e4 Nf6) 정리: 포 폰스 어택, 모던·익스체인지 변화, 양쪽 계획, 레이팅별 실제 응수 비율.
-- [모던 디펜스(1...g6): 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/modern-defense/): 모던 디펜스(1.e4 g6) 정리: 3.Nc3와 Be3·Qd2, 스리 폰즈 어택, 프테로닥틸, 하마(히포) 배치, 레이팅별로 많이 두는 수.
-- [님조비치 디펜스(1...Nc6): 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/nimzowitsch-defense/): 님조비치 디펜스(1.e4 Nc6) 정리: 2.d4 d5, 케네디 2...e5, 윌리엄스 2.Nf3 d6와 다른 오프닝으로 옮겨 가는 길, 레이팅별로 많이 두는 수.
-- [오웬 디펜스(1...b6): 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/owen-defense/): 오웬 디펜스(1.e4 b6) 정리: b7 비숍과 e4, 2.d4 Bb7 3.Bd3와 3.Nc3, 3...f5 뒤의 메이트 함정, 레이팅별로 많이 두는 응수.
-- [세인트 조지 디펜스(1...a6): 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/st-george-defense/): 세인트 조지 디펜스(1.e4 a6) 정리: 2.d4 b5와 b7 비숍, 양쪽 계획, 레이팅별로 많이 두는 응수.
-- [1.e4에 드문 응수: 1...f5·1...g5·1...a5·1...f6 등 | 외울수](https://chess.lumenlab.page/ko/openings/rare-defenses-to-e4/): 1.e4에 대한 드문 첫 응수 정리: 두라스 갬빗 1...f5, 보그 1...g5, 웨어 1...a5, 골드스미스 1...h5, 반스 1...f6, 카 1...h6, 레밍 1...Na6, 레이팅별 통계.
-- [퀸스 갬빗: 백으로 두는 법과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/queens-gambit/): 백의 퀸스 갬빗(1.d4 d5 2.c4) 정리: 2...e6, 2...c6, 2...dxc4, 알빈에 대한 대처, 계획과 내 레이팅대 실제 응수 비율.
-- [퀸스 갬빗 거절: 계획·엘리펀트 함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/queens-gambit-declined/): 퀸스 갬빗 거절(1.d4 d5 2.c4 e6) 정리: 오소독스, 익스체인지, 타라시 갈래, 엘리펀트 함정, 레이팅대 네 곳의 실제 응수 비율.
-- [퀸스 갬빗 수락: 주요 수순·함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/queens-gambit-accepted/): 퀸스 갬빗 수락(1.d4 d5 2.c4 dxc4) 정리: 3.e3, 3.e4, 3.Nf3, ...b5가 왜 안 되는지, 양쪽 계획과 레이팅별 응수 비율.
-- [슬라브 디펜스·세미 슬라브: 주요 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/slav-defense/): 슬라브(1.d4 d5 2.c4 c6)와 세미 슬라브 정리: 주요 수순, c8 비숍 문제, 양쪽 계획, 내 레이팅대에서 각 응수가 얼마나 나오는지.
-- [런던 시스템: 배치·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/london-system/): 런던 시스템(1.d4와 Bf4) 정리: 기본 배치, ...c5·...Qb6 대처, 양쪽 계획, 레이팅대 네 곳의 실제 응수 비율.
-- [1.d4 d5: 백의 둘째 수 모두, 주요 수와 드문 수 | 외울수](https://chess.lumenlab.page/ko/openings/queens-pawn-game/): 1.d4 d5(퀸스 폰 게임, 클로즈드 게임) 정리: 2.c4, 2.Bf4, 2.Nf3, 2.e3, 2.Nc3, 2.e4와 2.Bg5, 2.Qd3 같은 드문 수, 레이팅별로 많이 두는 수.
-- [콜레 시스템·스톤월 어택: 배치와 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/colle-system/): 콜레 시스템(d4, Nf3, e3, Bd3, c3, Nbd2)과 콜레-주커토르트, 스톤월 어택 정리: 배치, e4 돌파, 레이팅별로 많이 두는 수.
-- [블랙마-디머 갬빗: 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/blackmar-diemer-gambit/): 블랙마-디머 갬빗(1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3) 정리: 타이히만, 에이베, 보골류보프 디펜스와 거절 갈래, 레이팅별로 많이 두는 수.
-- [리히터-베레소프 어택(3.Bg5): 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/richter-veresov-attack/): 리히터-베레소프 어택(1.d4 d5 2.Nc3 Nf6 3.Bg5) 정리: 3...e6 4.e4, 3...Bf5, 3...Nbd7, 양쪽 계획과 레이팅별로 많이 두는 응수.
-- [타라시 디펜스(3...c5): 고립 폰, 수순과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/tarrasch-defense/): 타라시 디펜스(1.d4 d5 2.c4 e6 3.Nc3 c5) 정리: 고립된 d폰, 6.g3 주요 수순, 샤라 갬빗, 레이팅별로 많이 두는 수.
-- [1.d4 Nf6 인디언 디펜스: 모든 갈래와 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/indian-defense/): 1.d4 Nf6 인디언 디펜스 정리: 킹스 인디언, 님조, 퀸스 인디언, 그륀펠트, 베노니, 부다페스트와 토레·트롬포스키, 레이팅별로 많이 두는 응수.
-- [킹스 인디언 디펜스: 클래시컬·재미시, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/kings-indian-defense/): 킹스 인디언 디펜스(1.d4 Nf6 2.c4 g6) 정리: 클래시컬, 재미시, 포 폰스, 피앙케토 갈래, 대표 공격, 레이팅별 실제 응수 비율.
-- [님조 인디언 디펜스: 루빈스타인·클래시컬, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/nimzo-indian-defense/): 님조 인디언(1.d4 Nf6 2.c4 e6 3.Nc3 Bb4) 정리: 루빈스타인 4.e3, 클래시컬 4.Qc2, 재미시, 겹친 폰, 레이팅별 실제 응수 비율.
-- [퀸스 인디언 디펜스: 피앙케토·4...Ba6, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/queens-indian-defense/): 퀸스 인디언 디펜스(1.d4 Nf6 2.c4 e6 3.Nf3 b6) 정리: 4.g3 피앙케토와 4...Ba6·4...Bb7, 페트로시안 4.a3, 4.Nc3, 레이팅별로 많이 두는 수.
-- [보고 인디언 디펜스(3...Bb4+): 4.Bd2·4.Nbd2, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/bogo-indian-defense/): 보고 인디언 디펜스(1.d4 Nf6 2.c4 e6 3.Nf3 Bb4+) 정리: 4.Bd2와 4...Qe7·4...Bxd2+·4...a5, 4.Nbd2 갈래, 양쪽 계획, 레이팅별로 많이 두는 수.
-- [카탈란 오프닝: 오픈·클로즈드 갈래와 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/catalan-opening/): 카탈란(1.d4 Nf6 2.c4 e6 3.g3) 정리: 오픈 카탈란 4...dxc4, ...c6를 두는 클로즈드 4...Be7, 3...Bb4+, g2 비숍, 레이팅별로 많이 두는 수.
-- [그륀펠트 디펜스: 익스체인지·러시안·4.Bf4, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/grunfeld-defense/): 그륀펠트 디펜스(1.d4 Nf6 2.c4 g6 3.Nc3 d5) 정리: 익스체인지 변화, 4.Nf3 갈래와 러시안 Qb3, 4.Bf4, 4.Bg5, 레이팅별로 많이 두는 수.
-- [모던 베노니·올드 베노니: 수순·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/benoni-defense/): 베노니 디펜스 정리: 모던 베노니(1.d4 Nf6 2.c4 c5 3.d5 e6), 타이마노프 f4 갈래, 체코 베노니, 올드 베노니 1.d4 c5, 레이팅별로 많이 두는 수.
-- [벤코 갬빗(3...b5): 수락·거절과 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/benko-gambit/): 벤코 갬빗(1.d4 Nf6 2.c4 c5 3.d5 b5) 정리: 끝까지 받는 5.bxa6, 5.e3와 5.b6, 4.Nf3 거절, 블루멘펠트, 레이팅별로 많이 두는 수.
-- [부다페스트 갬빗(2...e5): 주요 수순·파야로비치·메이트 함정 | 외울수](https://chess.lumenlab.page/ko/openings/budapest-gambit/): 부다페스트 갬빗(1.d4 Nf6 2.c4 e5) 정리: 3...Ng4와 4.Bf4·4.Nf3, 파야로비치 3...Ne4, 3.d5 거절, Nd3 메이트 함정, 레이팅별로 많이 두는 수.
-- [트롬포스키 어택(2.Bg5): 2...Ne4·2...e6·2...d5, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/trompowsky-attack/): 트롬포스키 어택(1.d4 Nf6 2.Bg5) 정리: 2...Ne4와 3.Bf4·3.h4, 2...e6 3.e4, 2...d5 3.Bxf6, 양쪽 계획, 레이팅별로 많이 두는 응수.
-- [올드 인디언 디펜스(2...d6): 수순·잉글리시 랫, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/old-indian-defense/): 올드 인디언 디펜스(1.d4 Nf6 2.c4 d6) 정리: ...Nbd7와 ...e5 배치, 4.dxe5 퀸 교환, 4.d5, 잉글리시 랫과 웨이드 갈래, 레이팅별로 많이 두는 수.
-- [호르비츠 디펜스(1...e6): 잉글리시 디펜스·캥거루, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/horwitz-defense/): 호르비츠 디펜스(1.d4 e6) 정리: 프렌치·퀸스 갬빗·더치로 가는 수순, 잉글리시 디펜스 2...b6, 캥거루 2...Bb4+, 레이팅별로 많이 두는 수.
-- [더치 디펜스: 레닌그라드·스톤월·함정, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/dutch-defense/): 더치 디펜스(1.d4 f5) 정리: 레닌그라드, 스톤월, 클래시컬 배치, 2.Bg5와 스턴턴 갬빗 같은 안티 더치, 실제 응수 비율.
-- [잉글룬드 갬빗: 함정·반박·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/englund-gambit/): 잉글룬드 갬빗(1.d4 e5) 정리: 유명한 Qc1 메이트 함정, 백이 두어야 할 수, 레이팅대 네 곳에서 얼마나 통하는지.
-- [미케나스 디펜스(1...Nc6)와 1.d4에 드문 응수 | 외울수](https://chess.lumenlab.page/ko/openings/mikenas-defense/): 미케나스 디펜스(1.d4 Nc6) 정리: 2.c4 e5, 2.d5, 2.Nf3 d5, 그리고 폴리시 디펜스 1...b5 같은 1.d4에 드문 응수, 레이팅별로 많이 두는 수.
-- [잉글리시 오프닝: 주요 배치·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/english-opening/): 잉글리시 오프닝(1.c4) 정리: 역 시실리안, 대칭, 앵글로 인디언 배치, 양쪽 계획과 레이팅별 실제 응수 비율.
-- [레티 오프닝·1.Nf3: 배치·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/reti-opening/): 1.Nf3(주커토르트·레티) 정리: c4를 둔 레티, 킹스 인디언 어택, 1.d4로 넘어가기, 계획과 레이팅별 실제 응수 비율.
-- [킹스 인디언 어택(KIA): 배치·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/kings-indian-attack/): 킹스 인디언 어택 정리: ...d5, 프렌치, 시실리안 상대로 두는 Nf3, g3, Bg2, O-O, d3, Nbd2, e4 배치, 양쪽 계획, 레이팅별로 많이 두는 응수.
-- [버드 오프닝(1.f4): 프롬 갬빗·배치·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/bird-opening/): 버드 오프닝(1.f4) 정리: 1...d5 상대 배치, 프롬 갬빗 1...e5와 메이트 함정, 윌리엄스 갬빗 2.e4, 양쪽 계획, 레이팅별로 많이 두는 응수.
-- [님조-라르센 어택(1.b3): 배치·계획·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/nimzo-larsen-attack/): 님조-라르센 어택(1.b3) 정리: 1...e5 2.Bb2 Nc6, 1...d5, 1...Nf6 배치, e5를 겨누는 b2 비숍, 양쪽 계획, 레이팅별로 많이 두는 응수.
-- [헝가리안 오프닝(1.g3): 배치·다른 오프닝으로 넘어가기·응수 | 외울수](https://chess.lumenlab.page/ko/openings/hungarian-opening/): 헝가리안 오프닝(1.g3) 정리: Bg2 피앙케토, 1...e5와 1...d5 상대로 둘 수, 잉글리시와 킹스 인디언 어택으로 넘어가기, 레이팅별로 많이 두는 응수.
-- [폴리시 오프닝(1.b4): 1...e5·1...d5·함정, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/polish-opening/): 폴리시 오프닝(1.b4) 정리: 1...e5 2.Bb2와 ...Bxb4·...d6, 부가예프 2.a3, 1...d5, 3...Nc6? 함정, 레이팅별로 많이 두는 응수.
-- [반 헤트 오프닝(1.Nc3): 1...d5·1...e5, 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/van-geet-opening/): 반 헤트 오프닝(1.Nc3) 정리: 1...d5 2.e4와 2...d4·2...dxe4, 둔스트-페레넷 갬빗, 비엔나로 가는 1...e5, 레이팅별로 많이 두는 응수.
-- [반트 크라위스 오프닝(1.e3): 배치와 레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/vant-kruijs-opening/): 반트 크라위스 오프닝(1.e3) 정리: 1...e5와 1...d5 뒤 둘 수, 1.d4 배치로 넘어가기, 이른 Qh5, 레이팅별로 많이 두는 응수.
-- [미제스 오프닝(1.d3): 배치·다른 오프닝으로 넘어가기·응수 | 외울수](https://chess.lumenlab.page/ko/openings/mieses-opening/): 미제스 오프닝(1.d3) 정리: 색을 바꾼 피르츠와 킹스 인디언 배치, 킹스 인디언 어택, 1...e5와 1...d5 뒤 흐름, 레이팅별로 많이 두는 응수.
-- [그롭 오프닝(1.g4): 그롭 갬빗·함정·레이팅별 응수 | 외울수](https://chess.lumenlab.page/ko/openings/grob-opening/): 그롭 오프닝(1.g4) 정리: 그롭 갬빗 1...d5 2.Bg2 Bxg4 3.c4, 1...e5 상대로 둘 수, 2.f4?? 뒤 가장 빠른 메이트, 레이팅별로 많이 두는 응수.
-- [드문 첫 수: 1.c3·1.a3·1.f3·1.h3·1.h4와 그 밖의 수 | 외울수](https://chess.lumenlab.page/ko/openings/rare-first-moves/): 백의 드문 첫 수 정리: 사라고사 1.c3, 안데르센 1.a3, 반스 1.f3, 클레멘츠 1.h3, 웨어 1.a4, 카다시 1.h4, 1.Na3, 1.Nh3, 레이팅별로 많이 두는 응수.
-- [체스 오프닝 연습: 간격 반복으로 외우기 | 외울수](https://chess.lumenlab.page/ko/practice/): 내 레이팅대 사람들이 실제로 두는 응수를 상대로 오프닝을 연습해요. 틀린 수는 정해진 날에 다시 나와요. 무료, 브라우저에서.
-- [외울수 소개 | 외울수](https://chess.lumenlab.page/ko/about/): 외울수 숫자는 어디서 왔나: 리체스 레이팅 대국, 레이팅대, 오프닝 이름, 연습이 수를 고르는 방법과 한계.
-- [개인정보 처리방침 | 외울수](https://chess.lumenlab.page/ko/privacy/): 외울수가 이 기기에 남기는 것, 받아 오는 것, 방문 통계와 광고.
+- [오프닝 트레일: 체스 오프닝을 1수부터 수마다 이유와 함께](https://chess.lumenlab.page/ko/): 체스 오프닝을 1수부터 걸어 봐요. 수마다 두는 이유, 내 레이팅대가 실제로 두는 응수, 인기 있지만 사실은 나쁜 수까지. 무료.
+- [체스 오프닝 지도: 모든 수를 단계와 이유로](https://chess.lumenlab.page/ko/map/): 체스 오프닝을 한 장의 지도로: 리체스 1억 7,493만 판에서 나온 판 37만 개, 엔진 점수, 메인라인, 내 레이팅대의 함정.
+- [체스 오프닝 정리: 수순·계획·레이팅별 승률 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/): 다루는 체스 오프닝 전부를 첫 수별로 묶었어요. 메인라인 수마다 이유, 양쪽 계획, 함정, 레이팅대 네 곳의 승률.
+- [1.e4에 대한 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/e4/): 우리 대국에서 1.e4 뒤에 나온 응수 전부, 레이팅대마다 얼마나 두는지, 결과, 각각 어디로 이어지는지예요.
+- [1.d4에 대한 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/d4/): 우리 대국에서 1.d4 뒤에 나온 응수 전부, 레이팅대마다 얼마나 두는지, 결과, 각각 어디로 이어지는지예요.
+- [1.c4에 대한 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/c4/): 우리 대국에서 1.c4 뒤에 나온 응수 전부, 레이팅대마다 얼마나 두는지, 결과, 각각 어디로 이어지는지예요.
+- [1.Nf3에 대한 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/nf3/): 우리 대국에서 1.Nf3 뒤에 나온 응수 전부, 레이팅대마다 얼마나 두는지, 결과, 각각 어디로 이어지는지예요.
+- [그 밖의 첫 수 (체스) | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/other-first-moves/): 1.e4·1.d4·1.c4·1.Nf3이 아닌 첫 수가 얼마나 나오고 어디로 이어지는지예요.
+- [레이팅별 체스 오프닝 추천: 1억 7천만 판으로 센 승률](https://chess.lumenlab.page/ko/best-openings/): 1200 미만, 1200~1599, 1600~1999, 2000 이상에서 백과 흑으로 점수가 좋은 오프닝을 리체스 1억 7,493만 판으로 셌어요.
+- [이탈리안 게임: 주요 수순·계획·함정, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/italian-game/): 이탈리안 게임(1.e4 e5 2.Nf3 Nc6 3.Bc4) 정리: 지우오코 피아노·피아니시모, 그레코 어택, 에반스 갬빗, 투 나이츠, 루소 갬빗, 양쪽 계획과 레이팅별로 많이 두는 응수.
+- [루이 로페즈(스패니시): 계획·주요 수순·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/ruy-lopez/): 루이 로페즈(1.e4 e5 2.Nf3 Nc6 3.Bb5) 정리: 클로즈드·오픈, 마샬 어택, 치고린, 베를린, 익스체인지 변화, 대표 계획과 레이팅별로 많이 두는 응수.
+- [스카치 게임: 주요 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/scotch-game/): 스카치 게임(1.e4 e5 2.Nf3 Nc6 3.d4) 정리: 클래시컬, 슈미트, 스카치 갬빗 갈래와 양쪽 계획, 실제 응수 비율.
+- [페트로프 디펜스(러시안 게임): 수순·함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/petrovs-defense/): 페트로프 디펜스(1.e4 e5 2.Nf3 Nf6) 정리: 주요 수순, 스태퍼드 갬빗, 3...Nxe4? 함정, 레이팅별로 많이 두는 수.
+- [필리도르 디펜스: 계획·레갈 메이트·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/philidor-defense/): 필리도르 디펜스(1.e4 e5 2.Nf3 d6) 정리: 흑의 단단한 배치, 백의 가장 좋은 시도, 레갈 메이트, 레이팅별로 많이 두는 수.
+- [비엔나 게임·비엔나 갬빗: 수순·함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/vienna-game/): 비엔나 게임(1.e4 e5 2.Nc3) 정리: 비엔나 갬빗, 2...Nf6와 2...Nc6, 빠른 함정, 양쪽 계획과 레이팅별 실제 응수 비율.
+- [킹스 갬빗: 수락·거절·함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/kings-gambit/): 킹스 갬빗(1.e4 e5 2.f4) 정리: 수락·거절 갈래, 3.fxe5?? 함정, 양쪽 계획, 각 응수가 얼마나 나오는지.
+- [포 나이츠 게임: 스패니시·스카치·이탈리안 갈래, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/four-knights-game/): 포 나이츠 게임(1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6) 정리: 스패니시·스카치·이탈리안 포 나이츠, 포크 수, 실제 응수 비율.
+- [비숍스 오프닝: 수순·스칼라 메이트 패턴·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/bishops-opening/): 비숍스 오프닝(1.e4 e5 2.Bc4) 정리: 베를린 디펜스, 2...Bc5, 우루소프 갬빗, 스칼라 메이트 패턴, 실제 응수 비율.
+- [센터 게임·데니시 갬빗: 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/center-game/): 센터 게임(1.e4 e5 2.d4 exd4 3.Qxd4)과 데니시 갬빗(3.c3) 정리: 생각, 흔한 응수, 레이팅대 네 곳의 승률.
+- [투 나이츠 디펜스: 프라이드 리버·트랙슬러·4.d3, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/two-knights-defense/): 투 나이츠 디펜스(1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6) 정리: 4.Ng5와 프라이드 리버, 트랙슬러, 4.d3·4.d4, 레이팅별로 많이 두는 수.
+- [에반스 갬빗: 수락·거절 수순, 계획, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/evans-gambit/): 에반스 갬빗(1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.b4) 정리: 5...Ba5, 5...Be7, 라스커 디펜스, 거절 4...Bb6, 레이팅별로 많이 두는 수.
+- [폰치아니 오프닝(3.c3): 수순·계획, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/ponziani-opening/): 폰치아니 오프닝(1.e4 e5 2.Nf3 Nc6 3.c3) 정리: 3...Nf6, 3...d5 4.Qa4, 3...Bc5, c3와 d4의 생각, 레이팅별로 많이 두는 수.
+- [엘리펀트 갬빗(2...d5): 통하는 수일까, 수순과 레이팅별 성적 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/elephant-gambit/): 엘리펀트 갬빗(1.e4 e5 2.Nf3 d5) 정리: 3.exd5 e4, 3.Nxe5, 백의 좋은 응수, 레이팅대 네 곳의 성적.
+- [라트비안 갬빗(2...f5): 수순·함정, 레이팅별 성적 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/latvian-gambit/): 라트비안 갬빗(1.e4 e5 2.Nf3 f5) 정리: 3.Nxe5, 3.exf5, 3.Bc4, 백의 좋은 응수, 레이팅대 네 곳의 성적.
+- [다미아노 디펜스(2...f6): 왜 나쁜가, 어떻게 응징하나 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/damiano-defense/): 다미아노 디펜스(1.e4 e5 2.Nf3 f6) 정리: 3.Nxe5!가 통하는 이유, 3...fxe5 4.Qh5+ 함정, 더 안전한 3...Qe7, 레이팅대별 성적.
+- [웨이워드 퀸 어택(2.Qh5)과 2.Qf3: 일찍 나온 퀸 받아치기 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/wayward-queen-attack/): 웨이워드 퀸 어택(1.e4 e5 2.Qh5)과 나폴레옹 어택(2.Qf3) 정리: 스칼라 메이트의 생각, 안전한 2...Nc6·3...g6, 레이팅대별 성적.
+- [1.e4 e5: 백의 둘째 수 모두, 주요 수와 드문 수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/kings-pawn-game/): 1.e4 e5(킹스 폰 게임, 오픈 게임) 정리: 2.Nf3, 2.Bc4, 2.Nc3, 2.f4, 2.d4와 2.d3, 2.c3, 2.Ne2, 2.Bb5, 2.Ke2 같은 드문 수, 레이팅별로 많이 두는 수.
+- [킹스 나이트 오프닝(1.e4 e5 2.Nf3): 흑의 응수와 백의 셋째 수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/kings-knight-opening/): 킹스 나이트 오프닝(1.e4 e5 2.Nf3) 정리: 2...Nc6, 2...Nf6, 2...d6와 드문 응수, 백의 셋째 수 3.Bc4·3.Bb5·3.d4·3.Nc3·3.c3와 드문 3.g3·3.c4·3.Be2.
+- [베를린 디펜스: 베를린 엔드게임, 안티 베를린 4.d3, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/berlin-defense/): 베를린 디펜스(1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6) 정리: 베를린 엔드게임, 4.O-O Nxe4 5.Re1, 안티 베를린 4.d3, 레이팅이 오를수록 늘어나는 무승부.
+- [시실리안 디펜스: 주요 갈래 정리와 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-defense/): 시실리안 디펜스(1.e4 c5) 정리: 오픈 시실리안, 알라핀, 클로즈드, 스미스-모라, 로솔리모, 양쪽이 원하는 것과 각 갈래가 얼마나 나오는지.
+- [시실리안 나이도르프: 주요 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-najdorf/): 나이도르프 시실리안(5...a6) 정리: 잉글리시 어택, 6.Bg5, 6.Be2, 6.Bc4 갈래별 계획과 레이팅별 실제 응수 비율.
+- [시실리안 드래곤: 유고슬라브 어택·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-dragon/): 시실리안 드래곤(5...g6) 정리: 유고슬라브 어택, 가속 드래곤, 6.Be3 Ng4? 수, 레이팅별로 각 갈래가 얼마나 나오는지.
+- [스미스-모라 갬빗: 수순·시베리안 함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/smith-morra-gambit/): 스미스-모라 갬빗(1.e4 c5 2.d4 cxd4 3.c3) 정리: 수락·거절 갈래, 시베리안 함정, 양쪽 계획과 레이팅별 응수 비율.
+- [알라핀 시실리안(2.c3): 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/alapin-sicilian/): 알라핀 시실리안(1.e4 c5 2.c3) 정리: 2...d5, 2...Nf6와 다른 응수, 양쪽 계획, 레이팅별로 많이 두는 수.
+- [시실리안 클래시컬(5...Nc6): 리히터-라우저·소진, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-classical/): 클래시컬 시실리안(5...Nc6) 정리: 리히터-라우저 6.Bg5, 소진 6.Bc4, 6.Be3 Ng4, 6.Be2 e5, 양쪽 계획과 레이팅별로 많이 두는 수.
+- [시실리안 셰베닝겐: 케레스 어택·잉글리시 어택, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-scheveningen/): 셰베닝겐 시실리안(5...e6) 정리: 작은 중앙, 케레스 어택 6.g4, 잉글리시 어택, 조용한 6.Be2, 레이팅별로 많이 두는 수.
+- [시실리안 스베시니코프·칼라시니코프: 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-sveshnikov/): 스베시니코프 시실리안(5...e5)과 칼라시니코프·뢰벤탈(4...e5) 정리: d5 구멍, 9.Bxf6와 9.Nd5, 레이팅별 응수 비율.
+- [시실리안 타이마노프(4...Nc6): 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-taimanov/): 타이마노프 시실리안(2...e6, 4...Nc6) 정리: 5.Nc3 Qc7, 5...a6, 포 나이츠 5...Nf6, 5.Nb5, 양쪽 계획과 레이팅별로 많이 두는 수.
+- [시실리안 칸(4...a6): 마로치 바인드·5.Bd3, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/sicilian-kan/): 칸 시실리안(2...e6, 4...a6) 정리: 5.Nc3 Qc7, 5.Bd3, 5.c4 마로치 바인드와 고슴도치 배치, 레이팅별로 많이 두는 수.
+- [클로즈드 시실리안·그랑프리 어택: 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/closed-sicilian/): 클로즈드 시실리안(2.Nc3)의 g3·Bg2 배치, f4로 가는 그랑프리 어택, 2.f4까지, 양쪽 계획과 레이팅별로 많이 두는 수.
+- [로솔리모 어택(3.Bb5): 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/rossolimo-attack/): 로솔리모(1.e4 c5 2.Nf3 Nc6 3.Bb5) 정리: 3...g6, 3...e6, 3...d6, c6에서 바꿀 때, 양쪽 계획과 레이팅별로 많이 두는 수.
+- [시실리안 모스크바 변화(3.Bb5+): 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/moscow-variation/): 모스크바 변화(1.e4 c5 2.Nf3 d6 3.Bb5+) 정리: 3...Bd7, 3...Nd7, 3...Nc6, 양쪽 계획과 레이팅별로 많이 두는 응수.
+- [프렌치 디펜스: 어드밴스·익스체인지·위나워, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/french-defense/): 프렌치 디펜스(1.e4 e6 2.d4 d5) 정리: 어드밴스, 익스체인지, 타라시, 위나워, 양쪽 계획, 고전 함정, 실제 응수 비율.
+- [카로칸 디펜스: 어드밴스·익스체인지·클래시컬, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/caro-kann-defense/): 카로칸(1.e4 c6 2.d4 d5) 정리: 어드밴스, 익스체인지, 클래시컬, 투 나이츠 갈래, 양쪽 계획, 유명한 스머더드 메이트, 실제 응수 비율.
+- [스칸디나비안 디펜스: Qa5·Qd6·Qd8와 2...Nf6, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/scandinavian-defense/): 스칸디나비안 디펜스(1.e4 d5) 정리: 3...Qa5, 3...Qd6, 3...Qd8 갈래, 모던 2...Nf6, 양쪽 계획, 실제 응수 비율.
+- [피르츠 디펜스: 오스트리안·150 어택·라이언·체코, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/pirc-defense/): 피르츠 디펜스(1.e4 d6 2.d4 Nf6 3.Nc3 g6) 정리: 오스트리안 어택, 150 어택, 클래시컬, 라이언·체코 배치, 레이팅별 응수 비율.
+- [알레힌 디펜스: 포 폰스·모던·익스체인지, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/alekhine-defense/): 알레힌 디펜스(1.e4 Nf6) 정리: 포 폰스 어택, 모던·익스체인지 변화, 양쪽 계획, 레이팅별 실제 응수 비율.
+- [모던 디펜스(1...g6): 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/modern-defense/): 모던 디펜스(1.e4 g6) 정리: 3.Nc3와 Be3·Qd2, 스리 폰즈 어택, 프테로닥틸, 하마(히포) 배치, 레이팅별로 많이 두는 수.
+- [님조비치 디펜스(1...Nc6): 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/nimzowitsch-defense/): 님조비치 디펜스(1.e4 Nc6) 정리: 2.d4 d5, 케네디 2...e5, 윌리엄스 2.Nf3 d6와 다른 오프닝으로 옮겨 가는 길, 레이팅별로 많이 두는 수.
+- [오웬 디펜스(1...b6): 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/owen-defense/): 오웬 디펜스(1.e4 b6) 정리: b7 비숍과 e4, 2.d4 Bb7 3.Bd3와 3.Nc3, 3...f5 뒤의 메이트 함정, 레이팅별로 많이 두는 응수.
+- [세인트 조지 디펜스(1...a6): 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/st-george-defense/): 세인트 조지 디펜스(1.e4 a6) 정리: 2.d4 b5와 b7 비숍, 양쪽 계획, 레이팅별로 많이 두는 응수.
+- [1.e4에 드문 응수: 1...f5·1...g5·1...a5·1...f6 등 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/rare-defenses-to-e4/): 1.e4에 대한 드문 첫 응수 정리: 두라스 갬빗 1...f5, 보그 1...g5, 웨어 1...a5, 골드스미스 1...h5, 반스 1...f6, 카 1...h6, 레밍 1...Na6, 레이팅별 통계.
+- [퀸스 갬빗: 백으로 두는 법과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/queens-gambit/): 백의 퀸스 갬빗(1.d4 d5 2.c4) 정리: 2...e6, 2...c6, 2...dxc4, 알빈에 대한 대처, 계획과 내 레이팅대 실제 응수 비율.
+- [퀸스 갬빗 거절: 계획·엘리펀트 함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/queens-gambit-declined/): 퀸스 갬빗 거절(1.d4 d5 2.c4 e6) 정리: 오소독스, 익스체인지, 타라시 갈래, 엘리펀트 함정, 레이팅대 네 곳의 실제 응수 비율.
+- [퀸스 갬빗 수락: 주요 수순·함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/queens-gambit-accepted/): 퀸스 갬빗 수락(1.d4 d5 2.c4 dxc4) 정리: 3.e3, 3.e4, 3.Nf3, ...b5가 왜 안 되는지, 양쪽 계획과 레이팅별 응수 비율.
+- [슬라브 디펜스·세미 슬라브: 주요 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/slav-defense/): 슬라브(1.d4 d5 2.c4 c6)와 세미 슬라브 정리: 주요 수순, c8 비숍 문제, 양쪽 계획, 내 레이팅대에서 각 응수가 얼마나 나오는지.
+- [런던 시스템: 배치·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/london-system/): 런던 시스템(1.d4와 Bf4) 정리: 기본 배치, ...c5·...Qb6 대처, 양쪽 계획, 레이팅대 네 곳의 실제 응수 비율.
+- [1.d4 d5: 백의 둘째 수 모두, 주요 수와 드문 수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/queens-pawn-game/): 1.d4 d5(퀸스 폰 게임, 클로즈드 게임) 정리: 2.c4, 2.Bf4, 2.Nf3, 2.e3, 2.Nc3, 2.e4와 2.Bg5, 2.Qd3 같은 드문 수, 레이팅별로 많이 두는 수.
+- [콜레 시스템·스톤월 어택: 배치와 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/colle-system/): 콜레 시스템(d4, Nf3, e3, Bd3, c3, Nbd2)과 콜레-주커토르트, 스톤월 어택 정리: 배치, e4 돌파, 레이팅별로 많이 두는 수.
+- [블랙마-디머 갬빗: 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/blackmar-diemer-gambit/): 블랙마-디머 갬빗(1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3) 정리: 타이히만, 에이베, 보골류보프 디펜스와 거절 갈래, 레이팅별로 많이 두는 수.
+- [리히터-베레소프 어택(3.Bg5): 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/richter-veresov-attack/): 리히터-베레소프 어택(1.d4 d5 2.Nc3 Nf6 3.Bg5) 정리: 3...e6 4.e4, 3...Bf5, 3...Nbd7, 양쪽 계획과 레이팅별로 많이 두는 응수.
+- [타라시 디펜스(3...c5): 고립 폰, 수순과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/tarrasch-defense/): 타라시 디펜스(1.d4 d5 2.c4 e6 3.Nc3 c5) 정리: 고립된 d폰, 6.g3 주요 수순, 샤라 갬빗, 레이팅별로 많이 두는 수.
+- [1.d4 Nf6 인디언 디펜스: 모든 갈래와 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/indian-defense/): 1.d4 Nf6 인디언 디펜스 정리: 킹스 인디언, 님조, 퀸스 인디언, 그륀펠트, 베노니, 부다페스트와 토레·트롬포스키, 레이팅별로 많이 두는 응수.
+- [킹스 인디언 디펜스: 클래시컬·재미시, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/kings-indian-defense/): 킹스 인디언 디펜스(1.d4 Nf6 2.c4 g6) 정리: 클래시컬, 재미시, 포 폰스, 피앙케토 갈래, 대표 공격, 레이팅별 실제 응수 비율.
+- [님조 인디언 디펜스: 루빈스타인·클래시컬, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/nimzo-indian-defense/): 님조 인디언(1.d4 Nf6 2.c4 e6 3.Nc3 Bb4) 정리: 루빈스타인 4.e3, 클래시컬 4.Qc2, 재미시, 겹친 폰, 레이팅별 실제 응수 비율.
+- [퀸스 인디언 디펜스: 피앙케토·4...Ba6, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/queens-indian-defense/): 퀸스 인디언 디펜스(1.d4 Nf6 2.c4 e6 3.Nf3 b6) 정리: 4.g3 피앙케토와 4...Ba6·4...Bb7, 페트로시안 4.a3, 4.Nc3, 레이팅별로 많이 두는 수.
+- [보고 인디언 디펜스(3...Bb4+): 4.Bd2·4.Nbd2, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/bogo-indian-defense/): 보고 인디언 디펜스(1.d4 Nf6 2.c4 e6 3.Nf3 Bb4+) 정리: 4.Bd2와 4...Qe7·4...Bxd2+·4...a5, 4.Nbd2 갈래, 양쪽 계획, 레이팅별로 많이 두는 수.
+- [카탈란 오프닝: 오픈·클로즈드 갈래와 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/catalan-opening/): 카탈란(1.d4 Nf6 2.c4 e6 3.g3) 정리: 오픈 카탈란 4...dxc4, ...c6를 두는 클로즈드 4...Be7, 3...Bb4+, g2 비숍, 레이팅별로 많이 두는 수.
+- [그륀펠트 디펜스: 익스체인지·러시안·4.Bf4, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/grunfeld-defense/): 그륀펠트 디펜스(1.d4 Nf6 2.c4 g6 3.Nc3 d5) 정리: 익스체인지 변화, 4.Nf3 갈래와 러시안 Qb3, 4.Bf4, 4.Bg5, 레이팅별로 많이 두는 수.
+- [모던 베노니·올드 베노니: 수순·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/benoni-defense/): 베노니 디펜스 정리: 모던 베노니(1.d4 Nf6 2.c4 c5 3.d5 e6), 타이마노프 f4 갈래, 체코 베노니, 올드 베노니 1.d4 c5, 레이팅별로 많이 두는 수.
+- [벤코 갬빗(3...b5): 수락·거절과 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/benko-gambit/): 벤코 갬빗(1.d4 Nf6 2.c4 c5 3.d5 b5) 정리: 끝까지 받는 5.bxa6, 5.e3와 5.b6, 4.Nf3 거절, 블루멘펠트, 레이팅별로 많이 두는 수.
+- [부다페스트 갬빗(2...e5): 주요 수순·파야로비치·메이트 함정 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/budapest-gambit/): 부다페스트 갬빗(1.d4 Nf6 2.c4 e5) 정리: 3...Ng4와 4.Bf4·4.Nf3, 파야로비치 3...Ne4, 3.d5 거절, Nd3 메이트 함정, 레이팅별로 많이 두는 수.
+- [트롬포스키 어택(2.Bg5): 2...Ne4·2...e6·2...d5, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/trompowsky-attack/): 트롬포스키 어택(1.d4 Nf6 2.Bg5) 정리: 2...Ne4와 3.Bf4·3.h4, 2...e6 3.e4, 2...d5 3.Bxf6, 양쪽 계획, 레이팅별로 많이 두는 응수.
+- [올드 인디언 디펜스(2...d6): 수순·잉글리시 랫, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/old-indian-defense/): 올드 인디언 디펜스(1.d4 Nf6 2.c4 d6) 정리: ...Nbd7와 ...e5 배치, 4.dxe5 퀸 교환, 4.d5, 잉글리시 랫과 웨이드 갈래, 레이팅별로 많이 두는 수.
+- [호르비츠 디펜스(1...e6): 잉글리시 디펜스·캥거루, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/horwitz-defense/): 호르비츠 디펜스(1.d4 e6) 정리: 프렌치·퀸스 갬빗·더치로 가는 수순, 잉글리시 디펜스 2...b6, 캥거루 2...Bb4+, 레이팅별로 많이 두는 수.
+- [더치 디펜스: 레닌그라드·스톤월·함정, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/dutch-defense/): 더치 디펜스(1.d4 f5) 정리: 레닌그라드, 스톤월, 클래시컬 배치, 2.Bg5와 스턴턴 갬빗 같은 안티 더치, 실제 응수 비율.
+- [잉글룬드 갬빗: 함정·반박·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/englund-gambit/): 잉글룬드 갬빗(1.d4 e5) 정리: 유명한 Qc1 메이트 함정, 백이 두어야 할 수, 레이팅대 네 곳에서 얼마나 통하는지.
+- [미케나스 디펜스(1...Nc6)와 1.d4에 드문 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/mikenas-defense/): 미케나스 디펜스(1.d4 Nc6) 정리: 2.c4 e5, 2.d5, 2.Nf3 d5, 그리고 폴리시 디펜스 1...b5 같은 1.d4에 드문 응수, 레이팅별로 많이 두는 수.
+- [잉글리시 오프닝: 주요 배치·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/english-opening/): 잉글리시 오프닝(1.c4) 정리: 역 시실리안, 대칭, 앵글로 인디언 배치, 양쪽 계획과 레이팅별 실제 응수 비율.
+- [레티 오프닝·1.Nf3: 배치·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/reti-opening/): 1.Nf3(주커토르트·레티) 정리: c4를 둔 레티, 킹스 인디언 어택, 1.d4로 넘어가기, 계획과 레이팅별 실제 응수 비율.
+- [킹스 인디언 어택(KIA): 배치·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/kings-indian-attack/): 킹스 인디언 어택 정리: ...d5, 프렌치, 시실리안 상대로 두는 Nf3, g3, Bg2, O-O, d3, Nbd2, e4 배치, 양쪽 계획, 레이팅별로 많이 두는 응수.
+- [버드 오프닝(1.f4): 프롬 갬빗·배치·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/bird-opening/): 버드 오프닝(1.f4) 정리: 1...d5 상대 배치, 프롬 갬빗 1...e5와 메이트 함정, 윌리엄스 갬빗 2.e4, 양쪽 계획, 레이팅별로 많이 두는 응수.
+- [님조-라르센 어택(1.b3): 배치·계획·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/nimzo-larsen-attack/): 님조-라르센 어택(1.b3) 정리: 1...e5 2.Bb2 Nc6, 1...d5, 1...Nf6 배치, e5를 겨누는 b2 비숍, 양쪽 계획, 레이팅별로 많이 두는 응수.
+- [헝가리안 오프닝(1.g3): 배치·다른 오프닝으로 넘어가기·응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/hungarian-opening/): 헝가리안 오프닝(1.g3) 정리: Bg2 피앙케토, 1...e5와 1...d5 상대로 둘 수, 잉글리시와 킹스 인디언 어택으로 넘어가기, 레이팅별로 많이 두는 응수.
+- [폴리시 오프닝(1.b4): 1...e5·1...d5·함정, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/polish-opening/): 폴리시 오프닝(1.b4) 정리: 1...e5 2.Bb2와 ...Bxb4·...d6, 부가예프 2.a3, 1...d5, 3...Nc6? 함정, 레이팅별로 많이 두는 응수.
+- [반 헤트 오프닝(1.Nc3): 1...d5·1...e5, 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/van-geet-opening/): 반 헤트 오프닝(1.Nc3) 정리: 1...d5 2.e4와 2...d4·2...dxe4, 둔스트-페레넷 갬빗, 비엔나로 가는 1...e5, 레이팅별로 많이 두는 응수.
+- [반트 크라위스 오프닝(1.e3): 배치와 레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/vant-kruijs-opening/): 반트 크라위스 오프닝(1.e3) 정리: 1...e5와 1...d5 뒤 둘 수, 1.d4 배치로 넘어가기, 이른 Qh5, 레이팅별로 많이 두는 응수.
+- [미제스 오프닝(1.d3): 배치·다른 오프닝으로 넘어가기·응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/mieses-opening/): 미제스 오프닝(1.d3) 정리: 색을 바꾼 피르츠와 킹스 인디언 배치, 킹스 인디언 어택, 1...e5와 1...d5 뒤 흐름, 레이팅별로 많이 두는 응수.
+- [그롭 오프닝(1.g4): 그롭 갬빗·함정·레이팅별 응수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/grob-opening/): 그롭 오프닝(1.g4) 정리: 그롭 갬빗 1...d5 2.Bg2 Bxg4 3.c4, 1...e5 상대로 둘 수, 2.f4?? 뒤 가장 빠른 메이트, 레이팅별로 많이 두는 응수.
+- [드문 첫 수: 1.c3·1.a3·1.f3·1.h3·1.h4와 그 밖의 수 | 오프닝 트레일](https://chess.lumenlab.page/ko/openings/rare-first-moves/): 백의 드문 첫 수 정리: 사라고사 1.c3, 안데르센 1.a3, 반스 1.f3, 클레멘츠 1.h3, 웨어 1.a4, 카다시 1.h4, 1.Na3, 1.Nh3, 레이팅별로 많이 두는 응수.
+- [체스 오프닝 연습: 간격 반복으로 외우기 | 오프닝 트레일](https://chess.lumenlab.page/ko/practice/): 내 레이팅대 사람들이 실제로 두는 응수를 상대로 오프닝을 연습해요. 틀린 수는 정해진 날에 다시 나와요. 무료, 브라우저에서.
+- [체스 오프닝 테스트: 2분, 국면 10개로 내 단계 알기 | 오프닝 트레일](https://chess.lumenlab.page/ko/test/): 실제 오프닝 국면 10개에서 고수가 두는 수를 골라요. 내 오프닝 단계, 고른 수가 닮은 레이팅대, 공유 카드까지. 무료, 가입 없음.
+- [자료와 출처: 오프닝 트레일은 어떻게 세나](https://chess.lumenlab.page/ko/data/): 오프닝 트레일 숫자의 출처, 수를 메인·대안·사이드·의심스러운 수로 나누는 방법, 사용 허가와 내려받기.
+- [오프닝 트레일 소개 | 오프닝 트레일](https://chess.lumenlab.page/ko/about/): 오프닝 트레일은 체스 오프닝을 1수부터 수마다 이유와 함께, 리체스 레이팅 대국 1억 7,493만 판의 숫자로 보여 줘요.
+- [개인정보 처리방침 | 오프닝 트레일](https://chess.lumenlab.page/ko/privacy/): 오프닝 트레일이 이 기기에 남기는 것, 받아 오는 것, 방문 통계와 광고.
 
 ## Lumen Lab
 

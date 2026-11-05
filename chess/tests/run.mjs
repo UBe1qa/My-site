@@ -1,4 +1,4 @@
-// 로직 시험: node chess/tests/run.mjs  (core.js·chess.min.js·data/p 를 그대로 읽는다)
+// 로직 시험: node chess/tests/run.mjs  (core.js·chess.min.js·data/t 를 그대로 읽는다)
 import fs from 'node:fs';
 import vm from 'node:vm';
 import path from 'node:path';
@@ -11,22 +11,28 @@ let ok = 0, bad = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) === JSON.stringify(b)) ok++; else { bad++; console.log('✗', msg, JSON.stringify(a), '≠', JSON.stringify(b)); } };
 
 // 1) 조각: 모든 국면이 자기 조각에 있고(FNV 같음), 숫자 칸 모양이 맞다
-const dir = path.join(ROOT, 'data', 'p');
-let npos = 0, nnames = 0, slugs = 0;
+//    국면 = [도착 12칸, 평가, [[수, 분류, 수 뒤 평가, 12칸]…], 고수 도착 12칸|0, [[수, 4칸]…]|0, 엔진 최선 수|0, 수순|0]
+const dir = path.join(ROOT, 'data', 't');
+let npos = 0, nnames = 0, slugs = 0, nfiles = 0, nev = 0;
 for (const f of fs.readdirSync(dir)) {
+  nfiles++;
   const id = f.replace('.json', ''), sh = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
   for (const [epd, e] of Object.entries(sh.e)) {
     npos++;
+    if (e[1] != null) nev++;
     if (FM.shard(epd) !== id) eq(FM.shard(epd), id, 'shard ' + epd);
-    if (e[0].length !== 12 || e[1].length !== 12) eq(e[0].length, 12, 'played/reached 12칸 ' + epd);
-    for (const row of e.slice(2)) if (row.length !== 13 || typeof row[0] !== 'string') eq(row.length, 13, 'row ' + epd);
+    if (e[0].length !== 12) eq(e[0].length, 12, 'reached 12칸 ' + epd);
+    for (const row of e[2]) if (row.length !== 15 || typeof row[0] !== 'string' || row[1] < -1 || row[1] > 4) eq(row.length, 15, 'row ' + epd);
+    if (e[3] && e[3].length !== 12) eq(e[3].length, 12, 'otb 12칸 ' + epd);
+    if (e[4]) for (const row of e[4]) if (row.length !== 5) eq(row.length, 5, 'otb row ' + epd);
     const s = FM.stats(e, -1), sum = s.moves.reduce((a, m) => a + m.n, 0);
-    if (sum > s.played) eq(sum <= s.played, true, 'moves ≤ played ' + epd);
+    if (sum > s.n) eq(sum <= s.n, true, 'moves ≤ reached ' + epd);
   }
-  for (const [epd, n] of Object.entries(sh.n)) { nnames++; if (n[3]) slugs++; if (FM.shard(epd) !== id) eq(FM.shard(epd), id, 'name shard ' + epd); }
+  for (const [epd, n] of Object.entries(sh.n || {})) { nnames++; if (n[3]) slugs++; if (FM.shard(epd) !== id) eq(FM.shard(epd), id, 'name shard ' + epd); }
 }
-ok++;
-console.log(`국면 ${npos}, 이름 ${nnames}(해설 연결 ${slugs})`);
+eq(nfiles, FM.SHARDS, '조각 수');
+eq(nev / npos > 0.95, true, '평가가 있는 국면 95% 이상');
+console.log(`국면 ${npos}(평가 ${(nev / npos * 100).toFixed(1)}%), 이름 ${nnames}(해설 연결 ${slugs})`);
 
 // 2) 처음 국면 통계 + 수가 모두 둘 수 있는 수
 const start = new Chess(), sepd = FM.epd(start.fen());
@@ -59,9 +65,28 @@ eq(FM.due(FM.grade(null, true, T), T), false, '맞힌 카드 오늘 아님');
 
 // 5) 숫자 모양·주소
 eq(FM.pct(0.004), '0.4%', 'pct <1'); eq(FM.pct(0.0004), '<0.1%', 'pct <0.1'); eq(FM.pct(0.355), '36%', 'pct'); eq(FM.count(1234567, 'en'), '1.2M', 'count en');
-eq(FM.count(254000, 'ko'), '25만', 'count ko'); eq(FM.count(18000, 'ko'), '1.8만', 'count ko 2'); eq(FM.count(8673, 'ko'), '8,673', 'count ko 3');
+eq(FM.count(254000, 'ko'), '25만', 'count ko'); eq(FM.count(174931775, 'ko'), '1.7억', 'count ko 억'); eq(FM.count(18000, 'ko'), '1.8만', 'count ko 2'); eq(FM.count(8673, 'ko'), '8,673', 'count ko 3');
 eq(FM.paramToLine('e2e4.e7e5.zz.e1g1.a7a8q'), ['e2e4', 'e7e5', 'e1g1', 'a7a8q'], 'paramToLine');
 eq(FM.fnv('abc'), 440920331, 'fnv');
+eq(FM.shard(sepd).length, 3, '조각 이름 3자리');
+eq(FM.hashToSan('e4.e5.Nf3.Nc6'), ['e4', 'e5', 'Nf3', 'Nc6'], 'hashToSan');
+eq(FM.sanToHash(['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#']), 'e4.e5.Qh5.Nc6.Bc4.Nf6.Qxf7', 'sanToHash');
+
+// 7) 테스트 문제: 정답은 메인·대안이고 보기 넷이 서로 다르며 둘 수 있다
+const TQ = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'test.json'), 'utf8'));
+eq(TQ.q.length >= 300, true, '테스트 문제 300개 이상');
+let tbad = 0;
+for (const q of TQ.q) {
+  const c = new Chess();
+  for (const u of q[0].split(".").filter(Boolean)) c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+  const sans = q[3].map((o) => o[0]);
+  const okMove = (san) => { try { return !!new Chess(c.fen()).move(san); } catch (e) { return false; } };
+  if (new Set(sans).size !== 4 || !sans.includes(q[2]) || !sans.every(okMove) || (c.turn() === 'w') !== (q[1] === 'w')) tbad++;
+  const right = q[3].find((o) => o[0] === q[2]);
+  if (!right || right[2] > 1) tbad++;
+}
+eq(tbad, 0, '테스트 문제 모양');
+for (const [slug, ids] of Object.entries(TQ.by)) if (!ids.every((i) => TQ.q[i] && TQ.q[i][5].includes(slug))) eq(slug, 'ok', 'by 목록 ' + slug);
 
 // 6) chess.js EPD 앙파상 칸 = python-chess(잡을 수 있을 때만)
 const a = new Chess(); a.move('e4'); eq(FM.epd(a.fen()), 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -', 'ep 없음');

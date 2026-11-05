@@ -1,0 +1,391 @@
+{
+ "name": {
+  "en": "Sicilian Najdorf",
+  "ko": "시실리안 나이도르프"
+ },
+ "eco": "B90",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "c5",
+  "Nf3",
+  "d6",
+  "d4",
+  "cxd4",
+  "Nxd4",
+  "Nf6",
+  "Nc3",
+  "a6"
+ ],
+ "position_epd": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/sicilian-najdorf/",
+  "ko": "https://chess.lumenlab.page/ko/openings/sicilian-najdorf/"
+ },
+ "engine_eval_white_cp": 25,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 3679,
+   "share_of_band": 0.000123,
+   "white_win": 1794,
+   "draw": 110,
+   "black_win": 1775
+  },
+  {
+   "band": "1200–1599",
+   "games": 43865,
+   "share_of_band": 0.000736,
+   "white_win": 20738,
+   "draw": 1572,
+   "black_win": 21555
+  },
+  {
+   "band": "1600–1999",
+   "games": 209780,
+   "share_of_band": 0.003236,
+   "white_win": 99099,
+   "draw": 9000,
+   "black_win": 101681
+  },
+  {
+   "band": "2000+",
+   "games": 227613,
+   "share_of_band": 0.011106,
+   "white_win": 107532,
+   "draw": 20028,
+   "black_win": 100053
+  }
+ ],
+ "masters": {
+  "games": 26615,
+  "white_win": 9996,
+  "draw": 6717,
+  "black_win": 9902,
+  "next_moves": [
+   {
+    "san": "Be3",
+    "games": 5076
+   },
+   {
+    "san": "Bg5",
+    "games": 5032
+   },
+   {
+    "san": "Be2",
+    "games": 3652
+   },
+   {
+    "san": "h3",
+    "games": 3258
+   },
+   {
+    "san": "f3",
+    "games": 2214
+   },
+   {
+    "san": "Bc4",
+    "games": 1601
+   },
+   {
+    "san": "Bd3",
+    "games": 1159
+   },
+   {
+    "san": "g3",
+    "games": 811
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Bg5",
+   "type": "alternative",
+   "engine_eval_white_cp": 2,
+   "games": 109681,
+   "share": 0.22754,
+   "white_win": 52383,
+   "draw": 5576,
+   "black_win": 51722
+  },
+  {
+   "san": "Be3",
+   "type": "main",
+   "engine_eval_white_cp": 25,
+   "games": 95931,
+   "share": 0.19901,
+   "white_win": 45081,
+   "draw": 9283,
+   "black_win": 41567
+  },
+  {
+   "san": "Bc4",
+   "type": "side",
+   "engine_eval_white_cp": 3,
+   "games": 62532,
+   "share": 0.12973,
+   "white_win": 29940,
+   "draw": 2937,
+   "black_win": 29655
+  },
+  {
+   "san": "Be2",
+   "type": "alternative",
+   "engine_eval_white_cp": 24,
+   "games": 55541,
+   "share": 0.11522,
+   "white_win": 26113,
+   "draw": 3484,
+   "black_win": 25944
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": 6,
+   "games": 41239,
+   "share": 0.08555,
+   "white_win": 18435,
+   "draw": 1994,
+   "black_win": 20810
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": 14,
+   "games": 38824,
+   "share": 0.08054,
+   "white_win": 18927,
+   "draw": 2560,
+   "black_win": 17337
+  },
+  {
+   "san": "h3",
+   "type": "alternative",
+   "engine_eval_white_cp": 23,
+   "games": 20020,
+   "share": 0.04153,
+   "white_win": 9756,
+   "draw": 1450,
+   "black_win": 8814
+  },
+  {
+   "san": "a4",
+   "type": "side",
+   "engine_eval_white_cp": -6,
+   "games": 17223,
+   "share": 0.03573,
+   "white_win": 7784,
+   "draw": 1007,
+   "black_win": 8432
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": 8,
+   "games": 10605,
+   "share": 0.022,
+   "white_win": 5327,
+   "draw": 569,
+   "black_win": 4709
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 16,
+   "games": 7128,
+   "share": 0.01479,
+   "white_win": 3440,
+   "draw": 482,
+   "black_win": 3206
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 9,
+   "games": 6032,
+   "share": 0.01251,
+   "white_win": 2693,
+   "draw": 318,
+   "black_win": 3021
+  },
+  {
+   "san": "Rg1",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 5798,
+   "share": 0.01203,
+   "white_win": 3018,
+   "draw": 321,
+   "black_win": 2459
+  },
+  {
+   "san": "Nf3",
+   "type": "side",
+   "engine_eval_white_cp": -18,
+   "games": 3180,
+   "share": 0.0066,
+   "white_win": 1451,
+   "draw": 186,
+   "black_win": 1543
+  },
+  {
+   "san": "Nb3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 2189,
+   "share": 0.00454,
+   "white_win": 1055,
+   "draw": 126,
+   "black_win": 1008
+  },
+  {
+   "san": "Bf4",
+   "type": "mistake",
+   "engine_eval_white_cp": -246,
+   "games": 1898,
+   "share": 0.00394,
+   "white_win": 458,
+   "draw": 56,
+   "black_win": 1384
+  },
+  {
+   "san": "Qf3",
+   "type": "side",
+   "engine_eval_white_cp": -11,
+   "games": 1126,
+   "share": 0.00234,
+   "white_win": 591,
+   "draw": 65,
+   "black_win": 470
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c5",
+   "why_en": "Fights for d4 from the side and makes the game unbalanced from move one.",
+   "why_ko": "옆에서 d4를 다투고, 첫 수부터 판의 균형을 깨요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops and prepares d4, the most common plan against the Sicilian.",
+   "why_ko": "전개하면서 d4를 준비해요. 시실리안에 가장 흔한 계획이에요."
+  },
+  {
+   "ply": 4,
+   "san": "d6",
+   "why_en": "Covers e5 and keeps the knight out of e5 and the bishop’s path open.",
+   "why_ko": "e5를 막아 나이트가 못 오게 하고, 비숍 길을 열어요."
+  },
+  {
+   "ply": 5,
+   "san": "d4",
+   "why_en": "Opens the center; White gets a lead in development and more space.",
+   "why_ko": "중앙을 열어요. 백은 전개가 앞서고 공간이 넓어져요."
+  },
+  {
+   "ply": 6,
+   "san": "cxd4",
+   "why_en": "Trades a wing pawn for a center pawn, which gives Black two central pawns.",
+   "why_ko": "옆 폰을 중앙 폰과 바꿔, 흑에게 중앙 폰 두 개가 남아요."
+  },
+  {
+   "ply": 7,
+   "san": "Nxd4",
+   "why_en": "Recaptures with the knight, which now sits in the middle of the board.",
+   "why_ko": "나이트로 다시 잡아요. 나이트가 판 한가운데에 서요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4, so White has to defend it.",
+   "why_ko": "e4를 치며 전개해 백이 지키게 만들어요."
+  },
+  {
+   "ply": 9,
+   "san": "Nc3",
+   "why_en": "Defends e4 with a piece and develops.",
+   "why_ko": "기물로 e4를 지키면서 전개해요."
+  },
+  {
+   "ply": 10,
+   "san": "a6",
+   "why_en": "Takes b5 from White’s pieces and prepares ...e5 or ...b5 later.",
+   "why_ko": "백 기물이 b5에 못 오게 하고, 나중에 ...e5나 ...b5를 준비해요."
+  },
+  {
+   "ply": 11,
+   "san": "Be3",
+   "why_en": "Develops and prepares Qd2 and f3: the English Attack.",
+   "why_ko": "전개하며 Qd2·f3를 준비해요. 잉글리시 어택이에요."
+  },
+  {
+   "ply": 12,
+   "san": "e5",
+   "why_en": "Kicks the d4 knight and takes space; d5 becomes the key square.",
+   "why_ko": "d4 나이트를 쫓고 공간을 잡아요. d5가 핵심 칸이 돼요."
+  },
+  {
+   "ply": 13,
+   "san": "Nb3",
+   "why_en": "The knight steps back to b3, out of the way.",
+   "why_ko": "나이트가 비켜 b3로 물러나요."
+  },
+  {
+   "ply": 14,
+   "san": "Be6",
+   "why_en": "Covers d5 with the bishop.",
+   "why_ko": "비숍으로 d5를 막아요."
+  },
+  {
+   "ply": 15,
+   "san": "f3",
+   "why_en": "Stops ...Ng4 and prepares g4.",
+   "why_ko": "...Ng4를 막고 g4를 준비해요."
+  },
+  {
+   "ply": 16,
+   "san": "Be7",
+   "why_en": "Develops and prepares to castle.",
+   "why_ko": "전개하고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 17,
+   "san": "Qd2",
+   "why_en": "Connects and prepares to castle long.",
+   "why_ko": "기물을 잇고 반대쪽 캐슬링을 준비해요."
+  },
+  {
+   "ply": 18,
+   "san": "O-O",
+   "why_en": "Castles short.",
+   "why_ko": "짧게 캐슬링해요."
+  },
+  {
+   "ply": 19,
+   "san": "O-O-O",
+   "why_en": "Castles long: both sides will race to attack the other king.",
+   "why_ko": "길게 캐슬링해요. 서로 상대 킹을 먼저 치려는 경쟁이에요."
+  },
+  {
+   "ply": 20,
+   "san": "Nbd7",
+   "why_en": "Develops and prepares ...b5.",
+   "why_ko": "전개하며 ...b5를 준비해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

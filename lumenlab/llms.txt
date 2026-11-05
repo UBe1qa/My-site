@@ -27,7 +27,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [Todok · 토독](https://typing.lumenlab.page/): Typing test and practice in English and Korean that shows which keys you missed and where you slowed down. Korean: https://typing.lumenlab.page/ko/ AI guide: https://typing.lumenlab.page/llms.txt
 - [Oneturn · 한바퀴](https://time.lumenlab.page/): A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change. Korean: https://time.lumenlab.page/ko/ AI guide: https://time.lumenlab.page/llms.txt
 - [Checkbench · 체크벤치](https://check.lumenlab.page/): Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded. Korean: https://check.lumenlab.page/ko/ AI guide: https://check.lumenlab.page/llms.txt
-- [Fewmoves · 외울수](https://chess.lumenlab.page/): See the moves and win rates at your rating from 17.4 million Lichess games, with 81 opening guides and a spaced-repetition trainer. Korean: https://chess.lumenlab.page/ko/ AI guide: https://chess.lumenlab.page/llms.txt
+- [Opening Trail · 오프닝 트레일](https://chess.lumenlab.page/): A map of the moves players at your rating really choose, with engine checks, from 175 million Lichess games, plus 81 opening guides, a 2-minute test and a spaced-repetition trainer. Korean: https://chess.lumenlab.page/ko/ AI guide: https://chess.lumenlab.page/llms.txt
 
 ## 한국어 페이지 (Korean)
 
@@ -47,7 +47,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [토독: 한글·영어 타자 연습 · Lumen Lab 루멘랩](https://lumenlab.page/works/todok/): 한글·영어 타자 속도를 재고 연습해요. 끝나면 어느 키에서 틀리고 느렸는지 자판으로 보여 줘요.
 - [한바퀴: 타이머·스톱워치·세계 시간 · Lumen Lab 루멘랩](https://lumenlab.page/works/oneturn/): 남은 시간이 시계판에 보이는 타이머, 랩 기록 스톱워치, 알람, 세계 시간. 다른 탭에서도 제때 울리고, 도시마다 서머타임 바뀌는 날까지 보여 줘요.
 - [체크벤치: 키보드·마우스·마이크 테스트 · Lumen Lab 루멘랩](https://lumenlab.page/works/checkbench/): 키보드·마우스·마이크·웹캠·스피커·모니터·게임패드를 한 화면에서 테스트해요. 소리와 영상은 기기 밖으로 안 나가요.
-- [외울수: 레이팅별 체스 오프닝 탐색기·연습 · Lumen Lab 루멘랩](https://lumenlab.page/works/fewmoves/): 내 레이팅대 사람들이 실제로 두는 수와 승률을 리체스 1,740만 판으로 보여 주고, 오프닝 81개 해설과 간격 반복 연습까지 있어요.
+- [오프닝 트레일: 레이팅별 체스 오프닝 지도·해설·테스트 · Lumen Lab 루멘랩](https://lumenlab.page/works/fewmoves/): 내 레이팅대 사람들이 실제로 두는 수와 엔진 평가를 리체스 1억 7,493만 판으로 지도처럼 보여 주고, 오프닝 81개 해설과 2분 테스트, 간격 반복 연습까지 있어요.
 - [루멘랩 가이드: 웹 도구 11개의 계산 기준과 쓰는 법 · Lumen Lab](https://lumenlab.page/guides/): 며칠 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력 등 루멘랩 웹 도구 11개의 계산 기준과 쓰는 법을 정리한 글 57편. 글마다 출처와 마지막으로 확인한 날을 적어요.
 - [두 날짜 사이 며칠인지 세는 법 — 시작일 포함과 미포함 | 며칠 계산기](https://lumenlab.page/guides/date/days-between/): 두 날짜 사이 기간을 셀 때 시작일을 넣느냐에 따라 하루가 달라져요. 빼기 계산, 시작일 포함, 개월·주 단위로 바꾸는 법을 예시로 정리했어요.
 - [디데이(D-day) 세는 법 — D-1, D-Day, D+1의 뜻 | 며칠 계산기](https://lumenlab.page/guides/date/d-day/): 디데이는 목표일까지 남은 날을 D-숫자로, 지난 날을 D+숫자로 표시해요. 계산 공식과 시험·전역일·기념일에서 쓰는 방식 차이를 정리했어요.
@@ -105,7 +105,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [마이크가 안 잡힐 때: 브라우저·윈도우·맥에서 볼 곳 | 체크벤치](https://lumenlab.page/guides/check/maikeu-an-japil-ttae/): 화상회의에서 마이크가 안 될 때, 마이크 테스트가 알려 주는 안내 문장별로 어디를 고치면 되는지 정리했어요. 사이트 권한, 운영체제 설정, 다른 장치, 다른 앱 순서예요.
 - [새 모니터 불량화소 확인 순서와 주사율 확인 | 체크벤치](https://lumenlab.page/guides/check/bulryang-hwaso-hwagin/): 새 모니터나 노트북을 받으면 10분 안에 확인할 것. 전체 화면 단색으로 불량화소를 찾는 순서, 적어 둘 것, 주사율이 사양대로 나오는지 보는 법이에요.
 - [키보드 동시 입력(롤오버) 테스트: 몇 키까지 눌리나 | 체크벤치](https://lumenlab.page/guides/check/dongsi-ipryeok-rollover/): 키보드가 한 번에 몇 키까지 받는지 직접 확인하는 법이에요. 키보드 테스트의 '동시에 눌린 키'가 어떻게 세는지와, 안 눌리는 조합(고스팅)을 찾는 순서를 적었어요.
-- [레이팅별로 많이 두는 체스 오프닝: 리체스 1,740만 판 | 외울수](https://lumenlab.page/guides/chess/openings-by-rating/): 1200 미만부터 2000 이상까지 레이팅에 따라 두는 오프닝이 어떻게 바뀌는지, 리체스 레이팅 대국 1,740만 판으로 셌어요. 첫 수, 해설이 있는 오프닝 모두, 결과와 무승부.
+- [레이팅별로 많이 두는 체스 오프닝: 리체스 1억 7,500만 판 | 오프닝 트레일](https://lumenlab.page/guides/chess/openings-by-rating/): 1200 미만부터 2000 이상까지 레이팅에 따라 두는 오프닝이 어떻게 바뀌는지, 리체스 레이팅 대국 1억 7,500만 판으로 셌어요. 첫 수, 해설이 있는 오프닝 모두, 결과와 무승부.
 
 ## Pages in English
 
@@ -125,7 +125,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [Todok: Korean and English typing practice · Lumen Lab](https://lumenlab.page/en/works/todok/): Typing test and practice in English and Korean that shows which keys you missed and where you slowed down.
 - [Oneturn: Timer, stopwatch and world clock · Lumen Lab](https://lumenlab.page/en/works/oneturn/): A dial timer that rings on time in a background tab, a lap stopwatch, an alarm and a world clock with each city's next daylight saving change.
 - [Checkbench: Keyboard, mouse and mic tests · Lumen Lab](https://lumenlab.page/en/works/checkbench/): Test your keyboard, mouse, mic, webcam, speakers, screen and gamepad in one place. Nothing is uploaded.
-- [Fewmoves: Chess openings by rating, with a trainer · Lumen Lab](https://lumenlab.page/en/works/fewmoves/): See the moves and win rates at your rating from 17.4 million Lichess games, with 81 opening guides and a spaced-repetition trainer.
+- [Opening Trail: Chess openings by rating: map, guides and a test · Lumen Lab](https://lumenlab.page/en/works/fewmoves/): A map of the moves players at your rating really choose, with engine checks, from 175 million Lichess games, plus 81 opening guides, a 2-minute test and a spaced-repetition trainer.
 - [Guides: how the 11 Lumen Lab web tools work · Lumen Lab](https://lumenlab.page/en/guides/): 49 guides for the Lumen Lab web tools, from Daycount and Inplace to Staycode and Onesheet: the rules behind each result and how to use them, with sources and the date each was last checked.
 - [How to count the days between two dates (and when to add 1) | Daycount](https://lumenlab.page/en/guides/date/days-between-dates/): Subtract the earlier date from the later one, and add 1 only if both the first and last day count. Examples for countdowns, trips, leap years and spreadsheets.
 - [How to count business days and find a deadline | Daycount](https://lumenlab.page/en/guides/date/business-days/): A business day is a weekday that isn't a holiday. How to find the date 5 or 10 business days away, whether today counts, and which US holidays are skipped.
@@ -175,4 +175,4 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [Key Rollover and Ghosting: How Many Keys at Once? | Checkbench](https://lumenlab.page/en/guides/check/n-key-rollover-ghosting/): Hold keys together and see how many your keyboard really reports. A practical way to test key rollover and spot ghosting or blocked combinations.
 - [Mic Not Working in the Browser: What to Check | Checkbench](https://lumenlab.page/en/guides/check/microphone-not-working-browser/): Mic silent in a browser call? Run the mic test, read its message and follow the matching fix: site permission, system setting, device or another app.
 - [New Monitor Check: Dead Pixels and Refresh Rate | Checkbench](https://lumenlab.page/en/guides/check/check-new-monitor-dead-pixels/): A ten-minute check for a new monitor or laptop screen: full-screen colors to find bad pixels, what to note down and the refresh rate it really runs at.
-- [Chess Openings by Rating: What 17.4M Lichess Games Show | Fewmoves](https://lumenlab.page/en/guides/chess/openings-by-rating/): How the openings people play change from under 1200 to 2000+, counted from 17.4 million rated Lichess games: first moves, each opening, results and draws.
+- [Chess Openings by Rating: What 175M Lichess Games Show | Opening Trail](https://lumenlab.page/en/guides/chess/openings-by-rating/): How the openings people play change from under 1200 to 2000+, counted from 175 million rated Lichess games: first moves, each opening, results and draws.

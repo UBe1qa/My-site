@@ -2791,8 +2791,8 @@
       "en": "Pick your rating"
      },
      "d": {
-      "ko": "판 위 ‘리체스 레이팅’에서 내 레이팅대를 누르면 표와 화살표가 그 레이팅대 사람들이 둔 수와 비율로 바뀌어요.",
-      "en": "Tap your level under ‘Lichess rating’ above the board, and the table and arrows switch to the moves players at that level chose, with how often."
+      "ko": "‘지도’ 위 ‘리체스 레이팅’에서 내 레이팅대를 누르면 표와 화살표가 그 레이팅대 사람들이 둔 수와 비율로 바뀌어요.",
+      "en": "Tap your level under ‘Lichess rating’ on the Map, and the table and arrows switch to the moves players at that level chose, with how often."
      }
     },
     {
@@ -2801,8 +2801,8 @@
       "en": "Play a move"
      },
      "d": {
-      "ko": "판에서 말을 움직이거나 표에서 수를 누르면 다음 국면으로 가고, 이름 있는 국면이면 오프닝 이름과 해설 링크가 떠요.",
-      "en": "Move a piece or tap a move in the table to go to the next position; named positions show the opening name and a link to its guide."
+      "ko": "판에서 말을 움직이거나 표에서 수를 누르면 다음 국면으로 가요. 수마다 메인·대안·실수 표시가 붙고, 이름 있는 국면이면 오프닝 이름과 해설 링크가 떠요.",
+      "en": "Move a piece or tap a move in the table to go to the next position. Every move is labelled main, alternative or mistake, and named positions show the opening name and a link to its guide."
      }
     },
     {
@@ -2811,18 +2811,18 @@
       "en": "Read a guide"
      },
      "d": {
-      "ko": "‘오프닝’에서 81개 가운데 하나를 열면 주요 수순, 양쪽 계획, 갈래, 함정과 레이팅대별 응수 표가 있어요.",
-      "en": "Open one of the 81 guides under ‘Openings’ for the main line, plans for both sides, variations, traps and a table of replies by rating."
+      "ko": "‘오프닝’에서 81개 가운데 하나를 열면 메인라인을 수마다 이유와 함께 따라가는 판, 함정과 응징, 양쪽 계획, 세부 갈래, 레이팅대별 응수 표가 있어요.",
+      "en": "Open one of the 81 guides under ‘Openings’ to follow the main line with a reason for every move, then traps, plans for both sides, variations and a table of replies by rating."
      }
     },
     {
      "t": {
-      "ko": "연습하기",
-      "en": "Practice"
+      "ko": "테스트와 연습",
+      "en": "Test and practice"
      },
      "d": {
-      "ko": "해설 끝의 ‘백으로 연습’이나 ‘흑으로 연습’을 누르면 상대가 내 레이팅대에서 실제로 나온 수로 받아치고, 틀린 수는 복습에 들어가요.",
-      "en": "Press ‘Practice as White’ or ‘Practice as Black’ at the end of a guide; your opponent answers with moves really played at your rating, and wrong answers go into your review."
+      "ko": "‘테스트’에서 2분 동안 국면 10개를 풀면 내 단계가 나와요. 해설 끝 ‘백으로 연습’이나 ‘흑으로 연습’을 누르면 상대가 내 레이팅대에서 실제로 나온 수로 받아치고, 틀린 수는 복습에 들어가요.",
+      "en": "Solve 10 positions in about 2 minutes under ‘Test’ to see your level. Press ‘Practice as White’ or ‘Practice as Black’ at the end of a guide; your opponent answers with moves really played at your rating, and wrong answers go into your review."
      }
     }
    ]
@@ -2839,8 +2839,8 @@
       "en": "Games"
      },
      "v": {
-      "ko": "리체스가 공개한 2026년 10월 레이팅 대국 기록의 앞부분에서 블리츠·래피드·클래식 17,395,175판을 셌어요. 불릿·초불릿·통신 대국은 뺐어요.",
-      "en": "We counted 17,395,175 blitz, rapid and classical games from the first part of the October 2026 rated games file Lichess publishes. Bullet, ultrabullet and correspondence are left out."
+      "ko": "리체스가 공개한 2026년 8·9·10월 레이팅 대국 기록 전체에서 블리츠·래피드·클래식 174,931,775판을 셌어요. 불릿·초불릿·통신 대국은 뺐어요.",
+      "en": "We counted 174,931,775 blitz, rapid and classical games from the whole August, September and October 2026 rated games files Lichess publishes. Bullet, ultrabullet and correspondence are left out."
      },
      "src": {
       "t": {
@@ -2849,7 +2849,7 @@
       },
       "href": "https://database.lichess.org/"
      },
-     "on": "2026-11-04"
+     "on": "2026-11-05"
     },
     {
      "k": {
@@ -2862,15 +2862,15 @@
      },
      "src": {
       "t": {
-       "ko": "외울수 소개",
-       "en": "About Fewmoves"
+       "ko": "오프닝 트레일 자료와 출처",
+       "en": "Opening Trail data and sources"
       },
       "href": {
-       "ko": "https://chess.lumenlab.page/ko/about/",
-       "en": "https://chess.lumenlab.page/about/"
+       "ko": "https://chess.lumenlab.page/ko/data/",
+       "en": "https://chess.lumenlab.page/data/"
       }
      },
-     "on": "2026-11-04"
+     "on": "2026-11-05"
     },
     {
      "k": {
@@ -2878,20 +2878,20 @@
       "en": "What is shown"
      },
      "v": {
-      "ko": "첫 12수(24수순)까지, 60판 이상 나온 국면과 6판 이상 나온 수만 실어요.",
-      "en": "The first 12 moves (24 plies), positions reached in at least 60 games and moves played in at least 6."
+      "ko": "첫 20수(40수순)까지, 20판 넘게 나온 수순만 실어요. 수마다 메인·대안·실수 표시는 리체스 평가 데이터베이스(CC0)의 엔진 점수로 갈라요.",
+      "en": "The first 20 moves (40 plies), keeping move orders seen in more than 20 games. The main, alternative and mistake labels come from engine scores in the Lichess evaluation database (CC0)."
      },
      "src": {
       "t": {
-       "ko": "외울수 소개",
-       "en": "About Fewmoves"
+       "ko": "오프닝 트레일 자료와 출처",
+       "en": "Opening Trail data and sources"
       },
       "href": {
-       "ko": "https://chess.lumenlab.page/ko/about/",
-       "en": "https://chess.lumenlab.page/about/"
+       "ko": "https://chess.lumenlab.page/ko/data/",
+       "en": "https://chess.lumenlab.page/data/"
       }
      },
-     "on": "2026-11-04"
+     "on": "2026-11-05"
     },
     {
      "k": {
@@ -2935,20 +2935,20 @@
       "en": "What stays on your device"
      },
      "v": {
-      "ko": "고른 레이팅대와 연습 기록은 이 브라우저에만 적고 서버로 보내지 않아요. 회원 가입이나 로그인은 없어요.",
-      "en": "Your rating level and practice record are kept in this browser only and never sent to a server. There is no sign-up or login."
+      "ko": "고른 레이팅대·언어·효과음 설정과 연습 기록은 이 브라우저에만 적고 서버로 보내지 않아요. 회원 가입이나 로그인은 없어요.",
+      "en": "Your rating level, language and sound settings and practice record are kept in this browser only and never sent to a server. There is no sign-up or login."
      },
      "src": {
       "t": {
-       "ko": "외울수 개인정보 처리방침(저장하는 것 3가지)",
-       "en": "Fewmoves Privacy Policy (the three things it stores)"
+       "ko": "오프닝 트레일 개인정보 처리방침(저장하는 것 4가지)",
+       "en": "Opening Trail Privacy Policy (the four things it stores)"
       },
       "href": {
        "ko": "https://chess.lumenlab.page/ko/privacy/",
        "en": "https://chess.lumenlab.page/privacy/"
       }
      },
-     "on": "2026-11-04"
+     "on": "2026-11-05"
     }
    ],
    "note": {
@@ -2959,10 +2959,24 @@
   },
   "log": {
    "h": {
-    "ko": "오프닝 해설을 31개에서 81개로 늘렸어요",
-    "en": "The opening guides grew from 31 to 81"
+    "ko": "이름을 오프닝 트레일로 바꾸고 숫자를 열 배로 늘렸어요",
+    "en": "Renamed to Opening Trail, with ten times the games"
    },
    "items": [
+    {
+     "d": "2026-11-05",
+     "t": {
+      "ko": "이름을 외울수에서 오프닝 트레일로 바꾸고, 리체스 8~10월 대국 1억 7,493만 판으로 숫자를 다시 셌어요.",
+      "en": "Renamed Fewmoves to Opening Trail and recounted everything from 175 million Lichess games, August to October 2026."
+     }
+    },
+    {
+     "d": "2026-11-05",
+     "t": {
+      "ko": "오프닝 지도, 2분 테스트, 레이팅별 추천 오프닝을 더하고, 수마다 엔진 평가로 메인·대안·실수를 표시했어요.",
+      "en": "Added the opening map, a 2-minute test and best openings by rating, and labelled every move main, alternative or mistake from engine scores."
+     }
+    },
     {
      "d": "2026-11-04",
      "t": {

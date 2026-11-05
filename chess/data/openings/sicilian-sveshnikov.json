@@ -1,0 +1,321 @@
+{
+ "name": {
+  "en": "Sicilian Sveshnikov",
+  "ko": "시실리안 스베시니코프"
+ },
+ "eco": "B33",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "c5",
+  "Nf3",
+  "Nc6",
+  "d4",
+  "cxd4",
+  "Nxd4",
+  "Nf6",
+  "Nc3",
+  "e5"
+ ],
+ "position_epd": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/sicilian-sveshnikov/",
+  "ko": "https://chess.lumenlab.page/ko/openings/sicilian-sveshnikov/"
+ },
+ "engine_eval_white_cp": 31,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 1104,
+   "share_of_band": 3.7e-05,
+   "white_win": 517,
+   "draw": 40,
+   "black_win": 547
+  },
+  {
+   "band": "1200–1599",
+   "games": 9580,
+   "share_of_band": 0.000161,
+   "white_win": 4658,
+   "draw": 384,
+   "black_win": 4538
+  },
+  {
+   "band": "1600–1999",
+   "games": 42159,
+   "share_of_band": 0.00065,
+   "white_win": 19999,
+   "draw": 2063,
+   "black_win": 20097
+  },
+  {
+   "band": "2000+",
+   "games": 52691,
+   "share_of_band": 0.002571,
+   "white_win": 25267,
+   "draw": 4247,
+   "black_win": 23177
+  }
+ ],
+ "masters": {
+  "games": 5299,
+  "white_win": 1950,
+  "draw": 1525,
+  "black_win": 1824,
+  "next_moves": [
+   {
+    "san": "Ndb5",
+    "games": 4787
+   },
+   {
+    "san": "Nb3",
+    "games": 140
+   },
+   {
+    "san": "Nf3",
+    "games": 126
+   },
+   {
+    "san": "Nxc6",
+    "games": 85
+   },
+   {
+    "san": "Nde2",
+    "games": 62
+   },
+   {
+    "san": "Nf5",
+    "games": 55
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Ndb5",
+   "type": "main",
+   "engine_eval_white_cp": 31,
+   "games": 62338,
+   "share": 0.59531,
+   "white_win": 31012,
+   "draw": 4438,
+   "black_win": 26888
+  },
+  {
+   "san": "Nxc6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 16335,
+   "share": 0.15599,
+   "white_win": 7474,
+   "draw": 873,
+   "black_win": 7988
+  },
+  {
+   "san": "Nb3",
+   "type": "side",
+   "engine_eval_white_cp": -16,
+   "games": 10930,
+   "share": 0.10438,
+   "white_win": 5044,
+   "draw": 632,
+   "black_win": 5254
+  },
+  {
+   "san": "Nf3",
+   "type": "side",
+   "engine_eval_white_cp": -16,
+   "games": 8070,
+   "share": 0.07707,
+   "white_win": 3461,
+   "draw": 405,
+   "black_win": 4204
+  },
+  {
+   "san": "Nf5",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 5915,
+   "share": 0.05649,
+   "white_win": 2616,
+   "draw": 276,
+   "black_win": 3023
+  },
+  {
+   "san": "Nde2",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 871,
+   "share": 0.00832,
+   "white_win": 434,
+   "draw": 54,
+   "black_win": 383
+  },
+  {
+   "san": "Be3",
+   "type": "mistake",
+   "engine_eval_white_cp": -353,
+   "games": 105,
+   "share": 0.001,
+   "white_win": 21,
+   "draw": 4,
+   "black_win": 80
+  },
+  {
+   "san": "Bg5",
+   "type": "mistake",
+   "engine_eval_white_cp": -345,
+   "games": 64,
+   "share": 0.00061,
+   "white_win": 9,
+   "draw": 0,
+   "black_win": 55
+  },
+  {
+   "san": "Bc4",
+   "type": "mistake",
+   "engine_eval_white_cp": -339,
+   "games": 35,
+   "share": 0.00033,
+   "white_win": 6,
+   "draw": 0,
+   "black_win": 29
+  },
+  {
+   "san": "f3",
+   "type": "mistake",
+   "engine_eval_white_cp": -385,
+   "games": 33,
+   "share": 0.00032,
+   "white_win": 7,
+   "draw": 1,
+   "black_win": 25
+  },
+  {
+   "san": "Bb5",
+   "type": "mistake",
+   "engine_eval_white_cp": -442,
+   "games": 20,
+   "share": 0.00019,
+   "white_win": 6,
+   "draw": 0,
+   "black_win": 14
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c5",
+   "why_en": "Fights for d4 from the side and makes the game unbalanced from move one.",
+   "why_ko": "옆에서 d4를 다투고, 첫 수부터 판의 균형을 깨요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops and prepares d4, the most common plan against the Sicilian.",
+   "why_ko": "전개하면서 d4를 준비해요. 시실리안에 가장 흔한 계획이에요."
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "why_en": "Develops and adds a second guard of d4 and e5.",
+   "why_ko": "전개하면서 d4·e5를 한 번 더 막아요."
+  },
+  {
+   "ply": 5,
+   "san": "d4",
+   "why_en": "Opens the center to get the knight to d4.",
+   "why_ko": "중앙을 열어 나이트를 d4에 세우려 해요."
+  },
+  {
+   "ply": 6,
+   "san": "cxd4",
+   "why_en": "Trades the c-pawn for White’s d-pawn.",
+   "why_ko": "c폰을 백 d폰과 바꿔요."
+  },
+  {
+   "ply": 7,
+   "san": "Nxd4",
+   "why_en": "Recaptures with the knight, now centralized on d4.",
+   "why_ko": "나이트로 다시 잡아 d4 한가운데에 서요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4.",
+   "why_ko": "e4를 치며 전개해요."
+  },
+  {
+   "ply": 9,
+   "san": "Nc3",
+   "why_en": "Defends e4 with the knight.",
+   "why_ko": "나이트로 e4를 지켜요."
+  },
+  {
+   "ply": 10,
+   "san": "e5",
+   "why_en": "Kicks the d4 knight and grabs space; the d5 square becomes weak.",
+   "why_ko": "d4 나이트를 쫓고 공간을 얻어요. 대신 d5 칸이 약해져요."
+  },
+  {
+   "ply": 11,
+   "san": "Ndb5",
+   "why_en": "The knight jumps to b5, eyeing d6.",
+   "why_ko": "나이트가 b5로 뛰어 d6를 노려요."
+  },
+  {
+   "ply": 12,
+   "san": "d6",
+   "why_en": "Covers d6.",
+   "why_ko": "d6를 막아요."
+  },
+  {
+   "ply": 13,
+   "san": "Bg5",
+   "why_en": "Pins the f6 knight to fight for d5.",
+   "why_ko": "f6 나이트를 묶어 d5를 다퉈요."
+  },
+  {
+   "ply": 14,
+   "san": "a6",
+   "why_en": "Kicks the b5 knight.",
+   "why_ko": "b5 나이트를 쫓아요."
+  },
+  {
+   "ply": 15,
+   "san": "Na3",
+   "why_en": "The knight goes to a3, heading for c4 or c2.",
+   "why_ko": "나이트가 a3로 가요. 다음은 c4나 c2예요."
+  },
+  {
+   "ply": 16,
+   "san": "b5",
+   "why_en": "Keeps the a3 knight out of c4.",
+   "why_ko": "a3 나이트가 c4에 못 오게 해요."
+  },
+  {
+   "ply": 17,
+   "san": "Nd5",
+   "why_en": "The other knight lands on d5, the hole in Black’s camp.",
+   "why_ko": "다른 나이트가 흑 진영의 구멍 d5에 앉아요."
+  },
+  {
+   "ply": 18,
+   "san": "Be7",
+   "why_en": "Develops and challenges the g5 bishop.",
+   "why_ko": "전개하며 g5 비숍에 맞서요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

@@ -1,0 +1,324 @@
+{
+ "name": {
+  "en": "Trompowsky Attack",
+  "ko": "트롬포스키 어택"
+ },
+ "eco": "A45",
+ "side": "w",
+ "line_san": [
+  "d4",
+  "Nf6",
+  "Bg5"
+ ],
+ "position_epd": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/trompowsky-attack/",
+  "ko": "https://chess.lumenlab.page/ko/openings/trompowsky-attack/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 19851,
+   "share_of_band": 0.000661,
+   "white_win": 9582,
+   "draw": 783,
+   "black_win": 9486
+  },
+  {
+   "band": "1200–1599",
+   "games": 73978,
+   "share_of_band": 0.001241,
+   "white_win": 36264,
+   "draw": 2733,
+   "black_win": 34981
+  },
+  {
+   "band": "1600–1999",
+   "games": 131591,
+   "share_of_band": 0.00203,
+   "white_win": 63686,
+   "draw": 5955,
+   "black_win": 61950
+  },
+  {
+   "band": "2000+",
+   "games": 111382,
+   "share_of_band": 0.005435,
+   "white_win": 55675,
+   "draw": 7408,
+   "black_win": 48299
+  }
+ ],
+ "masters": {
+  "games": 5446,
+  "white_win": 2230,
+  "draw": 1353,
+  "black_win": 1863,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 2059
+   },
+   {
+    "san": "e6",
+    "games": 1118
+   },
+   {
+    "san": "Ne4",
+    "games": 862
+   },
+   {
+    "san": "g6",
+    "games": 614
+   },
+   {
+    "san": "c5",
+    "games": 533
+   },
+   {
+    "san": "d6",
+    "games": 74
+   },
+   {
+    "san": "c6",
+    "games": 56
+   },
+   {
+    "san": "h6",
+    "games": 47
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e6",
+   "type": "alternative",
+   "engine_eval_white_cp": 7,
+   "games": 85552,
+   "share": 0.25426,
+   "white_win": 41865,
+   "draw": 4388,
+   "black_win": 39299
+  },
+  {
+   "san": "Ne4",
+   "type": "alternative",
+   "engine_eval_white_cp": 19,
+   "games": 64928,
+   "share": 0.19296,
+   "white_win": 32020,
+   "draw": 3265,
+   "black_win": 29643
+  },
+  {
+   "san": "d5",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 61088,
+   "share": 0.18155,
+   "white_win": 29691,
+   "draw": 3343,
+   "black_win": 28054
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 5,
+   "games": 52472,
+   "share": 0.15594,
+   "white_win": 25511,
+   "draw": 2564,
+   "black_win": 24397
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 20681,
+   "share": 0.06146,
+   "white_win": 10645,
+   "draw": 876,
+   "black_win": 9160
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": 11,
+   "games": 20179,
+   "share": 0.05997,
+   "white_win": 9424,
+   "draw": 973,
+   "black_win": 9782
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 15658,
+   "share": 0.04653,
+   "white_win": 7850,
+   "draw": 707,
+   "black_win": 7101
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 16,
+   "games": 5524,
+   "share": 0.01642,
+   "white_win": 2562,
+   "draw": 258,
+   "black_win": 2704
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 28,
+   "games": 4098,
+   "share": 0.01218,
+   "white_win": 2069,
+   "draw": 180,
+   "black_win": 1849
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 43,
+   "games": 2733,
+   "share": 0.00812,
+   "white_win": 1315,
+   "draw": 153,
+   "black_win": 1265
+  },
+  {
+   "san": "Nd5",
+   "type": "side",
+   "engine_eval_white_cp": 85,
+   "games": 2107,
+   "share": 0.00626,
+   "white_win": 1176,
+   "draw": 73,
+   "black_win": 858
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": 112,
+   "games": 509,
+   "share": 0.00151,
+   "white_win": 319,
+   "draw": 24,
+   "black_win": 166
+  },
+  {
+   "san": "Ng8",
+   "type": "dubious",
+   "engine_eval_white_cp": 93,
+   "games": 364,
+   "share": 0.00108,
+   "white_win": 211,
+   "draw": 17,
+   "black_win": 136
+  },
+  {
+   "san": "Ng4",
+   "type": "dubious",
+   "engine_eval_white_cp": 122,
+   "games": 182,
+   "share": 0.00054,
+   "white_win": 112,
+   "draw": 6,
+   "black_win": 64
+  },
+  {
+   "san": "b5",
+   "type": "side",
+   "engine_eval_white_cp": 52,
+   "games": 108,
+   "share": 0.00032,
+   "white_win": 54,
+   "draw": 3,
+   "black_win": 51
+  },
+  {
+   "san": "Nh5",
+   "type": "dubious",
+   "engine_eval_white_cp": 107,
+   "games": 98,
+   "share": 0.00029,
+   "white_win": 53,
+   "draw": 4,
+   "black_win": 41
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Develops and stops e4 without committing a pawn yet.",
+   "why_ko": "폰을 정하지 않고 전개하며 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "Bg5",
+   "why_en": "Hits the f6 knight at once, threatening to double Black’s pawns.",
+   "why_ko": "바로 f6 나이트를 쳐서 흑 폰을 겹치게 하겠다고 해요."
+  },
+  {
+   "ply": 4,
+   "san": "d5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 5,
+   "san": "e3",
+   "why_en": "Supports d4 and opens the f1 bishop.",
+   "why_ko": "d4를 받치고 f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 6,
+   "san": "c5",
+   "why_en": "Hits d4.",
+   "why_ko": "d4를 쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "Bxf6",
+   "why_en": "Takes the knight and damages Black’s pawns.",
+   "why_ko": "나이트를 잡아 흑 폰 모양을 흔들어요."
+  },
+  {
+   "ply": 8,
+   "san": "gxf6",
+   "why_en": "Recaptures toward the center.",
+   "why_ko": "중앙 쪽으로 다시 잡아요."
+  },
+  {
+   "ply": 9,
+   "san": "dxc5",
+   "why_en": "Takes the c-pawn.",
+   "why_ko": "c폰을 잡아요."
+  },
+  {
+   "ply": 10,
+   "san": "e6",
+   "why_en": "Prepares ...Bxc5.",
+   "why_ko": "...Bxc5를 준비해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

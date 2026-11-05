@@ -1,0 +1,349 @@
+{
+ "name": {
+  "en": "Petrov’s Defense",
+  "ko": "페트로프 디펜스"
+ },
+ "eco": "C42",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nf6"
+ ],
+ "position_epd": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/petrovs-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/petrovs-defense/"
+ },
+ "engine_eval_white_cp": 31,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 801631,
+   "share_of_band": 0.02671,
+   "white_win": 430785,
+   "draw": 32132,
+   "black_win": 338714
+  },
+  {
+   "band": "1200–1599",
+   "games": 1062824,
+   "share_of_band": 0.017836,
+   "white_win": 540565,
+   "draw": 36818,
+   "black_win": 485441
+  },
+  {
+   "band": "1600–1999",
+   "games": 816979,
+   "share_of_band": 0.012601,
+   "white_win": 402877,
+   "draw": 36730,
+   "black_win": 377372
+  },
+  {
+   "band": "2000+",
+   "games": 192458,
+   "share_of_band": 0.00939,
+   "white_win": 90959,
+   "draw": 15923,
+   "black_win": 85576
+  }
+ ],
+ "masters": {
+  "games": 10998,
+  "white_win": 4667,
+  "draw": 3779,
+  "black_win": 2552,
+  "next_moves": [
+   {
+    "san": "Nxe5",
+    "games": 6074
+   },
+   {
+    "san": "Nc3",
+    "games": 2435
+   },
+   {
+    "san": "d4",
+    "games": 1994
+   },
+   {
+    "san": "d3",
+    "games": 263
+   },
+   {
+    "san": "Bc4",
+    "games": 183
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nc3",
+   "type": "alternative",
+   "engine_eval_white_cp": 17,
+   "games": 1003634,
+   "share": 0.34956,
+   "white_win": 514216,
+   "draw": 43552,
+   "black_win": 445866
+  },
+  {
+   "san": "Nxe5",
+   "type": "main",
+   "engine_eval_white_cp": 31,
+   "games": 841146,
+   "share": 0.29297,
+   "white_win": 429209,
+   "draw": 37890,
+   "black_win": 374047
+  },
+  {
+   "san": "Bc4",
+   "type": "side",
+   "engine_eval_white_cp": -50,
+   "games": 502189,
+   "share": 0.17491,
+   "white_win": 258109,
+   "draw": 17407,
+   "black_win": 226673
+  },
+  {
+   "san": "d4",
+   "type": "alternative",
+   "engine_eval_white_cp": 22,
+   "games": 218538,
+   "share": 0.07612,
+   "white_win": 113826,
+   "draw": 9612,
+   "black_win": 95100
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": -1,
+   "games": 198538,
+   "share": 0.06915,
+   "white_win": 97480,
+   "draw": 8786,
+   "black_win": 92272
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": -12,
+   "games": 31052,
+   "share": 0.01082,
+   "white_win": 15656,
+   "draw": 1116,
+   "black_win": 14280
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": -47,
+   "games": 27628,
+   "share": 0.00962,
+   "white_win": 13215,
+   "draw": 1080,
+   "black_win": 13333
+  },
+  {
+   "san": "Bb5",
+   "type": "side",
+   "engine_eval_white_cp": -30,
+   "games": 13781,
+   "share": 0.0048,
+   "white_win": 6603,
+   "draw": 546,
+   "black_win": 6632
+  },
+  {
+   "san": "Qe2",
+   "type": "side",
+   "engine_eval_white_cp": -34,
+   "games": 11192,
+   "share": 0.0039,
+   "white_win": 5304,
+   "draw": 448,
+   "black_win": 5440
+  },
+  {
+   "san": "Ng5",
+   "type": "side",
+   "engine_eval_white_cp": -54,
+   "games": 7252,
+   "share": 0.00253,
+   "white_win": 3608,
+   "draw": 236,
+   "black_win": 3408
+  },
+  {
+   "san": "Be2",
+   "type": "side",
+   "engine_eval_white_cp": -10,
+   "games": 4476,
+   "share": 0.00156,
+   "white_win": 2120,
+   "draw": 203,
+   "black_win": 2153
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": -14,
+   "games": 3077,
+   "share": 0.00107,
+   "white_win": 1495,
+   "draw": 117,
+   "black_win": 1465
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": -17,
+   "games": 2530,
+   "share": 0.00088,
+   "white_win": 1137,
+   "draw": 118,
+   "black_win": 1275
+  },
+  {
+   "san": "b3",
+   "type": "dubious",
+   "engine_eval_white_cp": -70,
+   "games": 1888,
+   "share": 0.00066,
+   "white_win": 866,
+   "draw": 69,
+   "black_win": 953
+  },
+  {
+   "san": "c4",
+   "type": "side",
+   "engine_eval_white_cp": -31,
+   "games": 1667,
+   "share": 0.00058,
+   "white_win": 725,
+   "draw": 87,
+   "black_win": 855
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": -12,
+   "games": 1209,
+   "share": 0.00042,
+   "white_win": 571,
+   "draw": 35,
+   "black_win": 603
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Counter-attacks e4 instead of defending e5.",
+   "why_ko": "e5를 지키지 않고 e4를 되쳐요."
+  },
+  {
+   "ply": 5,
+   "san": "Nxe5",
+   "why_en": "Takes the pawn; White is a pawn up for a moment.",
+   "why_ko": "폰을 잡아요. 잠시 백이 폰 하나를 더 가져요."
+  },
+  {
+   "ply": 6,
+   "san": "d6",
+   "why_en": "Kicks the knight before taking back on e4; 3...Nxe4? 4.Qe2 is bad for Black.",
+   "why_ko": "e4를 되찾기 전에 나이트부터 쫓아요. 바로 3...Nxe4?는 4.Qe2로 흑이 나빠요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Retreats to a safe square, keeping the knight out of trouble.",
+   "why_ko": "나이트를 안전한 칸으로 물려요."
+  },
+  {
+   "ply": 8,
+   "san": "Nxe4",
+   "why_en": "Wins back the pawn; material is level.",
+   "why_ko": "폰을 되찾아 기물이 같아져요."
+  },
+  {
+   "ply": 9,
+   "san": "d4",
+   "why_en": "Takes the center and plans to chase the e4 knight.",
+   "why_ko": "중앙을 잡고 e4 나이트를 쫓을 준비를 해요."
+  },
+  {
+   "ply": 10,
+   "san": "d5",
+   "why_en": "Supports the e4 knight with a pawn.",
+   "why_ko": "폰으로 e4 나이트를 받쳐요."
+  },
+  {
+   "ply": 11,
+   "san": "Bd3",
+   "why_en": "Develops toward the e4 knight and the black king.",
+   "why_ko": "e4 나이트와 흑 킹 쪽을 향해 전개해요."
+  },
+  {
+   "ply": 12,
+   "san": "Bd6",
+   "why_en": "Develops the bishop and prepares to castle.",
+   "why_ko": "비숍을 꺼내고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 13,
+   "san": "O-O",
+   "why_en": "Castles; c4 will hit d5 next.",
+   "why_ko": "캐슬링해요. 다음은 c4로 d5를 쳐요."
+  },
+  {
+   "ply": 14,
+   "san": "O-O",
+   "why_en": "Black castles too.",
+   "why_ko": "흑도 캐슬링해요."
+  },
+  {
+   "ply": 15,
+   "san": "c4",
+   "why_en": "Attacks d5, the pawn that holds the e4 knight.",
+   "why_ko": "e4 나이트를 받치는 d5 폰을 쳐요."
+  },
+  {
+   "ply": 16,
+   "san": "c6",
+   "why_en": "Holds d5 with another pawn.",
+   "why_ko": "다른 폰으로 d5를 지켜요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

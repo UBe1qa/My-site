@@ -1,0 +1,323 @@
+{
+ "name": {
+  "en": "Caro-Kann Defense",
+  "ko": "카로칸 디펜스"
+ },
+ "eco": "B12",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "c6",
+  "d4",
+  "d5"
+ ],
+ "position_epd": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/caro-kann-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/caro-kann-defense/"
+ },
+ "engine_eval_white_cp": 27,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 386158,
+   "share_of_band": 0.012867,
+   "white_win": 192003,
+   "draw": 13705,
+   "black_win": 180450
+  },
+  {
+   "band": "1200–1599",
+   "games": 1218507,
+   "share_of_band": 0.020448,
+   "white_win": 596836,
+   "draw": 44630,
+   "black_win": 577041
+  },
+  {
+   "band": "1600–1999",
+   "games": 1837186,
+   "share_of_band": 0.028336,
+   "white_win": 898326,
+   "draw": 86074,
+   "black_win": 852786
+  },
+  {
+   "band": "2000+",
+   "games": 789839,
+   "share_of_band": 0.038537,
+   "white_win": 384902,
+   "draw": 55104,
+   "black_win": 349833
+  }
+ ],
+ "masters": {
+  "games": 42566,
+  "white_win": 17087,
+  "draw": 10884,
+  "black_win": 14595,
+  "next_moves": [
+   {
+    "san": "e5",
+    "games": 16783
+   },
+   {
+    "san": "exd5",
+    "games": 12071
+   },
+   {
+    "san": "Nc3",
+    "games": 8581
+   },
+   {
+    "san": "Nd2",
+    "games": 2767
+   },
+   {
+    "san": "f3",
+    "games": 2171
+   },
+   {
+    "san": "Bd3",
+    "games": 110
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": 25,
+   "games": 1704995,
+   "share": 0.40317,
+   "white_win": 820286,
+   "draw": 75126,
+   "black_win": 809583
+  },
+  {
+   "san": "exd5",
+   "type": "alternative",
+   "engine_eval_white_cp": 15,
+   "games": 1195691,
+   "share": 0.28273,
+   "white_win": 576286,
+   "draw": 62893,
+   "black_win": 556512
+  },
+  {
+   "san": "Nc3",
+   "type": "alternative",
+   "engine_eval_white_cp": 25,
+   "games": 889299,
+   "share": 0.21028,
+   "white_win": 451602,
+   "draw": 41910,
+   "black_win": 395787
+  },
+  {
+   "san": "Nd2",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 172285,
+   "share": 0.04074,
+   "white_win": 88770,
+   "draw": 8901,
+   "black_win": 74614
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 163060,
+   "share": 0.03856,
+   "white_win": 85353,
+   "draw": 6322,
+   "black_win": 71385
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": -16,
+   "games": 48260,
+   "share": 0.01141,
+   "white_win": 23811,
+   "draw": 2289,
+   "black_win": 22160
+  },
+  {
+   "san": "Nf3",
+   "type": "dubious",
+   "engine_eval_white_cp": -84,
+   "games": 19116,
+   "share": 0.00452,
+   "white_win": 8372,
+   "draw": 620,
+   "black_win": 10124
+  },
+  {
+   "san": "c4",
+   "type": "side",
+   "engine_eval_white_cp": -45,
+   "games": 16076,
+   "share": 0.0038,
+   "white_win": 7677,
+   "draw": 607,
+   "black_win": 7792
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": -39,
+   "games": 7103,
+   "share": 0.00168,
+   "white_win": 3393,
+   "draw": 273,
+   "black_win": 3437
+  },
+  {
+   "san": "Be3",
+   "type": "side",
+   "engine_eval_white_cp": -42,
+   "games": 4332,
+   "share": 0.00102,
+   "white_win": 2208,
+   "draw": 177,
+   "black_win": 1947
+  },
+  {
+   "san": "Bf4",
+   "type": "side",
+   "engine_eval_white_cp": -54,
+   "games": 2120,
+   "share": 0.0005,
+   "white_win": 915,
+   "draw": 63,
+   "black_win": 1142
+  },
+  {
+   "san": "f4",
+   "type": "mistake",
+   "engine_eval_white_cp": -186,
+   "games": 1803,
+   "share": 0.00043,
+   "white_win": 778,
+   "draw": 41,
+   "black_win": 984
+  },
+  {
+   "san": "Qf3",
+   "type": "side",
+   "engine_eval_white_cp": -7,
+   "games": 1198,
+   "share": 0.00028,
+   "white_win": 551,
+   "draw": 33,
+   "black_win": 614
+  },
+  {
+   "san": "Qe2",
+   "type": "side",
+   "engine_eval_white_cp": -3,
+   "games": 543,
+   "share": 0.00013,
+   "white_win": 234,
+   "draw": 17,
+   "black_win": 292
+  },
+  {
+   "san": "Bd2",
+   "type": "dubious",
+   "engine_eval_white_cp": -82,
+   "games": 500,
+   "share": 0.00012,
+   "white_win": 180,
+   "draw": 10,
+   "black_win": 310
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": -60,
+   "games": 424,
+   "share": 0.0001,
+   "white_win": 161,
+   "draw": 21,
+   "black_win": 242
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c6",
+   "why_en": "Prepares ...d5 while keeping the light bishop’s path open.",
+   "why_ko": "밝은 칸 비숍 길을 막지 않고 ...d5를 준비해요."
+  },
+  {
+   "ply": 3,
+   "san": "d4",
+   "why_en": "Takes the center with a second pawn.",
+   "why_ko": "두 번째 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 4,
+   "san": "d5",
+   "why_en": "Challenges e4 with the d-pawn, protected by c6.",
+   "why_ko": "c6가 받치는 d폰으로 e4에 맞서요."
+  },
+  {
+   "ply": 5,
+   "san": "e5",
+   "why_en": "Pushes past and grabs space: the Advance Variation.",
+   "why_ko": "밀고 나가 공간을 잡아요. 어드밴스 변화예요."
+  },
+  {
+   "ply": 6,
+   "san": "Bf5",
+   "why_en": "Develops the light bishop outside the pawn chain, the Caro-Kann’s main idea.",
+   "why_ko": "밝은 칸 비숍을 폰 사슬 밖으로 꺼내요. 카로칸의 핵심이에요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops and protects d4.",
+   "why_ko": "전개하며 d4를 지켜요."
+  },
+  {
+   "ply": 8,
+   "san": "e6",
+   "why_en": "Closes the pawn chain now that the bishop is out.",
+   "why_ko": "비숍이 나왔으니 폰 사슬을 닫아요."
+  },
+  {
+   "ply": 9,
+   "san": "Be2",
+   "why_en": "Develops quietly and prepares to castle.",
+   "why_ko": "조용히 전개하고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 10,
+   "san": "Nd7",
+   "why_en": "Develops and keeps ...c5 possible.",
+   "why_ko": "전개하며 ...c5를 남겨요."
+  },
+  {
+   "ply": 11,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

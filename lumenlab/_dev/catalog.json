@@ -243,17 +243,17 @@
     },
     {
       "id": "fewmoves",
-      "what": {"ko": "레이팅별 체스 오프닝 탐색기·연습", "en": "Chess openings by rating, with a trainer"},
+      "what": {"ko": "레이팅별 체스 오프닝 지도·해설·테스트", "en": "Chess openings by rating: map, guides and a test"},
       "dir": "chess",
       "group": "play",
       "url": "https://chess.lumenlab.page/ko/",
       "url_en": "https://chess.lumenlab.page/",
       "icon": "/img/chess.svg",
-      "name": {"ko": "외울수", "en": "Fewmoves"},
-      "find": {"ko": "체스 오프닝 탐색기 레이팅 리체스 이탈리안 시실리안 런던 연습 외우기 함정", "en": "chess opening explorer by rating lichess trainer repertoire italian sicilian london traps"},
-      "sub": "Fewmoves",
-      "line": {"ko": "내 레이팅대 사람들이 실제로 두는 수와 승률을 리체스 1,740만 판으로 보여 주고, 오프닝 81개 해설과 간격 반복 연습까지 있어요.", "en": "See the moves and win rates at your rating from 17.4 million Lichess games, with 81 opening guides and a spaced-repetition trainer."},
-      "check": {"ko": "리체스가 공개한 2026년 10월 레이팅 대국을 직접 세었고, 해설의 모든 수순은 사이트를 만들 때 체스 규칙 프로그램(chess.js)으로 둬 보고 메이트라고 적은 함정은 실제 체크메이트인지 확인해요.", "en": "The numbers are our own count of the October 2026 rated games Lichess publishes, and every line in the guides is played through with chess.js when the site is built, with traps marked as mate checked to be checkmate."}
+      "name": {"ko": "오프닝 트레일", "en": "Opening Trail"},
+      "find": {"ko": "체스 오프닝 트레일 지도 탐색기 레이팅 리체스 엔진 테스트 이탈리안 시실리안 런던 연습 외우기 함정", "en": "chess opening trail map explorer by rating lichess engine test trainer repertoire italian sicilian london traps"},
+      "sub": "Opening Trail",
+      "line": {"ko": "내 레이팅대 사람들이 실제로 두는 수와 엔진 평가를 리체스 1억 7,493만 판으로 지도처럼 보여 주고, 오프닝 81개 해설과 2분 테스트, 간격 반복 연습까지 있어요.", "en": "A map of the moves players at your rating really choose, with engine checks, from 175 million Lichess games, plus 81 opening guides, a 2-minute test and a spaced-repetition trainer."},
+      "check": {"ko": "리체스가 공개한 2026년 8~10월 레이팅 대국을 직접 세었고, 메인·대안·실수 표시는 리체스 평가 데이터베이스의 엔진 점수로 가르며, 해설의 모든 수순은 사이트를 만들 때 체스 규칙 프로그램(chess.js)으로 둬 보고 메이트라고 적은 함정은 실제 체크메이트인지 확인해요.", "en": "The numbers are our own count of the August to October 2026 rated games Lichess publishes, the main, alternative and mistake labels come from engine scores in the Lichess evaluation database, and every line in the guides is played through with chess.js when the site is built, with traps marked as mate checked to be checkmate."}
     }
   ]
 }

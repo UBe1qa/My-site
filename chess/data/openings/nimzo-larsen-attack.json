@@ -1,0 +1,310 @@
+{
+ "name": {
+  "en": "Nimzo-Larsen Attack",
+  "ko": "님조-라르센 어택"
+ },
+ "eco": "A01",
+ "side": "w",
+ "line_san": [
+  "b3"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/8/1P6/P1PPPPPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/nimzo-larsen-attack/",
+  "ko": "https://chess.lumenlab.page/ko/openings/nimzo-larsen-attack/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 204486,
+   "share_of_band": 0.006813,
+   "white_win": 101786,
+   "draw": 8004,
+   "black_win": 94696
+  },
+  {
+   "band": "1200–1599",
+   "games": 581658,
+   "share_of_band": 0.009761,
+   "white_win": 291270,
+   "draw": 22187,
+   "black_win": 268201
+  },
+  {
+   "band": "1600–1999",
+   "games": 726610,
+   "share_of_band": 0.011207,
+   "white_win": 362216,
+   "draw": 32630,
+   "black_win": 331764
+  },
+  {
+   "band": "2000+",
+   "games": 261960,
+   "share_of_band": 0.012781,
+   "white_win": 129354,
+   "draw": 16662,
+   "black_win": 115944
+  }
+ ],
+ "masters": {
+  "games": 6092,
+  "white_win": 2536,
+  "draw": 1385,
+  "black_win": 2171,
+  "next_moves": [
+   {
+    "san": "e5",
+    "games": 1902
+   },
+   {
+    "san": "d5",
+    "games": 1801
+   },
+   {
+    "san": "Nf6",
+    "games": 1136
+   },
+   {
+    "san": "c5",
+    "games": 318
+   },
+   {
+    "san": "b6",
+    "games": 230
+   },
+   {
+    "san": "e6",
+    "games": 123
+   },
+   {
+    "san": "d6",
+    "games": 120
+   },
+   {
+    "san": "g6",
+    "games": 120
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 599583,
+   "share": 0.33835,
+   "white_win": 299028,
+   "draw": 25204,
+   "black_win": 275351
+  },
+  {
+   "san": "d5",
+   "type": "alternative",
+   "engine_eval_white_cp": 1,
+   "games": 464568,
+   "share": 0.26216,
+   "white_win": 229993,
+   "draw": 20865,
+   "black_win": 213710
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 9,
+   "games": 182634,
+   "share": 0.10306,
+   "white_win": 87626,
+   "draw": 9507,
+   "black_win": 85501
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 11,
+   "games": 120367,
+   "share": 0.06792,
+   "white_win": 61781,
+   "draw": 5161,
+   "black_win": 53425
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": 10,
+   "games": 92179,
+   "share": 0.05202,
+   "white_win": 45401,
+   "draw": 4192,
+   "black_win": 42586
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 30,
+   "games": 62304,
+   "share": 0.03516,
+   "white_win": 32543,
+   "draw": 2766,
+   "black_win": 26995
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 12,
+   "games": 62173,
+   "share": 0.03508,
+   "white_win": 30941,
+   "draw": 2915,
+   "black_win": 28317
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 15,
+   "games": 55283,
+   "share": 0.0312,
+   "white_win": 27704,
+   "draw": 2610,
+   "black_win": 24969
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 47667,
+   "share": 0.0269,
+   "white_win": 23747,
+   "draw": 2334,
+   "black_win": 21586
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 28,
+   "games": 27239,
+   "share": 0.01537,
+   "white_win": 13779,
+   "draw": 1241,
+   "black_win": 12219
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 47,
+   "games": 16248,
+   "share": 0.00917,
+   "white_win": 8125,
+   "draw": 654,
+   "black_win": 7469
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 26,
+   "games": 14820,
+   "share": 0.00836,
+   "white_win": 7267,
+   "draw": 755,
+   "black_win": 6798
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 59,
+   "games": 12621,
+   "share": 0.00712,
+   "white_win": 6449,
+   "draw": 564,
+   "black_win": 5608
+  },
+  {
+   "san": "b5",
+   "type": "side",
+   "engine_eval_white_cp": 33,
+   "games": 4310,
+   "share": 0.00243,
+   "white_win": 2285,
+   "draw": 238,
+   "black_win": 1787
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 4117,
+   "share": 0.00232,
+   "white_win": 2146,
+   "draw": 188,
+   "black_win": 1783
+  },
+  {
+   "san": "g5",
+   "type": "side",
+   "engine_eval_white_cp": 64,
+   "games": 1941,
+   "share": 0.0011,
+   "white_win": 1079,
+   "draw": 84,
+   "black_win": 778
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "b3",
+   "why_en": "Prepares Bb2, aiming the bishop down the long diagonal at e5 and the black king side.",
+   "why_ko": "Bb2를 준비해, 비숍으로 긴 대각선을 따라 e5와 흑 킹 쪽을 겨눠요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "Bb2",
+   "why_en": "The bishop hits e5 at once.",
+   "why_ko": "비숍이 바로 e5를 쳐요."
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "why_en": "Protects e5.",
+   "why_ko": "e5를 지켜요."
+  },
+  {
+   "ply": 5,
+   "san": "e3",
+   "why_en": "Opens the f1 bishop.",
+   "why_ko": "f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 6,
+   "san": "d5",
+   "why_en": "Builds a big center.",
+   "why_ko": "큰 중앙을 쌓아요."
+  },
+  {
+   "ply": 7,
+   "san": "Bb5",
+   "why_en": "Pins the knight that protects e5.",
+   "why_ko": "e5를 지키는 나이트를 묶어요."
+  },
+  {
+   "ply": 8,
+   "san": "Bd6",
+   "why_en": "Protects e5 with the bishop.",
+   "why_ko": "비숍으로 e5를 지켜요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

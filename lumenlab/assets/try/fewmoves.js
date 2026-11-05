@@ -1,5 +1,5 @@
-/* 외울수 바로 써 보기: 외울수 사이트의 판(board.js), 규칙(chess.min.js), 통계 읽기(core.js, 전역 FM)를 그대로 불러
-   리체스 레이팅 대국 1,740만 판에서 '이 국면 다음에 무엇을 두나'를 화살표 굵기(= 두는 비율)로 보여 준다.
+/* 오프닝 트레일 바로 써 보기: 오프닝 트레일 사이트의 판(board.js), 규칙(chess.min.js), 통계 읽기(core.js, 전역 FM)를 그대로 불러
+   리체스 레이팅 대국 1억 7,493만 판에서 '이 국면 다음에 무엇을 두나'를 화살표 굵기(= 두는 비율)로 보여 준다.
    레이팅을 바꾸면 굵기와 수 목록이 바뀐다. 숫자는 chess.lumenlab.page/data/ 조각에서 읽는다(그 사이트 _headers가 CORS를 연다). */
 window.LLTry.fewmoves = function (stage, c) {
   var h = c.h, ko = c.lang === 'ko', FM = window.FM, Chess = window.Chess;

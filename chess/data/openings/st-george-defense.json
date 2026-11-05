@@ -1,0 +1,317 @@
+{
+ "name": {
+  "en": "St. George Defense",
+  "ko": "세인트 조지 디펜스"
+ },
+ "eco": "B00",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "a6"
+ ],
+ "position_epd": "rnbqkbnr/1ppppppp/p7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/st-george-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/st-george-defense/"
+ },
+ "engine_eval_white_cp": 48,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 48206,
+   "share_of_band": 0.001606,
+   "white_win": 24845,
+   "draw": 1936,
+   "black_win": 21425
+  },
+  {
+   "band": "1200–1599",
+   "games": 110225,
+   "share_of_band": 0.00185,
+   "white_win": 55457,
+   "draw": 3848,
+   "black_win": 50920
+  },
+  {
+   "band": "1600–1999",
+   "games": 101262,
+   "share_of_band": 0.001562,
+   "white_win": 49250,
+   "draw": 3875,
+   "black_win": 48137
+  },
+  {
+   "band": "2000+",
+   "games": 25660,
+   "share_of_band": 0.001252,
+   "white_win": 11899,
+   "draw": 1423,
+   "black_win": 12338
+  }
+ ],
+ "masters": {
+  "games": 388,
+  "white_win": 156,
+  "draw": 64,
+  "black_win": 168,
+  "next_moves": [
+   {
+    "san": "d4",
+    "games": 314
+   },
+   {
+    "san": "Nf3",
+    "games": 26
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "d4",
+   "type": "main",
+   "engine_eval_white_cp": 48,
+   "games": 119690,
+   "share": 0.42158,
+   "white_win": 60101,
+   "draw": 4643,
+   "black_win": 54946
+  },
+  {
+   "san": "Nf3",
+   "type": "side",
+   "engine_eval_white_cp": 40,
+   "games": 84991,
+   "share": 0.29936,
+   "white_win": 41921,
+   "draw": 3236,
+   "black_win": 39834
+  },
+  {
+   "san": "Bc4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 27389,
+   "share": 0.09647,
+   "white_win": 13436,
+   "draw": 930,
+   "black_win": 13023
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 26,
+   "games": 16367,
+   "share": 0.05765,
+   "white_win": 7979,
+   "draw": 683,
+   "black_win": 7705
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 10512,
+   "share": 0.03703,
+   "white_win": 5274,
+   "draw": 380,
+   "black_win": 4858
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": 6,
+   "games": 6232,
+   "share": 0.02195,
+   "white_win": 2944,
+   "draw": 309,
+   "black_win": 2979
+  },
+  {
+   "san": "Qf3",
+   "type": "side",
+   "engine_eval_white_cp": -30,
+   "games": 4010,
+   "share": 0.01412,
+   "white_win": 2008,
+   "draw": 139,
+   "black_win": 1863
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": -43,
+   "games": 2440,
+   "share": 0.00859,
+   "white_win": 1162,
+   "draw": 108,
+   "black_win": 1170
+  },
+  {
+   "san": "Qh5",
+   "type": "dubious",
+   "engine_eval_white_cp": -63,
+   "games": 1839,
+   "share": 0.00648,
+   "white_win": 875,
+   "draw": 70,
+   "black_win": 894
+  },
+  {
+   "san": "a4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 1674,
+   "share": 0.0059,
+   "white_win": 871,
+   "draw": 81,
+   "black_win": 722
+  },
+  {
+   "san": "c4",
+   "type": "side",
+   "engine_eval_white_cp": 17,
+   "games": 1637,
+   "share": 0.00577,
+   "white_win": 804,
+   "draw": 86,
+   "black_win": 747
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": -23,
+   "games": 1353,
+   "share": 0.00477,
+   "white_win": 674,
+   "draw": 58,
+   "black_win": 621
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 1255,
+   "share": 0.00442,
+   "white_win": 566,
+   "draw": 67,
+   "black_win": 622
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 10,
+   "games": 1003,
+   "share": 0.00353,
+   "white_win": 470,
+   "draw": 55,
+   "black_win": 478
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": -3,
+   "games": 737,
+   "share": 0.0026,
+   "white_win": 352,
+   "draw": 36,
+   "black_win": 349
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": -25,
+   "games": 577,
+   "share": 0.00203,
+   "white_win": 239,
+   "draw": 37,
+   "black_win": 301
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "a6",
+   "why_en": "Prepares ...b5 and ...Bb7; it gives White a free hand in the center.",
+   "why_ko": "...b5·...Bb7을 준비해요. 대신 백이 중앙을 마음대로 써요."
+  },
+  {
+   "ply": 3,
+   "san": "d4",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 4,
+   "san": "e6",
+   "why_en": "Prepares ...d5.",
+   "why_ko": "...d5를 준비해요."
+  },
+  {
+   "ply": 5,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 6,
+   "san": "d5",
+   "why_en": "Hits e4.",
+   "why_ko": "e4를 쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "e5",
+   "why_en": "Pushes past and closes the center.",
+   "why_ko": "밀고 나가 중앙을 닫아요."
+  },
+  {
+   "ply": 8,
+   "san": "c5",
+   "why_en": "Hits the base of the chain, as in a French.",
+   "why_ko": "프렌치처럼 사슬 뿌리를 쳐요."
+  },
+  {
+   "ply": 9,
+   "san": "c3",
+   "why_en": "Protects d4.",
+   "why_ko": "d4를 지켜요."
+  },
+  {
+   "ply": 10,
+   "san": "Nc6",
+   "why_en": "Adds pressure on d4.",
+   "why_ko": "d4를 더 눌러요."
+  },
+  {
+   "ply": 11,
+   "san": "Bd3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 12,
+   "san": "Qb6",
+   "why_en": "The queen hits b2 and d4.",
+   "why_ko": "퀸이 b2와 d4를 쳐요."
+  },
+  {
+   "ply": 13,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

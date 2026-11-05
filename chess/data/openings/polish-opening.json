@@ -1,0 +1,316 @@
+{
+ "name": {
+  "en": "Polish Opening (1.b4)",
+  "ko": "폴리시 오프닝(1.b4)"
+ },
+ "eco": "A00",
+ "side": "w",
+ "line_san": [
+  "b4"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/1P6/8/P1PPPPPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/polish-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/polish-opening/"
+ },
+ "engine_eval_white_cp": -11,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 91845,
+   "share_of_band": 0.00306,
+   "white_win": 46007,
+   "draw": 3734,
+   "black_win": 42104
+  },
+  {
+   "band": "1200–1599",
+   "games": 291052,
+   "share_of_band": 0.004884,
+   "white_win": 153608,
+   "draw": 10171,
+   "black_win": 127273
+  },
+  {
+   "band": "1600–1999",
+   "games": 355804,
+   "share_of_band": 0.005488,
+   "white_win": 182717,
+   "draw": 15324,
+   "black_win": 157763
+  },
+  {
+   "band": "2000+",
+   "games": 72849,
+   "share_of_band": 0.003554,
+   "white_win": 35498,
+   "draw": 4958,
+   "black_win": 32393
+  }
+ ],
+ "masters": {
+  "games": 1386,
+  "white_win": 531,
+  "draw": 312,
+  "black_win": 543,
+  "next_moves": [
+   {
+    "san": "e5",
+    "games": 472
+   },
+   {
+    "san": "d5",
+    "games": 276
+   },
+   {
+    "san": "Nf6",
+    "games": 188
+   },
+   {
+    "san": "e6",
+    "games": 68
+   },
+   {
+    "san": "c6",
+    "games": 66
+   },
+   {
+    "san": "b6",
+    "games": 57
+   },
+   {
+    "san": "f6",
+    "games": 46
+   },
+   {
+    "san": "a5",
+    "games": 45
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": -11,
+   "games": 314799,
+   "share": 0.38856,
+   "white_win": 166007,
+   "draw": 12281,
+   "black_win": 136511
+  },
+  {
+   "san": "d5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 174728,
+   "share": 0.21567,
+   "white_win": 90333,
+   "draw": 7197,
+   "black_win": 77198
+  },
+  {
+   "san": "Nf6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 77456,
+   "share": 0.09561,
+   "white_win": 36660,
+   "draw": 3730,
+   "black_win": 37066
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": -11,
+   "games": 74347,
+   "share": 0.09177,
+   "white_win": 38747,
+   "draw": 3244,
+   "black_win": 32356
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 32880,
+   "share": 0.04058,
+   "white_win": 17019,
+   "draw": 1405,
+   "black_win": 14456
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 31611,
+   "share": 0.03902,
+   "white_win": 15373,
+   "draw": 1517,
+   "black_win": 14721
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 13,
+   "games": 23202,
+   "share": 0.02864,
+   "white_win": 11381,
+   "draw": 1043,
+   "black_win": 10778
+  },
+  {
+   "san": "b6",
+   "type": "alternative",
+   "engine_eval_white_cp": 8,
+   "games": 18413,
+   "share": 0.02273,
+   "white_win": 9196,
+   "draw": 834,
+   "black_win": 8383
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": 32,
+   "games": 13136,
+   "share": 0.01621,
+   "white_win": 6657,
+   "draw": 501,
+   "black_win": 5978
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 19,
+   "games": 12632,
+   "share": 0.01559,
+   "white_win": 6120,
+   "draw": 532,
+   "black_win": 5980
+  },
+  {
+   "san": "b5",
+   "type": "alternative",
+   "engine_eval_white_cp": 18,
+   "games": 9818,
+   "share": 0.01212,
+   "white_win": 5184,
+   "draw": 568,
+   "black_win": 4066
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 8608,
+   "share": 0.01063,
+   "white_win": 4298,
+   "draw": 400,
+   "black_win": 3910
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 8100,
+   "share": 0.01,
+   "white_win": 4222,
+   "draw": 350,
+   "black_win": 3528
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 11,
+   "games": 4097,
+   "share": 0.00506,
+   "white_win": 2042,
+   "draw": 233,
+   "black_win": 1822
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 44,
+   "games": 2675,
+   "share": 0.0033,
+   "white_win": 1354,
+   "draw": 135,
+   "black_win": 1186
+  },
+  {
+   "san": "g5",
+   "type": "side",
+   "engine_eval_white_cp": 61,
+   "games": 1352,
+   "share": 0.00167,
+   "white_win": 748,
+   "draw": 50,
+   "black_win": 554
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "b4",
+   "why_en": "Grabs space on the queenside and prepares Bb2; the b4 pawn can become a target.",
+   "why_ko": "퀸 쪽 공간을 잡고 Bb2를 준비해요. b4 폰이 과녁이 될 수 있어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Takes the center and lets the bishop look at b4.",
+   "why_ko": "중앙을 잡고 비숍이 b4를 볼 수 있게 해요."
+  },
+  {
+   "ply": 3,
+   "san": "Bb2",
+   "why_en": "Hits e5 with the bishop.",
+   "why_ko": "비숍으로 e5를 쳐요."
+  },
+  {
+   "ply": 4,
+   "san": "Bxb4",
+   "why_en": "Takes the b4 pawn.",
+   "why_ko": "b4 폰을 잡아요."
+  },
+  {
+   "ply": 5,
+   "san": "Bxe5",
+   "why_en": "Takes e5.",
+   "why_ko": "e5를 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 7,
+   "san": "c4",
+   "why_en": "Grabs space.",
+   "why_ko": "공간을 잡아요."
+  },
+  {
+   "ply": 8,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 9,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

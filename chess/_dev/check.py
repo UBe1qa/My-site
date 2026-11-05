@@ -96,7 +96,7 @@ for f in pages + [ROOT / '404.html']:
             errs.append(f'{rel}: 링크 끊김 {l}')
         if l.startswith('#') and l[1:] and l[1:] not in p.ids:
             errs.append(f'{rel}: 쪽 안 링크 없음 {l}')
-    no_ads = is404 or rel.rstrip('/').split('/')[-1] in ('about', 'privacy', 'openings')
+    no_ads = is404 or rel.rstrip('/').split('/')[-1] in ('about', 'privacy', 'openings', 'data', 'test')
     if no_ads and ADS in html:
         errs.append(f'{rel}: 광고 코드가 있으면 안 됨')
     if not no_ads and ADS not in html:

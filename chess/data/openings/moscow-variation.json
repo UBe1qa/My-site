@@ -1,0 +1,216 @@
+{
+ "name": {
+  "en": "Sicilian Moscow Variation",
+  "ko": "시실리안 모스크바 변화"
+ },
+ "eco": "B51",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "c5",
+  "Nf3",
+  "d6",
+  "Bb5+"
+ ],
+ "position_epd": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/moscow-variation/",
+  "ko": "https://chess.lumenlab.page/ko/openings/moscow-variation/"
+ },
+ "engine_eval_white_cp": 14,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 7030,
+   "share_of_band": 0.000234,
+   "white_win": 3339,
+   "draw": 283,
+   "black_win": 3408
+  },
+  {
+   "band": "1200–1599",
+   "games": 33418,
+   "share_of_band": 0.000561,
+   "white_win": 15727,
+   "draw": 1487,
+   "black_win": 16204
+  },
+  {
+   "band": "1600–1999",
+   "games": 68940,
+   "share_of_band": 0.001063,
+   "white_win": 33213,
+   "draw": 3994,
+   "black_win": 31733
+  },
+  {
+   "band": "2000+",
+   "games": 70163,
+   "share_of_band": 0.003423,
+   "white_win": 33903,
+   "draw": 6347,
+   "black_win": 29913
+  }
+ ],
+ "masters": {
+  "games": 11410,
+  "white_win": 4086,
+  "draw": 3547,
+  "black_win": 3777,
+  "next_moves": [
+   {
+    "san": "Nd7",
+    "games": 5972
+   },
+   {
+    "san": "Bd7",
+    "games": 4797
+   },
+   {
+    "san": "Nc6",
+    "games": 581
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Bd7",
+   "type": "main",
+   "engine_eval_white_cp": 14,
+   "games": 103513,
+   "share": 0.57743,
+   "white_win": 49417,
+   "draw": 7439,
+   "black_win": 46657
+  },
+  {
+   "san": "Nd7",
+   "type": "alternative",
+   "engine_eval_white_cp": 16,
+   "games": 45798,
+   "share": 0.25548,
+   "white_win": 21433,
+   "draw": 3131,
+   "black_win": 21234
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 33,
+   "games": 29793,
+   "share": 0.16619,
+   "white_win": 14992,
+   "draw": 1527,
+   "black_win": 13274
+  },
+  {
+   "san": "Qd7",
+   "type": "mistake",
+   "engine_eval_white_cp": 530,
+   "games": 162,
+   "share": 0.0009,
+   "white_win": 157,
+   "draw": 1,
+   "black_win": 4
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c5",
+   "why_en": "Fights for d4 from the side and makes the game unbalanced from move one.",
+   "why_ko": "옆에서 d4를 다투고, 첫 수부터 판의 균형을 깨요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops and prepares d4, the most common plan against the Sicilian.",
+   "why_ko": "전개하면서 d4를 준비해요. 시실리안에 가장 흔한 계획이에요."
+  },
+  {
+   "ply": 4,
+   "san": "d6",
+   "why_en": "Covers e5 and keeps the knight out of e5 and the bishop’s path open.",
+   "why_ko": "e5를 막아 나이트가 못 오게 하고, 비숍 길을 열어요."
+  },
+  {
+   "ply": 5,
+   "san": "Bb5+",
+   "why_en": "A check that develops the bishop and avoids the open Sicilian.",
+   "why_ko": "체크하면서 비숍을 꺼내고, 열린 시실리안을 피해요."
+  },
+  {
+   "ply": 6,
+   "san": "Bd7",
+   "why_en": "Blocks the check with a bishop and offers a trade.",
+   "why_ko": "비숍으로 체크를 막으며 바꾸자고 해요."
+  },
+  {
+   "ply": 7,
+   "san": "Bxd7+",
+   "why_en": "Trades bishops.",
+   "why_ko": "비숍을 바꿔요."
+  },
+  {
+   "ply": 8,
+   "san": "Qxd7",
+   "why_en": "Recaptures with the queen and keeps the knights flexible.",
+   "why_ko": "퀸으로 다시 잡고 나이트는 유연하게 남겨요."
+  },
+  {
+   "ply": 9,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 10,
+   "san": "Nc6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 11,
+   "san": "c3",
+   "why_en": "Prepares d4 with a pawn recapture.",
+   "why_ko": "폰으로 다시 잡을 수 있게 d4를 준비해요."
+  },
+  {
+   "ply": 12,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4.",
+   "why_ko": "e4를 치며 전개해요."
+  },
+  {
+   "ply": 13,
+   "san": "Re1",
+   "why_en": "Defends e4 with the rook.",
+   "why_ko": "룩으로 e4를 지켜요."
+  },
+  {
+   "ply": 14,
+   "san": "e6",
+   "why_en": "Opens the bishop and covers d5.",
+   "why_ko": "비숍 길을 열고 d5를 지켜요."
+  },
+  {
+   "ply": 15,
+   "san": "d4",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

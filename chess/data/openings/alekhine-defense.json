@@ -1,0 +1,327 @@
+{
+ "name": {
+  "en": "Alekhine Defense",
+  "ko": "알레힌 디펜스"
+ },
+ "eco": "B02",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "Nf6"
+ ],
+ "position_epd": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/alekhine-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/alekhine-defense/"
+ },
+ "engine_eval_white_cp": 74,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 367375,
+   "share_of_band": 0.012241,
+   "white_win": 189908,
+   "draw": 16220,
+   "black_win": 161247
+  },
+  {
+   "band": "1200–1599",
+   "games": 378091,
+   "share_of_band": 0.006345,
+   "white_win": 191802,
+   "draw": 13780,
+   "black_win": 172509
+  },
+  {
+   "band": "1600–1999",
+   "games": 562010,
+   "share_of_band": 0.008668,
+   "white_win": 263104,
+   "draw": 24427,
+   "black_win": 274479
+  },
+  {
+   "band": "2000+",
+   "games": 306560,
+   "share_of_band": 0.014958,
+   "white_win": 143255,
+   "draw": 18638,
+   "black_win": 144667
+  }
+ ],
+ "masters": {
+  "games": 5097,
+  "white_win": 1905,
+  "draw": 1151,
+  "black_win": 2041,
+  "next_moves": [
+   {
+    "san": "e5",
+    "games": 3920
+   },
+   {
+    "san": "Nc3",
+    "games": 1010
+   },
+   {
+    "san": "d3",
+    "games": 104
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": 74,
+   "games": 709796,
+   "share": 0.44059,
+   "white_win": 350833,
+   "draw": 31370,
+   "black_win": 327593
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 12,
+   "games": 542324,
+   "share": 0.33663,
+   "white_win": 269398,
+   "draw": 25614,
+   "black_win": 247312
+  },
+  {
+   "san": "Nf3",
+   "type": "dubious",
+   "engine_eval_white_cp": -80,
+   "games": 105903,
+   "share": 0.06574,
+   "white_win": 47475,
+   "draw": 4330,
+   "black_win": 54098
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 105682,
+   "share": 0.0656,
+   "white_win": 51342,
+   "draw": 5184,
+   "black_win": 49156
+  },
+  {
+   "san": "Bc4",
+   "type": "mistake",
+   "engine_eval_white_cp": -98,
+   "games": 49613,
+   "share": 0.0308,
+   "white_win": 23576,
+   "draw": 2003,
+   "black_win": 24034
+  },
+  {
+   "san": "Qf3",
+   "type": "dubious",
+   "engine_eval_white_cp": -54,
+   "games": 24395,
+   "share": 0.01514,
+   "white_win": 12153,
+   "draw": 976,
+   "black_win": 11266
+  },
+  {
+   "san": "d4",
+   "type": "dubious",
+   "engine_eval_white_cp": -57,
+   "games": 22960,
+   "share": 0.01425,
+   "white_win": 10189,
+   "draw": 978,
+   "black_win": 11793
+  },
+  {
+   "san": "f3",
+   "type": "dubious",
+   "engine_eval_white_cp": -59,
+   "games": 21852,
+   "share": 0.01356,
+   "white_win": 9997,
+   "draw": 1143,
+   "black_win": 10712
+  },
+  {
+   "san": "Bd3",
+   "type": "dubious",
+   "engine_eval_white_cp": -23,
+   "games": 8131,
+   "share": 0.00505,
+   "white_win": 3745,
+   "draw": 397,
+   "black_win": 3989
+  },
+  {
+   "san": "f4",
+   "type": "mistake",
+   "engine_eval_white_cp": -96,
+   "games": 6752,
+   "share": 0.00419,
+   "white_win": 3076,
+   "draw": 220,
+   "black_win": 3456
+  },
+  {
+   "san": "Qe2",
+   "type": "dubious",
+   "engine_eval_white_cp": -15,
+   "games": 3900,
+   "share": 0.00242,
+   "white_win": 1887,
+   "draw": 186,
+   "black_win": 1827
+  },
+  {
+   "san": "c3",
+   "type": "dubious",
+   "engine_eval_white_cp": -82,
+   "games": 2112,
+   "share": 0.00131,
+   "white_win": 923,
+   "draw": 87,
+   "black_win": 1102
+  },
+  {
+   "san": "Bb5",
+   "type": "mistake",
+   "engine_eval_white_cp": -95,
+   "games": 1425,
+   "share": 0.00088,
+   "white_win": 504,
+   "draw": 96,
+   "black_win": 825
+  },
+  {
+   "san": "Qh5",
+   "type": "mistake",
+   "engine_eval_white_cp": -651,
+   "games": 932,
+   "share": 0.00058,
+   "white_win": 155,
+   "draw": 58,
+   "black_win": 719
+  },
+  {
+   "san": "g3",
+   "type": "dubious",
+   "engine_eval_white_cp": -89,
+   "games": 824,
+   "share": 0.00051,
+   "white_win": 373,
+   "draw": 36,
+   "black_win": 415
+  },
+  {
+   "san": "c4",
+   "type": "mistake",
+   "engine_eval_white_cp": -91,
+   "games": 816,
+   "share": 0.00051,
+   "white_win": 332,
+   "draw": 42,
+   "black_win": 442
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Attacks e4 at once and invites White’s pawns forward.",
+   "why_ko": "바로 e4를 쳐서 백 폰을 앞으로 불러내요."
+  },
+  {
+   "ply": 3,
+   "san": "e5",
+   "why_en": "Kicks the knight with tempo.",
+   "why_ko": "나이트를 쫓으며 시간을 벌어요."
+  },
+  {
+   "ply": 4,
+   "san": "Nd5",
+   "why_en": "The knight goes to the center.",
+   "why_ko": "나이트가 중앙으로 가요."
+  },
+  {
+   "ply": 5,
+   "san": "d4",
+   "why_en": "Builds the center.",
+   "why_ko": "중앙을 쌓아요."
+  },
+  {
+   "ply": 6,
+   "san": "d6",
+   "why_en": "Hits the e5 pawn.",
+   "why_ko": "e5 폰을 쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops and protects e5.",
+   "why_ko": "전개하며 e5를 지켜요."
+  },
+  {
+   "ply": 8,
+   "san": "dxe5",
+   "why_en": "Trades the e5 pawn.",
+   "why_ko": "e5 폰을 바꿔요."
+  },
+  {
+   "ply": 9,
+   "san": "Nxe5",
+   "why_en": "Recaptures with the knight in the center.",
+   "why_ko": "나이트로 다시 잡아 중앙에 세워요."
+  },
+  {
+   "ply": 10,
+   "san": "c6",
+   "why_en": "Protects d5 and prepares ...Nd7 or ...Bf5.",
+   "why_ko": "d5를 지키고 ...Nd7이나 ...Bf5를 준비해요."
+  },
+  {
+   "ply": 11,
+   "san": "Be2",
+   "why_en": "Develops and prepares to castle.",
+   "why_ko": "전개하고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 12,
+   "san": "Bf5",
+   "why_en": "Develops the light bishop.",
+   "why_ko": "밝은 칸 비숍을 꺼내요."
+  },
+  {
+   "ply": 13,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 14,
+   "san": "Nd7",
+   "why_en": "Challenges the e5 knight.",
+   "why_ko": "e5 나이트에 맞서요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

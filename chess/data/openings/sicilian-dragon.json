@@ -1,0 +1,379 @@
+{
+ "name": {
+  "en": "Sicilian Dragon",
+  "ko": "시실리안 드래곤"
+ },
+ "eco": "B70",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "c5",
+  "Nf3",
+  "d6",
+  "d4",
+  "cxd4",
+  "Nxd4",
+  "Nf6",
+  "Nc3",
+  "g6"
+ ],
+ "position_epd": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/sicilian-dragon/",
+  "ko": "https://chess.lumenlab.page/ko/openings/sicilian-dragon/"
+ },
+ "engine_eval_white_cp": 41,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 2769,
+   "share_of_band": 9.2e-05,
+   "white_win": 1318,
+   "draw": 82,
+   "black_win": 1369
+  },
+  {
+   "band": "1200–1599",
+   "games": 19747,
+   "share_of_band": 0.000331,
+   "white_win": 9137,
+   "draw": 731,
+   "black_win": 9879
+  },
+  {
+   "band": "1600–1999",
+   "games": 76355,
+   "share_of_band": 0.001178,
+   "white_win": 35009,
+   "draw": 3491,
+   "black_win": 37855
+  },
+  {
+   "band": "2000+",
+   "games": 77808,
+   "share_of_band": 0.003796,
+   "white_win": 36162,
+   "draw": 5286,
+   "black_win": 36360
+  }
+ ],
+ "masters": {
+  "games": 5644,
+  "white_win": 2534,
+  "draw": 1258,
+  "black_win": 1852,
+  "next_moves": [
+   {
+    "san": "Be3",
+    "games": 3927
+   },
+   {
+    "san": "Be2",
+    "games": 441
+   },
+   {
+    "san": "f3",
+    "games": 420
+   },
+   {
+    "san": "Bc4",
+    "games": 287
+   },
+   {
+    "san": "f4",
+    "games": 136
+   },
+   {
+    "san": "g3",
+    "games": 108
+   },
+   {
+    "san": "Bg5",
+    "games": 64
+   },
+   {
+    "san": "Bb5+",
+    "games": 41
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Be3",
+   "type": "main",
+   "engine_eval_white_cp": 41,
+   "games": 67585,
+   "share": 0.38709,
+   "white_win": 32117,
+   "draw": 4067,
+   "black_win": 31401
+  },
+  {
+   "san": "Bc4",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 23546,
+   "share": 0.13486,
+   "white_win": 10669,
+   "draw": 1175,
+   "black_win": 11702
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 19508,
+   "share": 0.11173,
+   "white_win": 8421,
+   "draw": 812,
+   "black_win": 10275
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": 36,
+   "games": 16164,
+   "share": 0.09258,
+   "white_win": 7690,
+   "draw": 877,
+   "black_win": 7597
+  },
+  {
+   "san": "Be2",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 15416,
+   "share": 0.0883,
+   "white_win": 7197,
+   "draw": 963,
+   "black_win": 7256
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": -11,
+   "games": 9695,
+   "share": 0.05553,
+   "white_win": 4001,
+   "draw": 462,
+   "black_win": 5232
+  },
+  {
+   "san": "Bb5+",
+   "type": "side",
+   "engine_eval_white_cp": 12,
+   "games": 6474,
+   "share": 0.03708,
+   "white_win": 2676,
+   "draw": 300,
+   "black_win": 3498
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 6330,
+   "share": 0.03626,
+   "white_win": 3457,
+   "draw": 292,
+   "black_win": 2581
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 7,
+   "games": 2420,
+   "share": 0.01386,
+   "white_win": 1207,
+   "draw": 141,
+   "black_win": 1072
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 2356,
+   "share": 0.01349,
+   "white_win": 1104,
+   "draw": 134,
+   "black_win": 1118
+  },
+  {
+   "san": "Nf3",
+   "type": "side",
+   "engine_eval_white_cp": -4,
+   "games": 1395,
+   "share": 0.00799,
+   "white_win": 649,
+   "draw": 71,
+   "black_win": 675
+  },
+  {
+   "san": "Bf4",
+   "type": "dubious",
+   "engine_eval_white_cp": -71,
+   "games": 913,
+   "share": 0.00523,
+   "white_win": 320,
+   "draw": 25,
+   "black_win": 568
+  },
+  {
+   "san": "h4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 732,
+   "share": 0.00419,
+   "white_win": 331,
+   "draw": 43,
+   "black_win": 358
+  },
+  {
+   "san": "Nb3",
+   "type": "side",
+   "engine_eval_white_cp": 4,
+   "games": 587,
+   "share": 0.00336,
+   "white_win": 260,
+   "draw": 31,
+   "black_win": 296
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": -3,
+   "games": 314,
+   "share": 0.0018,
+   "white_win": 129,
+   "draw": 16,
+   "black_win": 169
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 19,
+   "games": 199,
+   "share": 0.00114,
+   "white_win": 63,
+   "draw": 11,
+   "black_win": 125
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c5",
+   "why_en": "Fights for d4 from the side and makes the game unbalanced from move one.",
+   "why_ko": "옆에서 d4를 다투고, 첫 수부터 판의 균형을 깨요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops and prepares d4, the most common plan against the Sicilian.",
+   "why_ko": "전개하면서 d4를 준비해요. 시실리안에 가장 흔한 계획이에요."
+  },
+  {
+   "ply": 4,
+   "san": "d6",
+   "why_en": "Covers e5 and keeps the knight out of e5 and the bishop’s path open.",
+   "why_ko": "e5를 막아 나이트가 못 오게 하고, 비숍 길을 열어요."
+  },
+  {
+   "ply": 5,
+   "san": "d4",
+   "why_en": "Opens the center; White gets a lead in development and more space.",
+   "why_ko": "중앙을 열어요. 백은 전개가 앞서고 공간이 넓어져요."
+  },
+  {
+   "ply": 6,
+   "san": "cxd4",
+   "why_en": "Trades a wing pawn for a center pawn, which gives Black two central pawns.",
+   "why_ko": "옆 폰을 중앙 폰과 바꿔, 흑에게 중앙 폰 두 개가 남아요."
+  },
+  {
+   "ply": 7,
+   "san": "Nxd4",
+   "why_en": "Recaptures with the knight, which now sits in the middle of the board.",
+   "why_ko": "나이트로 다시 잡아요. 나이트가 판 한가운데에 서요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4, so White has to defend it.",
+   "why_ko": "e4를 치며 전개해 백이 지키게 만들어요."
+  },
+  {
+   "ply": 9,
+   "san": "Nc3",
+   "why_en": "Defends e4 with a piece and develops.",
+   "why_ko": "기물로 e4를 지키면서 전개해요."
+  },
+  {
+   "ply": 10,
+   "san": "g6",
+   "why_en": "Prepares ...Bg7, aiming the bishop down the long diagonal.",
+   "why_ko": "...Bg7을 준비해 비숍으로 긴 대각선을 겨눠요."
+  },
+  {
+   "ply": 11,
+   "san": "Be3",
+   "why_en": "Develops and prepares Qd2 and Bh6.",
+   "why_ko": "전개하며 Qd2·Bh6를 준비해요."
+  },
+  {
+   "ply": 12,
+   "san": "Bg7",
+   "why_en": "The Dragon bishop takes the long diagonal.",
+   "why_ko": "드래곤 비숍이 긴 대각선에 서요."
+  },
+  {
+   "ply": 13,
+   "san": "f3",
+   "why_en": "Stops ...Ng4 and prepares g4: the Yugoslav Attack.",
+   "why_ko": "...Ng4를 막고 g4를 준비해요. 유고슬라브 어택이에요."
+  },
+  {
+   "ply": 14,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 15,
+   "san": "Qd2",
+   "why_en": "Prepares Bh6 to trade the Dragon bishop.",
+   "why_ko": "Bh6로 드래곤 비숍을 바꿀 준비를 해요."
+  },
+  {
+   "ply": 16,
+   "san": "Nc6",
+   "why_en": "Develops and hits d4.",
+   "why_ko": "전개하며 d4를 쳐요."
+  },
+  {
+   "ply": 17,
+   "san": "O-O-O",
+   "why_en": "Castles long and plans h4–h5.",
+   "why_ko": "길게 캐슬링하고 h4–h5를 노려요."
+  },
+  {
+   "ply": 18,
+   "san": "d5",
+   "why_en": "Breaks in the center at once to open lines toward White’s king.",
+   "why_ko": "바로 중앙을 밀어 백 킹 쪽 길을 열어요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

@@ -1404,8 +1404,8 @@
    "facts": [
     {
      "v": {
-      "ko": "1,740만 판",
-      "en": "17.4M"
+      "ko": "1억 7,493만 판",
+      "en": "175M"
      },
      "l": {
       "ko": "리체스 레이팅 대국",
@@ -1437,16 +1437,16 @@
     {
      "g": "table",
      "href": {
-      "ko": "https://chess.lumenlab.page/ko/",
-      "en": "https://chess.lumenlab.page/"
+      "ko": "https://chess.lumenlab.page/ko/map/",
+      "en": "https://chess.lumenlab.page/map/"
      },
      "t": {
-      "ko": "오프닝 탐색기",
-      "en": "Opening explorer"
+      "ko": "오프닝 지도",
+      "en": "Opening map"
      },
      "d": {
-      "ko": "레이팅대별 수·승률",
-      "en": "Moves and results by rating"
+      "ko": "레이팅대별 수·승률·엔진",
+      "en": "Moves, results and engine by rating"
      }
     },
     {
@@ -1465,18 +1465,18 @@
      }
     },
     {
-     "g": "stack",
+     "g": "rate",
      "href": {
-      "ko": "https://chess.lumenlab.page/ko/practice/",
-      "en": "https://chess.lumenlab.page/practice/"
+      "ko": "https://chess.lumenlab.page/ko/test/",
+      "en": "https://chess.lumenlab.page/test/"
      },
      "t": {
-      "ko": "오프닝 연습",
-      "en": "Opening trainer"
+      "ko": "오프닝 테스트",
+      "en": "Opening test"
      },
      "d": {
-      "ko": "틀린 수는 정해진 날 다시",
-      "en": "Mistakes come back on a schedule"
+      "ko": "2분, 국면 10개로 내 단계",
+      "en": "10 positions, 2 minutes, your level"
      }
     }
    ],
@@ -1487,8 +1487,8 @@
      "/assets/board.js"
     ],
     "cap": {
-     "ko": "화살표 굵기가 그 레이팅대에서 그 수를 두는 비율이에요. 숫자는 외울수 사이트의 리체스 1,740만 판 자료를 그대로 읽어요.",
-     "en": "Arrow thickness is how often players at that rating choose the move, read from the same 17.4 million Lichess games as Fewmoves."
+     "ko": "화살표 굵기가 그 레이팅대에서 그 수를 두는 비율이에요. 숫자는 오프닝 트레일 사이트의 리체스 1억 7,493만 판 자료를 그대로 읽어요.",
+     "en": "Arrow thickness is how often players at that rating choose the move, read from the same 175 million Lichess games as Opening Trail."
     }
    },
    "proof": {

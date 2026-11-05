@@ -1,0 +1,275 @@
+{
+ "name": {
+  "en": "Queen’s Pawn Game: 1.d4 d5",
+  "ko": "퀸스 폰 게임: 1.d4 d5"
+ },
+ "eco": "D00",
+ "side": "w",
+ "line_san": [
+  "d4",
+  "d5"
+ ],
+ "position_epd": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/queens-pawn-game/",
+  "ko": "https://chess.lumenlab.page/ko/openings/queens-pawn-game/"
+ },
+ "engine_eval_white_cp": 27,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 3562407,
+   "share_of_band": 0.1187,
+   "white_win": 1811564,
+   "draw": 147514,
+   "black_win": 1603329
+  },
+  {
+   "band": "1200–1599",
+   "games": 7150666,
+   "share_of_band": 0.12,
+   "white_win": 3684830,
+   "draw": 281757,
+   "black_win": 3184079
+  },
+  {
+   "band": "1600–1999",
+   "games": 7327783,
+   "share_of_band": 0.113021,
+   "white_win": 3754089,
+   "draw": 355300,
+   "black_win": 3218394
+  },
+  {
+   "band": "2000+",
+   "games": 1933309,
+   "share_of_band": 0.094329,
+   "white_win": 963795,
+   "draw": 140114,
+   "black_win": 829400
+  }
+ ],
+ "masters": {
+  "games": 94961,
+  "white_win": 40281,
+  "draw": 26790,
+  "black_win": 27890,
+  "next_moves": [
+   {
+    "san": "c4",
+    "games": 58902
+   },
+   {
+    "san": "Nf3",
+    "games": 20693
+   },
+   {
+    "san": "Bf4",
+    "games": 8931
+   },
+   {
+    "san": "Nc3",
+    "games": 3487
+   },
+   {
+    "san": "e3",
+    "games": 1055
+   },
+   {
+    "san": "Bg5",
+    "games": 677
+   },
+   {
+    "san": "c3",
+    "games": 279
+   },
+   {
+    "san": "g3",
+    "games": 277
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "c4",
+   "type": "main",
+   "engine_eval_white_cp": 27,
+   "games": 6604819,
+   "share": 0.33108,
+   "white_win": 3451011,
+   "draw": 309109,
+   "black_win": 2844699
+  },
+  {
+   "san": "Bf4",
+   "type": "side",
+   "engine_eval_white_cp": 5,
+   "games": 4311252,
+   "share": 0.21611,
+   "white_win": 2212221,
+   "draw": 193868,
+   "black_win": 1905163
+  },
+  {
+   "san": "Nf3",
+   "type": "alternative",
+   "engine_eval_white_cp": 16,
+   "games": 3424934,
+   "share": 0.17168,
+   "white_win": 1740570,
+   "draw": 170432,
+   "black_win": 1513932
+  },
+  {
+   "san": "e3",
+   "type": "side",
+   "engine_eval_white_cp": 9,
+   "games": 1937986,
+   "share": 0.09715,
+   "white_win": 966052,
+   "draw": 90072,
+   "black_win": 881862
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": -7,
+   "games": 1784644,
+   "share": 0.08946,
+   "white_win": 898019,
+   "draw": 77210,
+   "black_win": 809415
+  },
+  {
+   "san": "e4",
+   "type": "dubious",
+   "engine_eval_white_cp": -64,
+   "games": 630963,
+   "share": 0.03163,
+   "white_win": 322770,
+   "draw": 23309,
+   "black_win": 284884
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": -12,
+   "games": 348785,
+   "share": 0.01748,
+   "white_win": 182508,
+   "draw": 14823,
+   "black_win": 151454
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 275164,
+   "share": 0.01379,
+   "white_win": 131647,
+   "draw": 14115,
+   "black_win": 129402
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 6,
+   "games": 148616,
+   "share": 0.00745,
+   "white_win": 74834,
+   "draw": 7185,
+   "black_win": 66597
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": -48,
+   "games": 119494,
+   "share": 0.00599,
+   "white_win": 59494,
+   "draw": 6090,
+   "black_win": 53910
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 78722,
+   "share": 0.00395,
+   "white_win": 39257,
+   "draw": 3709,
+   "black_win": 35756
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": -54,
+   "games": 61566,
+   "share": 0.00309,
+   "white_win": 28781,
+   "draw": 2803,
+   "black_win": 29982
+  },
+  {
+   "san": "Qd3",
+   "type": "side",
+   "engine_eval_white_cp": -42,
+   "games": 56040,
+   "share": 0.00281,
+   "white_win": 24453,
+   "draw": 2715,
+   "black_win": 28872
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": -10,
+   "games": 41289,
+   "share": 0.00207,
+   "white_win": 19825,
+   "draw": 1853,
+   "black_win": 19611
+  },
+  {
+   "san": "Nd2",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 38788,
+   "share": 0.00194,
+   "white_win": 18837,
+   "draw": 1685,
+   "black_win": 18266
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 22848,
+   "share": 0.00115,
+   "white_win": 11237,
+   "draw": 1029,
+   "black_win": 10582
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Black takes an equal share of the center and stops e4.",
+   "why_ko": "흑도 중앙을 같이 잡고 e4를 막아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

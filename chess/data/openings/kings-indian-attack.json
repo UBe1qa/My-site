@@ -1,0 +1,354 @@
+{
+ "name": {
+  "en": "King’s Indian Attack",
+  "ko": "킹스 인디언 어택"
+ },
+ "eco": "A07",
+ "side": "w",
+ "line_san": [
+  "Nf3",
+  "d5",
+  "g3"
+ ],
+ "position_epd": "rnbqkbnr/ppp1pppp/8/3p4/8/5NP1/PPPPPP1P/RNBQKB1R b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/kings-indian-attack/",
+  "ko": "https://chess.lumenlab.page/ko/openings/kings-indian-attack/"
+ },
+ "engine_eval_white_cp": 13,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 49061,
+   "share_of_band": 0.001635,
+   "white_win": 24521,
+   "draw": 2124,
+   "black_win": 22416
+  },
+  {
+   "band": "1200–1599",
+   "games": 96772,
+   "share_of_band": 0.001624,
+   "white_win": 48632,
+   "draw": 4067,
+   "black_win": 44073
+  },
+  {
+   "band": "1600–1999",
+   "games": 147156,
+   "share_of_band": 0.00227,
+   "white_win": 77390,
+   "draw": 7130,
+   "black_win": 62636
+  },
+  {
+   "band": "2000+",
+   "games": 137953,
+   "share_of_band": 0.006731,
+   "white_win": 70741,
+   "draw": 10838,
+   "black_win": 56374
+  }
+ ],
+ "masters": {
+  "games": 15431,
+  "white_win": 6522,
+  "draw": 4886,
+  "black_win": 4023,
+  "next_moves": [
+   {
+    "san": "Nf6",
+    "games": 6529
+   },
+   {
+    "san": "g6",
+    "games": 1911
+   },
+   {
+    "san": "c5",
+    "games": 1665
+   },
+   {
+    "san": "c6",
+    "games": 1165
+   },
+   {
+    "san": "Nd7",
+    "games": 1097
+   },
+   {
+    "san": "Nc6",
+    "games": 1078
+   },
+   {
+    "san": "Bg4",
+    "games": 1067
+   },
+   {
+    "san": "e6",
+    "games": 413
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nf6",
+   "type": "main",
+   "engine_eval_white_cp": 17,
+   "games": 99794,
+   "share": 0.23189,
+   "white_win": 50449,
+   "draw": 6475,
+   "black_win": 42870
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 35,
+   "games": 90912,
+   "share": 0.21125,
+   "white_win": 45928,
+   "draw": 4115,
+   "black_win": 40869
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": 19,
+   "games": 68509,
+   "share": 0.15919,
+   "white_win": 36075,
+   "draw": 3753,
+   "black_win": 28681
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 13,
+   "games": 38159,
+   "share": 0.08867,
+   "white_win": 20289,
+   "draw": 2214,
+   "black_win": 15656
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 24,
+   "games": 35346,
+   "share": 0.08213,
+   "white_win": 17772,
+   "draw": 2311,
+   "black_win": 15263
+  },
+  {
+   "san": "Bg4",
+   "type": "side",
+   "engine_eval_white_cp": 19,
+   "games": 29083,
+   "share": 0.06758,
+   "white_win": 15062,
+   "draw": 1444,
+   "black_win": 12577
+  },
+  {
+   "san": "Bf5",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 26675,
+   "share": 0.06198,
+   "white_win": 13885,
+   "draw": 1271,
+   "black_win": 11519
+  },
+  {
+   "san": "g6",
+   "type": "alternative",
+   "engine_eval_white_cp": 16,
+   "games": 9693,
+   "share": 0.02252,
+   "white_win": 4490,
+   "draw": 944,
+   "black_win": 4259
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": 121,
+   "games": 7609,
+   "share": 0.01768,
+   "white_win": 4065,
+   "draw": 315,
+   "black_win": 3229
+  },
+  {
+   "san": "d4",
+   "type": "side",
+   "engine_eval_white_cp": 82,
+   "games": 5032,
+   "share": 0.01169,
+   "white_win": 2720,
+   "draw": 194,
+   "black_win": 2118
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 56,
+   "games": 4662,
+   "share": 0.01083,
+   "white_win": 2426,
+   "draw": 196,
+   "black_win": 2040
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 3754,
+   "share": 0.00872,
+   "white_win": 1957,
+   "draw": 221,
+   "black_win": 1576
+  },
+  {
+   "san": "Nd7",
+   "type": "side",
+   "engine_eval_white_cp": 25,
+   "games": 3624,
+   "share": 0.00842,
+   "white_win": 1765,
+   "draw": 287,
+   "black_win": 1572
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 60,
+   "games": 2012,
+   "share": 0.00468,
+   "white_win": 1079,
+   "draw": 122,
+   "black_win": 811
+  },
+  {
+   "san": "h5",
+   "type": "side",
+   "engine_eval_white_cp": 65,
+   "games": 1320,
+   "share": 0.00307,
+   "white_win": 687,
+   "draw": 64,
+   "black_win": 569
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 34,
+   "games": 1164,
+   "share": 0.0027,
+   "white_win": 616,
+   "draw": 66,
+   "black_win": 482
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "Nf3",
+   "why_en": "Develops a piece, covers d4 and e5, and keeps every pawn plan open.",
+   "why_ko": "기물을 꺼내 d4·e5를 막고, 폰 계획은 모두 열어 둬요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Takes the center while White keeps waiting.",
+   "why_ko": "백이 기다리는 동안 중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "g3",
+   "why_en": "Prepares Bg2 and the King’s Indian Attack set-up.",
+   "why_ko": "Bg2와 킹스 인디언 어택 짜임을 준비해요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "Bg2",
+   "why_en": "The bishop takes the long diagonal.",
+   "why_ko": "비숍이 긴 대각선에 서요."
+  },
+  {
+   "ply": 6,
+   "san": "e6",
+   "why_en": "Opens the dark bishop.",
+   "why_ko": "어두운 칸 비숍 길을 열어요."
+  },
+  {
+   "ply": 7,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 8,
+   "san": "Be7",
+   "why_en": "Develops and prepares to castle.",
+   "why_ko": "전개하고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 9,
+   "san": "d3",
+   "why_en": "Prepares e4: the King’s Indian Attack set-up.",
+   "why_ko": "e4를 준비해요. 킹스 인디언 어택 짜임이에요."
+  },
+  {
+   "ply": 10,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 11,
+   "san": "Nbd2",
+   "why_en": "Supports e4.",
+   "why_ko": "e4를 받쳐요."
+  },
+  {
+   "ply": 12,
+   "san": "c5",
+   "why_en": "Grabs queenside space.",
+   "why_ko": "퀸 쪽 공간을 잡아요."
+  },
+  {
+   "ply": 13,
+   "san": "e4",
+   "why_en": "Breaks in the center.",
+   "why_ko": "중앙을 밀어요."
+  },
+  {
+   "ply": 14,
+   "san": "Nc6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 15,
+   "san": "Re1",
+   "why_en": "Puts the rook behind the e-pawn and prepares e5.",
+   "why_ko": "룩을 e폰 뒤에 두고 e5를 준비해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}
