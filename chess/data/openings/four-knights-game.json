@@ -1,0 +1,375 @@
+{
+ "name": {
+  "en": "Four Knights Game",
+  "ko": "포 나이츠 게임"
+ },
+ "eco": "C47",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nc6",
+  "Nc3",
+  "Nf6"
+ ],
+ "position_epd": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/four-knights-game/",
+  "ko": "https://chess.lumenlab.page/ko/openings/four-knights-game/"
+ },
+ "engine_eval_white_cp": 5,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 711852,
+   "share_of_band": 0.023719,
+   "white_win": 351346,
+   "draw": 34132,
+   "black_win": 326374
+  },
+  {
+   "band": "1200–1599",
+   "games": 749390,
+   "share_of_band": 0.012576,
+   "white_win": 368023,
+   "draw": 32200,
+   "black_win": 349167
+  },
+  {
+   "band": "1600–1999",
+   "games": 459948,
+   "share_of_band": 0.007094,
+   "white_win": 227069,
+   "draw": 23000,
+   "black_win": 209879
+  },
+  {
+   "band": "2000+",
+   "games": 137858,
+   "share_of_band": 0.006726,
+   "white_win": 65169,
+   "draw": 12066,
+   "black_win": 60623
+  }
+ ],
+ "masters": {
+  "games": 10389,
+  "white_win": 3713,
+  "draw": 3460,
+  "black_win": 3216,
+  "next_moves": [
+   {
+    "san": "d4",
+    "games": 3606
+   },
+   {
+    "san": "Bb5",
+    "games": 3189
+   },
+   {
+    "san": "a3",
+    "games": 873
+   },
+   {
+    "san": "Bc4",
+    "games": 820
+   },
+   {
+    "san": "h3",
+    "games": 628
+   },
+   {
+    "san": "g3",
+    "games": 362
+   },
+   {
+    "san": "Nd5",
+    "games": 225
+   },
+   {
+    "san": "Be2",
+    "games": 145
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Bc4",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 758521,
+   "share": 0.3694,
+   "white_win": 364502,
+   "draw": 34376,
+   "black_win": 359643
+  },
+  {
+   "san": "d4",
+   "type": "main",
+   "engine_eval_white_cp": 5,
+   "games": 457727,
+   "share": 0.22291,
+   "white_win": 236969,
+   "draw": 23747,
+   "black_win": 197011
+  },
+  {
+   "san": "Bb5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 431294,
+   "share": 0.21004,
+   "white_win": 216015,
+   "draw": 22440,
+   "black_win": 192839
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": -20,
+   "games": 169668,
+   "share": 0.08263,
+   "white_win": 77985,
+   "draw": 8376,
+   "black_win": 83307
+  },
+  {
+   "san": "Nxe5",
+   "type": "mistake",
+   "engine_eval_white_cp": -184,
+   "games": 56517,
+   "share": 0.02752,
+   "white_win": 29380,
+   "draw": 1922,
+   "black_win": 25215
+  },
+  {
+   "san": "a3",
+   "type": "alternative",
+   "engine_eval_white_cp": -8,
+   "games": 46844,
+   "share": 0.02281,
+   "white_win": 23305,
+   "draw": 3417,
+   "black_win": 20122
+  },
+  {
+   "san": "Be2",
+   "type": "side",
+   "engine_eval_white_cp": -12,
+   "games": 35653,
+   "share": 0.01736,
+   "white_win": 17395,
+   "draw": 1789,
+   "black_win": 16469
+  },
+  {
+   "san": "h3",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 29577,
+   "share": 0.0144,
+   "white_win": 14580,
+   "draw": 1607,
+   "black_win": 13390
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": -16,
+   "games": 20076,
+   "share": 0.00978,
+   "white_win": 9578,
+   "draw": 1028,
+   "black_win": 9470
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": -14,
+   "games": 13728,
+   "share": 0.00669,
+   "white_win": 5602,
+   "draw": 723,
+   "black_win": 7403
+  },
+  {
+   "san": "Nd5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 11714,
+   "share": 0.0057,
+   "white_win": 5341,
+   "draw": 572,
+   "black_win": 5801
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": -37,
+   "games": 8556,
+   "share": 0.00417,
+   "white_win": 3755,
+   "draw": 366,
+   "black_win": 4435
+  },
+  {
+   "san": "Ng5",
+   "type": "side",
+   "engine_eval_white_cp": -56,
+   "games": 5207,
+   "share": 0.00254,
+   "white_win": 2261,
+   "draw": 199,
+   "black_win": 2747
+  },
+  {
+   "san": "Qe2",
+   "type": "side",
+   "engine_eval_white_cp": -39,
+   "games": 2576,
+   "share": 0.00125,
+   "white_win": 961,
+   "draw": 130,
+   "black_win": 1485
+  },
+  {
+   "san": "a4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 1855,
+   "share": 0.0009,
+   "white_win": 790,
+   "draw": 116,
+   "black_win": 949
+  },
+  {
+   "san": "Nb5",
+   "type": "dubious",
+   "engine_eval_white_cp": -114,
+   "games": 1000,
+   "share": 0.00049,
+   "white_win": 354,
+   "draw": 43,
+   "black_win": 603
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "why_en": "Defends e5 with a piece and develops at the same time.",
+   "why_ko": "기물로 e5를 지키면서 전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "Nc3",
+   "why_en": "Develops another knight and protects e4, a calm and solid choice.",
+   "why_ko": "나이트를 하나 더 꺼내 e4를 지켜요. 차분하고 단단한 선택이에요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Black mirrors White: all four knights are out.",
+   "why_ko": "흑도 똑같이 둬서 나이트 네 개가 모두 나와요."
+  },
+  {
+   "ply": 7,
+   "san": "d4",
+   "why_en": "Opens the center: the Scotch Four Knights.",
+   "why_ko": "중앙을 열어요. 스카치 포 나이츠예요."
+  },
+  {
+   "ply": 8,
+   "san": "exd4",
+   "why_en": "Takes the pawn.",
+   "why_ko": "폰을 잡아요."
+  },
+  {
+   "ply": 9,
+   "san": "Nxd4",
+   "why_en": "Recaptures with the knight in the center.",
+   "why_ko": "나이트로 다시 잡아 중앙에 세워요."
+  },
+  {
+   "ply": 10,
+   "san": "Bb4",
+   "why_en": "Pins the c3 knight so e4 is weaker.",
+   "why_ko": "c3 나이트를 묶어 e4를 약하게 만들어요."
+  },
+  {
+   "ply": 11,
+   "san": "Nxc6",
+   "why_en": "Trades on c6 to damage Black’s pawns.",
+   "why_ko": "c6에서 바꿔 흑 폰 모양을 흔들어요."
+  },
+  {
+   "ply": 12,
+   "san": "bxc6",
+   "why_en": "Recaptures toward the center.",
+   "why_ko": "중앙 쪽으로 다시 잡아요."
+  },
+  {
+   "ply": 13,
+   "san": "Bd3",
+   "why_en": "Protects e4 and prepares to castle.",
+   "why_ko": "e4를 지키고 캐슬링을 준비해요."
+  },
+  {
+   "ply": 14,
+   "san": "d5",
+   "why_en": "Frees the game in the center.",
+   "why_ko": "중앙을 밀어 판을 풀어요."
+  },
+  {
+   "ply": 15,
+   "san": "exd5",
+   "why_en": "Takes the pawn.",
+   "why_ko": "폰을 잡아요."
+  },
+  {
+   "ply": 16,
+   "san": "O-O",
+   "why_en": "Castles and gives the pawn back for fast development.",
+   "why_ko": "캐슬링하며 폰을 돌려주고 빠르게 전개해요."
+  },
+  {
+   "ply": 17,
+   "san": "O-O",
+   "why_en": "Castles too.",
+   "why_ko": "백도 캐슬링해요."
+  },
+  {
+   "ply": 18,
+   "san": "cxd5",
+   "why_en": "Wins back the pawn with a pawn on d5.",
+   "why_ko": "d5 폰으로 되찾아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

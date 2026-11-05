@@ -1,0 +1,323 @@
+{
+ "name": {
+  "en": "Mikenas Defense (1...Nc6)",
+  "ko": "미케나스 디펜스(1...Nc6)"
+ },
+ "eco": "A40",
+ "side": "b",
+ "line_san": [
+  "d4",
+  "Nc6"
+ ],
+ "position_epd": "r1bqkbnr/pppppppp/2n5/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/mikenas-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/mikenas-defense/"
+ },
+ "engine_eval_white_cp": 60,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 176267,
+   "share_of_band": 0.005873,
+   "white_win": 93250,
+   "draw": 8469,
+   "black_win": 74548
+  },
+  {
+   "band": "1200–1599",
+   "games": 124241,
+   "share_of_band": 0.002085,
+   "white_win": 68193,
+   "draw": 4851,
+   "black_win": 51197
+  },
+  {
+   "band": "1600–1999",
+   "games": 103374,
+   "share_of_band": 0.001594,
+   "white_win": 51540,
+   "draw": 4168,
+   "black_win": 47666
+  },
+  {
+   "band": "2000+",
+   "games": 52600,
+   "share_of_band": 0.002566,
+   "white_win": 24899,
+   "draw": 2893,
+   "black_win": 24808
+  }
+ ],
+ "masters": {
+  "games": 416,
+  "white_win": 198,
+  "draw": 84,
+  "black_win": 134,
+  "next_moves": [
+   {
+    "san": "Nf3",
+    "games": 179
+   },
+   {
+    "san": "d5",
+    "games": 88
+   },
+   {
+    "san": "c4",
+    "games": 62
+   },
+   {
+    "san": "Bf4",
+    "games": 27
+   },
+   {
+    "san": "e4",
+    "games": 25
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nf3",
+   "type": "alternative",
+   "engine_eval_white_cp": 48,
+   "games": 119362,
+   "share": 0.26217,
+   "white_win": 64013,
+   "draw": 5429,
+   "black_win": 49920
+  },
+  {
+   "san": "c4",
+   "type": "alternative",
+   "engine_eval_white_cp": 45,
+   "games": 68697,
+   "share": 0.15089,
+   "white_win": 34794,
+   "draw": 2617,
+   "black_win": 31286
+  },
+  {
+   "san": "d5",
+   "type": "main",
+   "engine_eval_white_cp": 60,
+   "games": 66402,
+   "share": 0.14585,
+   "white_win": 35385,
+   "draw": 2805,
+   "black_win": 28212
+  },
+  {
+   "san": "Bf4",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 64741,
+   "share": 0.1422,
+   "white_win": 34627,
+   "draw": 2794,
+   "black_win": 27320
+  },
+  {
+   "san": "e3",
+   "type": "side",
+   "engine_eval_white_cp": 32,
+   "games": 50825,
+   "share": 0.11163,
+   "white_win": 25660,
+   "draw": 2482,
+   "black_win": 22683
+  },
+  {
+   "san": "e4",
+   "type": "side",
+   "engine_eval_white_cp": 25,
+   "games": 25966,
+   "share": 0.05703,
+   "white_win": 13191,
+   "draw": 1126,
+   "black_win": 11649
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 24046,
+   "share": 0.05281,
+   "white_win": 12289,
+   "draw": 1137,
+   "black_win": 10620
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": 15,
+   "games": 19056,
+   "share": 0.04185,
+   "white_win": 9541,
+   "draw": 1035,
+   "black_win": 8480
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": -5,
+   "games": 4711,
+   "share": 0.01035,
+   "white_win": 2465,
+   "draw": 207,
+   "black_win": 2039
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 18,
+   "games": 2312,
+   "share": 0.00508,
+   "white_win": 1179,
+   "draw": 101,
+   "black_win": 1032
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": -5,
+   "games": 2038,
+   "share": 0.00448,
+   "white_win": 1071,
+   "draw": 104,
+   "black_win": 863
+  },
+  {
+   "san": "Be3",
+   "type": "side",
+   "engine_eval_white_cp": -1,
+   "games": 1507,
+   "share": 0.00331,
+   "white_win": 707,
+   "draw": 88,
+   "black_win": 712
+  },
+  {
+   "san": "Qd3",
+   "type": "side",
+   "engine_eval_white_cp": 2,
+   "games": 1431,
+   "share": 0.00314,
+   "white_win": 563,
+   "draw": 113,
+   "black_win": 755
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 35,
+   "games": 748,
+   "share": 0.00164,
+   "white_win": 402,
+   "draw": 29,
+   "black_win": 317
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 720,
+   "share": 0.00158,
+   "white_win": 379,
+   "draw": 36,
+   "black_win": 305
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 695,
+   "share": 0.00153,
+   "white_win": 329,
+   "draw": 44,
+   "black_win": 322
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nc6",
+   "why_en": "Develops and prepares ...e5 or ...d5.",
+   "why_ko": "전개하며 ...e5나 ...d5를 준비해요."
+  },
+  {
+   "ply": 3,
+   "san": "d5",
+   "why_en": "Pushes past and kicks the knight.",
+   "why_ko": "밀고 나가며 나이트를 쫓아요."
+  },
+  {
+   "ply": 4,
+   "san": "Ne5",
+   "why_en": "The knight goes to the center.",
+   "why_ko": "나이트가 중앙으로 가요."
+  },
+  {
+   "ply": 5,
+   "san": "e4",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "Ng6",
+   "why_en": "The knight steps back to g6.",
+   "why_ko": "나이트가 g6로 물러나요."
+  },
+  {
+   "ply": 7,
+   "san": "c4",
+   "why_en": "Grabs more space.",
+   "why_ko": "공간을 더 잡아요."
+  },
+  {
+   "ply": 8,
+   "san": "e5",
+   "why_en": "Stakes a claim in the center.",
+   "why_ko": "중앙에 자리를 잡아요."
+  },
+  {
+   "ply": 9,
+   "san": "Nc3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 10,
+   "san": "Bc5",
+   "why_en": "The bishop aims at f2.",
+   "why_ko": "비숍이 f2를 겨눠요."
+  },
+  {
+   "ply": 11,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 12,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

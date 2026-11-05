@@ -1,0 +1,309 @@
+{
+ "name": {
+  "en": "Owen Defense",
+  "ko": "오웬 디펜스"
+ },
+ "eco": "B00",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "b6"
+ ],
+ "position_epd": "rnbqkbnr/p1pppppp/1p6/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/owen-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/owen-defense/"
+ },
+ "engine_eval_white_cp": 93,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 247715,
+   "share_of_band": 0.008254,
+   "white_win": 123440,
+   "draw": 9046,
+   "black_win": 115229
+  },
+  {
+   "band": "1200–1599",
+   "games": 745168,
+   "share_of_band": 0.012505,
+   "white_win": 368681,
+   "draw": 26477,
+   "black_win": 350010
+  },
+  {
+   "band": "1600–1999",
+   "games": 798191,
+   "share_of_band": 0.012311,
+   "white_win": 401502,
+   "draw": 32920,
+   "black_win": 363769
+  },
+  {
+   "band": "2000+",
+   "games": 113433,
+   "share_of_band": 0.005535,
+   "white_win": 57667,
+   "draw": 5541,
+   "black_win": 50225
+  }
+ ],
+ "masters": {
+  "games": 1372,
+  "white_win": 638,
+  "draw": 282,
+  "black_win": 452,
+  "next_moves": [
+   {
+    "san": "d4",
+    "games": 1060
+   },
+   {
+    "san": "Nc3",
+    "games": 92
+   },
+   {
+    "san": "Nf3",
+    "games": 57
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "d4",
+   "type": "main",
+   "engine_eval_white_cp": 93,
+   "games": 792354,
+   "share": 0.41717,
+   "white_win": 403883,
+   "draw": 30251,
+   "black_win": 358220
+  },
+  {
+   "san": "Nf3",
+   "type": "side",
+   "engine_eval_white_cp": 57,
+   "games": 518246,
+   "share": 0.27286,
+   "white_win": 256610,
+   "draw": 20520,
+   "black_win": 241116
+  },
+  {
+   "san": "Bc4",
+   "type": "side",
+   "engine_eval_white_cp": 11,
+   "games": 178410,
+   "share": 0.09393,
+   "white_win": 86654,
+   "draw": 6618,
+   "black_win": 85138
+  },
+  {
+   "san": "Nc3",
+   "type": "alternative",
+   "engine_eval_white_cp": 60,
+   "games": 147672,
+   "share": 0.07775,
+   "white_win": 73422,
+   "draw": 6025,
+   "black_win": 68225
+  },
+  {
+   "san": "f4",
+   "type": "dubious",
+   "engine_eval_white_cp": 0,
+   "games": 69716,
+   "share": 0.03671,
+   "white_win": 35389,
+   "draw": 2314,
+   "black_win": 32013
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": 12,
+   "games": 50981,
+   "share": 0.02684,
+   "white_win": 24889,
+   "draw": 2301,
+   "black_win": 23791
+  },
+  {
+   "san": "Qf3",
+   "type": "dubious",
+   "engine_eval_white_cp": -16,
+   "games": 27020,
+   "share": 0.01423,
+   "white_win": 12840,
+   "draw": 1063,
+   "black_win": 13117
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 30,
+   "games": 19191,
+   "share": 0.0101,
+   "white_win": 9602,
+   "draw": 842,
+   "black_win": 8747
+  },
+  {
+   "san": "e5",
+   "type": "side",
+   "engine_eval_white_cp": 17,
+   "games": 14757,
+   "share": 0.00777,
+   "white_win": 7106,
+   "draw": 591,
+   "black_win": 7060
+  },
+  {
+   "san": "Be2",
+   "type": "side",
+   "engine_eval_white_cp": 10,
+   "games": 14500,
+   "share": 0.00763,
+   "white_win": 7975,
+   "draw": 623,
+   "black_win": 5902
+  },
+  {
+   "san": "c4",
+   "type": "side",
+   "engine_eval_white_cp": 27,
+   "games": 11242,
+   "share": 0.00592,
+   "white_win": 5434,
+   "draw": 441,
+   "black_win": 5367
+  },
+  {
+   "san": "f3",
+   "type": "dubious",
+   "engine_eval_white_cp": 5,
+   "games": 9706,
+   "share": 0.00511,
+   "white_win": 4573,
+   "draw": 447,
+   "black_win": 4686
+  },
+  {
+   "san": "c3",
+   "type": "side",
+   "engine_eval_white_cp": 18,
+   "games": 9181,
+   "share": 0.00483,
+   "white_win": 4327,
+   "draw": 353,
+   "black_win": 4501
+  },
+  {
+   "san": "Qh5",
+   "type": "dubious",
+   "engine_eval_white_cp": -25,
+   "games": 7689,
+   "share": 0.00405,
+   "white_win": 3413,
+   "draw": 306,
+   "black_win": 3970
+  },
+  {
+   "san": "Bb5",
+   "type": "dubious",
+   "engine_eval_white_cp": -3,
+   "games": 7178,
+   "share": 0.00378,
+   "white_win": 3249,
+   "draw": 273,
+   "black_win": 3656
+  },
+  {
+   "san": "b3",
+   "type": "side",
+   "engine_eval_white_cp": 18,
+   "games": 5448,
+   "share": 0.00287,
+   "white_win": 2607,
+   "draw": 213,
+   "black_win": 2628
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "b6",
+   "why_en": "Prepares ...Bb7 to attack e4 from the side.",
+   "why_ko": "...Bb7을 준비해 옆에서 e4를 쳐요."
+  },
+  {
+   "ply": 3,
+   "san": "d4",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 4,
+   "san": "Bb7",
+   "why_en": "The bishop hits e4.",
+   "why_ko": "비숍이 e4를 쳐요."
+  },
+  {
+   "ply": 5,
+   "san": "Bd3",
+   "why_en": "Protects e4 with the bishop.",
+   "why_ko": "비숍으로 e4를 지켜요."
+  },
+  {
+   "ply": 6,
+   "san": "e6",
+   "why_en": "Opens the dark bishop.",
+   "why_ko": "어두운 칸 비숍 길을 열어요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 8,
+   "san": "d6",
+   "why_en": "Covers e5.",
+   "why_ko": "e5를 막아요."
+  },
+  {
+   "ply": 9,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 10,
+   "san": "Nd7",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 11,
+   "san": "Re1",
+   "why_en": "Puts the rook behind the e-pawn.",
+   "why_ko": "룩을 e폰 뒤에 둬요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

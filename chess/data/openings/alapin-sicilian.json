@@ -1,0 +1,360 @@
+{
+ "name": {
+  "en": "Alapin Sicilian",
+  "ko": "알라핀 시실리안"
+ },
+ "eco": "B22",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "c5",
+  "c3"
+ ],
+ "position_epd": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/alapin-sicilian/",
+  "ko": "https://chess.lumenlab.page/ko/openings/alapin-sicilian/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 41227,
+   "share_of_band": 0.001374,
+   "white_win": 20663,
+   "draw": 1340,
+   "black_win": 19224
+  },
+  {
+   "band": "1200–1599",
+   "games": 256369,
+   "share_of_band": 0.004302,
+   "white_win": 129048,
+   "draw": 8785,
+   "black_win": 118536
+  },
+  {
+   "band": "1600–1999",
+   "games": 586117,
+   "share_of_band": 0.00904,
+   "white_win": 290867,
+   "draw": 26436,
+   "black_win": 268814
+  },
+  {
+   "band": "2000+",
+   "games": 248507,
+   "share_of_band": 0.012125,
+   "white_win": 121785,
+   "draw": 17061,
+   "black_win": 109661
+  }
+ ],
+ "masters": {
+  "games": 13545,
+  "white_win": 4678,
+  "draw": 3473,
+  "black_win": 5394,
+  "next_moves": [
+   {
+    "san": "Nf6",
+    "games": 5656
+   },
+   {
+    "san": "d5",
+    "games": 5065
+   },
+   {
+    "san": "e6",
+    "games": 862
+   },
+   {
+    "san": "d6",
+    "games": 544
+   },
+   {
+    "san": "g6",
+    "games": 514
+   },
+   {
+    "san": "Nc6",
+    "games": 420
+   },
+   {
+    "san": "e5",
+    "games": 310
+   },
+   {
+    "san": "Qa5",
+    "games": 69
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 14,
+   "games": 340426,
+   "share": 0.30094,
+   "white_win": 176442,
+   "draw": 13621,
+   "black_win": 150363
+  },
+  {
+   "san": "d5",
+   "type": "alternative",
+   "engine_eval_white_cp": 14,
+   "games": 196751,
+   "share": 0.17393,
+   "white_win": 94374,
+   "draw": 11510,
+   "black_win": 90867
+  },
+  {
+   "san": "e6",
+   "type": "alternative",
+   "engine_eval_white_cp": 21,
+   "games": 169657,
+   "share": 0.14998,
+   "white_win": 83983,
+   "draw": 7457,
+   "black_win": 78217
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 55,
+   "games": 153580,
+   "share": 0.13577,
+   "white_win": 77122,
+   "draw": 6809,
+   "black_win": 69649
+  },
+  {
+   "san": "Nf6",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 135264,
+   "share": 0.11957,
+   "white_win": 63207,
+   "draw": 8105,
+   "black_win": 63952
+  },
+  {
+   "san": "e5",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 57783,
+   "share": 0.05108,
+   "white_win": 28342,
+   "draw": 2678,
+   "black_win": 26763
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 28,
+   "games": 50356,
+   "share": 0.04452,
+   "white_win": 23991,
+   "draw": 2268,
+   "black_win": 24097
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 37,
+   "games": 16276,
+   "share": 0.01439,
+   "white_win": 8312,
+   "draw": 635,
+   "black_win": 7329
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 73,
+   "games": 4984,
+   "share": 0.00441,
+   "white_win": 2546,
+   "draw": 213,
+   "black_win": 2225
+  },
+  {
+   "san": "Qa5",
+   "type": "side",
+   "engine_eval_white_cp": 50,
+   "games": 2365,
+   "share": 0.00209,
+   "white_win": 1142,
+   "draw": 97,
+   "black_win": 1126
+  },
+  {
+   "san": "Qc7",
+   "type": "dubious",
+   "engine_eval_white_cp": 89,
+   "games": 1059,
+   "share": 0.00094,
+   "white_win": 539,
+   "draw": 45,
+   "black_win": 475
+  },
+  {
+   "san": "c4",
+   "type": "dubious",
+   "engine_eval_white_cp": 167,
+   "games": 486,
+   "share": 0.00043,
+   "white_win": 308,
+   "draw": 15,
+   "black_win": 163
+  },
+  {
+   "san": "b5",
+   "type": "dubious",
+   "engine_eval_white_cp": 118,
+   "games": 442,
+   "share": 0.00039,
+   "white_win": 267,
+   "draw": 17,
+   "black_win": 158
+  },
+  {
+   "san": "f5",
+   "type": "dubious",
+   "engine_eval_white_cp": 125,
+   "games": 329,
+   "share": 0.00029,
+   "white_win": 163,
+   "draw": 8,
+   "black_win": 158
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 133,
+   "games": 329,
+   "share": 0.00029,
+   "white_win": 201,
+   "draw": 7,
+   "black_win": 121
+  },
+  {
+   "san": "Qb6",
+   "type": "side",
+   "engine_eval_white_cp": 64,
+   "games": 327,
+   "share": 0.00029,
+   "white_win": 176,
+   "draw": 10,
+   "black_win": 141
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "c5",
+   "why_en": "Fights for d4 from the side and makes the game unbalanced from move one.",
+   "why_ko": "옆에서 d4를 다투고, 첫 수부터 판의 균형을 깨요."
+  },
+  {
+   "ply": 3,
+   "san": "c3",
+   "why_en": "Prepares d4 so White can recapture with a pawn and keep a big center.",
+   "why_ko": "d4를 준비해 폰으로 다시 잡고 큰 중앙을 지켜요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Hits e4, which c3 no longer protects with a knight.",
+   "why_ko": "e4를 쳐요. c3 때문에 나이트가 e4를 지킬 수 없어요."
+  },
+  {
+   "ply": 5,
+   "san": "e5",
+   "why_en": "Kicks the knight and grabs space.",
+   "why_ko": "나이트를 쫓으며 공간을 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "Nd5",
+   "why_en": "The knight goes to d5; with the pawn on c3, no white knight can challenge it from c3.",
+   "why_ko": "나이트가 d5로 가요. c3에 폰이 있어 백 나이트가 c3에서 그 칸을 다툴 수 없어요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 8,
+   "san": "d6",
+   "why_en": "Hits the e5 pawn.",
+   "why_ko": "e5 폰을 쳐요."
+  },
+  {
+   "ply": 9,
+   "san": "d4",
+   "why_en": "Builds the center.",
+   "why_ko": "중앙을 쌓아요."
+  },
+  {
+   "ply": 10,
+   "san": "cxd4",
+   "why_en": "Trades the c-pawn.",
+   "why_ko": "c폰을 바꿔요."
+  },
+  {
+   "ply": 11,
+   "san": "cxd4",
+   "why_en": "Recaptures with a pawn: White has a big center.",
+   "why_ko": "폰으로 다시 잡아 백이 큰 중앙을 가져요."
+  },
+  {
+   "ply": 12,
+   "san": "Nc6",
+   "why_en": "Develops and hits d4 and e5.",
+   "why_ko": "전개하며 d4·e5를 쳐요."
+  },
+  {
+   "ply": 13,
+   "san": "Bc4",
+   "why_en": "Hits the d5 knight.",
+   "why_ko": "d5 나이트를 쳐요."
+  },
+  {
+   "ply": 14,
+   "san": "Nb6",
+   "why_en": "The knight hits the bishop.",
+   "why_ko": "나이트가 비숍을 쳐요."
+  },
+  {
+   "ply": 15,
+   "san": "Bb5",
+   "why_en": "Pins the c6 knight.",
+   "why_ko": "c6 나이트를 묶어요."
+  },
+  {
+   "ply": 16,
+   "san": "dxe5",
+   "why_en": "Takes e5.",
+   "why_ko": "e5를 잡아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

@@ -1,0 +1,286 @@
+{
+ "name": {
+  "en": "Damiano Defense",
+  "ko": "다미아노 디펜스"
+ },
+ "eco": "C40",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "f6"
+ ],
+ "position_epd": "rnbqkbnr/pppp2pp/5p2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/damiano-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/damiano-defense/"
+ },
+ "engine_eval_white_cp": 162,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 215503,
+   "share_of_band": 0.007181,
+   "white_win": 119624,
+   "draw": 9244,
+   "black_win": 86635
+  },
+  {
+   "band": "1200–1599",
+   "games": 112791,
+   "share_of_band": 0.001893,
+   "white_win": 66656,
+   "draw": 4124,
+   "black_win": 42011
+  },
+  {
+   "band": "1600–1999",
+   "games": 22619,
+   "share_of_band": 0.000349,
+   "white_win": 13297,
+   "draw": 840,
+   "black_win": 8482
+  },
+  {
+   "band": "2000+",
+   "games": 2609,
+   "share_of_band": 0.000127,
+   "white_win": 1326,
+   "draw": 135,
+   "black_win": 1148
+  }
+ ],
+ "masters": {
+  "games": 41,
+  "white_win": 29,
+  "draw": 1,
+  "black_win": 11,
+  "next_moves": [],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Bc4",
+   "type": "alternative",
+   "engine_eval_white_cp": 132,
+   "games": 133062,
+   "share": 0.37747,
+   "white_win": 75472,
+   "draw": 5176,
+   "black_win": 52414
+  },
+  {
+   "san": "d4",
+   "type": "alternative",
+   "engine_eval_white_cp": 131,
+   "games": 76706,
+   "share": 0.2176,
+   "white_win": 43373,
+   "draw": 3213,
+   "black_win": 30120
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 111,
+   "games": 65956,
+   "share": 0.1871,
+   "white_win": 36221,
+   "draw": 3145,
+   "black_win": 26590
+  },
+  {
+   "san": "Nxe5",
+   "type": "main",
+   "engine_eval_white_cp": 162,
+   "games": 33567,
+   "share": 0.09522,
+   "white_win": 22866,
+   "draw": 844,
+   "black_win": 9857
+  },
+  {
+   "san": "c3",
+   "type": "dubious",
+   "engine_eval_white_cp": 52,
+   "games": 10657,
+   "share": 0.03023,
+   "white_win": 5733,
+   "draw": 415,
+   "black_win": 4509
+  },
+  {
+   "san": "d3",
+   "type": "dubious",
+   "engine_eval_white_cp": 34,
+   "games": 9415,
+   "share": 0.02671,
+   "white_win": 4645,
+   "draw": 484,
+   "black_win": 4286
+  },
+  {
+   "san": "Bb5",
+   "type": "dubious",
+   "engine_eval_white_cp": 63,
+   "games": 5119,
+   "share": 0.01452,
+   "white_win": 2586,
+   "draw": 232,
+   "black_win": 2301
+  },
+  {
+   "san": "Nh4",
+   "type": "side",
+   "engine_eval_white_cp": 80,
+   "games": 3243,
+   "share": 0.0092,
+   "white_win": 1972,
+   "draw": 99,
+   "black_win": 1172
+  },
+  {
+   "san": "Be2",
+   "type": "side",
+   "engine_eval_white_cp": 94,
+   "games": 3027,
+   "share": 0.00859,
+   "white_win": 1602,
+   "draw": 131,
+   "black_win": 1294
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 72,
+   "games": 2115,
+   "share": 0.006,
+   "white_win": 1113,
+   "draw": 105,
+   "black_win": 897
+  },
+  {
+   "san": "Bd3",
+   "type": "dubious",
+   "engine_eval_white_cp": 69,
+   "games": 1856,
+   "share": 0.00527,
+   "white_win": 941,
+   "draw": 103,
+   "black_win": 812
+  },
+  {
+   "san": "a3",
+   "type": "side",
+   "engine_eval_white_cp": 96,
+   "games": 1850,
+   "share": 0.00525,
+   "white_win": 1034,
+   "draw": 72,
+   "black_win": 744
+  },
+  {
+   "san": "h3",
+   "type": "dubious",
+   "engine_eval_white_cp": 63,
+   "games": 1553,
+   "share": 0.00441,
+   "white_win": 872,
+   "draw": 60,
+   "black_win": 621
+  },
+  {
+   "san": "b3",
+   "type": "dubious",
+   "engine_eval_white_cp": 68,
+   "games": 1247,
+   "share": 0.00354,
+   "white_win": 637,
+   "draw": 52,
+   "black_win": 558
+  },
+  {
+   "san": "c4",
+   "type": "dubious",
+   "engine_eval_white_cp": 50,
+   "games": 1212,
+   "share": 0.00344,
+   "white_win": 632,
+   "draw": 52,
+   "black_win": 528
+  },
+  {
+   "san": "g4",
+   "type": "mistake",
+   "engine_eval_white_cp": -45,
+   "games": 804,
+   "share": 0.00228,
+   "white_win": 377,
+   "draw": 44,
+   "black_win": 383
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "f6",
+   "why_en": "Guards e5 with the f-pawn, which takes f6 from the knight and weakens the king.",
+   "why_ko": "f폰으로 e5를 지키지만, 나이트 칸 f6을 뺏고 킹이 약해져요."
+  },
+  {
+   "ply": 5,
+   "san": "Nxe5",
+   "why_en": "Takes the pawn anyway: 3...fxe5? 4.Qh5+ wins for White.",
+   "why_ko": "그래도 폰을 잡아요. 3...fxe5?는 4.Qh5+로 백이 이겨요."
+  },
+  {
+   "ply": 6,
+   "san": "Qe7",
+   "why_en": "Hits the knight instead of taking it.",
+   "why_ko": "나이트를 잡지 않고 쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "The knight goes back home.",
+   "why_ko": "나이트가 제자리로 돌아가요."
+  },
+  {
+   "ply": 8,
+   "san": "Qxe4+",
+   "why_en": "Wins back the pawn with check.",
+   "why_ko": "체크하며 폰을 되찾아요."
+  },
+  {
+   "ply": 9,
+   "san": "Be2",
+   "why_en": "Blocks the check; White is ahead in development.",
+   "why_ko": "체크를 막아요. 백 전개가 앞서요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

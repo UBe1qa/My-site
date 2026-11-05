@@ -12,7 +12,7 @@ http.createServer((req, res) => {
   let f = path.join(ROOT, p);
   if (p.endsWith('/')) f = path.join(f, 'index.html');
   else if (fs.existsSync(f) && fs.statSync(f).isDirectory()) { res.writeHead(307, { Location: p + '/' }); return res.end(); }
-  if (!fs.existsSync(f)) { res.writeHead(404, { 'Content-Type': TYPES['.html'] }); return res.end(fs.readFileSync(path.join(ROOT, '404.html'))); }
+  if (!fs.existsSync(f)) { res.writeHead(404, { 'Content-Type': TYPES['.html'] }); return res.end(fs.readFileSync(path.join(ROOT, p.startsWith('/ko/') ? 'ko/404.html' : '404.html'))); }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(res);
 }).listen(port, () => console.log('http://localhost:' + port));

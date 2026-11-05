@@ -1,4 +1,4 @@
-// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'chess' 하나 (외울수 / Fewmoves, 체스 오프닝 탐색기·해설·연습)
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'chess' 하나 (Opening Trail / 오프닝 트레일: 체스 오프닝 지도·해설·연습·테스트)
 // 주소: https://chess.lumenlab.page (영어 /, 한국어 /ko/). workers.dev 주소는 켜지 않는다(같은 내용이 두 주소에 생기지 않게).
 // 빌드 없음. 이 폴더 파일이 그대로 사이트가 된다(HTML은 _dev/build.py가 미리 만든다). 올리지 않을 파일은 .assetsignore 에 적는다.
 // 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
@@ -7,7 +7,7 @@
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": ".",
-    // 없는 주소는 404.html(광고 없음, noindex)을 404로 보여 준다
+    // 없는 주소는 가장 가까운 404.html(광고 없음, noindex)을 404로 보여 준다: /ko/ 아래는 ko/404.html
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   },

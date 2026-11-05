@@ -1,0 +1,377 @@
+{
+ "name": {
+  "en": "King’s Indian Defense",
+  "ko": "킹스 인디언 디펜스"
+ },
+ "eco": "E70",
+ "side": "b",
+ "line_san": [
+  "d4",
+  "Nf6",
+  "c4",
+  "g6",
+  "Nc3",
+  "Bg7",
+  "e4",
+  "d6"
+ ],
+ "position_epd": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/kings-indian-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/kings-indian-defense/"
+ },
+ "engine_eval_white_cp": 55,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 11229,
+   "share_of_band": 0.000374,
+   "white_win": 5474,
+   "draw": 354,
+   "black_win": 5401
+  },
+  {
+   "band": "1200–1599",
+   "games": 76113,
+   "share_of_band": 0.001277,
+   "white_win": 37525,
+   "draw": 2628,
+   "black_win": 35960
+  },
+  {
+   "band": "1600–1999",
+   "games": 245546,
+   "share_of_band": 0.003787,
+   "white_win": 121489,
+   "draw": 10845,
+   "black_win": 113212
+  },
+  {
+   "band": "2000+",
+   "games": 181899,
+   "share_of_band": 0.008875,
+   "white_win": 91049,
+   "draw": 11034,
+   "black_win": 79816
+  }
+ ],
+ "masters": {
+  "games": 14490,
+  "white_win": 6445,
+  "draw": 3530,
+  "black_win": 4515,
+  "next_moves": [
+   {
+    "san": "Be2",
+    "games": 4167
+   },
+   {
+    "san": "Nf3",
+    "games": 4167
+   },
+   {
+    "san": "h3",
+    "games": 2681
+   },
+   {
+    "san": "f3",
+    "games": 1574
+   },
+   {
+    "san": "f4",
+    "games": 532
+   },
+   {
+    "san": "Nge2",
+    "games": 334
+   },
+   {
+    "san": "Bd3",
+    "games": 327
+   },
+   {
+    "san": "Bg5",
+    "games": 64
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nf3",
+   "type": "main",
+   "engine_eval_white_cp": 41,
+   "games": 145746,
+   "share": 0.28686,
+   "white_win": 71184,
+   "draw": 7430,
+   "black_win": 67132
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 76324,
+   "share": 0.15022,
+   "white_win": 38399,
+   "draw": 3440,
+   "black_win": 34485
+  },
+  {
+   "san": "f3",
+   "type": "alternative",
+   "engine_eval_white_cp": 26,
+   "games": 70117,
+   "share": 0.138,
+   "white_win": 35855,
+   "draw": 3453,
+   "black_win": 30809
+  },
+  {
+   "san": "Be2",
+   "type": "alternative",
+   "engine_eval_white_cp": 54,
+   "games": 59785,
+   "share": 0.11767,
+   "white_win": 30763,
+   "draw": 3136,
+   "black_win": 25886
+  },
+  {
+   "san": "h3",
+   "type": "alternative",
+   "engine_eval_white_cp": 55,
+   "games": 50200,
+   "share": 0.0988,
+   "white_win": 25215,
+   "draw": 2461,
+   "black_win": 22524
+  },
+  {
+   "san": "Bd3",
+   "type": "side",
+   "engine_eval_white_cp": 38,
+   "games": 44115,
+   "share": 0.08683,
+   "white_win": 21336,
+   "draw": 1932,
+   "black_win": 20847
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": 26,
+   "games": 20193,
+   "share": 0.03974,
+   "white_win": 9854,
+   "draw": 893,
+   "black_win": 9446
+  },
+  {
+   "san": "Be3",
+   "type": "side",
+   "engine_eval_white_cp": 18,
+   "games": 18522,
+   "share": 0.03646,
+   "white_win": 8929,
+   "draw": 776,
+   "black_win": 8817
+  },
+  {
+   "san": "Nge2",
+   "type": "side",
+   "engine_eval_white_cp": 31,
+   "games": 6109,
+   "share": 0.01202,
+   "white_win": 3238,
+   "draw": 273,
+   "black_win": 2598
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": -83,
+   "games": 4463,
+   "share": 0.00878,
+   "white_win": 1829,
+   "draw": 221,
+   "black_win": 2413
+  },
+  {
+   "san": "Bf4",
+   "type": "side",
+   "engine_eval_white_cp": 11,
+   "games": 3446,
+   "share": 0.00678,
+   "white_win": 1564,
+   "draw": 167,
+   "black_win": 1715
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": -11,
+   "games": 3304,
+   "share": 0.0065,
+   "white_win": 1589,
+   "draw": 170,
+   "black_win": 1545
+  },
+  {
+   "san": "d5",
+   "type": "side",
+   "engine_eval_white_cp": 15,
+   "games": 3049,
+   "share": 0.006,
+   "white_win": 1369,
+   "draw": 121,
+   "black_win": 1559
+  },
+  {
+   "san": "h4",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 1707,
+   "share": 0.00336,
+   "white_win": 815,
+   "draw": 71,
+   "black_win": 821
+  },
+  {
+   "san": "Qc2",
+   "type": "side",
+   "engine_eval_white_cp": -19,
+   "games": 407,
+   "share": 0.0008,
+   "white_win": 182,
+   "draw": 9,
+   "black_win": 216
+  },
+  {
+   "san": "c5",
+   "type": "mistake",
+   "engine_eval_white_cp": -111,
+   "games": 118,
+   "share": 0.00023,
+   "white_win": 47,
+   "draw": 3,
+   "black_win": 68
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Develops and stops e4 without committing a pawn yet.",
+   "why_ko": "폰을 정하지 않고 전개하며 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "c4",
+   "why_en": "Gains space and fights for d5.",
+   "why_ko": "공간을 얻고 d5를 다퉈요."
+  },
+  {
+   "ply": 4,
+   "san": "g6",
+   "why_en": "Prepares ...Bg7; Black will let White take the center first.",
+   "why_ko": "...Bg7을 준비해요. 흑은 먼저 백이 중앙을 잡게 둬요."
+  },
+  {
+   "ply": 5,
+   "san": "Nc3",
+   "why_en": "Develops and prepares e4.",
+   "why_ko": "전개하며 e4를 준비해요."
+  },
+  {
+   "ply": 6,
+   "san": "Bg7",
+   "why_en": "The bishop goes to the long diagonal, aiming at d4.",
+   "why_ko": "비숍이 긴 대각선에 서서 d4를 겨눠요."
+  },
+  {
+   "ply": 7,
+   "san": "e4",
+   "why_en": "Takes the full center with three pawns.",
+   "why_ko": "폰 세 개로 중앙을 다 잡아요."
+  },
+  {
+   "ply": 8,
+   "san": "d6",
+   "why_en": "Stops e5 and prepares castling and a later ...e5 or ...c5.",
+   "why_ko": "e5를 막고, 캐슬링과 나중의 ...e5나 ...c5를 준비해요."
+  },
+  {
+   "ply": 9,
+   "san": "Nf3",
+   "why_en": "Develops and protects d4.",
+   "why_ko": "전개하며 d4를 지켜요."
+  },
+  {
+   "ply": 10,
+   "san": "O-O",
+   "why_en": "Castles behind the g7 bishop.",
+   "why_ko": "g7 비숍 뒤로 캐슬링해요."
+  },
+  {
+   "ply": 11,
+   "san": "Be2",
+   "why_en": "Develops quietly and prepares to castle: the Classical.",
+   "why_ko": "조용히 전개하고 캐슬링을 준비해요. 클래시컬이에요."
+  },
+  {
+   "ply": 12,
+   "san": "e5",
+   "why_en": "Strikes at d4, the main idea of the King’s Indian.",
+   "why_ko": "d4를 쳐요. 킹스 인디언의 핵심 생각이에요."
+  },
+  {
+   "ply": 13,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 14,
+   "san": "Nc6",
+   "why_en": "Adds pressure on d4.",
+   "why_ko": "d4를 더 눌러요."
+  },
+  {
+   "ply": 15,
+   "san": "d5",
+   "why_en": "Closes the center and gains space.",
+   "why_ko": "중앙을 닫고 공간을 얻어요."
+  },
+  {
+   "ply": 16,
+   "san": "Ne7",
+   "why_en": "The knight heads for the kingside, where Black will attack with ...f5.",
+   "why_ko": "나이트가 킹 쪽으로 가요. 흑은 ...f5로 그쪽을 공격해요."
+  },
+  {
+   "ply": 17,
+   "san": "b4",
+   "why_en": "Starts the queenside attack: the Bayonet.",
+   "why_ko": "퀸 쪽 공격을 시작해요(바요넷)."
+  },
+  {
+   "ply": 18,
+   "san": "a5",
+   "why_en": "Hits the b4 pawn at once.",
+   "why_ko": "바로 b4 폰을 쳐요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

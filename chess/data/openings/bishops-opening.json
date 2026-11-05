@@ -1,0 +1,318 @@
+{
+ "name": {
+  "en": "Bishop’s Opening",
+  "ko": "비숍스 오프닝"
+ },
+ "eco": "C23",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "e5",
+  "Bc4"
+ ],
+ "position_epd": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/bishops-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/bishops-opening/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 1364245,
+   "share_of_band": 0.045457,
+   "white_win": 699375,
+   "draw": 52525,
+   "black_win": 612345
+  },
+  {
+   "band": "1200–1599",
+   "games": 2234264,
+   "share_of_band": 0.037495,
+   "white_win": 1140677,
+   "draw": 80960,
+   "black_win": 1012627
+  },
+  {
+   "band": "1600–1999",
+   "games": 1409346,
+   "share_of_band": 0.021737,
+   "white_win": 706985,
+   "draw": 58766,
+   "black_win": 643595
+  },
+  {
+   "band": "2000+",
+   "games": 129990,
+   "share_of_band": 0.006342,
+   "white_win": 63859,
+   "draw": 7157,
+   "black_win": 58974
+  }
+ ],
+ "masters": {
+  "games": 3627,
+  "white_win": 1559,
+  "draw": 793,
+  "black_win": 1275,
+  "next_moves": [
+   {
+    "san": "Nf6",
+    "games": 2471
+   },
+   {
+    "san": "Nc6",
+    "games": 766
+   },
+   {
+    "san": "Bc5",
+    "games": 219
+   },
+   {
+    "san": "d6",
+    "games": 50
+   },
+   {
+    "san": "c6",
+    "games": 25
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nf6",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 1663765,
+   "share": 0.32461,
+   "white_win": 837054,
+   "draw": 63189,
+   "black_win": 763522
+  },
+  {
+   "san": "Nc6",
+   "type": "alternative",
+   "engine_eval_white_cp": 20,
+   "games": 1651321,
+   "share": 0.32218,
+   "white_win": 820176,
+   "draw": 62801,
+   "black_win": 768344
+  },
+  {
+   "san": "Bc5",
+   "type": "alternative",
+   "engine_eval_white_cp": 21,
+   "games": 634885,
+   "share": 0.12387,
+   "white_win": 334030,
+   "draw": 24762,
+   "black_win": 276093
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 511806,
+   "share": 0.09986,
+   "white_win": 260484,
+   "draw": 21960,
+   "black_win": 229362
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 41,
+   "games": 134708,
+   "share": 0.02628,
+   "white_win": 68978,
+   "draw": 4987,
+   "black_win": 60743
+  },
+  {
+   "san": "Qf6",
+   "type": "dubious",
+   "engine_eval_white_cp": 96,
+   "games": 108103,
+   "share": 0.02109,
+   "white_win": 52962,
+   "draw": 4652,
+   "black_win": 50489
+  },
+  {
+   "san": "Qh4",
+   "type": "side",
+   "engine_eval_white_cp": 60,
+   "games": 62504,
+   "share": 0.01219,
+   "white_win": 31548,
+   "draw": 2675,
+   "black_win": 28281
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 67,
+   "games": 51768,
+   "share": 0.0101,
+   "white_win": 27229,
+   "draw": 1976,
+   "black_win": 22563
+  },
+  {
+   "san": "d5",
+   "type": "side",
+   "engine_eval_white_cp": 74,
+   "games": 44208,
+   "share": 0.00863,
+   "white_win": 24417,
+   "draw": 1754,
+   "black_win": 18037
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 78,
+   "games": 41721,
+   "share": 0.00814,
+   "white_win": 20897,
+   "draw": 1296,
+   "black_win": 19528
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 132,
+   "games": 26724,
+   "share": 0.00521,
+   "white_win": 14927,
+   "draw": 1140,
+   "black_win": 10657
+  },
+  {
+   "san": "Qe7",
+   "type": "side",
+   "engine_eval_white_cp": 84,
+   "games": 26493,
+   "share": 0.00517,
+   "white_win": 13766,
+   "draw": 1232,
+   "black_win": 11495
+  },
+  {
+   "san": "Be7",
+   "type": "dubious",
+   "engine_eval_white_cp": 113,
+   "games": 26303,
+   "share": 0.00513,
+   "white_win": 13568,
+   "draw": 1040,
+   "black_win": 11695
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 53,
+   "games": 24392,
+   "share": 0.00476,
+   "white_win": 13919,
+   "draw": 851,
+   "black_win": 9622
+  },
+  {
+   "san": "Nh6",
+   "type": "side",
+   "engine_eval_white_cp": 79,
+   "games": 22931,
+   "share": 0.00447,
+   "white_win": 12798,
+   "draw": 922,
+   "black_win": 9211
+  },
+  {
+   "san": "g6",
+   "type": "dubious",
+   "engine_eval_white_cp": 90,
+   "games": 17861,
+   "share": 0.00348,
+   "white_win": 9898,
+   "draw": 617,
+   "black_win": 7346
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Bc4",
+   "why_en": "Puts the bishop on its best diagonal at once and keeps the f-pawn free to move.",
+   "why_ko": "비숍을 바로 좋은 대각선에 두고, f폰은 움직일 수 있게 남겨요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4.",
+   "why_ko": "e4를 치며 전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "d3",
+   "why_en": "Protects e4 quietly.",
+   "why_ko": "조용히 e4를 지켜요."
+  },
+  {
+   "ply": 6,
+   "san": "c6",
+   "why_en": "Prepares ...d5 to grab the center.",
+   "why_ko": "...d5를 준비해 중앙을 잡으려 해요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops and hits e5.",
+   "why_ko": "전개하며 e5를 쳐요."
+  },
+  {
+   "ply": 8,
+   "san": "d5",
+   "why_en": "Takes the center and hits the bishop.",
+   "why_ko": "중앙을 잡고 비숍을 쳐요."
+  },
+  {
+   "ply": 9,
+   "san": "Bb3",
+   "why_en": "Keeps the bishop on its diagonal.",
+   "why_ko": "비숍을 같은 대각선에 남겨요."
+  },
+  {
+   "ply": 10,
+   "san": "Bb4+",
+   "why_en": "A check that develops the bishop.",
+   "why_ko": "체크하며 비숍을 꺼내요."
+  },
+  {
+   "ply": 11,
+   "san": "Bd2",
+   "why_en": "Blocks with a bishop and offers a trade.",
+   "why_ko": "비숍으로 막으며 바꾸자고 해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

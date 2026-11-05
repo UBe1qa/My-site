@@ -1,0 +1,310 @@
+{
+ "name": {
+  "en": "Van Geet Opening (1.Nc3)",
+  "ko": "반 헤트 오프닝(1.Nc3)"
+ },
+ "eco": "A00",
+ "side": "w",
+ "line_san": [
+  "Nc3"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/van-geet-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/van-geet-opening/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 205655,
+   "share_of_band": 0.006852,
+   "white_win": 95649,
+   "draw": 10371,
+   "black_win": 99635
+  },
+  {
+   "band": "1200–1599",
+   "games": 225900,
+   "share_of_band": 0.003791,
+   "white_win": 108022,
+   "draw": 9593,
+   "black_win": 108285
+  },
+  {
+   "band": "1600–1999",
+   "games": 223423,
+   "share_of_band": 0.003446,
+   "white_win": 111555,
+   "draw": 9715,
+   "black_win": 102153
+  },
+  {
+   "band": "2000+",
+   "games": 115690,
+   "share_of_band": 0.005645,
+   "white_win": 57247,
+   "draw": 7090,
+   "black_win": 51353
+  }
+ ],
+ "masters": {
+  "games": 1816,
+  "white_win": 820,
+  "draw": 328,
+  "black_win": 668,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 786
+   },
+   {
+    "san": "c5",
+    "games": 272
+   },
+   {
+    "san": "Nf6",
+    "games": 251
+   },
+   {
+    "san": "e5",
+    "games": 165
+   },
+   {
+    "san": "g6",
+    "games": 79
+   },
+   {
+    "san": "e6",
+    "games": 70
+   },
+   {
+    "san": "f5",
+    "games": 43
+   },
+   {
+    "san": "d6",
+    "games": 35
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "alternative",
+   "engine_eval_white_cp": 18,
+   "games": 226842,
+   "share": 0.29495,
+   "white_win": 109477,
+   "draw": 10001,
+   "black_win": 107364
+  },
+  {
+   "san": "d5",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 184621,
+   "share": 0.24005,
+   "white_win": 87488,
+   "draw": 9392,
+   "black_win": 87741
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 7,
+   "games": 100444,
+   "share": 0.1306,
+   "white_win": 49086,
+   "draw": 4635,
+   "black_win": 46723
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 44,
+   "games": 60975,
+   "share": 0.07928,
+   "white_win": 29454,
+   "draw": 2907,
+   "black_win": 28614
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": 27,
+   "games": 44575,
+   "share": 0.05796,
+   "white_win": 21055,
+   "draw": 2145,
+   "black_win": 21375
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 37641,
+   "share": 0.04894,
+   "white_win": 18108,
+   "draw": 1775,
+   "black_win": 17758
+  },
+  {
+   "san": "g6",
+   "type": "alternative",
+   "engine_eval_white_cp": 38,
+   "games": 33051,
+   "share": 0.04297,
+   "white_win": 16123,
+   "draw": 1474,
+   "black_win": 15454
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 41,
+   "games": 24607,
+   "share": 0.032,
+   "white_win": 12040,
+   "draw": 1226,
+   "black_win": 11341
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 14,
+   "games": 22621,
+   "share": 0.02941,
+   "white_win": 11109,
+   "draw": 1392,
+   "black_win": 10120
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 75,
+   "games": 13706,
+   "share": 0.01782,
+   "white_win": 6670,
+   "draw": 637,
+   "black_win": 6399
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 8780,
+   "share": 0.01142,
+   "white_win": 4537,
+   "draw": 344,
+   "black_win": 3899
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 49,
+   "games": 3051,
+   "share": 0.00397,
+   "white_win": 1444,
+   "draw": 170,
+   "black_win": 1437
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 64,
+   "games": 1732,
+   "share": 0.00225,
+   "white_win": 883,
+   "draw": 150,
+   "black_win": 699
+  },
+  {
+   "san": "h5",
+   "type": "side",
+   "engine_eval_white_cp": 83,
+   "games": 1312,
+   "share": 0.00171,
+   "white_win": 696,
+   "draw": 85,
+   "black_win": 531
+  },
+  {
+   "san": "g5",
+   "type": "dubious",
+   "engine_eval_white_cp": 148,
+   "games": 1250,
+   "share": 0.00163,
+   "white_win": 663,
+   "draw": 71,
+   "black_win": 516
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 102,
+   "games": 1103,
+   "share": 0.00143,
+   "white_win": 599,
+   "draw": 69,
+   "black_win": 435
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "Nc3",
+   "why_en": "Develops a knight and covers e4 and d5 without committing a pawn.",
+   "why_ko": "폰을 정하지 않고 나이트를 꺼내 e4·d5를 막아요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "e4",
+   "why_en": "Hits d5.",
+   "why_ko": "d5를 쳐요."
+  },
+  {
+   "ply": 4,
+   "san": "d4",
+   "why_en": "Pushes past and kicks the knight.",
+   "why_ko": "밀고 나가며 나이트를 쫓아요."
+  },
+  {
+   "ply": 5,
+   "san": "Nce2",
+   "why_en": "The knight heads for g3.",
+   "why_ko": "나이트가 g3로 가요."
+  },
+  {
+   "ply": 6,
+   "san": "e5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 7,
+   "san": "Ng3",
+   "why_en": "The knight lands on g3, eyeing f5.",
+   "why_ko": "나이트가 g3에 서서 f5를 노려요."
+  },
+  {
+   "ply": 8,
+   "san": "Be6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

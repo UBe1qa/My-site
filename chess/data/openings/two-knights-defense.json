@@ -1,0 +1,377 @@
+{
+ "name": {
+  "en": "Two Knights Defense",
+  "ko": "투 나이츠 디펜스"
+ },
+ "eco": "C55",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nc6",
+  "Bc4",
+  "Nf6"
+ ],
+ "position_epd": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/two-knights-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/two-knights-defense/"
+ },
+ "engine_eval_white_cp": 10,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 755498,
+   "share_of_band": 0.025173,
+   "white_win": 395966,
+   "draw": 26103,
+   "black_win": 333429
+  },
+  {
+   "band": "1200–1599",
+   "games": 1239294,
+   "share_of_band": 0.020797,
+   "white_win": 638231,
+   "draw": 41242,
+   "black_win": 559821
+  },
+  {
+   "band": "1600–1999",
+   "games": 870869,
+   "share_of_band": 0.013432,
+   "white_win": 434095,
+   "draw": 34620,
+   "black_win": 402154
+  },
+  {
+   "band": "2000+",
+   "games": 215163,
+   "share_of_band": 0.010498,
+   "white_win": 100900,
+   "draw": 14309,
+   "black_win": 99954
+  }
+ ],
+ "masters": {
+  "games": 16095,
+  "white_win": 6325,
+  "draw": 4133,
+  "black_win": 5637,
+  "next_moves": [
+   {
+    "san": "d3",
+    "games": 11766
+   },
+   {
+    "san": "Ng5",
+    "games": 2197
+   },
+   {
+    "san": "d4",
+    "games": 1090
+   },
+   {
+    "san": "Nc3",
+    "games": 559
+   },
+   {
+    "san": "O-O",
+    "games": 210
+   },
+   {
+    "san": "c3",
+    "games": 34
+   },
+   {
+    "san": "Qe2",
+    "games": 25
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "d3",
+   "type": "alternative",
+   "engine_eval_white_cp": 10,
+   "games": 1002356,
+   "share": 0.32576,
+   "white_win": 508182,
+   "draw": 42723,
+   "black_win": 451451
+  },
+  {
+   "san": "Ng5",
+   "type": "main",
+   "engine_eval_white_cp": 0,
+   "games": 913924,
+   "share": 0.29702,
+   "white_win": 482623,
+   "draw": 28922,
+   "black_win": 402379
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 517550,
+   "share": 0.1682,
+   "white_win": 252948,
+   "draw": 21636,
+   "black_win": 242966
+  },
+  {
+   "san": "O-O",
+   "type": "side",
+   "engine_eval_white_cp": -41,
+   "games": 266970,
+   "share": 0.08676,
+   "white_win": 133693,
+   "draw": 9565,
+   "black_win": 123712
+  },
+  {
+   "san": "d4",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 225668,
+   "share": 0.07334,
+   "white_win": 118723,
+   "draw": 8124,
+   "black_win": 98821
+  },
+  {
+   "san": "c3",
+   "type": "dubious",
+   "engine_eval_white_cp": -78,
+   "games": 97277,
+   "share": 0.03161,
+   "white_win": 48276,
+   "draw": 3344,
+   "black_win": 45657
+  },
+  {
+   "san": "Bxf7+",
+   "type": "mistake",
+   "engine_eval_white_cp": -365,
+   "games": 15839,
+   "share": 0.00515,
+   "white_win": 7368,
+   "draw": 441,
+   "black_win": 8030
+  },
+  {
+   "san": "Qe2",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 12435,
+   "share": 0.00404,
+   "white_win": 6144,
+   "draw": 488,
+   "black_win": 5803
+  },
+  {
+   "san": "Nxe5",
+   "type": "mistake",
+   "engine_eval_white_cp": -326,
+   "games": 5420,
+   "share": 0.00176,
+   "white_win": 1486,
+   "draw": 150,
+   "black_win": 3784
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": -47,
+   "games": 5229,
+   "share": 0.0017,
+   "white_win": 2553,
+   "draw": 193,
+   "black_win": 2483
+  },
+  {
+   "san": "a3",
+   "type": "dubious",
+   "engine_eval_white_cp": -83,
+   "games": 4639,
+   "share": 0.00151,
+   "white_win": 2184,
+   "draw": 161,
+   "black_win": 2294
+  },
+  {
+   "san": "b3",
+   "type": "dubious",
+   "engine_eval_white_cp": -114,
+   "games": 2041,
+   "share": 0.00066,
+   "white_win": 840,
+   "draw": 57,
+   "black_win": 1144
+  },
+  {
+   "san": "Bb5",
+   "type": "side",
+   "engine_eval_white_cp": -42,
+   "games": 1396,
+   "share": 0.00045,
+   "white_win": 589,
+   "draw": 59,
+   "black_win": 748
+  },
+  {
+   "san": "b4",
+   "type": "dubious",
+   "engine_eval_white_cp": -119,
+   "games": 1297,
+   "share": 0.00042,
+   "white_win": 563,
+   "draw": 30,
+   "black_win": 704
+  },
+  {
+   "san": "Bd5",
+   "type": "side",
+   "engine_eval_white_cp": -36,
+   "games": 1062,
+   "share": 0.00035,
+   "white_win": 499,
+   "draw": 60,
+   "black_win": 503
+  },
+  {
+   "san": "Bb3",
+   "type": "side",
+   "engine_eval_white_cp": -57,
+   "games": 779,
+   "share": 0.00025,
+   "white_win": 348,
+   "draw": 29,
+   "black_win": 402
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "why_en": "Defends e5 with a piece and develops at the same time.",
+   "why_ko": "기물로 e5를 지키면서 전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "Bc4",
+   "why_en": "The bishop aims at f7, the weak square that only the black king defends.",
+   "why_ko": "비숍이 f7을 겨눠요. f7은 흑 킹 혼자 지키는 약한 칸이에요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Counter-attacks e4 instead of copying White with ...Bc5.",
+   "why_ko": "...Bc5로 따라 두지 않고 e4를 되쳐요."
+  },
+  {
+   "ply": 7,
+   "san": "Ng5",
+   "why_en": "Attacks f7 with two pieces at once.",
+   "why_ko": "두 기물로 한꺼번에 f7을 쳐요."
+  },
+  {
+   "ply": 8,
+   "san": "d5",
+   "why_en": "Blocks the bishop’s path to f7.",
+   "why_ko": "비숍이 f7로 가는 길을 막아요."
+  },
+  {
+   "ply": 9,
+   "san": "exd5",
+   "why_en": "Takes the pawn and opens the bishop again.",
+   "why_ko": "폰을 잡아 비숍 길을 다시 열어요."
+  },
+  {
+   "ply": 10,
+   "san": "Na5",
+   "why_en": "Hits the bishop; 5...Nxd5?! lets White hit f7 with Nxf7 or d4.",
+   "why_ko": "비숍을 쳐요. 5...Nxd5?!는 Nxf7이나 d4로 f7이 위험해요."
+  },
+  {
+   "ply": 11,
+   "san": "Bb5+",
+   "why_en": "Moves the bishop with check.",
+   "why_ko": "체크하며 비숍을 옮겨요."
+  },
+  {
+   "ply": 12,
+   "san": "c6",
+   "why_en": "Blocks and offers a pawn for fast development.",
+   "why_ko": "막으면서 폰을 줘 빨리 전개해요."
+  },
+  {
+   "ply": 13,
+   "san": "dxc6",
+   "why_en": "Takes the second pawn.",
+   "why_ko": "두 번째 폰을 잡아요."
+  },
+  {
+   "ply": 14,
+   "san": "bxc6",
+   "why_en": "Recaptures and hits the bishop.",
+   "why_ko": "다시 잡으며 비숍을 쳐요."
+  },
+  {
+   "ply": 15,
+   "san": "Be2",
+   "why_en": "The bishop drops back to safety.",
+   "why_ko": "비숍이 안전하게 물러나요."
+  },
+  {
+   "ply": 16,
+   "san": "h6",
+   "why_en": "Chases the g5 knight away.",
+   "why_ko": "g5 나이트를 쫓아내요."
+  },
+  {
+   "ply": 17,
+   "san": "Nf3",
+   "why_en": "The knight goes back to f3.",
+   "why_ko": "나이트가 f3로 돌아가요."
+  },
+  {
+   "ply": 18,
+   "san": "e4",
+   "why_en": "Hits the knight again and grabs space.",
+   "why_ko": "나이트를 다시 치며 공간을 잡아요."
+  },
+  {
+   "ply": 19,
+   "san": "Ne5",
+   "why_en": "The knight goes to e5, the best square left.",
+   "why_ko": "나이트가 남은 칸 가운데 가장 좋은 e5로 가요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

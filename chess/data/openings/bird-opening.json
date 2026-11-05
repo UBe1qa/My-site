@@ -1,0 +1,322 @@
+{
+ "name": {
+  "en": "Bird Opening",
+  "ko": "버드 오프닝"
+ },
+ "eco": "A02",
+ "side": "w",
+ "line_san": [
+  "f4"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/bird-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/bird-opening/"
+ },
+ "engine_eval_white_cp": -23,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 222940,
+   "share_of_band": 0.007428,
+   "white_win": 104559,
+   "draw": 9877,
+   "black_win": 108504
+  },
+  {
+   "band": "1200–1599",
+   "games": 534523,
+   "share_of_band": 0.00897,
+   "white_win": 265404,
+   "draw": 19843,
+   "black_win": 249276
+  },
+  {
+   "band": "1600–1999",
+   "games": 844959,
+   "share_of_band": 0.013032,
+   "white_win": 421733,
+   "draw": 37021,
+   "black_win": 386205
+  },
+  {
+   "band": "2000+",
+   "games": 230735,
+   "share_of_band": 0.011258,
+   "white_win": 111299,
+   "draw": 13742,
+   "black_win": 105694
+  }
+ ],
+ "masters": {
+  "games": 4114,
+  "white_win": 1628,
+  "draw": 878,
+  "black_win": 1608,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 1862
+   },
+   {
+    "san": "Nf6",
+    "games": 467
+   },
+   {
+    "san": "f5",
+    "games": 305
+   },
+   {
+    "san": "c5",
+    "games": 291
+   },
+   {
+    "san": "g6",
+    "games": 186
+   },
+   {
+    "san": "e5",
+    "games": 172
+   },
+   {
+    "san": "b6",
+    "games": 164
+   },
+   {
+    "san": "d6",
+    "games": 102
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "d5",
+   "type": "main",
+   "engine_eval_white_cp": -21,
+   "games": 703091,
+   "share": 0.38429,
+   "white_win": 345438,
+   "draw": 31780,
+   "black_win": 325873
+  },
+  {
+   "san": "e6",
+   "type": "alternative",
+   "engine_eval_white_cp": -17,
+   "games": 186559,
+   "share": 0.10197,
+   "white_win": 94368,
+   "draw": 7914,
+   "black_win": 84277
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": -7,
+   "games": 167472,
+   "share": 0.09153,
+   "white_win": 81772,
+   "draw": 7338,
+   "black_win": 78362
+  },
+  {
+   "san": "e5",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 166300,
+   "share": 0.09089,
+   "white_win": 80190,
+   "draw": 6209,
+   "black_win": 79901
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": -23,
+   "games": 120100,
+   "share": 0.06564,
+   "white_win": 57508,
+   "draw": 5681,
+   "black_win": 56911
+  },
+  {
+   "san": "Nc6",
+   "type": "alternative",
+   "engine_eval_white_cp": 6,
+   "games": 98162,
+   "share": 0.05365,
+   "white_win": 48286,
+   "draw": 3902,
+   "black_win": 45974
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 7,
+   "games": 87937,
+   "share": 0.04806,
+   "white_win": 43877,
+   "draw": 3923,
+   "black_win": 40137
+  },
+  {
+   "san": "d6",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 86997,
+   "share": 0.04755,
+   "white_win": 42471,
+   "draw": 3692,
+   "black_win": 40834
+  },
+  {
+   "san": "g6",
+   "type": "alternative",
+   "engine_eval_white_cp": -10,
+   "games": 69579,
+   "share": 0.03803,
+   "white_win": 33274,
+   "draw": 3248,
+   "black_win": 33057
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 59568,
+   "share": 0.03256,
+   "white_win": 30474,
+   "draw": 2860,
+   "black_win": 26234
+  },
+  {
+   "san": "b6",
+   "type": "alternative",
+   "engine_eval_white_cp": 2,
+   "games": 51355,
+   "share": 0.02807,
+   "white_win": 25557,
+   "draw": 2192,
+   "black_win": 23606
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 69,
+   "games": 7290,
+   "share": 0.00398,
+   "white_win": 3803,
+   "draw": 326,
+   "black_win": 3161
+  },
+  {
+   "san": "g5",
+   "type": "dubious",
+   "engine_eval_white_cp": 76,
+   "games": 4989,
+   "share": 0.00273,
+   "white_win": 2484,
+   "draw": 167,
+   "black_win": 2338
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 9,
+   "games": 4339,
+   "share": 0.00237,
+   "white_win": 2160,
+   "draw": 230,
+   "black_win": 1949
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 3555,
+   "share": 0.00194,
+   "white_win": 1844,
+   "draw": 168,
+   "black_win": 1543
+  },
+  {
+   "san": "Nh6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 3379,
+   "share": 0.00185,
+   "white_win": 1521,
+   "draw": 227,
+   "black_win": 1631
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "f4",
+   "why_en": "Grabs e5 and prepares a kingside attack, at the cost of a slightly airy king.",
+   "why_ko": "e5를 잡고 킹 쪽 공격을 준비해요. 대신 킹 앞이 조금 허전해져요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops and covers e5.",
+   "why_ko": "전개하며 e5를 막아요."
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "e3",
+   "why_en": "Opens the f1 bishop.",
+   "why_ko": "f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 6,
+   "san": "c5",
+   "why_en": "Grabs space.",
+   "why_ko": "공간을 잡아요."
+  },
+  {
+   "ply": 7,
+   "san": "b3",
+   "why_en": "Prepares Bb2 toward e5.",
+   "why_ko": "Bb2를 준비해 e5를 겨눠요."
+  },
+  {
+   "ply": 8,
+   "san": "Nc6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 9,
+   "san": "Bb2",
+   "why_en": "The bishop takes the long diagonal.",
+   "why_ko": "비숍이 긴 대각선에 서요."
+  },
+  {
+   "ply": 10,
+   "san": "Bg4",
+   "why_en": "Pins the f3 knight.",
+   "why_ko": "f3 나이트를 묶어요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

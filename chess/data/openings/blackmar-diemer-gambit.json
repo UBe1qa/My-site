@@ -1,0 +1,319 @@
+{
+ "name": {
+  "en": "Blackmar-Diemer Gambit",
+  "ko": "블랙마-디머 갬빗"
+ },
+ "eco": "D00",
+ "side": "w",
+ "line_san": [
+  "d4",
+  "d5",
+  "e4",
+  "dxe4",
+  "Nc3",
+  "Nf6",
+  "f3"
+ ],
+ "position_epd": "rnbqkb1r/ppp1pppp/5n2/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/blackmar-diemer-gambit/",
+  "ko": "https://chess.lumenlab.page/ko/openings/blackmar-diemer-gambit/"
+ },
+ "engine_eval_white_cp": -71,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 19639,
+   "share_of_band": 0.000654,
+   "white_win": 10152,
+   "draw": 643,
+   "black_win": 8844
+  },
+  {
+   "band": "1200–1599",
+   "games": 70713,
+   "share_of_band": 0.001187,
+   "white_win": 37825,
+   "draw": 2019,
+   "black_win": 30869
+  },
+  {
+   "band": "1600–1999",
+   "games": 115812,
+   "share_of_band": 0.001786,
+   "white_win": 61459,
+   "draw": 4195,
+   "black_win": 50158
+  },
+  {
+   "band": "2000+",
+   "games": 33358,
+   "share_of_band": 0.001628,
+   "white_win": 16941,
+   "draw": 1571,
+   "black_win": 14846
+  }
+ ],
+ "masters": {
+  "games": 25,
+  "white_win": 9,
+  "draw": 2,
+  "black_win": 14,
+  "next_moves": [],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "exf3",
+   "type": "main",
+   "engine_eval_white_cp": -71,
+   "games": 182560,
+   "share": 0.76751,
+   "white_win": 98358,
+   "draw": 6217,
+   "black_win": 77985
+  },
+  {
+   "san": "Bf5",
+   "type": "alternative",
+   "engine_eval_white_cp": -50,
+   "games": 22048,
+   "share": 0.09269,
+   "white_win": 10624,
+   "draw": 760,
+   "black_win": 10664
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": -19,
+   "games": 8622,
+   "share": 0.03625,
+   "white_win": 4121,
+   "draw": 330,
+   "black_win": 4171
+  },
+  {
+   "san": "e6",
+   "type": "dubious",
+   "engine_eval_white_cp": 35,
+   "games": 7713,
+   "share": 0.03243,
+   "white_win": 4206,
+   "draw": 251,
+   "black_win": 3256
+  },
+  {
+   "san": "e3",
+   "type": "dubious",
+   "engine_eval_white_cp": 43,
+   "games": 6336,
+   "share": 0.02664,
+   "white_win": 3046,
+   "draw": 303,
+   "black_win": 2987
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": 85,
+   "games": 4763,
+   "share": 0.02002,
+   "white_win": 2294,
+   "draw": 248,
+   "black_win": 2221
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": -27,
+   "games": 2946,
+   "share": 0.01239,
+   "white_win": 1309,
+   "draw": 133,
+   "black_win": 1504
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": -18,
+   "games": 950,
+   "share": 0.00399,
+   "white_win": 473,
+   "draw": 45,
+   "black_win": 432
+  },
+  {
+   "san": "g6",
+   "type": "dubious",
+   "engine_eval_white_cp": 22,
+   "games": 892,
+   "share": 0.00375,
+   "white_win": 449,
+   "draw": 32,
+   "black_win": 411
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 242,
+   "share": 0.00102,
+   "white_win": 142,
+   "draw": 10,
+   "black_win": 90
+  },
+  {
+   "san": "b6",
+   "type": "dubious",
+   "engine_eval_white_cp": 52,
+   "games": 219,
+   "share": 0.00092,
+   "white_win": 127,
+   "draw": 4,
+   "black_win": 88
+  },
+  {
+   "san": "Nd5",
+   "type": "dubious",
+   "engine_eval_white_cp": 50,
+   "games": 212,
+   "share": 0.00089,
+   "white_win": 112,
+   "draw": 10,
+   "black_win": 90
+  },
+  {
+   "san": "a6",
+   "type": "dubious",
+   "engine_eval_white_cp": 37,
+   "games": 106,
+   "share": 0.00045,
+   "white_win": 56,
+   "draw": 4,
+   "black_win": 46
+  },
+  {
+   "san": "Nbd7",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 102,
+   "share": 0.00043,
+   "white_win": 48,
+   "draw": 2,
+   "black_win": 52
+  },
+  {
+   "san": "Bg4",
+   "type": "mistake",
+   "engine_eval_white_cp": 349,
+   "games": 46,
+   "share": 0.00019,
+   "white_win": 36,
+   "draw": 1,
+   "black_win": 9
+  },
+  {
+   "san": "Bd7",
+   "type": "mistake",
+   "engine_eval_white_cp": 96,
+   "games": 40,
+   "share": 0.00017,
+   "white_win": 31,
+   "draw": 0,
+   "black_win": 9
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Black takes an equal share of the center and stops e4.",
+   "why_ko": "흑도 중앙을 같이 잡고 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "e4",
+   "why_en": "Offers a pawn to open lines quickly.",
+   "why_ko": "폰을 내밀어 길을 빨리 열어요."
+  },
+  {
+   "ply": 4,
+   "san": "dxe4",
+   "why_en": "Takes the offered pawn.",
+   "why_ko": "내민 폰을 잡아요."
+  },
+  {
+   "ply": 5,
+   "san": "Nc3",
+   "why_en": "Develops with an attack on e4.",
+   "why_ko": "e4를 치며 전개해요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Defends the extra pawn with the knight.",
+   "why_ko": "나이트로 더 가진 폰을 지켜요."
+  },
+  {
+   "ply": 7,
+   "san": "f3",
+   "why_en": "Offers the pawn for real: after fxe3 the f-file opens for White’s attack.",
+   "why_ko": "정말로 폰을 줘요. f3에서 다시 잡으면 백 공격에 f파일이 열려요."
+  },
+  {
+   "ply": 8,
+   "san": "exf3",
+   "why_en": "Takes a second pawn.",
+   "why_ko": "두 번째 폰을 잡아요."
+  },
+  {
+   "ply": 9,
+   "san": "Nxf3",
+   "why_en": "Recaptures with the knight: White is a pawn down but ahead in development.",
+   "why_ko": "나이트로 다시 잡아요. 폰은 하나 모자라지만 전개가 앞서요."
+  },
+  {
+   "ply": 10,
+   "san": "Bg4",
+   "why_en": "Pins the f3 knight.",
+   "why_ko": "f3 나이트를 묶어요."
+  },
+  {
+   "ply": 11,
+   "san": "h3",
+   "why_en": "Asks the bishop to decide.",
+   "why_ko": "비숍에게 정하라고 물어요."
+  },
+  {
+   "ply": 12,
+   "san": "Bxf3",
+   "why_en": "Takes the knight.",
+   "why_ko": "나이트를 잡아요."
+  },
+  {
+   "ply": 13,
+   "san": "Qxf3",
+   "why_en": "Recaptures with the queen, which eyes b7.",
+   "why_ko": "퀸으로 다시 잡아 b7을 노려요."
+  },
+  {
+   "ply": 14,
+   "san": "c6",
+   "why_en": "Protects b7 from the queen.",
+   "why_ko": "퀸에게서 b7을 지켜요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

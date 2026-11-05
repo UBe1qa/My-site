@@ -1,0 +1,311 @@
+{
+ "name": {
+  "en": "Budapest Gambit",
+  "ko": "부다페스트 갬빗"
+ },
+ "eco": "A51",
+ "side": "b",
+ "line_san": [
+  "d4",
+  "Nf6",
+  "c4",
+  "e5"
+ ],
+ "position_epd": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/budapest-gambit/",
+  "ko": "https://chess.lumenlab.page/ko/openings/budapest-gambit/"
+ },
+ "engine_eval_white_cp": 85,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 3525,
+   "share_of_band": 0.000117,
+   "white_win": 1791,
+   "draw": 97,
+   "black_win": 1637
+  },
+  {
+   "band": "1200–1599",
+   "games": 29643,
+   "share_of_band": 0.000497,
+   "white_win": 14145,
+   "draw": 908,
+   "black_win": 14590
+  },
+  {
+   "band": "1600–1999",
+   "games": 125729,
+   "share_of_band": 0.001939,
+   "white_win": 59515,
+   "draw": 5611,
+   "black_win": 60603
+  },
+  {
+   "band": "2000+",
+   "games": 66750,
+   "share_of_band": 0.003257,
+   "white_win": 32547,
+   "draw": 4073,
+   "black_win": 30130
+  }
+ ],
+ "masters": {
+  "games": 1215,
+  "white_win": 603,
+  "draw": 243,
+  "black_win": 369,
+  "next_moves": [
+   {
+    "san": "dxe5",
+    "games": 1066
+   },
+   {
+    "san": "d5",
+    "games": 67
+   },
+   {
+    "san": "e3",
+    "games": 41
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "dxe5",
+   "type": "main",
+   "engine_eval_white_cp": 85,
+   "games": 137666,
+   "share": 0.61148,
+   "white_win": 67690,
+   "draw": 6941,
+   "black_win": 63035
+  },
+  {
+   "san": "d5",
+   "type": "dubious",
+   "engine_eval_white_cp": -14,
+   "games": 41776,
+   "share": 0.18556,
+   "white_win": 18485,
+   "draw": 1584,
+   "black_win": 21707
+  },
+  {
+   "san": "Nc3",
+   "type": "side",
+   "engine_eval_white_cp": 8,
+   "games": 23240,
+   "share": 0.10323,
+   "white_win": 10926,
+   "draw": 1032,
+   "black_win": 11282
+  },
+  {
+   "san": "e3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 12175,
+   "share": 0.05408,
+   "white_win": 5856,
+   "draw": 644,
+   "black_win": 5675
+  },
+  {
+   "san": "Nf3",
+   "type": "dubious",
+   "engine_eval_white_cp": -22,
+   "games": 7424,
+   "share": 0.03298,
+   "white_win": 3564,
+   "draw": 344,
+   "black_win": 3516
+  },
+  {
+   "san": "Bg5",
+   "type": "dubious",
+   "engine_eval_white_cp": -27,
+   "games": 1705,
+   "share": 0.00757,
+   "white_win": 755,
+   "draw": 78,
+   "black_win": 872
+  },
+  {
+   "san": "g3",
+   "type": "dubious",
+   "engine_eval_white_cp": -55,
+   "games": 599,
+   "share": 0.00266,
+   "white_win": 290,
+   "draw": 27,
+   "black_win": 282
+  },
+  {
+   "san": "a3",
+   "type": "dubious",
+   "engine_eval_white_cp": -37,
+   "games": 285,
+   "share": 0.00127,
+   "white_win": 143,
+   "draw": 10,
+   "black_win": 132
+  },
+  {
+   "san": "e4",
+   "type": "mistake",
+   "engine_eval_white_cp": -110,
+   "games": 139,
+   "share": 0.00062,
+   "white_win": 47,
+   "draw": 3,
+   "black_win": 89
+  },
+  {
+   "san": "Bf4",
+   "type": "mistake",
+   "engine_eval_white_cp": -376,
+   "games": 42,
+   "share": 0.00019,
+   "white_win": 8,
+   "draw": 0,
+   "black_win": 34
+  },
+  {
+   "san": "f3",
+   "type": "mistake",
+   "engine_eval_white_cp": -123,
+   "games": 32,
+   "share": 0.00014,
+   "white_win": 14,
+   "draw": 1,
+   "black_win": 17
+  },
+  {
+   "san": "Be3",
+   "type": "dubious",
+   "engine_eval_white_cp": -22,
+   "games": 30,
+   "share": 0.00013,
+   "white_win": 13,
+   "draw": 0,
+   "black_win": 17
+  },
+  {
+   "san": "b3",
+   "type": "mistake",
+   "engine_eval_white_cp": -95,
+   "games": 22,
+   "share": 0.0001,
+   "white_win": 7,
+   "draw": 1,
+   "black_win": 14
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Develops and stops e4 without committing a pawn yet.",
+   "why_ko": "폰을 정하지 않고 전개하며 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "c4",
+   "why_en": "Gains space and fights for d5.",
+   "why_ko": "공간을 얻고 d5를 다퉈요."
+  },
+  {
+   "ply": 4,
+   "san": "e5",
+   "why_en": "Offers the e-pawn to get quick piece play.",
+   "why_ko": "e폰을 내밀어 기물을 빨리 움직여요."
+  },
+  {
+   "ply": 5,
+   "san": "dxe5",
+   "why_en": "Takes the pawn.",
+   "why_ko": "폰을 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "Ng4",
+   "why_en": "The knight hits e5 to win the pawn back.",
+   "why_ko": "나이트가 e5를 쳐서 폰을 되찾으려 해요."
+  },
+  {
+   "ply": 7,
+   "san": "Bf4",
+   "why_en": "Protects e5.",
+   "why_ko": "e5를 지켜요."
+  },
+  {
+   "ply": 8,
+   "san": "Nc6",
+   "why_en": "Adds a second attacker on e5.",
+   "why_ko": "e5를 두 번째로 쳐요."
+  },
+  {
+   "ply": 9,
+   "san": "Nf3",
+   "why_en": "Protects e5 again.",
+   "why_ko": "다시 e5를 지켜요."
+  },
+  {
+   "ply": 10,
+   "san": "Bb4+",
+   "why_en": "A check that develops the bishop.",
+   "why_ko": "체크하며 비숍을 꺼내요."
+  },
+  {
+   "ply": 11,
+   "san": "Nbd2",
+   "why_en": "Blocks with the knight.",
+   "why_ko": "나이트로 막아요."
+  },
+  {
+   "ply": 12,
+   "san": "Qe7",
+   "why_en": "Adds a third attacker on e5.",
+   "why_ko": "e5를 세 번째로 쳐요."
+  },
+  {
+   "ply": 13,
+   "san": "e3",
+   "why_en": "Opens the f1 bishop.",
+   "why_ko": "f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 14,
+   "san": "Ngxe5",
+   "why_en": "Wins back the pawn.",
+   "why_ko": "폰을 되찾아요."
+  },
+  {
+   "ply": 15,
+   "san": "Nxe5",
+   "why_en": "Trades knights.",
+   "why_ko": "나이트를 바꿔요."
+  },
+  {
+   "ply": 16,
+   "san": "Nxe5",
+   "why_en": "Recaptures; material is level.",
+   "why_ko": "다시 잡아 기물이 같아져요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

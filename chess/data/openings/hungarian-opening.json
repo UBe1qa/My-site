@@ -1,0 +1,310 @@
+{
+ "name": {
+  "en": "Hungarian Opening (1.g3)",
+  "ko": "헝가리안 오프닝(1.g3)"
+ },
+ "eco": "A00",
+ "side": "w",
+ "line_san": [
+  "g3"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/hungarian-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/hungarian-opening/"
+ },
+ "engine_eval_white_cp": 8,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 312733,
+   "share_of_band": 0.01042,
+   "white_win": 153457,
+   "draw": 13751,
+   "black_win": 145525
+  },
+  {
+   "band": "1200–1599",
+   "games": 694910,
+   "share_of_band": 0.011662,
+   "white_win": 341795,
+   "draw": 28558,
+   "black_win": 324557
+  },
+  {
+   "band": "1600–1999",
+   "games": 728270,
+   "share_of_band": 0.011233,
+   "white_win": 356878,
+   "draw": 35041,
+   "black_win": 336351
+  },
+  {
+   "band": "2000+",
+   "games": 195804,
+   "share_of_band": 0.009554,
+   "white_win": 95731,
+   "draw": 13345,
+   "black_win": 86728
+  }
+ ],
+ "masters": {
+  "games": 3744,
+  "white_win": 1589,
+  "draw": 942,
+  "black_win": 1213,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 1378
+   },
+   {
+    "san": "Nf6",
+    "games": 731
+   },
+   {
+    "san": "e5",
+    "games": 501
+   },
+   {
+    "san": "g6",
+    "games": 400
+   },
+   {
+    "san": "c5",
+    "games": 270
+   },
+   {
+    "san": "c6",
+    "games": 103
+   },
+   {
+    "san": "f5",
+    "games": 71
+   },
+   {
+    "san": "Nc6",
+    "games": 58
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "d5",
+   "type": "main",
+   "engine_eval_white_cp": 14,
+   "games": 608903,
+   "share": 0.31565,
+   "white_win": 296578,
+   "draw": 29654,
+   "black_win": 282671
+  },
+  {
+   "san": "e5",
+   "type": "alternative",
+   "engine_eval_white_cp": 14,
+   "games": 563025,
+   "share": 0.29186,
+   "white_win": 275278,
+   "draw": 24133,
+   "black_win": 263614
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 17,
+   "games": 128873,
+   "share": 0.06681,
+   "white_win": 65322,
+   "draw": 5966,
+   "black_win": 57585
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 10,
+   "games": 114999,
+   "share": 0.05961,
+   "white_win": 55325,
+   "draw": 5871,
+   "black_win": 53803
+  },
+  {
+   "san": "c6",
+   "type": "alternative",
+   "engine_eval_white_cp": 22,
+   "games": 112711,
+   "share": 0.05843,
+   "white_win": 55511,
+   "draw": 5543,
+   "black_win": 51657
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": 8,
+   "games": 111703,
+   "share": 0.05791,
+   "white_win": 54075,
+   "draw": 5377,
+   "black_win": 52251
+  },
+  {
+   "san": "g6",
+   "type": "alternative",
+   "engine_eval_white_cp": 13,
+   "games": 94188,
+   "share": 0.04883,
+   "white_win": 45188,
+   "draw": 4884,
+   "black_win": 44116
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 40,
+   "games": 55236,
+   "share": 0.02863,
+   "white_win": 27285,
+   "draw": 2689,
+   "black_win": 25262
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 41,
+   "games": 43710,
+   "share": 0.02266,
+   "white_win": 23033,
+   "draw": 1954,
+   "black_win": 18723
+  },
+  {
+   "san": "Nc6",
+   "type": "alternative",
+   "engine_eval_white_cp": 29,
+   "games": 41868,
+   "share": 0.0217,
+   "white_win": 20615,
+   "draw": 1970,
+   "black_win": 19283
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 50,
+   "games": 18592,
+   "share": 0.00964,
+   "white_win": 9363,
+   "draw": 821,
+   "black_win": 8408
+  },
+  {
+   "san": "h5",
+   "type": "side",
+   "engine_eval_white_cp": 33,
+   "games": 16218,
+   "share": 0.00841,
+   "white_win": 7483,
+   "draw": 735,
+   "black_win": 8000
+  },
+  {
+   "san": "g5",
+   "type": "dubious",
+   "engine_eval_white_cp": 101,
+   "games": 4095,
+   "share": 0.00212,
+   "white_win": 2295,
+   "draw": 222,
+   "black_win": 1578
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 43,
+   "games": 3787,
+   "share": 0.00196,
+   "white_win": 1976,
+   "draw": 188,
+   "black_win": 1623
+  },
+  {
+   "san": "b5",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 3041,
+   "share": 0.00158,
+   "white_win": 1718,
+   "draw": 174,
+   "black_win": 1149
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 43,
+   "games": 2695,
+   "share": 0.0014,
+   "white_win": 1417,
+   "draw": 183,
+   "black_win": 1095
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "g3",
+   "why_en": "Prepares Bg2, a strong bishop on the long diagonal, before deciding the center.",
+   "why_ko": "중앙을 정하기 전에 Bg2를 준비해 긴 대각선에 강한 비숍을 세워요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "Bg2",
+   "why_en": "The bishop takes the long diagonal.",
+   "why_ko": "비숍이 긴 대각선에 서요."
+  },
+  {
+   "ply": 4,
+   "san": "c6",
+   "why_en": "Closes the long diagonal.",
+   "why_ko": "긴 대각선을 막아요."
+  },
+  {
+   "ply": 5,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 7,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 8,
+   "san": "Bg4",
+   "why_en": "Pins the f3 knight.",
+   "why_ko": "f3 나이트를 묶어요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

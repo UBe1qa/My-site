@@ -1,0 +1,317 @@
+{
+ "name": {
+  "en": "Elephant Gambit",
+  "ko": "엘리펀트 갬빗"
+ },
+ "eco": "C40",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "d5"
+ ],
+ "position_epd": "rnbqkbnr/ppp2ppp/8/3pp3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/elephant-gambit/",
+  "ko": "https://chess.lumenlab.page/ko/openings/elephant-gambit/"
+ },
+ "engine_eval_white_cp": 81,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 134668,
+   "share_of_band": 0.004487,
+   "white_win": 70677,
+   "draw": 5186,
+   "black_win": 58805
+  },
+  {
+   "band": "1200–1599",
+   "games": 215717,
+   "share_of_band": 0.00362,
+   "white_win": 105330,
+   "draw": 7005,
+   "black_win": 103382
+  },
+  {
+   "band": "1600–1999",
+   "games": 254892,
+   "share_of_band": 0.003931,
+   "white_win": 118108,
+   "draw": 10239,
+   "black_win": 126545
+  },
+  {
+   "band": "2000+",
+   "games": 59948,
+   "share_of_band": 0.002925,
+   "white_win": 27883,
+   "draw": 3299,
+   "black_win": 28766
+  }
+ ],
+ "masters": {
+  "games": 393,
+  "white_win": 209,
+  "draw": 60,
+  "black_win": 124,
+  "next_moves": [
+   {
+    "san": "exd5",
+    "games": 242
+   },
+   {
+    "san": "Nxe5",
+    "games": 75
+   },
+   {
+    "san": "d4",
+    "games": 22
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "exd5",
+   "type": "main",
+   "engine_eval_white_cp": 81,
+   "games": 355518,
+   "share": 0.53548,
+   "white_win": 174241,
+   "draw": 13219,
+   "black_win": 168058
+  },
+  {
+   "san": "Nxe5",
+   "type": "alternative",
+   "engine_eval_white_cp": 68,
+   "games": 145840,
+   "share": 0.21967,
+   "white_win": 70609,
+   "draw": 5676,
+   "black_win": 69555
+  },
+  {
+   "san": "d4",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 44268,
+   "share": 0.06668,
+   "white_win": 22806,
+   "draw": 1798,
+   "black_win": 19664
+  },
+  {
+   "san": "Nc3",
+   "type": "dubious",
+   "engine_eval_white_cp": -40,
+   "games": 42876,
+   "share": 0.06458,
+   "white_win": 20845,
+   "draw": 1681,
+   "black_win": 20350
+  },
+  {
+   "san": "d3",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 37298,
+   "share": 0.05618,
+   "white_win": 17527,
+   "draw": 1995,
+   "black_win": 17776
+  },
+  {
+   "san": "Bc4",
+   "type": "mistake",
+   "engine_eval_white_cp": -421,
+   "games": 11387,
+   "share": 0.01715,
+   "white_win": 3068,
+   "draw": 301,
+   "black_win": 8018
+  },
+  {
+   "san": "Bb5+",
+   "type": "dubious",
+   "engine_eval_white_cp": -19,
+   "games": 8158,
+   "share": 0.01229,
+   "white_win": 3752,
+   "draw": 303,
+   "black_win": 4103
+  },
+  {
+   "san": "Bd3",
+   "type": "mistake",
+   "engine_eval_white_cp": -208,
+   "games": 7481,
+   "share": 0.01127,
+   "white_win": 3525,
+   "draw": 269,
+   "black_win": 3687
+  },
+  {
+   "san": "Qe2",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 4139,
+   "share": 0.00623,
+   "white_win": 2006,
+   "draw": 159,
+   "black_win": 1974
+  },
+  {
+   "san": "c3",
+   "type": "dubious",
+   "engine_eval_white_cp": -36,
+   "games": 4114,
+   "share": 0.0062,
+   "white_win": 1851,
+   "draw": 140,
+   "black_win": 2123
+  },
+  {
+   "san": "Be2",
+   "type": "dubious",
+   "engine_eval_white_cp": -30,
+   "games": 708,
+   "share": 0.00107,
+   "white_win": 314,
+   "draw": 38,
+   "black_win": 356
+  },
+  {
+   "san": "c4",
+   "type": "mistake",
+   "engine_eval_white_cp": -183,
+   "games": 574,
+   "share": 0.00086,
+   "white_win": 258,
+   "draw": 23,
+   "black_win": 293
+  },
+  {
+   "san": "Ng5",
+   "type": "mistake",
+   "engine_eval_white_cp": -357,
+   "games": 566,
+   "share": 0.00085,
+   "white_win": 228,
+   "draw": 22,
+   "black_win": 316
+  },
+  {
+   "san": "h3",
+   "type": "mistake",
+   "engine_eval_white_cp": -88,
+   "games": 381,
+   "share": 0.00057,
+   "white_win": 167,
+   "draw": 8,
+   "black_win": 206
+  },
+  {
+   "san": "b3",
+   "type": "mistake",
+   "engine_eval_white_cp": -234,
+   "games": 211,
+   "share": 0.00032,
+   "white_win": 93,
+   "draw": 5,
+   "black_win": 113
+  },
+  {
+   "san": "g3",
+   "type": "mistake",
+   "engine_eval_white_cp": -89,
+   "games": 168,
+   "share": 0.00025,
+   "white_win": 71,
+   "draw": 10,
+   "black_win": 87
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "d5",
+   "why_en": "Gives a pawn to open the center at once; White is better with accurate play.",
+   "why_ko": "폰을 주고 바로 중앙을 열어요. 백이 정확히 두면 백이 좋아요."
+  },
+  {
+   "ply": 5,
+   "san": "exd5",
+   "why_en": "Takes the pawn and attacks nothing yet, but is a pawn up.",
+   "why_ko": "폰을 잡아요. 당장 치는 것은 없지만 폰 하나를 더 가져요."
+  },
+  {
+   "ply": 6,
+   "san": "e4",
+   "why_en": "Kicks the knight and grabs space.",
+   "why_ko": "나이트를 쫓으며 공간을 잡아요."
+  },
+  {
+   "ply": 7,
+   "san": "Qe2",
+   "why_en": "Pins the e4 pawn so the knight can stay.",
+   "why_ko": "e4 폰을 묶어 나이트가 머물 수 있게 해요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Defends e4 and develops.",
+   "why_ko": "e4를 지키며 전개해요."
+  },
+  {
+   "ply": 9,
+   "san": "d3",
+   "why_en": "Undermines e4.",
+   "why_ko": "e4 밑을 흔들어요."
+  },
+  {
+   "ply": 10,
+   "san": "Qxd5",
+   "why_en": "Wins back a pawn.",
+   "why_ko": "폰 하나를 되찾아요."
+  },
+  {
+   "ply": 11,
+   "san": "Nc3",
+   "why_en": "Develops with tempo on the queen.",
+   "why_ko": "퀸을 치며 전개해요."
+  },
+  {
+   "ply": 12,
+   "san": "Bb4",
+   "why_en": "Pins the knight.",
+   "why_ko": "나이트를 묶어요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

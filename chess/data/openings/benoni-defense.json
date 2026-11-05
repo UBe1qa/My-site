@@ -1,0 +1,287 @@
+{
+ "name": {
+  "en": "Benoni Defense",
+  "ko": "베노니 디펜스"
+ },
+ "eco": "A60",
+ "side": "b",
+ "line_san": [
+  "d4",
+  "Nf6",
+  "c4",
+  "c5",
+  "d5",
+  "e6",
+  "Nc3",
+  "exd5",
+  "cxd5",
+  "d6"
+ ],
+ "position_epd": "rnbqkb1r/pp3ppp/3p1n2/2pP4/8/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/benoni-defense/",
+  "ko": "https://chess.lumenlab.page/ko/openings/benoni-defense/"
+ },
+ "engine_eval_white_cp": 86,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 452,
+   "share_of_band": 1.5e-05,
+   "white_win": 240,
+   "draw": 11,
+   "black_win": 201
+  },
+  {
+   "band": "1200–1599",
+   "games": 7147,
+   "share_of_band": 0.00012,
+   "white_win": 3596,
+   "draw": 211,
+   "black_win": 3340
+  },
+  {
+   "band": "1600–1999",
+   "games": 35623,
+   "share_of_band": 0.000549,
+   "white_win": 17244,
+   "draw": 1329,
+   "black_win": 17050
+  },
+  {
+   "band": "2000+",
+   "games": 38973,
+   "share_of_band": 0.001902,
+   "white_win": 19400,
+   "draw": 2046,
+   "black_win": 17527
+  }
+ ],
+ "masters": {
+  "games": 1827,
+  "white_win": 818,
+  "draw": 389,
+  "black_win": 620,
+  "next_moves": [
+   {
+    "san": "e4",
+    "games": 1084
+   },
+   {
+    "san": "Nf3",
+    "games": 613
+   },
+   {
+    "san": "g3",
+    "games": 56
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e4",
+   "type": "main",
+   "engine_eval_white_cp": 86,
+   "games": 57009,
+   "share": 0.70773,
+   "white_win": 28403,
+   "draw": 2446,
+   "black_win": 26160
+  },
+  {
+   "san": "Nf3",
+   "type": "alternative",
+   "engine_eval_white_cp": 60,
+   "games": 12183,
+   "share": 0.15124,
+   "white_win": 6070,
+   "draw": 585,
+   "black_win": 5528
+  },
+  {
+   "san": "Bg5",
+   "type": "side",
+   "engine_eval_white_cp": 20,
+   "games": 6795,
+   "share": 0.08436,
+   "white_win": 3026,
+   "draw": 256,
+   "black_win": 3513
+  },
+  {
+   "san": "g3",
+   "type": "side",
+   "engine_eval_white_cp": 34,
+   "games": 2050,
+   "share": 0.02545,
+   "white_win": 1012,
+   "draw": 129,
+   "black_win": 909
+  },
+  {
+   "san": "Bf4",
+   "type": "side",
+   "engine_eval_white_cp": 65,
+   "games": 952,
+   "share": 0.01182,
+   "white_win": 447,
+   "draw": 51,
+   "black_win": 454
+  },
+  {
+   "san": "h3",
+   "type": "side",
+   "engine_eval_white_cp": 54,
+   "games": 813,
+   "share": 0.01009,
+   "white_win": 397,
+   "draw": 34,
+   "black_win": 382
+  },
+  {
+   "san": "e3",
+   "type": "side",
+   "engine_eval_white_cp": 38,
+   "games": 339,
+   "share": 0.00421,
+   "white_win": 147,
+   "draw": 17,
+   "black_win": 175
+  },
+  {
+   "san": "f3",
+   "type": "side",
+   "engine_eval_white_cp": 35,
+   "games": 213,
+   "share": 0.00264,
+   "white_win": 80,
+   "draw": 7,
+   "black_win": 126
+  },
+  {
+   "san": "a4",
+   "type": "side",
+   "engine_eval_white_cp": 56,
+   "games": 173,
+   "share": 0.00215,
+   "white_win": 81,
+   "draw": 7,
+   "black_win": 85
+  },
+  {
+   "san": "f4",
+   "type": "side",
+   "engine_eval_white_cp": 44,
+   "games": 25,
+   "share": 0.00031,
+   "white_win": 13,
+   "draw": 1,
+   "black_win": 11
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "Nf6",
+   "why_en": "Develops and stops e4 without committing a pawn yet.",
+   "why_ko": "폰을 정하지 않고 전개하며 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "c4",
+   "why_en": "Gains space and fights for d5.",
+   "why_ko": "공간을 얻고 d5를 다퉈요."
+  },
+  {
+   "ply": 4,
+   "san": "c5",
+   "why_en": "Hits d4 at once and asks White to push past or trade.",
+   "why_ko": "바로 d4를 쳐서 백에게 밀고 나갈지 바꿀지 물어요."
+  },
+  {
+   "ply": 5,
+   "san": "d5",
+   "why_en": "Pushes past and grabs space in the center.",
+   "why_ko": "밀고 나가 중앙 공간을 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "e6",
+   "why_en": "Challenges the d5 pawn and opens the f8 bishop.",
+   "why_ko": "d5 폰에 맞서고 f8 비숍 길을 열어요."
+  },
+  {
+   "ply": 7,
+   "san": "Nc3",
+   "why_en": "Supports d5 with the knight.",
+   "why_ko": "나이트로 d5를 받쳐요."
+  },
+  {
+   "ply": 8,
+   "san": "exd5",
+   "why_en": "Trades in the center to open the e-file.",
+   "why_ko": "중앙에서 바꿔 e파일을 열어요."
+  },
+  {
+   "ply": 9,
+   "san": "cxd5",
+   "why_en": "Recaptures with the pawn and keeps a space edge.",
+   "why_ko": "폰으로 다시 잡아 공간 우위를 지켜요."
+  },
+  {
+   "ply": 10,
+   "san": "d6",
+   "why_en": "Stops d6 and prepares ...g6 and ...Bg7.",
+   "why_ko": "d6을 막고 ...g6·...Bg7을 준비해요."
+  },
+  {
+   "ply": 11,
+   "san": "e4",
+   "why_en": "Builds a big center.",
+   "why_ko": "큰 중앙을 쌓아요."
+  },
+  {
+   "ply": 12,
+   "san": "g6",
+   "why_en": "Prepares ...Bg7.",
+   "why_ko": "...Bg7을 준비해요."
+  },
+  {
+   "ply": 13,
+   "san": "f4",
+   "why_en": "Adds the f-pawn and prepares e5: the Taimanov Attack.",
+   "why_ko": "f폰까지 올려 e5를 준비해요(타이마노프 어택)."
+  },
+  {
+   "ply": 14,
+   "san": "Bg7",
+   "why_en": "The bishop takes the long diagonal.",
+   "why_ko": "비숍이 긴 대각선에 서요."
+  },
+  {
+   "ply": 15,
+   "san": "Bb5+",
+   "why_en": "A check that makes Black’s pieces clumsy.",
+   "why_ko": "흑 기물을 어색하게 만드는 체크예요."
+  },
+  {
+   "ply": 16,
+   "san": "Nfd7",
+   "why_en": "Blocks with the knight, the best way.",
+   "why_ko": "가장 좋은 방법으로 나이트로 막아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

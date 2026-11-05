@@ -6,15 +6,14 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const B = 'http://localhost:8472';
 const TXT = {
-  en: ['Fewmoves', 'Chess openings, by what your opponents really play', 'Moves and win rates at four rating levels from 17.4 million Lichess games · guides · trainer'],
-  ko: ['외울수', '내 상대가 실제로 두는 수로 익히는 체스 오프닝', '리체스 1,740만 판, 레이팅대 네 곳의 수와 승률 · 오프닝 해설 · 연습'],
+  en: ['Opening Trail', 'Chess openings, one move at a time, with the reason for each', 'What players at your rating really play, from 175 million Lichess games.<br>Engine checks · 81 guides · 2-minute test'],
+  ko: ['오프닝 트레일', '체스 오프닝, 1수부터 수마다 이유와 함께', '리체스 1억 7,493만 판에서 내 레이팅대가 실제로 두는 수<br>엔진 평가 · 해설 81개 · 2분 테스트'],
 };
 (async () => {
   const b = await chromium.launch();
   for (const lang of ['en', 'ko']) {
     const pg = await b.newPage({ viewport: { width: 1200, height: 630 } });
-    await pg.goto(B + (lang === 'ko' ? '/ko/' : '/'), { waitUntil: 'networkidle' });
-    // 1.e4 뒤 국면(흑 차례), 응수 화살표가 굵기대로 보이게
+    await pg.goto(B + (lang === 'ko' ? '/ko/map/' : '/map/'), { waitUntil: 'networkidle' });
     // 처음 국면: 1.e4 60%·1.d4 27% 화살표가 굵기대로
     await pg.waitForTimeout(700);
     const t = TXT[lang];

@@ -1,0 +1,251 @@
+{
+ "name": {
+  "en": "Rare Defenses to 1.e4",
+  "ko": "1.e4에 드문 응수"
+ },
+ "eco": "B00",
+ "side": "b",
+ "line_san": [
+  "e4",
+  "f5"
+ ],
+ "position_epd": "rnbqkbnr/ppppp1pp/8/5p2/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/rare-defenses-to-e4/",
+  "ko": "https://chess.lumenlab.page/ko/openings/rare-defenses-to-e4/"
+ },
+ "engine_eval_white_cp": 179,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 35556,
+   "share_of_band": 0.001185,
+   "white_win": 20048,
+   "draw": 1351,
+   "black_win": 14157
+  },
+  {
+   "band": "1200–1599",
+   "games": 66491,
+   "share_of_band": 0.001116,
+   "white_win": 34401,
+   "draw": 1913,
+   "black_win": 30177
+  },
+  {
+   "band": "1600–1999",
+   "games": 76038,
+   "share_of_band": 0.001173,
+   "white_win": 39058,
+   "draw": 2454,
+   "black_win": 34526
+  },
+  {
+   "band": "2000+",
+   "games": 10214,
+   "share_of_band": 0.000498,
+   "white_win": 5239,
+   "draw": 468,
+   "black_win": 4507
+  }
+ ],
+ "masters": {
+  "games": 76,
+  "white_win": 31,
+  "draw": 21,
+  "black_win": 24,
+  "next_moves": [
+   {
+    "san": "exf5",
+    "games": 30
+   },
+   {
+    "san": "e5",
+    "games": 21
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "exf5",
+   "type": "main",
+   "engine_eval_white_cp": 179,
+   "games": 105899,
+   "share": 0.5645,
+   "white_win": 56013,
+   "draw": 3513,
+   "black_win": 46373
+  },
+  {
+   "san": "e5",
+   "type": "dubious",
+   "engine_eval_white_cp": 43,
+   "games": 29320,
+   "share": 0.15629,
+   "white_win": 15574,
+   "draw": 925,
+   "black_win": 12821
+  },
+  {
+   "san": "Nc3",
+   "type": "dubious",
+   "engine_eval_white_cp": 45,
+   "games": 16987,
+   "share": 0.09055,
+   "white_win": 8969,
+   "draw": 578,
+   "black_win": 7440
+  },
+  {
+   "san": "Nf3",
+   "type": "mistake",
+   "engine_eval_white_cp": -16,
+   "games": 7901,
+   "share": 0.04212,
+   "white_win": 3741,
+   "draw": 212,
+   "black_win": 3948
+  },
+  {
+   "san": "d3",
+   "type": "dubious",
+   "engine_eval_white_cp": 37,
+   "games": 7406,
+   "share": 0.03948,
+   "white_win": 3921,
+   "draw": 249,
+   "black_win": 3236
+  },
+  {
+   "san": "Bc4",
+   "type": "mistake",
+   "engine_eval_white_cp": -26,
+   "games": 4983,
+   "share": 0.02656,
+   "white_win": 2451,
+   "draw": 167,
+   "black_win": 2365
+  },
+  {
+   "san": "Qh5+",
+   "type": "mistake",
+   "engine_eval_white_cp": 0,
+   "games": 3802,
+   "share": 0.02027,
+   "white_win": 2029,
+   "draw": 113,
+   "black_win": 1660
+  },
+  {
+   "san": "f3",
+   "type": "mistake",
+   "engine_eval_white_cp": -30,
+   "games": 3500,
+   "share": 0.01866,
+   "white_win": 1782,
+   "draw": 134,
+   "black_win": 1584
+  },
+  {
+   "san": "d4",
+   "type": "mistake",
+   "engine_eval_white_cp": 0,
+   "games": 3490,
+   "share": 0.0186,
+   "white_win": 1756,
+   "draw": 119,
+   "black_win": 1615
+  },
+  {
+   "san": "f4",
+   "type": "mistake",
+   "engine_eval_white_cp": -42,
+   "games": 1190,
+   "share": 0.00634,
+   "white_win": 583,
+   "draw": 36,
+   "black_win": 571
+  },
+  {
+   "san": "Qf3",
+   "type": "mistake",
+   "engine_eval_white_cp": -14,
+   "games": 1119,
+   "share": 0.00596,
+   "white_win": 550,
+   "draw": 42,
+   "black_win": 527
+  },
+  {
+   "san": "Bd3",
+   "type": "mistake",
+   "engine_eval_white_cp": -18,
+   "games": 823,
+   "share": 0.00439,
+   "white_win": 405,
+   "draw": 22,
+   "black_win": 396
+  },
+  {
+   "san": "Be2",
+   "type": "mistake",
+   "engine_eval_white_cp": -25,
+   "games": 310,
+   "share": 0.00165,
+   "white_win": 161,
+   "draw": 8,
+   "black_win": 141
+  },
+  {
+   "san": "Qe2",
+   "type": "mistake",
+   "engine_eval_white_cp": -7,
+   "games": 190,
+   "share": 0.00101,
+   "white_win": 107,
+   "draw": 6,
+   "black_win": 77
+  },
+  {
+   "san": "c3",
+   "type": "mistake",
+   "engine_eval_white_cp": -28,
+   "games": 161,
+   "share": 0.00086,
+   "white_win": 69,
+   "draw": 4,
+   "black_win": 88
+  },
+  {
+   "san": "Bb5",
+   "type": "mistake",
+   "engine_eval_white_cp": -51,
+   "games": 81,
+   "share": 0.00043,
+   "white_win": 38,
+   "draw": 8,
+   "black_win": 35
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "f5",
+   "why_en": "Hits e4 with a pawn, but opens the black king; White is clearly better.",
+   "why_ko": "폰으로 e4를 치지만 흑 킹이 열려요. 백이 분명히 좋아요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

@@ -1,0 +1,282 @@
+{
+ "name": {
+  "en": "King’s Knight Opening: 2.Nf3",
+  "ko": "킹스 나이트 오프닝: 2.Nf3"
+ },
+ "eco": "C40",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3"
+ ],
+ "position_epd": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/kings-knight-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/kings-knight-opening/"
+ },
+ "engine_eval_white_cp": 13,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 6714428,
+   "share_of_band": 0.223725,
+   "white_win": 3472224,
+   "draw": 265744,
+   "black_win": 2976460
+  },
+  {
+   "band": "1200–1599",
+   "games": 11604835,
+   "share_of_band": 0.194748,
+   "white_win": 5911546,
+   "draw": 439234,
+   "black_win": 5254055
+  },
+  {
+   "band": "1600–1999",
+   "games": 8491751,
+   "share_of_band": 0.130974,
+   "white_win": 4289010,
+   "draw": 376709,
+   "black_win": 3826032
+  },
+  {
+   "band": "2000+",
+   "games": 1718062,
+   "share_of_band": 0.083827,
+   "white_win": 824360,
+   "draw": 140678,
+   "black_win": 753024
+  }
+ ],
+ "masters": {
+  "games": 112903,
+  "white_win": 45986,
+  "draw": 33052,
+  "black_win": 33865,
+  "next_moves": [
+   {
+    "san": "Nc6",
+    "games": 98960
+   },
+   {
+    "san": "Nf6",
+    "games": 10998
+   },
+   {
+    "san": "d6",
+    "games": 2025
+   },
+   {
+    "san": "d5",
+    "games": 393
+   },
+   {
+    "san": "f5",
+    "games": 137
+   },
+   {
+    "san": "Bc5",
+    "games": 105
+   },
+   {
+    "san": "Qe7",
+    "games": 95
+   },
+   {
+    "san": "f6",
+    "games": 41
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "Nc6",
+   "type": "main",
+   "engine_eval_white_cp": 13,
+   "games": 18366551,
+   "share": 0.64472,
+   "white_win": 9287666,
+   "draw": 799962,
+   "black_win": 8278923
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 52,
+   "games": 4153605,
+   "share": 0.1458,
+   "white_win": 2104439,
+   "draw": 183946,
+   "black_win": 1865220
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 27,
+   "games": 2864432,
+   "share": 0.10055,
+   "white_win": 1460476,
+   "draw": 121157,
+   "black_win": 1282799
+  },
+  {
+   "san": "Bc5",
+   "type": "dubious",
+   "engine_eval_white_cp": 181,
+   "games": 872680,
+   "share": 0.03063,
+   "white_win": 453001,
+   "draw": 29637,
+   "black_win": 390042
+  },
+  {
+   "san": "d5",
+   "type": "side",
+   "engine_eval_white_cp": 81,
+   "games": 660212,
+   "share": 0.02318,
+   "white_win": 319272,
+   "draw": 25550,
+   "black_win": 315390
+  },
+  {
+   "san": "Qf6",
+   "type": "dubious",
+   "engine_eval_white_cp": 106,
+   "games": 560967,
+   "share": 0.01969,
+   "white_win": 283046,
+   "draw": 21318,
+   "black_win": 256603
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 162,
+   "games": 341216,
+   "share": 0.01198,
+   "white_win": 194035,
+   "draw": 13843,
+   "black_win": 133338
+  },
+  {
+   "san": "f5",
+   "type": "dubious",
+   "engine_eval_white_cp": 139,
+   "games": 226497,
+   "share": 0.00795,
+   "white_win": 111925,
+   "draw": 7547,
+   "black_win": 107025
+  },
+  {
+   "san": "Bd6",
+   "type": "side",
+   "engine_eval_white_cp": 69,
+   "games": 121415,
+   "share": 0.00426,
+   "white_win": 66934,
+   "draw": 4439,
+   "black_win": 50042
+  },
+  {
+   "san": "Qe7",
+   "type": "side",
+   "engine_eval_white_cp": 95,
+   "games": 76161,
+   "share": 0.00267,
+   "white_win": 40146,
+   "draw": 2989,
+   "black_win": 33026
+  },
+  {
+   "san": "c6",
+   "type": "dubious",
+   "engine_eval_white_cp": 117,
+   "games": 71773,
+   "share": 0.00252,
+   "white_win": 38784,
+   "draw": 2629,
+   "black_win": 30360
+  },
+  {
+   "san": "Bb4",
+   "type": "dubious",
+   "engine_eval_white_cp": 124,
+   "games": 37014,
+   "share": 0.0013,
+   "white_win": 23823,
+   "draw": 1647,
+   "black_win": 11544
+  },
+  {
+   "san": "c5",
+   "type": "mistake",
+   "engine_eval_white_cp": 193,
+   "games": 23191,
+   "share": 0.00081,
+   "white_win": 13513,
+   "draw": 893,
+   "black_win": 8785
+  },
+  {
+   "san": "g6",
+   "type": "mistake",
+   "engine_eval_white_cp": 194,
+   "games": 21001,
+   "share": 0.00074,
+   "white_win": 12066,
+   "draw": 794,
+   "black_win": 8141
+  },
+  {
+   "san": "b6",
+   "type": "dubious",
+   "engine_eval_white_cp": 153,
+   "games": 20115,
+   "share": 0.00071,
+   "white_win": 11437,
+   "draw": 666,
+   "black_win": 8012
+  },
+  {
+   "san": "h6",
+   "type": "dubious",
+   "engine_eval_white_cp": 115,
+   "games": 13238,
+   "share": 0.00046,
+   "white_win": 7336,
+   "draw": 496,
+   "black_win": 5406
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

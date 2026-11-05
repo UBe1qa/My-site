@@ -1,0 +1,368 @@
+{
+ "name": {
+  "en": "Ruy Lopez",
+  "ko": "루이 로페즈"
+ },
+ "eco": "C60",
+ "side": "w",
+ "line_san": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nc6",
+  "Bb5"
+ ],
+ "position_epd": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/ruy-lopez/",
+  "ko": "https://chess.lumenlab.page/ko/openings/ruy-lopez/"
+ },
+ "engine_eval_white_cp": 18,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 593266,
+   "share_of_band": 0.019768,
+   "white_win": 307297,
+   "draw": 23894,
+   "black_win": 262075
+  },
+  {
+   "band": "1200–1599",
+   "games": 1425882,
+   "share_of_band": 0.023929,
+   "white_win": 731493,
+   "draw": 57945,
+   "black_win": 636444
+  },
+  {
+   "band": "1600–1999",
+   "games": 1239656,
+   "share_of_band": 0.01912,
+   "white_win": 636053,
+   "draw": 58416,
+   "black_win": 545187
+  },
+  {
+   "band": "2000+",
+   "games": 460418,
+   "share_of_band": 0.022465,
+   "white_win": 217064,
+   "draw": 53768,
+   "black_win": 189586
+  }
+ ],
+ "masters": {
+  "games": 41190,
+  "white_win": 16343,
+  "draw": 13841,
+  "black_win": 11006,
+  "next_moves": [
+   {
+    "san": "a6",
+    "games": 29409
+   },
+   {
+    "san": "Nf6",
+    "games": 7044
+   },
+   {
+    "san": "Nge7",
+    "games": 1157
+   },
+   {
+    "san": "f5",
+    "games": 1073
+   },
+   {
+    "san": "Bc5",
+    "games": 771
+   },
+   {
+    "san": "d6",
+    "games": 724
+   },
+   {
+    "san": "g6",
+    "games": 646
+   },
+   {
+    "san": "Nd4",
+    "games": 176
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "a6",
+   "type": "main",
+   "engine_eval_white_cp": 19,
+   "games": 893324,
+   "share": 0.24047,
+   "white_win": 452254,
+   "draw": 52001,
+   "black_win": 389069
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 39,
+   "games": 814010,
+   "share": 0.21912,
+   "white_win": 421522,
+   "draw": 39172,
+   "black_win": 353316
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 18,
+   "games": 741736,
+   "share": 0.19967,
+   "white_win": 373881,
+   "draw": 50836,
+   "black_win": 317019
+  },
+  {
+   "san": "Bc5",
+   "type": "side",
+   "engine_eval_white_cp": 36,
+   "games": 456567,
+   "share": 0.1229,
+   "white_win": 228203,
+   "draw": 18333,
+   "black_win": 210031
+  },
+  {
+   "san": "Nge7",
+   "type": "side",
+   "engine_eval_white_cp": 43,
+   "games": 212566,
+   "share": 0.05722,
+   "white_win": 106716,
+   "draw": 9375,
+   "black_win": 96475
+  },
+  {
+   "san": "Nd4",
+   "type": "side",
+   "engine_eval_white_cp": 58,
+   "games": 193618,
+   "share": 0.05212,
+   "white_win": 98335,
+   "draw": 7522,
+   "black_win": 87761
+  },
+  {
+   "san": "Qf6",
+   "type": "side",
+   "engine_eval_white_cp": 98,
+   "games": 92354,
+   "share": 0.02486,
+   "white_win": 46876,
+   "draw": 3420,
+   "black_win": 42058
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 49,
+   "games": 89436,
+   "share": 0.02408,
+   "white_win": 41197,
+   "draw": 3898,
+   "black_win": 44341
+  },
+  {
+   "san": "Bd6",
+   "type": "side",
+   "engine_eval_white_cp": 63,
+   "games": 63965,
+   "share": 0.01722,
+   "white_win": 33911,
+   "draw": 2656,
+   "black_win": 27398
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 75,
+   "games": 53797,
+   "share": 0.01448,
+   "white_win": 28938,
+   "draw": 2299,
+   "black_win": 22560
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 64,
+   "games": 23818,
+   "share": 0.00641,
+   "white_win": 12616,
+   "draw": 1043,
+   "black_win": 10159
+  },
+  {
+   "san": "d5",
+   "type": "dubious",
+   "engine_eval_white_cp": 129,
+   "games": 18680,
+   "share": 0.00503,
+   "white_win": 10384,
+   "draw": 724,
+   "black_win": 7572
+  },
+  {
+   "san": "Qe7",
+   "type": "side",
+   "engine_eval_white_cp": 100,
+   "games": 13269,
+   "share": 0.00357,
+   "white_win": 7057,
+   "draw": 520,
+   "black_win": 5692
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 44,
+   "games": 10978,
+   "share": 0.00296,
+   "white_win": 5422,
+   "draw": 578,
+   "black_win": 4978
+  },
+  {
+   "san": "Bb4",
+   "type": "side",
+   "engine_eval_white_cp": 78,
+   "games": 10951,
+   "share": 0.00295,
+   "white_win": 6412,
+   "draw": 433,
+   "black_win": 4106
+  },
+  {
+   "san": "Be7",
+   "type": "side",
+   "engine_eval_white_cp": 37,
+   "games": 7803,
+   "share": 0.0021,
+   "white_win": 4020,
+   "draw": 333,
+   "black_win": 3450
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e4",
+   "why_en": "Takes the center, opens lines for the queen and the light-squared bishop.",
+   "why_ko": "중앙을 잡고, 퀸과 밝은 칸 비숍의 길을 열어요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Black takes an equal share of the center and opens lines for the queen and bishop.",
+   "why_ko": "흑도 중앙을 같이 잡고 퀸과 비숍의 길을 열어요."
+  },
+  {
+   "ply": 3,
+   "san": "Nf3",
+   "why_en": "Develops with an attack on e5, so Black must spend the next move guarding it.",
+   "why_ko": "e5를 치며 전개해요. 흑은 다음 수로 e5를 지켜야 해요."
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "why_en": "Defends e5 with a piece and develops at the same time.",
+   "why_ko": "기물로 e5를 지키면서 전개해요."
+  },
+  {
+   "ply": 5,
+   "san": "Bb5",
+   "why_en": "Attacks the knight that guards e5, building slow pressure on Black’s center.",
+   "why_ko": "e5를 지키는 나이트를 쳐서 흑 중앙에 느린 압박을 쌓아요."
+  },
+  {
+   "ply": 6,
+   "san": "a6",
+   "why_en": "Asks the bishop at once whether it wants to take on c6 or retreat.",
+   "why_ko": "비숍에게 바로 c6를 잡을지 물러날지 물어요."
+  },
+  {
+   "ply": 7,
+   "san": "Ba4",
+   "why_en": "Keeps the bishop and the pin on the c6 knight; taking on c6 is the Exchange Variation.",
+   "why_ko": "비숍을 지키며 c6 나이트 압박을 이어요. c6를 잡으면 익스체인지 변화예요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Develops with an attack on e4.",
+   "why_ko": "e4를 치며 전개해요."
+  },
+  {
+   "ply": 9,
+   "san": "O-O",
+   "why_en": "Castles: e4 can be left hanging, because ...Nxe4 runs into Re1.",
+   "why_ko": "캐슬링해요. ...Nxe4는 Re1에 걸리므로 e4를 그냥 둬도 돼요."
+  },
+  {
+   "ply": 10,
+   "san": "Be7",
+   "why_en": "Develops quietly and prepares to castle; this is the Closed Ruy Lopez.",
+   "why_ko": "조용히 전개하고 캐슬링을 준비해요. 클로즈드 루이 로페즈예요."
+  },
+  {
+   "ply": 11,
+   "san": "Re1",
+   "why_en": "Defends e4 for real, so the threat Bxc6 and Nxe5 is now on.",
+   "why_ko": "이제 e4를 지켜요. 그래서 Bxc6 뒤 Nxe5가 진짜 위협이 돼요."
+  },
+  {
+   "ply": 12,
+   "san": "b5",
+   "why_en": "Chases the bishop away to end the pressure on c6 for good.",
+   "why_ko": "비숍을 쫓아 c6 압박을 아예 끝내요."
+  },
+  {
+   "ply": 13,
+   "san": "Bb3",
+   "why_en": "The bishop drops back to b3 and still aims at f7.",
+   "why_ko": "비숍이 b3로 물러나도 여전히 f7을 겨눠요."
+  },
+  {
+   "ply": 14,
+   "san": "d6",
+   "why_en": "Supports e5 and opens the c8 bishop.",
+   "why_ko": "e5를 받치고 c8 비숍 길을 열어요."
+  },
+  {
+   "ply": 15,
+   "san": "c3",
+   "why_en": "Prepares d4 and keeps a retreat on c2 for the bishop.",
+   "why_ko": "d4를 준비하고 비숍이 c2로 물러날 길을 만들어요."
+  },
+  {
+   "ply": 16,
+   "san": "O-O",
+   "why_en": "Black castles; ...Na5 or ...Bb7 come next.",
+   "why_ko": "흑이 캐슬링해요. 다음은 ...Na5나 ...Bb7이에요."
+  },
+  {
+   "ply": 17,
+   "san": "h3",
+   "why_en": "Stops ...Bg4, so that d4 can follow without a pin on the f3 knight.",
+   "why_ko": "...Bg4를 막아, f3 나이트가 묶이지 않은 채 d4를 둘 수 있게 해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

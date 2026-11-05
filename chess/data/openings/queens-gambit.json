@@ -1,0 +1,372 @@
+{
+ "name": {
+  "en": "Queen’s Gambit",
+  "ko": "퀸스 갬빗"
+ },
+ "eco": "D06",
+ "side": "w",
+ "line_san": [
+  "d4",
+  "d5",
+  "c4"
+ ],
+ "position_epd": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/queens-gambit/",
+  "ko": "https://chess.lumenlab.page/ko/openings/queens-gambit/"
+ },
+ "engine_eval_white_cp": 16,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 743049,
+   "share_of_band": 0.024758,
+   "white_win": 398161,
+   "draw": 26520,
+   "black_win": 318368
+  },
+  {
+   "band": "1200–1599",
+   "games": 2149248,
+   "share_of_band": 0.036068,
+   "white_win": 1140118,
+   "draw": 80523,
+   "black_win": 928607
+  },
+  {
+   "band": "1600–1999",
+   "games": 2809605,
+   "share_of_band": 0.043334,
+   "white_win": 1461180,
+   "draw": 134371,
+   "black_win": 1214054
+  },
+  {
+   "band": "2000+",
+   "games": 919034,
+   "share_of_band": 0.044841,
+   "white_win": 459740,
+   "draw": 68454,
+   "black_win": 390840
+  }
+ ],
+ "masters": {
+  "games": 58902,
+  "white_win": 25419,
+  "draw": 17819,
+  "black_win": 15664,
+  "next_moves": [
+   {
+    "san": "e6",
+    "games": 33638
+   },
+   {
+    "san": "c6",
+    "games": 16998
+   },
+   {
+    "san": "dxc4",
+    "games": 6109
+   },
+   {
+    "san": "Nf6",
+    "games": 668
+   },
+   {
+    "san": "e5",
+    "games": 544
+   },
+   {
+    "san": "Nc6",
+    "games": 421
+   },
+   {
+    "san": "c5",
+    "games": 377
+   },
+   {
+    "san": "Bf5",
+    "games": 109
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e6",
+   "type": "main",
+   "engine_eval_white_cp": 20,
+   "games": 1768989,
+   "share": 0.26743,
+   "white_win": 896980,
+   "draw": 94405,
+   "black_win": 777604
+  },
+  {
+   "san": "dxc4",
+   "type": "alternative",
+   "engine_eval_white_cp": 26,
+   "games": 1614990,
+   "share": 0.24415,
+   "white_win": 877973,
+   "draw": 67362,
+   "black_win": 669655
+  },
+  {
+   "san": "c6",
+   "type": "alternative",
+   "engine_eval_white_cp": 16,
+   "games": 1312630,
+   "share": 0.19844,
+   "white_win": 666243,
+   "draw": 68208,
+   "black_win": 578179
+  },
+  {
+   "san": "Nf6",
+   "type": "side",
+   "engine_eval_white_cp": 52,
+   "games": 990274,
+   "share": 0.14971,
+   "white_win": 527534,
+   "draw": 40646,
+   "black_win": 422094
+  },
+  {
+   "san": "Bf5",
+   "type": "side",
+   "engine_eval_white_cp": 84,
+   "games": 248916,
+   "share": 0.03763,
+   "white_win": 131482,
+   "draw": 9677,
+   "black_win": 107757
+  },
+  {
+   "san": "e5",
+   "type": "side",
+   "engine_eval_white_cp": 69,
+   "games": 244602,
+   "share": 0.03698,
+   "white_win": 121672,
+   "draw": 10944,
+   "black_win": 111986
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 204011,
+   "share": 0.03084,
+   "white_win": 109388,
+   "draw": 8229,
+   "black_win": 86394
+  },
+  {
+   "san": "c5",
+   "type": "side",
+   "engine_eval_white_cp": 40,
+   "games": 143468,
+   "share": 0.02169,
+   "white_win": 74820,
+   "draw": 6859,
+   "black_win": 61789
+  },
+  {
+   "san": "Bg4",
+   "type": "dubious",
+   "engine_eval_white_cp": 128,
+   "games": 21210,
+   "share": 0.00321,
+   "white_win": 11039,
+   "draw": 690,
+   "black_win": 9481
+  },
+  {
+   "san": "Be6",
+   "type": "side",
+   "engine_eval_white_cp": 96,
+   "games": 15915,
+   "share": 0.00241,
+   "white_win": 9173,
+   "draw": 576,
+   "black_win": 6166
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 51,
+   "games": 15794,
+   "share": 0.00239,
+   "white_win": 8300,
+   "draw": 690,
+   "black_win": 6804
+  },
+  {
+   "san": "b6",
+   "type": "dubious",
+   "engine_eval_white_cp": 107,
+   "games": 7315,
+   "share": 0.00111,
+   "white_win": 4193,
+   "draw": 280,
+   "black_win": 2842
+  },
+  {
+   "san": "h6",
+   "type": "side",
+   "engine_eval_white_cp": 102,
+   "games": 5771,
+   "share": 0.00087,
+   "white_win": 3141,
+   "draw": 212,
+   "black_win": 2418
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 89,
+   "games": 5124,
+   "share": 0.00077,
+   "white_win": 2785,
+   "draw": 196,
+   "black_win": 2143
+  },
+  {
+   "san": "f5",
+   "type": "dubious",
+   "engine_eval_white_cp": 147,
+   "games": 4231,
+   "share": 0.00064,
+   "white_win": 2307,
+   "draw": 171,
+   "black_win": 1753
+  },
+  {
+   "san": "f6",
+   "type": "dubious",
+   "engine_eval_white_cp": 138,
+   "games": 3843,
+   "share": 0.00058,
+   "white_win": 2230,
+   "draw": 134,
+   "black_win": 1479
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "d4",
+   "why_en": "Takes the center with a pawn that the queen already protects.",
+   "why_ko": "퀸이 이미 지키는 폰으로 중앙을 잡아요."
+  },
+  {
+   "ply": 2,
+   "san": "d5",
+   "why_en": "Black takes an equal share of the center and stops e4.",
+   "why_ko": "흑도 중앙을 같이 잡고 e4를 막아요."
+  },
+  {
+   "ply": 3,
+   "san": "c4",
+   "why_en": "Offers the c-pawn to pull Black’s d-pawn away from the center.",
+   "why_ko": "c폰을 내밀어 흑 d폰을 중앙에서 끌어내려 해요."
+  },
+  {
+   "ply": 4,
+   "san": "e6",
+   "why_en": "Keeps the d5 pawn protected; the c8 bishop is shut in for now.",
+   "why_ko": "d5 폰을 지켜요. c8 비숍은 잠시 갇혀요."
+  },
+  {
+   "ply": 5,
+   "san": "Nc3",
+   "why_en": "Develops and adds pressure on d5.",
+   "why_ko": "전개하며 d5를 더 눌러요."
+  },
+  {
+   "ply": 6,
+   "san": "Nf6",
+   "why_en": "Develops and adds a guard to d5.",
+   "why_ko": "전개하며 d5를 더 지켜요."
+  },
+  {
+   "ply": 7,
+   "san": "cxd5",
+   "why_en": "Trades on d5: the Exchange Variation.",
+   "why_ko": "d5에서 바꿔요. 익스체인지 변화예요."
+  },
+  {
+   "ply": 8,
+   "san": "exd5",
+   "why_en": "Recaptures with a pawn and opens the c8 bishop.",
+   "why_ko": "폰으로 다시 잡고 c8 비숍 길을 열어요."
+  },
+  {
+   "ply": 9,
+   "san": "Bg5",
+   "why_en": "Pins the f6 knight.",
+   "why_ko": "f6 나이트를 묶어요."
+  },
+  {
+   "ply": 10,
+   "san": "c6",
+   "why_en": "Supports d5 and gives the queen a path.",
+   "why_ko": "d5를 받치고 퀸 길을 열어요."
+  },
+  {
+   "ply": 11,
+   "san": "e3",
+   "why_en": "Opens the f1 bishop.",
+   "why_ko": "f1 비숍 길을 열어요."
+  },
+  {
+   "ply": 12,
+   "san": "h6",
+   "why_en": "Asks the bishop to decide.",
+   "why_ko": "비숍에게 정하라고 물어요."
+  },
+  {
+   "ply": 13,
+   "san": "Bh4",
+   "why_en": "Keeps the pin.",
+   "why_ko": "묶음을 이어요."
+  },
+  {
+   "ply": 14,
+   "san": "Be7",
+   "why_en": "Develops and unpins.",
+   "why_ko": "전개하며 묶임을 풀어요."
+  },
+  {
+   "ply": 15,
+   "san": "Bd3",
+   "why_en": "Develops the bishop on its best diagonal.",
+   "why_ko": "비숍을 가장 좋은 대각선에 세워요."
+  },
+  {
+   "ply": 16,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 17,
+   "san": "Nge2",
+   "why_en": "Develops the knight to e2 so f3 stays free for a pawn push.",
+   "why_ko": "f3 폰을 밀 수 있게 나이트를 e2로 꺼내요."
+  },
+  {
+   "ply": 18,
+   "san": "Re8",
+   "why_en": "Puts the rook on the e-file.",
+   "why_ko": "룩을 e파일에 둬요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

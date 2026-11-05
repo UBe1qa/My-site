@@ -1,0 +1,252 @@
+{
+ "name": {
+  "en": "Rare First Moves",
+  "ko": "드문 첫 수"
+ },
+ "eco": "A00",
+ "side": "w",
+ "line_san": [
+  "c3"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/rare-first-moves/",
+  "ko": "https://chess.lumenlab.page/ko/openings/rare-first-moves/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 87420,
+   "share_of_band": 0.002913,
+   "white_win": 41063,
+   "draw": 3941,
+   "black_win": 42416
+  },
+  {
+   "band": "1200–1599",
+   "games": 126673,
+   "share_of_band": 0.002126,
+   "white_win": 60502,
+   "draw": 4924,
+   "black_win": 61247
+  },
+  {
+   "band": "1600–1999",
+   "games": 133886,
+   "share_of_band": 0.002065,
+   "white_win": 65042,
+   "draw": 5827,
+   "black_win": 63017
+  },
+  {
+   "band": "2000+",
+   "games": 38173,
+   "share_of_band": 0.001863,
+   "white_win": 18181,
+   "draw": 2928,
+   "black_win": 17064
+  }
+ ],
+ "masters": {
+  "games": 369,
+  "white_win": 127,
+  "draw": 84,
+  "black_win": 158,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 99
+   },
+   {
+    "san": "Nf6",
+    "games": 82
+   },
+   {
+    "san": "e5",
+    "games": 53
+   },
+   {
+    "san": "c5",
+    "games": 31
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": 15,
+   "games": 134814,
+   "share": 0.34983,
+   "white_win": 64857,
+   "draw": 5774,
+   "black_win": 64183
+  },
+  {
+   "san": "d5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 99611,
+   "share": 0.25848,
+   "white_win": 47373,
+   "draw": 4547,
+   "black_win": 47691
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 32151,
+   "share": 0.08343,
+   "white_win": 15119,
+   "draw": 1623,
+   "black_win": 15409
+  },
+  {
+   "san": "e6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 27402,
+   "share": 0.0711,
+   "white_win": 12973,
+   "draw": 1222,
+   "black_win": 13207
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": 14,
+   "games": 24909,
+   "share": 0.06464,
+   "white_win": 11866,
+   "draw": 1128,
+   "black_win": 11915
+  },
+  {
+   "san": "g6",
+   "type": "side",
+   "engine_eval_white_cp": 46,
+   "games": 15811,
+   "share": 0.04103,
+   "white_win": 7530,
+   "draw": 697,
+   "black_win": 7584
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 21,
+   "games": 15633,
+   "share": 0.04057,
+   "white_win": 7470,
+   "draw": 812,
+   "black_win": 7351
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 24,
+   "games": 11043,
+   "share": 0.02866,
+   "white_win": 5352,
+   "draw": 505,
+   "black_win": 5186
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 14,
+   "games": 8205,
+   "share": 0.02129,
+   "white_win": 3829,
+   "draw": 374,
+   "black_win": 4002
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 23,
+   "games": 5951,
+   "share": 0.01544,
+   "white_win": 2877,
+   "draw": 322,
+   "black_win": 2752
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 22,
+   "games": 4279,
+   "share": 0.0111,
+   "white_win": 2083,
+   "draw": 215,
+   "black_win": 1981
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 36,
+   "games": 1029,
+   "share": 0.00267,
+   "white_win": 465,
+   "draw": 65,
+   "black_win": 499
+  },
+  {
+   "san": "b5",
+   "type": "side",
+   "engine_eval_white_cp": 42,
+   "games": 923,
+   "share": 0.0024,
+   "white_win": 453,
+   "draw": 64,
+   "black_win": 406
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 47,
+   "games": 904,
+   "share": 0.00235,
+   "white_win": 450,
+   "draw": 74,
+   "black_win": 380
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 75,
+   "games": 824,
+   "share": 0.00214,
+   "white_win": 422,
+   "draw": 47,
+   "black_win": 355
+  },
+  {
+   "san": "g5",
+   "type": "dubious",
+   "engine_eval_white_cp": 91,
+   "games": 606,
+   "share": 0.00157,
+   "white_win": 321,
+   "draw": 33,
+   "black_win": 252
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "c3",
+   "why_en": "A quiet move that prepares d4 or Qb3; it does little for development.",
+   "why_ko": "d4나 Qb3를 준비하는 조용한 수예요. 전개에는 별 도움이 안 돼요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}

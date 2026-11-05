@@ -1,0 +1,326 @@
+{
+ "name": {
+  "en": "Van’t Kruijs Opening (1.e3)",
+  "ko": "반트 크라위스 오프닝(1.e3)"
+ },
+ "eco": "A00",
+ "side": "w",
+ "line_san": [
+  "e3"
+ ],
+ "position_epd": "rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq -",
+ "url": {
+  "en": "https://chess.lumenlab.page/openings/vant-kruijs-opening/",
+  "ko": "https://chess.lumenlab.page/ko/openings/vant-kruijs-opening/"
+ },
+ "engine_eval_white_cp": 0,
+ "games_by_rating": [
+  {
+   "band": "<1200",
+   "games": 778373,
+   "share_of_band": 0.025935,
+   "white_win": 367171,
+   "draw": 34907,
+   "black_win": 376295
+  },
+  {
+   "band": "1200–1599",
+   "games": 1073888,
+   "share_of_band": 0.018022,
+   "white_win": 508577,
+   "draw": 41119,
+   "black_win": 524192
+  },
+  {
+   "band": "1600–1999",
+   "games": 779780,
+   "share_of_band": 0.012027,
+   "white_win": 370146,
+   "draw": 32729,
+   "black_win": 376905
+  },
+  {
+   "band": "2000+",
+   "games": 136175,
+   "share_of_band": 0.006644,
+   "white_win": 63397,
+   "draw": 8300,
+   "black_win": 64478
+  }
+ ],
+ "masters": {
+  "games": 755,
+  "white_win": 292,
+  "draw": 129,
+  "black_win": 334,
+  "next_moves": [
+   {
+    "san": "d5",
+    "games": 208
+   },
+   {
+    "san": "e5",
+    "games": 163
+   },
+   {
+    "san": "Nf6",
+    "games": 154
+   },
+   {
+    "san": "c5",
+    "games": 49
+   },
+   {
+    "san": "g6",
+    "games": 36
+   },
+   {
+    "san": "e6",
+    "games": 35
+   }
+  ],
+  "license": "CC BY-SA 4.0 (Lichess broadcasts, Opening Trail)"
+ },
+ "next_moves": [
+  {
+   "san": "e5",
+   "type": "main",
+   "engine_eval_white_cp": 26,
+   "games": 1215032,
+   "share": 0.43978,
+   "white_win": 579020,
+   "draw": 49527,
+   "black_win": 586485
+  },
+  {
+   "san": "d5",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 562178,
+   "share": 0.20348,
+   "white_win": 262930,
+   "draw": 24305,
+   "black_win": 274943
+  },
+  {
+   "san": "e6",
+   "type": "alternative",
+   "engine_eval_white_cp": 0,
+   "games": 219345,
+   "share": 0.07939,
+   "white_win": 104824,
+   "draw": 9708,
+   "black_win": 104813
+  },
+  {
+   "san": "c5",
+   "type": "alternative",
+   "engine_eval_white_cp": 9,
+   "games": 209907,
+   "share": 0.07598,
+   "white_win": 97374,
+   "draw": 8501,
+   "black_win": 104032
+  },
+  {
+   "san": "c6",
+   "type": "side",
+   "engine_eval_white_cp": 24,
+   "games": 119895,
+   "share": 0.0434,
+   "white_win": 56346,
+   "draw": 5080,
+   "black_win": 58469
+  },
+  {
+   "san": "Nf6",
+   "type": "alternative",
+   "engine_eval_white_cp": 5,
+   "games": 113727,
+   "share": 0.04116,
+   "white_win": 50286,
+   "draw": 5478,
+   "black_win": 57963
+  },
+  {
+   "san": "g6",
+   "type": "alternative",
+   "engine_eval_white_cp": 32,
+   "games": 92951,
+   "share": 0.03364,
+   "white_win": 41995,
+   "draw": 4101,
+   "black_win": 46855
+  },
+  {
+   "san": "d6",
+   "type": "side",
+   "engine_eval_white_cp": 25,
+   "games": 79911,
+   "share": 0.02892,
+   "white_win": 37726,
+   "draw": 3536,
+   "black_win": 38649
+  },
+  {
+   "san": "b6",
+   "type": "side",
+   "engine_eval_white_cp": 0,
+   "games": 56221,
+   "share": 0.02035,
+   "white_win": 27651,
+   "draw": 2245,
+   "black_win": 26325
+  },
+  {
+   "san": "Nc6",
+   "type": "side",
+   "engine_eval_white_cp": 38,
+   "games": 40940,
+   "share": 0.01482,
+   "white_win": 19671,
+   "draw": 1877,
+   "black_win": 19392
+  },
+  {
+   "san": "f5",
+   "type": "side",
+   "engine_eval_white_cp": 46,
+   "games": 18736,
+   "share": 0.00678,
+   "white_win": 8888,
+   "draw": 772,
+   "black_win": 9076
+  },
+  {
+   "san": "a6",
+   "type": "side",
+   "engine_eval_white_cp": 24,
+   "games": 9980,
+   "share": 0.00361,
+   "white_win": 4780,
+   "draw": 458,
+   "black_win": 4742
+  },
+  {
+   "san": "a5",
+   "type": "side",
+   "engine_eval_white_cp": 39,
+   "games": 5027,
+   "share": 0.00182,
+   "white_win": 2616,
+   "draw": 367,
+   "black_win": 2044
+  },
+  {
+   "san": "g5",
+   "type": "dubious",
+   "engine_eval_white_cp": 92,
+   "games": 4722,
+   "share": 0.00171,
+   "white_win": 2442,
+   "draw": 198,
+   "black_win": 2082
+  },
+  {
+   "san": "h5",
+   "type": "side",
+   "engine_eval_white_cp": 80,
+   "games": 4385,
+   "share": 0.00159,
+   "white_win": 2184,
+   "draw": 228,
+   "black_win": 1973
+  },
+  {
+   "san": "f6",
+   "type": "side",
+   "engine_eval_white_cp": 71,
+   "games": 3138,
+   "share": 0.00114,
+   "white_win": 1706,
+   "draw": 158,
+   "black_win": 1274
+  }
+ ],
+ "main_line": [
+  {
+   "ply": 1,
+   "san": "e3",
+   "why_en": "Opens the bishop on f1 and supports d4 later, a modest but safe start.",
+   "why_ko": "f1 비숍 길을 열고 나중에 d4를 받쳐요. 수수하지만 안전한 시작이에요."
+  },
+  {
+   "ply": 2,
+   "san": "e5",
+   "why_en": "Takes the center.",
+   "why_ko": "중앙을 잡아요."
+  },
+  {
+   "ply": 3,
+   "san": "d4",
+   "why_en": "Takes the center too.",
+   "why_ko": "백도 중앙을 잡아요."
+  },
+  {
+   "ply": 4,
+   "san": "exd4",
+   "why_en": "Trades.",
+   "why_ko": "바꿔요."
+  },
+  {
+   "ply": 5,
+   "san": "exd4",
+   "why_en": "Recaptures with the e-pawn.",
+   "why_ko": "e폰으로 다시 잡아요."
+  },
+  {
+   "ply": 6,
+   "san": "d5",
+   "why_en": "Takes the center: a French Exchange with colors reversed.",
+   "why_ko": "중앙을 잡아요. 색을 바꾼 프렌치 익스체인지예요."
+  },
+  {
+   "ply": 7,
+   "san": "Nf3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 8,
+   "san": "Nf6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 9,
+   "san": "Bd3",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 10,
+   "san": "Bd6",
+   "why_en": "Develops.",
+   "why_ko": "전개해요."
+  },
+  {
+   "ply": 11,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  },
+  {
+   "ply": 12,
+   "san": "O-O",
+   "why_en": "Castles.",
+   "why_ko": "캐슬링해요."
+  }
+ ],
+ "source": {
+  "games": "https://database.lichess.org/ lichess_db_standard_rated_2026-08, 2026-09, 2026-10 (whole months)",
+  "evals": "https://database.lichess.org/ lichess_db_eval.jsonl.zst (CC0)",
+  "license": "CC0 (Lichess games, evaluations, lichess-org/chess-openings); CC BY-SA 4.0 (broadcast numbers)",
+  "made": "2026-11-05"
+ }
+}
