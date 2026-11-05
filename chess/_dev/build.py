@@ -22,6 +22,8 @@ from openings import OPENINGS, GROUPS  # noqa: E402
 import reasons as RS  # noqa: E402
 import articles as ART  # noqa: E402
 import trail  # noqa: E402
+sys.path.insert(0, str(DEV / 'data'))
+from names_ko import ko_name  # noqa: E402  (이름표 한국어는 빌드 때 다시 옮긴다: names_ko.py만 고치면 조각에 들어간다)
 
 SITE = 'https://chess.lumenlab.page'
 ADS_CLIENT = 'ca-pub-9496167591465154'
@@ -325,7 +327,7 @@ def write_slugs():
     for sh in DATA.shards.values():
         for epd, v in sh['n'].items():
             slug = covers_slug(v[1])
-            want = v[:3] + ([slug] if slug else [])
+            want = [v[0], v[1], ko_name(v[1])] + ([slug] if slug else [])
             if want != v:
                 sh['n'][epd] = want
                 N[epd] = want
@@ -731,7 +733,7 @@ def explorer(lang, r=None, orient='w', sync=False, head_html='', slug='', tree=T
     nm = name_of(epds, lang)
     name = f'<span class="eco">{esc(nm["eco"])}</span><span>{esc(nm["name"])}</span>' if nm else f'<span>{esc(T["name_start"])}</span>'
     s = stats(epd, DEFAULT_BAND)
-    sm = fmt(T['sum'], n=f'<b>{count(s["played"], lang)}</b>', band=esc(BANDS[DEFAULT_BAND])) if s and s['played'] else esc(fmt(T['sum_none'], band=BANDS[DEFAULT_BAND]))
+    sm = fmt(T['sum'], n=f'<b>{count(max(s.get("n") or 0, s["played"]), lang)}</b>', band=esc(BANDS[DEFAULT_BAND])) if s and (s['played'] or s.get('n')) else esc(fmt(T['sum_none'], band=BANDS[DEFAULT_BAND]))
     g = GUIDES[lang].get(nm['slug']) if nm and nm['slug'] and nm['slug'] != slug else None
     guide = (f'<a class="guide-link" data-guide href="{g["u"]}">{u["guide_read"]} <b>{esc(g["n"])}</b></a>' if g
              else f'<a class="guide-link" data-guide href="{prefix(lang)}openings/" hidden>{u["guide_read"]} <b></b></a>')
@@ -1415,7 +1417,10 @@ def test_pool():
                 continue
 
             def shares(san):
-                return [round(next((x['share'] for x in (q or {'moves': []})['moves'] if x['san'] == san), 0), 3) for q in per]
+                # 지도와 같은 % 가 나오게 넷째 자리까지, 두긴 뒀는데 0으로 깎이면 '<0.1%'로 보이게 1e-4
+                def r4(v):
+                    return max(1e-4, round(v, 4)) if v > 0 else 0
+                return [r4(next((x['share'] for x in (q or {'moves': []})['moves'] if x['san'] == san), 0)) for q in per]
 
             def cls_of(san):
                 return next((x['cls'] for x in top['moves'] if x['san'] == san), next((x['cls'] for x in (per[2] or {'moves': []})['moves'] if x['san'] == san), -1))
@@ -1456,6 +1461,7 @@ def test_page(lang):
     <p class="q-score" data-qscore></p>
     <p class="q-ld" data-qld></p>
     <p class="q-like" data-qlike></p>
+    <p class="q-likewhy">{esc(TT['like_why'])}</p>
     <canvas class="q-card" data-qcard width="1080" height="1350" aria-hidden="true"></canvas>
     <div class="pfoot"><button type="button" class="btn" data-qa="share">{esc(TT['share'])}</button><button type="button" class="btn ghost" data-qa="save">{esc(TT['save'])}</button><button type="button" class="btn ghost" data-qa="again">{esc(TT['again'])}</button></div>
     <p class="q-note" data-qnote role="status"></p>
@@ -1489,17 +1495,22 @@ def doc_page(lang, key):
     return f'{key}/', page(lang, h, body, f'{key}/', None, scripts=False)
 
 
-def not_found():
-    e, k = TX['en'], TX['ko']
+def not_found(lang='en'):
+    """없는 주소 쪽. Cloudflare는 가장 가까운 폴더의 404.html을 주니 /ko/ 아래는 한국어 판(ko/404.html)이 나온다."""
+    other = 'ko' if lang == 'en' else 'en'
+    a, b = TX[lang], TX[other]
     body = f'''<div class="wrap sec nf">
   <div class="nf-b">{board_html('8/8/8/3k4/8/8/8/3K4 w - - 0 1')}</div>
-  <h1>{e['nf_title']} · <span lang="ko">{k['nf_title']}</span></h1>
-  <p><a class="btn" href="/map/">{e['nf_home']}</a> <a class="btn ghost" href="/ko/map/" lang="ko">{k['nf_home']}</a></p>
+  <h1>{a['nf_title']} · <span lang="{other}">{b['nf_title']}</span></h1>
+  <p><a class="btn" href="{prefix(lang) + 'map/'}">{a['nf_home']}</a> <a class="btn ghost" href="{prefix(other) + 'map/'}" lang="{other}">{b['nf_home']}</a></p>
 </div>'''
-    h = head('en', 'Page not found | Opening Trail', 'This page does not exist.', '', noindex=True, ads=False)
-    cfg = {'lang': 'en', 't': UI['en']['js'], 'mapUrl': '/map/',
-           'find': {'none': UI['en']['search_none'], 'page': UI['en']['search_page'], 'line': UI['en']['search_line'], 'src': '/data/find.json'}}
-    return (f'{h}\n<body>\n{header("en", "")}\n<main id="main">\n{body}\n</main>\n{footer("en")}\n{cfg_script(cfg)}\n'
+    title = {'en': 'Page not found | Opening Trail', 'ko': '없는 페이지 | 오프닝 트레일'}[lang]
+    desc = {'en': 'This page does not exist.', 'ko': '없는 페이지예요.'}[lang]
+    h = head(lang, title, desc, '', noindex=True, ads=False)
+    u = UI[lang]
+    cfg = {'lang': lang, 't': u['js'], 'mapUrl': prefix(lang) + 'map/',
+           'find': {'none': u['search_none'], 'page': u['search_page'], 'line': u['search_line'], 'moves': u['search_moves'], 'src': '/data/find.json'}}
+    return (f'{h}\n<body>\n{header(lang, "")}\n<main id="main">\n{body}\n</main>\n{footer(lang)}\n{cfg_script(cfg)}\n'
             '<script src="/assets/app.js"></script>\n</body>\n</html>\n')
 
 
@@ -1653,7 +1664,8 @@ def build():
         out[f'data/openings/{o["slug"]}.json'] = json.dumps(opening_json(o), ensure_ascii=False, indent=1) + '\n'
     out['data/test.json'] = json.dumps(test_pool(), ensure_ascii=False, separators=(',', ':')) + '\n'
     out['data/find.json'] = json.dumps(find_index(names), ensure_ascii=False, separators=(',', ':')) + '\n'
-    out['404.html'] = not_found()
+    out['404.html'] = not_found('en')
+    out['ko/404.html'] = not_found('ko')
     out['sitemap.xml'] = sitemap(paths)
     if MISSING_WHY:
         print(f'이유가 빠진 메인라인 수 {len(MISSING_WHY)}개 (예: {MISSING_WHY[:3]})')

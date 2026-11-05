@@ -90,7 +90,7 @@
     if (v == null) return '';
     if (typeof v === 'string') return '#' + v.slice(1);
     var p = v / 100;
-    return (p > 0 ? '+' : p < 0 ? '−' : '') + Math.abs(p).toFixed(Math.abs(p) >= 10 ? 0 : 1);
+    return (p > 0 ? '+' : p < 0 ? '−' : '') + fix(Math.abs(p), Math.abs(p) >= 10 ? 0 : 1);
   };
   FM.evWin = function (v) {
     if (v == null) return null;
@@ -101,20 +101,23 @@
   FM.CLS = ['main', 'alt', 'side', 'dubious', 'bad'];
   // 백 기준 점수(이김 1, 비김 0.5)
   FM.score = function (s) { return s.n ? (s.w + s.d / 2) / s.n : 0; };
+  // 반올림은 빌드(build.py tofixed)와 같게 5에서 올린다(0.15 → 0.2): 서버에서 쓴 숫자와 화면에서 쓴 숫자가 어긋나지 않게
+  function fix(x, d) { var m = Math.pow(10, d); return (Math.floor(x * m + 0.5 + 1e-9) / m).toFixed(d); }
+  FM.fix = fix;
   FM.pct = function (x, digits) {
     var v = x * 100;
     if (v > 0 && v < 0.1) return '<0.1%';
-    if (v > 0 && v < 1) return v.toFixed(1) + '%';
-    return v.toFixed(digits == null ? 0 : digits) + '%';
+    if (v > 0 && v < 1) return fix(v, 1) + '%';
+    return fix(v, digits == null ? 0 : digits) + '%';
   };
   FM.count = function (n, lang) {
     if (lang === 'ko') {
-      if (n >= 100000000) return (n / 100000000).toFixed(1).replace(/\.0$/, '') + '억';
-      if (n >= 10000) return (n / 10000).toFixed(n >= 100000 ? 0 : 1).replace(/\.0$/, '') + '만';
+      if (n >= 100000000) return fix(n / 100000000, 1).replace(/\.0$/, '') + '억';
+      if (n >= 10000) return fix(n / 10000, n >= 100000 ? 0 : 1).replace(/\.0$/, '') + '만';
       return n.toLocaleString('ko-KR');
     }
-    if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-    if (n >= 1e4) return Math.round(n / 1e3) + 'k';
+    if (n >= 1e6) return fix(n / 1e6, 1).replace(/\.0$/, '') + 'M';
+    if (n >= 1e4) return Math.floor(n / 1e3 + 0.5) + 'k';
     return n.toLocaleString('en-US');
   };
 

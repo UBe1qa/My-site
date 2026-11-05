@@ -117,7 +117,7 @@ PHRASE = {
     "Vienna Hybrid": "비엔나 하이브리드", "Wing Gambit": "윙 갬빗", "Baltic": "발틱", "Tartakower": "타르타코버", "Maróczy": "마로치", "Benoni": "베노니",
     "Indian": "인디언", "Old Indian": "올드 인디언", "Queen's Indian": "퀸스 인디언", "King's Indian": "킹스 인디언", "Benoni-Indian": "베노니-인디언",
     "Spielmann-Indian": "슈필만-인디언", "Czech-Indian": "체코-인디언", "Pirc Invitation": "피르츠 초대", "Slav Invitation": "슬라브 초대",
-    "Paulsen": "파울센", "Moscow": "모스크바", "Cozio": "코치오", "Hungarian": "헝가리안", "Two Pawns Attack": "투 폰스 어택", "Breyer": "브레이어",
+    "Adams": "애덤스", "Kiddie": "키디", "Paulsen": "파울센", "Moscow": "모스크바", "Cozio": "코치오", "Hungarian": "헝가리안", "Two Pawns Attack": "투 폰스 어택", "Breyer": "브레이어",
     "Great Snake": "그레이트 스네이크", "Blackburne": "블랙번", "Big Center": "빅 센터", "Center": "센터", "King's Gambit Reversed": "역 킹스 갬빗",
     "Botvinnik System Reversed": "역 보트비닉 시스템", "Botvinnik System": "보트비닉 시스템", "Botvinnik": "보트비닉", "Reversed": "역",
     "Mieses": "미제스", "Rat": "랫", "Quiet": "조용한", "Wade-Tartakower": "웨이드-타르타코버", "Wade-Smyslov": "웨이드-스미슬로프", "Rousseau": "루소",
@@ -140,6 +140,45 @@ PHRASE = {
 WORD = {"Variation": "변화", "Defense": "디펜스", "Attack": "어택", "Gambit": "갬빗", "System": "시스템", "Line": "라인",
         "Opening": "오프닝", "Game": "게임", "Countergambit": "카운터갬빗", "Counterattack": "카운터어택", "with": ""}
 
+# 2026-11-05 제3자 평가 L17: 흔한 낱말과 널리 쓰는 한국어 표기가 있는 이름만 더 옮긴다(나머지 사람 이름은 위 원칙대로 영어)
+PHRASE.update({
+    # 낱말
+    "Orthodox": "오소독스", "Fianchetto": "피앙케토", "Bishop's": "비숍스", "King's": "킹스", "Queen's": "퀸스", "Deferred": "지연",
+    "Poisoned Pawn": "포이즌드 폰", "Pawn Push": "폰 푸시", "Pawn": "폰", "Pawns": "폰", "Double": "더블", "Beginner's Trap": "초보자 함정", "Trap": "함정",
+    "Bishop": "비숍", "Knight": "나이트", "Queen": "퀸", "King": "킹", "Bind": "바인드", "Retreat": "후퇴", "Sacrifice": "희생",
+    "Endgame": "엔드게임", "Wing": "윙", "Pin": "핀", "Transfer": "트랜스퍼", "Advance": "어드밴스", "Hybrid": "하이브리드",
+    "Move Order": "수순", "Edge": "엣지", "Early Deviations": "이른 갈림", "Early": "이른", "Full Symmetry": "완전 대칭", "Symmetry": "대칭",
+    "Queenside": "퀸사이드", "Kingside": "킹사이드", "Spanish": "스패니시", "Austrian": "오스트리안", "Hedgehog": "헤지호그", "Dragon": "드래곤",
+    "Eastern": "이스턴", "Western": "웨스턴", "Old": "올드", "Long Whip": "롱 휩", "Long": "롱", "Full": "풀", "Bayonet": "바요넷",
+    "Norwegian": "노르웨이", "Portuguese": "포르투갈", "Siberian": "시베리안", "Swiss": "스위스", "American": "아메리칸", "Chinese": "차이니즈",
+    "Flexible": "플렉시블", "Sharp": "샤프", "Improved": "개량", "Development": "전개", "Unpin": "언핀", "Compromised": "컴프로마이즈드",
+    "Hyperaccelerated": "초가속", "Symmetrical": "대칭", "Lion's Claw": "라이언스 클로", "Lion's Jaw": "라이언스 조", "Lion's Cave": "라이언스 케이브",
+    "Lion": "라이언", "Pterodactyl": "프테로닥틸", "Pteranodon": "프테라노돈", "Rhamphorhynchus": "람포링쿠스", "Quetzalcoatlus": "케찰코아틀루스",
+    "Halloween": "핼러윈", "Corkscrew": "코르크스크루", "Millennium": "밀레니엄", "Chameleon": "카멜레온", "Lizard": "리저드", "Raptor": "랩터",
+    # 땅 이름
+    "Cambridge Springs": "케임브리지 스프링스", "St. Petersburg": "상트페테르부르크", "St. George": "세인트 조지", "St. Patrick's": "세인트 패트릭스",
+    "New York": "뉴욕", "New England": "뉴잉글랜드", "San Francisco": "샌프란시스코", "San Remo": "산레모", "Rio de Janeiro": "리우데자네이루",
+    "Leningrad": "레닌그라드", "Berlin": "베를린", "Venice": "베니스", "Brooklyn": "브루클린", "Manhattan": "맨해튼", "Vienna": "비엔나",
+    "Warsaw": "바르샤바", "Amsterdam": "암스테르담", "Hastings": "헤이스팅스", "Zurich": "취리히", "Belgrade": "베오그라드", "Novosibirsk": "노보시비르스크",
+    "Cambridge": "케임브리지", "Mannheim": "만하임", "Colorado": "콜로라도",
+    # 널리 쓰는 표기가 있는 사람 이름
+    "Max Lange": "막스 랑게", "Richter-Rauzer": "리히터-라우저", "Smith-Morra": "스미스-모라", "Milner-Barry": "밀너-배리",
+    "Kieseritzky": "키제리츠키", "Spielmann": "슈필만", "Meran": "메란", "McCutcheon": "매커천", "Philidor": "필리도르", "Bronstein": "브론스타인",
+    "Karpov": "카르포프", "Muzio": "무치오", "Staunton": "스톤턴", "Schlechter": "슐레히터", "Spassky": "스파스키", "Janowski": "야노프스키",
+    "Schliemann": "슐리만", "Steiner": "슈타이너", "Rubinstein": "루빈스타인", "Capablanca": "카파블랑카", "Sozin": "소진", "Korchnoi": "코르치노이",
+    "Flohr": "플로르", "McDonnell": "맥도널", "Jaenisch": "예니시", "Lopez": "로페즈", "Romanishin": "로마니신", "Zaitsev": "자이체프",
+    "Allgaier": "알가이어", "Alapin": "알라핀", "Réti": "레티", "Larsen": "라르센", "Gligoric": "글리고리치", "Horwitz": "호르비츠",
+    "Richter": "리히터", "Tal": "탈", "Fischer": "피셔", "Winawer": "비나버", "Pillsbury": "필즈버리", "Levenfish": "레벤피시",
+    "Grob": "그롭", "Veresov": "베레소프", "Sämisch": "제미시", "Geller": "겔러", "Polugaevsky": "폴루가옙스키", "Boleslavsky": "볼레슬랍스키",
+    "Pirc": "피르츠", "Ponziani": "폰치아니", "Catalan": "카탈란", "Blumenfeld": "블루멘펠트", "Kotov": "코토프", "Morozevich": "모로제비치",
+    "Reshevsky": "레셰프스키", "Duras": "두라스", "Kramnik": "크람니크", "Carlsen": "칼센", "Ivanchuk": "이반추크", "Averbakh": "아베르바흐",
+    "Benko": "벤코", "Boden": "보든", "Mikenas": "미케나스", "Urusov": "우루소프", "Panno": "판노", "Simagin": "시마긴", "Petrosian": "페트로시안",
+    "Smyslov": "스미슬로프", "Keres": "케레스", "Najdorf": "나이도르프", "Scheveningen": "스헤베닝언", "Taimanov": "타이마노프", "Kan": "칸",
+    "Paulsen": "파울센", "Morphy": "모피", "Anderssen": "안데르센", "Steinitz": "슈타이니츠", "Lasker": "라스커", "Alekhine": "알레힌", "Nimzowitsch": "님조비치",
+})
+# 접두어: Anti-베노니 → 안티 베노니
+PREFIX = {"Franco-": "프랑코 ", "Anti-": "안티 ", "Semi-": "세미 ", "Pseudo-": "유사 ", "Neo-": "네오 ", "Anglo-": "앵글로 ", "Ultra-": "울트라 "}
+
 _PH = sorted(PHRASE.items(), key=lambda kv: -len(kv[0]))
 
 
@@ -158,6 +197,8 @@ def ko_name(name):
         for en, ko in _PH:
             if en in p:   # 낱말 경계로만 바꾼다("Open"이 "Opening" 안에서 바뀌지 않게)
                 p = re.sub(r"(?<![A-Za-zÀ-ž'])" + re.escape(en) + r"(?![A-Za-zÀ-ž])", ko, p)
+        for en, ko in PREFIX.items():
+            p = re.sub(r"(?<![A-Za-zÀ-ž'])" + re.escape(en), ko, p)
         p = ' '.join(WORD.get(w, w) for w in p.split(' ')).strip()
         p = ' '.join(p.split())
         parts.append(p)

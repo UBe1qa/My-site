@@ -69,7 +69,7 @@ if len(guides) != 4:
 sm = (ROOT / 'sitemap.xml').read_text(encoding='utf-8')
 locs = set(re.findall(r'<loc>(.*?)</loc>', sm))
 ADS = 'pagead2.googlesyndication.com'
-for f in pages + [ROOT / '404.html']:
+for f in pages + [ROOT / '404.html', ROOT / 'ko' / '404.html']:
     rel = '/' + str(f.relative_to(ROOT)).replace('index.html', '')
     html = f.read_text(encoding='utf-8')
     p = P()

@@ -406,8 +406,9 @@
     this.cur = s;
     if (this.sumEl) {
       if (failed) this.sumEl.textContent = T.load_fail;
-      else if (!s || !s.played) this.sumEl.textContent = fmt(T.sum_none, { band: bandName(this.band) });
-      else this.sumEl.innerHTML = fmt(T.sum, { n: '<b>' + FM.count(s.played, L) + '</b>', band: esc(bandName(this.band)) });
+      else if (!s || !(s.played || s.n)) this.sumEl.textContent = fmt(T.sum_none, { band: bandName(this.band) });
+      // 이 국면까지 온 판 수(레이팅 표와 같은 숫자). 다음 수가 적힌 판(played)은 대국이 거기서 끝난 판만큼 적다
+      else this.sumEl.innerHTML = fmt(T.sum, { n: '<b>' + FM.count(Math.max(s.n || 0, s.played), L) + '</b>', band: esc(bandName(this.band)) });
     }
     if (this.evEl) this.evEl.textContent = entry ? (FM.evText(entry[1]) || '—') : '—';
     if (this.passEl) {
@@ -528,7 +529,7 @@
     this.board = new FM.Board($('[data-board]', root), { orient: root.getAttribute('data-orient') || 'w', movable: function () { return false; } });
     this.ply = -1;
     this.items.forEach(function (li) {
-      $('button', li).addEventListener('click', function () { self.set(+li.getAttribute('data-ply'), true); });
+      li.addEventListener('click', function (e) { if (!e.target.closest('a')) self.set(+li.getAttribute('data-ply'), true); });
     });
     if ('IntersectionObserver' in window) {
       // 화면 가운데 띠에 들어온 수를 판에 둔다(손으로 고른 뒤 잠깐은 따라가지 않는다)
