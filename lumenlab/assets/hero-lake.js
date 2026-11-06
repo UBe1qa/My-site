@@ -6,7 +6,7 @@
         등불이 안개를 비추고(가까울수록·등 쪽을 볼수록 밝게), 등보다 먼 안개 = 뒤 겹, 가까운 안개 + 화면을 지나는 옅은 안개 = 앞 겹.
      ② 합치기: 사진(물 아래는 물결에 흔들리는 반사) → 뒤 안개(등불 빛을 받아 따뜻해짐) → 글(왼쪽부터 흐리게 번지며 써짐) → 앞 안개 → 등불 빛무리·깜빡임
         → 물 위 금빛 반짝임 → 낟알. 넓은 화면은 사진 양옆을 흐린 가장자리 색으로 이어 붙인다.
-   들어올 때: 어두운 호수에 등불이 먼저 붙고 그 빛이 안개를 채운 뒤 글이 써진다(2.6초). 머무는 동안 안개가 흐르고 등불이 깜빡인다. 누르면 물에 동그란 물결.
+   들어올 때: 어스름한 호수에 등불이 먼저 붙고 그 빛이 안개를 채우며 글이 써진다(1.9초). 머무는 동안 안개가 흐르고 등불이 깜빡인다. 누르면 물에 동그란 물결.
    첫 스크롤(휠·손가락·키·'내려서 만든 것 보기'): 1.1초 찢기. 띠는 가는 것 3~9px·굵은 것 18~38px, 진행×36 박자마다 새 배치,
      굵은 띠엔 이 파일의 셰이더 코드 줄. 끝 40%에 조각마다 구멍이 뚫려(다시 안 닫힘) 뒤의 '만든 것'이 보이고 올라온다.
      '만든 것' 맨 위에서 위로 올리면 거꾸로(구멍이 닫히며 장면이 돌아옴).
@@ -26,6 +26,7 @@
   function hdr(mode) {   // 머리말: 첫 화면 위(투명·흰 글) / 넘어가는 중(숨김) / 글 위(원래)
     d.classList.toggle('top-lake', mode === 'hero');
     d.classList.toggle('top-mid', mode === 'mid');
+    d.classList.toggle('lake-past', mode === 'page');   // 글 위로 넘어가면 첫 화면 안내를 숨긴다(반투명 머리말 밑에 비치지 않게)
     theme(mode === 'hero');
   }
 
@@ -133,7 +134,7 @@
     '  vec2 dpx = vec2((sin(ph)*.0042 + sin(ph*2.6 + 1.1)*.0016)*amp*wet + ring*.008, ring*.002);',
     '  vec3 c = photo(uv + dpx);',
     '  vec2 dl = q - Ls; float r2 = dot(dl, dl);',
-    '  float intro = ss(.05, 1.9, uIn);',
+    '  float intro = ss(0., 1.2, uIn);',
     '  c *= 1. + (uFl - .95)*1.4*exp(-r2/.0035);   // 등불 깜빡임',
     '  vec2 fu = vec2(p.x/uRes.x, 1. - p.y/uRes.y);',
     '  vec2 e1 = uFt*vec2(.75, .75), e2 = uFt*vec2(.75, -.75);   // 안개는 네 점을 섞어 계단·낟알을 지운다',
@@ -164,8 +165,8 @@
     '  }',
     '  c += uWarm * exp(-r2/.0011) * .09 * uFl * intro;',
     '  // 들어올 때: 어두운 호수에 등불이 먼저 붙고, 그 빛이 안개로 번진다',
-    '  float lamp = exp(-r2/.006) * ss(.05, .5, uIn);',
-    '  c *= max(mix(.05, 1., intro), lamp);',
+    '  float lamp = exp(-r2/.006) * ss(0., .4, uIn);',
+    '  c *= max(mix(.45, 1., intro), lamp);   // 바탕 남색(사진 윗부분의 0.45배)에서 시작해 깜빡임 없이',
     '  return vec4(c, 1.);',
     '}',
     'void main(){',
@@ -328,7 +329,7 @@
     var t = (now - t0) / 1000, D = W / Math.max(1, cv.clientWidth), tin = IN > 50 ? 9 : t;
     look += (lookT - look) * .04;
     var fl = .93 + .035 * Math.sin(t * 7.3) + .025 * Math.sin(t * 13.1 + 1.3) + .02 * Math.sin(t * 3.7 + .5);   // 등불 깜빡임
-    var pw = (.25 + .75 * ss(.1, 1.6, tin)) * fl;
+    var pw = (.25 + .75 * ss(0, 1.1, tin)) * fl;
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.viewport(0, 0, fW, fH);
     gl.useProgram(P1.p); var v = P1.u;
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tImg); gl.uniform1i(v.uImg, 0);
@@ -347,7 +348,7 @@
     gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, tCode); gl.uniform1i(u.uCode, 3);
     gl.uniform2f(u.uRes, W, H); gl.uniform2f(u.uFt, 1 / fW, 1 / fH); gl.uniform4f(u.uMap, map[0], map[1], map[2], map[3]);
     gl.uniform2f(u.uL, IMG.lx, IMG.ly); gl.uniform1f(u.uLW, IMG.lw); gl.uniform1f(u.uWL, IMG.wl); gl.uniform1f(u.uHz, IMG.hz);
-    gl.uniform1f(u.uT, t); gl.uniform1f(u.uIn, clamp(tin / 2.6, 0, 1) * 2.6); gl.uniform1f(u.uWr, ss(1.1, 3.6, tin)); gl.uniform1f(u.uX, X);
+    gl.uniform1f(u.uT, t); gl.uniform1f(u.uIn, clamp(tin / 2.6, 0, 1) * 2.6); gl.uniform1f(u.uWr, ss(.5, 1.9, tin)); gl.uniform1f(u.uX, X);
     gl.uniform1f(u.uDpr, D); gl.uniform1f(u.uFl, fl); gl.uniform1f(u.uHc, CAM.hc); gl.uniform1f(u.uF, CAM.f); gl.uniform1f(u.uZL, geo.zl);
     gl.uniform3f(u.uWarm, WARM[0], WARM[1], WARM[2]);
     gl.uniform4f(u.uSeg0, segs[0][0], segs[0][1], segs[0][2], segs[0][3]); gl.uniform4f(u.uSeg1, segs[1][0], segs[1][1], segs[1][2], segs[1][3]);
@@ -355,7 +356,7 @@
     gl.uniform4fv(u.uRip, new Float32Array([].concat(rips[0], rips[1], rips[2])));
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     if (!drawn) { drawn = true; hero.classList.add('gl-on'); }
-    if (tin > 3.4) hero.classList.add('lake--in');
+    if (tin > 1.9) hero.classList.add('lake--in');
   }
   function loop(now) {
     raf = requestAnimationFrame(loop);

@@ -153,7 +153,7 @@ with sync_playwright() as p:
 
     # 첫 화면(안개 호수, 2026-11-05): 캔버스가 그리고(gl-on), 손가락·휠·키·'내려서 만든 것 보기' 한 번이면 잠긴 채 찢어지며 '만든 것' 맨 위(머리말 바로 밑)로,
     # 잠금이 풀리고, 거기서 위로 한 번 올리면 되돌아와 맨 위·다시 잠금. 제목은 휴대폰 두 줄
-    LK = "(()=>({y:Math.round(scrollY),cls:document.documentElement.className,hero:document.querySelector('.lake').className,top:Math.round(document.getElementById('works').getBoundingClientRect().top),hd:document.querySelector('.top').offsetHeight}))()"
+    LK = "(()=>({y:Math.round(scrollY),cls:document.documentElement.className,hero:document.querySelector('.lake').className,top:Math.round(document.getElementById('works').getBoundingClientRect().top),hd:document.querySelector('.top').offsetHeight,hint:getComputedStyle(document.querySelector('.lake__down')).visibility}))()"
     def lswipe(cdp, y0, y1):
         cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': 200, 'y': y0}]})
         for i in range(1, 5): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': 200, 'y': y0 + (y1 - y0) * i / 4}]})
@@ -174,8 +174,8 @@ with sync_playwright() as p:
             else: pg.keyboard.press('PageUp')
             pg.wait_for_timeout(1800); s2 = pg.evaluate(LK)
             good = ('gl-on' in s0['hero'] and 'lake--in' in s0['hero'] and 'lake-lock' in s0['cls'] and s0['y'] == 0 and mid == 1
-                    and abs(s1['top'] - s1['hd']) <= 2 and 'lake-lock' not in s1['cls'] and 'top-lake' not in s1['cls'] and s2['y'] == 0 and 'lake-lock' in s2['cls'] and 'top-lake' in s2['cls'] and not errs)
-            ok(good, f"{pre}/ {w}px {how} 첫 화면: 그림 {'gl-on' in s0['hero']}, 잠금 {'lake-lock' in s0['cls']}, 찢는 장면 {mid == 1}, '만든 것' 맨 위(위치 {s1['top']}, 머리말 {s1['hd']}), 풀림 {'lake-lock' not in s1['cls']}, 위로 한 번이면 맨 위 {s2['y']}·다시 잠금 {'lake-lock' in s2['cls']} {errs[:2]}")
+                    and abs(s1['top'] - s1['hd']) <= 2 and s1['hint'] == 'hidden' and 'lake-lock' not in s1['cls'] and 'top-lake' not in s1['cls'] and s2['y'] == 0 and 'lake-lock' in s2['cls'] and 'top-lake' in s2['cls'] and not errs)
+            ok(good, f"{pre}/ {w}px {how} 첫 화면: 그림 {'gl-on' in s0['hero']}, 잠금 {'lake-lock' in s0['cls']}, 찢는 장면 {mid == 1}, '만든 것' 맨 위(위치 {s1['top']}, 머리말 {s1['hd']}, 첫 화면 안내 {s1['hint']}), 풀림 {'lake-lock' not in s1['cls']}, 위로 한 번이면 맨 위 {s2['y']}·다시 잠금 {'lake-lock' in s2['cls']} {errs[:2]}")
             c.close()
         c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(1500)
         lines = pg.evaluate("(()=>{const h=document.querySelector('.lake__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
