@@ -22,9 +22,13 @@
 /games/ /#games 301
 /en/games/ /en/#games 301
 
-# 2026-10-29 출시 전인 캐슬업!·Owlight 를 홈 칸·소개 페이지에서 뺐다(catalog.json hold). 출시되면 hold 와 함께 이 네 줄을 지운다.
+# 2026-10-29 출시 전인 캐슬업!·Owlight 를 홈 칸·소개 페이지에서 뺐다(catalog.json hold). 출시되면 hold 와 함께 그 사이트 줄을 지운다.
+# Owlight 는 2026-11-09 출시 상태로 돌려 소개 페이지(/works/owlight/)가 다시 생겼다. 캐슬업!은 아직 플레이테스트 중이라 두 줄이 남는다.
 # 그 소개 사이트(castle-up·owlight.lumenlab.page)와 /owlight/privacy/·/owlight/support/ 는 그대로
 /works/castleup/ /#games 302
 /en/works/castleup/ /en/#games 302
-/works/owlight/ /#apps 302
-/en/works/owlight/ /en/#apps 302
+
+# Owlight 는 2026-10-18 Mac App Store 에 났고 소개 사이트가 따로 있다(사용자 결정 2026-10-05). 빈 주소로 오는 옛 링크를 새 사이트로 영구 이동.
+# 정확히 이 두 주소만 넘긴다(와일드카드 아님) — /owlight/privacy/·/owlight/support/ 는 앱과 App Store Connect 에 등록된 주소라 그대로 둔다.
+/owlight https://owlight.lumenlab.page/ 301
+/owlight/ https://owlight.lumenlab.page/ 301
