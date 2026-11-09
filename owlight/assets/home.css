@@ -21,7 +21,12 @@
 .hero h1{font-size:clamp(32px,8.4vw,54px);font-weight:800}
 .hero .lead{margin-top:14px;font-size:17px}
 .hero__status{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:15px;color:var(--night-ink)}
-.hero__meta{margin-top:6px;font-size:14px;color:var(--night-muted);line-height:1.7}
+.hero__cta{margin-top:18px}
+.hero__meta{margin-top:14px;font-size:14px;color:var(--night-muted);line-height:1.7}
+/* Mac App Store 배지(Apple이 주는 그림 그대로, 링크만 감쌈). 한·영 그림은 머리말 스크립트가 data-shot 으로 바꾼다 */
+.store{display:inline-block;line-height:0;border-radius:8px}
+.store img{display:block;height:48px;width:auto}
+.store:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
 
 .demo{position:relative}
 .stage{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;isolation:isolate;container-type:inline-size;background:var(--wall);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 1px var(--night-line);user-select:none}
@@ -226,6 +231,7 @@ picture{display:block}
 .price__num{font-size:clamp(44px,12vw,60px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
 .price__sub{font-size:17px;color:var(--ink-2);margin-top:8px}
 .price__krw{font-size:15px;color:var(--muted);margin-top:8px}
+.price__cta{margin-top:18px}
 .price__facts{margin:0;display:grid;gap:0}
 .price__facts div{padding:12px 0;border-top:1px solid var(--line)}
 .price__facts dt{font-size:14px;font-weight:700;color:var(--muted)}
