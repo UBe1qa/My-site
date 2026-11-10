@@ -366,11 +366,11 @@ function pos(e){const b=paper.getBoundingClientRect();return[(e.clientX-b.left)*
 // 페이지 스크롤로 넘긴 손: 손가락 따라 내리고, 놓으면 관성으로 조금 더(16ms마다 0.95배, 빠르기는 3px/ms까지). html의 부드러운 스크롤에 먹히지 않게 instant
 function scrollTo_(dy,t){window.scrollBy({top:dy,behavior:'instant'});if(lastMove){const dt=Math.max(1,t-lastMove[1]);vel=Math.max(-3,Math.min(3,.6*vel+.4*(dy/dt)))}lastMove=[0,t]}
 function glide(){cancelAnimationFrame(fling);if(reduce||Math.abs(vel)<.15)return;let t0=performance.now();const f=t=>{const dt=t-t0;t0=t;window.scrollBy({top:vel*dt,behavior:'instant'});vel*=Math.pow(.95,dt/16);if(Math.abs(vel)>.02)fling=requestAnimationFrame(f)};fling=requestAnimationFrame(f)}
-paper.addEventListener('pointerdown',e=>{if(done)return;cancelAnimationFrame(fling);vel=0;lastMove=null;down=true;start=[e.clientX,e.clientY,performance.now()];mode=e.pointerType==='mouse'?'rub':null;last=pos(e);try{paper.setPointerCapture(e.pointerId)}catch(_){}});
+paper.addEventListener('pointerdown',e=>{if(done)return;cancelAnimationFrame(fling);vel=0;lastMove=null;down=true;start=[e.clientX,e.clientY,e.timeStamp];mode=e.pointerType==='mouse'?'rub':null;last=pos(e);try{paper.setPointerCapture(e.pointerId)}catch(_){}});
 paper.addEventListener('pointermove',e=>{if(!down||done)return;
- if(!mode){const dx=Math.abs(e.clientX-start[0]),dy=Math.abs(e.clientY-start[1]),early=performance.now()-start[2]<80;
-  if(early&&dy>2*dx){if(dy>6){mode='scroll'}else return}   // 처음 80ms: 세로가 가로의 2배 넘고 6 넘으면 스크롤, 그 전엔 기다림
-  else if(dx+dy>4||!early)mode='rub';else return}
+ if(!mode){const dx=Math.abs(e.clientX-start[0]),dy=Math.abs(e.clientY-start[1]);
+  if(dy>2*dx){if(dy>6){mode='scroll'}else return}   // 첫 움직임이 세로(가로의 2배 넘고 6 넘음)면 페이지 스크롤. 시간 조건(틀 문서 80ms)은 느린 기기에서 스크롤을 막아서 뺌
+  else if(dx+dy>4)mode='rub';else return}
  if(mode==='scroll'){scrollTo_(start[1]-e.clientY,e.timeStamp);start[1]=e.clientY;return}
  const p=pos(e);const n=Math.max(1,Math.ceil(Math.hypot(p[0]-last[0],p[1]-last[1])/(10*S)));for(let k=1;k<=n&&!done;k++)rub(last[0]+(p[0]-last[0])*k/n,last[1]+(p[1]-last[1])*k/n);last=p});
 ['pointerup','pointercancel'].forEach(t=>paper.addEventListener(t,()=>{if(mode==='scroll')glide();down=false;mode=null;check()}));

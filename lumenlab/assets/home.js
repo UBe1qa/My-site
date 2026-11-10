@@ -136,6 +136,13 @@
   var WALLHASH = /^#(works|games|apps|tools|g-[a-z]+)$/;
   if (all && ab) {
     if (d.classList.contains('all-open')) openAll(true);
+    // 주소 #works… 로 들어왔을 때: 위쪽 써 보기 판이 늦게 커지며 자리를 밀어내므로, 손님이 스크롤하기 전 3초 동안은 그 자리에 다시 맞춘다
+    if (WALLHASH.test(location.hash) && window.ResizeObserver) {
+      var tgt = document.getElementById(location.hash.slice(1)), feats = $('.feats'), moved = false;
+      var stop = function () { moved = true; };
+      addEventListener('wheel', stop, { passive: true, once: true }); addEventListener('touchstart', stop, { passive: true, once: true }); addEventListener('keydown', stop, { once: true });
+      if (tgt && feats) { var ro = new ResizeObserver(function () { if (!moved) tgt.scrollIntoView({ behavior: 'instant', block: 'start' }); }); ro.observe(feats); setTimeout(function () { ro.disconnect(); }, 3000); }
+    }
     ab.addEventListener('click', function () { openAll(!all.classList.contains('is-open')); });
     addEventListener('hashchange', function () { if (WALLHASH.test(location.hash)) openAll(true); });
     document.addEventListener('click', function (e) {   // 같은 주소(#works)를 다시 눌러도 펼친다
