@@ -286,3 +286,18 @@ html:not(.js) .card__copy{display:none}
   .hero__view,.hero__btn,.hint,.hero__paper,.works::before,html.lit .works::before,.drawer,.all__wall,.all__ic,.mark .glow,.mark .core,.top .mark,html,body,.wi,.wi__icon{transition:none!important}
   .hero.on .hero__view{transform:none}
 }
+
+/* ---------- 제3자 비교(2026-11-10) 뒤 고침 ---------- */
+/* 첫 화면과 작품 칸은 늘 제 테마로 칠한다: 화면 가운데 줄이 넘어가는 순간 아직 보이는 첫 화면이 크림색이 되고 위 막대에 밑그림이 비치던 것을 막음 */
+.hero{--h-bg:#171721;--h-card:#1e1e2a;--h-card2:#272735;--h-ink:#ededf3;--h-mute:#c3c3cc;--h-hair:#afb2ce5c;--h-head:#70707d;--h-glass:#afb2ce33;background:var(--h-bg);color:var(--h-ink)}
+.works{--h-bg:#f6f2ea;--h-card:#eee7da;--h-card2:#fcfaf6;--h-ink:#2a2620;--h-mute:#5d5546;--h-hair:#7a6a4a38;--h-head:#c9bfa9;--h-glass:#7a6a4a1a;background:var(--h-bg);color:var(--h-ink)}
+.works::after{display:none}
+html.js[data-theme="lamp"] .top{background:color-mix(in srgb,var(--h-bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 0 6px rgba(20,20,30,.12)}
+/* 써 보기 판은 내용 높이만큼: 판 아래에서 글자가 반쯤 잘려 고장처럼 보이던 것 */
+.wp__pic--try{aspect-ratio:auto}
+.wp__pic--try .wp__demo{position:static;overflow:visible;--tc:var(--dot,#b4452c)}
+@media (min-width:960px){.wp__pic--try{aspect-ratio:auto;min-height:620px;align-self:center}}
+/* 문지르기 안내는 이 화면의 핵심 행동이라 크게 */
+.hint__pill{height:36px;border-radius:18px;padding:0 16px;font-size:14px;line-height:20px;color:var(--h-ink);background:#2c2c40}
+.hint__skip{height:36px;font-size:14px;line-height:20px}
+@media (max-width:959px){.hint{top:256px}}
