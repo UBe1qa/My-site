@@ -1,0 +1,303 @@
+/* 루멘랩 홈(2026-11-10): 디자인 틀 문서(context/reports/lumenlab/2026-11-10-홈-디자인-틀.md)대로. 숫자는 그 문서 1~4절.
+   폰이 먼저(아래 기본값 = 폰 390×844), 960px부터 PC(1440×900 기준, 본문 판 1024).
+   색은 칸마다 테마: 화면 세로 가운데에 걸친 칸의 테마로 바탕 전체가 바뀐다(home.js 가 html[data-theme] 를 바꿈, 0.5초).
+   스크립트가 없으면(html:not(.js)) 칸마다 제 테마로 칠한다. 위 막대·바닥글 마크업은 다른 페이지가 그대로 가져다 쓰므로 모양만 여기서 바꾼다. */
+
+/* 글꼴: Pretendard Variable(OFL, assets/fonts/Pretendard-OFL.txt). 한글 2350자 + 영문 하위 집합 둘. 'Pretendard' 이름도 같은 파일(장면 간판 글자가 이 이름으로 그림) */
+@font-face{font-family:"Pretendard Variable";font-style:normal;font-weight:45 920;font-display:swap;src:url(/assets/fonts/pretendard-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+20A9,U+2713}
+@font-face{font-family:"Pretendard Variable";font-style:normal;font-weight:45 920;font-display:swap;src:url(/assets/fonts/pretendard-kr.woff2) format("woff2");unicode-range:U+AC00-D7A3}
+@font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(/assets/fonts/pretendard-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+20A9,U+2713}
+@font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(/assets/fonts/pretendard-kr.woff2) format("woff2");unicode-range:U+AC00-D7A3}
+
+/* ---------- 색: 밤 테마(① 첫 화면, ③ 문의, 바닥) / 불빛 테마(② 작품) ---------- */
+:root{
+  --hf:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --te:cubic-bezier(0,0,.6,1);
+  --amber:#f2b544;--amber-hi:#ffc65a;
+  --h-bg:#171721;--h-card:#1e1e2a;--h-card2:#272735;--h-ink:#ededf3;--h-mute:#c3c3cc;--h-hair:#afb2ce5c;--h-head:#70707d;--h-glass:#afb2ce33;
+  --F:min(1024px,100% - 64px);
+  color-scheme:dark;
+}
+html.js[data-theme="lamp"],html:not(.js) .t-lamp{
+  --h-bg:#f6f2ea;--h-card:#eee7da;--h-card2:#fcfaf6;--h-ink:#2a2620;--h-mute:#5d5546;--h-hair:#7a6a4a38;--h-head:#c9bfa9;--h-glass:#7a6a4a1a;
+}
+html:not(.js) .hsec{background:var(--h-bg);color:var(--h-ink)}
+html{background:var(--h-bg);scroll-padding-top:88px;transition:background-color .5s var(--te)}
+body{background:var(--h-bg);color:var(--h-ink);font-family:var(--hf);font-size:16px;line-height:26px;transition:background-color .5s var(--te),color .5s var(--te)}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--h-ink);outline-offset:3px;border-radius:8px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.hgroup__p,.wp__tag,.wp__line,.wp__facts span,.all__p,.hint__pill,.hint__skip,.foot,.foot__links b,.shelf__line,.wi__w,.wi__p,.wi__s{transition:color .5s var(--te)}
+.wp__pic,.all__band,.card,.hb--glass,.wp__facts li{transition:background-color .5s var(--te),border-color .5s var(--te),color .5s var(--te)}
+
+/* ---------- 단추: 주 단추(호박색), 유리 단추. 알약 48 / 폰 44 ---------- */
+.hb{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 24px;border-radius:22px;border:0;
+  font:500 16px/16px var(--hf);letter-spacing:0;text-decoration:none;white-space:nowrap;cursor:pointer}
+.hb--main{background:var(--amber);color:#171721}
+.hb--main:hover{background:var(--amber-hi)}
+.hb--glass{background:var(--h-glass);color:var(--h-ink);border:1px solid var(--h-hair)}
+.hb--glass:hover{background:color-mix(in srgb,var(--h-glass),var(--h-ink) 8%)}
+@media (min-width:960px){.hb{height:48px;border-radius:24px}}
+
+/* ---------- N2 위 막대: 처음엔 투명(첫 화면이 비침), 막대 아래 끝이 첫 화면 아래 끝을 지나면 테마 바탕 + 뒤 흐림 + 그림자 ---------- */
+.top{position:fixed;left:0;right:0;top:0;z-index:30;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;color:var(--h-ink);
+  transition:background-color .5s var(--te),box-shadow .3s}
+.top.is-solid{background:color-mix(in srgb,var(--h-bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 0 6px rgba(20,20,30,.12)}
+.top__in{max-width:none;height:64px;padding:12px 24px;gap:12px}
+.top .brand{gap:8px;color:var(--h-ink);font:500 16px/16px var(--hf);letter-spacing:0}
+.top .brand small{font:inherit;color:inherit;display:inline!important}
+.mark .glow,.mark .core{fill:#8d8a80;transition:fill .6s}
+.top .mark{transition:filter .6s}
+html.lit .top .mark .glow,html.lit .top .mark .core{fill:var(--amber)}
+html.lit .top .mark{filter:drop-shadow(0 0 6px #f2b544aa)}
+.top nav{gap:4px;align-items:center}
+.top nav a{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:20px;color:var(--h-ink);font:500 16px/16px var(--hf);background:none}
+.top nav a:hover,.top nav a[aria-current]{background:var(--h-glass);color:var(--h-ink)}
+.top nav a.lang{margin-left:8px;background:var(--h-glass);border:1px solid var(--h-hair);font-size:16px}   /* 링크 사이 4 + 8 = 12 */
+@media (min-width:960px){.top__in{height:72px;padding:16px 32px}}
+/* 폰: 오른쪽 ☰(21×24, 줄 셋 21×2, 위에서 4·12·20). 누르면 오른쪽에서 서랍 */
+.menu-btn{display:none}
+@media (max-width:959px){
+  html.js .top nav{display:none}
+  html.js .menu-btn{display:block;position:relative;width:45px;height:44px;margin-right:-12px;padding:0;border:0;background:none;color:var(--h-ink);cursor:pointer;flex:none}
+  .menu-btn i{position:absolute;left:12px;width:21px;height:2px;border-radius:4px;background:currentColor;transition:transform .3s cubic-bezier(.32,.72,0,1),opacity .2s}
+  .menu-btn i:nth-child(1){top:14px}.menu-btn i:nth-child(2){top:22px}.menu-btn i:nth-child(3){top:30px}
+  .menu-btn[aria-expanded="true"] i:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  .menu-btn[aria-expanded="true"] i:nth-child(2){opacity:0}
+  .menu-btn[aria-expanded="true"] i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+}
+.drawer{position:fixed;inset:0;z-index:29;padding-top:64px;background:#272735;color:#ededf3;transform:translateX(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);overflow-y:auto}
+.drawer.is-open{transform:none}
+.drawer__nav a{display:flex;align-items:center;height:56px;padding:0 24px;border-top:1px solid #70707d;color:#ededf3;font:500 16px/16px var(--hf);text-decoration:none}
+.drawer__nav a.lang{margin:0;border-radius:0;border-width:1px 0 0;background:none;min-height:0}
+.drawer__nav a:hover{background:#afb2ce1a}
+html.menu-open{overflow:hidden}
+html.menu-open .top{background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;color:#ededf3}
+html.menu-open .top .brand,html.menu-open .menu-btn{color:#ededf3}
+
+/* ---------- S 첫 화면: 폰 390×844(한마디 위 112, 장면 무대 y 284~844), PC 1440×900(두 단, 무대 x 736~1232 y 94~806) ---------- */
+.hero{position:relative;overflow:hidden;padding-top:284px}
+.hero__h1{position:absolute;z-index:2;top:112px;left:24px;right:24px;margin:0;text-align:center;font-size:30px;line-height:38px;font-weight:500;letter-spacing:-.3px}
+.hero__h1 span,.hero__lead span{display:block}
+.hero__lead{position:absolute;z-index:2;top:200px;left:0;right:0;width:min(320px,100% - 48px);margin:0 auto;text-align:center;color:var(--h-mute);font-size:16px;line-height:26px}
+.hint{position:absolute;z-index:3;top:258px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:8px;transition:opacity .3s,visibility 0s .3s}
+.hint__pill{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:16px;background:var(--h-glass);color:var(--h-mute);font-size:12px;line-height:17px}
+.hint__skip{height:32px;padding:0;border:0;background:none;color:var(--h-mute);font:400 12px/17px var(--hf);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.hero__stage{position:relative;z-index:1;width:min(100%,560px);margin:0 auto;aspect-ratio:390/560;overflow:hidden}
+.hero__stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero__view{transform-origin:50% 68%;transition:transform 2.6s cubic-bezier(.2,.7,.2,1)}
+.hero.on .hero__view{transform:scale(1.04)}
+.hero__paper{touch-action:none;cursor:grab;transition:opacity .7s}
+.hero__paper:active{cursor:grabbing}
+.hero.ready .hero__paper{opacity:0;pointer-events:none}
+.hero.ready .hint{opacity:0;visibility:hidden}
+.hero__btn{position:absolute;z-index:4;left:50%;bottom:22px;height:44px;padding:0 26px;transform:translate(-50%,8px);opacity:0;visibility:hidden;box-shadow:0 6px 24px #f2b54455;
+  transition:opacity .4s,transform .4s,visibility 0s .4s,background-color .4s,color .4s,box-shadow .4s}
+.hero.ready .hero__btn{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .4s,transform .4s,visibility 0s,background-color .4s,color .4s,box-shadow .4s}
+.hero.on .hero__btn{background:#2a2633cc;color:#f6e6c4;box-shadow:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html:not(.js) .hint,html:not(.js) .hero__btn{display:none}
+@media (min-width:561px) and (max-width:959px){.hero__stage{-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}}
+@media (min-width:960px){
+  .hero{height:900px;padding:0}
+  .hero__copy{position:absolute;z-index:2;top:0;bottom:0;left:calc(50% - var(--F) / 2);width:calc(var(--F) / 2 - 32px);display:flex;flex-direction:column;justify-content:center}
+  .hero__h1,.hero__lead,.hint{position:static;width:auto;margin:0;text-align:left}
+  .hero__h1{font-size:49px;line-height:60px;letter-spacing:-.5px}
+  .hero__lead{margin-top:16px;font-size:19px;line-height:30px}
+  .hero__lead span{display:inline}
+  .hero__row{position:relative;height:48px;margin-top:52px}   /* 4절: 안내 줄 = 한마디 위 +218 */
+  .hint{justify-content:flex-start;gap:8px}
+  .hint__pill{font-size:13px;line-height:18px}
+  .hint__skip{font-size:13px;line-height:18px}
+  .hero__btn{left:0;top:0;bottom:auto;height:48px;transform:translateY(8px)}
+  .hero.ready .hero__btn{transform:none}
+  .hero__stage{position:absolute;top:50%;right:calc(50% - var(--F) / 2);width:calc((var(--F) - 32px) / 2);margin:0;translate:0 -50%;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}
+}
+
+/* ---------- 칸 머리 H-가: 가운데 제목 단 672 / 342 ---------- */
+.hgroup{width:min(672px,100% - 48px);margin:0 auto;text-align:center}
+.hgroup__h{margin:0;font-size:28px;line-height:36px;font-weight:500;letter-spacing:-.2px}
+.hgroup__h span{display:block}
+.hgroup__p{max-width:560px;margin:12px auto 0;color:var(--h-mute);font-size:16px;line-height:26px}
+@media (min-width:960px){
+  .hgroup{width:min(672px,100% - 64px)}
+  .hgroup__h{font-size:42px;line-height:52px;letter-spacing:-.4px}
+  .hgroup__p{font-size:19px;line-height:30px}
+}
+
+/* ---------- ② 작품 칸(불빛 테마): 첫 화면 끝 → 제목 152 / 112, 띠 아래 끝 → 칸 끝 152 / 112 ---------- */
+.works{position:relative;padding:112px 0}
+/* 불빛 빛무리: 불이 켜졌을 때만 ② 칸 위 끝에. PC는 장면 무대 가운데 x 아래 */
+.works::before{content:"";position:absolute;left:0;right:0;top:0;height:300px;pointer-events:none;opacity:0;transition:opacity .45s;
+  background:radial-gradient(ellipse 360px 300px at 50% 0,#f2b5446b,transparent 70%)}
+html.lit .works::before{opacity:1;transition:opacity 1.2s .4s}
+/* 폰: 장면 맨 아래 찻길(#26262d)이 선 없이 바탕으로 */
+.works::after{content:"";position:absolute;left:0;right:0;top:0;height:32px;pointer-events:none;background:linear-gradient(#26262d,transparent)}
+.feats{margin-top:56px}
+@media (min-width:960px){
+  .works{padding:152px 0}
+  .works::before{height:520px;background:radial-gradient(ellipse 720px 520px at calc(50% + var(--F) / 4 + 8px) 0,#f2b5446b,transparent 70%)}
+  .works::after{display:none}
+  .feats{margin-top:72px}
+}
+
+/* W 작품 판: 폰은 꼬리표 → 이름 → 그림 → 설명 → 사실 줄 → 단추. PC는 글 단 496 + 32 + 그림 판 496, 1·3번 그림 오른쪽, 2·4번 왼쪽 */
+.wp{width:min(100% - 48px,560px);margin:0 auto}
+.wp+.wp{margin-top:80px}
+.wp__tag{display:flex;align-items:center;gap:8px;margin:0;color:var(--h-mute);font-size:13px;line-height:14px;font-weight:500;letter-spacing:.02em}
+.wp__tag i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.wp__name{margin:10px 0 0;font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.2px}
+.wp__pic{position:relative;margin-top:10px;aspect-ratio:342/428;border-radius:12px;background:var(--h-card2);overflow:hidden;container-type:inline-size}
+.wp__line{margin:20px 0 0;color:var(--h-mute);font-size:15px;line-height:24px}
+.wp__facts{list-style:none;margin:24px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.wp__facts li{padding-top:12px;border-top:1px solid var(--h-hair);min-width:0}
+.wp__facts b{display:block;font-size:18px;line-height:24px;font-weight:500}
+.wp__facts span{display:block;margin-top:4px;color:var(--h-mute);font-size:13px;line-height:18px}
+.wp__act{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:24px 0 0}
+.wp__act .hb{padding:0 12px}
+/* 그림: 병아리 구조대 = 폰 화면 영상(포스터 먼저) 폭 286 위 +40, 판 아래로 잘림. Owlight = 화면 그림 둘(폭 448, 위 +48, 사이 32). 폰 판은 같은 비율로 */
+.wp__vid{position:absolute;left:50%;top:8.065cqw;width:57.66cqw;height:auto;translate:-50% 0;border-radius:8px;display:block;background:#1e1e2a}
+.wp__pic--mac{display:flex;flex-direction:column;align-items:center;gap:6.452cqw;padding-top:9.677cqw}
+.wp__img{display:block;width:90.32cqw;height:auto;border-radius:8px}
+/* 웹 도구: 바로 써 보기(assets/try/<id>.js)를 판 안(안 여백 24)에, 넘치면 판 안에서만 스크롤. 도구 판의 색은 불빛 테마로 */
+.wp__demo{position:absolute;inset:0;padding:24px;overflow:auto;overscroll-behavior:contain;
+  --paper:#f6f2ea;--card:#fcfaf6;--ink:#2a2620;--ink-2:#5d5546;--muted:#5d5546;--line:#d9cfbd;--focus:#2a2620;color:var(--ink);font-size:15px;line-height:24px}
+.wp__msg{margin:0;display:grid;place-items:center;height:100%;text-align:center;color:var(--h-mute)}
+.wp__msg a{color:var(--h-ink)}
+@media (min-width:960px){
+  .wp{width:var(--F);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:32px;grid-template-rows:1fr auto auto auto auto auto 1fr}
+  .wp+.wp{margin-top:112px}
+  .wp>*{grid-column:1}
+  .wp--l>*{grid-column:2}
+  .wp__pic{grid-row:1 / -1;grid-column:2;margin:0;aspect-ratio:496/620}
+  .wp--l .wp__pic{grid-column:1}
+  .wp__tag{grid-row:2;font-size:14px}
+  .wp__name{grid-row:3;margin-top:12px;font-size:28px;line-height:36px}
+  .wp__line{grid-row:4;max-width:440px;margin-top:12px;font-size:17px;line-height:28px}
+  .wp__facts{grid-row:5;margin-top:32px;grid-template-columns:repeat(3,144px);gap:16px}
+  .wp__facts b{font-size:21px;line-height:28px}
+  .wp__facts span{font-size:14px;line-height:20px}
+  .wp__act{grid-row:6;display:flex;margin-top:32px}
+  .wp__act .hb{padding:0 24px}
+}
+/* 등장: 판 위 끝이 화면 위에서 65%를 넘을 때 한 번, 아래 50 → 0, 0.67초, 그림 판 먼저 글은 0.1초 뒤(home.js 가 .in) */
+.anim .wp>*{opacity:0;transform:translateY(50px)}
+.anim .wp.in>*{opacity:1;transform:none;transition:opacity .67s cubic-bezier(.28,1.1,.74,1) .1s,transform .67s cubic-bezier(.28,1.1,.74,1) .1s}
+.anim .wp.in>.wp__pic{transition-delay:0s,0s}
+
+/* ---------- E 전체 보기 띠: PC 1024×160, 폰 342×200. 누르면 바로 아래 32 / 24에 큰 아이콘 칸이 0.4초에 펼쳐짐 ---------- */
+.all{width:min(100% - 48px,560px);margin:80px auto 0}
+.all__band{display:flex;flex-direction:column;justify-content:space-between;height:200px;padding:24px;border-radius:12px;background:var(--h-card)}
+.all__h{margin:0;font-size:18px;line-height:26px;font-weight:500}
+.all__p{margin:8px 0 0;color:var(--h-mute);font-size:15px;line-height:24px}
+.all__btn{width:100%}
+.all__ic{width:12px;height:8px;fill:none;stroke:currentColor;stroke-width:1.6;transition:transform .4s}
+.all.is-open .all__ic{transform:rotate(180deg)}
+.all__wall{display:grid;grid-template-rows:1fr;margin-top:24px}
+.all__in{min-height:0;overflow:hidden}
+html.js .all:not(.is-open) .all__wall{grid-template-rows:0fr;margin-top:0;visibility:hidden}
+html.js .all__wall{transition:grid-template-rows .4s,margin-top .4s,visibility 0s}
+html.js .all:not(.is-open) .all__wall{transition:grid-template-rows .4s,margin-top .4s,visibility 0s .4s}
+@media (min-width:960px){
+  .all{width:var(--F);margin-top:112px}
+  .all__band{flex-direction:row;align-items:center;height:160px;padding:48px}
+  .all__h{font-size:21px;line-height:28px}
+  .all__p{font-size:17px;line-height:28px}
+  .all__btn{width:auto}
+  .all__wall{margin-top:32px}
+}
+
+/* 펼친 큰 아이콘 칸(gen:wall): 모양은 예전 그대로, 색·글자만 이 문서 1절로(채도 있는 색은 그림과 상태 점만) */
+.shelf{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding:26px 0 18px;border-top:1px solid var(--h-hair)}
+.shelf:first-child{border-top:0;padding-top:8px}
+.shelf__kick{margin:0 0 4px;color:var(--h-mute);font-size:13px;line-height:14px;font-weight:500;letter-spacing:.02em}
+.shelf__h{margin:0;font-size:18px;line-height:26px;font-weight:500}
+.shelf__line{margin:6px 0 0;color:var(--h-mute);font-size:15px;line-height:24px}
+.wall{list-style:none;margin:8px -10px 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.wall li{display:flex;min-width:0}
+.wi{--tc:var(--h-mute);position:relative;display:grid;grid-template-columns:64px minmax(0,1fr);grid-auto-rows:min-content;column-gap:16px;align-content:start;width:100%;
+  padding:10px;border-radius:12px;color:var(--h-ink);text-decoration:none;transition:background-color .25s}
+.wi__icon{grid-row:1 / span 4;display:block;width:64px;height:64px;margin:0 0 12px;border-radius:22%;transition:transform .28s cubic-bezier(.3,1.4,.5,1)}
+.wi::after{content:"";position:absolute;left:3px;top:74px;width:78px;height:1px;background:var(--h-hair);pointer-events:none}   /* 선반 판 = 가는 선 */
+.wi__n,.wi__w,.wi__p,.wi__s{grid-column:2;text-wrap:pretty}
+.wi__n{margin-top:1px;font-size:15px;line-height:24px;font-weight:500}
+.wi__w{font-size:13px;line-height:18px;color:var(--h-mute)}
+.wi__p,.wi__s{display:flex;gap:6px;margin-top:5px;font-size:13px;line-height:18px;color:var(--h-mute)}
+.wi__p::before{content:"✓";flex:none}
+.wi__s::before{content:"";flex:none;width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--tc)}
+.wi:hover{background:var(--h-glass)}
+.wi:hover .wi__icon{transform:translateY(-4px)}
+.wi:active .wi__icon{transform:scale(.95)}
+@media (min-width:561px){
+  .wall{grid-template-columns:repeat(3,minmax(0,1fr));margin:8px -14px 0;gap:6px 10px}
+  .wi{display:flex;flex-direction:column;align-items:flex-start;padding:16px 14px 18px}
+  .wi__icon{width:84px;height:84px;margin-bottom:18px}
+  .wi::after{left:-6px;right:-6px;width:auto;top:100px}
+  .wi__n{font-size:17px;line-height:28px}
+}
+@media (min-width:960px){
+  .shelf{grid-template-columns:200px minmax(0,1fr);gap:14px 32px;padding:30px 0 26px}
+  .shelf:first-child{padding-top:8px}
+  .shelf__label{padding-top:16px}
+  .shelf__kick{font-size:14px}
+  .shelf__h{font-size:21px;line-height:28px}
+  .shelf__line{font-size:17px;line-height:28px}
+  .wall{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:0}
+  .wi__w,.wi__p,.wi__s{font-size:14px;line-height:20px}
+}
+
+/* ---------- ③ 문의(밤 테마): 칸 위 → 제목 152 / 112, 설명 → 카드 72 / 56, 카드 → 칸 끝 128 / 96 ---------- */
+.contact{padding:112px 0 96px}
+.cards{width:min(100% - 48px,560px);margin:56px auto 0;display:grid;gap:16px}
+.card{display:flex;flex-direction:column;min-height:176px;padding:24px;border-radius:12px;background:var(--h-card)}
+.card__h{margin:0;font-size:18px;line-height:26px;font-weight:500}
+.card__v{margin:8px 0 0;color:var(--h-ink);font-size:15px;line-height:24px}
+.card__act{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}
+html:not(.js) .card__copy{display:none}
+@media (min-width:960px){
+  .contact{padding:152px 0 128px}
+  .cards{width:var(--F);margin-top:72px;grid-template-columns:1fr 1fr;gap:32px}
+  .card{height:200px;padding:32px}
+  .card__h{font-size:21px;line-height:28px}
+  .card__v{font-size:17px;line-height:28px}
+}
+
+/* ---------- Z2 바닥(밤 고정): 폰 칸 위 +96, 로고 열 → 48 → 묶음 2열(155, 사이 32·48). PC 칸 위 +128, 로고 열 226 + 40 + 묶음 4열(226, 사이 40·64) ---------- */
+.foot{border-top:0;color:var(--h-mute);font-size:12px;line-height:17px}
+.foot__in{display:block;max-width:none;padding:96px 24px 64px}
+.foot .brand{gap:8px;color:var(--h-ink);font:500 16px/16px var(--hf)}
+.foot p{margin:10px 0 0}
+.foot a{color:var(--h-ink)}
+.foot__links{display:grid;grid-template-columns:repeat(2,minmax(0,155px));column-gap:32px;row-gap:48px;margin-top:48px}
+.foot__links b{display:block;margin:0 0 10px;color:var(--h-mute);font-size:12px;line-height:17px;font-weight:400}
+.foot__links a{display:block;padding:0;color:var(--h-ink);font-size:15px;line-height:28px;text-decoration:none}
+.foot__links a:hover{color:var(--h-mute);text-decoration:none}
+@media (min-width:960px){
+  .foot{font-size:13px;line-height:18px}
+  .foot__in{display:grid;grid-template-columns:226px auto;column-gap:40px;justify-content:start;padding:128px 32px 80px}
+  .foot__links{grid-template-columns:repeat(4,226px);column-gap:40px;row-gap:64px;margin-top:0}
+  .foot__links b{font-size:13px;line-height:18px}
+  .foot__links a{font-size:17px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hero__view,.hero__btn,.hint,.hero__paper,.works::before,html.lit .works::before,.drawer,.all__wall,.all__ic,.mark .glow,.mark .core,.top .mark,html,body,.wi,.wi__icon{transition:none!important}
+  .hero.on .hero__view{transform:none}
+}
+
+/* ---------- 제3자 비교(2026-11-10) 뒤 고침 ---------- */
+/* 첫 화면과 작품 칸은 늘 제 테마로 칠한다: 화면 가운데 줄이 넘어가는 순간 아직 보이는 첫 화면이 크림색이 되고 위 막대에 밑그림이 비치던 것을 막음 */
+.hero{--h-bg:#171721;--h-card:#1e1e2a;--h-card2:#272735;--h-ink:#ededf3;--h-mute:#c3c3cc;--h-hair:#afb2ce5c;--h-head:#70707d;--h-glass:#afb2ce33;background:var(--h-bg);color:var(--h-ink)}
+.works{--h-bg:#f6f2ea;--h-card:#eee7da;--h-card2:#fcfaf6;--h-ink:#2a2620;--h-mute:#5d5546;--h-hair:#7a6a4a38;--h-head:#c9bfa9;--h-glass:#7a6a4a1a;background:var(--h-bg);color:var(--h-ink)}
+.works::after{display:none}
+html.js[data-theme="lamp"] .top{background:color-mix(in srgb,var(--h-bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 0 6px rgba(20,20,30,.12)}
+/* 써 보기 판은 내용 높이만큼: 판 아래에서 글자가 반쯤 잘려 고장처럼 보이던 것 */
+.wp__pic--try{aspect-ratio:auto}
+.wp__pic--try .wp__demo{position:static;overflow:visible;--tc:var(--dot,#b4452c)}
+@media (min-width:960px){.wp__pic--try{aspect-ratio:auto;min-height:620px;align-self:center}}
+/* 문지르기 안내는 이 화면의 핵심 행동이라 크게 */
+.hint__pill{height:36px;border-radius:18px;padding:0 16px;font-size:14px;line-height:20px;color:var(--h-ink);background:#2c2c40}
+.hint__skip{height:36px;font-size:14px;line-height:20px}
+@media (max-width:959px){.hint{top:256px}}

@@ -4,7 +4,8 @@
 # 2026-10-29: 가이드 /guides/ 를 다시 둔다. 이번엔 목록이 아니라 도구 사이트에서 옮겨 온 글 자체(build_guides.py, 이 파일 끝에서 부름).
 #   아이콘을 누르면 assets/store.js 가 소개 창을 띄우고, 창 내용은 소개 페이지 /works/<id>/ 를 그대로 쓴다(build_store.py 가 만듦).
 #   그래서 새 앱·도구는 catalog.json 한 줄 + showcase.json 한 항목(+ 도구면 assets/try/<id>.js)만 더하고 이 스크립트를 돌린다.
-#   첫 화면(불 켜진 작업실 그림과 글)은 index.html 에 손으로 둔다(생성 칸 아님, 움직임은 assets/landing.js).
+#   2026-11-10 홈 = 세 칸(디자인 틀 문서 context/reports/lumenlab/2026-11-10-홈-디자인-틀.md): ① 첫 화면(코드로 그린 작업실 건물, assets/home-scene.js, 손으로 둔다)
+#   ② 작품 넷(gen:feat, 아래 FEAT 순서, 글·사실 줄·그림은 catalog.json·showcase.json) + '전체 보기'(gen:wall, 접어 두고 펼친다) ③ 문의. 모양은 assets/home.css, 움직임은 assets/home.js.
 # 웹 도구는 catalog.json 의 groups 순서대로 묶어서 보여 준다(도구마다 group 칸 필수, 없는 묶음 id면 멈춘다).
 # sitemap.xml 도 여기서 만든다: 홈 + 소개·개인정보 처리방침 + 소개 페이지 15개(한·영) + 가이드 모음·글 + 카탈로그의 이 사이트 안 링크(/로 시작) 중 canonical이 lumenlab.page인 것.
 #   lastmod = 그 파일을 마지막으로 바꾼 날(git). 가이드 글은 글의 마지막 확인 날(dateModified), 모음은 그중 가장 늦은 날.
@@ -35,6 +36,60 @@ def put(src, name, body):
     assert pat.search(src), f'표시 {name} 없음'
     return pat.sub(lambda m: m.group(1) + '\n' + body + m.group(2), src)
 
+# 작품 넷(디자인 틀 2절 W): 순서는 이 줄. 꼬리표·이름·설명(catalog line)·사실 줄(showcase facts)·그림(showcase shots 첫 항목, Owlight는 둘째까지)
+#   웹 도구는 그림 대신 바로 써 보기(assets/try/<id>.js, home.js 가 판 안에 띄운다). '열어 보기' = 게임·앱은 그 사이트, 도구는 도구 주소. '자세히' = 소개 창(/works/<id>/, store.js).
+#   출시 전이라 숨긴 것(hold, 지금 Owlight)은 소개 창·소개 페이지가 없으니 '자세히' 없이 '열어 보기'만 둔다.
+#   영어판은 같은 칸을 영어로 따로 만들어(그림 주소·대체 글이 언어마다 다름) 영어 홈을 만들기 전에 바꿔 끼운다.
+FEAT = [('games', 'chickrescue'), ('apps', 'owlight'), ('tools', 'inplace'), ('tools', 'pickboard')]
+TAG = {'games': ('tagGame', '게임', 'Game'), 'apps': ('tagMac', '맥 앱', 'Mac app'), 'tools': ('tagTool', '웹 도구', 'Web tool')}
+for _k, (_key, _ko, _en) in TAG.items(): EN[_key] = _en
+for _k, _v in (('wpOpen', 'Open'), ('wpMore', 'Details'), ('wpLoading', 'Loading')): EN[_k] = _v
+def feat(lang):
+    out = []
+    e = build_store.esc
+    for n, (kind, fid) in enumerate(FEAT):
+        it = next(x for x in cat[kind] if x['id'] == fid); s = build_store.SC[kind][fid]
+        L = lambda d: d[lang]
+        tk, tko, ten = TAG[kind]
+        EN[f'ft_{fid}_n'] = it['name']['en']; EN[f'ft_{fid}_l'] = build_store.plain(it['line']['en'])
+        assert len(s['facts']) == 3, f'{fid}: 사실 줄은 3칸'
+        facts = ''
+        for j, f in enumerate(s['facts']):
+            EN[f'ft_{fid}_v{j}'] = f['v']['en']; EN[f'ft_{fid}_k{j}'] = f['l']['en']
+            facts += f'<li><b data-i18n="ft_{fid}_v{j}">{e(L(f["v"]))}</b><span data-i18n="ft_{fid}_k{j}">{e(L(f["l"]))}</span></li>'
+        if kind == 'tools':
+            d = s['demo']; core = [build_info.core_url(it, x) for x in d['core']]; mod = [build_info.core_url(it, x) for x in d.get('mod', [])]
+            assert os.path.isfile(os.path.join(site, 'assets', 'try', fid + '.js')), f'{fid}: assets/try/{fid}.js 없음'
+            loading = '불러오는 중' if lang == 'ko' else 'Loading'
+            pic = (f'<div class="wp__pic wp__pic--try"><div class="wp__demo" data-tool="{fid}" data-name="{e(it["name"][lang])}" data-home="{e(it["url"] if lang == "ko" else it.get("url_en") or it["url"])}" '
+                   f'data-core="{e(json.dumps(core))}" data-mod="{e(json.dumps(mod))}"><p class="wp__msg" data-i18n="wpLoading">{loading}</p></div></div>')
+            href = it['url']
+        else:
+            sh = s['shots']['items']; w, h = s['shots']['w'], s['shots']['h']
+            if 'video' in sh[0]:
+                v = sh[0]
+                pic = (f'<div class="wp__pic wp__pic--phone"><video class="wp__vid" muted loop playsinline preload="none" width="{w}" height="{h}" poster="{L(v["poster"])}" aria-label="{e(L(v["alt"]))}">'
+                       f'<source src="{L(v["video"])}.webm" type="video/webm"><source src="{L(v["video"])}.mp4" type="video/mp4"></video></div>')
+            else:
+                imgs = ''.join(f'<img class="wp__img" src="{L(x["src"])}" width="{w}" height="{h}" alt="{e(L(x["alt"]))}" loading="lazy" decoding="async">' for x in sh[:2])
+                pic = f'<div class="wp__pic wp__pic--mac">{imgs}</div>'
+            href = (s.get('open') or {}).get(lang) or it.get('url') or it['links'][0]['href']
+        more_t = '자세히' if lang == 'ko' else 'Details'
+        more = '' if it.get('hold') else f'<a class="hb hb--glass" href="/works/{fid}/" data-show="{fid}" aria-haspopup="dialog" data-i18n="wpMore">{more_t}</a>'
+        side = 'wp--r' if n % 2 == 0 else 'wp--l'
+        open_t = '열어 보기' if lang == 'ko' else 'Open'
+        tag_t = tko if lang == 'ko' else ten
+        out.append(
+            f'      <article class="wp {side}" aria-labelledby="wn-{fid}">\n'
+            f'        <p class="wp__tag"><i style="--dot:{s["color"]}"></i><span data-i18n="{tk}">{tag_t}</span></p>\n'
+            f'        <h3 class="wp__name" id="wn-{fid}" data-i18n="ft_{fid}_n">{e(it["name"][lang])}</h3>\n'
+            f'        {pic}\n'
+            f'        <p class="wp__line" data-i18n="ft_{fid}_l">{e(build_store.plain(L(it["line"])))}</p>\n'
+            f'        <ul class="wp__facts">{facts}</ul>\n'
+            f'        <p class="wp__act"><a class="hb hb--main" href="{href}" data-i18n="wpOpen">{open_t}</a>{more}</p>\n'
+            f'      </article>')
+    return '\n'.join(out)
+
 idx = os.path.join(site, 'index.html')
 html = open(idx).read()
 
@@ -48,11 +103,13 @@ FOOT += (f'      <div><b data-i18n="ftGames">게임</b>{foot(sg)}</div>\n' if sg
 for it, _ in pvs: EN.setdefault(f"f_{it['id']}", it['name']['en'])   # 제품 줄에서 뺀 것(hold)도 앱 방침 줄엔 남으니 영어 이름을 따로 넣는다
 if pv: FOOT += f'\n      <div><b data-i18n="ftAppPrivacy">앱 개인정보 처리방침</b>{pv}</div>'
 
-# 홈: 큰 아이콘 칸(누르면 소개 창)·바닥글·숫자
+# 홈: 작품 넷(gen:feat)·전체 보기 띠의 개수·큰 아이콘 칸(누르면 소개 창, gen:wall)·바닥글
 wall, wt, wl = build_store.wall(cat, EN)
 html = put(html, 'wall', wall)
-html, n = re.subn(r'(data-i18n="wlTitle">).*?(</h2>)', lambda m: m.group(1) + wt + m.group(2), html, flags=re.S); assert n == 1, '아이콘 칸 제목을 못 찾음'
-html, n = re.subn(r'(data-i18n="wlLead">).*?(</p>)', lambda m: m.group(1) + wl + m.group(2), html, flags=re.S); assert n == 1, '아이콘 칸 설명을 못 찾음'
+n_all = len(sg) + len(sa) + len(tools)
+EN['allTitle'] = f'All {n_all} things we make'
+html, n = re.subn(r'(data-i18n="allTitle">).*?(</h3>)', lambda m: m.group(1) + f'만든 것 {n_all}개 전부' + m.group(2), html, flags=re.S); assert n == 1, '전체 보기 띠 제목을 못 찾음'
+html = put(html, 'feat', feat('ko'))
 html = put(html, 'foot', FOOT)
 
 open(idx, 'w').write(html)
@@ -62,7 +119,7 @@ for f in ['404.html', 'owlight/privacy/index.html', 'owlight/support/index.html'
 # 합친 옛 페이지(/apps/·/tools/·/games/, /works/ 목록)는 지운다(주소 이동은 _redirects). /works/<id>/ 소개 페이지는 build_store.py, /guides/ 는 build_guides.py 가 쓴다
 for x in ['games', 'apps', 'tools', 'en/games', 'en/apps', 'en/tools']:
     if os.path.isdir(os.path.join(site, x)): shutil.rmtree(os.path.join(site, x))
-for x in ['works/index.html', 'en/works/index.html', 'assets/home.css', 'assets/guides.js']:
+for x in ['works/index.html', 'en/works/index.html', 'assets/guides.js']:
     if os.path.isfile(os.path.join(site, x)): os.remove(os.path.join(site, x))
 
 i18n = os.path.join(site, 'assets', 'i18n.js')
@@ -130,7 +187,7 @@ def write_en(path, page):
     open(os.path.join(d, 'index.html'), 'w').write(page)
 
 no_left(open(idx).read(), 'index.html')
-write_en('en/', open(idx).read())
+write_en('en/', put(open(idx).read(), 'feat', feat('en')))
 
 # 소개·개인정보 처리방침(한·영)과 소개 페이지 /works/<id>/(한·영): 방금 만든 홈·영어 홈의 머리말·꼬리말을 그대로 쓴다
 info_paths, _ = build_info.build(site, cat, groups, tools)
