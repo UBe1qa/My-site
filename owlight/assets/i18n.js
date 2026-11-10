@@ -15,7 +15,9 @@
     heroKicker: 'Menu bar app for macOS',
     heroTitle: 'A quiet night watch <span class="nw">for you</span>',
     heroLead: 'Ever scrambled to tidy your desktop right before a talk? Click the little owl in your menu bar: your computer stays awake, a messy desktop disappears, and only the window you’re using stays sharp.',
-    status: 'Getting ready for the Mac App Store',
+    status: 'Out now on the Mac App Store',
+    buyBtn: 'Get it on the Mac App Store',
+    buyBtn2: 'Get it on the Mac App Store',
     heroMeta: '<span class="nw">US$5.99, one-time purchase</span> <span aria-hidden="true">·</span> <span class="nw">macOS 14 or later</span> <span aria-hidden="true">·</span> <span class="nw">No data collected</span>',
     file1: 'Contract.pdf',
     file2: 'Screenshot.png',
@@ -121,12 +123,12 @@
     a2: 'Yes. Curtain covers every connected display. For Halo you choose whether it works on all displays, and you can turn it off for certain apps.',
     q3: 'I can’t see the owl in the menu bar.',
     a3: 'The notch or a crowded menu bar may be hiding it. Open Owlight again to get its settings window, where every feature can be switched on and off. There is no Dock icon.',
-    q4: 'When can I get it?',
-    a4: 'We are getting it ready for the Mac App Store. When it is out, the App Store link will be right here on this page.',
+    q4: 'Where do I get it?',
+    a4: 'On the <a href="https://apps.apple.com/app/owlight/id6817679082?mt=12">Mac App Store</a>. Buy it once, with no subscription and no in-app purchases.',
     q5: 'More questions?',
     a5: 'The <a href="/support/">support page</a> has more on using Owlight and fixing problems. You can also email <a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a>.',
-    endTitle: 'Getting ready for <span class="nw">the Mac App Store</span>',
-    endLead: 'When it’s out, the App Store link will be right here. Until then, the support page shows how it works.',
+    endTitle: 'Out now on <span class="nw">the Mac App Store</span>',
+    endLead: 'Buy it once on the Mac App Store and you’re done. The support page shows how it works.',
     endBtn: 'See how it works',
     lumenLine: 'Owlight is one light Lumen Lab has switched on',
     lumenGo: 'See our other apps and tools <span class="lumen__arrow" aria-hidden="true">→</span>',
@@ -172,6 +174,7 @@
       var h = a.getAttribute('href').replace(/#(ko|en)$/, '');
       if (h === 'https://lumenlab.page/' || h === 'https://lumenlab.page/en/') a.setAttribute('href', 'https://lumenlab.page/' + (l === 'en' ? 'en/' : ''));
       else if (h === '/support/' || h === '/privacy/') a.setAttribute('href', h + (l === 'en' ? '#en' : ''));
+      else if (h.indexOf('https://apps.apple.com/') === 0) a.setAttribute('href', h.replace(/apps\.apple\.com\/(kr\/)?app/, 'apps.apple.com/' + (l === 'en' ? '' : 'kr/') + 'app'));
     });
     root.setAttribute('data-lang', l); root.lang = l;
     try { document.dispatchEvent(new CustomEvent('owlight:lang', { detail: l })); } catch (e) {}

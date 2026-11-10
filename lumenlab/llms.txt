@@ -12,6 +12,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 
 ## Apps
 
+- [Owlight](https://owlight.lumenlab.page/): Keep your computer awake, cover the desktop, highlight the front-most window and more, right from the menu bar. AI guide: https://owlight.lumenlab.page/llms.txt
 - [SetNote · 세트노트](https://setnote.lumenlab.page/): Save your routines and log every set with last time’s weight and reps beside it. AI guide: https://setnote.lumenlab.page/llms.txt
 
 ## Web tools
@@ -35,6 +36,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [루멘랩 소개 · Lumen Lab](https://lumenlab.page/about/): 루멘랩(Lumen Lab)은 혼자 운영하는 작은 소프트웨어 스튜디오예요. 누가 만드는지, 웹 도구의 결과를 어떻게 확인하는지, 운영비와 연락처.
 - [개인정보 처리방침 · Lumen Lab 루멘랩](https://lumenlab.page/privacy/): lumenlab.page와 루멘랩 웹 도구 사이트의 개인정보 처리방침: 처리하는 정보, 광고 쿠키(Google 애드센스), 방문 통계, 위탁과 국외 이전, 이용자의 권리.
 - [병아리 구조대: 병아리 구하는 정렬 퍼즐 · Lumen Lab 루멘랩](https://lumenlab.page/works/chickrescue/): 튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요.
+- [Owlight: 맥 잠자기 방지·화면 가리기 · Lumen Lab 루멘랩](https://lumenlab.page/works/owlight/): 잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.
 - [세트노트: 운동 세트 기록, 지난번과 나란히 · Lumen Lab 루멘랩](https://lumenlab.page/works/setnote/): 루틴을 저장하고, 세트마다 지난번 무게와 횟수를 보면서 기록해요.
 - [며칠 계산기: 날짜 사이·디데이·만 나이 · Lumen Lab 루멘랩](https://lumenlab.page/works/daycount/): 두 날짜 사이 며칠인지, 디데이, 공휴일을 뺀 영업일, 만 나이, 100일 기념일을 계산해요.
 - [공학용 계산기: 공학 함수·물리 상수 계산 · Lumen Lab 루멘랩](https://lumenlab.page/works/scicalc/): 분수·루트가 교과서처럼 보이고 답이 √2/2처럼 정확하게 나와요. 통계, 방정식, 행렬, 진법까지.
@@ -113,6 +115,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 - [About Lumen Lab](https://lumenlab.page/en/about/): Lumen Lab is a small, one-person software studio. Who makes the tools, how their results are checked, how the sites are paid for, and how to reach us.
 - [Privacy Policy · Lumen Lab](https://lumenlab.page/en/privacy/): Privacy policy for lumenlab.page and the Lumen Lab web tool sites: what is processed, advertising cookies (Google AdSense), visit statistics, service providers and your rights.
 - [Chick Rescue: Sort puzzle to rescue chicks · Lumen Lab](https://lumenlab.page/en/works/chickrescue/): A sort puzzle: move animal friends between tubes, hold them to use abilities, and send the buried chicks home.
+- [Owlight: Keeps your Mac awake, hides the desktop · Lumen Lab](https://lumenlab.page/en/works/owlight/): Keep your computer awake, cover the desktop, highlight the front-most window and more, right from the menu bar.
 - [SetNote: Workout log with last time beside it · Lumen Lab](https://lumenlab.page/en/works/setnote/): Save your routines and log every set with last time’s weight and reps beside it.
 - [Daycount: Days between dates, age and business days · Lumen Lab](https://lumenlab.page/en/works/daycount/): Days between dates, countdowns, business days excluding holidays, age and anniversaries.
 - [Scientific Calculator: Scientific functions and physical constants · Lumen Lab](https://lumenlab.page/en/works/scicalc/): Fractions and roots shown like a textbook, exact answers like √2/2, plus statistics, equations, matrices and base-n.
