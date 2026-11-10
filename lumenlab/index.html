@@ -24,13 +24,15 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/landing.css">
 <link rel="stylesheet" href="/assets/store.css">
-<link rel="stylesheet" href="/assets/home.css">
-<link rel="preload" href="/assets/fonts/pretendard-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/hero-lake.css">
+<link rel="preload" href="/assets/fonts/hahmlet-hero.woff2" as="font" type="font/woff2" crossorigin>
 <script>
-/* html.js = 스크립트로 꾸미는 홈(테마 바뀜·서랍·전체 보기 접기). 3초 안에 home.js 가 시작 안 하면 떼서 그냥 펼친 페이지로.
-   html.anim = 움직임(동작 줄이기가 아니고 IntersectionObserver 가 있을 때). html.all-open = #works·#games… 로 들어오면 '전체 보기'를 펼친 채 그 자리로 */
-(function(d){var m=!matchMedia('(prefers-reduced-motion: reduce)').matches;d.classList.add('js');d.setAttribute('data-theme','night');if(m&&'IntersectionObserver'in window){d.classList.add('anim')}if(/^#(works|games|apps|tools|g-[a-z]+)$/.test(location.hash))d.classList.add('all-open');setTimeout(function(){if(!window.__homeOn)d.classList.remove('js','anim')},3000)})(document.documentElement);
+/* 움직임(.anim)은 '동작 줄이기'가 아니고 IntersectionObserver가 있을 때만(3초 안에 site.js가 시작 안 하면 뗀다).
+   첫 화면(안개 호수, assets/hero-lake.js): 주소에 #가 없으면 머리말을 첫 화면 위 모양(.top-lake)으로, 움직일 수 있으면 캔버스가 어둠에서 그리기 시작하게(.lake-js).
+   3초 안에 hero-lake.js가 시작 안 하면 둘 다 떼서 사진·글이 그대로 보이게. */
+(function(d){var h=!location.hash||location.hash==='#main',m=!matchMedia('(prefers-reduced-motion: reduce)').matches;if(m&&'IntersectionObserver'in window){d.classList.add('anim');setTimeout(function(){if(!window.__rvOn)d.classList.remove('anim')},3000)}if(h){d.classList.add('top-lake');if(m)d.classList.add('lake-js')}setTimeout(function(){if(!window.__lakeOn)d.classList.remove('lake-js','top-lake')},3000)})(document.documentElement);
 </script>
 </head>
 <body>
@@ -52,71 +54,31 @@
 </header>
 
 <main id="main">
-  <!-- ① 첫 화면: 밤거리의 작은 벽돌 건물(코드로 그림, assets/home-scene.js). 연필 밑그림 종이를 문지르면 완성된 장면, 다 닦으면 불 켜기 -->
-  <section class="hero" data-theme="night" data-scene aria-labelledby="hero-title">
-    <div class="hero__copy">
-      <h1 id="hero-title" class="hero__h1" data-i18n="h1"><span>작지만, 하나하나</span> <span>공들여 만들어요.</span></h1>
-      <p class="hero__lead" data-i18n="heroLead"><span>문질러서 다듬고, 다 되면</span> <span>불을 켜 보세요.</span></p>
-      <div class="hero__row">
-        <div class="hint"><span class="hint__pill" data-i18n="heroHint">밑그림을 문질러 보세요</span><button class="hint__skip" type="button" data-i18n="heroSkip">바로 켜기</button></div>
-        <button class="hb hb--main hero__btn" type="button"><span data-i18n="lightOn">불 켜기</span><span data-i18n="lightOff" hidden>불 끄기</span></button>
+  <!-- 첫 화면: 안개 낀 호수 위 손으로 분 유리 등 하나 = 작지만 하나하나 공들여 만드는 곳(2026-11-05).
+       사진 한 장 위에 캔버스가 안개·물결·등불을 움직이고 한 줄 글을 안개 사이에 써 넣는다. 글(h1)은 캔버스가 그 자리를 읽어 그리므로 HTML에도 그대로 둔다.
+       첫 스크롤은 화면을 잠그고 장면을 세로 띠로 찢으며 '만든 것'으로 넘어간다. 모두 assets/hero-lake.js, 모양은 assets/hero-lake.css -->
+  <section class="lake" aria-labelledby="hero-title" data-lake>
+    <div class="lake__stage">
+      <picture class="lake__photo"><source media="(max-width:500px) and (max-resolution:1.5dppx)" srcset="/img/hero/lake-s.webp"><img src="/img/hero/lake.webp" alt="" width="1440" height="2560" fetchpriority="high" decoding="async"></picture>
+      <canvas class="lake__gl" aria-hidden="true"></canvas>
+      <div class="lake__copy">
+        <h1 id="hero-title" class="lake__h1" data-i18n="h1"><span>작지만, 하나하나</span> <span>공들여 만들어요.</span></h1>
+        <p class="lake__sub" data-i18n="heroSub">게임과 앱, 웹 도구를 혼자 만드는 작은 작업실, 루멘랩</p>
       </div>
-    </div>
-    <div class="hero__stage">
-      <canvas class="hero__view" role="img" aria-label="밤거리의 작은 벽돌 건물, 1층에 큰 작업실 창" data-i18n-aria="sceneLabel"></canvas>
-      <canvas class="hero__paper" role="img" aria-label="문지르면 닦이는 연필 밑그림" data-i18n-aria="paperLabel"></canvas>
-      <span hidden data-i18n="sceneMemo">여기 불, 따뜻하게</span>
+      <a class="lake__down" href="#works" data-lake-go><svg viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 1l8 7 8-7"/></svg><span data-i18n="heroCta">내려서 만든 것 보기</span></a>
     </div>
   </section>
 
-  <!-- ② 작품: 넷(gen:feat, build_home.py 가 catalog.json·showcase.json 에서) + 전체 보기 띠(누르면 아래에 gen:wall 큰 아이콘 칸, 아이콘·'자세히'는 소개 창 = assets/store.js) -->
-  <section class="works hsec t-lamp" id="made" data-theme="lamp" aria-labelledby="works-title">
-    <div class="hgroup">
-      <h2 id="works-title" class="hgroup__h" data-i18n="wkTitle">하나씩 공들인 것들</h2>
-      <p class="hgroup__p" data-i18n="wkLead">직접 눌러 보고 써 보세요.</p>
-    </div>
-    <div class="feats">
-      <!-- gen:feat -->
-      <article class="wp wp--r" aria-labelledby="wn-chickrescue">
-        <p class="wp__tag"><i style="--dot:#1f7a4a"></i><span data-i18n="tagGame">게임</span></p>
-        <h3 class="wp__name" id="wn-chickrescue" data-i18n="ft_chickrescue_n">병아리 구조대</h3>
-        <div class="wp__pic wp__pic--phone"><video class="wp__vid" muted loop playsinline preload="none" width="600" height="1300" poster="https://chick-rescue.lumenlab.page/img/play-ko-poster.webp" aria-label="구출 판을 처음부터 끝까지 푸는 실제 게임 영상 13초, 소리 없음"><source src="https://chick-rescue.lumenlab.page/img/play-ko.webm" type="video/webm"><source src="https://chick-rescue.lumenlab.page/img/play-ko.mp4" type="video/mp4"></video></div>
-        <p class="wp__line" data-i18n="ft_chickrescue_l">튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요.</p>
-        <ul class="wp__facts"><li><b data-i18n="ft_chickrescue_v0">1,440판</b><span data-i18n="ft_chickrescue_k0">메인 판 전부 무료</span></li><li><b data-i18n="ft_chickrescue_v1">12마리</b><span data-i18n="ft_chickrescue_k1">능력 쓰는 친구</span></li><li><b data-i18n="ft_chickrescue_v2">인터넷 없이</b><span data-i18n="ft_chickrescue_k2">계정 없이 휴대폰에 저장</span></li></ul>
-        <p class="wp__act"><a class="hb hb--main" href="https://chick-rescue.lumenlab.page/" data-i18n="wpOpen">열어 보기</a><a class="hb hb--glass" href="/works/chickrescue/" data-show="chickrescue" aria-haspopup="dialog" data-i18n="wpMore">자세히</a></p>
-      </article>
-      <article class="wp wp--l" aria-labelledby="wn-owlight">
-        <p class="wp__tag"><i style="--dot:#33337a"></i><span data-i18n="tagMac">맥 앱</span></p>
-        <h3 class="wp__name" id="wn-owlight" data-i18n="ft_owlight_n">Owlight</h3>
-        <div class="wp__pic wp__pic--mac"><img class="wp__img" src="https://owlight.lumenlab.page/img/ko-1-800.webp" width="800" height="456" alt="후광을 켠 화면: 앞의 설정 창만 밝고 뒤의 메모 창들은 어둡게 가라앉아 있다" loading="lazy" decoding="async"><img class="wp__img" src="https://owlight.lumenlab.page/img/ko-2-800.webp" width="800" height="456" alt="커튼을 친 바탕화면: 오로라 그라데이션 위에 큰 시계, 날짜, ‘5분 뒤에 돌아올게요’ 문구" loading="lazy" decoding="async"></div>
-        <p class="wp__line" data-i18n="ft_owlight_l">잠자기 방지, 바탕화면 가리기, 맨 앞 창 강조 같은 기능을 메뉴 막대에서 켜고 꺼요.</p>
-        <ul class="wp__facts"><li><b data-i18n="ft_owlight_v0">US$5.99</b><span data-i18n="ft_owlight_k0">한 번 구매, 구독 없음</span></li><li><b data-i18n="ft_owlight_v1">macOS 14</b><span data-i18n="ft_owlight_k1">이상에서 돌아가요</span></li><li><b data-i18n="ft_owlight_v2">수집 없음</b><span data-i18n="ft_owlight_k2">계정·네트워크·분석 도구 없음</span></li></ul>
-        <p class="wp__act"><a class="hb hb--main" href="https://owlight.lumenlab.page/" data-i18n="wpOpen">열어 보기</a></p>
-      </article>
-      <article class="wp wp--r" aria-labelledby="wn-inplace">
-        <p class="wp__tag"><i style="--dot:#e0a800"></i><span data-i18n="tagTool">웹 도구</span></p>
-        <h3 class="wp__name" id="wn-inplace" data-i18n="ft_inplace_n">인플레이스</h3>
-        <div class="wp__pic wp__pic--try"><div class="wp__demo" data-tool="inplace" data-name="인플레이스" data-home="https://convert.lumenlab.page/ko/" data-core="[]" data-mod="[]"><p class="wp__msg" data-i18n="wpLoading">불러오는 중</p></div></div>
-        <p class="wp__line" data-i18n="ft_inplace_l">영상에서 MP3 뽑기, 사진·HEIC 바꾸기, PDF 합치기, CSV·엑셀 변환을 파일을 올리지 않고 브라우저에서 해요.</p>
-        <ul class="wp__facts"><li><b data-i18n="ft_inplace_v0">25가지</b><span data-i18n="ft_inplace_k0">무료 변환 도구</span></li><li><b data-i18n="ft_inplace_v1">업로드 없음</b><span data-i18n="ft_inplace_k1">파일이 기기 안에서만</span></li><li><b data-i18n="ft_inplace_v2">제한 없음</b><span data-i18n="ft_inplace_k2">가입·워터마크·하루 횟수</span></li></ul>
-        <p class="wp__act"><a class="hb hb--main" href="https://convert.lumenlab.page/ko/" data-i18n="wpOpen">열어 보기</a><a class="hb hb--glass" href="/works/inplace/" data-show="inplace" aria-haspopup="dialog" data-i18n="wpMore">자세히</a></p>
-      </article>
-      <article class="wp wp--l" aria-labelledby="wn-pickboard">
-        <p class="wp__tag"><i style="--dot:#e23a3f"></i><span data-i18n="tagTool">웹 도구</span></p>
-        <h3 class="wp__name" id="wn-pickboard" data-i18n="ft_pickboard_n">공평뽑기</h3>
-        <div class="wp__pic wp__pic--try"><div class="wp__demo" data-tool="pickboard" data-name="공평뽑기" data-home="https://pick.lumenlab.page/ko/" data-core="[]" data-mod="[&quot;https://pick.lumenlab.page/assets/core/rng.js?v=0f45ba1529&quot;, &quot;https://pick.lumenlab.page/assets/core/pick.js?v=4addbe57ad&quot;]"><p class="wp__msg" data-i18n="wpLoading">불러오는 중</p></div></div>
-        <p class="wp__line" data-i18n="ft_pickboard_l">돌림판, 사다리타기, 제비뽑기, 팀 나누기를 명단 하나로. 5,000명까지 넣고 결과는 링크로 다시 보여 줘요.</p>
-        <ul class="wp__facts"><li><b data-i18n="ft_pickboard_v0">5,000명</b><span data-i18n="ft_pickboard_k0">명단에 넣는 수</span></li><li><b data-i18n="ft_pickboard_v1">결과 링크</b><span data-i18n="ft_pickboard_k1">누가 열어도 같은 결과</span></li><li><b data-i18n="ft_pickboard_v2">500개 넘게</b><span data-i18n="ft_pickboard_k2">자동 시험</span></li></ul>
-        <p class="wp__act"><a class="hb hb--main" href="https://pick.lumenlab.page/ko/" data-i18n="wpOpen">열어 보기</a><a class="hb hb--glass" href="/works/pickboard/" data-show="pickboard" aria-haspopup="dialog" data-i18n="wpMore">자세히</a></p>
-      </article>
-      <!-- /gen:feat -->
-    </div>
-    <div class="all" id="works">
-      <div class="all__band">
-        <div class="all__txt"><h3 class="all__h" data-i18n="allTitle">만든 것 14개 전부</h3><p class="all__p" data-i18n="allLead">게임, 앱, 웹 도구를 종류별로 모아 뒀어요.</p></div>
-        <button class="hb hb--glass all__btn" type="button" aria-expanded="false" aria-controls="all-wall"><span data-i18n="allOpen">전체 보기</span><span data-i18n="allClose" hidden>접기</span><svg class="all__ic" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5l5 5 5-5"/></svg></button>
+  <!-- 만든 것 전부: 큰 아이콘. 누르면 같은 페이지에 소개 창이 뜬다(assets/store.js, 창 내용 = 소개 페이지 /works/<id>/).
+       아이콘 밑 한 줄은 도구가 결과를 확인한 방법(showcase.json 의 proof, 소개 페이지 '확인하고 밝혀 둔 것'을 줄인 것)이나 게임·앱의 출시 상태.
+       칸은 build_home.py 가 catalog.json·showcase.json 에서 채운다 -->
+  <section class="works" id="works" aria-labelledby="works-title">
+    <div class="wrap">
+      <div class="works__head">
+        <p class="works__kick" data-i18n="wlKick">작업실 안</p>
+        <h2 id="works-title" class="sec-title" data-i18n="wlTitle">만든 것 14개, <span class="nw">눌러서 바로 써 보세요</span></h2>
+        <p class="sec-lead" data-i18n="wlLead">웹 도구는 창 안에서 그 도구의 계산이 그대로 돌고, 게임과 앱은 실제 화면을 보여 드려요. 도구 아이콘 밑 ✓ 줄은 그 도구가 확인하고 밝혀 둔 것이에요.</p>
       </div>
-      <div class="all__wall" id="all-wall"><div class="all__in">
       <!-- gen:wall -->
       <div class="shelf" id="games">
         <div class="shelf__label"><h3 class="shelf__h" data-i18n="wl_games_h">게임</h3><p class="shelf__line" data-i18n="wl_games_l">휴대폰 게임이에요. Google Play와 App Store에서 받아요.</p></div>
@@ -141,26 +103,43 @@
       </div>
       </div>
       <!-- /gen:wall -->
-      </div></div>
     </div>
   </section>
 
-  <!-- ③ 문의: 메일·전화(만든 사람 소개는 넣지 않는다) -->
-  <section class="contact hsec t-night" id="contact" data-theme="night" aria-labelledby="contact-title">
-    <div class="hgroup">
-      <h2 id="contact-title" class="hgroup__h" data-i18n="ctTitle"><span>틀린 곳을 찾으셨나요?</span> <span>메일 한 통이면 고쳐요</span></h2>
-      <p class="hgroup__p" data-i18n="enLead">어떤 도구인지, 기기와 브라우저, 넣은 값을 같이 적어 주시면 빨리 확인할 수 있어요.</p>
-    </div>
-    <div class="cards">
-      <div class="card">
-        <h3 class="card__h" data-i18n="bcMail">메일</h3>
-        <p class="card__v">contact@lumenlab.page</p>
-        <p class="card__act"><a class="hb hb--main" href="mailto:contact@lumenlab.page" data-i18n="mailBtn">메일 쓰기</a><button class="hb hb--glass card__copy" type="button" data-copy="contact@lumenlab.page"><span data-i18n="ctCopy">주소 복사</span><span data-i18n="ctCopied" hidden>복사했어요</span></button></p>
+  <section class="end" id="contact" aria-labelledby="contact-title">
+    <div class="wrap end__in">
+      <div class="end__text">
+        <p class="end__kick" data-i18n="enKick">작업실 창가</p>
+        <h2 id="contact-title" class="sec-title" data-i18n="enTitle">틀린 곳을 찾으셨나요? <span class="nw">메일 한 통이면 고쳐요</span></h2>
+        <p class="sec-lead" data-i18n="enLead">어떤 도구인지, 기기와 브라우저, 넣은 값을 같이 적어 주시면 빨리 확인할 수 있어요.</p>
+        <p class="end__act"><a class="btn btn--main" href="mailto:contact@lumenlab.page" data-i18n="mailBtn">메일 쓰기</a> <a class="btn btn--line" href="/about/" data-i18n="enAbout">루멘랩 소개</a></p>
       </div>
-      <div class="card">
-        <h3 class="card__h" data-i18n="bcTel">전화</h3>
-        <p class="card__v" data-i18n="bcTelN">070-8098-5263</p>
-        <p class="card__act"><a class="hb hb--glass" href="tel:+82-70-8098-5263" data-i18n="ctCall">전화 걸기</a></p>
+      <div class="end__stage" aria-hidden="true">
+        <div class="end__scene">
+          <div class="es-view">
+            <div class="es-sky"></div><div class="es-dawn"></div>
+            <div class="es-deep"><svg class="es-stars" viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" focusable="false"><circle cx="523" cy="157" r="1.3"/><circle cx="522" cy="144" r="1.6"/><circle cx="254" cy="61" r="1.6"/><circle cx="547" cy="175" r="1.6"/><circle cx="250" cy="38" r="1.3"/><circle cx="370" cy="50" r="0.9"/><circle cx="611" cy="191" r="0.9"/><circle cx="669" cy="115" r="1.3"/><circle cx="729" cy="171" r="1.0"/><circle cx="698" cy="17" r="1.6"/><circle cx="124" cy="29" r="0.9"/><circle cx="254" cy="75" r="1.6"/><circle cx="90" cy="132" r="1.1"/><circle cx="511" cy="165" r="1.0"/><circle cx="591" cy="73" r="1.1"/><circle cx="571" cy="15" r="0.9"/><circle cx="528" cy="181" r="1.1"/><circle cx="476" cy="155" r="0.9"/><circle cx="320" cy="94" r="1.0"/><circle cx="585" cy="87" r="0.9"/><circle cx="131" cy="158" r="0.9"/><circle cx="470" cy="41" r="1.1"/><circle cx="455" cy="31" r="0.9"/><circle cx="60" cy="68" r="1.0"/><circle cx="113" cy="134" r="1.3"/><circle cx="466" cy="121" r="0.9"/><circle cx="639" cy="175" r="1.0"/><circle cx="336" cy="100" r="0.9"/><circle cx="378" cy="99" r="0.9"/><circle cx="479" cy="44" r="1.0"/></svg><svg class="es-sun" viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" focusable="false"><defs><radialGradient id="es-sung"><stop offset="0" stop-color="#FFF4D0"/><stop offset=".13" stop-color="#FFE29A"/><stop offset=".3" stop-color="#FFC66E" stop-opacity=".7"/><stop offset=".62" stop-color="#FFAE5E" stop-opacity=".22"/><stop offset="1" stop-color="#FFA050" stop-opacity="0"/></radialGradient></defs><circle cx="418" cy="226" r="180" fill="url(#es-sung)"/><circle cx="418" cy="226" r="24" fill="#FFF3C8"/></svg></div>
+            <div class="es-mid"><svg class="es-far" viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" focusable="false"><path class="es-f2" d="M-40 420V262H60V240H100V270H150V226H190V258H250V244H300V268H340V236H372V262H420V284H446V250H490V266H540V232H570V258H640V242H690V270H740V250H840V420Z"/><path class="es-f1" d="M-40 420V300H40V288H96V304H130V292H176V306H230V296H280V308H330V292H366V304H400V296H436V306H470V290H516V302H560V292H610V306H660V294H720V304H840V420Z"/></svg></div>
+            <div class="es-mist"></div>
+            <svg class="es-near" viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" focusable="false"><defs><clipPath id="es-shopclip"><rect x="220" y="282" width="120" height="62"/></clipPath><radialGradient id="es-slg"><stop offset="0" stop-color="#FFE7B0" stop-opacity=".95"/><stop offset=".25" stop-color="#FFD27A" stop-opacity=".45"/><stop offset="1" stop-color="#FFC060" stop-opacity="0"/></radialGradient><radialGradient id="es-bg"><stop offset="0" stop-color="#FFE7A8" stop-opacity=".7"/><stop offset="1" stop-color="#FFD27A" stop-opacity="0"/></radialGradient></defs><rect class="es-curb" x="-40" y="344" width="880" height="16"/><rect class="es-road" x="-40" y="360" width="880" height="60"/><rect class="es-dash" x="-20" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="76" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="172" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="268" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="364" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="460" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="556" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="652" y="394" width="40" height="3" rx="1.5"/><rect class="es-dash" x="748" y="394" width="40" height="3" rx="1.5"/><rect class="es-b1" x="-20" y="190" width="130" height="154"/><rect class="es-w" x="12" y="210" width="26" height="24"/><rect class="es-w" x="58" y="210" width="26" height="24"/><rect class="es-w" x="12" y="250" width="26" height="24"/><rect class="es-w" x="58" y="250" width="26" height="24"/><rect class="es-w" x="12" y="290" width="26" height="24"/><rect class="es-w" x="58" y="290" width="26" height="24"/><path class="es-b2" d="M110 344V246L155 212L200 246V344Z"/><rect class="es-w" x="126" y="260" width="22" height="22"/><rect class="es-w" x="162" y="260" width="22" height="22"/><rect class="es-door" x="146" y="302" width="18" height="42"/><rect class="es-b1" x="200" y="150" width="160" height="194"/><rect class="es-b3" x="196" y="144" width="168" height="8"/><rect class="es-w" x="218" y="170" width="34" height="30"/><rect class="es-w" x="262" y="170" width="34" height="30"/><rect class="es-w" x="306" y="170" width="34" height="30"/><rect class="es-w" x="218" y="218" width="34" height="30"/><rect class="es-w" x="262" y="218" width="34" height="30"/><rect class="es-w" x="306" y="218" width="34" height="30"/><rect class="es-shop" x="220" y="282" width="120" height="62"/><rect class="es-shelf2" x="226" y="304" width="108" height="3"/><rect class="es-shelf2" x="226" y="326" width="108" height="3"/><ellipse class="es-bread" cx="238" cy="300" rx="9" ry="5"/><ellipse class="es-bread" cx="258" cy="300" rx="8" ry="5"/><ellipse class="es-bread" cx="280" cy="300" rx="10" ry="5"/><ellipse class="es-bread" cx="304" cy="300" rx="8" ry="5"/><ellipse class="es-bread" cx="322" cy="300" rx="7" ry="5"/><ellipse class="es-bread" cx="240" cy="322" rx="8" ry="5"/><ellipse class="es-bread" cx="262" cy="322" rx="10" ry="5"/><ellipse class="es-bread" cx="290" cy="322" rx="9" ry="5"/><ellipse class="es-bread" cx="316" cy="322" rx="10" ry="5"/><g clip-path="url(#es-shopclip)"><g class="es-shut"><rect class="es-shutr" x="220" y="282" width="120" height="62"/><rect class="es-shutl" x="220" y="288" width="120" height="1.6"/><rect class="es-shutl" x="220" y="294" width="120" height="1.6"/><rect class="es-shutl" x="220" y="300" width="120" height="1.6"/><rect class="es-shutl" x="220" y="306" width="120" height="1.6"/><rect class="es-shutl" x="220" y="312" width="120" height="1.6"/><rect class="es-shutl" x="220" y="318" width="120" height="1.6"/><rect class="es-shutl" x="220" y="324" width="120" height="1.6"/><rect class="es-shutl" x="220" y="330" width="120" height="1.6"/><rect class="es-shutl" x="220" y="336" width="120" height="1.6"/><rect class="es-shutl" x="220" y="342" width="120" height="1.6"/></g></g><rect class="es-awn1" x="212" y="266" width="17" height="16"/><rect class="es-awn2" x="229" y="266" width="17" height="16"/><rect class="es-awn1" x="246" y="266" width="17" height="16"/><rect class="es-awn2" x="263" y="266" width="17" height="16"/><rect class="es-awn1" x="280" y="266" width="17" height="16"/><rect class="es-awn2" x="297" y="266" width="17" height="16"/><rect class="es-awn1" x="314" y="266" width="17" height="16"/><rect class="es-awn2" x="331" y="266" width="17" height="16"/><rect class="es-awnb" x="210" y="281" width="140" height="3"/><circle class="es-sl on" cx="398" cy="250" r="40" fill="url(#es-slg)"/><rect class="es-pole" x="372" y="250" width="4" height="94"/><path class="es-pole2" d="M374 254Q374 242 388 242H392" /><rect class="es-lhead" x="388" y="239" width="18" height="6" rx="2.5"/><rect class="es-trunk" x="451" y="296" width="6" height="48"/><circle class="es-tree" cx="454" cy="284" r="21"/><circle class="es-tree" cx="438" cy="298" r="13"/><circle class="es-tree" cx="471" cy="296" r="14"/><rect class="es-b2" x="470" y="118" width="130" height="226"/><rect class="es-b3" x="466" y="112" width="138" height="8"/><rect class="es-w" x="486" y="136" width="26" height="24"/><rect class="es-w" x="522" y="136" width="26" height="24"/><rect class="es-w" x="558" y="136" width="26" height="24"/><rect class="es-w" x="486" y="174" width="26" height="24"/><rect class="es-w" x="522" y="174" width="26" height="24"/><rect class="es-w" x="558" y="174" width="26" height="24"/><rect class="es-w" x="486" y="212" width="26" height="24"/><rect class="es-w" x="522" y="212" width="26" height="24"/><rect class="es-w" x="558" y="212" width="26" height="24"/><rect class="es-w" x="486" y="250" width="26" height="24"/><rect class="es-w" x="522" y="250" width="26" height="24"/><rect class="es-w" x="558" y="250" width="26" height="24"/><rect class="es-cafe" x="484" y="294" width="54" height="50"/><rect class="es-door" x="550" y="296" width="30" height="48"/><rect class="es-b1" x="600" y="196" width="100" height="148"/><rect class="es-w" x="616" y="214" width="26" height="26"/><rect class="es-w" x="656" y="214" width="26" height="26"/><rect class="es-w" x="616" y="258" width="26" height="26"/><rect class="es-w" x="656" y="258" width="26" height="26"/><rect class="es-b3" x="700" y="160" width="120" height="184"/><rect class="es-w" x="720" y="180" width="26" height="24"/><rect class="es-w" x="764" y="180" width="26" height="24"/><rect class="es-w" x="720" y="222" width="26" height="24"/><rect class="es-w" x="764" y="222" width="26" height="24"/><rect class="es-w" x="720" y="264" width="26" height="24"/><rect class="es-w" x="764" y="264" width="26" height="24"/><g transform="translate(296 354) scale(1.45)"><g class="es-kidb"><path class="es-str" d="M-7 -14Q-15 -40-12 -63"/><circle class="es-bglow" cx="-12" cy="-73" r="22" fill="url(#es-bg)"/><path class="es-bal" d="M-12 -84C-6 -84-4 -79-4.6 -75-5.3 -70.6-9.2 -67.7-12 -67.2-14.8 -67.7-18.7 -70.6-19.4 -75-20 -79-18 -84-12 -84Z"/><path class="es-bal" d="M-13.2 -67.4H-10.8L-10.2 -65.6H-13.8Z"/><path class="es-kl" d="M-3 -2L-4 12M3 -2L4.4 12"/><path class="es-kf" d="M-4 -20Q-4 -23-1 -23H2Q5 -23 5 -20L8 -1Q.5 1.6-7 -1Z"/><g class="es-head"><path class="es-kf" d="M-3.6 -31.6Q-9.6 -33.4-10.6 -27.6Q-7.6 -29.6-4 -28.6Z"/><circle class="es-kf" cx=".8" cy="-29" r="6.4"/></g><path class="es-ka" d="M-2.6 -19.4L-7 -14"/><g class="es-arm"><path class="es-ka" d="M3.4 -19.4L8.6 -11.6"/><path class="es-hp" d="M6.6 -13.6L15.4 -16.4L10.2 -10.4Z"/></g></g></g></svg>
+            <div class="es-warm"></div>
+            <svg class="es-rim" viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" focusable="false"><path d="M196 144H364M360 152V280M466 112H604M470 120V290M600 196H700M700 160H820M-20 190H110M110 246L155 212L200 246"/><path class="es-rt" d="M436 280A21 21 0 0 1 472 280"/></svg>
+            <div class="es-flock"><i><svg viewBox="0 0 20 8"><path d="M1 6.4Q5 1 10 5Q15 1 19 6.4"/></svg></i><i><svg viewBox="0 0 20 8"><path d="M1 6.4Q5 1 10 5Q15 1 19 6.4"/></svg></i><i><svg viewBox="0 0 20 8"><path d="M1 6.4Q5 1 10 5Q15 1 19 6.4"/></svg></i></div>
+          </div>
+          <i class="es-glass"></i><i class="es-bar"></i><i class="es-bar2"></i>
+          <svg class="es-cur" viewBox="0 0 40 300" preserveAspectRatio="none" focusable="false"><path d="M40 0H2C10 40 0 80 8 120S2 200 10 240S6 280 12 300H40Z"/><path class="es-curf" d="M18 0C24 60 14 120 22 180S18 260 24 300M30 0C34 70 26 150 32 220S30 280 34 300"/></svg>
+        </div>
+        <div class="es-sill"></div>
+        <div class="es-lamp"><i class="es-lampg"></i><svg viewBox="0 0 72 80" focusable="false"><rect class="es-lb" x="5" y="74" width="28" height="6" rx="2.5"/><path class="es-la" d="M19 75L23 44L45 29"/><circle class="es-lb" cx="23" cy="44" r="3.3"/><g class="es-shade"><path class="es-lb" d="M42.8 30.4L49.2 25.6L66 38Q59.8 46.4 50 50Z"/><path class="es-lm" d="M66 38Q59.8 46.4 50 50Q57 44.5 66 38Z"/></g></svg></div>
+      </div>
+      <div class="bcard">
+        <span class="bcard__stamp" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg></span>
+        <p class="bcard__name"><svg class="mark" viewBox="0 0 22 22" aria-hidden="true"><circle class="glow" cx="11" cy="11" r="10"/><circle class="core" cx="11" cy="11" r="5"/></svg><span>Lumen Lab <span lang="ko">루멘랩</span></span></p>
+        <p class="bcard__kind" data-i18n="bcKind">개인사업자 · 한국</p>
+        <dl class="bcard__rows">
+          <div><dt data-i18n="bcMail">메일</dt><dd><a href="mailto:contact@lumenlab.page">contact@lumenlab.page</a></dd></div>
+          <div><dt data-i18n="bcTel">전화</dt><dd><a href="tel:+82-70-8098-5263" data-i18n="bcTelN">070-8098-5263</a></dd></div>
+        </dl>
       </div>
     </div>
   </section>
@@ -184,20 +163,9 @@
     </div>
   </div>
 </footer>
-<!-- 폰 서랍: home.js 가 ☰ 단추를 위 막대 안으로 옮긴다(위 막대·바닥글은 다른 페이지가 그대로 가져다 쓰므로 이 둘은 그 밖에 둔다) -->
-<button class="menu-btn" type="button" aria-expanded="false" aria-controls="drawer"><i></i><i></i><i></i><span class="vh" data-i18n="menuOpen">메뉴 열기</span><span class="vh" data-i18n="menuClose" hidden>메뉴 닫기</span></button>
-<div class="drawer" id="drawer" hidden>
-  <nav class="drawer__nav" aria-label="사이트" data-i18n-aria="navLabel">
-    <a href="/#works" data-i18n="navWorks">만든 것</a>
-    <a href="/guides/" data-i18n="navGuides">가이드</a>
-    <a href="/about/" data-i18n="navAbout">소개</a>
-    <a href="/#contact" data-i18n="navContact">문의</a>
-    <a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>English</a>
-  </nav>
-</div>
 <script src="/assets/site.js" defer></script>
-<script src="/assets/home-scene.js" defer></script>
-<script src="/assets/home.js" defer></script>
+<script src="/assets/hero-lake.js" defer></script>
+<script src="/assets/landing.js" defer></script>
 <script src="/assets/store.js" defer></script>
 </body>
 </html>

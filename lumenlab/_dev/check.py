@@ -1,7 +1,7 @@
 # 루멘랩 배포 전 확인: 사이트 폴더에서 python3 -m http.server 8765 를 띄운 뒤 python3 _dev/check.py
-# 페이지마다 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 사이트 안 링크, 동작 줄이기,
-# 홈 첫 화면(2026-11-10 작업실 건물: 문질러 60%면 '불 켜기', 바로 켜기, 불 켜고 끄기, 동작 줄이기, 폰 세로 스크롤, 화면 밖이면 그리기 멈춤), 테마·서랍·전체 보기,
-# 홈 '전체 보기' 아이콘마다 소개 창(주소 /works/<id>/, 바로 써 보기·미리 보기, Esc·뒤로 가기로 닫힘), 소개 페이지에서 바로 써 보기
+# 페이지마다 320·390·1366 가로 넘침, 콘솔 오류, 깨진 사진, 사이트 안 링크, 동작 줄이기, 움직임 뒤 숨은 요소, 첫 화면 다시 흐려짐,
+# 첫 화면(안개 호수: 캔버스 그림, 한 번에 찢기며 '만든 것' 맨 위로·위로 올리면 되돌아옴, 동작 줄이기·#works 는 잠금 없음, 옛 '불 켜진 작업실' 확인은 data-hero 가 있을 때만),
+# 홈 '만든 것' 아이콘마다 소개 창(주소 /works/<id>/, 바로 써 보기·미리 보기, Esc·뒤로 가기로 닫힘), 소개 페이지에서 바로 써 보기
 import os, sys, hashlib, re
 from urllib.parse import urljoin, urlparse
 from playwright.sync_api import sync_playwright
@@ -109,7 +109,7 @@ def sub_file(r):
     r.fulfill(path=f, headers=hd)
 SUB = re.compile(r'https://[a-z0-9-]+\.lumenlab\.page/.*')
 
-EXPAND = "(()=>{const b=document.querySelector('.all__btn');if(b&&b.getAttribute('aria-expanded')!=='true')b.click()})()"   # 홈 '전체 보기'를 펼친다(큰 아이콘 칸)
+OLD_HERO = 'data-hero' in open(os.path.join(site, 'index.html')).read()
 with sync_playwright() as p:
     br = p.chromium.launch(args=['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'], executable_path=next((x for x in ('/opt/pw-browsers/chromium-1194/chrome-linux/chrome', '/opt/pw-browsers/chromium') if os.path.exists(x)), None))  # 작업 공간마다 브라우저 자리가 다름
     seen = set()
@@ -151,96 +151,220 @@ with sync_playwright() as p:
     ok(not pg.evaluate("document.documentElement.classList.contains('anim')"), '동작 줄이기면 움직임 꺼짐')
     c.close()
 
-    # 첫 화면(2026-11-10 작업실 건물, assets/home-scene.js · 디자인 틀 2절 S): 장면을 그리고 제목은 폰 두 줄,
-    # 문질러 60%면 종이가 걷히고 '불 켜기'가 뜸, '바로 켜기' → 0.5초 뒤 불(깜빡임·간판 2.3초 뒤 끝, 장면 다가감, 로고·빛무리 html.lit), 불 끄기,
-    # 동작 줄이기면 바로 켜지고 꺼짐(다가감·먼지 없음), 폰은 종이 위에서 세로로 밀어도 페이지가 내려감(걷힌 뒤엔 그냥 스크롤), 화면 밖이면 그리기 멈춤
-    PEEK = '__sceneCheck.peek()'
-    READY = "window.__sceneCheck && __sceneCheck.peek().drawn"
-    def scene_page(**kw):
-        c = br.new_context(**kw); pg = c.new_page(); errs = []
-        pg.on('pageerror', lambda e: errs.append(str(e))); pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
-        return c, pg, errs
-    c, pg, errs = scene_page(viewport={'width': 390, 'height': 844})
-    pg.goto(BASE + '/'); pg.wait_for_function(READY, timeout=8000)
-    lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
-    ok(lines == 2, f'휴대폰 첫 화면 제목 {lines}줄')
-    b = pg.locator('.hero__paper').bounding_box()
-    hid0 = pg.evaluate("getComputedStyle(document.querySelector('.hero__btn')).visibility")
-    pg.mouse.move(b['x'] + 4, b['y'] + 30); pg.mouse.down()
-    for rnd_ in range(4):
-        for row in range(14):
-            y = b['y'] + 30 + row * (b['height'] - 40) / 13
-            xs = (b['x'] + 4, b['x'] + b['width'] - 4) if (row + rnd_) % 2 == 0 else (b['x'] + b['width'] - 4, b['x'] + 4)
-            pg.mouse.move(xs[0], y, steps=2); pg.mouse.move(xs[1], y, steps=14)
-    pg.mouse.up(); pg.wait_for_timeout(900)
-    st = pg.evaluate(PEEK)
-    shown = pg.evaluate("(()=>{const b=getComputedStyle(document.querySelector('.hero__btn'));return document.querySelector('.hero').classList.contains('ready')&&b.visibility==='visible'&&+b.opacity>.9&&document.querySelector('.hero__paper').hidden})()")
-    ok(hid0 == 'hidden' and st['done'] and shown and not st['lit'] and not errs, f"폰 첫 화면: 처음엔 '불 켜기' 숨김({hid0}), 문질러 60% → 종이 걷힘·'불 켜기' 뜸 {st['done']}·{shown} {errs[:2]}")
-    c.close()
-    # 바로 켜기 → 불 켜짐 → 끄기 (PC, 움직임 있음)
-    c, pg, errs = scene_page(viewport={'width': 1440, 'height': 900})
-    pg.goto(BASE + '/'); pg.wait_for_function(READY, timeout=8000)
-    pg.click('.hint__skip'); pg.wait_for_timeout(250); early = pg.evaluate(PEEK)
-    pg.wait_for_timeout(3300)
-    st = pg.evaluate(PEEK)
-    on = pg.evaluate("""(()=>{const v=getComputedStyle(document.querySelector('.hero__view')).transform,s=document.querySelectorAll('.hero__btn [data-i18n]');
-      return{lit:document.documentElement.classList.contains('lit'),scale:v==='none'?1:new DOMMatrix(v).a,label:s[1].hidden===false&&s[0].hidden===true,ready:document.querySelector('.hero').classList.contains('ready')}})()""")
-    ok(not early['lit'] and st['lit'] and st['L'] == 1 and st['sig'] == 1 and on['lit'] and on['label'] and on['ready'] and abs(on['scale'] - 1.04) < .003 and not errs,
-       f"PC '바로 켜기': 0.25초엔 아직 꺼짐 {not early['lit']}, 켜짐 L {st['L']}·간판 {st['sig']}, 로고·빛무리 {on['lit']}, 장면 다가감 {on['scale']:.3f}, 단추 '불 끄기' {on['label']} {errs[:2]}")
-    pg.click('.hero__btn'); pg.wait_for_timeout(700); st = pg.evaluate(PEEK)
-    off = pg.evaluate("!document.documentElement.classList.contains('lit') && !document.querySelector('.hero').classList.contains('on') && document.querySelectorAll('.hero__btn [data-i18n]')[0].hidden===false")
-    ok(not st['lit'] and st['L'] == 0 and st['sig'] == 0 and off, f"PC 불 끄기: L {st['L']}, 간판 {st['sig']}, 되돌아감 {off}")
-    # 화면 밖이면 그리기 멈춤, 돌아오면 다시
-    pg.click('.hero__btn'); pg.wait_for_timeout(2600)
-    pg.evaluate("scrollTo({top:document.body.scrollHeight,behavior:'instant'})"); pg.wait_for_timeout(500)
-    f1 = pg.evaluate(PEEK); pg.wait_for_timeout(600); f2 = pg.evaluate(PEEK)
-    pg.evaluate("scrollTo({top:0,behavior:'instant'})"); pg.wait_for_timeout(500); f3 = pg.evaluate(PEEK)
-    ok(f1['frames'] == f2['frames'] and not f2['raf'] and f3['frames'] > f2['frames'], f"화면 밖이면 그리기 멈춤({f1['frames']}→{f2['frames']}), 돌아오면 다시({f3['frames']})")
-    c.close()
-    # 동작 줄이기: 바로 켜기 = 기다림·깜빡임 없이 곧바로, 다가감 없음, 그리기 루프 없음
-    c, pg, errs = scene_page(viewport={'width': 390, 'height': 844}, reduced_motion='reduce')
-    pg.goto(BASE + '/'); pg.wait_for_function(READY, timeout=8000)
-    pg.click('.hint__skip'); pg.wait_for_timeout(120); st = pg.evaluate(PEEK)
-    tf = pg.evaluate("getComputedStyle(document.querySelector('.hero__view')).transform")
-    pg.click('.hero__btn'); pg.wait_for_timeout(80); st2 = pg.evaluate(PEEK)
-    ok(st['L'] == 1 and st['sig'] == 1 and not st['raf'] and tf == 'none' and st2['L'] == 0 and not st2['lit'] and not errs, f"동작 줄이기: 바로 켜짐 L {st['L']}, 루프 없음 {not st['raf']}, 다가감 없음 {tf}, 바로 꺼짐 L {st2['L']} {errs[:2]}")
-    c.close()
-    # 폰 세로 스크롤이 막히지 않음: 종이 위에서 세로로 빨리 밀면 페이지가 내려가고(그새 종이는 거의 안 닦임), 걷힌 뒤엔 장면 위에서도 그냥 스크롤
-    def tswipe(cdp, x, y0, y1, n=6):
-        cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': x, 'y': y0}]})
-        for i in range(1, n + 1): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': x, 'y': y0 + (y1 - y0) * i / n}]})
+    # 첫 화면(안개 호수, 2026-11-05): 캔버스가 그리고(gl-on), 손가락·휠·키·'내려서 만든 것 보기' 한 번이면 잠긴 채 찢어지며 '만든 것' 맨 위(머리말 바로 밑)로,
+    # 잠금이 풀리고, 거기서 위로 한 번 올리면 되돌아와 맨 위·다시 잠금. 제목은 휴대폰 두 줄
+    LK = "(()=>({y:Math.round(scrollY),cls:document.documentElement.className,hero:document.querySelector('.lake').className,top:Math.round(document.getElementById('works').getBoundingClientRect().top),hd:document.querySelector('.top').offsetHeight}))()"
+    def lswipe(cdp, y0, y1):
+        cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': 200, 'y': y0}]})
+        for i in range(1, 5): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': 200, 'y': y0 + (y1 - y0) * i / 4}]})
         cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []})
-    c, pg, errs = scene_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
-    pg.goto(BASE + '/'); pg.wait_for_function(READY, timeout=8000); cdp = c.new_cdp_session(pg)
-    tswipe(cdp, 200, 760, 400); pg.wait_for_timeout(900); y1 = pg.evaluate('scrollY'); st = pg.evaluate(PEEK)
-    pg.evaluate("scrollTo({top:0,behavior:'instant'})"); pg.click('.hint__skip'); pg.wait_for_timeout(1200)
-    tswipe(cdp, 200, 760, 400); pg.wait_for_timeout(900); y2 = pg.evaluate('scrollY')
-    ok(y1 >= 300 and not st['done'] and y2 >= 300 and not errs, f'폰 첫 화면: 종이 위 세로 밀기 → 페이지 {y1}px 내려감(지우기 아님), 걷힌 뒤 장면 위 → {y2}px {errs[:2]}')
-    c.close()
-    # 테마: 화면 가운데 줄에 걸친 칸의 테마(밤 → 불빛 → 밤), 위 막대는 첫 화면을 지나면 테마 바탕. 폰 서랍(☰): 다섯 항목, Esc로 닫힘
-    c, pg, errs = scene_page(viewport={'width': 390, 'height': 844})
-    pg.goto(BASE + '/'); pg.wait_for_timeout(600)
-    th = [pg.evaluate("[document.documentElement.dataset.theme,document.querySelector('.top').classList.contains('is-solid')]")]
-    for sel in ('#works-title', '.feats .wp', '#contact-title'):
-        pg.evaluate(f"document.querySelector('{sel}').scrollIntoView({{block:'center',behavior:'instant'}})"); pg.wait_for_timeout(400)
-        th.append(pg.evaluate("[document.documentElement.dataset.theme,document.querySelector('.top').classList.contains('is-solid')]"))
-    ok(th == [['night', False], ['lamp', False], ['lamp', True], ['night', True]], f'테마 밤 → 불빛 → 밤, 위 막대는 첫 화면 아래 끝을 지나야 바탕 {th}')
-    pg.evaluate("scrollTo({top:0,behavior:'instant'})"); pg.click('.top .menu-btn'); pg.wait_for_timeout(450)
-    dr = pg.evaluate("(()=>{const d=document.getElementById('drawer'),r=d.getBoundingClientRect();return{open:!d.hidden&&r.left===0&&r.width===innerWidth,n:d.querySelectorAll('a').length,h:Math.round(d.querySelector('a').getBoundingClientRect().height)}})()")
-    pg.keyboard.press('Escape'); pg.wait_for_timeout(450)
-    shut = pg.evaluate("document.getElementById('drawer').hidden && document.querySelector('.menu-btn').getAttribute('aria-expanded')==='false'")
-    ok(dr['open'] and dr['n'] == 5 and dr['h'] == 56 and shut and not errs, f'폰 서랍: 열림 {dr}, Esc로 닫힘 {shut} {errs[:2]}')
-    c.close()
-    # 전체 보기: 처음엔 접힘, 누르면 펼침·접기. /#works 로 들어오면 펼친 채 그 자리(띠가 화면 위쪽)
-    c, pg, errs = scene_page(viewport={'width': 390, 'height': 844})
-    pg.goto(BASE + '/'); pg.wait_for_timeout(500)
-    h0 = pg.evaluate("document.getElementById('all-wall').getBoundingClientRect().height")
-    pg.evaluate("document.querySelector('.all__btn').click()"); pg.wait_for_timeout(700)
-    h1 = pg.evaluate("document.getElementById('all-wall').getBoundingClientRect().height"); ex = pg.evaluate("document.querySelector('.all__btn').getAttribute('aria-expanded')")
-    pg = c.new_page(); pg.goto(BASE + '/#works'); pg.wait_for_timeout(1500)   # 새로 들어온 /#works (다시 읽기는 그새 스크롤 자리를 되살려서 안 씀)
-    st = pg.evaluate("(()=>({open:document.querySelector('.all').classList.contains('is-open'),top:Math.round(document.getElementById('works').getBoundingClientRect().top)}))()")
-    ok(h0 < 2 and h1 > 1500 and ex == 'true' and st['open'] and 0 <= st['top'] <= 120 and not errs, f"전체 보기: 접힘 {h0:.0f}px → 펼침 {h1:.0f}px, /#works 로 오면 펼친 채 띠가 위 {st} {errs[:2]}")
-    c.close()
+    if not OLD_HERO:
+        for pre, w, h, how in (('', 390, 844, 'touch'), ('/en', 1366, 860, 'wheel'), ('', 1280, 800, 'key'), ('', 390, 844, 'click')):
+            c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=how == 'touch', has_touch=how == 'touch'); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
+            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(4500); s0 = pg.evaluate(LK); cdp = c.new_cdp_session(pg)
+            pg.evaluate("window.__fx=0;new MutationObserver(()=>{if(document.querySelector('.lake--fixed'))__fx=1}).observe(document.querySelector('.lake'),{attributes:true})")   # 찢는 동안 화면 위에 덮였는지(느린 기계에서도)
+            if how == 'touch': lswipe(cdp, 600, 400)
+            elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 120)
+            elif how == 'key': pg.keyboard.press('PageDown')
+            else: pg.click('[data-lake-go]')
+            pg.wait_for_timeout(1900); mid = pg.evaluate('__fx'); s1 = pg.evaluate(LK)
+            if how == 'touch': lswipe(cdp, 300, 650)
+            elif how in ('wheel', 'click'): pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, -120)
+            else: pg.keyboard.press('PageUp')
+            pg.wait_for_timeout(1800); s2 = pg.evaluate(LK)
+            good = ('gl-on' in s0['hero'] and 'lake--in' in s0['hero'] and 'lake-lock' in s0['cls'] and s0['y'] == 0 and mid == 1
+                    and abs(s1['top'] - s1['hd']) <= 2 and 'lake-lock' not in s1['cls'] and 'top-lake' not in s1['cls'] and s2['y'] == 0 and 'lake-lock' in s2['cls'] and 'top-lake' in s2['cls'] and not errs)
+            ok(good, f"{pre}/ {w}px {how} 첫 화면: 그림 {'gl-on' in s0['hero']}, 잠금 {'lake-lock' in s0['cls']}, 찢는 장면 {mid == 1}, '만든 것' 맨 위(위치 {s1['top']}, 머리말 {s1['hd']}), 풀림 {'lake-lock' not in s1['cls']}, 위로 한 번이면 맨 위 {s2['y']}·다시 잠금 {'lake-lock' in s2['cls']} {errs[:2]}")
+            c.close()
+        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(1500)
+        lines = pg.evaluate("(()=>{const h=document.querySelector('.lake__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
+        ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄'); c.close()
+        # 동작 줄이기 · #works 로 들어옴: 사진 한 장과 글(제목 글자색 보임), 잠금 없음, 휠로 그냥 내려감
+        for name, opt, path in (('동작 줄이기', {'reduced_motion': 'reduce'}, '/'), ('#works 로 들어옴', {}, '/#works')):
+            c = br.new_context(viewport={'width': 390, 'height': 844}, **opt); pg = c.new_page(); pg.goto(BASE + path); pg.wait_for_timeout(1200)
+            st = pg.evaluate("(()=>({lock:document.documentElement.classList.contains('lake-lock'),ink:getComputedStyle(document.querySelector('.lake__h1')).color,off:document.querySelector('.lake').classList.contains('gl-off'),y:scrollY}))()")
+            want = (st['off'] and st['ink'] != 'rgba(0, 0, 0, 0)') if name == '동작 줄이기' else st['y'] > 300
+            ok(not st['lock'] and want, f"{name}: 잠금 없음, {'사진 한 장·제목 보임' if name == '동작 줄이기' else '만든 것에서 시작'} {st}")
+            c.close()
+
+    if OLD_HERO:   # 옛 첫 화면(불 켜진 작업실, PR #24) 확인. 2026-11-05 안개 호수 첫 화면으로 바꾼 뒤엔 건너뜀
+        # 움직임 켜고 휠로 끝까지 내려가며 가운데 걸친 요소 중 숨은 것 0, 되돌아오면 다시 재생(명함 ✓ 도장은 답장 불빛이 닿아야 찍히니 아래 끝 칸 시험이 따로 봄, 끝 칸 모니터 번쩍 판은 늘 0, 첫 화면은 내리면 일부러 흐려지고 '만든 것'은 확대 끝(END p 0.72)에 드러나며 그동안 날아가는 아이콘 자리는 비어 있으니 그 구간은 아래 따로 확인)
+        HID = '''()=>{const out=[];const H=innerHeight;const hz=document.querySelector('.zoom [data-hero]');if(hz&&scrollY<hz.offsetTop+(hz.offsetHeight-hz.querySelector('.hero__stage').offsetHeight)*.72)return out;for(const el of document.querySelectorAll('main *')){if(el.closest('.hero,.bcard__stamp,.end__stage'))continue;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)continue;if(r.bottom<H*.12||r.top>H*.75)continue;let o=1,n=el;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}const cs=getComputedStyle(el);if(o<.2||cs.visibility==='hidden')out.push(el.className||el.tagName)}return out}'''
+        for w, h in [(390, 844), (1366, 860)]:
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + '/')
+            pg.wait_for_timeout(1500)
+            ok(pg.evaluate('!!window.__rvOn'), f'{w}px 움직임 시작됨')
+            bad = set()
+            for _ in range(40):
+                pg.mouse.wheel(0, 260); pg.wait_for_timeout(260)
+                pg.wait_for_timeout(700)
+                bad |= set(map(str, pg.evaluate(HID)))
+                if pg.evaluate('innerHeight+scrollY>=document.body.scrollHeight-2'): break
+            ok(not bad, f'{w}px 스크롤 뒤 숨은 채 남은 요소 0 {sorted(bad)[:4]}')
+            c.close()
+
+        # 첫 화면이 보인 뒤 다시 흐려지지 않음
+        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page()
+        pg.add_init_script('''window.__op=[];(function f(t){const e=document.querySelector('.hero__h1');if(e){let o=1,n=e;while(n&&n.nodeType===1){o*=+getComputedStyle(n).opacity;n=n.parentElement}__op.push(o)}if(performance.now()<2500)requestAnimationFrame(f)})()''')
+        pg.goto(BASE + '/'); pg.wait_for_timeout(2800)
+        ops = pg.evaluate('__op'); peak = False; dip = False
+        for o in ops:
+            if o >= .95: peak = True
+            elif peak and o < .85: dip = True
+        ok(peak and not dip, '첫 화면 제목이 한 번 보인 뒤 다시 흐려지지 않음')
+        # 제목(루멘랩이 무엇을 만드는지) 두 줄
+        lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
+        ok(lines <= 2, f'휴대폰 첫 화면 제목 {lines}줄')
+        c.close()
+
+        # 첫 화면(불 켜진 작업실): 여러 화면 크기에서 글(머리·제목·설명·단추 둘)이 불 켜진 창·창 위 간판과 겹치지 않고, 창이 화면 안에 다 보이고, 글이 무대 밖으로 잘리지 않음
+        LAY = r"""()=>{const vis=[...document.querySelectorAll('.hero [data-win],.hero .n-board')].filter(e=>e.getBoundingClientRect().width>0).map(e=>e.getBoundingClientRect());
+          const st=document.querySelector('.hero__stage').getBoundingClientRect(),hit=[];
+          for(const c of document.querySelectorAll('.hero__kick,.hero__h1,.hero__sub,.hero__cta,.hero__more'))for(const r of c.getClientRects())for(const v of vis)
+            if(r.left<v.right&&r.right>v.left&&r.top<v.bottom&&r.bottom>v.top)hit.push(c.className);
+          const w=[...document.querySelectorAll('.hero [data-win]')].map(e=>e.getBoundingClientRect()).find(r=>r.width>0),cta=document.querySelector('.hero__act').getBoundingClientRect();
+          return{n:vis.length,hit,win:w.left>=0&&w.right<=innerWidth&&w.top>=64&&w.bottom<=Math.min(innerHeight,st.bottom),cut:cta.bottom>st.bottom,
+            sw:document.documentElement.scrollWidth}}"""
+        for pre in ('', '/en'):
+            for w, h in ((320, 568), (360, 740), (375, 667), (390, 844), (430, 932), (768, 1024), (844, 390), (1024, 768), (1280, 800), (1366, 768), (1440, 900), (1920, 1080), (2560, 1080)):
+                c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(500)
+                st = pg.evaluate(LAY)
+                ok(st['n'] == 2 and not st['hit'] and st['win'] and not st['cut'] and st['sw'] <= w,
+                   f"{pre}/ {w}x{h} 첫 화면: 글이 창·간판과 겹침 {st['hit'] or '없음'}, 창 {'다 보임' if st['win'] else '잘림'}, 단추 {'잘림' if st['cut'] else '보임'}, 가로 {st['sw']}")
+                c.close()
+        # 내리면 창 안으로: 스크롤 위치를 따라 커지고(글은 흐려지고) 끝에 종이색이 덮이며 머리말이 원래대로, 되돌리면 처음 그대로, '만든 것' 제목이 곧 올라옴
+        Z = r"""(p)=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');scrollTo({top:H.getBoundingClientRect().top+scrollY+p*(H.offsetHeight-S.offsetHeight),behavior:'instant'})}"""
+        # aim = 모니터 화면(방 안 .r-scr, SVG 그대로 읽음) 가운데가 화면 가운데에서 얼마나 떨어졌나(화면 폭·높이에 대한 비율). 확대가 다 됐을 때 0 근처여야 한다
+        ZS = r"""()=>{const n=document.querySelector('.night__near'),m=getComputedStyle(n).transform,c=document.querySelector('.hero__copy'),t=document.getElementById('works-title').getBoundingClientRect();
+          const g=[...document.querySelectorAll('.hero [data-win]')].map(e=>e.getBoundingClientRect()).find(r=>r.width>0),sc=document.querySelector('#n-room .r-scr'),vb=document.querySelector('#n-room').getAttribute('viewBox').split(' ').map(Number);
+          const ax=g.left+g.width*(+sc.getAttribute('x')+sc.getAttribute('width')/2)/vb[2],ay=g.top+g.height*(+sc.getAttribute('y')+sc.getAttribute('height')/2)/vb[3],wa=document.querySelector('.hero__wash'),st=document.querySelector('.hero__stage').getBoundingClientRect();
+          return{s:m==='none'?1:new DOMMatrix(m).a,copy:+getComputedStyle(c).opacity,wash:getComputedStyle(wa).display==='none'?0:+getComputedStyle(wa).opacity,
+            aim:Math.max(Math.abs(ax-st.left-st.width/2)/st.width,Math.abs(ay-st.top-st.height/2)/st.height),
+            night:document.documentElement.classList.contains('top-night'),theme:document.querySelector('meta[name=theme-color]').content,title:t.top<innerHeight&&t.bottom>64,
+            top:t.top>64&&t.bottom<innerHeight*.5,wo:+getComputedStyle(document.getElementById('works')).opacity,wp:getComputedStyle(document.getElementById('works')).pointerEvents}}"""
+        for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
+            z0 = pg.evaluate(ZS); pg.evaluate(Z, 0.3); pg.wait_for_timeout(250); zh = pg.evaluate(ZS)
+            pg.evaluate(Z, 0.45); pg.wait_for_timeout(250); zm = pg.evaluate(ZS)
+            pg.evaluate(Z, 0.72); pg.wait_for_timeout(250); za = pg.evaluate(ZS)
+            pg.evaluate(Z, 1); pg.wait_for_timeout(250); z1 = pg.evaluate(ZS)
+            pg.evaluate(Z, 0); pg.wait_for_timeout(250); zb = pg.evaluate(ZS)
+            good = (z0['s'] == 1 and z0['copy'] == 1 and z0['night'] and zm['s'] > 2 and zm['copy'] < .05 and za['aim'] < .03 and z1['wash'] == 1 and not z1['night'] and z1['wo'] == 1
+                    and zh['wo'] == 0 and zh['wp'] == 'none' and za['wo'] == 1 and za['wp'] != 'none' and za['top'] and za['wash'] == 1
+                    and z1['theme'] != z0['theme'] and zb['s'] == 1 and zb['copy'] == 1 and zb['night'] and zb['theme'] == z0['theme'] and not errs)
+            ok(good, f"{pre}/ {w}px 내리면 창 안으로: 배율 {z0['s']}→{zm['s']:.1f}→{za['s']:.1f}, 모니터 화면이 가운데에서 {za['aim']:.3f}, 글 {zm['copy']:.2f}, '만든 것' 가림 {zh['wo']}/{zh['wp']} → 드러남 {za['wo']}·제목이 머리말 바로 밑 {za['top']}, 끝 종이 {z1['wash']}·머리말 {'밤' if z1['night'] else '원래'}·'만든 것' {z1['wo']}, 되돌리면 배율 {zb['s']}·글 {zb['copy']} {errs[:1]}")
+            pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__more'); pg.wait_for_timeout(4600)   # 장면을 끝까지 보여 주며(약 3.8초) 내려감
+            st = pg.evaluate(ZS)
+            wt = pg.evaluate("Math.round(document.getElementById('works').getBoundingClientRect().top)")
+            ok(st['top'] and not st['night'] and st['wo'] == 1 and abs(wt) < 12 and pg.evaluate('location.hash') == '#works', f"{pre}/ {w}px '작업실 구경하기'를 누르면 만든 것이 화면 맨 위 제자리로(제목은 머리말 바로 밑) (위 {wt}px, 제목 {'머리말 밑' if st['top'] else '딴 데'})")
+            pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.click('.hero__cta'); pg.wait_for_timeout(2500)
+            tl = pg.evaluate("(()=>{const r=document.getElementById('tools').getBoundingClientRect();return Math.abs(r.top-80)<12&&+getComputedStyle(document.getElementById('works')).opacity===1})()")
+            ok(tl and pg.evaluate('location.hash') == '#tools', f"{pre}/ {w}px '무료 웹 도구 써 보기'를 누르면 웹 도구 줄로 ({tl})")
+            # 가려진 '만든 것' 안으로 탭 키가 오면 드러나는 곳까지 내려 줌
+            pg.evaluate(Z, 0); pg.wait_for_timeout(200); pg.focus('.hero__more'); pg.keyboard.press('Tab'); pg.wait_for_timeout(600)
+            fx = pg.evaluate("(()=>{const a=document.activeElement,r=a.getBoundingClientRect();return !!a.closest('#works')&&+getComputedStyle(document.getElementById('works')).opacity===1&&r.top>=0&&r.bottom<=innerHeight})()")
+            ok(fx, f"{pre}/ {w}px 첫 화면에서 탭 키로 '만든 것' 안에 가면 그 칸이 드러나고 포커스가 보임")
+            pg.keyboard.press('Shift+Tab'); pg.wait_for_timeout(500)
+            bk = pg.evaluate("(()=>{const a=document.activeElement,H=document.querySelector('[data-hero]');return a.classList.contains('hero__more')&&Math.abs(scrollY-(H.getBoundingClientRect().top+scrollY))<3&&+getComputedStyle(document.querySelector('.hero__copy')).opacity===1})()")
+            ok(bk, f"{pre}/ {w}px Shift+Tab으로 첫 화면 단추에 돌아오면 첫 화면 처음으로(단추 보임)")
+            c.close()
+        # 한 번 튕겨도 장면을 끝까지: 맨 위에서 휠 한 칸·손가락 한 번·PageDown이면 장면이 정해진 빠르기로 END(p 0.72)까지 가서 멈추고, 거기서 위로 한 번이면 맨 위까지
+        PP = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');return (scrollY-(H.getBoundingClientRect().top+scrollY))/(H.offsetHeight-S.offsetHeight)}"""
+        def swipe(cdp, y0, y1):
+            cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': 200, 'y': y0}]})
+            for i in range(1, 5): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': 200, 'y': y0 + (y1 - y0) * i / 4}]})
+            cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []})
+        for pre, w, h, how in (('', 390, 844, 'touch'), ('/en', 1280, 800, 'wheel'), ('', 1280, 800, 'key')):
+            c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=how == 'touch', has_touch=how == 'touch'); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(2800)
+            cdp = c.new_cdp_session(pg)
+            if how == 'touch': swipe(cdp, 600, 250)
+            elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 120)
+            else: pg.keyboard.press('PageDown')
+            pg.wait_for_timeout(1200); p1 = pg.evaluate(PP); pg.wait_for_timeout(3000); p2 = pg.evaluate(PP); st = pg.evaluate(ZS)
+            if how == 'touch': swipe(cdp, 300, 650)
+            elif how == 'wheel': pg.mouse.wheel(0, -120)
+            else: pg.keyboard.press('PageUp')
+            pg.wait_for_timeout(2800); p3 = pg.evaluate(PP); zb = pg.evaluate(ZS)
+            ok(.15 < p1 < .6 and abs(p2 - .72) < .01 and st['wo'] == 1 and st['top'] and abs(p3) < .005 and zb['copy'] == 1 and zb['s'] == 1 and not errs
+               and pg.evaluate("document.documentElement.style.overflow") == '',
+               f"{pre}/ {w}px {how} 한 번에 장면을 끝까지: 1.2초 p {p1:.2f}(중간), 4.2초 p {p2:.3f}(END 0.72)·'만든 것' {st['wo']}, 위로 한 번이면 맨 위 p {p3:.3f}·글 {zb['copy']} {errs[:1]}")
+            c.close()
+        # 모니터 화면 = '만든 것'으로 가는 창: 화면이 넓어지는 중(p 0.53)엔 '만든 것'이 그 화면 안에 보이고(옮김·자름), END에 제자리(옮김 없음).
+        # 그 뒤 줄이 보이면 줄 등이 켜지고 불빛이 날아가 아이콘이 다 켜짐, 끝 칸은 도시가 잠들기 시작하고 명함은 보임
+        PT = r"""()=>{const w=document.getElementById('works'),cs=getComputedStyle(w);return{o:+cs.opacity,tf:cs.transform!=='none',clip:cs.clipPath!=='none'}}"""
+        LIT = r"""(id)=>{const s=document.getElementById(id);return{in:s.classList.contains('in'),off:[...s.querySelectorAll('.wi')].filter(a=>!a.classList.contains('on')&&!a.classList.contains('landed')).length}}"""
+        for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
+            pg.evaluate(Z, 0.53); pg.wait_for_timeout(250); mid = pg.evaluate(PT)
+            pg.evaluate(Z, 0.72); pg.wait_for_timeout(1800); end = pg.evaluate(PT); g = pg.evaluate(LIT, 'games')
+            pg.evaluate("document.getElementById('g-play').scrollIntoView()"); pg.wait_for_timeout(2000); t = pg.evaluate(LIT, 'g-play')
+            pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1700)
+            e = pg.evaluate("(()=>{const b=document.querySelector('.bcard');return !!document.querySelector('.end-anim.dawn')&&+getComputedStyle(b).opacity===1})()")
+            fxn = pg.evaluate("document.querySelectorAll('.page-fx .pf-b').length")
+            ok(mid['o'] == 1 and mid['tf'] and mid['clip'] and end['o'] == 1 and not end['tf'] and not end['clip'] and g['in'] and g['off'] == 0 and t['in'] and t['off'] == 0 and e and fxn == 0 and not errs,
+               f"{pre}/ {w}px 모니터 화면 안에 '만든 것'(넓어지는 중 {mid}) → END 제자리 {end}, 줄 등·아이콘 불: 게임 {g}·모임 {t}, 끝 칸 창밖에 날이 밝기 시작·명함 보임 {e}, 남은 불빛 {fxn} {errs[:1]}")
+            c.close()
+        # 다시 내려와도 또: '만든 것'까지 내렸다 첫 화면 맨 위로 올리면 줄 등·아이콘이 꺼지고 끝 칸 도시 불이 다시 켜져 처음으로 돌아가고, 다시 내리면 불빛이 또 날아가 켬
+        FX = r"""()=>({fx:document.querySelectorAll('.page-fx .pf-b').length,gin:document.getElementById('games').classList.contains('in'),
+          on:document.querySelectorAll('.works .wi.on').length,end:document.querySelector('.end').classList.contains('dawn'),out:/^inset\(0(px)? 0(px)? 100%/.test(getComputedStyle(document.getElementById('works')).clipPath)})"""
+        for pre, w, h in (('', 412, 780), ('/en', 1366, 800)):
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(1800)
+            rounds = []
+            for rnd in range(2):
+                pg.evaluate(Z, 0.72); bead = 0
+                for i in range(10): pg.wait_for_timeout(120); bead = max(bead, pg.evaluate(FX)['fx'])
+                pg.wait_for_timeout(1400); a = pg.evaluate(FX)
+                pg.evaluate("document.querySelector('.end').scrollIntoView()"); pg.wait_for_timeout(1500); e = pg.evaluate(FX)['end']
+                pg.evaluate(Z, 0); pg.wait_for_timeout(400); b = pg.evaluate(FX)
+                rounds.append((bead, a['gin'], e, b['gin'] or b['on'] > 0 or b['end'], b['out']))
+            ok(all(r[0] > 0 and r[1] and r[2] and not r[3] and r[4] for r in rounds) and not errs,
+               f"{pre}/ {w}px 내렸다 올렸다 두 번: 매번 불빛이 날아가 켜지고 끝 칸 창밖에 날이 밝음, 맨 위에선 다 꺼지고 끝 칸은 다시 밤으로, 숨은 '만든 것'은 그리지 않음(첫 화면 아래쪽을 덮지 않음) (날아간 불빛·게임 줄·끝 칸 새벽·맨 위에 남은 불·안 그림) {rounds} {errs[:1]}")
+            c.close()
+        # 첫 화면 이야기 더하기: 거리의 셋째 손님(휴대폰)이 불빛을 받아 화면이 켜지고(45초 안, 아이·개 다음), 간판을 누르면 글자가 톡 뜀(오류 없이)
+        c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e)))
+        pg.add_init_script("""window.__wk=0;(function f(){const s=[...document.querySelectorAll('.n-cast .scr')].find(e=>e.getBoundingClientRect().width>0);if(s&&+s.getAttribute('opacity')>.9)__wk=1;requestAnimationFrame(f)})()""")
+        pg.goto(BASE + '/')
+        try: pg.wait_for_function('__wk === 1', timeout=45000)
+        except Exception: pass
+        wk = pg.evaluate('__wk')
+        sp = pg.evaluate("(()=>{const r=[...document.querySelectorAll('.night__bld')].find(e=>e.getBoundingClientRect().width>0).querySelector('.n-board').getBoundingClientRect();return[r.left+r.width*.6,r.top+r.height/2]})()")
+        pg.touchscreen.tap(sp[0], sp[1]); pg.wait_for_timeout(200)
+        hop = pg.evaluate("[...document.querySelectorAll('.n-name tspan')].some(t=>t.hasAttribute('y'))")
+        ok(wk == 1 and hop and not errs, f"첫 화면: 거리의 사람 휴대폰에 불빛 {wk}, 간판 누르면 글자 톡 {hop} {errs[:1]}")
+        c.close()
+        # (위: p 0.3엔 '만든 것'이 가려져 누를 수 없고, p 0.72엔 모니터 화면이 넓어져 된 '만든 것'이 화면 맨 위에 놓이고 제목이 머리말 바로 밑(아이콘 셋은 p 0.7에 다 앉음))
+        # 확대하지 않을 때: 동작 줄이기, 낮은 화면, landing.js를 못 받음(3초 뒤 확대 풀림), JS 꺼짐 → 첫 화면은 화면 한 장, 글이 보이고 불은 켜진 채
+        ONE = r"""()=>{const H=document.querySelector('[data-hero]'),S=H.querySelector('.hero__stage');return{one:Math.abs(H.offsetHeight-S.offsetHeight)<2,copy:+getComputedStyle(document.querySelector('.hero__copy')).opacity,
+          lit:[...document.querySelectorAll('.n-lit')].filter(e=>e.getBoundingClientRect().width>0).every(e=>+getComputedStyle(e).opacity===1)}}"""
+        # (낮은 화면은 움직임이 켜져 있어 들어올 때 불이 차례로 켜지는 2.5초를 기다린 뒤 본다)
+        for name, opt, h, block in (('동작 줄이기', {'reduced_motion': 'reduce'}, 844, False), ('낮은 화면', {}, 500, False), ('landing.js를 못 받음', {}, 844, True), ('JS 꺼짐', {'java_script_enabled': False}, 844, False)):
+            c = br.new_context(viewport={'width': 390, 'height': h}, **opt); pg = c.new_page()
+            if block: pg.route(re.compile(r'.*/assets/landing\.js.*'), lambda r: r.abort())
+            pg.goto(BASE + '/'); pg.wait_for_timeout(3600 if block else 3000 if h == 500 else 1800)
+            st = pg.evaluate(ONE)
+            ok(st['one'] and st['copy'] == 1 and st['lit'], f"{name}이면 첫 화면은 그림 한 장(확대 없음 {st['one']}), 글 보임, 불 켜짐")
+            if opt.get('reduced_motion'):
+                pg.evaluate('scrollTo(0, document.getElementById("works").offsetTop)'); pg.wait_for_timeout(300)
+                ok(not pg.evaluate("document.documentElement.classList.contains('top-night')"), '동작 줄이기: 첫 화면을 지나면 머리말이 원래대로')
+            c.close()
+
+        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(1500)
+        pg.emulate_media(reduced_motion='reduce'); pg.wait_for_timeout(400); st = pg.evaluate(ONE)
+        ok(st['one'] and st['copy'] == 1, f"보는 중에 동작 줄이기를 켜면 확대가 풀려 첫 화면이 화면 한 장 ({st['one']})")
+        pg.emulate_media(reduced_motion='no-preference'); pg.wait_for_timeout(400)
+        ok(not pg.evaluate(ONE)['one'], '동작 줄이기를 다시 끄면 확대가 돌아옴')
+        pg.evaluate("scrollTo(0, innerHeight*.8)"); pg.wait_for_timeout(300); pg.emulate_media(media='print')
+        st = pg.evaluate("""()=>{const h=document.querySelector('.hero__h1').getBoundingClientRect(),w=document.querySelector('.works').getBoundingClientRect(),c=getComputedStyle(document.querySelector('.hero__h1'));
+          return{shown:h.height>0&&+getComputedStyle(document.querySelector('.hero__copy')).opacity===1&&c.visibility==='visible',under:w.top>=h.bottom,ink:c.color}}""")
+        ok(st['shown'] and st['under'] and st['ink'] in ('rgb(0, 0, 0)',), f"인쇄하면 첫 화면 글이 검은 글로 보이고 '만든 것'이 그 밑에 {st}")
+        c.close()
+
     # 언어: 한국어 / 와 영어 /en/ 은 따로 된 페이지. 자동으로 넘기지 않고 띠로만 알림, 방침 페이지는 #en 이면 영어 칸
     sm = open(os.path.join(site, 'sitemap.xml')).read()
     for ko, en in PAIRS:
@@ -264,7 +388,7 @@ with sync_playwright() as p:
     ko_left = pg.evaluate(r"""[...document.querySelectorAll('main *, header *, footer *')].filter(e=>e.children.length===0&&/[가-힣]/.test(e.textContent)&&!e.closest('[lang=ko]')).map(e=>e.textContent.trim()).slice(0,6)""")
     ok(not ko_left, f'영어 화면에 한국어가 남지 않음 {ko_left}')
     sw = pg.evaluate('document.documentElement.scrollWidth'); ok(sw <= 390, f'영어 390px 가로 넘침 없음 ({sw})')
-    lines = pg.evaluate("(()=>{const h=document.querySelector('.hero__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
+    lines = pg.evaluate("(()=>{const h=document.querySelector('.lake__h1,.hero__h1');return Math.round(h.getBoundingClientRect().height/parseFloat(getComputedStyle(h).lineHeight))})()")
     ok(lines <= 3, f'영어 휴대폰 첫 화면 제목 {lines}줄')
     hrefs = pg.evaluate('[...document.querySelectorAll("a[href]")].map(a=>a.getAttribute("href"))')
     ok(all(h.startswith(('/en/', '#', 'http', 'mailto:', 'tel:')) or h.endswith('#en') or h == '/' for h in hrefs), f'영어 페이지 안 링크는 영어 쪽 {[h for h in hrefs if not (h.startswith(("/en/", "#", "http", "mailto:", "tel:")) or h == "/")]}')
@@ -278,7 +402,7 @@ with sync_playwright() as p:
         ok(not bad, f'{path} 안 링크는 영어 쪽 {bad[:4]}')
         if 'privacy' not in path: ok(pg.locator('.top nav a[aria-current]').count() == 1, f'{path} 머리말에 지금 페이지 표시')
     pg.goto(BASE + '/en/'); pg.wait_for_timeout(300)
-    pg.click('.top .menu-btn'); pg.wait_for_timeout(400); pg.click('.drawer a.lang'); pg.wait_for_timeout(400)   # 폰은 ☰ 서랍 안에 언어 단추
+    pg.click('a.lang'); pg.wait_for_timeout(400)
     ok(pg.url == BASE + '/' and pg.evaluate('document.documentElement.lang') == 'ko' and ('공들여 만들어요' in pg.inner_text('h1') or '혼자 만들어요' in pg.inner_text('h1')), '한국어 단추로 / 로')
     ok(pg.locator('.langbar').count() == 0, '한국어를 고르면 띠가 다시 안 뜸')
     pg.goto(BASE + '/owlight/privacy/#en'); pg.wait_for_timeout(300)
@@ -306,9 +430,9 @@ with sync_playwright() as p:
             pg.on('console', lambda m: errs.append(m.text) if m.type in ('error', 'warning') else None)
             pg.on('pageerror', lambda e: errs.append(str(e)))
             pg.route(SUB, sub_file)
-            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(300); home_title = pg.title(); pg.evaluate(EXPAND); pg.wait_for_timeout(500)
+            pg.goto(BASE + pre + '/'); pg.wait_for_timeout(300); home_title = pg.title()
             for i, (kind, tid) in enumerate(ITEMS):
-                errs.clear(); a = pg.locator(f'.wall a[data-show="{tid}"]')
+                errs.clear(); a = pg.locator(f'.works a[data-show="{tid}"]')
                 a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
                 before = pg.evaluate("(document.querySelector('dialog.sheet .stage')||{}).innerText||''")
                 if kind == 'tools': pg.wait_for_timeout(3200)
@@ -324,7 +448,7 @@ with sync_playwright() as p:
                 what = ('바로 써 보기 ' + ('실패' if st['fail'] else '뜸') + ', 시연 ' + ('움직임' if st['text'] != before else '멈춤')) if kind == 'tools' else f"미리 보기 {st['shots']}장"
                 ok(good, f"{pre}/ {w}px {tid} 소개 창: 주소 {st['path']}, 제목 {'맞음' if titled else st['title']}, {what}, 숫자 {st['facts']}·카드 {st['cards']}·다른 것 {st['others']}·쓰는 법 {st['steps']}·기준 {st['rows']}·기록 {st['days']}, {'뒤로 가기' if i % 2 else 'Esc'}로 {'닫힘' if shut else '안 닫힘'} {errs[:2]}")
             # 창 안 '다른 것도 둘러보기'를 누르면 창 내용만 바뀌고(주소도), 한 번 닫으면 홈
-            a = pg.locator('.wall a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
+            a = pg.locator('.works a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
             nxt = pg.locator('dialog.sheet .sh__others a').first; nid = nxt.get_attribute('data-show')
             nxt.scroll_into_view_if_needed(); nxt.click(); pg.wait_for_timeout(1200)
             st = pg.evaluate(SHEET)
@@ -368,13 +492,72 @@ with sync_playwright() as p:
     ok(pg.evaluate('location.pathname+location.hash') == '/guides/#qr' and 0 <= top < 220, f'가이드 모음 #도구 로 오면 그 도구 칸에서 멈춤(넘기지 않음, 칸 위 {round(top)}px)')
     c.close()
 
+    if OLD_HERO:
+        # 첫 화면 들어올 때 카메라는 움직이지 않음(처음부터 배율 1, 사용자가 '과하다'고 뺌). 제목 낱말 셋이 있고 위층 이웃 창에 불이 켜지면 그 낱말도 켜짐
+        NEAR = "(()=>{const m=getComputedStyle(document.querySelector('.night__near')).transform;return m==='none'?1:new DOMMatrix(m).a})()"
+        for pre, w, h in (('', 390, 844), ('/en', 1366, 860)):
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + pre + '/'); pg.wait_for_timeout(250)
+            s0 = pg.evaluate(NEAR); pg.wait_for_timeout(900); s1 = pg.evaluate(NEAR)
+            ok(abs(s0 - 1) < .001 and abs(s1 - 1) < .001 and not errs, f'{pre}/ {w}px 들어올 때 카메라 그대로: 배율 {s0:.2f} → {s1:.2f} {errs[:2]}')
+            n = pg.evaluate("document.querySelectorAll('.hero__h1 .hw[data-k]').length")
+            pg.wait_for_function("document.querySelector('.hero__h1 .hw.lit')", timeout=9000)
+            lit = pg.evaluate("[...document.querySelectorAll('.hero__h1 .hw.lit')].map(e=>e.dataset.k)")
+            col = pg.evaluate("getComputedStyle(document.querySelector('.hero__h1 .hw.lit')).color!==getComputedStyle(document.querySelector('.hero__h1')).color")
+            ok(n == 3 and lit and col, f'{pre}/ {w}px 제목 낱말 {n}개, 이웃 창 불과 같이 켜진 낱말 {lit}')
+            c.close()
+        # 동작 줄이기: 그림 그대로
+        c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
+        ok(pg.evaluate(NEAR) == 1, '동작 줄이기: 첫 화면 그림 그대로')
+        c.close()
+
+        # 거리를 지나는 사람들: 넷(아이·개 산책·휴대폰·자전거)과 개, 그림자·테두리. 첫 사람(풍선 든 아이)이 창 앞에서 불빛을 받으면 풍선이 등불(.on)
+        for w, h in ((390, 844), (1366, 768)):
+            c = br.new_context(viewport={'width': w, 'height': h}); pg = c.new_page(); errs = []
+            pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/')
+            pg.wait_for_function("[...document.querySelectorAll('.night__bld')].some(s=>s.getBoundingClientRect().width>0&&s.querySelector('.n-bln.on'))", timeout=20000)
+            st = pg.evaluate("""()=>{const s=[...document.querySelectorAll('.night__bld')].find(s=>s.getBoundingClientRect().width>0),c=s.querySelector('.n-cast');
+              return{figs:c.querySelectorAll('.n-fig').length,shd:c.querySelectorAll('.n-shd').length,rim:c.querySelectorAll('.n-rimu').length,op:+c.getAttribute('opacity')}}""")
+            ok(st['figs'] == 5 and st['shd'] == 5 and st['rim'] == 5 and st['op'] > .9 and not errs, f"{w}px 거리: 그림 {st['figs']}(넷+개)·그림자 {st['shd']}·테두리 {st['rim']}, 아이 풍선이 불빛을 받아 켜짐 {errs[:2]}")
+            c.close()
+
+    # 끝 칸: 명함 종이가 칠해져 글씨가 보이고(배경 ≠ 투명, 글자 대비 4.5 이상), 창이 보이면 날이 밝아 건너편 창 불이 다 꺼지고 아이가 던진 종이비행기가
+    # 명함에 내려앉아 ✓ 도장(.got). 다 가렸다 다시 보이면 밤부터 또
+    LUM = "(c)=>{const v=c.match(/[\\d.]+/g).map(Number).slice(0,3).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*v[0]+.7152*v[1]+.0722*v[2]}"
+    for scheme in ('light', 'dark'):
+        c = br.new_context(viewport={'width': 390, 'height': 844}, color_scheme=scheme); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(600)
+        st = pg.evaluate("(()=>{const L=" + LUM + ",cd=document.querySelector('.bcard'),bg=getComputedStyle(cd).backgroundColor,a=getComputedStyle(cd.querySelector('.bcard__rows a')).color,l1=L(bg),l2=L(a);return{bg,ratio:(Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05)}})()")
+        ok(st['bg'] not in ('rgba(0, 0, 0, 0)', 'transparent') and st['ratio'] >= 4.5, f"{scheme} 끝 칸 명함: 종이 {st['bg']}, 메일 글자 대비 {st['ratio']:.1f}")
+        pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=9000)
+        lit = pg.evaluate("document.querySelectorAll('.end__scene .es-w.on').length")
+        pl = pg.evaluate("(()=>{const p=document.querySelector('.end__fx .ef-plane'),c=document.querySelector('.bcard');if(!p)return 9e9;const a=p.getBoundingClientRect(),b=c.getBoundingClientRect();return Math.hypot(a.left+a.width/2-(b.right-22),a.top+a.height/2-b.top)})()")
+        pg.evaluate("scrollTo({top:0,behavior:'instant'})"); pg.wait_for_timeout(400)
+        off = pg.evaluate("!document.querySelector('.bcard.got') && !document.querySelector('.end.dawn') && !document.querySelector('.end__fx .ef-plane') && document.querySelectorAll('.end__scene .es-w.on').length > 10")
+        pg.evaluate("document.querySelector('.end__scene').scrollIntoView({block:'center',behavior:'instant'})")
+        pg.wait_for_function("document.querySelector('.bcard.got')", timeout=9000)
+        ok(lit == 0 and pl < 24 and off and not errs, f"{scheme} 끝 칸: 날이 밝아 건너편 창 불이 다 꺼지고({lit}) 종이비행기가 명함 귀퉁이에(떨어진 거리 {pl:.0f}px) 내려앉아 도장, 올라갔다 다시 오면 밤부터 다시 {errs[:2]}")
+        c.close()
+    c = br.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='reduce'); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(400)
+    ok(pg.evaluate("!document.querySelector('.end-anim') && getComputedStyle(document.querySelector('.bcard__stamp')).opacity > .5 && !document.querySelector('.end__scene .es-w.on') && +getComputedStyle(document.querySelector('.es-dawn')).opacity === 1 && +getComputedStyle(document.querySelector('.es-lampg')).opacity === 0"), '동작 줄이기: 끝 칸은 해 뜬 아침(건너편 불·스탠드 꺼짐)과 도장 찍힌 명함 그대로')
+    c.close()
+
+    # '만든 것' 줄마다 매단 등: 줄이 켜지면 벽에 등불(::before 보임), 등 줄(::after)이 위 선까지
+    c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/'); pg.wait_for_timeout(600)
+    pg.click('[data-lake-go],.hero__more'); pg.wait_for_timeout(5200)
+    st = pg.evaluate("""()=>{const sh=document.querySelector('.shelf.in'),h=sh&&sh.querySelector('.shelf__h'),a=h&&getComputedStyle(h,'::after'),b=sh&&getComputedStyle(sh,'::before');
+      return{in:!!sh,wash:b?+b.opacity:0,cord:a?a.content!=='none'&&Math.abs(h.getBoundingClientRect().top+parseFloat(a.top)-sh.getBoundingClientRect().top)<2:false}}""")
+    ok(st['in'] and st['wash'] > .9 and st['cord'], f"'만든 것' 줄 등: 켜짐 {st['in']}, 벽 등불 {st['wash']}, 등 줄이 위 선까지 {st['cord']}")
+    c.close()
+
     # 소개 창 = 작업대: 열면 스탠드가 꺼진 채였다가 켜지고(.off 빠짐), 스탠드를 누르면 꺼지고 또 누르면 켜짐, 사실 숫자는 끝에 원래 글 그대로,
     # 도구는 모니터 안 무대, 닫을 때 스탠드가 꺼짐. 소개 페이지는 처음부터 켜진 채(CSS 첫 켜짐)
     for w in (390, 1366):
         c = br.new_context(viewport={'width': w, 'height': 844}, has_touch=w < 500); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.route(SUB, sub_file)
-        pg.goto(BASE + '/'); pg.wait_for_timeout(300); pg.evaluate(EXPAND); pg.wait_for_timeout(500)
-        a = pg.locator('.wall a[data-show="chickrescue"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(120)
+        pg.goto(BASE + '/'); pg.wait_for_timeout(300)
+        a = pg.locator('.works a[data-show="chickrescue"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(120)
         off0 = pg.evaluate("!!document.querySelector('dialog.sheet .sh__spot.off')"); pg.wait_for_timeout(1500)
         on1 = pg.evaluate("!document.querySelector('dialog.sheet .sh__spot.off') && !!document.querySelector('dialog.sheet .sh__spot .sh__lamp') && !!document.querySelector('dialog.sheet .sh__spot .sh__status, dialog.sheet .sh__status')")
         facts = pg.evaluate("[...document.querySelectorAll('dialog.sheet .sh__facts b')].map(b=>b.textContent)")
@@ -383,7 +566,7 @@ with sync_playwright() as p:
         pg.locator('dialog.sheet .sh__lamp').click(force=True); pg.wait_for_timeout(250); tog1 = pg.evaluate("!!document.querySelector('dialog.sheet .sh__spot.off')")
         pg.locator('dialog.sheet .sh__lamp').click(force=True); pg.wait_for_timeout(250); tog2 = pg.evaluate("!document.querySelector('dialog.sheet .sh__spot.off')")
         pg.keyboard.press('Escape'); pg.wait_for_timeout(60); dark = pg.evaluate("!!document.querySelector('dialog.sheet .sh__spot.off')"); pg.wait_for_timeout(600)
-        a = pg.locator('.wall a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
+        a = pg.locator('.works a[data-show="daycount"]'); a.scroll_into_view_if_needed(); a.click(); pg.wait_for_timeout(900)
         mon = pg.evaluate("!!document.querySelector('dialog.sheet .mon > .stage[data-tool]')")
         pg.keyboard.press('Escape'); pg.wait_for_timeout(500)
         ok(off0 and on1 and same and tog1 and tog2 and dark and mon and not errs,
