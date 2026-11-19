@@ -1,4 +1,4 @@
-# 방침·지원 페이지와 404를 다시 만든다: 머리말·바닥글은 index.html에서, 본문은 원래 사이트(lumenlab-site)에서 그대로.
+# 방침·지원 페이지와 404를 다시 만든다: 머리말·바닥글은 _dev/shell.html(옛 홈 틀)에서, 본문은 원래 사이트(lumenlab-site)에서 그대로.
 # 새 앱 페이지를 옮길 때: PAGES에 (경로, 앱 이름, 아이콘, 한국어 이름표 키) 한 줄을 더하고 python3 _dev/build_pages.py
 # 원래 사이트 복사본 경로: SRC (없으면 git clone --depth 1 https://github.com/UBe1qa/lumenlab-site)
 import re, os, sys
@@ -9,7 +9,7 @@ PAGES = [
     ('owlight/privacy', 'Owlight', '/img/owlight.webp', 'crumbPrivacy', '개인정보 처리방침', 'Owlight(macOS 메뉴 막대 앱)의 개인정보 처리방침. Owlight privacy policy.'),
     ('owlight/support', 'Owlight', '/img/owlight.webp', 'crumbSupport', '지원', 'Owlight(macOS 메뉴 막대 앱) 사용 안내, 자주 묻는 질문, 문의. Owlight support.'),
 ]
-idx = open('index.html').read()
+idx = open('_dev/shell.html').read()   # 머리말·바닥글 틀(2026-11-19부터 한국어 홈은 따로)
 langscript = idx[idx.index('<script>\n/* 언어'):]
 langscript = langscript[:langscript.index('/* 움직임은')].rstrip() + '\n</script>'
 header = idx[idx.index('<a class="skip"'):idx.index('<main')]
