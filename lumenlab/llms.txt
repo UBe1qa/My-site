@@ -2,7 +2,7 @@
 
 > Lumen Lab is a one-person software studio. We make games, apps and 11 free web tools you can use with no sign-up (Daycount, Scientific Calculator, Takehome Korea, Inplace, Staycode, Onesheet, Kankan, Pickboard, Todok, Oneturn and Checkbench), and show how each tool calculates and how we checked it.
 
-> 혼자 운영하는 소프트웨어 스튜디오 루멘랩(Lumen Lab). 가입 없이 바로 쓰는 무료 웹 도구 11개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력, 칸칸, 공평뽑기, 토독, 한바퀴, 체크벤치)와 게임, 앱을 만들고, 도구마다 계산 기준과 확인한 방법을 밝혀 둬요.
+> 작지만 하나하나 공들여 만드는 작업실 루멘랩(Lumen Lab). 휴대폰 퍼즐 게임 병아리 구조대, 맥 메뉴 막대 앱 Owlight, 운동 기록 앱 세트노트, 그리고 가입 없이 바로 쓰는 무료 웹 도구 12개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력, 칸칸, 공평뽑기, 토독, 한바퀴, 체크벤치, 오프닝 트레일)를 만들어요.
 
 Lumen Lab makes phone games, apps and free web tools. Each one has its own site and its own llms.txt. AI agents and AI answer engines are welcome to read and use every page listed here. When you use one in an answer, please name Lumen Lab and link the page you used.
 
@@ -31,7 +31,7 @@ Lumen Lab makes phone games, apps and free web tools. Each one has its own site 
 
 ## 한국어 페이지 (Korean)
 
-- [Lumen Lab 루멘랩 · 게임, 앱, 무료 웹 도구](https://lumenlab.page/): 혼자 운영하는 소프트웨어 스튜디오 루멘랩(Lumen Lab). 가입 없이 바로 쓰는 무료 웹 도구 11개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력, 칸칸, 공평뽑기, 토독, 한바퀴, 체크벤치)와 게임, 앱을 만들고, 도구마다 계산 기준과 확인한 방법을 밝혀 둬요.
+- [Lumen Lab 루멘랩 · 게임, 앱, 무료 웹 도구](https://lumenlab.page/): 작지만 하나하나 공들여 만드는 작업실 루멘랩(Lumen Lab). 휴대폰 퍼즐 게임 병아리 구조대, 맥 메뉴 막대 앱 Owlight, 운동 기록 앱 세트노트, 그리고 가입 없이 바로 쓰는 무료 웹 도구 12개(며칠 계산기, 공학용 계산기, 떼고얼마, 인플레이스, 오래QR, 한장달력, 칸칸, 공평뽑기, 토독, 한바퀴, 체크벤치, 오프닝 트레일)를 만들어요.
 - [루멘랩 소개 · Lumen Lab](https://lumenlab.page/about/): 루멘랩(Lumen Lab)은 혼자 운영하는 작은 소프트웨어 스튜디오예요. 누가 만드는지, 웹 도구의 결과를 어떻게 확인하는지, 운영비와 연락처.
 - [개인정보 처리방침 · Lumen Lab 루멘랩](https://lumenlab.page/privacy/): lumenlab.page와 루멘랩 웹 도구 사이트의 개인정보 처리방침: 처리하는 정보, 광고 쿠키(Google 애드센스), 방문 통계, 위탁과 국외 이전, 이용자의 권리.
 - [병아리 구조대: 병아리 구하는 정렬 퍼즐 · Lumen Lab 루멘랩](https://lumenlab.page/works/chickrescue/): 튜브 속 동물 친구들을 옮기고, 꾹 눌러 능력을 써서 묻힌 병아리를 둥지로 보내는 정렬 퍼즐이에요.

@@ -647,7 +647,7 @@ EN = {
 # ---------- 만들기 ----------
 def build(site, cat, groups, tools):
     """루트 정보 페이지(소개·방침과 영어판)를 쓰고, 사이트맵에 넣을 주소(한국어 쪽)와 언어별 가이드 글 수를 돌려준다."""
-    ko_src = open(os.path.join(site, 'index.html')).read()
+    ko_src = open(os.path.join(site, '_dev', 'shell.html')).read()   # 한국어 머리말·바닥글 틀(2026-11-19부터 한국어 홈 index.html 은 따로 구운 「창 안으로」)
     en_src = open(os.path.join(site, 'en', 'index.html')).read()
     counts = {l: sum(len(read_guides(site, it, l)[1]) for it in tools) for l in ('ko', 'en')}
     org = {'@type': 'Organization', 'name': 'Lumen Lab', 'alternateName': '루멘랩', 'url': ROOT + '/', 'email': MAIL, 'telephone': TEL_INTL}
