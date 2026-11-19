@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumen Lab 루멘랩 · 게임, 앱, 무료 웹 도구</title>
+<meta name="description" content="작지만 하나하나 공들여 만드는 작업실 루멘랩(Lumen Lab). 휴대폰 퍼즐 게임 병아리 구조대, 맥 메뉴 막대 앱 Owlight, 운동 기록 앱 세트노트, 그리고 가입 없이 바로 쓰는 무료 웹 도구 {{ntools}}개({{toolnames}})를 만들어요.">
+<!-- 구글 서치 콘솔 소유 확인(lumenlab.page). 지우면 확인이 풀린다 -->
+<meta name="google-site-verification" content="5wk0foAz4naKCTO0IuAf1aklHWTSIPggcePVQiEMakE">
+<link rel="canonical" href="https://lumenlab.page/">
+<link rel="alternate" hreflang="ko" href="https://lumenlab.page/">
+<link rel="alternate" hreflang="en" href="https://lumenlab.page/en/">
+<link rel="alternate" hreflang="x-default" href="https://lumenlab.page/en/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lumen Lab 루멘랩">
+<meta property="og:title" content="Lumen Lab 루멘랩 · 게임, 앱, 무료 웹 도구">
+<meta property="og:description" content="작지만, 하나하나 공들여 만들어요. 게임과 앱, 가입 없이 바로 쓰는 무료 웹 도구 {{ntools}}개를 만드는 작업실 루멘랩.">
+<meta property="og:url" content="https://lumenlab.page/">
+<meta property="og:image" content="https://lumenlab.page/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#06060c">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&amp;family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/home.css">
+<link rel="stylesheet" href="/assets/store.css">
+<link rel="preload" as="image" href="/img/home/play-poster.webp">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<!-- 이 파일은 lumenlab/_dev/home_ko.html 을 build_home.py 가 구운 것(손으로 고치지 말 것). 영어 홈 /en/ 과 다른 페이지의 머리말·바닥글은 _dev/shell.html 에서 나온다.
+     틀: My-site-private context/reports/lumenlab/2026-11-19-홈-디자인-틀.md (A 「창 안으로」). 움직임은 assets/home.js, 도구 꼬리표를 누르면 assets/store.js 가 소개 창을 띄운다 -->
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<nav class="nav" id="nav" aria-label="사이트"><div class="wrap"><a class="brand" href="/" aria-label="Lumen Lab 루멘랩 처음으로"><i aria-hidden="true"></i>Lumen Lab</a>
+  <div class="side"><a class="lang" href="/en/" hreflang="en" lang="en" data-other-lang>EN</a><a class="go" href="/#works" data-go="0">만든 것 보기</a></div></div></nav>
+
+<main id="main">
+<section class="walk" id="works" aria-label="작업실과 만든 것">
+ <div class="pin" id="hero">
+  <canvas id="room" aria-hidden="true"></canvas>
+  <canvas id="scene" role="img" aria-label="밤 거리에 불이 켜진 루멘랩 작업실. 누르면 이웃 창에 불이 번져요"></canvas>
+  <div class="flash" aria-hidden="true"></div>
+  <div class="say"><div class="wrap"><h1>작지만, 하나하나<br>공들여 만들어요.</h1><p>게임과 앱, 웹 도구를 만드는 작업실</p></div></div>
+  <div class="low" id="low"><div id="hint" aria-hidden="true">내려 보면 창 안으로 들어가요</div></div>
+
+  <div class="bench" id="stage">
+   <div class="chaps" aria-label="만든 것 고르기">
+    <button type="button" data-go="0"><span>{{name:chickrescue}}</span><i><b></b></i></button>
+    <button type="button" data-go="1"><span>{{name:owlight}}</span><i><b></b></i></button>
+    <button type="button" data-go="2"><span>{{name:setnote}}</span><i><b></b></i></button>
+    <button type="button" data-go="3"><span>다음 작품</span><i><b></b></i></button>
+   </div>
+
+   <article class="ch" id="c0" aria-labelledby="t-chick">
+    <div class="obj o-chick"><div class="grp">
+      <div class="phone"><div class="scr"><video poster="/img/home/play-poster.webp" muted loop playsinline preload="none" aria-label="{{name:chickrescue}} 실제 플레이 화면"><source src="/img/home/play-ko.mp4" type="video/mp4"><source src="/img/home/play-ko.webm" type="video/webm"></video></div></div>
+      <img class="peek" src="/img/home/c-chick.webp" width="160" height="160" alt="">
+      <span class="fig f1"><img src="/img/home/c-frog.webp" width="160" height="160" alt=""></span><span class="fig f2"><img src="/img/home/c-penguin.webp" width="160" height="160" alt=""></span>
+      <span class="fig f3"><img src="/img/home/c-owl.webp" width="160" height="160" alt=""></span><span class="fig f4"><img src="/img/home/c-lion.webp" width="160" height="160" alt=""></span>
+    </div></div>
+    <div class="plate">
+     <p class="kind">휴대폰 퍼즐 게임 · 안드로이드·아이폰</p><h2 id="t-chick">{{name:chickrescue}}</h2>
+     <p class="one">동물 친구들을 옮겨, 묻힌 병아리를 둥지로 보내요.</p>
+     <div class="row badges"><a href="{{link:chickrescue:apps.apple.com}}" target="_blank" rel="noopener"><img src="/img/home/badge-appstore-ko.svg" width="130" height="40" alt="App Store에서 다운로드"></a><a href="{{link:chickrescue:play.google.com}}" target="_blank" rel="noopener"><img src="/img/home/badge-play-ko.png" width="646" height="192" alt="Google Play에서 다운로드"></a></div>
+    </div>
+   </article>
+
+   <article class="ch" id="c1" aria-labelledby="t-owl">
+    <div class="obj o-owl">
+      <div class="grp imac"><div class="scrn"><div class="mac">
+        <div class="wall"><img src="/img/home/owl-w1.jpg" width="1400" height="792" alt="" loading="lazy"><img src="/img/home/owl-w3.jpg" width="1400" height="792" alt="" loading="lazy"></div>
+        <div class="bar"><span class="owl" id="owlIcon"><img src="/img/owlight.webp" width="15" height="15" alt=""></span><span class="bat"></span><span data-bartime></span></div>
+        <div class="clock" data-clock aria-hidden="true"><div class="hm"><small>오후</small><b>7:42</b></div><span></span></div>
+      </div></div><div class="neck"></div><div class="foot"></div></div>
+      <div class="pop" id="pop"><img src="/img/home/owl-panel.webp" width="463" height="749" alt="{{name:owlight}} 메뉴 막대 패널: 불침번(잠자기 방지), 커튼(바탕화면 가리기), 후광, 몰입 세션" loading="lazy"></div>
+    </div>
+    <div class="plate">
+     <p class="kind">맥 메뉴 막대 앱 · macOS 14 이상</p><h2 id="t-owl">{{name:owlight}}</h2>
+     <p class="one">잠자기 방지, 바탕화면 가리기를 메뉴 막대에서 켜고 꺼요.</p>
+     <div class="row"><a class="btn solid" href="{{link:owlight:apps.apple.com}}" target="_blank" rel="noopener">Mac App Store에서 보기</a><a class="btn ghost" href="{{url:owlight}}" target="_blank" rel="noopener">어떤 앱인지</a></div>
+    </div>
+   </article>
+
+   <article class="ch" id="c2" aria-labelledby="t-set">
+    <div class="obj o-set"><div class="grp sn">
+      <div class="phone back"><div class="scr"><img src="/img/setnote/done-ko.webp" width="600" height="1298" alt="" loading="lazy"></div></div>
+      <div class="phone front"><div class="scr"><img src="/img/setnote/workout-ko.webp" width="600" height="1298" alt="{{name:setnote}} 운동 기록 화면" loading="lazy"></div></div>
+      </div>
+      <div class="chip c1" aria-hidden="true"><span class="ck">{{check}}</span><span>벤치프레스 62.5kg × 8<small>지난번 60kg × 8</small></span></div>
+      <div class="chip c2" aria-hidden="true"><span class="ck">{{check}}</span><span><em>+2.5kg</em> 올렸어요<small>세트마다 지난번이 옆에</small></span></div>
+      <div class="chip c3" aria-hidden="true"><span class="ck">{{check}}</span><span>오늘 4,468kg<small>16세트 · 51분</small></span></div>
+    </div>
+    <div class="plate">
+     <p class="kind">브라우저로 여는 운동 기록</p><h2 id="t-set">{{name:setnote}}</h2>
+     <p class="one">세트마다 지난번 무게와 횟수를 옆에 두고 기록해요.</p>
+     <div class="row"><a class="btn solid" href="{{link:setnote:/app/}}" target="_blank" rel="noopener">세트노트 열기</a><a class="btn ghost" href="{{url:setnote}}" target="_blank" rel="noopener">어떤 앱인지</a></div>
+    </div>
+   </article>
+
+   <article class="ch" id="c3" aria-labelledby="t-next">
+    <div class="obj o-next"><div class="cover">
+      <div class="cv c1">{{drape_tall}}<span class="tag">체스 오프닝 새 판<small>만드는 중</small></span></div>
+      <div class="cv c2">{{drape_wide}}<span class="tag">소재 정보<small>만드는 중</small></span></div>
+    </div></div>
+    <div class="plate">
+     <p class="kind">작업대 위, 천을 덮어 둔 것</p><h2 id="t-next">다음 작품</h2>
+     <p class="one">체스 오프닝 새 판과 소재 정보 사이트를 만들고 있어요. 나오면 여기 올라와요.</p>
+    </div>
+   </article>
+  </div>
+ </div>
+</section>
+
+<section class="peg works" id="tools" aria-labelledby="t-tools"><div class="wrap">
+  <div class="hd"><p class="kind">웹 도구</p><h2 id="t-tools">벽에 걸어 둔 도구 {{ntools}}개</h2><p>가입 없이 바로 열어 써요. 꼬리표를 누르면 그 자리에서 써 볼 수 있어요.</p></div>
+  <ul class="board">
+{{tags}}
+  </ul>
+  <a class="all" href="/guides/">도구마다 쓰는 법, 가이드 모아 보기 →</a>
+</div></section>
+
+<section class="exit" id="contact" aria-labelledby="t-contact">
+  <div class="wrap"><h2 id="t-contact">불은 늘 켜 둘게요.</h2><p>문의는 메일로 받아요.</p>
+  <div class="mail"><a id="addr" href="mailto:contact@lumenlab.page">contact@lumenlab.page</a><button id="copy" type="button">복사</button></div></div>
+  <div class="facade" aria-hidden="true"><div class="wn"><i></i></div><div class="door"><div class="lf"><div class="gl"></div><span class="op">OPEN</span><i class="kn"></i></div></div><div class="wn"><i></i></div></div>
+  <div class="spill" aria-hidden="true"></div>
+</section>
+</main>
+
+<footer class="ft"><div class="wrap"><span>© 2026 Lumen Lab · 개인사업자</span>
+  <nav aria-label="바닥 링크"><a href="/about/">소개</a><a href="/guides/">가이드</a><a href="/privacy/">개인정보 처리방침</a><a href="/en/" hreflang="en" lang="en">English</a></nav></div></footer>
+<script src="/assets/home.js" defer></script>
+<script src="/assets/store.js" defer></script>
+</body>
+</html>
