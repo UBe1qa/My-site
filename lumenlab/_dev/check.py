@@ -422,22 +422,27 @@ with sync_playwright() as p:
                 and abs(x['tools']) < 2 and at(y) == 4 and all(s['ov'] == '' for s in (a, b, f, x, y)) and not errs)
         ok(good, f"/ {w}x{h} {how} 손짓 한 번에 작품 하나: 0.7초 u {m['u']:.2f}(가는 중) → {a['u']:.2f}·{b['u']:.2f}, 빨리 여러 번 → {f['u']:.2f}(멈춤 자리 {fi}), 마지막 다음 걸이판 {x['tools']:.0f}px, 위로 한 번 u {y['u']:.2f} {errs[:1]}")
         c.close()
-    # PC 휠·트랙패드·키는 브라우저 스크롤 그대로(사용자 11-20 「pc에서 위로 아래로 스크롤 할때 스무스하게 안됨」): 휠 한 칸은 그만큼만 움직이고 붙잡혀 다음 작품까지 끌려가지 않음,
-    # 트랙패드처럼 작은 값이 이어지면 다 더한 만큼 가고(관성이 안 끊김), 위로도 같음, PageDown도 브라우저 그대로. 알약으로 가는 중에 휠을 쓰면 바로 멈추고 사람한테 넘김
+    # PC 휠·트랙패드 = 작품 앞 턱(사용자 11-20 「pc에서 스크롤 스무스하게 안됨」 → 11-21 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」):
+    # 멈춤 자리 가까이선 휠 한 칸이 20~60px만(턱), 그 자리에서 조금 내려도 되돌려 끌지 않음(갇힘 없음). 여러 칸·트랙패드로 다가가면 그 작품 자리에 딱 섬,
+    # 위로도 같음. 칸 끝을 지나 걸이판 밑은 브라우저 그대로, PageDown도 브라우저 그대로. 알약으로 가는 중에 휠을 쓰면 바로 멈추고 사람한테 넘김
     c = br.new_context(viewport={'width': 1440, 'height': 900}, locale='ko-KR'); pg = c.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(1500); pg.mouse.move(720, 450)
-    Y = 'scrollY'
-    y0 = pg.evaluate(Y); pg.mouse.wheel(0, 100); pg.wait_for_timeout(900); y1 = pg.evaluate(Y)
-    tot = 0
-    for i in range(60): d = max(1, 40 - i * .6); tot += d; pg.mouse.wheel(0, d); pg.wait_for_timeout(16)
-    pg.wait_for_timeout(1200); y2 = pg.evaluate(Y)
-    for i in range(60): pg.mouse.wheel(0, -max(1, 40 - i * .6)); pg.wait_for_timeout(16)
-    pg.wait_for_timeout(1200); y3 = pg.evaluate(Y)
-    pg.keyboard.press('PageDown'); pg.wait_for_timeout(1200); y4 = pg.evaluate(Y)
-    pg.evaluate(HU, 1.5); pg.wait_for_timeout(300); pg.click('.chaps button[data-go="3"]'); pg.wait_for_timeout(250); pg.mouse.wheel(0, -100); pg.wait_for_timeout(900); ya = pg.evaluate(Y); pg.wait_for_timeout(1200); yb = pg.evaluate(Y)
-    good = (abs(y1 - y0 - 100) < 3 and abs(y2 - y1 - tot) < 6 and abs(y3 - y1) < 6 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2
-            and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
-    ok(good, f"/ PC 휠·트랙패드·키는 그대로: 휠 한 칸 {y1 - y0:.0f}px, 트랙패드 {y2 - y1:.0f}/{tot:.0f}px, 위로 {y3 - y1:.0f}, PageDown {y4 - y3:.0f}px, 알약으로 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
+    HUu = "()=>-document.querySelector('.walk').getBoundingClientRect().top/document.getElementById('hero').clientHeight"
+    def notch(n, d=100, gap=80):
+        for i in range(n): pg.mouse.wheel(0, d); pg.wait_for_timeout(gap)
+    def flick(sg=1):
+        for i in range(60): pg.mouse.wheel(0, sg * max(1, 40 - i * .6)); pg.wait_for_timeout(16)
+    notch(1); pg.wait_for_timeout(500); n1 = pg.evaluate('scrollY'); pg.wait_for_timeout(900); n1b = pg.evaluate('scrollY')
+    notch(12); pg.wait_for_timeout(1500); h1 = pg.evaluate(HUu)
+    y5 = pg.evaluate('scrollY'); notch(1); pg.wait_for_timeout(1300); y6 = pg.evaluate('scrollY')
+    flick(); pg.wait_for_timeout(1500); fu = pg.evaluate(HUu); flick(-1); pg.wait_for_timeout(1500); fd = pg.evaluate(HUu)
+    notch(70, gap=60); pg.wait_for_timeout(1500); out = pg.evaluate(HUu)
+    pg.evaluate(HU, 2.0); pg.wait_for_timeout(300); y3 = pg.evaluate('scrollY'); pg.keyboard.press('PageDown'); pg.wait_for_timeout(1200); y4 = pg.evaluate('scrollY')
+    pg.evaluate(HU, 1.5); pg.wait_for_timeout(300); pg.click('.chaps button[data-go="3"]'); pg.wait_for_timeout(250); pg.mouse.wheel(0, -100); pg.wait_for_timeout(1300); ya = pg.evaluate('scrollY'); pg.wait_for_timeout(1200); yb = pg.evaluate('scrollY')
+    on = lambda u: any(abs(u - v) < .003 for v in HSTOP)
+    good = (20 <= n1 <= 60 and abs(n1b - n1) < 1 and abs(h1 - HSTOP[1]) < .003 and 20 <= y6 - y5 <= 60 and on(fu) and fu > h1 + .5 and on(fd) and fd < fu
+            and out > HX[3] + 1.85 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2 and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
+    ok(good, f"/ PC 휠 턱: 첫 칸 {n1:.0f}px(1.4초 뒤 {n1b:.0f}), 열두 칸 → u {h1:.3f}, 멈춤 자리에서 한 칸 {y6 - y5:.0f}px 그대로, 트랙패드 → {fu:.3f} · 위로 → {fd:.3f}, 일흔 칸 → 걸이판 밑 u {out:.2f}, PageDown {y4 - y3:.0f}px, 알약 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
     c.close()
     # 문 밖 가게 앞(11-20 사용자 「OPEN이라고 있는데 눌러도 안 눌림, 뭘 뜻하는지 모르겠음」): 진열창 둘에 작품 넷 중 셋이 이름표와 함께 화면 안에 보이고,
     # 가운데 문은 메일 링크라 누르면 문이 열리고 말풍선이 뜸. 진열창 '세트노트'를 누르면 그 장으로
