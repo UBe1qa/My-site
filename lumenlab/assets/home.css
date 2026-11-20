@@ -176,40 +176,76 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--n-lamp);outline-off
 .mail{display:inline-flex;align-items:center;gap:6px;background:rgba(10,8,24,.6);box-shadow:inset 0 0 0 1px var(--n-line);border-radius:99px;padding:6px 6px 6px 18px;font-size:15px;font-weight:500;max-width:100%}
 .mail a{min-width:0;overflow-wrap:anywhere}
 .mail button{min-width:104px;font-size:14px;font-weight:600;border:0;background:var(--n-press);color:var(--n-press-ink);height:40px;padding:0 16px;border-radius:99px;cursor:pointer;flex:none}
-.door{position:relative;margin:48px auto 0;width:200px;height:270px;border-radius:8px 8px 0 0;background:#1a1233;padding:10px 10px 0}
-.door .lf{position:relative;height:100%;border-radius:4px 4px 0 0;background:#6a2c4e;padding:22px 26px 0}
-.door .gl{height:58%;border-radius:4px;background:linear-gradient(#ffd98e,#e88a4c);box-shadow:0 0 60px 10px rgba(255,180,90,.35)}
-.door .op{position:absolute;left:50%;top:40px;transform:translateX(-50%);background:#1a1233;color:#ffe2a6;font:700 12px/1 Geist,sans-serif;letter-spacing:.2em;padding:6px 8px 6px 10px;border-radius:4px;text-shadow:0 0 10px rgba(255,190,90,.9);animation:op 2.6s ease-in-out infinite}
-@keyframes op{0%,100%{opacity:1}48%{opacity:1}50%{opacity:.55}53%{opacity:1}}
-.door .kn{position:absolute;right:30px;top:64%;width:7px;height:7px;border-radius:50%;background:#ffd98a}
-.spill{height:80px;margin-top:-1px;background:linear-gradient(#ffb466,rgba(255,180,102,0));clip-path:polygon(calc(50% - 100px) 0,calc(50% + 100px) 0,calc(50% + 190px) 100%,calc(50% - 190px) 100%);opacity:.55}
+.spill{height:80px;margin-top:-1px;background:linear-gradient(#ffb466,rgba(255,180,102,0));clip-path:polygon(calc(50% - var(--dw) / 2) 0,calc(50% + var(--dw) / 2) 0,calc(50% + var(--dw)) 100%,calc(50% - var(--dw)) 100%);opacity:.55;transition:opacity .6s}
+.exit:has(.sf-door.open) .spill{opacity:.95}
 .ft{background:var(--n-bg);text-align:left}
 .ft .wrap{padding-block:30px 40px;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center;color:var(--n-dim);font-size:13px}
 .ft nav{display:flex;flex-wrap:wrap;gap:4px 16px}
 .ft nav a{display:inline-block;padding:11px 0}
 .ft nav a:hover{color:var(--n-ink)}
 
-/* PC 문 칸: 문만 덩그러니 있지 않게, 첫 화면 작업실 건물 앞면(벽돌·불 켜진 창 둘·간판)을 이어 붙인다(틀 문서 1절 '전체 제작 때 PC 문 칸에 거리 한 조각') */
-.facade{position:relative;margin-top:48px}
-.facade .door{margin-top:0}
-.wn{display:none}
+/* 문 밖 가게 앞(11-20 고침): 사용자 「OPEN이라고 있는데 눌러도 안 눌림, 뭘 뜻하는지 모르겠음」 → 가게 앞면 = 진열창 둘(우리 작품, 누르면 그 장으로) + 가운데 문(= 메일 보내기).
+   문에 닿으면 살짝, 누르면 활짝 열리며 안쪽 등빛이 쏟아지고 메일 앱이 열림(주소도 복사, 말풍선으로 알림). 폰도 같은 앞면(진열창이 작아질 뿐) */
+.exit{--dw:116px;--dh:190px}
+.facade{position:relative;width:min(420px,calc(100% - 24px));margin:44px auto 0;padding:48px 10px 0;display:grid;grid-template-columns:minmax(0,1fr) var(--dw) minmax(0,1fr);gap:8px;align-items:end;border-radius:10px 10px 0 0;
+  background:linear-gradient(rgba(255,180,102,0) 72%,rgba(255,180,102,.10)),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.20) 0 2px,transparent 2px 20px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.13) 0 2px,transparent 2px 44px),
+    linear-gradient(#2c2150,#1f1739);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.05),0 -40px 90px -40px rgba(140,90,220,.45)}
+.sf-sign{position:absolute;top:14px;left:50%;transform:translateX(-50%);margin:0;padding:6px 12px 6px 16px;border-radius:4px;background:#1a1233;white-space:nowrap;
+  font:600 11px/1 Geist,sans-serif;letter-spacing:.4em;color:#ffe2a6;text-shadow:0 0 12px rgba(255,190,90,.85)}
+.sf-win{position:relative;container-type:inline-size;height:138px;margin-bottom:34px;border-radius:6px;background:#1a1233;padding:7px;display:flex;align-items:flex-end;justify-content:space-around;gap:2px;
+  box-shadow:0 0 70px 6px rgba(255,180,90,.20)}
+.sf-win::before{content:"";position:absolute;inset:7px;border-radius:3px;background:
+    linear-gradient(transparent 70%,#3a1d10 70% 73%,rgba(58,29,16,.35) 73%),
+    linear-gradient(#ffe2a6,#f2a35a 70%,#c96d42)}
+.sf-win::after{content:"";position:absolute;inset:7px;border-radius:3px;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.22) 0 12%,transparent 12% 30%,rgba(255,255,255,.12) 30% 34%,transparent 34%)}
+.sf-pl{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);z-index:2;padding:3px 9px;border-radius:3px;background:#3b2a5e;color:#ffe2a6;font-size:11px;font-weight:600;letter-spacing:.06em;white-space:nowrap}
+.sf-it{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:24%;color:#2a120a;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.sf-it:hover,.sf-it:focus-visible{transform:translateY(-5px)}
+.sf-fig{display:flex;align-items:flex-end;filter:drop-shadow(0 6px 6px rgba(80,30,10,.35))}
+.sf-fig img{display:block;height:auto}
+.sf-game .sf-fig img{width:min(46cqw,96px)}.sf-game .sf-fig img+img{margin-left:-10cqw;width:min(50cqw,104px)}
+.sf-owl .sf-fig img{width:min(40cqw,78px);border-radius:22%}
+.sf-set .sf-fig img{width:min(22cqw,46px);border:2px solid #121212;border-radius:6px;background:#121212}
+.sf-tag{padding:2px 5px;border-radius:3px;background:#fff6e6;box-shadow:0 2px 4px rgba(60,20,8,.25);font-size:clamp(8.5px,4.6cqw,12px);font-weight:700;line-height:1.2;white-space:nowrap;transform:rotate(-3deg)}
+.sf-door{position:relative;display:block;height:var(--dh);border-radius:8px 8px 0 0;background:#1a1233;perspective:700px;color:#3a160c;-webkit-tap-highlight-color:transparent}
+.sf-in{position:absolute;inset:8px 8px 0;border-radius:4px 4px 0 0;background:radial-gradient(70% 50% at 50% 28%,#fff6dc,#ffcf86 40%,#f0954e 75%,#c96d42)}
+.sf-leaf{position:absolute;inset:8px 8px 0;border-radius:4px 4px 0 0;background:linear-gradient(90deg,#5c2443,#6a2c4e 30%,#6a2c4e 70%,#5a2342);padding:36px 10px 0;transform-origin:0 50%;
+  transition:transform .75s cubic-bezier(.2,.75,.25,1);box-shadow:inset -2px 0 0 rgba(0,0,0,.25)}
+.sf-glass{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;margin-top:10px;height:54%;border-radius:4px;background:linear-gradient(#ffd98e,#e88a4c);box-shadow:0 0 50px 8px rgba(255,180,90,.35);text-align:center}
+.sf-glass b{font-size:14px;font-weight:700;letter-spacing:-.02em}
+.sf-glass small{font-size:10.5px;font-weight:500;opacity:.72}
+.sf-kn{position:absolute;right:13px;top:66%;width:7px;height:7px;border-radius:50%;background:#ffd98a;box-shadow:0 0 6px rgba(255,210,140,.8)}
+.sf-open{position:absolute;left:50%;top:7px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 7px 5px 9px;border-radius:4px;background:#1a1233;
+  color:#ffe2a6;font:700 12px/1 Geist,sans-serif;letter-spacing:.2em;text-shadow:0 0 10px rgba(255,190,90,.9);box-shadow:0 0 0 1px rgba(255,226,166,.18);animation:op 2.6s ease-in-out infinite;white-space:nowrap}
+.sf-open small{font:600 9.5px/1 var(--sans,inherit);letter-spacing:.02em;color:#ffcf86;text-shadow:none}
+@keyframes op{0%,100%{opacity:1}48%{opacity:1}50%{opacity:.55}53%{opacity:1}}
+.sf-door:hover .sf-leaf,.sf-door:focus-visible .sf-leaf{transform:rotateY(-24deg)}
+.sf-door.open .sf-leaf{transform:rotateY(-74deg)}
+.sf-door:focus-visible{outline:2px solid #ffe2a6;outline-offset:4px}
+.sf-win .sf-tag{max-width:100cqw;overflow:hidden;text-overflow:ellipsis}
+@container (max-width:84px){.sf-tag{display:none}.sf-it{margin-bottom:31%}}
+.sf-say{position:absolute;left:50%;bottom:calc(var(--dh) * .42);z-index:3;margin:0;transform:translate(-50%,6px);padding:9px 14px;border-radius:12px;background:#fff6e6;color:#2a120a;font-size:13px;font-weight:600;line-height:1.35;
+  width:max-content;max-width:min(210px,calc(100vw - 48px));text-align:center;box-shadow:0 12px 30px -8px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.sf-say::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;background:#fff6e6;transform:translateX(-50%) rotate(45deg)}
+.sf-say.on{opacity:1;transform:translate(-50%,0)}
+
 @media (min-width:860px){
-  .facade{width:min(1040px,88vw);margin:56px auto 0;padding:64px 56px 0;display:flex;justify-content:space-between;align-items:flex-end;border-radius:12px 12px 0 0;
-    background:linear-gradient(rgba(255,180,102,0) 72%,rgba(255,180,102,.10)),
-      repeating-linear-gradient(0deg,rgba(0,0,0,.20) 0 2px,transparent 2px 24px),
-      repeating-linear-gradient(90deg,rgba(0,0,0,.13) 0 2px,transparent 2px 52px),
-      linear-gradient(#2c2150,#1f1739);
-    box-shadow:inset 0 2px 0 rgba(255,255,255,.05),0 -40px 90px -40px rgba(140,90,220,.45)}
-  .facade::before{content:"LUMEN LAB";position:absolute;top:22px;left:50%;transform:translateX(-50%);padding:7px 16px 7px 22px;border-radius:4px;background:#1a1233;
-    font:600 13px/1 Geist,sans-serif;letter-spacing:.42em;color:#ffe2a6;text-shadow:0 0 12px rgba(255,190,90,.85)}
-  .facade .door{margin:0}
-  .wn{display:block;position:relative;width:min(300px,24vw);height:190px;margin-bottom:60px;border-radius:6px;background:#1a1233;padding:9px;box-shadow:0 0 80px 8px rgba(255,180,90,.20)}
-  .wn i{display:block;height:100%;border-radius:3px;background:
-      linear-gradient(90deg,transparent calc(50% - 2px),#1a1233 calc(50% - 2px) calc(50% + 2px),transparent calc(50% + 2px)),
-      radial-gradient(14px 22px at 22% 34%,#3d6b3a 60%,transparent 64%),radial-gradient(10px 16px at 70% 30%,#6a2c4e 60%,transparent 64%),radial-gradient(9px 12px at 82% 64%,#3a5a8a 60%,transparent 64%),
-      linear-gradient(transparent 40%,#3a1d10 40% 43%,transparent 43% 74%,#3a1d10 74% 77%,transparent 77%),
-      linear-gradient(#ffe2a6,#f2a35a 68%,#c96d42)}
-  .wn::after{content:"";position:absolute;left:-6px;right:-6px;bottom:-12px;height:8px;border-radius:2px;background:#3b2a5e}
+  .exit{--dw:210px;--dh:290px}
+  .facade{width:min(1040px,88vw);margin-top:56px;padding:64px 56px 0;gap:56px;grid-template-columns:minmax(0,1fr) var(--dw) minmax(0,1fr)}
+  .sf-sign{top:22px;font-size:13px;padding:7px 16px 7px 22px;letter-spacing:.42em}
+  .sf-win{height:210px;margin-bottom:60px;padding:9px;justify-content:space-evenly}
+  .sf-win::before,.sf-win::after{inset:9px}
+  .sf-pl{bottom:-34px;font-size:12px;padding:4px 12px}
+  .sf-set .sf-fig img{border-width:3px;border-radius:9px}
+  .sf-tag{padding:3px 8px}
+  .sf-leaf{padding:56px 26px 0}
+  .sf-glass b{font-size:18px}.sf-glass small{font-size:12px}
+  .sf-kn{right:26px}
+  .sf-open{top:12px;font-size:13px;padding:6px 9px 6px 11px}.sf-open small{font-size:11px}
+  .sf-say{font-size:14px;max-width:260px}
 }
 
 @media (min-width:860px){
@@ -257,7 +293,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--n-lamp);outline-off
 }
 
 /* 움직임 없이(동작 줄이기): 들어가는 확대 없이 장끼리 투명만, 반복 움직임 끔, 꼬리표는 그냥 걸려 있음 */
-@media (prefers-reduced-motion:reduce){.fig,.peek,.cv::after,.door .op,.mac .wall img{animation:none}.tg.sw{animation:none}.chip{transition:none}}
+@media (max-width:359px){.mail{font-size:13.5px;padding-left:14px}.mail button{min-width:76px;padding:0 12px}}
+@media (prefers-reduced-motion:reduce){.fig,.peek,.cv::after,.sf-open,.mac .wall img{animation:none}.sf-leaf,.sf-it,.sf-say,.spill{transition:none}.tg.sw{animation:none}.chip{transition:none}}
 
 /* JS 없이: 고정 장면을 풀고 칸을 차례로 쌓는다(거리 그림은 캔버스라 밤하늘 색만) */
 html:not(.js) .walk{height:auto}

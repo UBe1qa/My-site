@@ -125,7 +125,22 @@
 <section class="exit" id="contact" aria-labelledby="t-contact">
   <div class="wrap"><h2 id="t-contact">불은 늘 켜 둘게요.</h2><p>문의는 메일로 받아요.</p>
   <div class="mail"><a id="addr" href="mailto:contact@lumenlab.page">contact@lumenlab.page</a><button id="copy" type="button">복사</button></div></div>
-  <div class="facade" aria-hidden="true"><div class="wn"><i></i></div><div class="door"><div class="lf"><div class="gl"></div><span class="op">OPEN</span><i class="kn"></i></div></div><div class="wn"><i></i></div></div>
+  <!-- 문 밖 가게 앞(11-20 사용자 「OPEN이라고 있는데 눌러도 안 눌림, 뭘 뜻하는지 모르겠음」): 진열창 둘에 우리 작품(누르면 그 장으로), 가운데 문 = 메일 보내기(누르면 문이 열리고 메일 앱) -->
+  <div class="facade">
+   <div class="sf-sign" aria-hidden="true">LUMEN LAB</div>
+   <div class="sf-win"><span class="sf-pl" aria-hidden="true">게임</span>
+    <a class="sf-it sf-game" href="/#c0" data-go="0"><span class="sf-fig"><img src="/img/home/c-frog.webp" width="160" height="160" alt="" loading="lazy"><img src="/img/home/c-chick.webp" width="160" height="160" alt="" loading="lazy"></span><span class="sf-tag">{{name:chickrescue}}</span></a>
+   </div>
+   <a class="sf-door" id="door" href="mailto:contact@lumenlab.page" aria-label="문 열고 메일 보내기, contact@lumenlab.page">
+    <span class="sf-in" aria-hidden="true"></span>
+    <span class="sf-leaf" aria-hidden="true"><span class="sf-open">OPEN<small>문의 받아요</small></span><span class="sf-glass"><b>메일 보내기</b><small>문을 눌러 주세요</small></span><i class="sf-kn"></i></span>
+   </a>
+   <div class="sf-win"><span class="sf-pl" aria-hidden="true">앱</span>
+    <a class="sf-it sf-owl" href="/#c1" data-go="1"><span class="sf-fig"><img src="/img/owlight.webp" width="240" height="240" alt="" loading="lazy"></span><span class="sf-tag">{{name:owlight}}</span></a>
+    <a class="sf-it sf-set" href="/#c2" data-go="2"><span class="sf-fig"><img src="/img/setnote/workout-ko.webp" width="600" height="1298" alt="" loading="lazy"></span><span class="sf-tag">{{name:setnote}}</span></a>
+   </div>
+   <div class="sf-say" id="doorSay" role="status" aria-live="polite"></div>
+  </div>
   <div class="spill" aria-hidden="true"></div>
 </section>
 </main>
