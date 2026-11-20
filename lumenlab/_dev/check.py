@@ -422,7 +422,7 @@ with sync_playwright() as p:
                 and abs(x['tools']) < 2 and at(y) == 4 and all(s['ov'] == '' for s in (a, b, f, x, y)) and not errs)
         ok(good, f"/ {w}x{h} {how} 손짓 한 번에 작품 하나: 0.7초 u {m['u']:.2f}(가는 중) → {a['u']:.2f}·{b['u']:.2f}, 빨리 여러 번 → {f['u']:.2f}(멈춤 자리 {fi}), 마지막 다음 걸이판 {x['tools']:.0f}px, 위로 한 번 u {y['u']:.2f} {errs[:1]}")
         c.close()
-    # PC 휠·트랙패드 = 작품 앞 턱(사용자 11-20 「pc에서 스크롤 스무스하게 안됨」 → 11-21 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」):
+    # PC 휠·트랙패드 = 작품 앞 턱(사용자 11-20 「pc에서 스크롤 스무스하게 안됨」 → 11-21 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」, 「처음 내릴 때는 저항감이 거의 없거든」):
     # 멈춤 자리 가까이선 휠 한 칸이 20~60px만(턱), 그 자리에서 조금 내려도 되돌려 끌지 않음(갇힘 없음). 여러 칸·트랙패드로 다가가면 그 작품 자리에 딱 섬,
     # 위로도 같음. 칸 끝을 지나 걸이판 밑은 브라우저 그대로, PageDown도 브라우저 그대로. 알약으로 가는 중에 휠을 쓰면 바로 멈추고 사람한테 넘김
     c = br.new_context(viewport={'width': 1440, 'height': 900}, locale='ko-KR'); pg = c.new_page(); errs = []
@@ -433,7 +433,7 @@ with sync_playwright() as p:
     def flick(sg=1):
         for i in range(60): pg.mouse.wheel(0, sg * max(1, 40 - i * .6)); pg.wait_for_timeout(16)
     notch(1); pg.wait_for_timeout(500); n1 = pg.evaluate('scrollY'); pg.wait_for_timeout(900); n1b = pg.evaluate('scrollY')
-    notch(12); pg.wait_for_timeout(1500); h1 = pg.evaluate(HUu)
+    notch(20); pg.wait_for_timeout(1800); h1 = pg.evaluate(HUu)
     y5 = pg.evaluate('scrollY'); notch(1); pg.wait_for_timeout(1300); y6 = pg.evaluate('scrollY')
     flick(); pg.wait_for_timeout(1500); fu = pg.evaluate(HUu); flick(-1); pg.wait_for_timeout(1500); fd = pg.evaluate(HUu)
     notch(70, gap=60); pg.wait_for_timeout(1500); out = pg.evaluate(HUu)
@@ -442,7 +442,14 @@ with sync_playwright() as p:
     on = lambda u: any(abs(u - v) < .003 for v in HSTOP)
     good = (20 <= n1 <= 60 and abs(n1b - n1) < 1 and abs(h1 - HSTOP[1]) < .003 and 20 <= y6 - y5 <= 60 and on(fu) and fu > h1 + .5 and on(fd) and fd < fu
             and out > HX[3] + 1.85 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2 and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
-    ok(good, f"/ PC 휠 턱: 첫 칸 {n1:.0f}px(1.4초 뒤 {n1b:.0f}), 열두 칸 → u {h1:.3f}, 멈춤 자리에서 한 칸 {y6 - y5:.0f}px 그대로, 트랙패드 → {fu:.3f} · 위로 → {fd:.3f}, 일흔 칸 → 걸이판 밑 u {out:.2f}, PageDown {y4 - y3:.0f}px, 알약 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
+    ok(good, f"/ PC 휠 턱: 첫 칸 {n1:.0f}px(1.4초 뒤 {n1b:.0f}), 스무 칸 → u {h1:.3f}, 멈춤 자리에서 한 칸 {y6 - y5:.0f}px 그대로, 트랙패드 → {fu:.3f} · 위로 → {fd:.3f}, 일흔 칸 → 걸이판 밑 u {out:.2f}, PageDown {y4 - y3:.0f}px, 알약 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
+    # 창 안으로 들어가는 구간(u .4~1.1)은 휠 한 칸이 절반만(11-21 「처음 내릴 때는 저항감이 거의 없거든... 슈루룩 넘겨져서」),
+    # 거리와 방이 겹쳐 흐린 구간(u .86~1.1)엔 서지 않음: 내려가다 서면 첫 작품 자리까지 정해진 빠르기로, 올라가다 서면 겹치기 전(.86)으로
+    pg.evaluate(HU, .7); pg.wait_for_timeout(400); z0 = pg.evaluate('scrollY'); notch(1); pg.wait_for_timeout(900); z1 = pg.evaluate('scrollY')
+    pg.evaluate(HU, .84); pg.wait_for_timeout(400); notch(1); pg.wait_for_timeout(1900); bd = pg.evaluate(HUu)
+    pg.evaluate(HU, 1.12); pg.wait_for_timeout(400); notch(1, d=-100); pg.wait_for_timeout(1300); bu = pg.evaluate(HUu)
+    good = 40 <= z1 - z0 <= 60 and abs(bd - HSTOP[1]) < .003 and abs(bu - .86) < .005 and not errs
+    ok(good, f"/ PC 창 안으로 구간: 휠 한 칸 {z1 - z0:.0f}px(다른 데 100), 흐린 구간에서 내려가다 서면 → u {bd:.3f} · 올라가다 서면 → u {bu:.3f} {errs[:1]}")
     c.close()
     # 문 밖 가게 앞(11-20 사용자 「OPEN이라고 있는데 눌러도 안 눌림, 뭘 뜻하는지 모르겠음」): 진열창 둘에 작품 넷 중 셋이 이름표와 함께 화면 안에 보이고,
     # 가운데 문은 메일 링크라 누르면 문이 열리고 말풍선이 뜸. 진열창 '세트노트'를 누르면 그 장으로

@@ -121,11 +121,14 @@ function onWheel(e){
   if((dy>0&&wT>=z-1)||(dy<0&&wT<=a+1)){if(wRaf)e.preventDefault();return;}   // 칸 끝에서 더 밀면 브라우저에 넘김(따라가는 중이면 다 따라간 뒤)
   e.preventDefault();
   let n=1e9;for(const v of stops())n=Math.min(n,Math.abs(v-wT)/vh);
-  const f=.35+.65*sm(cl((n-.03)/.25));
+  // 창 안으로 들어가는 구간(u .4~1.1, 거리가 커지고 방과 겹쳐 바뀜)은 휠이 절반만(11-21 사용자 「처음 내릴 때는 저항감이 거의 없거든... 슈루룩 넘겨져서」)
+  const uu=(wT-a)/vh,zf=1-.5*sm(cl((uu-.15)/.25))*(1-sm(cl((uu-1.1)/.15))),f=Math.min(zf,.35+.65*sm(cl((n-.03)/.25)));
   wT=cl(wT+dy*f,a,z);wDir=dy>0?1:-1;wGo();
   clearTimeout(wIdle);wIdle=setTimeout(wSettle,220);}
 function wSettle(){if(ride||!fine.matches)return;
   for(const v of stops())if((v-wStart)*(wT-v)>0&&Math.abs(wT-v)/vhNow()<.12){wT=v;wC=scrollY;wGo();return;}   // 이번 손짓에 살짝 지나친 멈춤 자리면 거기 걸림
+  const uu=(wT-top0())/vhNow();   // 거리와 방이 겹쳐 흐린 구간(u .86~1.1)엔 서지 않음: 내려가던 중이면 첫 작품까지 정해진 빠르기로(폰과 같은 느낌), 올라가던 중이면 겹치기 전으로
+  if(uu>.86&&uu<1.1){if(wDir>0)go(1,yU(STOP[1]));else{wT=yU(.86);wC=scrollY;wGo();}return;}
   const h=nextStop(wT,wDir);if(h!=null&&Math.abs(h-wT)/vhNow()<.65){wT=h;wC=scrollY;wGo();}}
 addEventListener('keydown',e=>{if(/^(Arrow|Page|Home|End| )/.test(e.key)){if(ride)stop(false);wHalt();}});   // 키로 움직이면 브라우저에 넘김
 addEventListener('touchmove',()=>{lastIn=performance.now();},{passive:true});
