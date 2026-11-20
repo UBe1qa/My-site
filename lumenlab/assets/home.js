@@ -11,6 +11,15 @@ const cb=document.getElementById('copy');
 if(cb)cb.addEventListener('click',function(){const b=this,t=document.getElementById('addr');
   function sel(){const r=document.createRange();r.selectNodeContents(t);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='선택했어요';}
   try{navigator.clipboard.writeText(t.textContent).then(()=>{b.textContent='복사했어요';},sel);}catch(e){sel();}});
+// 문 밖 가게 문 = 메일 보내기: 누르면 문이 활짝 열리고(0.55초 뒤 메일 앱) 주소도 복사, 말풍선으로 알림. 메일 앱이 없는 PC에서도 '눌렸다'가 보이게
+const door=document.getElementById('door'),dsay=document.getElementById('doorSay');
+if(door&&dsay)door.addEventListener('click',function(e){
+  if(e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+  e.preventDefault();const href=door.href;
+  door.classList.add('open');dsay.textContent='메일 앱을 열어요';dsay.classList.add('on');
+  try{navigator.clipboard.writeText('contact@lumenlab.page').then(()=>{dsay.textContent='메일 앱을 열어요. 주소도 복사해 뒀어요';},()=>{});}catch(err){}
+  clearTimeout(door._t);door._t=setTimeout(()=>{door.classList.remove('open');dsay.classList.remove('on');},5000);
+  setTimeout(()=>{location.href=href;},reduce?0:550);});
 const days='일월화수목금토';
 function tick(){const d=new Date();let h=d.getHours();const ap=h<12?'오전':'오후';h=h%12||12;const m=String(d.getMinutes()).padStart(2,'0');const ds=(d.getMonth()+1)+'월 '+d.getDate()+'일 ';
   document.querySelectorAll('[data-clock]').forEach(el=>{el.querySelector('small').textContent=ap;el.querySelector('b').textContent=h+':'+m;el.querySelector('span').textContent=ds+days[d.getDay()]+'요일';});
@@ -390,12 +399,14 @@ function req(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
 addEventListener('resize',()=>{geo();req();});
 addEventListener('scene:built',()=>{geo();update();});
 
-/* 손짓 한 번 = 작품 하나(디자인-방법 249). 위 장면은 스크롤 위치에 묶여 있어서, 그대로 두면 폰에서 한 번 튕길 때 작품 넷이 1초 안에 다 지나간다
-   (사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」). 그래서 이 칸 안에서는 휠 한 번·손가락 한 번·PageDown이면
+/* 손가락 한 번 = 작품 하나(디자인-방법 249). 위 장면은 스크롤 위치에 묶여 있어서, 그대로 두면 폰에서 한 번 튕길 때 작품 넷이 1초 안에 다 지나간다
+   (사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」). 그래서 이 칸 안에서 손가락으로 한 번 밀면
    정해진 빠르기로 다음 멈춤 자리까지 가서 선다. 가는 중에 같은 쪽으로 또 밀면 빨리(2배씩, 4배까지), 반대쪽이면 되돌아감. 동작 줄이기면 그냥 스크롤.
+   PC 휠·트랙패드·키는 붙잡지 않고 브라우저 스크롤 그대로(사용자 11-20 「pc에서 위로 아래로 스크롤 할때 스무스하게 안됨」: 휠까지 붙잡으니 트랙패드 관성이 끊겼다).
+   CSS scroll-snap(proximity)도 시험했으나 크롬에서 휠·트랙패드 작은 움직임이 멈춤 자리로 되돌려져 갇혀서 안 씀.
    멈춤 자리: 첫 화면(u 0) → 작품마다 X+.45(들어오는 움직임·Owlight 패널·기록 조각 셋이 다 끝난 자리) → 마지막 다음은 칸 끝(걸이판이 화면 맨 위) */
 const STOP=[0,...X.map(x=>x+.45)],D=document.documentElement,fine=matchMedia('(hover: hover) and (pointer: fine)');
-let ride=null,settle=0,setDir=0,qT=0,free=0,lastIn=-1e9,lastY=scrollY,lastWheel=0,lastAbs=0,spent=false,grab=false,rraf=0;
+let ride=null,settle=0,setDir=0,qT=0,free=0,lastIn=-1e9,lastY=scrollY,grab=false,rraf=0;
 const can=()=>!reduce&&!D.classList.contains('is-sheet'),vhNow=()=>pin.clientHeight,
  top0=()=>walk.offsetTop,yU=u=>top0()+u*vhNow(),yExit=()=>Math.min(top0()+walk.offsetHeight,D.scrollHeight-innerHeight),
  stops=()=>STOP.map(yU).concat(yExit()),ease=t=>.5*sm(t)+.5*(1-(1-t)*(1-t)*(1-t));   // 떠날 땐 바로, 닿을 땐 천천히
@@ -411,7 +422,7 @@ function go(dir,to){
   let span=Math.abs(b-a)/vhNow();if(Math.max(a,b)>yExit()-3)span*=.55;   // 마지막 작품 → 걸이판은 방이 위로 빠지기만 하니 짧게
   let dur=dir>0?300+900*span:220+600*span;if(to!=null)dur=Math.min(dur,2200);   // 한 작품 1.2초, 첫 화면 → 첫 작품(창 안으로 확대) 1.9초, 올라갈 땐 0.8초
   ride={dir:b>a?1:-1,a,b,y:a,t:0,dur,rate:1,sped:now,last:0};
-  if(!fine.matches)D.style.overflow='hidden';   // 폰: 손가락 관성을 멈춘다(스크립트 스크롤은 그대로 됨). PC는 스크롤 막대 폭이 안 바뀌게 휠·키만 막는다
+  if(!fine.matches)D.style.overflow='hidden';   // 폰: 손가락 관성을 멈춘다(스크립트 스크롤은 그대로 됨)
   hold();if(!rraf)rraf=requestAnimationFrame(step);return true;
 }
 function step(now){rraf=0;if(!ride)return;
@@ -427,13 +438,6 @@ function intent(dir){   // 사람이 내리거나 올리려 함: 이 칸 안(첫
   if((dir>0&&y<z-2)||(dir<0&&y>a+2&&y<=z+3))return go(dir);
   return false;}
 const inSheet=e=>e.target&&e.target.closest&&e.target.closest('dialog');
-function onWheel(e){
-  if(e.ctrlKey||!e.deltaY||Math.abs(e.deltaX)>Math.abs(e.deltaY)||inSheet(e))return;
-  const now=performance.now(),ab=Math.abs(e.deltaY),fresh=now-lastWheel>180||(ab>lastAbs*1.8&&ab>16&&now-lastWheel>40);   // 새 손짓: 0.18초 쉼, 또는 줄던 관성이 다시 커짐(트랙패드)
-  lastWheel=lastIn=now;lastAbs=ab;if(fresh)spent=false;
-  if(ride){e.preventDefault();if(fresh)go(e.deltaY>0?1:-1);spent=true;return;}
-  if(spent){e.preventDefault();return;}   // 한 손짓이 한 작품을 넘긴 뒤 남은 관성(트랙패드·빨리 굴린 휠)은 버린다
-  if(intent(e.deltaY>0?1:-1)){spent=true;e.preventDefault();}}
 let ty0=null,tx0=0,tDone=false;
 addEventListener('touchstart',e=>{lastIn=performance.now();if(e.touches.length!==1||inSheet(e)){ty0=null;return;}ty0=e.touches[0].clientY;tx0=e.touches[0].clientX;tDone=false;},{passive:true});
 function onTouch(e){
@@ -443,20 +447,17 @@ function onTouch(e){
   if(ride){if(e.cancelable)e.preventDefault();if(Math.abs(dy)>10){tDone=true;go(dy<0?1:-1);}return;}
   if(Math.abs(dy)<3||Math.abs(dx)>Math.abs(dy))return;
   if(intent(dy<0?1:-1)){tDone=true;if(e.cancelable)e.preventDefault();}}
+addEventListener('wheel',()=>{if(ride)stop(false);},{passive:true});   // 알약으로 가는 중에 PC 휠·키를 쓰면 바로 사람한테 넘김
+addEventListener('keydown',e=>{if(ride&&/^(Arrow|Page|Home|End| )/.test(e.key))stop(false);});
 addEventListener('touchmove',()=>{lastIn=performance.now();},{passive:true});
 addEventListener('touchend',()=>{lastIn=performance.now();},{passive:true});
-// 막을 수 있는(passive 아닌) 휠·손가락 듣기는 이 칸 안(걸이판 맨 위 조금 밑까지)에서만 단다. 그 밑에선 떼어 둬서 브라우저가 기다리지 않고 바로 스크롤
+// 막을 수 있는(passive 아닌) 손가락 듣기는 이 칸 안(걸이판 맨 위 조금 밑까지)에서만 단다. 그 밑에선 떼어 둬서 브라우저가 기다리지 않고 바로 스크롤
 function hold(){const want=!!ride||(can()&&scrollY<=yExit()+40);if(want===grab)return;grab=want;
-  (grab?addEventListener:removeEventListener)('wheel',onWheel,{passive:false});
   (grab?addEventListener:removeEventListener)('touchmove',onTouch,{passive:false});}
-addEventListener('keydown',e=>{
-  if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||(e.target.closest&&e.target.closest('input, textarea, select, button, [contenteditable], dialog')))return;
-  const q=e.key,dir=q==='ArrowDown'||q==='PageDown'||(q===' '&&!e.shiftKey)?1:q==='ArrowUp'||q==='PageUp'||(q===' '&&e.shiftKey)?-1:0;
-  if(dir&&intent(dir))e.preventDefault();});
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href*="#"]');if(a&&!a.hasAttribute('data-go'))free=performance.now()+2500;});   // 다른 # 링크는 브라우저가 옮기는 동안 손대지 않음
 addEventListener('mousedown',e=>{if(e.target===D||e.clientX>=D.clientWidth)free=Infinity;});   // 스크롤 막대를 끄는 중
 addEventListener('mouseup',()=>{if(free===Infinity)free=0;});
-// 손가락 관성·휠로 칸 안 멈춤 자리 사이에 들어오면(사람이 막 움직인 뒤에만, 예: 걸이판에서 위로 튕김) 그쪽 다음 멈춤 자리까지
+// 손가락 관성으로 칸 안 멈춤 자리 사이에 들어오면(손가락이 막 움직인 뒤에만, 예: 걸이판에서 위로 튕김) 그쪽 다음 멈춤 자리까지
 addEventListener('scroll',()=>{const y=scrollY,now=performance.now();
   if(!ride&&can()&&Math.abs(y-lastY)>4&&now-lastIn<3000&&now>free&&y>top0()+2&&y<yExit()-3)go(y>lastY?1:-1);
   lastY=y;hold();if(!ride)req();},{passive:true});

@@ -402,31 +402,59 @@ with sync_playwright() as p:
         pg.evaluate(HU, 0); pg.wait_for_timeout(300); pg.click('.nav .go'); pg.wait_for_timeout(2400); p0 = pg.evaluate(HS)
         ok(p2['cur'] == 2 and p2['chs'][2]['on'] and p0['cur'] == 0 and p0['chs'][0]['on'], f"/ {w}x{h} 장 알약 '세트노트' → 장 {p2['cur']}, 위 막대 '만든 것 보기' → 장 {p0['cur']}")
         c.close()
-    # 손짓 한 번 = 작품 하나(디자인-방법 249, 사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」):
-    # 첫 화면에서 손가락 한 번·휠 한 번·PageDown이면 정해진 빠르기로 가서(0.7초엔 아직 가는 중) 첫 작품 멈춤 자리 u 1.75에 서고, 또 한 번이면 다음 작품 2.75.
-    # 빨리 세 번 밀거나 트랙패드 관성이 길게 이어져도 멈춤 자리에만 서고 한 손짓에 한 작품(빨리 세 번은 둘까지). 마지막 작품 다음은 걸이판 맨 위, 위로 한 번이면 마지막 작품. 끝나면 overflow 원래대로
+    # 손가락 한 번 = 작품 하나(디자인-방법 249, 사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」):
+    # 폰에서 첫 화면에서 손가락 한 번이면 정해진 빠르기로 가서(0.7초엔 아직 가는 중) 첫 작품 멈춤 자리 u 1.75에 서고, 또 한 번이면 다음 작품 2.75.
+    # 빨리 세 번 밀어도 멈춤 자리에만 서고 한 손짓에 한 작품(빨리 세 번은 둘까지). 마지막 작품 다음은 걸이판 맨 위, 위로 한 번이면 마지막 작품. 끝나면 overflow 원래대로
     HG = "()=>{const p=document.getElementById('hero');return{u:-document.querySelector('.walk').getBoundingClientRect().top/p.clientHeight,ov:document.documentElement.style.overflow,tools:document.getElementById('tools').getBoundingClientRect().top}}"
     HSTOP = [0] + [x + .45 for x in HX]
     at = lambda s: next((i for i, v in enumerate(HSTOP) if abs(s['u'] - v) < .01), None)
-    for w, h, how in ((390, 664, 'touch'), (390, 844, 'touch'), (1440, 900, 'wheel'), (1440, 900, 'key')):
-        c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=how == 'touch', has_touch=how == 'touch', locale='ko-KR'); pg = c.new_page(); errs = []
+    for w, h, how in ((390, 664, 'touch'), (390, 844, 'touch')):
+        c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=True, has_touch=True, locale='ko-KR'); pg = c.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(1500); cdp = c.new_cdp_session(pg)
-        def push(d):
-            if how == 'touch': swipe(cdp, h * .75, h * .3) if d > 0 else swipe(cdp, h * .3, h * .75)
-            elif how == 'wheel': pg.mouse.move(w / 2, h / 2); pg.mouse.wheel(0, 100 * d)
-            else: pg.keyboard.press('PageDown' if d > 0 else 'PageUp')
+        def push(d): swipe(cdp, h * .75, h * .3) if d > 0 else swipe(cdp, h * .3, h * .75)
         push(1); pg.wait_for_timeout(700); m = pg.evaluate(HG); pg.wait_for_timeout(1700); a = pg.evaluate(HG)
         push(1); pg.wait_for_timeout(1700); b = pg.evaluate(HG)
-        if how == 'wheel':
-            for i in range(40): pg.mouse.wheel(0, max(2, 60 - i * 1.5)); pg.wait_for_timeout(16)
-        else:
-            for i in range(3): push(1); pg.wait_for_timeout(110)
+        for i in range(3): push(1); pg.wait_for_timeout(110)
         pg.wait_for_timeout(2600); f = pg.evaluate(HG); fi = at(f)
         pg.goto(BASE + '/'); pg.wait_for_timeout(1200); pg.evaluate(HU, HSTOP[4]); pg.wait_for_timeout(300)
         push(1); pg.wait_for_timeout(1500); x = pg.evaluate(HG); push(-1); pg.wait_for_timeout(1500); y = pg.evaluate(HG)
-        good = (.2 < m['u'] < 1.6 and at(a) == 1 and at(b) == 2 and fi is not None and (fi == 3 if how == 'wheel' else 3 <= fi <= 4)
+        good = (.2 < m['u'] < 1.6 and at(a) == 1 and at(b) == 2 and fi is not None and 3 <= fi <= 4
                 and abs(x['tools']) < 2 and at(y) == 4 and all(s['ov'] == '' for s in (a, b, f, x, y)) and not errs)
         ok(good, f"/ {w}x{h} {how} 손짓 한 번에 작품 하나: 0.7초 u {m['u']:.2f}(가는 중) → {a['u']:.2f}·{b['u']:.2f}, 빨리 여러 번 → {f['u']:.2f}(멈춤 자리 {fi}), 마지막 다음 걸이판 {x['tools']:.0f}px, 위로 한 번 u {y['u']:.2f} {errs[:1]}")
+        c.close()
+    # PC 휠·트랙패드·키는 브라우저 스크롤 그대로(사용자 11-20 「pc에서 위로 아래로 스크롤 할때 스무스하게 안됨」): 휠 한 칸은 그만큼만 움직이고 붙잡혀 다음 작품까지 끌려가지 않음,
+    # 트랙패드처럼 작은 값이 이어지면 다 더한 만큼 가고(관성이 안 끊김), 위로도 같음, PageDown도 브라우저 그대로. 알약으로 가는 중에 휠을 쓰면 바로 멈추고 사람한테 넘김
+    c = br.new_context(viewport={'width': 1440, 'height': 900}, locale='ko-KR'); pg = c.new_page(); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(1500); pg.mouse.move(720, 450)
+    Y = 'scrollY'
+    y0 = pg.evaluate(Y); pg.mouse.wheel(0, 100); pg.wait_for_timeout(900); y1 = pg.evaluate(Y)
+    tot = 0
+    for i in range(60): d = max(1, 40 - i * .6); tot += d; pg.mouse.wheel(0, d); pg.wait_for_timeout(16)
+    pg.wait_for_timeout(1200); y2 = pg.evaluate(Y)
+    for i in range(60): pg.mouse.wheel(0, -max(1, 40 - i * .6)); pg.wait_for_timeout(16)
+    pg.wait_for_timeout(1200); y3 = pg.evaluate(Y)
+    pg.keyboard.press('PageDown'); pg.wait_for_timeout(1200); y4 = pg.evaluate(Y)
+    pg.evaluate(HU, 1.5); pg.wait_for_timeout(300); pg.click('.chaps button[data-go="3"]'); pg.wait_for_timeout(250); pg.mouse.wheel(0, -100); pg.wait_for_timeout(900); ya = pg.evaluate(Y); pg.wait_for_timeout(1200); yb = pg.evaluate(Y)
+    good = (abs(y1 - y0 - 100) < 3 and abs(y2 - y1 - tot) < 6 and abs(y3 - y1) < 6 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2
+            and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
+    ok(good, f"/ PC 휠·트랙패드·키는 그대로: 휠 한 칸 {y1 - y0:.0f}px, 트랙패드 {y2 - y1:.0f}/{tot:.0f}px, 위로 {y3 - y1:.0f}, PageDown {y4 - y3:.0f}px, 알약으로 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
+    c.close()
+    # 문 밖 가게 앞(11-20 사용자 「OPEN이라고 있는데 눌러도 안 눌림, 뭘 뜻하는지 모르겠음」): 진열창 둘에 작품 넷 중 셋이 이름표와 함께 화면 안에 보이고,
+    # 가운데 문은 메일 링크라 누르면 문이 열리고 말풍선이 뜸. 진열창 '세트노트'를 누르면 그 장으로
+    for w, h in ((390, 844), (1440, 900), (320, 640)):
+        c = br.new_context(viewport={'width': w, 'height': h}, locale='ko-KR'); pg = c.new_page(); errs = []
+        pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/#contact'); pg.wait_for_timeout(900)
+        pg.evaluate("document.getElementById('contact').scrollIntoView({block:'end',behavior:'instant'})"); pg.wait_for_timeout(500)
+        f = pg.evaluate("""(()=>{const R=e=>e.getBoundingClientRect(),its=[...document.querySelectorAll('.sf-it')].map(a=>{const r=R(a.querySelector('.sf-fig'));return{l:r.left,r:r.right,w:r.width,go:a.dataset.go}}),
+          d=document.getElementById('door'),dr=R(d),hit=document.elementFromPoint(dr.left+dr.width/2,dr.top+dr.height*.4);
+          return{its,door:d.tagName==='A'&&d.href.startsWith('mailto:')&&d.contains(hit),sw:document.documentElement.scrollWidth}})()""")
+        pg.click('#door'); pg.wait_for_timeout(450)
+        o = pg.evaluate("[document.getElementById('door').classList.contains('open'),+getComputedStyle(document.getElementById('doorSay')).opacity,document.getElementById('doorSay').textContent]")
+        pg.goto(BASE + '/#contact'); pg.wait_for_timeout(900); pg.evaluate("document.getElementById('contact').scrollIntoView({block:'end',behavior:'instant'})"); pg.wait_for_timeout(400)
+        pg.click('.sf-set'); pg.wait_for_timeout(1800); cur = pg.evaluate(HS)['cur']
+        good = (len(f['its']) == 3 and all(i['l'] >= 0 and i['r'] <= w and i['w'] > 12 for i in f['its']) and f['door'] and f['sw'] <= w
+                and o[0] and o[1] > .9 and '메일' in o[2] and cur == 2 and not errs)
+        ok(good, f"/ {w}x{h} 가게 앞: 진열창 작품 {[round(i['w']) for i in f['its']]}px 화면 안, 문 = 메일 링크 {f['door']}, 누르면 열림 {o[0]}·말풍선 {o[1]:.2f} '{o[2]}', 진열창 세트노트 → 장 {cur} {errs[:1]}")
         c.close()
     # 옛 주소 조각: #works·#games·#apps·#setnote 는 그 장, #tools·#g-play·#contact 는 그 칸
     for frag, k in (('#works', 0), ('#games', 0), ('#apps', 1), ('#owlight', 1), ('#setnote', 2), ('#next', 3)):

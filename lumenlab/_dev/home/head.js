@@ -11,6 +11,15 @@ const cb=document.getElementById('copy');
 if(cb)cb.addEventListener('click',function(){const b=this,t=document.getElementById('addr');
   function sel(){const r=document.createRange();r.selectNodeContents(t);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='선택했어요';}
   try{navigator.clipboard.writeText(t.textContent).then(()=>{b.textContent='복사했어요';},sel);}catch(e){sel();}});
+// 문 밖 가게 문 = 메일 보내기: 누르면 문이 활짝 열리고(0.55초 뒤 메일 앱) 주소도 복사, 말풍선으로 알림. 메일 앱이 없는 PC에서도 '눌렸다'가 보이게
+const door=document.getElementById('door'),dsay=document.getElementById('doorSay');
+if(door&&dsay)door.addEventListener('click',function(e){
+  if(e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+  e.preventDefault();const href=door.href;
+  door.classList.add('open');dsay.textContent='메일 앱을 열어요';dsay.classList.add('on');
+  try{navigator.clipboard.writeText('contact@lumenlab.page').then(()=>{dsay.textContent='메일 앱을 열어요. 주소도 복사해 뒀어요';},()=>{});}catch(err){}
+  clearTimeout(door._t);door._t=setTimeout(()=>{door.classList.remove('open');dsay.classList.remove('on');},5000);
+  setTimeout(()=>{location.href=href;},reduce?0:550);});
 const days='일월화수목금토';
 function tick(){const d=new Date();let h=d.getHours();const ap=h<12?'오전':'오후';h=h%12||12;const m=String(d.getMinutes()).padStart(2,'0');const ds=(d.getMonth()+1)+'월 '+d.getDate()+'일 ';
   document.querySelectorAll('[data-clock]').forEach(el=>{el.querySelector('small').textContent=ap;el.querySelector('b').textContent=h+':'+m;el.querySelector('span').textContent=ds+days[d.getDay()]+'요일';});
