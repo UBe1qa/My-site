@@ -402,8 +402,7 @@ addEventListener('scene:built',()=>{geo();update();});
 /* 손가락 한 번 = 작품 하나(디자인-방법 249). 위 장면은 스크롤 위치에 묶여 있어서, 그대로 두면 폰에서 한 번 튕길 때 작품 넷이 1초 안에 다 지나간다
    (사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」). 그래서 이 칸 안에서 손가락으로 한 번 밀면
    정해진 빠르기로 다음 멈춤 자리까지 가서 선다. 가는 중에 같은 쪽으로 또 밀면 빨리(2배씩, 4배까지), 반대쪽이면 되돌아감. 동작 줄이기면 그냥 스크롤.
-   PC 휠·트랙패드·키는 붙잡지 않고 브라우저 스크롤 그대로(사용자 11-20 「pc에서 위로 아래로 스크롤 할때 스무스하게 안됨」: 휠까지 붙잡으니 트랙패드 관성이 끊겼다).
-   CSS scroll-snap(proximity)도 시험했으나 크롬에서 휠·트랙패드 작은 움직임이 멈춤 자리로 되돌려져 갇혀서 안 씀.
+   PC 휠·트랙패드는 아래 '턱'(onWheel) 참고. 키는 브라우저 그대로.
    멈춤 자리: 첫 화면(u 0) → 작품마다 X+.45(들어오는 움직임·Owlight 패널·기록 조각 셋이 다 끝난 자리) → 마지막 다음은 칸 끝(걸이판이 화면 맨 위) */
 const STOP=[0,...X.map(x=>x+.45)],D=document.documentElement,fine=matchMedia('(hover: hover) and (pointer: fine)');
 let ride=null,settle=0,setDir=0,qT=0,free=0,lastIn=-1e9,lastY=scrollY,grab=false,rraf=0;
@@ -421,7 +420,7 @@ function go(dir,to){
   if(b==null||Math.abs(b-a)<3)return false;
   let span=Math.abs(b-a)/vhNow();if(Math.max(a,b)>yExit()-3)span*=.55;   // 마지막 작품 → 걸이판은 방이 위로 빠지기만 하니 짧게
   let dur=dir>0?300+900*span:220+600*span;if(to!=null)dur=Math.min(dur,2200);   // 한 작품 1.2초, 첫 화면 → 첫 작품(창 안으로 확대) 1.9초, 올라갈 땐 0.8초
-  ride={dir:b>a?1:-1,a,b,y:a,t:0,dur,rate:1,sped:now,last:0};
+  wHalt();ride={dir:b>a?1:-1,a,b,y:a,t:0,dur,rate:1,sped:now,last:0};
   if(!fine.matches)D.style.overflow='hidden';   // 폰: 손가락 관성을 멈춘다(스크립트 스크롤은 그대로 됨)
   hold();if(!rraf)rraf=requestAnimationFrame(step);return true;
 }
@@ -447,13 +446,41 @@ function onTouch(e){
   if(ride){if(e.cancelable)e.preventDefault();if(Math.abs(dy)>10){tDone=true;go(dy<0?1:-1);}return;}
   if(Math.abs(dy)<3||Math.abs(dx)>Math.abs(dy))return;
   if(intent(dy<0?1:-1)){tDone=true;if(e.cancelable)e.preventDefault();}}
-addEventListener('wheel',()=>{if(ride)stop(false);},{passive:true});   // 알약으로 가는 중에 PC 휠·키를 쓰면 바로 사람한테 넘김
-addEventListener('keydown',e=>{if(ride&&/^(Arrow|Page|Home|End| )/.test(e.key))stop(false);});
+/* PC 휠·트랙패드 = 작품 앞 '턱'. 11-20 #48은 휠을 통째로 붙잡아 한 작품씩 넘겨 뻑뻑했고(사용자 「pc에서 스크롤할 때 스무스하게 안됨」, 트랙패드 관성이 끊김),
+   #49는 브라우저 그대로라 이번엔 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」(11-21). 그 사이로:
+   이 칸 안에서만 휠 값을 받아 부드럽게 따라가고(매 프레임 남은 거리의 15%, 60fps 기준), 멈춤 자리 ±0.28화면 안에서는 휠이 35%만 먹는다(턱).
+   손을 떼고 0.22초 뒤, 가던 쪽 앞에 멈춤 자리가 0.65화면 안이면(두 작품이 겹쳐 바뀌는 구간에 서지 않게) 거기로 미끄러져 붙고, 이번 손짓에 0.12화면 안으로 살짝 지나쳤으면 거기 걸린다.
+   손짓을 시작한 자리로 되돌려 끌지는 않는다(scroll-snap처럼 작은 휠이 갇히지 않게).
+   첫 화면 위·칸 끝(걸이판) 밑으로는 브라우저 그대로. 손가락 화면·동작 줄이기면 안 씀. CSS scroll-snap(proximity)은 크롬에서 작은 휠이 되돌려져 갇혀서 안 씀 */
+let wT=0,wC=0,wRaf=0,wDir=0,wIdle=0,wPrev=0,wStart=0,wEv=0;
+function wStep(now){wRaf=0;const dt=wPrev?Math.min(64,now-wPrev):16.7;wPrev=now;const d=wT-wC;
+  if(Math.abs(d)<.6){wC=wT;jumpTo(wC);lastY=scrollY;update();wPrev=0;return;}
+  wC+=d*(1-Math.pow(.85,dt/16.7));jumpTo(wC);lastY=scrollY;update();wRaf=requestAnimationFrame(wStep);}
+function wGo(){if(!wRaf){wPrev=0;wRaf=requestAnimationFrame(wStep);}}
+function wHalt(){if(wRaf){cancelAnimationFrame(wRaf);wRaf=0;wPrev=0;}clearTimeout(wIdle);}
+function onWheel(e){
+  if(!fine.matches||!can()||e.ctrlKey||!e.deltaY||Math.abs(e.deltaX)>Math.abs(e.deltaY)||inSheet(e))return;
+  if(ride)stop(false);
+  const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1),a=top0(),z=yExit(),vh=vhNow();
+  if(!wRaf)wT=wC=scrollY;
+  const t=performance.now();if(t-wEv>220)wStart=wT;wEv=t;   // 손짓 하나의 시작 자리
+  if(wT>z+2)return;   // 걸이판 밑: 브라우저 그대로
+  if((dy>0&&wT>=z-1)||(dy<0&&wT<=a+1)){if(wRaf)e.preventDefault();return;}   // 칸 끝에서 더 밀면 브라우저에 넘김(따라가는 중이면 다 따라간 뒤)
+  e.preventDefault();
+  let n=1e9;for(const v of stops())n=Math.min(n,Math.abs(v-wT)/vh);
+  const f=.35+.65*sm(cl((n-.03)/.25));
+  wT=cl(wT+dy*f,a,z);wDir=dy>0?1:-1;wGo();
+  clearTimeout(wIdle);wIdle=setTimeout(wSettle,220);}
+function wSettle(){if(ride||!fine.matches)return;
+  for(const v of stops())if((v-wStart)*(wT-v)>0&&Math.abs(wT-v)/vhNow()<.12){wT=v;wC=scrollY;wGo();return;}   // 이번 손짓에 살짝 지나친 멈춤 자리면 거기 걸림
+  const h=nextStop(wT,wDir);if(h!=null&&Math.abs(h-wT)/vhNow()<.65){wT=h;wC=scrollY;wGo();}}
+addEventListener('keydown',e=>{if(/^(Arrow|Page|Home|End| )/.test(e.key)){if(ride)stop(false);wHalt();}});   // 키로 움직이면 브라우저에 넘김
 addEventListener('touchmove',()=>{lastIn=performance.now();},{passive:true});
 addEventListener('touchend',()=>{lastIn=performance.now();},{passive:true});
 // 막을 수 있는(passive 아닌) 손가락 듣기는 이 칸 안(걸이판 맨 위 조금 밑까지)에서만 단다. 그 밑에선 떼어 둬서 브라우저가 기다리지 않고 바로 스크롤
 function hold(){const want=!!ride||(can()&&scrollY<=yExit()+40);if(want===grab)return;grab=want;
-  (grab?addEventListener:removeEventListener)('touchmove',onTouch,{passive:false});}
+  (grab?addEventListener:removeEventListener)('touchmove',onTouch,{passive:false});
+  (grab?addEventListener:removeEventListener)('wheel',onWheel,{passive:false});}
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href*="#"]');if(a&&!a.hasAttribute('data-go'))free=performance.now()+2500;});   // 다른 # 링크는 브라우저가 옮기는 동안 손대지 않음
 addEventListener('mousedown',e=>{if(e.target===D||e.clientX>=D.clientWidth)free=Infinity;});   // 스크롤 막대를 끄는 중
 addEventListener('mouseup',()=>{if(free===Infinity)free=0;});
