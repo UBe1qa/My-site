@@ -353,7 +353,13 @@ const walk=document.getElementById('walk')||document.querySelector('.walk'),pin=
  chaps=stage.querySelector('.chaps'),pills=[...chaps.querySelectorAll('button')],chs=[...stage.querySelectorAll('.ch')],objs=chs.map(c=>c.querySelector('.obj')),plates=chs.map(c=>c.querySelector('.plate')),
  nav=document.getElementById('nav'),vid=stage.querySelector('video'),pop=document.getElementById('pop'),icon=document.getElementById('owlIcon'),owlObj=chs[1].querySelector('.obj'),
  chips=[...stage.querySelectorAll('.o-set .chip')],wall=window.wallCycle(owlObj);
-const X=[1.3,2.3,3.3,4.3],END=5.1;
+/* 작품 넷은 옆으로 넘긴다(11-24 사용자 「단추들 내려갈때 내려가는거 말고 이거 왼쪽오른쪽으로 스와이프하는걸로 해볼까? pc나 모바일이나 둘다, 알약줄 모션이랑도 일관성」).
+   내리기(세로)는 거리 → 창 안 → 작업대(작품 한 자리) → 걸이판 그대로이고, 작업대 위에서 몇 번째 작품인지(HB.x, 0~3 실수)는 따로 스프링으로 움직인다.
+   넘기는 길: 손가락·마우스로 옆으로 끌기(따라오다 놓으면 한 작품), 트랙패드 옆 밀기(한 손짓에 한 작품), ← → 키, 양옆 화살표, 장 알약 */
+const X0=1.3,END=2.1,N=4;
+const HB={x:0,v:0,t:0},HK=280,HC=22;   // 디자인북마크 tokens.css 'settle'(280 22): 닿을 때 살짝 지나쳤다 돌아옴 = 알약(Rubber dock)과 같은 출렁임
+let hp=null,hSup=false,t1=null,t2=null,loLast=0,peeked=false,peekT=0,hraf=0,hlast=0;
+const nvs=[...stage.querySelectorAll('.nv')];
 let W=0,H=0,cx=0,cy=0,S=5,P={x:0,y:0},ticking=false,vidReady=false,lastAct=-2;
 const cl=(v,a,b)=>Math.min(b===undefined?1:b,Math.max(a===undefined?0:a,v)),sm=t=>t*t*(3-2*t),cub=t=>t*t*t;
 function offs(el,root){let x=0,y=0;while(el&&el!==root){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}return{x,y};}
@@ -375,26 +381,48 @@ function update(){ticking=false;
   //    (11-19 제3자 평가: 틀 문서대로 0.44화면 겹치니 두 장의 글·단추가 300px 동안 같이 보이고 보이는 단추와 눌리는 단추가 달랐다)
   //    나가는 쪽 끝 0.2화면 전부터 0.16화면, 다음 작품은 시작 0.08화면 전부터 0.22화면(겹침 0.04), 다음 글은 시작 0.02화면 전부터 0.2화면. 첫 장은 방이 보이자마자(0.24 / 0.2 전)
   stage.classList.toggle('live',u>1.15);chaps.style.opacity=cl((u-1.1)/.2).toFixed(3);chaps.style.visibility=u<1.1?'hidden':'';
-  let act=-1;
-  for(let k=0;k<4;k++){const a=X[k],b=k<3?X[k+1]:END;
-    const ein=cl((u-(k?a-.08:a-.24))/.22),pe=cl((u-(k?a-.02:a-.2))/.2),eout=k<3?cl((u-(b-.2))/.16):0,vis=ein*(1-eout),vp=pe*(1-eout);
-    const ty=reduce?0:(1-sm(ein))*90-sm(eout)*80,sc=reduce?1:.93+.07*sm(ein)-.05*sm(eout);
-    objs[k].style.opacity=vis.toFixed(3);objs[k].style.transform='translateY('+ty.toFixed(1)+'px) scale('+sc.toFixed(3)+')';
-    plates[k].style.opacity=vp.toFixed(3);plates[k].style.transform=reduce?'none':'translateY('+((1-sm(pe))*36-sm(eout)*28).toFixed(1)+'px)';
-    chs[k].classList.toggle('on',vp>.5);chs[k].style.visibility=vis<.01&&vp<.01?'hidden':'';
-    if(u>=a-.1&&(u<b-.1||k===3))act=k;
-    pills[k].querySelector('b').style.width=(cl((u-a+.2)/.65)*100).toFixed(1)+'%';}   // 알약 밑줄: 그 작품 멈춤 자리(X+.45)에 닿으면 다 참
+  // 지금 작품이 아래 90px에서 제자리로 올라오며(.93→1) 들어오고, 옆 작품은 화면 폭만큼 옆에 비켜 있다. 끌거나 넘기면 HB.x 만큼 같이 옆으로
+  // 앞판 글은 가운데 작품 것만: 두 작품 사이 절반(|d| .45)에서 앞 글이 다 빠지고 다음 글이 들어옴(두 장 글이 같이 보이지 않게, 11-19 제3자 평가)
+  const hx=HB.x,ein=cl((u-(X0-.24))/.22),pe=cl((u-(X0-.2))/.2),now=performance.now(),sh=W>=860?Math.min(W*.5,720):W*.86,
+    near=u>1.15&&Math.abs(u-STOP[1])<.12&&!ride;
+  pin.classList.toggle('hz',near);
+  const act=u>=X0-.1?cl(Math.round(hx),0,N-1):-1;
+  for(let k=0;k<N;k++){const d=k-hx,ad=Math.abs(d);
+    const vis=ein*(reduce?cl(1-ad*2):cl(1-ad*1.05)),vp=pe*cl(1-ad/.45);
+    const ty=reduce?0:(1-sm(ein))*90,sc=reduce?1:(.93+.07*sm(ein))*(1-.07*Math.min(1,ad)),tx=reduce?0:d*sh;
+    objs[k].style.opacity=vis.toFixed(3);objs[k].style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+sc.toFixed(3)+')';
+    plates[k].style.opacity=vp.toFixed(3);plates[k].style.transform=reduce?'none':'translate('+(d*70).toFixed(1)+'px,'+((1-sm(pe))*36).toFixed(1)+'px)';
+    chs[k].classList.toggle('on',k===act&&vp>.5);chs[k].style.visibility=vis<.01&&vp<.01?'hidden':'';
+    pills[k].querySelector('b').style.width=k===act?'100%':'0%';}
   if(act!==lastAct){pills.forEach((p,k)=>{if(k===act)p.setAttribute('aria-current','true');else p.removeAttribute('aria-current');});lastAct=act;}
-  // Owlight: 메뉴 막대 아이콘에서 패널이 작게 시작해 내리는 만큼 커지며 튀어나옴(0.42화면 동안 .06→1)
-  const lo=reduce?1:sm(cl((u-X[1]+.02)/.42)),sc2=.06+.94*lo;
+  const co=cl((u-1.1)/.2);nvs.forEach(b=>{const dis=act<0||(b.classList.contains('prev')?act<=0:act>=N-1);b.disabled=dis;b.style.opacity=(co*(dis?.28:1)).toFixed(3);b.style.visibility=u<1.1?'hidden':'visible';});
+  // Owlight: 그 작품이 가운데 오면 메뉴 막대 아이콘에서 패널이 작게 시작해 커지며 튀어나옴(0.45초 .06→1). 옆으로 다 비켜나면 다시 접힘
+  const f1=Math.abs(1-hx);if(ein>.9&&f1<.5){if(t1===null)t1=now;}else if(f1>.95||ein<.5)t1=null;
+  const lo=reduce?1:t1!==null?sm(cl((now-t1-60)/450)):(f1>.95||ein<.5?0:loLast),sc2=.06+.94*lo;loLast=lo;
   pop.style.opacity=cl(lo*4).toFixed(3);pop.style.transform='translate('+(P.x*(1-lo)).toFixed(1)+'px,'+(P.y*(1-lo)).toFixed(1)+'px) scale('+sc2.toFixed(3)+')';
-  // 세트노트: 기록 조각 셋이 0.2화면마다 하나씩
-  chips.forEach((c,i)=>c.classList.toggle('on',u>X[2]+.02+i*.2));
-  // 영상은 다가오면 받기 시작하고, 이 장일 때만 돈다. 바탕화면도 이 장일 때만 바뀐다
+  // 세트노트: 가운데 오면 기록 조각 셋이 0.22초마다 하나씩
+  const f2=Math.abs(2-hx);if(ein>.9&&f2<.5){if(t2===null)t2=now;}else if(f2>.95||ein<.5)t2=null;
+  if(t2!==null)chips.forEach((c,i)=>c.classList.toggle('on',reduce||now-t2>120+i*220));else if(f2>.95||ein<.5)chips.forEach(c=>c.classList.remove('on'));
+  // 영상은 다가오면 받기 시작하고, 이 작품이 가운데일 때만 돈다. 바탕화면도 Owlight 가 가운데일 때만 바뀐다
   if(vid){if(!vidReady&&u>.45){vidReady=true;vid.preload='auto';try{vid.load();}catch(e){}}
-    if(act===0&&u<X[1]){if(vid.paused&&!reduce)vid.play().catch(()=>{});}else if(!vid.paused)vid.pause();}
-  if(act===1)wall.start();else wall.stop();
+    if(act===0&&u<END+.6&&Math.abs(hx)<.5){if(vid.paused&&!reduce)vid.play().catch(()=>{});}else if(!vid.paused)vid.pause();}
+  if(act===1&&f1<.6)wall.start();else wall.stop();
+  if(pending())hKick();
+  // 처음 작업대에 서면 한 번, 다음 작품이 오른쪽에서 살짝 비쳤다 돌아감(옆으로 넘어간다는 표시)
+  if(near&&!peeked&&!reduce&&act===0&&!hp&&HB.t===0&&Math.abs(hx)<.01&&Math.abs(HB.v)<.01){peeked=true;clearTimeout(peekT);
+    peekT=setTimeout(()=>{if(hp||HB.t!==0||!benchLive())return;HB.t=.17;hKick();peekT=setTimeout(()=>{if(HB.t===.17){HB.t=0;hKick();}},430);},700);}
 }
+function pending(){const n=performance.now();return (t1!==null&&n-t1<620)||(t2!==null&&n-t2<760);}
+/* 작업대 위 옆 넘기기: 스프링을 4번 나눠 밟고(원본 motion.js), 다 서고 패널·조각도 다 뜨면 rAF 를 멈춤 */
+function hstep(now){hraf=0;const dt=hlast?Math.min((now-hlast)/1000,1/30):1/60;hlast=now;
+  if(!(hp&&hp.live)){for(let i=0;i<4;i++){const a=-HK*(HB.x-HB.t)-HC*HB.v;HB.v+=a*dt/4;HB.x+=HB.v*dt/4;}
+    if(Math.abs(HB.x-HB.t)<.0006&&Math.abs(HB.v)<.006){HB.x=HB.t;HB.v=0;}}
+  update();
+  if((hp&&hp.live)||HB.x!==HB.t||HB.v||pending())hraf=requestAnimationFrame(hstep);else hlast=0;}
+function hKick(){if(!hraf){hlast=0;hraf=requestAnimationFrame(hstep);}}
+function peekStop(){clearTimeout(peekT);peeked=true;if(HB.t===.17)HB.t=0;}
+function hGo(k,instant,keep){k=cl(Math.round(k),0,N-1);if(keep)clearTimeout(peekT);else peekStop();HB.t=k;if(instant||reduce){HB.x=k;HB.v=0;}hKick();}
+window.BENCH={go:hGo,at:()=>HB.x,set:x=>{peekStop();HB.x=HB.t=x;HB.v=0;update();}};   // check.py 가 씀(set = 두 작품 사이에 세워 두고 보기)
 function req(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
 addEventListener('resize',()=>{geo();req();});
 addEventListener('scene:built',()=>{geo();update();});
@@ -404,7 +432,7 @@ addEventListener('scene:built',()=>{geo();update();});
    정해진 빠르기로 다음 멈춤 자리까지 가서 선다. 가는 중에 같은 쪽으로 또 밀면 빨리(2배씩, 4배까지), 반대쪽이면 되돌아감. 동작 줄이기면 그냥 스크롤.
    PC 휠·트랙패드는 아래 '턱'(onWheel) 참고. 키는 브라우저 그대로.
    멈춤 자리: 첫 화면(u 0) → 작품마다 X+.45(들어오는 움직임·Owlight 패널·기록 조각 셋이 다 끝난 자리) → 마지막 다음은 칸 끝(걸이판이 화면 맨 위) */
-const STOP=[0,...X.map(x=>x+.45)],D=document.documentElement,fine=matchMedia('(hover: hover) and (pointer: fine)');
+const STOP=[0,X0+.45],D=document.documentElement,fine=matchMedia('(hover: hover) and (pointer: fine)');
 let ride=null,settle=0,setDir=0,qT=0,free=0,lastIn=-1e9,lastY=scrollY,grab=false,rraf=0;
 const can=()=>!reduce&&!D.classList.contains('is-sheet'),vhNow=()=>pin.clientHeight,
  top0=()=>walk.offsetTop,yU=u=>top0()+u*vhNow(),yExit=()=>Math.min(top0()+walk.offsetHeight,D.scrollHeight-innerHeight),
@@ -441,11 +469,13 @@ let ty0=null,tx0=0,tDone=false;
 addEventListener('touchstart',e=>{lastIn=performance.now();if(e.touches.length!==1||inSheet(e)){ty0=null;return;}ty0=e.touches[0].clientY;tx0=e.touches[0].clientX;tDone=false;},{passive:true});
 function onTouch(e){
   if(ty0===null)return;
+  if(hp&&hp.live){if(e.cancelable)e.preventDefault();return;}   // 작업대에서 옆으로 끄는 중
   const dy=e.touches[0].clientY-ty0,dx=e.touches[0].clientX-tx0;
   if(tDone){if(e.cancelable)e.preventDefault();return;}   // 이 손가락은 이미 한 작품을 넘김: 남은 움직임은 버린다
   if(ride){if(e.cancelable)e.preventDefault();if(Math.abs(dy)>10){tDone=true;go(dy<0?1:-1);}return;}
+  if(benchLive()&&Math.max(Math.abs(dx),Math.abs(dy))<10)return;   // 작업대 위에선 옆 끌기인지 먼저 봄
   if(Math.abs(dy)<3||Math.abs(dx)>Math.abs(dy))return;
-  if(intent(dy<0?1:-1)){tDone=true;if(e.cancelable)e.preventDefault();}}
+  if(intent(dy<0?1:-1)){tDone=true;hp=null;if(e.cancelable)e.preventDefault();}}
 /* PC 휠·트랙패드 = 작품 앞 '턱'. 11-20 #48은 휠을 통째로 붙잡아 한 작품씩 넘겨 뻑뻑했고(사용자 「pc에서 스크롤할 때 스무스하게 안됨」, 트랙패드 관성이 끊김),
    #49는 브라우저 그대로라 이번엔 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」(11-21). 그 사이로:
    이 칸 안에서만 휠 값을 받아 부드럽게 따라가고(매 프레임 남은 거리의 15%, 60fps 기준), 멈춤 자리 ±0.28화면 안에서는 휠이 35%만 먹는다(턱).
@@ -477,7 +507,11 @@ function wSettle(){if(ride||!fine.matches)return;
   const uu=(wT-top0())/vhNow();   // 거리와 방이 겹쳐 흐린 구간(u .86~1.1)엔 서지 않음: 내려가던 중이면 첫 작품까지 정해진 빠르기로(폰과 같은 느낌), 올라가던 중이면 겹치기 전으로
   if(uu>.86&&uu<1.1){if(wDir>0)go(1,yU(STOP[1]));else{wT=yU(.86);wC=scrollY;wGo();}return;}
   const h=nextStop(wT,wDir);if(h!=null&&Math.abs(h-wT)/vhNow()<.65){wT=h;wC=scrollY;wGo();}}
-addEventListener('keydown',e=>{if(/^(Arrow|Page|Home|End| )/.test(e.key)){if(ride)stop(false);wHalt();}});   // 키로 움직이면 브라우저에 넘김
+addEventListener('keydown',e=>{
+  if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&!e.altKey&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&stage.classList.contains('live')&&!D.classList.contains('is-sheet')
+    &&!(e.target.closest&&e.target.closest('input,textarea,select,dialog,[contenteditable]'))){const u=(scrollY-top0())/vhNow();
+    if(u>X0-.1&&u<END+.3){e.preventDefault();hGo(Math.round(HB.t)+(e.key==='ArrowRight'?1:-1));return;}}   // 작업대가 보이면 ← → 로 작품 넘김
+  if(/^(Arrow|Page|Home|End| )/.test(e.key)){if(ride)stop(false);wHalt();}});   // 키로 움직이면 브라우저에 넘김
 addEventListener('touchmove',()=>{lastIn=performance.now();},{passive:true});
 addEventListener('touchend',()=>{lastIn=performance.now();},{passive:true});
 // 막을 수 있는(passive 아닌) 손가락 듣기는 이 칸 안(걸이판 맨 위 조금 밑까지)에서만 단다. 그 밑에선 떼어 둬서 브라우저가 기다리지 않고 바로 스크롤
@@ -491,8 +525,39 @@ addEventListener('mouseup',()=>{if(free===Infinity)free=0;});
 addEventListener('scroll',()=>{const y=scrollY,now=performance.now();
   if(!ride&&can()&&Math.abs(y-lastY)>4&&now-lastIn<3000&&now>free&&y>top0()+2&&y<yExit()-3)go(y>lastY?1:-1);
   lastY=y;hold();if(!ride)req();},{passive:true});
-// 장 알약·위 막대 '만든 것 보기': 그 작품까지 같은 빠르기로. 멀면(작품 둘 넘게, 또는 걸이판 밑에서) 그 작품 바로 앞으로 옮겨 놓고 들어오는 것만 보여 줌
-function goChap(k,smooth){const to=yU(STOP[k+1]),vh=vhNow();
+/* 옆으로 끌기(손가락·마우스 같이, pointer 사건). .pin 은 touch-action pan-y 라 옆 움직임은 브라우저가 스크롤로 안 가져감.
+   8px 넘게 옆으로(세로의 1.2배) 움직이면 잡고, 작품이 손을 따라옴(폰 화면 폭 80%, PC 42%·620px까지 = 한 작품). 양 끝 밖으론 28%만 따라옴(고무).
+   놓으면 손 빠르기 0.16초만큼 더 간 자리에서 가까운 작품, 단 한 손짓에 한 작품까지(디자인-방법 249) */
+const benchLive=()=>stage.classList.contains('live')&&!ride&&Math.abs(scrollY-yU(STOP[1]))<vhNow()*.12;
+const span=()=>innerWidth>=860?Math.min(innerWidth*.42,620):innerWidth*.8;
+const rubH=h=>h<0?h*.28:h>N-1?N-1+(h-N+1)*.28:h;
+pin.addEventListener('pointerdown',e=>{if(e.button||!benchLive()||(e.target.closest&&e.target.closest('.chaps,.nv,dialog')))return;
+  hp={id:e.pointerId,x0:e.clientX,y0:e.clientY,h0:HB.x,live:false,px:e.clientX,pt:performance.now(),vx:0};});
+addEventListener('pointermove',e=>{if(!hp||e.pointerId!==hp.id)return;const dx=e.clientX-hp.x0,dy=e.clientY-hp.y0;
+  if(!hp.live){if(Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)*1.2&&!ride){peekStop();hp.live=true;hp.x0=e.clientX;hp.h0=HB.x;hp.px=e.clientX;hp.pt=performance.now();pin.classList.add('hdrag');
+      try{pin.setPointerCapture(e.pointerId);}catch(err){}hKick();}else if(Math.abs(dy)>12)hp=null;return;}
+  const n=performance.now(),dt=Math.max(1,n-hp.pt);hp.vx=hp.vx*.5+((e.clientX-hp.px)/dt)*.5;hp.px=e.clientX;hp.pt=n;
+  HB.x=rubH(hp.h0-(e.clientX-hp.x0)/span());HB.v=0;hKick();});
+function hEnd(e,cancel){if(!hp||e.pointerId!==hp.id)return;
+  if(hp.live){const old=performance.now()-hp.pt>90,v=cancel||old?0:-hp.vx*1000/span(),base=Math.round(hp.h0);
+    let k=Math.round(HB.x+v*.16);k=cl(cl(k,base-1,base+1),0,N-1);
+    HB.t=k;HB.v=reduce?0:cl(v,-7,7);if(reduce)HB.x=k;pin.classList.remove('hdrag');hSup=true;setTimeout(()=>{hSup=false;},0);hp=null;hKick();return;}
+  hp=null;}
+addEventListener('pointerup',e=>hEnd(e,false));addEventListener('pointercancel',e=>hEnd(e,true));
+document.addEventListener('click',e=>{if(hSup){e.stopPropagation();e.preventDefault();}},true);   // 끌기를 놓을 때 밑에 있던 단추가 눌리지 않게
+pin.addEventListener('dragstart',e=>{if(stage.classList.contains('live'))e.preventDefault();});
+// 트랙패드 옆 밀기 = 한 손짓에 한 작품: 30px 쌓이면 넘기고, 남은 관성은 버림. 마지막 값에서 0.22초 동안 아무것도 안 오고 작품도 거의 다 넘어갔으면 다음 손짓으로 받음.
+// (값 사이 틈으로 재면, 다음 작품 그림을 풀며 화면이 잠깐 버벅인 틈을 새 손짓으로 잘못 봄 → 타이머로 잼: 밀린 입력이 타이머보다 먼저 처리됨). 옆 밀기는 브라우저 '뒤로 가기'로도 안 넘김
+let hwAcc=0,hwLock=false,hwT=0;
+function hwFree(){if(Math.abs(HB.x-HB.t)>=.08){hwT=setTimeout(hwFree,120);return;}hwLock=false;hwAcc=0;}
+pin.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<=Math.abs(e.deltaY)||e.ctrlKey||!benchLive())return;e.preventDefault();
+  clearTimeout(hwT);hwT=setTimeout(hwFree,220);if(hwLock)return;hwAcc+=e.deltaX*(e.deltaMode===1?16:1);
+  if(Math.abs(hwAcc)>30){hGo(Math.round(HB.t)+(hwAcc>0?1:-1));hwLock=true;hwAcc=0;}},{passive:false});
+stage.querySelectorAll('.nv').forEach(b=>b.addEventListener('click',()=>hGo(Math.round(HB.t)+(b.classList.contains('prev')?-1:1))));
+// 장 알약·위 막대 '만든 것 보기': 작업대에 서 있으면 옆으로 그 작품까지. 아니면 그 작품을 가운데 놓고 작업대까지 같은 빠르기로(멀면 바로 앞으로 옮겨 놓고 들어오는 것만)
+function goChap(k,smooth){const to=yU(STOP[1]),vh=vhNow();
+  if(smooth&&can()&&!ride&&Math.abs(scrollY-to)<vh*.15){hGo(k);if(Math.abs(scrollY-to)>2){wHalt();go(scrollY<to?1:-1,to);}return;}
+  hGo(k,true,true);   // 멀리서 오면 그 작품을 가운데 두고 들어옴(처음 한 번 '옆으로 넘어감' 비침은 남겨 둠)
   if(!smooth||!can()){stop(false);jumpTo(to);lastY=scrollY;req();return;}
   const y=ride?ride.y:scrollY;
   if(y>to+vh*1.05||to-y>vh*1.8){stop(false);jumpTo(to-vh*.6);lastY=scrollY;update();}
@@ -524,10 +589,11 @@ if(other){const want=/^ko\b/i.test(navigator.language||'')?'ko':'en';let saved=n
    스프링은 원본 tokens.css 값 그대로('강도 감쇠'), 색·크기·글은 루멘랩 것. 부품 도감 머리의 '작은 부품 움직임은 디자인북마크에서' 줄.
    1) 장 알약(.chaps) = Rubber dock: 흰 알약의 앞 가장자리는 빠르고(640 38) 뒤는 느려서(150 16) 옮길 때 고무처럼 늘어남. 알약 줄을 옆으로 끌면 따라오고 놓으면 가까운 작품으로
    2) 걸이판 꼬리표(.tg) = Parallax ticket: 손을 올린 쪽으로 기울고(14°, 220 18) 아이콘·글이 깊이만큼 어긋나며 빛이 따라옴
-   3) Owlight 모니터 화면 = Glass lens: 둥근 돋보기가 화면 위를 다니며 메뉴 막대·시계를 키워 보여 줌(180 17, 1.7배, 누르면 2.4배). 그 장일 때만 돈다
-   4) 주 단추(작품 단추·위 막대 '만든 것 보기'·메일 복사) = Magnetic button: 마우스가 다가가면 단추가 끌려오고 글은 더 끌려옴(170 13 / 220 15). PC 마우스만
+   (3) Owlight 모니터 화면 돋보기(Glass lens)는 11-24 사용자 「없어도 될듯」으로 뺌)
+   4) 주 단추(작품 단추·앱 배지·위 막대 '만든 것 보기'·메일 복사) = Magnetic button: 마우스가 다가가면 단추가 끌려오고 글은 더 끌려옴(170 13 / 220 15).
+      폰은 마우스가 없어 다가가기가 없으니, 누르는 동안 손가락 쪽으로 끌려가 눌리고 떼면 출렁이며 제자리(11-24 사용자 「모바일에서는 아예 안됨」)
    5) 문 밖 '불은 늘 켜 둘게요' = Pull cord: 줄 달린 등. 당기면 딸깍 불이 꺼지며 어둠이 전구에서 번지고, 잠시 뒤 스스로 다시 켜짐(밧줄 12마디, 딸깍 22px)
-   스프링 엔진은 원본 shared/motion.js 를 줄인 것. 움직일 게 없으면 rAF 를 멈춘다(원본은 늘 돎). 동작 줄이기면 출렁임 없이(임계 감쇠) 가고, 자석·돋보기 떠돌기·등 힌트는 끈다 */
+   스프링 엔진은 원본 shared/motion.js 를 줄인 것. 움직일 게 없으면 rAF 를 멈춘다(원본은 늘 돎). 동작 줄이기면 출렁임 없이(임계 감쇠) 가고, 자석·등 힌트는 끈다 */
 (function(){
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,fine=matchMedia('(hover: hover) and (pointer: fine)');
 const Sp=(x,k=400,c=30)=>({x,v:0,t:x,k,c:reduce?2*Math.sqrt(k):c});
@@ -644,65 +710,19 @@ function wake(c){comps.add(c);if(!raf){last=performance.now();raf=requestAnimati
   });
 })();
 
-/* ── 3) Owlight 모니터 = Glass lens. 화면(.mac) 속 그림·메뉴 막대·시계를 세 벌 겹쳐(가장자리일수록 조금 더 키움) 볼록 렌즈처럼 ── */
-(function(){
-  const mac=document.querySelector('.o-owl .mac'),ch=document.getElementById('c1');if(!mac||!ch)return;
-  const lens=document.createElement('div');lens.className='lens';lens.setAttribute('aria-hidden','true');
-  const view=document.createElement('div');view.className='lens-view';
-  const glass=document.createElement('div');glass.className='lens-glass';
-  lens.append(view,glass);
-  const kids=[...mac.children];
-  const BEND=[1,1.05,1.12];
-  const copies=BEND.map((b,i)=>{const layer=document.createElement('div');layer.className='layer l'+i;const c=document.createElement('div');c.className='lc';
-    kids.forEach(k=>{const n=k.cloneNode(true);n.removeAttribute('id');n.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));n.querySelectorAll('img').forEach(im=>{im.alt='';im.loading='eager';});c.appendChild(n);});
-    layer.appendChild(c);view.appendChild(layer);return{c,b};});
-  mac.appendChild(lens);
-  // 바탕화면 두 장이 바뀌는 것(home.js wallCycle)과 천천히 다가가는 움직임(kb)을 렌즈 속 사본에도 맞춘다
-  const oimg=[...mac.querySelectorAll(':scope > .wall img')];
-  const cimg=copies.map(({c})=>[...c.querySelectorAll('.wall img')]);
-  function sync(){oimg.forEach((o,i)=>{const on=o.classList.contains('on');cimg.forEach(set=>{const c=set[i];if(!c)return;c.classList.toggle('on',on);
-    try{const a=o.getAnimations()[0],b=c.getAnimations()[0];if(a&&b&&a.currentTime!=null)b.currentTime=a.currentTime;}catch(e){}});});}
-  oimg.forEach(o=>new MutationObserver(sync).observe(o,{attributes:true,attributeFilter:['class']}));
-  let LS=128,W=0,H=0;
-  const X=Sp(0,180,17),Y=Sp(0,180,17),Z=Sp(1.7,260,26);
-  let px=null,py=null,lastP=-1e9,clock=0,on=false,first=true;
-  function size(){W=mac.offsetWidth;H=mac.offsetHeight;LS=Math.round(cl(W*.26,84,150));lens.style.width=lens.style.height=LS+'px';
-    copies.forEach(({c})=>{c.style.width=W+'px';c.style.height=H+'px';});}
-  const loc=e=>{const r=mac.getBoundingClientRect(),k=W/(r.width||1);return[(e.clientX-r.left)*k,(e.clientY-r.top)*k];};
-  const drift=t=>{const a=t*.42;return[W*(.5+.36*Math.cos(a)),H*(.5-.34*Math.cos(a)+.12*Math.sin(a))];};   // 메뉴 막대(오른쪽 위) ↔ 시계(왼쪽 아래)를 오감
-  mac.addEventListener('pointermove',e=>{if(!on)return;[px,py]=loc(e);lastP=performance.now();wake(comp);});
-  mac.addEventListener('pointerleave',()=>{px=null;});
-  mac.addEventListener('pointerdown',e=>{if(!on)return;[px,py]=loc(e);lastP=performance.now();Z.t=2.4;wake(comp);});
-  addEventListener('pointerup',()=>{Z.t=1.7;if(!fine.matches)px=null;});
-  function show(v){if(v===on)return;on=v;lens.classList.toggle('on',v);
-    if(v){size();sync();if(first){first=false;const[a,b]=drift(clock);X.x=X.t=a;Y.x=Y.t=b;}wake(comp);}}
-  new MutationObserver(()=>show(ch.classList.contains('on'))).observe(ch,{attributes:true,attributeFilter:['class']});
-  addEventListener('resize',()=>{if(on)size();});
-  const comp={
-    frame(dt){clock+=dt;const idle=px===null||performance.now()-lastP>2500;
-      if(idle){if(reduce){X.t=W*.86;Y.t=H*.2;}else[X.t,Y.t]=drift(clock);}else{X.t=px;Y.t=py;}
-      step(X,dt);step(Y,dt);step(Z,dt);},
-    render(){const x=X.x,y=Y.x,tilt=cl(X.v/220,-6,6);
-      lens.style.transform='translate('+(x-LS/2).toFixed(2)+'px,'+(y-LS/2).toFixed(2)+'px) rotate('+tilt.toFixed(2)+'deg)';
-      const o=(x).toFixed(2)+'px '+(y).toFixed(2)+'px',ox=-(x-LS/2),oy=-(y-LS/2);
-      copies.forEach(({c,b})=>{c.style.transformOrigin=o;c.style.transform='translate('+ox.toFixed(2)+'px,'+oy.toFixed(2)+'px) scale('+(Z.x*b).toFixed(4)+')';});
-      view.style.transform='rotate('+(-tilt).toFixed(2)+'deg)';},
-    busy(){return on||!still([X,Y,Z],.05);}};
-})();
-
-/* ── 4) 주 단추 = Magnetic button(끌림 반경: 단추 반 폭 + 46px). PC 마우스만, 동작 줄이기면 안 씀 ── */
+/* ── 4) 주 단추 = Magnetic button(끌림 반경: 단추 반 폭 + 46px). PC는 마우스가 다가가면, 폰은 누르는 동안 손가락 쪽으로. 동작 줄이기면 안 씀 ── */
 (function(){
   if(reduce)return;
-  const els=[...document.querySelectorAll('.plate .btn, .nav .go, #copy')];if(!els.length)return;
+  const els=[...document.querySelectorAll('.plate .btn, .plate .badges a, .nav .go, #copy')];if(!els.length)return;
   const ms=els.map(el=>{const lb=document.createElement('span');lb.className='mg-l';while(el.firstChild)lb.appendChild(el.firstChild);el.appendChild(lb);el.classList.add('mg');
-    return{el,lb,bx:Sp(0,170,13),by:Sp(0,170,13),lx:Sp(0,220,15),ly:Sp(0,220,15),sc:Sp(1,400,18),press:false};});
+    return{el,lb,bx:Sp(0,170,13),by:Sp(0,170,13),lx:Sp(0,220,15),ly:Sp(0,220,15),sc:Sp(1,400,18),press:false,fx:null,fy:null};});
   let px=-1e4,py=-1e4;
   const MX=12,MY=8;   // 원본은 홀로 선 단추라 30px 가까이 끌려가지만, 여기 단추는 옆 단추·메일 칸과 붙어 있어 가로 12·세로 8px까지만
   const live=m=>{const c=m.el.closest('.ch');return !c||c.classList.contains('on');};
-  function aim(){ms.forEach(m=>{const r=m.el.getBoundingClientRect();
+  function aim(){ms.forEach(m=>{const r=m.el.getBoundingClientRect(),tp=m.fx!==null,qx=tp?m.fx:px,qy=tp?m.fy:py;
     if(!r.width||!live(m)){m.bx.t=m.by.t=m.lx.t=m.ly.t=0;if(!m.press)m.sc.t=1;return;}
     // 지금 끌려가 있는 만큼을 빼고 원래 자리 가운데에서 잰다
-    const cx=r.left+r.width/2-m.bx.x,cy=r.top+r.height/2-m.by.x,dx=px-cx,dy=py-cy,d=Math.hypot(dx,dy),R=r.width/2+46,pull=d<R?1-d/R*.35:0;
+    const cx=r.left+r.width/2-m.bx.x,cy=r.top+r.height/2-m.by.x,dx=qx-cx,dy=qy-cy,d=Math.hypot(dx,dy),R=r.width/2+46,pull=tp?1:d<R?1-d/R*.35:0;
     const pv=m.el.previousElementSibling,nx=m.el.nextElementSibling,ol=r.left-m.bx.x,orr=r.right-m.bx.x;   // 옆 단추 쪽으로는 사이 틈만큼만(옆 단추를 덮지 않게)
     const capL=pv?Math.min(MX,Math.max(0,ol-pv.getBoundingClientRect().right-2)):MX,capR=nx?Math.min(MX,Math.max(0,nx.getBoundingClientRect().left-orr-2)):MX;
     m.bx.t=cl(dx*.32*pull,-capL,capR);m.by.t=cl(dy*.38*pull,-MY,MY);m.lx.t=cl(dx*.14*pull,-5,5);m.ly.t=cl(dy*.18*pull,-4,4);if(!m.press)m.sc.t=1+.06*pull;});}
@@ -715,6 +735,11 @@ function wake(c){comps.add(c);if(!raf){last=performance.now();raf=requestAnimati
   addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||!fine.matches)return;px=e.clientX;py=e.clientY;aim();wake(comp);},{passive:true});
   document.documentElement.addEventListener('pointerleave',()=>{px=py=-1e4;aim();wake(comp);});
   addEventListener('scroll',()=>{if(px>-1e4){aim();wake(comp);}},{passive:true});
+  // 폰: 누르면 손가락 쪽으로 끌려가며 눌리고(.94), 손가락을 따라오다가 떼거나 화면이 밀리면 출렁이며 제자리
+  const tRel=m=>{if(m.fx===null)return;m.fx=m.fy=null;m.press=false;m.sc.t=1;m.sc.v=3;aim();wake(comp);};
+  ms.forEach(m=>{m.el.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;m.fx=e.clientX;m.fy=e.clientY;m.press=true;m.sc.t=.94;aim();wake(comp);});
+    addEventListener('pointermove',e=>{if(m.fx===null||e.pointerType==='mouse')return;m.fx=e.clientX;m.fy=e.clientY;aim();wake(comp);},{passive:true});
+    addEventListener('pointerup',()=>tRel(m));addEventListener('pointercancel',()=>tRel(m));});
   ms.forEach(m=>{m.el.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;m.press=true;m.sc.t=.94;wake(comp);});
     m.el.addEventListener('pointerup',()=>{if(!m.press)return;m.press=false;m.sc.t=1;m.sc.v=3;wake(comp);});
     m.el.addEventListener('pointerleave',()=>{if(m.press){m.press=false;m.sc.t=1;wake(comp);}});});

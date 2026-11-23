@@ -2,10 +2,11 @@
    스프링은 원본 tokens.css 값 그대로('강도 감쇠'), 색·크기·글은 루멘랩 것. 부품 도감 머리의 '작은 부품 움직임은 디자인북마크에서' 줄.
    1) 장 알약(.chaps) = Rubber dock: 흰 알약의 앞 가장자리는 빠르고(640 38) 뒤는 느려서(150 16) 옮길 때 고무처럼 늘어남. 알약 줄을 옆으로 끌면 따라오고 놓으면 가까운 작품으로
    2) 걸이판 꼬리표(.tg) = Parallax ticket: 손을 올린 쪽으로 기울고(14°, 220 18) 아이콘·글이 깊이만큼 어긋나며 빛이 따라옴
-   3) Owlight 모니터 화면 = Glass lens: 둥근 돋보기가 화면 위를 다니며 메뉴 막대·시계를 키워 보여 줌(180 17, 1.7배, 누르면 2.4배). 그 장일 때만 돈다
-   4) 주 단추(작품 단추·위 막대 '만든 것 보기'·메일 복사) = Magnetic button: 마우스가 다가가면 단추가 끌려오고 글은 더 끌려옴(170 13 / 220 15). PC 마우스만
+   (3) Owlight 모니터 화면 돋보기(Glass lens)는 11-24 사용자 「없어도 될듯」으로 뺌)
+   4) 주 단추(작품 단추·앱 배지·위 막대 '만든 것 보기'·메일 복사) = Magnetic button: 마우스가 다가가면 단추가 끌려오고 글은 더 끌려옴(170 13 / 220 15).
+      폰은 마우스가 없어 다가가기가 없으니, 누르는 동안 손가락 쪽으로 끌려가 눌리고 떼면 출렁이며 제자리(11-24 사용자 「모바일에서는 아예 안됨」)
    5) 문 밖 '불은 늘 켜 둘게요' = Pull cord: 줄 달린 등. 당기면 딸깍 불이 꺼지며 어둠이 전구에서 번지고, 잠시 뒤 스스로 다시 켜짐(밧줄 12마디, 딸깍 22px)
-   스프링 엔진은 원본 shared/motion.js 를 줄인 것. 움직일 게 없으면 rAF 를 멈춘다(원본은 늘 돎). 동작 줄이기면 출렁임 없이(임계 감쇠) 가고, 자석·돋보기 떠돌기·등 힌트는 끈다 */
+   스프링 엔진은 원본 shared/motion.js 를 줄인 것. 움직일 게 없으면 rAF 를 멈춘다(원본은 늘 돎). 동작 줄이기면 출렁임 없이(임계 감쇠) 가고, 자석·등 힌트는 끈다 */
 (function(){
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,fine=matchMedia('(hover: hover) and (pointer: fine)');
 const Sp=(x,k=400,c=30)=>({x,v:0,t:x,k,c:reduce?2*Math.sqrt(k):c});
@@ -122,65 +123,19 @@ function wake(c){comps.add(c);if(!raf){last=performance.now();raf=requestAnimati
   });
 })();
 
-/* ── 3) Owlight 모니터 = Glass lens. 화면(.mac) 속 그림·메뉴 막대·시계를 세 벌 겹쳐(가장자리일수록 조금 더 키움) 볼록 렌즈처럼 ── */
-(function(){
-  const mac=document.querySelector('.o-owl .mac'),ch=document.getElementById('c1');if(!mac||!ch)return;
-  const lens=document.createElement('div');lens.className='lens';lens.setAttribute('aria-hidden','true');
-  const view=document.createElement('div');view.className='lens-view';
-  const glass=document.createElement('div');glass.className='lens-glass';
-  lens.append(view,glass);
-  const kids=[...mac.children];
-  const BEND=[1,1.05,1.12];
-  const copies=BEND.map((b,i)=>{const layer=document.createElement('div');layer.className='layer l'+i;const c=document.createElement('div');c.className='lc';
-    kids.forEach(k=>{const n=k.cloneNode(true);n.removeAttribute('id');n.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));n.querySelectorAll('img').forEach(im=>{im.alt='';im.loading='eager';});c.appendChild(n);});
-    layer.appendChild(c);view.appendChild(layer);return{c,b};});
-  mac.appendChild(lens);
-  // 바탕화면 두 장이 바뀌는 것(home.js wallCycle)과 천천히 다가가는 움직임(kb)을 렌즈 속 사본에도 맞춘다
-  const oimg=[...mac.querySelectorAll(':scope > .wall img')];
-  const cimg=copies.map(({c})=>[...c.querySelectorAll('.wall img')]);
-  function sync(){oimg.forEach((o,i)=>{const on=o.classList.contains('on');cimg.forEach(set=>{const c=set[i];if(!c)return;c.classList.toggle('on',on);
-    try{const a=o.getAnimations()[0],b=c.getAnimations()[0];if(a&&b&&a.currentTime!=null)b.currentTime=a.currentTime;}catch(e){}});});}
-  oimg.forEach(o=>new MutationObserver(sync).observe(o,{attributes:true,attributeFilter:['class']}));
-  let LS=128,W=0,H=0;
-  const X=Sp(0,180,17),Y=Sp(0,180,17),Z=Sp(1.7,260,26);
-  let px=null,py=null,lastP=-1e9,clock=0,on=false,first=true;
-  function size(){W=mac.offsetWidth;H=mac.offsetHeight;LS=Math.round(cl(W*.26,84,150));lens.style.width=lens.style.height=LS+'px';
-    copies.forEach(({c})=>{c.style.width=W+'px';c.style.height=H+'px';});}
-  const loc=e=>{const r=mac.getBoundingClientRect(),k=W/(r.width||1);return[(e.clientX-r.left)*k,(e.clientY-r.top)*k];};
-  const drift=t=>{const a=t*.42;return[W*(.5+.36*Math.cos(a)),H*(.5-.34*Math.cos(a)+.12*Math.sin(a))];};   // 메뉴 막대(오른쪽 위) ↔ 시계(왼쪽 아래)를 오감
-  mac.addEventListener('pointermove',e=>{if(!on)return;[px,py]=loc(e);lastP=performance.now();wake(comp);});
-  mac.addEventListener('pointerleave',()=>{px=null;});
-  mac.addEventListener('pointerdown',e=>{if(!on)return;[px,py]=loc(e);lastP=performance.now();Z.t=2.4;wake(comp);});
-  addEventListener('pointerup',()=>{Z.t=1.7;if(!fine.matches)px=null;});
-  function show(v){if(v===on)return;on=v;lens.classList.toggle('on',v);
-    if(v){size();sync();if(first){first=false;const[a,b]=drift(clock);X.x=X.t=a;Y.x=Y.t=b;}wake(comp);}}
-  new MutationObserver(()=>show(ch.classList.contains('on'))).observe(ch,{attributes:true,attributeFilter:['class']});
-  addEventListener('resize',()=>{if(on)size();});
-  const comp={
-    frame(dt){clock+=dt;const idle=px===null||performance.now()-lastP>2500;
-      if(idle){if(reduce){X.t=W*.86;Y.t=H*.2;}else[X.t,Y.t]=drift(clock);}else{X.t=px;Y.t=py;}
-      step(X,dt);step(Y,dt);step(Z,dt);},
-    render(){const x=X.x,y=Y.x,tilt=cl(X.v/220,-6,6);
-      lens.style.transform='translate('+(x-LS/2).toFixed(2)+'px,'+(y-LS/2).toFixed(2)+'px) rotate('+tilt.toFixed(2)+'deg)';
-      const o=(x).toFixed(2)+'px '+(y).toFixed(2)+'px',ox=-(x-LS/2),oy=-(y-LS/2);
-      copies.forEach(({c,b})=>{c.style.transformOrigin=o;c.style.transform='translate('+ox.toFixed(2)+'px,'+oy.toFixed(2)+'px) scale('+(Z.x*b).toFixed(4)+')';});
-      view.style.transform='rotate('+(-tilt).toFixed(2)+'deg)';},
-    busy(){return on||!still([X,Y,Z],.05);}};
-})();
-
-/* ── 4) 주 단추 = Magnetic button(끌림 반경: 단추 반 폭 + 46px). PC 마우스만, 동작 줄이기면 안 씀 ── */
+/* ── 4) 주 단추 = Magnetic button(끌림 반경: 단추 반 폭 + 46px). PC는 마우스가 다가가면, 폰은 누르는 동안 손가락 쪽으로. 동작 줄이기면 안 씀 ── */
 (function(){
   if(reduce)return;
-  const els=[...document.querySelectorAll('.plate .btn, .nav .go, #copy')];if(!els.length)return;
+  const els=[...document.querySelectorAll('.plate .btn, .plate .badges a, .nav .go, #copy')];if(!els.length)return;
   const ms=els.map(el=>{const lb=document.createElement('span');lb.className='mg-l';while(el.firstChild)lb.appendChild(el.firstChild);el.appendChild(lb);el.classList.add('mg');
-    return{el,lb,bx:Sp(0,170,13),by:Sp(0,170,13),lx:Sp(0,220,15),ly:Sp(0,220,15),sc:Sp(1,400,18),press:false};});
+    return{el,lb,bx:Sp(0,170,13),by:Sp(0,170,13),lx:Sp(0,220,15),ly:Sp(0,220,15),sc:Sp(1,400,18),press:false,fx:null,fy:null};});
   let px=-1e4,py=-1e4;
   const MX=12,MY=8;   // 원본은 홀로 선 단추라 30px 가까이 끌려가지만, 여기 단추는 옆 단추·메일 칸과 붙어 있어 가로 12·세로 8px까지만
   const live=m=>{const c=m.el.closest('.ch');return !c||c.classList.contains('on');};
-  function aim(){ms.forEach(m=>{const r=m.el.getBoundingClientRect();
+  function aim(){ms.forEach(m=>{const r=m.el.getBoundingClientRect(),tp=m.fx!==null,qx=tp?m.fx:px,qy=tp?m.fy:py;
     if(!r.width||!live(m)){m.bx.t=m.by.t=m.lx.t=m.ly.t=0;if(!m.press)m.sc.t=1;return;}
     // 지금 끌려가 있는 만큼을 빼고 원래 자리 가운데에서 잰다
-    const cx=r.left+r.width/2-m.bx.x,cy=r.top+r.height/2-m.by.x,dx=px-cx,dy=py-cy,d=Math.hypot(dx,dy),R=r.width/2+46,pull=d<R?1-d/R*.35:0;
+    const cx=r.left+r.width/2-m.bx.x,cy=r.top+r.height/2-m.by.x,dx=qx-cx,dy=qy-cy,d=Math.hypot(dx,dy),R=r.width/2+46,pull=tp?1:d<R?1-d/R*.35:0;
     const pv=m.el.previousElementSibling,nx=m.el.nextElementSibling,ol=r.left-m.bx.x,orr=r.right-m.bx.x;   // 옆 단추 쪽으로는 사이 틈만큼만(옆 단추를 덮지 않게)
     const capL=pv?Math.min(MX,Math.max(0,ol-pv.getBoundingClientRect().right-2)):MX,capR=nx?Math.min(MX,Math.max(0,nx.getBoundingClientRect().left-orr-2)):MX;
     m.bx.t=cl(dx*.32*pull,-capL,capR);m.by.t=cl(dy*.38*pull,-MY,MY);m.lx.t=cl(dx*.14*pull,-5,5);m.ly.t=cl(dy*.18*pull,-4,4);if(!m.press)m.sc.t=1+.06*pull;});}
@@ -193,6 +148,11 @@ function wake(c){comps.add(c);if(!raf){last=performance.now();raf=requestAnimati
   addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||!fine.matches)return;px=e.clientX;py=e.clientY;aim();wake(comp);},{passive:true});
   document.documentElement.addEventListener('pointerleave',()=>{px=py=-1e4;aim();wake(comp);});
   addEventListener('scroll',()=>{if(px>-1e4){aim();wake(comp);}},{passive:true});
+  // 폰: 누르면 손가락 쪽으로 끌려가며 눌리고(.94), 손가락을 따라오다가 떼거나 화면이 밀리면 출렁이며 제자리
+  const tRel=m=>{if(m.fx===null)return;m.fx=m.fy=null;m.press=false;m.sc.t=1;m.sc.v=3;aim();wake(comp);};
+  ms.forEach(m=>{m.el.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;m.fx=e.clientX;m.fy=e.clientY;m.press=true;m.sc.t=.94;aim();wake(comp);});
+    addEventListener('pointermove',e=>{if(m.fx===null||e.pointerType==='mouse')return;m.fx=e.clientX;m.fy=e.clientY;aim();wake(comp);},{passive:true});
+    addEventListener('pointerup',()=>tRel(m));addEventListener('pointercancel',()=>tRel(m));});
   ms.forEach(m=>{m.el.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;m.press=true;m.sc.t=.94;wake(comp);});
     m.el.addEventListener('pointerup',()=>{if(!m.press)return;m.press=false;m.sc.t=1;m.sc.v=3;wake(comp);});
     m.el.addEventListener('pointerleave',()=>{if(m.press){m.press=false;m.sc.t=1;wake(comp);}});});
