@@ -41,7 +41,7 @@ function building(c,R,x,w,top,gy,base,isNear){
 }
 
 function build(){
-  const r=hero.getBoundingClientRect();W=Math.round(r.width);H=Math.round(r.height);D=Math.min(2,window.devicePixelRatio||1);
+  const r=hero.getBoundingClientRect();W=Math.round(r.width);H=Math.round(r.height);D=Math.min(W<860?1.5:2,window.devicePixelRatio||1);
   cv.width=W*D;cv.height=H*D;wins=[];
   bg=document.createElement('canvas');bg.width=W*D;bg.height=H*D;const c=bg.getContext('2d');c.scale(D,D);
   const R=rnd(20261110);
@@ -172,7 +172,9 @@ function build(){
 function glow(x,y,r,col,a){ctx.fillStyle=rg(ctx,x,y,0,r,[[0,'rgba('+col+','+a+')'],[.4,'rgba('+col+','+(a*.35)+')'],[1,'rgba('+col+',0)']]);ctx.fillRect(x-r,y-r,r*2,r*2);}
 
 let rc=null,rx=null;
+let fLast=0;
 function frame(now){
+  if(W<860&&!reduce&&now-fLast<30&&!window.__scenePaused){raf=requestAnimationFrame(frame);return;}fLast=now;
   if(window.__scenePaused){raf=requestAnimationFrame(frame);return;}
   const t=(now-t0)/1000;ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(bg,0,0);ctx.setTransform(D,0,0,D,0,0);
   const {gy,curb,sw,win,door}=G;
@@ -210,7 +212,7 @@ function frame(now){
   if(rc.width!==W*D||rc.height!==bh){rc.width=W*D;rc.height=bh;}
   rx.clearRect(0,0,rc.width,bh);rx.drawImage(cv,0,top0*D,W*D,bh,0,0,W*D,bh);
   ctx.fillStyle='#0a0718';ctx.fillRect(0,curb,W,sh);
-  const step=2;for(let y=0;y<sh;y+=step){const sy=curb-3-y*1.55;if(sy<top0)break;const dx=reduce?0:Math.sin(y*.16+t*1.4)*(.5+y*.012)+Math.sin(y*.05-t*.7)*1.2;
+  const step=W<860?3:2;for(let y=0;y<sh;y+=step){const sy=curb-3-y*1.55;if(sy<top0)break;const dx=reduce?0:Math.sin(y*.16+t*1.4)*(.5+y*.012)+Math.sin(y*.05-t*.7)*1.2;
     ctx.drawImage(rc,0,Math.round((sy-top0)*D),W*D,Math.max(1,Math.round(step*1.55*D)),dx,curb+y,W,step+.6);}
   ctx.fillStyle=lg(ctx,0,curb,0,H,[[0,'rgba(10,7,26,.30)'],[.5,'rgba(8,6,20,.52)'],[1,'rgba(6,6,12,.94)']]);ctx.fillRect(0,curb,W,sh);
   // glints on the wet road

@@ -327,8 +327,8 @@ with sync_playwright() as p:
     c.close()
 
     # ── 한국어 홈 「창 안으로」(2026-11-19, 틀 문서 My-site-private reports/lumenlab/2026-11-19-홈-디자인-틀.md) ──
-    # 높이 310svh 칸 안에 100svh 고정 장면 하나: u = 그 칸을 몇 화면 내렸나. 0~1.15 거리 → 진열창 속, 1.3 에서 작업대(멈춤 자리 u 1.75), 그 아래 걸이판·문.
-    # 작품 넷은 작업대 위에서 옆으로 넘김(11-24 사용자 「왼쪽오른쪽으로 스와이프하는걸로」): BENCH.go(k, 바로) / BENCH.set(두 작품 사이 실수)
+    # 높이 610svh 칸 안에 100svh 고정 장면 하나: u = 그 칸을 몇 화면 내렸나. 0~1.15 거리 → 진열창 속, 1.3 에서 작업대(작품 멈춤 자리 u 1.75·2.75·3.75·4.75), 6.1 에서 걸이판.
+    # 작품 넷은 옆으로 넘어감(11-24 사용자 「왼쪽오른쪽으로 스와이프」 → 「스크롤 내리면 (옆을 안 보고) 다음 칸이 뜸」: 내려도 옆으로 하나씩). BENCH.go(k, 바로) / BENCH.set(두 작품 사이 실수)
     HX0 = 1.3; HB = 1.75
     HU = "(u)=>{const w=document.querySelector('.walk');scrollTo({top:w.offsetTop+u*document.getElementById('hero').clientHeight,behavior:'instant'})}"
     HK = "(k)=>window.BENCH.go(k,true)"
@@ -406,11 +406,11 @@ with sync_playwright() as p:
         ok(p2['cur'] == 2 and p2['chs'][2]['on'] and p0['cur'] == 0 and p0['chs'][0]['on'], f"/ {w}x{h} 장 알약 '세트노트' → 장 {p2['cur']}, 위 막대 '만든 것 보기' → 장 {p0['cur']}")
         c.close()
     # 손가락 한 번 = 한 자리(디자인-방법 249, 사용자 11-20 「모바일에서 보면 화면이 수루룩 넘어가서 각각의 앱들이 인식이 잘 안 됨」):
-    # 폰에서 첫 화면에서 손가락 한 번이면 정해진 빠르기로 가서(0.7초엔 아직 가는 중) 작업대 u 1.75에 서고, 또 한 번이면 걸이판 맨 위, 위로 한 번이면 작업대.
+    # 폰에서 첫 화면에서 손가락 한 번이면 정해진 빠르기로 가서(0.7초엔 아직 가는 중) 첫 작품 u 1.75에 서고, 한 번 더면 다음 작품(옆으로), 넷째 다음은 걸이판 맨 위, 위로 한 번이면 넷째 작품.
     # 빨리 세 번 밀어도 멈춤 자리에만 섬. 끝나면 overflow 원래대로
-    # 작업대에서 옆으로 밀면(11-24 사용자 「왼쪽오른쪽으로 스와이프하는걸로」) 작품 하나씩, 세로 자리는 그대로: 빨리 길게 밀어도 하나, 살짝 천천히 밀면 그대로, 마지막에서 더 밀면 그대로
+    # 작업대에서 옆으로 밀어도(11-24 사용자 「왼쪽오른쪽으로 스와이프하는걸로」) 작품 하나씩, 그 작품 자리에 섬: 빨리 길게 밀어도 하나, 살짝 천천히 밀면 그대로, 마지막에서 더 밀면 그대로
     HG = "()=>{const p=document.getElementById('hero');return{u:-document.querySelector('.walk').getBoundingClientRect().top/p.clientHeight,ov:document.documentElement.style.overflow,tools:document.getElementById('tools').getBoundingClientRect().top,h:window.BENCH.at()}}"
-    HSTOP = [0, HB]
+    HSTOP = [0, HB, HB + 1, HB + 2, HB + 3]; HEND = 6.1
     at = lambda s: next((i for i, v in enumerate(HSTOP) if abs(s['u'] - v) < .01), None)
     for w, h, how in ((390, 664, 'touch'), (390, 844, 'touch')):
         c = br.new_context(viewport={'width': w, 'height': h}, is_mobile=True, has_touch=True, locale='ko-KR'); pg = c.new_page(); errs = []
@@ -419,17 +419,17 @@ with sync_playwright() as p:
         def hsw(x0, x1, n=10, gap=16):
             y = h * .45; cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': x0, 'y': y}]})
             for i in range(1, n + 1): cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': x0 + (x1 - x0) * i / n, 'y': y + i * .3}]}); pg.wait_for_timeout(gap)
-            cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []}); pg.wait_for_timeout(1300); return pg.evaluate(HG)
+            cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []}); pg.wait_for_timeout(1800); return pg.evaluate(HG)
         push(1); pg.wait_for_timeout(700); m = pg.evaluate(HG); pg.wait_for_timeout(1700); a = pg.evaluate(HG)
         h1 = hsw(w * .8, w * .3); h2 = hsw(w * .92, w * .04, 5, 12); h3 = hsw(w * .4, w * .48, 20, 40); pg.evaluate(HK, 3); pg.wait_for_timeout(300); h4 = hsw(w * .8, w * .2); h5 = hsw(w * .2, w * .8)
-        push(1); pg.wait_for_timeout(1700); b = pg.evaluate(HG); push(-1); pg.wait_for_timeout(1700); y = pg.evaluate(HG)
+        push(1); pg.wait_for_timeout(1900); b0 = pg.evaluate(HG); push(1); pg.wait_for_timeout(1900); b = pg.evaluate(HG); push(-1); pg.wait_for_timeout(1900); y = pg.evaluate(HG)
         pg.goto(BASE + '/'); pg.wait_for_timeout(1500)
         for i in range(3): push(1); pg.wait_for_timeout(110)
         pg.wait_for_timeout(2600); f = pg.evaluate(HG)
         hs = [round(x['h'], 2) for x in (h1, h2, h3, h4, h5)]
-        good = (.2 < m['u'] < 1.6 and at(a) == 1 and hs == [1, 2, 2, 3, 2] and all(at(x) == 1 for x in (h1, h2, h3, h4, h5))
-                and abs(b['tools']) < 2 and at(y) == 1 and (at(f) == 1 or abs(f['tools']) < 2) and all(s['ov'] == '' for s in (a, b, f, y)) and not errs)
-        ok(good, f"/ {w}x{h} {how} 손짓 한 번에 한 자리: 0.7초 u {m['u']:.2f}(가는 중) → 작업대 {a['u']:.2f}, 옆으로 밀면 작품 {hs}(밀기·빨리 길게·살짝·마지막에서 더·되돌림) 세로 그대로, 한 번 더 → 걸이판 {b['tools']:.0f}px, 위로 → u {y['u']:.2f}, 빨리 세 번 → u {f['u']:.2f} {errs[:1]}")
+        good = (.2 < m['u'] < 1.6 and at(a) == 1 and hs == [1, 2, 2, 3, 2] and [at(x) for x in (h1, h2, h3, h4, h5)] == [2, 3, 3, 4, 3]
+                and at(b0) == 4 and abs(b['tools']) < 2 and at(y) == 4 and (at(f) is not None or abs(f['tools']) < 2) and all(s['ov'] == '' for s in (a, b0, b, f, y)) and not errs)
+        ok(good, f"/ {w}x{h} {how} 손짓 한 번에 한 자리: 0.7초 u {m['u']:.2f}(가는 중) → 첫 작품 {a['u']:.2f}, 옆으로 밀면 작품 {hs}(밀기·빨리 길게·살짝·마지막에서 더·되돌림), 내리면 넷째 u {b0['u']:.2f} → 걸이판 {b['tools']:.0f}px, 위로 → u {y['u']:.2f}, 빨리 세 번 → u {f['u']:.2f} {errs[:1]}")
         c.close()
     # PC 휠·트랙패드 = 작품 앞 턱(사용자 11-20 「pc에서 스크롤 스무스하게 안됨」 → 11-21 「너무 저항감이 없거든... 조금만 더 저항감이 있긴해야함」, 「처음 내릴 때는 저항감이 거의 없거든」):
     # 멈춤 자리 가까이선 휠 한 칸이 20~60px만(턱), 그 자리에서 조금 내려도 되돌려 끌지 않음(갇힘 없음). 여러 칸·트랙패드로 다가가면 그 작품 자리에 딱 섬,
@@ -445,13 +445,13 @@ with sync_playwright() as p:
     notch(20); pg.wait_for_timeout(1800); h1 = pg.evaluate(HUu)
     y5 = pg.evaluate('scrollY'); notch(1); pg.wait_for_timeout(1300); y6 = pg.evaluate('scrollY')
     flick(); pg.wait_for_timeout(1500); fu = pg.evaluate(HUu); flick(-1); pg.wait_for_timeout(1500); fd = pg.evaluate(HUu)
-    notch(70, gap=60); pg.wait_for_timeout(1500); out = pg.evaluate(HUu)
+    notch(110, gap=60); pg.wait_for_timeout(1500); out = pg.evaluate(HUu)
     pg.evaluate(HU, 2.0); pg.wait_for_timeout(300); y3 = pg.evaluate('scrollY'); pg.keyboard.press('PageDown'); pg.wait_for_timeout(1200); y4 = pg.evaluate('scrollY')
     pg.evaluate(HU, 1.5); pg.wait_for_timeout(300); pg.click('.chaps button[data-go="3"]'); pg.wait_for_timeout(250); pg.mouse.wheel(0, -100); pg.wait_for_timeout(1300); ya = pg.evaluate('scrollY'); pg.wait_for_timeout(1200); yb = pg.evaluate('scrollY')
-    on = lambda u: any(abs(u - v) < .003 for v in HSTOP + [3.1])   # 3.1 = 칸 끝(걸이판 맨 위)
+    on = lambda u: any(abs(u - v) < .003 for v in HSTOP + [HEND])   # HEND = 칸 끝(걸이판 맨 위)
     good = (20 <= n1 <= 60 and abs(n1b - n1) < 1 and abs(h1 - HSTOP[1]) < .003 and 20 <= y6 - y5 <= 60 and on(fu) and fu > h1 + .5 and on(fd) and fd < fu
-            and out > 3.15 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2 and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
-    ok(good, f"/ PC 휠 턱: 첫 칸 {n1:.0f}px(1.4초 뒤 {n1b:.0f}), 스무 칸 → u {h1:.3f}, 멈춤 자리에서 한 칸 {y6 - y5:.0f}px 그대로, 트랙패드 → {fu:.3f} · 위로 → {fd:.3f}, 일흔 칸 → 걸이판 밑 u {out:.2f}, PageDown {y4 - y3:.0f}px, 알약 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
+            and out > HEND + .05 and 500 < y4 - y3 < 900 and abs(yb - ya) < 2 and pg.evaluate("document.documentElement.style.overflow") == '' and not errs)
+    ok(good, f"/ PC 휠 턱: 첫 칸 {n1:.0f}px(1.4초 뒤 {n1b:.0f}), 스무 칸 → u {h1:.3f}, 멈춤 자리에서 한 칸 {y6 - y5:.0f}px 그대로, 트랙패드 → {fu:.3f} · 위로 → {fd:.3f}, 백열 칸 → 걸이판 밑 u {out:.2f}, PageDown {y4 - y3:.0f}px, 알약 가는 중 휠이면 멈춤 {ya:.0f}→{yb:.0f} {errs[:1]}")
     # 창 안으로 들어가는 구간(u .4~1.1)은 휠 한 칸이 절반만(11-21 「처음 내릴 때는 저항감이 거의 없거든... 슈루룩 넘겨져서」),
     # 거리와 방이 겹쳐 흐린 구간(u .86~1.1)엔 서지 않음: 내려가다 서면 첫 작품 자리까지 정해진 빠르기로, 올라가다 서면 겹치기 전(.86)으로
     pg.evaluate(HU, .7); pg.wait_for_timeout(400); z0 = pg.evaluate('scrollY'); notch(1); pg.wait_for_timeout(900); z1 = pg.evaluate('scrollY')
@@ -461,26 +461,24 @@ with sync_playwright() as p:
     ok(good, f"/ PC 창 안으로 구간: 휠 한 칸 {z1 - z0:.0f}px(다른 데 100), 흐린 구간에서 내려가다 서면 → u {bd:.3f} · 올라가다 서면 → u {bu:.3f} {errs[:1]}")
     c.close()
     # PC 작업대 옆 넘기기(11-24): 마우스로 옆으로 끌면 하나(놓을 때 밑의 단추가 안 눌림), 트랙패드 옆 밀기 한 손짓(관성 포함 50번)에 하나, ← → 키, 양옆 화살표(끝에선 꺼짐),
-    # 세로 자리는 그대로. 처음 작업대에 서면 다음 작품이 한 번 살짝 비쳤다 돌아감. Owlight 모니터 돋보기는 뺌(11-24 「없어도 될듯」)
+    # 넘기면 그 작품 자리(u)로. Owlight 모니터 돋보기는 뺌(11-24 「없어도 될듯」)
     c = br.new_context(viewport={'width': 1440, 'height': 900}, locale='ko-KR'); pg = c.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(1500)
-    pg.click('.nav .go'); pg.wait_for_timeout(2300); pk = []
-    for i in range(14): pk.append(pg.evaluate('window.BENCH.at()')); pg.wait_for_timeout(100)
-    pg.wait_for_timeout(600)
+    pg.click('.nav .go'); pg.wait_for_timeout(2600)
     def mdrag(x0, x1):
         pg.mouse.move(x0, 450); pg.mouse.down()
         for i in range(1, 13): pg.mouse.move(x0 + (x1 - x0) * i / 12, 450); pg.wait_for_timeout(16)
-        pg.mouse.up(); pg.wait_for_timeout(1300); return round(pg.evaluate('window.BENCH.at()'), 2)
+        pg.mouse.up(); pg.wait_for_timeout(1800); return round(pg.evaluate('window.BENCH.at()'), 2)
     TP = """sg=>new Promise(r=>{const pin=document.getElementById('hero');let i=0;const t=setInterval(()=>{pin.dispatchEvent(new WheelEvent('wheel',{deltaX:sg*Math.max(1,42-i*.8),bubbles:true,cancelable:true}));if(++i>=50){clearInterval(t);r()}},16)})"""
     d1 = mdrag(1200, 800); u1 = pg.evaluate(HUu); clicked = pg.evaluate("location.href")
-    pg.evaluate(TP, 1); pg.wait_for_timeout(1300); t1 = round(pg.evaluate('window.BENCH.at()'), 2)
-    pg.evaluate(TP, -1); pg.wait_for_timeout(1300); t2 = round(pg.evaluate('window.BENCH.at()'), 2)
-    pg.keyboard.press('ArrowRight'); pg.wait_for_timeout(1100); k1 = round(pg.evaluate('window.BENCH.at()'), 2)
-    pg.click('.nv.next'); pg.wait_for_timeout(1100); a1 = round(pg.evaluate('window.BENCH.at()'), 2)
+    pg.evaluate(TP, 1); pg.wait_for_timeout(1800); t1 = round(pg.evaluate('window.BENCH.at()'), 2)
+    pg.evaluate(TP, -1); pg.wait_for_timeout(1800); t2 = round(pg.evaluate('window.BENCH.at()'), 2)
+    pg.keyboard.press('ArrowRight'); pg.wait_for_timeout(1800); k1 = round(pg.evaluate('window.BENCH.at()'), 2)
+    pg.click('.nv.next'); pg.wait_for_timeout(1800); a1 = round(pg.evaluate('window.BENCH.at()'), 2)
     nx = pg.evaluate("[document.querySelector('.nv.next').disabled,document.querySelector('.nv.prev').disabled,document.querySelectorAll('.lens').length]")
-    good = (max(pk) > .08 and abs(pk[-1]) < .01 and d1 == 1 and abs(u1 - HB) < .003 and clicked == BASE + '/' and t1 == 2 and t2 == 1 and k1 == 2 and a1 == 3
+    good = (d1 == 1 and abs(u1 - HSTOP[2]) < .003 and clicked == BASE + '/' and t1 == 2 and t2 == 1 and k1 == 2 and a1 == 3
             and nx == [True, False, 0] and not errs)
-    ok(good, f"/ PC 작업대 옆 넘기기: 처음 살짝 비침 {max(pk):.2f}, 끌기 → {d1}(u {u1:.3f}), 트랙패드 → {t1}·되돌림 {t2}, → 키 {k1}, 화살표 → {a1}(끝에서 꺼짐 {nx[0]}), 돋보기 {nx[2]} {errs[:1]}")
+    ok(good, f"/ PC 작업대 옆 넘기기: 끌기 → {d1}(u {u1:.3f}), 트랙패드 → {t1}·되돌림 {t2}, → 키 {k1}, 화살표 → {a1}(끝에서 꺼짐 {nx[0]}), 돋보기 {nx[2]} {errs[:1]}")
     c.close()
     # 폰 단추(11-24 「모바일에서는 아예 안됨」): 마우스가 없으니 누르는 동안 손가락 쪽으로 끌려가며 눌리고(.94), 떼면 제자리
     c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, locale='ko-KR'); pg = c.new_page(); errs = []
