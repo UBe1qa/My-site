@@ -1,0 +1,14 @@
+// Cloudflare 배포 설정: 이 폴더 = Cloudflare Worker 'movelens' 하나 (MoveLens: 무료 Stockfish 19 체스 기보 복기)
+// 주소: https://movelens.mysitebox.workers.dev
+// 배포 때 빌드 없음. _dev/에서 빌드한 결과물(루트 파일)이 그대로 사이트가 된다. 올리지 않을 파일은 .assetsignore 에 적는다.
+// 배포는 GitHub Actions(.github/workflows/deploy-new-sites.yml)가 한다 (.deploy-actions 표시).
+{
+  "name": "movelens",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    "not_found_handling": "single-page-application",
+    "html_handling": "auto-trailing-slash"
+  },
+  "workers_dev": true
+}
