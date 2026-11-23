@@ -113,7 +113,7 @@ home = re.sub(r'\{\{link:([a-z]+):([^}]+)\}\}', lambda m: h_link(m.group(1), m.g
 home = re.sub(r'\{\{([a-z_]+)\}\}', lambda m: fill[m.group(1)], home)
 assert '{{' not in home, '한국어 홈: 채우지 못한 자리 ' + home[home.index('{{'):home.index('{{') + 40]
 open(os.path.join(site, 'index.html'), 'w').write(home)
-js_parts = ['head.js', 'scene.js', 'room.js', 'walk.js']
+js_parts = ['head.js', 'scene.js', 'room.js', 'walk.js', 'touch.js']   # touch.js = 작은 부품 손맛 다섯(2026-11-23, 디자인북마크 Motion에서 옮김)
 open(os.path.join(site, 'assets', 'home.js'), 'w').write('\n'.join(open(os.path.join(here, 'home', f)).read().rstrip('\n') + '\n' for f in js_parts))
 print(f'한국어 홈: 작품 장 4 + 도구 꼬리표 {len(tags)}개 → index.html, assets/home.js')
 
