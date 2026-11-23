@@ -294,6 +294,60 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--n-lamp);outline-off
 
 /* 움직임 없이(동작 줄이기): 들어가는 확대 없이 장끼리 투명만, 반복 움직임 끔, 꼬리표는 그냥 걸려 있음 */
 @media (max-width:359px){.mail{font-size:13.5px;padding-left:14px}.mail button{min-width:76px;padding:0 12px}}
+/* ── 작은 부품 손맛 다섯(2026-11-23, 움직임은 assets/home.js 끝 touch.js 칸). 디자인북마크 Motion 원본 소스를 읽고 옮김 ── */
+/* 1) 장 알약 = Rubber dock: 흰 알약이 따로 떠서 고무처럼 늘어나고, 알약 위 글자 층(.rb-ink)을 알약 모양으로 잘라 그 자리만 진한 글씨 */
+.chaps.rb{touch-action:pan-y;cursor:grab}.chaps.rb.dragging{cursor:grabbing}
+.chaps.rb>button[aria-current]{background:rgba(36,14,6,.45);color:rgba(255,236,220,.66)}
+.chaps.rb>button i{display:none}
+.chaps.rb button span{display:inline-block;will-change:transform}
+.rb-pill{position:absolute;left:0;top:0;z-index:1;width:0;height:0;background:#fff1dc;box-shadow:0 6px 16px -6px rgba(20,6,0,.6);pointer-events:none;opacity:0;will-change:transform,width}
+.rb-ink{position:absolute;inset:0;z-index:2;display:flex;justify-content:center;gap:inherit;padding:inherit;pointer-events:none;clip-path:inset(50%)}
+.rb-ink button{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#2a120a!important}
+.rb-ink button i{opacity:1}
+/* 2) 걸이판 꼬리표 = Parallax ticket: 기울기는 JS 가 .card 에 바로 적음(원래 :hover 살짝 뜨기도 JS 가 대신) */
+.tg.tl .card{transition:box-shadow .25s;transform-style:preserve-3d;will-change:transform}
+.tg.tl:hover .card{transform:none}
+.tg .card img,.tg .card b,.tg .card .wt{will-change:translate}
+.tg .gl{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;mix-blend-mode:screen;background:radial-gradient(160px circle at var(--gx,50%) var(--gy,30%),rgba(255,255,255,.55),rgba(255,255,255,0) 60%)}
+/* 3) Owlight 화면 = Glass lens: 세 벌 사본(.lc)이 가장자리로 갈수록 조금 더 커져 볼록 렌즈처럼. 선·그림자 없이 굴절 띠와 테두리 빛만 */
+.mac .lens{position:absolute;left:0;top:0;z-index:5;width:128px;height:128px;border-radius:50%;overflow:hidden;pointer-events:none;isolation:isolate;opacity:0;transition:opacity .5s;will-change:transform}
+.mac .lens.on{opacity:1}
+.mac .lens-view,.mac .lens .layer{position:absolute;left:0;top:0;width:100%;height:100%}
+.mac .lens .layer{overflow:hidden;border-radius:50%}
+.mac .lens .lc{position:absolute;left:0;top:0;will-change:transform}
+.mac .lens .l1{-webkit-mask:radial-gradient(circle closest-side,transparent 52%,#000 74%);mask:radial-gradient(circle closest-side,transparent 52%,#000 74%)}
+.mac .lens .l2{-webkit-mask:radial-gradient(circle closest-side,transparent 74%,#000 90%);mask:radial-gradient(circle closest-side,transparent 74%,#000 90%)}
+.mac .lens .l0 .lc{filter:saturate(1.08) contrast(1.03)}
+.mac .lens-glass{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:
+  radial-gradient(40% 22% at 34% 17%,rgba(255,255,255,.26),rgba(255,255,255,.06) 60%,rgba(255,255,255,0) 80%),
+  radial-gradient(12% 7% at 70% 86%,rgba(255,255,255,.42),rgba(255,255,255,0) 80%),
+  radial-gradient(circle closest-side,rgba(255,255,255,0) 88%,rgba(255,255,255,.08) 95%,rgba(255,255,255,.34) 99%,rgba(255,255,255,.12) 100%),
+  radial-gradient(circle closest-side,rgba(0,0,0,0) 74%,rgba(10,20,30,.06) 87%,rgba(10,20,30,.13) 94%,rgba(10,20,30,0) 98%)}
+.mac .lens-glass::after{content:"";position:absolute;inset:0;border-radius:50%;mix-blend-mode:screen;
+  background:conic-gradient(from 200deg,rgba(255,80,80,0),rgba(255,120,90,.22),rgba(255,220,120,0) 20%,rgba(90,170,255,0) 45%,rgba(90,150,255,.24) 60%,rgba(160,100,255,0) 75%,rgba(255,80,80,0));
+  -webkit-mask:radial-gradient(circle closest-side,transparent 88%,#000 95%,transparent 99%);mask:radial-gradient(circle closest-side,transparent 88%,#000 95%,transparent 99%)}
+/* 4) 주 단추 = Magnetic button */
+.mg{will-change:transform}.mg .mg-l{display:inline-flex;align-items:center;gap:inherit;will-change:transform;pointer-events:none}
+/* 5) 문 밖 = Pull cord: 줄 달린 등(밤 보라 갓 + 등빛 전구). 폰은 오른쪽 위, PC는 문구 오른쪽. 꺼지면 .dark 가 전구에서 둥글게 덮음 */
+.cord{position:absolute;top:0;left:calc(100% - 40px);width:200px;height:380px;margin-left:-100px;z-index:6;pointer-events:none;transform-origin:50% 0;transform:scale(.7)}
+.cord .rope{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.cord .rope path{fill:none;stroke:#8f86ad;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cord .lamp{position:absolute;left:50%;top:0;width:0;height:0;transform-origin:0 0}
+.cord .head{position:absolute;left:0;top:0}
+.cord .cap{position:absolute;left:-9px;top:-10px;width:18px;height:14px;border-radius:5px 5px 0 0;background:#6d6488}
+.cord .shade{position:absolute;left:-62px;top:0;width:124px;height:66px;border-radius:62px 62px 12px 12px / 58px 58px 12px 12px;background:linear-gradient(#3a2d66,#251b48);box-shadow:inset 0 2px 0 rgba(255,255,255,.08)}
+.cord .bulb{position:absolute;left:-19px;top:44px;width:38px;height:38px;border-radius:50%;background:#3b3552;transition:background .15s}
+.exit:not(.lights-off) .cord .bulb{background:radial-gradient(circle at 40% 35%,#fff6dc,#ffc46a 70%)}
+.cord .glow{position:absolute;left:-110px;top:-47px;width:220px;height:220px;pointer-events:none;background:radial-gradient(closest-side,rgba(255,196,106,.30),rgba(255,196,106,.10) 55%,rgba(255,196,106,0))}
+.cord .bead{position:absolute;left:-8px;top:-3px;width:16px;height:30px;border-radius:99px;background:#fff1dc;box-shadow:0 0 0 1px rgba(42,18,10,.25) inset;transform-origin:8px 3px}
+.cord .grab{position:absolute;left:-22px;top:-12px;width:44px;height:52px;border:0;border-radius:12px;background:transparent;cursor:grab;touch-action:none;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.cord .grab.is-held{cursor:grabbing}
+.cord-say{position:absolute;left:0;top:0;margin-left:-200px;width:200px;text-align:right;padding-right:22px;font-size:12.5px;font-weight:600;color:#ffe2a6;opacity:0;transition:opacity .4s;pointer-events:none;white-space:normal}
+.cord-say.on{opacity:1}
+.cord:not(.touched) .cord-say{opacity:0}
+.exit .dark{position:absolute;inset:0;z-index:5;background:rgba(3,2,10,.84);pointer-events:none;visibility:hidden}
+.exit.lights-off .sf-sign{color:#5d5478;text-shadow:none}
+@media (min-width:860px){.cord{left:calc(50% + 380px);transform:none}.cord .glow{left:-150px;top:-87px;width:300px;height:300px}}
 @media (prefers-reduced-motion:reduce){.fig,.peek,.cv::after,.sf-open,.mac .wall img{animation:none}.sf-leaf,.sf-it,.sf-say,.spill{transition:none}.tg.sw{animation:none}.chip{transition:none}}
 
 /* JS 없이: 고정 장면을 풀고 칸을 차례로 쌓는다(거리 그림은 캔버스라 밤하늘 색만) */
