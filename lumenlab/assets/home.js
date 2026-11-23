@@ -421,7 +421,7 @@ function hstep(now){hraf=0;const dt=hlast?Math.min((now-hlast)/1000,1/30):1/60;h
   if((hp&&hp.live)||HB.x!==HB.t||HB.v||pending())hraf=requestAnimationFrame(hstep);else hlast=0;}
 function hKick(){if(!hraf){hlast=0;hraf=requestAnimationFrame(hstep);}}
 function peekStop(){clearTimeout(peekT);peeked=true;if(HB.t===.17)HB.t=0;}
-function hGo(k,instant){k=cl(Math.round(k),0,N-1);peekStop();HB.t=k;if(instant||reduce){HB.x=k;HB.v=0;}hKick();}
+function hGo(k,instant,keep){k=cl(Math.round(k),0,N-1);if(keep)clearTimeout(peekT);else peekStop();HB.t=k;if(instant||reduce){HB.x=k;HB.v=0;}hKick();}
 window.BENCH={go:hGo,at:()=>HB.x,set:x=>{peekStop();HB.x=HB.t=x;HB.v=0;update();}};   // check.py 가 씀(set = 두 작품 사이에 세워 두고 보기)
 function req(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
 addEventListener('resize',()=>{geo();req();});
@@ -557,7 +557,7 @@ stage.querySelectorAll('.nv').forEach(b=>b.addEventListener('click',()=>hGo(Math
 // 장 알약·위 막대 '만든 것 보기': 작업대에 서 있으면 옆으로 그 작품까지. 아니면 그 작품을 가운데 놓고 작업대까지 같은 빠르기로(멀면 바로 앞으로 옮겨 놓고 들어오는 것만)
 function goChap(k,smooth){const to=yU(STOP[1]),vh=vhNow();
   if(smooth&&can()&&!ride&&Math.abs(scrollY-to)<vh*.15){hGo(k);if(Math.abs(scrollY-to)>2){wHalt();go(scrollY<to?1:-1,to);}return;}
-  hGo(k,true);
+  hGo(k,true,true);   // 멀리서 오면 그 작품을 가운데 두고 들어옴(처음 한 번 '옆으로 넘어감' 비침은 남겨 둠)
   if(!smooth||!can()){stop(false);jumpTo(to);lastY=scrollY;req();return;}
   const y=ride?ride.y:scrollY;
   if(y>to+vh*1.05||to-y>vh*1.8){stop(false);jumpTo(to-vh*.6);lastY=scrollY;update();}

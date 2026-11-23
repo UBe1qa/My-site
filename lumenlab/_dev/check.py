@@ -476,17 +476,17 @@ with sync_playwright() as p:
     pg.evaluate(TP, 1); pg.wait_for_timeout(1300); t1 = round(pg.evaluate('window.BENCH.at()'), 2)
     pg.evaluate(TP, -1); pg.wait_for_timeout(1300); t2 = round(pg.evaluate('window.BENCH.at()'), 2)
     pg.keyboard.press('ArrowRight'); pg.wait_for_timeout(1100); k1 = round(pg.evaluate('window.BENCH.at()'), 2)
-    pg.click('.nv.next'); pg.wait_for_timeout(1100); pg.click('.nv.next'); pg.wait_for_timeout(1100); a1 = round(pg.evaluate('window.BENCH.at()'), 2)
+    pg.click('.nv.next'); pg.wait_for_timeout(1100); a1 = round(pg.evaluate('window.BENCH.at()'), 2)
     nx = pg.evaluate("[document.querySelector('.nv.next').disabled,document.querySelector('.nv.prev').disabled,document.querySelectorAll('.lens').length]")
     good = (max(pk) > .08 and abs(pk[-1]) < .01 and d1 == 1 and abs(u1 - HB) < .003 and clicked == BASE + '/' and t1 == 2 and t2 == 1 and k1 == 2 and a1 == 3
             and nx == [True, False, 0] and not errs)
-    ok(good, f"/ PC 작업대 옆 넘기기: 처음 살짝 비침 {max(pk):.2f}, 끌기 → {d1}(u {u1:.3f}), 트랙패드 → {t1}·되돌림 {t2}, → 키 {k1}, 화살표 둘 → {a1}(끝에서 꺼짐 {nx[0]}), 돋보기 {nx[2]} {errs[:1]}")
+    ok(good, f"/ PC 작업대 옆 넘기기: 처음 살짝 비침 {max(pk):.2f}, 끌기 → {d1}(u {u1:.3f}), 트랙패드 → {t1}·되돌림 {t2}, → 키 {k1}, 화살표 → {a1}(끝에서 꺼짐 {nx[0]}), 돋보기 {nx[2]} {errs[:1]}")
     c.close()
     # 폰 단추(11-24 「모바일에서는 아예 안됨」): 마우스가 없으니 누르는 동안 손가락 쪽으로 끌려가며 눌리고(.94), 떼면 제자리
     c = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, locale='ko-KR'); pg = c.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e))); pg.goto(BASE + '/'); pg.wait_for_timeout(1200); pg.evaluate(HU, HB); pg.evaluate(HK, 1); pg.wait_for_timeout(900)
     cdp = c.new_cdp_session(pg); bx = pg.evaluate("(()=>{const r=document.querySelector('#c1 .btn.solid').getBoundingClientRect();return[r.left,r.top,r.width,r.height]})()")
-    cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': bx[0] + bx[2] - 6, 'y': bx[1] + bx[3] - 4}]}); pg.wait_for_timeout(450)
+    cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': bx[0] + bx[2] - 26, 'y': bx[1] + bx[3] * .5 + 9}]}); pg.wait_for_timeout(450)
     pr = pg.evaluate("(()=>{const m=new DOMMatrix(getComputedStyle(document.querySelector('#c1 .btn.solid')).transform);return[m.e,m.f,m.a]})()")
     cdp.send('Input.dispatchTouchEvent', {'type': 'touchCancel', 'touchPoints': []}); pg.wait_for_timeout(1200)
     rl = pg.evaluate("getComputedStyle(document.querySelector('#c1 .btn.solid')).transform")
