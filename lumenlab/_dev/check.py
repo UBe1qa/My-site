@@ -511,7 +511,7 @@ with sync_playwright() as p:
         c.close()
     # 옛 주소 조각: #works·#games·#apps·#setnote 는 그 장, #tools·#g-play·#contact 는 그 칸
     for frag, k in (('#works', 0), ('#games', 0), ('#apps', 1), ('#owlight', 1), ('#setnote', 2), ('#next', 3)):
-        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/' + frag); pg.wait_for_timeout(900); s = pg.evaluate(HS)
+        c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/' + frag); pg.wait_for_timeout(2400); s = pg.evaluate(HS)   # 첫 작품은 0.7초 뒤 옆 작품이 한 번 비침(0.5초) → 그 뒤에 봄
         ok(s['cur'] == k and s['chs'][k]['on'] and s['chs'][k]['op'] > .98, f'/{frag} 로 오면 장 {k} ({s["cur"]})'); c.close()
     for frag in ('#tools', '#g-play', '#contact'):
         c = br.new_context(viewport={'width': 390, 'height': 844}); pg = c.new_page(); pg.goto(BASE + '/' + frag); pg.wait_for_timeout(900)
