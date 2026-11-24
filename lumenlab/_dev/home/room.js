@@ -8,7 +8,7 @@ function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);
 function lg(c,x0,y0,x1,y1,s){const g=c.createLinearGradient(x0,y0,x1,y1);s.forEach(k=>g.addColorStop(k[0],k[1]));return g;}
 function rg(c,x,y,r0,r1,s){const g=c.createRadialGradient(x,y,r0,x,y,r1);s.forEach(k=>g.addColorStop(k[0],k[1]));return g;}
 function build(){
-  W=cv.clientWidth;H=cv.clientHeight;if(!W||!H)return;D=Math.min(2,window.devicePixelRatio||1);cv.width=W*D;cv.height=H*D;
+  W=cv.clientWidth;H=cv.clientHeight;if(!W||!H)return;D=Math.min(W<860?1.5:2,window.devicePixelRatio||1);cv.width=W*D;cv.height=H*D;
   const pc=W>=860,low=W>=600&&H<=560;deskY=Math.round(pc||low?H*.80:H-176);window.ROOM={deskY,pc};
   bg=document.createElement('canvas');bg.width=W*D;bg.height=H*D;const c=bg.getContext('2d');c.scale(D,D);const R=rnd(1119);
   // 벽
@@ -58,7 +58,9 @@ function build(){
   motes=[];for(let i=0;i<(pc?60:34);i++)motes.push({x:R()*W,y:R()*deskY,r:.5+R()*1.1,p:R()*6.28,s:.15+R()*.45});
 }
 function glow(x,y,r,col,a){ctx.fillStyle=rg(ctx,x,y,0,r,[[0,'rgba('+col+','+a+')'],[.45,'rgba('+col+','+(a*.32)+')'],[1,'rgba('+col+',0)']]);ctx.fillRect(x-r,y-r,r*2,r*2);}
+let fLast=0;
 function frame(now){
+  if(W<860&&!reduce&&now-fLast<30&&!window.__roomPaused){raf=requestAnimationFrame(frame);return;}fLast=now;
   if(window.__roomPaused){raf=requestAnimationFrame(frame);return;}
   if(!bg){raf=requestAnimationFrame(frame);return;}
   const t=(now-t0)/1000;ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(bg,0,0);ctx.setTransform(D,0,0,D,0,0);
