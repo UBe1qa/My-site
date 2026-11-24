@@ -1,0 +1,15 @@
+# Small Hours
+
+> A concept site by Lumen Lab (https://lumenlab.page) for an imaginary moonphase watch micro-brand. Small Hours is not a real company: there are no products, no orders, and the sign-up form does not send or store anything.
+
+The page is one scroll story in seven chapters:
+
+1. Stopped night: the watch at rest, "Scroll to wind".
+2. Wind it: the crown turns as you scroll and the movement starts.
+3. Every part: the watch comes apart into about thirty pieces (example calibre).
+4. Actual size: 39 mm case, 46 mm lug to lug, 11.2 mm thin, shown at about actual size on a phone.
+5. The promise: three promises engraved on the case back (example terms: two-year warranty, shipping and duties shown before paying, full refund if late) and six common questions.
+6. Tonight's moon: the moonphase disc turns to tonight's real moon phase, calculated in the browser from the date.
+7. Notify me: a mock launch sign-up that counts the days to the next full moon. Nothing is collected.
+
+All specifications are examples. Made with three.js; the 3D watch was modelled in Blender.
