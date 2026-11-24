@@ -4258,10 +4258,18 @@ vec3 night(vec2 uv, vec2 px, float withMoon){
   c *= mix(0.55, 1.0, smoothstep(0.0, hz, y));
   // faint milky haze so the sky is never an empty flat colour
   float haze = fbm(px / 260.0 + vec2(0.0, uDrift / 260.0));
-  c += vec3(0.10, 0.12, 0.24) * 0.10 * smoothstep(0.35, 0.9, haze);
+  c += vec3(0.10, 0.12, 0.24) * 0.16 * smoothstep(0.3, 0.9, haze);
+  c += vec3(0.16, 0.14, 0.22) * 0.05 * (fbm(px / 40.0 + vec2(0.0, uDrift / 40.0)) - 0.5);   // fine grain of the night
   // aventurine star dust, drifting up as you scroll
   vec2 sp = px + vec2(0.0, uDrift);
-  float st = stars(sp, 9.0, 0.10, 1.0) * 0.55 + stars(sp * 0.97, 23.0, 0.22, 5.0) + stars(sp * 1.03, 61.0, 0.35, 9.0) * 1.3;
+  // a faint milky band across the sky: denser dust and a soft glow, broken up by dark lanes
+  vec2 bp = (sp - vec2(0.0, uRes.y / uDpr * 0.55)) / (uRes.y / uDpr);
+  float bd = bp.y - bp.x * 0.55 * (uRes.x / uRes.y) + 0.05;
+  float lane = fbm(sp / 90.0) * fbm(sp / 33.0 + 4.0);
+  float band = exp(-bd * bd * 22.0) * (0.55 + 0.9 * lane);
+  c += vec3(0.20, 0.22, 0.38) * 0.22 * band * smoothstep(hz, hz + 0.25, y);
+  c += vec3(0.85, 0.78, 0.62) * 0.05 * band * smoothstep(0.55, 0.85, fbm(sp / 18.0));
+  float st = stars(sp, 4.0, 0.12 + 0.5 * band, 13.0) * (0.25 + 0.35 * band) + stars(sp, 9.0, 0.16, 1.0) * 0.55 + stars(sp * 0.97, 23.0, 0.26, 5.0) + stars(sp * 1.03, 61.0, 0.35, 9.0) * 1.3;
   st *= smoothstep(hz - 0.02, hz + 0.15, y);
   c += vec3(1.0, 0.95, 0.86) * st * 0.85;
   if (withMoon > 0.0) {
