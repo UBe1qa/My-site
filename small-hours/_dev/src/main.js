@@ -6,6 +6,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass.js';
 import { makeStudio } from './studio.js';
 import { setupWatch } from './watch-setup.js';
 import { makeBackdrop } from './backdrop.js';
@@ -250,7 +252,7 @@ if (renderer) {
   const lineMat = new THREE.ShaderMaterial({
     uniforms: { uK: { value: 0 } },
     vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = -mv.xyz; vN = normalMatrix * normal; gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'uniform float uK; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 3.0) * 1.4 + smoothstep(0.9, 1.0, f) * 0.8; gl_FragColor = vec4(vec3(0.89, 0.74, 0.46) * (0.03 + e) * uK, 1.0); }',
+    fragmentShader: 'uniform float uK; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 7.0) * 3.0 + smoothstep(0.93, 1.0, f) * 2.0; gl_FragColor = vec4(vec3(0.89, 0.72, 0.42) * e * uK, 1.0); }',
     blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, depthFunc: THREE.LessEqualDepth, toneMapped: false,
   });
 
@@ -366,23 +368,72 @@ if (renderer) {
       k(39.8, 0.10, PI + 0.12, 0, BACK, 0.95, -0.1),
       k(40.6, -0.08, 0, 0, O, 0.8, -0.04, 0, [0.55, 0, 0]),
       k(41.45, 0, 0, 0, DIVE, 9, 0, 0, [6, 0, 0]),
-      k(45.6, 0, 0, -0.5, O, 0.06, -0.02, 0, [0.04, -0.02, 0]),
+      k(45.6, 0.5, -0.6, -0.9, O, 0.3, 0.05, 0, [0.2, 0, 0]),
+      k(46.35, -0.15, -0.2, -0.6, O, 0.95, 0.05, 0, [0.62, 0, 0.14]),
       k(47.0, 0, 0, -0.5, O, actual, -0.1, 0, [actual, -0.02, 0]),
       k(48.5, 0, 0, -0.5, O, actual, -0.1, 0, [actual, -0.02, 0]),
     ];
   }
-  let K = keys();
+  // the camera path: one smooth curve through all the keys (monotone cubic, so it never overshoots a key
+  // and a held pose stays held), instead of easing in and out of every key like a robot arm
+  function makeTrack(K) {
+    const n = K.length, xs = K.map(k => k.s);
+    for (let i = 1; i < n; i++) if (K[i].q.dot(K[i - 1].q) < 0) K[i].q.set(-K[i].q.x, -K[i].q.y, -K[i].q.z, -K[i].q.w);
+    const ch = [k => k.q.x, k => k.q.y, k => k.q.z, k => k.q.w, k => k.tgt.x, k => k.tgt.y, k => k.tgt.z, k => Math.log(k.size), k => k.oy, k => k.ox].map(f => K.map(f));
+    const sl = ch.map(ys => {
+      const d = [], m = new Array(n).fill(0);
+      for (let i = 0; i < n - 1; i++) d.push((ys[i + 1] - ys[i]) / Math.max(1e-6, xs[i + 1] - xs[i]));
+      for (let i = 1; i < n - 1; i++) {
+        if (d[i - 1] * d[i] <= 0) continue;
+        const h0 = xs[i] - xs[i - 1], h1 = xs[i + 1] - xs[i], w1 = 2 * h1 + h0, w2 = h1 + 2 * h0;
+        m[i] = (w1 + w2) / (w1 / d[i - 1] + w2 / d[i]);
+      }
+      return m;
+    });
+    const out = new Array(ch.length);
+    return x => {
+      let i = 0; while (i < n - 2 && x > xs[i + 1]) i++;
+      const h = xs[i + 1] - xs[i], t = clamp((x - xs[i]) / h), t2 = t * t, t3 = t2 * t;
+      const a = 2 * t3 - 3 * t2 + 1, b = t3 - 2 * t2 + t, c = -2 * t3 + 3 * t2, e = t3 - t2;
+      for (let j = 0; j < ch.length; j++) out[j] = a * ch[j][i] + b * h * sl[j][i] + c * ch[j][i + 1] + e * h * sl[j][i + 1];
+      return out;
+    };
+  }
+  let K = keys(), track = makeTrack(K);
   const pose = { q: new THREE.Quaternion(), tgt: new THREE.Vector3(), size: 1, oy: 0, ox: 0 };
   function poseAt(x) {
-    let i = 0; while (i < K.length - 2 && x > K[i + 1].s) i++;
-    const a = K[i], b = K[i + 1];
-    const t = sineInOut(fit(x, a.s, b.s));
-    pose.q.slerpQuaternions(a.q, b.q, t);
-    pose.tgt.lerpVectors(a.tgt, b.tgt, t);
-    pose.size = Math.exp(lerp(Math.log(a.size), Math.log(b.size), t));   // size is felt in proportion
-    pose.oy = lerp(a.oy, b.oy, t); pose.ox = lerp(a.ox, b.ox, t);
+    const v = track(x);
+    pose.q.set(v[0], v[1], v[2], v[3]).normalize();
+    pose.tgt.set(v[4], v[5], v[6]);
+    pose.size = Math.exp(v[7]); pose.oy = v[8]; pose.ox = v[9];
     return pose;
   }
+
+  // ---------- the finish: the watch is drawn into its own HDR layer, gets a bloom, then film tone, grain and a vignette ----------
+  renderer.setClearColor(0x000000, 0);
+  const sceneRT = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: coarse ? 2 : 4 });
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.12, 0.35, 3.0);
+  const finish = new FullScreenQuad(new THREE.ShaderMaterial({
+    uniforms: { tScene: { value: sceneRT.texture }, uExp: { value: 1 }, uWarm: { value: 0 }, uTime: { value: 0 }, uVig: { value: 0.4 }, uGrain: { value: 0.03 }, uRes: { value: new THREE.Vector2(1, 1) } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: `uniform sampler2D tScene; uniform float uExp, uTime, uVig, uGrain, uWarm; uniform vec2 uRes; varying vec2 vUv;
+      vec3 rrt(vec3 v){ vec3 a = v * (v + 0.0245786) - 0.000090537; vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081; return a / b; }
+      vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
+        const mat3 O = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
+        return clamp(O * rrt(I * (c / 0.6)), 0.0, 1.0); }
+      vec3 srgb(vec3 c){ return mix(pow(c, vec3(1.0 / 2.4)) * 1.055 - 0.055, c * 12.92, vec3(lessThanEqual(c, vec3(0.0031308)))); }
+      float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+      void main(){
+        vec4 t = texture2D(tScene, vUv);
+        vec3 c = srgb(aces(max(t.rgb, 0.0) * uExp * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
+        float v = smoothstep(0.35, 1.15, length((vUv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * 1.15)) * uVig;
+        c *= 1.0 - v;
+        c += (h(floor(vUv * uRes) + fract(uTime) * 71.0) - 0.5) * uGrain;
+        gl_FragColor = vec4(c, 1.0 - (1.0 - clamp(t.a, 0.0, 1.0)) * (1.0 - v));
+      }`,
+    blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
+    blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneMinusSrcAlphaFactor, depthTest: false, depthWrite: false, transparent: true,
+  }));
 
   // ---------- part labels for the exploded view ----------
   const LABELS = [['crystal', 'Sapphire', 15.5], ['bezel', 'Bezel', 19.5], ['hand_minute', 'Hands', 2], ['dial', 'Dial', 15.5],
@@ -474,15 +525,18 @@ if (renderer) {
   // ---------- helpers ----------
   const proj = new THREE.Vector3();
   const toScreen = (x, y, z) => { proj.set(x, y, z).applyMatrix4(group.matrixWorld).project(camera); return [(proj.x + 1) / 2 * W, (1 - proj.y) / 2 * H]; };
-  const clockEl = $('clock'), flash = $('flash');
+  const clockEl = $('clock'), flash = $('flash'), barEl = document.querySelector('.bar');
   const nightMinutes = S => 22 * 60 + 8 + Math.max(0, S - 7.1) * (470 / (FILM_END - 7.1));
 
   // ---------- render loop ----------
   const clock = new THREE.Clock();
   let lastCrownStep = 0, beatAcc = 0, spun = false, moonCued = false, woundAt = -1, clockWas = '';
   function resize() {
-    layout(); K = keys();
+    layout(); K = keys(); track = makeTrack(K);
     renderer.setSize(W, H, false);
+    const pr = renderer.getPixelRatio();
+    sceneRT.setSize(Math.round(W * pr), Math.round(H * pr)); bloom.setSize(Math.round(W * pr), Math.round(H * pr));
+    finish.material.uniforms.uRes.value.set(W * pr, H * pr);
     camera.aspect = W / H;
     U.uRes.value.set(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
     U.uDpr.value = renderer.getPixelRatio();
@@ -515,6 +569,10 @@ if (renderer) {
     const cs = `<b>${((hh + 11) % 12) + 1}:${String(mm).padStart(2, '0')}</b> ${hh >= 12 ? 'PM' : 'AM'}`;
     if (cs !== clockWas) { clockEl.innerHTML = cs; clockWas = cs; }
     clockEl.style.opacity = s > FILM_END + 0.2 ? 0 : 1;
+    // after the night the bar sits on paper or on the dark bands: follow what is under it
+    let onPaper = false;
+    if (s > FILM_END + 0.6) { const el = document.elementsFromPoint(W / 2, 30).find(e => !e.closest('header')); onPaper = !!el && !el.closest('.tiles, .launch') && !!el.closest('#after'); }
+    if (onPaper !== frame.onPaper) { frame.onPaper = onPaper; barEl.classList.toggle('on-paper', onPaper); }
 
     const e = galleryFrame(S);
     const paperOn = S > 46.9 && s < FILM_END + 0.8;
@@ -596,13 +654,19 @@ if (renderer) {
 
     // the flash when the balance starts to swing
     const fl = Math.exp(-Math.pow((S - 7.2) / 0.22, 2));
-    flash.style.opacity = fl > 0.01 ? fl.toFixed(3) : 0;
+    flash.style.opacity = fl > 0.01 ? (0.55 * fl).toFixed(3) : 0;
 
     // exposure: the logo moment turns the watch into a silhouette (a new moon), the blueprint dims it under the lines
     const bp = bell(S, 29.4, 29.9, 31.9, 32.3);
     const dim = bell(S, 35.15, 35.6, 36.15, 36.6);
-    renderer.toneMappingExposure = (1 + 0.7 * fl) * (1 - 0.82 * bp) * (1 - 0.93 * dim);
-    lineMat.uniforms.uK.value = bp;
+    const exposure = (1 + 0.6 * fl) * (1 - 0.95 * bp) * (1 - 0.985 * dim) * (1 - 0.35 * bell(S, 8.6, 9.6, 12.8, 13.6)) * (1 + 0.15 * bell(S, 45.7, 46.3, 46.9, 47.3));
+    finish.material.uniforms.uExp.value = exposure;
+    finish.material.uniforms.uTime.value = reduced ? 0 : time;
+    lineMat.uniforms.uK.value = bp / exposure;
+    // the bloom: a quiet glow on polished edges, a burst when the balance starts, the gold lines of the blueprint glowing
+    bloom.strength = 0.12 + 0.55 * fl + 0.45 * bp;
+    bloom.threshold = 3.0 - 1.8 * fl - 2.85 * bp;
+    finish.material.uniforms.uWarm.value = bell(S, 45.7, 46.3, 46.9, 47.3);
 
     const paperW = fit(S, 46.9, 47.3);
     shadowMat.opacity = 0.9 * paperW;
@@ -615,6 +679,7 @@ if (renderer) {
       const P = watch.parts;
       for (const m of dialMats) { const t = dialOp < 0.999; if (m.transparent !== t) { m.transparent = t; m.needsUpdate = true; } m.opacity = dialOp; }
       const open = dialOp < 0.999;
+      if (P.strap_long) P.strap_long.visible = P.strap_short.visible = bp < 0.5;
       for (const o of hideWhenOpen) o.visible = !open;
       for (const m of dialHoles) m.visible = open;
       if (engraveRing) engraveRing.visible = engraveRing.visible && !open;
@@ -652,13 +717,17 @@ if (renderer) {
     renderer.setRenderTarget(null);
     renderer.clear();
     renderer.render(backdrop.scene, backdrop.cam);
-    renderer.render(scene, camera);
+    renderer.setRenderTarget(sceneRT);
+    renderer.clear();
+    if (group.visible || marksMesh.visible) renderer.render(scene, camera);
     if (bp > 0.001 && watch) {
-      const ex = renderer.toneMappingExposure; renderer.toneMappingExposure = 1;
       scene.overrideMaterial = lineMat; const sh = shadow.visible, mk = marksMesh.visible; shadow.visible = marksMesh.visible = false;
       renderer.render(scene, camera);
-      scene.overrideMaterial = null; shadow.visible = sh; marksMesh.visible = mk; renderer.toneMappingExposure = ex;
+      scene.overrideMaterial = null; shadow.visible = sh; marksMesh.visible = mk;
     }
+    bloom.render(renderer, null, sceneRT);
+    renderer.setRenderTarget(null);
+    finish.render(renderer);
     placeLabels(fit(S, 33.2, 33.5) * (1 - fit(S, 34.2, 34.5)));
     logoFrame(S, 0.5 * pose.size * ref, cx, cy);
   }
