@@ -284,7 +284,7 @@ if (renderer) {
   const catcher = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), catcherMat);
   catcher.receiveShadow = true; catcher.renderOrder = -3; scene.add(catcher);
   const tint = new THREE.Vector3(1, 1, 1), upV = new THREE.Vector3(), zAxis = new THREE.Vector3(0, 0, 1);
-  let strapMats = [];
+  let strapMats = []; const lumeMats = new Set(), lumeCol = new THREE.Color(0.32, 1.0, 0.72);
 
   // ---------- words as pictures: a few giant words drawn into the world, behind the watch ----------
   const typeCv = document.createElement('canvas'), tg = typeCv.getContext('2d');
@@ -367,6 +367,9 @@ if (renderer) {
     engrave = makeEngraving(P);
     g.scene.traverse(o => { if (o.isMesh) { o.castShadow = o.name !== 'dial_hole'; o.receiveShadow = false; } });
     for (const n of ['strap_long', 'strap_short']) P[n]?.traverse(o => { if (o.isMesh) strapMats.push(o.material); });
+    // lume: hands and indices that glow when the room goes dark
+    const LUME = ['gold_satin_free', 'gold_polished_free', 'gold_satin'];
+    for (const n of ['hand_hour', 'hand_minute', 'dial']) P[n]?.traverse(o => { if (o.isMesh && LUME.includes(o.material.name) && o.material.emissive) lumeMats.add(o.material); });
     strapMats = [...new Set(strapMats)];
     renderer.compile(scene, camera);
     loaderEl.style.transform = 'scaleX(1)'; loaderEl.classList.add('is-done');
@@ -843,6 +846,9 @@ if (renderer) {
       if (S > 42.6 && !moonCued) { moonCued = true; sound.moon(); }
       if (S < 41 && moonCued) { moonCued = false; sound.resetMoon(); }
       engrave?.frame(dt);
+      // the lights go out before the crescent: only the lume is left
+      const lume = bell(S, 35.0, 35.5, 36.2, 36.6);
+      if (lume !== frame.lume) { frame.lume = lume; for (const m of lumeMats) { m.emissive.copy(lumeCol); m.emissiveIntensity = lume * 0.9 / Math.max(0.02, exposure); } }
     }
 
     // render
