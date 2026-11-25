@@ -57,7 +57,7 @@ const fmt = (d, o) => d.toLocaleDateString('en-GB', o).toUpperCase();
 const pctNow = Math.round(moonNow.fraction * 100);
 (function writeMoonText() {
   const name = phaseName(moonNow.phase);
-  let l1 = 'Tonight,', l2 = `the moon is ${pctNow}% lit.`;
+  let l1 = 'Tonight,', l2 = `the moon is ${moonNow.phase < 0.5 ? 'waxing' : 'waning'}.`;   // the per cent is the big number below
   if (Math.abs(moonNow.phase - 0.5) * SYNODIC < 0.6) l2 = 'the moon is full.';
   else if (pctNow <= 2) { l1 = 'Tonight'; l2 = 'there is no moon.'; }
   $('moonLine1').textContent = l1; $('moonLine2').textContent = l2;
