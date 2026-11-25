@@ -58,7 +58,7 @@ const pctNow = Math.round(moonNow.fraction * 100);
 (function writeMoonText() {
   const name = phaseName(moonNow.phase);
   let l1 = 'Tonight,', l2 = `the moon is ${pctNow}% lit.`;
-  if (pctNow >= 98) l2 = 'the moon is full.';
+  if (Math.abs(moonNow.phase - 0.5) * SYNODIC < 0.6) l2 = 'the moon is full.';
   else if (pctNow <= 2) { l1 = 'Tonight'; l2 = 'there is no moon.'; }
   $('moonLine1').textContent = l1; $('moonLine2').textContent = l2;
   $('moonDate').textContent = `${fmt(now, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} · ${name.toUpperCase()}`;
@@ -227,7 +227,7 @@ function galleryFrame(S) {
   gallery.style.background = (S < 16.2 || e > 5.02) ? 'transparent' : `radial-gradient(120% 90% at 50% 60%, rgb(${mix3(g0[0], g1[0])}) 0%, rgb(${mix3(g0[1], g1[1])}) 100%)`;
   imgs[0].style.opacity = fit(S, 15.7, 16.2).toFixed(3);
   const c = Math.round(e);
-  if (c !== capWas) { capWas = c; $('cap').className = 'cap p' + (c === 6 ? 0 : c % 4); $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
+  if (c !== capWas) { capWas = c; $('cap').className = 'cap p' + [0, 1, 3, 2, 1, 3, 0][c]; $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
   $('cap').style.opacity = (fit(S, 15.9, 16.3) * (1 - fit(S, 23.9, 24.3)) * (1 - fit(Math.abs(e - c), 0.25, 0.45))).toFixed(3);
   return e;
 }
@@ -291,6 +291,7 @@ if (renderer) {
     const yrs = Math.round(122 * fit(S, 26.3, 28.8));
     const eng = ($('line').value || 'For the small hours').trim();
     if (S > 3.55 && S < 7.15) m = [`r${Math.round(72 * fit(S, 3.75, 6.45))}`, bell(S, 3.55, 4.05, 6.75, 7.15), g => tall(g, `${Math.round(72 * fit(S, 3.75, 6.45))}`, 'hours', GOLD)];
+    else if (S > 29.6 && S < 32.2) m = [`v${Math.round(72 * fit(S, 29.9, 30.4))}`, bell(S, 29.6, 30.0, 31.7, 32.1), g => tall(g, `${Math.round(72 * fit(S, 29.9, 30.4))}`, 'hours', GOLD, 0.93)];
     else if (S > 26.0 && S < 29.4) m = [`y${yrs}`, bell(S, 26.0, 26.5, 29.0, 29.4), g => big(g, String(yrs), '', NAVY, 0.38)];
     U.uTypeOp.value = m ? m[1] : 0;
     if (!m || m[0] === typeKey) return;
@@ -313,9 +314,9 @@ if (renderer) {
     if (unit) { g.font = `italic 400 ${px * 0.42}px "Instrument Serif", Georgia, serif`; g.letterSpacing = '0px'; g.fillText(unit, x0 + nw + px * 0.04, yb); }
   }
   // a number standing on its side up the right edge, running behind the watch, its unit small at its foot
-  function tall(g, num, unit, color) {
+  function tall(g, num, unit, color, y = 0.555) {
     const px = wide ? H * 0.62 : Math.min(W * 0.66, H * 0.36);
-    g.save(); g.translate(wide ? W * 0.93 : W - px * 0.12, wide ? H * 0.86 : H * 0.555); g.rotate(-Math.PI / 2);
+    g.save(); g.translate(wide ? W * 0.93 : W - px * 0.12, wide ? H * 0.86 : H * y); g.rotate(-Math.PI / 2);
     g.fillStyle = color; g.textBaseline = 'alphabetic';
     g.font = `400 ${px}px "Instrument Serif", Georgia, serif`; g.letterSpacing = `${-px * 0.04}px`; g.fillText(num, 0, 0);
     const nw = g.measureText(num).width;
@@ -461,8 +462,8 @@ if (renderer) {
       k(24.0, -0.6, 0.25, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(26.0, -0.5, 0.1, 0, M, 1.45, -0.22, 0, [1.3, -0.06, 0.19]),
       k(28.9, -0.45, 0.03, 0, M, 1.4, -0.22, 0, [1.25, -0.06, 0.19]),
-      k(29.8, -0.3, -0.45, 0.15, O, 1.3, -0.08, -0.24, [0.95, -0.02, -0.05]),
-      k(31.9, -0.25, -0.15, 0.1, O, 1.35, -0.08, -0.2, [1.0, -0.02, -0.03]),
+      k(29.8, -0.3, -0.45, 0.15, O, 0.85, -0.08, -0.3, [0.95, -0.02, -0.05]),
+      k(31.9, -0.25, -0.15, 0.1, O, 0.88, -0.08, -0.28, [1.0, -0.02, -0.03]),
       k(32.4, EX, 0, 0, O, 0.6, -0.02, -0.08, [0.4, 0, 0.12]),
       k(33.1, EX, 0.06, 0, [0, 0, 4.8], 0.46, 0.1, -0.13, [0.27, 0.1, 0.13]),
       k(34.4, EX, -0.06, 0, [0, 0, -6.2], 0.46, 0.12, -0.13, [0.27, 0.12, 0.13]),
@@ -695,6 +696,7 @@ if (renderer) {
     let onPaper = false;
     if (s > FILM_END + 0.6) { const el = document.elementsFromPoint(W / 2, 30).find(e => !e.closest('header')); onPaper = !!el && !el.closest('.launch') && !!el.closest('#after'); }
     if (onPaper !== frame.onPaper) { frame.onPaper = onPaper; barEl.classList.toggle('on-paper', onPaper); }
+    const solid = s > FILM_END + 0.3; if (solid !== frame.solid) { frame.solid = solid; barEl.classList.toggle('solid', solid); }
 
     const e = galleryFrame(S);
     const paperOn = S > 46.9 && s < FILM_END + 0.8;
@@ -838,7 +840,7 @@ if (renderer) {
       watch.setExplode(ex, 'detail', 0.55);
       if (bp > 0.5 && P.strap_long) P.strap_long.visible = P.strap_short.visible = false;   // gold outlines on leather read as a mustard strap
       // on the benches the watch is a head without its strap (as it is while being made): the strap goes after the hero, comes back for the night sky
-      const strapOp = S < 20 ? 1 - fit(S, 3.15, 3.6) : fit(S, 40.2, 40.6);
+      const strapOp = S < 14 ? 1 - fit(S, 3.15, 3.6) : fit(S, 14.3, 14.8) * (1 - bell(S, 32.0, 32.3, 34.7, 35.1));
       if (strapOp < 1) {
         for (const m of strapMats) { m.transparent = true; m.opacity = Math.min(m.opacity, strapOp); }
         if (strapOp < 0.01 && P.strap_long) P.strap_long.visible = P.strap_short.visible = false;
@@ -855,10 +857,13 @@ if (renderer) {
       if (amp > 0 && S < 41.9 && !(S > 16 && S < 22.6)) { beatAcc += dt * 8; if (beatAcc >= 1) { beatAcc %= 1; sound.tick(S < 14 ? 0.07 : 0.035, 1.25); } }
       if (S > 7.15 && !frame.flashed) { frame.flashed = true; sound.clack(); } if (S < 6.9) frame.flashed = false;
       // hands: stopped at 10:08 until it is wound, then the night runs with the scroll
-      watch.setTime(Math.floor(T / 60), T % 60);
+      // before the dive the hands sweep up to 10:08, clear of the moon window we go through, and come back once we are out
+      const cur = T % 720, away = sineInOut(fit(S, 40.25, 41.0)) * (1 - fit(S, 45.3, 45.8));
+      const Td = cur + (((608 - cur) % 720 + 720) % 720) * away;
+      watch.setTime(Math.floor(Td / 60), Td % 60);
       if (amp > 0.02 && woundAt < 0) woundAt = time; if (amp <= 0.02) woundAt = -1;
       const run = woundAt < 0 ? 0 : Math.floor((time - woundAt) * 8) / 8;
-      if (P.hand_second) P.hand_second.rotation.z = -((23 + run) % 60) / 60 * Math.PI * 2;
+      if (P.hand_second) P.hand_second.rotation.z = -((23 + run) % 60) / 60 * Math.PI * 2 * (1 - away) - Math.PI / 2 * away;   // parked at three o'clock, its tail out of the moon window
       // the moon disc: 122 years in three screens, then one click
       const spinE = spin < 1 ? sineInOut(spin) : 1;
       watch.setMoonAge((moonNow.age + SYNODIC * 24 * spinE) % SYNODIC);
