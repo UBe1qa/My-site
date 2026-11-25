@@ -19,7 +19,7 @@ const CH = { c1: [0, 3], c2: [3, 7.6], c3: [7.6, 14], c4: [14, 26], c5: [26, 36]
 const GO = { c1: 0, c2: 4.0, c3: 8.7, c4: 15.9, c5: 26.7, c6: 37.1, c7: 43.1, c8: 47.6 };
 // backdrop: [from s, stage]  0 night · 4 night with tonight's moon · 5 dawn · 7 void · 9 drafting film
 // 20.. photographed sets: 20 the desk at night · 21 the drafting table · 22 the engraver's bench · 23 the morning table
-const STAGES = [[0, 0], [2.0, 20], [21, 21], [32.2, 9], [34.9, 7], [36.4, 22], [41.9, 4], [45.9, 5], [47.0, 23]];
+const STAGES = [[0, 0], [2.0, 20], [21, 21], [32.2, 9], [34.9, 7], [36.4, 22], [41.9, 4], [45.9, 23]];
 const D = 3.9, FOV = 24;
 // The sets. Inside a set the camera stands still DSET away (it only zooms and shifts), the watch turns in front of it,
 // and a table lies h below the focus at e degrees: the photo was made from a Blender layout with exactly this camera
@@ -262,10 +262,13 @@ if (renderer) {
   const group = new THREE.Group(); scene.add(group);
 
   // ---------- the photographed sets ----------
-  const texLoader = new THREE.TextureLoader(), setTex = { p: [], w: [] };
+  const texLoader = new THREE.TextureLoader(), setTex = { p: [], w: [] }, setEnv = [];
   const loadSets = kind => {
     if (setTex[kind].length) return;
-    setTex[kind] = SETS.map((st, i) => texLoader.load(`img/set-${st.name}-${kind}.webp`, t => { t.anisotropy = 4; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.needsUpdate = true; }));
+    setTex[kind] = SETS.map((st, i) => texLoader.load(`img/set-${st.name}-${kind}.webp`, t => {
+      t.anisotropy = 4; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.needsUpdate = true;
+      if (!setEnv[i]) setEnv[i] = makeStudio(renderer, { ambient: 0.5, photo: t, photoGain: st.envGain ?? 2.2, envOnly: true }).env;
+    }));
   };
   const useSets = () => {
     const kind = wide ? 'w' : 'p'; loadSets(kind);
@@ -283,6 +286,50 @@ if (renderer) {
   const tint = new THREE.Vector3(1, 1, 1), upV = new THREE.Vector3(), zAxis = new THREE.Vector3(0, 0, 1);
   let strapMats = [];
 
+  // ---------- words as pictures: a few giant words drawn into the world, behind the watch ----------
+  const typeCv = document.createElement('canvas'), tg = typeCv.getContext('2d');
+  const typeTex = new THREE.CanvasTexture(typeCv); typeTex.minFilter = THREE.LinearFilter; typeTex.generateMipmaps = false;
+  U.tType.value = typeTex;
+  let typeKey = '';
+  const GOLD = '#C9A45C', NAVY = '#14182B';
+  function typeFrame(S) {
+    // [key, opacity, draw]: one moment at a time
+    let m = null;
+    const yrs = Math.round(122 * fit(S, 26.3, 28.8));
+    const eng = ($('line').value || 'For the small hours').trim();
+    if (S > 3.55 && S < 7.15) m = [`r${Math.round(72 * fit(S, 3.75, 6.45))}`, bell(S, 3.55, 4.05, 6.75, 7.15), g => big(g, `${Math.round(72 * fit(S, 3.75, 6.45))}`, 'h', GOLD, 0.56)];
+    else if (S > 26.0 && S < 29.4) m = [`y${yrs}`, bell(S, 26.0, 26.5, 29.0, 29.4), g => big(g, String(yrs), '', NAVY, 0.38)];
+    U.uTypeOp.value = m ? m[1] : 0;
+    if (!m || m[0] === typeKey) return;
+    typeKey = m[0];
+    const pr = renderer.getPixelRatio(), w = Math.round(W * pr), h = Math.round(H * pr);
+    if (typeCv.width !== w || typeCv.height !== h) { typeCv.width = w; typeCv.height = h; typeTex.dispose(); }
+    tg.setTransform(pr, 0, 0, pr, 0, 0); tg.clearRect(0, 0, W, H);
+    m[2](tg); typeTex.needsUpdate = true;
+  }
+  // a number that fills the width, its unit small and italic beside it
+  function big(g, num, unit, color, y) {
+    const lim = (wide ? W * 0.62 : W * 1.04);
+    let px = Math.min(H * (wide ? 0.78 : 0.5), lim / (0.52 * num.length + (unit ? 0.4 : 0)));
+    g.font = `400 ${px}px "Instrument Serif", Georgia, serif`;
+    const nw = g.measureText(num).width; g.font = `italic 400 ${px * 0.42}px "Instrument Serif", Georgia, serif`;
+    const uw = unit ? g.measureText(unit).width + px * 0.04 : 0;
+    const x0 = (wide ? W * 0.66 : W * 0.5) - (nw + uw) / 2, yb = H * y + px * 0.34;
+    g.fillStyle = color; g.textBaseline = 'alphabetic';
+    g.font = `400 ${px}px "Instrument Serif", Georgia, serif`; g.letterSpacing = `${-px * 0.04}px`; g.fillText(num, x0, yb);
+    if (unit) { g.font = `italic 400 ${px * 0.42}px "Instrument Serif", Georgia, serif`; g.letterSpacing = '0px'; g.fillText(unit, x0 + nw + px * 0.04, yb); }
+  }
+  // the engraving, set as huge italic lines that run off the edges
+  function words(g, text, color) {
+    const ws = text.split(/\s+/).slice(0, 5), px = Math.min(H * 0.2, (wide ? W * 0.55 : W) / 3.2);
+    g.font = `italic 400 ${px}px "Instrument Serif", Georgia, serif`; g.fillStyle = color; g.globalAlpha = 0.85; g.textBaseline = 'middle';
+    const cx = wide ? W * 0.66 : W * 0.5, top = H * 0.52 - (ws.length - 1) * px * 0.45;
+    ws.forEach((wd, i) => { const tw = g.measureText(wd).width; g.fillText(wd, cx - tw / 2 + (i % 2 ? px * 0.5 : -px * 0.5), top + i * px * 0.9); });
+    g.globalAlpha = 1;
+  }
+  document.fonts?.load('400 40px "Instrument Serif"').then(() => { typeKey = ''; }).catch(() => {});
+  document.fonts?.load('italic 400 40px "Instrument Serif"').then(() => { typeKey = ''; }).catch(() => {});
+
   // soft contact shadow on the paper
   const shTex = (() => {
     const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
@@ -296,9 +343,9 @@ if (renderer) {
 
   // gold lines: the watch drawn as its own blueprint (an outline pass on top of the normal render)
   const lineMat = new THREE.ShaderMaterial({
-    uniforms: { uK: { value: 0 }, uC: { value: new THREE.Color(0.86, 0.93, 1.0) } },
+    uniforms: { uK: { value: 0 }, uC: { value: new THREE.Color(1.0, 0.74, 0.36) } },
     vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = -mv.xyz; vN = normalMatrix * normal; gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'uniform float uK; uniform vec3 uC; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 7.0) * 3.0 + smoothstep(0.93, 1.0, f) * 2.0; gl_FragColor = vec4(uC * e * uK, 1.0); }',
+    fragmentShader: 'uniform float uK; uniform vec3 uC; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 14.0) * 2.2 + smoothstep(0.965, 1.0, f) * 1.6; gl_FragColor = vec4(uC * e * uK, 1.0); }',
     blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, depthFunc: THREE.LessEqualDepth, toneMapped: false,
   });
 
@@ -375,7 +422,7 @@ if (renderer) {
   const EX = -Math.PI / 2 + 0.42, PI = Math.PI;
   const pxPerMm = () => (coarse && Math.min(screen.width, screen.height) < 600) ? 6.05 : coarse ? 5.2 : 4.2;
   const O = [0, 0, 0], C = [1.9, 0, -0.2], B = [0.25, -0.1, -0.5], M = [0, -0.8, 0.1], BACK = [0, 0, -0.4];
-  const SKY = [-0.62, -0.22, 0.05], SKY2 = [-0.4, -0.18, 0.05], DIVE = [0.62, 0.52, 0.05];
+  const SKY = [-0.62, -0.22, 0.05], SKY2 = [-0.4, -0.18, 0.05], DIVE = [0, -0.8, 0.05];   // the dive goes in through the moon window
   const BAL = [-0.954, 0.124, -0.32], ROT = [0.45, -0.45, -0.45];
   function keys() {
     const ref = wide ? H : W;
@@ -713,6 +760,8 @@ if (renderer) {
       renderer.shadowMap.needsUpdate = true;
     }
     tint.set(1, 1, 1).lerp(v3b.set(...SET.tint), sw);
+    const envWant = sw > 0.5 && setEnv[si] ? setEnv[si] : studio.env;
+    if (scene.environment !== envWant) scene.environment = envWant;
     finish.material.uniforms.uTint.value.copy(tint);
 
     // the dial as a window: see-through at the start (the sky is the dial) and again when we dive back into it
@@ -726,6 +775,7 @@ if (renderer) {
     U.uZoom.value.set(cx, H - cy, zoom);
     U.uHole.value.set(cx, H - cy, 1.62 * pxPerUnit, bell(S, 0.4, 1.4, 2.3, 3.1));
     U.uIris.value.set(cx, H - cy, 1);
+    typeFrame(S);
 
     // the flash when the balance starts to swing
     const fl = Math.exp(-Math.pow((S - 7.2) / 0.22, 2));
@@ -734,12 +784,12 @@ if (renderer) {
     // exposure: the logo moment turns the watch into a silhouette (a new moon), the blueprint dims it under the lines
     const bp = bell(S, 29.4, 29.9, 31.9, 32.3);
     const dim = bell(S, 35.15, 35.6, 36.15, 36.6);
-    const exposure = (1 + 0.6 * fl) * (1 - 0.95 * bp) * (1 - 0.985 * dim) * (1 - 0.35 * bell(S, 8.6, 9.6, 12.8, 13.6)) * (1 + 0.15 * bell(S, 45.7, 46.3, 46.9, 47.3));
+    const exposure = (1 + 0.6 * fl) * (1 - 0.95 * bp) * (1 - 0.985 * dim) * (1 - 0.5 * bell(S, 8.6, 9.6, 12.8, 13.6)) * (1 + 0.15 * bell(S, 45.7, 46.3, 46.9, 47.3));
     finish.material.uniforms.uExp.value = exposure;
     finish.material.uniforms.uTime.value = reduced ? 0 : time;
     lineMat.uniforms.uK.value = bp / exposure;
     // the bloom: a quiet glow on polished edges, a burst when the balance starts, the gold lines of the blueprint glowing
-    bloom.strength = 0.12 + 0.55 * fl + 0.22 * bp;
+    bloom.strength = 0.12 + 0.55 * fl + 0.08 * bp;
     bloom.threshold = 3.0 - 1.8 * fl - 2.85 * bp;
     finish.material.uniforms.uWarm.value = bell(S, 45.7, 46.3, 46.9, 47.3);
     finish.material.uniforms.uLoupe.value = bell(S, 8.3, 9.0, 13.2, 13.8);

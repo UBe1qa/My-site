@@ -13,6 +13,7 @@ uniform sampler2D tSet0, tSet1, tSet2, tSet3;   // the photographed sets (desk, 
 uniform vec4 uWin[4];  // each photo's window in tan space: xy centre, zw half size
 uniform vec4 uCam;     // the watch camera now: x tan(fov/2), y aspect, z ox, w oy (its view offset)
 uniform vec3 uIris;    // where scene changes open from: xy css px (bottom left origin), z radius scale
+uniform sampler2D tType; uniform float uTypeOp;   // giant words drawn into the world, behind the watch
 varying vec2 vUv;
 
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
@@ -235,6 +236,7 @@ void main(){
     float m = smoothstep(r + 40.0, r - 40.0, d);
     c = mix(a, b, m);
   }
+  if (uTypeOp > 0.0) { vec4 ty = texture2D(tType, vUv); c = mix(c, ty.rgb, ty.a * uTypeOp); }
   // fine grain so gradients do not band on phones
   c += (h21(px * 1.37 + fract(uTime)) - 0.5) / 255.0 * 2.0;
   gl_FragColor = vec4(c, 1.0);
@@ -247,7 +249,7 @@ export function makeBackdrop() {
     uMoon: { value: new THREE.Vector4(0, 0, 60, 0) }, uPhase: { value: Math.PI }, uBeam: { value: 0 }, uGrid: { value: 1 }, uZoom: { value: new THREE.Vector3(0, 0, 1) }, uHole: { value: new THREE.Vector4(0, 0, 1, 0) },
     tSet0: { value: null }, tSet1: { value: null }, tSet2: { value: null }, tSet3: { value: null },
     uWin: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 1, 1)) }, uCam: { value: new THREE.Vector4(0.2, 0.5, 0, 0) },
-    uIris: { value: new THREE.Vector3(0, 0, 1) },
+    uIris: { value: new THREE.Vector3(0, 0, 1) }, tType: { value: null }, uTypeOp: { value: 0 },
   };
   const mat = new THREE.ShaderMaterial({
     uniforms, depthTest: false, depthWrite: false,

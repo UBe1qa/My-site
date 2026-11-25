@@ -25,6 +25,7 @@
 <style>
 @font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-serif-latin-400-normal.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-serif-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Pinyon Script";src:url(assets/fonts/pinyon-script-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Inter Tight";src:url(assets/fonts/inter-tight-latin-300-normal.woff2) format("woff2");font-weight:300;font-display:swap}
 @font-face{font-family:"Inter Tight";src:url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Inter Tight";src:url(assets/fonts/inter-tight-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
@@ -34,12 +35,12 @@ img{max-width:100%;height:auto;display:block}
 :root{
   --night:#0B1026; --deep:#070A18; --panel:#121833;
   --gold:#C9A45C; --gold2:#E3C88E; --line:rgba(201,164,92,.28);
-  --ink:#F3EBDD; --ink2:rgba(243,235,221,.66); --ink3:rgba(243,235,221,.40);
+  --ink:#F3EBDD; --ink2:rgba(243,235,221,.8); --ink3:rgba(243,235,221,.40);
   --paper:#EEE8DC; --pink:#E9A98A;
   --pad:20px; --bar:56px;
   --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
   --sans:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --t-mega:clamp(64px,19vw,104px); --t-title:44px; --t-num:64px; --t-body:16px; --t-tag:11px;
+  --t-mega:clamp(64px,22vw,110px); --t-title:44px; --t-num:64px; --t-body:16px; --t-tag:11px;
 }
 @media (min-width:900px){
   :root{--pad:48px; --bar:72px; --t-mega:clamp(120px,12.5vw,220px); --t-title:96px; --t-num:150px; --t-body:18px; --t-tag:12px}
@@ -54,11 +55,16 @@ a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 :focus-visible{outline:1px solid var(--gold);outline-offset:3px;border-radius:4px}
 
-.tag{font:500 var(--t-tag)/1.25 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0}
+.tag{font:500 var(--t-tag)/1.25 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink2);margin:0}
 .tag b{color:var(--gold);font-weight:500}
 .title{font:400 var(--t-title)/.98 var(--serif);letter-spacing:-.015em;margin:10px 0 0;text-wrap:balance}
 .mega{font:400 var(--t-mega)/.88 var(--serif);letter-spacing:-.03em;margin:10px 0 0}
 .title em,.mega em{font-style:italic}
+/* one or two words per scene in an engraver's script: big serif, tiny wide tags, and this hand between them */
+.mega .script,.title .script{font:400 1.12em/.9 "Pinyon Script",cursive;font-style:normal;color:var(--gold);letter-spacing:0;padding-right:.1em}
+body.is-paper .script{color:#8A6326}
+#c3 .top,#c7 .top{text-align:center}
+#b5a,#b5b{text-align:right}#b5a .gauge,#b5b .gauge{justify-content:flex-end}
 html.js .shade{text-shadow:0 0 18px rgba(7,10,24,.8),0 0 42px rgba(7,10,24,.55)}
 .body{max-width:34ch;color:var(--ink2);margin:0}
 .body strong{color:var(--ink);font-weight:500}
@@ -160,7 +166,8 @@ html.js #c3::after{bottom:0;background:linear-gradient(rgba(7,10,24,0),rgba(7,10
 .cap .tag:last-child{color:var(--gold);font:400 clamp(120px,36vw,340px)/.78 var(--serif);letter-spacing:-.045em;margin:0 0 0 -.04em;text-transform:none;font-variant-numeric:tabular-nums;text-shadow:0 2px 30px rgba(0,0,0,.35)}
 .count{position:absolute;z-index:2;right:var(--pad);top:calc(var(--bar) + 26px + env(safe-area-inset-top));font:500 var(--t-tag)/1 var(--sans);letter-spacing:.14em;color:var(--ink3)}
 
-/* 5 bench: gauges */
+/* 5 bench: gauges (with WebGL the years count and the reserve are drawn huge into the world instead) */
+html.js:not(.no-gl) #b5a .gauge,html.js:not(.no-gl) #c2 .reserve{visibility:hidden}
 .gauge{display:flex;align-items:flex-end;gap:14px;margin-top:16px}
 .gauge .num{font-size:clamp(56px,16vw,150px)}
 .gauge .unit{font:500 11px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);padding-bottom:8px}
@@ -200,7 +207,7 @@ html:not(.js) #after{margin-top:0}
 html:not(.js) .qa .a{height:auto}
 
 /* sideways tiles while scrolling down */
-.tiles{height:420vh;position:relative;background:#0B1026;color:#F3EBDD;--ink2:rgba(243,235,221,.66);--line:rgba(201,164,92,.28)}
+.tiles{height:420vh;position:relative;background:#0B1026;color:#F3EBDD;--ink2:rgba(243,235,221,.8);--line:rgba(201,164,92,.28)}
 .tiles .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
 .tiles .head{padding:0 var(--pad);position:absolute;top:calc(var(--bar) + 24px);left:0;right:0}
 .tiles .row{display:flex;gap:14px;padding:0 var(--pad);will-change:transform;margin-top:64px}
@@ -231,7 +238,7 @@ html:not(.js) .tiles .row{overflow-x:auto}
 @media (min-width:900px){.alm{grid-template-columns:repeat(4,1fr)}}
 
 /* launch + end */
-.launch{background:#070A18;color:#F3EBDD;--ink2:rgba(243,235,221,.66);--ink3:rgba(243,235,221,.4);--line:rgba(201,164,92,.28);text-align:center}
+.launch{background:#070A18;color:#F3EBDD;--ink2:rgba(243,235,221,.8);--ink3:rgba(243,235,221,.4);--line:rgba(201,164,92,.28);text-align:center}
 .launch .pg{padding-top:112px}
 .launch .num{margin-top:20px}
 .form{display:flex;flex-direction:column;gap:10px;max-width:400px;margin:24px auto 0}
@@ -317,7 +324,7 @@ html:not(.js) .tiles .row{overflow-x:auto}
     <div class="blk mid lie" id="lie"><p class="mega shade"><span class="ln">This is not</span> <span class="ln"><em>the night sky.</em></span></p></div>
     <div class="blk top" id="hero">
       <p class="tag">Moonphase automatic · a concept Kickstarter</p>
-      <h1 class="mega shade" id="h1"><span class="ln">Made in</span> <span class="ln">the <em>small</em></span> <span class="ln"><em>hours.</em></span></h1>
+      <h1 class="mega shade" id="h1"><span class="ln">Made in</span> <span class="ln">the <em>small</em></span> <span class="ln"><em class="script">hours.</em></span></h1>
       <p class="body sub shade">It is a 39 mm dial of aventurine glass: a sky you can wear. The watch has stopped. Scroll to wind it.</p>
     </div>
     <div class="blk hint"><p class="tag">Scroll to wind</p><i aria-hidden="true"></i></div>
@@ -390,7 +397,7 @@ html:not(.js) .tiles .row{overflow-x:auto}
   <section class="sc" id="c8" aria-labelledby="h8">
     <div class="blk top">
       <p class="tag">05:50 · Morning</p>
-      <h2 class="mega" id="h8"><span class="ln">Morning.</span> <span class="ln"><em>Actual size.</em></span></h2>
+      <h2 class="mega" id="h8"><span class="ln"><em class="script">Morning.</em></span> <span class="ln">Actual size.</span></h2>
     </div>
     <div class="blk bot"><span class="hair" aria-hidden="true"></span><p class="body" id="sizeNote"><strong>39 × 46 × 11.2 mm.</strong> About actual size on a phone. The lines under it are wrists of 15, 17 and 19 cm, seen from above.</p></div>
   </section>

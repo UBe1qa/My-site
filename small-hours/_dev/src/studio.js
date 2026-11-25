@@ -5,6 +5,7 @@
 //   tent = env with a bright horizon: pass as polishEnv to setupWatch (mirror-polished parts of the movement)
 import * as THREE from 'three';
 
+// opt.photo (texture) + opt.envOnly: the same studio with a set's photo as the room, for that set's reflections
 export function makeStudio(renderer, opt = {}) {
   const s = new THREE.Scene();
   const box = (w, h, d, pos, color, intensity) => {
@@ -18,8 +19,15 @@ export function makeStudio(renderer, opt = {}) {
   const dome = new THREE.Mesh(new THREE.SphereGeometry(60, 48, 24), new THREE.ShaderMaterial({
     side: THREE.BackSide, uniforms: U,
     vertexShader: 'varying vec3 p; void main(){ p = normalize(position); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-    fragmentShader: 'varying vec3 p; uniform vec3 pole; uniform vec3 hor; uniform float k; uniform vec2 ab; void main(){ float h = smoothstep(0.08, 0.85, abs(p.z)); float d = dot(p, normalize(vec3(-0.6, 0.5, 0.0))); gl_FragColor = vec4(mix(hor, pole, h)*k*max(0.02, ab.x + ab.y*d), 1.0); }'
+    fragmentShader: `varying vec3 p; uniform vec3 pole; uniform vec3 hor; uniform float k; uniform vec2 ab; uniform sampler2D photo; uniform float pk;
+      void main(){ float h = smoothstep(0.08, 0.85, abs(p.z)); float d = dot(p, normalize(vec3(-0.6, 0.5, 0.0)));
+        vec3 c = mix(hor, pole, h)*k*max(0.02, ab.x + ab.y*d);
+        // a set's photo wrapped round the room, so the steel reflects the desk, the lamp and the leather it floats over
+        if (pk > 0.0) { vec2 uv = vec2(0.5 + atan(p.x, -p.z) / 6.2832, 0.5 + asin(clamp(p.y, -1.0, 1.0)) / 3.1416);
+          vec3 ph = pow(texture2D(photo, uv).rgb, vec3(2.2)); c = mix(c, ph * pk, 0.7); }
+        gl_FragColor = vec4(c, 1.0); }`
   }));
+  U.photo = { value: opt.photo ?? null }; U.pk = { value: opt.photo ? (opt.photoGain ?? 2.2) : 0 };
   s.add(dome);
   // key softbox: large, warm white, front-left above the dial
   box(26, 16, 0.5, [-22, 10, 30], 0xfff3e2, 6.5);
@@ -44,6 +52,7 @@ export function makeStudio(renderer, opt = {}) {
                 [10, 4, 44], [-4, -10, 44], [20, 8, -34], [-12, -18, -34], [0, 30, -24]];
   pins.forEach(p => box(1.1, 1.1, 0.3, p, 0xffffff, 70.0));
   const env = pmrem.fromScene(s, 0.0, 0.1, 200).texture;
+  if (opt.envOnly) { pmrem.dispose(); s.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); }); return { env }; }
   // same studio with the horizon lit like a light tent: polished chamfers of the movement reflect it and read as bright lines
   // lit from the upper left, dark on the other side: every bridge outline gets a bright edge and a dark edge
   U.hor.value.setRGB(...(opt.tentHorizon ?? [1.0, 1.0, 1.04])); U.ab.value.set(0.5, 0.8);
