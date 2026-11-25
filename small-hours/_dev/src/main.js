@@ -31,6 +31,24 @@ const SETS = [
   { name: 'engrave', e: 28, h: 2.97, light: [-0.35, 0, 0.12], shadow: 0.8, tint: [1.06, 0.98, 0.88], w: S => fit(S, 36.0, 36.5) * (1 - fit(S, 41.0, 41.45)) },
   { name: 'morning', e: 90, h: 1.54, light: [-0.3, 0, 0], shadow: 0, tint: [1, 1, 1], w: S => fit(S, 46.6, 47.0) },
 ];
+// each chapter has its own light: tungsten at the desk, cold daylight at the drawing board, lume green in the dark,
+// brass at the engraver's bench. [from S, gain, lift], crossfaded over 0.6 screens. Applied to the room and the watch.
+const GRADES = [
+  [0, [1, 1, 1], [0, 0, 0]],
+  [2.2, [1.1, 0.96, 0.82], [0.006, 0.002, 0]],
+  [14.2, [1, 1, 1], [0, 0, 0]],
+  [21.6, [0.8, 0.97, 1.12], [0, 0.006, 0.014]],
+  [34.7, [0.5, 1.0, 0.78], [0, 0.04, 0.028]],
+  [36.4, [1.12, 0.93, 0.78], [0.012, 0.004, 0]],
+  [41.8, [1, 1, 1], [0, 0, 0]],
+];
+const gradeAt = (S, out) => {
+  let i = 0; while (i < GRADES.length - 1 && S >= GRADES[i + 1][0] - 0.3) i++;
+  const a = GRADES[Math.max(0, i - 1)], b = GRADES[i], t = i === 0 ? 1 : fit(S, b[0] - 0.3, b[0] + 0.3);
+  for (let j = 0; j < 3; j++) { out.g[j] = lerp(a[1][j], b[1][j], t); out.l[j] = lerp(a[2][j], b[2][j], t); }
+  return out;
+};
+const grade = { g: [1, 1, 1], l: [0, 0, 0] };
 const setAt = S => S < 17 ? 0 : S < 34.6 ? 1 : S < 44 ? 2 : 3;
 // each photo's window in tan space (xc, yc, half w, half h) for phone and wide screens, from the layout script
 const SET_WIN = {
@@ -263,6 +281,7 @@ if (renderer) {
       if (!setEnv[i]) setEnv[i] = makeStudio(renderer, { ambient: 0.5, photo: t, photoGain: st.envGain ?? 1.5, envOnly: true }).env;
     }));
   };
+  texLoader.load('img/moon-map.webp', t => { t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.anisotropy = 4; U.tMoon.value = t; U.uMoonMap.value = 1; });
   const useSets = () => {
     const kind = wide ? 'w' : 'p'; loadSets(kind);
     setTex[kind].forEach((t, i) => { U['tSet' + i].value = t; U.uWin.value[i].set(...SET_WIN[kind][i]); });
@@ -375,6 +394,8 @@ if (renderer) {
     const LUME = ['gold_satin_free', 'gold_polished_free', 'gold_satin'];
     for (const n of ['hand_hour', 'hand_minute', 'dial']) P[n]?.traverse(o => { if (o.isMesh && LUME.includes(o.material.name) && o.material.emissive) lumeMats.add(o.material); });
     strapMats = [...new Set(strapMats)];
+    // the gold moon reads as beaten leaf, not a sticker: deeper relief, a little more sheen
+    g.scene.traverse(o => { if (o.isMesh && o.material.name === 'moon_gold') { o.material.normalScale.set(2.2, 2.2); o.material.roughness = 0.6; o.material.envMapIntensity = 1.4; } });
     // the movement: when it faces the camera the front key light floods it white, so its reflections are turned down then
     g.scene.traverse(o => { if (o.isMesh && /_mv$/.test(o.material.name)) mvMats.set(o.material, o.material.envMapIntensity); });
     renderer.compile(scene, camera);
@@ -456,8 +477,8 @@ if (renderer) {
       k(11.8, 0.1, PI - 0.08, 0.12, BAL, 5.6, 0.0, 0, [3.5, 0, 0.16]),
       k(13.0, 0.12, PI + 0.15, 0, ROT, 1.8, 0.05),
       k(14.0, 0.0, PI + 0.3, 0, BACK, 0.9, 0.0),
-      k(14.9, -0.05, 0, 0, O, fS, fOy, fOx, fr),
-      k(16.0, -0.05, 0.05, 0, O, fS, fOy, fOx, fr),
+      k(14.9, -0.42, 0.62, 0.32, O, fS, fOy, fOx, fr),
+      k(16.0, -0.4, 0.55, 0.3, O, fS, fOy, fOx, fr),
       k(22.6, -0.62, 0.3, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(24.0, -0.6, 0.25, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(26.0, -0.5, 0.1, 0, M, 1.45, -0.22, 0, [1.3, -0.06, 0.19]),
@@ -788,6 +809,8 @@ if (renderer) {
     tint.set(1, 1, 1).lerp(v3b.set(...SET.tint), sw);
     const envWant = sw > 0.5 && setEnv[si] ? setEnv[si] : studio.env;
     if (scene.environment !== envWant) scene.environment = envWant;
+    gradeAt(S, grade); U.uGain.value.set(...grade.g); U.uLift.value.set(...grade.l);
+    tint.multiply(v3b.set(...grade.g));
     finish.material.uniforms.uTint.value.copy(tint);
 
     // the dial as a window: see-through at the start (the sky is the dial) and again when we dive back into it

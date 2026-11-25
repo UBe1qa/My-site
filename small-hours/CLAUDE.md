@@ -11,6 +11,7 @@
   - 세트(3판, 11-25): 세트 안에서는 카메라가 DSET=20 거리에 서서 줌·이동만 하고 시계가 그 앞에서 돈다. 사진은 같은 카메라로 Blender 회색 구도(`_dev/sets/sets.py`, 결과 `sets.json`)를 찍어 Seedream 5.5에 기준 그림으로 넣어 뽑았다. 그래서 화면 픽셀마다 카메라 광선으로 사진 자리를 찾아 그리면 줌해도 맞는다(`SET_WIN`). 책상 그림자는 안 보이는 판(ShadowMaterial)이 받는다. 세트를 바꾸려면 sets.py를 다시 돌리고 SETS·SET_WIN 숫자를 고친다.
   - `watch-setup.js`·`studio.js`: 3D 스레드가 준 것(프로젝트 파일 `small-hours/3d/`). 사이트에서 바꾼 곳은 `setExplode`의 `stagger`(부품이 위에서부터 차례로 뜸)와 `glassBoost`(분해 때 유리 반사 세기) 둘.
   - 5판(11-25): 마무리 색 처리는 AgX(punchy, finish 셰이더 `agx()`), 뒷면이 보이면 무브먼트(`_mv` 재질) 반사를 절반으로. 분해는 제도대 세트 위에서 하고 불이 꺼지며 야광(`lumeMats`)으로 넘어감. 사진 줄 사진은 CSS 필터·그레인으로 한 필름처럼, 캡션 자리는 사진마다 바뀜(`.cap.p0~p3`), 사진마다 `objectPosition`으로 시계를 화면 안에.
+  - 7판(11-25): 장마다 색(`GRADES`, 배경 `uGain/uLift`와 시계 `uTint`에 같이), 오늘 밤 달은 NASA LRO 색 지도+높이(`img/moon-map.webp`, 퍼블릭 도메인, 알파=높이).
   - `moon.js`: 오늘 달 위상·밝기·다음 보름(브라우저에서 계산). `sound.js`: 음악 둘 + 코드로 만든 째깍 소리.
 - `img/set-*-p/w.webp`(세트 사진 폰/PC, Seedream 5.5), `img/night-1~6.webp`(Seedream 5.5 손목 사진, 사진 칸은 화면 가득), `img/dial-*`(3D 모델에서 헤드리스로 찍은 것)
 - `assets/watch.glb`(Draco), `assets/draco/`(디코더), `assets/fonts/`(Instrument Serif, Inter Tight, OFL), `assets/audio/`(Suno 곡: night = 바탕 반복 4마디 뒤 24마디 고리, moon = ⑥에서 한 번).

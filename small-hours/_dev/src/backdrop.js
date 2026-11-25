@@ -13,7 +13,7 @@ uniform sampler2D tSet0, tSet1, tSet2, tSet3;   // the photographed sets (desk, 
 uniform vec4 uWin[4];  // each photo's window in tan space: xy centre, zw half size
 uniform vec4 uCam;     // the watch camera now: x tan(fov/2), y aspect, z ox, w oy (its view offset)
 uniform vec3 uIris;    // where scene changes open from: xy css px (bottom left origin), z radius scale
-uniform sampler2D tType; uniform float uTypeOp;   // giant words drawn into the world, behind the watch
+uniform sampler2D tType; uniform float uTypeOp; uniform sampler2D tMoon; uniform float uMoonMap; uniform vec3 uGain, uLift;   // giant words drawn into the world, behind the watch
 varying vec2 vUv;
 
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
@@ -72,10 +72,23 @@ vec3 night(vec2 uv, vec2 px, float withMoon){
       vec3 N = vec3(m.x, -m.y, sqrt(1.0 - r*r));
       vec3 L = normalize(vec3(sin(uPhase), 0.0, -cos(uPhase)));
       float sh = smoothstep(-0.04, 0.10, dot(N, L));
-      vec2 q = m * 1.7 + vec2(3.0, 1.4);
-      float maria = smoothstep(0.45, 0.72, fbm(q)) * 0.24 + smoothstep(0.5, 0.8, fbm(q * 2.3 + 5.0)) * 0.08;
-      float crat = smoothstep(0.7, 0.9, noise(m * 16.0)) * 0.06 + (noise(m * 60.0) - 0.5) * 0.05;
-      vec3 alb = vec3(0.95, 0.92, 0.85) * (1.0 - maria - crat) * pow(N.z, 0.22);
+      vec3 alb;
+      if (uMoonMap > 0.5) {
+        // the real near side (NASA LRO colour map, height in alpha for the relief at the terminator)
+        vec2 mu = vec2(0.5 + atan(N.x, N.z) / 6.2832, 0.5 + asin(clamp(-N.y, -1.0, 1.0)) / 3.1416);   // N.y points down the screen here
+        vec4 t = texture2D(tMoon, mu);
+        float e = 0.0015;
+        float hx = texture2D(tMoon, mu + vec2(e, 0.0)).a - texture2D(tMoon, mu - vec2(e, 0.0)).a;
+        float hy = texture2D(tMoon, mu + vec2(0.0, e)).a - texture2D(tMoon, mu - vec2(0.0, e)).a;
+        vec3 Nb = normalize(N - vec3(hx, -hy, 0.0) * 2.2);
+        sh = smoothstep(-0.03, 0.12, dot(Nb, L)) * (0.75 + 0.25 * max(dot(Nb, L), 0.0));
+        alb = pow(t.rgb, vec3(1.25)) * vec3(1.06, 1.02, 0.94) * 1.25 * pow(N.z, 0.12);
+      } else {
+        vec2 q = m * 1.7 + vec2(3.0, 1.4);
+        float maria = smoothstep(0.45, 0.72, fbm(q)) * 0.24 + smoothstep(0.5, 0.8, fbm(q * 2.3 + 5.0)) * 0.08;
+        float crat = smoothstep(0.7, 0.9, noise(m * 16.0)) * 0.06 + (noise(m * 60.0) - 0.5) * 0.05;
+        alb = vec3(0.95, 0.92, 0.85) * (1.0 - maria - crat) * pow(N.z, 0.22);
+      }
       vec3 moonC = alb * sh + vec3(0.05, 0.07, 0.13) * (1.0 - sh) * 0.5;   // earthshine on the dark side
       float edge = smoothstep(1.0, 0.985, r);
       c = mix(c, moonC, edge * withMoon);
@@ -236,6 +249,7 @@ void main(){
     float m = smoothstep(r + 40.0, r - 40.0, d);
     c = mix(a, b, m);
   }
+  c = c * uGain + uLift;   // the chapter's grade (the giant numerals stay their own colour)
   if (uTypeOp > 0.0) { vec4 ty = texture2D(tType, vUv); c = mix(c, ty.rgb, ty.a * uTypeOp); }
   // fine grain so gradients do not band on phones
   c += (h21(px * 1.37 + fract(uTime)) - 0.5) / 255.0 * 2.0;
@@ -249,7 +263,7 @@ export function makeBackdrop() {
     uMoon: { value: new THREE.Vector4(0, 0, 60, 0) }, uPhase: { value: Math.PI }, uBeam: { value: 0 }, uGrid: { value: 1 }, uZoom: { value: new THREE.Vector3(0, 0, 1) }, uHole: { value: new THREE.Vector4(0, 0, 1, 0) },
     tSet0: { value: null }, tSet1: { value: null }, tSet2: { value: null }, tSet3: { value: null },
     uWin: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 1, 1)) }, uCam: { value: new THREE.Vector4(0.2, 0.5, 0, 0) },
-    uIris: { value: new THREE.Vector3(0, 0, 1) }, tType: { value: null }, uTypeOp: { value: 0 },
+    uIris: { value: new THREE.Vector3(0, 0, 1) }, tType: { value: null }, uTypeOp: { value: 0 }, tMoon: { value: null }, uMoonMap: { value: 0 }, uGain: { value: new THREE.Vector3(1, 1, 1) }, uLift: { value: new THREE.Vector3(0, 0, 0) },
   };
   const mat = new THREE.ShaderMaterial({
     uniforms, depthTest: false, depthWrite: false,
