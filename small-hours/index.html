@@ -158,7 +158,16 @@ html.js #c3::after{bottom:0;background:linear-gradient(rgba(7,10,24,0),rgba(7,10
 .strip{position:absolute;inset:0;overflow:hidden}
 .reel{position:absolute;left:0;top:0;height:100%;display:flex;will-change:transform}
 .shot{flex:none;width:var(--fw-px,300px);height:100%;position:relative;overflow:hidden}
-.shot img{width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;will-change:transform}
+.shot img{width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;will-change:transform;filter:saturate(.8) contrast(1.07) brightness(.9) sepia(.08)}
+/* one film for all the photos: the same grain and the same falloff at the edges as the 3D chapters */
+.strip::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.strip::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 85% at 50% 50%,transparent 55%,rgba(4,5,12,.55))}
+/* the caption moves round the frame from picture to picture, so no two pictures are laid out alike */
+.cap{transition:none}
+.cap.p1,.cap.p3{bottom:auto;top:calc(var(--bar) + 22px + env(safe-area-inset-top))}
+.cap.p1,.cap.p2{align-items:flex-end;text-align:right}
+.cap.p1 .tag:first-child,.cap.p3 .tag:first-child{order:2;margin-top:10px}
+.cap.p1 .tag:last-child,.cap.p2 .tag:last-child{margin:0 -.04em 0 0}
 .shot.window{background:transparent}
 .cap{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(26px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:flex-start;gap:0;z-index:2}
 .cap .tag:first-child{color:var(--ink);padding-left:.3em}
@@ -416,20 +425,6 @@ html:not(.js) .tiles .row{overflow-x:auto}
       <li><button type="button" aria-expanded="false"><span>05</span>Shipping, duties and refunds</button><div class="a"><p>Shipping and import duties shown before you pay, so nothing arrives with a bill attached. (Example terms.)</p></div></li>
       <li><button type="button" aria-expanded="false"><span>06</span>What if the Kickstarter is late?</button><div class="a"><p>If delivery slips past the date we gave, you can cancel for a full refund. (Example terms.)</p></div></li>
     </ul>
-  </section>
-
-  <section class="tiles" id="tiles" aria-labelledby="ht">
-    <div class="pin">
-      <div class="head"><p class="tag">Up close</p><h2 class="title" id="ht">Made for <em>looking at</em> in the dark.</h2></div>
-      <div class="row" id="row">
-        <figure class="tile" style="margin:0"><img src="img/tile-dial.webp" alt="Close-up of the aventurine dial" width="840" height="1050" loading="lazy"><figcaption><b>Aventurine</b><span>Copper flecks in blue glass. No two dials share a sky.</span></figcaption></figure>
-        <figure class="tile" style="margin:0"><img src="img/tile-moon.webp" alt="The gold moon in its window at six o'clock" width="840" height="1050" loading="lazy"><figcaption><b>The moon disc</b><span>Two gold moons on one disc, one turn every two months.</span></figcaption></figure>
-        <figure class="tile" style="margin:0"><img src="img/tile-rotor.webp" alt="The gold micro-rotor seen through the case back" width="840" height="1050" loading="lazy"><figcaption><b>Micro-rotor</b><span>Set into the movement, so the watch stays thin.</span></figcaption></figure>
-        <figure class="tile" style="margin:0"><img src="img/tile-balance.webp" alt="The balance wheel and blued screws" width="840" height="1050" loading="lazy"><figcaption><b>Blued screws</b><span>Heated until the steel turns blue, then polished flat.</span></figcaption></figure>
-        <figure class="tile" style="margin:0"><img src="img/tile-crown.webp" alt="The crown and the side of the case" width="840" height="1050" loading="lazy"><figcaption><b>The crown</b><span>Big enough to wind with cold fingers.</span></figcaption></figure>
-        <figure class="tile" style="margin:0"><img src="img/tile-side.webp" alt="The thin steel case from the side" width="840" height="1050" loading="lazy"><figcaption><b>11.2 mm</b><span>Slides under a cuff, even a pyjama one.</span></figcaption></figure>
-      </div>
-    </div>
   </section>
 
   <section class="pg" id="dials" aria-labelledby="hd">

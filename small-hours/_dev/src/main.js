@@ -19,7 +19,7 @@ const CH = { c1: [0, 3], c2: [3, 7.6], c3: [7.6, 14], c4: [14, 26], c5: [26, 36]
 const GO = { c1: 0, c2: 4.0, c3: 8.7, c4: 15.9, c5: 26.7, c6: 37.1, c7: 43.1, c8: 47.6 };
 // backdrop: [from s, stage]  0 night · 4 night with tonight's moon · 5 dawn · 7 void · 9 drafting film
 // 20.. photographed sets: 20 the desk at night · 21 the drafting table · 22 the engraver's bench · 23 the morning table
-const STAGES = [[0, 0], [2.0, 20], [21, 21], [32.2, 9], [34.9, 7], [36.4, 22], [41.9, 4], [45.9, 23]];
+const STAGES = [[0, 0], [2.0, 20], [21, 21], [34.9, 7], [36.4, 22], [41.9, 4], [45.9, 23]];
 const D = 3.9, FOV = 24;
 // The sets. Inside a set the camera stands still DSET away (it only zooms and shifts), the watch turns in front of it,
 // and a table lies h below the focus at e degrees: the photo was made from a Blender layout with exactly this camera
@@ -27,7 +27,7 @@ const D = 3.9, FOV = 24;
 const DSET = 20;
 const SETS = [
   { name: 'desk', e: 18, h: 3.34, light: [-0.35, 0, 0.12], shadow: 0.8, tint: [1.07, 0.97, 0.87], w: S => S < 9 ? fit(S, 1.55, 2.15) * (1 - fit(S, 8.6, 9.3)) : fit(S, 13.2, 13.8) },
-  { name: 'drafting', e: 48, h: 2.19, light: [-0.35, 0, 0.1], shadow: 0.7, tint: [1.04, 0.98, 0.92], w: S => fit(S, 21, 22) * (1 - fit(S, 32.0, 32.4)) },
+  { name: 'drafting', e: 48, h: 2.19, light: [-0.35, 0, 0.1], shadow: 0.7, tint: [1.04, 0.98, 0.92], w: S => fit(S, 21, 22) * (1 - fit(S, 34.6, 35.0)) },
   { name: 'engrave', e: 28, h: 2.97, light: [-0.35, 0, 0.12], shadow: 0.8, tint: [1.06, 0.98, 0.88], w: S => fit(S, 36.0, 36.5) * (1 - fit(S, 41.0, 41.45)) },
   { name: 'morning', e: 90, h: 1.54, light: [-0.3, 0, 0], shadow: 0, tint: [1, 1, 1], w: S => fit(S, 46.6, 47.0) },
 ];
@@ -127,7 +127,7 @@ const TEXT = [
   [$('lie'), -1, -1, 0.75, 1.15], [q('#c1 .hint'), -1, -1, 0.2, 0.5], [$('hero'), 1.75, 2.05, 2.95, 3.3],
   [q('#c2 .bot'), 3.75, 4.05, 6.55, 6.95],
   [q('#c3 .top'), 8.2, 8.5, 13.3, 13.7], [q('#c3 .bot'), 9.0, 9.3, 13.3, 13.7],
-  [q('#gallery .head'), 15.3, 15.6, 24.2, 24.6],
+  [q('#gallery .head'), 15.3, 15.6, 17.0, 17.4],
   [$('b5a'), 26.25, 26.55, 28.95, 29.3], [$('b5b'), 29.75, 30.05, 31.8, 32.1], [$('b5c'), 32.45, 32.75, 34.55, 34.9],
   [q('#c6 .top'), 36.75, 37.05, 40.0, 40.35],
   [q('#c7 .top'), 42.6, 42.9, 45.4, 45.8], [q('#c7 .bot'), 43.0, 43.3, 45.4, 45.8],
@@ -204,20 +204,13 @@ $('form').addEventListener('submit', e => {
   $('email').value = '';
 });
 
-// the tiles: the row slides sideways while the page scrolls down
-const tiles = $('tiles'), row = $('row');
-function tilesFrame() {
-  const r = tiles.getBoundingClientRect();
-  if (r.bottom < 0 || r.top > H) return;
-  const p = clamp(-r.top / Math.max(1, r.height - H));
-  row.style.transform = `translate3d(${(-p * Math.max(0, row.scrollWidth - W + 0)).toFixed(1)}px,0,0)`;
-}
-
 // ---------- the gallery ----------
 const shots = [...$('reel').children], imgs = shots.map(f => f.querySelector('img'));
 const CAPS = [['Ward 4, night shift', '03:12'], ['First loaves', '04:05'], ['The 2 a.m. feed', '02:40'], ['Clear sky, finally', '01:55'], ['Last fare home', '03:30'], ['One more page', '04:20'], ['And the bench where it is made', 'Now']];
 // the light of each photo spills into the room around the frame: ward teal, oven ember, nursery rose, sky blue, taxi neon, desk lamp, walnut bench
 const GLOW = [[[24, 70, 72], [5, 20, 24]], [[96, 44, 16], [26, 10, 4]], [[88, 46, 64], [24, 10, 20]], [[22, 42, 96], [5, 9, 26]], [[96, 22, 76], [24, 4, 22]], [[90, 66, 22], [24, 16, 6]], [[64, 34, 14], [18, 9, 4]]];
+// keep each wrist in the picture on a narrow phone (where the watch sits across each photo)
+['42% 50%', '4% 50%', '24% 50%', '2% 50%', '86% 50%', '30% 50%'].forEach((p, i) => { if (imgs[i]) imgs[i].style.objectPosition = p; });
 const galIndex = x => { const r = fit(x, 16.3, 24.0) * 6, f = Math.floor(r); return Math.min(6, f + sineInOut(fit(r - f, 0.1, 0.9))); };
 let capWas = -1;
 function galleryFrame(S) {
@@ -234,8 +227,8 @@ function galleryFrame(S) {
   gallery.style.background = (S < 16.2 || e > 5.02) ? 'transparent' : `radial-gradient(120% 90% at 50% 60%, rgb(${mix3(g0[0], g1[0])}) 0%, rgb(${mix3(g0[1], g1[1])}) 100%)`;
   imgs[0].style.opacity = fit(S, 15.7, 16.2).toFixed(3);
   const c = Math.round(e);
-  if (c !== capWas) { capWas = c; $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
-  $('cap').style.opacity = (fit(S, 15.9, 16.3) * (1 - fit(S, 23.9, 24.3))).toFixed(3);
+  if (c !== capWas) { capWas = c; $('cap').className = 'cap p' + (c === 6 ? 0 : c % 4); $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
+  $('cap').style.opacity = (fit(S, 15.9, 16.3) * (1 - fit(S, 23.9, 24.3)) * (1 - fit(Math.abs(e - c), 0.25, 0.45))).toFixed(3);
   return e;
 }
 
@@ -267,7 +260,7 @@ if (renderer) {
     if (setTex[kind].length) return;
     setTex[kind] = SETS.map((st, i) => texLoader.load(`img/set-${st.name}-${kind}.webp`, t => {
       t.anisotropy = 4; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.needsUpdate = true;
-      if (!setEnv[i]) setEnv[i] = makeStudio(renderer, { ambient: 0.5, photo: t, photoGain: st.envGain ?? 2.2, envOnly: true }).env;
+      if (!setEnv[i]) setEnv[i] = makeStudio(renderer, { ambient: 0.5, photo: t, photoGain: st.envGain ?? 1.5, envOnly: true }).env;
     }));
   };
   const useSets = () => {
@@ -284,7 +277,7 @@ if (renderer) {
   const catcher = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), catcherMat);
   catcher.receiveShadow = true; catcher.renderOrder = -3; scene.add(catcher);
   const tint = new THREE.Vector3(1, 1, 1), upV = new THREE.Vector3(), zAxis = new THREE.Vector3(0, 0, 1);
-  let strapMats = []; const lumeMats = new Set(), lumeCol = new THREE.Color(0.32, 1.0, 0.72);
+  let strapMats = []; const mvMats = new Map(); const lumeMats = new Set(), lumeCol = new THREE.Color(0.32, 1.0, 0.72);
 
   // ---------- words as pictures: a few giant words drawn into the world, behind the watch ----------
   const typeCv = document.createElement('canvas'), tg = typeCv.getContext('2d');
@@ -297,7 +290,7 @@ if (renderer) {
     let m = null;
     const yrs = Math.round(122 * fit(S, 26.3, 28.8));
     const eng = ($('line').value || 'For the small hours').trim();
-    if (S > 3.55 && S < 7.15) m = [`r${Math.round(72 * fit(S, 3.75, 6.45))}`, bell(S, 3.55, 4.05, 6.75, 7.15), g => big(g, `${Math.round(72 * fit(S, 3.75, 6.45))}`, 'h', GOLD, 0.56)];
+    if (S > 3.55 && S < 7.15) m = [`r${Math.round(72 * fit(S, 3.75, 6.45))}`, bell(S, 3.55, 4.05, 6.75, 7.15), g => tall(g, `${Math.round(72 * fit(S, 3.75, 6.45))}`, 'hours', GOLD)];
     else if (S > 26.0 && S < 29.4) m = [`y${yrs}`, bell(S, 26.0, 26.5, 29.0, 29.4), g => big(g, String(yrs), '', NAVY, 0.38)];
     U.uTypeOp.value = m ? m[1] : 0;
     if (!m || m[0] === typeKey) return;
@@ -318,6 +311,16 @@ if (renderer) {
     g.fillStyle = color; g.textBaseline = 'alphabetic';
     g.font = `400 ${px}px "Instrument Serif", Georgia, serif`; g.letterSpacing = `${-px * 0.04}px`; g.fillText(num, x0, yb);
     if (unit) { g.font = `italic 400 ${px * 0.42}px "Instrument Serif", Georgia, serif`; g.letterSpacing = '0px'; g.fillText(unit, x0 + nw + px * 0.04, yb); }
+  }
+  // a number standing on its side up the right edge, running behind the watch, its unit small at its foot
+  function tall(g, num, unit, color) {
+    const px = wide ? H * 0.62 : Math.min(W * 0.66, H * 0.36);
+    g.save(); g.translate(wide ? W * 0.93 : W - px * 0.12, wide ? H * 0.86 : H * 0.555); g.rotate(-Math.PI / 2);
+    g.fillStyle = color; g.textBaseline = 'alphabetic';
+    g.font = `400 ${px}px "Instrument Serif", Georgia, serif`; g.letterSpacing = `${-px * 0.04}px`; g.fillText(num, 0, 0);
+    const nw = g.measureText(num).width;
+    g.font = `italic 400 ${px * 0.16}px "Instrument Serif", Georgia, serif`; g.letterSpacing = '0px'; g.fillText(unit, nw + px * 0.05, 0);
+    g.restore();
   }
   // the engraving, set as huge italic lines that run off the edges
   function words(g, text, color) {
@@ -371,6 +374,8 @@ if (renderer) {
     const LUME = ['gold_satin_free', 'gold_polished_free', 'gold_satin'];
     for (const n of ['hand_hour', 'hand_minute', 'dial']) P[n]?.traverse(o => { if (o.isMesh && LUME.includes(o.material.name) && o.material.emissive) lumeMats.add(o.material); });
     strapMats = [...new Set(strapMats)];
+    // the movement: when it faces the camera the front key light floods it white, so its reflections are turned down then
+    g.scene.traverse(o => { if (o.isMesh && /_mv$/.test(o.material.name)) mvMats.set(o.material, o.material.envMapIntensity); });
     renderer.compile(scene, camera);
     loaderEl.style.transform = 'scaleX(1)'; loaderEl.classList.add('is-done');
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-ready')));
@@ -456,11 +461,11 @@ if (renderer) {
       k(24.0, -0.6, 0.25, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(26.0, -0.5, 0.1, 0, M, 1.45, -0.22, 0, [1.3, -0.06, 0.19]),
       k(28.9, -0.45, 0.03, 0, M, 1.4, -0.22, 0, [1.25, -0.06, 0.19]),
-      k(29.8, -0.35, -0.35, 0.1, O, 0.78, -0.14),
-      k(31.9, -0.3, 0.35, 0.05, O, 0.8, -0.14),
+      k(29.8, -0.3, -0.45, 0.15, O, 1.3, -0.08, -0.24, [0.95, -0.02, -0.05]),
+      k(31.9, -0.25, -0.15, 0.1, O, 1.35, -0.08, -0.2, [1.0, -0.02, -0.03]),
       k(32.4, EX, 0, 0, O, 0.6, -0.02, -0.08, [0.4, 0, 0.12]),
-      k(33.1, EX, 0.06, 0, [0, 0, 4.8], 0.64, -0.04, -0.13, [0.36, 0, 0.12]),
-      k(34.4, EX, -0.06, 0, [0, 0, -6.2], 0.64, 0, -0.13, [0.36, 0, 0.12]),
+      k(33.1, EX, 0.06, 0, [0, 0, 4.8], 0.46, 0.1, -0.13, [0.27, 0.1, 0.13]),
+      k(34.4, EX, -0.06, 0, [0, 0, -6.2], 0.46, 0.12, -0.13, [0.27, 0.12, 0.13]),
       k(35.2, -0.05, 0, 0, O, 0.62, 0.0, 0, [0.5, 0, 0]),
       k(35.9, -0.05, 0, 0, O, 0.62, 0.0, 0, [0.5, 0, 0]),
       k(36.7, 0.12, PI - 0.15, 0, BACK, 0.92, -0.1),
@@ -520,11 +525,26 @@ if (renderer) {
       vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
         const mat3 O = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
         return clamp(O * rrt(I * (c / 0.6)), 0.0, 1.0); }
+      // AgX (Blender's view transform) with a punchy look: highlights roll off into colour instead of clipping to white
+      vec3 agx(vec3 c){
+        const mat3 I = mat3(vec3(0.856627153315983, 0.137318972929847, 0.11189821299995), vec3(0.0951212405381588, 0.761241990602591, 0.0767994186031903), vec3(0.0482516061458583, 0.101439036467562, 0.811302368396859));
+        const mat3 O = mat3(vec3(1.1271005818144368, -0.1413297634984383, -0.14132976349843826), vec3(-0.11060664309660323, 1.157823702216272, -0.11060664309660294), vec3(-0.016493938717834573, -0.016493938717834257, 1.2519364065950405));
+        const mat3 toR = mat3(vec3(0.6274, 0.0691, 0.0164), vec3(0.3293, 0.9195, 0.0880), vec3(0.0433, 0.0113, 0.8956));
+        const mat3 toS = mat3(vec3(1.6605, -0.1246, -0.0182), vec3(-0.5876, 1.1329, -0.1006), vec3(-0.0728, -0.0083, 1.1187));
+        c = I * (toR * c * 1.6);
+        c = clamp((log2(max(c, 1e-10)) + 12.47393) / 16.5, 0.0, 1.0);
+        vec3 x2 = c * c, x4 = x2 * x2;
+        c = 15.5 * x4 * x2 - 40.14 * x4 * c + 31.96 * x4 - 6.868 * x2 * c + 0.4298 * x2 + 0.1191 * c - 0.00232;
+        float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+        c = pow(max(c, 0.0), vec3(1.3)); l = pow(max(l, 0.0), 1.3);
+        c = l + 1.25 * (c - l);
+        c = O * c;
+        return clamp(toS * pow(max(c, 0.0), vec3(2.2)), 0.0, 1.0); }
       vec3 srgb(vec3 c){ return mix(pow(c, vec3(1.0 / 2.4)) * 1.055 - 0.055, c * 12.92, vec3(lessThanEqual(c, vec3(0.0031308)))); }
       float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       void main(){
         vec4 t = texture2D(tScene, vUv);
-        vec3 c = srgb(aces(max(t.rgb, 0.0) * uExp * uTint * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
+        vec3 c = srgb(agx(max(t.rgb, 0.0) * uExp * uTint * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
         float v = smoothstep(0.35, 1.15, length((vUv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * 1.15)) * uVig;
         // inside the movement we look through a loupe: a circle of light, a thin bright rim, black around it
         vec2 lq = (vUv - 0.5) * uRes / min(uRes.x, uRes.y); float ld = length(lq - vec2(0.0, -0.04)), lr = 0.47;
@@ -654,7 +674,6 @@ if (renderer) {
     s = coarse || reduced ? sRaw : s + (sRaw - s) * (1 - Math.exp(-dt * 14));
     if (Math.abs(sRaw - s) < 1e-4) s = sRaw;
     const S = clamp(s, 0, FILM_END);
-    tilesFrame();
 
     // text
     const secOn = new Set();
@@ -674,11 +693,11 @@ if (renderer) {
     clockEl.style.opacity = s > FILM_END + 0.2 ? 0 : 1;
     // after the night the bar sits on paper or on the dark bands: follow what is under it
     let onPaper = false;
-    if (s > FILM_END + 0.6) { const el = document.elementsFromPoint(W / 2, 30).find(e => !e.closest('header')); onPaper = !!el && !el.closest('.tiles, .launch') && !!el.closest('#after'); }
+    if (s > FILM_END + 0.6) { const el = document.elementsFromPoint(W / 2, 30).find(e => !e.closest('header')); onPaper = !!el && !el.closest('.launch') && !!el.closest('#after'); }
     if (onPaper !== frame.onPaper) { frame.onPaper = onPaper; barEl.classList.toggle('on-paper', onPaper); }
 
     const e = galleryFrame(S);
-    const paperOn = (S > 46.9 && s < FILM_END + 0.8) || (S > 32.3 && S < 34.85);
+    const paperOn = S > 46.9 && s < FILM_END + 0.8;
     if (paperOn !== document.body._paper) { document.body.classList.toggle('is-paper', paperOn); document.body._paper = paperOn; document.querySelector('meta[name=theme-color]').content = paperOn ? '#EEE8DC' : '#070A18'; }
 
     // power reserve while winding
@@ -735,6 +754,8 @@ if (renderer) {
     const tgtW = v3.copy(pose.tgt).applyQuaternion(pose.q);
     group.position.copy(tgtW).negate();   // the point we look at sits at the origin, the camera on +Z
     group.updateMatrixWorld();
+    const backK = lerp(1, 0.5, fit(-v3b.set(0, 0, 1).applyQuaternion(pose.q).z, -0.1, 0.6));
+    if (backK !== frame.backK) { frame.backK = backK; for (const [m, b] of mvMats) m.envMapIntensity = b * backK; }
     const ref = wide ? H : W;
     const dist = D * H / (2 * Math.tan(THREE.MathUtils.degToRad(FOV) / 2) * pose.size * ref);
     // inside a set the camera stands still and zooms; between sets it travels as before
@@ -755,7 +776,7 @@ if (renderer) {
     upV.set(0, Math.cos(er), Math.sin(er));
     catcher.position.copy(upV).multiplyScalar(-SET.h);
     catcher.quaternion.setFromUnitVectors(zAxis, upV);
-    catcherMat.opacity = SET.shadow * sw;
+    catcherMat.opacity = SET.shadow * sw * (1 - bell(S, 32.2, 32.6, 34.4, 34.8));   // the parts float off the table during the explode
     catcher.visible = catcherMat.opacity > 0.003;
     if (catcher.visible) {
       sun.position.set(...SET.light).add(upV).normalize().multiplyScalar(40); sun.target.position.set(0, -SET.h * 0.5, 0);
@@ -786,8 +807,8 @@ if (renderer) {
 
     // exposure: the logo moment turns the watch into a silhouette (a new moon), the blueprint dims it under the lines
     const bp = bell(S, 29.4, 29.9, 31.9, 32.3);
-    const dim = bell(S, 35.15, 35.6, 36.15, 36.6);
-    const exposure = (1 + 0.6 * fl) * (1 - 0.95 * bp) * (1 - 0.985 * dim) * (1 - 0.5 * bell(S, 8.6, 9.6, 12.8, 13.6)) * (1 + 0.15 * bell(S, 45.7, 46.3, 46.9, 47.3));
+    const dim = bell(S, 34.75, 35.2, 36.15, 36.6);
+    const exposure = (1 - 0.3 * bell(S, 6.5, 7.0, 8.4, 8.9)) * (1 + 0.6 * fl) * (1 - 0.95 * bp) * (1 - 0.985 * dim) * (1 - 0.5 * bell(S, 8.6, 9.6, 12.8, 13.6)) * (1 + 0.15 * bell(S, 45.7, 46.3, 46.9, 47.3));
     finish.material.uniforms.uExp.value = exposure;
     finish.material.uniforms.uTime.value = reduced ? 0 : time;
     lineMat.uniforms.uK.value = bp / exposure;
@@ -847,7 +868,7 @@ if (renderer) {
       if (S < 41 && moonCued) { moonCued = false; sound.resetMoon(); }
       engrave?.frame(dt);
       // the lights go out before the crescent: only the lume is left
-      const lume = bell(S, 35.0, 35.5, 36.2, 36.6);
+      const lume = bell(S, 34.7, 35.1, 36.2, 36.6);
       if (lume !== frame.lume) { frame.lume = lume; for (const m of lumeMats) { m.emissive.copy(lumeCol); m.emissiveIntensity = lume * 0.9 / Math.max(0.02, exposure); } }
     }
 

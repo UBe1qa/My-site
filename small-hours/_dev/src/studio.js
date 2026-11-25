@@ -24,7 +24,7 @@ export function makeStudio(renderer, opt = {}) {
         vec3 c = mix(hor, pole, h)*k*max(0.02, ab.x + ab.y*d);
         // a set's photo wrapped round the room, so the steel reflects the desk, the lamp and the leather it floats over
         if (pk > 0.0) { vec2 uv = vec2(0.5 + atan(p.x, -p.z) / 6.2832, 0.5 + asin(clamp(p.y, -1.0, 1.0)) / 3.1416);
-          vec3 ph = pow(texture2D(photo, uv).rgb, vec3(2.2)); c = mix(c, ph * pk, 0.7); }
+          vec3 ph = pow(texture2D(photo, uv).rgb, vec3(2.2)); c = mix(c, ph * pk, 0.7 * smoothstep(0.35, -0.2, p.y)); }
         gl_FragColor = vec4(c, 1.0); }`
   }));
   U.photo = { value: opt.photo ?? null }; U.pk = { value: opt.photo ? (opt.photoGain ?? 2.2) : 0 };
