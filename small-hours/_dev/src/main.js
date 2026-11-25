@@ -38,8 +38,8 @@ const GRADES = [
   [2.2, [1.1, 0.96, 0.82], [0.006, 0.002, 0]],
   [14.2, [1, 1, 1], [0, 0, 0]],
   [21.6, [0.8, 0.97, 1.12], [0, 0.006, 0.014]],
-  [34.7, [0.5, 1.0, 0.78], [0, 0.04, 0.028]],
-  [36.4, [1.12, 0.93, 0.78], [0.012, 0.004, 0]],
+  [34.7, [0.38, 1.1, 0.74], [0, 0.075, 0.05]],
+  [36.4, [1.25, 0.9, 0.62], [0.022, 0.006, 0]],
   [41.8, [1, 1, 1], [0, 0, 0]],
 ];
 const gradeAt = (S, out) => {
@@ -237,7 +237,9 @@ function galleryFrame(S) {
   if (!on) return;
   gallery.style.opacity = (fit(S, 14.6, 15.1) * (1 - fit(S, 24.9, 25.8))).toFixed(3);
   const e = galIndex(S);
-  $('reel').style.transform = `translate3d(${(-e * FR.w).toFixed(1)}px,0,0)`;
+  // the last picture does not slide away: it dissolves, and the bench behind it is simply there (no seam between photo and render)
+  $('reel').style.transform = `translate3d(${(-Math.min(e, 5) * FR.w).toFixed(1)}px,0,0)`;
+  shots[5].style.opacity = (1 - clamp(e - 5)).toFixed(3);
   imgs.forEach((im, i) => { if (!im) return; const d = clamp(i - e, -1, 1); im.style.transform = `translate3d(${(-d * 22).toFixed(2)}%,0,0) scale(1.2)`; });
   const i0 = Math.floor(e), i1 = Math.min(6, i0 + 1), f = e - i0, mix3 = (a, b) => a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(',');
   const g0 = GLOW[i0], g1 = GLOW[i1];
@@ -311,7 +313,7 @@ if (renderer) {
     const eng = ($('line').value || 'For the small hours').trim();
     if (S > 3.55 && S < 7.15) m = [`r${Math.round(72 * fit(S, 3.75, 6.45))}`, bell(S, 3.55, 4.05, 6.75, 7.15), g => tall(g, `${Math.round(72 * fit(S, 3.75, 6.45))}`, 'hours', GOLD)];
     else if (S > 29.6 && S < 32.2) m = [`v${Math.round(72 * fit(S, 29.9, 30.4))}`, bell(S, 29.6, 30.0, 31.7, 32.1), g => tall(g, `${Math.round(72 * fit(S, 29.9, 30.4))}`, 'hours', GOLD, 0.93)];
-    else if (S > 26.0 && S < 29.4) m = [`y${yrs}`, bell(S, 26.0, 26.5, 29.0, 29.4), g => big(g, String(yrs), '', NAVY, 0.38)];
+    else if (S > 26.0 && S < 29.4) m = [`y${yrs}`, bell(S, 26.0, 26.5, 29.0, 29.4), g => big(g, String(yrs), '', '#EFE6D2', 0.43)];
     U.uTypeOp.value = m ? m[1] : 0;
     if (!m || m[0] === typeKey) return;
     typeKey = m[0];
@@ -395,6 +397,13 @@ if (renderer) {
     for (const n of ['hand_hour', 'hand_minute', 'dial']) P[n]?.traverse(o => { if (o.isMesh && LUME.includes(o.material.name) && o.material.emissive) lumeMats.add(o.material); });
     strapMats = [...new Set(strapMats)];
     // the gold moon reads as beaten leaf, not a sticker: deeper relief, a little more sheen
+    // brushed steel: the grain catches the light as streaks, not as plastic
+    const aniso = new Map();
+    g.scene.traverse(o => {
+      if (!o.isMesh || !/^steel_(brushed|satin)/.test(o.material.name)) return;
+      if (!aniso.has(o.material)) { const p = new THREE.MeshPhysicalMaterial(); THREE.MeshStandardMaterial.prototype.copy.call(p, o.material); p.defines = { STANDARD: '', PHYSICAL: '' }; p.anisotropy = 0.7; p.anisotropyRotation = 0; aniso.set(o.material, p); }
+      o.material = aniso.get(o.material);
+    });
     g.scene.traverse(o => { if (o.isMesh && o.material.name === 'moon_gold') { o.material.normalScale.set(2.2, 2.2); o.material.roughness = 0.6; o.material.envMapIntensity = 1.4; } });
     // the movement: when it faces the camera the front key light floods it white, so its reflections are turned down then
     g.scene.traverse(o => { if (o.isMesh && /_mv$/.test(o.material.name)) mvMats.set(o.material, o.material.envMapIntensity); });
@@ -481,8 +490,8 @@ if (renderer) {
       k(16.0, -0.4, 0.55, 0.3, O, fS, fOy, fOx, fr),
       k(22.6, -0.62, 0.3, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(24.0, -0.6, 0.25, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
-      k(26.0, -0.5, 0.1, 0, M, 1.45, -0.22, 0, [1.3, -0.06, 0.19]),
-      k(28.9, -0.45, 0.03, 0, M, 1.4, -0.22, 0, [1.25, -0.06, 0.19]),
+      k(26.0, -0.5, 0.1, 0, M, 0.95, -0.3, 0, [1.0, -0.1, 0.2]),
+      k(28.9, -0.45, 0.03, 0, M, 1.0, -0.3, 0, [1.05, -0.1, 0.2]),
       k(29.8, -0.3, -0.45, 0.15, O, 0.85, -0.08, -0.3, [0.95, -0.02, -0.05]),
       k(31.9, -0.25, -0.15, 0.1, O, 0.88, -0.08, -0.28, [1.0, -0.02, -0.03]),
       k(32.4, EX, 0, 0, O, 0.6, -0.02, -0.08, [0.4, 0, 0.12]),
@@ -739,7 +748,7 @@ if (renderer) {
       const inset = [FR.t, W - FR.l - FR.w, H - FR.t - FR.h, FR.l];   // top right bottom left
       if (S < 16.3) { const t = sineInOut(fit(S, 14.8, 15.6)); clip = inset.map(v => v * t); canvasOp = 1 - fit(S, 15.7, 16.2); }
       else if (S < 24) {
-        const off = clamp(6 - e) * FR.w;   // the window frame slides in from the right
+        const off = e > 5 ? 0 : FR.w;   // the bench is behind the last picture, which dissolves
         clip = [inset[0], inset[1], inset[2], inset[3] + off]; canvasOp = off >= FR.w - 0.5 ? 0 : 1; extraOx = off / W;
       } else { const t = sineInOut(fit(S, 24.0, 25.8)); clip = inset.map(v => v * (1 - t)); }
     }
@@ -768,7 +777,7 @@ if (renderer) {
     U.uBeam.value = lerp(-0.9, 0.9, fit(S, 21, 41));
     // tonight's moon in the real sky
     const minD = Math.min(W, H), grow = sineInOut(fit(S, 42.2, 43.8));
-    U.uMoon.value.set(W * (wide ? 0.66 : 0.5), H * (wide ? 0.5 : 0.5), minD * lerp(0.05, wide ? 0.24 : 0.3, grow), 1);
+    U.uMoon.value.set(W * (wide ? 0.66 : 0.5), H * (wide ? 0.5 : 0.47), minD * lerp(0.05, wide ? 0.34 : 0.47, grow), 1);   // tonight's moon fills the frame
     U.uPhase.value = moonNow.phase * Math.PI * 2;
 
     // ---- watch ----
