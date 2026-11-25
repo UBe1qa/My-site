@@ -225,10 +225,10 @@ $('form').addEventListener('submit', e => {
 // ---------- the gallery ----------
 const shots = [...$('reel').children], imgs = shots.map(f => f.querySelector('img'));
 const CAPS = [['Ward 4, night shift', '03:12'], ['First loaves', '04:05'], ['The 2 a.m. feed', '02:40'], ['Clear sky, finally', '01:55'], ['Last fare home', '03:30'], ['One more page', '04:20'], ['And the bench where it is made', 'Now']];
-// the light of each photo spills into the room around the frame: ward teal, oven ember, nursery rose, sky blue, taxi neon, desk lamp, walnut bench
-const GLOW = [[[24, 70, 72], [5, 20, 24]], [[96, 44, 16], [26, 10, 4]], [[88, 46, 64], [24, 10, 20]], [[22, 42, 96], [5, 9, 26]], [[96, 22, 76], [24, 4, 22]], [[90, 66, 22], [24, 16, 6]], [[64, 34, 14], [18, 9, 4]]];
+// the light of each photo spills into the room around the frame: ward teal, oven ember, nursery rose, sky blue, taxi neon, banker's lamp green, walnut bench
+const GLOW = [[[24, 70, 72], [5, 20, 24]], [[96, 44, 16], [26, 10, 4]], [[88, 46, 64], [24, 10, 20]], [[22, 42, 96], [5, 9, 26]], [[96, 22, 76], [24, 4, 22]], [[30, 84, 44], [6, 18, 10]], [[64, 34, 14], [18, 9, 4]]];
 // keep each wrist in the picture on a narrow phone (where the watch sits across each photo)
-['42% 50%', '4% 50%', '24% 50%', '2% 50%', '86% 50%', '30% 50%'].forEach((p, i) => { if (imgs[i]) imgs[i].style.objectPosition = p; });
+['42% 50%', '16% 50%', '0% 50%', '58% 50%', '82% 50%', '100% 50%'].forEach((p, i) => { if (imgs[i]) imgs[i].style.objectPosition = p; });
 const galIndex = x => { const r = fit(x, 16.3, 24.0) * 6, f = Math.floor(r); return Math.min(6, f + sineInOut(fit(r - f, 0.1, 0.9))); };
 let capWas = -1;
 function galleryFrame(S) {
@@ -379,7 +379,7 @@ if (renderer) {
   const gltfLoader = new GLTFLoader(); gltfLoader.setDRACOLoader(draco);
   gltfLoader.load('assets/watch.glb', g => {
     group.add(g.scene);
-    watch = setupWatch(g.scene, { glassEnv: studio.soft, polishEnv: studio.tent, anisotropy: 8, glassReflect: 0.14, glassBoost: 0.3, seconds: true });
+    watch = setupWatch(g.scene, { glassEnv: studio.soft, polishEnv: studio.tent, anisotropy: 8, glassReflect: 0.24, glassBoost: 0.3, seconds: true });
     const P = watch.parts;
     // the aventurine of the dial can turn see-through: then the sky behind it is the real one
     // (a depth-only copy of the dial is drawn first, so the case behind it never shows: only the backdrop does)
@@ -401,7 +401,7 @@ if (renderer) {
     const aniso = new Map();
     g.scene.traverse(o => {
       if (!o.isMesh || !/^steel_(brushed|satin)/.test(o.material.name)) return;
-      if (!aniso.has(o.material)) { const p = new THREE.MeshPhysicalMaterial(); THREE.MeshStandardMaterial.prototype.copy.call(p, o.material); p.defines = { STANDARD: '', PHYSICAL: '' }; p.anisotropy = 0.7; p.anisotropyRotation = 0; aniso.set(o.material, p); }
+      if (!aniso.has(o.material)) { const p = new THREE.MeshPhysicalMaterial(); THREE.MeshStandardMaterial.prototype.copy.call(p, o.material); p.defines = { STANDARD: '', PHYSICAL: '' }; p.anisotropy = 0.75; p.anisotropyRotation = 0; p.roughness = Math.min(p.roughness, 0.2); aniso.set(o.material, p); }
       o.material = aniso.get(o.material);
     });
     g.scene.traverse(o => { if (o.isMesh && o.material.name === 'moon_gold') { o.material.normalScale.set(2.2, 2.2); o.material.roughness = 0.6; o.material.envMapIntensity = 1.4; } });
@@ -492,8 +492,8 @@ if (renderer) {
       k(24.0, -0.6, 0.25, 0.4, O, fS * 0.95, fOy, fOx, [fS * 0.95, fOy, fOx]),
       k(26.0, -0.5, 0.1, 0, M, 0.95, -0.3, 0, [1.0, -0.1, 0.2]),
       k(28.9, -0.45, 0.03, 0, M, 1.0, -0.3, 0, [1.05, -0.1, 0.2]),
-      k(29.8, -0.3, -0.45, 0.15, O, 0.85, -0.08, -0.3, [0.95, -0.02, -0.05]),
-      k(31.9, -0.25, -0.15, 0.1, O, 0.88, -0.08, -0.28, [1.0, -0.02, -0.03]),
+      k(29.8, -0.12, -1.05, 0.08, O, 0.9, -0.1, -0.24, [0.95, -0.02, -0.05]),
+      k(31.9, -0.1, -0.85, 0.06, O, 0.92, -0.1, -0.22, [1.0, -0.02, -0.03]),
       k(32.4, EX, 0, 0, O, 0.6, -0.02, -0.08, [0.4, 0, 0.12]),
       k(33.1, EX, 0.06, 0, [0, 0, 4.8], 0.46, 0.1, -0.13, [0.27, 0.1, 0.13]),
       k(34.4, EX, -0.06, 0, [0, 0, -6.2], 0.46, 0.12, -0.13, [0.27, 0.12, 0.13]),
