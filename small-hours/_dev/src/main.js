@@ -239,7 +239,7 @@ function galleryFrame(S) {
   const e = galIndex(S);
   // the last picture does not slide away: it dissolves, and the bench behind it is simply there (no seam between photo and render)
   $('reel').style.transform = `translate3d(${(-Math.min(e, 5) * FR.w).toFixed(1)}px,0,0)`;
-  shots[5].style.opacity = (1 - clamp(e - 5)).toFixed(3);
+  shots[5].style.opacity = (1 - fit(e, 5.02, 5.35)).toFixed(3);
   imgs.forEach((im, i) => { if (!im) return; const d = clamp(i - e, -1, 1); im.style.transform = `translate3d(${(-d * 22).toFixed(2)}%,0,0) scale(1.2)`; });
   const i0 = Math.floor(e), i1 = Math.min(6, i0 + 1), f = e - i0, mix3 = (a, b) => a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(',');
   const g0 = GLOW[i0], g1 = GLOW[i1];
