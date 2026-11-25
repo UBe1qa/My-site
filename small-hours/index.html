@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Small Hours: a moonphase watch, wound by scrolling (concept)</title>
-<meta name="description" content="Small Hours is a concept site for an imaginary moonphase watch micro-brand. Scroll to wind it, take it apart, see it at actual size, and watch its moon disc turn to tonight's real moon. Not a real brand.">
-<meta name="theme-color" content="#0B1026">
+<title>Small Hours: a moonphase watch for people who are still up (concept)</title>
+<meta name="description" content="Small Hours is a concept site for an imaginary moonphase watch micro-brand. The sky turns out to be its dial, you wind it by scrolling, follow it through one night, and its moon disc turns to tonight's real moon. Not a real brand.">
+<meta name="theme-color" content="#070A18">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://small-hours.lumenlab.page/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Small Hours: a moonphase watch, wound by scrolling">
-<meta property="og:description" content="A concept site by Lumen Lab. The moon disc turns to tonight's real moon. Not a real brand.">
+<meta property="og:title" content="Small Hours: a moonphase watch for people who are still up">
+<meta property="og:description" content="A concept site by Lumen Lab. One watch, one night, and tonight's real moon. Not a real brand.">
 <meta property="og:url" content="https://small-hours.lumenlab.page/">
 <meta property="og:image" content="https://small-hours.lumenlab.page/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -30,43 +30,46 @@
 @font-face{font-family:"Inter Tight";src:url(assets/fonts/inter-tight-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
 
 [hidden]{display:none!important}
-img{max-width:100%;height:auto}
+img{max-width:100%;height:auto;display:block}
 :root{
   --night:#0B1026; --deep:#070A18; --panel:#121833;
-  --gold:#C9A45C; --line:rgba(201,164,92,.28);
-  --ink:#F3EBDD; --ink2:rgba(243,235,221,.64); --ink3:rgba(243,235,221,.40);
+  --gold:#C9A45C; --gold2:#E3C88E; --line:rgba(201,164,92,.28);
+  --ink:#F3EBDD; --ink2:rgba(243,235,221,.66); --ink3:rgba(243,235,221,.40);
+  --paper:#EEE8DC; --pink:#E9A98A;
   --pad:20px; --bar:56px;
   --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
   --sans:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --t-title:44px; --t-num:64px; --t-sub:24px; --t-body:16px; --t-tag:11px;
+  --t-mega:clamp(64px,19vw,104px); --t-title:44px; --t-num:64px; --t-body:16px; --t-tag:11px;
 }
 @media (min-width:900px){
-  :root{--pad:48px; --bar:72px; --t-title:112px; --t-num:160px; --t-sub:32px; --t-body:18px; --t-tag:12px}
+  :root{--pad:48px; --bar:72px; --t-mega:clamp(120px,12.5vw,220px); --t-title:96px; --t-num:150px; --t-body:18px; --t-tag:12px}
 }
 *{box-sizing:border-box}
 html{background:var(--deep);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--deep);color:var(--ink);font:400 var(--t-body)/1.45 var(--sans);-webkit-font-smoothing:antialiased;transition:color .6s ease}
+body{margin:0;background:var(--deep);color:var(--ink);font:400 var(--t-body)/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+body.is-paper{--ink:#14182B;--ink2:rgba(20,24,43,.68);--ink3:rgba(20,24,43,.45);--line:rgba(20,24,43,.25)}
 body.is-paper .bar{background:linear-gradient(rgba(238,232,220,.85),rgba(238,232,220,0))}
-body.is-paper{--ink:#14182B;--ink2:rgba(20,24,43,.66);--ink3:rgba(20,24,43,.45);--line:rgba(20,24,43,.25)}
 a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 :focus-visible{outline:1px solid var(--gold);outline-offset:3px;border-radius:4px}
 
-.tag{font:500 var(--t-tag)/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0}
-.title{font:400 var(--t-title)/1.0 var(--serif);letter-spacing:-.01em;margin:8px 0 0;text-wrap:balance}
-.title em{font-style:italic}
-html.js body:not(.is-paper) .title,html.js body:not(.is-paper) .body,html.js body:not(.is-paper) .num{text-shadow:0 0 18px rgba(7,10,24,.85),0 0 42px rgba(7,10,24,.6)}
+.tag{font:500 var(--t-tag)/1.25 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0}
+.tag b{color:var(--gold);font-weight:500}
+.title{font:400 var(--t-title)/.98 var(--serif);letter-spacing:-.015em;margin:10px 0 0;text-wrap:balance}
+.mega{font:400 var(--t-mega)/.88 var(--serif);letter-spacing:-.03em;margin:10px 0 0}
+.title em,.mega em{font-style:italic}
+html.js .shade{text-shadow:0 0 18px rgba(7,10,24,.8),0 0 42px rgba(7,10,24,.55)}
 .body{max-width:34ch;color:var(--ink2);margin:0}
 .body strong{color:var(--ink);font-weight:500}
 .hair{display:block;width:32px;height:1px;background:var(--gold);opacity:.8;margin:0 0 12px}
-.num{font:300 var(--t-num)/1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin:0}
-.foot{font:400 12px/1.5 var(--sans);color:var(--ink2);margin:0}
+.num{font:300 var(--t-num)/1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin:0}
+.foot{font:400 12px/1.55 var(--sans);color:var(--ink2);margin:0}
 
 /* top bar */
-.bar{position:fixed;z-index:20;background:linear-gradient(rgba(7,10,24,.72),rgba(7,10,24,.35) 60%,rgba(7,10,24,0));top:0;left:0;right:0;height:calc(var(--bar) + env(safe-area-inset-top));padding:env(safe-area-inset-top) var(--pad) 0;display:flex;align-items:center;gap:8px}
+.bar{position:fixed;z-index:40;background:linear-gradient(rgba(7,10,24,.72),rgba(7,10,24,.3) 60%,rgba(7,10,24,0));top:0;left:0;right:0;height:calc(var(--bar) + env(safe-area-inset-top));padding:env(safe-area-inset-top) var(--pad) 0;display:flex;align-items:center;gap:8px;transition:color .5s ease}
 .brand{white-space:nowrap;font:500 var(--t-tag)/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;padding:14px 0}
 .chip{white-space:nowrap;margin-right:auto;font:500 9px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);border-radius:999px;padding:4px 7px}
-.pill{white-space:nowrap;height:32px;min-width:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font:500 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;position:relative;transition:border-color .3s ease,background-color .3s ease}
+.pill{white-space:nowrap;height:32px;min-width:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font:500 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;position:relative;transition:border-color .3s ease}
 .pill::after{content:"";position:absolute;inset:-6px}
 .pill:hover{border-color:var(--gold)}
 .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--ink3);transition:background-color .3s ease}
@@ -74,132 +77,188 @@ html.js body:not(.is-paper) .title,html.js body:not(.is-paper) .body,html.js bod
 @media (max-width:420px){.pill .st{display:none}.bar{gap:6px}.pill{padding:0 12px}}
 
 /* menu */
-.menu{position:fixed;z-index:30;inset:0;background:#070A18;color:#F3EBDD;padding:calc(var(--bar) + 24px + env(safe-area-inset-top)) var(--pad) 32px;display:flex;flex-direction:column}
-.menu ol{list-style:none;margin:0;padding:0;counter-reset:m}
+.menu{position:fixed;z-index:50;inset:0;background:#070A18;color:#F3EBDD;padding:calc(var(--bar) + 16px + env(safe-area-inset-top)) var(--pad) 24px;display:flex;flex-direction:column;overflow:auto}
+.menu ol{list-style:none;margin:0;padding:0}
 .menu li{border-bottom:1px solid rgba(201,164,92,.28)}
-.menu a{display:flex;align-items:baseline;gap:16px;min-height:56px;padding:12px 0;text-decoration:none;font:400 32px/1.1 var(--serif)}
+.menu a{display:flex;align-items:baseline;gap:16px;min-height:48px;padding:9px 0;text-decoration:none;font:400 28px/1.1 var(--serif)}
 .menu a[aria-current]{color:var(--gold)}
 .menu a span{font:500 11px/1 var(--sans);letter-spacing:.14em;color:var(--gold);min-width:2.4em}
 .menu .close{position:absolute;top:calc(env(safe-area-inset-top) + (var(--bar) - 32px)/2);right:var(--pad)}
 .menu .foot{margin-top:auto;padding-top:24px}
 
-/* minute track: 60 ticks on the right edge, lit as you go */
-.ticks{position:fixed;z-index:10;right:3px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;pointer-events:none}
-.ticks i{display:block;width:4px;height:1px;background:var(--ink3);opacity:.6;transition:background-color .2s ease,width .2s ease}
-.ticks i:nth-child(5n+1){width:7px}
-.ticks i.on{background:var(--gold);opacity:1}
-@media (min-width:900px){.ticks{right:18px;gap:7px}.ticks i{width:6px}.ticks i:nth-child(5n+1){width:10px}}
+/* the hour the hands show, in the right margin: the night passing */
+.clock{position:fixed;z-index:12;right:var(--pad);bottom:calc(18px + env(safe-area-inset-bottom));font:500 10px/1 var(--sans);letter-spacing:.16em;color:var(--ink3);pointer-events:none;font-variant-numeric:tabular-nums;transition:opacity .4s ease}
+.clock b{color:var(--gold);font-weight:500}
 
 #gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;background:var(--deep)}
-.poster{position:fixed;left:50%;top:58%;transform:translate(-50%,-50%);width:min(92vw,460px);z-index:1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent);mask-image:radial-gradient(closest-side,#000 62%,transparent);transition:opacity .8s ease}
+.poster{position:fixed;left:50%;top:56%;transform:translate(-50%,-50%);width:min(92vw,460px);z-index:1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent);mask-image:radial-gradient(closest-side,#000 62%,transparent);transition:opacity .8s ease}
 html.is-ready .poster{opacity:0}
 html:not(.js) .poster{display:none}
 html.no-gl .poster{display:block;position:static;transform:none;margin:72px auto 0;width:min(86vw,420px)}
-html.no-gl #gl,html.no-gl .ticks,html.no-gl .loader{display:none}
+html.no-gl #gl,html.no-gl .clock,html.no-gl .loader,html.no-gl #gallery,html.no-gl #logo,html.no-gl #flash{display:none}
 @media (min-width:900px){.poster{left:62%;top:50%;width:min(46vh,460px)}}
-
-/* loader: a thin gold line under the bar */
-.loader{position:fixed;z-index:21;left:0;top:calc(var(--bar) + env(safe-area-inset-top));height:1px;width:100%;background:var(--gold);transform-origin:0 50%;transform:scaleX(0);transition:transform .3s ease,opacity .6s ease}
+.loader{position:fixed;z-index:41;left:0;top:calc(var(--bar) + env(safe-area-inset-top));height:1px;width:100%;background:var(--gold);transform-origin:0 50%;transform:scaleX(0);transition:transform .3s ease,opacity .6s ease}
 .loader.is-done{opacity:0}
+#flash{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(227,200,142,.55),rgba(227,200,142,.12) 35%,rgba(227,200,142,0) 70%);mix-blend-mode:screen}
 
-/* ---------- story: without JS, the scenes are just a page ---------- */
+/* ---------- the film: without JS the chapters are just a page ---------- */
 .sc{position:relative;padding:96px var(--pad) 64px;max-width:900px}
 .sc+.sc{border-top:1px solid var(--line)}
 html.js .sc{position:fixed;inset:0;max-width:none;padding:0;border:0;z-index:5;pointer-events:none;opacity:0}
 .blk{position:absolute;left:var(--pad);right:var(--pad)}
 html:not(.js) .blk{position:static;margin-bottom:24px}
-.ln{display:block;will-change:transform}
-html.js .sc.is-on .qa,html.js .sc.is-on .form,html.js .sc.is-on a{pointer-events:auto}
+.ln{display:block}
+html.js .ln .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .08em .16em;margin:0 -.08em -.16em}
+html.js .ln .w>i{display:inline-block;font-style:inherit;transform:translate3d(0,108%,0);transition:transform .45s cubic-bezier(.7,0,.84,0)}
+html.js .is-in .ln .w>i{transform:none;transition:transform 1.15s cubic-bezier(.16,1,.3,1) calc(var(--i)*60ms)}
+html.js .sc.is-on .form,html.js .sc.is-on a,html.js .sc.is-on input{pointer-events:auto}
+.top{top:calc(var(--bar) + 28px + env(safe-area-inset-top))}
+.bot{bottom:calc(56px + env(safe-area-inset-bottom))}
+.mid{top:50%;transform:translateY(-50%)}
 
-/* 1 stopped night: title top left, hint bottom centre */
-#s1 .blk.top{top:calc(96px + env(safe-area-inset-top))}
-#s1 .sub{margin-top:16px}
-.hint{bottom:calc(28px + env(safe-area-inset-bottom));text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+/* 1 sky */
+#c1 .lie{text-align:center}
+#c1 .lie .mega{font-size:clamp(46px,13vw,140px)}
+.hint{bottom:calc(26px + env(safe-area-inset-bottom));text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
 .hint i{display:block;width:1px;height:40px;background:linear-gradient(var(--gold),transparent);transform-origin:50% 0;animation:drip 2.4s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+#c1 .sub{margin-top:14px}
 
-/* 2 wind: text at the bottom */
-#s2 .blk{bottom:calc(120px + env(safe-area-inset-bottom))}
-.reserve{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;margin-top:20px;max-width:340px}
-.reserve .tag{grid-column:1/-1;display:flex;justify-content:space-between}
-.bar-line{height:1px;background:var(--line);position:relative;grid-column:1/-1}
-.bar-line b{position:absolute;inset:0;background:var(--gold);transform-origin:0 50%;transform:scaleX(0)}
+/* 2 wind */
+.reserve{display:grid;gap:8px;margin-top:18px;max-width:340px}
+.reserve .tag{display:flex;justify-content:space-between}
+.meter{height:1px;background:var(--line);position:relative}
+.meter b{position:absolute;inset:0;background:var(--gold);transform-origin:0 50%;transform:scaleX(0)}
 
-/* 3 parts */
-#s3 .blk{top:calc(84px + env(safe-area-inset-top))}
-.sheet{display:none;position:absolute;right:var(--pad);bottom:calc(20px + env(safe-area-inset-bottom));border:1px solid var(--line);padding:8px 10px;font:500 9px/1.6 var(--sans);letter-spacing:.14em;color:var(--ink2);text-transform:uppercase;text-align:right}
+/* 3 inside: the macro is bright metal, so the words get a shade of night behind them */
+html.js #c3::before,html.js #c3::after{content:"";position:absolute;left:0;right:0;height:42%;pointer-events:none}
+html.js #c3::before{top:0;background:linear-gradient(rgba(7,10,24,.78),rgba(7,10,24,.5) 55%,rgba(7,10,24,0))}
+html.js #c3::after{bottom:0;background:linear-gradient(rgba(7,10,24,0),rgba(7,10,24,.75))}
+
+/* 4 gallery: photos slide sideways while you scroll down */
+#gallery{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;visibility:hidden;background:radial-gradient(120% 90% at 50% 62%,#141B3A 0%,#0B1026 45%,#070A18 100%)}
+#gallery .head{position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--bar) + 20px + env(safe-area-inset-top))}
+#gallery .head .title{font-size:clamp(40px,11vw,96px)}
+.frame{position:absolute;left:50%;top:var(--fy,58%);width:var(--fw,78vw);aspect-ratio:3/4;transform:translate(-50%,-50%)}
+.frame .corners{position:absolute;inset:-8px;pointer-events:none}
+.frame .corners i{position:absolute;width:14px;height:14px;border-color:var(--gold);border-style:solid;opacity:.9}
+.frame .corners i:nth-child(1){left:0;top:0;border-width:1px 0 0 1px}
+.frame .corners i:nth-child(2){right:0;top:0;border-width:1px 1px 0 0}
+.frame .corners i:nth-child(3){left:0;bottom:0;border-width:0 0 1px 1px}
+.frame .corners i:nth-child(4){right:0;bottom:0;border-width:0 1px 1px 0}
+.frame .dash{position:absolute;inset:0;border:1px dashed rgba(201,164,92,.45)}
+.strip{position:absolute;inset:0;overflow:hidden}
+.reel{position:absolute;left:0;top:0;height:100%;display:flex;will-change:transform}
+.shot{flex:none;width:var(--fw-px,300px);height:100%;position:relative;overflow:hidden}
+.shot img{width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;will-change:transform}
+.shot.window{background:transparent}
+.cap{position:absolute;left:50%;transform:translateX(-50%);top:calc(var(--fy,58%) + var(--fh,52vw) + 18px);width:var(--fw,78vw);display:flex;justify-content:space-between;gap:12px}
+.cap .tag:last-child{color:var(--gold);text-align:right}
+.count{position:absolute;right:var(--pad);top:calc(var(--bar) + 26px + env(safe-area-inset-top));font:500 var(--t-tag)/1 var(--sans);letter-spacing:.14em;color:var(--ink3)}
+
+/* 5 bench: gauges */
+.gauge{display:flex;align-items:flex-end;gap:14px;margin-top:16px}
+.gauge .num{font-size:clamp(56px,16vw,150px)}
+.gauge .unit{font:500 11px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);padding-bottom:8px}
+.ruler{position:relative;height:22px;margin-top:10px;max-width:360px;background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 10%)}
+.ruler b{position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);box-shadow:0 0 10px var(--gold)}
 #labels{position:fixed;inset:0;z-index:6;pointer-events:none}
 .lab span{overflow:hidden;text-overflow:ellipsis}
 .lab{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;font:500 9px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;opacity:0;will-change:transform,opacity}
 .lab b{font-weight:500;color:var(--gold);border:1px solid var(--line);border-radius:999px;padding:3px 5px}
 .lab i{display:block;height:1px;background:var(--line)}
 @media (min-width:900px){.lab{font-size:11px}}
+#logo{position:fixed;inset:0;z-index:3;pointer-events:none;width:100%;height:100%;opacity:0}
+#logo>circle{fill:none;stroke:var(--gold);stroke-width:2px;filter:drop-shadow(0 0 10px rgba(201,164,92,.7))}
 
-/* 4 actual size: paper */
-#s4 .blk.top{top:calc(84px + env(safe-area-inset-top))}
-.dims{display:none;position:absolute;right:var(--pad);top:calc(170px + env(safe-area-inset-top));text-align:right;font:500 11px/1.9 var(--sans);letter-spacing:.12em;color:var(--ink)}
-.dims span{color:var(--ink2)}
-#s4 .blk.bot{bottom:calc(20px + env(safe-area-inset-bottom));left:auto;width:min(58%,26ch);text-align:right;background:rgba(238,232,220,.9);padding:12px 12px 10px;border-radius:2px}
-#s4 .blk.bot .hair{margin-left:auto}
+/* 6 engrave */
+.engrave{display:flex;gap:8px;margin-top:18px;max-width:420px}
+.engrave input{flex:1;min-width:0;height:48px;border-radius:999px;border:1px solid var(--line);background:rgba(7,10,24,.6);color:var(--ink);padding:0 18px;font:500 14px var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.engrave input::placeholder{color:var(--ink3)}
 
-/* 5 promise: list in the lower half */
-#s5 .blk.top{top:calc(84px + env(safe-area-inset-top))}
-#s5 .blk.list{bottom:calc(16px + env(safe-area-inset-bottom))}
-.qa{margin:0;padding:0;list-style:none;border-top:1px solid var(--line);background:linear-gradient(rgba(7,10,24,0),rgba(7,10,24,.6) 30%)}
+/* 8 dawn, actual size on paper */
+#c8 .bot{left:auto;width:min(60%,26ch);text-align:right;background:rgba(238,232,220,.9);padding:12px 12px 10px;border-radius:2px}
+#c8 .bot .hair{margin-left:auto}
+
+/* ---------- after the night: an ordinary page in the morning ---------- */
+#after{position:relative;z-index:8;background:var(--paper);color:#14182B;--ink:#14182B;--ink2:rgba(20,24,43,.68);--ink3:rgba(20,24,43,.45);--line:rgba(20,24,43,.22)}
+html:not(.js) #after{margin-top:0}
+.pg{padding:96px var(--pad);max-width:1200px;margin:0 auto}
+.pg + .pg{border-top:1px solid var(--line)}
+.qa{margin:28px 0 0;padding:0;list-style:none;border-top:1px solid var(--line);max-width:720px}
 .qa li{border-bottom:1px solid var(--line)}
-.qa button{width:100%;min-height:48px;display:flex;align-items:center;gap:14px;text-align:left;padding:10px 0;font:400 15px/1.3 var(--sans);color:var(--ink)}
-.qa button span{font:500 10px/1 var(--sans);letter-spacing:.14em;color:var(--gold);width:2em;flex:none}
-.qa button::after{content:"+";margin-left:auto;color:var(--ink2);font-size:18px;transition:transform .3s ease}
+.qa button{width:100%;min-height:56px;display:flex;align-items:center;gap:14px;text-align:left;padding:12px 0;font:400 22px/1.2 var(--serif)}
+.qa button span{font:500 10px/1 var(--sans);letter-spacing:.14em;color:#8A6A2C;width:2em;flex:none}
+.qa button::after{content:"+";margin-left:auto;color:var(--ink2);font:300 22px/1 var(--sans);transition:transform .3s ease}
 .qa button[aria-expanded="true"]::after{transform:rotate(45deg)}
 .qa .a{overflow:hidden;height:0;transition:height .35s cubic-bezier(.2,.8,.2,1)}
-.qa .a p{margin:0;padding:0 0 14px 2em;padding-left:calc(2em + 14px);color:var(--ink2);font-size:14px;max-width:46ch}
+.qa .a p{margin:0;padding:0 0 16px calc(2em + 14px);color:var(--ink2);max-width:52ch}
 html:not(.js) .qa .a{height:auto}
 
-/* 6 tonight's moon */
-#s6 .blk.top{top:calc(84px + env(safe-area-inset-top))}
-#s6 .m6{max-width:25ch}
-#s6 .board{margin-top:18px}
-#s6 .board .tag{margin-top:6px}
-#s6 .num{font-size:48px}
-@media (max-width:899px){#s6 .m6{display:none}}
+/* sideways tiles while scrolling down */
+.tiles{height:420vh;position:relative;background:#0B1026;color:#F3EBDD;--ink2:rgba(243,235,221,.66);--line:rgba(201,164,92,.28)}
+.tiles .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.tiles .head{padding:0 var(--pad);position:absolute;top:calc(var(--bar) + 24px);left:0;right:0}
+.tiles .row{display:flex;gap:14px;padding:0 var(--pad);will-change:transform;margin-top:64px}
+.tile{flex:none;width:min(76vw,420px);aspect-ratio:4/5;position:relative;overflow:hidden;border-radius:4px;background:#121833}
+.tile img{width:100%;height:100%;object-fit:cover}
+.tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(rgba(7,10,24,0),rgba(7,10,24,.85));}
+.tile figcaption b{display:block;font:400 30px/1 var(--serif);color:#F3EBDD;margin-bottom:6px}
+.tile figcaption span{font:400 13px/1.4 var(--sans);color:rgba(243,235,221,.75)}
+html:not(.js) .tiles{height:auto}
+html:not(.js) .tiles .pin{position:static;height:auto;padding:96px 0}
+html:not(.js) .tiles .row{overflow-x:auto}
 
-/* 7 notify */
-#s7 .blk.mid{top:50%;text-align:center;transform:translateY(-20%)}
-#s7 .title{margin-left:auto;margin-right:auto}
-#s7 .num{margin-top:20px}
+/* three dials */
+.dials{display:grid;grid-template-columns:1fr;gap:18px;margin-top:32px}
+.dial{border:1px solid var(--line);border-radius:4px;padding:16px;background:rgba(255,255,255,.35);display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.dial img{width:120px;height:120px;object-fit:cover;border-radius:50%}
+.dial h3{font:400 30px/1 var(--serif);margin:0 0 6px}
+.dial p{margin:0;color:var(--ink2);font-size:14px}
+@media (min-width:900px){.dials{grid-template-columns:repeat(3,1fr)}.dial{grid-template-columns:1fr;text-align:center}.dial img{width:100%;height:auto;aspect-ratio:1;margin:0 auto}}
+
+/* almanac */
+.alm{margin:28px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line);max-width:900px}
+.alm li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums}
+.alm li i{width:14px;height:14px;border-radius:50%;background:#C9A45C;flex:none;box-shadow:inset -2px -2px 0 rgba(0,0,0,.12)}
+.alm li span{font:500 12px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase}
+.alm li.go span{color:#8A6A2C}
+.alm li.go::after{content:"Launch";margin-left:auto;margin-right:12px;font:500 9px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;border:1px solid #8A6A2C;color:#8A6A2C;border-radius:999px;padding:4px 7px}
+@media (min-width:900px){.alm{grid-template-columns:repeat(4,1fr)}}
+
+/* launch + end */
+.launch{background:#070A18;color:#F3EBDD;--ink2:rgba(243,235,221,.66);--ink3:rgba(243,235,221,.4);--line:rgba(201,164,92,.28);text-align:center}
+.launch .pg{padding-top:112px}
+.launch .num{margin-top:20px}
 .form{display:flex;flex-direction:column;gap:10px;max-width:400px;margin:24px auto 0}
-.form input{height:48px;border-radius:999px;border:1px solid var(--line);background:rgba(7,10,24,.55);color:var(--ink);padding:0 20px;font:400 16px var(--sans)}
+.form input{height:48px;border-radius:999px;border:1px solid var(--line);background:rgba(18,24,51,.9);color:#F3EBDD;padding:0 20px;font:400 16px var(--sans)}
 .form input::placeholder{color:var(--ink3)}
 .form input[aria-invalid="true"]{border-color:#E07A5F}
 .form .go{height:48px;border-radius:999px;background:var(--gold);color:#0B1026;font:500 13px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;transition:filter .2s ease,transform .2s ease}
 .form .go:hover{filter:brightness(1.08)}
 .form .go:active{transform:scale(.98)}
 .note{min-height:3em;margin:10px auto 0;max-width:400px;color:var(--ink2);font-size:13px}
-#s7 .blk.end{bottom:calc(16px + env(safe-area-inset-bottom));text-align:center}
-#s7 .end a{text-decoration-color:var(--line);text-underline-offset:3px;display:inline-block;padding:8px 0}
+.pitch{border-top:1px solid var(--line);margin-top:72px;padding-top:72px}
+.pitch .mega{font-size:clamp(52px,14vw,170px)}
+.pitch .body{margin:22px auto 0;max-width:40ch}
+.pitch .cta{display:inline-flex;align-items:center;gap:10px;margin-top:26px;height:48px;padding:0 22px;border:1px solid var(--gold);border-radius:999px;text-decoration:none;font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.launch .foot{margin:56px auto 0;max-width:62ch}
 
 @media (min-width:900px){
-  #s1 .blk.top,#s3 .blk,#s4 .blk.top,#s5 .blk.top,#s6 .blk.top{top:calc(var(--bar) + 64px);right:auto;max-width:44vw}
-  #s2 .blk{bottom:96px;right:auto}
-  .sheet{display:block}
-  #s5 .blk.list{left:auto;right:calc(var(--pad) + 24px);width:min(400px,28vw);bottom:auto;top:50%;transform:translateY(-50%)}
-  #s5 .blk.top{max-width:40vw}
-  #s6 .m6{max-width:34ch}
-  #s6 .num{font-size:var(--t-num)}
-  .dims{display:block;top:calc(var(--bar) + 80px);right:calc(var(--pad) + 32px)}
-  #s7 .blk.mid{top:50%;transform:translateY(-50%);text-align:left;right:auto;max-width:46vw}
-  #s7 .title{margin-left:0}
-  #s7 .form{margin-left:0}
-  #s7 .note{margin-left:0}
-  #s4 .blk.bot{left:auto;right:calc(var(--pad) + 32px);width:30ch;bottom:64px;text-align:right}
+  .top{right:auto;max-width:52vw}
+  .bot{right:auto;max-width:52vw}
+  #c8 .bot{left:auto;right:calc(var(--pad) + 32px);width:30ch;max-width:none}
+  .frame{--fw:min(30vw,48vh)}
 }
-@media (prefers-reduced-motion:reduce){.hint i{animation:none}}
+@media (prefers-reduced-motion:reduce){.hint i{animation:none}html.js .ln .w>i{transition:none!important;transform:none!important}}
 </style>
 </head>
 <body>
 <canvas id="gl" aria-hidden="true"></canvas>
 <img class="poster" src="img/watch-front.webp" alt="The Small Hours moonphase watch: steel case, aventurine blue dial, gold hands and a moon window at six o'clock" width="800" height="1000">
 <div class="loader" id="loader" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+<svg id="logo" aria-hidden="true"></svg>
 
 <header class="bar">
   <a class="brand" href="#top" id="top">Small Hours</a><span class="chip">Concept</span>
@@ -210,98 +269,176 @@ html:not(.js) .qa .a{height:auto}
 <nav class="menu" id="menu" hidden aria-label="Chapters">
   <button type="button" class="pill close" id="menuClose">Close</button>
   <ol>
-    <li><a href="#s1" data-go="1"><span>01</span>Stopped night</a></li>
-    <li><a href="#s2" data-go="2"><span>02</span>Wind it</a></li>
-    <li><a href="#s3" data-go="3"><span>03</span>Every part</a></li>
-    <li><a href="#s4" data-go="4"><span>04</span>Actual size</a></li>
-    <li><a href="#s5" data-go="5"><span>05</span>The promise</a></li>
-    <li><a href="#s6" data-go="6"><span>06</span>Tonight's moon</a></li>
-    <li><a href="#s7" data-go="7"><span>07</span>Notify me</a></li>
+    <li><a href="#c1" data-go="c1"><span>00:00</span>Not the sky</a></li>
+    <li><a href="#c2" data-go="c2"><span>00:40</span>Wind it</a></li>
+    <li><a href="#c3" data-go="c3"><span>01:20</span>Inside</a></li>
+    <li><a href="#c4" data-go="c4"><span>02:00</span>Who's up</a></li>
+    <li><a href="#c5" data-go="c5"><span>03:30</span>The bench</a></li>
+    <li><a href="#c6" data-go="c6"><span>04:00</span>Engrave</a></li>
+    <li><a href="#c7" data-go="c7"><span>04:40</span>Tonight's moon</a></li>
+    <li><a href="#c8" data-go="c8"><span>05:50</span>Morning</a></li>
+    <li><a href="#questions" data-go="questions"><span>—</span>Questions</a></li>
+    <li><a href="#launch" data-go="launch"><span>—</span>Notify me</a></li>
   </ol>
   <p class="foot">A concept site by Lumen Lab. Small Hours is not a real brand.</p>
 </nav>
 
-<div class="ticks" id="ticks" aria-hidden="true"></div>
+<p class="clock" id="clock" aria-hidden="true"><b>10:08</b> PM</p>
 <div id="labels" aria-hidden="true"></div>
 
+<div id="gallery" aria-hidden="true">
+  <div class="head"><p class="tag">02:00 · Who's up</p><p class="title shade"><span class="ln">Who else is up</span> <span class="ln"><em>at 3 a.m.?</em></span></p></div>
+  <p class="count" id="galCount">01 / 07</p>
+  <div class="frame" id="frame">
+    <div class="strip"><div class="reel" id="reel">
+      <figure class="shot" style="margin:0"><img src="img/night-1.webp" alt="" width="900" height="1200"></figure>
+      <figure class="shot" style="margin:0"><img src="img/night-2.webp" alt="" width="900" height="1200" loading="lazy"></figure>
+      <figure class="shot" style="margin:0"><img src="img/night-3.webp" alt="" width="900" height="1200" loading="lazy"></figure>
+      <figure class="shot" style="margin:0"><img src="img/night-4.webp" alt="" width="900" height="1200" loading="lazy"></figure>
+      <figure class="shot" style="margin:0"><img src="img/night-5.webp" alt="" width="900" height="1200" loading="lazy"></figure>
+      <figure class="shot" style="margin:0"><img src="img/night-6.webp" alt="" width="900" height="1200" loading="lazy"></figure>
+      <figure class="shot window" style="margin:0"></figure>
+    </div></div>
+    <div class="dash"></div>
+    <div class="corners"><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="cap" id="cap"><p class="tag" id="capL">Ward 4, night shift</p><p class="tag" id="capR">03:12</p></div>
+</div>
+
 <main id="story">
-  <section class="sc" id="s1" data-scene="1" aria-labelledby="h1">
-    <div class="blk top">
+  <section class="sc" id="c1" aria-labelledby="h1">
+    <div class="blk mid lie" id="lie"><p class="mega shade"><span class="ln">This is not</span> <span class="ln"><em>the night sky.</em></span></p></div>
+    <div class="blk top" id="hero">
       <p class="tag">Moonphase automatic · a concept Kickstarter</p>
-      <h1 class="title" id="h1"><span class="ln">Made in the</span> <span class="ln"><em>small hours.</em></span></h1>
-      <p class="body sub">A 39 mm moonphase for people who are still up. It has stopped. Scroll to wind it.</p>
+      <h1 class="mega shade" id="h1"><span class="ln">Made in</span> <span class="ln">the <em>small</em></span> <span class="ln"><em>hours.</em></span></h1>
+      <p class="body sub shade">It is a 39 mm dial of aventurine glass: a sky you can wear. The watch has stopped. Scroll to wind it.</p>
     </div>
     <div class="blk hint"><p class="tag">Scroll to wind</p><i aria-hidden="true"></i></div>
   </section>
 
-  <section class="sc" id="s2" data-scene="2" aria-labelledby="h2">
-    <div class="blk">
-      <p class="tag">02 / 07 · Wind it</p>
-      <h2 class="title" id="h2"><span class="ln">Wind it.</span></h2>
-      <span class="hair" style="margin-top:20px" aria-hidden="true"></span>
-      <p class="body">Every turn of the crown tightens the mainspring. Keep scrolling, turn the watch over, and the balance wheel starts to breathe: eight beats a second.</p>
+  <section class="sc" id="c2" aria-labelledby="h2">
+    <div class="blk bot">
+      <p class="tag">00:40 · Wind it</p>
+      <h2 class="mega shade" id="h2"><span class="ln">Wind</span> <span class="ln"><em>it.</em></span></h2>
+      <p class="body shade" style="margin-top:14px">Every turn of the crown tightens the mainspring. Turn the watch over and the balance wheel starts to breathe.</p>
       <div class="reserve" aria-hidden="true">
         <p class="tag"><span>Power reserve</span><span id="reserveNum">0 h</span></p>
-        <div class="bar-line"><b id="reserveBar"></b></div>
+        <div class="meter"><b id="reserveBar"></b></div>
       </div>
     </div>
   </section>
 
-  <section class="sc" id="s3" data-scene="3" aria-labelledby="h3">
-    <div class="blk">
-      <p class="tag">03 / 07 · The parts</p>
-      <h2 class="title" id="h3"><span class="ln">Every part,</span> <span class="ln"><em>in the open.</em></span></h2>
-      <p class="body" style="margin-top:16px">Thirty-odd pieces, from sapphire to case back. Bevelled bridges, blued screws and a gold micro-rotor you can see through the back.</p>
+  <section class="sc" id="c3" aria-labelledby="h3">
+    <div class="blk top">
+      <p class="tag">01:20 · Inside</p>
+      <h2 class="mega shade" id="h3"><span class="ln">Eight beats</span> <span class="ln"><em>a second.</em></span></h2>
     </div>
-    <p class="sheet" aria-hidden="true">SH-01 · Moonphase<br>Example calibre<br>Sheet 3 of 7</p>
+    <div class="blk bot"><p class="body shade">The balance wheel swings 28,800 times an hour. Behind it, a gold micro-rotor winds the spring each time your wrist moves.</p></div>
   </section>
 
-  <section class="sc" id="s4" data-scene="4" aria-labelledby="h4">
-    <div class="blk top">
-      <p class="tag">04 / 07 · Actual size</p>
-      <h2 class="title" id="h4"><span class="ln">Fits the wrist</span> <span class="ln"><em>you have.</em></span></h2>
+  <section class="sc" id="c4" aria-labelledby="h4" data-quiet>
+    <h2 class="tag" id="h4" style="position:absolute;left:-9999px">Who's up at 3 a.m.</h2>
+    <p class="body" style="position:absolute;left:-9999px">Six people wearing Small Hours in the middle of the night: a nurse on a night shift, a baker at four, a parent at the 2 a.m. feed, an astronomer, a taxi driver and a writer. Then the workbench where it is made.</p>
+  </section>
+
+  <section class="sc" id="c5" aria-labelledby="h5">
+    <div class="blk top" id="b5a">
+      <p class="tag">03:30 · The bench</p>
+      <h2 class="title shade" id="h5"><span class="ln">A moon that stays</span> <span class="ln"><em>right for 122 years.</em></span></h2>
+      <div class="gauge" aria-hidden="true"><p class="num"><span id="years">0</span></p><p class="unit">years<br>off by <b id="off">0</b> day</p></div>
+      <div class="ruler" aria-hidden="true"><b id="drift"></b></div>
     </div>
-    <p class="dims" aria-label="Case 39 millimetres, 11.2 millimetres thick, 46 millimetres lug to lug">39 MM <span>across</span><br>11.2 MM <span>thin</span><br>46 MM <span>lug to lug</span></p>
+    <div class="blk top" id="b5b">
+      <p class="tag">03:40 · The spring</p>
+      <p class="title shade"><span class="ln">Three nights</span> <span class="ln"><em>on one winding.</em></span></p>
+      <div class="gauge" aria-hidden="true"><p class="num"><span id="hours">0</span></p><p class="unit">hours<br>reserve</p></div>
+    </div>
+    <div class="blk top" id="b5c">
+      <p class="tag">03:50 · Every part</p>
+      <p class="title shade"><span class="ln">Thirty-one parts,</span> <span class="ln"><em>none of them hidden.</em></span></p>
+    </div>
+  </section>
+
+  <section class="sc" id="c6" aria-labelledby="h6">
+    <div class="blk top">
+      <p class="tag">04:00 · Engrave</p>
+      <h2 class="title shade" id="h6"><span class="ln">Your line,</span> <span class="ln"><em>on the back.</em></span></h2>
+      <p class="body shade" style="margin-top:12px">Type it and watch it cut into the steel. Up to 24 letters.</p>
+      <div class="engrave"><label for="line" style="position:absolute;left:-9999px">Your engraving</label><input id="line" maxlength="24" autocomplete="off" spellcheck="false" placeholder="For the small hours"></div>
+    </div>
+  </section>
+
+  <section class="sc" id="c7" aria-labelledby="h7">
+    <div class="blk top">
+      <p class="tag">04:40 · Tonight's moon</p>
+      <h2 class="mega shade" id="h7"><span class="ln" id="moonLine1">Tonight,</span> <span class="ln"><em id="moonLine2">the moon is full.</em></span></h2>
+    </div>
     <div class="blk bot">
-      <span class="hair" aria-hidden="true"></span>
-      <p class="body" id="sizeNote"><strong>39 × 46 × 11.2 mm.</strong> About actual size on a phone. The lines under it are wrists of 15, 17 and 19 cm, seen from above.</p>
+      <p class="num shade"><span id="moonPct">100</span>%</p>
+      <p class="tag" id="moonDate">Lit tonight</p>
+      <p class="body shade" style="margin-top:10px">Worked out in your browser from today's date. The disc on the dial agrees.</p>
     </div>
   </section>
 
-  <section class="sc" id="s5" data-scene="5" aria-labelledby="h5">
+  <section class="sc" id="c8" aria-labelledby="h8">
     <div class="blk top">
-      <p class="tag">05 / 07 · The promise</p>
-      <h2 class="title" id="h5"><span class="ln">Engraved</span> <span class="ln"><em>on the back.</em></span></h2>
+      <p class="tag">05:50 · Morning</p>
+      <h2 class="mega" id="h8"><span class="ln">Morning.</span> <span class="ln"><em>Actual size.</em></span></h2>
     </div>
-    <div class="blk list">
-      <ul class="qa" id="qa">
-        <li><button type="button" aria-expanded="false"><span>01</span>Who are you, exactly?</button><div class="a"><p>Small Hours is a concept made by Lumen Lab to show how a watch micro-brand launch could feel. There is no company and nothing for sale. A real brand would put its people and its workshop here.</p></div></li>
-        <li><button type="button" aria-expanded="false"><span>02</span>Whose movement is inside?</button><div class="a"><p>In this concept, an example automatic calibre with a micro-rotor, 28,800 beats an hour and a 42-hour reserve. A real brand names the maker and the calibre here.</p></div></li>
-        <li><button type="button" aria-expanded="false"><span>03</span>Will it fit my wrist?</button><div class="a"><p>39 mm across, 46 mm lug to lug and 11.2 mm thin, on a strap for 15 to 19 cm wrists. Scroll back one chapter to see it at about actual size.</p></div></li>
-        <li><button type="button" aria-expanded="false"><span>04</span>Warranty and repairs</button><div class="a"><p>Engraved promise one: a two-year warranty, serviced by the people who made it. (Example terms for a concept brand.)</p></div></li>
-        <li><button type="button" aria-expanded="false"><span>05</span>Shipping, duties and refunds</button><div class="a"><p>Engraved promise two: shipping and import duties are shown before you pay, so nothing arrives with a bill attached. (Example terms.)</p></div></li>
-        <li><button type="button" aria-expanded="false"><span>06</span>What if the Kickstarter is late?</button><div class="a"><p>Engraved promise three: if delivery slips past the date we gave, you can cancel for a full refund. (Example terms.)</p></div></li>
-      </ul>
-    </div>
+    <div class="blk bot"><span class="hair" aria-hidden="true"></span><p class="body" id="sizeNote"><strong>39 × 46 × 11.2 mm.</strong> About actual size on a phone. The lines under it are wrists of 15, 17 and 19 cm, seen from above.</p></div>
+  </section>
+</main>
+<div id="track" aria-hidden="true"></div>
+
+<div id="after">
+  <section class="pg" id="questions" aria-labelledby="hq">
+    <p class="tag">Questions</p>
+    <h2 class="title" id="hq">Asked at 4 a.m.</h2>
+    <ul class="qa" id="qa">
+      <li><button type="button" aria-expanded="false"><span>01</span>Who are you, exactly?</button><div class="a"><p>Small Hours is a concept made by Lumen Lab to show how a watch micro-brand launch could feel. There is no company and nothing for sale. A real brand would put its people and its workshop here.</p></div></li>
+      <li><button type="button" aria-expanded="false"><span>02</span>Whose movement is inside?</button><div class="a"><p>In this concept, an example automatic calibre with a micro-rotor, 28,800 beats an hour and a 72-hour reserve. A real brand names the maker and the calibre here.</p></div></li>
+      <li><button type="button" aria-expanded="false"><span>03</span>Will it fit my wrist?</button><div class="a"><p>39 mm across, 46 mm lug to lug and 11.2 mm thin, on a strap for 15 to 19 cm wrists. The last chapter of the night shows it at about actual size.</p></div></li>
+      <li><button type="button" aria-expanded="false"><span>04</span>Warranty and repairs</button><div class="a"><p>A two-year warranty, serviced by the people who made it. (Example terms for a concept brand.)</p></div></li>
+      <li><button type="button" aria-expanded="false"><span>05</span>Shipping, duties and refunds</button><div class="a"><p>Shipping and import duties shown before you pay, so nothing arrives with a bill attached. (Example terms.)</p></div></li>
+      <li><button type="button" aria-expanded="false"><span>06</span>What if the Kickstarter is late?</button><div class="a"><p>If delivery slips past the date we gave, you can cancel for a full refund. (Example terms.)</p></div></li>
+    </ul>
   </section>
 
-  <section class="sc" id="s6" data-scene="6" aria-labelledby="h6">
-    <div class="blk top">
-      <p class="tag">06 / 07 · Tonight's moon</p>
-      <h2 class="title" id="h6"><span class="ln" id="moonLine1">Tonight, the</span> <span class="ln"><em id="moonLine2">moon is full.</em></span></h2>
-      <p class="body m6" style="margin-top:12px">The disc just turned to the real sky tonight, worked out from today's date.</p>
-      <div class="board">
-        <p class="num"><span id="moonPct">100</span>%</p>
-        <p class="tag" id="moonDate">Illuminated tonight</p>
+  <section class="tiles" id="tiles" aria-labelledby="ht">
+    <div class="pin">
+      <div class="head"><p class="tag">Up close</p><h2 class="title" id="ht">Made for <em>looking at</em> in the dark.</h2></div>
+      <div class="row" id="row">
+        <figure class="tile" style="margin:0"><img src="img/tile-dial.webp" alt="Close-up of the aventurine dial" width="840" height="1050" loading="lazy"><figcaption><b>Aventurine</b><span>Copper flecks in blue glass. No two dials share a sky.</span></figcaption></figure>
+        <figure class="tile" style="margin:0"><img src="img/tile-moon.webp" alt="The gold moon in its window at six o'clock" width="840" height="1050" loading="lazy"><figcaption><b>The moon disc</b><span>Two gold moons on one disc, one turn every two months.</span></figcaption></figure>
+        <figure class="tile" style="margin:0"><img src="img/tile-rotor.webp" alt="The gold micro-rotor seen through the case back" width="840" height="1050" loading="lazy"><figcaption><b>Micro-rotor</b><span>Set into the movement, so the watch stays thin.</span></figcaption></figure>
+        <figure class="tile" style="margin:0"><img src="img/tile-balance.webp" alt="The balance wheel and blued screws" width="840" height="1050" loading="lazy"><figcaption><b>Blued screws</b><span>Heated until the steel turns blue, then polished flat.</span></figcaption></figure>
+        <figure class="tile" style="margin:0"><img src="img/tile-crown.webp" alt="The crown and the side of the case" width="840" height="1050" loading="lazy"><figcaption><b>The crown</b><span>Big enough to wind with cold fingers.</span></figcaption></figure>
+        <figure class="tile" style="margin:0"><img src="img/tile-side.webp" alt="The thin steel case from the side" width="840" height="1050" loading="lazy"><figcaption><b>11.2 mm</b><span>Slides under a cuff, even a pyjama one.</span></figcaption></figure>
       </div>
     </div>
   </section>
 
-  <section class="sc" id="s7" data-scene="7" aria-labelledby="h7">
-    <div class="blk mid">
-      <p class="tag">07 / 07 · Kickstarter launch</p>
-      <h2 class="title" id="h7"><span class="ln">We launch at the</span> <span class="ln"><em>next full moon.</em></span></h2>
-      <p class="num"><span id="days">30</span> <span style="font-size:.38em;letter-spacing:.14em">DAYS</span></p>
+  <section class="pg" id="dials" aria-labelledby="hd">
+    <p class="tag">Three dials</p>
+    <h2 class="title" id="hd">Pick your <em>night.</em></h2>
+    <div class="dials">
+      <article class="dial"><img src="img/dial-midnight.webp" alt="Midnight dial: deep blue aventurine" width="480" height="480" loading="lazy"><div><h3>Midnight</h3><p>Deep blue aventurine, gold moon. The one on this page.</p></div></article>
+      <article class="dial"><img src="img/dial-dusk.webp" alt="Dusk dial: violet aventurine" width="480" height="480" loading="lazy"><div><h3>Dusk</h3><p>Violet aventurine for the hour after sunset.</p></div></article>
+      <article class="dial"><img src="img/dial-ink.webp" alt="Ink dial: black aventurine" width="480" height="480" loading="lazy"><div><h3>Ink</h3><p>Black aventurine. The stars only show when the light hits.</p></div></article>
+    </div>
+  </section>
+
+  <section class="pg" id="almanac" aria-labelledby="ha">
+    <p class="tag">The almanac</p>
+    <h2 class="title" id="ha">The next twelve <em>full moons.</em></h2>
+    <ol class="alm" id="alm"></ol>
+  </section>
+
+  <section class="launch" id="launch" aria-labelledby="hl">
+    <div class="pg">
+      <p class="tag">Kickstarter launch</p>
+      <h2 class="title" id="hl">We launch at the <em>next full moon.</em></h2>
+      <p class="num"><span id="days">30</span> <span style="font-size:.32em;letter-spacing:.14em">DAYS</span></p>
       <p class="tag" id="fullDate">Until the next full moon</p>
       <form class="form" id="form" novalidate>
         <label class="tag" for="email" style="position:absolute;left:-9999px">Email address</label>
@@ -309,14 +446,16 @@ html:not(.js) .qa .a{height:auto}
         <button type="submit" class="go">Notify me</button>
       </form>
       <p class="note" id="note" role="status" aria-live="polite"></p>
+      <div class="pitch">
+        <p class="mega"><span class="ln">This watch</span> <span class="ln"><em>doesn't exist.</em></span></p>
+        <p class="body">Small Hours is a concept by Lumen Lab. If a watch that isn't real kept you scrolling until morning, imagine what a launch page could do for one that is.</p>
+        <a class="cta" href="https://lumenlab.page/">Lumen Lab &rarr;</a>
+      </div>
+      <p class="foot">A concept site. Small Hours is not a real brand: no products, no orders, and no emails are collected. The photographs are generated images. Moon phases are computed in your browser for <span id="today">today</span>.</p>
     </div>
-    <footer class="blk end">
-      <p class="foot">A concept site by <a href="https://lumenlab.page/">Lumen Lab</a>. Small Hours is not a real brand: no products, no orders, and no emails are collected. Moon phase computed in your browser for <span id="today">today</span>.</p>
-    </footer>
   </section>
-</main>
-<div id="track" aria-hidden="true"></div>
-<noscript><style>.ticks,#gl{display:none}</style></noscript>
+</div>
+<noscript><style>#gl,.clock{display:none}</style></noscript>
 <script type="module" src="assets/app.js"></script>
 </body>
 </html>

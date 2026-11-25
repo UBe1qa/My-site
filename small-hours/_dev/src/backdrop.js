@@ -1,5 +1,5 @@
 // Full-screen stage behind the watch. One shader, five stages, wiped from the bottom when the scene changes.
-// 0 night sky · 1 blueprint · 2 paper · 3 workbench with a beam of light · 4 night sky with tonight's moon
+// 0 night sky · 1 blueprint · 2 paper · 3 workbench with a beam of light · 4 night sky with tonight's moon · 5 dawn
 import * as THREE from 'three';
 
 const frag = /* glsl */`
@@ -7,6 +7,8 @@ precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform float uDrift;
 uniform float uFrom; uniform float uTo; uniform float uWipe;
 uniform vec4 uMoon; uniform float uPhase; uniform float uBeam; uniform float uGrid;
+uniform vec3 uZoom;   // star field zoom: xy = centre in css px, z = scale (1 = none)
+uniform vec4 uHole;   // the dial seen as a hole in the sky: xy centre, z radius (css px), w how much the sky outside it dims
 varying vec2 vUv;
 
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
@@ -40,7 +42,7 @@ vec3 night(vec2 uv, vec2 px, float withMoon){
   c += vec3(0.10, 0.12, 0.24) * 0.16 * smoothstep(0.3, 0.9, haze);
   c += vec3(0.16, 0.14, 0.22) * 0.05 * (fbm(px / 40.0 + vec2(0.0, uDrift / 40.0)) - 0.5);   // fine grain of the night
   // aventurine star dust, drifting up as you scroll
-  vec2 sp = px + vec2(0.0, uDrift);
+  vec2 sp = (px - uZoom.xy) / uZoom.z + uZoom.xy + vec2(0.0, uDrift);
   // a faint milky band across the sky: denser dust and a soft glow, broken up by dark lanes
   vec2 bp = (sp - vec2(0.0, uRes.y / uDpr * 0.55)) / (uRes.y / uDpr);
   float bd = bp.y - bp.x * 0.55 * (uRes.x / uRes.y) + 0.05;
@@ -50,6 +52,10 @@ vec3 night(vec2 uv, vec2 px, float withMoon){
   c += vec3(0.85, 0.78, 0.62) * 0.05 * band * smoothstep(0.55, 0.85, fbm(sp / 18.0));
   float st = stars(sp, 4.0, 0.12 + 0.5 * band, 13.0) * (0.25 + 0.35 * band) + stars(sp, 9.0, 0.16, 1.0) * 0.55 + stars(sp * 0.97, 23.0, 0.26, 5.0) + stars(sp * 1.03, 61.0, 0.35, 9.0) * 1.3;
   st *= smoothstep(hz - 0.02, hz + 0.15, y);
+  // outside the dial the sky goes quiet, so the stars inside read as the dial's own
+  float outside = uHole.w * smoothstep(uHole.z * 0.99, uHole.z * 1.04, length(px - uHole.xy));
+  st *= 1.0 - 0.92 * outside;
+  c = mix(c, c * 0.45, outside);
   c += vec3(1.0, 0.95, 0.86) * st * 0.85;
   if (withMoon > 0.0) {
     vec2 m = (px - uMoon.xy) / uMoon.z;
@@ -109,12 +115,25 @@ vec3 bench(vec2 uv, vec2 px){
   return c;
 }
 
+// first light: the night sky with the horizon warming and the stars going out
+vec3 dawn(vec2 uv, vec2 px){
+  float y = uv.y;
+  vec3 c = mix(vec3(0.93, 0.66, 0.50), vec3(0.30, 0.36, 0.58), smoothstep(0.05, 0.75, y));
+  c = mix(c, vec3(0.16, 0.20, 0.38), smoothstep(0.7, 1.0, y));
+  c += vec3(1.0, 0.82, 0.58) * 0.35 * exp(-pow((y - 0.12) * 5.0, 2.0));
+  c += (fbm(px / 300.0 + vec2(uTime * 0.01, 0.0)) - 0.5) * 0.04;
+  float st = stars(px + vec2(0.0, uDrift), 23.0, 0.2, 5.0) * smoothstep(0.55, 0.95, y);
+  c += vec3(1.0, 0.95, 0.86) * st * 0.35;
+  return c;
+}
+
 vec3 stage(float s, vec2 uv, vec2 px){
   if (s < 0.5) return night(uv, px, 0.0);
   if (s < 1.5) return blueprint(uv, px);
   if (s < 2.5) return paper(uv, px);
   if (s < 3.5) return bench(uv, px);
-  return night(uv, px, 1.0);
+  if (s < 4.5) return night(uv, px, 1.0);
+  return dawn(uv, px);
 }
 
 void main(){
@@ -137,7 +156,7 @@ export function makeBackdrop() {
   const uniforms = {
     uRes: { value: new THREE.Vector2(1, 1) }, uDpr: { value: 1 }, uTime: { value: 0 }, uDrift: { value: 0 },
     uFrom: { value: 0 }, uTo: { value: 0 }, uWipe: { value: 0 },
-    uMoon: { value: new THREE.Vector4(0, 0, 60, 0) }, uPhase: { value: Math.PI }, uBeam: { value: 0 }, uGrid: { value: 1 },
+    uMoon: { value: new THREE.Vector4(0, 0, 60, 0) }, uPhase: { value: Math.PI }, uBeam: { value: 0 }, uGrid: { value: 1 }, uZoom: { value: new THREE.Vector3(0, 0, 1) }, uHole: { value: new THREE.Vector4(0, 0, 1, 0) },
   };
   const mat = new THREE.ShaderMaterial({
     uniforms, depthTest: false, depthWrite: false,
