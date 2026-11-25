@@ -19,6 +19,6 @@
 ## 명령
 ```
 cd _dev && npm install   # 처음 한 번 (esbuild, three 0.187)
-./build.sh               # src → ../assets/app.js
+./build.sh               # src → ../assets/app.js, index.html의 app.js?v=해시도 같이 바꿈(옛 스크립트 캐시 막기)
 ./check.sh               # 정적 검사
 ```
