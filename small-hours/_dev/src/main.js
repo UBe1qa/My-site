@@ -17,10 +17,26 @@ import { makeSound } from './sound.js';
 const FILM_END = 48.5;
 const CH = { c1: [0, 3], c2: [3, 7.6], c3: [7.6, 14], c4: [14, 26], c5: [26, 36], c6: [36, 40.4], c7: [40.4, 46], c8: [46, FILM_END] };
 const GO = { c1: 0, c2: 4.0, c3: 8.7, c4: 15.9, c5: 26.7, c6: 37.1, c7: 43.1, c8: 47.6 };
-// backdrop: [from s, stage]  0 night · 2 paper · 4 night with tonight's moon · 5 dawn
-// 6 lamp-lit walnut · 7 void · 8 cyanotype · 9 drafting film · 10 oxblood leather · 11 green felt
-const STAGES = [[0, 0], [3.2, 10], [7.6, 7], [21, 6], [29.3, 8], [32.2, 9], [34.9, 7], [36.4, 11], [41.9, 4], [45.9, 5], [47.0, 2]];
+// backdrop: [from s, stage]  0 night · 4 night with tonight's moon · 5 dawn · 7 void · 9 drafting film
+// 20.. photographed sets: 20 the desk at night · 21 the drafting table · 22 the engraver's bench · 23 the morning table
+const STAGES = [[0, 0], [2.0, 20], [21, 21], [32.2, 9], [34.9, 7], [36.4, 22], [41.9, 4], [45.9, 5], [47.0, 23]];
 const D = 3.9, FOV = 24;
+// The sets. Inside a set the camera stands still DSET away (it only zooms and shifts), the watch turns in front of it,
+// and a table lies h below the focus at e degrees: the photo was made from a Blender layout with exactly this camera
+// (see _dev/sets/). w(S) = how much the set camera is in charge. light = where the shadow on the table comes from (added to the table's up).
+const DSET = 20;
+const SETS = [
+  { name: 'desk', e: 18, h: 3.34, light: [-0.35, 0, 0.12], shadow: 0.8, tint: [1.07, 0.97, 0.87], w: S => S < 9 ? fit(S, 1.55, 2.15) * (1 - fit(S, 8.6, 9.3)) : fit(S, 13.2, 13.8) },
+  { name: 'drafting', e: 48, h: 2.19, light: [-0.35, 0, 0.1], shadow: 0.7, tint: [1.04, 0.98, 0.92], w: S => fit(S, 21, 22) * (1 - fit(S, 32.0, 32.4)) },
+  { name: 'engrave', e: 28, h: 2.97, light: [-0.35, 0, 0.12], shadow: 0.8, tint: [1.06, 0.98, 0.88], w: S => fit(S, 36.0, 36.5) * (1 - fit(S, 41.0, 41.45)) },
+  { name: 'morning', e: 90, h: 1.54, light: [-0.3, 0, 0], shadow: 0, tint: [1, 1, 1], w: S => fit(S, 46.6, 47.0) },
+];
+const setAt = S => S < 17 ? 0 : S < 34.6 ? 1 : S < 44 ? 2 : 3;
+// each photo's window in tan space (xc, yc, half w, half h) for phone and wide screens, from the layout script
+const SET_WIN = {
+  p: [[0, 0.0738, 0.1838, 0.3268], [0, 0.0757, 0.1613, 0.2867], [0, 0.0211, 0.1573, 0.2796], [0, 0.0698, 0.2079, 0.3697]],
+  w: [[-0.1124, 0.0224, 0.4138, 0.2328], [-0.1067, 0.0175, 0.3926, 0.2208], [-0.0447, 0.0050, 0.3480, 0.1958], [0, 0.0093, 0.4375, 0.2461]],
+};
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const fit = (x, a, b) => clamp((x - a) / (b - a));
@@ -214,7 +230,9 @@ function galleryFrame(S) {
   imgs.forEach((im, i) => { if (!im) return; const d = clamp(i - e, -1, 1); im.style.transform = `translate3d(${(-d * 22).toFixed(2)}%,0,0) scale(1.2)`; });
   const i0 = Math.floor(e), i1 = Math.min(6, i0 + 1), f = e - i0, mix3 = (a, b) => a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(',');
   const g0 = GLOW[i0], g1 = GLOW[i1];
-  gallery.style.background = `radial-gradient(120% 90% at 50% 60%, rgb(${mix3(g0[0], g1[0])}) 0%, rgb(${mix3(g0[1], g1[1])}) 100%)`;
+  // the gallery lies over the watch: see-through while the watch drops in and again once the window onto the bench comes
+  gallery.style.background = (S < 16.2 || e > 5.02) ? 'transparent' : `radial-gradient(120% 90% at 50% 60%, rgb(${mix3(g0[0], g1[0])}) 0%, rgb(${mix3(g0[1], g1[1])}) 100%)`;
+  imgs[0].style.opacity = fit(S, 15.7, 16.2).toFixed(3);
   const c = Math.round(e);
   if (c !== capWas) { capWas = c; $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
   $('cap').style.opacity = (fit(S, 15.9, 16.3) * (1 - fit(S, 23.9, 24.3))).toFixed(3);
@@ -242,6 +260,28 @@ if (renderer) {
   const backdrop = makeBackdrop();
   const U = backdrop.uniforms;
   const group = new THREE.Group(); scene.add(group);
+
+  // ---------- the photographed sets ----------
+  const texLoader = new THREE.TextureLoader(), setTex = { p: [], w: [] };
+  const loadSets = kind => {
+    if (setTex[kind].length) return;
+    setTex[kind] = SETS.map((st, i) => texLoader.load(`img/set-${st.name}-${kind}.webp`, t => { t.anisotropy = 4; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.needsUpdate = true; }));
+  };
+  const useSets = () => {
+    const kind = wide ? 'w' : 'p'; loadSets(kind);
+    setTex[kind].forEach((t, i) => { U['tSet' + i].value = t; U.uWin.value[i].set(...SET_WIN[kind][i]); });
+  };
+  // the table under the watch only catches its shadow (the photo is the table you see)
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap; renderer.shadowMap.autoUpdate = false;
+  const sun = new THREE.DirectionalLight(0xffffff, 0.0001);
+  sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); sun.shadow.radius = 9; sun.shadow.blurSamples = 16; sun.shadow.bias = -0.0005;
+  Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 90 });
+  scene.add(sun, sun.target);
+  const catcherMat = new THREE.ShadowMaterial({ color: 0x050302, opacity: 0, depthWrite: false });
+  const catcher = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), catcherMat);
+  catcher.receiveShadow = true; catcher.renderOrder = -3; scene.add(catcher);
+  const tint = new THREE.Vector3(1, 1, 1), upV = new THREE.Vector3(), zAxis = new THREE.Vector3(0, 0, 1);
+  let strapMats = [];
 
   // soft contact shadow on the paper
   const shTex = (() => {
@@ -278,11 +318,14 @@ if (renderer) {
     } });
     hideWhenOpen = ['movement', 'caseback', 'caseback_glass', 'caseback_engraving', 'hand_hour_shadow', 'hand_minute_shadow', 'crystal'].map(n => P[n]).filter(Boolean);
     engrave = makeEngraving(P);
+    g.scene.traverse(o => { if (o.isMesh) { o.castShadow = o.name !== 'dial_hole'; o.receiveShadow = false; } });
+    for (const n of ['strap_long', 'strap_short']) P[n]?.traverse(o => { if (o.isMesh) strapMats.push(o.material); });
+    strapMats = [...new Set(strapMats)];
     renderer.compile(scene, camera);
     loaderEl.style.transform = 'scaleX(1)'; loaderEl.classList.add('is-done');
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-ready')));
     buildLabels();
-    if (/[?&]debug/.test(location.search)) window.__sh = { watch, camera, group, scene, THREE, get s() { return s; } };
+    if (/[?&]debug/.test(location.search)) window.__sh = { watch, camera, group, scene, THREE, catcher, sun, renderer, get s() { return s; } };
   }, p => { if (p.total) loaderEl.style.transform = `scaleX(${(p.loaded / p.total) * 0.95})`; },
   () => { root.classList.add('no-gl'); root.classList.remove('js'); loaderEl.classList.add('is-done'); });
 
@@ -420,9 +463,9 @@ if (renderer) {
   const sceneRT = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: coarse ? 2 : 4 });
   const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.12, 0.35, 3.0);
   const finish = new FullScreenQuad(new THREE.ShaderMaterial({
-    uniforms: { tScene: { value: sceneRT.texture }, uExp: { value: 1 }, uWarm: { value: 0 }, uLoupe: { value: 0 }, uTime: { value: 0 }, uVig: { value: 0.4 }, uGrain: { value: 0.03 }, uRes: { value: new THREE.Vector2(1, 1) } },
+    uniforms: { tScene: { value: sceneRT.texture }, uExp: { value: 1 }, uWarm: { value: 0 }, uTint: { value: new THREE.Vector3(1, 1, 1) }, uLoupe: { value: 0 }, uTime: { value: 0 }, uVig: { value: 0.4 }, uGrain: { value: 0.03 }, uRes: { value: new THREE.Vector2(1, 1) } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
-    fragmentShader: `uniform sampler2D tScene; uniform float uExp, uTime, uVig, uGrain, uWarm, uLoupe; uniform vec2 uRes; varying vec2 vUv;
+    fragmentShader: `uniform sampler2D tScene; uniform float uExp, uTime, uVig, uGrain, uWarm, uLoupe; uniform vec3 uTint; uniform vec2 uRes; varying vec2 vUv;
       vec3 rrt(vec3 v){ vec3 a = v * (v + 0.0245786) - 0.000090537; vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081; return a / b; }
       vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
         const mat3 O = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
@@ -431,7 +474,7 @@ if (renderer) {
       float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       void main(){
         vec4 t = texture2D(tScene, vUv);
-        vec3 c = srgb(aces(max(t.rgb, 0.0) * uExp * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
+        vec3 c = srgb(aces(max(t.rgb, 0.0) * uExp * uTint * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
         float v = smoothstep(0.35, 1.15, length((vUv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * 1.15)) * uVig;
         // inside the movement we look through a loupe: a circle of light, a thin bright rim, black around it
         vec2 lq = (vUv - 0.5) * uRes / min(uRes.x, uRes.y); float ld = length(lq - vec2(0.0, -0.04)), lr = 0.47;
@@ -542,7 +585,7 @@ if (renderer) {
   const clock = new THREE.Clock();
   let lastCrownStep = 0, beatAcc = 0, spun = false, moonCued = false, woundAt = -1, clockWas = '';
   function resize() {
-    layout(); K = keys(); track = makeTrack(K);
+    layout(); K = keys(); track = makeTrack(K); useSets();
     renderer.setSize(W, H, false);
     const pr = renderer.getPixelRatio();
     sceneRT.setSize(Math.round(W * pr), Math.round(H * pr)); bloom.setSize(Math.round(W * pr), Math.round(H * pr));
@@ -639,28 +682,50 @@ if (renderer) {
     // ---- watch ----
     poseAt(S);
     group.quaternion.copy(pose.q);
-    group.updateMatrixWorld();
     const tgtW = v3.copy(pose.tgt).applyQuaternion(pose.q);
+    group.position.copy(tgtW).negate();   // the point we look at sits at the origin, the camera on +Z
+    group.updateMatrixWorld();
     const ref = wide ? H : W;
     const dist = D * H / (2 * Math.tan(THREE.MathUtils.degToRad(FOV) / 2) * pose.size * ref);
-    camera.position.set(tgtW.x, tgtW.y, tgtW.z + dist);
-    camera.lookAt(tgtW);
-    camera.near = Math.max(0.05, dist - 12); camera.far = dist + 30;
+    // inside a set the camera stands still and zooms; between sets it travels as before
+    const si = setAt(S), SET = SETS[si], sw = SET.w(S);
+    const camDist = Math.exp(lerp(Math.log(dist), Math.log(DSET), sw));
+    const tanH = D * H / (2 * pose.size * ref * camDist);
+    camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tanH));
+    camera.position.set(0, 0, camDist);
+    camera.lookAt(0, 0, 0);
+    camera.near = Math.max(0.05, camDist - 12); camera.far = camDist + 60;
     const ox = pose.ox + extraOx;
     camera.setViewOffset(W, H, -ox * W, pose.oy * H, W, H);
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld();
+    U.uCam.value.set(tanH, W / H, ox, pose.oy);
+    // the table and its shadow
+    const er = THREE.MathUtils.degToRad(SET.e);
+    upV.set(0, Math.cos(er), Math.sin(er));
+    catcher.position.copy(upV).multiplyScalar(-SET.h);
+    catcher.quaternion.setFromUnitVectors(zAxis, upV);
+    catcherMat.opacity = SET.shadow * sw;
+    catcher.visible = catcherMat.opacity > 0.003;
+    if (catcher.visible) {
+      sun.position.set(...SET.light).add(upV).normalize().multiplyScalar(40); sun.target.position.set(0, -SET.h * 0.5, 0);
+      sun.updateMatrixWorld(); sun.target.updateMatrixWorld();
+      renderer.shadowMap.needsUpdate = true;
+    }
+    tint.set(1, 1, 1).lerp(v3b.set(...SET.tint), sw);
+    finish.material.uniforms.uTint.value.copy(tint);
 
     // the dial as a window: see-through at the start (the sky is the dial) and again when we dive back into it
-    const dialOp = S < 30 ? fit(S, 1.15, 2.0) : 1 - fit(S, 41.9, 42.35) * (1 - fit(S, 45.6, 45.62));
+    const dialOp = S < 30 ? fit(S, 1.15, 1.6) : 1 - fit(S, 41.9, 42.35) * (1 - fit(S, 45.6, 45.62));
     group.visible = !(S > 42.4 && S < 45.6);
-    const pxPerUnit = H / (2 * Math.tan(THREE.MathUtils.degToRad(FOV) / 2) * dist);
+    const pxPerUnit = H / (2 * tanH * camDist);
     const [cx, cy] = toScreen(0, 0, 0);
     let zoom = 1;
     if (S < 2.2) zoom = Math.max(1, pose.size / 0.74);
     else if (S > 40.6 && S < 45.6) zoom = S < 41.9 ? Math.max(1, pose.size / 0.8) : lerp(pose.size / 0.8 * 0.8, 1, sineInOut(fit(S, 41.9, 43.4)));
     U.uZoom.value.set(cx, H - cy, zoom);
     U.uHole.value.set(cx, H - cy, 1.62 * pxPerUnit, bell(S, 0.4, 1.4, 2.3, 3.1));
+    U.uIris.value.set(cx, H - cy, 1);
 
     // the flash when the balance starts to swing
     const fl = Math.exp(-Math.pow((S - 7.2) / 0.22, 2));
@@ -674,7 +739,7 @@ if (renderer) {
     finish.material.uniforms.uTime.value = reduced ? 0 : time;
     lineMat.uniforms.uK.value = bp / exposure;
     // the bloom: a quiet glow on polished edges, a burst when the balance starts, the gold lines of the blueprint glowing
-    bloom.strength = 0.12 + 0.55 * fl + 0.45 * bp;
+    bloom.strength = 0.12 + 0.55 * fl + 0.22 * bp;
     bloom.threshold = 3.0 - 1.8 * fl - 2.85 * bp;
     finish.material.uniforms.uWarm.value = bell(S, 45.7, 46.3, 46.9, 47.3);
     finish.material.uniforms.uLoupe.value = bell(S, 8.3, 9.0, 13.2, 13.8);
@@ -683,7 +748,7 @@ if (renderer) {
     shadowMat.opacity = 0.9 * paperW;
     marksMat.opacity = fit(S, 47.0, 47.4);
     marksMesh.visible = marksMat.opacity > 0.001;
-    marksMesh.position.set(0, 0, -1.3); marksMesh.scale.setScalar((dist + 1.3) / dist);
+    marksMesh.position.set(0, 0, -1.3); marksMesh.scale.setScalar((camDist + 1.3) / camDist);
     marksMesh.rotation.z = -0.5;
 
     if (watch) {
@@ -698,6 +763,12 @@ if (renderer) {
       const ex = fit(S, 32.3, 33.2) * (1 - fit(S, 34.4, 35.1));
       watch.setExplode(ex, 'detail', 0.55);
       if (bp > 0.5 && P.strap_long) P.strap_long.visible = P.strap_short.visible = false;   // gold outlines on leather read as a mustard strap
+      // on the benches the watch is a head without its strap (as it is while being made): the strap goes after the hero, comes back for the night sky
+      const strapOp = S < 20 ? 1 - fit(S, 3.15, 3.6) : fit(S, 40.2, 40.6);
+      if (strapOp < 1) {
+        for (const m of strapMats) { m.transparent = true; m.opacity = Math.min(m.opacity, strapOp); }
+        if (strapOp < 0.01 && P.strap_long) P.strap_long.visible = P.strap_short.visible = false;
+      }
       // winding: one turn of the crown per screen, a tick every 30 degrees
       const crown = Math.PI * 2 * clamp(S - 3.75, 0, 2.7);
       watch.setCrown(crown, 0);
@@ -732,9 +803,9 @@ if (renderer) {
     renderer.clear();
     if (group.visible || marksMesh.visible) renderer.render(scene, camera);
     if (bp > 0.001 && watch) {
-      scene.overrideMaterial = lineMat; const sh = shadow.visible, mk = marksMesh.visible; shadow.visible = marksMesh.visible = false;
+      scene.overrideMaterial = lineMat; const sh = shadow.visible, mk = marksMesh.visible, ct = catcher.visible; shadow.visible = marksMesh.visible = catcher.visible = false;
       renderer.render(scene, camera);
-      scene.overrideMaterial = null; shadow.visible = sh; marksMesh.visible = mk;
+      scene.overrideMaterial = null; shadow.visible = sh; marksMesh.visible = mk; catcher.visible = ct;
     }
     bloom.render(renderer, null, sceneRT);
     renderer.setRenderTarget(null);

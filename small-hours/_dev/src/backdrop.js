@@ -1,4 +1,4 @@
-// Full-screen stage behind the watch. One shader, five stages, wiped from the bottom when the scene changes.
+// Full-screen stage behind the watch. One shader: painted stages and photographed sets, the next one opening as a circle out of the watch.
 // 0 night sky · 1 blueprint · 2 paper · 3 workbench with a beam of light · 4 night sky with tonight's moon · 5 dawn
 import * as THREE from 'three';
 
@@ -9,6 +9,10 @@ uniform float uFrom; uniform float uTo; uniform float uWipe;
 uniform vec4 uMoon; uniform float uPhase; uniform float uBeam; uniform float uGrid;
 uniform vec3 uZoom;   // star field zoom: xy = centre in css px, z = scale (1 = none)
 uniform vec4 uHole;   // the dial seen as a hole in the sky: xy centre, z radius (css px), w how much the sky outside it dims
+uniform sampler2D tSet0, tSet1, tSet2, tSet3;   // the photographed sets (desk, drafting table, engraver's bench, morning table)
+uniform vec4 uWin[4];  // each photo's window in tan space: xy centre, zw half size
+uniform vec4 uCam;     // the watch camera now: x tan(fov/2), y aspect, z ox, w oy (its view offset)
+uniform vec3 uIris;    // where scene changes open from: xy css px (bottom left origin), z radius scale
 varying vec2 vUv;
 
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
@@ -186,7 +190,23 @@ vec3 dawn(vec2 uv, vec2 px){
   return c;
 }
 
+// a photographed set: every screen pixel is a ray of the watch camera; the photo was shot by the same fixed camera,
+// so the ray picks the same spot in the photo whatever the zoom or the view offset (the camera never moves inside a set)
+vec3 photo(int i, vec2 uv){
+  vec2 n = vec2(uv.x - uCam.z, uv.y - uCam.w) * 2.0 - 1.0;
+  vec2 t = n * vec2(uCam.x * uCam.y, uCam.x);
+  vec4 w = i == 0 ? uWin[0] : i == 1 ? uWin[1] : i == 2 ? uWin[2] : uWin[3];
+  vec2 p = (t - w.xy) / w.zw * 0.5 + 0.5;
+  vec2 q = clamp(p, 0.001, 0.999);
+  vec3 c = i == 0 ? texture2D(tSet0, q).rgb : i == 1 ? texture2D(tSet1, q).rgb : i == 2 ? texture2D(tSet2, q).rgb : texture2D(tSet3, q).rgb;
+  float out_ = length(max(abs(p - 0.5) - 0.5, 0.0)) * 6.0;
+  // the night sets keep their tops and bottoms dark enough for the words on them
+  if (i < 3) c *= mix(1.0, 0.42, smoothstep(0.6, 1.0, uv.y)) * mix(1.0, 0.7, smoothstep(0.3, 0.0, uv.y));
+  return c * exp(-out_);
+}
+
 vec3 stage(float s, vec2 uv, vec2 px){
+  if (s > 19.5) return photo(int(s - 19.5), uv);
   // 0 night · 1 blueprint · 2 paper · 3 bench · 4 night + moon · 5 dawn · 6 lamp · 7 void · 8 cyanotype · 9 drafting film · 10 leather · 11 felt
   if (s < 0.5) return night(uv, px, 0.0);
   if (s < 1.5) return blueprint(uv, px);
@@ -208,9 +228,11 @@ void main(){
   vec3 c = a;
   if (uWipe > 0.0) {
     vec3 b = stage(uTo, vUv, px);
-    // wipe rises from the bottom with a soft edge
-    float e = uWipe * 1.4 - 0.2;
-    float m = smoothstep(e + 0.32, e - 0.32, vUv.y);
+    // the next world opens as a circle out of the watch (the dial, the loupe, the moon: one shape all the way)
+    vec2 sz = uRes / uDpr;
+    float far = max(max(length(uIris.xy), length(uIris.xy - sz)), max(length(uIris.xy - vec2(sz.x, 0.0)), length(uIris.xy - vec2(0.0, sz.y))));
+    float r = uWipe * (far + 80.0) * uIris.z, d = length(px - uIris.xy);
+    float m = smoothstep(r + 40.0, r - 40.0, d);
     c = mix(a, b, m);
   }
   // fine grain so gradients do not band on phones
@@ -223,6 +245,9 @@ export function makeBackdrop() {
     uRes: { value: new THREE.Vector2(1, 1) }, uDpr: { value: 1 }, uTime: { value: 0 }, uDrift: { value: 0 },
     uFrom: { value: 0 }, uTo: { value: 0 }, uWipe: { value: 0 },
     uMoon: { value: new THREE.Vector4(0, 0, 60, 0) }, uPhase: { value: Math.PI }, uBeam: { value: 0 }, uGrid: { value: 1 }, uZoom: { value: new THREE.Vector3(0, 0, 1) }, uHole: { value: new THREE.Vector4(0, 0, 1, 0) },
+    tSet0: { value: null }, tSet1: { value: null }, tSet2: { value: null }, tSet3: { value: null },
+    uWin: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 1, 1)) }, uCam: { value: new THREE.Vector4(0.2, 0.5, 0, 0) },
+    uIris: { value: new THREE.Vector3(0, 0, 1) },
   };
   const mat = new THREE.ShaderMaterial({
     uniforms, depthTest: false, depthWrite: false,
