@@ -115,6 +115,65 @@ vec3 bench(vec2 uv, vec2 px){
   return c;
 }
 
+
+// ---- worlds for the middle of the story (each chapter lives somewhere else) ----
+float vig(vec2 uv, float k){ return 1.0 - k * smoothstep(0.25, 1.05, length((uv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * 1.2)); }
+
+// oxblood leather pad under the crown: pebble grain and a soft top light
+vec3 leather(vec2 uv, vec2 px){
+  vec3 c = mix(vec3(0.075, 0.012, 0.020), vec3(0.20, 0.035, 0.050), smoothstep(-0.1, 1.1, uv.y));
+  float peb = fbm(px / 3.2) * 0.6 + fbm(px / 9.0) * 0.4;
+  c *= 0.82 + 0.36 * peb;
+  c += vec3(0.55, 0.18, 0.14) * 0.10 * exp(-pow(length((uv - vec2(0.35, 0.85)) * vec2(uRes.x / uRes.y, 1.0)) * 1.6, 2.0));
+  return c * vig(uv, 0.55);
+}
+
+// walnut desk under a work lamp: long grain and a warm pool of light
+vec3 lamp(vec2 uv, vec2 px){
+  vec2 g = px / vec2(520.0, 11.0);
+  float grain = fbm(g + vec2(fbm(px / 160.0) * 3.0, 0.0));
+  vec3 c = mix(vec3(0.060, 0.030, 0.014), vec3(0.17, 0.090, 0.040), grain);
+  c *= 0.85 + 0.3 * smoothstep(0.4, 0.6, fbm(px / vec2(900.0, 26.0) + 3.0));
+  float d = length((uv - vec2(0.72, 0.78)) * vec2(uRes.x / uRes.y, 1.0));
+  c += vec3(1.0, 0.62, 0.28) * 0.42 * exp(-d * d * 2.6) * (0.75 + 0.25 * grain);
+  c += vec3(0.85, 0.70, 0.45) * exp(-pow((dot(uv - 0.5, normalize(vec2(0.9, -0.4))) * (uRes.x / uRes.y) - uBeam) * 6.0, 2.0)) * 0.05;
+  return c * vig(uv, 0.6);
+}
+
+// cyanotype: Prussian blue paper, white grid, fibres
+vec3 cyan(vec2 uv, vec2 px){
+  vec3 c = mix(vec3(0.050, 0.20, 0.46), vec3(0.085, 0.29, 0.60), smoothstep(0.0, 1.0, uv.y));
+  c *= 0.9 + 0.2 * fbm(px / 70.0);
+  c += (fbm(px / vec2(2.0, 30.0)) - 0.5) * 0.05;
+  vec2 gm = abs(fract(px / 24.0 - 0.5) - 0.5) * 24.0, GM = abs(fract(px / 120.0 - 0.5) - 0.5) * 120.0;
+  float minor = 1.0 - smoothstep(0.0, 1.0 / uDpr + 0.3, min(gm.x, gm.y));
+  float major = 1.0 - smoothstep(0.0, 1.0 / uDpr + 0.4, min(GM.x, GM.y));
+  c = mix(c, vec3(0.86, 0.93, 1.0), (minor * 0.08 + major * 0.2) * uGrid);
+  return c * vig(uv, 0.35);
+}
+
+// drafting film: warm white, a fine millimetre grid and crop marks in the corners
+vec3 draft(vec2 uv, vec2 px){
+  vec3 c = vec3(0.925, 0.905, 0.860);
+  c *= 1.0 - 0.06 * smoothstep(0.3, 1.0, length(uv - 0.5) * 1.4);
+  c += (fbm(px / 5.0) - 0.5) * 0.02;
+  vec2 gm = abs(fract(px / 12.0 - 0.5) - 0.5) * 12.0, GM = abs(fract(px / 60.0 - 0.5) - 0.5) * 60.0;
+  float minor = 1.0 - smoothstep(0.0, 1.0 / uDpr + 0.25, min(gm.x, gm.y));
+  float major = 1.0 - smoothstep(0.0, 1.0 / uDpr + 0.35, min(GM.x, GM.y));
+  c = mix(c, vec3(0.42, 0.50, 0.58), minor * 0.07 + major * 0.16);
+  return c;
+}
+
+// green felt of a watchmaker's bench pad
+vec3 felt(vec2 uv, vec2 px){
+  vec3 c = mix(vec3(0.020, 0.075, 0.055), vec3(0.045, 0.15, 0.105), smoothstep(-0.1, 1.0, uv.y));
+  c *= 0.86 + 0.28 * fbm(px / 2.2);
+  c += vec3(0.6, 0.9, 0.7) * 0.05 * exp(-pow(length((uv - vec2(0.3, 0.9)) * vec2(uRes.x / uRes.y, 1.0)) * 1.4, 2.0));
+  return c * vig(uv, 0.6);
+}
+
+vec3 voidw(vec2 uv, vec2 px){ return vec3(0.010, 0.011, 0.016) * vig(uv, 0.5) + (fbm(px / 300.0) - 0.5) * 0.01; }
+
 // first light: the night sky with the horizon warming and the stars going out
 vec3 dawn(vec2 uv, vec2 px){
   float y = uv.y;
@@ -128,12 +187,19 @@ vec3 dawn(vec2 uv, vec2 px){
 }
 
 vec3 stage(float s, vec2 uv, vec2 px){
+  // 0 night · 1 blueprint · 2 paper · 3 bench · 4 night + moon · 5 dawn · 6 lamp · 7 void · 8 cyanotype · 9 drafting film · 10 leather · 11 felt
   if (s < 0.5) return night(uv, px, 0.0);
   if (s < 1.5) return blueprint(uv, px);
   if (s < 2.5) return paper(uv, px);
   if (s < 3.5) return bench(uv, px);
   if (s < 4.5) return night(uv, px, 1.0);
-  return dawn(uv, px);
+  if (s < 5.5) return dawn(uv, px);
+  if (s < 6.5) return lamp(uv, px);
+  if (s < 7.5) return voidw(uv, px);
+  if (s < 8.5) return cyan(uv, px);
+  if (s < 9.5) return draft(uv, px);
+  if (s < 10.5) return leather(uv, px);
+  return felt(uv, px);
 }
 
 void main(){

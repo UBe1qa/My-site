@@ -48,6 +48,7 @@ img{max-width:100%;height:auto;display:block}
 html{background:var(--deep);-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--deep);color:var(--ink);font:400 var(--t-body)/1.45 var(--sans);-webkit-font-smoothing:antialiased}
 body.is-paper{--ink:#14182B;--ink2:rgba(20,24,43,.68);--ink3:rgba(20,24,43,.45);--line:rgba(20,24,43,.25)}
+html.js body.is-paper .shade{text-shadow:none}
 body.is-paper .bar,.bar.on-paper{color:#14182B;--ink:#14182B;--ink2:rgba(20,24,43,.68);--ink3:rgba(20,24,43,.45);--line:rgba(20,24,43,.25);background:linear-gradient(rgba(238,232,220,.85),rgba(238,232,220,0))}
 a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
@@ -136,7 +137,7 @@ html.js #c3::before{top:0;background:linear-gradient(rgba(7,10,24,.78),rgba(7,10
 html.js #c3::after{bottom:0;background:linear-gradient(rgba(7,10,24,0),rgba(7,10,24,.75))}
 
 /* 4 gallery: photos slide sideways while you scroll down */
-#gallery{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;visibility:hidden;background:radial-gradient(120% 90% at 50% 62%,#141B3A 0%,#0B1026 45%,#070A18 100%)}
+#gallery{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;visibility:hidden;background:#070A18}
 #gallery .head{position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--bar) + 20px + env(safe-area-inset-top))}
 #gallery .head .title{font-size:clamp(40px,11vw,96px)}
 .frame{position:absolute;left:50%;top:var(--fy,57%);width:var(--fw,86vw);aspect-ratio:3/4;transform:translate(-50%,-50%)}
@@ -354,7 +355,7 @@ html:not(.js) .tiles .row{overflow-x:auto}
       <p class="title shade"><span class="ln">Three nights</span> <span class="ln"><em>on one winding.</em></span></p>
       <div class="gauge" aria-hidden="true"><p class="num"><span id="hours">0</span></p><p class="unit">hours<br>reserve</p></div>
     </div>
-    <div class="blk top" id="b5c">
+    <div class="blk bot" id="b5c">
       <p class="tag">03:50 · Every part</p>
       <p class="title shade"><span class="ln">Thirty-one parts,</span> <span class="ln"><em>none of them hidden.</em></span></p>
     </div>

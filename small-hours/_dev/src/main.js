@@ -17,8 +17,9 @@ import { makeSound } from './sound.js';
 const FILM_END = 48.5;
 const CH = { c1: [0, 3], c2: [3, 7.6], c3: [7.6, 14], c4: [14, 26], c5: [26, 36], c6: [36, 40.4], c7: [40.4, 46], c8: [46, FILM_END] };
 const GO = { c1: 0, c2: 4.0, c3: 8.7, c4: 15.9, c5: 26.7, c6: 37.1, c7: 43.1, c8: 47.6 };
-// backdrop: [from s, stage]  0 night · 1 blueprint · 2 paper · 3 bench · 4 night with tonight's moon · 5 dawn
-const STAGES = [[0, 0], [21, 3], [29.3, 1], [34.9, 3], [41.9, 4], [45.9, 5], [47.0, 2]];
+// backdrop: [from s, stage]  0 night · 2 paper · 4 night with tonight's moon · 5 dawn
+// 6 lamp-lit walnut · 7 void · 8 cyanotype · 9 drafting film · 10 oxblood leather · 11 green felt
+const STAGES = [[0, 0], [3.2, 10], [7.6, 7], [21, 6], [29.3, 8], [32.2, 9], [34.9, 7], [36.4, 11], [41.9, 4], [45.9, 5], [47.0, 2]];
 const D = 3.9, FOV = 24;
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -199,6 +200,8 @@ function tilesFrame() {
 // ---------- the gallery ----------
 const shots = [...$('reel').children], imgs = shots.map(f => f.querySelector('img'));
 const CAPS = [['Ward 4, night shift', '03:12'], ['First loaves', '04:05'], ['The 2 a.m. feed', '02:40'], ['Clear sky, finally', '01:55'], ['Last fare home', '03:30'], ['One more page', '04:20'], ['And the bench where it is made', 'Now']];
+// the light of each photo spills into the room around the frame: ward teal, oven ember, nursery rose, sky blue, taxi neon, desk lamp, walnut bench
+const GLOW = [[[24, 70, 72], [5, 20, 24]], [[96, 44, 16], [26, 10, 4]], [[88, 46, 64], [24, 10, 20]], [[22, 42, 96], [5, 9, 26]], [[96, 22, 76], [24, 4, 22]], [[90, 66, 22], [24, 16, 6]], [[64, 34, 14], [18, 9, 4]]];
 const galIndex = x => { const r = fit(x, 16.3, 24.0) * 6, f = Math.floor(r); return Math.min(6, f + sineInOut(fit(r - f, 0.1, 0.9))); };
 let capWas = -1;
 function galleryFrame(S) {
@@ -209,6 +212,9 @@ function galleryFrame(S) {
   const e = galIndex(S);
   $('reel').style.transform = `translate3d(${(-e * FR.w).toFixed(1)}px,0,0)`;
   imgs.forEach((im, i) => { if (!im) return; const d = clamp(i - e, -1, 1); im.style.transform = `translate3d(${(-d * 22).toFixed(2)}%,0,0) scale(1.2)`; });
+  const i0 = Math.floor(e), i1 = Math.min(6, i0 + 1), f = e - i0, mix3 = (a, b) => a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(',');
+  const g0 = GLOW[i0], g1 = GLOW[i1];
+  gallery.style.background = `radial-gradient(120% 90% at 50% 60%, rgb(${mix3(g0[0], g1[0])}) 0%, rgb(${mix3(g0[1], g1[1])}) 100%)`;
   const c = Math.round(e);
   if (c !== capWas) { capWas = c; $('capL').textContent = CAPS[c][0]; $('capR').textContent = CAPS[c][1]; $('galCount').textContent = `${String(c + 1).padStart(2, '0')} / 07`; }
   $('cap').style.opacity = (fit(S, 15.9, 16.3) * (1 - fit(S, 23.9, 24.3))).toFixed(3);
@@ -230,7 +236,7 @@ if (renderer) {
   renderer.autoClear = false;
 
   const scene = new THREE.Scene();
-  const studio = makeStudio(renderer);
+  const studio = makeStudio(renderer, { ambient: 0.5 });
   scene.environment = studio.env;
   const camera = new THREE.PerspectiveCamera(FOV, W / H, 0.1, 400);
   const backdrop = makeBackdrop();
@@ -250,9 +256,9 @@ if (renderer) {
 
   // gold lines: the watch drawn as its own blueprint (an outline pass on top of the normal render)
   const lineMat = new THREE.ShaderMaterial({
-    uniforms: { uK: { value: 0 } },
+    uniforms: { uK: { value: 0 }, uC: { value: new THREE.Color(0.86, 0.93, 1.0) } },
     vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = -mv.xyz; vN = normalMatrix * normal; gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'uniform float uK; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 7.0) * 3.0 + smoothstep(0.93, 1.0, f) * 2.0; gl_FragColor = vec4(vec3(0.89, 0.72, 0.42) * e * uK, 1.0); }',
+    fragmentShader: 'uniform float uK; uniform vec3 uC; varying vec3 vN; varying vec3 vV; void main(){ float f = 1.0 - abs(dot(normalize(vN), normalize(vV))); float e = pow(f, 7.0) * 3.0 + smoothstep(0.93, 1.0, f) * 2.0; gl_FragColor = vec4(uC * e * uK, 1.0); }',
     blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, depthFunc: THREE.LessEqualDepth, toneMapped: false,
   });
 
@@ -414,9 +420,9 @@ if (renderer) {
   const sceneRT = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: coarse ? 2 : 4 });
   const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.12, 0.35, 3.0);
   const finish = new FullScreenQuad(new THREE.ShaderMaterial({
-    uniforms: { tScene: { value: sceneRT.texture }, uExp: { value: 1 }, uWarm: { value: 0 }, uTime: { value: 0 }, uVig: { value: 0.4 }, uGrain: { value: 0.03 }, uRes: { value: new THREE.Vector2(1, 1) } },
+    uniforms: { tScene: { value: sceneRT.texture }, uExp: { value: 1 }, uWarm: { value: 0 }, uLoupe: { value: 0 }, uTime: { value: 0 }, uVig: { value: 0.4 }, uGrain: { value: 0.03 }, uRes: { value: new THREE.Vector2(1, 1) } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
-    fragmentShader: `uniform sampler2D tScene; uniform float uExp, uTime, uVig, uGrain, uWarm; uniform vec2 uRes; varying vec2 vUv;
+    fragmentShader: `uniform sampler2D tScene; uniform float uExp, uTime, uVig, uGrain, uWarm, uLoupe; uniform vec2 uRes; varying vec2 vUv;
       vec3 rrt(vec3 v){ vec3 a = v * (v + 0.0245786) - 0.000090537; vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081; return a / b; }
       vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
         const mat3 O = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
@@ -427,7 +433,11 @@ if (renderer) {
         vec4 t = texture2D(tScene, vUv);
         vec3 c = srgb(aces(max(t.rgb, 0.0) * uExp * mix(vec3(1.0), vec3(1.12, 0.94, 0.80), uWarm)));
         float v = smoothstep(0.35, 1.15, length((vUv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * 1.15)) * uVig;
+        // inside the movement we look through a loupe: a circle of light, a thin bright rim, black around it
+        vec2 lq = (vUv - 0.5) * uRes / min(uRes.x, uRes.y); float ld = length(lq - vec2(0.0, -0.04)), lr = 0.47;
+        v = max(v, uLoupe * smoothstep(lr, lr + 0.012, ld) * 0.97);
         c *= 1.0 - v;
+        c += uLoupe * vec3(0.95, 0.88, 0.74) * 0.35 * exp(-pow((ld - lr - 0.004) / 0.0035, 2.0));
         c += (h(floor(vUv * uRes) + fract(uTime) * 71.0) - 0.5) * uGrain;
         gl_FragColor = vec4(c, 1.0 - (1.0 - clamp(t.a, 0.0, 1.0)) * (1.0 - v));
       }`,
@@ -575,7 +585,7 @@ if (renderer) {
     if (onPaper !== frame.onPaper) { frame.onPaper = onPaper; barEl.classList.toggle('on-paper', onPaper); }
 
     const e = galleryFrame(S);
-    const paperOn = S > 46.9 && s < FILM_END + 0.8;
+    const paperOn = (S > 46.9 && s < FILM_END + 0.8) || (S > 32.3 && S < 34.85);
     if (paperOn !== document.body._paper) { document.body.classList.toggle('is-paper', paperOn); document.body._paper = paperOn; document.querySelector('meta[name=theme-color]').content = paperOn ? '#EEE8DC' : '#070A18'; }
 
     // power reserve while winding
@@ -667,6 +677,7 @@ if (renderer) {
     bloom.strength = 0.12 + 0.55 * fl + 0.45 * bp;
     bloom.threshold = 3.0 - 1.8 * fl - 2.85 * bp;
     finish.material.uniforms.uWarm.value = bell(S, 45.7, 46.3, 46.9, 47.3);
+    finish.material.uniforms.uLoupe.value = bell(S, 8.3, 9.0, 13.2, 13.8);
 
     const paperW = fit(S, 46.9, 47.3);
     shadowMat.opacity = 0.9 * paperW;
@@ -679,7 +690,6 @@ if (renderer) {
       const P = watch.parts;
       for (const m of dialMats) { const t = dialOp < 0.999; if (m.transparent !== t) { m.transparent = t; m.needsUpdate = true; } m.opacity = dialOp; }
       const open = dialOp < 0.999;
-      if (P.strap_long) P.strap_long.visible = P.strap_short.visible = bp < 0.5;
       for (const o of hideWhenOpen) o.visible = !open;
       for (const m of dialHoles) m.visible = open;
       if (engraveRing) engraveRing.visible = engraveRing.visible && !open;
@@ -687,6 +697,7 @@ if (renderer) {
       // the explode
       const ex = fit(S, 32.3, 33.2) * (1 - fit(S, 34.4, 35.1));
       watch.setExplode(ex, 'detail', 0.55);
+      if (bp > 0.5 && P.strap_long) P.strap_long.visible = P.strap_short.visible = false;   // gold outlines on leather read as a mustard strap
       // winding: one turn of the crown per screen, a tick every 30 degrees
       const crown = Math.PI * 2 * clamp(S - 3.75, 0, 2.7);
       watch.setCrown(crown, 0);
