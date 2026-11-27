@@ -473,11 +473,16 @@ if (renderer) {
       return { s, q: new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz, 'ZYX')), tgt: new THREE.Vector3(...tgt), size, oy, ox };
     };
     const fr = [fS, fOy, fOx];
+    // phone hero: the body text runs far down the screen, so the watch sits just below it (its bright case never
+    // under the words); a little of the case may leave the bottom edge, the moon window stays in view
+    const hero = $('hero'), hb = hero ? hero.offsetTop + hero.offsetHeight : H * 0.6;
+    const hS = clamp((H - hb - 18) / (W * 1.04 * 0.8), 0.45, 0.62), hR = hS * W * 0.52;
+    const hOy = -clamp((hb + 18 + hR - H / 2) / H, 0.12, 0.42);
     return [
       k(0, 0, 0, 0, SKY, 10.5, 0, 0, [12, 0, 0]),
       k(0.95, -0.04, 0.02, 0, SKY2, 3.0, -0.02, 0, [2.6, 0, 0.05]),
-      k(2.0, -0.26, 0, 0, O, 0.74, -0.17),
-      k(3.0, -0.30, -0.2, 0.05, O, 0.8, -0.12),
+      k(2.0, -0.26, 0, 0, O, hS, hOy, 0, [0.74 * 0.6, -0.17 * 0.3, 0.16]),
+      k(3.0, -0.30, -0.2, 0.05, O, hS * 1.04, hOy, 0, [0.8 * 0.6, -0.12 * 0.3, 0.16]),
       k(3.75, -0.25, -1.1, -0.75, C, 2.0, 0.21),
       k(6.45, -0.35, -0.95, -0.62, C, 1.9, 0.21),
       k(7.1, 0.3, PI - 0.55, 0.2, B, 1.55, 0.2),
@@ -535,6 +540,8 @@ if (renderer) {
     };
   }
   let K = keys(), track = makeTrack(K);
+  // the hero keys measure the text, so measure again once the fonts have set it
+  document.fonts?.ready.then(() => { K = keys(); track = makeTrack(K); }).catch(() => {});
   const pose = { q: new THREE.Quaternion(), tgt: new THREE.Vector3(), size: 1, oy: 0, ox: 0 };
   function poseAt(x) {
     const v = track(x);
